@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:08:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
 
                     aFont.SetColor(COL_LIGHTRED);
                     aFont.SetTransparent(sal_True);
-                    aFont.SetLineOrientation(sal_uInt16(NormAngle360(rGeometric.nDrehWink)/10));
+                    aFont.SetOrientation(sal_uInt16(NormAngle360(rGeometric.nDrehWink)/10));
 
                     if(bUnderline)
                     {
