@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:38:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,37 +961,8 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     SwFtnBossFrm *pBoss = pFrm->FindFtnBossFrm( !rFtn.IsEndNote() );
     SwFtnFrm *pFtnFrm = NULL;
     if( pScrFrm )
-    {
         pFtnFrm = pBoss->FindFtn( pScrFrm, pFtn );
-        if( pFtnFrm && pFtnFrm->Lower() )
-        {
-            SwTxtFrm *pTxtFrm = NULL;
-            if( pFtnFrm->Lower()->IsTxtFrm() )
-                pTxtFrm = (SwTxtFrm*)pFtnFrm->Lower();
-            else if( pFtnFrm->Lower()->IsSctFrm() )
-            {
-                SwFrm* pCntnt = ((SwSectionFrm*)pFtnFrm->Lower())->ContainsCntnt();
-                if( pCntnt && pCntnt->IsTxtFrm() )
-                    pTxtFrm = (SwTxtFrm*)pCntnt;
-            }
-            if ( pTxtFrm && pTxtFrm->HasPara() )
-            {
-                SwParaPortion *pPara = pTxtFrm->GetPara();
-                SwLinePortion *pTmp = pPara->GetPortion();
-                while( pTmp )
-                {
-                    if( pTmp->IsFtnNumPortion() )
-                    {
-                        SeekAndChg( rInf );
-                        if( ((SwFtnNumPortion*)pTmp)->DiffFont( rInf.GetFont() ) )
-                            pTxtFrm->Prepare(PREP_FTN);
-                        break;
-                    }
-                    pTmp = pTmp->GetPortion();
-                }
-            }
-        }
-    }
+
     // Wir erkundigen uns, ob durch unser Append irgendeine
     // Fussnote noch auf der Seite/Spalte steht. Wenn nicht verschwindet
     // auch unsere Zeile. Dies fuehrt zu folgendem erwuenschten
@@ -1114,27 +1085,6 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
     SwFont *pFnt = new SwFont( pParSet, rInf.GetDoc() );
     pFnt->SetDiffFnt(&rSet, rInf.GetDoc() );
-    SwTxtFtn* pTxtFtn = rFtn.GetTxtFtn();
-    if( pTxtFtn )
-    {
-        SwScriptInfo aScriptInfo;
-        SwAttrIter aIter( (SwTxtNode&)pTxtFtn->GetTxtNode(), aScriptInfo );
-        aIter.Seek( *pTxtFtn->GetStart() );
-        // Achtung: Wenn die Kriterien, nach denen der FtnReferenz-Font
-        // auf den FtnNumerierungsfont wirkt, geaendert werden, muss die
-        // untenstehende Methode SwFtnNumPortion::DiffFont() angepasst
-        // werden.
-        if( aIter.GetFnt()->IsSymbol(rInf.GetVsh()) || aIter.GetFnt()->GetCharSet() !=
-            pFnt->GetCharSet() )
-        {
-            const BYTE nAct = pFnt->GetActual();
-            pFnt->SetName( aIter.GetFnt()->GetName(), nAct );
-            pFnt->SetStyleName( aIter.GetFnt()->GetStyleName(), nAct );
-            pFnt->SetFamily( aIter.GetFnt()->GetFamily(),nAct );
-            pFnt->SetCharSet( aIter.GetFnt()->GetCharSet(), nAct );
-        }
-    }
-
     pFnt->SetVertical( pFnt->GetOrientation(), pFrm->IsVertical() );
     SwFtnNumPortion* pNewPor = new SwFtnNumPortion( aFtnTxt, pFnt );
     pNewPor->SetLeft( !pFrm->IsRightToLeft() );
@@ -1691,22 +1641,6 @@ sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
     return sal_False;
 }
 
-/*************************************************************************
- * sal_Bool SwFtnNumPortion::DiffFont()
- *  liefert sal_True, wenn der Font der FtnReferenz (pFont) eine Aenderung
- *  des Fonts der FtnNumerierung (pFnt) erforderlich macht.
- *  Die Bedingungen sind ein Spiegel dessen, was in NewFtnNumPortion steht
- *************************************************************************/
-
-sal_Bool SwFtnNumPortion::DiffFont( SwFont* pFont )
-{
-    if( pFnt->GetName() != pFont->GetName() ||
-        pFnt->GetStyleName() != pFont->GetStyleName() ||
-        pFnt->GetFamily() != pFont->GetFamily() ||
-        pFont->GetCharSet() != pFnt->GetCharSet() )
-        return sal_True;
-    return sal_False;
-}
 
 /*************************************************************************
  *                      SwParaPortion::SetErgoSumNum()
