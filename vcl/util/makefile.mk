@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-20 14:52:23 $
+#   last change: $Author: obr $ $Date: 2001-02-22 12:24:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -641,6 +641,8 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo RmBitmap>> $@
     @echo RmSound>> $@
     @echo __CT>> $@
+    @echo DNDEventDispatcher>> $@
+    @echo DNDListenerContainer>> $@
 
 # --- Targets ------------------------------------------------------------
 
