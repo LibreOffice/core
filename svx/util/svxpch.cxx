@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxpch.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:29 $
+ *  last change: $Author: pb $ $Date: 2000-10-30 11:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include <sfxstyle.hxx>
 #include <svxenum.hxx>
 #include <sbx.hxx>
-#include <libcall.hxx>
 #include <hmwrap.hxx>
 #include <mail.hxx>
 #include <urlobj.hxx>
