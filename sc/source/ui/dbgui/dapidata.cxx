@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapidata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 17:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <tools/debug.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/processfactory.hxx>
-#include <vos/xception.hxx>
 
 #include <com/sun/star/data/XDatabaseFavorites.hpp>
 #include <com/sun/star/data/XDatabaseEngine.hpp>
@@ -118,7 +117,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 
     WaitObject aWait( this );       // initializing the database service the first time takes a while
 
-    TRY
+    try
     {
         //  get database names
 
@@ -138,11 +137,10 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
             }
         }
     }
-    CATCH_ALL()
+    catch(uno::Exception&)
     {
         DBG_ERROR("exception in database");
     }
-    END_CATCH
 
     aLbDatabase.SelectEntryPos( 0 );
     aLbType.SelectEntryPos( 0 );
@@ -194,7 +192,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     if ( nSelect > DP_TYPELIST_QUERY )
         return;                                 // only tables and queries
 
-    TRY
+    try
     {
         uno::Reference<data::XDatabaseEngine> xEngine(
                 utl::getProcessServiceFactory()->createInstance(
@@ -237,12 +235,11 @@ void ScDataPilotDatabaseDlg::FillObjects()
             aCbObject.InsertEntry( aName );
         }
     }
-    CATCH_ALL()
+    catch(uno::Exception&)
     {
         //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
         DBG_WARNING("exception in database");
     }
-    END_CATCH
 }
 
 
