@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-12 08:59:55 $
+ *  last change: $Author: ab $ $Date: 2002-08-29 10:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1735,41 +1735,42 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
     {
         OUString aUName( rName );
         if( mxExactName.is() )
-            aUName = mxExactName->getExactName( aUName );
+        {
+            OUString aUExactName = mxExactName->getExactName( aUName );
+            if( aUExactName.getLength() )
+                aUName = aUExactName;
+        }
         if( mxUnoAccess.is() )
         {
-            if( aUName.getLength() )
+            if( mxUnoAccess->hasProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS ) )
             {
-                if( mxUnoAccess->hasProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS ) )
-                {
-                    const Property& rProp = mxUnoAccess->
-                        getProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS );
+                const Property& rProp = mxUnoAccess->
+                    getProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS );
 
-                    // #58455 Wenn die Property void sein kann, muss als Typ Variant gesetzt werden
-                    SbxDataType eSbxType;
-                    if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
-                        eSbxType = SbxVARIANT;
-                    else
-                        eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
+                // #58455 Wenn die Property void sein kann, muss als Typ Variant gesetzt werden
+                SbxDataType eSbxType;
+                if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
+                    eSbxType = SbxVARIANT;
+                else
+                    eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
-                    // Property anlegen und reinbraten
-                    SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, 0 );
-                    QuickInsert( (SbxVariable*)xVarRef );
-                    pRes = xVarRef;
-                }
-                else if( mxUnoAccess->hasMethod( aUName,
-                    MethodConcept::ALL - MethodConcept::DANGEROUS ) )
-                {
-                    // Methode ansprechen
-                    const Reference< XIdlMethod >& rxMethod = mxUnoAccess->
-                        getMethod( aUName, MethodConcept::ALL - MethodConcept::DANGEROUS );
+                // Property anlegen und reinbraten
+                SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, 0 );
+                QuickInsert( (SbxVariable*)xVarRef );
+                pRes = xVarRef;
+            }
+            else if( mxUnoAccess->hasMethod( aUName,
+                MethodConcept::ALL - MethodConcept::DANGEROUS ) )
+            {
+                // Methode ansprechen
+                const Reference< XIdlMethod >& rxMethod = mxUnoAccess->
+                    getMethod( aUName, MethodConcept::ALL - MethodConcept::DANGEROUS );
 
-                    // SbUnoMethode anlegen und reinbraten
-                    SbxVariableRef xMethRef = new SbUnoMethod
-                        ( rxMethod->getName(), unoToSbxType( rxMethod->getReturnType() ), rxMethod );
-                    QuickInsert( (SbxVariable*)xMethRef );
-                    pRes = xMethRef;
-                }
+                // SbUnoMethode anlegen und reinbraten
+                SbxVariableRef xMethRef = new SbUnoMethod
+                    ( rxMethod->getName(), unoToSbxType( rxMethod->getReturnType() ), rxMethod );
+                QuickInsert( (SbxVariable*)xMethRef );
+                pRes = xMethRef;
             }
 
             // Wenn immer noch nichts gefunden wurde, muss geprueft werden, ob NameAccess vorliegt
@@ -1815,22 +1816,19 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
         }
         else if( mxInvocation.is() )
         {
-            if( aUName.getLength() )
+            if( mxInvocation->hasProperty( aUName ) )
             {
-                if( mxInvocation->hasProperty( aUName ) )
-                {
-                    // Property anlegen und reinbraten
-                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0 );
-                    QuickInsert( (SbxVariable*)xVarRef );
-                    pRes = xVarRef;
-                }
-                else if( mxInvocation->hasMethod( aUName ) )
-                {
-                    // SbUnoMethode anlegen und reinbraten
-                    SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod );
-                    QuickInsert( (SbxVariable*)xMethRef );
-                    pRes = xMethRef;
-                }
+                // Property anlegen und reinbraten
+                SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0 );
+                QuickInsert( (SbxVariable*)xVarRef );
+                pRes = xVarRef;
+            }
+            else if( mxInvocation->hasMethod( aUName ) )
+            {
+                // SbUnoMethode anlegen und reinbraten
+                SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod );
+                QuickInsert( (SbxVariable*)xMethRef );
+                pRes = xMethRef;
             }
         }
     }
