@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesPanel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:44:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 
 #include "strings.hrc"
 #include "sdresid.hxx"
+#include "helpids.h"
+
 
 namespace sd { namespace toolpanel { namespace controls {
 
@@ -94,7 +96,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
     pSelector->LateInit();
     pScrollPanel->AddControl (
         ::std::auto_ptr<TreeNode>(pSelector),
-        SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE));
+        SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
+        HID_SD_CURRENT_MASTERS);
 
     // Create a panel with the most recently used master pages.
     pSelector = new controls::RecentMasterPagesSelector (
@@ -104,7 +107,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
     pSelector->LateInit();
     pScrollPanel->AddControl (
         ::std::auto_ptr<TreeNode>(pSelector),
-        SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE));
+        SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE),
+        HID_SD_RECENT_MASTERS);
 
     // Create a panel with all available master pages.
     pSelector = new controls::AllMasterPagesSelector (
@@ -115,7 +119,8 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
     pSelector->LateInit();
     pScrollPanel->AddControl (
         ::std::auto_ptr<TreeNode>(pSelector),
-        SdResId(STR_TASKPANEL_ALL_MASTER_PAGES_TITLE));
+        SdResId(STR_TASKPANEL_ALL_MASTER_PAGES_TITLE),
+        HID_SD_ALL_MASTERS);
 
     AddControl (::std::auto_ptr<TreeNode>(pScrollPanel));
 }
