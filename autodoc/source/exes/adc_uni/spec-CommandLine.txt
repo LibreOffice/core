@@ -1,0 +1,160 @@
+        Command Line Options
+        --------------------
+
+autodoc [-v <level>] -html <out> -lg <proglang> [-t <sourcetree>[ <sourcetree> ...]
+        [-d <sourcedir>[ <sourcedir> ...]  [-f <sourcefile>[ <sourcefile> ...]
+
+
+    -html <OutputDirectory>
+        Directory where the output will be created.
+
+    -lg <ProgrammingLanguage>
+        Allowed values: "c++" or "idl"
+
+    -t <SourceTree>*
+        Directory with all subdirectories.
+
+    -d <SourceDirectory>*
+        Directory without subdirectories.
+
+    -f <SourceFile>*
+        Any file. Here also files with extensions not matching the
+        language are accepted.
+
+    -I:<ResponseFile>
+        Each line in the response file has to have one command line
+        option. No whitespace at start of line.
+
+    -C:<ConfigurationFile>
+        Format see below.
+
+    -v <VerboseLevel>
+        Only for debugging. Bits 1, 2 and 4 in any combination give
+        different output.
+
+    -h
+        Displays help.
+    -?
+        Displays help.
+
+
+
+
+
+        Command Line Options especially for the OpenOffice.org SDK
+        ----------------------------------------------------------
+
+    -dvgroot <DevelopersGuide>
+        Root directory of the SDK Developers Guide.
+
+    -dvgfile <ReferenceFile>
+        File with references to the SDK Developers Guide.
+
+    -sincefile <@since-AssociationFile>
+        File that maps OpenOffice versions to the wished displayed version names.
+
+    -idlref <IdlDocumentationRoot> <Namespace[,Namespace ...]>
+        Gives the outputdirectory of an IDL documentation, where
+        symbols not found in the currently parsed namespaces of C++
+        or Java can be found.
+
+
+
+        Configure File Format
+        ---------------------
+
+<AutodocConfiguration>
+    <RepositoryName></RepositoryName>
+        // Base name of the binary repository files.
+        // Has to be a valid file name.
+
+    <HtmlOutputTitle></HtmlOutputTitle>
+        // Title on the "welcome page" of the created HTML documentation.
+        // Can be any text.
+
+    <CppExtensions></CppExtensions>
+        // Overwrites the default. Default is: .hxx .h .hpp
+        // Format: File extensions with a dot in front, like ".hcc".
+
+    <IdlExtensions></IdlExtensions>
+        // Overwrites the default. Default is: .idl
+        // Format: File extensions with a dot in front, like ".txt".
+
+    <CppDocu html="(on|off) off"/>
+
+    <IdlDocu html="(on|off) on"/>
+
+</AutodocConfiguration>
+
+
+
+
+
+
+        Historical Command Line Options
+        -------------------------------
+
+autodoc.exe
+    [ -v <VerboseNr> ]
+    -html <OutputDirectory>
+    {
+        [ -parse ]
+	[ -name <RepositoryName> ]
+        -lg <ProgrammingLanguage>
+        {
+            [ -p <ProjectName> <ProjectRootDirectory> ]
+            {
+                -t <SourceDirectory>*
+                -d <SourceDirectory>*
+                -f <SourceFile>*
+            }+
+        }+
+    }
+
+Legend:
+    <Text>
+    	command line parameter
+    [ ]
+    	optional
+    { }
+    	Block of connected options.
+    The sequence of not connected options does not matter. So the -html or -v options can be used before or after all the parsing options.
+    +
+    	once or more times
+    *
+    	none or more times
+
+
+Explanation of the Options
+    -v <VerboseNr> 	Only for debugging. Bits 1, 2 and 4 in any combination give different output.
+    -html <OutputDirectory>
+    	Gives the directory, where a HTML version of the docu shall be generated.
+    -parse 	Starts the block, where all the parse options are given. This can be omitted, because the parse options are identifiable without it, but it may make a commandline more readable.
+    -name <RepositoryName> 	This name appears as title of the documentation (currently only in the in the C++ version).
+    -lg <ProgrammingLanguage>
+
+
+    Possible values are:
+
+    c++
+        This parses all files with the endings .hxx and .h .
+    idl
+        This parses all files with the ending .idl .
+
+    -p with -t/-d/-f: 	If there are more than one project, the -p option is required for each one.
+
+    The directory given wit the -p option is the root directory of the project.
+    If there is no -p option, the working directory is seen as root.
+
+    All paths given with -t/-d/-f are relative to that root directory. It is possible to use "." as argument for -t or -d.
+
+    Each of -t/-d/-f can have several arguments:
+    One could write "-f file1.hxx file2.hxx file_xyz.hxx"
+    After each -p (or after -lg, if there is no -p option), there has to be at least one of the following three:
+    -t 	Tree, which means: include subdirectories
+    -d 	Directory, which means: no subdirectories
+    -f 	File", which means: single file name with ending.
+    This option also allows to parse some files with an ending different from those, the -lg option implies.
+
+
+
