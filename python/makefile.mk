@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2004-09-08 12:25:19 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:08:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,84 +70,75 @@ TARGET=so_python
 
 # --- Files --------------------------------------------------------
 
+
 TARFILE_NAME=Python-$(PYVERSION)
 PATCH_FILE_NAME=Python-$(PYVERSION).patch
 
+
+PYPROJECTS= \
+    datetime 	\
+    mmap		\
+    parser		\
+    pyexpat		\
+    python 		\
+    pythonw		\
+    select		\
+    unicodedata	\
+    w9xpopen 	\
+    winreg		\
+    winsound	\
+    _socket		\
+    _csv		\
+    _sre	 	\
+    _symtable	\
+    _testcapi	
+
+PYADDITIONAL_PROJECTS = \
+    zlib 			\
+    make_versioninfo	\
+    bz2			\
+    _tkinter		\
+    _testcapi		\
+    _symtable		\
+    _sre			\
+    _socket			\
+    _csv			\
+    _bsddb			\
+    pythoncore
+
+ADDITIONAL_FILES_TMP=$(PYPROJECTS) $(PYADDITIONAL_PROJECTS)
+ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES_TMP) PCbuild/$(i).mak PCbuild/$(i).dep)
+
+
 CONFIGURE_DIR=
 
-BUILD_DIR=
-
 .IF "$(GUI)"=="UNX"
+BUILD_DIR=
+MYCWD=$(shell pwd)/$(INPATH)/misc/build
+CONFIGURE_ACTION= ./configure --prefix=$(MYCWD)/python-inst --enable-shared
+.IF "$(OS)$(CPU)" == "SOLARISI"
+CONFIGURE_ACTION += --disable-ipv6
+.ENDIF                                                                          
 .IF "$(COMNAME)"=="sunpro5"
 .IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 CC:=$(COMPATH)$/bin$/cc
 CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF          # "$(COMNAME)"=="sunpro5"
-.ELSE
-.ENDIF          # "$(GUI)"=="UNX"
 
-
-.IF "$(USE_SHELL)"!="4nt"
-CONVERT=convert.sh
-BUILD_ACTION_SEP=;
-.IF "$(HOME)" == ""
-ENV_BUILD=setenv HOME ;
-.ENDIF
-.ELSE # "$(USE_SHELL)"!="4nt"
-CONVERT=convert.bat
-BUILD_ACTION_SEP=^
-.ENDIF # "$(USE_SHELL)"!="4nt"
-
-DSP_DIR=PCbuild
-.IF "$(GUI)" == "UNX"
-CONFIGURE_ACTION= ./configure --prefix=../python-inst
-.IF "$(OS)$(CPU)" == "SOLARISI"
-CONFIGURE_ACTION += --disable-ipv6
-.ENDIF
 .IF "$(OS)" == "IRIX"
 BUILD_ACTION=$(ENV_BUILD) gmake ; gmake install
 .ELSE
 BUILD_ACTION=$(ENV_BUILD) make ; make install
 .ENDIF
-.IF "$(OS)"=="MACOSX"
-PYTHONCORESHL=$(OUT)$/lib$/$(DLLPRE)python$(PYMAJOR)$(PYMINOR)$(DLLPOST)
-PYTHONCORELINK1=$(OUT)$/lib$/$(DLLPRE)python$(PYMAJOR)$(DLLPOST)
-PYTHONCORELINK2=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST)
 .ELSE
-PYTHONCORESHL=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST).$(PYVERSION)
-PYTHONCORELINK1=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST).$(PYMAJOR)
-PYTHONCORELINK2=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST)
-.ENDIF
-.ELSE
-BUILD_DIR=$(DSP_DIR)
-CONFIGURE_DIR=$(DSP_DIR)
-
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-CONFIGURE_ACTION=wdevenv pcbuild Release $(BUILD_ACTION_SEP) $(PERL) $(BACK_PATH)..$/..$/vc70_patch.pl .
-BUILD_ACTION=devenv /build Release /project winsound pcbuild.sln /useenv \
-    $(BUILD_ACTION_SEP) devenv /build Release /project winreg pcbuild.sln /useenv \
-    $(BUILD_ACTION_SEP) devenv /build Release /project unicodedata pcbuild.sln /useenv 	\
-    $(BUILD_ACTION_SEP) devenv /build Release /project select pcbuild.sln /useenv  \
-    $(BUILD_ACTION_SEP) devenv /build Release /project parser pcbuild.sln /useenv  \
-    $(BUILD_ACTION_SEP) devenv /build Release /project mmap pcbuild.sln /useenv    \
-    $(BUILD_ACTION_SEP) devenv /build Release /project _symtable pcbuild.sln /useenv \
-    $(BUILD_ACTION_SEP) devenv /build Release /project _socket pcbuild.sln /useenv  \
-    $(BUILD_ACTION_SEP) devenv /build Release /project _sre pcbuild.sln /useenv  \
-    $(BUILD_ACTION_SEP) devenv /build Release /project python pcbuild.sln /useenv
-.ELSE
-BUILD_ACTION=msdev pcbuild.dsw /USEENV /MAKE 	\
-    "python - Win32 Release" 	\
-    "_sre - Win32 Release" 		\
-    "_socket - Win32 Release"	\
-    "_symtable - Win32 Release" 	\
-    "mmap - Win32 Release" 		\
-    "parser - Win32 Release" 	\
-    "select - Win32 Release" 	\
-    "unicodedata - Win32 Release" 	\
-    "winreg - Win32 Release" 	\
-    "winsound - Win32 Release"
-.ENDIF
+# ----------------------------------
+# WINDOWS
+# ----------------------------------
+BUILD_DIR=PCbuild
+BUILD_ACTION= \
+    $(foreach,i,$(PYPROJECTS) nmake -F $(i).mak CFG="$(i) - Win32 Release" && ) \
+    echo build done
 .ENDIF
 
 PYVERSIONFILE=$(MISC)$/pyversion.mk
@@ -163,74 +154,26 @@ PYCONFIG=$(MISC)$/build$/pyconfig.h
 .INCLUDE : tg_ext.mk
 
 .IF "$(L10N_framework)"==""
-ALLTAR : $(PYCONFIG) $(PYTHONCORESHL) $(PYVERSIONFILE) $(PYTHONCORELINK1) $(PYTHONCORELINK2)
+ALLTAR : $(PYCONFIG) $(PYVERSIONFILE) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ENDIF          # "$(L10N_framework)"==""
 
-$(MISC)$/convert_unx_flag :  $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
-    +$(CONVERT) unx $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$(DSP_DIR)
-    +$(TOUCH) $(MISC)$/convert_unx_flag
 
-$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/convert_unx_flag
-
-$(MISC)$/convert_dos_flag : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    +$(CONVERT) dos $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$(DSP_DIR)
-    +$(TOUCH) $(MISC)$/convert_dos_flag
-
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/convert_dos_flag
-
-$(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
-
-#.IF "$(GUI)" !="UNX"
 $(MISC)$/build$/pyconfig.h : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
     -rm -f $@
     cat $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h > $@
-#.ENDIF
-
-.IF "$(GUI)" == "UNX"
-$(PYTHONCORESHL) : makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-.IF "$(OS)" == "SOLARIS"
-    ld -G -o $@ -u Py_Main -u Py_FrozenMain -u PyFPE_dummy $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -h libpython.so.$(PYMAJOR) -lm -ldl -lc -lpthread
-.ELSE
-.IF "$(OS)" == "FREEBSD" 
-    $(LINK) -shared -o $@ -Wl,-whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -Wl,-no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -lutil ${PTHREAD_LIBS}
-.ELSE
-.IF "$(OS)" == "NETBSD"
-    $(LINK) -shared -o $@ -Wl,-whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -Wl,-no-whole-archive -Wl,-soname=libpython.so.$(PYMAJOR)  -lm -lutil ${PTHREAD_LIBS}
-.ELSE
-.IF "$(OS)" == "IRIX"
-    ld -shared -o $@ -all $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -notall -soname libpython.so.$(PYMAJOR)  -lm -ldl -lc -lpthread
-.ELSE	
-.IF "$(OS)" == "MACOSX"
-    cp $(MISC)$/build$/$(TARFILE_NAME)$/$(DLLPRE)python$(PYMAJOR).$(PYMINOR)$(DLLPOST) $(OUT)$/lib
-.ELSE
-    echo "$(OS)"
-    ld -shared -o $@ --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a --no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -ldl -lutil -lc -lpthread
-.ENDIF # MACOSX
-.ENDIF # IRIX
-.ENDIF # NETBSD
-.ENDIF # FREEBSD
-.ENDIF # SOLARIS
-
-$(PYTHONCORELINK1) : makefile.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
-    -rm -f $@
-.IF "$(OS)" == "MACOSX"
-    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(PYMAJOR).$(PYMINOR)$(DLLPOST) $(DLLPRE)python$(PYMAJOR)$(DLLPOST)
-.ELSE
-    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(DLLPOST).$(PYVERSION) $(DLLPRE)python$(DLLPOST).$(PYMAJOR)
-.ENDIF
-
-$(PYTHONCORELINK2) : makefile.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
-    -rm -f $@
-.IF "$(OS)" == "MACOSX"
-    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(PYMAJOR).$(PYMINOR)$(DLLPOST) $(DLLPRE)python$(DLLPOST)
-.ELSE
-    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(DLLPOST).$(PYVERSION) $(DLLPRE)python$(DLLPOST)
-.ENDIF
-.ENDIF
 
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
     cat $? > $@
 
-patch : $(MISC)$/convert_dos_flag
+#--------------------
+# to be moved to tg_ext.mk
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.bz2
+    @+-$(RM) $@
+.IF "$(GUI)"=="UNX"
+    @+echo $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+.ELSE			# "$(GUI)"=="UNX"
+    @+echo $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)download$/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+.ENDIF			# "$(GUI)"=="UNX"
+    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
