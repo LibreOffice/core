@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:12:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,8 @@ namespace connectivity
             struct DBFMemoHeader
                             {
                                 DBFMemoType db_typ;                     /* Dateityp                     */
-                                UINT32  db_next;                        /* nächster freier Block        */
-                                USHORT  db_size;                        /* Blockgröße: dBase 3 fest     */
+                                UINT32  db_next;                        /* naechster freier Block       */
+                                USHORT  db_size;                        /* Blockgroesse: dBase 3 fest   */
                             };
 
             ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
