@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: tra $ $Date: 2002-12-05 11:35:23 $
+#   last change: $Author: tra $ $Date: 2002-12-14 12:59:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,9 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/tempfile.obj\
             $(SLO)$/file_url.obj\
             $(SLO)$/file_error_transl.obj\
-            $(SLO)$/file_path_helper.obj
+            $(SLO)$/file_path_helper.obj\
+            $(SLO)$/uunxapi.obj\
+            $(SLO)$/process_impl.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -128,7 +130,9 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/tempfile.obj\
             $(OBJ)$/file_url.obj\
             $(OBJ)$/file_error_transl.obj\
-            $(OBJ)$/file_path_helper.obj
+            $(OBJ)$/file_path_helper.obj\
+            $(OBJ)$/uunxapi.obj\
+            $(OBJ)$/process_impl.obj
 #.ENDIF
 
 # --- Targets ------------------------------------------------------
