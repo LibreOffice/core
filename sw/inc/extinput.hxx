@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:02:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,6 @@ public:
     virtual ~SwExtTextInput();
 
     void SetInputData( const CommandExtTextInputData& rData );
-    void InvalidateRange();
-    void SetFontForPos( USHORT nPos, Font& rFont );
     const SvUShorts& GetAttrs() const   { return aAttrs; }
     BOOL IsInsText() const              { return bInsText; }
     void SetInsText( BOOL bFlag )       { bInsText = bFlag; }
