@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-05 17:36:14 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 19:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,24 +640,39 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
 Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() throw (uno::RuntimeException)
 {
-    Rectangle aRect;
+    Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
         Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(NULL);
+        {
+            Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
+            aCellRect.setX(aCellRect.getX() + aRect.getX());
+            aCellRect.setY(aCellRect.getY() + aRect.getY());
+        }
     }
-    return aRect;
+    return aCellRect;
 }
 
 Rectangle ScAccessiblePreviewTable::GetBoundingBox() throw (uno::RuntimeException)
 {
+    FillTableInfo();
+
     Rectangle aRect;
-    if (mpViewShell)
+    if ( mpTableInfo )
     {
-        Window* pWindow = mpViewShell->GetWindow();
-        if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
+        USHORT nColumns = mpTableInfo->GetCols();
+        USHORT nRows = mpTableInfo->GetRows();
+        if ( nColumns > 0 && nRows > 0 )
+        {
+            const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
+            const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
+
+            aRect = Rectangle( pColInfo[0].nPixelStart,
+                               pRowInfo[0].nPixelStart,
+                               pColInfo[nColumns-1].nPixelEnd,
+                               pRowInfo[nRows-1].nPixelEnd );
+        }
     }
     return aRect;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 19:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,9 +1681,11 @@ void ScPrintFunc::MakeEditEngine()
 }
 
 //  nStartY = logic
-void ScPrintFunc::PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nStartY,
+void ScPrintFunc::PrintHF( long nPageNo, BOOL bHeader, long nStartY,
                             BOOL bDoPrint, ScPreviewLocationData* pLocationData )
 {
+    const ScPrintHFParam& rParam = bHeader ? aHdr : aFtr;
+
     pDev->SetMapMode( aTwipMode );          // Kopf-/Fusszeilen in Twips
 
     BOOL bLeft = IsLeft(nPageNo) && !rParam.bShared;
@@ -1813,7 +1815,7 @@ void ScPrintFunc::PrintHF( long nPageNo, const ScPrintHFParam& rParam, long nSta
     if ( pLocationData )
     {
         Rectangle aHeaderRect( aBorderStart, aBorderSize );
-        pLocationData->AddHeaderFooter( aHeaderRect );
+        pLocationData->AddHeaderFooter( aHeaderRect, bHeader );
     }
 }
 
@@ -1942,12 +1944,12 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
         if (aHdr.bEnable)
         {
             long nHeaderY = aPageRect.Top()-aHdr.nHeight;
-            PrintHF( nPageNo, aHdr, nHeaderY, bDoPrint, pLocationData );
+            PrintHF( nPageNo, TRUE, nHeaderY, bDoPrint, pLocationData );
         }
         if (aFtr.bEnable)
         {
             long nFooterY = aPageRect.Bottom()+aFtr.nDistance;
-            PrintHF( nPageNo, aFtr, nFooterY, bDoPrint, pLocationData );
+            PrintHF( nPageNo, FALSE, nFooterY, bDoPrint, pLocationData );
         }
     }
 
@@ -2020,12 +2022,12 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
     if (aHdr.bEnable)
     {
         long nHeaderY = aPageRect.Top()-aHdr.nHeight;
-        PrintHF( nPageNo, aHdr, nHeaderY, bDoPrint, pLocationData );
+        PrintHF( nPageNo, TRUE, nHeaderY, bDoPrint, pLocationData );
     }
     if (aFtr.bEnable)
     {
         long nFooterY = aPageRect.Bottom()+aFtr.nDistance;
-        PrintHF( nPageNo, aFtr, nFooterY, bDoPrint, pLocationData );
+        PrintHF( nPageNo, FALSE, nFooterY, bDoPrint, pLocationData );
     }
 
     //  Position ( Raender / zentrieren )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-05 17:36:14 $
+ *  last change: $Author: nn $ $Date: 2002-03-11 19:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _SC_ACCESSIBLEPREVIEWTABLE_HXX
 #include "AccessiblePreviewTable.hxx"
 #endif
+#ifndef _SC_ACCESSIBLEPAGEHEADER_HXX
+#include "AccessiblePageHeader.hxx"
+#endif
 #ifndef SC_ACCESSIBILITYHINTS_HXX
 #include "AccessibilityHints.hxx"
 #endif
@@ -108,6 +111,55 @@
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 
+//=========================================================================
+
+struct ScPagePreviewCountData
+{
+    //  order is background shapes, header, table, footer, foreground shapes, controls
+
+    long nBackShapes;
+    long nHeaders;
+    long nTables;
+    long nFooters;
+    long nForeShapes;
+    long nControls;
+
+    ScPagePreviewCountData( const ScPreviewLocationData& rData, Window* pSizeWindow );
+
+    long GetTotal() const
+    {
+        return nBackShapes + nHeaders + nTables + nFooters + nForeShapes + nControls;
+    }
+};
+
+ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rData, Window* pSizeWindow ) :
+    nBackShapes( 0 ),
+    nHeaders( 0 ),
+    nTables( 0 ),
+    nFooters( 0 ),
+    nForeShapes( 0 ),
+    nControls( 0 )
+{
+    Size aOutputSize;
+    if ( pSizeWindow )
+        aOutputSize = pSizeWindow->GetOutputSizePixel();
+    Point aPoint;
+    Rectangle aVisRect( aPoint, aOutputSize );
+
+    Rectangle aObjRect;
+
+    if ( rData.GetHeaderPosition( aObjRect ) && aObjRect.IsOver( aVisRect ) )
+        nHeaders = 1;
+
+    if ( rData.GetFooterPosition( aObjRect ) && aObjRect.IsOver( aVisRect ) )
+        nFooters = 1;
+
+    if ( rData.HasCellsInRange( aVisRect ) )
+        nTables = 1;
+
+    //! shapes...
+}
+
 //=====  internal  ========================================================
 
 ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
@@ -128,6 +180,8 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
 void ScAccessibleDocumentPagePreview::SetDefunc()
 {
     mxTable.clear();
+    mxHeader.clear();
+    mxFooter.clear();
 
     if (mpViewShell)
     {
@@ -161,13 +215,14 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
     if ( mpViewShell )
     {
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow() );
+
         if ( rData.HasCellsInRange( Rectangle( rPoint.X, rPoint.Y, rPoint.X, rPoint.Y ) ) )
         {
             if ( !mxTable.is() )
             {
-                //! order is background shapes, header, table, footer, foreground shapes, controls
-                sal_Int32 nIndex = 0;
-
+                //  order is background shapes, header, table, footer, foreground shapes, controls
+                sal_Int32 nIndex = aCount.nBackShapes + aCount.nHeaders;
                 mxTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
             }
             xAccessible = mxTable;
@@ -200,22 +255,8 @@ long SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void) thr
     long nRet = 0;
     if ( mpViewShell )
     {
-        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-
-        Size aOutputSize;
-        Window* pWindow = mpViewShell->GetWindow();
-        if ( pWindow )
-            aOutputSize = pWindow->GetOutputSizePixel();
-        Point aPoint;
-        Rectangle aVisRect( aPoint, aOutputSize );
-
-        //! order is background shapes, header, table, footer, foreground shapes, controls
-
-        long nTables = 0;
-        if ( rData.HasCellsInRange( aVisRect ) )
-            nTables = 1;
-
-        nRet = nTables;
+        ScPagePreviewCountData aCount( mpViewShell->GetLocationData(), mpViewShell->GetWindow() );
+        nRet = aCount.GetTotal();
     }
 
     return nRet;
@@ -230,27 +271,31 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
     if ( mpViewShell )
     {
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow() );
 
-        Size aOutputSize;
-        Window* pWindow = mpViewShell->GetWindow();
-        if ( pWindow )
-            aOutputSize = pWindow->GetOutputSizePixel();
-        Point aPoint;
-        Rectangle aVisRect( aPoint, aOutputSize );
-
-        //! order is background shapes, header, table, footer, foreground shapes, controls
-
-        long nTables = 0;
-        if ( rData.HasCellsInRange( aVisRect ) )
-            nTables = 1;
-
-        if ( nIndex < nTables )
+        if ( nIndex < aCount.nBackShapes )
+        {
+            //! get shape
+        }
+        else if ( nIndex < aCount.nBackShapes + aCount.nHeaders )
+        {
+            if ( !mxHeader.is() )
+                mxHeader = new ScAccessiblePageHeader( this, mpViewShell, sal_True, nIndex );
+            xAccessible = mxHeader;
+        }
+        else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables )
         {
             if ( !mxTable.is() )
                 mxTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-
             xAccessible = mxTable;
         }
+        else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nFooters )
+        {
+            if ( !mxFooter.is() )
+                mxFooter = new ScAccessiblePageHeader( this, mpViewShell, sal_False, nIndex );
+            xAccessible = mxFooter;
+        }
+        //! remaining shapes
     }
 
     if ( !xAccessible.is() )
