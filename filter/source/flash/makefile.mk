@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-08 09:30:57 $
+#   last change: $Author: cl $ $Date: 2002-10-24 16:24:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,16 +96,21 @@ UNOTYPES=\
     com.sun.star.container.XIndexAccess
 # --- Files -------------------------------------
 
-CFLAGS+=-I..$/swfsource
+SRCFILES =	impswfdialog.src				
 
 SLOFILES=	$(SLO)$/filter.obj								\
             $(SLO)$/writer.obj								\
             $(SLO)$/writer1.obj								\
             $(SLO)$/writer2.obj								\
             $(SLO)$/uno.obj									\
-            $(SLO)$/exporter.obj
+            $(SLO)$/exporter.obj							\
+            $(SLO)$/swfdialog.obj							\
+            $(SLO)$/impswfdialog.obj
 
 # --- Library -----------------------------------
+
+RESLIB1NAME=$(TARGET)
+RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
     
@@ -114,6 +119,7 @@ SHL1STDLIBS=\
     $(SVTOOLLIB) \
     $(CPPULIB)			\
     $(CPPUHELPERLIB)	\
+    $(COMPHELPERLIB)	\
     $(VOSLIB)			\
     $(SALLIB)			\
     $(TOOLSLIB)			\
