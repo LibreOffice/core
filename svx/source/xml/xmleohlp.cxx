@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,15 @@
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBED_PERSIST_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_ENTRYINITMODES_HPP_
 #include <com/sun/star/embed/EntryInitModes.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -129,104 +136,6 @@ using namespace ::com::sun::star::lang;
 #define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE      "vnd.sun.star.GraphicObject:"
 
 // -----------------------------------------------------------------------------
-class InputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<stario::XInputStream>
-{
-    ::osl::Mutex    maMutex;
-    Reference < XInputStream > xIn;
-    TempFile aTempFile;
-
-public:
-    InputStorageWrapper_Impl( const uno::Reference < embed::XStorage >&, const ::rtl::OUString& );
-    virtual ~InputStorageWrapper_Impl();
-
-    virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
-    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
-};
-
-InputStorageWrapper_Impl::InputStorageWrapper_Impl( const uno::Reference < embed::XStorage >& xDocStor, const ::rtl::OUString& aObjectStorageName )
-{
-    SvStream *pStream = 0;
-    aTempFile.EnableKillingFile();
-    uno::Reference < container::XNameAccess > xAccess( xDocStor, uno::UNO_QUERY );
-    if ( xAccess.is() && xAccess->hasByName( aObjectStorageName ) )
-    {
-        try
-        {
-            if ( xDocStor->isStreamElement( aObjectStorageName ) )
-            {
-                xIn = xDocStor->openStreamElement( aObjectStorageName, embed::ElementModes::READ )->getInputStream();
-            }
-            else
-            {
-                DBG_ERROR("InputStorageWrapper for an own object?!");
-                uno::Reference < embed::XStorage > xStg = xDocStor->openStorageElement( aObjectStorageName, embed::ElementModes::READ );
-                pStream = aTempFile.GetStream( STREAM_READWRITE );
-                uno::Reference < io::XStream > xStream = new OStreamWrapper( *pStream );
-                uno::Reference < embed::XStorage > xStor = ::comphelper::OStorageHelper::GetStorageFromStream( xStream );
-                xStg->copyToStorage( xStor );
-                xIn = new OSeekableInputStreamWrapper( *pStream );
-            }
-        }
-        catch ( uno::Exception& )
-        {
-        }
-    }
-
-    if ( !xIn.is() )
-    {
-        if ( !pStream )
-            pStream = aTempFile.GetStream( STREAM_READWRITE );
-        xIn = new OSeekableInputStreamWrapper( *pStream );
-    }
-}
-
-InputStorageWrapper_Impl::~InputStorageWrapper_Impl()
-{
-    xIn = 0;
-}
-
-sal_Int32 SAL_CALL InputStorageWrapper_Impl::readBytes(
-        Sequence< sal_Int8 >& aData,
-        sal_Int32 nBytesToRead)
-    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
-{
-    MutexGuard          aGuard( maMutex );
-    return xIn->readBytes( aData, nBytesToRead );
-}
-
-sal_Int32 SAL_CALL InputStorageWrapper_Impl::readSomeBytes(
-        Sequence< sal_Int8 >& aData,
-        sal_Int32 nMaxBytesToRead)
-    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
-{
-    MutexGuard          aGuard( maMutex );
-    return xIn->readSomeBytes( aData, nMaxBytesToRead );
-}
-
-void SAL_CALL InputStorageWrapper_Impl::skipBytes( sal_Int32 nBytesToSkip )
-    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
-{
-    MutexGuard          aGuard( maMutex );
-    xIn->skipBytes( nBytesToSkip );
-}
-
-sal_Int32 SAL_CALL InputStorageWrapper_Impl::available()
-    throw(NotConnectedException, RuntimeException)
-{
-    MutexGuard          aGuard( maMutex );
-    return xIn->available();
-}
-
-void SAL_CALL InputStorageWrapper_Impl::closeInput()
-    throw(NotConnectedException, RuntimeException)
-{
-    MutexGuard          aGuard( maMutex );
-    xIn->closeInput();
-    xIn = 0;
-}
 
 // -----------------------------------------------------------------------------
 
@@ -521,11 +430,20 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         {
             try
             {
+                pTemp->Seek( 0 );
                 uno::Reference < io::XStream > xStm = xDocStor->openStreamElement( rObjName,
                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
                 SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xStm );
                 *pTemp >> *pStream;
                 delete pStream;
+
+                // TODO/LATER: what to do when other types of objects are based on substream persistence?
+                // This is an ole object
+                uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY_THROW );
+                xProps->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                    uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) );
+
                 xStm->getOutputStream()->closeOutput();
             }
             catch ( uno::Exception& )
@@ -674,6 +592,11 @@ void SvXMLEmbeddedObjectHelper::Destroy(
 
 void SvXMLEmbeddedObjectHelper::Flush()
 {
+    if( mxTempStorage.is() )
+    {
+        Reference < XComponent > xComp( mxTempStorage, UNO_QUERY );
+        xComp->dispose();
+    }
 }
 
 // XGraphicObjectResolver: alien objects!
@@ -742,15 +665,26 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                 }
                 else
                 {
-                    uno::Reference < embed::XStorage > xDocStor( mpDocPersist->GetStorage() );
-                    if ( xDocStor->isStreamElement( aObjectStorageName ) )
+                    comphelper::EmbeddedObjectContainer& rContainer =
+                        mpDocPersist->GetEmbeddedObjectContainer();
+
+                    Reference < embed::XEmbeddedObject > xObj =
+                        rContainer.GetEmbeddedObject( aObjectStorageName );
+                    Reference < embed::XEmbedPersist > xPersist( xObj, UNO_QUERY );
+                    if( xPersist.is() )
                     {
-                        uno::Reference < io::XStream > xStream = xDocStor->openStreamElement( aObjectStorageName, embed::ElementModes::READ );
-                        xStrm = xStream->getInputStream();
-                    }
-                    else
-                    {
-                        xStrm = new InputStorageWrapper_Impl( xDocStor, aObjectStorageName );
+                        if( !mxTempStorage.is() )
+                            mxTempStorage =
+                                comphelper::OStorageHelper::GetTemporaryStorage();
+                        Sequence < beans::PropertyValue > aDummy1( 0), aDummy2( 0 );
+                        xPersist->storeToEntry( mxTempStorage, aObjectStorageName,
+                                                aDummy1, aDummy2 );
+                        Reference < io::XStream > xStream =
+                            mxTempStorage->openStreamElement(
+                                                    aObjectStorageName,
+                                                    embed::ElementModes::READ);
+                        if( xStream.is() )
+                            xStrm = xStream->getInputStream();
                     }
                 }
             }
