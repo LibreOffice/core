@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 08:28:58 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
 //.........................................................................
 namespace dbaui
 {
@@ -122,12 +125,17 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     OQueryContainerWindow::~OQueryContainerWindow()
     {
-        if(m_xBeamer.is())
-            m_xBeamer->setComponent(NULL,NULL);
-        m_xBeamer   = NULL;
+
+        if ( m_pBeamer )
+            ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+        m_pBeamer = NULL;
+        if ( m_xBeamer.is() )
         {
-            ::std::auto_ptr<Window> aTemp(m_pBeamer);
-            m_pBeamer = NULL;
+            Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
+            m_xBeamer = NULL;
+            if(xCloseable.is())
+                xCloseable->close(sal_False); // false - holds the owner ship of this frame
+            //  m_xBeamer->setComponent(NULL,NULL);
         }
         {
             ::std::auto_ptr<Window> aTemp(m_pBeamerSeparator);
@@ -233,12 +241,15 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void OQueryContainerWindow::disposingPreview()
     {
-        // here I know that we will be destroyed from the frame
-        ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        m_pBeamer = NULL;
-        m_xBeamer = NULL;
-        m_pSplitter->Hide();
-        Resize();
+        if ( m_pBeamer )
+        {
+            // here I know that we will be destroyed from the frame
+            ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+            m_pBeamer = NULL;
+            m_xBeamer = NULL;
+            m_pSplitter->Hide();
+            Resize();
+        }
     }
     // -----------------------------------------------------------------------------
     long OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
@@ -311,6 +322,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/05/29 08:28:58  oj
+ *  #99650# use of auto_ptr when deleting window
+ *
  *  Revision 1.7  2002/05/06 09:52:47  oj
  *  #96363# change return type of switchView
  *
