@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpsum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:47:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,7 @@ void BmpSum::ProcessFileList( const String& rInFileList,
                     "dtch",
                     "enus",
                     "fren",
+                    "hebrew"
                     "ital",
                     "japn",
                     "korean",
