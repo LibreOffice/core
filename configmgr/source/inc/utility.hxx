@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:40:47 $
+ *  last change: $Author: jb $ $Date: 2002-04-25 15:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,39 @@
 
 #define CFG_NOTHROW() SAL_THROW( () )
 
-#define CFG_THROW1( Ex1 )           SAL_THROW( (Ex1) )
-#define CFG_THROW2( Ex1,Ex2 )       SAL_THROW( (Ex1,Ex2) )
-#define CFG_THROW3( Ex1,Ex2,Ex3 )   SAL_THROW( (Ex1,Ex2,Ex3) )
+#define CFG_THROW1( Ex1 )                       SAL_THROW( (Ex1) )
+#define CFG_THROW2( Ex1,Ex2 )                   SAL_THROW( (Ex1,Ex2) )
+#define CFG_THROW3( Ex1,Ex2,Ex3 )               SAL_THROW( (Ex1,Ex2,Ex3) )
+#define CFG_THROW4( Ex1,Ex2,Ex3,Ex4 )           SAL_THROW( (Ex1,Ex2,Ex3,Ex4) )
+#define CFG_THROW5( Ex1,Ex2,Ex3,Ex4,Ex5 )       SAL_THROW( (Ex1,Ex2,Ex3,Ex4,Ex5) )
+#define CFG_THROW6( Ex1,Ex2,Ex3,Ex4,Ex5,Ex6 )   SAL_THROW( (Ex1,Ex2,Ex3,Ex4,Ex5,Ex6) )
 
 #define CFG_UNO_THROW1( Ex1 )           \
-    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::uno::RuntimeException) )
+    SAL_THROW( (::com::sun::star::Ex1,  \
+                ::com::sun::star::uno::RuntimeException) )
 
 #define CFG_UNO_THROW2( Ex1,Ex2 )       \
-    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::uno::RuntimeException) )
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2,   \
+                ::com::sun::star::uno::RuntimeException) )
 
 #define CFG_UNO_THROW3( Ex1,Ex2,Ex3 )   \
-    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::Ex3, ::com::sun::star::uno::RuntimeException) )
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::Ex3,    \
+                ::com::sun::star::uno::RuntimeException) )
+
+#define CFG_UNO_THROW4( Ex1,Ex2,Ex3,Ex4 )   \
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::Ex3,    \
+                ::com::sun::star::Ex4,  \
+                ::com::sun::star::uno::RuntimeException) )
+
+#define CFG_UNO_THROW5( Ex1,Ex2,Ex3,Ex4,Ex5 )   \
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::Ex3,    \
+                ::com::sun::star::Ex4, ::com::sun::star::Ex5,   \
+                ::com::sun::star::uno::RuntimeException) )
+
+#define CFG_UNO_THROW6( Ex1,Ex2,Ex3,Ex4,Ex5,Ex6 )   \
+    SAL_THROW( (::com::sun::star::Ex1, ::com::sun::star::Ex2, ::com::sun::star::Ex3,    \
+                ::com::sun::star::Ex4, ::com::sun::star::Ex5, ::com::sun::star::Ex6,    \
+                ::com::sun::star::uno::RuntimeException) )
 
 #define CFG_UNO_THROW_ALL(  ) CFG_UNO_THROW1(uno::Exception)
 #define CFG_UNO_THROW_RTE(  ) CFG_UNO_THROW1(uno::RuntimeException)
