@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.18 $
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:11:09 $
+ *  $Revision: 1.19 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
-        aTmpName = ByteString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
+        aTmpName = ByteString(String(INetURLObject( rInitName ).PathToFileName()), osl_getThreadTextEncoding());
                 eStyle = FSYS_STYLE_HOST;
 #endif // BOOTSTRAP
     }
@@ -989,7 +989,7 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
-        aTmpName = ByteString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
+        aTmpName = ByteString(String(INetURLObject( rInitName ).PathToFileName()), osl_getThreadTextEncoding());
         eStyle = FSYS_STYLE_HOST;
 #endif
     }
