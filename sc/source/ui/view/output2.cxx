@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:49:01 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,7 +1164,34 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         rRightClip = ( nRightMissing > 0 );
     }
     else
+    {
         rLeftClip = rRightClip = FALSE;
+
+        // leave space for AutoFilter on screen
+        // (for automatic line break: only if not formatting for printer, as in ScColumn::GetNeededSize)
+
+        if ( eType==OUTTYPE_WINDOW &&
+             ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & SC_MF_AUTO ) &&
+             ( !bBreak || pRefDevice == pFmtDevice ) )
+        {
+            long nFilter = Min( nMergeSizeY, (long) DROPDOWN_BITMAP_SIZE );
+            BOOL bFit = ( nNeeded + nFilter <= nMergeSizeX );
+            if ( bFit || bCellIsValue )
+            {
+                // content fits even in the remaining area without the filter button
+                // -> align within that remaining area
+
+                rAlignRect.Right() -= nFilter * nLayoutSign;
+                rClipRect.Right() -= nFilter * nLayoutSign;
+
+                // if a number doesn't fit, don't hide part of the number behind the button
+                // -> set clip flags, so "###" replacement is used (but also within the smaller area)
+
+                if ( !bFit )
+                    rLeftClip = rRightClip = TRUE;
+            }
+        }
+    }
 
     //  justify both rectangles for alignment calculation, use with DrawText etc.
 
@@ -2655,26 +2682,9 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 if ( eOrient!=SVX_ORIENTATION_STANDARD || bAsianVertical || !bBreak )
                                 {
                                     long nAvailWidth = aCellSize.Width();
-                                    if (eType==OUTTYPE_WINDOW &&
-                                            eOrient!=SVX_ORIENTATION_STACKED &&
-                                            pInfo && pInfo->bAutoFilter)
-                                    {
-                                        USHORT nSub = Min( pRowInfo[nArrY].nHeight,
-                                                            (USHORT) DROPDOWN_BITMAP_SIZE );
-                                        if (bPixelToLogic)
-                                            nAvailWidth -= pRefDevice->PixelToLogic(Size(0,nSub)).Height();
-                                        else
-                                            nAvailWidth -= nSub;
-                                        if (nAvailWidth < nEngineWidth) nAvailWidth = nEngineWidth;
+                                    // space for AutoFilter is already handled in GetOutputArea
 
-                                        nOutWidth -= nSub;
-                                        long nEnginePixel = bPixelToLogic ?
-                                                pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() :
-                                                nEngineWidth;
-                                        if (nOutWidth <= nEnginePixel) nOutWidth = nEnginePixel+1;
-                                    }
-
-                                    //  horizontale Ausrichtung
+                                    //  horizontal alignment
 
                                     if (eOrient==SVX_ORIENTATION_STANDARD && !bAsianVertical)
                                     {
