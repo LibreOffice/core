@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:43:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize)
 : nBufferSize (nNewBufferSize)
 , aBuffer (nNewBufferSize)
 , nCurrent(0)
+, nEnd(0)
 {
 }
 ZipPackageBuffer::~ZipPackageBuffer(void)
@@ -79,6 +80,7 @@ Any SAL_CALL  ZipPackageBuffer::queryInterface( const Type& rType )
 {
     Any aReturn( ::cppu::queryInterface
                 (   rType, static_cast< com::sun::star::io::XInputStream*>  ( this ),
+                           static_cast< com::sun::star::io::XSeekable*> ( this ),
                            static_cast< com::sun::star::io::XOutputStream*> ( this )));
     if ( aReturn.hasValue () == sal_True )
         return aReturn ;
@@ -109,6 +111,7 @@ sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal
 sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    /*
     if (nMaxBytesToRead + nCurrent > nEnd)
         nMaxBytesToRead = nEnd - nCurrent;
     sal_Int64 nEndRead = nMaxBytesToRead+nCurrent;
@@ -116,6 +119,8 @@ sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData,
     for (sal_Int64 i =0; nCurrent < nEndRead; nCurrent++, i++)
         aData[i] = aBuffer[nCurrent];
     return nMaxBytesToRead;
+    */
+    return readBytes(aData, nMaxBytesToRead);
 }
 void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
@@ -135,12 +140,11 @@ void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     sal_Int64 nDataLen = aData.getLength();
-    if (nEnd - nCurrent < nDataLen)
+    if (nEnd + nDataLen > nBufferSize)
     {
         nBufferSize *=2;
         aBuffer.realloc(nBufferSize);
     }
-    nEnd++;
     for (sal_Int64 i=0; i<nDataLen;i++,nEnd++)
         aBuffer[nEnd] = aData[i];
 

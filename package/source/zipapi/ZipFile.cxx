@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:21 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,6 @@
 
 #ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
 #include <com/sun/star/package/ZipConstants.hpp>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _RTL_BYTESEQ_HXX_
-#include <rtl/byteseq.hxx>
 #endif
 
 #include <string.h>
@@ -211,7 +203,7 @@ uno::Reference< io::XInputStream> ZipFile::getInputStream(const package::ZipEntr
     sal_Int64 nBegin = rEntry.nOffset;
     nEnd +=nBegin;
 
-    uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nEnd, 1024, rEntry.nMethod == DEFLATED);
+    uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nEnd, 1024, rEntry.nSize);
     return xStreamRef;
 }
 sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
@@ -268,14 +260,14 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
 
 sal_Int32 ZipFile::findEND( )
 {
-    ULONG nLength=0, nPos=0;
-    ByteSequence aByteSeq;
+    sal_uInt32 nLength=0, nPos=0;
+    uno::Sequence < sal_Int8 > aByteSeq;
     nLength = nPos = aGrabber.getLength();
     aGrabber.seek( nLength );
 
     while (nLength - nPos < 0xFFFF)
     {
-        ULONG nCount = 0xFFFF - ( nLength - nPos);
+        sal_uInt32 nCount = 0xFFFF - ( nLength - nPos);
         if (nCount > ENDHDR)
             nCount = ENDHDR;
         nPos -= nCount;

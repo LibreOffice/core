@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:45:20 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -80,6 +84,7 @@
 class ZipPackageBuffer :
                 public com::sun::star::io::XInputStream,
                 public com::sun::star::io::XOutputStream,
+                public com::sun::star::io::XSeekable,
                 public cppu::OWeakObject
 {
 private:

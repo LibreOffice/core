@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:08:47 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,11 @@ ZipPackage::ZipPackage (Reference < XInputStream > xInput)
 , pZipOut(NULL)
 , pZipBuffer(NULL)
 , pRootFolder(NULL)
+, xStream (NULL)
+, xFolder (NULL)
+, xZipFile (NULL)
+, xBuffer (NULL)
+, xZipOut(NULL)
 {
 }
 
@@ -87,6 +92,11 @@ ZipPackage::ZipPackage( void )
 , pZipOut(NULL)
 , pZipBuffer(NULL)
 , pRootFolder(NULL)
+, xStream (NULL)
+, xFolder (NULL)
+, xZipFile (NULL)
+, xBuffer (NULL)
+, xZipOut(NULL)
 {
 }
 
@@ -94,7 +104,7 @@ ZipPackage::~ZipPackage( void )
 {
     if (pContent)
         delete pContent;
-    if (pZipFile)
+/*  if (pZipFile)
         delete pZipFile;
     if (pZipOut)
         delete pZipOut;
@@ -102,6 +112,7 @@ ZipPackage::~ZipPackage( void )
         delete pZipBuffer;
     if (pRootFolder)
         delete pRootFolder;
+*/
 }
 
 // XInitialization
@@ -115,14 +126,20 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     if (pContent->openStream ( xSink) )
         xStream = xSink->getInputStream();
 
-    pZipFile = new ZipFile(xStream);
-    pZipBuffer = new ZipPackageBuffer(65535);
-    Reference < XOutputStream > xOStream (pZipBuffer);
-    pZipOut = new ZipOutputStream(xOStream, 65535);
+    pZipFile    = new ZipFile(xStream);
+    pZipBuffer  = new ZipPackageBuffer(65535);
+
+    xZipFile    = Reference < XZipFile >         (pZipFile);
+    xBuffer     = Reference < XOutputStream >    (pZipBuffer);
+
+    pZipOut     = new ZipOutputStream(xBuffer, 65535);
     pRootFolder = new ZipPackageFolder(*pZipOut);
 
+    xZipOut     = Reference < XZipOutputStream > (pZipOut);
+    xFolder     = Reference < XNameContainer >   (pRootFolder );
+
     Reference< XEnumeration > xEnum = pZipFile->entries();
-    Reference< XNameContainer > xCurrent  = Reference < XNameContainer > (pRootFolder);
+    Reference< XNameContainer > xCurrent  = xFolder;
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder;
     ZipEntry aEntry;

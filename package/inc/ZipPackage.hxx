@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,12 +122,16 @@ class ZipPackage : public cppu::WeakImplHelper4<
 {
 private:
     ZipPackageFolder *pRootFolder;
-    ::ucb::Content  *pContent;
-    ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
-public:
     ZipFile          *pZipFile;
     ZipOutputStream  *pZipOut;
     ZipPackageBuffer *pZipBuffer;
+    ::ucb::Content  *pContent;
+    ::com::sun::star::uno::Reference < com::sun::star::package::XZipFile > xZipFile;
+    ::com::sun::star::uno::Reference < com::sun::star::package::XZipOutputStream > xZipOut;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xBuffer;
+    ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xFolder;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+public:
     ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput);
     ZipPackage (void);
     virtual ~ZipPackage( void );
