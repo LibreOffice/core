@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:35:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,9 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
 // -----------------------------------------------------------------------------
 void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 {
+    ::rtl::OUString sSelected;
+    if (m_aDatasource.GetEntryCount())
+         sSelected = m_aDatasource.GetSelectEntry();
     m_aDatasource.Clear();
     // fill the list
     for (   ConstStringBagIterator aDS = _rDatasources.begin();
@@ -310,9 +313,13 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
         m_aDatasource.InsertEntry( *aDS );
     }
 
-    // select the first entry
     if (m_aDatasource.GetEntryCount())
-        m_aDatasource.SelectEntryPos(0);
+    {
+        if (sSelected.getLength())
+            m_aDatasource.SelectEntry(sSelected);
+        else        // select the first entry
+            m_aDatasource.SelectEntryPos(0);
+    }
 }
 
 //.........................................................................
