@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 06:30:16 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,17 +173,11 @@ void java_sql_Driver::saveClassRef( jclass pClass )
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
 }
-// -------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
-                                                         Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+// -----------------------------------------------------------------------------
+void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled)
 {
-    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    if(!t.pEnv)
-        throw SQLException(::rtl::OUString::createFromAscii("No Java installed!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
-    Reference< XConnection > xRet;
     // first try if the jdbc driver is alraedy registered at the driver manager
-    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
+    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     try
     {
         if(!object)
@@ -219,11 +213,11 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
                 }
                 else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
                 {
-                    pBegin->Value >>= bAutoRetrievingEnabled;
+                    pBegin->Value >>= _rbAutoRetrievingEnabled;
                 }
                 else if(!pBegin->Name.compareToAscii("AutoRetrievingStatement"))
                 {
-                    pBegin->Value >>= sGeneratedValueStatement;
+                    pBegin->Value >>= _rsGeneratedValueStatement;
                 }
             }
         }
@@ -246,7 +240,20 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
         }
         ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The specified driver could not be loaded!")) ,*this);
     }
+}
+// -------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
+                                                         Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+{
+    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    if(!t.pEnv)
+        throw SQLException(::rtl::OUString::createFromAscii("No Java installed!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
+    Reference< XConnection > xRet;
 
+
+    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
+    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
+    loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled);
     jobject out(0);
 
     if( t.pEnv )
@@ -321,8 +328,14 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
         ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
 
     SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    if(!object)
-        object = java_sql_DriverManager::getDriver(url);
+
+    if ( !object )
+    {
+        // driver was not loaded so far, load it by name
+        ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
+        sal_Bool            bAutoRetrievingEnabled = sal_False; // set to when we should allow to query for generated values
+        loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled);
+    }
 
     if(!object)
     {

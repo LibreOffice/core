@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 11:37:53 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@ java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const
         if( pBegin->Name.compareToAscii("JavaDriverClass") &&
             pBegin->Name.compareToAscii("CharSet") &&
             pBegin->Name.compareToAscii("ParameterNameSubstitution") &&
+            pBegin->Name.compareToAscii("IsPasswordRequired") &&
+            pBegin->Name.compareToAscii("IsAutoRetrievingEnabled") &&
+            pBegin->Name.compareToAscii("AutoRetrievingStatement") &&
             pBegin->Name.compareToAscii("BooleanComparisonMode"))
         {
             ::rtl::OUString aStr;

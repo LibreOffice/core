@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 13:34:23 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,6 @@ namespace connectivity
         static jclass theJSbxObjectClass;   // die Klasse braucht nur einmal angefordert werden !
         static sal_uInt32 nObjCount;                // Zaehler fuer die Anzahl der Instanzen
 
-        static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
     public:
         // der Konstruktor, der fuer die abgeleiteten Klassen verwendet
         // werden soll.
@@ -159,6 +157,7 @@ namespace connectivity
 
         ::rtl::OUString     toString();
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xFactory; }
+        static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 }
 #endif //_CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Driver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:19:58 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ namespace connectivity
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
+
+        void loadDriverFromProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled);
+
         virtual ~java_sql_Driver();
     public:
         // only available to set the driver

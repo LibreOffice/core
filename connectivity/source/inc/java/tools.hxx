@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-09 12:59:06 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ namespace connectivity
             for(jsize i=0;i<nLen;++i)
             {
                 JT xInfo(pEnv,pEnv->GetObjectArrayElement(_Array,i));
+                java_lang_Object::ThrowSQLException(pEnv,NULL);
                 xOut.getArray()[i] = xInfo;
             }
             pEnv->DeleteLocalRef(_Array);
