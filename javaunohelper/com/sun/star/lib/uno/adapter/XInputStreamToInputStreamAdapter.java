@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStreamToInputStreamAdapter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2002-02-15 17:56:04 $
+ *  last change: $Author: jbu $ $Date: 2002-03-05 12:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
 
     public long skip(long n) throws IOException {
 
+        long tmpLongVal = n;
+        int  tmpIntVal;
         int avail;
 
         try {
@@ -187,11 +189,21 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
             throw new IOException(e.toString());
         }
 
-        try {
-            xin.skipBytes((int)n);
-        } catch (Exception e) {
-            throw new IOException(e.toString());
-        }
+        do {
+            if (tmpLongVal >= Integer.MAX_VALUE) {
+                tmpIntVal = Integer.MAX_VALUE;
+            } else {
+                // Casting is safe here.
+                tmpIntVal = (int)tmpLongVal;
+            }
+            tmpLongVal -= tmpIntVal;
+
+            try {
+                xin.skipBytes(tmpIntVal);
+            } catch (Exception e) {
+                throw new IOException(e.toString());
+            }
+        } while (tmpLongVal > 0);
 
         if (avail < n) {
             return(avail);
