@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:22:29 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:23:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=sd
 TARGET=sdraw3
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------------
 
@@ -88,18 +89,14 @@ RESLIB1SRSFILES=\
 # --- StarDraw DLL
 
 SHL1TARGET= sd$(UPD)$(DLLPOSTFIX)
-#SHL1VERSIONMAP= sd.map
+SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= sdi
-
 
 # on MacOSX static libs must be at end of libraries to link with
 .IF "$(OS)" != "MACOSX"
 # static libraries
-SHL1STDLIBS= $(SCHLIB)
-.ELSE
-SHL1STDLIBS=
+SHL1STDLIBS+= $(SCHLIB)
 .ENDIF # MACOSX
-
 
 # dynamic libraries
 SHL1STDLIBS+= \
@@ -125,19 +122,15 @@ SHL1STDLIBS+= \
     $(SALLIB) \
     $(AVMEDIALIB)	
 
-
 # on MacOSX static libs must be at end of libraries to link with
 .IF "$(OS)" == "MACOSX"
 # add back in static libraries
 SHL1STDLIBS+= $(SCHLIB)
 .ENDIF # MACOSX
 
-
-
 SHL1DEPN=   $(L)$/itools.lib
 SHL1LIBS=   $(LIB3TARGET)
 SHL1DEPN+=	makefile.mk
-
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
@@ -183,6 +176,7 @@ LIB3FILES=      \
             $(SLB)$/notes.lib		
 
 
+# sdd
 SHL2TARGET= sdd$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB= sddimp
 SHL2VERSIONMAP= sdd.map
@@ -206,7 +200,7 @@ SHL2OBJS=   $(SLO)$/sddetect.obj \
         $(SLO)$/detreg.obj
 SHL2DEPN+=	makefile.mk
 
-# add for sdui
+# sdui
 SHL4TARGET= sdui$(UPD)$(DLLPOSTFIX)
 SHL4IMPLIB= sduiimp
 SHL4VERSIONMAP= sdui.map
@@ -214,12 +208,14 @@ SHL4DEF=$(MISC)$/$(SHL4TARGET).def
 DEF4NAME=       $(SHL4TARGET)
 SHL4LIBS=   $(SLB)$/sdui_all.lib
 
-LIB4TARGET = $(SLB)$/sdui_all.lib
-LIB4OBJFILES= $(SLO)$/pubdlg.obj
-LIB4FILES = $(SLB)$/sdui.lib
+LIB4TARGET=	$(SLB)$/sdui_all.lib
+LIB4FILES=	\
+    $(SLB)$/sdui.lib \
+    $(SLB)$/func_ui.lib \
+    $(SLB)$/html_ui.lib
 
 SHL4STDLIBS= \
-        $(ISDLIB) \
+    $(ISDLIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASICLIB) \
@@ -240,11 +236,6 @@ SHL4STDLIBS= \
     $(VOSLIB) \
     $(CANVASLIB) \
     $(SALLIB)
-
-
-
-
-
 
 # --- Targets -------------------------------------------------------------
 
