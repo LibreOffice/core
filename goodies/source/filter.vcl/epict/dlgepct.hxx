@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 11:04:27 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 13:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <svtools/fltcall.hxx>
@@ -88,13 +87,13 @@ private:
 
     RadioButton         aRbOriginal;
     RadioButton         aRbSize;
-    GroupBox            aGrpMode;
+    FixedLine           aGrpMode;
 
     FixedText           aFtSizeX;
     MetricField         aMtfSizeX;
     FixedText           aFtSizeY;
     MetricField         aMtfSizeY;
-    GroupBox            aGrpSize;
+    FixedLine           aGrpSize;
 
     FilterConfigItem*   pConfigItem;
     ResMgr*             pMgr;

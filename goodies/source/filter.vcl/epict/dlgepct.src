@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.1.1.3 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:12:12 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 13:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ ModalDialog DLG_EXPORT_EPCT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 178 , 98 ) ;
+    Size = MAP_APPFONT ( 178 , 89 ) ;
     Text = "PICT Optionen" ;
     Text [ ENGLISH ] = "PICT options" ;
     Text [ english_us ] = "PICT Options" ;
@@ -82,7 +82,7 @@ ModalDialog DLG_EXPORT_EPCT
     MetricField MTF_SIZEX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 59 ) ;
+        Pos = MAP_APPFONT ( 60 , 55 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -99,7 +99,7 @@ ModalDialog DLG_EXPORT_EPCT
     MetricField MTF_SIZEY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 74 ) ;
+        Pos = MAP_APPFONT ( 60 , 71 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -113,10 +113,10 @@ ModalDialog DLG_EXPORT_EPCT
         Last = 99999 ;
         SpinSize = 100 ;
     };
-    GroupBox GRP_SIZE
+    FixedLine GRP_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 48 ) ;
-        Size = MAP_APPFONT ( 110 , 44 ) ;
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
         Text = "Größe" ;
         Text [ ENGLISH ] = "Size" ;
         Text [ english_us ] = "Size" ;
@@ -145,8 +145,8 @@ ModalDialog DLG_EXPORT_EPCT
     };
     FixedText FT_SIZEX
     {
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 57 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text = "Breite" ;
         Text [ ENGLISH ] = "Width" ;
         Text [ dutch ] = "Breedte" ;
@@ -175,8 +175,8 @@ ModalDialog DLG_EXPORT_EPCT
     };
     FixedText FT_SIZEY
     {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text = "Höhe" ;
         Text [ ENGLISH ] = "Height" ;
         Text [ english_us ] = "Height" ;
@@ -224,8 +224,8 @@ ModalDialog DLG_EXPORT_EPCT
     };
     RadioButton RB_ORIGINAL
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 98 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Original" ;
         Text [ ENGLISH ] = "~Original" ;
@@ -255,8 +255,8 @@ ModalDialog DLG_EXPORT_EPCT
     };
     RadioButton RB_SIZE
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 98 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Größe" ;
         Text [ ENGLISH ] = "~Size" ;
@@ -284,10 +284,10 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ catalan ] = "~Tamaño";
         Text[ finnish ] = "~Koko";
     };
-    GroupBox GRP_MODE
+    FixedLine GRP_MODE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 110 , 42 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
         Text = "Modus" ;
         Text [ ENGLISH ] = "Mode" ;
         Text [ dutch ] = "Modus" ;
