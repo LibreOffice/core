@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:42:16 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,11 @@
 #include <svx/fhgtitem.hxx>
 #endif
 
+// OD 26.06.2003 #108784#
+#ifndef _SVDPAGV_HXX
+#include <svx/svdpagv.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 
@@ -200,6 +205,10 @@ SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
 
 SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 {
+    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
+    // the corresponding 'master' drawing objects.
+    SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
+
     const SdrMarkList &rMrkList = rDrawView.GetMarkList();
     SwDrawFrmFmt *pFmt;
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
@@ -272,6 +281,11 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     int bUndo = DoesUndo();
     if( bUndo )
         ClearRedo();
+
+    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
+    // the corresponding 'master' drawing objects.
+    SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
+
     const SdrMarkList &rMrkList = rDrawView.GetMarkList();
     if( rMrkList.GetMarkCount() )
     {
@@ -402,6 +416,15 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     if( pContact ) // natuerlich nicht bei gruppierten Objekten
                     {
                         SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
+                        // OD 18.06.2003 #108784# - before delete of selection
+                        // is performed, marked <SwDrawVirtObj>-objects have to
+                        // be replaced by its reference objects.
+                        // Thus, assert, if a <SwDrawVirt>-object is found in the mark list.
+                        if ( pObj->ISA(SwDrawVirtObj) )
+                        {
+                            ASSERT( false,
+                                    "<SwDrawVirtObj> is still marked for delete. application will crash!" );
+                        }
                         //loescht sich selbst!
                         pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetBoundRect() );
                         pObj->SetUserCall( 0 );
@@ -530,6 +553,19 @@ void SwDoc::InitDrawModel()
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
     nControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
+    // OD 25.06.2003 #108784# - add invisible layers corresponding to the
+    // visible ones.
+    {
+        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
+        nInvisibleHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+
+        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHeaven" ));
+        nInvisibleHeaven = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+
+        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleControls" ));
+        nInvisibleControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    }
+
     pDrawModel->InsertPage( pDrawModel->AllocPage( FALSE ) );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
 
@@ -558,6 +594,137 @@ void SwDoc::InitDrawModel()
         pLayout->SetDrawPage( pDrawModel->GetPage( 0 ) );
         pLayout->GetDrawPage()->SetSize( pLayout->Frm().SSize() );
     }
+}
+
+/** method to notify drawing page view about the invisible layers
+
+    OD 26.06.2003 #108784#
+
+    @author OD
+*/
+void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
+{
+    String sLayerNm;
+    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
+    _rSdrPageView.SetLayerVisible( sLayerNm, FALSE );
+
+    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHeaven" ));
+    _rSdrPageView.SetLayerVisible( sLayerNm, FALSE );
+
+    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleControls" ));
+    _rSdrPageView.SetLayerVisible( sLayerNm, FALSE );
+}
+
+/** method to determine, if a layer ID belongs to the visible ones.
+
+    OD 25.06.2003 #108784#
+    Note: If given layer ID is unknown, method asserts and returns <false>.
+
+    @author OD
+*/
+bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId )
+{
+    bool bRetVal;
+
+    if ( _nLayerId == GetHeavenId() ||
+         _nLayerId == GetHellId() ||
+         _nLayerId == GetControlsId() )
+    {
+        bRetVal = true;
+    }
+    else if ( _nLayerId == GetInvisibleHeavenId() ||
+              _nLayerId == GetInvisibleHellId() ||
+              _nLayerId == GetInvisibleControlsId() )
+    {
+        bRetVal = false;
+    }
+    else
+    {
+        ASSERT( false, "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
+        bRetVal = false;
+    }
+
+    return bRetVal;
+}
+
+/** method to determine, if the corresponding visible layer ID for a invisible one.
+
+    OD 25.06.2003 #108784#
+    Note: If given layer ID is a visible one, method returns given layer ID.
+    Note: If given layer ID is unknown, method returns given layer ID.
+
+    @author OD
+*/
+SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId )
+{
+    SdrLayerID nVisibleLayerId;
+
+    if ( _nInvisibleLayerId == GetInvisibleHeavenId() )
+    {
+        nVisibleLayerId = GetHeavenId();
+    }
+    else if ( _nInvisibleLayerId == GetInvisibleHellId() )
+    {
+        nVisibleLayerId = GetHellId();
+    }
+    else if ( _nInvisibleLayerId == GetInvisibleControlsId() )
+    {
+        nVisibleLayerId = GetControlsId();
+    }
+    else if ( _nInvisibleLayerId == GetHeavenId() ||
+              _nInvisibleLayerId == GetHellId() ||
+              _nInvisibleLayerId == GetControlsId() )
+    {
+        ASSERT( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
+        nVisibleLayerId = _nInvisibleLayerId;
+    }
+    else
+    {
+        ASSERT( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
+        nVisibleLayerId = _nInvisibleLayerId;
+    }
+
+    return nVisibleLayerId;
+}
+
+/** method to determine, if the corresponding invisible layer ID for a visible one.
+
+    OD 25.06.2003 #108784#
+    Note: If given layer ID is a invisible one, method returns given layer ID.
+    Note: If given layer ID is unknown, method returns given layer ID.
+
+    @author OD
+*/
+SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId )
+{
+    SdrLayerID nInvisibleLayerId;
+
+    if ( _nVisibleLayerId == GetHeavenId() )
+    {
+        nInvisibleLayerId = GetInvisibleHeavenId();
+    }
+    else if ( _nVisibleLayerId == GetHellId() )
+    {
+        nInvisibleLayerId = GetInvisibleHellId();
+    }
+    else if ( _nVisibleLayerId == GetControlsId() )
+    {
+        nInvisibleLayerId = GetInvisibleControlsId();
+    }
+    else if ( _nVisibleLayerId == GetInvisibleHeavenId() ||
+              _nVisibleLayerId == GetInvisibleHellId() ||
+              _nVisibleLayerId == GetInvisibleControlsId() )
+    {
+        ASSERT( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
+        nInvisibleLayerId = _nVisibleLayerId;
+    }
+    else
+    {
+        ASSERT( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
+        nInvisibleLayerId = _nVisibleLayerId;
+    }
+
+    return nInvisibleLayerId;
 }
 
 /*************************************************************************/
@@ -714,6 +881,3 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
     return(0);
 }
-
-
-
