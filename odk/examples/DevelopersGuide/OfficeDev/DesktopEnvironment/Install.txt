@@ -6,5 +6,5 @@
 (5) copy from an existing java installation the runtime library "jawt" (e.g. jawt.dll for windows)
 	into this directory
 (6) copy "api/<platform>/bin/nativelib.dll" (for windows) to "api/<platform>/class"
-(7) start an office  : "soffice -accept=socket,host=localhost,port=8100;urp;"
+(7) start an office  : "soffice -accept=socket,host=localhost,port=2083;urp;"
 (8) goto "api/<platform>/class" and start java applet: "java -jar desktop.jar"
