@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:45:28 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,12 @@
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
 #endif
-
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
+#endif
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -569,7 +574,6 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 
 void DrawViewShell::FuTemp04(SfxRequest& rReq)
 {
-
     USHORT nSId = rReq.GetSlot();
     switch( nSId )
     {
@@ -606,6 +610,41 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             rReq.Ignore ();
         }
         break;
+
+        case SID_EXTRUSION_TOOGLE:
+        case SID_EXTRUSION_TILT_DOWN:
+        case SID_EXTRUSION_TILT_UP:
+        case SID_EXTRUSION_TILT_LEFT:
+        case SID_EXTRUSION_TILT_RIGHT:
+        case SID_EXTRUSION_3D_COLOR:
+        case SID_EXTRUSION_DEPTH:
+        case SID_EXTRUSION_DIRECTION:
+        case SID_EXTRUSION_PROJECTION:
+        case SID_EXTRUSION_LIGHTING_DIRECTION:
+        case SID_EXTRUSION_LIGHTING_INTENSITY:
+        case SID_EXTRUSION_SURFACE:
+        case SID_EXTRUSION_DEPTH_FLOATER:
+        case SID_EXTRUSION_DIRECTION_FLOATER:
+        case SID_EXTRUSION_LIGHTING_FLOATER:
+        case SID_EXTRUSION_SURFACE_FLOATER:
+        case SID_EXTRUSION_DEPTH_DIALOG:
+            svx::ExtrusionBar::execute( pDrView, rReq, GetViewFrame()->GetBindings() );
+            Cancel();
+            rReq.Ignore ();
+            break;
+
+        case SID_FONTWORK_SHAPE:
+        case SID_FONTWORK_ALIGNMENT:
+        case SID_FONTWORK_CHARACTER_SPACING:
+        case SID_FONTWORK_KERN_CHARACTER_PAIRS:
+        case SID_FONTWORK_GALLERY_FLOATER:
+        case SID_FONTWORK_SHAPE_FLOATER:
+        case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
+        case SID_FONTWORK_ALIGNMENT_FLOATER:
+            svx::FontworkBar::execute( pDrView, rReq );
+            Cancel();
+            rReq.Ignore ();
+            break;
 
         case SID_BMPMASK:
         {
