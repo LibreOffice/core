@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: as $ $Date: 2001-07-20 08:11:17 $
+#   last change: $Author: as $ $Date: 2001-07-31 06:58:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/taskcreator.obj		  		\
                 $(SLO)$/targetfinder.obj		  	\
                 $(SLO)$/argumentanalyzer.obj		\
+                $(SLO)$/converter.obj				\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/asyncquit.obj				\
                 $(SLO)$/oframes.obj					\
@@ -181,6 +182,7 @@ SHL2OBJS=		$(SLO)$/registertemp.obj			\
                 $(SLO)$/filtercachedata.obj			\
                 $(SLO)$/filtercache.obj				\
                 $(SLO)$/argumentanalyzer.obj		\
+                $(SLO)$/converter.obj				\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/lockhelper.obj
 

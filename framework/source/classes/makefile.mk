@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: cd $ $Date: 2001-06-22 13:41:29 $
+#   last change: $Author: as $ $Date: 2001-07-31 06:55:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/statusbarconfiguration.obj				\
                     $(SLO)$/statusbardocumenthandler.obj			\
                     $(SLO)$/eventsconfiguration.obj					\
-                    $(SLO)$/eventsdocumenthandler.obj
+                    $(SLO)$/eventsdocumenthandler.obj				\
+                    $(SLO)$/converter.obj
 
 SRCFILES=			fltdlg.src
 
