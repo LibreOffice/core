@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ LayerUpdateHandler::~LayerUpdateHandler()
 }
 // -----------------------------------------------------------------------------
 inline
-void LayerUpdateHandler::checkBuilder()
+void LayerUpdateHandler::checkBuilder(bool _bForProperty)
 {
     if ( m_aBuilder.isEmpty() )
         raiseMalformedDataException("LayerUpdateHandler: Illegal operation - no update is in progress");
@@ -114,7 +114,7 @@ void LayerUpdateHandler::checkBuilder()
     if ( !m_aBuilder.isActive() )
         raiseMalformedDataException("LayerUpdateHandler: Illegal operation - no context for update available");
 
-    if ( m_aBuilder.isPropertyActive() )
+    if ( m_aBuilder.isPropertyActive() != _bForProperty )
         raiseMalformedDataException("LayerUpdateHandler: Illegal operation - a property is in progress");
 }
 // -----------------------------------------------------------------------------
@@ -129,14 +129,14 @@ void LayerUpdateHandler::raiseMalformedDataException(sal_Char const * pMsg)
 void LayerUpdateHandler::raiseNodeChangedBeforeException(sal_Char const * pMsg)
 {
     OUString sMsg = OUString::createFromAscii(pMsg);
-    throw container::ElementExistException(sMsg,*this);
+    throw backenduno::MalformedDataException(sMsg,*this);
 }
 // -----------------------------------------------------------------------------
 
 void LayerUpdateHandler::raisePropChangedBeforeException(sal_Char const * pMsg)
 {
     OUString sMsg = OUString::createFromAscii(pMsg);
-    throw beans::PropertyExistException(sMsg,*this);
+    throw backenduno::MalformedDataException(sMsg,*this);
 }
 // -----------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@ void LayerUpdateHandler::raisePropExistsException(sal_Char const * pMsg)
 // XUpdateHandler
 void SAL_CALL
     LayerUpdateHandler::startUpdate( const OUString& aContext )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (!m_aBuilder.setContext(aContext))
         raiseMalformedDataException("LayerUpdateHandler: Cannot start update - update is already in progress");
@@ -159,7 +159,8 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::endUpdate(  )
-        throw (backenduno::MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
+        throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
+
 {
     checkBuilder();
 
@@ -175,74 +176,41 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::modifyGroup( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler::modifyNode( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
+        throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     checkBuilder();
 
     if (!m_aBuilder.modifyNode(aName,aAttributes,aAttributeMask,bReset))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start group node modification - node has already been changed.");
+        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start node modification - node has already been changed.");
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::modifySet( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
-{
-    checkBuilder();
-
-    if (!m_aBuilder.modifyNode(aName,aAttributes,aAttributeMask,bReset))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start set node modification - node has already been changed.");
-}
-// -----------------------------------------------------------------------------
-
-void SAL_CALL
-    LayerUpdateHandler::addOrReplaceGroup( const OUString& aName, sal_Int16 aAttributes )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler::addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
+        throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     checkBuilder();
 
     if (!m_aBuilder.replaceNode(aName,aAttributes,NULL))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start added/replaced group node - node has already been changed.");
+        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start added/replaced node - node has already been changed.");
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::addOrReplaceSet( const OUString& aName, sal_Int16 aAttributes )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
-{
-    checkBuilder();
-
-    if (!m_aBuilder.replaceNode(aName,aAttributes,NULL))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start added/replaced set node - node has already been changed.");
-}
-// -----------------------------------------------------------------------------
-
-void SAL_CALL
-    LayerUpdateHandler::addOrReplaceGroupFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler::addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+        throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     checkBuilder();
 
     if (!m_aBuilder.replaceNode(aName,aAttributes,&aTemplate))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start added/replaced group node - node has already been changed.");
+        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start added/replaced node - node has already been changed.");
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::addOrReplaceSetFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
-{
-    checkBuilder();
-
-    if (!m_aBuilder.replaceNode(aName,aAttributes,&aTemplate))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot start added/replaced set node - node has already been changed.");
-}
-// -----------------------------------------------------------------------------
-
-void SAL_CALL
-    LayerUpdateHandler::endNode( const OUString& aName )
-        throw (backenduno::MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler::endNode(  )
+        throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     checkBuilder();
 
@@ -258,47 +226,21 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::removeGroupNode( const OUString& aName )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler::removeNode( const OUString& aName )
+        throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     checkBuilder();
 
     if (!m_aBuilder.removeNode(aName))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot remove group node - node has already been changed.");
+        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot remove node - node has already been changed.");
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::removeSetNode( const OUString& aName )
-        throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler:: modifyProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask )
+        throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    checkBuilder();
-
-    if (!m_aBuilder.removeNode(aName))
-        raiseNodeChangedBeforeException("LayerUpdateHandler: Cannot remove set node - node has already been changed.");
-}
-// -----------------------------------------------------------------------------
-
-void SAL_CALL
-    LayerUpdateHandler::modifyPropertyValue( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, const uno::Any& aValue )
-        throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
-{
-    checkBuilder();
-
-    if (!m_aBuilder.modifyProperty(aName,aAttributes,aAttributeMask,aValue.getValueType()))
-        raisePropChangedBeforeException("LayerUpdateHandler: Cannot start property modification - property has already been changed.");
-
-    OSL_VERIFY( m_aBuilder.setPropertyValue(aValue) );
-
-    OSL_VERIFY( m_aBuilder.finishProperty() );
-}
-// -----------------------------------------------------------------------------
-
-void SAL_CALL
-    LayerUpdateHandler::modifyPropertyAttributes( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask )
-        throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
-{
-    checkBuilder();
+    checkBuilder(false);
 
     if (!m_aBuilder.modifyProperty(aName,aAttributes,aAttributeMask,uno::Type()))
         raisePropChangedBeforeException("LayerUpdateHandler: Cannot start property modification - property has already been changed.");
@@ -308,10 +250,59 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::resetProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask )
-        throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    LayerUpdateHandler:: setPropertyValue( const uno::Any& aValue )
+        throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_ENSURE(aAttributeMask == 0, "LayerUpdateHandler: No support for setting an attribute on a property being reset");
+    checkBuilder(true); // already checks for open property
+
+    OSL_VERIFY( m_aBuilder.setPropertyValue(aValue) );
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL
+    LayerUpdateHandler:: setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+        throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+{
+    checkBuilder(true); // already checks for open property
+
+    OSL_VERIFY( m_aBuilder.setPropertyValueForLocale(aValue,aLocale) );
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL
+    LayerUpdateHandler::resetPropertyValue( const uno::Any& aValue )
+        throw (MalformedDataException, uno::RuntimeException)
+{
+    checkBuilder(true); // already checks for open property
+
+    OSL_VERIFY( m_aBuilder.resetPropertyValue() );
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL
+    LayerUpdateHandler::resetPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+        throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException)
+{
+    checkBuilder(true); // already checks for open property
+
+    OSL_VERIFY( m_aBuilder.resetPropertyValueForLocale(aLocale) );
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL
+    LayerUpdateHandler::endProperty(  )
+        throw (MalformedDataException, uno::RuntimeException)
+{
+    checkBuilder(true); // already checks for open property
+
+    OSL_VERIFY ( m_aBuilder.finishProperty() );
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL
+    LayerUpdateHandler::resetProperty( const OUString& aName )
+        throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+{
     if (!m_aBuilder.resetProperty(aName))
         raisePropChangedBeforeException("LayerUpdateHandler: Cannot reset property - property has already been changed.");
 }
@@ -319,7 +310,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::addOrReplaceProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-        throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (!m_aBuilder.addNullProperty(aName,aAttributes,aType))
         raisePropExistsException("LayerUpdateHandler: Cannot add property - property exists (and has already been changed).");
@@ -328,7 +319,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::addOrReplacePropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-        throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (!m_aBuilder.addProperty(aName,aAttributes,aValue))
         raisePropExistsException("LayerUpdateHandler: Cannot add property - property exists (and has already been changed).");
@@ -337,7 +328,7 @@ void SAL_CALL
 
 void SAL_CALL
     LayerUpdateHandler::removeProperty( const OUString& aName )
-        throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     // treat 'remove' as 'reset'. (Note: does not verify that this actually amounts to dropping the property)
     if (!m_aBuilder.resetProperty(aName))

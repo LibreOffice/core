@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,35 @@ void SAL_CALL LayerUpdateMerger::setPropertyValue( const uno::Any& aValue )
         BasicUpdateMerger::setPropertyValue(aValue);
         return;
     }
+
+    OSL_ASSERT(m_xCurrentNode.is());
+
+    if (!m_xCurrentProp.is())
+    {
+        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: setting value, but no property is started.") );
+        throw MalformedDataException( sMsg, *this );
+    }
+
+    if (!m_xCurrentProp->hasChange())
+    {
+        BasicUpdateMerger::setPropertyValue(aValue);
+        return;
+    }
+
+#ifndef CFG_UPDATEMERGER_BATCHWRITE_PROPERTIES
+    if (m_xCurrentProp->hasValue())
+    {
+        getResultWriter()->setPropertyValue(m_xCurrentProp->getValue());
+    }
+    else
+    {
+        OSL_ENSURE(m_xCurrentProp->hasReset(),"LayerUpdateMerger: ERROR: Unknown change type in PropertyUpdate");
+        // write nothing to result
+    }
+
+    // mark handled
+    m_xCurrentProp->removeValue();
+#endif
 }
 // -----------------------------------------------------------------------------
 
@@ -361,6 +390,35 @@ void SAL_CALL LayerUpdateMerger::setPropertyValueForLocale( const uno::Any& aVal
         BasicUpdateMerger::setPropertyValueForLocale(aValue, aLocale);
         return;
     }
+
+    OSL_ASSERT(m_xCurrentNode.is());
+
+    if (!m_xCurrentProp.is())
+    {
+        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: setting value, but no property is started.") );
+        throw MalformedDataException( sMsg, *this );
+    }
+
+    if (!m_xCurrentProp->hasChangeFor(aLocale))
+    {
+        BasicUpdateMerger::setPropertyValueForLocale(aValue, aLocale);
+        return;
+    }
+
+#ifndef CFG_UPDATEMERGER_BATCHWRITE_PROPERTIES
+    if (m_xCurrentProp->hasValueFor(aLocale))
+    {
+        getResultWriter()->setPropertyValueForLocale(m_xCurrentProp->getValueFor(aLocale),aLocale);
+    }
+    else
+    {
+        OSL_ENSURE(m_xCurrentProp->hasResetFor(aLocale),"LayerUpdateMerger: ERROR: Unknown change type in PropertyUpdate");
+        // write nothing to result
+    }
+
+    // mark handled
+    m_xCurrentProp->removeValueFor(aLocale);
+#endif
 }
 // -----------------------------------------------------------------------------
 
@@ -403,6 +461,7 @@ void SAL_CALL LayerUpdateMerger::addProperty( const OUString& aName, sal_Int16 a
             if (pPropUpdate->getValueType() != aType && pPropUpdate->getValueType() != uno::Type())
                 malformedUpdate("LayerUpdateMerger: types for property update do not match");
 
+            OSL_ENSURE(!pPropUpdate->hasReset(),"Warning: resetting the value of an added property is undefined - reverting to NULL");
             getResultWriter()->addProperty(aName, pPropUpdate->updateFlags(aAttributes), aType);
         }
     }
@@ -435,12 +494,18 @@ void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const OUString& aName, sa
 
     if (PropertyUpdate * pPropUpdate = xUpdate->asPropertyUpdate())
     {
-        if (!pPropUpdate->hasValue())
+        if (!pPropUpdate->hasChange()) // attribute change only
         {
             getResultWriter()->addPropertyWithValue(aName, pPropUpdate->updateFlags(aAttributes), aValue);
         }
-        else if (pPropUpdate->getValue().hasValue())
+        else if (pPropUpdate->hasReset())
         {
+            // write nothing
+        }
+        else if (pPropUpdate->getValue().hasValue()) // setting to non-NULL value
+        {
+            OSL_ASSERT(pPropUpdate->hasValue());
+
             // TODO: validate value-type
             uno::Any aNewValue = pPropUpdate->getValue();
 
@@ -449,8 +514,10 @@ void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const OUString& aName, sa
 
             getResultWriter()->addPropertyWithValue(aName, pPropUpdate->updateFlags(aAttributes), aNewValue);
         }
-        else // setting to null
+        else // setting to null value
         {
+            OSL_ASSERT(pPropUpdate->hasValue());
+
             // TODO: validate type
             if (pPropUpdate->getValueType() != aValue.getValueType() && pPropUpdate->getValueType() != uno::Type())
                 malformedUpdate("LayerUpdateMerger: types for property update do not match");

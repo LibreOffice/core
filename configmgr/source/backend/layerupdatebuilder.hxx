@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,9 @@ namespace configmgr
 
             bool modifyProperty(OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType);
             bool setPropertyValue(uno::Any const & _aValue);
-            bool setPropertyValueForLocale(OUString const & _aLocale, uno::Any const & _aValue);
+            bool setPropertyValueForLocale(uno::Any const & _aValue, OUString const & _aLocale);
+            bool resetPropertyValue();
+            bool resetPropertyValueForLocale(OUString const & _aLocale);
             bool finishProperty();
 
             bool addNullProperty(OUString const & _aName, sal_Int16 _nFlags, uno::Type const & _aType);

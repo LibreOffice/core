@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,9 +242,11 @@ namespace configmgr
             PropertyUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, uno::Type const & _aType);
 
             bool setValueFor(OUString const & _aLocale, ValueUpdate const & _aValueUpdate);
+            bool resetValueFor(OUString const & _aLocale);
             void removeValueFor(OUString const & _aLocale);
 
             bool setValue(ValueUpdate const & _aValueUpdate)    { return setValueFor(primarySlot(), _aValueUpdate); }
+            bool resetValue()                                   { return resetValueFor(primarySlot()); }
             void removeValue()                                  { removeValueFor(primarySlot()); }
 
             void clear();
@@ -253,6 +255,12 @@ namespace configmgr
 
             bool hasValueFor(OUString const & _aLocale) const;
             bool hasValue() const { return hasValueFor(primarySlot()); }
+
+            bool hasResetFor(OUString const & _aLocale) const;
+            bool hasReset() const { return hasResetFor(primarySlot()); }
+
+            bool hasChangeFor(OUString const & _aLocale) const;
+            bool hasChange() const { return hasChangeFor(primarySlot()); }
 
             ValueUpdate getValueFor(OUString const & _aLocale) const;
             ValueUpdate getValue() const { return getValueFor(primarySlot()); }
@@ -267,6 +275,9 @@ namespace configmgr
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer);
         private:
             OUString primarySlot() const { return OUString(); }
+
+            static uno::Any const & getResetMarker();
+            static inline bool isResetMarker(uno::Any const & _aValue);
 
             virtual PropertyUpdate  * asPropertyUpdate();
         };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@ namespace configmgr
         namespace beans     = ::com::sun::star::beans;
         namespace container = ::com::sun::star::container;
         namespace backenduno = drafts::com::sun::star::configuration::backend;
+
+        using backenduno::TemplateIdentifier;
+        using backenduno::MalformedDataException;
 // -----------------------------------------------------------------------------
         class LayerUpdateBuilder;
 
@@ -102,76 +105,76 @@ namespace configmgr
             // XUpdateHandler
             virtual void SAL_CALL
                 startUpdate( const OUString& aContext )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 endUpdate(  )
-                    throw (backenduno::MalformedDataException, lang::IllegalAccessException, uno::RuntimeException);
+                    throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                modifyGroup( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                modifyNode( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
+                    throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                modifySet( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, sal_Bool bReset )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                addOrReplaceNode( const OUString& aName, sal_Int16 aAttributes )
+                    throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceGroup( const OUString& aName, sal_Int16 aAttributes )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                addOrReplaceNodeFromTemplate( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
+                    throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceSet( const OUString& aName, sal_Int16 aAttributes )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                endNode(  )
+                    throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceGroupFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                removeNode( const OUString& aName )
+                    throw (MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                addOrReplaceSetFromTemplate( const OUString& aName, const backenduno::TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                modifyProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask )
+                    throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                endNode( const OUString& aName )
-                    throw (backenduno::MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException);
+                setPropertyValue( const uno::Any& aValue )
+                    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                removeGroupNode( const OUString& aName )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+                    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                removeSetNode( const OUString& aName )
-                    throw (backenduno::MalformedDataException, container::NoSuchElementException, container::ElementExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                resetPropertyValue( const uno::Any& aValue )
+                    throw (MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                modifyPropertyValue( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask, const uno::Any& aValue )
-                    throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                resetPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+                    throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                modifyPropertyAttributes( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask )
-                    throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                endProperty(  )
+                    throw (MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                resetProperty( const OUString& aName, sal_Int16 aAttributes, sal_Int16 aAttributeMask )
-                    throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                resetProperty( const OUString& aName )
+                    throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addOrReplaceProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-                    throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 addOrReplacePropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-                    throw (backenduno::MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 removeProperty( const OUString& aName )
-                    throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (MalformedDataException, beans::UnknownPropertyException, beans::PropertyExistException, lang::IllegalArgumentException, uno::RuntimeException);
 
         private:
             LayerUpdateBuilder & getUpdateBuilder();
 
-            void checkBuilder();
+            void checkBuilder(bool _bForProperty = false);
 
             void raiseMalformedDataException(sal_Char const * pMsg);
             void raiseNodeChangedBeforeException(sal_Char const * pMsg);

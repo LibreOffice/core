@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-30 15:28:35 $
+ *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,11 +210,27 @@ bool LayerUpdateBuilder::setPropertyValue(uno::Any const & _aValue)
 }
 // -----------------------------------------------------------------------------
 
-bool LayerUpdateBuilder::setPropertyValueForLocale(OUString const & _aLocale, uno::Any const & _aValue)
+bool LayerUpdateBuilder::setPropertyValueForLocale(uno::Any const & _aValue, OUString const & _aLocale)
 {
     OSL_PRECOND(m_pCurrentProp, "LayerUpdateBuilder: Illegal state for property operation");
 
     return m_pCurrentProp->setValueFor(_aLocale, _aValue);
+}
+// -----------------------------------------------------------------------------
+
+bool LayerUpdateBuilder::resetPropertyValue()
+{
+    OSL_PRECOND(m_pCurrentProp, "LayerUpdateBuilder: Illegal state for property operation");
+
+    return m_pCurrentProp->resetValue();
+}
+// -----------------------------------------------------------------------------
+
+bool LayerUpdateBuilder::resetPropertyValueForLocale(OUString const & _aLocale)
+{
+    OSL_PRECOND(m_pCurrentProp, "LayerUpdateBuilder: Illegal state for property operation");
+
+    return m_pCurrentProp->resetValueFor(_aLocale);
 }
 // -----------------------------------------------------------------------------
 

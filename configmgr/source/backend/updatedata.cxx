@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,12 +275,50 @@ PropertyUpdate  * PropertyUpdate::asPropertyUpdate()
 }
 // -----------------------------------------------------------------------------
 
+static uno::Any makeResetMarker()
+{
+    uno::Reference< backenduno::XLayerHandler > xNull;
+    return uno::makeAny(xNull);
+}
+// -----------------------------------------------------------------------------
+
+inline bool PropertyUpdate::isResetMarker(uno::Any const & _aValue)
+{
+    OSL_ENSURE( _aValue.getValueTypeClass() != uno::TypeClass_INTERFACE ||
+                _aValue == makeResetMarker() && _aValue.getValueType() == makeResetMarker().getValueType(),
+                "Unexpected any: Interface reference will be taken as reset marker");
+
+    return _aValue.getValueTypeClass() == uno::TypeClass_INTERFACE;
+}
+// -----------------------------------------------------------------------------
+
+uno::Any const & PropertyUpdate::getResetMarker()
+{
+    static uno::Any const aMarker = makeResetMarker();
+
+    OSL_ASSERT( isResetMarker(aMarker) );
+
+    return aMarker;
+}
+// -----------------------------------------------------------------------------
+
 bool PropertyUpdate::setValueFor(OUString const & _aLocale, uno::Any const & _aValueUpdate)
 {
+    OSL_PRECOND( !isResetMarker(_aValueUpdate), "PropertyUpdate: ERROR: Trying to set a reset marker as regular value" );
+
     OSL_ENSURE(m_aValues.find(_aLocale) == m_aValues.end(),
                 "PropertyUpdate: Locale being added already has a value in this property.");
 
     return m_aValues.insert( ValueList::value_type(_aLocale,_aValueUpdate) ).second;
+}
+// -----------------------------------------------------------------------------
+
+bool PropertyUpdate::resetValueFor(OUString const & _aLocale)
+{
+    OSL_ENSURE(m_aValues.find(_aLocale) == m_aValues.end(),
+                "PropertyUpdate: Locale being reset already has a value in this property.");
+
+    return m_aValues.insert( ValueList::value_type(_aLocale,getResetMarker()) ).second;
 }
 // -----------------------------------------------------------------------------
 
@@ -303,6 +341,22 @@ bool PropertyUpdate::hasValueFor(OUString const & _aLocale) const
 {
     Iterator it = m_aValues.find(_aLocale);
 
+    return it != m_aValues.end() && ! isResetMarker(it->second);
+}
+// -----------------------------------------------------------------------------
+
+bool PropertyUpdate::hasResetFor(OUString const & _aLocale) const
+{
+    Iterator it = m_aValues.find(_aLocale);
+
+    return it != m_aValues.end() && isResetMarker(it->second);
+}
+// -----------------------------------------------------------------------------
+
+bool PropertyUpdate::hasChangeFor(OUString const & _aLocale) const
+{
+    Iterator it = m_aValues.find(_aLocale);
+
     return it != m_aValues.end();
 }
 // -----------------------------------------------------------------------------
@@ -311,14 +365,20 @@ uno::Any PropertyUpdate::getValueFor(OUString const & _aLocale) const
 {
     Iterator it = m_aValues.find(_aLocale);
 
-    return it != m_aValues.end() ? it->second : uno::Any();
+    OSL_ENSURE(it != m_aValues.end() && !isResetMarker(it->second),
+                "PropertyUpdate: Should not call getValue() unless hasValue() returns true" );
+
+    return it != m_aValues.end() && !isResetMarker(it->second) ? it->second : uno::Any();
 }
 // -----------------------------------------------------------------------------
 
 void PropertyUpdate::writeValueToLayer(backenduno::XLayerHandler * _pLayer, uno::Any const & _aValue)
 {
     OSL_ASSERT(_pLayer);
-    _pLayer->setPropertyValue(_aValue);
+    if ( !isResetMarker(_aValue) )
+        _pLayer->setPropertyValue(_aValue);
+
+    // else - to reset - do nothing
 }
 // -----------------------------------------------------------------------------
 
@@ -328,8 +388,10 @@ void PropertyUpdate::writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, u
     if (_aLocale == this->primarySlot())
         this->writeValueToLayer(_pLayer,_aValue);
 
-    else
+    else if ( !isResetMarker(_aValue) )
         _pLayer->setPropertyValueForLocale(_aValue,_aLocale);
+
+    // else - to reset - do nothing
 }
 // -----------------------------------------------------------------------------
 
