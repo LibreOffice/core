@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-22 14:21:34 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 09:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 
 #ifndef _FILTER_HXX
-#include <svtools/Filter.hxx>
+#include <svtools/filter.hxx>
 #endif
 #ifndef _SVTOOLS_GRAPHICTOOLS_HXX_
 #include <svtools/graphictools.hxx>
@@ -1143,7 +1143,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
 
     switch( rFilling.getFillType() )
     {
-    case SvtGraphicFill::FillType::fillSolid:
+    case SvtGraphicFill::fillSolid:
         {
             Color aColor( rFilling.getFillColor() );
 
@@ -1156,11 +1156,11 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             maShapeIds.push_back( nShapeId );
         }
         break;
-    case SvtGraphicFill::FillType::fillGradient:
+    case SvtGraphicFill::fillGradient:
         return false;
-    case SvtGraphicFill::FillType::fillHatch:
+    case SvtGraphicFill::fillHatch:
         return false;
-    case SvtGraphicFill::FillType::fillTexture:
+    case SvtGraphicFill::fillTexture:
         {
             Graphic aGraphic;
             rFilling.getGraphic( aGraphic );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-28 16:01:37 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 09:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         delete mpWriter;
         mpWriter = new Writer( nOutputWidth, nOutputHeight, mnDocWidth, mnDocHeight, mnJPEGcompressMode  );
     }
-    catch( exception& )
+    catch( Exception& )
     {
         OSL_ASSERT( false );
         return false; // no writer, no cookies
@@ -333,7 +333,7 @@ sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Referenc
                 return sal_False;
         }
     }
-    catch( exception& )
+    catch( Exception& )
     {
         OSL_ASSERT( false );
     }
@@ -438,7 +438,7 @@ sal_Bool FlashExporter::exportSound( Reference< XOutputStream > &xOutputStream, 
         delete mpWriter;
         mpWriter = new Writer( 0, 0, 0, 0 );
     }
-    catch( exception& )
+    catch( Exception& )
     {
         OSL_ASSERT( false );
     }
