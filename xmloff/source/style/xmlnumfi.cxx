@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: er $ $Date: 2001-07-16 17:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,6 +1326,13 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     bAutoDec = ( rInfo.nDecimals < 0 );
     bAutoInt = ( rInfo.nInteger < 0 );
 
+    if ( bAutoDec )
+    {   // This denotes the GENERAL keyword in proper case which may appear
+        // anywhere in any format code.
+        aFormatCode.append( pFormatter->GetStandardName( nFormatLang ) );
+        return ;
+    }
+
     sal_uInt16 nPrec = 0;
     sal_uInt16 nLeading = 0;
     if ( rInfo.nDecimals >= 0 )                     //  < 0 : Default
@@ -1333,17 +1340,6 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     if ( rInfo.nInteger >= 0 )                      //  < 0 : Default
         nLeading = (sal_uInt16) rInfo.nInteger;
 
-    if ( bAutoDec )
-    {
-        //  use language defaults for other than builtin formats
-
-        const LocaleDataWrapper& rLoc = pData->GetLocaleData( nFormatLang );
-
-        if ( nType == XML_TOK_STYLES_CURRENCY_STYLE )
-            nPrec = rLoc.getCurrDigits();
-        else
-            nPrec = 2; //! was rInt.GetNumDigits(), how about LocaleData providing this?
-    }
     if ( bAutoInt )
     {
         //!...

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: er $ $Date: 2001-07-16 17:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1398,6 +1398,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         else
                             AddToTextElement_Impl( *pElemStr );
                     }
+                    break;
+                case NF_KEY_GENERAL :
+                        WriteNumberElement_Impl( -1, 1, OUString(), sal_False );
                     break;
                 case NF_KEY_CCC:
                     if (pElemStr)
