@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:31:06 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ struct XclImpRootData : public XclRootData
 
 // ----------------------------------------------------------------------------
 
+class ExcelToSc;
+
 /** Access to global data from other classes. */
 class XclImpRoot : public XclRoot
 {
@@ -158,6 +160,9 @@ public:
     XclImpObjectManager&        GetObjectManager() const;
     /** Returns the web query buffer. */
     XclImpWebQueryBuffer&       GetWebQueryBuffer() const;
+
+    /** Returns the formula converter. */
+    ExcelToSc&                  GetFmlaConverter() const;
 
     /** Returns the Calc add-in function name for an Excel function name. */
     String                      GetScAddInName( const String& rXclName ) const;
