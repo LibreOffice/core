@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:10:58 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,6 @@
 #ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
 #endif
-/*
-#ifndef _THREADED_BUFFER_HXX
-#include <ThreadedBuffer.hxx>
-#endif
-*/
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
 #endif
@@ -123,6 +118,12 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
+#endif
 #include <memory>
 
 using namespace rtl;
@@ -131,7 +132,6 @@ using namespace std;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::io;
-using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::util;
@@ -205,8 +205,7 @@ char * ImplGetChars( const OUString & rString )
 #endif
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
-: pContent(NULL)
-, pZipFile(NULL)
+: pZipFile(NULL)
 , pRootFolder(NULL)
 , xContentStream (NULL)
 , xContentSeek (NULL)
@@ -221,7 +220,6 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 
 ZipPackage::~ZipPackage( void )
 {
-    delete pContent;
     delete pZipFile;
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
@@ -431,9 +429,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
 {
     if (! (aArguments[0] >>= sURL))
-        throw com::sun::star::uno::Exception ( OUString::createFromAscii ( "Bad URL." ),
+        throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad URL." ) ),
             static_cast < ::cppu::OWeakObject * > ( this ) );
-    pContent = new Content(sURL, Reference < XCommandEnvironment >() );
+    Content aContent (sURL, Reference < XCommandEnvironment >() );
     sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True;
 
 #ifdef MTG_DEBUG
@@ -444,7 +442,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     try
     {
         Reference < XActiveDataSink > xSink = new ZipPackageSink;
-        if (pContent->openStream ( xSink ) )
+        if (aContent.openStream ( xSink ) )
             xContentStream = xSink->getInputStream();
         if (xContentStream.is())
         {
@@ -492,8 +490,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         {
             // clean up the memory, and tell the UCB about the error
             delete pZipFile; pZipFile = NULL;
-            delete pContent; pContent = NULL;
-            throw com::sun::star::uno::Exception ( OUString::createFromAscii ( "Bad Zip File." ),
+            throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad Zip File." ) ),
                 static_cast < ::cppu::OWeakObject * > ( this ) );
         }
     }
@@ -807,16 +804,42 @@ void SAL_CALL ZipPackage::commitChanges(  )
 
     if (!nSegmentSize )
     {
-        try
+        Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
+        Content aContent ( sURL, Reference < XCommandEnvironment > () );
+        if ( xPropSet.is() )
         {
-            if ( !pContent )
-                pContent = new Content(sURL, Reference < XCommandEnvironment >() );
-            pContent->writeStream ( xContentStream, sal_True );
+            OUString sTempURL;
+            Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
+            aAny >>= sTempURL;
+            TransferInfo aInfo;
+            aInfo.NameClash = NameClash::OVERWRITE;
+            aInfo.MoveData = sal_False;
+            aInfo.SourceURL = sTempURL;
+            aInfo.NewTitle = sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
+            aAny <<= aInfo;
+            try
+            {
+                aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "transfer" ) ), aAny );
+            }
+            catch (::com::sun::star::uno::Exception& r)
+            {
+                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
+                        static_cast < OWeakObject * > ( this ), makeAny( r ) );
+            }
         }
-        catch (::com::sun::star::uno::Exception& r)
+        else
         {
-            throw WrappedTargetException( OUString::createFromAscii( "Unable to write Zip File to disk!" ),
-                    static_cast < OWeakObject * > ( this ), makeAny( r ) );
+            // not quite sure how it could happen that xContentStream WOULDN'T support
+            // XPropertySet, but just in case... :)
+            try
+            {
+                aContent.writeStream ( xContentStream, sal_True );
+            }
+            catch (::com::sun::star::uno::Exception& r)
+            {
+                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
+                        static_cast < OWeakObject * > ( this ), makeAny( r ) );
+            }
         }
     }
     else
@@ -890,13 +913,12 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 {
                     try
                     {
-                        if ( !pContent )
-                            pContent = new Content(sURL, Reference < XCommandEnvironment >() );
-                        pContent->writeStream ( xContentStream, sal_True );
+                        Content aContent (sURL, Reference < XCommandEnvironment >() );
+                        aContent.writeStream ( xContentStream, sal_True );
                     }
                     catch (::com::sun::star::uno::Exception& r)
                     {
-                        throw WrappedTargetException( OUString::createFromAscii( "Unable to write Zip File to disk!" ),
+                        throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
                                 static_cast < OWeakObject * > ( this ), makeAny( r ) );
                     }
                 }
@@ -1540,7 +1562,6 @@ void ZipPackage::unSpanFile ( )
     // Clear the references to the first segment so that we can unmount the disk
     xContentStream = xTempIn;
     xContentSeek = xTempSeek;
-    delete pContent; pContent = NULL;
 
     // Check if the buffer just read is the last one
     if ( checkEnd ( aBuffer ) )
