@@ -344,6 +344,54 @@
                     <value xml:lang="pt">Valores unívocos</value>
                 </prop>
             </node>
+            <node oor:name=".uno:FormSlots/saveRecord" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Aktuellen Datensatz speichern</value>
+                    <value xml:lang="en-US">Save Current Record</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:FormSlots/undoRecord" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Rückgängig : Dateneingabe</value>
+                    <value xml:lang="en-US">Undo: Data Input</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DBSlots/EditDoc" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Daten bearbeiten</value>
+                    <value xml:lang="en-US">Edit Data</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataSourceBrowser/FormLetter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Seriendruck...</value>
+                    <value xml:lang="en-US">~Mail Merge...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataSourceBrowser/InsertColumns" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Daten in Text ...</value>
+                    <value xml:lang="en-US">Data to Text...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataSourceBrowser/InsertContent" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Daten in Felder</value>
+                    <value xml:lang="en-US">Data to Fields</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataSourceBrowser/ToggleExplore" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Explorer ein/aus</value>
+                    <value xml:lang="en-US">Explorer On/Off</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataSourceBrowser/DocumentDataSource" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Aktuelle Dokument-Datenquelle</value>
+                    <value xml:lang="en-US">Data Source of Current Document</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
         </node>
