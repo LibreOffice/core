@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-29 10:51:37 $
+ *  last change: $Author: tl $ $Date: 2002-08-01 10:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Writer" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!-- Responsible: OS -->
   <info>
     <desc xml:lang="en-US">Contains settings for the Writer application.</desc>
   </info>
