@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:21:40 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
     // points to own view provider if the the object has no server
     OwnView_Impl*   m_pOwnView;
 
+    // whether the object should be initialized from clipboard in case of default initialization
+    sal_Bool m_bFromClipboard;
+
 protected:
 
     void SwitchComponentToRunningState_Impl();
@@ -243,6 +246,9 @@ public:
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                         sal_Bool bLink );
 
+    // this constructor let object be initialized from clipboard
+    OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+
     virtual ~OleEmbeddedObject();
 
     sal_Bool SaveObject_Impl();
@@ -250,6 +256,7 @@ public:
 
     void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
+    void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = NULL );
 
     void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
 
