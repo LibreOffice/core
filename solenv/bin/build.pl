@@ -267,13 +267,13 @@ sub GetQuantityToBuild {
 sub IsRootDir {
     my ($Dir);
     $Dir = $_[0];
-    if (($ENV{GUI} eq "UNX") ||
-                ($ENV{GUI} eq "MACOSX") ||
+    if ((($ENV{GUI} eq "UNX") ||
+                ($ENV{GUI} eq "MACOSX")) &&
                 ($Dir eq "\/")) {
         return 1;
-    } elsif (   ($ENV{GUI} eq "WNT") ||
+    } elsif (   (($ENV{GUI} eq "WNT") ||
                 ($ENV{GUI} eq "WIN") ||
-                ($ENV{GUI} eq "OS2") &&
+                ($ENV{GUI} eq "OS2")) &&
                 ($Dir =~ /\S:\/$/)) {
         return 1;
     } else {
