@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 23:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Assign design:";
         Text[ arabic ] = "Assign design:";
         Text[ catalan ] = "Assigna el disseny:";
+        Text[ thai ] = "Assign design";
     };
 
     RadioButton PAGE1_NEW_DESIGN
@@ -147,6 +148,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nou disseny";
         Text[ finnish ] = "Uusi suunnitelma";
+        Text[ thai ] = "New design";
     };
 
     RadioButton PAGE1_OLD_DESIGN
@@ -176,6 +178,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Disseny existent";
         Text[ finnish ] = "Nykyinen suunnitelma";
+        Text[ thai ] = "Existing Design";
     };
 
     ListBox PAGE1_DESIGNS
@@ -216,6 +219,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Suprimeix el disseny seleccionat";
         Text[ finnish ] = "Poista valittu suunnitelma";
+        Text[ thai ] = "Delete Selected Design";
     };
 
     FixedText PAGE1_DESC
@@ -245,6 +249,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Si us plau, seleccioneu un disseny existent o creeu-ne un de nou";
         Text[ finnish ] = "Valitse aiemmin luotu rakenne tai luo uusi rakenne";
+        Text[ thai ] = "Select an existing design or create a new one";
     };
 
 
@@ -289,6 +294,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus de publicació";
         Text[ finnish ] = "Julkaisutyyppi";
+        Text[ thai ] = "Publication type";
     };
 
     RadioButton PAGE2_STANDARD
@@ -318,6 +324,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Format HTML ~estàndard";
         Text[ finnish ] = "~HTML-vakiomuoto";
+        Text[ thai ] = "Standard H~TML format";
     };
 
     RadioButton PAGE2_FRAMES
@@ -347,6 +354,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "HTML estàndard amb ~marcs";
         Text[ finnish ] = "~HTML-vakiomuoto ja kehykset";
+        Text[ thai ] = "Standard HTML with ~frames";
     };
 
     RadioButton PAGE2_KIOSK
@@ -359,7 +367,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese ] = "~Automático";
         Text[ russian ] = "~Àâòîìàòè÷åñêè";
         Text[ greek ] = "ÁõôïìÜôùò";
-        Text[ dutch ] = "~Automatisch";
+        Text[ dutch ] = "A~utomatisch";
         Text[ french ] = "~Automatique";
         Text[ spanish ] = "~Automático";
         Text[ italian ] = "~Automatico";
@@ -376,6 +384,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automàtic";
         Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "~Automatic";
     };
 
     RadioButton PAGE2_WEBCAST
@@ -404,6 +413,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "~WebCast";
         Text[ catalan ] = "~WebCast";
         Text[ finnish ] = "~WebCast";
+        Text[ thai ] = "~WebCast";
     };
 
     FixedBitmap PAGE2_NOFRAMES_FB
@@ -476,6 +486,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Additions";
         Text[ arabic ] = "Additions";
         Text[ catalan ] = "Opcions";
+        Text[ thai ] = "Options";
     };
 
     CheckBox PAGE2_CONTENT
@@ -505,6 +516,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crea ~portada";
         Text[ finnish ] = "Luo otsikkosivu";
+        Text[ thai ] = "Create title page";
     };
 
     FixedLine PAGE2_VERT
@@ -541,6 +553,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostra les notes";
         Text[ finnish ] = "Näytä huomautukset";
+        Text[ thai ] = "Show notes";
     };
 
     ///////////////////////////////
@@ -573,6 +586,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Slayt geçiþi";
         Text[ catalan ] = "Canvi de pàgines";
         Text[ finnish ] = "Esitä dioja";
+        Text[ thai ] = "Advance slides";
     };
 
     RadioButton PAGE2_CHG_DEFAULT
@@ -602,6 +616,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Belgede belirtildiði gibi";
         Text[ catalan ] = "Com s'indica al document";
         Text[ finnish ] = "~Asiakirjan mukaan";
+        Text[ thai ] = "~As stated in document";
     };
 
     RadioButton PAGE2_CHG_AUTO
@@ -615,7 +630,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese ] = "~Automático";
         Text[ russian ] = "~Àâòîìàòè÷åñêè";
         Text[ greek ] = "ÁõôïìÜôùò";
-        Text[ dutch ] = "~Automatisch";
+        Text[ dutch ] = "A~utomatisch";
         Text[ french ] = "~Automatique";
         Text[ spanish ] = "~Automático";
         Text[ italian ] = "~Automatico";
@@ -632,6 +647,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automàtic";
         Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "~Automatic";
     };
 
     FixedText PAGE2_DURATION_TXT
@@ -660,6 +676,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Durma süresi:";
         Text[ catalan ] = "~Durada:";
         Text[ finnish ] = "~Diakuvan näyttöaika:";
+        Text[ thai ] = "~Slide view time:";
     };
 
     TimeField PAGE2_DURATION_TMF
@@ -706,6 +723,7 @@ ModalDialog DLG_PUBLISHING
         QuickHelpText[ turkish ] = "Stand~dauer";
         QuickHelpText[ catalan ] = "~Duración de página";
         QuickHelpText[ finnish ] = "~Sivun kesto";
+        QuickHelpText[ thai ] = "~Duration of page";
     };
 
     CheckBox PAGE2_ENDLESS
@@ -735,6 +753,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~ense fi";
         Text[ finnish ] = "~Päättymätön";
+        Text[ thai ] = "~Endless";
     };
 
     /////////////////////////////////
@@ -767,6 +786,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "WebCast";
         Text[ catalan ] = "WebCast";
         Text[ finnish ] = "~WebCast";
+        Text[ thai ] = "WebCast";
     };
 
     RadioButton PAGE2_ASP
@@ -795,6 +815,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Active Server Pages (ASP)";
         Text[ catalan ] = "~Active Server Pages (ASP)";
         Text[ finnish ] = "~Aktiivisen palvelimen sivut (ASP)";
+        Text[ thai ] = "~Active Server Pages (ASP)";
     };
 
     RadioButton PAGE2_PERL
@@ -823,6 +844,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "~Perl";
         Text[ catalan ] = "Perl";
         Text[ finnish ] = "Perl";
+        Text[ thai ] = "Perl";
     };
 
     FixedText PAGE2_INDEX_TXT
@@ -852,6 +874,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~URL per a oients";
         Text[ finnish ] = "~URL kuuntelijoille";
+        Text[ thai ] = "~URL for listeners";
     };
 
     Edit PAGE2_INDEX
@@ -889,6 +912,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL per a ~presentació:";
         Text[ finnish ] = "Esityksen ~URL ";
+        Text[ thai ] = "URL for ~presentation:";
     };
 
     Edit PAGE2_URL
@@ -925,6 +949,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Perl Skript'leri için URL:";
         Text[ catalan ] = "URL per a ~scripts de perl:";
         Text[ finnish ] = "Perl-komentosarjojen ~URL";
+        Text[ thai ] = "URL for ~perl scripts";
     };
 
     Edit PAGE2_CGI
@@ -980,6 +1005,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Save graphics";
         Text[ arabic ] = "Save graphics";
         Text[ catalan ] = "Desa els gràfics";
+        Text[ thai ] = "Save graphics as";
     };
 
     RadioButton PAGE3_GIF
@@ -1008,6 +1034,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "GIF - Graphics Interchange-Format";
         Text[ catalan ] = "Format ~GIF";
         Text[ finnish ] = "~GIF";
+        Text[ thai ] = "~GIF";
     };
 
     RadioButton PAGE3_JPG
@@ -1036,6 +1063,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "JPG - Sýkýþtýrýlmýþ dosya formatý";
         Text[ catalan ] = "~JPG - Format de fitxer comprimit";
         Text[ finnish ] = "~JPG (tiivistetty muoto)";
+        Text[ thai ] = "~JPG";
     };
 
     ComboBox PAGE3_QUALITY
@@ -1072,6 +1100,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Sýkýþtýrma deðeri:";
         Text[ arabic ] = "ÞíãÉ ÇáÖÛØ:";
         Text[ catalan ] = "Compressió:";
+        Text[ thai ] = "Compression";
     };
 
     FixedLine PAGE3_VERT
@@ -1111,6 +1140,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Display resolution";
         Text[ arabic ] = "Display resolution";
         Text[ catalan ] = "Resolució del monitor";
+        Text[ thai ] = "Monitor resolution";
     };
 
     RadioButton PAGE3_RESOLUTION_1
@@ -1139,6 +1169,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Düþük çözünürlük (~640x480 piksel)";
         Text[ catalan ] = "Resolució baixa (~640x480 píxels)";
         Text[ finnish ] = "Matala tarkkuus (~640x480 kuvapistettä)";
+        Text[ thai ] = "Low resolution (~640x480 pixel)";
     };
 
     RadioButton PAGE3_RESOLUTION_2
@@ -1167,6 +1198,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Normal çözünürlük (~800x600 piksel)";
         Text[ catalan ] = "Resolució mitjana (~800x600 píxels)";
         Text[ finnish ] = "Keskitason tarkkuus (~800x600 kuvapistettä)";
+        Text[ thai ] = "Medium resolution (~800x600 pixel)";
     };
 
     RadioButton PAGE3_RESOLUTION_3
@@ -1195,6 +1227,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Yüksek çözünürlük (~1024x768 piksel)";
         Text[ catalan ] = "Resolució alta (~1024x768 píxels)";
         Text[ finnish ] = "Suuri tarkkuus (~1024x768 kuvapistettä)";
+        Text[ thai ] = "High resolution (~1024x768 pixel)";
     };
 
     ////////////////
@@ -1228,6 +1261,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Efectes";
         Text[ finnish ] = "Tehosteet";
+        Text[ thai ] = "Effects";
     };
 
     CheckBox PAGE3_SLD_SOUND
@@ -1257,6 +1291,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Slayt geçiþlerinde sesi dýþa aktar";
         Text[ catalan ] = "~Exporta els sons quan la diapositiva avanci";
         Text[ finnish ] = "~Vie äänet diakuvan vaihtuessa";
+        Text[ thai ] = "~Export sounds when slide advances";
     };
 
     ////////////////////////////////////////
@@ -1298,6 +1333,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Baþlýk sayfasý için bilgiler";
         Text[ catalan ] = "Informacions per a la portada";
         Text[ finnish ] = "Otsikkosivun tiedot";
+        Text[ thai ] = "Information for the title page";
     };
 
     FixedText PAGE4_AUTHOR_TXT
@@ -1326,6 +1362,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Yazan:";
         Text[ arabic ] = "ÇáãÄáÝ:";
         Text[ catalan ] = "~Autor";
+        Text[ thai ] = "~Author";
     };
 
     Edit PAGE4_AUTHOR
@@ -1363,6 +1400,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "E-posta adresi:";
         Text[ arabic ] = "ÚäæÇä ÇáÈÑíÏ ÇáÅáßÊÑæäí:";
         Text[ catalan ] = "Direcció ~electrònica:";
+        Text[ thai ] = "E-~mail address";
     };
 
     Edit PAGE4_EMAIL_EDIT
@@ -1400,6 +1438,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Web sayfanýz:";
         Text[ arabic ] = "ÕÝÍÉ ÇáÅäÊÑäÊ ÇáÎÇÕÉ Èß:";
         Text[ catalan ] = "La seva pàgina ~principal:";
+        Text[ thai ] = "Your hom~epage";
     };
 
     Edit PAGE4_WWW_EDIT
@@ -1436,6 +1475,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Diðer\n bilgiler:";
         Text[ arabic ] = "ãÚáæãÇÊ\nÅÖÇÝíÉ:";
         Text[ catalan ] = "~Altres\ninformacions:";
+        Text[ thai ] = "Additional ~information";
     };
 
     MultiLineEdit PAGE4_MISC
@@ -1475,6 +1515,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Asýl sununun kopyasýna baðlantý";
         Text[ catalan ] = "Enllaç a la còpia de la presentació ~original";
         Text[ finnish ] = "Linkitä ~alkuperäisen esityksen kopioon";
+        Text[ thai ] = "Link to a copy of the ~original presentation";
     };
 
     CheckBox PAGE4_CREATED
@@ -1504,6 +1545,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Not: '%PRODUCTNAME ile oluþturulmuþtur'";
         Text[ catalan ] = "Nota: 'Creat amb %PRODUCTNAME'";
         Text[ finnish ] = "Huomautus: Luotu ohjelmalla %PRODUCTNAME";
+        Text[ thai ] = "Note: 'Created with %PRODUCTNAME'";
     };
 
     /////////////////////
@@ -1546,6 +1588,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escull estil pel botó";
         Text[ finnish ] = "Valitse painiketyyli";
+        Text[ thai ] = "Select button style";
     };
 
     CheckBox PAGE5_TEXTONLY
@@ -1575,6 +1618,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Només ~text";
         Text[ finnish ] = "~Vain teksti";
+        Text[ thai ] = "~Text only";
     };
 
     Control PAGE5_BUTTONS
@@ -1624,6 +1668,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Seleccioneu l'esquema de color";
         Text[ finnish ] = "Valitse väriskeema";
+        Text[ thai ] = "Select color scheme";
     };
 
     RadioButton PAGE6_DOCCOLORS
@@ -1653,6 +1698,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aplica l'esquema de color des del document";
         Text[ finnish ] = "~Käytä asiakirjan väriskeemaa";
+        Text[ thai ] = "~Apply color scheme from document";
     };
 
     RadioButton PAGE6_DEFAULT
@@ -1681,6 +1727,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Web tarayýcýsý renklerini kullan";
         Text[ catalan ] = "Utilitza els colors del navegador";
         Text[ finnish ] = "Käytä ~selaimen värejä";
+        Text[ thai ] = "Use ~browser colors";
     };
 
     RadioButton PAGE6_USER
@@ -1709,6 +1756,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Kullanýcý tanýmlý renkleri kullan:";
         Text[ catalan ] = "~Utilitza un esquema de color personalitzat:";
         Text[ finnish ] = "~Käytä mukautettua väriskeemaa:";
+        Text[ thai ] = "~Use custom color scheme:";
     };
 
     PushButton PAGE6_TEXT
@@ -1722,10 +1770,10 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese ] = "~Texto";
         Text[ danish ] = "Tekst";
         Text[ french ] = "~Texte";
-        Text[ swedish ] = "~Text";
+        Text[ swedish ] = "T~ext";
         Text[ dutch ] = "~Tekst";
         Text[ spanish ] = "~Texto";
-        Text[ english_us ] = "~Text";
+        Text[ english_us ] = "Text";
         Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "~Òåêñò";
         Text[ polish ] = "Tekst";
@@ -1738,6 +1786,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Text";
         Text[ finnish ] = "~Teksti";
+        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
 
     PushButton PAGE6_LINK
@@ -1767,6 +1816,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Hiperenllaç";
         Text[ finnish ] = "Hyper~linkki";
+        Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
     };
 
     PushButton PAGE6_ALINK
@@ -1796,6 +1846,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Enllaç actiu";
         Text[ finnish ] = "Aktiivinen link~ki";
+        Text[ thai ] = "Active Li~nk";
     };
 
     PushButton PAGE6_VLINK
@@ -1824,6 +1875,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Kullanýlmýþ baðlantý";
         Text[ catalan ] = "~Enllaç visitat";
         Text[ finnish ] = "~Käyty linkki";
+        Text[ thai ] = "~Visited Link";
     };
 
     Control PAGE6_PREVIEW
@@ -1859,6 +1911,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "Artalan";
         Text[ catalan ] = "~Fons";
         Text[ finnish ] = "Taus~ta";
+        Text[ thai ] = "Bac~kground";
     };
 
     // generell
@@ -1898,6 +1951,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<< Enrere";
         Text[ finnish ] = "<< Edellinen";
+        Text[ thai ] = "<< Back";
     };
 
     PushButton BUT_NEXT
@@ -1930,6 +1984,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Següent >>";
         Text[ finnish ] = "Seuraava >>";
+        Text[ thai ] = "Next >>";
     };
 
     OKButton BUT_FINISH
@@ -1961,6 +2016,7 @@ ModalDialog DLG_PUBLISHING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crea";
         Text[ finnish ] = "~Luo";
+        Text[ thai ] = "~Create";
     };
 
     CancelButton BUT_CANCEL
@@ -1991,6 +2047,7 @@ ModalDialog DLG_PUBLISHING
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Exportació HTML";
     Text[ finnish ] = "HTML-vienti";
+    Text[ thai ] = "HTML Export";
 };
 
 ModalDialog DLG_DESIGNNAME
@@ -2041,6 +2098,7 @@ ModalDialog DLG_DESIGNNAME
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "De~sa";
         Text[ finnish ] = "~Tallenna";
+        Text[ thai ] = "~Save";
     };
 
     CancelButton BTN_NOSAVE
@@ -2072,6 +2130,7 @@ ModalDialog DLG_DESIGNNAME
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No desis";
         Text[ finnish ] = "Älä tallenna";
+        Text[ thai ] = "Do Not Save";
     };
     Text[ italian ] = "Nome per il design HTML";
     Text[ portuguese_brazilian ] = "Name for HTML-design";
@@ -2094,6 +2153,7 @@ ModalDialog DLG_DESIGNNAME
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Anomena el disseny HTML";
     Text[ finnish ] = "Nimeä HTML-suunnitelma";
+    Text[ thai ] = "Name HTML design";
 };
 
 
