@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:02:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Akce při kliknutí myší";
         Text[ hebrew ] = "Aktion bei Mausklick";
         Text[ hindi ] = "मौस क्लिक के समय कार्य";
+        Text[ slovak ] = "Činnosť pri kliknutí myšou";
     };
     ListBox LB_ACTION
     {
@@ -154,6 +155,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Efekty";
         Text[ hebrew ] = "‮אפקטים‬";
         Text[ hindi ] = "प्रभाव";
+        Text[ slovak ] = "Efekty";
     };
 #define MA_Y1 (MA_Y0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP)
     FixedText FT_ANIMATION
@@ -187,6 +189,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Animace";
         Text[ hebrew ] = "Animation";
         Text[ hindi ] = "हूलास";
+        Text[ slovak ] = "Animácia";
     };
     ListBox LB_EFFECT
     {
@@ -229,6 +232,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Rychlost";
         Text[ hebrew ] = "Geschwindigkeit";
         Text[ hindi ] = "गति";
+        Text[ slovak ] = "Rýchlosť";
     };
     RadioButton RBT_SLOW
     {
@@ -264,6 +268,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Pomalu";
         Text[ hebrew ] = "~Langsam";
         Text[ hindi ] = "~धीमा";
+        Text[ slovak ] = "~Pomalá";
     };
     RadioButton RBT_MEDIUM
     {
@@ -299,6 +304,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Středně";
         Text[ hebrew ] = "~Mittel";
         Text[ hindi ] = "~मीडियम";
+        Text[ slovak ] = "Stred~ná";
     };
     RadioButton RBT_FAST
     {
@@ -334,6 +340,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Rychle";
         Text[ hebrew ] = "S~chnell";
         Text[ hindi ] = "~तेज";
+        Text[ slovak ] = "~Rýchla";
     };
 #define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
 #define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
@@ -369,6 +376,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Přechod se zvukem";
         Text[ hebrew ] = "Mit Klang ausblenden";
         Text[ hindi ] = "ध्वनी सहित फीका";
+        Text[ slovak ] = "Vyblednúť so zvukom";
     };
     Edit EDT_SOUND
     {
@@ -413,6 +421,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Prohlížet...";
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
+        Text[ slovak ] = "~Listovať...";
     };
     TriStateBox TSB_PLAY_FULL
     {
@@ -447,6 +456,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Přehrát vcelku";
         Text[ hebrew ] = "Klang ~vollständig abspielen";
         Text[ hindi ] = "~पूरा बजाना";
+        Text[ slovak ] = "~Prehrať celé";
     };
 
     //------------------------------------
@@ -542,7 +552,7 @@ TabPage TP_ANIMATION
         Text[ russian ] = "~�����";
         Text[ polish ] = "~Znajd�";
         Text[ japanese ] = "検索(~F)";
-        Text[ chinese_traditional ] = "搜尋(~F)";
+        Text[ chinese_traditional ] = "尋找(~F)";
         Text[ arabic ] = "���";
         Text[ greek ] = "A��������";
         Text[ korean ] = "찾기(~F)";
@@ -554,6 +564,7 @@ TabPage TP_ANIMATION
         Text[ czech ] = "Najít";
         Text[ hebrew ] = "‮חיפוס‬";
         Text[ hindi ] = "~अन्वेषण करो";
+        Text[ slovak ] = "~Nájsť";
     };
 
     Text = "Interaktion" ;
@@ -592,7 +603,10 @@ TabPage TP_ANIMATION
     Text[ czech ] = "Interakce";
     Text[ hebrew ] = "Interaktion";
     Text[ hindi ] = "परस्पर सम्बन्ध का कार्य";
+    Text[ slovak ] = "Interakcia";
 };
+
+
 
 
 
