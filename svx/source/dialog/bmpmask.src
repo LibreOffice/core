@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,10 +237,10 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ spanish ] = "Transparencia" ;
         Text [ french ] = "Transparence" ;
         Text [ dutch ] = "Transparantie" ;
-        Text [ swedish ] = "Transparens" ;
+        Text [ swedish ] = "~Transparens" ;
         Text [ danish ] = "Transparens" ;
         Text [ portuguese_brazilian ] = "Transparenz" ;
-        Text [ portuguese ] = "Transparência" ;
+        Text [ portuguese ] = "~Transparência" ;
         Text[ chinese_simplified ] = "Í¸Ã÷(~A)";
         Text[ russian ] = "Ïðîçðà÷íîñòü";
         Text[ polish ] = "Przezroczystoœæ";
@@ -321,9 +321,9 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ italian ] = "Sostituisci" ;
         Text [ spanish ] = "Reemplazar" ;
         Text [ french ] = "Remplacer" ;
-        Text [ swedish ] = "Ersätt" ;
+        Text [ swedish ] = "~Ersätt" ;
         Text [ danish ] = "Erstat" ;
-        Text [ portuguese ] = "Substituir" ;
+        Text [ portuguese ] = "~Substituir" ;
         Text [ portuguese_brazilian ] = "Ersetzen" ;
         Text[ chinese_simplified ] = "¸üÌæ(~R)";
         Text[ russian ] = "Çàìåíèòü";
@@ -482,5 +482,6 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
 };
 
  // ********************************************************************** EOF
+
 
 
