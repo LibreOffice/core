@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 10:59:20 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_traditional ] = "欄";
         Text[ turkish ] = "Column";
         Text[ arabic ] = "Column";
-        Text[ catalan ] = "Column";
-        Text[ thai ] = "Column";
+        Text[ catalan ] = "COLUMN";
+        Text[ thai ] = "คอลัมน์";
     };
     Control WND_COL
     {
@@ -160,8 +160,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_traditional ] = "列";
         Text[ turkish ] = "Row";
         Text[ arabic ] = "Row";
-        Text[ catalan ] = "Row";
-        Text[ thai ] = "Row";
+        Text[ catalan ] = "fila";
+        Text[ thai ] = "บรรทัด";
     };
     Control WND_ROW
     {
@@ -194,8 +194,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_traditional ] = "資料";
         Text[ turkish ] = "Data";
         Text[ arabic ] = "Data";
-        Text[ catalan ] = "Data";
-        Text[ thai ] = "Data";
+        Text[ catalan ] = "Dades";
+        Text[ thai ] = "ข้อมูล";
     };
     Control WND_DATA
     {
@@ -327,7 +327,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ turkish ] = "Remove";
         Text[ arabic ] = "Remove";
         Text[ catalan ] = "Remove";
-        Text[ thai ] = "Remove";
+        Text[ thai ] = "เอาออก";
     };
     PushButton BTN_OPTIONS
     {
@@ -420,7 +420,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "Sa?da de" ;
         Text [ portuguese ] = "~Resultado em" ;
         Text [ finnish ] = "Tulokset" ;
-        Text [ danish ] = "Output fra" ;
+        Text [ danish ] = "~Output fra" ;
         Text [ french ] = "Destination" ;
         Text [ swedish ] = "Utd~ata fr�n" ;
         Text [ dutch ] = "~Weergave vanaf" ;
@@ -483,7 +483,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ korean ] = "축소";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
     };
@@ -921,6 +921,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ catalan ] = "VarP - ";
         Text[ thai ] = "VarP - ";
     };
-    Text[ thai ] = "DataPilot";
+    Text[ thai ] = "ข้อมูลนำร่อง";
 };
 
