@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: fs $ $Date: 2001-05-07 15:08:41 $
+#   last change: $Author: rt $ $Date: 2001-05-11 09:29:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Generate -----------------------------------------------------
 
-                    $(SLO)$/timerhelper.obj	 						\
+SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/helpagentdispatcher.obj	 				\
                     $(SLO)$/otasksaccess.obj	 					\
                     $(SLO)$/ostatusindicatorfactory.obj				\
