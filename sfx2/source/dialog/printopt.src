@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:24:24 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 20:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ dutch ] = "Afdrukgegevens reduceren";
         Text[ french ] = "Réduire les données d'impression";
         Text[ spanish ] = "Reducir datos de impresión";
-        Text[ italian ] = "Riduce la data di stampa";
+        Text[ italian ] = "Riduci i dati di stampa";
         Text[ danish ] = "Reduce printing data";
         Text[ swedish ] = "Reducera utskriftsdata";
         Text[ polish ] = "Zmniejsz iloœæ danych do wydruku";
@@ -1066,6 +1066,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ catalan ] = "Warning";
     Text[ finnish ] = "Varoitus";
 };
+
 
 
 
