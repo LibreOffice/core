@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:16:08 $
+ *  last change: $Author: fs $ $Date: 2001-09-28 16:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,6 +710,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 const SwDBData& rData = GetWrtShell().GetDBDesc();
                 SW_MOD()->ShowDBObj(*this, rData, FALSE);
             }
+            rReq.Done();
         }
         break;
         default:
