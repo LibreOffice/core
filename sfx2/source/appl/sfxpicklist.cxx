@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 15:19:05 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,10 +431,11 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             case SFX_EVENT_CREATEDOC:
             {
+                BOOL bModifiedState = pDocSh->IsModified();
                 SfxDocumentInfo &rInfo = pDocSh->GetDocInfo();
                 rInfo.SetCreated( SvtUserOptions().GetFullName() );
                 pDocSh->Broadcast( SfxDocumentInfoHint( &rInfo ) );
-                pDocSh->SetModified(FALSE);
+                pDocSh->SetModified(bModifiedState);
             }
             break;
 
