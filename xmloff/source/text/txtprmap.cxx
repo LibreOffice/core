@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-19 12:07:00 $
+ *  last change: $Author: mib $ $Date: 2001-04-25 15:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,8 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_ED( "TopBorderDistance",  FO,     padding_top,              XML_TYPE_MEASURE, CTF_TOPBORDERDISTANCE ),
     M_ED( "BottomBorderDistance",FO,    padding_bottom,           XML_TYPE_MEASURE, CTF_BOTTOMBORDERDISTANCE ),
 
-    M_ED( "LeftBorder",         FO,     border,                   XML_TYPE_BORDER, CTF_ALLBORDER ),
+    // There is an additional property for controls!
+    M_ED( "LeftBorder",         FO,     border,                   XML_TYPE_BORDER|MID_FLAG_MULTI_PROPERTY, CTF_ALLBORDER ),
     M_ED( "LeftBorder",         FO,     border_left,              XML_TYPE_BORDER, CTF_LEFTBORDER ),
     M_ED( "RightBorder",            FO,     border_right,             XML_TYPE_BORDER, CTF_RIGHTBORDER ),
     M_ED( "TopBorder",          FO,     border_top,               XML_TYPE_BORDER, CTF_TOPBORDER ),

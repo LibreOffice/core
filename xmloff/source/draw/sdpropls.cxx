@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-19 16:55:16 $
+ *  last change: $Author: mib $ $Date: 2001-04-25 15:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,8 +347,9 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // 3D shadow attributes
     { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
 
-    // control attributes
-    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER, 0 },
+    // control attributes (border exists one mor time for the text additions
+    // of shapes)
+    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
 
     { 0L }
 };
