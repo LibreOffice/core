@@ -87,7 +87,6 @@ sal_Int32 GetFormatId_Impl( SvGlobalName aName )
 }
 
 
-
 SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
 {
     switch ( nFormat )
@@ -687,6 +686,40 @@ BOOL UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     }
 
     return TRUE;
+}
+
+BOOL UCBStorageStream::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
+{
+    try
+    {
+        if ( pImp->m_pContent )
+        {
+            pImp->m_pContent->setPropertyValue( rName, rValue );
+            return TRUE;
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    return FALSE;
+}
+
+BOOL UCBStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
+{
+    try
+    {
+        if ( pImp->m_pContent )
+        {
+            rValue = pImp->m_pContent->getPropertyValue( rName );
+            return TRUE;
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    return FALSE;
 }
 
 UCBStorage::UCBStorage( SvStream& rStrm, BOOL bDirect )
@@ -1782,3 +1815,38 @@ BOOL UCBStorage::IsStorageFile( SvStream* pFile )
     pFile->Seek( nPos );
     return bRet;
 }
+
+BOOL UCBStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
+{
+    try
+    {
+        if ( pImp->m_pContent )
+        {
+            pImp->m_pContent->setPropertyValue( rName, rValue );
+            return TRUE;
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    return FALSE;
+}
+
+BOOL UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
+{
+    try
+    {
+        if ( pImp->m_pContent )
+        {
+            rValue = pImp->m_pContent->getPropertyValue( rName );
+            return TRUE;
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    return FALSE;
+}
+

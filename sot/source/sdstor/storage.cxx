@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-12 17:18:09 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 13:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,34 @@ BOOL SotStorageStream::Revert()
         SetError( pOwnStm->GetError() );
     }
     return GetError() == SVSTREAM_OK;
+}
+
+BOOL SotStorageStream::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
+{
+    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
+    if ( pStg )
+    {
+        return pStg->SetProperty( rName, rValue );
+    }
+    else
+    {
+        DBG_ERROR("Not implemented!")
+        return FALSE;
+    }
+}
+
+BOOL SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
+{
+    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
+    if ( pStg )
+    {
+        return pStg->GetProperty( rName, rValue );
+    }
+    else
+    {
+        DBG_ERROR("Not implemented!")
+        return FALSE;
+    }
 }
 
 /************** class SotStorage ******************************************
@@ -1100,4 +1128,31 @@ BOOL SotStorage::Validate()
         return TRUE;
 }
 
+BOOL SotStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
+{
+    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    if ( pStg )
+    {
+        return pStg->SetProperty( rName, rValue );
+    }
+    else
+    {
+        DBG_ERROR("Not implemented!")
+        return FALSE;
+    }
+}
+
+BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
+{
+    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    if ( pStg )
+    {
+        return pStg->GetProperty( rName, rValue );
+    }
+    else
+    {
+        DBG_ERROR("Not implemented!")
+        return FALSE;
+    }
+}
 
