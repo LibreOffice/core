@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1461,12 +1461,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_LEFT:
         case KEY_RIGHT:
-            // When RTL is active then reverst the meaning of the left and
-            // right cursor keys.  With this the cursor keys react even
-            // under RTL visually i.e. KEY_LEFT always goes left
-            // indepentantly of RTL.
-            if ((rKEvt.GetKeyCode().GetCode()==KEY_LEFT && ! IsRTLActive())
-                || (rKEvt.GetKeyCode().GetCode()==KEY_RIGHT && IsRTLActive()))
+            if ( rKEvt.GetKeyCode().GetCode()==KEY_LEFT )
             {
                 do
                 {
