@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:48:55 $
+ *  last change: $Author: thb $ $Date: 2002-09-17 11:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
+#include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
 
 #ifndef _SFXDOCFILE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:31:15 $
+ *  last change: $Author: thb $ $Date: 2002-09-17 11:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
