@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+
 using namespace comphelper;
 
 //.........................................................................
@@ -88,8 +92,12 @@ namespace frm
 //==================================================================
 // OImageControlModel
 //==================================================================
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::form::XImageProducerSupplier
+                            ,   ::com::sun::star::awt::XImageProducer
+                            >   OImageControlModel_Base;
+
 class OImageControlModel
-                :public ::com::sun::star::form::XImageProducerSupplier
+                :public OImageControlModel_Base
                 ,public ::comphelper::OAggregationArrayUsageHelper<OImageControlModel>
                 ,public OBoundControlModel
                 ,public OPropertyChangeListener
@@ -149,7 +157,12 @@ public:
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::form::XImageProducerSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer> SAL_CALL getImageProducer() throw ( ::com::sun::star::uno::RuntimeException) { return m_xImageProducer; }
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer> SAL_CALL getImageProducer() throw ( ::com::sun::star::uno::RuntimeException);
+
+// XImageProducer
+    virtual void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
 
 // ::comphelper::OAggregationArrayUsageHelper
     virtual void fillProperties(
