@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-25 13:34:06 $
+ *  last change: $Author: jbu $ $Date: 2001-11-02 17:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,55 @@ import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
+
+class MyWorkAt implements IWorkAt
+{
+    private static boolean DEBUG = false;
+    protected ThreadId _id;
+    protected WorkAt _async_WorkAt;
+    protected boolean _success = false;
+    public MyWorkAt( WorkAt async_WorkAt )
+        {
+            _async_WorkAt = async_WorkAt;
+        }
+    public void syncCall() throws Throwable
+        {
+            if( DEBUG ) System.out.println( "reaching syncCall" );
+            IMessage iMessage = new MyMessage(true, ThreadPool_Test.__workAt_td, "oid", ThreadPoolFactory.getThreadId(), null, null, null);
+
+            // marshal reply
+            ThreadPool_Test.__iThreadPool.putJob(new Job(this, ThreadPool_Test. __iReceiver, iMessage));
+        }
+    public  void asyncCall() throws Throwable
+        {
+
+            for( int i = 0 ; i < 5 ; i ++ )
+            {
+                if( DEBUG ) System.out.println( "starting asyncCall"  + _async_WorkAt._async_counter);
+                ThreadPool_Test.__iThreadPool.attach();
+                ThreadPool_Test.putJob(
+                      this , true ,
+                      ThreadPoolFactory.getThreadId() , "syncCall" );
+                // wait for reply
+                ThreadPool_Test.__iThreadPool.enter();
+                ThreadPool_Test.__iThreadPool.detach();
+                if( DEBUG ) System.out.println( "finishing asyncCall"  + _async_WorkAt._async_counter);
+            }
+            // async must have waited for this call
+            _success = _async_WorkAt._async_counter == 2;
+        }
+
+    public  void increment() throws Throwable
+        {
+
+        }
+
+    public  void notifyme()
+        {
+
+        }
+
+}
 
 public class ThreadPool_Test {
     /**
@@ -410,6 +459,41 @@ public class ThreadPool_Test {
         return passed;
     }
 
+    static boolean test_async_sync( Vector vector , boolean silent ) throws InterruptedException
+    {
+        boolean passed = true;
+
+        if(!silent)
+            System.err.println("\t\ttest_async_sync:");
+
+        WorkAt workAt = new WorkAt();
+        ThreadId threadId = new ThreadId();
+        MyWorkAt myWorkAt = new MyWorkAt( workAt );
+
+        // queue asyncs
+        for(int i = 0; i < WorkAt.MESSAGES; ++ i) {
+            if( i == 2 )
+            {
+                putJob( myWorkAt, false , threadId, "asyncCall" );
+            }
+            putJob(workAt, false, threadId, "asyncCall");
+        }
+
+        synchronized(workAt) {
+            putJob(workAt, false, threadId, "notifyme");
+
+            while(!workAt._notified)
+                workAt.wait();
+        }
+
+        passed = workAt._async_counter == WorkAt.MESSAGES && myWorkAt._success;
+
+        if(!silent)
+            System.err.println("\t\tpassed? " + passed);
+
+        return passed;
+    }
+
     static boolean test_stress(Vector vector) throws Throwable {
         boolean passed = true;
 
@@ -669,8 +753,12 @@ public class ThreadPool_Test {
           tmp_passed = test_static_thread_async_sync_order(vector, false);
         passed = passed && tmp_passed;
 
-          tmp_passed = test_stress(vector);
+           tmp_passed = test_stress(vector);
+          passed = passed && tmp_passed;
+
+        tmp_passed = test_async_sync(vector,false);
         passed = passed && tmp_passed;
+
 
         System.err.println("\tpassed? " + passed);
         return passed;
