@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:02:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,6 +698,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
             case ::com::sun::star::sdbc::DataType::TIME:
             case ::com::sun::star::sdbc::DataType::TIMESTAMP:
             case ::com::sun::star::sdbc::DataType::BIT:
+            case ::com::sun::star::sdbc::DataType::BOOLEAN:
             case ::com::sun::star::sdbc::DataType::TINYINT:
             case ::com::sun::star::sdbc::DataType::SMALLINT:
             case ::com::sun::star::sdbc::DataType::INTEGER:
