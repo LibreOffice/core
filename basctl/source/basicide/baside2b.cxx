@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:45:47 $
+ *  last change: $Author: sb $ $Date: 2002-07-05 10:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,8 @@ void lcl_FormatArrayString( String& rResult )
 
 void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
 {
+    // The result of using explicit colors here appears to be harmless when
+    // switching to high contrast mode:
     if ( !pWin->IsFloatingMode() )
     {
         Size aSz = pWin->GetOutputSizePixel();
@@ -341,7 +343,8 @@ EditorWindow::EditorWindow( Window* pParent ) :
     bHighlightning = FALSE;
     pProgress = 0;
     nCurTextWidth = 0;
-    SetBackground( Wallpaper( COL_WHITE ) );
+    SetBackground(
+        Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
     SetPointer( Pointer( POINTER_TEXT ) );
 
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
@@ -784,6 +787,23 @@ void EditorWindow::CreateEditEngine()
         pModulWindow->SetReadOnly( TRUE );
 }
 
+// virtual
+void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
+{
+    Window::DataChanged(rDCEvt);
+    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+        && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
+    {
+        Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
+        if (aColor
+            != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
+        {
+            SetBackground(Wallpaper(aColor));
+            Invalidate();
+        }
+    }
+}
+
 void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
@@ -891,8 +911,7 @@ void EditorWindow::ImpDoHighlight( ULONG nLine )
     for ( USHORT i = 0; i < nCount; i++ )
     {
         HighlightPortion& r = aPortions[i];
-        USHORT nCol = r.tokenType;
-        const Color& rColor = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetSyntaxColors()[nCol];
+        const Color& rColor = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);
         pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd );
     }
 
@@ -1065,8 +1084,7 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
 {
     pModulWindow = 0;
     nCurYOffset = 0;
-    SetLineColor( Color( COL_BLACK ) );
-    SetBackground( Wallpaper( COL_WHITE ) );
+    setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
     nMarkerPos = MARKER_NOMARKER;
 
     // nCurYOffset merken und nicht von EditEngine holen.
@@ -1100,8 +1118,10 @@ void __EXPORT BreakPointWindow::Paint( const Rectangle& )
     Size aOutSz( GetOutputSize() );
     long nLineHeight = GetTextHeight();
 
-    Image aBrk1( ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_BRKENABLED ) );
-    Image aBrk0( ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_BRKDISABLED ) );
+    Image aBrk1(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
+                getImage(IMGID_BRKENABLED, m_bHighContrastMode));
+    Image aBrk0(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
+                getImage(IMGID_BRKDISABLED, m_bHighContrastMode));
     Size aBmpSz( aBrk1.GetSizePixel() );
     aBmpSz = PixelToLogic( aBmpSz );
     Point aBmpOff( 0, 0 );
@@ -1148,11 +1168,10 @@ void BreakPointWindow::ShowMarker( BOOL bShow )
     Size aOutSz( GetOutputSize() );
     long nLineHeight = GetTextHeight();
 
-    Image aMarker;
-    if ( bErrorMarker )
-        aMarker = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_ERRORMARKER );
-    else
-        aMarker = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_STEPMARKER );
+    Image aMarker(((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->
+                  getImage(bErrorMarker
+                           ? IMGID_ERRORMARKER : IMGID_STEPMARKER,
+                           m_bHighContrastMode));
 
     Size aMarkerSz( aMarker.GetSizePixel() );
     aMarkerSz = PixelToLogic( aMarkerSz );
@@ -1272,35 +1291,28 @@ BOOL BreakPointWindow::SyncYOffset()
     return FALSE;
 }
 
-
-/*
-
-
-void __EXPORT BreakPointWindow::MouseMove( const MouseEvent &rEvt )
+// virtual
+void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
+    Window::DataChanged(rDCEvt);
+    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+        && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
+    {
+        Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
+        if (aColor
+            != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
+        {
+            setBackgroundColor(aColor);
+            Invalidate();
+        }
+    }
 }
 
-
-
-void __EXPORT BreakPointWindow::MouseButtonUp( const MouseEvent &rEvt )
+void BreakPointWindow::setBackgroundColor(Color aColor)
 {
+    SetBackground(Wallpaper(aColor));
+    m_bHighContrastMode = aColor.IsDark();
 }
-
-
-
-
-BOOL __EXPORT BreakPointWindow::Drop( const DropEvent& rEvt )
-{
-}
-
-
-
-BOOL __EXPORT BreakPointWindow::QueryDrop( const DropEvent& rEvt )
-{
-}
-*/
-
-
 
 WatchWindow::WatchWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
@@ -1618,7 +1630,7 @@ void __EXPORT StackWindow::UpdateCalls()
 
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
-    Window( pParent,  WB_3DLOOK | WB_CLIPCHILDREN ),
+    Window( pParent, WB_3DLOOK | WB_CLIPCHILDREN ),
     aEWVScrollBar( this, WB_VSCROLL | WB_DRAG ),
     aBrkWindow( this ),
     aEdtWindow( this )
@@ -1659,24 +1671,6 @@ void __EXPORT ComplexEditorWindow::Resize()
 //  Invalidate();
 }
 
-
-
-void __EXPORT ComplexEditorWindow::Paint( const Rectangle& rRect )
-{
-#ifdef WIN
-    Point aPos( aEWVScrollBar.GetPosPixel() );
-    Size aSz( aEWVScrollBar.GetSizePixel() );
-    const Color aOldLineColor( GetLineColor() );
-    SetLineColor( Color( COL_GRAY ) );
-    DrawLine( Point( aPos.X(), aPos.Y() - 1 ), Point( aPos.X() + aSz.Width(), aPos.Y() - 1 ) );
-    SetLineColor( Color( COL_WHITE ) );
-    DrawLine( Point( aPos.X() + aSz.Width(), aPos.Y() - 1 ), Point( aPos.X() + aSz.Width(), aPos.Y() + aSz.Height() ) );
-    DrawLine( Point( aPos.X(), aPos.Y() + aSz.Height() ), Point( aPos.X() + aSz.Width(), aPos.Y() + aSz.Height() ) );
-    SetLineColor( aOldLineColor );
-#endif
-}
-
-
 IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 {
     if ( aEdtWindow.GetEditView() )
@@ -1692,7 +1686,22 @@ IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
     return 0;
 }
 
-
+// virtual
+void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
+{
+    Window::DataChanged(rDCEvt);
+    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+        && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
+    {
+        Color aColor(GetSettings().GetStyleSettings().GetFaceColor());
+        if (aColor
+            != rDCEvt.GetOldSettings()->GetStyleSettings().GetFaceColor())
+        {
+            SetBackground(Wallpaper(aColor));
+            Invalidate();
+        }
+    }
+}
 
 WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
     : SvTreeListBox( pParent, nWinBits )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:45:47 $
+ *  last change: $Author: sb $ $Date: 2002-07-05 10:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1384,16 +1384,17 @@ BOOL ModulWindow::IsPasteAllowed()
 
 ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     Window( pParent, WB_CLIPCHILDREN ),
-    aWatchWindow( this ),
-    aStackWindow( this ),
     aVSplitter( this, WinBits( WB_VSCROLL ) ),
     aHSplitter( this, WinBits( WB_HSCROLL ) ),
+    aWatchWindow( this ),
+    aStackWindow( this ),
+    bVSplitted(FALSE),
+    bHSplitted(FALSE),
+    m_pModulWindow(0),
     m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT)),
     m_aImagesHighContrast(IDEResId(RID_IMGLST_LAYOUT_HC))
 {
-    pModulWindow = 0;
-    bVSplitted = FALSE;
-    bHSplitted = FALSE;
+    SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
     aVSplitter.SetSplitHdl( LINK( this, ModulWindowLayout, SplitHdl ) );
     aHSplitter.SetSplitHdl( LINK( this, ModulWindowLayout, SplitHdl ) );
@@ -1403,16 +1404,25 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     aWatchWindow.Show();
     aStackWindow.Show();
 
-    aSyntaxColors[0] = Color( COL_BLACK );      // TT_UNKNOWN,
-    aSyntaxColors[1] = Color( COL_GREEN );      // TT_IDENTIFIER,
-    aSyntaxColors[2] = Color( COL_BLACK );      // TT_WHITESPACE,
-    aSyntaxColors[3] = Color( COL_LIGHTRED );   // TT_NUMBER,
-    aSyntaxColors[4] = Color( COL_LIGHTRED );   // TT_STRING,
-    aSyntaxColors[5] = Color( COL_BLACK );      // TT_EOL,
-    aSyntaxColors[6] = Color( COL_GRAY );       // TT_COMMENT,
-    aSyntaxColors[7] = Color( COL_RED );        // TT_ERROR,
-    aSyntaxColors[8] = Color( COL_BLUE );       // TT_OPERATOR,
-    aSyntaxColors[9] = Color( COL_BLUE );       // TT_KEYWORD
+    Color aColor(GetSettings().GetStyleSettings().GetFieldTextColor());
+    m_aSyntaxColors[TT_UNKNOWN] = aColor;
+    m_aSyntaxColors[TT_WHITESPACE] = aColor;
+    m_aSyntaxColors[TT_EOL] = aColor;
+    StartListening(m_aColorConfig);
+    m_aSyntaxColors[TT_IDENTIFIER]
+        = Color(m_aColorConfig.GetColorValue(svx::BASICIDENTIFIER).nColor);
+    m_aSyntaxColors[TT_NUMBER]
+        = Color(m_aColorConfig.GetColorValue(svx::BASICNUMBER).nColor);
+    m_aSyntaxColors[TT_STRING]
+        = Color(m_aColorConfig.GetColorValue(svx::BASICSTRING).nColor);
+    m_aSyntaxColors[TT_COMMENT]
+        = Color(m_aColorConfig.GetColorValue(svx::BASICCOMMENT).nColor);
+    m_aSyntaxColors[TT_ERROR] = Color(COL_RED); // FIXME (#99517#)
+//      = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
+    m_aSyntaxColors[TT_OPERATOR]
+        = Color(m_aColorConfig.GetColorValue(svx::BASICOPERATOR).nColor);
+    m_aSyntaxColors[TT_KEYWORD]
+        = Color(m_aColorConfig.GetColorValue(svx::BASICKEYWORD).nColor);
 
     Font aFont( GetFont() );
     Size aSz( aFont.GetSize() );
@@ -1420,11 +1430,13 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     aSz.Height() /= 2;
     aFont.SetSize( aSz );
     aFont.SetWeight( WEIGHT_BOLD );
+    aFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
     SetFont( aFont );
 }
 
 ModulWindowLayout::~ModulWindowLayout()
 {
+    EndListening(m_aColorConfig);
 }
 
 void __EXPORT ModulWindowLayout::Resize()
@@ -1468,10 +1480,10 @@ void ModulWindowLayout::ArrangeWindows()
     Size aXEWSz;
     aXEWSz.Width() = aSz.Width();
     aXEWSz.Height() = nVSplitPos + 1;
-    if ( pModulWindow )
+    if ( m_pModulWindow )
     {
-        DBG_CHKOBJ( pModulWindow, ModulWindow, 0 );
-        pModulWindow->SetPosSizePixel( Point( 0, 0 ), aXEWSz );
+        DBG_CHKOBJ( m_pModulWindow, ModulWindow, 0 );
+        m_pModulWindow->SetPosSizePixel( Point( 0, 0 ), aXEWSz );
     }
 
     aVSplitter.SetDragRectPixel( Rectangle( Point( 0, 0 ), Size( aSz.Width(), aSz.Height() ) ) );
@@ -1576,7 +1588,98 @@ void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
 
 void ModulWindowLayout::SetModulWindow( ModulWindow* pModWin )
 {
-    pModulWindow = pModWin;
+    m_pModulWindow = pModWin;
     ArrangeWindows();
 }
 
+// virtual
+void ModulWindowLayout::DataChanged(DataChangedEvent const & rDCEvt)
+{
+    Window::DataChanged(rDCEvt);
+    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+        && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
+    {
+        bool bInvalidate = false;
+        Color aColor(GetSettings().GetStyleSettings().GetWindowColor());
+        if (aColor
+            != rDCEvt.GetOldSettings()->GetStyleSettings().GetWindowColor())
+        {
+            SetBackground(Wallpaper(aColor));
+            bInvalidate = true;
+        }
+        aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+        if (aColor != rDCEvt.GetOldSettings()->
+            GetStyleSettings().GetWindowTextColor())
+        {
+            Font aFont(GetFont());
+            aFont.SetColor(aColor);
+            SetFont(aFont);
+            bInvalidate = true;
+        }
+        if (bInvalidate)
+            Invalidate();
+        aColor = GetSettings().GetStyleSettings().GetFieldTextColor();
+        if (aColor != m_aSyntaxColors[TT_UNKNOWN])
+        {
+            m_aSyntaxColors[TT_UNKNOWN] = aColor;
+            m_aSyntaxColors[TT_WHITESPACE] = aColor;
+            m_aSyntaxColors[TT_EOL] = aColor;
+            updateSyntaxHighlighting();
+        }
+    }
+}
+
+// virtual
+void ModulWindowLayout::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
+{
+    if (rHint.ISA(SfxSimpleHint)
+        && (static_cast< SfxSimpleHint const & >(rHint).GetId()
+            == SFX_HINT_COLORS_CHANGED))
+    {
+        Color aColor(m_aColorConfig.GetColorValue(svx::BASICIDENTIFIER).
+                     nColor);
+        bool bChanged = aColor != m_aSyntaxColors[TT_IDENTIFIER];
+        m_aSyntaxColors[TT_IDENTIFIER] = aColor;
+        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICNUMBER).nColor);
+        bChanged = bChanged || aColor != m_aSyntaxColors[TT_NUMBER];
+        m_aSyntaxColors[TT_NUMBER] = aColor;
+        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICSTRING).nColor);
+        bChanged = bChanged || aColor != m_aSyntaxColors[TT_STRING];
+        m_aSyntaxColors[TT_STRING] = aColor;
+        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICCOMMENT).
+                       nColor);
+        bChanged = bChanged || aColor != m_aSyntaxColors[TT_COMMENT];
+        m_aSyntaxColors[TT_COMMENT] = aColor;
+// FIXME (#99517#):
+//      aColor = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
+//      bChanged = bChanged || aColor != m_aSyntaxColors[TT_ERROR];
+//      m_aSyntaxColors[TT_ERROR] = aColor;
+        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICOPERATOR).
+                       nColor);
+        bChanged = bChanged || aColor != m_aSyntaxColors[TT_OPERATOR];
+        m_aSyntaxColors[TT_OPERATOR] = aColor;
+        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICKEYWORD).
+                       nColor);
+        bChanged = bChanged || aColor != m_aSyntaxColors[TT_KEYWORD];
+        m_aSyntaxColors[TT_KEYWORD] = aColor;
+        if (bChanged)
+            updateSyntaxHighlighting();
+    }
+}
+
+void ModulWindowLayout::updateSyntaxHighlighting()
+{
+    if (m_pModulWindow != 0)
+    {
+        EditorWindow & rEditor = m_pModulWindow->GetEditorWindow();
+        ULONG nCount = rEditor.GetEditEngine()->GetParagraphCount();
+        for (ULONG i = 0; i < nCount; ++i)
+            rEditor.DoDelayedSyntaxHighlight(i);
+    }
+}
+
+Image ModulWindowLayout::getImage(USHORT nId, bool bHighContrastMode) const
+{
+    return (bHighContrastMode ? m_aImagesHighContrast : m_aImagesNormal).
+        GetImage(nId);
+}

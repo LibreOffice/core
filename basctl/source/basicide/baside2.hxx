@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:45:46 $
+ *  last change: $Author: sb $ $Date: 2002-07-05 10:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,14 @@ class SvxSearchItem;
 #include <vcl/split.hxx>
 #endif
 
+#ifndef _SFXLSTNER_HXX
+#include "svtools/lstner.hxx"
+#endif
+
+#ifndef _SVX_COLORCFG_HXX
+#include "svx/colorcfg.hxx"
+#endif
+
 #include <sfx2/progress.hxx>
 
 
@@ -161,6 +169,7 @@ private:
     Timer           aHelpAgentTimer;
     DECL_LINK(      HelpAgentTimerHdl, Timer * );
 
+    virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -222,6 +231,11 @@ private:
     BreakPointList  aBreakPointList;
     ModulWindow*    pModulWindow;
     BOOL            bErrorMarker;
+    bool m_bHighContrastMode;
+
+    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+
+    void setBackgroundColor(Color aColor);
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -241,11 +255,6 @@ public:
                         { pModulWindow = pWin; }
 
     void            SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
-
-//  virtual void    MouseMove( const MouseEvent& rMEvt );
-//  virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-//  virtual BOOL    Drop( const DropEvent& rEvt );
-//  virtual BOOL    QueryDrop( const DropEvent& rEvt );
 
     void            Scroll( long nHorzScroll, long nVertScroll );
     long&           GetCurYOffset()         { return nCurYOffset; }
@@ -337,9 +346,10 @@ private:
     EditorWindow        aEdtWindow;
     ScrollBar           aEWVScrollBar;
 
+    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+
 protected:
     virtual void        Resize();
-    virtual void        Paint( const Rectangle& rRect );
     DECL_LINK( ScrollHdl, ScrollBar * );
 
 public:
@@ -459,7 +469,7 @@ public:
     void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }
 };
 
-class ModulWindowLayout: public Window
+class ModulWindowLayout: public Window, public SfxListener
 {
 private:
 
@@ -469,19 +479,26 @@ private:
     WatchWindow     aWatchWindow;
     StackWindow     aStackWindow;
 
-    DECL_LINK( SplitHdl, Splitter * );
     BOOL            bVSplitted;
     BOOL            bHSplitted;
 
-    void            ArrangeWindows();
+    ModulWindow * m_pModulWindow;
 
-    ModulWindow*    pModulWindow;
-
-//  BOOL            bDoSyntaxHighlight;
-    Color           aSyntaxColors[10];
+    Color m_aSyntaxColors[TT_KEYWORD + 1];
+    svx::ColorConfig m_aColorConfig;
 
     ImageList m_aImagesNormal;
     ImageList m_aImagesHighContrast;
+
+    virtual void DataChanged(DataChangedEvent const & rDCEvt);
+
+    virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
+
+    void updateSyntaxHighlighting();
+
+    DECL_LINK( SplitHdl, Splitter * );
+
+    void            ArrangeWindows();
 
 protected:
     virtual void    Resize();
@@ -495,18 +512,15 @@ public:
     BOOL            IsToBeDocked( DockingWindow* pDockingWin, const Point& rPos, Rectangle& rRect );
 
     void            SetModulWindow( ModulWindow* pModWin );
-    ModulWindow*    GetModulWindow() const { return pModulWindow; }
+    ModulWindow*    GetModulWindow() const { return m_pModulWindow; }
 
     WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
     StackWindow&    GetStackWindow()    { return aStackWindow; }
 
-    Color*          GetSyntaxColors()   { return aSyntaxColors; }
+    Image getImage(USHORT nId, bool bHighContrastMode) const;
 
-    Image GetImage(USHORT nId) { return m_aImagesNormal.GetImage(nId); }
-
-//  BOOL            DoHighlight() const { return bDoSyntaxHighlight; }
-//  void            SetHighlightMode( BOOL bHighlight )
-//                      { bDoSyntaxHighlight = bHighlight; }
+    inline Color const & getSyntaxColor(TokenTypes eType) const
+    { return m_aSyntaxColors[eType]; }
 };
 
 #endif  // _BASIDE2_HXX
