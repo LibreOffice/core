@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-20 11:42:32 $
+ *  last change: $Author: gt $ $Date: 2002-11-21 09:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,8 +519,13 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             else if ( bIsExport )
             {
                 // This is the normal dialog
-                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, GetFactory(), nMust, nDont );
-                pFileDlg->CreateMatcher( GetFactory() );
+                SfxObjectFactory& rFact = GetFactory();
+                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, rFact, nMust, nDont );
+                if( strcmp( rFact.GetShortName(), "sdraw" ) != 0 )
+                    pFileDlg->SetContext( sfx2::FileDialogHelper::SD_EXPORT );
+                else if( strcmp( rFact.GetShortName(), "simpress" ) != 0 )
+                    pFileDlg->SetContext( sfx2::FileDialogHelper::SI_EXPORT );
+                pFileDlg->CreateMatcher( rFact );
                 Reference< ::com::sun::star::ui::dialogs::XFilePicker > xFilePicker = pFileDlg->GetFilePicker();
                 Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess > xControlAccess =
                     Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess >( xFilePicker, UNO_QUERY );
