@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuiasciiopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:12:58 $
+ *  last change: $Author: hr $ $Date: 2004-10-11 12:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,12 @@
 
 class ScImportAsciiDlg : public ModalDialog
 {
-    SvStream*                   pDatStream;
-    ULONG*                      pRowPosArray;
-    ULONG*                      pRowPosArrayUnicode;
-    USHORT                      nArrayEndPos;
-    USHORT                      nArrayEndPosUnicode;
-    ULONG                       nStreamPos;
-    ULONG                       nStreamPosUnicode;
-    BOOL                        bVFlag;
+    SvStream*                   mpDatStream;
+    ULONG                       mnStreamPos;
+    ULONG*                      mpRowPosArray;
+    ULONG                       mnRowPosCount;
+
+    String                      maPreviewLine[ CSV_PREVIEW_LINES ];
 
     FixedLine                   aFlFieldOpt;
     FixedText                   aFtCharSet;
@@ -114,11 +112,8 @@ class ScImportAsciiDlg : public ModalDialog
     String                      aColumnUser;
     String                      aFldSepList;
     String                      aTextSepList;
-
-    // aPreviewLine contains the byte string as read from the file
-    ByteString                  aPreviewLine[ CSV_PREVIEW_LINES ];
-    // same for Unicode
-    String                      aPreviewLineUnicode[ CSV_PREVIEW_LINES ];
+    String                      maFieldSeparators;  // selected field separators
+    sal_Unicode                 mcTextSep;
 
     CharSet                     meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
@@ -140,7 +135,10 @@ private:
     /** Enables or disables all separator checkboxes and edit fields. */
     void                        SetupSeparatorCtrls();
 
-    void                        UpdateVertical( bool bSwitchToFromUnicode = false );
+
+    bool                        GetLine( ULONG nLine, String &rText );
+    void                        UpdateVertical();
+    inline bool                 Seek( ULONG nPos ); // synced to and from mnStreamPos
 
                                 DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
                                 DECL_LINK( FirstRowHdl, NumericField* );
@@ -150,6 +148,20 @@ private:
                                 DECL_LINK( UpdateTextHdl, ScCsvTableBox* );
                                 DECL_LINK( ColTypeHdl, ScCsvTableBox* );
 };
+
+
+inline bool ScImportAsciiDlg::Seek(ULONG nPos)
+{
+    bool bSuccess = true;
+    if (nPos != mnStreamPos && mpDatStream)
+    {
+        if (mpDatStream->Seek( nPos ) != nPos)
+            bSuccess = false;
+        else
+            mnStreamPos = nPos;
+    }
+    return bSuccess;
+}
 
 #endif
 
