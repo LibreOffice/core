@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 10:01:19 $
+ *  last change: $Author: iha $ $Date: 2003-12-16 10:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,8 @@ namespace chart
 void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
                                , const rtl::OUString& rName )
 {
+    if(!xShape.is())
+        return;
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     DBG_ASSERT(xProp.is(), "shape offers no XPropertySet");
     if( xProp.is())
