@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-29 11:34:00 $
+ *  last change: $Author: cl $ $Date: 2001-07-26 09:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,6 @@
 #include "svdviter.hxx"
 #include "svdview.hxx"
 #include "svdoutl.hxx"
-
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
-#endif
 
 #ifndef _SV_BMPACC_HXX //autogen
 #include <vcl/bmpacc.hxx>
