@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** the set of linguistic relevant properties.
 */
-service LinguProperties
+published service LinguProperties
 {
     interface com::sun::star::beans::XPropertySet;
     interface com::sun::star::beans::XFastPropertySet;
