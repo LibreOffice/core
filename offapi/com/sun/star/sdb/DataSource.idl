@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:35:08 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ published service DataSource
         as it is the case when using <type>XCompletedConnection</type> or <type scope="com::sun::star::sdbc">XDataSource</type>.
         @see XCompletedConnection
         @see com::sun::star::sdbc::XDataSource
-        @since #101798#
+        @since OOo 1.1.2
      */
     interface com::sun::star::sdbc::XIsolatedConnection;
 
