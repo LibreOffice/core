@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 18:34:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ BOOL ScConsolidateDlg::VerifyEdit( ScRefEdit* pEd )
          ((pEd != &aEdDataArea) && (pEd != &aEdDestArea)) )
         return FALSE;
 
-    USHORT  nTab    = pViewData->GetTabNo();
+    SCTAB   nTab    = pViewData->GetTabNo();
     BOOL    bEditOk = FALSE;
     String  theCompleteStr;
 
@@ -449,11 +449,11 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, p )
 
     if ( nDataAreaCount > 0 )
     {
-        ScRefTripel aDestTripel;
-        USHORT      nTab = pViewData->GetTabNo();
+        ScRefAddress aDestAddress;
+        SCTAB       nTab = pViewData->GetTabNo();
         String      aDestPosStr( aEdDestArea.GetText() );
 
-        if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestTripel ) )
+        if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress ) )
         {
             ScConsolidateParam  theOutParam( theConsData );
             ScArea**            ppDataAreas = new ScArea*[nDataAreaCount];
@@ -468,9 +468,9 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, p )
                 ppDataAreas[i] = pArea;
             }
 
-            theOutParam.nCol            = aDestTripel.GetCol();
-            theOutParam.nRow            = aDestTripel.GetRow();
-            theOutParam.nTab            = aDestTripel.GetTab();
+            theOutParam.nCol            = aDestAddress.Col();
+            theOutParam.nRow            = aDestAddress.Row();
+            theOutParam.nTab            = aDestAddress.Tab();
             theOutParam.eFunction       = LbPosToFunc( aLbFunc.GetSelectEntryPos() );
             theOutParam.bByCol          = aBtnByCol.IsChecked();
             theOutParam.bByRow          = aBtnByRow.IsChecked();
