@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 17:26:24 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 11:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,9 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 
 void Writer::PutNumFmtFontsInAttrPool()
 {
+    if( !pImpl )
+        pImpl = new Writer_Impl( *pDoc );
+
     // dann gibt es noch in den NumRules ein paar Fonts
     // Diese in den Pool putten. Haben sie danach einen RefCount > 1
     // kann es wieder entfernt werden - ist schon im Pool
@@ -501,6 +504,9 @@ void Writer::PutNumFmtFontsInAttrPool()
 
 void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
 {
+    if( !pImpl )
+        pImpl = new Writer_Impl( *pDoc );
+
     SfxItemPool* pPool = pDoc->GetAttrPool().GetSecondaryPool();
     if( pPool )
     {
@@ -515,6 +521,9 @@ void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
 
 void Writer::PutCJKandCTLFontsInAttrPool()
 {
+    if( !pImpl )
+        pImpl = new Writer_Impl( *pDoc );
+
     SfxItemPool& rPool = pDoc->GetAttrPool();
     _AddFontItems( rPool, RES_CHRATR_CJK_FONT );
     _AddFontItems( rPool, RES_CHRATR_CTL_FONT );
@@ -649,11 +658,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.4 2000-11-13 17:26:24 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.5 2000-11-20 11:15:52 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/13 17:26:24  jp
+      new method PutCJKandCTLFontsInAttrPool
+
       Revision 1.3  2000/11/01 19:31:51  jp
       Writer:CopyLocalFileToINet: export of mail graphics removed and SvFileStream access removed
 
