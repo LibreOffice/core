@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
         aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("LONGVARCHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::LONGVARCHAR);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)65535);
+        aRow[6] = new ORowSetValueDecorator();
         aRows.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DATE"));
