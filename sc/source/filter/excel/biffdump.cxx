@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-28 13:20:45 $
+ *  last change: $Author: dr $ $Date: 2001-03-28 13:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,6 +662,7 @@ DUMP_ERR::~DUMP_ERR()
 #define ADDCELLHEAD()           {UINT16 nR,nC,nX;rIn>>nR>>nC>>nX;__AddCellHead(t,nC,nR,nX);}
 #define STARTFLAG()             {ADDTEXT( "flags (" ); __AddHex( t, __nFlags ); ADDTEXT( "):" );}
 #define ADDFLAG(mask,text)      {if( __nFlags & mask ) t += text;}
+#define ADDRESERVED(mask)       ADDFLAG(mask," !RESERVED!")
 
 
 UINT16 Biff8RecDumper::DumpXF( XclImpStream& rIn, const sal_Char* pPre )
@@ -1084,7 +1085,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x0010, " fCalcExp" );
                 ADDFLAG( 0x0020, " fBuiltIn" );
                 ADDFLAG( 0x1000, " fBig" );
-                ADDFLAG( 0xE000, " !RESERVED!" );
+                ADDRESERVED( 0xE000 );
                 ADDTEXT( "   Fn grp index: " );
                 __AddDec( t, (UINT16)((__nFlags & 0x0FC0) >> 6) );
                 PRINT();
@@ -1216,7 +1217,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( " outlnlev=" );
                 __AddDec( t, (UINT16)((__nFlags & 0x0700) >> 8) );
                 ADDFLAG( 0x1000, " fCollapsed" );
-                ADDFLAG( 0xE8FE, " !RESERVED!" );
+                ADDRESERVED( 0xE8FE );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "reserved: " );
@@ -1272,7 +1273,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDFLAG( 0x0800, " fDispColGuts" );
                     ADDFLAG( 0x4000, " fAee" );
                     ADDFLAG( 0x8000, " fAfe" );
-                    ADDFLAG( 0x320E, " !RESERVED!" );
+                    ADDRESERVED( 0x320E );
                     PRINT();
                 }
                 if( !__nFlags )
@@ -1696,7 +1697,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDFLAG( 0x1000, " fMultiDataOnAxis" );
                     ADDFLAG( 0x2000, " fBlankLine" );       // undocumented
                     ADDFLAG( 0x4000, " fHideDetail" );      // undocumented
-                    ADDFLAG( 0x8000, " !RESERVED!" );
+                    ADDRESERVED( 0x8000 );
                     PRINT();
                     LINESTART();
                     ADDTEXT( pInd );
@@ -2602,7 +2603,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDFLAG( 0x01000000, " fChartSize" );
                     ADDFLAG( 0x02000000, " fFilterUnique" );
                     ADDFLAG( 0x04000000, " fLayoutView" );
-                    ADDFLAG( 0xF8C18000, " !RESERVED!" );
+                    ADDRESERVED( 0xF8C18000 );
                     PRINT();
                     LINESTART();
                 }
@@ -2623,7 +2624,33 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x01AB:        // USERSVIEWEND
             {
+                LINESTART();
                 ADDTEXT( "settings are valid: " );  ADDHEX( 2 );
+                PRINT();
+            }
+            break;
+            case 0x01AD:        // QSI - web query range
+            {
+                LINESTART();
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0001, " fTitles" );
+                ADDFLAG( 0x0002, " fRowNums" );
+                ADDFLAG( 0x0004, " fDisRefr" );
+                ADDFLAG( 0x0080, " fFill" );
+                ADDFLAG( 0x0100, " fAutoFmt" );
+                ADDFLAG( 0x0400, " fDisEdit" );
+                ADDRESERVED( 0xFA78 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "AutoFmt: " );             ADDDEC( 2 );
+                ADDTEXT( "   AutoFmtAttr: " );      ADDHEX( 2 );
+                ADDTEXT( "   reserved: " );         ADDHEX( 4 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "name: " );
+                AddUNICODEString( t, rIn );
+                PRINT();
             }
             break;
             case 0x01AE:
@@ -3153,7 +3180,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x0020, " fRowHeightZero" );
                 ADDFLAG( 0x0040, " fUnsynced" );
                 ADDFLAG( 0x0080, " fGhostDirty" );
-                ADDFLAG( 0xFF08, " !RESERVED!" );
+                ADDRESERVED( 0xFF08 );
                 PRINT();
                 if( __nFlags & 0x0080 )
                 {
@@ -3165,7 +3192,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDTEXT( "):" );
                     ADDFLAG( 0x1000, " fExAsc" );
                     ADDFLAG( 0x2000, " fExDsc" );
-                    ADDFLAG( 0xC000, " !RESERVED!" );
+                    ADDRESERVED( 0xC000 );
                 }
             }
             break;
@@ -3179,7 +3206,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x0002, " fRowHtZero" );
                 ADDFLAG( 0x0004, " fExAsc" );
                 ADDFLAG( 0x0008, " fExDsc" );
-                ADDFLAG( 0xFFF0, " !RESERVED!" );
+                ADDRESERVED( 0xFFF0 );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "default row height: " );
