@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-09-07 13:58:38 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, USHORT nTab,
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {
-            Rectangle aObjRect = pObject->GetBoundRect();
+            Rectangle aObjRect = pObject->GetCurrentBoundRect();
             if ( bAll || aRect.IsInside( aObjRect ) )
             {
                 Size aSpace;
