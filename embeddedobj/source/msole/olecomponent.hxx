@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:54:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
@@ -99,8 +103,12 @@
 #include <com/sun/star/awt/Size.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 
 #include <vector>
@@ -118,7 +126,8 @@ class OleWrapperAdviseSink;
 class OleEmbeddedObject;
 struct OleComponentNative_Impl;
 
-class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCloseable,
+class OleComponent : public ::cppu::WeakImplHelper4< ::com::sun::star::util::XCloseable, ::com::sun::star::lang::XComponent,
+                                                     ::com::sun::star::lang::XUnoTunnel,
                                                      ::com::sun::star::datatransfer::XTransferable >
 {
     ::osl::Mutex m_aMutex;
@@ -217,6 +226,13 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XComponent
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener(const com::sun::star::uno::Reference < com::sun::star::lang::XEventListener >& aListener) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(const com::sun::star::uno::Reference < com::sun::star::lang::XEventListener >& aListener) throw (::com::sun::star::uno::RuntimeException);
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException) ;
 };
 
 #endif
