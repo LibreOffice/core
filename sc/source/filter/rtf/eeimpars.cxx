@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,9 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                             aLeft.EraseLeadingChars();
                             nInd = 0;
                             xub_StrLen n = aLeft.GetTokenCount( cThoSepEng );
-                            for ( xub_StrLen j = 0; j < n; j++ )
+                            xub_StrLen j;
+
+                            for ( j = 0; j < n; j++ )
                             {
                                 String aT( aLeft.GetToken( 0, cThoSepEng, nInd ) );
                                 if ( j > 0 && aT.Len() != 3 )
