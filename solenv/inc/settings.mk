@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.142 $
+#   $Revision: 1.143 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:52:23 $
+#   last change: $Author: rt $ $Date: 2004-03-02 11:32:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1088,9 +1088,9 @@ RSCUPDVERDEF=-DUPDVER="$(RSCUPDVER)"
 
 RSCFLAGS=-s
 .IF "$(remote)" != ""
-RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -DBUILD=$(BUILD) -D$(REMOTEDEF) $(JAVADEF)
+RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -D$(REMOTEDEF) $(JAVADEF)
 .ELSE
-RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -DBUILD=$(BUILD) $(JAVADEF)
+RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) $(JAVADEF)
 .ENDIF
 
 .IF "$(BUILD_SPECIAL)!=""
@@ -1174,7 +1174,7 @@ COMID=$(COM)
 .ENDIF			# "$(SOLAR_JAVA)"=="TRUE"
 
 # --- extend new environment ----------------------------------
-CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
+CDEFS+= -DSUPD=$(UPD)
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_CRASHDUMP)"!="" || "$(ENABLE_SYMBOLS)"!=""
@@ -1246,7 +1246,7 @@ CDEFS+=-DEXCEPTIONS_ON
 .ENDIF
 .ENDIF
 
-# Zusammenbau der Flags und CDefs fuer GUI
+# compose flags and defines for GUI
 .IF "$(TARGETTYPE)"=="GUI"
 CDEFS+= $(CDEFSGUI)
 CFLAGSSLO+=$(CFLAGSSLOGUIMT)
@@ -1270,7 +1270,7 @@ STDSHL=$(STDSHLGUIST)
 
 .ENDIF
 
-# Zusammenbau der Flags und CDefs fuer CUI
+# compose flags and defines for CUI
 .IF "$(TARGETTYPE)" == "CUI" || "$(TARGETTYPE)"=="cui"
 CDEFS+= $(CDEFSCUI)
 CFLAGSSLO+=$(CFLAGSSLOCUIMT)
@@ -1342,6 +1342,7 @@ CFLAGSAPPEND+=$(CFLAGSDFLTWARN)
 CFLAGSAPPEND+=$(ENVWARNFLAGS)
 .ENDIF			# "$(ENVWARNFLAGS)"==""
 
+CDEFS+= $(ADDCDEFS)
 CDEFS+= $(ENVCDEFS)
 CFLAGS+= $(CFLAGSCALL) $(ENVCFLAGS)
 CFLAGSCXX+= $(ENVCFLAGSCXX)
