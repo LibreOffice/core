@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:35:40 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ inline double stringToDouble(rtl::OString const & rString,
                                              cDecSeparator, cGroupSeparator,
                                              pStatus, &pEnd);
     if (pParsedEnd != 0)
-        *pParsedEnd = pEnd - pBegin;
+        *pParsedEnd = (sal_Int32)(pEnd - pBegin);
     return fResult;
 }
 
@@ -204,7 +204,7 @@ inline double stringToDouble(rtl::OUString const & rString,
                                               cDecSeparator, cGroupSeparator,
                                               pStatus, &pEnd);
     if (pParsedEnd != 0)
-        *pParsedEnd = pEnd - pBegin;
+        *pParsedEnd = (sal_Int32)(pEnd - pBegin);
     return fResult;
 }
 
