@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-13 17:07:43 $
+#   last change: $Author: rt $ $Date: 2004-10-22 07:45:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@ SHL1STDLIBS=$(CPPULIB)\
             oleaut32.lib\
             comdlg32.lib\
             kernel32.lib\
-            comsupp.lib\
             oleaut32.lib
 
 SHL1DEPN=
@@ -123,7 +122,6 @@ SHL2STDLIBS=$(CPPULIB)\
             ole32.lib\
             gdi32.lib\
             shell32.lib\
-            comsupp.lib\
             oleaut32.lib
 
 SHL2DEPN=
