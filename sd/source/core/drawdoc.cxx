@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:10:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,6 @@
 #include <svtools/saveopt.hxx>
 #endif
 #include <comphelper/extract.hxx>
-#ifndef _XCEPTION_HXX_
-#include <vos/xception.hxx>
-#endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -374,7 +371,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     USHORT nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );
 
-    TRY
+    try
     {
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -386,11 +383,10 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
         SetForbiddenCharsTable( new SvxForbiddenCharactersTable( ::comphelper::getProcessServiceFactory() ) );
     }
-    CATCH_ALL()
+    catch(...)
     {
         DBG_ERROR("Can't get SpellChecker");
     }
-    END_CATCH
 
     rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
@@ -439,7 +435,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
     pHitTestOutliner->SetCalcFieldValueHdl( LINK(SD_MOD(), SdModule, CalcFieldValueHdl) );
 
-    TRY
+    try
     {
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -449,11 +445,10 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         if( xHyphenator.is() )
             pHitTestOutliner->SetHyphenator( xHyphenator );
     }
-    CATCH_ALL()
+    catch(...)
     {
         DBG_ERROR("Can't get SpellChecker");
     }
-    END_CATCH
 
     pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
