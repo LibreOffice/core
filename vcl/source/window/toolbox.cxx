@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:35:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,10 @@ void ImplRGBtoHSB( const Color& rColor, USHORT& nHue, USHORT& nSat, USHORT& nBri
         {
             dHue = 4.0 + (double)( c[0] - c[1] ) / (double)cDelta;
         }
+        else {
+            //  TODO What should the default Hue be?
+            dHue = 0;
+        }
         dHue *= 60.0;
 
         if( dHue < 0.0 )
@@ -293,6 +297,7 @@ Color ImplHSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
             case 3: cR = a;     cG = b;     cB = nB;    break;
             case 4: cR = c;     cG = a;     cB = nB;    break;
             case 5: cR = nB;    cG = a;     cB = b;     break;
+            default:cR = 0;     cG = 0;     cB = 0;     break;  // TODO what should this be?
         }
     }
 
@@ -1174,10 +1179,15 @@ static void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
         nCurSize = rRect.Right() - rPos.X();
         mbHorz = FALSE;
     }
-    else //if ( nLineMode & DOCK_LINETOP )
+    else if ( nLineMode & DOCK_LINETOP )
     {
         nCurSize = rRect.Bottom() - rPos.Y();
         mbHorz = TRUE;
+    }
+    else {
+        DBG_ERROR( "ImplLineSizing: Trailing else" );
+        nCurSize = 0;
+        mbHorz = FALSE;
     }
 
     Size    aWinSize = pThis->GetSizePixel();
