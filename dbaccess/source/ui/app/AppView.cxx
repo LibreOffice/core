@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:04:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,13 @@ OApplicationView::~OApplicationView()
     m_pElementNotification = NULL;
 }
 // -----------------------------------------------------------------------------
+void OApplicationView::createIconAutoMnemonics()
+{
+    if ( m_pWin && m_pWin->getPanel() )
+        m_pWin->getPanel()->createIconAutoMnemonics();
+}
+
+// -----------------------------------------------------------------------------
 void OApplicationView::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ODataView::DataChanged( rDCEvt );
@@ -384,7 +391,6 @@ void OApplicationView::resizeDocumentView(Rectangle& _rPlayground)
 //------------------------------------------------------------------------------
 long OApplicationView::PreNotify( NotifyEvent& rNEvt )
 {
-    BOOL bHandled = FALSE;
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:
@@ -395,9 +401,18 @@ long OApplicationView::PreNotify( NotifyEvent& rNEvt )
             else
                 m_eChildFocus = NONE;
             break;
+        case EVENT_KEYINPUT:
+        {
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            // give the pane the chance to intercept mnemonic accelerators
+            // #i34790# - 2004-09-30 - fs@openoffice.org
+            if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
+                return 1L;
+        }
+        break;
     }
 
-    return bHandled ? 1L : ODataView::PreNotify(rNEvt);
+    return ODataView::PreNotify(rNEvt);
 }
 // -----------------------------------------------------------------------------
 IClipboardTest* OApplicationView::getActiveChild() const

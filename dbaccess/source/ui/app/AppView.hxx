@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:40:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,10 @@ namespace dbaui
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& _xController
                             );
         virtual ~OApplicationView();
+
+        /** automatically creates mnemonics for the icon/texts in our left hand side panel
+        */
+        void    createIconAutoMnemonics();
 
         // window overloads
         virtual long PreNotify( NotifyEvent& rNEvt );
