@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-08 15:34:03 $
+ *  last change: $Author: ka $ $Date: 2001-01-24 11:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,8 +603,8 @@ BOOL SdDrawDocShell::Save()
     // komprimiert/native speichern?
     SvtSaveOptions                          aOptions;
     const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
-    const BOOL                              bSaveCompressed = ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode );
     const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
+    const BOOL                              bSaveCompressed = ( bSaveNative || ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode ) );
 
     pDoc->SetSaveCompressed( bSaveCompressed );
     pDoc->SetSaveNative( bSaveNative );
@@ -733,8 +733,8 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
     // komprimiert/native speichern?
     SvtSaveOptions                          aOptions;
     const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
-    const BOOL                              bSaveCompressed = ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode );
     const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
+    const BOOL                              bSaveCompressed = ( bSaveNative || ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode ) );
 
     pDoc->SetSaveCompressed( bSaveCompressed );
     pDoc->SetSaveNative( bSaveNative );
