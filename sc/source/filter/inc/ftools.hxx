@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:03 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,8 @@ class ScfNoInstance : private ScfNoCopy {};
 
 // ============================================================================
 
+class ScStyleSheet;
+class ScStyleSheetPool;
 class SvStorage;
 class SvStorageStreamRef;
 class SvStream;
@@ -245,6 +247,16 @@ public:
     static const SvStorageStreamRef OpenStorageStreamRead( SvStorage* pStorage, const String& rStrmName );
     /** Tries to create or open a stream with the specified name in the passed storage (read/write). */
     static const SvStorageStreamRef OpenStorageStreamWrite( SvStorage* pStorage, const String& rStrmName );
+
+// *** style sheet handling ***
+
+    /** Creates and returns a cell style sheet and inserts it into the pool.
+        @descr  If the style sheet is already in the pool, another unused style name is used.
+        @param bForceName  Controls behaviour, if the style already exists:
+        true = Old existing style will be renamed; false = New style gets another name. */
+    static ScStyleSheet&        MakeCellStyleSheet(
+                                    ScStyleSheetPool& rPool,
+                                    const String& rStyleName, bool bForceName );
 
 // *** byte string import operations ***
 
@@ -330,8 +342,10 @@ public:
     inline Type*                Remove( sal_uInt32 nIndex )             { return static_cast< Type* >( maList.Remove( nIndex ) ); }
     /** Removes and deletes the object. */
     inline void                 Delete( sal_uInt32 nIndex )             { delete Remove( nIndex ); }
-    /** Replaces the object without deletion. */
-    inline Type*                Replace( Type* pObj, sal_uInt32 nIndex ){ return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
+    /** Exchanges the contained object with the passed, returns the old. */
+    inline Type*                Exchange( Type* pObj, sal_uInt32 nIndex ){ return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
+    /** Replaces (deletes) the contained object. */
+    inline void                 Replace( Type* pObj, sal_uInt32 nIndex ){ delete Exchange( pObj, nIndex ); }
 
     inline void                 Clear();
     inline sal_uInt32           Count() const                           { return maList.Count(); }
