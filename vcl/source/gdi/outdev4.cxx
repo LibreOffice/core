@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:21:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_OUTDEV_CXX
-
 #include <math.h>
 
 #ifndef _SV_SVSYS_HXX
@@ -87,14 +85,14 @@
 #ifndef _SV_OUTDATA_HXX
 #include <outdata.hxx>
 #endif
-#ifndef _POLY_HXX
+#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
-#ifndef _SV_LINE_HXX
-#include <line.hxx>
+#ifndef _LINE_HXX
+#include <tools/line.hxx>
 #endif
 #ifndef _SV_HATCH_HXX
 #include <hatch.hxx>
@@ -1040,7 +1038,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 if( pVDev->SetOutputSizePixel( aDstSize) )
                 {
                     MapMode         aVDevMap;
-                    const RasterOp  eOldROP = GetRasterOp();
                     const BOOL      bOldMap = mbMap;
 
                     EnableMapMode( FALSE );
@@ -1391,7 +1388,6 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
 
         if( rPoly.GetSize() > 1 )
         {
-            Point   aIntersection;
             Line    aCurSegment( rPoly[ 0 ], Point() );
 
             for( long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
