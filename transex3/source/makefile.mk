@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
-#   last change: $Author: kz $ $Date: 2004-09-01 12:26:46 $
+#   $Revision: 1.33 $
+#   last change: $Author: hr $ $Date: 2004-10-11 13:56:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ LIBTARGET=no
 .INCLUDE :  settings.mk
 .INCLUDE :  libs.mk
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
+
+.IF "$(SYSTEM_EXPAT)" == "YES"
+CFLAGS+=-DSYSTEM_EXPAT
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
