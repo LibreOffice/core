@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:50:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ String STR_COULDNOTCONNECT
     Text [ english_us ] = "No connection could be established for the URL #connurl#.";
     Text[ portuguese ] = "Foi impossνvel estabelecer ligaηγo para o URL #connurl#.";
     Text[ russian ] = "Νεβξημξζνξ ρξεδθνθςόρÿ ρ URL #connurl#.";
-    Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η σύνδεση με το URL #connurl#.";
+    Text[ greek ] = "Δεν ήταν δυνατή η δημιουργία σύνδεσης για το URL #connurl#.";
     Text[ dutch ] = "Er kan geen verbinding met de URL #connurl# tot stand worden gebracht.";
     Text[ french ] = "Impossible d'ιtablir une connexion pour l'URL #connurl# !";
     Text[ spanish ] = "No se pudo realizar ninguna conexiσn para la URL #connurl#.";
@@ -272,7 +272,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text [ english_us ] = "Please check the current settings, for example user name and password.";
     Text[ portuguese ] = "Verifique as definiηυes actuais, por exemplo, nome de utilizador e senha.";
     Text[ russian ] = "Οπξβεπόςε ςεκσωθε νΰρςπξικθ, νΰοπθμεπ, θμÿ οξλόηξβΰςελÿ θ οΰπξλό.";
-    Text[ greek ] = "Παρακαλώ ελέγξτε τις τρέχουσες ρυθμίσεις, π.χ σχετικά με το όνομα χρήστη και τον κωδικό πρόσβασης.";
+    Text[ greek ] = "Ελέγξτε τις τρέχουσες ρυθμίσεις, π.χ. όνομα χρήστη και κωδικό πρόσβασης.";
     Text[ dutch ] = "Controleer de huidige instellingen, zoals de gebruikersnaam en het wachtwoord.";
     Text[ french ] = "Vιrifiez les paramθtres actifs - par ex. ceux qui concernent le nom d'utilisateur et le mot de passe.";
     Text[ spanish ] = "Compruebe la configuraciσn actual, como el nombre de usuario y la contraseρa.";
@@ -310,7 +310,7 @@ String STR_NOTABLEINFO
     Text[ danish ] = "Forbindelsen er blevet oprettet; men det var ikke muligt at hente informationer om tabeller i databasen.";
     Text[ swedish ] = "Fφrbindelsen upprδttades men det gick inte att fε fram nεgon information om tabeller i databasen.";
     Text[ polish ] = "Po³Ήczenie nawiΉzano pomylnie, ale nie sΉ dostκpne informacje o tabelach w bazie danych.";
-    Text[ portuguese_brazilian ] = "A conexγo foi estabelecida com sucesso, mas as informaηυes sobre tabelas na base de dados nγo estγo disponνveis.";
+    Text[ portuguese_brazilian ] = "A conexγo foi estabelecida com sucesso, mas as informaηυes sobre tabelas no banco de dados nγo estγo disponνveis.";
     Text[ japanese ] = "ζ­£εΈΈγ«ζ¥η¶γ§γγΎγ—γγγ€γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγ®γƒ†γƒΌγƒ–γƒ«γ«ι–Άγ™γ‚‹ζƒ…ε ±γγ‚γ‚γΎγ›γ‚“γ€‚";
     Text[ korean ] = "μ„±κ³µμ μΌλ΅ μ—°κ²°μ΄ λμ—μ§€λ§ λ°μ΄ν„°λ² μ΄μ¤ ν…μ΄λΈ”μ— κ΄€ν• μ •λ³΄λ” μ—†μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏζ¥ε·²η»ζεοΌδ½†ζ―ζ— ζ³•θ·εΎ—η›Έε…³η„ζ•°ζ®εΊ“θ΅¨ζ Όζ•°ζ®γ€‚";
@@ -419,6 +419,13 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35.8.1  2003/07/03 14:44:05  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.35  2003/06/13 12:50:48  hr
+ *  INTEGRATION: CWS rcmerge (1.34.24); FILE MERGED
+ *  2003/06/12 10:57:45 gh 1.34.24.1: final Merge RC
+ *
  *  Revision 1.34.24.1  2003/06/12 10:57:45  gh
  *  final Merge RC
  *
@@ -552,6 +559,7 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
 
 
 
