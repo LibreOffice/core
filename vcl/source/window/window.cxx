@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cp $ $Date: 2002-02-11 10:45:34 $
+ *  last change: $Author: mt $ $Date: 2002-02-14 17:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,7 @@ void Window::ImplInitData( WindowType nType )
     mpCursor            = NULL;         // cursor
     mpControlFont       = NULL;         // font propertie
     mpVCLXWindow        = NULL;
+    mpAccessibleInfos   = NULL;
     maControlForeground = Color( COL_TRANSPARENT );     // kein Foreground gesetzt
     maControlBackground = Color( COL_TRANSPARENT );     // kein Background gesetzt
     mnLeftBorder        = 0;            // left border
@@ -504,10 +505,6 @@ void Window::ImplInitData( WindowType nType )
     mbExtTextInput      = FALSE;        // TRUE: ExtTextInput-Mode is active
     mbInFocusHdl        = FALSE;        // TRUE: Innerhalb vom GetFocus-Handler
     mbCreatedWithToolkit = FALSE;
-
-    mpDummy3_WindowEventListeners = new VclEventListeners;
-    mpDummy4_WindowChildEventListeners = new VclEventListeners;
-    mpDummy2_AccessibleInfos = NULL;
 
 #ifdef REMOTE_APPSERVER
     mpRmEvents          = NULL;
@@ -4304,9 +4301,7 @@ Window::~Window()
     if ( mpChildClipRegion )
         delete mpChildClipRegion;
 
-    delete mpDummy3_WindowEventListeners;
-    delete mpDummy4_WindowChildEventListeners;
-    delete mpDummy2_AccessibleInfos;
+    delete mpAccessibleInfos;
 }
 
 // -----------------------------------------------------------------------
@@ -4685,14 +4680,14 @@ void Window::ImplCallEventListeners( ULONG nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
 
-    if ( !mpDummy3_WindowEventListeners->empty() )
-        mpDummy3_WindowEventListeners->Call( &aEvent );
+    if ( !maEventListeners.empty() )
+        maEventListeners.Call( &aEvent );
 
     Window* pWindow = this;
     while ( pWindow )
     {
-        if ( !pWindow->mpDummy4_WindowChildEventListeners->empty() )
-            pWindow->mpDummy4_WindowChildEventListeners->Call( &aEvent );
+        if ( !pWindow->maChildEventListeners.empty() )
+            pWindow->maChildEventListeners.Call( &aEvent );
 
         pWindow = pWindow->GetParent();
     }
@@ -4702,28 +4697,28 @@ void Window::ImplCallEventListeners( ULONG nEvent, void* pData )
 
 void Window::AddEventListener( const Link& rEventListener )
 {
-    mpDummy3_WindowEventListeners->push_back( rEventListener );
+    maEventListeners.push_back( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveEventListener( const Link& rEventListener )
 {
-    mpDummy3_WindowEventListeners->remove( rEventListener );
+    maEventListeners.remove( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::AddChildEventListener( const Link& rEventListener )
 {
-    mpDummy4_WindowChildEventListeners->push_back( rEventListener );
+    maChildEventListeners.push_back( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveChildEventListener( const Link& rEventListener )
 {
-    mpDummy4_WindowChildEventListeners->remove( rEventListener );
+    maChildEventListeners.remove( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -7195,7 +7190,7 @@ Reference< XClipboard > Window::GetSelection()
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::GetAccessible( BOOL bCreate )
 {
-    if ( /*!GetParent() &&*/ ( GetType() == WINDOW_BORDERWINDOW ) )
+    if ( /*!GetParent() &&*/ ( GetType() == WINDOW_BORDERWINDOW ) && ( GetChildCount() == 1 ) )
     {
         Window* pChild = GetAccessibleChildWindow( 0 );
         if ( pChild )
@@ -7222,9 +7217,8 @@ void Window::SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun
 Window* Window::GetAccessibleParentWindow() const
 {
     Window* pParent = GetParent();
-    if ( pParent && ( pParent->GetType() == WINDOW_BORDERWINDOW ) )
+    if ( pParent && ( pParent->GetType() == WINDOW_BORDERWINDOW ) && ( pParent->GetChildCount() == 1 ) )
     {
-        // DBG_ASSERT( pParent->GetChildCount() == 1, "BorderWindow with more than 1 child?" );
         pParent = pParent->GetParent();
     }
     return pParent;
@@ -7238,9 +7232,8 @@ USHORT Window::GetAccessibleChildWindowCount()
 Window* Window::GetAccessibleChildWindow( USHORT n )
 {
     Window* pChild = GetChild( n );
-    if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) )
+    if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) && ( pChild->GetChildCount() == 1 ) )
     {
-        // DBG_ASSERT( pChild->GetChildCount() == 1, "BorderWindow with more than 1 child?" );
         pChild = pChild->GetChild( 0 );
     }
     return pChild;
@@ -7248,18 +7241,18 @@ Window* Window::GetAccessibleChildWindow( USHORT n )
 
 void Window::SetAccessibleRole( USHORT nRole )
 {
-    if ( ! mpDummy2_AccessibleInfos )
-        mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
+    if ( !mpAccessibleInfos )
+        mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( mpDummy2_AccessibleInfos->nAccessibleRole == 0xFFFF, "AccessibleRole already set!" );
-    mpDummy2_AccessibleInfos->nAccessibleRole = nRole;
+    DBG_ASSERT( mpAccessibleInfos->nAccessibleRole == 0xFFFF, "AccessibleRole already set!" );
+    mpAccessibleInfos->nAccessibleRole = nRole;
 }
 
 USHORT Window::GetAccessibleRole() const
 {
     using namespace ::drafts::com::sun::star;
 
-    USHORT nRole = mpDummy2_AccessibleInfos ? mpDummy2_AccessibleInfos->nAccessibleRole : 0xFFFF;
+    USHORT nRole = mpAccessibleInfos ? mpAccessibleInfos->nAccessibleRole : 0xFFFF;
     if ( nRole == 0xFFFF )
     {
         switch ( GetType() )
@@ -7363,20 +7356,20 @@ USHORT Window::GetAccessibleRole() const
 
 void Window::SetAccessibleName( const String& rName )
 {
-   if ( ! mpDummy2_AccessibleInfos )
-        mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
+   if ( !mpAccessibleInfos )
+        mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( !mpDummy2_AccessibleInfos->pAccessibleName, "AccessibleName already set!" );
-    delete mpDummy2_AccessibleInfos->pAccessibleName;
-    mpDummy2_AccessibleInfos->pAccessibleName = new String( rName );
+    DBG_ASSERT( !mpAccessibleInfos->pAccessibleName, "AccessibleName already set!" );
+    delete mpAccessibleInfos->pAccessibleName;
+    mpAccessibleInfos->pAccessibleName = new String( rName );
 }
 
 String Window::GetAccessibleName() const
 {
     String aAccessibleName;
-    if ( mpDummy2_AccessibleInfos && mpDummy2_AccessibleInfos->pAccessibleName )
+    if ( mpAccessibleInfos && mpAccessibleInfos->pAccessibleName )
     {
-        aAccessibleName = *mpDummy2_AccessibleInfos->pAccessibleName;
+        aAccessibleName = *mpAccessibleInfos->pAccessibleName;
     }
     else
     {
@@ -7387,20 +7380,20 @@ String Window::GetAccessibleName() const
 
 void Window::SetAccessibleDescription( const String& rDescription )
 {
-   if ( ! mpDummy2_AccessibleInfos )
-        mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
+   if ( ! mpAccessibleInfos )
+        mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( !mpDummy2_AccessibleInfos->pAccessibleDescription, "AccessibleDescription already set!" );
-    delete mpDummy2_AccessibleInfos->pAccessibleDescription;
-    mpDummy2_AccessibleInfos->pAccessibleDescription = new String( rDescription );
+    DBG_ASSERT( !mpAccessibleInfos->pAccessibleDescription, "AccessibleDescription already set!" );
+    delete mpAccessibleInfos->pAccessibleDescription;
+    mpAccessibleInfos->pAccessibleDescription = new String( rDescription );
 }
 
 String Window::GetAccessibleDescription() const
 {
     String aAccessibleDescription;
-    if ( mpDummy2_AccessibleInfos && mpDummy2_AccessibleInfos->pAccessibleDescription )
+    if ( mpAccessibleInfos && mpAccessibleInfos->pAccessibleDescription )
     {
-        aAccessibleDescription = *mpDummy2_AccessibleInfos->pAccessibleDescription;
+        aAccessibleDescription = *mpAccessibleInfos->pAccessibleDescription;
     }
     else
     {
