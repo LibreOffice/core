@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:52:01 $
+ *  last change: $Author: aw $ $Date: 2000-11-30 14:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_HORZ_SEGS);
         if(eState != SFX_ITEM_DONTCARE)
         {
-            UINT32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
+            UINT32 nValue = ((const Svx3DHorizontalSegmentsItem&)rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
             if(nValue != (UINT32)aNumHorizontal.GetValue())
             {
                 aNumHorizontal.SetValue( nValue );
@@ -698,7 +698,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_VERT_SEGS);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue();
+            UINT32 nValue = ((const Svx3DVerticalSegmentsItem&)rAttrs.Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue();
             if( nValue != (UINT32) aNumVertical.GetValue() )
             {
                 aNumVertical.SetValue( nValue );
@@ -726,7 +726,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_DEPTH);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_DEPTH)).GetValue();
+            UINT32 nValue = ((const Svx3DDepthItem&)rAttrs.Get(SDRATTR_3DOBJ_DEPTH)).GetValue();
             UINT32 nValue2 = GetCoreValue( aMtrDepth, ePoolUnit );
             if( nValue != nValue2 )
             {
@@ -753,7 +753,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_DOUBLE_SIDED);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue();
+        BOOL bValue = ((const Svx3DDoubleSidedItem&)rAttrs.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue();
         if( bValue != aBtnDoubleSided.IsChecked() )
         {
             aBtnDoubleSided.Check( bValue );
@@ -777,7 +777,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_PERCENT_DIAGONAL);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue();
+            UINT16 nValue = ((const Svx3DPercentDiagonalItem&)rAttrs.Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue();
             if( nValue != aMtrPercentDiagonal.GetValue() )
             {
                 aMtrPercentDiagonal.SetValue( nValue );
@@ -802,7 +802,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_BACKSCALE);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue();
+            UINT16 nValue = ((const Svx3DBackscaleItem&)rAttrs.Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue();
             if( nValue != aMtrBackscale.GetValue() )
             {
                 aMtrBackscale.SetValue( nValue );
@@ -827,7 +827,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_END_ANGLE);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
+            UINT32 nValue = ((const Svx3DEndAngleItem&)rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
             if( nValue != aMtrEndAngle.GetValue() )
             {
                 aMtrEndAngle.SetValue( nValue );
@@ -848,7 +848,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_NORMALS_KIND);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue();
+        UINT16 nValue = ((const Svx3DNormalsKindItem&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue();
 
         if( ( !aBtnNormalsObj.IsChecked() && nValue == 0 ) ||
             ( !aBtnNormalsFlat.IsChecked() && nValue == 1 ) ||
@@ -877,7 +877,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_NORMALS_INVERT);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue();
+        BOOL bValue = ((const Svx3DNormalsInvertItem&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue();
         if( bValue != aBtnNormalsInvert.IsChecked() )
         {
             aBtnNormalsInvert.Check( bValue );
@@ -899,7 +899,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue();
+        BOOL bValue = ((const Svx3DTwoSidedLightingItem&)rAttrs.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue();
         if( bValue != aBtnTwoSidedLighting.IsChecked() )
         {
             aBtnTwoSidedLighting.Check( bValue );
@@ -922,7 +922,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_SHADE_MODE);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue();
+        UINT16 nValue = ((const Svx3DShadeModeItem&)rAttrs.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue();
         if( nValue != aLbShademode.GetSelectEntryPos() )
         {
             aLbShademode.SelectEntryPos( nValue );
@@ -942,7 +942,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_SHADOW_3D);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue();
+        BOOL bValue = ((const Svx3DShadow3DItem&)rAttrs.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue();
         if( bValue != aBtnShadow3d.IsChecked() )
         {
             aBtnShadow3d.Check( bValue );
@@ -966,7 +966,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_SHADOW_SLANT);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue();
+        UINT16 nValue = ((const Svx3DShadowSlantItem&)rAttrs.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue();
         if( nValue != aMtrSlant.GetValue() )
         {
             aMtrSlant.SetValue( nValue );
@@ -986,7 +986,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_DISTANCE);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        UINT32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+        UINT32 nValue = ((const Svx3DDistanceItem&)rAttrs.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
         UINT32 nValue2 = GetCoreValue( aMtrDistance, ePoolUnit );
         if( nValue != nValue2 )
         {
@@ -1010,7 +1010,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_FOCAL_LENGTH);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        UINT32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+        UINT32 nValue = ((const Svx3DFocalLengthItem&)rAttrs.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
         UINT32 nValue2 = GetCoreValue( aMtrFocalLength, ePoolUnit );
         if( nValue != nValue2 )
         {
@@ -1037,7 +1037,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_1);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
+        aColor = ((const Svx3DLightcolor1Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
         ColorLB* pLb = &aLbLight1;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1059,7 +1059,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_1);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff1Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
         if( ( bOn && aBtnLight1.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight1.GetImage() != aImgLightOff ) )
         {
@@ -1082,7 +1082,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_1);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
+        aVector = ((const Svx3DLightDirection1Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight0 );
         if( aVector != aVector2 )
         {
@@ -1095,7 +1095,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_2);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
+        aColor = ((const Svx3DLightcolor2Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
         ColorLB* pLb = &aLbLight2;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1117,7 +1117,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_2);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff2Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
         if( ( bOn && aBtnLight2.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight2.GetImage() != aImgLightOff ) )
         {
@@ -1140,7 +1140,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_2);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
+        aVector = ((const Svx3DLightDirection2Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight1 );
         if( aVector != aVector2 )
         {
@@ -1153,7 +1153,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_3);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
+        aColor = ((const Svx3DLightcolor3Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
         ColorLB* pLb = &aLbLight3;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1175,7 +1175,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_3);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff3Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
         if( ( bOn && aBtnLight3.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight3.GetImage() != aImgLightOff ) )
         {
@@ -1198,7 +1198,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_3);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
+        aVector = ((const Svx3DLightDirection3Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight2 );
         if( aVector != aVector2 )
         {
@@ -1211,7 +1211,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_4);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
+        aColor = ((const Svx3DLightcolor4Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
         ColorLB* pLb = &aLbLight4;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1233,7 +1233,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_4);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff4Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
         if( ( bOn && aBtnLight4.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight4.GetImage() != aImgLightOff ) )
         {
@@ -1256,7 +1256,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_4);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
+        aVector = ((const Svx3DLightDirection4Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight3 );
         if( aVector != aVector2 )
         {
@@ -1269,7 +1269,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_5);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
+        aColor = ((const Svx3DLightcolor5Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
         ColorLB* pLb = &aLbLight5;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1291,7 +1291,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_5);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff5Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
         if( ( bOn && aBtnLight5.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight5.GetImage() != aImgLightOff ) )
         {
@@ -1314,7 +1314,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_5);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
+        aVector = ((const Svx3DLightDirection5Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight4 );
         if( aVector != aVector2 )
         {
@@ -1327,7 +1327,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_6);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
+        aColor = ((const Svx3DLightcolor6Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
         ColorLB* pLb = &aLbLight6;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1349,7 +1349,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_6);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff6Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
         if( ( bOn && aBtnLight6.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight6.GetImage() != aImgLightOff ) )
         {
@@ -1372,7 +1372,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_6);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
+        aVector = ((const Svx3DLightDirection6Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight5 );
         if( aVector != aVector2 )
         {
@@ -1385,7 +1385,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_7);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
+        aColor = ((const Svx3DLightcolor7Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
         ColorLB* pLb = &aLbLight7;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1407,7 +1407,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_7);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff7Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
         if( ( bOn && aBtnLight7.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight7.GetImage() != aImgLightOff ) )
         {
@@ -1430,7 +1430,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_7);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
+        aVector = ((const Svx3DLightDirection7Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight6 );
         if( aVector != aVector2 )
         {
@@ -1443,7 +1443,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_8);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
+        aColor = ((const Svx3DLightcolor8Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
         ColorLB* pLb = &aLbLight8;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1465,7 +1465,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_8);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        BOOL bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
+        BOOL bOn = ((const Svx3DLightOnOff8Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
         if( ( bOn && aBtnLight8.GetImage() != aImgLightOn ) ||
             ( !bOn && aBtnLight8.GetImage() != aImgLightOff ) )
         {
@@ -1488,7 +1488,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_8);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aVector = ((const SvxVector3DItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
+        aVector = ((const Svx3DLightDirection8Item&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
         Vector3D aVector2 = pLightGroup->GetDirection( Base3DLight7 );
         if( aVector != aVector2 )
         {
@@ -1501,7 +1501,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_AMBIENTCOLOR);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue();
+        aColor = ((const Svx3DAmbientcolorItem&)rAttrs.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue();
         ColorLB* pLb = &aLbAmbientlight;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1528,7 +1528,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_KIND);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue();
+            UINT16 nValue = ((const Svx3DTextureKindItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue();
 
             if( ( !aBtnTexLuminance.IsChecked() && nValue == 1 ) ||
                 ( !aBtnTexColor.IsChecked() && nValue == 3 ) )
@@ -1553,7 +1553,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_MODE);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue();
+            UINT16 nValue = ((const Svx3DTextureModeItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue();
 
             if( ( !aBtnTexReplace.IsChecked() && nValue == 1 ) ||
                 ( !aBtnTexModulate.IsChecked() && nValue == 2 ) )
@@ -1580,7 +1580,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_PROJ_X);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue();
+            UINT16 nValue = ((const Svx3DTextureProjectionXItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue();
 
             if( ( !aBtnTexObjectX.IsChecked() && nValue == 0 ) ||
                 ( !aBtnTexParallelX.IsChecked() && nValue == 1 ) ||
@@ -1609,7 +1609,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_PROJ_Y);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue();
+            UINT16 nValue = ((const Svx3DTextureProjectionYItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue();
 
             if( ( !aBtnTexObjectY.IsChecked() && nValue == 0 ) ||
                 ( !aBtnTexParallelY.IsChecked() && nValue == 1 ) ||
@@ -1638,7 +1638,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_FILTER);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            BOOL bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue();
+            BOOL bValue = ((const Svx3DTextureFilterItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue();
             if( bValue != aBtnTexFilter.IsChecked() )
             {
                 aBtnTexFilter.Check( bValue );
@@ -1690,7 +1690,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_EMISSION);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue();
+        aColor = ((const Svx3DMaterialEmissionItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue();
         aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialEmission );
         ColorLB* pLb = &aLbMatEmission;
         if( aColor != pLb->GetSelectEntryColor() )
@@ -1712,7 +1712,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_SPECULAR);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue();
+        aColor = ((const Svx3DMaterialSpecularItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue();
         aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialSpecular );
         ColorLB* pLb = &aLbMatSpecular;
         if( aColor != pLb->GetSelectEntryColor() )
@@ -1734,7 +1734,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue();
+        UINT16 nValue = ((const Svx3DMaterialSpecularIntensityItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue();
         aCtlLightPreview.GetPreviewControl().SetShininess( nValue );
         if( nValue != aMtrMatSpecularIntensity.GetValue() )
         {
@@ -1757,7 +1757,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_PERSPECTIVE);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        ProjectionType ePT = (ProjectionType)((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue();
+        ProjectionType ePT = (ProjectionType)((const Svx3DPerspectiveItem&)rAttrs.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue();
         if( ( !aBtnPerspective.IsChecked() && ePT == PR_PERSPECTIVE ) ||
             ( aBtnPerspective.IsChecked() && ePT == PR_PARALLEL ) )
         {
@@ -1812,10 +1812,10 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
             nValue = PR_PERSPECTIVE;
         else
             nValue = PR_PARALLEL;
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DSCENE_PERSPECTIVE, nValue ) );
+        rAttrs.Put(Svx3DPerspectiveItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_PERSPECTIVE );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_PERSPECTIVE);
 
 // Geometrie
     // evtl. PoolUnit ermitteln (Falls dies in Update() nicht passiert ist)
@@ -1833,65 +1833,65 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aNumHorizontal.IsEmptyFieldValue() )
     {
         UINT32 nValue = aNumHorizontal.GetValue();
-        rAttrs.Put( SfxUInt32Item( SDRATTR_3DOBJ_HORZ_SEGS, nValue ) );
+        rAttrs.Put(Svx3DHorizontalSegmentsItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_HORZ_SEGS );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_HORZ_SEGS);
 
     // Anzahl Segmente (vertikal)
     if( !aNumVertical.IsEmptyFieldValue() )
     {
         UINT32 nValue = aNumVertical.GetValue();
-        rAttrs.Put( SfxUInt32Item( SDRATTR_3DOBJ_VERT_SEGS, nValue ) );
+        rAttrs.Put(Svx3DVerticalSegmentsItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_VERT_SEGS );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_VERT_SEGS);
 
     // Tiefe
     if( !aMtrDepth.IsEmptyFieldValue() )
     {
         UINT32 nValue = GetCoreValue( aMtrDepth, ePoolUnit );
-        rAttrs.Put( SfxUInt32Item( SDRATTR_3DOBJ_DEPTH, nValue ) );
+        rAttrs.Put(Svx3DDepthItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_DEPTH );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_DEPTH);
 
     // Doppelseitig
     TriState eState = aBtnDoubleSided.GetState();
     if( eState != STATE_DONTKNOW )
     {
         BOOL bValue = STATE_CHECK == eState;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DOBJ_DOUBLE_SIDED, bValue ) );
+        rAttrs.Put(Svx3DDoubleSidedItem(bValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_DOUBLE_SIDED );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_DOUBLE_SIDED);
 
     // Kantenrundung
     if( !aMtrPercentDiagonal.IsEmptyFieldValue() )
     {
         UINT16 nValue = (UINT16) aMtrPercentDiagonal.GetValue();
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_PERCENT_DIAGONAL, nValue ) );
+        rAttrs.Put(Svx3DPercentDiagonalItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_PERCENT_DIAGONAL );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_PERCENT_DIAGONAL);
 
     // Tiefenskalierung
     if( !aMtrBackscale.IsEmptyFieldValue() )
     {
-        UINT16 nValue = (UINT16) aMtrBackscale.GetValue();
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_BACKSCALE, nValue ) );
+        UINT16 nValue = (UINT16)aMtrBackscale.GetValue();
+        rAttrs.Put(Svx3DBackscaleItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_BACKSCALE );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_BACKSCALE);
 
     // Endwinkel
     if( !aMtrEndAngle.IsEmptyFieldValue() )
     {
-        UINT16 nValue = (UINT16) aMtrEndAngle.GetValue();
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_END_ANGLE, nValue ) );
+        UINT16 nValue = (UINT32)aMtrEndAngle.GetValue();
+        rAttrs.Put(Svx3DEndAngleItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_END_ANGLE );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_END_ANGLE);
 
     // Normalentyp
     UINT16 nValue = 99;
@@ -1903,80 +1903,80 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         nValue = 2;
 
     if( nValue <= 2 )
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_NORMALS_KIND, nValue ) );
+        rAttrs.Put(Svx3DNormalsKindItem(nValue));
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_NORMALS_KIND );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_NORMALS_KIND);
 
     // Normalen invertieren
     eState = aBtnNormalsInvert.GetState();
     if( eState != STATE_DONTKNOW )
     {
         BOOL bValue = STATE_CHECK == eState;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DOBJ_NORMALS_INVERT, bValue ) );
+        rAttrs.Put(Svx3DNormalsInvertItem(bValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_NORMALS_INVERT );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_NORMALS_INVERT);
 
     // 2-seitige Beleuchtung
     eState = aBtnTwoSidedLighting.GetState();
     if( eState != STATE_DONTKNOW )
     {
         BOOL bValue = STATE_CHECK == eState;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bValue ) );
+        rAttrs.Put(Svx3DTwoSidedLightingItem(bValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_TWO_SIDED_LIGHTING );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING);
 
 // Darstellung
     // Shademode
     if( aLbShademode.GetSelectEntryCount() )
     {
         nValue = aLbShademode.GetSelectEntryPos();
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DSCENE_SHADE_MODE, nValue ) );
+        rAttrs.Put(Svx3DShadeModeItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_SHADE_MODE );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_SHADE_MODE);
 
     // 3D-Shatten
     eState = aBtnShadow3d.GetState();
     if( eState != STATE_DONTKNOW )
     {
         BOOL bValue = STATE_CHECK == eState;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DOBJ_SHADOW_3D, bValue ) );
-        rAttrs.Put( SdrShadowItem( bValue ) );
+        rAttrs.Put(Svx3DShadow3DItem(bValue));
+        rAttrs.Put(SdrShadowItem(bValue));
     }
     else
     {
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_SHADOW_3D );
-        rAttrs.InvalidateItem( SDRATTR_SHADOW );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_SHADOW_3D);
+        rAttrs.InvalidateItem(SDRATTR_SHADOW);
     }
 
     // Neigung (Schatten)
     if( !aMtrSlant.IsEmptyFieldValue() )
     {
         UINT16 nValue = (UINT16) aMtrSlant.GetValue();
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DSCENE_SHADOW_SLANT, nValue ) );
+        rAttrs.Put(Svx3DShadowSlantItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_SHADOW_SLANT );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_SHADOW_SLANT);
 
     // Distanz
     if( !aMtrDistance.IsEmptyFieldValue() )
     {
         UINT32 nValue = GetCoreValue( aMtrDistance, ePoolUnit );
-        rAttrs.Put( SfxUInt32Item( SDRATTR_3DSCENE_DISTANCE, nValue ) );
+        rAttrs.Put(Svx3DDistanceItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_DISTANCE );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_DISTANCE);
 
     // Brennweite
     if( !aMtrFocalLength.IsEmptyFieldValue() )
     {
         UINT32 nValue = GetCoreValue( aMtrFocalLength, ePoolUnit );
-        rAttrs.Put( SfxUInt32Item( SDRATTR_3DSCENE_FOCAL_LENGTH, nValue ) );
+        rAttrs.Put(Svx3DFocalLengthItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_FOCAL_LENGTH );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
 
 // Beleuchtung
     Image aImg;
@@ -1986,10 +1986,10 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( aLbLight1.GetSelectEntryCount() )
     {
         aColor = aLbLight1.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_1 ) );
+        rAttrs.Put(Svx3DLightcolor1Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_1 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_1);
     // Licht 1 (an/aus)
     eState = aBtnLight1.GetState();
     if( eState != STATE_DONTKNOW )
@@ -1998,27 +1998,27 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_1, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff1Item(bValue));
 
         // Licht 1 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight0 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_1, aVector ) );
+            rAttrs.Put(Svx3DLightDirection1Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_1 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_1);
 
 
     // Licht 2 Farbe
     if( aLbLight2.GetSelectEntryCount() )
     {
         aColor = aLbLight2.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_2 ) );
+        rAttrs.Put(Svx3DLightcolor2Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_2 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_2);
     // Licht 2 (an/aus)
     eState = aBtnLight2.GetState();
     if( eState != STATE_DONTKNOW )
@@ -2027,26 +2027,26 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_2, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff2Item(bValue));
 
         // Licht 2 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight1 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_2, aVector ) );
+            rAttrs.Put(Svx3DLightDirection2Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_2 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_2);
 
     // Licht 3 Farbe
     if( aLbLight3.GetSelectEntryCount() )
     {
         aColor = aLbLight3.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_3 ) );
+        rAttrs.Put(Svx3DLightcolor3Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_3 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_3);
     // Licht 3 (an/aus)
     eState = aBtnLight3.GetState();
     if( eState != STATE_DONTKNOW )
@@ -2055,26 +2055,26 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_3, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff3Item(bValue));
 
         // Licht 3 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight2 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_3, aVector ) );
+            rAttrs.Put(Svx3DLightDirection3Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_3 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_3);
 
     // Licht 4 Farbe
     if( aLbLight4.GetSelectEntryCount() )
     {
         aColor = aLbLight4.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_4 ) );
+        rAttrs.Put(Svx3DLightcolor4Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_4 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_4);
     // Licht 4 (an/aus)
     eState = aBtnLight4.GetState();
     if( eState != STATE_DONTKNOW )
@@ -2083,26 +2083,26 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_4, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff4Item(bValue));
 
         // Licht 4 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight3 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_4, aVector ) );
+            rAttrs.Put(Svx3DLightDirection4Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_4 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_4);
 
     // Licht 5 Farbe
     if( aLbLight5.GetSelectEntryCount() )
     {
         aColor = aLbLight5.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_5 ) );
+        rAttrs.Put(Svx3DLightcolor5Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_5 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_5);
     // Licht 5 (an/aus)
     eState = aBtnLight5.GetState();
     if( eState != STATE_DONTKNOW )
@@ -2111,26 +2111,26 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_5, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff5Item(bValue));
 
         // Licht 5 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight4 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_5, aVector ) );
+            rAttrs.Put(Svx3DLightDirection5Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_5 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_5);
 
     // Licht 6 Farbe
     if( aLbLight6.GetSelectEntryCount() )
     {
         aColor = aLbLight6.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_6 ) );
+        rAttrs.Put(Svx3DLightcolor6Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_6 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_6);
     // Licht 6 (an/aus)
     eState = aBtnLight6.GetState();
     if( eState != STATE_DONTKNOW )
@@ -2139,26 +2139,26 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_6, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff6Item(bValue));
 
         // Licht 6 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight5 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_6, aVector ) );
+            rAttrs.Put(Svx3DLightDirection6Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_6 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_6);
 
     // Licht 7 Farbe
     if( aLbLight7.GetSelectEntryCount() )
     {
         aColor = aLbLight7.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_7 ) );
+        rAttrs.Put(Svx3DLightcolor7Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_7 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_7);
     // Licht 7 (an/aus)
     eState = aBtnLight7.GetState();
     if( eState != STATE_DONTKNOW )
@@ -2167,26 +2167,26 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_7, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff7Item(bValue));
 
         // Licht 7 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight6 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_7, aVector ) );
+            rAttrs.Put(Svx3DLightDirection7Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_7 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_7);
 
     // Licht 8 Farbe
     if( aLbLight8.GetSelectEntryCount() )
     {
         aColor = aLbLight8.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_LIGHTCOLOR_8 ) );
+        rAttrs.Put(Svx3DLightcolor8Item(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTCOLOR_8 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_8);
     // Licht 8 (an/aus)
     eState = aBtnLight8.GetState();
     if( eState != STATE_DONTKNOW )
@@ -2195,26 +2195,26 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         BOOL bValue = FALSE;
         if( aImg == aImgLightOn )
             bValue = TRUE;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DSCENE_LIGHTON_8, bValue ) );
+        rAttrs.Put(Svx3DLightOnOff8Item(bValue));
 
         // Licht 8 (Richtung)
         if( bValue )
         {
             aVector = pLightGroup->GetDirection( Base3DLight7 );
-            rAttrs.Put( SvxVector3DItem( SDRATTR_3DSCENE_LIGHTDIRECTION_8, aVector ) );
+            rAttrs.Put(Svx3DLightDirection8Item(aVector));
         }
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_LIGHTON_8 );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTON_8);
 
     // Umgebungslicht
     if( aLbAmbientlight.GetSelectEntryCount() )
     {
         aColor = aLbAmbientlight.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DSCENE_AMBIENTCOLOR ) );
+        rAttrs.Put(Svx3DAmbientcolorItem(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DSCENE_AMBIENTCOLOR );
+        rAttrs.InvalidateItem(SDRATTR_3DSCENE_AMBIENTCOLOR);
 
 // Texturen
     // Art
@@ -2225,9 +2225,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         nValue = 3;
 
     if( nValue == 1 || nValue == 3 )
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_TEXTURE_KIND, nValue ) );
+        rAttrs.Put(Svx3DTextureKindItem(nValue));
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_TEXTURE_KIND );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_TEXTURE_KIND);
 
 
     // Modus
@@ -2240,9 +2240,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     //  nValue = 2;
 
     if( nValue == 1 || nValue == 2 )
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_TEXTURE_MODE, nValue ) );
+        rAttrs.Put(Svx3DTextureModeItem(nValue));
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_TEXTURE_MODE );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_TEXTURE_MODE);
 
     // Projektion X
     nValue = 99;
@@ -2254,9 +2254,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         nValue = 2;
 
     if( nValue <= 2 )
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_TEXTURE_PROJ_X, nValue ) );
+        rAttrs.Put(Svx3DTextureProjectionXItem(nValue));
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_TEXTURE_PROJ_X );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_TEXTURE_PROJ_X);
 
     // Projektion Y
     nValue = 99;
@@ -2268,9 +2268,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         nValue = 2;
 
     if( nValue <= 2 )
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nValue ) );
+        rAttrs.Put(Svx3DTextureProjectionYItem(nValue));
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_TEXTURE_PROJ_Y );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_TEXTURE_PROJ_Y);
 
 
     // Filter
@@ -2278,10 +2278,10 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( eState != STATE_DONTKNOW )
     {
         BOOL bValue = STATE_CHECK == eState;
-        rAttrs.Put( SfxBoolItem( SDRATTR_3DOBJ_TEXTURE_FILTER, bValue ) );
+        rAttrs.Put(Svx3DTextureFilterItem(bValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_TEXTURE_FILTER );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_TEXTURE_FILTER);
 
 
 // Material
@@ -2302,28 +2302,28 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( aLbMatEmission.GetSelectEntryCount() )
     {
         aColor = aLbMatEmission.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DOBJ_MAT_EMISSION ) );
+        rAttrs.Put(Svx3DMaterialEmissionItem(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_MAT_EMISSION );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_EMISSION);
 
     // Glanzpunkt
     if( aLbMatSpecular.GetSelectEntryCount() )
     {
         aColor = aLbMatSpecular.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DOBJ_MAT_SPECULAR ) );
+        rAttrs.Put(Svx3DMaterialSpecularItem(aColor));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_MAT_SPECULAR );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_SPECULAR);
 
     // Glanzpunkt Intensitaet
     if( !aMtrMatSpecularIntensity.IsEmptyFieldValue() )
     {
         UINT16 nValue = (UINT16) aMtrMatSpecularIntensity.GetValue();
-        rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nValue ) );
+        rAttrs.Put(Svx3DMaterialSpecularIntensityItem(nValue));
     }
     else
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY );
+        rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY);
 }
 
 // -----------------------------------------------------------------------
