@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 13:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 
 #include <tools/urlobj.hxx>
@@ -380,7 +383,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParent ) :
 {
     Size aBoxSize = pParent->GetSizePixel();
     mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.Width(), 16 ) );
+    mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER );
     mpHeaderBar->InsertItem( 1, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 220, nBits );
