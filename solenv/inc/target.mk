@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-19 15:52:36 $
+#   last change: $Author: hjs $ $Date: 2001-04-20 14:51:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2963,7 +2963,7 @@ $(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES)
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
 $(MISC)$/linkinc.ls:
-        +sed -f r:\bat\chrel.sed $(MISC)$/*.lin >> $@
+        +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(MISC)$/*.lin >> $@
 .ENDIF
 .ELSE
 $(MISC)$/linkinc.ls:
@@ -2980,7 +2980,7 @@ $(MISC)\$(TARGET).lck:
 libr:
 .ENDIF
 
-# dependencies from *.lng to par-files, this dependency is to much
+# dependencies from *.lng to par-files, this dependency is too much
 # but better than nothing
 .IF "$(PARFILES)"!=""
 $(ALLPARFILES): $(LNGFILES)
