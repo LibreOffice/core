@@ -1,4 +1,4 @@
-PKG=OOOopenoffice-gnome
+PKG=openofficeorg-gnome
 NAME=%PRODUCTNAME Solaris
 CATEGORY=application
 BASEDIR=/usr
