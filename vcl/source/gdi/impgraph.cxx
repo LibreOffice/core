@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-25 15:50:03 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 11:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,7 +1207,7 @@ BOOL ImpGraphic::ImplSwapOut()
 
                 if( pOStm )
                 {
-                    pOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+                    pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                     pOStm->SetCompressMode( COMPRESSMODE_NATIVE );
 
                     if( ( bRet = ImplSwapOut( pOStm ) ) == TRUE )
@@ -1307,7 +1307,7 @@ BOOL ImpGraphic::ImplSwapIn()
 
             if( pIStm )
             {
-                pIStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+                pIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 pIStm->SetCompressMode( COMPRESSMODE_NATIVE );
 
                 if( !mpSwapFile )
