@@ -1,9 +1,10 @@
 av	avmedia	: sfx2 NULL
-av	avmedia                 	usr1	-	all	av_mkout										NULL
-av	avmedia\prj					get		-	all	av_prj											NULL
-av	avmedia\inc					get		-	all	av_inv											NULL
-av  avmedia\source\viewer		nmake	-	all	av_viewer	        							NULL
-av  avmedia\source\framework	nmake	-	all	av_framework	        						NULL
-av  avmedia\source\win	    	nmake	-	all	av_win	            							NULL
-av	avmedia\source\java			nmake	-	all	av_java	            							NULL
-av	avmedia\util				nmake	-	all	av_inv av_viewer av_framework av_win av_java	NULL
+av	avmedia                 	usr1	-	all	av_mkout												NULL
+av	avmedia\prj					get		-	all	av_prj													NULL
+av	avmedia\inc					get		-	all	av_inv													NULL
+av  avmedia\source\viewer		nmake	-	all	av_viewer	        									NULL
+av  avmedia\source\framework	nmake	-	all	av_framework	        								NULL
+av  avmedia\source\win	    	nmake	-	all	av_win	            									NULL
+av	avmedia\source\java			nmake	-	all	av_java	            									NULL
+av	avmedia\source\xine			nmake	-	all	av_xine	            									NULL
+av	avmedia\util				nmake	-	all	av_inv av_viewer av_framework av_win av_java av_xine	NULL
