@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:50:40 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
