@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2001-07-17 10:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "dispatch.hxx"
 #include "msgpool.hxx"
 #include "statcach.hxx"
+#include "viewfrm.hxx"
 
 //====================================================================
 
@@ -464,11 +465,30 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
 {
     SfxStateCache *pCache = pBindings->GetStateCache( nId );
     SfxDispatcher *pDispat = pBindings->GetDispatcher_Impl();
-    const SfxSlotServer *pServer = pCache->GetSlotServer( *pDispat );
-    SfxShell *pSh = pDispat->GetShell( pServer->GetShellLevel() );
-    SfxItemPool &rPool = pSh->GetPool();
-    USHORT nWhich = rPool.GetWhich( nId );
-    return rPool.GetMetric( nWhich );
+
+    if ( !pDispat )
+    {
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if ( !pViewFrame )
+            SfxViewFrame::GetFirst();
+        if ( pViewFrame )
+            pDispat = pViewFrame->GetDispatcher();
+    }
+
+    if ( pDispat )
+    {
+        const SfxSlotServer *pServer = pCache->GetSlotServer( *pDispat );
+        if ( pServer )
+        {
+            SfxShell *pSh = pDispat->GetShell( pServer->GetShellLevel() );
+            SfxItemPool &rPool = pSh->GetPool();
+            USHORT nWhich = rPool.GetWhich( nId );
+            return rPool.GetMetric( nWhich );
+        }
+    }
+
+    DBG_WARNING( "W1: Can not find ItemPool!" );
+    return SFX_MAPUNIT_100TH_MM;
 }
 
 //------------------------------------------------------------------------
