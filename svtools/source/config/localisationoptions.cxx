@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localisationoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:51:55 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 //_________________________________________________________________________________________________________________
 //  includes
