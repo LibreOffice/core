@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-21 14:58:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,8 +470,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 }
 
 #define _STANDARD_FONT_PROPERTIES \
-    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),           RES_CHRATR_FONTSIZE  ,  &::getCppuType((Float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},      \
-    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),           RES_CHRATR_WEIGHT    ,  &::getCppuType((Float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},                    \
+    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),           RES_CHRATR_FONTSIZE  ,  &::getCppuType((float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},      \
+    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),           RES_CHRATR_WEIGHT    ,  &::getCppuType((float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},                    \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),        RES_CHRATR_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },                  \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),  RES_CHRATR_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },                    \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),      RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },    \
@@ -481,8 +481,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE),           RES_CHRATR_LANGUAGE ,   &::getCppuType((Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 
 #define _CJK_FONT_PROPERTIES \
-    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT_ASIAN),         RES_CHRATR_CJK_FONTSIZE  ,  &::getCppuType((Float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},   \
-    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT_ASIAN),         RES_CHRATR_CJK_WEIGHT    ,  &::getCppuType((Float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},                 \
+    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT_ASIAN),         RES_CHRATR_CJK_FONTSIZE  ,  &::getCppuType((float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},   \
+    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT_ASIAN),         RES_CHRATR_CJK_WEIGHT    ,  &::getCppuType((float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},                 \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_ASIAN),      RES_CHRATR_CJK_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },               \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN),RES_CHRATR_CJK_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },                 \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_ASIAN),    RES_CHRATR_CJK_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },    \
@@ -492,8 +492,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE_ASIAN),         RES_CHRATR_CJK_LANGUAGE ,   &::getCppuType((Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 
 #define _CTL_FONT_PROPERTIES \
-    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT_COMPLEX),           RES_CHRATR_CTL_FONTSIZE  ,  &::getCppuType((Float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},\
-    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT_COMPLEX),           RES_CHRATR_CTL_WEIGHT    ,  &::getCppuType((Float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},              \
+    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT_COMPLEX),           RES_CHRATR_CTL_FONTSIZE  ,  &::getCppuType((float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},\
+    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT_COMPLEX),           RES_CHRATR_CTL_WEIGHT    ,  &::getCppuType((float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},              \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_COMPLEX),        RES_CHRATR_CTL_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },            \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_COMPLEX),  RES_CHRATR_CTL_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },              \
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_COMPLEX),      RES_CHRATR_CTL_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },    \
@@ -703,11 +703,11 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 
 
 #define     _PROP_DIFF_FONTHEIGHT \
-                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT),              RES_CHRATR_FONTSIZE ,           &::getCppuType((Float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT),              RES_CHRATR_FONTSIZE ,           &::getCppuType((float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
                     { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_HEIGHT),              RES_CHRATR_FONTSIZE ,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},\
-                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT_ASIAN),        RES_CHRATR_CJK_FONTSIZE ,           &::getCppuType((Float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT_ASIAN),        RES_CHRATR_CJK_FONTSIZE ,           &::getCppuType((float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
                     { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_HEIGHT_ASIAN),        RES_CHRATR_CJK_FONTSIZE ,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},\
-                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX),      RES_CHRATR_CTL_FONTSIZE ,           &::getCppuType((Float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
+                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX),      RES_CHRATR_CTL_FONTSIZE ,           &::getCppuType((float*)0),                                          PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
                     { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX),      RES_CHRATR_CTL_FONTSIZE ,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},
 
 const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
