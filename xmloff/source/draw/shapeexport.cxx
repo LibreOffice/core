@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-14 07:13:57 $
+ *  last change: $Author: cl $ $Date: 2002-04-17 11:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,15 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if( xSet.is() )
         xSet->getPropertyValue(msZIndex) >>= nZIndex;
 
-    ImplXMLShapeExportInfo& aShapeInfo = (*maCurrentShapesIter).second[nZIndex];
+    ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
+
+    if( aShapeInfoVector.size() <= nZIndex )
+    {
+        DBG_ERROR( "XMLShapeExport::collectShapeAutoStyles(): no shape info allocated for a given shape" );
+        return;
+    }
+
+    ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
     // -----------------------------
     // first compute the shapes type
@@ -439,7 +447,15 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( xSet.is() )
         xSet->getPropertyValue(msZIndex) >>= nZIndex;
 
-    const ImplXMLShapeExportInfo& aShapeInfo = (*maCurrentShapesIter).second[nZIndex];
+    ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
+
+    if( aShapeInfoVector.size() <= nZIndex )
+    {
+        DBG_ERROR( "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
+        return;
+    }
+
+    const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
 #ifndef PRODUCT
     // ---------------------------------------
