@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-02 12:56:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,27 +206,31 @@ void E3dPolyScene::TakeContour3D(XPolyPolygon& rPoly)
 |*
 \************************************************************************/
 
-FASTBOOL E3dPolyScene::Paint(ExtOutputDevice& rOut,
-    const SdrPaintInfoRec& rInfoRec) const
+sal_Bool E3dPolyScene::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     FASTBOOL bOk=TRUE;
     if(GetSubList() && GetSubList()->GetObjCount())
     {
         bOk = ((E3dPolyScene*)this)->LocalPaint3D(rOut, rInfoRec);
     }
-    else
-    {
-        // Leere Szene, zeichne genau wie leere Gruppe
-        if (!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet(nLayerId)) {
-            OutputDevice* pOutDev=rOut.GetOutDev();
-            pOutDev->SetLineColor(Color(COL_LIGHTGRAY));
-            pOutDev->SetFillColor();
-            pOutDev->DrawRect(aOutRect);
-        }
-    }
-    if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-        bOk=PaintGluePoints(rOut,rInfoRec);
-    }
+    // #110094#
+    // moved to DrawContact objects
+    //else
+    //{
+    //  // Leere Szene, zeichne genau wie leere Gruppe
+    //  if (!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet(nLayerId)) {
+    //      OutputDevice* pOutDev=rOut.GetOutDev();
+    //      pOutDev->SetLineColor(Color(COL_LIGHTGRAY));
+    //      pOutDev->SetFillColor();
+    //      pOutDev->DrawRect(aOutRect);
+    //  }
+    //}
+
+    // #110094#-13
+    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
+    //  bOk=PaintGluePoints(rOut,rInfoRec);
+    //}
+
     return bOk;
 }
 
@@ -358,7 +362,7 @@ BOOL E3dPolyScene::LocalPaint3D(ExtOutputDevice& rOut,
                 const Vector3D aPos = rSet.WorldToViewCoor(pLabelObject->GetTransPosition());
                 Point a2DPos((long)(aPos.X() + 0.5), (long)(aPos.Y() + 0.5));
                 pLabel->NbcSetAnchorPos(a2DPos);
-                pLabel->Paint(rOut, rInfoRec);
+                pLabel->SingleObjectPainter(rOut, rInfoRec); // #110094#-17
             }
         }
     }
