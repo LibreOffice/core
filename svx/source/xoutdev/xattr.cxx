@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:54:08 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 12:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,38 +857,55 @@ FASTBOOL XLineDashItem::ScaleMetrics(long nMul, long nDiv)
 
 sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    const XDash& rXD = GetValue();
+    if( nMemberId == MID_NAME )
+    {
+        rtl::OUString aName( GetName() );
+        rVal <<= aName;
+    }
+    else
+    {
+        const XDash& rXD = GetValue();
 
-    ::com::sun::star::drawing::LineDash aLineDash;
+        ::com::sun::star::drawing::LineDash aLineDash;
 
-    aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
-    aLineDash.Dots = rXD.GetDots();
-    aLineDash.DotLen = rXD.GetDotLen();
-    aLineDash.Dashes = rXD.GetDashes();
-    aLineDash.DashLen = rXD.GetDashLen();
-    aLineDash.Distance = rXD.GetDistance();
+        aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
+        aLineDash.Dots = rXD.GetDots();
+        aLineDash.DotLen = rXD.GetDotLen();
+        aLineDash.Dashes = rXD.GetDashes();
+        aLineDash.DashLen = rXD.GetDashLen();
+        aLineDash.Distance = rXD.GetDistance();
 
-    rVal <<= aLineDash;
+        rVal <<= aLineDash;
+    }
 
     return sal_True;
 }
 
 sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    ::com::sun::star::drawing::LineDash aLineDash;
-    if(!(rVal >>= aLineDash))
-        return sal_False;
+    if( nMemberId == MID_NAME )
+    {
+        rtl::OUString aName;
+        rVal >>= aName;
+        SetName( aName );
+    }
+    else
+    {
+        ::com::sun::star::drawing::LineDash aLineDash;
+        if(!(rVal >>= aLineDash))
+            return sal_False;
 
-    XDash aXDash;
+        XDash aXDash;
 
-    aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
-    aXDash.SetDots(aLineDash.Dots);
-    aXDash.SetDotLen(aLineDash.DotLen);
-    aXDash.SetDashes(aLineDash.Dashes);
-    aXDash.SetDashLen(aLineDash.DashLen);
-    aXDash.SetDistance(aLineDash.Distance);
+        aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
+        aXDash.SetDots(aLineDash.Dots);
+        aXDash.SetDotLen(aLineDash.DotLen);
+        aXDash.SetDashes(aLineDash.Dashes);
+        aXDash.SetDashLen(aLineDash.DashLen);
+        aXDash.SetDistance(aLineDash.Distance);
+        SetValue( aXDash );
+    }
 
-    SetValue( aXDash );
     return sal_True;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:59:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 12:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,7 +1183,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         case XATTR_FILLFLOATTRANSPARENCE:
         case XATTR_LINEEND:
         case XATTR_LINESTART:
-        // case XATTR_LINEDASH:
+        case XATTR_LINEDASH:
         {
             if( pMap->nMemberId == MID_NAME )
             {
