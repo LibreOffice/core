@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:56:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,20 +301,19 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     else
         aFont.SetOrientation( (short)rFont.lfEscapement );
 
-    Size aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
+    Size  aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
     if ( rFont.lfHeight > 0 )
     {
         // converting the cell height into a font height
         VirtualDevice aVDev;
-        aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
         aFont.SetSize( aFontSize );
         aVDev.SetFont( aFont );
         FontMetric aMetric( aVDev.GetFontMetric() );
         long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
         if ( nHeight )
         {
-            aFontSize.Height() *= rFont.lfHeight;
-            aFontSize.Height() /= nHeight;
+            double fHeight = ((double)aFontSize.Height() * rFont.lfHeight ) / nHeight;
+            aFontSize.Height() = (sal_Int32)( fHeight + 0.5 );
         }
     }
     else if ( aFontSize.Height() < 0 )
