@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: nf $ $Date: 2003-07-25 08:26:19 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2526,6 +2526,17 @@
       </prop>
       <prop oor:name="Data">
         <value>24,writer_web_HTML,com.sun.star.text.TextDocument,,16451,HTML,0,,</value>
+      </prop>
+    </node>
+    <node oor:name="HTML_MasterDoc" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">HTML Document (MasterDocument)</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>24,writer_web_HTML,com.sun.star.text.GlobalDocument,,12298,HTML,0,,</value>
       </prop>
     </node>
     <node oor:name="ICL Office Power 6 (W4W)" oor:op="replace">
@@ -7367,21 +7378,86 @@
     </node>
   </node>
   <node oor:name="DetectServices">
+    <node oor:name="com.sun.star.text.FormatDetector" oor:op="replace">
+    <prop oor:name="Types">
+        <value>
+            writer_StarOffice_XML_Writer writer_StarOffice_XML_Writer_Template
+            writer_web_StarOffice_XML_Writer_Web_Template writer_globaldocument_StarOffice_XML_Writer_GlobalDocument
+            writer_web_HTML writer_StarWriter_DOS writer_Text writer_Text_encoded
+            writer_web_HTML_help
+            writer_Rich_Text_Format
+            writer_Lotus_1_2_3_10_DOS_StarWriter writer_Lotus_1_2_3_10_WIN_StarWriter
+            writer_MS_WinWord_5 writer_MS_WinWord_60 writer_MS_Word_95 writer_MS_Word_95_Vorlage writer_MS_Word_97 writer_MS_Word_97_Vorlage
+            writer_StarWriter_10 writer_StarWriter_20
+            writer_StarWriter_30 writer_StarWriter_30_VorlageTemplate writer_StarWriter_40 writer_StarWriter_40_VorlageTemplate writer_StarWriter_50 writer_StarWriter_50_VorlageTemplate writer_globaldocument_StarWriter_50GlobalDocument writer_globaldocument_StarWriter_40GlobalDocument
+        </value>
+    </prop>
+    </node>
+    <node oor:name="com.sun.star.text.W4WFormatDetector" oor:op="replace">
+    <prop oor:name="Types">
+        <value>
+            writer_Ami_Pro_1x_31_W4W writer_CTOS_DEF_W4W writer_Claris_Works_W4W writer_DCA_Revisable_Form_Text_W4W writer_DCA_with_Display_Write_5_W4W writer_DCAFFT_Final_Form_Text_W4W
+            writer_DEC_DX_W4W writer_DEC_WPS_PLUS_W4W writer_DataGeneral_CEO_Write_W4W writer_DisplayWrite_20_4x_W4W writer_DisplayWrite_5x_W4W writer_EBCDIC_W4W
+            writer_Enable_W4W writer_Frame_Maker_MIF_30_W4W writer_Frame_Maker_MIF_40_W4W writer_Frame_Maker_MIF_50_W4W writer_Frame_Work_III_W4W writer_Frame_Work_IV_W4W
+            writer_HP_AdvanceWrite_Plus_W4W writer_ICL_Office_Power_6_W4W writer_ICL_Office_Power_7_W4W writer_Interleaf_W4W writer_Interleaf_5_6_W4W writer_Legacy_Winstar_onGO_W4W
+            writer_Lotus_Manuscript_W4W writer_MASS_11_Rel_80_83_W4W writer_MASS_11_Rel_85_90_W4W writer_MS_MacWord_30_W4W writer_MS_MacWord_40_W4W writer_MS_MacWord_5x_W4W
+            writer_MS_WinWord_1x_W4W writer_MS_WinWord_2x_W4W writer_MS_Word_3x_W4W writer_MS_Word_4x_W4W writer_MS_Word_5x_W4W writer_MS_Word_6x_W4W writer_MS_Works_20_DOS_W4W
+            writer_MS_Works_30_Win_W4W writer_MS_Works_40_Mac_W4W writer_Mac_Write_4x_50_W4W writer_Mac_Write_II_W4W writer_Mac_Write_Pro_W4W writer_MultiMate_33_W4W
+            writer_MultiMate_4_W4W writer_MultiMate_Adv_36_W4W writer_MultiMate_Adv_II_37_W4W writer_NAVY_DIF_W4W writer_OfficeWriter_40_W4W writer_OfficeWriter_50_W4W
+            writer_OfficeWriter_6x_W4W writer_PFS_First_Choice_10_W4W writer_PFS_First_Choice_20_W4W writer_PFS_First_Choice_30_W4W writer_PFS_Write_W4W writer_Peach_Text_W4W
+            writer_Professional_Write_10_W4W writer_Professional_Write_2x_W4W writer_Professional_Write_Plus_W4W writer_QA_Write_10_30_W4W writer_QA_Write_40_W4W writer_Rapid_File_10_W4W
+            writer_Rapid_File_12_W4W writer_Samna_Word_IV_IV_Plus_W4W writer_Total_Word_W4W writer_Uniplex_V7_V8_W4W writer_Uniplex_onGO_W4W writer_VolksWriter_3_and_4_W4W writer_VolksWriter_Deluxe_W4W
+            writer_WITA_W4W writer_Wang_II_SWP_W4W writer_Wang_PC_W4W writer_Wang_WP_Plus_W4W writer_Win_Write_3x_W4W writer_WiziWord_30_W4W writer_WordPerfect_Win_51_52_W4W
+            writer_WordPerfect_Win_60_W4W writer_WordPerfect_Win_61_W4W writer_WordPerfect_Win_70_W4W writer_WordPerfect_41_W4W writer_WordPerfect_42_W4W writer_WordPerfect_50_W4W
+            writer_WordPerfect_51_W4W writer_WordPerfect_60_W4W writer_WordPerfect_61_W4W writer_WordPerfect_Mac_1_W4W writer_WordPerfect_Mac_2_W4W writer_WordPerfect_Mac_3_W4W
+            writer_WordStar_Win_1x_20_W4W writer_WordStar_2000_Rel_30_W4W writer_WordStar_2000_Rel_35_W4W writer_WordStar_33x_W4W writer_WordStar_345_W4W writer_WordStar_40_W4W
+            writer_WordStar_50_W4W writer_WordStar_55_W4W writer_WordStar_60_W4W writer_WordStar_70_W4W writer_WriteNow_30_Macintosh_W4W writer_Writing_Assistant_W4W
+            writer_XEROX_XIF_50_Illustrator_W4W writer_XEROX_XIF_50_W4W writer_XEROX_XIF_60_Color_Bitmap_W4W writer_XEROX_XIF_60_Res_Graphic_W4W writer_XyWrite_Win_10_W4W
+            writer_XyWrite_III_W4W writer_XyWrite_IIIP_W4W writer_XyWrite_IV_W4W writer_XyWrite_Sig_Win_W4W writer_XyWrite_Signature_W4W
+        </value>
+    </prop>
+    </node>
     <node oor:name="com.sun.star.comp.filters.XMLFilterDetect" oor:op="replace">
     <prop oor:name="Types">
         <value>writer_DocBook_File writer_Flat_XML_File writer_XHTML_File writer_MS_Word_2003 calc_MS_Excel_2003</value>
     </prop>
     </node>
+    <node oor:name="com.sun.star.comp.math.FormatDetector" oor:op="replace">
+    <prop oor:name="Types">
+        <value>math_StarOffice_XML_Math math_StarMath_50 math_StarMath_40 math_StarMath_30 math_StarMath_20 math_MathType_3x math_MathML_XML_Math</value>
+    </prop>
+    </node>
+    <node oor:name="com.sun.star.comp.chart.FormatDetector" oor:op="replace">
+    <prop oor:name="Types">
+        <value>chart_StarOffice_XML_Chart chart_StarChart_50 chart_StarChart_40 chart_StarChart_30</value>
+    </prop>
+    </node>
+    <node oor:name="com.sun.star.comp.calc.FormatDetector" oor:op="replace">
+    <prop oor:name="Types">
+        <value>
+            calc_dBase calc_Text_txt_csv_StarCalc calc_StarOffice_XML_Calc_Template calc_StarOffice_XML_Calc
+            calc_StarCalc_50_VorlageTemplate calc_StarCalc_50 calc_StarCalc_40_VorlageTemplate calc_StarCalc_40 calc_StarCalc_30_VorlageTemplate calc_StarCalc_30
+            calc_StarCalc_10 calc_Lotus calc_DIF calc_SYLK
+            calc_MS_Excel_97_VorlageTemplate calc_MS_Excel_97 calc_MS_Excel_95_VorlageTemplate calc_MS_Excel_95 calc_MS_Excel_5095_VorlageTemplate calc_MS_Excel_5095 calc_MS_Excel_40_VorlageTemplate calc_MS_Excel_40
+        </value>
+    </prop>
+    </node>
+    <node oor:name="com.sun.star.comp.draw.FormatDetector" oor:op="replace">
+    <prop oor:name="Types">
+        <value>xpm_XPM xbm_X_Consortium wmf_MS_Windows_Metafile tif_Tag_Image_File tga_Truevision_TARGA svm_StarView_Metafile bmp_MS_Windows
+        ras_Sun_Rasterfile psd_Adobe_Photoshop ppm_Portable_Pixelmap png_Portable_Network_Graphic pgm_Portable_Graymap pcx_Zsoft_Paintbrush pct_Mac_Pict
+        pcd_Photo_CD_Base4 pcd_Photo_CD_Base16 pcd_Photo_CD_Base pbm_Portable_Bitmap met_OS2_Metafile jpg_JPEG
+        impress_CGM_Computer_Graphics_Metafile gif_Graphics_Interchange eps_Encapsulated_PostScript emf_MS_Windows_Metafile dxf_AutoCAD_Interchange
+        sgf_StarOffice_Writer_SGF sgv_StarDraw_20
+        draw_StarOffice_XML_Draw_Template draw_StarOffice_XML_Draw
+        impress_StarOffice_XML_Impress_Template impress_StarOffice_XML_Impress
+        impress_StarImpress_50_packed impress_StarImpress_50_Vorlage impress_StarImpress_50 impress_StarImpress_40_Vorlage impress_StarImpress_40
+        impress_MS_PowerPoint_97_Vorlage impress_MS_PowerPoint_97
+        draw_StarDraw_50_Vorlage draw_StarDraw_50 draw_StarDraw_30_Vorlage draw_StarDraw_30</value>
+    </prop>
+    </node>
   </node>
   <node oor:name="FrameLoaders">
-    <node oor:name="com.sun.star.comp.sfx2.SfxMacroLoader" oor:op="replace">
-      <prop oor:name="UIName">
-        <value xml:lang="en-US">com.sun.star.comp.sfx2.SfxMacroLoader</value>
-      </prop>
-      <prop oor:name="Types">
-        <value>macro</value>
-      </prop>
-    </node>
     <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
       <prop oor:name="UIName">
         <value xml:lang="en-US">com.sun.star.frame.Bibliography</value>
