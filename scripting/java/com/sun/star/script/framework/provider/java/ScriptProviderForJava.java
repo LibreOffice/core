@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJava.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:17 $
+*  last change: $Author: rt $ $Date: 2004-01-05 13:44:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -90,18 +90,21 @@ import com.sun.star.script.CannotConvertException;
 
 import java.util.Properties;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Vector;
+import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 
 import drafts.com.sun.star.script.provider.XScriptContext;
-import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.browse.XBrowseNode;
 import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.framework.browse.ScriptMetaData;
 
 import com.sun.star.script.framework.provider.*;
 import com.sun.star.script.framework.log.LogUtils;
-
 /**
  *  Description of the Class
  *
@@ -125,14 +128,124 @@ public class ScriptProviderForJava
             super (ctx, "Java");
         }
 
+        public XScript getScript( /*IN*/String scriptURI )
+            throws com.sun.star.uno.RuntimeException,
+                   com.sun.star.lang.IllegalArgumentException
+        {
+            ScriptMetaData scriptData = getScriptData( scriptURI );
+            ScriptImpl script = null;
+            if ( scriptData == null )
+            {
+                throw new com.sun.star.uno.RuntimeException(
+                "Cannot find script for URI: " + scriptURI );
+            }
+            else
+            {
+                script = new ScriptImpl( m_xContext, m_resolutionPolicy, scriptData, m_xInvocationContext );
+            }
+            return script;
+        }
+
+    }
+    /**
+     * Returns a factory for creating the service.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     *
+     * @param  implName      the name of the implementation for which a service is desired
+     * @param  multiFactory  the service manager to be used if needed
+     * @param  regKey        the registryKey
+     * @return               returns a <code>XSingleServiceFactory</code> for creating
+     *                          the component
+     * @see                  com.sun.star.comp.loader.JavaLoader
+     */
+    public static XSingleServiceFactory __getServiceFactory( String implName,
+            XMultiServiceFactory multiFactory,
+            XRegistryKey regKey )
+    {
+        XSingleServiceFactory xSingleServiceFactory = null;
+
+        if ( implName.equals( ScriptProviderForJava._ScriptProviderForJava.class.getName() ) )
+        {
+              xSingleServiceFactory = FactoryHelper.getServiceFactory(
+                ScriptProviderForJava._ScriptProviderForJava.class,
+                "drafts.com.sun.star.script.provider.ScriptProviderForJava",
+                multiFactory,
+                regKey );
+        }
+
+        return xSingleServiceFactory;
+    }
+
+
+    /**
+     * Writes the service information into the given registry key.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     *
+     * @param  regKey  the registryKey
+     * @return         returns true if the operation succeeded
+     * @see            com.sun.star.comp.loader.JavaLoader
+     */
+    public static boolean __writeRegistryServiceInfo( XRegistryKey regKey )
+    {
+        String impl = "com.sun.star.scripting.runtime.java." +
+            "ScriptProviderForJava$_ScriptProviderForJava";
+
+        String service = "drafts.com.sun.star.script.provider." +
+            "ScriptProviderForJava";
+
+        if (FactoryHelper.writeRegistryServiceInfo(impl, service, regKey)) {
+              return true;
+// code below is commented out because we want this to happen
+// as part of the install, this will have to be done
+// programatically during the install as registration of java components
+// is not fully supported in setup. It should work somewhat like c++ somewhat like c++ registration in install
+/*            try {
+                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theScriptProviderForJava");
+                newKey.setStringValue(service);
+                return true;
+            }
+            catch (Exception ex) {
+                System.err.println(
+                    "Error registering ScriptProviderForJava: " + ex);
+            }*/
+        }
+        return false;
+    }
+}
+
+class ScriptImpl implements XScript
+{
+    private ScriptMetaData metaData;
+    private XComponentContext m_xContext;
+    private Object m_oInvokeContext;
+    private XMultiComponentFactory m_xMultiComponentFactory;
+    private Resolver m_resolutionPolicy;
+    ScriptImpl( XComponentContext ctx, Resolver resolver, ScriptMetaData metaData, Object oInvokeContext ) throws com.sun.star.uno.RuntimeException
+    {
+        this.metaData = metaData;
+        this.m_xContext = ctx;
+        this.m_oInvokeContext = oInvokeContext;
+        this.m_resolutionPolicy = resolver;
+        try
+        {
+            this.m_xMultiComponentFactory = m_xContext.getServiceManager();
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            throw new com.sun.star.uno.RuntimeException(
+                "Error constructing  ScriptProvider: "
+                + e.getMessage() );
+        }
+
+        LogUtils.DEBUG("ScriptImpl [java] script data = " + metaData );
+    }
         /**
          *  Invoke
          *
          *
-         * @param scriptName        The scriptName is the language specific name of the
-         *                          script
-         * @param invocationCtx     The invocation context contains the documentStorageID
-         *                      and document reference for use in script name resolving
          * @param aParams           All parameters; pure, out params are undefined in
          *                      sequence, i.e., the value has to be ignored by the callee
          * @param aOutParamIndex    Out indices
@@ -145,8 +258,7 @@ public class ScriptProviderForJava
          *              this information is captured and rethrown as this exception type.
          */
 
-        private Object invoke(  /*IN*/String scriptURI,
-                                     /*IN*/Object invocationCtx,
+        public Object invoke(
                                      /*IN*/Object[]  params,
                                      /*OUT*/short[][]  aOutParamIndex,
                                      /*OUT*/Object[][]  aOutParam )
@@ -160,31 +272,31 @@ public class ScriptProviderForJava
             aOutParam[0] = new Object[0];
 
 
-            String parcelURI = m_xScriptInfo.getParcelURI();
-            XPropertySet languageProps = m_xScriptInfo.getLanguageProperties();
-            String classpath = null;
-            try
-            {
-                classpath = ( String ) languageProps.getPropertyValue( CLASSPATH );
-            }
-            catch ( Exception e )
-            {
-                LogUtils.DEBUG( "Can't get classpath!!" );
-            }
-            if ( classpath == null )
-            {
-                classpath = "";
-            }
-            LogUtils.DEBUG("Classpath from parcel is " + classpath );
+            Map languageProps = metaData.getLanguageProperties();
+
             ScriptDescriptor scriptDesc =
-                new ScriptDescriptor( m_xScriptInfo.getFunctionName() );
+                new ScriptDescriptor( metaData.getLanguageName() );
+
+            ClassLoader scriptLoader = null;
 
             try {
-                scriptDesc.setClasspath(
-                    PathUtils.buildClasspath( parcelURI, classpath ) );
+                LogUtils.DEBUG( "Classloader starting..." );
+                scriptLoader = ClassLoaderFactory.getURLClassLoader(
+                        metaData );
+                LogUtils.DEBUG( "Classloader finished..." );
             }
-            catch (MalformedURLException mue) {
-                throw new InvocationTargetException(mue.getMessage());
+            catch (MalformedURLException mfe )
+            {
+                throw new InvocationTargetException(mfe.getMessage());
+            }
+            catch (NoSuitableClassLoaderException ncl )
+            {
+                throw new InvocationTargetException(ncl.getMessage());
+            }
+            catch (ArrayStoreException e )
+            {
+                LogUtils.DEBUG("Barfed " + e);
+                e.printStackTrace();
             }
 
             ArrayList invocationArgList = new ArrayList();
@@ -193,7 +305,7 @@ public class ScriptProviderForJava
             LogUtils.DEBUG( "Parameter Mapping..." );
 
             // Setup Context Object
-            XScriptContext xSc = ScriptContext.createContext(invocationCtx,
+            XScriptContext xSc = ScriptContext.createContext(m_oInvokeContext,
                 m_xContext, m_xMultiComponentFactory);
             scriptDesc.addArgumentType( XScriptContext.class );
             invocationArgList.add( xSc );
@@ -209,28 +321,14 @@ public class ScriptProviderForJava
                 invocationArgs = invocationArgList.toArray();
             }
 
-            LogUtils.DEBUG( "Classloader starting..." );
-            ClassLoader scriptLoader = null;
 
-            try
-            {
-                scriptLoader = ClassLoaderFactory.getClassLoader(m_xContext,
-                    scriptDesc.getClass().getClassLoader(),
-                    scriptDesc.getClasspath() );
-            }
-            catch ( NoSuitableClassLoaderException e )
-            {
-                String trace = LogUtils.getTrace( e );
-                LogUtils.DEBUG( trace );
-                throw new InvocationTargetException( trace );
-            }
 
             LogUtils.DEBUG( "ScriptProxy starting... " );
             ScriptProxy script = null;
             try
             {
-                String className = m_xScriptInfo.getFunctionName().substring( 0,
-                    m_xScriptInfo.getFunctionName().lastIndexOf( '.' ) );
+                String className = metaData.getLanguageName().substring( 0,
+                    metaData.getLanguageName().lastIndexOf( '.' ) );
                 LogUtils.DEBUG( "About to load Class " + className + " starting... " );
 
                 long start = new java.util.Date().getTime();
@@ -310,83 +408,4 @@ public class ScriptProviderForJava
             }
             return result;
         }
-
-        public Object invoke( /*IN*/Object[] aParams,
-                            /*OUT*/short[][] aOutParamIndex,
-                            /*OUT*/Object[][] aOutParam )
-            throws IllegalArgumentException, CannotConvertException,
-                InvocationTargetException
-        {
-            LogUtils.DEBUG( "ScriptProviderForJava: starting invoke" );
-            return invoke(m_scriptURI, m_xInvocationContext, aParams,
-                            aOutParamIndex, aOutParam);
-        }
-    }
-
-    /**
-     * Returns a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     *
-     * @param  implName      the name of the implementation for which a service is desired
-     * @param  multiFactory  the service manager to be used if needed
-     * @param  regKey        the registryKey
-     * @return               returns a <code>XSingleServiceFactory</code> for creating
-     *                          the component
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static XSingleServiceFactory __getServiceFactory( String implName,
-            XMultiServiceFactory multiFactory,
-            XRegistryKey regKey )
-    {
-        XSingleServiceFactory xSingleServiceFactory = null;
-
-        if ( implName.equals( ScriptProviderForJava._ScriptProviderForJava.class.getName() ) )
-        {
-              xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                ScriptProviderForJava._ScriptProviderForJava.class,
-                "drafts.com.sun.star.script.provider.ScriptProviderForJava",
-                multiFactory,
-                regKey );
-        }
-
-        return xSingleServiceFactory;
-    }
-
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     *
-     * @param  regKey  the registryKey
-     * @return         returns true if the operation succeeded
-     * @see            com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo( XRegistryKey regKey )
-    {
-        String impl = "com.sun.star.scripting.runtime.java." +
-            "ScriptProviderForJava$_ScriptProviderForJava";
-
-        String service = "drafts.com.sun.star.script.provider." +
-            "ScriptProviderForJava";
-
-        if (FactoryHelper.writeRegistryServiceInfo(impl, service, regKey)) {
-              return true;
-// code below is commented out because we want this to happen
-// as part of the install, this will have to be done
-// programatically during the install as registration of java components
-// is not fully supported in setup. It should work somewhat like c++ somewhat like c++ registration in install
-/*            try {
-                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theScriptProviderForJava");
-                newKey.setStringValue(service);
-                return true;
-            }
-            catch (Exception ex) {
-                System.err.println(
-                    "Error registering ScriptProviderForJava: " + ex);
-            }*/
-        }
-        return false;
-    }
 }
