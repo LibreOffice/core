@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:01:27 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ class Converter
         // String <=> tools.DateTime
         static DateTime                                        convert_String2DateTime         ( const ::rtl::OUString&                                 sSource );
         static ::rtl::OUString                                 convert_DateTime2String         ( const DateTime&                                        aSource );
+        static ::rtl::OUString                                 convert_DateTime2ISO8601        ( const DateTime&                                        aSource );
 };
 
 }       // namespace framework
