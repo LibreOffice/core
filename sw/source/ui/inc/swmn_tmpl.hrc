@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmn_tmpl.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:06:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2484,37 +2484,6 @@ MenuItem _MN_EXTRA
     {
         ItemList =
         {
-            MenuItem
-            {
-                Identifier = MN_SUB_SPELLING ;
-                HelpID = HID_MN_SUB_SPELLING ;
-                Command = ".uno:SpellingMenu" ;
-                Text [ de ] = "~Rechtschreibprüfung" ;
-                Text [ en-US ] = "~Spellcheck" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Rechtschreibprüfung : Rechtschreibpr³fung */
-                SubMenu = Menu
-                {
-                    ItemList =
-                    {
-                        MenuItem
-                        {
-                            Identifier = FN_SPELLING_DLG ;
-                            HelpID = FN_SPELLING_DLG ;
-                            /* ### ACHTUNG: Neuer Text in Resource? ~Prüfen... : ~Pr³fen... */
-                            Text [ de ] = "~Prüfen..." ;
-                            Text [ en-US ] = "~Check..." ;
-                        };
-                        MenuItem
-                        {
-                            Identifier = SID_AUTOSPELL_CHECK ;
-                            HelpID = SID_AUTOSPELL_CHECK ;
-                            /* ### ACHTUNG: Neuer Text in Resource? ~Automatisch prüfen : ~Automatisch pr³fen */
-                            Text [ de ] = "~Automatisch prüfen" ;
-                            Text [ en-US ] = "~AutoSpellcheck" ;
-                        };
-                    };
-                };
-            };
                         MenuItem
                         {
                                 ITEM_HANGUL_HANJA_CONVERSION
