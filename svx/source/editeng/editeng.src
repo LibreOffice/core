@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:25:23 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 19:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String RID_EDITUNDO_DEL
     TEXT[ greek ] = "Διαγραφή";
     TEXT[ korean ] = "»θΑ¦";
     TEXT[ turkish ] = "Sil";
+    TEXT[ catalan ] = "Eliminar";
 };
 
 String RID_EDITUNDO_MOVE
@@ -116,6 +117,7 @@ String RID_EDITUNDO_MOVE
     TEXT[ greek ] = "Μετακίνηση";
     TEXT[ korean ] = "ΐΜµΏ";
     TEXT[ turkish ] = "Taώύ";
+    TEXT[ catalan ] = "Desplazar";
 };
 
 String RID_EDITUNDO_INSERT
@@ -144,6 +146,7 @@ String RID_EDITUNDO_INSERT
     TEXT[ greek ] = "Εισαγωγή";
     TEXT[ korean ] = "»πΐΤ";
     TEXT[ turkish ] = "Ekle";
+    TEXT[ catalan ] = "Insertar";
 };
 
 String RID_EDITUNDO_REPLACE
@@ -172,6 +175,7 @@ String RID_EDITUNDO_REPLACE
     TEXT[ greek ] = "Αντικατάσταση";
     TEXT[ korean ] = "ΉΩ²Ω±β";
     TEXT[ turkish ] = "Deπiώtir";
+    TEXT[ catalan ] = "Reemplazar";
 };
 
 String RID_EDITUNDO_SETATTRIBS
@@ -200,6 +204,7 @@ String RID_EDITUNDO_SETATTRIBS
     TEXT[ greek ] = "Εφαρμογή ιδιοτήτων";
     TEXT[ korean ] = "ΌΣΌΊ ΐϋΏλ";
     TEXT[ turkish ] = "Φznitelikleri kullan";
+    TEXT[ catalan ] = "Aplicar atributos";
 };
 
 String RID_EDITUNDO_RESETATTRIBS
@@ -228,6 +233,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT[ greek ] = "Επαναφορά ιδιοτήτων";
     TEXT[ korean ] = "ΌΣΌΊ Ώψ·΅΄λ·Ξ";
     TEXT[ turkish ] = "Φznitelikleri baώa al";
+    TEXT[ catalan ] = "Restablecer atributos";
 };
 
 String RID_EDITUNDO_INDENT
@@ -254,6 +260,7 @@ String RID_EDITUNDO_INDENT
     Text[ greek ] = "Εσοχή";
     Text[ korean ] = "µιΏ©Ύ²±β";
     Text[ turkish ] = "Girinti";
+    Text[ catalan ] = "Sangrνa";
 };
 
 String RID_EDITUNDO_SETSTYLE
@@ -282,6 +289,7 @@ String RID_EDITUNDO_SETSTYLE
     TEXT[ greek ] = "Εφαρμογή στυλ";
     TEXT[ korean ] = "ΐ―Ηό ΐϋΏλ";
     TEXT[ turkish ] = "ήablonlarύ kullan";
+    TEXT[ catalan ] = "Aplicar estilos";
 };
 
 String RID_EDITUNDO_TRANSLITERATE
@@ -307,6 +315,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ turkish ] = "Change case";
     TEXT[ arabic ] = "ΗαίΚΗΘΙ ΘΓΝΡέ ίΘνΡΙ Γζ ΥΫνΡΙ";
     TEXT[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
+    TEXT[ catalan ] = "Mayϊsculas/minϊsculas";
 };
 
 
@@ -340,6 +349,7 @@ Menu RID_MENU_SPELL
             Text[ greek ] = "Ο~ρθογραφία";
             Text[ korean ] = "ΈΒΓγΉύ(~S)";
             Text[ turkish ] = "~Yazύm kύlavuzu";
+            Text[ catalan ] = "~Ortografνa";
         };
         MenuItem
         {
@@ -370,6 +380,7 @@ Menu RID_MENU_SPELL
             Text[ greek ] = "Πρ~οσθήκη";
             Text[ korean ] = "Γί°΅(~A)";
             Text[ turkish ] = "Ekle";
+            Text[ catalan ] = "~Incluir";
         };
         MenuItem
         {
@@ -399,6 +410,7 @@ Menu RID_MENU_SPELL
             Text[ greek ] = "Παρά~βλεψη όλων";
             Text[ korean ] = "ΈπµΞ Ή«½Γ";
             Text[ turkish ] = "Tόmόnό yok say";
+            Text[ catalan ] = "I~gnorar todo";
         };
         MenuItem
         {
@@ -429,6 +441,7 @@ Menu RID_MENU_SPELL
             Text[ greek ] = "Αυτο~Διόρθωση";
             Text[ korean ] = "ΐΪµΏ°νΔ§";
             Text[ turkish ] = "Otomatik dόzeltme";
+            Text[ catalan ] = "Auto~Correcciσn";
         };
     };
 };
