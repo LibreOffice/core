@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:50:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ ModalDialog DLG_FLD_INPUT
         Text[ chinese_traditional ] = "Ä~Äò(~N)";
         Text[ arabic ] = "ÇáÊÇáí";
         Text[ greek ] = "Åðüìåíï";
-        Text[ korean ] = "´ÙÀ½";
+        Text[ korean ] = "´ÙÀ½(~N)";
         Text[ turkish ] = "Ý~leri";
         Text[ language_user1 ] = " ";
     };
