@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 14:15:49 $
+ *  last change: $Author: obo $ $Date: 2000-11-09 10:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <string>
-#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
@@ -151,6 +149,8 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
