@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:23:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog DLG_ASCII_FILTER
     FixedText FT_CHARSET
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text [ de ] = "Z~eichensatz" ;
         Text [ en-US ] = "~Character set";
     };
@@ -96,7 +96,7 @@ ModalDialog DLG_ASCII_FILTER
     FixedText FT_FONT
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text [ de ] = "~Grundschrift" ;
         Text [ en-US ] = "Default fonts";
     };
@@ -111,7 +111,7 @@ ModalDialog DLG_ASCII_FILTER
     FixedText FT_LANGUAGE
     {
         Pos = MAP_APPFONT ( 12 , 47 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text [ de ] = "~Sprache" ;
         Text [ en-US ] = "Lan~guage";
         Text [ x-comment ] = " ";
@@ -127,7 +127,7 @@ ModalDialog DLG_ASCII_FILTER
     FixedText FT_CRLF
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 53 , 8 ) ;
+        Size = MAP_APPFONT ( 66 , 8 ) ;
         Text [ de ] = "~Absatzumbruch" ;
         Text [ en-US ] = "~Paragraph break";
         Text [ x-comment ] = " ";
