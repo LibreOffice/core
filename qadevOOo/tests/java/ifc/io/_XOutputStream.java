@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XOutputStream.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:44 $
+ *  last change:$Date: 2003-09-08 10:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.io;
 
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.io.XInputStream;
+import com.sun.star.io.XOutputStream;
 
 /**
 * Testing <code>com.sun.star.io.XOutputStream</code>
