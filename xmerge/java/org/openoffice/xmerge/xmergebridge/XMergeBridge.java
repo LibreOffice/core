@@ -278,12 +278,12 @@ public class XMergeBridge {
 
         }
         catch (IOException e){
-        System.out.println("XMergeBridge IO Exception "+e.getMessage());
+        //System.out.println("XMergeBridge IO Exception "+e.getMessage());
           return false;
         }
          catch (Exception e){
-        System.out.println("XMergeBridge Exception "+e+" "+e.getMessage());
-        //return false;
+        //System.out.println("XMergeBridge Exception "+e+" "+e.getMessage());
+        return false;
         }
         return true;
     }
@@ -417,7 +417,7 @@ public class XMergeBridge {
        //System.out.println("\nStart Document!");
        }
 
-    public void endDocument()
+    public void endDocument()throws com.sun.star.uno.RuntimeException
     {
 
         try{
@@ -426,10 +426,14 @@ public class XMergeBridge {
 
         }
         catch (IOException e){
-        System.out.println("Exception "+e);
+        //System.out.println("Exception "+e);
+        throw new com.sun.star.uno.RuntimeException(e.getMessage());
+
         }
          catch (Exception e){
-        System.out.println("Exception "+e);
+        //System.out.println("Exception "+e);
+        throw new com.sun.star.uno.RuntimeException("Xmerge Exception");
+
         }
     }
 
