@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-21 11:21:28 $
+ *  last change: $Author: bm $ $Date: 2001-05-21 12:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,18 +413,18 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                         pUnit = sXML_unit_cm;
                         break;
 
+                    case MAP_TWIP:
+                        // 1twip = 72 / 1440 pt (exactly)
+                        fRetval = 20.0;     // 1440.0 / 72.0
+                        pUnit = sXML_unit_pt;
+                        break;
+
                     case MAP_INCH:
+                    default:
+                        DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for pt values");
                         // 1in = 72 pt (exactly)
                         fRetval = ( 1.0 / 72.0 );
                         pUnit = sXML_unit_inch;
-                        break;
-
-                    case MAP_TWIP:
-                    default:
-                        // 1pt = 1pt (exactly)
-                        DBG_ASSERT(MAP_POINT == eDestUnit, "output unit not supported for pt values");
-                        fRetval = 1.0;
-                        pUnit = sXML_unit_pt;
                         break;
                 }
                 break;
