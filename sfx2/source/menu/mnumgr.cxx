@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-22 15:59:45 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod 
                 rStream << 'I';
                 rStream << nId;
                 rStream.WriteByteString(aTitle, nEnc );
-                if (nId >= SID_MACRO_START && nId <= SID_MACRO_END)
+                if ( SfxMacroConfig::IsMacroSlot(nId) )
                     // MacroInfo speichern
                     rStream << *(pMC->GetMacroInfo(nId));
                 if ( pIterator->GetPopupMenu() )
@@ -718,7 +718,7 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
                 if ( bWithHelp )
                     rStream.ReadByteString( aHelpText, nEnc );
 
-                if (nId >= SID_MACRO_START && nId <= SID_MACRO_END)
+                if ( SfxMacroConfig::IsMacroSlot(nId) )
                 {
                     SfxMacroInfo aInfo;
                     rStream >> aInfo;
@@ -747,8 +747,7 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
                 rStream >> nId;
                 rStream.ReadByteString( aTitle, nEnc );
 
-                if ( nId >= SID_MACRO_START && nId <= SID_MACRO_END ||
-                   nId < SID_SFX_START )
+                if ( SfxMacroConfig::IsMacroSlot(nId) || nId < SID_SFX_START )
                 {
                     // Bug im Cfg-Dialog: Popups mit Macro-SlotIds
                     USHORT i;
@@ -870,7 +869,7 @@ void SfxMenuManager::LeavePopup()
     for ( n=0; n<pArr->Count(); n++ )
     {
         SfxMenuCfgItem* pItem = (*pArr)[n];
-        if ( pItem->pPopup && pItem->nId >= SID_MACRO_START && pItem->nId <= SID_MACRO_END )
+        if ( pItem->pPopup && SfxMacroConfig::IsMacroSlot(pItem->nId) )
         {
             // Weil in dem Fucking-ConfigDialog Entries und Popups bunt
             // vermischt sind, kann auch ein Popup eine Macro-Id haben, die

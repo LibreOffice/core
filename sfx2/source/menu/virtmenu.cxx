@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2002-06-20 05:56:27 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,6 +950,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
                 {
                     Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                     pWin->GrabFocus();
+                    pWin->ToTop( TOTOP_RESTOREWHENMIN );
                     break;
                 }
 
@@ -965,7 +966,10 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
         return sal_True;
     }
 
-    pBindings->Execute( nId );
+    if ( pMenu->GetItemCommand( nId ).Len() )
+        pBindings->ExecuteCommand_Impl( pMenu->GetItemCommand( nId ) );
+    else
+        pBindings->Execute( nId );
 
     return TRUE;
 }

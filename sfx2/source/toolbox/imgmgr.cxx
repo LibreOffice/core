@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-02 07:41:58 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,8 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
             {
                 pIds[i] = (USHORT) pItem->aCommandURL.Copy( 5 ).ToInt32();
             }
-            else if ( pItem->aCommandURL.CompareToAscii("macro:",6) == COMPARE_EQUAL )
+            else if ( pItem->aCommandURL.Len() )
+            //else if ( pItem->aCommandURL.CompareToAscii("macro:",6) == COMPARE_EQUAL )
             {
                 SfxMacroInfo aInfo( pItem->aCommandURL );
                 pCfg->GetSlotId( &aInfo );
@@ -544,7 +545,8 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
             {
                 nId = (USHORT) pItem->aCommandURL.Copy( 5 ).ToInt32();
             }
-            else if ( pItem->aCommandURL.CompareToAscii("macro:",6) == COMPARE_EQUAL )
+            else if ( pItem->aCommandURL.Len() )
+            //else if ( pItem->aCommandURL.CompareToAscii("macro:",6) == COMPARE_EQUAL )
             {
                 SfxMacroInfo aInfo( pItem->aCommandURL );
                 pCfg->GetSlotId( &aInfo );
