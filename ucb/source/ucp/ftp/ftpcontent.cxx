@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:42:51 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
+#include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
@@ -245,6 +246,7 @@ rtl::OUString SAL_CALL FTPContent::getContentType()
 {
     return rtl::OUString::createFromAscii(MYUCP_CONTENT_TYPE);
 }
+
 
 //=========================================================================
 //
@@ -905,6 +907,8 @@ Sequence<Any> FTPContent::setPropertyValues(
 
             if(m_bInserted) {
                 m_aFTPURL.child(Title);
+                m_xIdentifier =
+                    new FTPContentIdentifier(m_aFTPURL.ident(false,false));
                 m_bTitleSet = true;
             } else
                 try {
