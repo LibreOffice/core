@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:01:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,7 +1277,6 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             {
                 // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
                 // If we don't cache it for own objects also we must load the object here
-                svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() );
                 awt::Size aObjSize = xObjRef->getVisualAreaSize( GetAspect() );
 
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
