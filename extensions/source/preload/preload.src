@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-10 21:12:13 $
+ *  last change: $Author: rt $ $Date: 2002-01-14 21:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ polish ] = "<< Back";
         Text[ portuguese_brazilian ] = "<< Back";
         Text[ japanese ] = "<< 戻る";
-        Text[ korean ] = "<< Back";
+        Text[ korean ] = "<< 이전";
         Text[ chinese_simplified ] = "<< 返回";
         Text[ chinese_traditional ] = "<< 返回";
         Text[ turkish ] = "<< Back";
@@ -115,7 +115,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ polish ] = "Next >>";
         Text[ portuguese_brazilian ] = "Next >>";
         Text[ japanese ] = "次へ >>";
-        Text[ korean ] = "Next >>";
+        Text[ korean ] = "다음 >>";
         Text[ chinese_simplified ] = "继续 >>";
         Text[ chinese_traditional ] = "繼續 >>";
         Text[ turkish ] = "Next >>";
@@ -144,7 +144,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ polish ] = "Accept";
         Text[ portuguese_brazilian ] = "Accept";
         Text[ japanese ] = "同意する";
-        Text[ korean ] = "Accept";
+        Text[ korean ] = "동의";
         Text[ chinese_simplified ] = "接受";
         Text[ chinese_traditional ] = "接受";
         Text[ turkish ] = "Accept";
@@ -169,7 +169,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ polish ] = "Finish";
         Text[ portuguese_brazilian ] = "Finish";
         Text[ japanese ] = "完了";
-        Text[ korean ] = "Finish";
+        Text[ korean ] = "만들기";
         Text[ chinese_simplified ] = "完成";
         Text[ chinese_traditional ] = "完成";
         Text[ turkish ] = "Finish";
@@ -189,11 +189,11 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ finnish ] = " - Software License Agreement";
         Text[ italian ] = " - Accordo di licenza del software";
         Text[ danish ] = " - Software License Agreement";
-        Text[ swedish ] = " - Avtal f�r progamvara";
+        Text[ swedish ] = " - Licensavtal f�r progamvara";
         Text[ polish ] = " - Software License Agreement";
         Text[ portuguese_brazilian ] = " - Software License Agreement";
         Text[ japanese ] = " - ソフトウェア使用許諾協定";
-        Text[ korean ] = " - Software License Agreement";
+        Text[ korean ] = " - 소프트웨어 라이센스 협정";
         Text[ chinese_simplified ] = " - 软件使用协约";
         Text[ chinese_traditional ] = " - 軟體使用協定";
         Text[ turkish ] = " - Software License Agreement";
@@ -218,7 +218,7 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ polish ] = "- User Data";
         Text[ portuguese_brazilian ] = "- User Data";
         Text[ japanese ] = "- ユーザーデータ";
-        Text[ korean ] = "- User Data";
+        Text[ korean ] = "- 사용자 데이터";
         Text[ chinese_simplified ] = "- 使用者数据";
         Text[ chinese_traditional ] = "- 使用者資料";
         Text[ turkish ] = "- User Data";
@@ -255,7 +255,7 @@ TabPage RID_TP_WELCOME
         Text[ polish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
         Text[ portuguese_brazilian ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
         Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION OEM へようこそ\n\n%PRODUCTNAME %PRODUCTVERSION OEM を起動するには、ライセンス許諾書の文章に続くダイアログページでユーザーデータを入力します。\n\nStarSuite の製品がインストールされているディレクトリの Readme ファイルにプログラムについての大切な指示があります。この指示をよく読んでください。\n\nそのほかにも下記の Sun のインターネット上のページに詳細情報があります。\n\nhttp://www.sun.com/staroffice.\n\nStarSuite での充実したお仕事を願っております。";
-        Text[ korean ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION OEM\n\n에 오신 것을 환영합니다. %PRODUCTNAME %PRODUCTVERSION OEM을 시작하려면 다음 대화 상자의 라이센스 텍스트에 사용자 데이터를 입력하십시오. \n\nIn der -Datei im %PRODUCTNAME 제품 디렉토리의 Readme 파일에는 프로그램에 대한 주요 참고 사항이 수록되어 있습니다. 이 참고 사항들을 주의깊게 읽으십시오.\n\n그 외 자세한 정보는 Sun의 인터넷 사이트인 \n\nhttp://www.sun.com/staroffice에서 볼 수 있습니다.\n\n새로운 %PRODUCTNAME의 사용이 사용자에게 큰 즐거움이 되기를 희망합니다.\n\n %PRODUCTNAME 팀 일동.";
         Text[ chinese_simplified ] = "欢迎安装 %PRODUCTNAME %PRODUCTVERSION OEM\n\n要启动 %PRODUCTNAME %PRODUCTVERSION OEM ，请在用户许可协议之后出现的对话方框内添入您的个人资料。\n\n在 %PRODUCTNAME 软件目录内您可以找到一个 Readme 文件，请您仔细阅读其中的有关本软件的重要说明。\n\n另外，您还可以通过 Sun 的网页获得更多的相关信息：\n\nhttp://www.sun.com/starsuite\n\n我们预祝您能够顺利、愉快地使用新版本的 %PRODUCTNAME 。\n\n%PRODUCTNAME 工作组";
         Text[ chinese_traditional ] = "歡迎安裝 %PRODUCTNAME %PRODUCTVERSION OEM\n\n要啟動 %PRODUCTNAME %PRODUCTVERSION OEM ，請在使用許可協定之後出現的對話方塊內填入您的個人資料。\n\n在 %PRODUCTNAME 軟體目錄內您能夠找到一個[Readme]檔案，請您仔細閱讀其中關於本軟體的重要說明。\n\n另外，您還可以透過 Sun 的網頁獲得更多的資訊：\n\nhttp://www.sun.com/starsuite\n\n我們預祝您能夠順利、愉快地使用新版本的 %PRODUCTNAME 。\n\n%PRODUCTNAME 工作組";
         Text[ turkish ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
@@ -276,7 +276,7 @@ TabPage RID_TP_WELCOME
     Text[ polish ] = "Welcome";
     Text[ portuguese_brazilian ] = "Welcome";
     Text[ japanese ] = "ようこそ";
-    Text[ korean ] = "Welcome";
+    Text[ korean ] = "환영합니다";
     Text[ chinese_simplified ] = "欢迎";
     Text[ chinese_traditional ] = "歡迎";
     Text[ turkish ] = "Welcome";
@@ -350,7 +350,7 @@ TabPage RID_TP_LICENSE
         Text[ chinese_traditional ] = "要接受所有的使用許可協定的全部條款，按一下[%1]。若不想接受全部條款，就按一下[%2]，取消安裝。";
         Text[ arabic ] = "��� ��� ������� ��� ���� ���� ������� ������� ��� ���� ��� '%1'. ��� �� ���� ���� ��ǡ ����� ��� '%2'. �� ��� ������ ��� ��� ��� ����� �������.";
         Text[ greek ] = "�� ���������� ����� ���� ����� ��� '������ ������', �������� �� ����� '%1'. ����������� �������� �� ����� '%2' ��� �� �������� � �����������.";
-        Text[ korean ] = "앞의 라이센스 협정에 언급된 전체 조건에 동의하면 '%1' 버튼을 클릭하십시오. 조건에 동의하지 않으면 '%2'을(를) 클릭하십시오. 그러면 설치가 중단됩니다.";
+        Text[ korean ] = "라이센스 협정에 언급된 전체 조건에 동의하면 '%1' 버튼을 클릭하십시오. 조건에 동의하지 않으면 '%2'을(를) 클릭하십시오. 그러면 설치가 중단됩니다.";
         Text[ turkish ] = "Lisans anla�mas�ndaki t�m ko�ullar� kabul ediyorsan�z, '%1' d��mesini t�klay�n. Ko�ullar� kabul etmiyorsan�z, '%2' d��mesini t�klay�n. Bu durumda kurulum iptal edilecek.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Si acepta las condiciones de este acuerdo de licencia, pulse sobre '%1'. En caso de no ser as� pulse sobre '%2' para cancelar la instalaci�n.";
@@ -370,13 +370,14 @@ TabPage RID_TP_LICENSE
     Text[ polish ] = "License Agreement";
     Text[ portuguese_brazilian ] = "License Agreement";
     Text[ japanese ] = "ライセンス許諾書";
-    Text[ korean ] = "License Agreement";
+    Text[ korean ] = "라이센스 협정";
     Text[ chinese_simplified ] = "用户许可协议";
     Text[ chinese_traditional ] = "使用許可協定";
     Text[ turkish ] = "License Agreement";
     Text[ arabic ] = "License Agreement";
     Text[ catalan ] = "License Agreement";
 };
+
 
 
 
