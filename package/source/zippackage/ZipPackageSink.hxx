@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageSink.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:15:31 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 class ZipPackageSink : public com::sun::star::io::XActiveDataSink,
                 public cppu::OWeakObject
 {
-private:
+protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
 public:
     ZipPackageSink(void);

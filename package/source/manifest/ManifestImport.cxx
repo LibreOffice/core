@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _MANIFEST_DEFINES_HXX
 #include <ManifestDefines.hxx>
 #endif
+#ifndef _BASE64_CODEC_HXX_
+#include <Base64Codec.hxx>
+#endif
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
@@ -73,6 +76,7 @@ using namespace std;
 
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
 : rManVector ( rNewManVector )
+, nNumProperty (0)
 {
 }
 ManifestImport::~ManifestImport (void )
@@ -89,31 +93,78 @@ void SAL_CALL ManifestImport::endDocument(  )
 void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
-    static const OUString sFileEntryElement   ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
+    static const OUString sEncryptionDataElement   ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
+    static const OUString sInitialisationVectorElement   ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_INITIALISATION_VECTOR ) );
+    static const OUString sAlgorithmAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_INITIALISATION_VECTOR ) );
+    static const OUString sSaltAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
+    static const OUString sIterationCountAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
     static const OUString sManifestElement    ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
+    static const OUString sFileEntryElement   ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
     static const OUString sCdataAttribute     ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
     static const OUString sMediaTypeAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
     static const OUString sFullPathAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
     static const OUString sMediaTypeProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
     static const OUString sFullPathProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+    static const OUString sSaltProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+    static const OUString sAlgorithmProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "Algorithm" ) );
+    static const OUString sIterationCountProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
 
     if (aName == sFileEntryElement)
     {
-        Sequence < PropertyValue > aPropSeq ( 2 );
-        aPropSeq[0].Name = sMediaTypeProperty;
-        aPropSeq[0].Value <<= xAttribs->getValueByName( sMediaTypeAttribute );
-        aPropSeq[1].Name = sFullPathProperty;
-        aPropSeq[1].Value <<= xAttribs->getValueByName( sFullPathAttribute );
-        rManVector.push_back ( aPropSeq );
+        aStack.push( e_FileEntry );
+        aSequence.realloc ( 2 );
+        aSequence[0].Name = sMediaTypeProperty;
+        aSequence[0].Value <<= xAttribs->getValueByName( sMediaTypeAttribute );
+        aSequence[1].Name = sFullPathProperty;
+        aSequence[1].Value <<= xAttribs->getValueByName( sFullPathAttribute );
+        nNumProperty=2;
+    }
+    else if (!aStack.empty())
+    {
+        if (aStack.top() == e_FileEntry && aName == sEncryptionDataElement)
+        {
+            aSequence.realloc (nNumProperty+3);
+            aStack.push (e_EncryptionData );
+            aSequence[nNumProperty].Name = sAlgorithmProperty;
+            aSequence[nNumProperty].Value <<= xAttribs->getValueByName( sAlgorithmAttribute );
+            aSequence[nNumProperty+1].Name = sSaltProperty;
+            OUString aString;
+            aString = xAttribs->getValueByName ( sSaltAttribute );
+            Sequence < sal_Int8 > aDecodeBuffer;
+            Base64Codec::decodeBase64 (aDecodeBuffer, aString);
+            aSequence[nNumProperty+1].Value <<= aDecodeBuffer;
+            aSequence[nNumProperty+2].Name = sIterationCountProperty;
+            aSequence[nNumProperty+2].Value <<= xAttribs->getValueByName( sIterationCountAttribute );
+            nNumProperty+=3;
+        }
+        else if (aStack.top() == e_EncryptionData && aName == sInitialisationVectorElement)
+        {
+            aStack.push (e_InitialisationVector);
+            aSequence.realloc (++nNumProperty);
+        }
     }
 }
 void SAL_CALL ManifestImport::endElement( const OUString& aName )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+    throw(xml::sax::SAXException, uno::RuntimeException)
 {
+    if ( !aStack.empty() )
+    {
+        if (aStack.top() == e_FileEntry)
+            rManVector.push_back ( aSequence );
+        aStack.pop();
+    }
 }
 void SAL_CALL ManifestImport::characters( const OUString& aChars )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
+    if (!aStack.empty() && aStack.top() == e_InitialisationVector)
+    {
+        const OUString sAlgorithmProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "Algorithm" ) );
+        Sequence < sal_Int8 > aDecodeBuffer;
+        Base64Codec::decodeBase64 (aDecodeBuffer, aChars);
+        aSequence[nNumProperty-1].Name = sAlgorithmProperty;
+        aSequence[nNumProperty-1].Value <<= aDecodeBuffer;
+    }
 }
 void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& aWhitespaces )
         throw(xml::sax::SAXException, uno::RuntimeException)

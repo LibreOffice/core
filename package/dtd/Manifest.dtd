@@ -1,5 +1,5 @@
 <!--
-	$Id: Manifest.dtd,v 1.5 2001-03-19 12:27:07 mtg Exp $
+	$Id: Manifest.dtd,v 1.6 2001-04-27 14:56:04 mtg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,8 +54,15 @@
 -->
 <!ELEMENT manifest:manifest (manifest:file-entry+)>
 <!ATTLIST manifest:manifest xmlns:manifest CDATA #FIXED "http://openoffice.org/2001/manifest"> 
-<!ELEMENT manifest:file-entry EMPTY>
+<!ELEMENT manifest:file-entry (manifest:encryption-data?)>
 <!ATTLIST manifest:file-entry
 	manifest:full-path CDATA #REQUIRED
 	manifest:media-type CDATA #REQUIRED
 >
+<!ELEMENT manifest:encryption-data (manifest:initialisation-vector?)>
+<!ATTLIST manifest:encryption-data  
+	manifest:algorithm CDATA #REQUIRED
+	manifest:salt CDATA #REQUIRED
+	manifest:iteration-count CDATA #REQUIRED>
+<!-- the initialisation-vector should be base-64 encoded -->
+<!ELEMENT manifest:initialisation-vector (#PCDATA)>

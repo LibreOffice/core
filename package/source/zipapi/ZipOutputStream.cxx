@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,19 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
+#ifndef _VOS_REF_H_
+#include <vos/ref.hxx>
+#endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/ZipConstants.hpp>
 #endif
-#include <time.h>
-#include <utime.h>
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::packages::ZipConstants;
 
 /** This class is used to write Zip files
@@ -82,6 +87,7 @@ ZipOutputStream::ZipOutputStream( uno::Reference < io::XOutputStream > &xOStream
 , nMethod(DEFLATED)
 , pCurrentEntry(NULL)
 , bFinished(sal_False)
+, bEncryptCurrentEntry(sal_False)
 , aBuffer(nNewBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
 {
@@ -108,30 +114,64 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
 {
     aDeflater.setLevel( nNewLevel);
 }
-void SAL_CALL ZipOutputStream::putNextEntry( const packages::ZipEntry& rEntry )
+
+Sequence < sal_Int8 > ZipOutputStream::getInitialisationVector()
+{
+    Sequence < sal_Int8 > aSequence( 8 );
+    TimeValue aTimeVal;
+    sal_Int8 * pVector = aSequence.getArray();
+    osl_getSystemTime( &aTimeVal );
+
+    pVector[0] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 0 )  & 0xFF );
+    pVector[1] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 8 )  & 0xFF );
+    pVector[2] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 16 ) & 0xFF );
+    pVector[3] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 24 ) & 0xFF );
+    pVector[4] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 0 )  & 0xFF );
+    pVector[5] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 8 )  & 0xFF );
+    pVector[6] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 16 ) & 0xFF );
+    pVector[7] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 24 ) & 0xFF );
+    return aSequence;
+}
+
+void SAL_CALL ZipOutputStream::putNextEntry( packages::ZipEntry& rEntry,
+                        const vos::ORef < EncryptionData > &xEncryptData,
+                        sal_Bool bEncrypt)
     throw(io::IOException, uno::RuntimeException)
 {
-    packages::ZipEntry *pNonConstEntry = const_cast < packages::ZipEntry* >(&rEntry);
     if (pCurrentEntry != NULL)
         closeEntry();
-    if (pNonConstEntry->nTime == -1)
-        pNonConstEntry->nTime = getCurrentDosTime();
-    if (pNonConstEntry->nMethod == -1)
-    {
-        pNonConstEntry->nMethod = nMethod;
-    }
-    pNonConstEntry->nVersion = 20;
-    if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
-        pNonConstEntry->nCrc == -1)
-        pNonConstEntry->nFlag = 8;
-    else if (pNonConstEntry->nSize != -1 && pNonConstEntry->nCompressedSize != -1 &&
-        pNonConstEntry->nCrc != -1)
-        pNonConstEntry->nFlag = 0;
+    if (rEntry.nTime == -1)
+        rEntry.nTime = getCurrentDosTime();
+    if (rEntry.nMethod == -1)
+        rEntry.nMethod = nMethod;
+    rEntry.nVersion = 20;
+    if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
+        rEntry.nCrc == -1)
+        rEntry.nFlag = 8;
+    else if (rEntry.nSize != -1 && rEntry.nCompressedSize != -1 &&
+        rEntry.nCrc != -1)
+        rEntry.nFlag = 0;
 
-    pNonConstEntry->nOffset = static_cast < sal_Int32 > (aChucker.getPosition());
+    rEntry.nOffset = static_cast < sal_Int32 > (aChucker.getPosition());
     writeLOC(rEntry);
-    aZipList.push_back( pNonConstEntry );
-    pCurrentEntry=pNonConstEntry;
+    aZipList.push_back( &rEntry );
+    pCurrentEntry = &rEntry;
+    /* Don't have encryption code yet...
+    if (bEncrypt)
+    {
+
+        bEncryptCurrentEntry = sal_True;
+        rtlCipherError aResult;
+
+        aCipher = rtl_cipher_create ( rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
+        aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionEncode,
+                            reinterpret_cast < const sal_uInt8 *> (rKey.getConstArray()),
+                            rKey.getLength(),
+                            reinterpret_cast < const sal_uInt8 *> (rVector.getConstArray()),
+                            rVector.getLength());
+        OSL_ASSERT( aResult == rtl_Cipher_E_None );
+    }
+    */
 }
 void SAL_CALL ZipOutputStream::close(  )
     throw(io::IOException, uno::RuntimeException)
@@ -220,6 +260,11 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 break;
         }
         aCRC.reset();
+        if (bEncryptCurrentEntry)
+        {
+            aEncryptionBuffer.realloc ( 0 );
+            bEncryptCurrentEntry = sal_False;
+        }
         pCurrentEntry = NULL;
     }
 }
@@ -241,7 +286,17 @@ void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, 
             sal_Int32 nOldLength = rBuffer.getLength();
             uno::Sequence < sal_Int8 > *pBuffer = const_cast < uno::Sequence < sal_Int8 > *> (&rBuffer);
             pBuffer->realloc(nNewLength);
-            aChucker.writeBytes(*pBuffer);
+            if (bEncryptCurrentEntry)
+            {
+                rtlCipherError aResult;
+                aEncryptionBuffer.realloc ( nNewLength );
+                aResult = rtl_cipher_encode ( aCipher, static_cast < const void * > (pBuffer->getConstArray()),
+                                              nNewLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nNewLength );
+                aChucker.writeBytes ( aEncryptionBuffer );
+                aEncryptionBuffer.realloc ( nOldLength );
+            }
+            else
+                aChucker.writeBytes( *pBuffer );
             pBuffer->realloc(nOldLength);
             break;
     }
@@ -286,7 +341,17 @@ void ZipOutputStream::doDeflate()
     if (nLength> 0 )
     {
         aBuffer.realloc(nLength);
-        aChucker.writeBytes(aBuffer);
+        if (bEncryptCurrentEntry)
+        {
+            rtlCipherError aResult;
+            aEncryptionBuffer.realloc ( nLength );
+            aResult = rtl_cipher_encode ( aCipher, static_cast < const void * > (aBuffer.getConstArray()),
+                                            nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
+            aChucker.writeBytes ( aEncryptionBuffer );
+            aEncryptionBuffer.realloc ( nOldLength );
+        }
+        else
+            aChucker.writeBytes(aBuffer);
         aBuffer.realloc(nOldLength);
     }
 }
@@ -421,28 +486,32 @@ void ZipOutputStream::writeLOC( const packages::ZipEntry &rEntry )
 }
 sal_uInt32 ZipOutputStream::getCurrentDosTime( )
 {
-    time_t nTime = time (NULL);
-    // pTime is a static internal to the time library and shouldn't be deleted
-    struct tm *pTime = localtime ( &nTime);
+    oslDateTime aDateTime;
+    TimeValue aTimeValue;
+    osl_getSystemTime ( &aTimeValue );
+    osl_getDateTimeFromTimeValue( &aTimeValue, &aDateTime);
 
-    sal_uInt32 nYear = static_cast <sal_uInt32> (pTime->tm_year);
+    sal_uInt32 nYear = static_cast <sal_uInt32> (aDateTime.Year);
 
     if (nYear>1980)
         nYear-=1980;
     else if (nYear>80)
         nYear-=80;
-    sal_uInt32 nResult = static_cast < sal_uInt32>( ( ( ( pTime->tm_mday) +
-                                          ( 32 * (pTime->tm_mon+1)) +
+    sal_uInt32 nResult = static_cast < sal_uInt32>( ( ( ( aDateTime.Day) +
+                                          ( 32 * (aDateTime.Month)) +
                                           ( 512 * nYear ) ) << 16) |
-                                        ( ( pTime->tm_sec/2) +
-                                            ( 32 * pTime->tm_min) +
-                                          ( 2048 * static_cast <sal_uInt32 > (pTime->tm_hour) ) ) );
+                                        ( ( aDateTime.Seconds/2) +
+                                            ( 32 * aDateTime.Minutes) +
+                                          ( 2048 * static_cast <sal_uInt32 > (aDateTime.Hours) ) ) );
     return nResult;
 }
 /*
 
    This is actually never used, so I removed it, but thought that the
    implementation details may be useful in the future...mtg 20010307
+
+   I stopped using the time library and used the OSL version instead, but
+   it might still be useful to have this code here..
 
 void ZipOutputStream::dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 class ByteGrabber
 {
-private:
+protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
 public:
@@ -79,22 +79,22 @@ public:
 
     void setInputStream (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream);
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+    sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+    sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL available(  )
+    sal_Int32 SAL_CALL available(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL closeInput(  )
+    void SAL_CALL closeInput(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XSeekable
-    virtual sal_Int64 SAL_CALL seek( sal_Int64 location )
+    sal_Int64 SAL_CALL seek( sal_Int64 location )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getPosition(  )
+    sal_Int64 SAL_CALL getPosition(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getLength(  )
+    sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     ByteGrabber& operator >> (sal_Int8& rInt8);

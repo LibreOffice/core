@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:28:02 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,21 +91,18 @@ class ZipPackageFolder : public ZipPackageEntry,
                          public ::com::sun::star::container::XNameContainer,
                          public ::com::sun::star::container::XEnumerationAccess
 {
-private:
+protected:
     TunnelHash aContents;
 public:
-    ZipPackage *pPackage;
-    com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > xPackage;
 
-    ZipPackageFolder ( void );
-    virtual ~ZipPackageFolder( void );
+    ZipPackageFolder ();
+    virtual ~ZipPackageFolder();
 
     static void copyZipEntry( com::sun::star::packages::ZipEntry &rDest, const com::sun::star::packages::ZipEntry &rSource);
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut)
         throw(::com::sun::star::uno::RuntimeException);
-    void  updateReferences( ZipFile * pNewZipFile);
-    void  releaseUpwardRef( void );
+    void  releaseUpwardRef();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
@@ -142,6 +139,12 @@ public:
     // XNameReplace
     virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XPropertySet
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
     static ::com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+#   last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ SLOFILES= \
         $(SLO)$/ManifestImport.obj \
         $(SLO)$/ManifestExport.obj \
         $(SLO)$/AttributeList.obj \
+        $(SLO)$/Base64Codec.obj \
         $(SLO)$/UnoRegister.obj
 
 # --- UNO stuff ---------------------------------------------------

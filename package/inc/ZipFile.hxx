@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,6 @@
 #ifndef _ZIP_FILE_HXX
 #define _ZIP_FILE_HXX
 
-#ifndef _COM_SUN_STAR_PACKAGE_XZIPFILE_HPP_
-#include <com/sun/star/packages/XZipFile.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#endif
 #ifndef _BYTE_GRABBER_HXX_
 #include <ByteGrabber.hxx>
 #endif
@@ -76,18 +70,32 @@
 #ifndef _INFLATER_HXX
 #include <Inflater.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPEXCEPTION_HPP_
+#include <com/sun/star/packages/ZipException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#endif
+#ifndef _VOS_REF_H_
+#include <vos/ref.hxx>
+#endif
 /*
  * We impose  arbitrary but reasonable limit on ZIP files.
  */
+
 #define ZIP_MAXNAMELEN 512
 #define ZIP_MAXEXTRA 256
 #define ZIP_MAXENTRIES (0x10000 - 2)
 
-class ZipFile : public cppu::WeakImplHelper1<
-                        com::sun::star::packages::XZipFile>
+class ZipEnumeration;
+class EncryptionData;
+
+class ZipFile
 {
-private:
+protected:
     ::rtl::OUString sName;          /* zip file name */
     ::rtl::OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
@@ -100,39 +108,40 @@ public:
     void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
     sal_uInt32 SAL_CALL getHeader(const ::com::sun::star::packages::ZipEntry& rEntry)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::ZipException, ::com::sun::star::uno::RuntimeException);
-    virtual ~ZipFile();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( const ::com::sun::star::packages::ZipEntry& rEntry )
+    ~ZipFile();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream(
+            ::com::sun::star::packages::ZipEntry& rEntry,
+            const vos::ORef < EncryptionData > &rData)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::ZipException, ::com::sun::star::uno::RuntimeException);
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
+    ::com::sun::star::uno::Type SAL_CALL getElementType(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  )
+    sal_Bool SAL_CALL hasElements(  )
         throw(::com::sun::star::uno::RuntimeException);
     // XZipFile
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream( const ::com::sun::star::packages::ZipEntry& rEntry )
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
+            ::com::sun::star::packages::ZipEntry& rEntry,
+            const vos::ORef < EncryptionData > &rData)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::ZipException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getName(  )
+    ::rtl::OUString SAL_CALL getName(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getSize(  )
+    sal_Int32 SAL_CALL getSize(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL close(  )
+    void SAL_CALL close(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    // XEnumerationAccess (except called with entries instead of
-    // createEnumeration
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL entries(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    ZipEnumeration * SAL_CALL entries(  );
 private:
-    sal_Bool        readLOC(const com::sun::star::packages::ZipEntry &rEntry)
+    sal_Bool        readLOC (com::sun::star::packages::ZipEntry &rEntry)
         throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);
     sal_Int32       readCEN()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);

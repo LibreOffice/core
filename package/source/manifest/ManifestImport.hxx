@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,21 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #include <vector>
+#include <stack>
 
+enum ElementNames
+{
+    e_Manifest,
+    e_FileEntry,
+    e_EncryptionData,
+    e_InitialisationVector
+};
 class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
 {
 private:
+    com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aSequence;
+    sal_Int16       nNumProperty;
+    ::std::stack < ElementNames > aStack;
     std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );

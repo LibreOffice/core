@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,20 @@
 #ifndef _INFLATER_HXX_
 #define _INFLATER_HXX_
 
-#ifndef _COM_SUN_STAR_PACKAGE_XINFLATER_HDL_
-#include <com/sun/star/packages/XInflater.hpp>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HDL_
+#include <com/sun/star/uno/RuntimeException.hdl>
 #endif
 
 extern "C"
 {
     typedef struct z_stream_s z_stream;
 }
-class Inflater : public cppu::WeakImplHelper1 < com::sun::star::packages::XInflater>
+class Inflater
 {
-private:
+protected:
     sal_Bool                bFinish;
     sal_Bool                bFinished;
     sal_Bool                bSetParams;
@@ -82,44 +82,42 @@ private:
     sal_Int32               nOffset, nLength;
     z_stream*               pStream;
     com::sun::star::uno::Sequence < sal_Int8 >  sInBuffer;
-    void init   (sal_Bool bNowrap);
     sal_Int32   doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
-    Inflater(sal_Bool bNoWrap);
-    Inflater();
+    Inflater(sal_Bool bNoWrap = sal_False);
     ~Inflater();
-    virtual void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
+    void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
+    void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getRemaining(  )
+    sal_Int32 SAL_CALL getRemaining(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL needsInput(  )
+    sal_Bool SAL_CALL needsInput(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL needsDictionary(  )
+    sal_Bool SAL_CALL needsDictionary(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL finish(  )
+    void SAL_CALL finish(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL finished(  )
+    sal_Bool SAL_CALL finished(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL doInflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
+    sal_Int32 SAL_CALL doInflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getAdler(  )
+    sal_Int32 SAL_CALL getAdler(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getTotalIn(  )
+    sal_Int32 SAL_CALL getTotalIn(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getTotalOut(  )
+    sal_Int32 SAL_CALL getTotalOut(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL reset(  )
+    void SAL_CALL reset(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL end(  )
+    void SAL_CALL end(  )
         throw(::com::sun::star::uno::RuntimeException);
 };
 

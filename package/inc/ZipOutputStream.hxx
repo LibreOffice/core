@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,64 +70,71 @@
 #ifndef _CRC32_HXX
 #include <CRC32.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGE_XZIPOUTPUTSTREAM_HPP_
-#include <com/sun/star/packages/XZipOutputStream.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#endif
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#ifndef _RTL_CIPHER_H_
+#include <rtl/cipher.h>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPENTRY_HPP_
+#include <com/sun/star/packages/ZipEntry.hpp>
+#endif
+#ifndef _VOS_REF_H_
+#include <vos/ref.hxx>
+#endif
 
-
-class ZipOutputStream : public cppu::WeakImplHelper1< com::sun::star::packages::XZipOutputStream >
+class EncryptionData;
+class ZipOutputStream
 {
 private:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
-    Deflater            aDeflater;
+    ::std::vector < ::com::sun::star::packages::ZipEntry *>         aZipList;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
+    com::sun::star::uno::Sequence < sal_Int8 > aEncryptionBuffer;
     ::rtl::OUString     sComment;
+    Deflater            aDeflater;
+    rtlCipher           aCipher;
+    CRC32               aCRC;
+    ByteChucker         aChucker;
+    com::sun::star::packages::ZipEntry          *pCurrentEntry;
     sal_Int16           nMethod;
     sal_Int16           nLevel;
-    com::sun::star::packages::ZipEntry          *pCurrentEntry;
-    CRC32               aCRC;
     sal_Bool            bFinished;
-    ByteChucker         aChucker;
-    ::std::vector < ::com::sun::star::packages::ZipEntry *>         aZipList;
+    sal_Bool            bEncryptCurrentEntry;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize);
-    virtual ~ZipOutputStream(void);
+    ~ZipOutputStream(void);
 
+    void SAL_CALL setEncryptionKey ( com::sun::star::uno::Sequence < sal_Int8 > &rKey, com::sun::star::packages::ZipEntry & rEntry );
+    static com::sun::star::uno::Sequence < sal_Int8 > getInitialisationVector();
     // rawWrite to support a direct write to the output stream
     void SAL_CALL rawWrite( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer)
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL rawCloseEntry(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setComment( const ::rtl::OUString& rComment )
+    // XZipOutputStream interfaces
+    void SAL_CALL setComment( const ::rtl::OUString& rComment )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setMethod( sal_Int32 nNewMethod )
+    void SAL_CALL setMethod( sal_Int32 nNewMethod )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLevel( sal_Int32 nNewLevel )
+    void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL putNextEntry( const ::com::sun::star::packages::ZipEntry& rEntry )
+    void SAL_CALL putNextEntry( ::com::sun::star::packages::ZipEntry& rEntry,
+            const vos::ORef < EncryptionData > &rData,
+            sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL closeEntry(  )
+    void SAL_CALL closeEntry(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL finish(  )
+    void SAL_CALL finish(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL close(  )
+    void SAL_CALL close(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     static sal_uInt32 getCurrentDosTime ( );
-    /*
-    static sal_uInt32 tmDateToDosDate ( tm *pTime);
-    static void dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate);
-    */
-private:
+protected:
     void doDeflate();
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

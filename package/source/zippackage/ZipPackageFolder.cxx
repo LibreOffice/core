@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
+#ifndef _RTL_RANDOM_H_
+#include <rtl/random.h>
+#endif
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 using namespace com::sun::star::packages::ZipConstants;
 using namespace com::sun::star::container;
@@ -92,7 +98,6 @@ using namespace rtl;
 using namespace std;
 
 ZipPackageFolder::ZipPackageFolder (void)
-: pPackage( NULL )
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -225,10 +230,11 @@ Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
         sName = aName.copy(1, aName.getLength());
     else
         sName = aName;
-    if (!aContents.count(sName))
+    TunnelHash::const_iterator aCI = aContents.find(sName);
+
+    if (aCI == aContents.end())
         throw NoSuchElementException();
 
-    TunnelHash::const_iterator aCI = aContents.find(sName);
     aAny <<= (*aCI).second;
     return aAny;
 }
@@ -275,6 +281,15 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     TunnelHash::const_iterator aCI = aContents.begin(), aEnd = aContents.end();
     const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
     const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+    const OUString sInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
+    const OUString sSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+    const OUString sIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+
+    // Get a random number generator and seed it with current timestamp
+    TimeValue aTime;
+    osl_getSystemTime( &aTime );
+    rtlRandomPool aRandomPool = rtl_random_createPool ();
+    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
 
     for (; aCI!=aEnd ; aCI++)
     {
@@ -314,35 +329,24 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             try
             {
-                rZipOut.putNextEntry(*pTempEntry);
+                vos::ORef < EncryptionData > xEmpty;
+                rZipOut.putNextEntry(*pTempEntry, xEmpty);
                 rZipOut.closeEntry();
             }
             catch (IOException & )
             {
                 VOS_ENSURE( 0, "Error writing ZipOutputStream" );
             }
-            try
-            {
-                aPropSet[1].Name = sMediaType;
-                aPropSet[1].Value <<= pFolder->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ( "MediaType") ) );
-            }
-            catch (UnknownPropertyException & )
-            {
-                VOS_ENSURE( 0, "MediaType is an unknown property!!" );
-            }
 
-            // Then copy it back
+            aPropSet[0].Name = sMediaType;
+            aPropSet[0].Value <<= pFolder->GetMediaType();
+            aPropSet[1].Name = sFullPath;
+            aPropSet[1].Value <<= pFolder->aEntry.sName;
+
+            // Copy back the zip entry and make the offset negative so that we
+            // know it's point at the beginning of the LOC
             ZipPackageFolder::copyZipEntry ( pFolder->aEntry, *pTempEntry );
             pFolder->aEntry.nOffset *= -1;
-            try
-            {
-                aPropSet[0].Name = sFullPath;
-                aPropSet[0].Value <<= pFolder->aEntry.sName;
-            }
-            catch (UnknownPropertyException & )
-            {
-                VOS_ENSURE( 0, "MediaType is an unknown property!!" );
-            }
             pFolder->saveContents(pFolder->aEntry.sName, rManList, rZipOut);
             pFolder->aEntry.sName = (*aCI).first;
         }
@@ -351,20 +355,39 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             // In case the entry we are reading is also the entry we are writing, we will
             // store the ZipEntry data in pTempEntry
 
-#if SUPD>617
-            Any aAny = pStream->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Compressed") ) );
-#else
-            Any aAny = pStream->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Compress") ) );
-#endif
-            sal_Bool bToBeCompressed;
-            aAny >>= bToBeCompressed;
-
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pStream->aEntry );
             pTempEntry->sName = rPath + (*aCI).first;
+            sal_Bool bToBeCompressed = pStream->IsToBeCompressed();
+            sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted();
+
+            aPropSet[0].Name = sMediaType;
+            aPropSet[0].Value <<= pStream->GetMediaType( );
+            aPropSet[1].Name = sFullPath;
+            aPropSet[1].Value <<= pStream->aEntry.sName;
+
+            if ( bToBeEncrypted)
+            {
+                Sequence < sal_Int8 > aSalt ( 16 ), aVector ( 8 );
+                rtl_random_getBytes ( aRandomPool, aSalt.getArray(), 16 );
+                rtl_random_getBytes ( aRandomPool, aVector.getArray(), 8 );
+                sal_Int64 nIterationCount = 1024;
+
+                pStream->setInitialisationVector ( aVector );
+                pStream->setSalt ( aSalt );
+                pStream->setIterationCount ( nIterationCount );
+
+                aPropSet.realloc(5);
+                aPropSet[2].Name = sInitialisationVector;
+                aPropSet[2].Value <<= aVector;
+                aPropSet[3].Name = sSalt;
+                aPropSet[3].Value <<= aSalt;
+                aPropSet[4].Name = sIterationCount;
+                aPropSet[4].Value <<= nIterationCount;
+            }
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if (pStream->bPackageMember &&
+            if (pStream->IsPackageMember() &&
                 ( (pTempEntry->nMethod == DEFLATED && bToBeCompressed) ||
                   (pTempEntry->nMethod == STORED && !bToBeCompressed) ) )
             {
@@ -373,7 +396,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     Reference < XInputStream > xStream = pStream->getRawStream( *pTempEntry );
                     try
                     {
-                        rZipOut.putNextEntry ( *pTempEntry );
+                        rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted );
                         while (1)
                         {
                             Sequence < sal_Int8 > aSeq (65535);
@@ -405,11 +428,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 pTempEntry->nCrc = -1;
                 pTempEntry->nSize = -1;
                 pTempEntry->nCompressedSize = -1;
-
-                if (bToBeCompressed)
-                    pTempEntry->nMethod = DEFLATED;
-                else
-                    pTempEntry->nMethod = STORED;
+                pTempEntry->nMethod = bToBeCompressed ? DEFLATED : STORED;
 
                 if (xSeek.is())
                 {
@@ -426,7 +445,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 try
                 {
-                    rZipOut.putNextEntry ( *pTempEntry );
+                    rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted );
                     while (1)
                     {
                         Sequence < sal_Int8 > aSeq (65535);
@@ -442,7 +461,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     }
                     if (bTrackLength)
                         pTempEntry->nCompressedSize = pStream->aEntry.nSize;
-                    pStream->bPackageMember = sal_True;
+                    pStream->SetPackageMember ( sal_True );
                     rZipOut.closeEntry();
                 }
                 catch (IOException & )
@@ -451,32 +470,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 }
             }
 
-            try
-            {
-                aPropSet[0].Name = sFullPath;
-                aPropSet[0].Value <<= pStream->aEntry.sName;
-            }
-            catch (UnknownPropertyException & )
-            {
-                VOS_ENSURE( 0, "MediaType is an unknown property!!" );
-            }
-            try
-            {
-                aPropSet[1].Name = sMediaType;
-                aPropSet[1].Value <<= pStream->getPropertyValue( sMediaType );
-            }
-            catch (UnknownPropertyException & )
-            {
-                VOS_ENSURE( 0, "MediaType is an unknown property!!" );
-            }
+
             // Then copy it back afterwards...
             ZipPackageFolder::copyZipEntry ( pStream->aEntry, *pTempEntry );
             pStream->aEntry.sName = (*aCI).first;
             pStream->aEntry.nOffset *= -1;
         }
-        OUString aString, bString;
-        aPropSet[0].Value >>= aString;
-        aPropSet[1].Value >>= bString;
         rManList.push_back (aPropSet);
     }
 }
@@ -514,48 +513,6 @@ void ZipPackageFolder::releaseUpwardRef( void )
             pStream->clearParent();
     }
 }
-void ZipPackageFolder::updateReferences( ZipFile * pNewZipFile)
-{
-    Reference < XUnoTunnel > xTunnel;
-    ZipPackageFolder *pFolder = NULL;
-    ZipPackageStream *pStream = NULL;
-    sal_Bool bIsFolder;
-    TunnelHash::const_iterator aCI = aContents.begin();
-
-    for (;aCI!=aContents.end();aCI++)
-    {
-        xTunnel = Reference < XUnoTunnel> ((*aCI).second, UNO_QUERY);
-        sal_Int64 nTest=0;
-        if ((nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId())) != 0)
-        {
-            pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
-            bIsFolder = sal_True;
-        }
-        else
-        {
-            // If this getSomething call returns 0, it means that
-            // something evil has crept into the contents hash_map, which
-            // should mean that something has gone very wrong somewhere, and someone
-            // else should deal with it
-
-            nTest = xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId());
-            if (nTest == 0)
-                throw RuntimeException();
-            pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
-            bIsFolder = sal_False;
-        }
-
-        if (bIsFolder)
-        {
-            //if pPackage is set,then this is the root folder of a different ZipPackage and
-            // should not be changed
-            if (!pFolder->pPackage)
-                pFolder->updateReferences(pNewZipFile);
-        }
-        else
-            pStream->pZipFile = pNewZipFile;
-    }
-}
 
 Sequence< sal_Int8 > ZipPackageFolder::getUnoTunnelImplementationId( void )
     throw (RuntimeException)
@@ -580,4 +537,31 @@ sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& a
         return reinterpret_cast < sal_Int64 > ( this );
 
     return 0;
+}
+void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
+        aValue >>= sMediaType;
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
+        aValue >>= aEntry.nSize;
+    else
+        throw UnknownPropertyException();
+}
+Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    Any aAny;
+    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+    {
+        aAny <<= sMediaType;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
+    {
+        aAny <<= aEntry.nSize;
+        return aAny;
+    }
+    else
+        throw UnknownPropertyException();
 }

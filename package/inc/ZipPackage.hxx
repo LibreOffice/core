@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_XZIPFILE_HPP_
-#include <com/sun/star/packages/XZipFile.hpp>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _ZIP_PACKAGE_BUFFER_HXX
 #include <ZipPackageBuffer.hxx>
@@ -109,13 +109,14 @@ class ZipPackage :
                    public com::sun::star::lang::XSingleServiceFactory,
                    public com::sun::star::lang::XUnoTunnel,
                    public com::sun::star::container::XHierarchicalNameAccess,
-                   public com::sun::star::util::XChangesBatch
+                   public com::sun::star::util::XChangesBatch,
+                   public com::sun::star::beans::XPropertySet
 {
-private:
+protected:
     ZipPackageFolder *pRootFolder;
     ZipFile          *pZipFile;
     ::ucb::Content   *pContent;
-    ::com::sun::star::uno::Reference < com::sun::star::packages::XZipFile > xZipFile;
+    ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
@@ -126,6 +127,9 @@ private:
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
     virtual ~ZipPackage( void );
+    ZipFile& getZipFile() { return *pZipFile;}
+    const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return aEncryptionKey;}
+
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);
@@ -160,6 +164,21 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
         throw(::com::sun::star::uno::RuntimeException);
+    // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     // Uno componentiseralation
     static ::rtl::OUString getImplementationName();
     static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,21 @@
 
 
 /** Provides general purpose decompression using the ZLIB library */
-void Inflater::init (sal_Bool bNowrap)
+
+Inflater::Inflater(sal_Bool bNoWrap)
+: bFinish(sal_False),
+  bFinished(sal_False),
+  bSetParams(sal_False),
+  bNeedDict(sal_False),
+  nOffset(0),
+  nLength(0),
+  pStream(NULL)
 {
     pStream = new z_stream;
     /* memset to 0 to set zalloc/opaque etc */
     memset (pStream, 0, sizeof(*pStream));
     sal_Int32 nRes;
-    nRes = inflateInit2(pStream, bNowrap ? -MAX_WBITS : MAX_WBITS);
+    nRes = inflateInit2(pStream, bNoWrap ? -MAX_WBITS : MAX_WBITS);
     switch (nRes)
     {
         case Z_OK:
@@ -99,29 +107,6 @@ void Inflater::init (sal_Bool bNowrap)
     }
 }
 
-Inflater::Inflater(sal_Bool bNoWrap)
-: bFinish(sal_False),
-  bFinished(sal_False),
-  bSetParams(sal_False),
-  bNeedDict(sal_False),
-  nOffset(0),
-  nLength(0),
-  pStream(NULL)
-{
-    init(bNoWrap);
-}
-
-Inflater::Inflater()
-: bFinish(sal_False),
-  bFinished(sal_False),
-  bSetParams(sal_False),
-  bNeedDict(sal_False),
-  nOffset(0),
-  nLength(0),
-  pStream(NULL)
-{
-    init(sal_False);
-}
 Inflater::~Inflater()
 {
     end();

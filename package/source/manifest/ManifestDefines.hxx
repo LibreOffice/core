@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestDefines.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,13 @@
 
 #define ELEMENT_MANIFEST "manifest:manifest"
 #define ELEMENT_FILE_ENTRY "manifest:file-entry"
+#define ELEMENT_ENCRYPTION_DATA "manifest:encryption-data"
+#define ELEMENT_INITIALISATION_VECTOR "manifest:initialisation-vector"
 #define ATTRIBUTE_FULL_PATH "manifest:full-path"
 #define ATTRIBUTE_MEDIA_TYPE "manifest:media-type"
+#define ATTRIBUTE_ALGORITHM "manifest:algorithm"
+#define ATTRIBUTE_SALT "manifest:salt"
+#define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
 #define ATTRIBUTE_CDATA "CDATA"
 #define ATTRIBUTE_XMLNS "xmlns:manifest"
 #define MANIFEST_NAMESPACE "http://openoffice.org/2001/manifest"

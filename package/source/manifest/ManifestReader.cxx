@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestReader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-04-23 15:52:53 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
         {
         }
     }
+    xParser->setDocumentHandler ( Reference < XDocumentHandler > () );
     return aManifestSequence;
 }
 // Component functions

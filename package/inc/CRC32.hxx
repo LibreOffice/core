@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,29 +61,29 @@
 #ifndef _CRC32_HXX
 #define _CRC32_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGE_XCHECKSUM_HPP_
-#include <com/sun/star/packages/XChecksum.hpp>
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HDL_
+#include <com/sun/star/uno/RuntimeException.hdl>
 #endif
 
-class CRC32 : public cppu::WeakImplHelper1<com::sun::star::packages::XChecksum>
+class CRC32
 {
 private:
     sal_uInt32 nCRC;
 public:
     CRC32();
-    virtual ~CRC32();
-    virtual void SAL_CALL updateByte (sal_Int8 nByte)
+    ~CRC32();
+    void SAL_CALL updateByte (sal_Int8 nByte)
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL updateSegment(const ::com::sun::star::uno::Sequence< sal_Int8 > &b, sal_Int32 off, sal_Int32 len)
+    void SAL_CALL updateSegment(const ::com::sun::star::uno::Sequence< sal_Int8 > &b, sal_Int32 off, sal_Int32 len)
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL update(const ::com::sun::star::uno::Sequence< sal_Int8 > &b)
+    void SAL_CALL update(const ::com::sun::star::uno::Sequence< sal_Int8 > &b)
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getValue()
+    sal_Int32 SAL_CALL getValue()
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL reset()
+    void SAL_CALL reset()
         throw(::com::sun::star::uno::RuntimeException);
 };
 

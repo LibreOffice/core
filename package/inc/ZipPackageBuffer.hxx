@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ class ZipPackageBuffer :
                 public com::sun::star::io::XSeekable,
                 public cppu::OWeakObject
 {
-private:
+protected:
     sal_Int64 nBufferSize;
     sal_Int64 nEnd;
     sal_Int64 nCurrent;

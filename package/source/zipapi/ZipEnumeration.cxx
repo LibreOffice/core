@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,10 @@
 #ifndef _ZIP_ENUMERATION_HXX
 #include <ZipEnumeration.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
-#endif
 
 using namespace rtl;
 using namespace com::sun::star;
+using namespace com::sun::star::packages;
 
 /** Provides an Enumeration over the contents of a Zip file */
 
@@ -78,17 +76,15 @@ ZipEnumeration::ZipEnumeration( EntryHash & rNewEntryHash)
 ZipEnumeration::~ZipEnumeration( void )
 {
 }
-sal_Bool SAL_CALL ZipEnumeration::hasMoreElements() throw (uno::RuntimeException)
+sal_Bool SAL_CALL ZipEnumeration::hasMoreElements()
 {
     return (aIterator != rEntryHash.end());
 }
 
-uno::Any SAL_CALL ZipEnumeration::nextElement() throw (uno::RuntimeException)
+const ZipEntry* SAL_CALL ZipEnumeration::nextElement()
 {
-    uno::Any aAny;
-    if (aIterator == rEntryHash.end())
-        throw container::NoSuchElementException();
-    aAny <<= (*aIterator).second;
-    aIterator++;
-    return aAny;
+    if (aIterator != rEntryHash.end())
+        return &((*aIterator++).second);
+    else
+        return NULL;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:15:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,13 @@ class ZipPackageEntry : public com::sun::star::container::XNamed,
                         public com::sun::star::lang::XUnoTunnel,
                         public com::sun::star::beans::XPropertySet
 {
-private:
+protected:
     com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
     ::rtl::OUString     sMediaType;
-    sal_Bool            bToBeCompressed;
 public:
     com::sun::star::packages::ZipEntry aEntry;
-    sal_Bool bPackageMember;
+    ::rtl::OUString & GetMediaType () { return sMediaType; }
+    void SetMediaType ( ::rtl::OUString & sNewType) { sMediaType = sNewType; }
 
     ZipPackageEntry (void);
     virtual ~ZipPackageEntry( void );
@@ -124,9 +124,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
     virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )

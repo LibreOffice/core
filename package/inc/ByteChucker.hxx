@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:11:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,27 +70,27 @@
 
 class ByteChucker
 {
-private:
+protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
 
 public:
     ByteChucker (com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xOstream);
-    virtual ~ByteChucker();
+    ~ByteChucker();
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
+    void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL flush(  )
+    void SAL_CALL flush(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL closeOutput(  )
+    void SAL_CALL closeOutput(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XSeekable
-    virtual sal_Int64 SAL_CALL seek( sal_Int64 location )
+    sal_Int64 SAL_CALL seek( sal_Int64 location )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getPosition(  )
+    sal_Int64 SAL_CALL getPosition(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getLength(  )
+    sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     ByteChucker& operator << (sal_Int8 nInt8);

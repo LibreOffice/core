@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:15:10 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,48 @@
 #ifndef _ZIP_PACKAGE_ENTRY_HXX
 #include <ZipPackageEntry.hxx>
 #endif
+#ifndef _VOS_REF_H_
+#include <vos/ref.hxx>
+#endif
+#ifndef _ENCRYPTION_DATA_HXX_
+#include <EncryptionData.hxx>
+#endif
 
-class ZipFile;
+class ZipPackage;
 class ZipPackageStream : public ZipPackageEntry,
                          public ::cppu::OWeakObject,
                          public ::com::sun::star::io::XActiveDataSink
 {
-private:
+protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    ZipPackage          &rZipPackage;
+    sal_Bool            bToBeCompressed, bToBeEncrypted, bPackageMember;
+    vos::ORef < EncryptionData > xEncryptionData;
 public:
-    ZipFile *pZipFile;
-    ZipPackageStream (ZipFile *pInFile);
+    inline sal_Bool IsToBeCompressed () { return bToBeCompressed;}
+    inline sal_Bool IsToBeEncrypted ()  { return bToBeEncrypted;}
+    inline sal_Bool IsPackageMember ()  { return bPackageMember;}
+    const com::sun::star::uno::Sequence < sal_Int8 >& getEncryptionKey ();
+    const vos::ORef < EncryptionData > & getEncryptionData ()
+    { return xEncryptionData;}
+    const com::sun::star::uno::Sequence < sal_Int8 >& getInitialisationVector ()
+    { return xEncryptionData->aInitVector;}
+    const com::sun::star::uno::Sequence < sal_Int8 >& getSalt ()
+    { return xEncryptionData->aSalt;}
+    const sal_Int64 getIterationCount ()
+    { return xEncryptionData->nIterationCount;}
+
+    inline void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
+    inline void SetToBeEncrypted (sal_Bool bNewValue)  { bToBeEncrypted  = bNewValue;}
+    inline void SetPackageMember (sal_Bool bNewValue)  { bPackageMember  = bNewValue;}
+    inline void setInitialisationVector (const com::sun::star::uno::Sequence < sal_Int8 >& rNewVector )
+    { xEncryptionData->aInitVector = rNewVector;}
+    inline void setSalt (const com::sun::star::uno::Sequence < sal_Int8 >& rNewSalt )
+    { xEncryptionData->aSalt = rNewSalt;}
+    inline void setIterationCount (const sal_Int64 nNewCount)
+    { xEncryptionData->nIterationCount = nNewCount;}
+
+    ZipPackageStream (ZipPackage & rNewPackage);
     virtual ~ZipPackageStream( void );
 
     void setZipEntry( const com::sun::star::packages::ZipEntry &rInEntry);
@@ -109,5 +140,11 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException);
+
+    // XPropertySet
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 #endif

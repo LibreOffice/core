@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,6 @@ using namespace com::sun::star::packages::ZipConstants;
 using namespace rtl;
 
 ZipPackageEntry::ZipPackageEntry (void)
-: bPackageMember  ( sal_False )
-, bToBeCompressed ( sal_True )
 {
 }
 
@@ -146,58 +144,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertyS
         throw(uno::RuntimeException)
 {
     return uno::Reference < beans::XPropertySetInfo > (NULL);
-}
-void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
-    {
-        aValue >>= sMediaType;
-
-        if (sMediaType.getLength() > 0)
-        {
-            if ( sMediaType.indexOf (OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1)
-                bToBeCompressed = sal_True;
-            else
-                bToBeCompressed = sal_False;
-        }
-    }
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
-        aValue >>= aEntry.nSize;
-#if SUPD>617
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compressed") ) )
-#else
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compress") ) )
-#endif
-        aValue >>= bToBeCompressed;
-    else
-        throw beans::UnknownPropertyException();
-}
-uno::Any SAL_CALL ZipPackageEntry::getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    uno::Any aAny;
-    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
-    {
-        aAny <<= sMediaType;
-        return aAny;
-    }
-    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
-    {
-        aAny <<= aEntry.nSize;
-        return aAny;
-    }
-#if SUPD>617
-    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
-#else
-    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compress" ) ) )
-#endif
-    {
-        aAny <<= bToBeCompressed;
-        return aAny;
-    }
-    else
-        throw beans::UnknownPropertyException();
 }
 void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)

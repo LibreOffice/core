@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mtg $ $Date: 2001-04-19 14:12:12 $
+#   last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,11 +91,9 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
 SHL1STDLIBS=\
-    $(VOSLIB)		\
     $(CPPULIB)		\
     $(UCBHELPERLIB)		\
     $(CPPUHELPERLIB)	\
-    $(COMPHELPERLIB)	\
     $(SALLIB)		\
     $(ZLIB3RDLIB)
 

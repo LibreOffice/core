@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:12:53 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,23 +73,33 @@
 #ifndef _INFLATER_HXX_
 #include <Inflater.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPENTRY_HPP_
+#include <com/sun/star/packages/ZipEntry.hpp>
+#endif
+#ifndef _VOS_REF_H_
+#include <vos/ref.hxx>
+#endif
+#ifndef _ENCRYPTION_DATA_HXX
+#include <EncryptionData.hxx>
+#endif
 class EntryInputStream : public cppu::WeakImplHelper2< com::sun::star::io::XInputStream,
                                                        com::sun::star::io::XSeekable >
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference< com::sun::star::io::XSeekable > xSeek;
-    sal_Int64 nBegin, nEnd, nCurrent, nUncompressedSize;
-    sal_Bool bReachEOF;
-    sal_Bool bDeflated;
-    sal_Bool bHaveInMemory;
-    com::sun::star::uno::Sequence < sal_Int8 > aSequence;
-    com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
+    sal_Int64 nEnd, nCurrent;
+    sal_Bool bDeflated, bHaveInMemory, bEncrypted;
+    com::sun::star::uno::Sequence < sal_Int8 > aSequence, aBuffer;
+    const vos::ORef < EncryptionData > xEncryptionData;
+    const com::sun::star::packages::ZipEntry & rEntry;
     Inflater aInflater;
     void readIntoMemory();
 public:
-             EntryInputStream( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput, sal_Int64 nBegin, sal_Int64 nEnd, sal_Int64 nNewUncompressedSize, sal_Bool bIsDeflated);
+             EntryInputStream( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
+                                const com::sun::star::packages::ZipEntry &rNewEntry,
+                               const vos::ORef < EncryptionData > &xEncryptData,
+                                sal_Bool bIsDeflated );
     virtual ~EntryInputStream();
 
     // XInputStream

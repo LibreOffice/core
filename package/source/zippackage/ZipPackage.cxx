@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-23 15:34:21 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _ZIP_PACKAGE_SINK_HXX
 #include <ZipPackageSink.hxx>
 #endif
+#ifndef _ZIP_ENUMERATION_HXX
+#include <ZipEnumeration.hxx>
+#endif
 #ifndef _ZIP_PACKAGE_STREAM_HXX
 #include <ZipPackageStream.hxx>
 #endif
@@ -112,7 +115,6 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xContentStream (NULL)
 , xContentSeek (NULL)
 , xRootFolder (NULL)
-, xZipFile (NULL)
 , xFactory(xNewFactory)
 {
     pRootFolder = new ZipPackageFolder();
@@ -121,8 +123,8 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 
 ZipPackage::~ZipPackage( void )
 {
-    if (pContent)
-        delete pContent;
+    delete pContent;
+    delete pZipFile;
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
     // the hash_map of the root folder is cleared, releasing all subfolders
@@ -135,19 +137,18 @@ ZipPackage::~ZipPackage( void )
 
 void ZipPackage::getZipFileContents()
 {
-    Reference< XEnumeration > xEnum = pZipFile->entries();
+    ZipEnumeration *pEnum = pZipFile->entries();
     Reference< XNameContainer > xCurrent;
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder;
-    ZipEntry aEntry;
     Any aAny;
-    while (xEnum->hasMoreElements())
+
+    while (pEnum->hasMoreElements())
     {
         xCurrent  = xRootFolder;
-        sal_Int32 nOldIndex =0,nIndex = 0;
-        aAny = xEnum->nextElement();
-        aAny >>= aEntry;
-        OUString &rName = aEntry.sName;
+        sal_Int32 nOldIndex = 0,nIndex = 0;
+        const ZipEntry & rEntry = *pEnum->nextElement();
+        const OUString &rName = rEntry.sName;
 
         if (rName.lastIndexOf('/') == rName.getLength()-1)
         {
@@ -212,9 +213,9 @@ void ZipPackage::getZipFileContents()
                 nOldIndex = nIndex+1;
             }
             OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
-            pPkgStream = new ZipPackageStream( pZipFile );
-            pPkgStream->bPackageMember = sal_True;
-            pPkgStream->setZipEntry( aEntry );
+            pPkgStream = new ZipPackageStream( *this );
+            pPkgStream->SetPackageMember( sal_True );
+            pPkgStream->setZipEntry( rEntry );
             pPkgStream->setName( sStreamName );
             try
             {
@@ -241,32 +242,69 @@ void ZipPackage::getZipFileContents()
             {
                 const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
                 const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+                const OUString sInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
+                const OUString sSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+                const OUString sIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
                 Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                 sal_Int32 nLength = aManifestSequence.getLength();
                 const Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
+                ZipPackageStream *pStream = NULL;
+                ZipPackageFolder *pFolder = NULL;
 
 
                 for (sal_Int32 i = 0; i < nLength ; i++, pSequence++)
                 {
-                    OUString sPath;
-                    Any aValueAny;
+                    OUString sPath, sMediaType;
                     const PropertyValue *pValue = pSequence->getConstArray();
                     for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                     {
                         if (pValue[j].Name.equals( sFullPath ) )
                             pValue[j].Value >>= sPath;
                         else if (pValue[j].Name.equals( sMediaType ) )
-                            aValueAny = pValue[j].Value;
+                            pValue[j].Value >>= sMediaType;
                     }
-                    if (sPath.getLength() && aValueAny.getValueTypeClass() == TypeClass_STRING)
+                    if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
                     {
-                        if ( hasByHierarchicalName ( sPath ) )
+                        Any aAny = getByHierarchicalName( sPath );
+                        Reference < XUnoTunnel > xTunnel;
+                        aAny >>= xTunnel;
+                        sal_Int64 nTest=0;
+                        if ((nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId())) != 0)
                         {
-                            Any aAny = getByHierarchicalName( sPath );
-                            Reference < XUnoTunnel > xTunnel;
-                            aAny >>= xTunnel;
-                            Reference < XPropertySet > xProps ( xTunnel, UNO_QUERY );
-                            xProps->setPropertyValue ( sMediaType, aValueAny );
+                            pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
+                            pFolder->SetMediaType ( sMediaType );
+                        }
+                        else
+                        {
+                            pStream = reinterpret_cast < ZipPackageStream* > ( xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
+                            pStream->SetMediaType ( sMediaType );
+                            pValue = pSequence->getConstArray();
+                            sal_Bool bSetEncrypted = sal_False;
+                            for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
+                            {
+                                Sequence < sal_Int8 > aSequence;
+                                if (pValue[j].Name.equals( sSalt ) )
+                                {
+                                    pValue[j].Value >>= aSequence;
+                                    pStream->setSalt ( aSequence );
+                                    bSetEncrypted = sal_True;
+                                }
+                                else if (pValue[j].Name.equals( sInitialisationVector ) )
+                                {
+                                    pValue[j].Value >>= aSequence;
+                                    pStream->setInitialisationVector ( aSequence );
+                                    bSetEncrypted = sal_True;
+                                }
+                                else if (pValue[j].Name.equals( sIterationCount ) )
+                                {
+                                    sal_Int64 nCount;
+                                    pValue[j].Value >>= nCount;
+                                    pStream->setIterationCount ( nCount );
+                                    bSetEncrypted = sal_True;
+                                }
+                            }
+                            if (bSetEncrypted)
+                                pStream->SetToBeEncrypted ( sal_True );
                         }
                     }
                 }
@@ -290,7 +328,6 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         try
         {
             pZipFile    = new ZipFile(xContentStream, sal_True);
-            xZipFile    = Reference < XZipFile > ( pZipFile );
             getZipFileContents();
         }
         catch (ZipException&)// rException)
@@ -479,7 +516,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 Reference< XInterface > SAL_CALL ZipPackage::createInstance(  )
         throw(Exception, RuntimeException)
 {
-    Reference < XInterface > xRef = *(new ZipPackageStream ( pZipFile ));
+    Reference < XInterface > xRef = *(new ZipPackageStream ( *this ));
     return xRef;
 }
 Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const Sequence< Any >& aArguments )
@@ -491,7 +528,7 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     if (bArg)
         xRef = *new ZipPackageFolder ( );
     else
-        xRef = *new ZipPackageStream ( pZipFile );
+        xRef = *new ZipPackageStream ( *this );
 
     return xRef;
 }
@@ -508,17 +545,14 @@ void SAL_CALL ZipPackage::commitChanges(  )
 
     ZipPackageBuffer *pZipBuffer = new ZipPackageBuffer( 65535 );
     Reference < XOutputStream > xOutStream (pZipBuffer);
-    ZipOutputStream *pZipOut = new ZipOutputStream( xOutStream, 65535 );
+    ZipOutputStream aZipOut ( xOutStream, 65535 );
 
     // Make a reference to the manifest output stream so it persists
     // until the call to ZipOutputStream->finish()
 
     Reference < XOutputStream > xManOutStream;
-    ZipPackageStream *pManifestStream = NULL;
-
-    Reference < XZipOutputStream > xZipOut (pZipOut);
-    pZipOut->setMethod(DEFLATED);
-    pZipOut->setLevel(DEFAULT_COMPRESSION);
+    aZipOut.setMethod(DEFLATED);
+    aZipOut.setLevel(DEFAULT_COMPRESSION);
 
     // Remove the old META-INF directory as this will be re-generated below.
     // Pass save-contents a vector which will be used to store the entries which
@@ -533,12 +567,12 @@ void SAL_CALL ZipPackage::commitChanges(  )
 
     Sequence < PropertyValue > aPropSeq ( 2 );
     aPropSeq [0].Name = sMediaType;
-    aPropSeq [0].Value <<= pRootFolder->getPropertyValue( sMediaType ) ;
+    aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
     aPropSeq [1].Name = sFullPath;
     aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
     aManList.push_back( aPropSeq );
-    pRootFolder->saveContents(OUString(), aManList, *pZipOut);
+    pRootFolder->saveContents(OUString(), aManList, aZipOut);
 
     OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
     Reference < XManifestWriter > xWriter (xFactory->createInstance( sManifestWriter ), UNO_QUERY );
@@ -567,9 +601,10 @@ void SAL_CALL ZipPackage::commitChanges(  )
 
         try
         {
-            pZipOut->putNextEntry(*pEntry);
-            pZipOut->write(pBuffer->aBuffer, 0, pEntry->nSize);
-            pZipOut->closeEntry();
+            vos::ORef < EncryptionData > xEmpty;
+            aZipOut.putNextEntry(*pEntry, xEmpty);
+            aZipOut.write(pBuffer->aBuffer, 0, pEntry->nSize);
+            aZipOut.closeEntry();
         }
         catch (::com::sun::star::io::IOException & )
         {
@@ -578,7 +613,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
     }
     try
     {
-        pZipOut->finish();
+        aZipOut.finish();
     }
     catch (::com::sun::star::io::IOException & )
     {
@@ -666,6 +701,7 @@ Any SAL_CALL ZipPackage::queryInterface( const Type& rType )
                                         static_cast< XSingleServiceFactory*     > ( this )  ,
                                         static_cast< XUnoTunnel*        > ( this )  ,
                                         static_cast< XHierarchicalNameAccess*       > ( this )  ,
+                                        static_cast< XPropertySet*      > ( this )  ,
                                         static_cast< XChangesBatch* > ( this ) );
 }
 
@@ -705,3 +741,45 @@ sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdenti
     return 0;
 }
 
+Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
+        throw(RuntimeException)
+{
+    return Reference < XPropertySetInfo > (NULL);
+}
+void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+        throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
+        if (!( aValue >>= aEncryptionKey ) )
+            throw IllegalArgumentException();
+    else
+        throw UnknownPropertyException();
+}
+Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    Any aAny;
+    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
+    {
+        aAny <<= aEncryptionKey;
+        return aAny;
+    }
+    else
+        throw UnknownPropertyException();
+}
+void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+void SAL_CALL ZipPackage::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+void SAL_CALL ZipPackage::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}

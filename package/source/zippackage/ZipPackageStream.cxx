@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
+ *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _ZIP_PACKAGE_STREAM_HXX
 #include <ZipPackageStream.hxx>
 #endif
+#ifndef _ZIP_PACKAGE_HXX
+#include <ZipPackage.hxx>
+#endif
 #ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
 #endif
@@ -69,13 +72,18 @@
 #include <vos/diagnose.hxx>
 #endif
 
-
-
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 using namespace com::sun::star;
 using namespace cppu;
+using namespace rtl;
 
-ZipPackageStream::ZipPackageStream (ZipFile *pInFile)
-: pZipFile(pInFile)
+ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
+: rZipPackage(rNewPackage)
+, bToBeCompressed ( sal_False )
+, bToBeEncrypted ( sal_False )
+, bPackageMember ( sal_False )
+, xEncryptionData ( new EncryptionData )
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -106,17 +114,17 @@ void ZipPackageStream::setZipEntry( const packages::ZipEntry &rInEntry)
     aEntry.sComment = rInEntry.sComment;
 }
     //XInterface
-uno::Any SAL_CALL ZipPackageStream::queryInterface( const uno::Type& rType )
-    throw(uno::RuntimeException)
+Any SAL_CALL ZipPackageStream::queryInterface( const Type& rType )
+    throw(RuntimeException)
 {
     return ( ::cppu::queryInterface (   rType                                       ,
                                                 // OWeakObject interfaces
-                                                reinterpret_cast< uno::XInterface*      > ( this )  ,
-                                                static_cast< uno::XWeak*            > ( this )  ,
+                                                reinterpret_cast< XInterface*       > ( this )  ,
+                                                static_cast< XWeak*         > ( this )  ,
                                                 // ZipPackageEntry interfaces
                                                 static_cast< container::XNamed*     > ( this )  ,
                                                 static_cast< container::XChild*     > ( this )  ,
-                                                static_cast< lang::XUnoTunnel*      > ( this )  ,
+                                                static_cast< XUnoTunnel*        > ( this )  ,
                                                 // My own interfaces
                                                 static_cast< io::XActiveDataSink*   > ( this )  ,
                                                 static_cast< beans::XPropertySet*   > ( this ) ) );
@@ -135,53 +143,55 @@ void SAL_CALL ZipPackageStream::release(  )
 }
 
     // XActiveDataSink
-void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInputStream >& aStream )
-        throw(uno::RuntimeException)
+void SAL_CALL ZipPackageStream::setInputStream( const Reference< io::XInputStream >& aStream )
+        throw(RuntimeException)
 {
     xStream = aStream;
-    bPackageMember = sal_False;
+    SetPackageMember ( sal_False );
     aEntry.nTime = -1;
 }
 
-uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( com::sun::star::packages::ZipEntry &rEntry )
-        throw(uno::RuntimeException)
+Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( com::sun::star::packages::ZipEntry &rEntry )
+        throw(RuntimeException)
 {
-    if (bPackageMember)
+    if (IsPackageMember())
     {
         try
         {
-            return pZipFile->getRawStream(rEntry);
+            return rZipPackage.getZipFile().getRawStream(rEntry, xEncryptionData);
         }
         catch (packages::ZipException &)//rException)
         {
             VOS_ENSURE( 0, "ZipException thrown");//rException.Message);
-            return uno::Reference < io::XInputStream > ();
+            return Reference < io::XInputStream > ();
         }
     }
     else
         return xStream;
 }
 
-uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
-        throw(uno::RuntimeException)
+Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
+        throw(RuntimeException)
 {
-    if (bPackageMember)
+    if (IsPackageMember())
     {
         try
         {
-            return pZipFile->getInputStream(aEntry);
+            return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData);
         }
         catch (packages::ZipException &)//rException)
         {
             VOS_ENSURE( 0,"ZipException thrown");//rException.Message);
-            return uno::Reference < io::XInputStream > ();
+            return Reference < io::XInputStream > ();
         }
     }
     else
         return xStream;
 }
-uno::Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
-    throw (uno::RuntimeException)
+
+// XPropertySet
+Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
+    throw (RuntimeException)
 {
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
@@ -196,8 +206,8 @@ uno::Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
     return pId->getImplementationId();
 }
 
-sal_Int64 SAL_CALL ZipPackageStream::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
-    throw(uno::RuntimeException)
+sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
+    throw(RuntimeException)
 {
     if (aIdentifier.getLength() == 16 &&
         0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),
@@ -205,4 +215,68 @@ sal_Int64 SAL_CALL ZipPackageStream::getSomething( const uno::Sequence< sal_Int8
         return reinterpret_cast < sal_Int64 > ( this );
 
     return 0;
+}
+void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
+    {
+        aValue >>= sMediaType;
+
+        if (sMediaType.getLength() > 0)
+        {
+            if ( sMediaType.indexOf (OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1)
+                bToBeCompressed = sal_True;
+            else
+                bToBeCompressed = sal_False;
+        }
+    }
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
+        aValue >>= aEntry.nSize;
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Encrypted") ) )
+        aValue >>= bToBeEncrypted;
+#if SUPD>617
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compressed") ) )
+#else
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compress") ) )
+#endif
+        aValue >>= bToBeCompressed;
+    else
+        throw beans::UnknownPropertyException();
+}
+Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
+        throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    Any aAny;
+    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+    {
+        aAny <<= sMediaType;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
+    {
+        aAny <<= aEntry.nSize;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Encrypted" ) ) )
+    {
+        aAny <<= bToBeEncrypted;
+        return aAny;
+    }
+#if SUPD>617
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
+#else
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compress" ) ) )
+#endif
+    {
+        aAny <<= bToBeCompressed;
+        return aAny;
+    }
+    else
+        throw beans::UnknownPropertyException();
+}
+
+const com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::getEncryptionKey ()
+{
+    return rZipPackage.getEncryptionKey();
 }
