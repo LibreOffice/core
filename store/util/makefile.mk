@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+#   last change: $Author: pluby $ $Date: 2001-02-02 04:38:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,11 @@ LIB1FILES=	$(LB)$/store.lib
 
 SHL1TARGET= 	$(STORE_TARGET)$(STORE_MAJOR)
 SHL1IMPLIB= 	istore
+.IF "$(OS)"=="MACOSX"
+SHL1VERSIONMAP=	$(TARGET).$(DLLPOSTFIX).map
+.ELSE
 SHL1VERSIONMAP=	$(TARGET).map
+.ENDIF
 
 SHL1STDLIBS=	$(VOSLIB) $(SALLIB)
 
