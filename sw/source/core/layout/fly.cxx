@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-04 07:49:17 $
+ *  last change: $Author: ama $ $Date: 2002-07-02 14:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,7 +1254,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             if( IsMinHeight() )
             {
                 Size aSz( CalcRel( rFrmSz ) );
-                nMinHeight = aSz.Height();
+                nMinHeight = bVert ? aSz.Width() : aSz.Height();
             }
             if ( Lower() )
             {
@@ -1306,8 +1306,9 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 #ifndef PRODUCT
             if ( IsMinHeight() )
             {
-                const long nMinHeightII = CalcRel( rFrmSz ).Height();
-                ASSERT( nMinHeight==nMinHeightII, "FlyFrm::Format: Changed MinHeight" );
+                const Size aSizeII = CalcRel( rFrmSz );
+                ASSERT( nMinHeight==(bVert? aSizeII.Width() : aSizeII.Height()),
+                        "FlyFrm::Format: Changed MinHeight" );
             }
 #endif
             if( IsMinHeight() && (nRemaining + nUL) < nMinHeight )
@@ -1341,7 +1342,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         if ( !bFormatHeightOnly )
         {
             Size aSz( CalcRel( rFrmSz ) );
-            SwTwips nNewSize = aSz.Width();
+            SwTwips nNewSize = bVert ? aSz.Height() : aSz.Width();
             nNewSize -= nLR;
             if( nNewSize < MINFLY )
                 nNewSize = MINFLY;

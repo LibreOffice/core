@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: ama $ $Date: 2002-07-02 14:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,11 +216,9 @@ void SwFlyFreeFrm::MakeAll()
             if ( !bValidSize )
             {
                 bValidPrtArea = FALSE;
-                const long nOldWidth = Frm().Width();
                 const Size aTmp( CalcRel( *pSz ) );
                 const SwTwips nMin = MINFLY + rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
-#ifdef VERTICAL_LAYOUT
-                long nDiff = aTmp.Width();
+                long nDiff = bVert ? aTmp.Height() : aTmp.Width();
                 if( nDiff < nMin )
                     nDiff = nMin;
                 nDiff -= (aFrm.*fnRect->fnGetWidth)();
@@ -229,11 +227,6 @@ void SwFlyFreeFrm::MakeAll()
                     (aFrm.*fnRect->fnAddRight)( nDiff );
                     bValidPos = FALSE;
                 }
-#else
-                aFrm.Width( Max( aTmp.Width(), nMin ) );
-                if ( nOldWidth != Frm().Width() )
-                    bValidPos = FALSE;  //Clipping kann notwendig sein.
-#endif
             }
 
             if ( !bValidPrtArea )
