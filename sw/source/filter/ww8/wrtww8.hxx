@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 09:43:12 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,8 +630,8 @@ private:
 public:
     WW8_WrPlcFtnEdn( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
-    inline BOOL WriteTxt( SwWW8Writer& rWrt );
-    inline void WritePlc( SwWW8Writer& rWrt ) const;
+    BOOL WriteTxt( SwWW8Writer& rWrt );
+    void WritePlc( SwWW8Writer& rWrt ) const;
 
     void Append( WW8_CP nCp, const SwFmtFtn& rFtn );
 };
@@ -646,8 +646,8 @@ public:
     WW8_WrPlcPostIt() {}
 
     void Append( WW8_CP nCp, const SwPostItField& rPostIt );
-    inline BOOL WriteTxt( SwWW8Writer& rWrt );
-    inline void WritePlc( SwWW8Writer& rWrt ) const;
+    BOOL WriteTxt( SwWW8Writer& rWrt );
+    void WritePlc( SwWW8Writer& rWrt ) const;
 };
 
 class WW8_WrPlcTxtBoxes : public WW8_WrPlcSubDoc    // Doppel-Plc fuer Textboxen
@@ -665,7 +665,7 @@ public:
     WW8_WrPlcTxtBoxes( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
     BOOL WriteTxt( SwWW8Writer& rWrt );
-    inline void WritePlc( SwWW8Writer& rWrt ) const;
+    void WritePlc( SwWW8Writer& rWrt ) const;
     void Append( const SdrObject& rObj, UINT32 nShapeId );
     USHORT Count() const { return aCntnt.Count(); }
     USHORT GetPos( const VoidPtr& p ) const { return aCntnt.GetPos( p ); }
@@ -897,71 +897,5 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode );
 Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
 
-
-// --------------------------- inlines ---------------------------------
-
-inline BOOL WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
-{
-    BOOL bRet=FALSE;
-    if( TXT_FTN == nTyp )
-    {
-        bRet = WriteGenericTxt( rWrt, TXT_FTN, rWrt.pFib->ccpFtn );
-        rWrt.pFldFtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
-                            rWrt.pFib->ccpText );
-    }
-    else
-    {
-        bRet = WriteGenericTxt( rWrt, TXT_EDN, rWrt.pFib->ccpEdn );
-        rWrt.pFldEdn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
-                            rWrt.pFib->ccpText + rWrt.pFib->ccpFtn
-                            + rWrt.pFib->ccpHdr + rWrt.pFib->ccpAtn );
-    }
-    return bRet;
-}
-
-inline void WW8_WrPlcFtnEdn::WritePlc( SwWW8Writer& rWrt ) const
-{
-    if( TXT_FTN == nTyp )
-    {
-        WriteGenericPlc( rWrt, TXT_FTN, rWrt.pFib->fcPlcffndTxt,
-            rWrt.pFib->lcbPlcffndTxt, rWrt.pFib->fcPlcffndRef,
-            rWrt.pFib->lcbPlcffndRef );
-    }
-    else
-    {
-        WriteGenericPlc( rWrt, TXT_EDN, rWrt.pFib->fcPlcfendTxt,
-            rWrt.pFib->lcbPlcfendTxt, rWrt.pFib->fcPlcfendRef,
-            rWrt.pFib->lcbPlcfendRef );
-    }
-}
-
-
-BOOL WW8_WrPlcPostIt::WriteTxt( SwWW8Writer& rWrt )
-{
-    return WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
-}
-
-void WW8_WrPlcPostIt::WritePlc( SwWW8Writer& rWrt ) const
-{
-    WriteGenericPlc( rWrt, TXT_ATN, rWrt.pFib->fcPlcfandTxt,
-        rWrt.pFib->lcbPlcfandTxt, rWrt.pFib->fcPlcfandRef,
-        rWrt.pFib->lcbPlcfandRef );
-}
-
-void WW8_WrPlcTxtBoxes::WritePlc( SwWW8Writer& rWrt ) const
-{
-    if( TXT_TXTBOX == nTyp )
-    {
-        WriteGenericPlc( rWrt, nTyp, rWrt.pFib->fcPlcftxbxBkd,
-            rWrt.pFib->lcbPlcftxbxBkd, rWrt.pFib->fcPlcftxbxTxt,
-            rWrt.pFib->lcbPlcftxbxTxt );
-    }
-    else
-    {
-        WriteGenericPlc( rWrt, nTyp, rWrt.pFib->fcPlcfHdrtxbxBkd,
-            rWrt.pFib->lcbPlcfHdrtxbxBkd, rWrt.pFib->fcPlcfHdrtxbxTxt,
-            rWrt.pFib->lcbPlcfHdrtxbxTxt );
-    }
-}
 
 #endif  //  _WRTWW8_HXX

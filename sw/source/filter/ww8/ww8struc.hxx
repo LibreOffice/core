@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:40 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,29 +70,23 @@
 // max. Anzahl der Listen-Level in WW8: 1..9
 #define nWW8MaxListLevel 9
 
-
-inline BYTE Get_Byte( BYTE *& p )
-    { BYTE n = SVBT8ToByte( *(SVBT8*)p );       p += 1; return n; }
-
-inline short Get_Short( BYTE *& p )
-    { short n = SVBT16ToShort( *(SVBT16*)p );   p += 2; return n; }
-inline USHORT Get_UShort( BYTE *& p )
-    { USHORT n = SVBT16ToShort( *(SVBT16*)p );  p += 2; return n; }
-
-inline long Get_Long( BYTE *& p )
-    { long n = SVBT32ToLong( *(SVBT32*)p );     p += 4; return n; }
-inline ULONG Get_ULong( BYTE *& p )
-    { ULONG n = SVBT32ToLong( *(SVBT32*)p );        p += 4; return n; }
-
 inline void Set_UInt8( BYTE *& p, UINT8 n )
-    { ByteToSVBT8( n, *(SVBT8*)p );  p+= 1; }
+{
+    ByteToSVBT8( n, *(SVBT8*)p );
+    p+= 1;
+}
 
 inline void Set_UInt16( BYTE *& p, UINT16 n )
-    { ShortToSVBT16( n, *(SVBT16*)p );  p+= 2; }
+{
+    ShortToSVBT16( n, *(SVBT16*)p );
+    p+= 2;
+}
 
 inline void Set_UInt32( BYTE *& p, UINT32 n )
-    { LongToSVBT32( n, *(SVBT32*)p );  p+= 4; }
-
+{
+    LongToSVBT32( n, *(SVBT32*)p );
+    p+= 4;
+}
 
 #if defined  __BIGENDIAN || __ALIGNMENT4 > 2 || defined UNX
 #define __WW8_NEEDS_COPY
@@ -870,11 +864,10 @@ struct WW8_TablePos
 #pragma pack()
 #endif
 
-class wwUtility
+namespace wwUtility
 {
-public:
-    static sal_uInt32 BGRToRGB(sal_uInt32 nColour);
-    static sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return BGRToRGB(nColour); }
+    sal_uInt32 BGRToRGB(sal_uInt32 nColour);
+    inline sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return BGRToRGB(nColour); }
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 10:49:45 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,37 @@ namespace SL
     IMPLCONSTSTRINGARRAY(CheckBox);
     IMPLCONSTSTRINGARRAY(TextBox);
     IMPLCONSTSTRINGARRAY(TextField);
+}
+
+inline BYTE Get_Byte( BYTE *& p )
+{
+    BYTE n = SVBT8ToByte( *(SVBT8*)p );
+    p += 1;
+    return n;
+}
+
+inline USHORT Get_UShort( BYTE *& p )
+{
+    USHORT n = SVBT16ToShort( *(SVBT16*)p );
+    p += 2;
+    return n;
+}
+
+inline short Get_Short( BYTE *& p )
+{
+    return Get_UShort(p);
+}
+
+inline ULONG Get_ULong( BYTE *& p )
+{
+    ULONG n = SVBT32ToLong( *(SVBT32*)p );
+    p += 4;
+    return n;
+}
+
+inline long Get_Long( BYTE *& p )
+{
+    return Get_ULong(p);
 }
 
 WW8SprmIter::WW8SprmIter(const BYTE* pSprms_, long nLen_, BYTE nVersion_ )

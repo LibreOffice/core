@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 09:43:11 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2427,4 +2427,68 @@ SwWW8Writer::~SwWW8Writer()
 void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName );
+}
+
+BOOL WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
+{
+    BOOL bRet=FALSE;
+    if( TXT_FTN == nTyp )
+    {
+        bRet = WriteGenericTxt( rWrt, TXT_FTN, rWrt.pFib->ccpFtn );
+        rWrt.pFldFtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
+                            rWrt.pFib->ccpText );
+    }
+    else
+    {
+        bRet = WriteGenericTxt( rWrt, TXT_EDN, rWrt.pFib->ccpEdn );
+        rWrt.pFldEdn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
+                            rWrt.pFib->ccpText + rWrt.pFib->ccpFtn
+                            + rWrt.pFib->ccpHdr + rWrt.pFib->ccpAtn );
+    }
+    return bRet;
+}
+
+void WW8_WrPlcFtnEdn::WritePlc( SwWW8Writer& rWrt ) const
+{
+    if( TXT_FTN == nTyp )
+    {
+        WriteGenericPlc( rWrt, TXT_FTN, rWrt.pFib->fcPlcffndTxt,
+            rWrt.pFib->lcbPlcffndTxt, rWrt.pFib->fcPlcffndRef,
+            rWrt.pFib->lcbPlcffndRef );
+    }
+    else
+    {
+        WriteGenericPlc( rWrt, TXT_EDN, rWrt.pFib->fcPlcfendTxt,
+            rWrt.pFib->lcbPlcfendTxt, rWrt.pFib->fcPlcfendRef,
+            rWrt.pFib->lcbPlcfendRef );
+    }
+}
+
+
+BOOL WW8_WrPlcPostIt::WriteTxt( SwWW8Writer& rWrt )
+{
+    return WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
+}
+
+void WW8_WrPlcPostIt::WritePlc( SwWW8Writer& rWrt ) const
+{
+    WriteGenericPlc( rWrt, TXT_ATN, rWrt.pFib->fcPlcfandTxt,
+        rWrt.pFib->lcbPlcfandTxt, rWrt.pFib->fcPlcfandRef,
+        rWrt.pFib->lcbPlcfandRef );
+}
+
+void WW8_WrPlcTxtBoxes::WritePlc( SwWW8Writer& rWrt ) const
+{
+    if( TXT_TXTBOX == nTyp )
+    {
+        WriteGenericPlc( rWrt, nTyp, rWrt.pFib->fcPlcftxbxBkd,
+            rWrt.pFib->lcbPlcftxbxBkd, rWrt.pFib->fcPlcftxbxTxt,
+            rWrt.pFib->lcbPlcftxbxTxt );
+    }
+    else
+    {
+        WriteGenericPlc( rWrt, nTyp, rWrt.pFib->fcPlcfHdrtxbxBkd,
+            rWrt.pFib->lcbPlcfHdrtxbxBkd, rWrt.pFib->fcPlcfHdrtxbxTxt,
+            rWrt.pFib->lcbPlcfHdrtxbxTxt );
+    }
 }
