@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListAutoStylePool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-31 08:59:05 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 18:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
+#ifndef _COM_SUN_STAR_UCB_XANYCOMPARE_HPP_
+#include <com/sun/star/ucb/XAnyCompare.hpp>
 #endif
 
 namespace com { namespace sun { namespace star { namespace container {
@@ -77,6 +77,7 @@ namespace rtl { class OUString; }
 
 class XMLTextListAutoStylePool_Impl;
 class XMLTextListAutoStylePoolNames_Impl;
+class XMLTextListAutoStylePoolEntry_Impl;
 class SvXMLExport;
 
 class XMLTextListAutoStylePool
@@ -89,6 +90,11 @@ class XMLTextListAutoStylePool
     XMLTextListAutoStylePoolNames_Impl *pNames;
     sal_uInt32 nName;
 
+    /** this is an optional NumRule compare component for applications where
+        the NumRules don't have names */
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > mxNumRuleCompare;
+
+    sal_uInt32 Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const;
 public:
 
     XMLTextListAutoStylePool( SvXMLExport& rExport );
