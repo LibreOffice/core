@@ -1,496 +1,767 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: ImpressWindowState.xcu,v $
+ *
+ *  $Revision: 1.12 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:52:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="ImpressWindowState" oor:package="org.openoffice.Office.UI">
- <node oor:name="UIElements">
-  <node oor:name="States">
-   <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">3D-Settings</value>
-     <value xml:lang="de">3D-Einstellungen</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/drawingobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Pos" oor:type="xs:string">
-     <value>89,283</value>
-    </prop>
-    <prop oor:name="Size" oor:type="xs:string">
-     <value>613,27</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Format Graphic</value>
-     <value xml:lang="de">Grafik formatieren</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/3dobjectsbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">3D-Objects</value>
-     <value xml:lang="de">3D-Objekte</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/alignmentbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Align</value>
-     <value xml:lang="de">Ausrichtung</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/arrowsbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Arrows</value>
-     <value xml:lang="de">Pfeile</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/choosemodebar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Mode</value>
-     <value xml:lang="de">Modus</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/commontaskbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>595,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Pos" oor:type="xs:string">
-     <value>582,356</value>
-    </prop>
-    <prop oor:name="Size" oor:type="xs:string">
-     <value>142,27</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Presentation</value>
-     <value xml:lang="de">Präsentation</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/connectorsbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Connectors</value>
-     <value xml:lang="de">Verbinder</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/fullscreenbar" oor:op="replace">
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Pos" oor:type="xs:string">
-     <value>79,65</value>
-    </prop>
-    <prop oor:name="Size" oor:type="xs:string">
-     <value>99,27</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>2</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Full Screen</value>
-     <value xml:lang="de">Ganzer Bildschirm</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/ellipsesbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Circles and Ovals</value>
-     <value xml:lang="de">Kreise und Ovale</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/formsfilterbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Form Filter</value>
-     <value xml:lang="de">Formularfilter</value>
-    </prop>
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/formsnavigationbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Form Navigation</value>
-     <value xml:lang="de">Formular Navigation</value>
-    </prop>
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/formcontrols" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Controls</value>
-     <value xml:lang="de">Steuerelemente</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/moreformcontrols" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">More controls</value>
-     <value xml:lang="de">Weitere Steuerelemente</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/formdesign" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Form Design</value>
-     <value xml:lang="de">Formular Entwurf</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,2</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/fontworkobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Fontwork</value>
-     <value xml:lang="de">Fontwork</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Fontwork Shape</value>
-     <value xml:lang="de">Fontwork-Form</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/graphicobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Picture</value>
-     <value xml:lang="de">Bild</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/graffilterbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Picture Filter</value>
-     <value xml:lang="de">Grafik Filter</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/outlinetoolbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Outline</value>
-     <value xml:lang="de">Gliederung</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Insert</value>
-     <value xml:lang="de">Einfügen</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/linesbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Lines</value>
-     <value xml:lang="de">Linien</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/basicshapes" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Basic Shapes</value>
-     <value xml:lang="de">Standardformen</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/symbolshapes" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Symbol Shapes</value>
-     <value xml:lang="de">Symbolformen</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/arrowshapes" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Block Arrows</value>
-     <value xml:lang="de">Blockpfeile</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/flowchartshapes" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Flowcharts</value>
-     <value xml:lang="de">Flussdiagramme</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/calloutshapes" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Callouts</value>
-     <value xml:lang="de">Legenden</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/starshapes" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Stars</value>
-     <value xml:lang="de">Sterne</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/optionsbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Pos" oor:type="xs:string">
-     <value>93,146</value>
-    </prop>
-    <prop oor:name="Size" oor:type="xs:string">
-     <value>612,27</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Options</value>
-     <value xml:lang="de">Optionen</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/rectanglesbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Rectangles</value>
-     <value xml:lang="de">Rechtecke</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/positionbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Position</value>
-     <value xml:lang="de">Position</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/slideviewobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Slide View</value>
-     <value xml:lang="de">Folien-Ansicht</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/slideviewtoolbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Slide Sorter</value>
-     <value xml:lang="de">Foliensortierung</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Standard</value>
-     <value xml:lang="de">Standard</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/textbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Text</value>
-     <value xml:lang="de">Text</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Text Formatting</value>
-     <value xml:lang="de">Text Format</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>1</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="Pos" oor:type="xs:string">
-     <value>2147483647,2147483647</value>
-    </prop>
-    <prop oor:name="Size" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Tools</value>
-     <value xml:lang="de">Wekzeuge</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/zoombar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Zoom</value>
-     <value xml:lang="de">Zoom</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/gluepointsobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Gluepoints</value>
-     <value xml:lang="de">Klebepunkte</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Path</value>
-     <value xml:lang="de">Pfad</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Standard (viewing mode)</value>
-     <value xml:lang="de">Standard (Lesemodus)</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/mediaobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-        <value>0,3</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-        <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-        <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-        <value>0</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-        <value xml:lang="en-US">Media Playback</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-        <value>true</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/colorbar" oor:op="replace">
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Color</value>
-     <value xml:lang="de">Farbe</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/masterviewtoolbar" oor:op="replace">
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Locked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="Pos" oor:type="xs:string">
-     <value>500,100</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Master View</value>
-     <value xml:lang="de">Master Ansicht</value>
-    </prop>
-   </node>
-  </node>
- </node>
+<oor:component-data oor:name="ImpressWindowState" oor:package="org.openoffice.Office.UI" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="UIElements">
+        <node oor:name="States">
+            <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">3D-Settings</value>
+                    <value xml:lang="de">3D-Einstellungen</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/drawingobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Line and Filling</value>
+                    <value xml:lang="en-US">Linie und Füllung</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/3dobjectsbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">3D-Objects</value>
+                    <value xml:lang="de">3D-Objekte</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/alignmentbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Align</value>
+                    <value xml:lang="de">Ausrichten</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/arrowsbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Arrows</value>
+                    <value xml:lang="de">Pfeile</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/choosemodebar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Mode</value>
+                    <value xml:lang="de">Modus</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/commontaskbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>1,0</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Style" oor:type="xs:int">
+                    <value>2</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Presentation</value>
+                    <value xml:lang="de">Präsentation</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/connectorsbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Connectors</value>
+                    <value xml:lang="de">Verbinder</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/fullscreenbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Style" oor:type="xs:int">
+                    <value>2</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Full Screen</value>
+                    <value xml:lang="de">Ganzer Bildschirm</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/ellipsesbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Circles and Ovals</value>
+                    <value xml:lang="de">Kreise und Ovale</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/formsfilterbar" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Form Filter</value>
+                    <value xml:lang="de">Formular-Filter</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/formsnavigationbar" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Form Navigation</value>
+                    <value xml:lang="de">Formular-Navigation</value>
+                </prop>
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/formcontrols" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Controls</value>
+                    <value xml:lang="de">Steuerelemente</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/moreformcontrols" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">More Controls</value>
+                    <value xml:lang="de">Weitere Steuerelemente</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/formdesign" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Form Design</value>
+                    <value xml:lang="de">Formular Entwurf</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/fontworkobjectbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Fontwork</value>
+                    <value xml:lang="de">Fontwork</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Fontwork Shape</value>
+                    <value xml:lang="de">Fontwork-Form</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/graphicobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Picture</value>
+                    <value xml:lang="de">Bild</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/graffilterbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Graphic Filter</value>
+                    <value xml:lang="de">Grafikfilter</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/outlinetoolbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Outline</value>
+                    <value xml:lang="de">Outline</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Insert</value>
+                    <value xml:lang="de">Einfügen</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/linesbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Lines</value>
+                    <value xml:lang="de">Linien</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/basicshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Basic Shapes</value>
+                    <value xml:lang="de">Standardformen</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/symbolshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Symbol Shapes</value>
+                    <value xml:lang="de">Symbolformen</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/arrowshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Block Arrows</value>
+                    <value xml:lang="de">Blockpfeile</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/flowchartshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Flowchart</value>
+                    <value xml:lang="de">Flussdiagram</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/calloutshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Callouts</value>
+                    <value xml:lang="de">Legenden</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/starshapes" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Stars and Banners</value>
+                    <value xml:lang="de">Sterne und Banner</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/optionsbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Options</value>
+                    <value xml:lang="de">Optionen</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/rectanglesbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Rectangles</value>
+                    <value xml:lang="de">Rechtecke</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/positionbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Position</value>
+                    <value xml:lang="de">Reihenfolge</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/slideviewtoolbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Slide Sorter</value>
+                    <value xml:lang="de">Foliensortiertisch</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/slideviewobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Slide View</value>
+                    <value xml:lang="de">Folienansicht</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,0</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Standard</value>
+                    <value xml:lang="de">Standard</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/textbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Text</value>
+                    <value xml:lang="de">Text</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Size" oor:type="xs:string">
+                    <value>362,75</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Text Formatting</value>
+                    <value xml:lang="de">Text Format</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Drawing</value>
+                    <value xml:lang="de">Zeichnen</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/zoombar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Zoom</value>
+                    <value xml:lang="de">Zoom</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/gluepointsobjectbar" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Gluepoints</value>
+                    <value xml:lang="de">Klebepunkte</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Edit Points</value>
+                    <value xml:lang="de">Punkte bearbeiten</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Standard (Viewing Mode)</value>
+                    <value xml:lang="de">Standard (Lesemodus)</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/mediaobjectbar" oor:op="replace">
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,1</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Media Playback</value>
+                    <value xml:lang="de">Medienwiedergabe</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/colorbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Color</value>
+                    <value xml:lang="de">Farbe</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="private:resource/toolbar/masterviewtoolbar" oor:op="replace">
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Locked" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="Style" oor:type="xs:int">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="Pos" oor:type="xs:string">
+                    <value>500,100</value>
+                </prop>
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Master View</value>
+                    <value xml:lang="de">Master Ansicht</value>
+                </prop>
+           </node>
+        </node>
+    </node>
 </oor:component-data>
