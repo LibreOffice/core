@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-12 19:06:56 $
+ *  last change: $Author: nn $ $Date: 2002-04-19 17:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "attrib.hxx"
 #include "chgtrack.hxx"
 #include "transobj.hxx"
+#include "refundo.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -736,8 +737,8 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                 USHORT nNewFlags,
-                ScRangeName* pNewUndoRange, ScRangeName* pNewRedoRange,
-                ScDBCollection* pNewUndoDB, ScDBCollection* pNewRedoDB,
+                ScRefUndoData* pRefData,
+                void* pFill1, void* pFill2, void* pFill3,
                 BOOL bRedoIsFilled ) :
     ScSimpleUndo( pNewDocShell ),
     aRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
@@ -745,14 +746,20 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
     pUndoDoc( pNewUndoDoc ),
     pRedoDoc( pNewRedoDoc ),
     nFlags( nNewFlags ),
-    pUndoRange( pNewUndoRange ),
-    pRedoRange( pNewRedoRange ),
-    pUndoDB( pNewUndoDB ),
-    pRedoDB( pNewRedoDB ),
+    pRefUndoData( pRefData ),
+    pRefRedoData( NULL ),
     bRedoFilled( bRedoIsFilled )
 {
+    //  pFill1,pFill2,pFill3 are there so the ctor calls for simple paste (without cutting)
+    //  don't have to be changed and branched for 641.
+    //  They can be removed later.
+
     if ( !aMarkData.IsMarked() )            // keine Zelle markiert:
         aMarkData.SetMarkArea( aRange );    //  Paste-Block markieren
+
+    if ( pRefUndoData )
+        pRefUndoData->DeleteUnchanged( pDocShell->GetDocument() );
+
     SetChangeTrack();
 }
 
@@ -760,10 +767,8 @@ __EXPORT ScUndoPaste::~ScUndoPaste()
 {
     delete pUndoDoc;
     delete pRedoDoc;
-    delete pUndoRange;
-    delete pRedoRange;
-    delete pUndoDB;
-    delete pRedoDB;
+    delete pRefUndoData;
+    delete pRefRedoData;
 }
 
 String __EXPORT ScUndoPaste::GetComment() const
@@ -783,8 +788,15 @@ void ScUndoPaste::SetChangeTrack()
 
 void ScUndoPaste::DoChange( const BOOL bUndo )
 {
-    ScRangeName*    pWorkRange = bUndo ? pUndoRange : pRedoRange;
-    ScDBCollection* pWorkDB    = bUndo ? pUndoDB    : pRedoDB;
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    //  RefUndoData for redo is created before first undo
+    //  (with DeleteUnchanged after the DoUndo call)
+    BOOL bCreateRedoData = ( bUndo && pRefUndoData && !pRefRedoData );
+    if ( bCreateRedoData )
+        pRefRedoData = new ScRefUndoData( pDoc );
+
+    ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData : pRefRedoData;
 
         //  fuer Undo immer alle oder keine Inhalte sichern
     USHORT nUndoFlags = IDF_NONE;
@@ -795,7 +807,6 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
 
     BOOL bPaintAll = FALSE;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     ScUndoUtil::MarkSimpleBlock( pDocShell, aRange );
@@ -824,14 +835,15 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
     if ( !bUndo && pRedoDoc )       // Redo: UndoToDocument vorher
         pRedoDoc->UndoToDocument( aRange, nUndoFlags, FALSE, pDoc );
 
-    if (pWorkRange)
-        pDoc->SetRangeName( new ScRangeName( *pWorkRange ) );
-    if (pWorkDB)
+    if (pWorkRefData)
     {
-        pDoc->SetDBCollection( new ScDBCollection( *pWorkDB ) );
+        pWorkRefData->DoUndo( pDoc, TRUE );     // TRUE = bSetChartRangeLists for SetChartListenerCollection
         if ( pDoc->RefreshAutoFilter( 0,0, MAXCOL,MAXROW, aRange.aStart.Tab() ) )
             bPaintAll = TRUE;
     }
+
+    if ( bCreateRedoData && pRefRedoData )
+        pRefRedoData->DeleteUnchanged( pDoc );
 
     if (bUndo)      // Undo: UndoToDocument hinterher
         pUndoDoc->UndoToDocument( aRange, nUndoFlags, FALSE, pDoc );

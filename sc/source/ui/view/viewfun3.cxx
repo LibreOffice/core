@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
+ *  last change: $Author: nn $ $Date: 2002-04-19 17:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,10 +792,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     ScDocument* pUndoDoc    = NULL;
     ScDocument* pRefUndoDoc = NULL;
     ScDocument* pRedoDoc    = NULL;
-    ScRangeName* pUndoRange = NULL;
-    ScRangeName* pRedoRange = NULL;
-    ScDBCollection* pUndoDB = NULL;
-    ScDBCollection* pRedoDB = NULL;
+    ScRefUndoData* pUndoData = NULL;
 
     if ( bRecord )
     {
@@ -809,12 +806,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
             pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRefUndoDoc->InitUndo( pDoc, 0, pDoc->GetTableCount()-1, FALSE, FALSE );
 
-            ScRangeName* pDocRange = pDoc->GetRangeName();
-            if (pDocRange->GetCount())
-                pUndoRange = new ScRangeName( *pDocRange );
-            ScDBCollection* pDocDB = pDoc->GetDBCollection();
-            if (pDocDB->GetCount())
-                pUndoDB = new ScDBCollection( *pDocDB );
+            pUndoData = new ScRefUndoData( pDoc );
         }
     }
 
@@ -930,22 +922,15 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
             delete pRefUndoDoc;
         }
 
-        if ( bCutMode )
-        {
-            if ( pUndoRange )
-                pRedoRange = new ScRangeName( *pDoc->GetRangeName() );
-            if ( pUndoDB )
-                pRedoDB = new ScDBCollection( *pDoc->GetDBCollection() );
-        }
-
-        //!     testen, ob Bereich wirklich geaendert
+        //  DeleteUnchanged for pUndoData is in ScUndoPaste ctor,
+        //  UndoData for redo is made during first undo
 
         pUndoMgr->AddUndoAction(
             new ScUndoPaste( pDocSh,
                                 nStartCol, nStartRow, nStartTab,
                                 nUndoEndCol, nUndoEndRow, nEndTab, rMark,
                                 pUndoDoc, pRedoDoc, nFlags | nUndoFlags,
-                                pUndoRange, pRedoRange, pUndoDB, pRedoDB,
+                                pUndoData, NULL, NULL, NULL,
                                 FALSE ) );  // FALSE = Redo-Daten sind nicht kopiert
     }
 

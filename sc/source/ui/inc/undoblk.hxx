@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:49:47 $
+ *  last change: $Author: nn $ $Date: 2002-04-19 17:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,8 +204,7 @@ public:
                                  const ScMarkData& rMark,
                                  ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                                  USHORT nNewFlags,
-                                 ScRangeName* pNewUndoRange, ScRangeName* pNewRedoRange,
-                                 ScDBCollection* pNewUndoDB, ScDBCollection* pNewRedoDB,
+                                 ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
                                  BOOL bRedoIsFilled = TRUE );
     virtual         ~ScUndoPaste();
 
@@ -222,10 +221,8 @@ private:
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
     USHORT          nFlags;
-    ScRangeName*    pUndoRange;
-    ScRangeName*    pRedoRange;
-    ScDBCollection* pUndoDB;
-    ScDBCollection* pRedoDB;
+    ScRefUndoData*  pRefUndoData;
+    ScRefUndoData*  pRefRedoData;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
     BOOL            bRedoFilled;
