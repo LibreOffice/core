@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-23 13:24:05 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,8 +657,7 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                         else
                         {
                             // a type by this name is not known in the process.
-                            if( (nTypeClass & 0x7f) >= 0 &&
-                                (nTypeClass & 0x7f) < typelib_TypeClass_UNKNOWN )
+                            if( (nTypeClass & 0x7f) < typelib_TypeClass_UNKNOWN )
                             {
                                 // typeclass is within a valid range, introduce the new
                                 // type.
