@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cbutton.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2002-07-29 13:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,20 +85,17 @@ public:
 
     void    Draw( const Point&  rAt,
                   const Size&   rSize,
-                  const Color&  rArrowCol,
+                  BOOL          bState,
                   BOOL          bBtnIn = FALSE );
 
     void    Draw( const Point&  rAt,
-                  const Color&  rArrowCol,
+                  BOOL          bState,
                   BOOL          bBtnIn = FALSE )
-                { Draw( rAt, aBtnSize, rArrowCol, bBtnIn ); }
+                { Draw( rAt, aBtnSize, bState, bBtnIn ); }
 
-    void    Draw( const Point&  rAt,
+    void    Draw( BOOL          bState,
                   BOOL          bBtnIn = FALSE )
-                { Draw( rAt, aBtnSize, aArrowColor, bBtnIn ); }
-
-    void    Draw( BOOL bBtnIn = FALSE )
-                { Draw( aBtnPos, aBtnSize, aArrowColor, bBtnIn ); }
+                { Draw( aBtnPos, aBtnSize, bState, bBtnIn ); }
 
     void    SetOptSizePixel();
 
@@ -108,18 +105,14 @@ public:
     void    SetSizePixel( const Size& rNewSize ) { aBtnSize = rNewSize; }
     Size    GetSizePixel() const                 { return aBtnSize; }
 
-    void    SetColor( const Color& rNewColor )   { aArrowColor = rNewColor; }
-    Color   GetColor() const                     { return aArrowColor; }
-
 private:
     void    ImpDrawArrow( const Rectangle&  rRect,
-                          const Color&      rColor );
+                          BOOL              bState );
 
 protected:
     Window* pOut;
     Point   aBtnPos;
     Size    aBtnSize;
-    Color   aArrowColor;
 };
 
 

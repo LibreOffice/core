@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 10:29:11 $
+ *  last change: $Author: dr $ $Date: 2002-07-29 13:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ private:
     void            DrawComboButton( const Point&   rCellPos,
                                      long           nCellSizeX,
                                      long           nCellSizeY,
+                                     BOOL           bArrowState,
                                      BOOL           bBtnIn  = FALSE );
 
     void            DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
