@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentDrawView.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:06 $
+ *  last change: $Author: cl $ $Date: 2002-11-12 15:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
 
 //=============================================================================
 
@@ -103,6 +107,12 @@ service DrawingDocumentDrawView
         desktop.
     */
     service com::sun::star::frame::Controller;
+
+    //-------------------------------------------------------------------------
+
+    /** lets you access the window for this view
+    */
+    interface com::sun::star::awt::XWindow;
 
     //-------------------------------------------------------------------------
 

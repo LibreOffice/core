@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationView.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-29 13:13:17 $
+ *  last change: $Author: cl $ $Date: 2002-11-12 15:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
 
 //=============================================================================
 
@@ -99,6 +103,12 @@ service PresentationView
         desktop.
     */
     service com::sun::star::frame::Controller;
+
+    //-------------------------------------------------------------------------
+
+    /** lets you access the window for this view
+    */
+    interface com::sun::star::awt::XWindow;
 
     //-------------------------------------------------------------------------
 
