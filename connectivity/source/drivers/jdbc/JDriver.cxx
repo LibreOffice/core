@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:26:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-25 16:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,33 +144,6 @@ Sequence< ::rtl::OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames( 
 {
     return getSupportedServiceNames_Static();
 }
-            else if(!pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
-            {
-                pBegin->Value >>= _bIgnoreDriverPrivileges;
-            }
-        }
-    }
-    catch(SQLException& e)
-    {
-        if( object )
-        {
-            t.pEnv->DeleteGlobalRef( object );
-            object = NULL;
-        }
-        throw SQLException(::rtl::OUString::createFromAscii("The specified driver could not be loaded!"),*this,::rtl::OUString(),1000,makeAny(e));
-    }
-    catch(Exception&)
-    {
-        if( object )
-        {
-            t.pEnv->DeleteGlobalRef( object );
-            object = NULL;
-        }
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The specified driver could not be loaded!")) ,*this);
-    }
-}
-=======
->>>>>>> 1.25.54.1
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
                                                          Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
