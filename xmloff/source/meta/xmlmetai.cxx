@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:11:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
 
 #include "xmlmetai.hxx"
 #include "xmltkmap.hxx"
@@ -75,6 +76,10 @@
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmluconv.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -113,7 +118,8 @@ private:
     SfxXMLMetaContext&  rParent;
     sal_uInt16          nElementType;
     rtl::OUString       sContent;
-    rtl::OUString       sFieldName;     // for <meta:user-defined>
+    rtl::OUString       sFieldName;     // prop name of <meta:user-defined>
+    rtl::OUString       sTypeName;      // type name of (some!) <meta:user-defined>
 
 public:
     SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -559,6 +565,11 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
             {
                 sFieldName = xAttrList->getValueByIndex( i );
             }
+            if ( nPrefix == XML_NAMESPACE_META &&
+                 IsXMLToken(aLocalName, XML_VALUE_TYPE) )
+            {
+                sTypeName = xAttrList->getValueByIndex( i );
+            }
         }
     }
     else if ( nElementType == XML_TOK_META_DOCUMENT_STATISTIC )
@@ -695,7 +706,16 @@ void SfxXMLMetaElementContext::EndElement()
             rParent.AddKeyword( sContent );
             break;
         case XML_TOK_META_USERDEFINED:
-            rParent.AddUserField( sFieldName, sContent );
+            {
+                if (sTypeName.getLength())
+                {
+                    uno::Any aValue;
+                    if (SvXMLUnitConverter::convertAny(aValue, sTypeName, sContent))
+                        rParent.AddUserField( sFieldName, aValue );
+                }
+                else
+                    rParent.AddUserField( sFieldName, sContent );
+            }
             break;
         case XML_TOK_META_DOCUMENT_STATISTIC:
             break;
@@ -809,4 +829,19 @@ void SfxXMLMetaContext::AddUserField( const rtl::OUString& rName, const rtl::OUS
     }
 }
 
+void SfxXMLMetaContext::AddUserField( const ::rtl::OUString& rName    ,
+                                      const uno::Any&        rContent )
+{
+    if ( !xInfoProp.is() )
+        return;
+
+    uno::Reference< beans::XPropertySetInfo > xSetInfo = xInfoProp->getPropertySetInfo();
+    if (xSetInfo->hasPropertyByName(rName))
+        xInfoProp->setPropertyValue(rName, rContent);
+    else
+    {
+        uno::Reference< beans::XPropertyContainer > xPropCont(xInfoProp, uno::UNO_QUERY_THROW);
+        xPropCont->addProperty(rName, 0, rContent);
+    }
+}
 
