@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 17:07:38 $
+ *  last change: $Author: mhu $ $Date: 2002-06-28 18:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2216,7 +2216,7 @@ SvStream& SvStream::WriteNumber( const double& rDouble )
 
 ULONG SvStream::CryptAndWriteBuffer( const void* pStart, ULONG nLen)
 {
-    unsigned char* pTemp = new unsigned char[CRYPT_BUFSIZE];
+    unsigned char  pTemp[CRYPT_BUFSIZE];
     unsigned char* pDataPtr = (unsigned char*)pStart;
     ULONG nCount = 0;
     ULONG nBufCount;
@@ -2242,7 +2242,6 @@ ULONG SvStream::CryptAndWriteBuffer( const void* pStart, ULONG nLen)
         pDataPtr += nBufCount;
     }
     while ( nLen );
-    delete pTemp;
     return nCount;
 }
 
