@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:39:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@ TabDialog RID_SVXDLG_CUSTOMIZE
 #define TEXT_DEFAULT_STYLE \
     Text [ de ] = "Standard Einstellungen herstellen" ; \
     Text [ en-US ] = "Restore Default Settings" ;
+
+#define TEXT_DEFAULT_COMMAND \
+    Text [ de ] = "Standardbefehl ~wiederherstellen" ; \
+    Text [ en-US ] = "Restore Default Command" ;
 
 #define TEXT_TEXT_ONLY \
     Text [ de ] = "Nur Text" ; \
@@ -400,8 +404,8 @@ Menu MODIFY_TOOLBAR_CONTENT
         };
         MenuItem
         {
-            Identifier = ID_DEFAULT_STYLE ;
-            TEXT_DEFAULT_STYLE
+            Identifier = ID_DEFAULT_COMMAND ;
+            TEXT_DEFAULT_COMMAND
         };
         MenuItem
         {
