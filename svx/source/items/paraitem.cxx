@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-22 15:23:23 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 10:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,7 +1423,7 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    switch ( nMemberId )
+    switch ( nMemberId & ~CONVERT_TWIPS)
     {
         case MID_TABSTOPS:
         {
