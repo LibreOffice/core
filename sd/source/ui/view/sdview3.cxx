@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-10 17:22:57 $
+ *  last change: $Author: ka $ $Date: 2002-10-20 07:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,25 +269,26 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     SdTransferable* pOwnData = NULL;
     SdTransferable* pImplementation = SdTransferable::getImplementation( aDataHelper.GetTransferable() );
 
-    if( SD_MOD()->pTransferClip == (SdTransferable*) pImplementation )
-        pOwnData = SD_MOD()->pTransferClip;
-    else if( SD_MOD()->pTransferDrag == (SdTransferable*) pImplementation )
-        pOwnData = SD_MOD()->pTransferDrag;
-    else if( SD_MOD()->pTransferSelection == (SdTransferable*) pImplementation )
-        pOwnData = SD_MOD()->pTransferSelection;
-
-    if( !pOwnData )
+    // try to get own transfer data
+    if( pImplementation )
     {
-        // ImageMap?
-        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVIM ) )
-        {
-            SotStorageStreamRef xStm;
+        if( SD_MOD()->pTransferClip == (SdTransferable*) pImplementation )
+            pOwnData = SD_MOD()->pTransferClip;
+        else if( SD_MOD()->pTransferDrag == (SdTransferable*) pImplementation )
+            pOwnData = SD_MOD()->pTransferDrag;
+        else if( SD_MOD()->pTransferSelection == (SdTransferable*) pImplementation )
+            pOwnData = SD_MOD()->pTransferSelection;
+    }
 
-            if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVIM, xStm ) )
-            {
-                pImageMap = new ImageMap;
-                *xStm >> *pImageMap;
-            }
+    // ImageMap?
+    if( !pOwnData && aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVIM ) )
+    {
+        SotStorageStreamRef xStm;
+
+        if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVIM, xStm ) )
+        {
+            pImageMap = new ImageMap;
+            *xStm >> *pImageMap;
         }
     }
 
@@ -414,12 +415,25 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                                 pMarkList->ForceSort();
 
                                 // #83525# stuff to remember originals and clones
-                                Container aConnectorContainer(0);
-                                sal_uInt32 a;
-                                sal_uInt32 nConnectorCount(0L);
-                                Size aVector(
-                                    aDropPos.X() - pOwnData->GetStartPos().X(),
-                                    aDropPos.Y() - pOwnData->GetStartPos().Y());
+                                Container   aConnectorContainer(0);
+                                sal_uInt32  a, nConnectorCount(0L);
+                                Point       aCurPos;
+
+                                // calculate real position of current
+                                // source objects, if necessary (#103207)
+                                if( pOwnData == SD_MOD()->pTransferSelection )
+                                {
+                                    Rectangle aCurBoundRect;
+
+                                    if( pMarkList->TakeBoundRect( pPV, aCurBoundRect ) )
+                                        aCurPos = aCurBoundRect.TopLeft();
+                                    else
+                                        aCurPos = pOwnData->GetStartPos();
+                                }
+                                else
+                                    aCurPos = pOwnData->GetStartPos();
+
+                                const Size aVector( aDropPos.X() - aCurPos.X(), aDropPos.Y() - aCurPos.Y() );
 
                                 for(a = 0; a < pMarkList->GetMarkCount(); a++)
                                 {
