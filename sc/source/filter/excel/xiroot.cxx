@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:16:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
+#ifndef SC_XINAME_HXX
+#include "xiname.hxx"
+#endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
@@ -117,14 +120,24 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     mrImpData.mxXFRangeBfr.reset( new XclImpXFRangeBuffer( GetRoot() ) );
     mrImpData.mxPageSettings.reset( new XclImpPageSettings( GetRoot() ) );
     mrImpData.mxTabInfo.reset( new XclImpTabInfo );
-    mrImpData.mxNameBfr.reset( new XclImpNameBuffer( GetRoot() ) );
-    mrImpData.mxLinkMgr.reset( new XclImpLinkManager( GetRoot() ) );
+    mrImpData.mxNameMgr.reset( new XclImpNameManager( GetRoot() ) );
+
+    if( GetBiff() >= xlBiff8 )
+    {
+        mrImpData.mxLinkMgr.reset( new XclImpLinkManager( GetRoot() ) );
+        mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
+        mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
+        mrImpData.mxObjMgr.reset( new XclImpObjectManager( GetRoot() ) );
+        // TODO still in old RootData (deleted by RootData)
+        mpRD->pAutoFilterBuffer = new XclImpAutoFilterBuffer;
+        mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
+        mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
+    }
 }
 
 XclImpSst& XclImpRoot::GetSst() const
 {
-    if( !mrImpData.mxSst.get() )
-        mrImpData.mxSst.reset( new XclImpSst( GetRoot() ) );
+    DBG_ASSERT( mrImpData.mxSst.get(), "XclImpRoot::GetSst - invalid call, wrong BIFF" );
     return *mrImpData.mxSst;
 }
 
@@ -160,11 +173,13 @@ XclImpPageSettings& XclImpRoot::GetPageSettings() const
 
 _ScRangeListTabs& XclImpRoot::GetPrintAreaBuffer() const
 {
+    // TODO still in old RootData
     return *mpRD->pPrintRanges;
 }
 
 _ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
 {
+    // TODO still in old RootData
     return *mpRD->pPrintTitles;
 }
 
@@ -173,54 +188,51 @@ XclImpTabInfo& XclImpRoot::GetTabInfo() const
     return *mrImpData.mxTabInfo;
 }
 
-XclImpNameBuffer& XclImpRoot::GetNameBuffer() const
+XclImpNameManager& XclImpRoot::GetNameManager() const
 {
-    return *mrImpData.mxNameBfr;
+    return *mrImpData.mxNameMgr;
 }
 
 XclImpLinkManager& XclImpRoot::GetLinkManager() const
 {
+    DBG_ASSERT( mrImpData.mxLinkMgr.get(), "XclImpRoot::GetLinkManager - invalid call, wrong BIFF" );
     return *mrImpData.mxLinkMgr;
 }
 
 XclImpObjectManager& XclImpRoot::GetObjectManager() const
 {
-    if( !mrImpData.mxObjMgr.get() )
-        mrImpData.mxObjMgr.reset( new XclImpObjectManager( GetRoot() ) );
+    DBG_ASSERT( mrImpData.mxObjMgr.get(), "XclImpRoot::GetObjectManager - invalid call, wrong BIFF" );
     return *mrImpData.mxObjMgr;
 }
 
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
-    if( !mrImpData.mxCondFmtMgr.get() )
-        mrImpData.mxCondFmtMgr.reset( new XclImpCondFormatManager( GetRoot() ) );
+    DBG_ASSERT( mrImpData.mxCondFmtMgr.get(), "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
     return *mrImpData.mxCondFmtMgr;
 }
 
 XclImpAutoFilterBuffer& XclImpRoot::GetFilterManager() const
 {
     // TODO still in old RootData
-    if( !mpRD->pAutoFilterBuffer )
-        mpRD->pAutoFilterBuffer = new XclImpAutoFilterBuffer;
+    DBG_ASSERT( mpRD->pAutoFilterBuffer, "XclImpRoot::GetFilterManager - invalid call, wrong BIFF" );
     return *mpRD->pAutoFilterBuffer;
 }
 
 XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
 {
-    if( !mrImpData.mxWebQueryBfr.get() )
-        mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
+    DBG_ASSERT( mrImpData.mxWebQueryBfr.get(), "XclImpRoot::GetWebQueryBuffer - invalid call, wrong BIFF" );
     return *mrImpData.mxWebQueryBfr;
 }
 
 XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
 {
-    if( !mrImpData.mxPTableMgr.get() )
-        mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
+    DBG_ASSERT( mrImpData.mxPTableMgr.get(), "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF" );
     return *mrImpData.mxPTableMgr;
 }
 
 ExcelToSc& XclImpRoot::GetFmlaConverter() const
 {
+    // TODO still in old RootData
     return *mpRD->pFmlaConverter;
 }
 
