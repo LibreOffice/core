@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-02 12:24:47 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 19:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,14 @@ TabPage TP_ANIMATION
         Text[ chinese_simplified ] = "å•å‡»é¼ æ ‡æ—¶æ‰§è¡Œçš„æ“ä½œ";
         Text[ russian ] = "Äåéñòâèå ïî ùåë÷êó ìûøè";
         Text[ polish ] = "Akcja po klikniêciu mysz¹";
-        Text[ japanese ] = "ï¾ï½³ï½½ï½¸ï¾˜ï½¯ï½¸ã§ï½±ï½¸ï½¼ï½®ï¾";
+        Text[ japanese ] = "ãƒã‚¦ã‚¹ã‚¯ãƒªãƒƒã‚¯ã§ã‚¢ã‚¯ã‚·ãƒ§ãƒ³";
         Text[ chinese_traditional ] = "æŒ‰é¼ æ¨™æ™‚åŸ·è¡Œçš„å‹•ä½œ";
         Text[ arabic ] = "ÅÌÑÇÁ ÚäÏ ÇáäŞÑ ÈÇáãÇæÓ";
         Text[ greek ] = "Åíİñãåéá ìå êëéê ôïõ ğïíôéêéïı";
         Text[ korean ] = "ë§ˆìš°ìŠ¤ í´ë¦­í•  ë•Œ ì‹¤í–‰";
         Text[ turkish ] = "Tıklama sonrası işlem";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Acción con pulsación de ratón";
+        Text[ catalan ] = "Acció amb pulsació del ratolí";
         Text[ finnish ] = "Toiminto napsautettaessa";
     };
     ListBox LB_ACTION
@@ -145,7 +145,7 @@ TabPage TP_ANIMATION
         Text[ korean ] = "íš¨ê³¼";
         Text[ turkish ] = "Efektler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Efecto";
+        Text[ catalan ] = "Efecte";
     };
 #define MA_Y1 (MA_Y0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP)
     FixedText FT_ANIMATION
@@ -168,13 +168,13 @@ TabPage TP_ANIMATION
         Text[ swedish ] = "Animation";
         Text[ polish ] = "Animacja";
         Text[ portuguese_brazilian ] = "Animation";
-        Text[ japanese ] = "ï½±ï¾†ï¾’ï½°ï½¼ï½®ï¾";
+        Text[ japanese ] = "ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³";
         Text[ korean ] = "ì• ë‹ˆë©”ì´ì…˜";
         Text[ chinese_simplified ] = "åŠ¨ç”»";
         Text[ chinese_traditional ] = "å‹•ç•«";
         Text[ turkish ] = "Canlandırma";
         Text[ arabic ] = "ÍÑßÉ";
-        Text[ catalan ] = "Animation";
+        Text[ catalan ] = "Animació";
     };
     ListBox LB_EFFECT
     {
@@ -206,13 +206,13 @@ TabPage TP_ANIMATION
         Text[ swedish ] = "Hastighet";
         Text[ polish ] = "Szybkoœæ";
         Text[ portuguese_brazilian ] = "Speed";
-        Text[ japanese ] = "ï½½ï¾‹ï¾Ÿï½°ï¾„ï¾";
+        Text[ japanese ] = "ã‚¹ãƒ”ãƒ¼ãƒ‰";
         Text[ korean ] = "ì†ë„";
         Text[ chinese_simplified ] = "é€Ÿåº¦";
         Text[ chinese_traditional ] = "é€Ÿåº¦";
         Text[ turkish ] = "Speed";
         Text[ arabic ] = "Speed";
-        Text[ catalan ] = "Speed";
+        Text[ catalan ] = "Velocitat";
     };
     RadioButton RBT_SLOW
     {
@@ -274,7 +274,7 @@ TabPage TP_ANIMATION
         Text[ korean ] = "ì¤‘ê°„(~M)";
         Text[ turkish ] = "Normal";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Media";
+        Text[ catalan ] = "~Mitjana";
     };
     RadioButton RBT_FAST
     {
@@ -305,7 +305,7 @@ TabPage TP_ANIMATION
         Text[ korean ] = "ë¹ ë¥´ê²Œ(~F)";
         Text[ turkish ] = "Hızlı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Rápida";
+        Text[ catalan ] = "~Ràpida";
     };
 #define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
 #define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
@@ -330,13 +330,13 @@ TabPage TP_ANIMATION
         Text[ swedish ] = "Tona ut med ljud";
         Text[ polish ] = "Ukryj z dŸwiêkiem";
         Text[ portuguese_brazilian ] = "Vanish with sound";
-        Text[ japanese ] = "ï½»ï½³ï¾ï¾„ï¾ä»˜ãã§ï¾Œï½ªï½°ï¾„ï¾ï½±ï½³ï¾„";
+        Text[ japanese ] = "ã‚µã‚¦ãƒ³ãƒ‰ä»˜ãã§ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ";
         Text[ korean ] = "ê°œì²´ ìˆ¨ê¸¸ ë•Œ ì‚¬ìš´ë“œ ì¬ìƒ";
         Text[ chinese_simplified ] = "æ¶ˆå¤±æ—¶æ’­æ”¾å£°éŸ³";
         Text[ chinese_traditional ] = "æ¶ˆå¤±æ™‚æ’­æ”¾è²éŸ³";
         Text[ turkish ] = "Vanish with sound";
         Text[ arabic ] = "Vanish with sound";
-        Text[ catalan ] = "Vanish with sound";
+        Text[ catalan ] = "Oculta amb el so";
     };
     Edit EDT_SOUND
     {
@@ -398,14 +398,14 @@ TabPage TP_ANIMATION
         Text[ chinese_simplified ] = "å®Œæ•´åœ°æ’­æ”¾å£°éŸ³(~P)";
         Text[ russian ] = "Ïîëíîå âîñïğîèçâåäåíèå çâóêà";
         Text[ polish ] = "Odtwórz pe³ny dŸwiêk";
-        Text[ japanese ] = "ï½»ï½³ï¾ï¾„ï¾ã‚’å…¨éƒ¨å†ç”Ÿ(~P)";
+        Text[ japanese ] = "ã‚µã‚¦ãƒ³ãƒ‰ã‚’å…¨éƒ¨å†ç”Ÿ(~P)";
         Text[ chinese_traditional ] = "å®Œæ•´åœ°æ’­æ”¾è²éŸ³(~P)";
         Text[ arabic ] = "ÊÔÛíá ÇáÕæÊ ßÇãáÇğ";
         Text[ greek ] = "ĞëŞñçò åêôİëåóç Ş÷ïõ";
         Text[ korean ] = "ì‚¬ìš´ë“œ ì™„ë²½í•˜ê²Œ ì¬ìƒ(~P)";
         Text[ turkish ] = "Sesi sonuna kadar çal";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reproducir el sonido ~completo";
+        Text[ catalan ] = "Reproduïr el so ~complet";
         Text[ finnish ] = "~Toista kokonaan";
     };
 
@@ -508,7 +508,7 @@ TabPage TP_ANIMATION
         Text[ korean ] = "ì°¾ê¸°(~F)";
         Text[ turkish ] = "Ara";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Buscar";
+        Text[ catalan ] = "~Cerca";
         Text[ finnish ] = "Etsi";
     };
 
@@ -526,14 +526,14 @@ TabPage TP_ANIMATION
     Text[ chinese_simplified ] = "äº¤äº’å¼";
     Text[ russian ] = "Èíòåğàêöèÿ";
     Text[ polish ] = "Interakcja";
-    Text[ japanese ] = "ï½²ï¾ï¾€ï¾—ï½¸ï½¼ï½®ï¾";
+    Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "äº’å‹•å¼";
     Text[ arabic ] = "ÊİÇÚá";
     Text[ greek ] = "Áëëçëåğßäñáóç";
     Text[ korean ] = "ìƒí˜¸ì‘ìš©";
     Text[ turkish ] = "Etkileşim";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Interacción";
+    Text[ catalan ] = "Interacció";
     Text[ finnish ] = "Vuorovaikutus";
     Text [ dutch ] = "Interactie" ;
     Text [ english_us ] = "Interaction" ;
@@ -545,6 +545,7 @@ TabPage TP_ANIMATION
     Text [ portuguese_brazilian ] = "Interaktion" ;
     Text [ portuguese ] = "Interacção" ;
 };
+
 
 
 
