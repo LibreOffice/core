@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 13:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@ namespace dbaui
         void SaveData( OFieldDescription* pFieldDescr );
         void SetReadOnly( BOOL bReadOnly );
 
-        virtual void GetFocus(){ m_pGenPage->GetFocus(); }
-        virtual void LoseFocus(){ m_pGenPage->LoseFocus(); }
+        virtual void GetFocus();
+        virtual void LoseFocus();
         void SetControlText( USHORT nControlId, const String& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
         String GetControlText( USHORT nControlId )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 07:47:39 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 13:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,18 @@ void OTableFieldDescWin::paste()
 {
     if(m_pGenPage)
         m_pGenPage->paste();
+}
+// -----------------------------------------------------------------------------
+void OTableFieldDescWin::GetFocus()
+{
+    if ( m_pGenPage )
+        m_pGenPage->GetFocus();
+}
+// -----------------------------------------------------------------------------
+void OTableFieldDescWin::LoseFocus()
+{
+    if ( m_pGenPage )
+        m_pGenPage->LoseFocus();
 }
 // -----------------------------------------------------------------------------
 
