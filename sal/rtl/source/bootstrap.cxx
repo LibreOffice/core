@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-06 14:36:55 $
+ *  last change: $Author: kr $ $Date: 2002-01-07 16:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,10 +296,8 @@ typedef struct Bootstrap_Impl {
     OUString      _iniName;
 } Bootstrap_Impl;
 
-static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl)
+static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl, const OUString & iniName)
 {
-    OUString iniName = pBootstrap_Impl->_iniName;
-
 #ifdef DEBUG
     OString sFile = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
     OSL_TRACE("bootstrap.cxx::fillFromIniFile - %s\n", sFile.getStr());
@@ -367,7 +365,8 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
     Bootstrap_Impl * pBootstrap_Impl = new Bootstrap_Impl;
 
     pBootstrap_Impl->_iniName = iniName;
-    fillFromIniFile(pBootstrap_Impl);
+    fillFromIniFile(pBootstrap_Impl, getIniFileNameImpl());
+    fillFromIniFile(pBootstrap_Impl, iniName);
 
     return pBootstrap_Impl;
 }
@@ -392,27 +391,10 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_u
             }
 
             found = getValue(&((Bootstrap_Impl *)handle)->_nameValueList, pName, ppValue, pDefault);
-
-
             if(*ppValue)
             {
                 OUString result = expandMacros(&((Bootstrap_Impl *)handle)->_nameValueList, OUString(*ppValue));
-
                 rtl_uString_assign(ppValue, result.pData );
-            }
-
-            if(!found) {
-                // fall back to executable rc
-                rtl_uString * pTmp = 0;
-
-                  if(((Bootstrap_Impl *)handle)->_iniName != getIniFileNameImpl())
-                    found = rtl_bootstrap_get(pName, &pTmp, pDefault);
-
-                if(found) {
-                    rtl_uString_assign(ppValue, pTmp);
-
-                    rtl_uString_release(pTmp);
-                }
             }
 
             if(!*ppValue)
@@ -422,7 +404,6 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_u
         else
             found = rtl_bootstrap_get(pName, ppValue, pDefault);
     }
-
 
     return found;
 }
@@ -458,7 +439,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue ,
         static Bootstrap_Impl bootstrap_Impl;
 
         bootstrap_Impl._iniName = getIniFileNameImpl();
-        fillFromIniFile(&bootstrap_Impl);
+        fillFromIniFile(&bootstrap_Impl, bootstrap_Impl._iniName);
 
         pBootstrap_Impl = &bootstrap_Impl;
     }
