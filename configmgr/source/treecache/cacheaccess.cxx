@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ data::NodeAddress CacheClientAccess::findInnerNode( data::Accessor const& _aAcce
 
     data::NodeAddress aNode = this->m_aData.getNode(_aAccess, aComponentName);
 
-    if (aNode.is() && data::NodeAccess(_aAccess,aNode).data().isValue() )
+    if (aNode.is() && data::NodeAccessRef(&_aAccess,aNode).data().isValue() )
         aNode = data::NodeAddress();
 
     return aNode;
