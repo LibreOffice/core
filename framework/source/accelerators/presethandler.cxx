@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:52:37 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,10 @@
 #define BASEPATH_SHARE_LAYER    DECLARE_ASCII("UIConfig"  )
 #define BASEPATH_USER_LAYER     DECLARE_ASCII("UserConfig")
 
-#define RELPATH_SHARE_LAYER     DECLARE_ASCII("soffice.cfg/uiconfig.zip")
-#define RELPATH_USER_LAYER      DECLARE_ASCII("soffice.cfg/uiconfig.zip")
+#define RELPATH_SHARE_LAYER     DECLARE_ASCII("soffice.cfg")
+#define RELPATH_USER_LAYER      DECLARE_ASCII("soffice.cfg")
+// #define RELPATH_SHARE_LAYER     DECLARE_ASCII("soffice.cfg/uiconfig.zip")
+// #define RELPATH_USER_LAYER      DECLARE_ASCII("soffice.cfg/uiconfig.zip")
 
 #define FILE_EXTENSION          DECLARE_ASCII(".xml")
 
@@ -258,7 +260,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[0] <<= sShareLayer;
     lArgs[1] <<= css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_STORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_FILESYSTEMSTORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::embed::XStorage >             xStorage       (xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY      );
 
     m_aSharedStorages->m_lStoragesShare.setRootStorage(xStorage);
@@ -297,7 +299,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[0] <<= sUserLayer;
     lArgs[1] <<= css::embed::ElementModes::READWRITE;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_STORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_FILESYSTEMSTORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::embed::XStorage >             xStorage       (xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY      );
     m_aSharedStorages->m_lStoragesUser.setRootStorage(xStorage);
 
