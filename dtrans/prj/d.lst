@@ -7,6 +7,7 @@
 ..\source\win32\ftransl\ftransl.xml %_DEST%\xml%_EXT%\ftransl.xml
 ..\source\X11\dtransX11.xml %_DEST%\xml%_EXT%\dtransX11.xml
 ..\source\cnttype\mcnttype.xml %_DEST%\xml%_EXT%\mcnttype.xml
+..\source\generic\dtrans.xml %_DEST%\xml%_EXT%\dtrans.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
