@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:39 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,12 +169,6 @@ struct UStringTraits
     }
 };
 
-#if defined WIN
-#pragma optimize("",off)
-#elif defined MSC && defined WNT
-// #56399# z.B. 1e88 => 1,00000000000001E+088
-#pragma optimize("g",off)
-#endif // WIN, MSC, WNT
 
 // Solaris C++ 5.2 compiler has problems when "StringT ** pResult" is
 // "typename T::String ** pResult" instead:
@@ -245,24 +239,8 @@ inline void doubleToString(StringT ** pResult,
     int nExp = 0;
     if ( fValue > 0.0 )
     {
-        if ( fValue < 1e-8 || fValue > 1e8 )
-        {   // the shear whether it's faster or not is between 1e7 and 1e8
-            nExp = static_cast< int >( floor( log10( fValue ) ) );
-            fValue /= pow( 10.0, static_cast< double >( nExp ) );
-        }
-        else
-        {   // else imagine 1E+308 ...
-            while( fValue < 1.0 )
-            {
-                fValue *= 10.0;
-                nExp--;
-            }
-            while( fValue >= 10.0 )
-            {
-                fValue /= 10.0;
-                nExp++;
-            }
-        }
+        nExp = static_cast< int >( floor( log10( fValue ) ) );
+        fValue /= pow( 10.0, static_cast< double >( nExp ) );
     }
 
     switch ( eFormat )
@@ -585,9 +563,6 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
         cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
 }
 
-#if defined WIN || (defined MSC && defined WNT)
-#pragma optimize("",on)
-#endif // WIN, MSC, WNT
 
 namespace {
 
