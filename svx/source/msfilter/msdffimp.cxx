@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-31 11:15:44 $
+ *  last change: $Author: cmc $ $Date: 2002-06-21 14:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3623,8 +3623,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
             // hier rausrechnen
-            rTextRect.Bottom() -= nTextTop + nTextBottom;
-            rTextRect.Right() -= nTextLeft + nTextRight;
+            Rectangle aNewRect(rTextRect);
+            aNewRect.Bottom() -= nTextTop + nTextBottom;
+            aNewRect.Right() -= nTextLeft + nTextRight;
 
             // Nur falls es eine einfache Textbox ist, darf der Writer
             // das Objekt durch einen Rahmen ersetzen, ansonsten
@@ -3649,9 +3650,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             {
                 aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
                 aSet.Put( SdrTextMinFrameHeightItem(
-                    rTextRect.Bottom() - rTextRect.Top() ) );
+                    aNewRect.Bottom() - aNewRect.Top() ) );
                 aSet.Put( SdrTextMinFrameWidthItem(
-                    rTextRect.Right() - rTextRect.Left() ) );
+                    aNewRect.Right() - aNewRect.Left() ) );
             }
             else
             {
@@ -3775,7 +3776,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if ( nTextRotationAngle )
             {
                 double a = nTextRotationAngle * nPi180;
-                pTextObj->NbcRotate( rTextRect.Center(), nTextRotationAngle,
+                pTextObj->NbcRotate( aNewRect.Center(), nTextRotationAngle,
                     sin( a ), cos( a ) );
             }
 
@@ -3798,6 +3799,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     SdrObject* pGroup = new SdrObjGroup;
                     pGroup->GetSubList()->NbcInsertObject( pObj );
                     pGroup->GetSubList()->NbcInsertObject( pTextObj );
+                    pGroup->NbcSetLogicRect(rTextRect);
                     pOrgObj = pObj;
                     pObj    = pGroup;
                 }
@@ -3808,7 +3810,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // simple rectangular objects are ignored by ImportObj()  :-(
             // this is OK for Draw but not for Calc and Writer
             // cause here these objects have a default border
-            pObj = new SdrRectObj( rTextRect );
+            pObj = new SdrRectObj(rTextRect);
             pOrgObj = pObj;
             pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
