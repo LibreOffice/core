@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 08:04:08 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 13:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _XMLOFF_FORMS_OFFICEFORMS_HXX_
+#include "officeforms.hxx"
+#endif
 
 
 //.........................................................................
@@ -106,6 +109,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::drawing;
+    using namespace ::com::sun::star::frame;
 
     //=====================================================================
     //= OFormLayerXMLExport
@@ -168,6 +172,22 @@ namespace xmloff
         m_pImpl->exportForms(_rxDrawPage);
     }
 
+    //=========================================================================
+    //= OOfficeFormsExport
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    OOfficeFormsExport::OOfficeFormsExport( SvXMLExport& _rExp )
+        :m_pImpl(NULL)
+    {
+        m_pImpl = new OFormsRootExport(_rExp);
+    }
+
+    //-------------------------------------------------------------------------
+    OOfficeFormsExport::~OOfficeFormsExport()
+    {
+        delete m_pImpl;
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -175,6 +195,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/03/20 08:04:08  fs
+ *  removed exportAutoStyles (was obsolete)
+ *
  *  Revision 1.8  2001/03/16 14:36:39  sab
  *  did the required change (move of extract.hxx form cppuhelper to comphelper)
  *
