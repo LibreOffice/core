@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filstr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:42:31 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ XStream_impl::queryInterface(
                                           SAL_STATIC_CAST( io::XInputStream*,this ),
                                           SAL_STATIC_CAST( io::XOutputStream*,this ),
                                           SAL_STATIC_CAST( io::XSeekable*,this ),
-                                          SAL_STATIC_CAST( io::XTruncate*,this ) );
+                                          SAL_STATIC_CAST( io::XTruncate*,this ),
+                                          SAL_STATIC_CAST( task::XJob*,this ) ); //HACK see #i38298#
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -163,14 +164,15 @@ XStream_impl::getSupportedServiceNames()
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-XTYPEPROVIDER_IMPL_7( XStream_impl,
+XTYPEPROVIDER_IMPL_8( XStream_impl,
                       lang::XTypeProvider,
                       lang::XServiceInfo,
                       io::XStream,
                       io::XSeekable,
                       io::XInputStream,
                       io::XOutputStream,
-                      io::XTruncate )
+                      io::XTruncate,
+                      task::XJob ) //HACK see #i38298#
 
 
 
@@ -456,13 +458,19 @@ XStream_impl::flush()
            io::BufferSizeExceededException,
            io::IOException,
            uno::RuntimeException )
-{
-    if( ! m_nIsOpen ) return;
+{}
 
-    if( m_aFile.sync() != osl::FileBase::E_None ) {
-        io::IOException ex;
-        ex.Message = rtl::OUString::createFromAscii(
-            "could not synchronize file to disc");
-        throw ex;
+//HACK see #i38298#
+uno::Any XStream_impl::execute(uno::Sequence< beans::NamedValue > const &)
+    throw (
+        lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
+{
+    if (m_nIsOpen && m_aFile.sync() != osl::FileBase::E_None) {
+        throw io::IOException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "could not synchronize file to disc")),
+            static_cast< OWeakObject * >(this));
     }
+    return uno::Any();
 }
