@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:20:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,7 +1410,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxUInt16Item(nWhich, m_nLastSlot));
                 break;
             case SID_FM_DESIGN_MODE:
-                if (!m_pFormView || ( GetImpl()->getDocumentType() == eEnhancedForm ) )
+                if (!m_pFormView || GetImpl()->IsReadonlyDoc() || ( GetImpl()->getDocumentType() == eEnhancedForm ) )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, m_bDesignMode) );
