@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluectrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:45:43 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #include "sdresid.hxx"
 #include "app.hrc"
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+
 // z.Z. werden von Joe nur die u.a. Moeglichkeiten unterstuetzt
 #define ESCDIR_COUNT 5
 static UINT16 aEscDirArray[] =
@@ -116,8 +120,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
 |*
 \************************************************************************/
 
-GlueEscDirLB::GlueEscDirLB( Window* pParent ) :
-        ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) )
+GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame ) :
+        ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
+        m_xFrame( rFrame )
 {
     String aStr; aStr += sal_Unicode('X');
     Size aXSize( GetTextWidth( aStr ), GetTextHeight() );
@@ -149,9 +154,21 @@ void GlueEscDirLB::Select()
     UINT16 nPos = GetSelectEntryPos();
     SfxUInt16Item aItem( SID_GLUE_ESCDIR, aEscDirArray[ nPos ] );
 
-
+    if ( m_xFrame.is() )
+    {
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GlueEscapeDirection" ));
+        aItem.QueryValue( a );
+        aArgs[0].Value  = a;
+        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GlueEscapeDirection" )),
+                                    aArgs );
+    }
+/*
     SfxViewFrame::Current()->GetDispatcher()->Execute( SID_GLUE_ESCDIR, SFX_CALLMODE_ASYNCHRON |
                                                        SFX_CALLMODE_RECORD, &aItem, (void*) NULL, 0L );
+*/
 }
 
 /*************************************************************************
@@ -184,9 +201,9 @@ void GlueEscDirLB::Fill()
 |*
 \************************************************************************/
 
-SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir( USHORT nId, ToolBox& rTbx,
-                                    SfxBindings& rBindings ) :
-        SfxToolBoxControl( nId, rTbx, rBindings )
+SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
+    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -202,7 +219,7 @@ void SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
     if( eState == SFX_ITEM_AVAILABLE )
     {
         GlueEscDirLB* pGlueEscDirLB = (GlueEscDirLB*) ( GetToolBox().
-                                            GetItemWindow( SID_GLUE_ESCDIR ) );
+                                            GetItemWindow( GetId() ) );
         if( pGlueEscDirLB )
         {
             if( pState )
@@ -237,9 +254,9 @@ void SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
 
 Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 {
-    if( GetId() == SID_GLUE_ESCDIR )
+    if( GetSlotId() == SID_GLUE_ESCDIR )
     {
-        return( new GlueEscDirLB( pParent ) );
+        return( new GlueEscDirLB( pParent, m_xFrame ) );
     }
 
     return( NULL );
