@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optmemory.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:47:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,69 +75,15 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW0 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text = "Rückgängig" ;
-        Text [ English ] = "Undo" ;
-        Text [ english_us ] = "Undo" ;
-        Text [ italian ] = "Annulla" ;
-        Text [ spanish ] = "Deshacer" ;
-        Text [ french ] = "Annuler" ;
-        Text [ dutch ] = "Ongedaan maken" ;
-        Text [ swedish ] = "Ångra" ;
-        Text [ danish ] = "Fortryd" ;
-        Text [ portuguese_brazilian ] = "Desfazer" ;
-        Text [ portuguese ] = "Anular" ;
-        Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤";
-        Text[ russian ] = "Îòìåíèòü";
-        Text[ polish ] = "Cofnij";
-        Text[ japanese ] = "å…ƒã«æˆ»ã™";
-        Text[ chinese_traditional ] = "å¾©åŸ";
-        Text[ arabic ] = "ÊÑÇÌÚ";
-        Text[ greek ] = "Áíáßñåóç";
-        Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ";
-        Text[ turkish ] = "Geri al";
-        Text[ finnish ] = "Kumoa";
-        Text[ catalan ] = "Desfer ";
-        Text[ thai ] = "Undo";
-        Text[ czech ] = "ZpÄ›t";
-        Text[ hebrew ] = "â€®×‘×™×˜×•×œ ×¤×¢×•×œ×”â€¬";
-        Text[ hindi ] = "à¤…à¤¨à¤¾à¤µà¥ƒà¤¤à¥à¤¤à¤¿";
-        Text[ slovak ] = "SpÃ¤Å¥ (undo)";
-        Text[ hungarian ] = "VisszavonÃ¡s";
-        Text[ slovenian ] = "Razveljavi";
+        Text [ de ] = "Rückgängig" ;
+        Text [ en-US ] = "Undo" ;
     };
     FixedText FT_UNDO
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW1 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "A~nzahl der Schritte" ;
-        Text [ English ] = "~Count of steps" ;
-        Text[ italian ] = "~Numero operazioni";
-        Text[ portuguese_brazilian ] = "Número de passos";
-        Text[ portuguese ] = "~Número de operações";
-        Text[ danish ] = "Antal trin";
-        Text[ french ] = "~Nombre d'opérations";
-        Text[ swedish ] = "A~ntal steg";
-        Text[ dutch ] = "~Aantal stappen";
-        Text[ spanish ] = "~Cantidad de pasos";
-        Text[ english_us ] = "Number of steps";
-        Text[ chinese_simplified ] = "æ­¥æ•°";
-        Text[ russian ] = "Êîëè÷åñòâî øàãîâ";
-        Text[ polish ] = "Liczba kroków";
-        Text[ japanese ] = "ã‚¹ãƒ†ãƒƒãƒ—æ•°";
-        Text[ chinese_traditional ] = "æ­¥æ•¸";
-        Text[ arabic ] = "ÚÏÏ ÇáÎØæÇÊ";
-        Text[ greek ] = "Áñéèìüò âçìÜôùí";
-        Text[ korean ] = "ë‹¨ê³„ ìˆ˜";
-        Text[ turkish ] = "Adım Sayısı";
-        Text[ finnish ] = "Vaiheiden määrä";
-        Text[ catalan ] = "~Quantitat de passos";
-        Text[ thai ] = "Number of steps";
-        Text[ czech ] = "PoÄet krokÅ¯";
-        Text[ hebrew ] = "A~nzahl der Schritte";
-        Text[ hindi ] = "à¤¸à¥à¤Ÿà¥‡à¤ªà¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-        Text[ slovak ] = "PoÄet krokov";
-        Text[ hungarian ] = "LÃ©pÃ©sek szÃ¡ma";
-        Text[ slovenian ] = "Å tevilo korakov";
+        Text [ de ] = "A~nzahl der Schritte" ;
+        Text [ en-US ] = "Number of steps";
     };
     NumericField ED_UNDO
     {
@@ -159,69 +105,15 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW2 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text = "Grafik-Cache" ;
-        Text [ ENGLISH ] = "Graphic cache" ;
-        Text[ english_us ] = "Graphics cache";
-        Text[ portuguese ] = "Cache gráfico";
-        Text[ russian ] = "Êıø ãğàôè÷åñêîãî îáúåêòà";
-        Text[ greek ] = "ÊñõöŞ ìíŞìç ãñáöéêşí";
-        Text[ dutch ] = "Afbeeldingencache";
-        Text[ french ] = "Cache graphique";
-        Text[ spanish ] = "Antememoria de la imagen";
-        Text[ italian ] = "Cache grafica";
-        Text[ danish ] = "Grafikmellemlager";
-        Text[ swedish ] = "Grafikcache";
-        Text[ polish ] = "Pamiêæ podrêczna na grafikê";
-        Text[ portuguese_brazilian ] = "Memória cache para figuras";
-        Text[ japanese ] = "å›³ã‚­ãƒ£ãƒƒã‚·ãƒ¥";
-        Text[ korean ] = "ê·¸ë˜í”½ ìºì‹œ";
-        Text[ chinese_simplified ] = "å›¾å½¢ç¼“å†²åŒº";
-        Text[ chinese_traditional ] = "åœ–å½¢ç·©è¡å€";
-        Text[ turkish ] = "Graphic önbellek";
-        Text[ arabic ] = "Graphic cache";
-        Text[ catalan ] = "Memòria cau gràfica";
-        Text[ finnish ] = "Grafiikkavälimuisti";
-        Text[ thai ] = "Graphics cache";
-        Text[ czech ] = "GrafickÃ¡ vyrovnÃ¡vacÃ­ pamÄ›Å¥";
-        Text[ hebrew ] = "Grafik-Cache";
-        Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤•à¥‰à¤¶";
-        Text[ slovak ] = "GrafickÃ¡ vyrovnÃ¡vacia pamÃ¤Å¥";
-        Text[ hungarian ] = "KÃ©pgyorsÃ­tÃ³tÃ¡r";
-        Text[ slovenian ] = "Predpomnilnik za grafike";
+        Text [ de ] = "Grafik-Cache" ;
+        Text [ en-US ] = "Graphics cache";
     };
     FixedText FT_GRAPHICCACHE
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW3 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Verwenden für %PRODUCTNAME" ;
-        Text [ ENGLISH ] = "Use for %PRODUCTNAME" ;
-        Text[ english_us ] = "Use for %PRODUCTNAME";
-        Text[ portuguese ] = "%PRODUCTNAME";
-        Text[ russian ] = "Èñïîëüçîâàòü äëÿ %PRODUCTNAME";
-        Text[ greek ] = "×ñŞóç ãéá %PRODUCTNAME";
-        Text[ dutch ] = "Gebruiken voor %PRODUCTNAME";
-        Text[ french ] = "Utilisation pour %PRODUCTNAME";
-        Text[ spanish ] = "Uso de %PRODUCTNAME";
-        Text[ finnish ] = "Käytä %PRODUCTNAMEssa";
-        Text[ italian ] = "Uso di %PRODUCTNAME";
-        Text[ danish ] = "Anvend til %PRODUCTNAME";
-        Text[ swedish ] = "Använd för %PRODUCTNAME";
-        Text[ polish ] = "U¿yj dla %PRODUCTNAME";
-        Text[ portuguese_brazilian ] = "Alocar para %PRODUCTNAME";
-        Text[ japanese ] = "%PRODUCTNAME ã«ä½¿ç”¨";
-        Text[ korean ] = "%PRODUCTNAME";
-        Text[ chinese_simplified ] = "ç”¨äº %PRODUCTNAME";
-        Text[ chinese_traditional ] = "ç”¨æ–¼ %PRODUCTNAME";
-        Text[ turkish ] = "%PRODUCTNAME için kullan";
-        Text[ arabic ] = "%PRODUCTNAME";
-        Text[ catalan ] = "%PRODUCTNAME";
-        Text[ thai ] = "Use for %PRODUCTNAME";
-        Text[ czech ] = "PouÅ¾Ã­t pro %PRODUCTNAME";
-        Text[ hebrew ] = "Verwenden fÃ¼r %PRODUCTNAME";
-        Text[ hindi ] = "%PRODUCTNAME à¤•à¥‡à¤²à¤¿à¤ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¥‹";
-        Text[ slovak ] = "PouÅ¾iÅ¥ pre %PRODUCTNAME";
-        Text[ hungarian ] = "%PRODUCTNAME Ã¡ltal hasznÃ¡lt";
-        Text[ slovenian ] = "Uporabi za %PRODUCTNAME";
+        Text [ de ] = "Verwenden für %PRODUCTNAME" ;
+        Text [ en-US ] = "Use for %PRODUCTNAME";
     };
     NumericField NF_GRAPHICCACHE
     {
@@ -238,69 +130,15 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL5, OFFS_TEXTBOX_FIXEDTEXT( ROW3 ) );
         Size = MAP_APPFONT( WIDTH3, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "MB" ;
-        Text [ ENGLISH ] = "MB" ;
-        Text[ english_us ] = "MB";
-        Text[ portuguese ] = "MB";
-        Text[ russian ] = "Ìá";
-        Text[ greek ] = "MB";
-        Text[ dutch ] = "MB";
-        Text[ french ] = "Mo";
-        Text[ spanish ] = "MB";
-        Text[ finnish ] = "Mt";
-        Text[ italian ] = "MB";
-        Text[ danish ] = "MB";
-        Text[ swedish ] = "MB";
-        Text[ polish ] = "MB";
-        Text[ portuguese_brazilian ] = "MB";
-        Text[ japanese ] = "MB";
-        Text[ korean ] = "MB";
-        Text[ chinese_simplified ] = "MB";
-        Text[ chinese_traditional ] = "MB";
-        Text[ turkish ] = "MB";
-        Text[ arabic ] = "ãíÛÇÈÇíÊ";
-        Text[ catalan ] = "MB";
-        Text[ thai ] = "MB";
-        Text[ czech ] = "MB";
-        Text[ hebrew ] = "MB";
-        Text[ hindi ] = "MB";
-        Text[ slovak ] = "MB";
-        Text[ hungarian ] = "MB";
-        Text[ slovenian ] = "MB";
+        Text [ de ] = "MB" ;
+        Text [ en-US ] = "MB";
     };
     FixedText FT_GRAPHICOBJECTCACHE
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW4 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Speicher pro Objekt" ;
-        Text [ ENGLISH ] = "Memory per object" ;
-        Text[ english_us ] = "Memory per object" ;
-        Text[ portuguese ] = "Memory per object";
-        Text[ russian ] = "Ïàìÿòè íà îáúåêò";
-        Text[ greek ] = "ÌíŞìç áíÜ áíôéêåßìåíï";
-        Text[ dutch ] = "Opslagruimte per object";
-        Text[ french ] = "Mémoire par objet";
-        Text[ spanish ] = "Memoria por objeto";
-        Text[ finnish ] = "O~bjektikohtainen muisti";
-        Text[ italian ] = "Memoria per oggetto";
-        Text[ danish ] = "Hukommelse pr. objekt";
-        Text[ swedish ] = "Minne per objekt";
-        Text[ polish ] = "Iloœæ pamiêci na obiekt";
-        Text[ portuguese_brazilian ] = "Memória alocada por objeto";
-        Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã”ã¨ã®ãƒ¡ãƒ¢ãƒªä½¿ç”¨é‡";
-        Text[ korean ] = "ê°œì²´ë‹¹ ë©”ëª¨ë¦¬";
-        Text[ chinese_simplified ] = "æ¯ä¸ªå¯¹è±¡çš„å†…å­˜";
-        Text[ chinese_traditional ] = "æ¯å€‹ç‰©ä»¶çš„è¨˜æ†¶é«”";
-        Text[ turkish ] = "Her nesne için bellek";
-        Text[ arabic ] = "Memory per object";
-        Text[ catalan ] = "Memòria per objecte";
-        Text[ thai ] = "Memory per object";
-        Text[ czech ] = "PamÄ›Å¥ na objekt";
-        Text[ hebrew ] = "Speicher pro Objekt";
-        Text[ hindi ] = "à¤à¤• à¤µà¤¸à¥à¤¤à¥ à¤•à¥‡à¤²à¤¿à¤ à¤®à¥‡à¤®à¤°à¥€";
-        Text[ slovak ] = "PamÃ¤Å¥ pre objekt";
-        Text[ hungarian ] = "MemÃ³ria objektumonkÃ©nt";
-        Text[ slovenian ] = "Pomnilnika na predmet";
+        Text [ de ] = "Speicher pro Objekt" ;
+        Text [ en-US ] = "Memory per object" ;
     };
     NumericField NF_GRAPHICOBJECTCACHE
     {
@@ -318,69 +156,15 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL5, OFFS_TEXTBOX_FIXEDTEXT( ROW4 ) );
         Size = MAP_APPFONT( WIDTH3, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "MB" ;
-        Text [ ENGLISH ] = "MB" ;
-        Text[ english_us ] = "MB";
-        Text[ portuguese ] = "MB";
-        Text[ russian ] = "Ìá";
-        Text[ greek ] = "MB";
-        Text[ dutch ] = "MB";
-        Text[ french ] = "Mo";
-        Text[ spanish ] = "MB";
-        Text[ finnish ] = "Mt";
-        Text[ italian ] = "MB";
-        Text[ danish ] = "MB";
-        Text[ swedish ] = "MB";
-        Text[ polish ] = "MB";
-        Text[ portuguese_brazilian ] = "MB";
-        Text[ japanese ] = "MB";
-        Text[ korean ] = "MB";
-        Text[ chinese_simplified ] = "MB";
-        Text[ chinese_traditional ] = "MB";
-        Text[ turkish ] = "MB";
-        Text[ arabic ] = "ãíÛÇÈÇíÊ";
-        Text[ catalan ] = "MB";
-        Text[ thai ] = "MB";
-        Text[ czech ] = "MB";
-        Text[ hebrew ] = "MB";
-        Text[ hindi ] = "MB";
-        Text[ slovak ] = "MB";
-        Text[ hungarian ] = "MB";
-        Text[ slovenian ] = "MB";
+        Text [ de ] = "MB" ;
+        Text [ en-US ] = "MB";
     };
     FixedText FT_GRAPHICOBJECTTIME
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW5 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Aus Speicher entfernen nach" ;
-        Text [ ENGLISH ] = "Remove from memory after";
-        Text[ english_us ] = "Remove from memory after";
-        Text[ portuguese ] = "Remove from memory after";
-        Text[ russian ] = "Óäàëèòü èç ïàìÿòè ÷åğåç";
-        Text[ greek ] = "ÊáôÜñãçóç áğü ôç ìíŞìç ìåôÜ áğü";
-        Text[ dutch ] = "Uit geheugen verwijderen na";
-        Text[ french ] = "Effacer de la mémoire après";
-        Text[ spanish ] = "Borrar de la memoria tras";
-        Text[ finnish ] = "Poista muistista seuraavan jälkeen:";
-        Text[ italian ] = "Elimina dalla memoria dopo";
-        Text[ danish ] = "Fjern fra hukommelse efter";
-        Text[ swedish ] = "Ta ~bort från minnet efter";
-        Text[ polish ] = "Usuñ z pamiêci po";
-        Text[ portuguese_brazilian ] = "Remover da memória após";
-        Text[ japanese ] = "ãƒ¡ãƒ¢ãƒªã‹ã‚‰å‰Šé™¤ã™ã‚‹ã¾ã§ã®å¾…ã¡æ™‚é–“";
-        Text[ korean ] = "ë©”ëª¨ë¦¬ë¡œë¶€í„° ì œê±° ì‹œê°„ ì„¤ì •";
-        Text[ chinese_simplified ] = "ä¿å­˜åœ¨å†…å­˜ä¸­çš„æ—¶é™æ˜¯";
-        Text[ chinese_traditional ] = "æ¸…ç©ºè¨˜æ†¶é«”çš„æ™‚é™";
-        Text[ turkish ] = "Bellekten sonra kaldır";
-        Text[ arabic ] = "Remove from memory after";
-        Text[ catalan ] = "Elimina de la memòria en";
-        Text[ thai ] = "Remove from memory after";
-        Text[ czech ] = "Odstranit z pamÄ›ti po";
-        Text[ hebrew ] = "Aus Speicher entfernen nach";
-        Text[ hindi ] = "à¤•à¥‡ à¤ªà¤¶à¥à¤šà¤¾à¤¤à¥ à¤®à¥‡à¤®à¤°à¥€ à¤¸à¥‡ à¤¹à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "OdstrÃ¡niÅ¥ z pamÃ¤te za";
-        Text[ hungarian ] = "TÃ¶rlÃ©s a memÃ³riÃ¡bÃ³l";
-        Text[ slovenian ] = "Odstrani iz pomnilnika po";
+        Text [ de ] = "Aus Speicher entfernen nach" ;
+        Text [ en-US ] = "Remove from memory after";
     };
     TimeField TF_GRAPHICOBJECTTIME
     {
@@ -420,103 +204,22 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL5, OFFS_TEXTBOX_FIXEDTEXT( ROW5 ) );
         Size = MAP_APPFONT( WIDTH3, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "hh:mm" ;
-        Text [ ENGLISH ] = "hh:mm";
-        Text[ english_us ] = "hh:mm";
-        Text[ portuguese ] = "hh:mm";
-        Text[ russian ] = "÷÷:ìì";
-        Text[ greek ] = "ùù:ëë";
-        Text[ dutch ] = "hh:mm";
-        Text[ french ] = "hh:mm";
-        Text[ spanish ] = "hh:mm";
-        Text[ finnish ] = "hh:mm";
-        Text[ italian ] = "hh:mm";
-        Text[ danish ] = "tt:mm";
-        Text[ swedish ] = "hh:mm";
-        Text[ polish ] = "gg:mm";
-        Text[ portuguese_brazilian ] = "hh:mm";
-        Text[ japanese ] = "hh:mm";
-        Text[ korean ] = "hh:mm";
-        Text[ chinese_simplified ] = "hh:mm";
-        Text[ chinese_traditional ] = "hh:mm";
-        Text[ turkish ] = "hh:mm";
-        Text[ arabic ] = "hh:mm";
-        Text[ catalan ] = "hh:mm";
-        Text[ thai ] = "hh:mm";
-        Text[ czech ] = "hh:mm";
-        Text[ hebrew ] = "hh:mm";
-        Text[ hindi ] = "hh:mm";
-        Text[ slovak ] = "hh:mm";
-        Text[ hungarian ] = "(Ã³Ã³:pp) utÃ¡n";
-        Text[ slovenian ] = "hh:mm";
+        Text [ de ] = "hh:mm" ;
+        Text [ en-US ] = "hh:mm";
     };
     FixedLine GB_OLECACHE
     {
         Pos = MAP_APPFONT( COL0, ROW6 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text = "Cache für eingefügte Objekte" ;
-        Text [ ENGLISH ] = "Cache for embeded objects" ;
-        Text[ english_us ] = "Cache for inserted objects";
-        Text[ portuguese ] = "Cache for embeded objects";
-        Text[ russian ] = "Êıø äëÿ âñòàâëåííûõ îáúåêòîâ";
-        Text[ greek ] = "ÊñõöŞ ìíŞìç ãéá åéóá÷èİíôá áíôéêåßìåíá";
-        Text[ dutch ] = "Cache voor ingevoegde objecten";
-        Text[ french ] = "Cache pour les objets insérés";
-        Text[ spanish ] = "Antememoria para los objetos insertados";
-        Text[ finnish ] = "Lisättyjen objektien välimuisti";
-        Text[ italian ] = "Cache per gli oggetti inseriti";
-        Text[ danish ] = "Mellemlager for indsatte objekter";
-        Text[ swedish ] = "Cache för infogade objekt";
-        Text[ polish ] = "Pamiêæ podrêczna na wstawione obiekty";
-        Text[ portuguese_brazilian ] = "Memória cache para os objetos inseridos";
-        Text[ japanese ] = "æŒ¿å…¥ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥";
-        Text[ korean ] = "í¬í•¨ëœ ê°œì²´ì˜ ìºì‹œ";
-        Text[ chinese_simplified ] = "ç»™æ’å…¥å¯¹è±¡çš„ç¼“å†²åŒº";
-        Text[ chinese_traditional ] = "ç”¨æ–¼æ’å…¥ç‰©ä»¶çš„ç·©è¡å€";
-        Text[ turkish ] = "Girilen nesneler için önbellek";
-        Text[ arabic ] = "Cache for embeded objects";
-        Text[ catalan ] = "Memòria cau per objectes inclosos";
-        Text[ thai ] = "Cache for inserted objects";
-        Text[ czech ] = "Cache pro vloÅ¾enÃ© objekty";
-        Text[ hebrew ] = "Cache fÃ¼r eingefÃ¼gte Objekte";
-        Text[ hindi ] = "à¤œà¥‹à¤¡à¤¾ à¤¹à¥à¤† à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤•à¥‡à¤²à¤¿à¤ à¤•à¥‰à¤¶";
-        Text[ slovak ] = "VyrovnÃ¡vacia pamÃ¤Å¥ pre vloÅ¾enÃ© objekty";
-        Text[ hungarian ] = "A beszÃºrt objektumok gyorsÃ­tÃ³tÃ¡ra";
-        Text[ slovenian ] = "Predpomnilnik za vstavljene predmete";
+        Text [ de ] = "Cache für eingefügte Objekte" ;
+        Text [ en-US ] = "Cache for inserted objects";
     };
     FixedText FT_OLECACHE
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW7 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Anzahl der Objekte" ;
-        Text [ ENGLISH ] = "Number of objects" ;
-        Text[ english_us ] = "Number of objects";
-        Text[ portuguese ] = "Number of objects";
-        Text[ russian ] = "Êîëè÷åñòâî îáúåêòîâ";
-        Text[ greek ] = "Áñéèìüò áíôéêåéìİíùí";
-        Text[ dutch ] = "Aantal objecten";
-        Text[ french ] = "Nombre d'objets";
-        Text[ spanish ] = "Número de objetos";
-        Text[ finnish ] = "Objektien määrä";
-        Text[ italian ] = "Numero degli oggetti";
-        Text[ danish ] = "Antal objekter";
-        Text[ swedish ] = "Antal objekt";
-        Text[ polish ] = "Liczba obiektów";
-        Text[ portuguese_brazilian ] = "Número de objetos";
-        Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ•°";
-        Text[ korean ] = "ê°œì²´ ìˆ˜";
-        Text[ chinese_simplified ] = "å¯¹è±¡çš„æ•°ç›®";
-        Text[ chinese_traditional ] = "ç‰©ä»¶çš„æ•¸ç›®";
-        Text[ turkish ] = "Neslerin sayısı";
-        Text[ arabic ] = "Number of objects";
-        Text[ catalan ] = "Número d'objectes";
-        Text[ thai ] = "Number of objects";
-        Text[ czech ] = "PoÄet objektÅ¯";
-        Text[ hebrew ] = "Anzahl der Objekte";
-        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-        Text[ slovak ] = "PoÄet objektov";
-        Text[ hungarian ] = "Objektumok szÃ¡ma";
-        Text[ slovenian ] = "Å tevilo predmetov";
+        Text [ de ] = "Anzahl der Objekte" ;
+        Text [ en-US ] = "Number of objects";
     };
     NumericField NF_OLECACHE
     {
@@ -532,69 +235,15 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW8 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text = "%PRODUCTNAME Schnellstart" ;
-        Text [ ENGLISH ] = "%PRODUCTNAME quick launch" ;
-        Text[ english_us ] = "%PRODUCTNAME Quickstarter";
-        Text[ portuguese ] = "%PRODUCTNAME Início rápido";
-        Text[ russian ] = "Áûñòğûé çàïóñê %PRODUCTNAME";
-        Text[ greek ] = "Ïäçãüò ãñŞãïñçò İíáñîçò ôïõ %PRODUCTNAME";
-        Text[ dutch ] = "%PRODUCTNAME SnelStarter";
-        Text[ french ] = "Démarrage rapide de %PRODUCTNAME";
-        Text[ spanish ] = "Inicio rápido de %PRODUCTNAME";
-        Text[ finnish ] = "%PRODUCTNAME -pikakäynnistys";
-        Text[ italian ] = "QuickStart di %PRODUCTNAME";
-        Text[ danish ] = "%PRODUCTNAME Hurtig start";
-        Text[ swedish ] = "Snabbstart av %PRODUCTNAME";
-        Text[ polish ] = "%PRODUCTNAME - Szybkie uruchamianie";
-        Text[ portuguese_brazilian ] = "Início rápido do %PRODUCTNAME";
-        Text[ japanese ] = "%PRODUCTNAME ã‚¯ã‚¤ãƒƒã‚¯èµ·å‹•";
-        Text[ korean ] = "%PRODUCTNAME ë¹ ë¥¸ ì‹œì‘";
-        Text[ chinese_simplified ] = "%PRODUCTNAME å¿«é€Ÿå¯åŠ¨";
-        Text[ chinese_traditional ] = "%PRODUCTNAME å¿«é€Ÿå•“å‹•";
-        Text[ turkish ] = "%PRODUCTNAME hızlı başlatıcı";
-        Text[ arabic ] = "%PRODUCTNAME quick launch";
-        Text[ catalan ] = "Inici ràpid %PRODUCTNAME";
-        Text[ thai ] = "%PRODUCTNAME Quickstarter";
-        Text[ czech ] = "%PRODUCTNAME Quickstarter";
-        Text[ hebrew ] = "%PRODUCTNAME Schnellstart";
-        Text[ hindi ] = "%PRODUCTNAME à¤•à¥à¤·à¤¿à¤ªà¥à¤° à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
-        Text[ slovak ] = "%PRODUCTNAME Quickstarter";
-        Text[ hungarian ] = "%PRODUCTNAME GyorsindÃ­tÃ³";
-        Text[ slovenian ] = "%PRODUCTNAME Quickstarter";
+        Text [ de ] = "%PRODUCTNAME Schnellstart" ;
+        Text [ en-US ] = "%PRODUCTNAME Quickstarter";
     };
     CheckBox CB_QUICKLAUNCH
     {
         Pos = MAP_APPFONT( COL1, ROW9 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
-        Text = "%PRODUCTNAME beim ~Systemstart laden" ;
-        Text [ ENGLISH ] = "Load %PRODUCTNAME at system start-up" ;
-        Text[ english_us ] = "Load %PRODUCTNAME during system start-up";
-        Text[ portuguese ] = "~Carregar %PRODUCTNAME ao iniciar sistema";
-        Text[ russian ] = "Çàãğóæàòü %PRODUCTNAME âî âğåìÿ çàïóñêà ñèñòåìû";
-        Text[ greek ] = "Öüñôùóç ôïõ %PRODUCTNAME êáôÜ ôçí åêêßíçóç ôïõ óõóôŞìáôïò";
-        Text[ dutch ] = "%PRODUCTNAME laden bij ~opstarten";
-        Text[ french ] = "Chargement de %PRODUCTNAME au démarrage du ~système";
-        Text[ spanish ] = "Cargar %PRODUCTNAME al iniciar el sistema";
-        Text[ finnish ] = "Lataa %PRODUCTNAME järjestelmän käynnistyksen yhteydessä";
-        Text[ italian ] = "Carica %PRODUCTNAME all'a~vvio del sistema";
-        Text[ danish ] = "Indlæs %PRODUCTNAME ved systemstart";
-        Text[ swedish ] = "Ladda %PRODUCTNAME vid ~systemstart";
-        Text[ polish ] = "£aduj program %PRODUCTNAME podczas uruchamiania systemu";
-        Text[ portuguese_brazilian ] = "Carregar o %PRODUCTNAME ao iniciar o sistema";
-        Text[ japanese ] = "ã‚·ã‚¹ãƒ†ãƒ èµ·å‹•æ™‚ã« %PRODUCTNAME ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹";
-        Text[ korean ] = "ì‹œìŠ¤í…œ ì‹œì‘ ì‹œ %PRODUCTNAME ë¡œë“œ";
-        Text[ chinese_simplified ] = "ç³»ç»Ÿå¯åŠ¨æ—¶è£…è½½ %PRODUCTNAME";
-        Text[ chinese_traditional ] = "ç³»çµ±å•Ÿå‹•æ™‚è¼‰å…¥ %PRODUCTNAME";
-        Text[ turkish ] = "Sistem açıldığında  %PRODUCTNAME 'i yükle";
-        Text[ arabic ] = "Load %PRODUCTNAME at system start-up";
-        Text[ catalan ] = "Carrega l'%PRODUCTNAME a l'inici del sistema";
-        Text[ thai ] = "Load %PRODUCTNAME during system start-up";
-        Text[ czech ] = "NaÄÃ­st %PRODUCTNAME bÄ›hem spuÅ¡tÄ›nÃ­ systÃ©mu";
-        Text[ hebrew ] = "%PRODUCTNAME beim ~Systemstart laden";
-        Text[ hindi ] = "%PRODUCTNAME à¤•à¥‹ à¤¸à¤¿à¤¸à¥à¤Ÿà¤®à¥ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤¹à¥‹à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
-        Text[ slovak ] = "NaÄÃ­taÅ¥ %PRODUCTNAME poÄas Å¡tartu systÃ©mu";
-        Text[ hungarian ] = "Az %PRODUCTNAME betÃ¶ltÃ©se a rendszer indÃ­tÃ¡sakor";
-        Text[ slovenian ] = "NaloÅ¾i %PRODUCTNAME med zagonom sistema";
+        Text [ de ] = "%PRODUCTNAME beim ~Systemstart laden" ;
+        Text [ en-US ] = "Load %PRODUCTNAME during system start-up";
     };
 };
 
