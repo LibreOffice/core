@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
+ *  last change: $Author: oj $ $Date: 2000-11-17 07:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1584,6 +1584,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 // -------------------------------------------------------------------------
 void ORowSet::approveExecution() throw (RowSetVetoException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aColumnsMutex );
     EventObject aEvt(*this);
     OInterfaceIteratorHelper aApproveIter(m_aApproveListeners);
     while (aApproveIter.hasMoreElements())
