@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:21 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1741,7 +1741,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
         {
         case text::ControlCharacter::PARAGRAPH_BREAK:
         {
-            const String aText( (char)13, 1 );  // '\r' geht auf'm Mac nicht
+            const String aText( (sal_Unicode)13 );  // '\r' geht auf'm Mac nicht
             insertString( xRange, aText, bAbsorb );
 
             return;
@@ -1792,7 +1792,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
                 aRange.nEndPos  = aRange.nStartPos;
 
                 pRange->SetSelection( aRange );
-                const String aText( (char)13, 1 );  // '\r' geht auf'm Mac nicht
+                const String aText( (sal_Unicode)13 );  // '\r' geht auf'm Mac nicht
                 pRange->setString( aText );
 
                 aRange.nStartPos = 0;
