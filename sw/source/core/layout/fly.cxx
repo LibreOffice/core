@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-17 16:09:57 $
+ *  last change: $Author: ama $ $Date: 2001-12-20 16:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,12 +186,25 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 
     //Grosseneinstellung, Fixe groesse ist immer die Breite
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
-#ifndef VERTICAL_LAYOUT
+#ifdef VERTICAL_LAYOUT
+    SwFrm* pTmp = bDerivedVert ? pAnch : this;
+    BOOL bVert = pTmp ? pTmp->IsVertical() : FALSE;
+    if( bVert )
+    {
+        Frm().Width( rFrmSize.GetHeight() );
+        Frm().Height( rFrmSize.GetWidth() );
+    }
+    else
+    {
+        Frm().Width( rFrmSize.GetWidth() );
+        Frm().Height( rFrmSize.GetHeight() );
+    }
+#else
     bVarHeight = TRUE;
     bFixWidth = TRUE;
-#endif
     Frm().Width( rFrmSize.GetWidth() );
     Frm().Height( rFrmSize.GetHeight() );
+#endif
 
     //Hoehe Fix oder Variabel oder was?
     if ( rFrmSize.GetSizeType() == ATT_MIN_SIZE )
@@ -1168,10 +1181,112 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         ASSERT( rSz.Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
 
 #ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
         if( !HasFixSize() )
+        {
+            SwTwips nRemaining = 0;
+            SwTwips nOldHeight = (Frm().*fnRect->fnGetHeight)();
+            long nMinHeight = 0;
+            if( IsMinHeight() )
+            {
+                Size aSz( CalcRel( rFrmSz ) );
+                nMinHeight = aSz.Height();
+            }
+            if ( Lower() )
+            {
+                if ( Lower()->IsColumnFrm() )
+                {
+                    FormatWidthCols( *pAttrs, nUL, nMinHeight );
+                    nRemaining = (Lower()->Frm().*fnRect->fnGetHeight)();
+                }
+                else
+                {
+                    SwFrm *pFrm = Lower();
+                    while ( pFrm )
+                    {   nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
+                        if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
+                            // Dieser TxtFrm waere gern ein bisschen groesser
+                            nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
+                                    - (pFrm->Prt().*fnRect->fnGetHeight)();
+                        else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
+                            nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
+                        pFrm = pFrm->GetNext();
+                    }
+                    if( !nRemaining )
+                        nRemaining = nOldHeight - nUL;
+                }
+                if ( GetDrawObjs() )
+                {
+                    USHORT nCnt = GetDrawObjs()->Count();
+                    SwTwips nTop = (Frm().*fnRect->fnGetTop)();
+                    SwTwips nBorder = (Frm().*fnRect->fnGetHeight)() -
+                                      (Prt().*fnRect->fnGetHeight)();
+                    for ( USHORT i = 0; i < nCnt; ++i )
+                    {
+                        SdrObject *pO = (*GetDrawObjs())[i];
+                        if ( pO->IsWriterFlyFrame() )
+                        {
+                            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                            if( pFly->IsFlyLayFrm() &&
+                                pFly->Frm().Top() != WEIT_WECH )
+                            {
+                                SwTwips nDist = -(pFly->Frm().*fnRect->
+                                    fnBottomDist)( nTop );
+                                if( nDist > nBorder + nRemaining )
+                                    nRemaining = nDist - nBorder;
+                            }
+                        }
+                    }
+                }
+            }
+#ifndef PRODUCT
+            if ( IsMinHeight() )
+            {
+                const long nMinHeightII = CalcRel( rFrmSz ).Height();
+                ASSERT( nMinHeight==nMinHeightII, "FlyFrm::Format: Changed MinHeight" );
+            }
+#endif
+            if( IsMinHeight() && (nRemaining + nUL) < nMinHeight )
+                nRemaining = nMinHeight - nUL;
+            //Weil das Grow/Shrink der Flys die Groessen nicht direkt
+            //einstellt, sondern indirekt per Invalidate ein Format
+            //ausloesst, muessen die Groessen hier direkt eingestellt
+            //werden. Benachrichtung laeuft bereits mit.
+            //Weil bereits haeufiger 0en per Attribut hereinkamen wehre
+            //ich mich ab sofort dagegen.
+            if ( nRemaining < MINFLY )
+                nRemaining = MINFLY;
+            (Prt().*fnRect->fnSetHeight)( nRemaining );
+            nRemaining -= (Frm().*fnRect->fnGetHeight)();
+            (Frm().*fnRect->fnAddBottom)( nRemaining + nUL );
+            bValidSize = TRUE;
+        }
+        else
+        {
+            bValidSize = TRUE;  //Fixe Frms formatieren sich nicht.
+                                //Flys stellen ihre Groesse anhand des Attr ein.
+            Size aSz( CalcRel( rFrmSz ) );
+            SwTwips nNewSize = bVert ? aSz.Height() : aSz.Width();
+            nNewSize -= nUL;
+            if( nNewSize < MINFLY )
+                nNewSize = MINFLY;
+            (Prt().*fnRect->fnSetHeight)( nNewSize );
+            nNewSize += nUL - (Frm().*fnRect->fnGetHeight)();
+            (Frm().*fnRect->fnAddBottom)( nNewSize );
+        }
+        if ( !bFormatHeightOnly )
+        {
+            Size aSz( CalcRel( rFrmSz ) );
+            SwTwips nNewSize = aSz.Width();
+            nNewSize -= nLR;
+            if( nNewSize < MINFLY )
+                nNewSize = MINFLY;
+            (Prt().*fnRect->fnSetWidth)( nNewSize );
+            nNewSize += nLR - (Frm().*fnRect->fnGetWidth)();
+            (Frm().*fnRect->fnAddRight)( nNewSize );
+        }
 #else
         if ( !HasFixSize( pHeight ) )
-#endif
         {
             //Die Groesse in der VarSize wird durch den Inhalt plus den
             //Raendern bestimmt.
@@ -1261,6 +1376,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             Frm().Width( Max( CalcRel( rFrmSz ).Width(), nMin ) );
             Prt().Width( Frm().Width() - (nLR) );
         }
+#endif
     }
     ColUnlock();
 }
@@ -1318,7 +1434,13 @@ void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl )
         do
         {
             pLast = pFrm;
+#ifdef VERTICAL_LAYOUT
+            if( pFrm->IsVertical() ?
+                ( pFrm->GetUpper()->Prt().Height() != pFrm->Frm().Height() )
+                : ( pFrm->GetUpper()->Prt().Width() != pFrm->Frm().Width() ) )
+#else
             if ( pFrm->GetUpper()->Prt().Width() != pFrm->Frm().Width() )
+#endif
             {
                 pFrm->Prepare( PREP_FIXSIZE_CHG );
                 pFrm->_InvalidateSize();
@@ -1471,7 +1593,9 @@ void SwFlyFrm::MakeFlyPos()
     if ( !bValidPos )
     {   bValidPos = TRUE;
         GetAnchor()->Calc();
-
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( GetAnchor() );
+#endif
             //Die Werte in den Attributen muessen ggf. upgedated werden,
             //deshalb werden hier Attributinstanzen und Flags benoetigt.
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
@@ -1494,12 +1618,21 @@ void SwFlyFrm::MakeFlyPos()
             SwTwips nYPos = aVert.GetPos();
             if ( bVertPrt )
             {
+#ifdef VERTICAL_LAYOUT
+                nYPos += (GetAnchor()->*fnRect->fnGetTopMargin)();
+                if( GetAnchor()->IsPageFrm() && !bVert )
+#else
                 nYPos += GetAnchor()->Prt().Top();
                 if( GetAnchor()->IsPageFrm() )
+#endif
                 {
                     SwFrm* pPrtFrm = ((SwPageFrm*)GetAnchor())->Lower();
                     if( pPrtFrm && pPrtFrm->IsHeaderFrm() )
+#ifdef VERTICAL_LAYOUT
+                        nYPos += (pPrtFrm->Frm().*fnRect->fnGetHeight)();
+#else
                         nYPos += pPrtFrm->Frm().Height();
+#endif
                 }
             }
             if( nYPos < 0 )
@@ -1507,6 +1640,71 @@ void SwFlyFrm::MakeFlyPos()
               if( !bFlyAtFly  )
 #endif
                 nYPos = 0;
+#ifdef VERTICAL_LAYOUT
+            if( bVert )
+                aRelPos.X() = bRev ? nYPos : -Frm().Width()-nYPos;
+            else
+                aRelPos.Y() = nYPos;
+        }
+        else
+        {   //Zuerst den Bezugsrahmen festlegen (PrtArea oder Frame)
+            SwTwips nRel, nAdd;
+            if ( bVertPrt )
+            {   nRel = (GetAnchor()->Prt().*fnRect->fnGetHeight)();
+                nAdd = (GetAnchor()->*fnRect->fnGetTopMargin)();
+                if( GetAnchor()->IsPageFrm() && !bVert )
+                {
+                    // Wenn wir am SeitenTextBereich ausgerichtet sind,
+                    // sollen Kopf- und Fusszeilen _nicht_ mit zaehlen.
+                    SwFrm* pPrtFrm = ((SwPageFrm*)GetAnchor())->Lower();
+                    while( pPrtFrm )
+                    {
+                        if( pPrtFrm->IsHeaderFrm() )
+                        {
+                            nRel -= pPrtFrm->Frm().Height();
+                            nAdd += pPrtFrm->Frm().Height();
+                        }
+                        else if( pPrtFrm->IsFooterFrm() )
+                            nRel -= pPrtFrm->Frm().Height();
+                        pPrtFrm = pPrtFrm->GetNext();
+                    }
+                }
+            }
+            else
+            {   nRel = (GetAnchor()->Frm().*fnRect->fnGetHeight)();
+                nAdd = 0;
+            }
+            // Bei rahmengebunden Rahmen wird nur vertikal unten oder zentriert
+            // ausgerichtet, wenn der Text durchlaeuft oder der Anker eine feste
+            // Hoehe besitzt.
+            SwTwips nRelPosY;
+            SwTwips nFrmHeight = (aFrm.*fnRect->fnGetHeight)();
+            if( bFlyAtFly && VERT_TOP != aVert.GetVertOrient() &&
+                SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() &&
+                !GetAnchor()->HasFixSize() )
+                nRelPosY = rUL.GetUpper();
+            else if ( aVert.GetVertOrient() == VERT_CENTER )
+                nRelPosY = (nRel / 2) - (nFrmHeight / 2);
+            else if ( aVert.GetVertOrient() == VERT_BOTTOM )
+                nRelPosY = nRel - (nFrmHeight + rUL.GetLower());
+            else
+                nRelPosY = rUL.GetUpper();
+            nRelPosY += nAdd;
+
+            if ( aVert.GetPos() != nRelPosY )
+            {   aVert.SetPos( nRelPosY );
+                bVertChgd = TRUE;
+            }
+            if( bVert )
+            {
+                if( !bRev )
+                    nRelPosY = - nRelPosY - nFrmHeight;
+                aRelPos.X() = nRelPosY;
+            }
+            else
+                aRelPos.Y() = nRelPosY;
+        }
+#else
             aRelPos.Y() = nYPos;
         }
         else
@@ -1542,11 +1740,7 @@ void SwFlyFrm::MakeFlyPos()
             // Hoehe besitzt.
             if( bFlyAtFly && VERT_TOP != aVert.GetVertOrient() &&
                 SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() &&
-#ifdef VERTICAL_LAYOUT
-                !GetAnchor()->HasFixSize() )
-#else
                 !GetAnchor()->HasFixSize( pHeight ) )
-#endif
                 aRelPos.Y() = rUL.GetUpper();
             else if ( aVert.GetVertOrient() == VERT_CENTER )
                 aRelPos.Y() = (nRel / 2) - (aFrm.Height() / 2);
@@ -1561,6 +1755,7 @@ void SwFlyFrm::MakeFlyPos()
                 bVertChgd = TRUE;
             }
         }
+#endif
 
         //Fuer die Hoehe der Seiten im Browser muessen wir etwas tricksen. Das
         //Grow muessen wir auf den Body rufen; wegen ggf. eingeschalteter
@@ -1596,8 +1791,13 @@ void SwFlyFrm::MakeFlyPos()
             case PRTAREA:
             case REL_PG_PRTAREA:
             {
+#ifdef VERTICAL_LAYOUT
+                nRel = (GetAnchor()->Prt().*fnRect->fnGetWidth)();
+                nAdd = (GetAnchor()->*fnRect->fnGetLeftMargin)();
+#else
                 nRel = GetAnchor()->Prt().Width();
                 nAdd = GetAnchor()->Prt().Left();
+#endif
                 break;
             }
             case REL_PG_LEFT:
@@ -1609,24 +1809,77 @@ void SwFlyFrm::MakeFlyPos()
             {
                 if ( bTmpToggle )    // linker Seitenrand
                 {
+#ifdef VERTICAL_LAYOUT
+                    nRel = (GetAnchor()->*fnRect->fnGetLeftMargin)();
+#else
                     nRel = GetAnchor()->Prt().Left();
+#endif
                     nAdd = 0;
                 }
                 else            // rechter Seitenrand
                 {
+#ifdef VERTICAL_LAYOUT
+                    nRel = (GetAnchor()->Frm().*fnRect->fnGetWidth)();
+                    nAdd = (GetAnchor()->Prt().*fnRect->fnGetRight)();
+#else
                     nRel = GetAnchor()->Frm().Width();
                     nAdd = GetAnchor()->Prt().Right();
+#endif
                     nRel -= nAdd;
                 }
                 break;
             }
             default:
             {
+#ifdef VERTICAL_LAYOUT
+                nRel = (GetAnchor()->Frm().*fnRect->fnGetWidth)();
+#else
                 nRel = GetAnchor()->Frm().Width();
+#endif
                 nAdd = 0;
                 break;
             }
         }
+#ifdef VERTICAL_LAYOUT
+        SwTwips nFrmWidth = (Frm().*fnRect->fnGetWidth)();
+        if( bRev )
+        {
+            nFrmWidth = -nFrmWidth;
+            nRel = -nRel;
+            nAdd = -nAdd;
+        }
+        SwTwips nRelX;
+        if ( aHori.GetHoriOrient() == HORI_NONE )
+        {
+            if( bToggle )
+                nRelX = nRel - nFrmWidth - aHori.GetPos();
+            else
+                nRelX = aHori.GetPos();
+        }
+        else if ( HORI_CENTER == eHOri )
+            nRelX = (nRel / 2) - (nFrmWidth / 2);
+        else if ( HORI_RIGHT == eHOri )
+            nRelX = nRel - ( nFrmWidth + rLR.GetRight() );
+        else
+            nRelX = rLR.GetLeft();
+        nRelX += nAdd;
+
+        if( ( nRelX < 0 ) != bRev )
+            nRelX = 0;
+        if( bVert )
+            aRelPos.Y() = nRelX;
+        else
+            aRelPos.X() = nRelX;
+        if ( HORI_NONE != aHori.GetHoriOrient() &&
+            aHori.GetPos() != nRelX )
+        {   aHori.SetPos( nRelX );
+            bHoriChgd = TRUE;
+        }
+        //Die Absolute Position ergibt sich aus der absoluten Position des
+        //Ankers plus der relativen Position.
+        aFrm.Pos( aRelPos );
+        aFrm.Pos() += (GetAnchor()->Frm().*fnRect->fnGetPos)();
+#else
         if ( aHori.GetHoriOrient() == HORI_NONE )
         {
             if( bToggle )
@@ -1653,6 +1906,7 @@ void SwFlyFrm::MakeFlyPos()
         //Ankers plus der relativen Position.
         aFrm.Pos( aRelPos );
         aFrm.Pos() += GetAnchor()->Frm().Pos();
+#endif
 
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
         //zu diesem Zeitpunkt natuerlich kein Modify verschickt werden.

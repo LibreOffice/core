@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-17 16:10:41 $
+ *  last change: $Author: ama $ $Date: 2001-12-20 16:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,10 +465,16 @@ void __EXPORT SwVirtFlyDrawObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL ) cons
 void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
     MoveRect( aOutRect, rSiz );
-
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( GetFlyFrm() )
+    const Point aOldPos( (GetFlyFrm()->Frm().*fnRect->fnGetPos)() );
+    const SwRect aFlyRect( aOutRect );
+    const Point aNewPos( (aFlyRect.*fnRect->fnGetPos)() );
+#else
     const Point aOldPos( GetFlyFrm()->Frm().Pos() );
     const Point aNewPos( aOutRect.TopLeft() );
     const SwRect aFlyRect( aOutRect );
+#endif
 
     ASSERT( aOldPos != aNewPos, "PosUnchanged." );
 
@@ -482,9 +488,6 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     //Bei Absatzgebundenen Flys muss ausgehend von der neuen Position ein
     //neuer Anker gesetzt werden. Anker und neue RelPos werden vom Fly selbst
     //berechnet und gesetzt.
-#ifdef VERTICAL_LAYOUT
-    SWRECTFN( GetFlyFrm()->GetAnchor() )
-#endif
     if( GetFlyFrm()->IsFlyAtCntFrm() )
         ((SwFlyAtCntFrm*)GetFlyFrm())->SetAbsPos( aNewPos );
     else
@@ -608,10 +611,18 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 {
     ResizeRect( aOutRect, rRef, xFact, yFact );
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( GetFlyFrm() )
+    const Point aNewPos( bVert ? aOutRect.Right() + 1 : aOutRect.Left(),
+                         aOutRect.Top() );
+    SwTwips nWidth = aOutRect.Right() - aOutRect.Left() + 1;
+    SwTwips nHeight = aOutRect.Bottom()- aOutRect.Top() + 1;
+    Size aSz = bVert ? Size( nHeight, nWidth ) : Size( nWidth, nHeight );
+#else
     const Point aNewPos( aOutRect.TopLeft() );
-
     Size aSz( aOutRect.Right() - aOutRect.Left() + 1,
               aOutRect.Bottom()- aOutRect.Top()  + 1 );
+#endif
     if( aSz != GetFlyFrm()->Frm().SSize() )
     {
         //Die Breite darf bei Spalten nicht zu schmal werden
@@ -670,10 +681,27 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     }
 
     //Position kann auch veraendert sein!
+#ifdef VERTICAL_LAYOUT
+    const Point aOldPos( (GetFlyFrm()->Frm().*fnRect->fnGetPos)() );
+#else
     const Point aOldPos( GetFlyFrm()->Frm().Pos() );
+#endif
     if ( aNewPos != aOldPos )
     {
         //Kann sich durch das ChgSize veraendert haben!
+#ifdef VERTICAL_LAYOUT
+        if( bVert )
+        {
+            if( aOutRect.TopRight() != aNewPos )
+            {
+                SwTwips nDeltaX = aNewPos.X() - aOutRect.Right();
+                SwTwips nDeltaY = aNewPos.Y() - aOutRect.Top();
+                MoveRect( aOutRect, Size( nDeltaX, nDeltaY ) );
+            }
+        }
+        else
+#else
+#endif
         if ( aOutRect.TopLeft() != aNewPos )
             aOutRect.SetPos( aNewPos );
         bInResize = TRUE;

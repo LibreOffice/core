@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-14 10:46:38 $
+ *  last change: $Author: ama $ $Date: 2001-12-20 16:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ void SwFlyFreeFrm::MakeAll()
                 const Size aTmp( CalcRel( *pSz ) );
                 const SwTwips nMin = MINFLY + rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
 #ifdef VERTICAL_LAYOUT
-                long nDiff = bVert ? aTmp.Height() : aTmp.Width();
+                long nDiff = aTmp.Width();
                 if( nDiff < nMin )
                     nDiff = nMin;
                 nDiff -= (aFrm.*fnRect->fnGetWidth)();
