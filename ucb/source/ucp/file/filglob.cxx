@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:21:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,6 @@ namespace {
     {
         OSL_ENSURE(pShell,"specification violation");
 
-        rtl::OUString aUri;
         rtl::OUString aResourceName;
         rtl::OUString aResourceType;
         sal_Bool      bRemovable;
@@ -166,8 +165,7 @@ namespace {
         bool bResourceType = false;
         bool bRemoveProperty = false;
 
-        if (rPhysicalUrl == aUri
-            && osl::FileBase::getSystemPathFromFileURL(
+        if (osl::FileBase::getSystemPathFromFileURL(
                 rPhysicalUrl,
                 aResourceName)
             == osl::FileBase::E_None)
@@ -218,7 +216,7 @@ namespace {
             <<= PropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "Uri")),
                               -1,
-                              makeAny(aUri),
+                              makeAny(rPhysicalUrl),
                               PropertyState_DIRECT_VALUE);
         if (bResourceName)
             aArguments[i++]
