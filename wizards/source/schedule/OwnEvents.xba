@@ -208,7 +208,7 @@ GETDATEFORMAT:
 	GetDateUnits() =SBDATEUNDEFINED
 NODATEFORMAT:
 	If Err &lt;&gt; 0 Then
-	    MsgBox(&quot;Error: Datum : &apos; &quot; &amp;  LocDateStr &amp; &quot;&apos; is not a valid Format&quot;, 16, sWizardTitle)
+	    MsgBox(&quot;Error: Date : &apos; &quot; &amp;  LocDateStr &amp; &quot;&apos; is not a valid Format&quot;, 16, sWizardTitle)
 		Resume GETRETURNVALUE
 GETRETURNVALUE:
 		GetDateUnits() = SBDATEUNDEFINED

@@ -87,15 +87,14 @@ Dim iThisMonth as Integer
 	CalChoosenLand = -2
 	CalLoadOwnData()
 	
-&apos;	sCurLanguage = &quot;ja&quot;
 	With DlgCalModel
 		.cmdDelete.Enabled = False
 		.lstMonth.StringItemList() = cCalShortMonthNames()
 		Select Case sCurLangLocale
-			Case &quot;ja&quot;
+			Case cLANGUAGE_JAPANESE
 				.lstOwnData.FontName = &quot;HG Mincho Light J&quot;
 				.txtEvent.FontName = &quot;HG Mincho Light J&quot;
-			Case &quot;zh&quot;
+			Case cLANGUAGE_CHINESE
 				If oDocument.CharLocale.Country = &quot;CN&quot; Then
 					.lstOwnData.FontName = &quot;HG MSung Light SC&quot;
 					.txtEvent.FontName = &quot;HG MSung Light SC&quot;
@@ -136,30 +135,45 @@ Sub SetupNumberFormatter(sCurLangLocale as String, sCurCountryLocale as String)
 Dim oFormats as Object
 Dim DateFormatString as String
 	oFormats = oDocument.getNumberFormats()
-
 	Select Case sCurLangLocale
 		Case cLANGUAGE_GERMAN
 			DateFormatString = &quot;TT.MMM&quot;
 		Case cLANGUAGE_ENGLISH
-			DateFormatString = &quot;DD/MMM&quot;
+			DateFormatString = &quot;MMM DD&quot;
 		Case cLANGUAGE_FRENCH
+			DateFormatString = &quot;JJ/MMM&quot;
 		Case cLANGUAGE_ITALIAN
+			DateFormatString = &quot;GG/MMM&quot;
 		Case cLANGUAGE_SPANISH
+			DateFormatString = &quot;DD/MMM&quot;
 		Case cLANGUAGE_PORTUGUESE
+			DateFormatString = &quot;DD-MMM&quot;
 		Case cLANGUAGE_DUTCH
+			DateFormatString = &quot;DD-MMM&quot;
 		Case cLANGUAGE_SWEDISH
+			DateFormatString = &quot;MMM DD&quot;
 		Case cLANGUAGE_DANISH
+			DateFormatString = &quot;DD-MMM&quot;
 		Case cLANGUAGE_POLISH
+			DateFormatString = &quot;MMM DD&quot;
 		Case cLANGUAGE_RUSSIAN
+			DateFormatString = &quot;MMM DD&quot;
 		Case cLANGUAGE_JAPANESE
+			DateFormatString = &quot;M月D日&quot;
 		Case cLANGUAGE_CHINESE
-&apos;			If sCurCountryLocale = &quot;TW&quot; Then
-&apos;			Else
-&apos;			End If
+			If sCurCountryLocale = &quot;TW&quot; Then
+				DateFormatString = &quot;MMMMD&quot; &amp;&quot;&quot;&quot;&quot; &amp; &quot;日&quot; &amp; &quot;&quot;&quot;&quot;
+			Else
+				DateFormatString = &quot;M&quot; &amp; &quot;&quot;&quot;&quot; &amp; &quot;月&quot; &amp; &quot;&quot;&quot;&quot; &amp; &quot;D&quot; &amp;&quot;&quot;&quot;&quot; &amp; &quot;日&quot; &amp; &quot;&quot;&quot;&quot;
+			End If
 		Case cLANGUAGE_GREEK
+			DateFormatString = &quot;DD/MMM&quot;		
 		Case cLANGUAGE_TURKISH
+			DateFormatString = &quot;DD/MMM&quot;		
 		Case cLANGUAGE_POLISH
+			DateFormatString = &quot;MMM DD&quot;		
 		Case cLANGUAGE_FINNISH
+			DateFormatString = &quot;PP.KKK&quot;		
 	End Select
 
 	lDateFormat = AddNumberFormat(oFormats, DateFormatString, oDocument.CharLocale)

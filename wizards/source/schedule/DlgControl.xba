@@ -16,14 +16,28 @@ End Sub
 
 Sub CalcmdDeleteSelect()
 Dim MsgBoxResult as Integer
+Dim bDoEnable as Boolean
+Dim iSel as Integer
+Dim MaxIndex as Integer
 	If Ubound(DlgCalModel.lstOwnData.SelectedItems()) &gt; -1 Then
 		MsgBoxResult = MsgBox(cCalSubcmdDeleteSelect_DeleteSelEntry$, 4+32, cCalSubcmdDeleteSelect_DeleteSelEntryTitle$)
 		If MsgBoxResult = 6 Then
+			iSel = DlgCalModel.lstOwnData.SelectedItems(0)
 			DlgCalModel.lstOwnData.StringItemList() = RemoveSelected(DlgCalModel.lstOwnData)
 			&apos; Flag to store the new data
 			bCalOwnDataChanged = True
-			DlgCalModel.cmdDelete.Enabled = Ubound(DlgCalModel.lstOwnData.StringItemList()) &gt; -1
-			Call CalClearInputMask()
+			bDoEnable = Ubound(DlgCalModel.lstOwnData.StringItemList()) &gt; -1
+			DlgCalModel.cmdDelete.Enabled = bDoEnable
+			If bDoEnable Then
+				MaxIndex = Ubound(DlgCalModel.lstOwnData.StringItemList()) 
+				If iSel &gt; MaxIndex Then
+					iSel = MaxIndex
+				End If
+				DlgCalendar.GetControl(&quot;lstOwnData&quot;).SelectItemPos(iSel, True)
+				CalUpdateNewEventFrame()
+			Else
+				Call CalClearInputMask()
+			End If
 		End If
 	End If
 End Sub
@@ -145,7 +159,7 @@ Dim DateStr as String
 				.cmdInsert.Enabled = True
 			Else
 				Call CalClearInputMask()
-				.cmdDelete.Enabled = False
+				.cmdDelete.Enabled = True
 			End If
 		End If
 	End With
