@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     // Biff8
     SvStorage*              pPivotCacheStorage;
     XclImpPivotCacheList*   pImpPivotCacheList;     // pivot caches for import
-
-    UINT32              nCondRangeCnt;
-    UINT16              nLastCond;
-    String              GetCondFormStyleName( const UINT16 nCondCnt );  // -> exctools.cxx
 
     // Erweiterungen fuer Export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
