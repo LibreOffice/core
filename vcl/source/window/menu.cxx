@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-14 11:13:17 $
+ *  last change: $Author: ssa $ $Date: 2001-11-26 11:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,17 @@ static void ImplSetMenuItemData( MenuItemData* pData, USHORT nPos )
         pData->eType = MENUITEM_STRINGIMAGE;
 }
 
+static ULONG ImplChangeTipTimeout( ULONG nTimeout )
+{
+    AllSettings aAllSettings( Application::GetSettings() );
+    HelpSettings aHelpSettings( aAllSettings.GetHelpSettings() );
+    ULONG nRet = aHelpSettings.GetTipTimeout();
+    aHelpSettings.SetTipTimeout( nTimeout );
+    aAllSettings.SetHelpSettings( aHelpSettings );
+    Application::SetSettings( aAllSettings );
+    return nRet;
+}
+
 static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighlightedItem, const HelpEvent& rHEvt )
 {
     BOOL bDone = FALSE;
@@ -466,14 +477,22 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
         if( pMenu->GetHelpText( nId ).Len() )
             Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
         else
+        {
+            // give user a chance to read the full filename
+            ULONG oldTimeout = ImplChangeTipTimeout( 60000 );
             Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+            ImplChangeTipTimeout( oldTimeout );
+        }
         bDone = TRUE;
     }
     else if ( ( rHEvt.GetMode() & HELPMODE_QUICK ) && pMenuWindow )
     {
         Point aPos = rHEvt.GetMousePosPixel();
         Rectangle aRect( aPos, Size() );
+        // give user a chance to read the full filename
+        ULONG oldTimeout = ImplChangeTipTimeout( 60000 );
         Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+        ImplChangeTipTimeout( oldTimeout );
         bDone = TRUE;
     }
     else if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
