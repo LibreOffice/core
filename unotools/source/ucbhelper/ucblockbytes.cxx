@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-19 11:26:26 $
+ *  last change: $Author: mba $ $Date: 2000-10-19 17:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,7 @@ public:
     virtual void SAL_CALL   onTerminated();
     virtual void SAL_CALL   run();
     void                    Cancel();
+    void                    DoIt();
 };
 
 //----------------------------------------------------------------------------
@@ -367,42 +368,47 @@ void CommandThread_Impl::run()
     m_bRunning = sal_True;
 
     if( !m_bCanceled && schedule() )
-    {
-        Any aParam;
-        aParam <<= m_aArgument;
-        Any aResult;
-        bool bException = false;
-        bool bAborted = false;
-
-        m_pContent = new ::ucb::Content( m_xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
-
-        try
-        {
-            aResult = m_pContent->executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("open") ), aParam );
-        }
-        catch ( CommandAbortedException )
-        {
-            bAborted = true;
-        }
-        catch ( Exception )
-        {
-            bException = true;
-        }
-
-        if ( bAborted || bException )
-        {
-            if( m_xHandler.Is() )
-                m_xHandler->Handle( UcbLockBytesHandler::CANCEL, m_xLockBytes );
-
-            Reference < XInputStream > aDummy;
-            Reference < XActiveDataSink > ::query(m_aArgument.Sink)->setInputStream( aDummy );
-        }
-
-        Reference < XActiveDataControl > ::query(m_aArgument.Sink)->terminate();
-    }
+        DoIt();
 
     m_bRunning = sal_False;
 }
+
+
+void CommandThread_Impl::DoIt()
+{
+    Any aParam;
+    aParam <<= m_aArgument;
+    Any aResult;
+    bool bException = false;
+    bool bAborted = false;
+
+    m_pContent = new ::ucb::Content( m_xContent, new UcbTaskEnvironment( m_xInteract, m_xProgress ) );
+
+    try
+    {
+        aResult = m_pContent->executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("open") ), aParam );
+    }
+    catch ( CommandAbortedException )
+    {
+        bAborted = true;
+    }
+    catch ( Exception )
+    {
+        bException = true;
+    }
+
+    if ( bAborted || bException )
+    {
+        if( m_xHandler.Is() )
+            m_xHandler->Handle( UcbLockBytesHandler::CANCEL, m_xLockBytes );
+
+        Reference < XInputStream > aDummy;
+        Reference < XActiveDataSink > ::query(m_aArgument.Sink)->setInputStream( aDummy );
+    }
+
+    Reference < XActiveDataControl > ::query(m_aArgument.Sink)->terminate();
+}
+
 
 //----------------------------------------------------------------------------
 void CommandThread_Impl::onTerminated()
@@ -770,5 +776,40 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     pThread->create();
     return xLockBytes;
 }
+
+SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode, UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+{
+    SvStream* pStream = NULL;
+    try
+    {
+        ::ucb::Content* pContent = new ::ucb::Content( rFileName, Reference < XCommandEnvironment >() );
+        UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( pContent->get(), pHandler );
+        if ( xLockBytes.Is() )
+        {
+            xLockBytes->SetSynchronMode( !pHandler || bForceSynchron );
+            pStream = new SvStream( xLockBytes );
+        }
+    }
+    catch( ::ucb::ContentCreationException e )
+    {
+        if ( e.getReason() == ::ucb::ContentCreationException::NO_CONTENT_BROKER || e.getReason() == ::ucb::ContentCreationException::NO_CONTENT_PROVIDER )
+            pStream = new SvFileStream( rFileName, eOpenMode );
+    }
+    catch ( Exception e )
+    {
+        DBG_ERROR( "Any other exception!" );
+    }
+
+    return pStream;
+}
+
+SvStream* UcbStreamHelper::CreateStream( Reference < XInputStream > xStream, UcbLockBytesHandler* pHandler )
+{
+    UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream, pHandler );
+    if ( xLockBytes.Is() )
+        return new SvStream( xLockBytes );
+    else
+        return NULL;
+};
 
 };

@@ -135,6 +135,13 @@ public:
 #endif
 };
 
+class UcbStreamHelper : public SvStream
+{
+public:
+    static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode, UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
+    static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream, UcbLockBytesHandler* pHandler=0 );
+};
+
 //----------------------------------------------------------------------------
 SV_IMPL_REF( UcbLockBytes );
 
