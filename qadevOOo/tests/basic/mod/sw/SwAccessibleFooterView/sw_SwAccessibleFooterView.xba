@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sw_SwAccessibleFooterView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:03:07 $ 
+'*  last change:$Date: 2003-06-11 16:29:41 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -100,7 +100,9 @@ On Error Goto ErrHndl
     Dim xRoot As Object
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 102)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+                                              com.sun.star.accessibility.AccessibleRole.FOOTER)
+
 Exit Sub
 ErrHndl:
     Test.Exception()
