@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-03 09:36:13 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:30:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -665,6 +665,20 @@ sub put_productname_into_setupini
 }
 
 ##########################################################################
+# Writing the productcode into setup.ini
+##########################################################################
+
+sub put_productcode_into_setupini
+{
+    my ($setupinifile) = @_;
+
+    my $productcode = $installer::globals::productcode;
+    my $line = "productcode=" . $productcode . "\n";
+
+    push(@{$setupinifile}, $line);
+}
+
+##########################################################################
 # Writing the number of languages into setup.ini
 ##########################################################################
 
@@ -730,6 +744,7 @@ sub create_setup_ini
     put_instmsiapath_into_setupini($setupinifile);
     put_msiversion_into_setupini($setupinifile);
     put_productname_into_setupini($setupinifile, $allvariableshashref);
+    put_productcode_into_setupini($setupinifile);
 
     $line = "\[languages\]\n";
     push(@setupinifile, $line);
@@ -835,22 +850,21 @@ sub copy_child_projects_into_installset
     # the source directory is defined with the parameter "-msifiles"
     # in the variable $installer::globals::msifilespath
 
-    @copydirs = ();
-    push(@copydirs, "java");
-    push(@copydirs, "adabas");
+    # adding Java
 
-    for ( my $i = 0; $i <= $#copydirs; $i++ )
-    {
-        my $sourcedir = $installer::globals::msifilespath . $installer::globals::separator . $copydirs[$i];
+    my $sourcefile = $installer::globals::msifilespath . $installer::globals::separator . "java2" . $installer::globals::separator . $installer::globals::javafilename;
+    if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java child project file not found: $sourcefile !", "copy_child_projects_into_installset"); }
+    my $destdir = $installdir . $installer::globals::separator . "java";
+    if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
+    installer::systemactions::copy_one_file($sourcefile, $destdir);
 
-        if ( ! -d $sourcedir ) { installer::exiter::exit_program("ERROR: Child project directory not found: $sourcedir !", "copy_child_projects_into_installset"); }
+    # adding Adabas ( complete directory )
 
-        my $destdir = $installdir . $installer::globals::separator . $copydirs[$i];
-
-        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-
-        installer::systemactions::copy_directory($sourcedir, $destdir);
-    }
+    my $sourcedir = $installer::globals::msifilespath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
+    if ( ! -d $sourcedir ) { installer::exiter::exit_program("ERROR: Adabas child project file not found: $sourcedir !", "copy_child_projects_into_installset"); }
+    $destdir = $installdir . $installer::globals::separator . "adabas";
+    if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
+    installer::systemactions::copy_directory($sourcedir, $destdir);
 }
 
 #################################################################
