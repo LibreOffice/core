@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 11:53:45 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@
 #include <unoforou.hxx>
 #endif
 #include "svdotext.hxx"
+#include "svdpage.hxx"
+#include "editeng.hxx"
 
 #include "unotext.hxx"
 
@@ -148,16 +150,16 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
     if( pObj && !bDataValid )
     {
         OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
-        if( pOutlinerParaObject )
+        if( pOutlinerParaObject && !pObj->IsEmptyPresObj() )
         {
             pOutliner->SetText( *pOutlinerParaObject );
         }
         else
         {
             // set objects style sheet on empty outliner
-            pOutliner->SetStyleSheet( 0, pObj->GetStyleSheet());
+            pOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)pObj->GetModel()->GetStyleSheetPool() );
+            pOutliner->SetStyleSheet( 0, pObj->GetPage()->GetTextStyleSheetForObject( pObj ) );
         }
-
 
         bDataValid = TRUE;
     }
@@ -170,8 +172,13 @@ void SvxTextEditSource::UpdateData()
 {
     if( pOutliner && pObj && !bDestroyed )
     {
-        OutlinerParaObject* pOutlinerParaObject = pOutliner->CreateParaObject();
-        pObj->SetOutlinerParaObject( pOutlinerParaObject );
+        if( pOutliner->GetParagraphCount() != 1 || pOutliner->GetEditEngine().GetTextLen( 0 ) )
+            pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );
+        else
+            pObj->SetOutlinerParaObject( NULL );
+
+        if( pObj->IsEmptyPresObj() )
+            pObj->SetEmptyPresObj(sal_False);
     }
 }
 
