@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:19:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,9 @@
 #define HID_PACKAGE_MANAGER_TREELISTBOX             (HID_DESKTOP_START +   1)
 #define HID_PACKAGE_MANAGER_PROGRESS                (HID_DESKTOP_START +   2)
 #define HID_PACKAGE_MANAGER_PROGRESS_CANCEL         (HID_DESKTOP_START +   3)
+#define HID_PACKAGE_MANAGER_MENU_ITEM               (HID_DESKTOP_START +   4)
 
-#define ACT_DESKTOP_HID_END HID_PACKAGE_MANAGER_PROGRESS_CANCEL
+#define ACT_DESKTOP_HID_END HID_PACKAGE_MANAGER_MENU_ITEM
 
 // check bounds:
 #if ACT_DESKTOP_HID_END > HID_DESKTOP_END
