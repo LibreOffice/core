@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-28 12:31:25 $
+ *  last change: $Author: pl $ $Date: 2002-06-05 11:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,6 +772,30 @@ void ValueSet::ImplDrawSelect()
     Rectangle               aRect = pItem->maRect;
     Control::SetFillColor();
 
+    Color aDoubleColor( rStyleSettings.GetHighlightColor() );
+    Color aSingleColor( rStyleSettings.GetHighlightTextColor() );
+    if( ! mbDoubleSel )
+    {
+        /*
+         *  #99777# contrast enhancement for thin mode
+         */
+        const Wallpaper& rWall = GetDisplayBackground();
+        if( ! rWall.IsBitmap() && ! rWall.IsGradient() )
+        {
+            const Color& rBack = rWall.GetColor();
+            if( rBack.IsDark() && ! aDoubleColor.IsBright() )
+            {
+                aDoubleColor = Color( COL_WHITE );
+                aSingleColor = Color( COL_BLACK );
+            }
+            else if( rBack.IsBright() && ! aDoubleColor.IsDark() )
+            {
+                aDoubleColor = Color( COL_BLACK );
+                aSingleColor = Color( COL_WHITE );
+            }
+        }
+    }
+
     // Selectionsausgabe festlegen
     WinBits nStyle = GetStyle();
     if ( nStyle & WB_RADIOSEL )
@@ -793,7 +817,7 @@ void ValueSet::ImplDrawSelect()
 
         if ( bDrawSel )
         {
-            SetLineColor( rStyleSettings.GetHighlightColor() );
+            SetLineColor( aDoubleColor );
             aRect.Left()++;
             aRect.Top()++;
             aRect.Right()--;
@@ -813,7 +837,7 @@ void ValueSet::ImplDrawSelect()
             if ( mbBlackSel )
                 SetLineColor( Color( COL_BLACK ) );
             else
-                SetLineColor( rStyleSettings.GetHighlightColor() );
+                SetLineColor( aDoubleColor );
             DrawRect( aRect );
         }
         if ( mbDoubleSel )
@@ -851,7 +875,7 @@ void ValueSet::ImplDrawSelect()
             if ( mbBlackSel )
                 SetLineColor( Color( COL_WHITE ) );
             else
-                SetLineColor( rStyleSettings.GetHighlightTextColor() );
+                SetLineColor( aSingleColor );
         }
         else
             SetLineColor( Color( COL_LIGHTGRAY ) );
