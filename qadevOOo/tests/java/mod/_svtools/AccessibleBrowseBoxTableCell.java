@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxTableCell.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:32:50 $
+ *  last change:$Date: 2003-09-08 12:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,21 @@
 
 package mod._svtools;
 
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XControlModel;
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
@@ -79,24 +88,6 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
-import com.sun.star.view.XControlAccess;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DesktopTools;
-import util.FormTools;
-import util.SOfficeFactory;
-import util.WriterTools;
-import util.AccessibilityTools;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.Rectangle;
 
 /**
  * Test for object that implements the following interfaces :
@@ -262,8 +253,6 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
         log.println("ImplementationName: "+util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
-
-        final XTextDocument aDoc = xTextDoc;
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
