@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotesTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:54:02 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,25 +99,29 @@
 #ifndef _XMLOFF_RENAMEELEMTCONTEXT_HXX
 #include "RenameElemTContext.hxx"
 #endif
+#ifndef _XMLOFF_FLATTCONTEXT_HXX
+#include "FlatTContext.hxx"
+#endif
 
 #ifndef _XMLOFF_NOTESCONTEXT_HXX
 #include "NotesTContext.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-TYPEINIT1( XMLNotesTransformerContext, XMLTransformerContext );
+TYPEINIT1( XMLNotesTransformerContext, XMLPersElemContentTContext );
 
 XMLNotesTransformerContext::XMLNotesTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,
-        sal_Bool bConfig ) :
-    XMLTransformerContext( rImp, rQName ),
-    m_bConfiguration( bConfig ),
-    m_bEndNote( sal_False )
+        XMLTokenEnum eToken, sal_Bool bPersistent ) :
+    XMLPersElemContentTContext( rImp, rQName ),
+    m_eTypeToken( eToken ),
+    m_bEndNote( sal_False ),
+    m_bPersistent( bPersistent )
 {
 }
 
@@ -183,30 +187,53 @@ void XMLNotesTransformerContext::StartElement(
         }
     }
 
-    XMLTokenEnum eToken =
-        m_bConfiguration ? (m_bEndNote ? XML_ENDNOTES_CONFIGURATION
-                                   : XML_FOOTNOTES_CONFIGURATION )
-                       : (m_bEndNote ? XML_ENDNOTE : XML_FOOTNOTE );
+    XMLTokenEnum eToken = XML_FOOTNOTE;
+    switch( m_eTypeToken )
+    {
+    case XML_NOTE:
+        eToken = (m_bEndNote ? XML_ENDNOTE : XML_FOOTNOTE);
+        break;
+    case XML_NOTES_CONFIGURATION:
+        eToken = (m_bEndNote ? XML_ENDNOTES_CONFIGURATION
+                             : XML_FOOTNOTES_CONFIGURATION);
+    case XML_NOTE_REF:
+        eToken = (m_bEndNote ? XML_ENDNOTE_REF : XML_FOOTNOTE_REF);
+        break;
+    default:
+        OSL_ENSURE( XML_NOTE==m_eTypeToken, "invalid note type" );
+        break;
+    }
 
-    m_aElemQName = GetTransformer().GetNamespaceMap().GetQNameByKey(
+    SetExportQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
                             XML_NAMESPACE_TEXT,
-                            ::xmloff::token::GetXMLToken( eToken ) );
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
+                            ::xmloff::token::GetXMLToken( eToken ) ) );
+    if( m_bPersistent )
+        XMLPersElemContentTContext::StartElement( xAttrList );
+    else
+        GetTransformer().GetDocHandler()->startElement( GetExportQName(),
+                                                        xAttrList );
 }
 
 void XMLNotesTransformerContext::EndElement()
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    if( m_bPersistent )
+    {
+        XMLPersElemContentTContext::EndElement();
+    }
+    else
+    {
+        GetTransformer().GetDocHandler()->endElement( GetExportQName() );
+    }
 }
 
 XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString& rQName,
-        const Reference< XAttributeList >& xAttrList )
+        const Reference< XAttributeList >& rAttrList )
 {
     XMLTransformerContext *pContext = 0;
-    if( !m_bConfiguration )
+    if( XML_NOTE == m_eTypeToken )
     {
         if( XML_NAMESPACE_TEXT == nPrefix )
         {
@@ -223,15 +250,40 @@ XMLTransformerContext *XMLNotesTransformerContext::CreateChildContext(
             }
 
             if( XML_TOKEN_INVALID != eToken )
-                pContext = new XMLRenameElemTransformerContext(
-                                GetTransformer(), rQName, XML_NAMESPACE_TEXT,
-                                eToken );
+            {
+                if( m_bPersistent  )
+                {
+                    pContext = new XMLPersTextContentTContext(
+                                    GetTransformer(), rQName,
+                                    XML_NAMESPACE_TEXT,
+                                    eToken );
+                    AddContent( pContext );
+
+                }
+                else
+                {
+                    pContext = new XMLRenameElemTransformerContext(
+                                    GetTransformer(), rQName,
+                                    XML_NAMESPACE_TEXT,
+                                    eToken );
+                }
+            }
         }
     }
 
     if( !pContext )
-        pContext = XMLTransformerContext::CreateChildContext(
-                        nPrefix, rLocalName, rQName, xAttrList );
+    {
+        pContext = m_bPersistent
+                        ? XMLPersElemContentTContext::CreateChildContext(
+                                nPrefix, rLocalName, rQName, rAttrList )
+                        : XMLTransformerContext::CreateChildContext(
+                                nPrefix, rLocalName, rQName, rAttrList );
+    }
 
     return pContext;
+}
+
+sal_Bool XMLNotesTransformerContext::IsPersistent() const
+{
+    return m_bPersistent;
 }
