@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcustomshape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:07:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef SC_FUCONCUSTOMSHAPE_HXX
 #include <fuconcustomshape.hxx>
 #endif
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
+#endif
 #ifndef _GALLERY_HXX_
 #include <svx/gallery.hxx>
 #endif
@@ -92,6 +95,13 @@
 #include "fuconuno.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
+
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+#ifndef _SVX_ADJITEM_HXX
+#include <svx/adjitem.hxx>
+#endif
 
 //------------------------------------------------------------------------
 
@@ -318,6 +328,9 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
     }
     if ( !bAttributesAppliedFromGallery )
     {
+        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ) );
+        pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+        pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
