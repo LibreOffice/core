@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:48:24 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,11 +442,10 @@ namespace dbaui
 
         void transferChangedControlProperty(const ::rtl::OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);
 
-        void insertRows(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& xSrcRs,
-                       const ::std::vector<sal_Int32>& _rvColumns,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
-                       sal_Bool bIsAutoIncrement) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connectWithStatus(
+            const ::rtl::OUString& _rDataSourceName,
+            void* _pTreeListUserData    // in rela a DBTreeListModel::DBTreeListUserData*, but we do not know this class here ....
+        );
 
         // set _rsName as title at the frame
         void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;

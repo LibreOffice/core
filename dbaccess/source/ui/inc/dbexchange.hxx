@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 15:25:28 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ namespace dbaui
         */
         ODataClipboard(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLivingForm,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rSelectedRows
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rSelectedRows,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxResultSet
         );
 
     protected:

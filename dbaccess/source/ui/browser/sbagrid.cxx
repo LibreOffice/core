@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 15:42:48 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
+#include <com/sun/star/sdb/XResultSetAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
@@ -1119,7 +1122,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 //------------------------------------------------------------------------------
 SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 {
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),UNO_QUERY)), sal_True,getServiceManager());
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), sal_True,getServiceManager());
 
     Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
     SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
@@ -1389,7 +1392,7 @@ void SbaGridControl::ColChanged()
 
 
 //------------------------------------------------------------------------------
-void SbaGridControl::setDataSource(const Reference< ::com::sun::star::sdbc::XRowSet > & rCursor, sal_uInt16 nOpts)
+void SbaGridControl::setDataSource(const Reference< XRowSet > & rCursor, sal_uInt16 nOpts)
 {
     FmGridControl::setDataSource(rCursor, nOpts);
 
@@ -1398,7 +1401,7 @@ void SbaGridControl::setDataSource(const Reference< ::com::sun::star::sdbc::XRow
     Reference< ::com::sun::star::form::XForm >  xForm(xFormSet, UNO_QUERY);
     if (xForm.is() && xFormSet.is() && ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)))
     {   //  (only if the statement isn't native)
-        Reference< XSQLQueryComposerFactory >  xFactory(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (xFormSet,UNO_QUERY)), UNO_QUERY);
+        Reference< XSQLQueryComposerFactory >  xFactory(::dbtools::getConnection(Reference< XRowSet > (xFormSet,UNO_QUERY)), UNO_QUERY);
         if (xFactory.is())
             m_xComposer = xFactory->createQueryComposer();
     }
@@ -1414,13 +1417,15 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
     {
         // first get the name of the column
         Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
-        if (xCols.is())
+        if ( xCols.is() && xCols->getCount() > nModelPos )
         {
             Reference< XPropertySet >  xCol;
-            ::cppu::extractInterface(xCol,xCols->getByIndex(nModelPos));
-            if (xCol.is())
-                ::cppu::extractInterface(xEmptyReturn,xCol->getPropertyValue(PROPERTY_BOUNDFIELD));
+            xCols->getByIndex(nModelPos) >>= xCol;
+            if ( xCol.is() )
+                xCol->getPropertyValue(PROPERTY_BOUNDFIELD) >>= xEmptyReturn;
         }
+        else
+            OSL_ENSURE(0,"SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
     catch(Exception&)
     {
@@ -1440,7 +1445,7 @@ sal_Bool SbaGridControl::IsReadOnlyDB() const
     Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
     if (xColumns.is())
     {
-        Reference< ::com::sun::star::sdbc::XRowSet >  xDataSource(xColumns->getParent(), UNO_QUERY);
+        Reference< XRowSet >  xDataSource(xColumns->getParent(), UNO_QUERY);
         Reference< XChild >  xConn(::dbtools::getConnection(xDataSource),UNO_QUERY);
         if (xConn.is())
         {
@@ -1638,7 +1643,12 @@ void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
         }
     }
 
-    ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows);
+    Reference< XResultSet> xRowSetClone;
+    Reference< XResultSetAccess > xResultSetAccess(xDataSource,UNO_QUERY);
+    if ( xResultSetAccess.is() )
+        xRowSetClone = xResultSetAccess->createResultSet();
+
+    ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows,xRowSetClone);
 
     Reference< XTransferable > xEnsureDelete = pTransfer;
     pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
@@ -1701,7 +1711,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     sal_Int8 nAction = DND_ACTION_NONE;
 
     // we need a valid connection
-    if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),UNO_QUERY)).is())
+    if (!::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)).is())
         return nAction;
 
     if ( IsDropFormatSupported( FORMAT_STRING ) ) do
@@ -1814,7 +1824,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
 
     // we need a valid connection
-    if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (xDataSource,UNO_QUERY)).is())
+    if (!::dbtools::getConnection(Reference< XRowSet > (xDataSource,UNO_QUERY)).is())
         return DND_ACTION_NONE;
 
     if ( IsDropFormatSupported( FORMAT_STRING ) )
@@ -1906,8 +1916,12 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
     m_nAsyncDropEvent = 0;
 
     Reference< XPropertySet >  xDataSource = getDataSource();
-    if (xDataSource.is())
+    if ( xDataSource.is() )
     {
+        sal_Bool bCountFinal = sal_False;
+        xDataSource->getPropertyValue(PROPERTY_ISROWCOUNTFINAL) >>= bCountFinal;
+        if ( !bCountFinal )
+            setDataSource(NULL); // deattach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
         ORowSetImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor,getServiceManager());
         Reference<XEventListener> xHolder = pImExport;
@@ -1929,8 +1943,11 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
         }
         catch(const Exception& )
         {
+            Show();
             OSL_ENSURE(0,"Exception catched!");
         }
+        if ( !bCountFinal )
+            setDataSource(Reference< XRowSet >(xDataSource,UNO_QUERY));
     }
     m_aDataDescriptor.clear();
 

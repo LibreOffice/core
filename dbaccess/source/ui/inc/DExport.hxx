@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-22 07:22:37 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ namespace dbaui
     {
     public:
         DECLARE_STL_MAP(::rtl::OUString,OFieldDescription*,::comphelper::UStringMixLess,TColumns);
-        typedef ::std::vector<TColumns::iterator> TColumnVector;
+        typedef ::std::vector<TColumns::const_iterator> TColumnVector;
     protected:
         ::std::vector<sal_Int32>        m_vColumns;     // Welche Spalten "ubernommen werden sollen
         ::std::vector<sal_Int32>        m_vColumnTypes; // FeldTypen f"ur schnelleren Zugriff

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:40:32 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,250 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svx;
 
+        // -----------------------------------------------------------------------------
+    void insertRows(const Reference<XResultSet>& xSrcRs,
+                   const ::std::vector<sal_Int32>& _rvColumns,
+                   const Reference<XPropertySet>& _xTable,
+                   const Reference<XDatabaseMetaData>& _xMetaData,
+                   sal_Bool bIsAutoIncrement,
+                   const Sequence<Any>& _aSelection) throw(SQLException, RuntimeException)
+    {
+        Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
+        Reference<XRow> xRow(xSrcRs,UNO_QUERY);
+        if(!xSrcRs.is() || !xRow.is())
+            return;
+
+        Reference< XResultSetMetaData> xMeta = xSrcMetaSup->getMetaData();
+        sal_Int32 nCount = xMeta->getColumnCount();
+
+
+        ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
+        ::rtl::OUString sComposedTableName;
+        ::dbaui::composeTableName(_xMetaData,_xTable,sComposedTableName,sal_True);
+
+        aSql += sComposedTableName;
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( "));
+        // set values and column names
+        ::rtl::OUString aValues = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
+        static ::rtl::OUString aPara = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?,"));
+        ::rtl::OUString aQuote = _xMetaData->getIdentifierQuoteString();
+        static ::rtl::OUString aComma = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+
+        Reference<XColumnsSupplier> xColsSup(_xTable,UNO_QUERY);
+        OSL_ENSURE(xColsSup.is(),"SbaTableQueryBrowser::insertRows: No columnsSupplier!");
+        if(!xColsSup.is())
+            return;
+        Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
+        Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+        const ::rtl::OUString* pBegin = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+        for(;pBegin != pEnd;++pBegin)
+        {
+            aSql += ::dbtools::quoteName( aQuote,*pBegin);
+            aSql += aComma;
+            aValues += aPara;
+        }
+
+        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+
+        aSql += aValues;
+        // now create,fill and execute the prepared statement
+        Reference< XPreparedStatement > xPrep(_xMetaData->getConnection()->prepareStatement(aSql));
+        Reference< XParameters > xParameter(xPrep,UNO_QUERY);
+        ::std::vector<sal_Int32> aColumnTypes;
+        aColumnTypes.reserve(nCount+1);
+        aColumnTypes.push_back(-1); // just to avoid a everytime i-1 call
+        for(sal_Int32 k=1;k <= nCount;++k)
+            aColumnTypes.push_back(xMeta->getColumnType(k));
+
+
+        sal_Int32 nRowCount = 0;
+        const Any* pSelBegin    = _aSelection.getConstArray();
+        const Any* pSelEnd      = pSelBegin + _aSelection.getLength();
+        sal_Bool bUseSelection  = _aSelection.getLength() > 0;
+        sal_Bool bNext = sal_True;
+        do // loop as long as there are more rows or the selection ends
+        {
+            if ( bUseSelection )
+            {
+                if ( pSelBegin != pSelEnd )
+                {
+                    sal_Int32 nPos = 0;
+                    *pSelBegin >>= nPos;
+                    bNext = xSrcRs->absolute( nPos );
+                    ++pSelBegin;
+                }
+                else
+                    bNext = sal_False;
+            }
+            else
+                bNext = xSrcRs->next();
+            if ( bNext )
+            {
+                ++nRowCount;
+                ::std::vector<sal_Int32>::const_iterator aPosIter = _rvColumns.begin();
+                for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter,++i)
+                {
+                    sal_Int32 nPos = *aPosIter;
+                    if(nPos == CONTAINER_ENTRY_NOTFOUND)
+                        continue;
+                    if(i == 1 && bIsAutoIncrement)
+                    {
+                        xParameter->setInt(1,nRowCount);
+                        continue;
+                    }
+                    switch(aColumnTypes[i])
+                    {
+                        case DataType::CHAR:
+                        case DataType::VARCHAR:
+                            xParameter->setString(nPos,xRow->getString(i));
+                            break;
+                        case DataType::DECIMAL:
+                        case DataType::NUMERIC:
+                            xParameter->setDouble(nPos,xRow->getDouble(i));
+                            break;
+                        case DataType::BIGINT:
+                            xParameter->setLong(nPos,xRow->getLong(i));
+                            break;
+                        case DataType::FLOAT:
+                            xParameter->setFloat(nPos,xRow->getFloat(i));
+                            break;
+                        case DataType::DOUBLE:
+                            xParameter->setDouble(nPos,xRow->getDouble(i));
+                            break;
+                        case DataType::LONGVARCHAR:
+                            xParameter->setString(nPos,xRow->getString(i));
+                            break;
+                        case DataType::LONGVARBINARY:
+                            xParameter->setBytes(nPos,xRow->getBytes(i));
+                            break;
+                        case DataType::DATE:
+                            xParameter->setDate(nPos,xRow->getDate(i));
+                            break;
+                        case DataType::TIME:
+                            xParameter->setTime(nPos,xRow->getTime(i));
+                            break;
+                        case DataType::TIMESTAMP:
+                            xParameter->setTimestamp(nPos,xRow->getTimestamp(i));
+                            break;
+                        case DataType::BIT:
+                            xParameter->setBoolean(nPos,xRow->getBoolean(i));
+                            break;
+                        case DataType::TINYINT:
+                            xParameter->setByte(nPos,xRow->getByte(i));
+                            break;
+                        case DataType::SMALLINT:
+                            xParameter->setShort(nPos,xRow->getShort(i));
+                            break;
+                        case DataType::INTEGER:
+                            xParameter->setInt(nPos,xRow->getInt(i));
+                            break;
+                        case DataType::REAL:
+                            xParameter->setDouble(nPos,xRow->getDouble(i));
+                            break;
+                        case DataType::BINARY:
+                        case DataType::VARBINARY:
+                            xParameter->setBytes(nPos,xRow->getBytes(i));
+                            break;
+                        default:
+                            OSL_ENSURE(0,"Unknown type");
+                    }
+                    if(xRow->wasNull())
+                        xParameter->setNull(nPos,aColumnTypes[i]);
+                }
+                xPrep->executeUpdate();
+            }
+        }
+        while( bNext );
+    }
+    // -----------------------------------------------------------------------------
+    Reference<XResultSet> createResultSet(  SbaTableQueryBrowser* _pBrowser,sal_Bool bDispose,
+                                            sal_Int32 _nCommandType,Reference<XConnection>& _xSrcConnection,
+                                            const Reference<XPropertySet>& xSourceObject,
+                                            Reference<XStatement> &xStmt,Reference<XPreparedStatement> &xPrepStmt)
+    {
+        Reference<XResultSet> xSrcRs;
+        ::rtl::OUString sSql;
+        if(_nCommandType == CommandType::TABLE)
+        {
+            sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+            // we need to create the sql stmt with column names
+            // otherwise it is possible that names don't match
+            ::rtl::OUString sQuote = _xSrcConnection->getMetaData()->getIdentifierQuoteString();
+            static ::rtl::OUString sComma = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+
+            Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
+            OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
+            Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
+            Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+            const ::rtl::OUString* pBegin = aSeq.getConstArray();
+            const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+            for(;pBegin != pEnd;++pBegin)
+            {
+                sSql += ::dbtools::quoteName( sQuote,*pBegin);
+                sSql += sComma;
+            }
+            sSql = sSql.replaceAt(sSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FROM "));
+            ::rtl::OUString sComposedName;
+            ::dbaui::composeTableName(_xSrcConnection->getMetaData(),xSourceObject,sComposedName,sal_True);
+            sSql += sComposedName;
+            xStmt = _xSrcConnection->createStatement();
+            if( xStmt.is() )
+                xSrcRs = xStmt->executeQuery(sSql);
+        }
+        else
+        {
+            xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
+            xPrepStmt = _xSrcConnection->prepareStatement(sSql);
+            if( xPrepStmt.is() )
+            {
+                // look if we have to fill in some parameters
+                // create and fill a composer
+                Reference< XSQLQueryComposerFactory >  xFactory(_xSrcConnection, UNO_QUERY);
+                Reference< XSQLQueryComposer> xComposer;
+                if (xFactory.is())
+                {
+                    try
+                    {
+                        xComposer = xFactory->createQueryComposer();
+                        if(xComposer.is())
+                        {
+                            xComposer->setQuery(sSql);
+                            Reference< XInteractionHandler > xHandler(_pBrowser->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.InteractionHandler"))), UNO_QUERY);
+                            ::dbtools::askForParameters(xComposer,Reference<XParameters>(xPrepStmt,UNO_QUERY),_xSrcConnection,xHandler);
+                            xSrcRs = xPrepStmt->executeQuery();
+                        }
+                    }
+                    catch(SQLContext&)
+                    {
+                        if(bDispose)
+                            ::comphelper::disposeComponent(_xSrcConnection);
+                        throw;
+                    }
+                    catch(SQLWarning&)
+                    {
+                        if(bDispose)
+                            ::comphelper::disposeComponent(_xSrcConnection);
+                        throw;
+                    }
+                    catch(SQLException&)
+                    {
+                        if(bDispose)
+                            ::comphelper::disposeComponent(_xSrcConnection);
+                        throw;
+                    }
+                    catch (Exception&)
+                    {
+                        xComposer = NULL;
+                    }
+                }
+            }
+        }
+        return xSrcRs;
+    }
+
     // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData )
     {
@@ -226,11 +470,11 @@ namespace dbaui
                 ::rtl::OUString sCommand;
                 sal_Bool        bEscapeProcessing = sal_True;
                 {
-                    ODataAccessDescriptor aDescriptor(aDescriptor);
-                    aDescriptor[daDataSource]       >>= sDataSourceName;
-                    aDescriptor[daCommandType]      >>= nCommandType;
-                    aDescriptor[daCommand]          >>= sCommand;
-                    aDescriptor[daEscapeProcessing] >>= bEscapeProcessing;
+                    ODataAccessDescriptor aDesc(aDescriptor);
+                    aDesc[daDataSource]     >>= sDataSourceName;
+                    aDesc[daCommandType]        >>= nCommandType;
+                    aDesc[daCommand]        >>= sCommand;
+                    aDesc[daEscapeProcessing]   >>= bEscapeProcessing;
                 }
 
                 // plausibility check
@@ -384,23 +628,24 @@ namespace dbaui
                     if(!ensureConnection(_pApplyTo, xDestConnection))
                         return;
 
-                    Reference<XConnection> xSrcConnection;
-                    ::rtl::OUString sName,sSrcDataSourceName;
+                    // ask the descriptor for the needed properties
+                    Reference<XConnection>  xSrcConnection; // the source connection
+                    Reference<XResultSet>   xSrcRs;         // the source resultset may be empty
                     sal_Int32 nCommandType = CommandType::TABLE;
-                    for(;pBegin != pEnd;++pBegin)
+                    ::rtl::OUString sCommand,
+                                    sSrcDataSourceName;
+                    Sequence< Any > aSelection;
                     {
-                        if (0 == pBegin->Name.compareToAscii(PROPERTY_DATASOURCENAME))
-                            pBegin->Value >>= sSrcDataSourceName;
-                        else if (0 == pBegin->Name.compareToAscii(PROPERTY_COMMANDTYPE))
-                            pBegin->Value >>= nCommandType;
-                        else if (0 == pBegin->Name.compareToAscii(PROPERTY_COMMAND))
-                            pBegin->Value >>= sName;
-                        else if (0 == pBegin->Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
-                            pBegin->Value >>= xSrcConnection;
+                        ODataAccessDescriptor aDesc(aSeq);
+                        aDesc[daDataSource]     >>= sSrcDataSourceName;
+                        aDesc[daCommandType]    >>= nCommandType;
+                        aDesc[daCommand]        >>= sCommand;
+                        aDesc[daConnection]     >>= xSrcConnection;
+                        aDesc[daSelection]      >>= aSelection;
+                        aDesc[daCursor]         >>= xSrcRs;
                     }
 
-                    // get the source connection
-
+                    // check if the source connection is valid
                     sal_Bool bDispose = sal_False;
                     if(sSrcDataSourceName == aDSName)
                         xSrcConnection = xDestConnection;
@@ -410,6 +655,7 @@ namespace dbaui
                         showError(::dbaui::createConnection(sSrcDataSourceName,m_xDatabaseContext,getORB(),xEvt,xSrcConnection));
                         bDispose = sal_True;
                     }
+                    // we need the right container for our type of command
                     Reference<XNameAccess> xNameAccess;
                     switch(nCommandType)
                     {
@@ -428,13 +674,15 @@ namespace dbaui
                                     xNameAccess = xSup->getQueries();
                             }
                             break;
+                        default:
+                            OSL_ENSURE(0,"UNsupported command type found!");
                     }
 
                     // check if this name really exists in the name access
-                    if(xNameAccess.is() && xNameAccess->hasByName(sName))
+                    if ( xNameAccess.is() && xNameAccess->hasByName( sCommand ) )
                     {
                         Reference<XPropertySet> xSourceObject;
-                        xNameAccess->getByName(sName) >>= xSourceObject;
+                        xNameAccess->getByName( sCommand ) >>= xSourceObject;
                         OCopyTableWizard aWizard(getView(),
                                                  xSourceObject,
                                                  xSrcConnection,
@@ -473,100 +721,34 @@ namespace dbaui
                                         if(!xTable.is())
                                             break;
 
-                                        Reference<XResultSet>   xSrcRs;
                                         Reference<XStatement> xStmt; // needed to hold a reference to the statement
                                         Reference<XPreparedStatement> xPrepStmt;// needed to hold a reference to the statement
-                                        ::rtl::OUString sSql,sDestName;
+                                        ::rtl::OUString sDestName;
                                         ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
                                         // create the sql stmt
-                                        if(nCommandType == CommandType::TABLE)
-                                        {
-                                            sSql = ::rtl::OUString::createFromAscii("SELECT ");
-                                            // we need to create the sql stmt with column names
-                                            // otherwise it is possible that names don't match
-                                            ::rtl::OUString sQuote = xSrcConnection->getMetaData()->getIdentifierQuoteString();
-                                            static ::rtl::OUString sComma = ::rtl::OUString::createFromAscii(",");
-
-                                            Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
-                                            OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
-                                            Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
-                                            Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-                                            const ::rtl::OUString* pBegin = aSeq.getConstArray();
-                                            const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-                                            for(;pBegin != pEnd;++pBegin)
-                                            {
-                                                sSql += ::dbtools::quoteName( sQuote,*pBegin);
-                                                sSql += sComma;
-                                            }
-                                            sSql = sSql.replaceAt(sSql.getLength()-1,1,::rtl::OUString::createFromAscii(" "));
-                                            sSql += ::rtl::OUString::createFromAscii("FROM ");
-                                            ::rtl::OUString sComposedName;
-                                            ::dbaui::composeTableName(xSrcConnection->getMetaData(),xSourceObject,sComposedName,sal_True);
-                                            sSql += sComposedName;
-                                            xStmt = xSrcConnection->createStatement();
-                                            if(!xStmt.is())
-                                                break;
-                                            xSrcRs = xStmt->executeQuery(sSql);
-                                        }
-                                        else
-                                        {
-                                            xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
-                                            xPrepStmt = xSrcConnection->prepareStatement(sSql);
-                                            if(!xPrepStmt.is())
-                                                break;
-                                            // look if we have to fill in some parameters
-                                            // create and fill a composer
-                                            Reference< XSQLQueryComposerFactory >  xFactory(xSrcConnection, UNO_QUERY);
-                                            Reference< XSQLQueryComposer> xComposer;
-                                            if (xFactory.is())
-                                            {
-                                                try
-                                                {
-                                                    xComposer = xFactory->createQueryComposer();
-                                                    if(xComposer.is())
-                                                    {
-                                                        xComposer->setQuery(sSql);
-                                                        Reference< XInteractionHandler > xHandler(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
-                                                        ::dbtools::askForParameters(xComposer,Reference<XParameters>(xPrepStmt,UNO_QUERY),xSrcConnection,xHandler);
-                                                        xSrcRs = xPrepStmt->executeQuery();
-                                                    }
-                                                }
-                                                catch(SQLContext&)
-                                                {
-                                                    if(bDispose)
-                                                        ::comphelper::disposeComponent(xSrcConnection);
-                                                    throw;
-                                                }
-                                                catch(SQLWarning&)
-                                                {
-                                                    if(bDispose)
-                                                        ::comphelper::disposeComponent(xSrcConnection);
-                                                    throw;
-                                                }
-                                                catch(SQLException&)
-                                                {
-                                                    if(bDispose)
-                                                        ::comphelper::disposeComponent(xSrcConnection);
-                                                    throw;
-                                                }
-                                                catch (Exception&)
-                                                {
-                                                    xComposer = NULL;
-                                                    break;
-                                                }
-                                            }
-
-                                        }
+                                        if ( !xSrcRs.is() ) // if not already exists
+                                            xSrcRs = createResultSet(this,
+                                                                    bDispose,
+                                                                    nCommandType,
+                                                                    xSrcConnection,
+                                                                    xSourceObject,
+                                                                    xStmt,
+                                                                    xPrepStmt);
 
                                         Reference<XRow> xRow(xSrcRs,UNO_QUERY);
-                                        if(!xSrcRs.is() || !xRow.is())
+                                        if( !xSrcRs.is() || !xRow.is() )
                                             break;
 
                                         sal_Bool bIsAutoIncrement           = aWizard.SetAutoincrement();
                                         ::std::vector<sal_Int32> vColumns   = aWizard.GetColumnPositions();
                                         // now insert the rows into the new table
                                         // we couldn't use the rowset here because it could happen that we haven't a primary key
-                                        insertRows(xSrcRs,vColumns,xTable,xDestConnection->getMetaData(),bIsAutoIncrement);
+                                        insertRows( xSrcRs,
+                                                    vColumns,
+                                                    xTable,
+                                                    xDestConnection->getMetaData(),
+                                                    bIsAutoIncrement,
+                                                    aSelection);
                                     }
                                     break;
                                 case OCopyTableWizard::WIZARD_DEF_VIEW:
@@ -608,7 +790,7 @@ namespace dbaui
                 SvStream* pStream = (SvStream*)(SotStorageStream*)aStream;
                 pImport->setStream(pStream);
                 if(!pImport->Read())
-                    throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any());
+                    throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
             }
             else
                 DBG_ERROR("SbaTableQueryBrowser::implPasteTable: invalid call (no supported format found)!");
@@ -685,20 +867,19 @@ namespace dbaui
     {
         // check if we're a table or query container
         SvLBoxEntry* pHitEntry = m_pTreeView->getListBox()->GetEntry( _rEvt.maPosPixel );
-        if (!pHitEntry)
-            // no drop of no entry was hit ....
-            return DND_ACTION_NONE;
 
-        // it must be a container
-        EntryType eEntryType = getEntryType( pHitEntry );
-        if (!isContainer(eEntryType))
-            return DND_ACTION_NONE;
-
-        // TODO: check if the data source is readonly
-
-        // check for the concrete type
-        if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),DataFlavorExVectorSlotPrec(eEntryType,sal_True)) != _rFlavors.end())
-            return DND_ACTION_COPY;
+        if ( pHitEntry ) // no drop if no entry was hit ....
+        {
+            // it must be a container
+            EntryType eEntryType = getEntryType( pHitEntry );
+            if ( isContainer(eEntryType) )
+            {
+                // TODO: check if the data source is readonly
+                // check for the concrete type
+                if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),DataFlavorExVectorSlotPrec(eEntryType,sal_True)) != _rFlavors.end())
+                    return DND_ACTION_COPY;
+            }
+        }
 
         return DND_ACTION_NONE;
     }
@@ -787,11 +968,7 @@ namespace dbaui
     sal_Bool SbaTableQueryBrowser::isTableFormat()  const
     {
         sal_Bool bTableFormat = sal_False;
-#if SUPD < 631
-        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-#else
         TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-#endif
         bTableFormat    =   aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
                     ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                     ||  aTransferData.HasFormat(SOT_FORMAT_RTF)
@@ -801,140 +978,6 @@ namespace dbaui
         return bTableFormat;
     }
     // -----------------------------------------------------------------------------
-    void SbaTableQueryBrowser::insertRows(const Reference<XResultSet>& xSrcRs,
-                                                   const ::std::vector<sal_Int32>& _rvColumns,
-                                                   const Reference<XPropertySet>& _xTable,
-                                                   const Reference<XDatabaseMetaData>& _xMetaData,
-                                                   sal_Bool bIsAutoIncrement) throw(SQLException, RuntimeException)
-    {
-        Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
-        Reference<XRow> xRow(xSrcRs,UNO_QUERY);
-        if(!xSrcRs.is() || !xRow.is())
-            return;
-
-        Reference< XResultSetMetaData> xMeta = xSrcMetaSup->getMetaData();
-        sal_Int32 nCount = xMeta->getColumnCount();
-
-
-        ::rtl::OUString aSql(::rtl::OUString::createFromAscii("INSERT INTO "));
-        ::rtl::OUString sComposedTableName;
-        ::dbaui::composeTableName(_xMetaData,_xTable,sComposedTableName,sal_True);
-
-        aSql += sComposedTableName;
-        aSql += ::rtl::OUString::createFromAscii(" ( ");
-        // set values and column names
-        ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
-        static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-        ::rtl::OUString aQuote = _xMetaData->getIdentifierQuoteString();
-        static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
-
-        Reference<XColumnsSupplier> xColsSup(_xTable,UNO_QUERY);
-        OSL_ENSURE(xColsSup.is(),"SbaTableQueryBrowser::insertRows: No columnsSupplier!");
-        if(!xColsSup.is())
-            return;
-        Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
-        Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-        const ::rtl::OUString* pBegin = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-        for(;pBegin != pEnd;++pBegin)
-        {
-            aSql += ::dbtools::quoteName( aQuote,*pBegin);
-            aSql += aComma;
-            aValues += aPara;
-        }
-
-        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-        aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-
-        aSql += aValues;
-        // now create,fill and execute the prepared statement
-        Reference< XPreparedStatement > xPrep(_xMetaData->getConnection()->prepareStatement(aSql));
-        Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-        ::std::vector<sal_Int32> aColumnTypes;
-        aColumnTypes.reserve(nCount+1);
-        aColumnTypes.push_back(-1); // just to avoid a everytime i-1 call
-        for(sal_Int32 k=1;k <= nCount;++k)
-            aColumnTypes.push_back(xMeta->getColumnType(k));
-
-
-        sal_Int32 nRowCount = 0;
-        while(xSrcRs->next())
-        {
-            ++nRowCount;
-            ::std::vector<sal_Int32>::const_iterator aPosIter = _rvColumns.begin();
-            for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter,++i)
-            {
-                sal_Int32 nPos = *aPosIter;
-                if(nPos == CONTAINER_ENTRY_NOTFOUND)
-                    continue;
-                if(i == 1 && bIsAutoIncrement)
-                {
-                    xParameter->setInt(1,nRowCount);
-                    continue;
-                }
-                switch(aColumnTypes[i])
-                {
-                    case DataType::CHAR:
-                    case DataType::VARCHAR:
-                        xParameter->setString(nPos,xRow->getString(i));
-                        break;
-                    case DataType::DECIMAL:
-                    case DataType::NUMERIC:
-                        xParameter->setDouble(nPos,xRow->getDouble(i));
-                        break;
-                    case DataType::BIGINT:
-                        xParameter->setLong(nPos,xRow->getLong(i));
-                        break;
-                    case DataType::FLOAT:
-                        xParameter->setFloat(nPos,xRow->getFloat(i));
-                        break;
-                    case DataType::DOUBLE:
-                        xParameter->setDouble(nPos,xRow->getDouble(i));
-                        break;
-                    case DataType::LONGVARCHAR:
-                        xParameter->setString(nPos,xRow->getString(i));
-                        break;
-                    case DataType::LONGVARBINARY:
-                        xParameter->setBytes(nPos,xRow->getBytes(i));
-                        break;
-                    case DataType::DATE:
-                        xParameter->setDate(nPos,xRow->getDate(i));
-                        break;
-                    case DataType::TIME:
-                        xParameter->setTime(nPos,xRow->getTime(i));
-                        break;
-                    case DataType::TIMESTAMP:
-                        xParameter->setTimestamp(nPos,xRow->getTimestamp(i));
-                        break;
-                    case DataType::BIT:
-                        xParameter->setBoolean(nPos,xRow->getBoolean(i));
-                        break;
-                    case DataType::TINYINT:
-                        xParameter->setByte(nPos,xRow->getByte(i));
-                        break;
-                    case DataType::SMALLINT:
-                        xParameter->setShort(nPos,xRow->getShort(i));
-                        break;
-                    case DataType::INTEGER:
-                        xParameter->setInt(nPos,xRow->getInt(i));
-                        break;
-                    case DataType::REAL:
-                        xParameter->setDouble(nPos,xRow->getDouble(i));
-                        break;
-                    case DataType::BINARY:
-                    case DataType::VARBINARY:
-                        xParameter->setBytes(nPos,xRow->getBytes(i));
-                        break;
-                    default:
-                        OSL_ENSURE(0,"Unknown type");
-                }
-                if(xRow->wasNull())
-                    xParameter->setNull(nPos,aColumnTypes[i]);
-            }
-            xPrep->executeUpdate();
-        }
-    }
-    // -----------------------------------------------------------------------------
     IMPL_LINK(SbaTableQueryBrowser, OnCutEntry, SvLBoxEntry*, _pEntry)
     {
         return 0;
@@ -942,14 +985,14 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     IMPL_LINK(SbaTableQueryBrowser, OnCopyEntry, SvLBoxEntry*, _pEntry)
     {
-        if(isEntryCopyAllowed(_pEntry))
+        if( isEntryCopyAllowed(_pEntry) )
             copyEntry(_pEntry);
         return 0;
     }
     // -----------------------------------------------------------------------------
     IMPL_LINK(SbaTableQueryBrowser, OnPasteEntry, SvLBoxEntry*, _pEntry)
     {
-        if(isEntryPasteAllowed(_pEntry))
+        if ( isEntryPasteAllowed(_pEntry) )
             pasteEntry(_pEntry);
         return 0;
     }
@@ -1054,7 +1097,7 @@ namespace dbaui
         }
         catch(const ElementExistException& e)
         {
-            static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("S1000");
+            static ::rtl::OUString sStatus = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
             String sMsg = String(ModuleRes(STR_OBJECT_ALREADY_EXISTS));
             sMsg.SearchAndReplace('#',e.Message);
             showError(SQLExceptionInfo(SQLException(sMsg, e.Context, sStatus, 0, Any())));
@@ -1218,6 +1261,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2002/01/24 17:40:32  fs
+ *  incorporate the improvements suggested during code review of genericcontroller.*
+ *
  *  Revision 1.34  2001/12/07 13:13:04  oj
  *  #95728# insert try catch
  *

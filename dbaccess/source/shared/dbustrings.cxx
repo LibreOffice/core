@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,5 +76,10 @@ namespace dbaui
     //= other
     //============================================================
     IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,  "QueryPreview");
+
+    //============================================================
+    //= properties
+    //============================================================
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TRISTATE, "TriState");
 
 }
