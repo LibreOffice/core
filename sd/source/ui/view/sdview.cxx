@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-24 13:13:09 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 15:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ void SdView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
             if( pPage )
             {
                 SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
-                rOutl.SetBackgroundColor( pPage->GetBackgroundColor() );
+                rOutl.SetBackgroundColor( pPage->GetBackgroundColor(pPgView) );
             }
         }
 
@@ -439,7 +439,7 @@ BOOL SdView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         Outliner* pOL = GetTextEditOutliner();
 
         if( pObj && pObj->GetPage() )
-            pOL->SetBackgroundColor( pObj->GetPage()->GetBackgroundColor() );
+            pOL->SetBackgroundColor( pObj->GetPage()->GetBackgroundColor(pPV) );
 
         SfxUndoManager& rUndoMgr = pOL->GetUndoManager();
         rUndoMgr.Clear();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 09:56:55 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 15:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,7 +841,7 @@ void SdDrawView::PresPaint(const Region& rRegion)
         if( pPageView )
         {
             SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
-            rOutl.SetBackgroundColor( pPageView->GetPage()->GetBackgroundColor() );
+            rOutl.SetBackgroundColor( pPageView->GetPage()->GetBackgroundColor(pPageView) );
 
             const Link aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
 
