@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: er $ $Date: 2000-10-22 17:22:16 $
+#*  last change: $Author: mh $ $Date: 2000-10-24 07:45:24 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -247,6 +247,7 @@ SHL1OBJS=$(SLO)$/svtdata.obj
 SHL2STDLIBS=$(TOOLSLIB) 	\
         $(VOSLIB)			\
         $(CPPULIB)			\
+        $(COMPHELPERLIB)		\
         $(CPPUHELPERLIB)	\
         $(RTLLIB)			\
         $(SALLIB)			\
