@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:30:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,19 @@
 						<label xml:lang="ko">표</label>
 						<label xml:lang="zh-CN">表格</label>
 						<label xml:lang="zh-TW">表格</label>
+						<label xml:lang="pt">Tabelas</label>
+						<label xml:lang="ru">Таблицы</label>
+						<label xml:lang="el">Πίνακες</label>
+						<label xml:lang="nl">Tabellen</label>
+						<label xml:lang="fi">Taulukot</label>
+						<label xml:lang="cs">Tabulky</label>
+						<label xml:lang="da">Tabeller</label>
+						<label xml:lang="pl">Tabele</label>
+						<label xml:lang="pt-BR">Tabelas</label>
+						<label xml:lang="ar">جداول</label>
+						<label xml:lang="he">‮טבלאות‬</label>
+						<label xml:lang="ca">Taules</label>
+						<label xml:lang="th">ตาราง</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -164,6 +177,19 @@
 						<label xml:lang="ko">메모</label>
 						<label xml:lang="zh-CN">备注</label>
 						<label xml:lang="zh-TW">備註</label>
+						<label xml:lang="pt">Anotações</label>
+						<label xml:lang="ru">Примечания</label>
+						<label xml:lang="el">Σημειώσεις</label>
+						<label xml:lang="nl">Aantekeningen</label>
+						<label xml:lang="fi">Huomautukset</label>
+						<label xml:lang="cs">Komentáře</label>
+						<label xml:lang="da">Anmærkning</label>
+						<label xml:lang="pl">Notatki</label>
+						<label xml:lang="pt-BR">Notas</label>
+						<label xml:lang="tr">Notlar</label>
+						<label xml:lang="ar">ملاحظات</label>
+						<label xml:lang="he">‮הערות‬</label>
+						<label xml:lang="th">หมายเหตุ</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -279,6 +305,9 @@
 						<label xml:lang="ko">나누기</label>
 						<label xml:lang="zh-CN">换行符</label>
 						<label xml:lang="zh-TW">換行和分頁</label>
+						<label xml:lang="cs">Zalomení</label>
+						<label xml:lang="tr">Kesmeler</label>
+						<label xml:lang="he">‮מעברים‬</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -308,6 +337,20 @@
 						<label xml:lang="ko">필드 명령</label>
 						<label xml:lang="zh-CN">字段</label>
 						<label xml:lang="zh-TW">欄位指令</label>
+						<label xml:lang="pt">Campos</label>
+						<label xml:lang="ru">Поле</label>
+						<label xml:lang="el">Εντολή πεδίου</label>
+						<label xml:lang="nl">Veldopdracht</label>
+						<label xml:lang="fi">Kentät</label>
+						<label xml:lang="cs">Pole</label>
+						<label xml:lang="da">Felt</label>
+						<label xml:lang="pl">Pole</label>
+						<label xml:lang="pt-BR">Campos</label>
+						<label xml:lang="tr">Alan öğesi</label>
+						<label xml:lang="ar">حقل</label>
+						<label xml:lang="he">‮שדות‬</label>
+						<label xml:lang="ca">Camps</label>
+						<label xml:lang="th">เขตข้อมูล</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -344,6 +387,20 @@
 						<label xml:lang="ko">안내선</label>
 						<label xml:lang="zh-CN">辅助线</label>
 						<label xml:lang="zh-TW">輔助線</label>
+						<label xml:lang="pt">Guias</label>
+						<label xml:lang="ru">Направляющие линии</label>
+						<label xml:lang="el">Βοηθητικές γραμμές</label>
+						<label xml:lang="nl">Hulplijnen</label>
+						<label xml:lang="fi">Ohjaimet</label>
+						<label xml:lang="cs">Vodítka</label>
+						<label xml:lang="da">Hjælpelinjer</label>
+						<label xml:lang="pl">Linie pomocnicze</label>
+						<label xml:lang="pt-BR">Guias</label>
+						<label xml:lang="tr">Görsel yardım</label>
+						<label xml:lang="ar">خطوط مساعدة</label>
+						<label xml:lang="he">Hilfslinien</label>
+						<label xml:lang="ca">Ajudes visuals</label>
+						<label xml:lang="th">คำแนะนำ</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -459,28 +516,56 @@
 							<info>
 								<desc xml:lang="en-US">Millimeter</desc>
 								<desc xml:lang="x-comment">Millimeter</desc>
-								<desc xml:lang="fr">Millimeter</desc>
+								<desc xml:lang="fr">Millimètre</desc>
 								<desc xml:lang="es">Milímetros</desc>
-								<desc xml:lang="it">Millimeter</desc>
+								<desc xml:lang="it">Millimetro</desc>
 								<desc xml:lang="sv">Millimeter</desc>
 								<desc xml:lang="ja">ミリメートル</desc>
 								<desc xml:lang="ko">밀리미터</desc>
 								<desc xml:lang="zh-CN">毫米</desc>
 								<desc xml:lang="zh-TW">毫米</desc>
+								<desc xml:lang="pt">Milímetro</desc>
+								<desc xml:lang="ru">Миллиметры</desc>
+								<desc xml:lang="el">Χιλιοστά</desc>
+								<desc xml:lang="nl">Millimeter</desc>
+								<desc xml:lang="fi">Millimetri</desc>
+								<desc xml:lang="cs">Milimetr</desc>
+								<desc xml:lang="da">Millimeter</desc>
+								<desc xml:lang="pl">Milimetr</desc>
+								<desc xml:lang="pt-BR">Milímetro</desc>
+								<desc xml:lang="tr">Milimetre</desc>
+								<desc xml:lang="ar">ميليمتر</desc>
+								<desc xml:lang="he">‮מילימטר‬</desc>
+								<desc xml:lang="ca">Mil?l?metre</desc>
+								<desc xml:lang="th">มิลลิเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Centimeter</desc>
 								<desc xml:lang="x-comment">Centimeter</desc>
-								<desc xml:lang="fr">Centimeter</desc>
-								<desc xml:lang="es">Centimeter</desc>
-								<desc xml:lang="it">Centimeter</desc>
+								<desc xml:lang="fr">Centimètre</desc>
+								<desc xml:lang="es">Centímetro</desc>
+								<desc xml:lang="it">Centimetro</desc>
 								<desc xml:lang="sv">Centimeter</desc>
 								<desc xml:lang="ja">センチメートル</desc>
 								<desc xml:lang="ko">센티미터</desc>
 								<desc xml:lang="zh-CN">厘米</desc>
 								<desc xml:lang="zh-TW">厘米</desc>
+								<desc xml:lang="pt">Centímetro</desc>
+								<desc xml:lang="ru">Сантиметры</desc>
+								<desc xml:lang="el">Εκατοστά</desc>
+								<desc xml:lang="nl">Centimeter</desc>
+								<desc xml:lang="fi">Senttimetri</desc>
+								<desc xml:lang="cs">Centimeter</desc>
+								<desc xml:lang="da">Centimeter</desc>
+								<desc xml:lang="pl">Centymetr</desc>
+								<desc xml:lang="pt-BR">Centímetro</desc>
+								<desc xml:lang="tr">Santimetre</desc>
+								<desc xml:lang="ar">سنتيمتر</desc>
+								<desc xml:lang="he">‮סנטימטר‬</desc>
+								<desc xml:lang="ca">Centímetre</desc>
+								<desc xml:lang="th">เซนติเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -495,13 +580,27 @@
 								<desc xml:lang="ko">미터</desc>
 								<desc xml:lang="zh-CN">米</desc>
 								<desc xml:lang="zh-TW">米</desc>
+								<desc xml:lang="pt">Metro</desc>
+								<desc xml:lang="ru">Метры</desc>
+								<desc xml:lang="el">Μέτρα</desc>
+								<desc xml:lang="nl">Meter</desc>
+								<desc xml:lang="fi">Metri</desc>
+								<desc xml:lang="cs">Metr</desc>
+								<desc xml:lang="da">Meter</desc>
+								<desc xml:lang="pl">Metr</desc>
+								<desc xml:lang="pt-BR">Metro</desc>
+								<desc xml:lang="tr">Metre</desc>
+								<desc xml:lang="ar">متر</desc>
+								<desc xml:lang="he">‮מטר‬</desc>
+								<desc xml:lang="ca">Metre</desc>
+								<desc xml:lang="th">เมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
 							<info>
 								<desc xml:lang="en-US">Kilometer</desc>
 								<desc xml:lang="x-comment">Kilometer</desc>
-								<desc xml:lang="fr">Kilometer</desc>
+								<desc xml:lang="fr">Kilomètre</desc>
 								<desc xml:lang="es">Kilómetro</desc>
 								<desc xml:lang="it">Chilometro</desc>
 								<desc xml:lang="sv">Kilometer</desc>
@@ -509,6 +608,20 @@
 								<desc xml:lang="ko">킬로미터</desc>
 								<desc xml:lang="zh-CN">公里</desc>
 								<desc xml:lang="zh-TW">公里</desc>
+								<desc xml:lang="pt">Quilómetro</desc>
+								<desc xml:lang="ru">Километры</desc>
+								<desc xml:lang="el">Χιλιόμετρο</desc>
+								<desc xml:lang="nl">Kilometer</desc>
+								<desc xml:lang="fi">Kilometri</desc>
+								<desc xml:lang="cs">Kilometer</desc>
+								<desc xml:lang="da">Kilometer</desc>
+								<desc xml:lang="pl">Kilometr</desc>
+								<desc xml:lang="pt-BR">Quilometro</desc>
+								<desc xml:lang="tr">Kilometre</desc>
+								<desc xml:lang="ar">كيلومتر</desc>
+								<desc xml:lang="he">‮קילומטר‬</desc>
+								<desc xml:lang="ca">Quilòmetre</desc>
+								<desc xml:lang="th">กิโลเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -523,6 +636,20 @@
 								<desc xml:lang="ko">점</desc>
 								<desc xml:lang="zh-CN">点</desc>
 								<desc xml:lang="zh-TW">點</desc>
+								<desc xml:lang="pt">Ponto</desc>
+								<desc xml:lang="ru">Пункт</desc>
+								<desc xml:lang="el">Σημείο</desc>
+								<desc xml:lang="nl">Punt</desc>
+								<desc xml:lang="fi">Piste</desc>
+								<desc xml:lang="cs">Bod</desc>
+								<desc xml:lang="da">Punkt</desc>
+								<desc xml:lang="pl">Punkt</desc>
+								<desc xml:lang="pt-BR">Ponto</desc>
+								<desc xml:lang="tr">Nokta</desc>
+								<desc xml:lang="ar">نقطة</desc>
+								<desc xml:lang="he">‮נקודה‬</desc>
+								<desc xml:lang="ca">Punt</desc>
+								<desc xml:lang="th">พ้อยนท์</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="7">
@@ -537,6 +664,20 @@
 								<desc xml:lang="ko">표준 규격 활자</desc>
 								<desc xml:lang="zh-CN">皮可</desc>
 								<desc xml:lang="zh-TW">皮可</desc>
+								<desc xml:lang="pt">Pica</desc>
+								<desc xml:lang="ru">Пики</desc>
+								<desc xml:lang="el">Pica (Πίκα)</desc>
+								<desc xml:lang="nl">Pica</desc>
+								<desc xml:lang="fi">Pica</desc>
+								<desc xml:lang="cs">Pika</desc>
+								<desc xml:lang="da">Pica</desc>
+								<desc xml:lang="pl">Cycero</desc>
+								<desc xml:lang="pt-BR">Pica</desc>
+								<desc xml:lang="tr">Pika</desc>
+								<desc xml:lang="ar">بيكا</desc>
+								<desc xml:lang="he">‮פיקה‬</desc>
+								<desc xml:lang="ca">Piques</desc>
+								<desc xml:lang="th">พิคา</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="8">
@@ -551,6 +692,20 @@
 								<desc xml:lang="ko">인치</desc>
 								<desc xml:lang="zh-CN">英寸</desc>
 								<desc xml:lang="zh-TW">英吋</desc>
+								<desc xml:lang="pt">Polegada</desc>
+								<desc xml:lang="ru">Дюймы</desc>
+								<desc xml:lang="el">Ίντσα</desc>
+								<desc xml:lang="nl">Duim</desc>
+								<desc xml:lang="fi">Tuuma</desc>
+								<desc xml:lang="cs">Palec</desc>
+								<desc xml:lang="da">Tommer</desc>
+								<desc xml:lang="pl">Cal</desc>
+								<desc xml:lang="pt-BR">Polegada</desc>
+								<desc xml:lang="tr">Inç</desc>
+								<desc xml:lang="ar">بوصة</desc>
+								<desc xml:lang="he">‮אינצ&apos;‬</desc>
+								<desc xml:lang="ca">Polzada</desc>
+								<desc xml:lang="th">นิ้ว</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -565,6 +720,20 @@
 								<desc xml:lang="ko">피트</desc>
 								<desc xml:lang="zh-CN">英尺</desc>
 								<desc xml:lang="zh-TW">英尺</desc>
+								<desc xml:lang="pt">Pés</desc>
+								<desc xml:lang="ru">Футы</desc>
+								<desc xml:lang="el">Πόδι</desc>
+								<desc xml:lang="nl">Voet</desc>
+								<desc xml:lang="fi">Jalka</desc>
+								<desc xml:lang="cs">Stopa</desc>
+								<desc xml:lang="da">Fod</desc>
+								<desc xml:lang="pl">Stopa</desc>
+								<desc xml:lang="pt-BR">Pé</desc>
+								<desc xml:lang="tr">Ft</desc>
+								<desc xml:lang="ar">قدم</desc>
+								<desc xml:lang="he">‮רגל‬</desc>
+								<desc xml:lang="ca">Peu</desc>
+								<desc xml:lang="th">ฟุต</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="10">
@@ -579,6 +748,20 @@
 								<desc xml:lang="ko">마일</desc>
 								<desc xml:lang="zh-CN">英里</desc>
 								<desc xml:lang="zh-TW">英里</desc>
+								<desc xml:lang="pt">Milhas</desc>
+								<desc xml:lang="ru">Мили</desc>
+								<desc xml:lang="el">Μίλια</desc>
+								<desc xml:lang="nl">Mijlen</desc>
+								<desc xml:lang="fi">Mailit</desc>
+								<desc xml:lang="cs">Míle</desc>
+								<desc xml:lang="da">Mil</desc>
+								<desc xml:lang="pl">Mila</desc>
+								<desc xml:lang="pt-BR">Milhas</desc>
+								<desc xml:lang="tr">Mil</desc>
+								<desc xml:lang="ar">أميال</desc>
+								<desc xml:lang="he">‮מיל‬</desc>
+								<desc xml:lang="ca">Milles</desc>
+								<desc xml:lang="th">ไมล์</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -601,6 +784,19 @@
 						<label xml:lang="ko">수직 눈금자</label>
 						<label xml:lang="zh-CN">垂直标尺</label>
 						<label xml:lang="zh-TW">垂直標尺</label>
+						<label xml:lang="pt">Mostrar régua vertical</label>
+						<label xml:lang="ru">Вертикальная линейка</label>
+						<label xml:lang="el">Κατακόρυφος χάρακας</label>
+						<label xml:lang="fi">Pystyviivain</label>
+						<label xml:lang="cs">Svislé pravítko</label>
+						<label xml:lang="da">Lodret lineal</label>
+						<label xml:lang="pl">Pionowa linijka</label>
+						<label xml:lang="pt-BR">Régua Vertical</label>
+						<label xml:lang="tr">Dikey cetvel</label>
+						<label xml:lang="ar">مسطرة رأسية</label>
+						<label xml:lang="he">‮סרגל אנכי‬l</label>
+						<label xml:lang="ca">Regle vertical</label>
+						<label xml:lang="th">ไม้บรรทัดแนวตั้ง</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -621,28 +817,56 @@
 							<info>
 								<desc xml:lang="en-US">Millimeter</desc>
 								<desc xml:lang="x-comment">Millimeter</desc>
-								<desc xml:lang="fr">Millimeter</desc>
+								<desc xml:lang="fr">Millimètre</desc>
 								<desc xml:lang="es">Milímetros</desc>
-								<desc xml:lang="it">Millimeter</desc>
+								<desc xml:lang="it">Millimetro</desc>
 								<desc xml:lang="sv">Millimeter</desc>
 								<desc xml:lang="ja">ミリメートル</desc>
 								<desc xml:lang="ko">밀리미터</desc>
 								<desc xml:lang="zh-CN">毫米</desc>
 								<desc xml:lang="zh-TW">毫米</desc>
+								<desc xml:lang="pt">Milímetro</desc>
+								<desc xml:lang="ru">Миллиметры</desc>
+								<desc xml:lang="el">Χιλιοστά</desc>
+								<desc xml:lang="nl">Millimeter</desc>
+								<desc xml:lang="fi">Millimetri</desc>
+								<desc xml:lang="cs">Milimetr</desc>
+								<desc xml:lang="da">Millimeter</desc>
+								<desc xml:lang="pl">Milimetr</desc>
+								<desc xml:lang="pt-BR">Milímetro</desc>
+								<desc xml:lang="tr">Milimetre</desc>
+								<desc xml:lang="ar">ميليمتر</desc>
+								<desc xml:lang="he">‮מילימטר‬</desc>
+								<desc xml:lang="ca">Mil?l?metre</desc>
+								<desc xml:lang="th">มิลลิเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Centimeter</desc>
 								<desc xml:lang="x-comment">Centimeter</desc>
-								<desc xml:lang="fr">Centimeter</desc>
-								<desc xml:lang="es">Centimeter</desc>
-								<desc xml:lang="it">Centimeter</desc>
+								<desc xml:lang="fr">Centimètre</desc>
+								<desc xml:lang="es">Centímetro</desc>
+								<desc xml:lang="it">Centimetro</desc>
 								<desc xml:lang="sv">Centimeter</desc>
 								<desc xml:lang="ja">センチメートル</desc>
 								<desc xml:lang="ko">센티미터</desc>
 								<desc xml:lang="zh-CN">厘米</desc>
 								<desc xml:lang="zh-TW">厘米</desc>
+								<desc xml:lang="pt">Centímetro</desc>
+								<desc xml:lang="ru">Сантиметры</desc>
+								<desc xml:lang="el">Εκατοστά</desc>
+								<desc xml:lang="nl">Centimeter</desc>
+								<desc xml:lang="fi">Senttimetri</desc>
+								<desc xml:lang="cs">Centimeter</desc>
+								<desc xml:lang="da">Centimeter</desc>
+								<desc xml:lang="pl">Centymetr</desc>
+								<desc xml:lang="pt-BR">Centímetro</desc>
+								<desc xml:lang="tr">Santimetre</desc>
+								<desc xml:lang="ar">سنتيمتر</desc>
+								<desc xml:lang="he">‮סנטימטר‬</desc>
+								<desc xml:lang="ca">Centímetre</desc>
+								<desc xml:lang="th">เซนติเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -657,13 +881,27 @@
 								<desc xml:lang="ko">미터</desc>
 								<desc xml:lang="zh-CN">米</desc>
 								<desc xml:lang="zh-TW">米</desc>
+								<desc xml:lang="pt">Metro</desc>
+								<desc xml:lang="ru">Метры</desc>
+								<desc xml:lang="el">Μέτρα</desc>
+								<desc xml:lang="nl">Meter</desc>
+								<desc xml:lang="fi">Metri</desc>
+								<desc xml:lang="cs">Metr</desc>
+								<desc xml:lang="da">Meter</desc>
+								<desc xml:lang="pl">Metr</desc>
+								<desc xml:lang="pt-BR">Metro</desc>
+								<desc xml:lang="tr">Metre</desc>
+								<desc xml:lang="ar">متر</desc>
+								<desc xml:lang="he">‮מטר‬</desc>
+								<desc xml:lang="ca">Metre</desc>
+								<desc xml:lang="th">เมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
 							<info>
 								<desc xml:lang="en-US">Kilometer</desc>
 								<desc xml:lang="x-comment">Kilometer</desc>
-								<desc xml:lang="fr">Kilometer</desc>
+								<desc xml:lang="fr">Kilomètre</desc>
 								<desc xml:lang="es">Kilómetro</desc>
 								<desc xml:lang="it">Chilometro</desc>
 								<desc xml:lang="sv">Kilometer</desc>
@@ -671,6 +909,20 @@
 								<desc xml:lang="ko">킬로미터</desc>
 								<desc xml:lang="zh-CN">公里</desc>
 								<desc xml:lang="zh-TW">公里</desc>
+								<desc xml:lang="pt">Quilómetro</desc>
+								<desc xml:lang="ru">Километры</desc>
+								<desc xml:lang="el">Χιλιόμετρο</desc>
+								<desc xml:lang="nl">Kilometer</desc>
+								<desc xml:lang="fi">Kilometri</desc>
+								<desc xml:lang="cs">Kilometer</desc>
+								<desc xml:lang="da">Kilometer</desc>
+								<desc xml:lang="pl">Kilometr</desc>
+								<desc xml:lang="pt-BR">Quilometro</desc>
+								<desc xml:lang="tr">Kilometre</desc>
+								<desc xml:lang="ar">كيلومتر</desc>
+								<desc xml:lang="he">‮קילומטר‬</desc>
+								<desc xml:lang="ca">Quilòmetre</desc>
+								<desc xml:lang="th">กิโลเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -685,6 +937,20 @@
 								<desc xml:lang="ko">점</desc>
 								<desc xml:lang="zh-CN">点</desc>
 								<desc xml:lang="zh-TW">點</desc>
+								<desc xml:lang="pt">Ponto</desc>
+								<desc xml:lang="ru">Пункт</desc>
+								<desc xml:lang="el">Σημείο</desc>
+								<desc xml:lang="nl">Punt</desc>
+								<desc xml:lang="fi">Piste</desc>
+								<desc xml:lang="cs">Bod</desc>
+								<desc xml:lang="da">Punkt</desc>
+								<desc xml:lang="pl">Punkt</desc>
+								<desc xml:lang="pt-BR">Ponto</desc>
+								<desc xml:lang="tr">Nokta</desc>
+								<desc xml:lang="ar">نقطة</desc>
+								<desc xml:lang="he">‮נקודה‬</desc>
+								<desc xml:lang="ca">Punt</desc>
+								<desc xml:lang="th">พ้อยนท์</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="7">
@@ -699,6 +965,20 @@
 								<desc xml:lang="ko">표준 규격 활자</desc>
 								<desc xml:lang="zh-CN">皮可</desc>
 								<desc xml:lang="zh-TW">皮可</desc>
+								<desc xml:lang="pt">Pica</desc>
+								<desc xml:lang="ru">Пики</desc>
+								<desc xml:lang="el">Pica (Πίκα)</desc>
+								<desc xml:lang="nl">Pica</desc>
+								<desc xml:lang="fi">Pica</desc>
+								<desc xml:lang="cs">Pika</desc>
+								<desc xml:lang="da">Pica</desc>
+								<desc xml:lang="pl">Cycero</desc>
+								<desc xml:lang="pt-BR">Pica</desc>
+								<desc xml:lang="tr">Pika</desc>
+								<desc xml:lang="ar">بيكا</desc>
+								<desc xml:lang="he">‮פיקה‬</desc>
+								<desc xml:lang="ca">Piques</desc>
+								<desc xml:lang="th">พิคา</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="8">
@@ -713,6 +993,20 @@
 								<desc xml:lang="ko">인치</desc>
 								<desc xml:lang="zh-CN">英寸</desc>
 								<desc xml:lang="zh-TW">英吋</desc>
+								<desc xml:lang="pt">Polegada</desc>
+								<desc xml:lang="ru">Дюймы</desc>
+								<desc xml:lang="el">Ίντσα</desc>
+								<desc xml:lang="nl">Duim</desc>
+								<desc xml:lang="fi">Tuuma</desc>
+								<desc xml:lang="cs">Palec</desc>
+								<desc xml:lang="da">Tommer</desc>
+								<desc xml:lang="pl">Cal</desc>
+								<desc xml:lang="pt-BR">Polegada</desc>
+								<desc xml:lang="tr">Inç</desc>
+								<desc xml:lang="ar">بوصة</desc>
+								<desc xml:lang="he">‮אינצ&apos;‬</desc>
+								<desc xml:lang="ca">Polzada</desc>
+								<desc xml:lang="th">นิ้ว</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -727,6 +1021,20 @@
 								<desc xml:lang="ko">피트</desc>
 								<desc xml:lang="zh-CN">英尺</desc>
 								<desc xml:lang="zh-TW">英尺</desc>
+								<desc xml:lang="pt">Pés</desc>
+								<desc xml:lang="ru">Футы</desc>
+								<desc xml:lang="el">Πόδι</desc>
+								<desc xml:lang="nl">Voet</desc>
+								<desc xml:lang="fi">Jalka</desc>
+								<desc xml:lang="cs">Stopa</desc>
+								<desc xml:lang="da">Fod</desc>
+								<desc xml:lang="pl">Stopa</desc>
+								<desc xml:lang="pt-BR">Pé</desc>
+								<desc xml:lang="tr">Ft</desc>
+								<desc xml:lang="ar">قدم</desc>
+								<desc xml:lang="he">‮רגל‬</desc>
+								<desc xml:lang="ca">Peu</desc>
+								<desc xml:lang="th">ฟุต</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="10">
@@ -741,6 +1049,20 @@
 								<desc xml:lang="ko">마일</desc>
 								<desc xml:lang="zh-CN">英里</desc>
 								<desc xml:lang="zh-TW">英里</desc>
+								<desc xml:lang="pt">Milhas</desc>
+								<desc xml:lang="ru">Мили</desc>
+								<desc xml:lang="el">Μίλια</desc>
+								<desc xml:lang="nl">Mijlen</desc>
+								<desc xml:lang="fi">Mailit</desc>
+								<desc xml:lang="cs">Míle</desc>
+								<desc xml:lang="da">Mil</desc>
+								<desc xml:lang="pl">Mila</desc>
+								<desc xml:lang="pt-BR">Milhas</desc>
+								<desc xml:lang="tr">Mil</desc>
+								<desc xml:lang="ar">أميال</desc>
+								<desc xml:lang="he">‮מיל‬</desc>
+								<desc xml:lang="ca">Milles</desc>
+								<desc xml:lang="th">ไมล์</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -786,34 +1108,76 @@
 						<label xml:lang="ko">치수 단위</label>
 						<label xml:lang="zh-CN">定量单位</label>
 						<label xml:lang="zh-TW">定量單位</label>
+						<label xml:lang="pt">Unidade de medida</label>
+						<label xml:lang="ru">Единица измерения</label>
+						<label xml:lang="el">Μονάδα μέτρησης</label>
+						<label xml:lang="nl">Maateenheid</label>
+						<label xml:lang="fi">Mittayksikkö</label>
+						<label xml:lang="cs">Měrná jednotka</label>
+						<label xml:lang="da">Måleenhed</label>
+						<label xml:lang="pl">Jednostka miary</label>
+						<label xml:lang="pt-BR">Unidade de Medida</label>
+						<label xml:lang="tr">Ölçüm birimi</label>
+						<label xml:lang="ar">وحدة القياس</label>
+						<label xml:lang="he">‮יחידות מידה‬</label>
+						<label xml:lang="ca">Unitat de mesura</label>
+						<label xml:lang="th">หน่วยมาตรวัด</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="1">
 							<info>
 								<desc xml:lang="en-US">Millimeter</desc>
 								<desc xml:lang="x-comment">Millimeter</desc>
-								<desc xml:lang="fr">Millimeter</desc>
+								<desc xml:lang="fr">Millimètre</desc>
 								<desc xml:lang="es">Milímetros</desc>
-								<desc xml:lang="it">Millimeter</desc>
+								<desc xml:lang="it">Millimetro</desc>
 								<desc xml:lang="sv">Millimeter</desc>
 								<desc xml:lang="ja">ミリメートル</desc>
 								<desc xml:lang="ko">밀리미터</desc>
 								<desc xml:lang="zh-CN">毫米</desc>
 								<desc xml:lang="zh-TW">毫米</desc>
+								<desc xml:lang="pt">Milímetro</desc>
+								<desc xml:lang="ru">Миллиметры</desc>
+								<desc xml:lang="el">Χιλιοστά</desc>
+								<desc xml:lang="nl">Millimeter</desc>
+								<desc xml:lang="fi">Millimetri</desc>
+								<desc xml:lang="cs">Milimetr</desc>
+								<desc xml:lang="da">Millimeter</desc>
+								<desc xml:lang="pl">Milimetr</desc>
+								<desc xml:lang="pt-BR">Milímetro</desc>
+								<desc xml:lang="tr">Milimetre</desc>
+								<desc xml:lang="ar">ميليمتر</desc>
+								<desc xml:lang="he">‮מילימטר‬</desc>
+								<desc xml:lang="ca">Mil?l?metre</desc>
+								<desc xml:lang="th">มิลลิเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Centimeter</desc>
 								<desc xml:lang="x-comment">Centimeter</desc>
-								<desc xml:lang="fr">Centimeter</desc>
-								<desc xml:lang="es">Centimeter</desc>
-								<desc xml:lang="it">Centimeter</desc>
+								<desc xml:lang="fr">Centimètre</desc>
+								<desc xml:lang="es">Centímetro</desc>
+								<desc xml:lang="it">Centimetro</desc>
 								<desc xml:lang="sv">Centimeter</desc>
 								<desc xml:lang="ja">センチメートル</desc>
 								<desc xml:lang="ko">센티미터</desc>
 								<desc xml:lang="zh-CN">厘米</desc>
 								<desc xml:lang="zh-TW">厘米</desc>
+								<desc xml:lang="pt">Centímetro</desc>
+								<desc xml:lang="ru">Сантиметры</desc>
+								<desc xml:lang="el">Εκατοστά</desc>
+								<desc xml:lang="nl">Centimeter</desc>
+								<desc xml:lang="fi">Senttimetri</desc>
+								<desc xml:lang="cs">Centimeter</desc>
+								<desc xml:lang="da">Centimeter</desc>
+								<desc xml:lang="pl">Centymetr</desc>
+								<desc xml:lang="pt-BR">Centímetro</desc>
+								<desc xml:lang="tr">Santimetre</desc>
+								<desc xml:lang="ar">سنتيمتر</desc>
+								<desc xml:lang="he">‮סנטימטר‬</desc>
+								<desc xml:lang="ca">Centímetre</desc>
+								<desc xml:lang="th">เซนติเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -828,13 +1192,27 @@
 								<desc xml:lang="ko">미터</desc>
 								<desc xml:lang="zh-CN">米</desc>
 								<desc xml:lang="zh-TW">米</desc>
+								<desc xml:lang="pt">Metro</desc>
+								<desc xml:lang="ru">Метры</desc>
+								<desc xml:lang="el">Μέτρα</desc>
+								<desc xml:lang="nl">Meter</desc>
+								<desc xml:lang="fi">Metri</desc>
+								<desc xml:lang="cs">Metr</desc>
+								<desc xml:lang="da">Meter</desc>
+								<desc xml:lang="pl">Metr</desc>
+								<desc xml:lang="pt-BR">Metro</desc>
+								<desc xml:lang="tr">Metre</desc>
+								<desc xml:lang="ar">متر</desc>
+								<desc xml:lang="he">‮מטר‬</desc>
+								<desc xml:lang="ca">Metre</desc>
+								<desc xml:lang="th">เมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
 							<info>
 								<desc xml:lang="en-US">Kilometer</desc>
 								<desc xml:lang="x-comment">Kilometer</desc>
-								<desc xml:lang="fr">Kilometer</desc>
+								<desc xml:lang="fr">Kilomètre</desc>
 								<desc xml:lang="es">Kilómetro</desc>
 								<desc xml:lang="it">Chilometro</desc>
 								<desc xml:lang="sv">Kilometer</desc>
@@ -842,6 +1220,20 @@
 								<desc xml:lang="ko">킬로미터</desc>
 								<desc xml:lang="zh-CN">公里</desc>
 								<desc xml:lang="zh-TW">公里</desc>
+								<desc xml:lang="pt">Quilómetro</desc>
+								<desc xml:lang="ru">Километры</desc>
+								<desc xml:lang="el">Χιλιόμετρο</desc>
+								<desc xml:lang="nl">Kilometer</desc>
+								<desc xml:lang="fi">Kilometri</desc>
+								<desc xml:lang="cs">Kilometer</desc>
+								<desc xml:lang="da">Kilometer</desc>
+								<desc xml:lang="pl">Kilometr</desc>
+								<desc xml:lang="pt-BR">Quilometro</desc>
+								<desc xml:lang="tr">Kilometre</desc>
+								<desc xml:lang="ar">كيلومتر</desc>
+								<desc xml:lang="he">‮קילומטר‬</desc>
+								<desc xml:lang="ca">Quilòmetre</desc>
+								<desc xml:lang="th">กิโลเมตร</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="6">
@@ -856,6 +1248,20 @@
 								<desc xml:lang="ko">점</desc>
 								<desc xml:lang="zh-CN">点</desc>
 								<desc xml:lang="zh-TW">點</desc>
+								<desc xml:lang="pt">Ponto</desc>
+								<desc xml:lang="ru">Пункт</desc>
+								<desc xml:lang="el">Σημείο</desc>
+								<desc xml:lang="nl">Punt</desc>
+								<desc xml:lang="fi">Piste</desc>
+								<desc xml:lang="cs">Bod</desc>
+								<desc xml:lang="da">Punkt</desc>
+								<desc xml:lang="pl">Punkt</desc>
+								<desc xml:lang="pt-BR">Ponto</desc>
+								<desc xml:lang="tr">Nokta</desc>
+								<desc xml:lang="ar">نقطة</desc>
+								<desc xml:lang="he">‮נקודה‬</desc>
+								<desc xml:lang="ca">Punt</desc>
+								<desc xml:lang="th">พ้อยนท์</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="7">
@@ -870,6 +1276,20 @@
 								<desc xml:lang="ko">표준 규격 활자</desc>
 								<desc xml:lang="zh-CN">皮可</desc>
 								<desc xml:lang="zh-TW">皮可</desc>
+								<desc xml:lang="pt">Pica</desc>
+								<desc xml:lang="ru">Пики</desc>
+								<desc xml:lang="el">Pica (Πίκα)</desc>
+								<desc xml:lang="nl">Pica</desc>
+								<desc xml:lang="fi">Pica</desc>
+								<desc xml:lang="cs">Pika</desc>
+								<desc xml:lang="da">Pica</desc>
+								<desc xml:lang="pl">Cycero</desc>
+								<desc xml:lang="pt-BR">Pica</desc>
+								<desc xml:lang="tr">Pika</desc>
+								<desc xml:lang="ar">بيكا</desc>
+								<desc xml:lang="he">‮פיקה‬</desc>
+								<desc xml:lang="ca">Piques</desc>
+								<desc xml:lang="th">พิคา</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="8">
@@ -884,6 +1304,20 @@
 								<desc xml:lang="ko">인치</desc>
 								<desc xml:lang="zh-CN">英寸</desc>
 								<desc xml:lang="zh-TW">英吋</desc>
+								<desc xml:lang="pt">Polegada</desc>
+								<desc xml:lang="ru">Дюймы</desc>
+								<desc xml:lang="el">Ίντσα</desc>
+								<desc xml:lang="nl">Duim</desc>
+								<desc xml:lang="fi">Tuuma</desc>
+								<desc xml:lang="cs">Palec</desc>
+								<desc xml:lang="da">Tommer</desc>
+								<desc xml:lang="pl">Cal</desc>
+								<desc xml:lang="pt-BR">Polegada</desc>
+								<desc xml:lang="tr">Inç</desc>
+								<desc xml:lang="ar">بوصة</desc>
+								<desc xml:lang="he">‮אינצ&apos;‬</desc>
+								<desc xml:lang="ca">Polzada</desc>
+								<desc xml:lang="th">นิ้ว</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -898,6 +1332,20 @@
 								<desc xml:lang="ko">피트</desc>
 								<desc xml:lang="zh-CN">英尺</desc>
 								<desc xml:lang="zh-TW">英尺</desc>
+								<desc xml:lang="pt">Pés</desc>
+								<desc xml:lang="ru">Футы</desc>
+								<desc xml:lang="el">Πόδι</desc>
+								<desc xml:lang="nl">Voet</desc>
+								<desc xml:lang="fi">Jalka</desc>
+								<desc xml:lang="cs">Stopa</desc>
+								<desc xml:lang="da">Fod</desc>
+								<desc xml:lang="pl">Stopa</desc>
+								<desc xml:lang="pt-BR">Pé</desc>
+								<desc xml:lang="tr">Ft</desc>
+								<desc xml:lang="ar">قدم</desc>
+								<desc xml:lang="he">‮רגל‬</desc>
+								<desc xml:lang="ca">Peu</desc>
+								<desc xml:lang="th">ฟุต</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="10">
@@ -912,6 +1360,20 @@
 								<desc xml:lang="ko">마일</desc>
 								<desc xml:lang="zh-CN">英里</desc>
 								<desc xml:lang="zh-TW">英里</desc>
+								<desc xml:lang="pt">Milhas</desc>
+								<desc xml:lang="ru">Мили</desc>
+								<desc xml:lang="el">Μίλια</desc>
+								<desc xml:lang="nl">Mijlen</desc>
+								<desc xml:lang="fi">Mailit</desc>
+								<desc xml:lang="cs">Míle</desc>
+								<desc xml:lang="da">Mil</desc>
+								<desc xml:lang="pl">Mila</desc>
+								<desc xml:lang="pt-BR">Milhas</desc>
+								<desc xml:lang="tr">Mil</desc>
+								<desc xml:lang="ar">أميال</desc>
+								<desc xml:lang="he">‮מיל‬</desc>
+								<desc xml:lang="ca">Milles</desc>
+								<desc xml:lang="th">ไมล์</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -947,6 +1409,20 @@
 								<desc xml:lang="ko">퍼센트</desc>
 								<desc xml:lang="zh-CN">百分比</desc>
 								<desc xml:lang="zh-TW">百分比</desc>
+								<desc xml:lang="pt">~Percentagem</desc>
+								<desc xml:lang="ru">Процент</desc>
+								<desc xml:lang="el">Ποσοστό (%)</desc>
+								<desc xml:lang="nl">Procent</desc>
+								<desc xml:lang="fi">Prosenttia</desc>
+								<desc xml:lang="cs">Procento</desc>
+								<desc xml:lang="da">Procent</desc>
+								<desc xml:lang="pl">Procent</desc>
+								<desc xml:lang="pt-BR">Porcentagem</desc>
+								<desc xml:lang="tr">Yüzde</desc>
+								<desc xml:lang="ar">في المئة</desc>
+								<desc xml:lang="he">‮אחוז‬</desc>
+								<desc xml:lang="ca">Percentatge</desc>
+								<desc xml:lang="th">เปอร์เซ็นต์</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -961,6 +1437,20 @@
 								<desc xml:lang="ko">Whole Page</desc>
 								<desc xml:lang="zh-CN">Whole Page</desc>
 								<desc xml:lang="zh-TW">Whole Page</desc>
+								<desc xml:lang="pt">Whole Page</desc>
+								<desc xml:lang="ru">Whole Page</desc>
+								<desc xml:lang="el">Whole Page</desc>
+								<desc xml:lang="nl">Whole Page</desc>
+								<desc xml:lang="fi">Whole Page</desc>
+								<desc xml:lang="cs">Whole Page</desc>
+								<desc xml:lang="da">Whole Page</desc>
+								<desc xml:lang="pl">Whole Page</desc>
+								<desc xml:lang="pt-BR">Whole Page</desc>
+								<desc xml:lang="tr">Whole Page</desc>
+								<desc xml:lang="ar">Whole Page</desc>
+								<desc xml:lang="he">Whole Page</desc>
+								<desc xml:lang="ca">Whole Page</desc>
+								<desc xml:lang="th">Whole Page</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -975,6 +1465,20 @@
 								<desc xml:lang="ko">페이지 너비</desc>
 								<desc xml:lang="zh-CN">页面宽度</desc>
 								<desc xml:lang="zh-TW">頁面寬度</desc>
+								<desc xml:lang="pt">Larg. de página</desc>
+								<desc xml:lang="ru">По ширине страницы</desc>
+								<desc xml:lang="el">Πλάτος σελίδας</desc>
+								<desc xml:lang="nl">Paginabreedte</desc>
+								<desc xml:lang="fi">Sivun leveys</desc>
+								<desc xml:lang="cs">Šířka stránky</desc>
+								<desc xml:lang="da">Sidebredde</desc>
+								<desc xml:lang="pl">Szerokość strony</desc>
+								<desc xml:lang="pt-BR">Largura da Página</desc>
+								<desc xml:lang="tr">Sayfa genişliği</desc>
+								<desc xml:lang="ar">عرض الصفحة</desc>
+								<desc xml:lang="he">‮רוחב הדף‬</desc>
+								<desc xml:lang="ca">Ample de pàgina</desc>
+								<desc xml:lang="th">ความกว้างของหน้า</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1026,6 +1530,20 @@
 						<label xml:lang="ko">그리드로 스냅</label>
 						<label xml:lang="zh-CN">使用网格坐标</label>
 						<label xml:lang="zh-TW">使用網格</label>
+						<label xml:lang="pt">Utilizar grelha</label>
+						<label xml:lang="ru">Привязать к сетке</label>
+						<label xml:lang="el">Προσκόλληση στο πλέγμα</label>
+						<label xml:lang="nl">Vangen aan raster</label>
+						<label xml:lang="fi">Kohdista ruudukkoon</label>
+						<label xml:lang="cs">Přichytávat do mřížky</label>
+						<label xml:lang="da">Fastgør til gitter</label>
+						<label xml:lang="pl">Zaczep przy siatce</label>
+						<label xml:lang="pt-BR">Foto Grade</label>
+						<label xml:lang="tr">Kılavuz çizgileri kullan</label>
+						<label xml:lang="ar">حبس في الشبكة</label>
+						<label xml:lang="he">‮הזזה על קוי הרשת‬</label>
+						<label xml:lang="ca">Captura la graella</label>
+						<label xml:lang="th">จัดชิดกับเส้นตาราง</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1166,6 +1684,20 @@
 						<label xml:lang="ko">그래픽</label>
 						<label xml:lang="zh-CN">图形</label>
 						<label xml:lang="zh-TW">圖形</label>
+						<label xml:lang="pt">Imagem</label>
+						<label xml:lang="ru">Графика</label>
+						<label xml:lang="el">Γραφικό</label>
+						<label xml:lang="nl">Afbeelding</label>
+						<label xml:lang="fi">Kuvat</label>
+						<label xml:lang="cs">Grafika</label>
+						<label xml:lang="da">Grafik</label>
+						<label xml:lang="pl">Grafika</label>
+						<label xml:lang="pt-BR">Imagem</label>
+						<label xml:lang="tr">Grafik</label>
+						<label xml:lang="ar">صورة</label>
+						<label xml:lang="he">‮גרפיקה‬</label>
+						<label xml:lang="ca">Gràfics</label>
+						<label xml:lang="th">กราฟิค</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1187,6 +1719,19 @@
 						<label xml:lang="ko">표</label>
 						<label xml:lang="zh-CN">表格</label>
 						<label xml:lang="zh-TW">表格</label>
+						<label xml:lang="pt">Tabelas</label>
+						<label xml:lang="ru">Таблицы</label>
+						<label xml:lang="el">Πίνακες</label>
+						<label xml:lang="nl">Tabellen</label>
+						<label xml:lang="fi">Taulukot</label>
+						<label xml:lang="cs">Tabulky</label>
+						<label xml:lang="da">Tabeller</label>
+						<label xml:lang="pl">Tabele</label>
+						<label xml:lang="pt-BR">Tabelas</label>
+						<label xml:lang="ar">جداول</label>
+						<label xml:lang="he">‮טבלאות‬</label>
+						<label xml:lang="ca">Taules</label>
+						<label xml:lang="th">ตาราง</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1204,11 +1749,25 @@
 						<label xml:lang="fr">Contrôles</label>
 						<label xml:lang="es">Controles</label>
 						<label xml:lang="it">Campi di controllo</label>
-						<label xml:lang="sv">Controls</label>
+						<label xml:lang="sv">Kontrollelement</label>
 						<label xml:lang="ja">コントロール</label>
 						<label xml:lang="ko">컨트롤</label>
 						<label xml:lang="zh-CN">控件</label>
 						<label xml:lang="zh-TW">控制項</label>
+						<label xml:lang="pt">Controlos</label>
+						<label xml:lang="ru">Элементы управления</label>
+						<label xml:lang="el">Στοιχεία ελέγχου</label>
+						<label xml:lang="nl">Controles</label>
+						<label xml:lang="fi">Ohjaimet</label>
+						<label xml:lang="cs">Ovládací prvky</label>
+						<label xml:lang="da">Kontrolelementer</label>
+						<label xml:lang="pl">Pola kontrolne</label>
+						<label xml:lang="pt-BR">Controles</label>
+						<label xml:lang="tr">Komut alanları</label>
+						<label xml:lang="ar">عناصر تحكم</label>
+						<label xml:lang="he">‮שלטים‬</label>
+						<label xml:lang="ca">Elements de control</label>
+						<label xml:lang="th">ตัวควบคุม</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1231,6 +1790,20 @@
 						<label xml:lang="ko">배경</label>
 						<label xml:lang="zh-CN">背景</label>
 						<label xml:lang="zh-TW">背景</label>
+						<label xml:lang="pt">Plano de fundo</label>
+						<label xml:lang="ru">Фон</label>
+						<label xml:lang="el">Φόντο</label>
+						<label xml:lang="nl">Achtergrond</label>
+						<label xml:lang="fi">Tausta</label>
+						<label xml:lang="cs">Pozadí</label>
+						<label xml:lang="da">Baggrund</label>
+						<label xml:lang="pl">Tło</label>
+						<label xml:lang="pt-BR">Plano de fundo</label>
+						<label xml:lang="tr">Artalan</label>
+						<label xml:lang="ar">الخلفية</label>
+						<label xml:lang="he">‮רקע‬</label>
+						<label xml:lang="ca">Fons</label>
+						<label xml:lang="th">พื้นหลัง</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1272,6 +1845,20 @@
 								<desc xml:lang="ko">없음</desc>
 								<desc xml:lang="zh-CN">无</desc>
 								<desc xml:lang="zh-TW">無充填</desc>
+								<desc xml:lang="pt">Nenhum</desc>
+								<desc xml:lang="ru">Без</desc>
+								<desc xml:lang="el">Κανένα</desc>
+								<desc xml:lang="nl">Geen</desc>
+								<desc xml:lang="fi">Ei mitään</desc>
+								<desc xml:lang="cs">Žádné</desc>
+								<desc xml:lang="da">Ingen</desc>
+								<desc xml:lang="pl">Brak</desc>
+								<desc xml:lang="pt-BR">Nenhum</desc>
+								<desc xml:lang="tr">Yok</desc>
+								<desc xml:lang="ar">بدون</desc>
+								<desc xml:lang="he">‮ללא‬</desc>
+								<desc xml:lang="ca">Cap</desc>
+								<desc xml:lang="th">ไม่มี</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -1286,6 +1873,20 @@
 								<desc xml:lang="ko">Notes only</desc>
 								<desc xml:lang="zh-CN">Notes only</desc>
 								<desc xml:lang="zh-TW">Notes only</desc>
+								<desc xml:lang="pt">Notes only</desc>
+								<desc xml:lang="ru">Notes only</desc>
+								<desc xml:lang="el">Notes only</desc>
+								<desc xml:lang="nl">Notes only</desc>
+								<desc xml:lang="fi">Notes only</desc>
+								<desc xml:lang="cs">Notes only</desc>
+								<desc xml:lang="da">Notes only</desc>
+								<desc xml:lang="pl">Notes only</desc>
+								<desc xml:lang="pt-BR">Notes only</desc>
+								<desc xml:lang="tr">Notes only</desc>
+								<desc xml:lang="ar">Notes only</desc>
+								<desc xml:lang="he">Notes only</desc>
+								<desc xml:lang="ca">Notes only</desc>
+								<desc xml:lang="th">Notes only</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -1300,6 +1901,20 @@
 								<desc xml:lang="ko">End of document</desc>
 								<desc xml:lang="zh-CN">End of document</desc>
 								<desc xml:lang="zh-TW">End of document</desc>
+								<desc xml:lang="pt">End of document</desc>
+								<desc xml:lang="ru">End of document</desc>
+								<desc xml:lang="el">End of document</desc>
+								<desc xml:lang="nl">End of document</desc>
+								<desc xml:lang="fi">End of document</desc>
+								<desc xml:lang="cs">End of document</desc>
+								<desc xml:lang="da">End of document</desc>
+								<desc xml:lang="pl">End of document</desc>
+								<desc xml:lang="pt-BR">End of document</desc>
+								<desc xml:lang="tr">End of document</desc>
+								<desc xml:lang="ar">End of document</desc>
+								<desc xml:lang="he">End of document</desc>
+								<desc xml:lang="ca">End of document</desc>
+								<desc xml:lang="th">End of document</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -1314,6 +1929,20 @@
 								<desc xml:lang="ko">End of page</desc>
 								<desc xml:lang="zh-CN">End of page</desc>
 								<desc xml:lang="zh-TW">End of page</desc>
+								<desc xml:lang="pt">End of page</desc>
+								<desc xml:lang="ru">End of page</desc>
+								<desc xml:lang="el">End of page</desc>
+								<desc xml:lang="nl">End of page</desc>
+								<desc xml:lang="fi">End of page</desc>
+								<desc xml:lang="cs">End of page</desc>
+								<desc xml:lang="da">End of page</desc>
+								<desc xml:lang="pl">End of page</desc>
+								<desc xml:lang="pt-BR">End of page</desc>
+								<desc xml:lang="tr">End of page</desc>
+								<desc xml:lang="ar">End of page</desc>
+								<desc xml:lang="he">End of page</desc>
+								<desc xml:lang="ca">End of page</desc>
+								<desc xml:lang="th">End of page</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1389,14 +2018,25 @@
 							<desc xml:lang="zh-CN">指定从文档中直接发送传真时所使用的传真机。</desc>
 						<label xml:lang="en-US">Fax</label>
 						<label xml:lang="x-comment">; Fax</label>
-						<label xml:lang="fr">Fax</label>
+						<label xml:lang="fr">~Fax</label>
 						<label xml:lang="es">Fax</label>
 						<label xml:lang="it">Fax</label>
-						<label xml:lang="sv">Fax</label>
+						<label xml:lang="sv">~Fax</label>
 						<label xml:lang="ja">FAX 番号</label>
 						<label xml:lang="ko">팩스</label>
 						<label xml:lang="zh-CN">传真</label>
 						<label xml:lang="zh-TW">傳真</label>
+						<label xml:lang="pt">~Fax</label>
+						<label xml:lang="ru">Факс</label>
+						<label xml:lang="el">~Fax</label>
+						<label xml:lang="nl">~Fax</label>
+						<label xml:lang="fi">Faksi</label>
+						<label xml:lang="da">FA~X</label>
+						<label xml:lang="pl">Faks</label>
+						<label xml:lang="tr">faks</label>
+						<label xml:lang="ar">الفاكس</label>
+						<label xml:lang="he">‮פקס‬</label>
+						<label xml:lang="th">โทรสาร</label>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1457,6 +2097,20 @@
 						<label xml:lang="ko">행</label>
 						<label xml:lang="zh-CN">行</label>
 						<label xml:lang="zh-TW">行</label>
+						<label xml:lang="pt">Linha</label>
+						<label xml:lang="ru">Строка</label>
+						<label xml:lang="el">Γραμμή</label>
+						<label xml:lang="nl">Rij</label>
+						<label xml:lang="fi">Rivi</label>
+						<label xml:lang="cs">Řádek</label>
+						<label xml:lang="da">Række</label>
+						<label xml:lang="pl">Wiersz</label>
+						<label xml:lang="pt-BR">Linha</label>
+						<label xml:lang="tr">Satır</label>
+						<label xml:lang="ar">صف</label>
+						<label xml:lang="he">Zeile</label>
+						<label xml:lang="ca">fila</label>
+						<label xml:lang="th">แถว</label>
 					</info>
 					<value>500</value>
 				</prop>
@@ -1480,6 +2134,18 @@
 						<label xml:lang="ko">열</label>
 						<label xml:lang="zh-CN">列</label>
 						<label xml:lang="zh-TW">欄</label>
+						<label xml:lang="pt">Núm_coluna</label>
+						<label xml:lang="ru">Колонка</label>
+						<label xml:lang="el">Στήλη</label>
+						<label xml:lang="nl">Kolom</label>
+						<label xml:lang="fi">Sarake</label>
+						<label xml:lang="cs">Sloupec</label>
+						<label xml:lang="da">Kolonne</label>
+						<label xml:lang="pl">Kolumna</label>
+						<label xml:lang="tr">Sütun</label>
+						<label xml:lang="ar">عمود</label>
+						<label xml:lang="he">‮עמודה‬</label>
+						<label xml:lang="th">คอลัมน์</label>
 					</info>
 					<value>500</value>
 				</prop>
@@ -1510,6 +2176,20 @@
 						<label xml:lang="ko">행</label>
 						<label xml:lang="zh-CN">行</label>
 						<label xml:lang="zh-TW">行</label>
+						<label xml:lang="pt">Linha</label>
+						<label xml:lang="ru">Строка</label>
+						<label xml:lang="el">Γραμμή</label>
+						<label xml:lang="nl">Rij</label>
+						<label xml:lang="fi">Rivi</label>
+						<label xml:lang="cs">Řádek</label>
+						<label xml:lang="da">Række</label>
+						<label xml:lang="pl">Wiersz</label>
+						<label xml:lang="pt-BR">Linha</label>
+						<label xml:lang="tr">Satır</label>
+						<label xml:lang="ar">صف</label>
+						<label xml:lang="he">Zeile</label>
+						<label xml:lang="ca">fila</label>
+						<label xml:lang="th">แถว</label>
 					</info>
 					<value>500</value>
 				</prop>
@@ -1533,6 +2213,18 @@
 						<label xml:lang="ko">열</label>
 						<label xml:lang="zh-CN">列</label>
 						<label xml:lang="zh-TW">欄</label>
+						<label xml:lang="pt">Núm_coluna</label>
+						<label xml:lang="ru">Колонка</label>
+						<label xml:lang="el">Στήλη</label>
+						<label xml:lang="nl">Kolom</label>
+						<label xml:lang="fi">Sarake</label>
+						<label xml:lang="cs">Sloupec</label>
+						<label xml:lang="da">Kolonne</label>
+						<label xml:lang="pl">Kolumna</label>
+						<label xml:lang="tr">Sütun</label>
+						<label xml:lang="ar">عمود</label>
+						<label xml:lang="he">‮עמודה‬</label>
+						<label xml:lang="th">คอลัมน์</label>
 					</info>
 					<value>2500</value>
 				</prop>
@@ -1566,6 +2258,20 @@
 								<desc xml:lang="ko">고정</desc>
 								<desc xml:lang="zh-CN">固定</desc>
 								<desc xml:lang="zh-TW">固定</desc>
+								<desc xml:lang="pt">Fixo</desc>
+								<desc xml:lang="ru">Точный</desc>
+								<desc xml:lang="el">Σταθερά</desc>
+								<desc xml:lang="nl">Vast</desc>
+								<desc xml:lang="fi">Kiinteä</desc>
+								<desc xml:lang="cs">Písmo s pevnou šířkou (fixed)</desc>
+								<desc xml:lang="da">Fast</desc>
+								<desc xml:lang="pl">stałe</desc>
+								<desc xml:lang="pt-BR">Largura Fixa</desc>
+								<desc xml:lang="tr">Sabit</desc>
+								<desc xml:lang="ar">ثابت</desc>
+								<desc xml:lang="he">‮קבוע‬</desc>
+								<desc xml:lang="ca">Fix</desc>
+								<desc xml:lang="th">คงที่</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -1580,6 +2286,20 @@
 								<desc xml:lang="ko">FixedProportional</desc>
 								<desc xml:lang="zh-CN">FixedProportional</desc>
 								<desc xml:lang="zh-TW">FixedProportional</desc>
+								<desc xml:lang="pt">FixedProportional</desc>
+								<desc xml:lang="ru">FixedProportional</desc>
+								<desc xml:lang="el">FixedProportional</desc>
+								<desc xml:lang="nl">FixedProportional</desc>
+								<desc xml:lang="fi">FixedProportional</desc>
+								<desc xml:lang="cs">FixedProportional</desc>
+								<desc xml:lang="da">FixedProportional</desc>
+								<desc xml:lang="pl">FixedProportional</desc>
+								<desc xml:lang="pt-BR">FixedProportional</desc>
+								<desc xml:lang="tr">FixedProportional</desc>
+								<desc xml:lang="ar">FixedProportional</desc>
+								<desc xml:lang="he">FixedProportional</desc>
+								<desc xml:lang="ca">FixedProportional</desc>
+								<desc xml:lang="th">FixedProportional</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -1588,12 +2308,26 @@
 								<desc xml:lang="x-comment">Variable</desc>
 								<desc xml:lang="fr">Variable</desc>
 								<desc xml:lang="es">Variable</desc>
-								<desc xml:lang="it">Variable</desc>
-								<desc xml:lang="sv">Variable</desc>
+								<desc xml:lang="it">Variabile</desc>
+								<desc xml:lang="sv">Variabel</desc>
 								<desc xml:lang="ja">変数</desc>
 								<desc xml:lang="ko">변수</desc>
 								<desc xml:lang="zh-CN">可变</desc>
 								<desc xml:lang="zh-TW">可變</desc>
+								<desc xml:lang="pt">Variável</desc>
+								<desc xml:lang="ru">Переменная</desc>
+								<desc xml:lang="el">Μεταβλητή</desc>
+								<desc xml:lang="nl">Variabele</desc>
+								<desc xml:lang="fi">Muuttuja</desc>
+								<desc xml:lang="cs">Proměnný</desc>
+								<desc xml:lang="da">Variabel</desc>
+								<desc xml:lang="pl">Zmienna</desc>
+								<desc xml:lang="pt-BR">Variável</desc>
+								<desc xml:lang="tr">Değişken</desc>
+								<desc xml:lang="ar">متغيرة</desc>
+								<desc xml:lang="he">Variabel</desc>
+								<desc xml:lang="ca">Variable</desc>
+								<desc xml:lang="th">ตัวแปร</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1625,6 +2359,20 @@
 						<label xml:lang="ko">번호 인식</label>
 						<label xml:lang="zh-CN">识别数字</label>
 						<label xml:lang="zh-TW">數字識別</label>
+						<label xml:lang="pt">R~econhecimento de números</label>
+						<label xml:lang="ru">Распознавание чисел</label>
+						<label xml:lang="el">Αναγνώριση αριθμών</label>
+						<label xml:lang="nl">Herkenning van getallen</label>
+						<label xml:lang="fi">Lukujen tunnistus</label>
+						<label xml:lang="cs">Rozpoznání čísel</label>
+						<label xml:lang="da">Talgenkendelse</label>
+						<label xml:lang="pl">Identyfikacja numeru</label>
+						<label xml:lang="pt-BR">R~econhecimento de números</label>
+						<label xml:lang="tr">Sayı tanıma</label>
+						<label xml:lang="ar">تعريف الأرقام</label>
+						<label xml:lang="he">‮זיהוי מספרים‬</label>
+						<label xml:lang="ca">Reconeixement de números</label>
+						<label xml:lang="th">จดจำตัวเลข</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1647,6 +2395,20 @@
 						<label xml:lang="ko">숫자 형식 인식</label>
 						<label xml:lang="zh-CN">识别数字格式</label>
 						<label xml:lang="zh-TW">識別數字格式</label>
+						<label xml:lang="pt">Reconhecimento do ~formato numérico</label>
+						<label xml:lang="ru">Распознание числового формата</label>
+						<label xml:lang="el">Αναγνώριση μορφής αριθμού</label>
+						<label xml:lang="nl">Herkenning ~getalnotatie</label>
+						<label xml:lang="fi">Numeromuodon tunnistus</label>
+						<label xml:lang="cs">Rozpoznání formátu čísel</label>
+						<label xml:lang="da">Talformatgen~kendelse</label>
+						<label xml:lang="pl">Rozpoznawanie for~matu liczb</label>
+						<label xml:lang="pt-BR">Reconhecimento do ~formato numérico</label>
+						<label xml:lang="tr">Sayı formatı tanıma</label>
+						<label xml:lang="ar">تعريف تنسيق الأرقام</label>
+						<label xml:lang="he">Zahlenformater~kennung</label>
+						<label xml:lang="ca">Reconeixement format ~numèric</label>
+						<label xml:lang="th">จดจำรูปแบบตัวเลข</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1669,6 +2431,20 @@
 						<label xml:lang="ko">맞춤</label>
 						<label xml:lang="zh-CN">对齐</label>
 						<label xml:lang="zh-TW">對齊</label>
+						<label xml:lang="pt">Alinhar</label>
+						<label xml:lang="ru">Выравнивание</label>
+						<label xml:lang="el">Στοίχιση</label>
+						<label xml:lang="nl">Uitlijning</label>
+						<label xml:lang="fi">Tasaus</label>
+						<label xml:lang="cs">Zarovnání</label>
+						<label xml:lang="da">Justering</label>
+						<label xml:lang="pl">Wyrównanie</label>
+						<label xml:lang="pt-BR">Alinhamento</label>
+						<label xml:lang="tr">Hizalama</label>
+						<label xml:lang="ar">المحاذاة</label>
+						<label xml:lang="he">‮יישור‬</label>
+						<label xml:lang="ca">Alineament</label>
+						<label xml:lang="th">การจัดตำแหน่ง</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1705,6 +2481,20 @@
 						<label xml:lang="ko">표제</label>
 						<label xml:lang="zh-CN">标题</label>
 						<label xml:lang="zh-TW">標題</label>
+						<label xml:lang="pt">~Título</label>
+						<label xml:lang="ru">Заголовок</label>
+						<label xml:lang="el">Επικεφαλίδα</label>
+						<label xml:lang="nl">~Kop</label>
+						<label xml:lang="fi">Yläotsikko</label>
+						<label xml:lang="cs">Záhlaví</label>
+						<label xml:lang="da">Overskrift</label>
+						<label xml:lang="pl">Tytuł</label>
+						<label xml:lang="pt-BR">Cabeçalho</label>
+						<label xml:lang="tr">Başlık</label>
+						<label xml:lang="ar">العنوان</label>
+						<label xml:lang="he">‮כותרת עליונה‬</label>
+						<label xml:lang="ca">Capçalera</label>
+						<label xml:lang="th">หัวกระดาษ</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1742,6 +2532,20 @@
 						<label xml:lang="ko">테두리</label>
 						<label xml:lang="zh-CN">边框</label>
 						<label xml:lang="zh-TW">框</label>
+						<label xml:lang="pt">Moldura</label>
+						<label xml:lang="ru">Рамка</label>
+						<label xml:lang="el">Περίγραμμα</label>
+						<label xml:lang="nl">Kader</label>
+						<label xml:lang="fi">Reuna</label>
+						<label xml:lang="cs">Okraj</label>
+						<label xml:lang="da">Ramme</label>
+						<label xml:lang="pl">Ramka</label>
+						<label xml:lang="pt-BR">Moldura</label>
+						<label xml:lang="tr">Çerçeve</label>
+						<label xml:lang="ar">كادر</label>
+						<label xml:lang="he">‮שוליים‬</label>
+						<label xml:lang="ca">Vora</label>
+						<label xml:lang="th">เส้นขอบ</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1830,6 +2634,20 @@
 					<label xml:lang="ko">배경색</label>
 					<label xml:lang="zh-CN">背景颜色</label>
 					<label xml:lang="zh-TW">背景顏色</label>
+					<label xml:lang="pt">Cor de fundo</label>
+					<label xml:lang="ru">Цвет фона</label>
+					<label xml:lang="el">Χρώμα φόντου</label>
+					<label xml:lang="nl">Achtergrondkleur</label>
+					<label xml:lang="fi">Taustaväri</label>
+					<label xml:lang="cs">Barva pozadí</label>
+					<label xml:lang="da">Baggrundsfarve</label>
+					<label xml:lang="pl">Kolor tła</label>
+					<label xml:lang="pt-BR">Cor de fundo</label>
+					<label xml:lang="tr">Artalan rengi</label>
+					<label xml:lang="ar">لون الخلفية</label>
+					<label xml:lang="he">‮צבע רקע‬</label>
+					<label xml:lang="ca">Color de fons</label>
+					<label xml:lang="th">สีพื้นหลัง</label>
 				</info>
 			</prop>
 		</group>
@@ -1853,5 +2671,6 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
