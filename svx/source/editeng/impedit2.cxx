@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
+ *  last change: $Author: mt $ $Date: 2002-08-20 10:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3355,8 +3355,8 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
     if ( bR2LPara )
     {
         // Switch X postions...
-        DBG_ASSERT( GetPaperSize().Width(), "GetPortionXOffset - paper size?!" );
-        DBG_ASSERT( nX <= GetPaperSize().Width(), "GetPortionXOffset - position out of paper size!" );
+        DBG_ASSERT( GetTextRanger() || GetPaperSize().Width(), "GetPortionXOffset - paper size?!" );
+        DBG_ASSERT( GetTextRanger() || (nX <= GetPaperSize().Width()), "GetPortionXOffset - position out of paper size!" );
         nX = GetPaperSize().Width() - nX;
         nX -= pDestPortion->GetSize().Width();
     }
