@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Filter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:28:37 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -139,6 +136,7 @@ namespace frm
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xField;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >           m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xMessageParent;
 
