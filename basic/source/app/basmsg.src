@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:17:14 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 14:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ String S_ERROR_OUTSIDE_TESTCASE
     Text[ danish ] = "Error outside of test case.";
     Text[ swedish ] = "Error outside of test case";
     Text[ polish ] = "B³¹d poza Testcase.";
-    Text[ portuguese_brazilian ] = "Fehler außerhalb eines Testcase.";
+    Text[ portuguese_brazilian ] = "Fehler au?erhalb eines Testcase.";
     Text[ japanese ] = "Error outside of test case.";
     Text[ korean ] = "Å×½ºÆ® ÄÉÀÌ½º ¿ÜºÎÀÇ ¿À·ù";
     Text[ chinese_simplified ] = "Error outside of test case";
