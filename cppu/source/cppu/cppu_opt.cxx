@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppu_opt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:52:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "typelib/typedescription.h"
+#include "uno/any2.h"
 #include "rtl/ustrbuf.hxx"
 
 
@@ -75,6 +76,23 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     buf.append( OUString::unacquired( &pType->pTypeName ) );
     buf.append( (sal_Unicode) '!' );
     OUString ret( buf.makeStringAndClear() );
+    rtl_uString_acquire( ret.pData );
+    return ret.pData;
+}
+
+//##############################################################################
+extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
+    uno_Any * pAny, typelib_TypeDescriptionReference * pType )
+    SAL_THROW_EXTERN_C()
+{
+    OUStringBuffer buf;
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+                         "Cannot extract an Any(") );
+    buf.append( OUString::unacquired(&pAny->pType->pTypeName) );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(") to ") );
+    buf.append( OUString::unacquired(&pType->pTypeName) );
+    buf.append( static_cast<sal_Unicode>('!') );
+    const OUString ret( buf.makeStringAndClear() );
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }
