@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:05:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,8 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     ResMgr*                             pResMgr = NULL;
 
     ResMgr::GetResourceSkipHeader( rResId.SetRT( RSC_BITMAP ), &pResMgr );
-    pResMgr->ReadShort();
-    pResMgr->ReadShort();
+    pResMgr->ReadLong();
+    pResMgr->ReadLong();
 
     const String aFileName( pResMgr->ReadString() );
 
