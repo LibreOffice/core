@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:30:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1672,6 +1672,7 @@ void ToolBox::SetOutStyle( USHORT nNewStyle )
     if ( mnOutStyle != nNewStyle )
     {
         mnOutStyle = nNewStyle;
+        ImplDisableFlatButtons();
 
         // Damit das ButtonDevice neu angelegt wird
         if ( !(mnOutStyle & TOOLBOX_STYLE_FLAT) )
