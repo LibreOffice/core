@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aststruct.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-30 10:27:39 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <idlc/astmember.hxx>
 #endif
 
+#include "registry/version.h"
+#include "registry/writer.hxx"
+
 using namespace ::rtl;
 
 AstStruct::AstStruct(const OString& name, AstStruct* pBaseType, AstScope* pScope)
@@ -88,7 +91,7 @@ AstStruct::~AstStruct()
 {
 }
 
-sal_Bool AstStruct::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstStruct::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
@@ -100,26 +103,27 @@ sal_Bool AstStruct::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     }
 
     sal_uInt16 nMember = getNodeCount(NT_member);
-    OUString uBaseTypeName;
-    if ( m_pBaseType )
-        uBaseTypeName = OStringToOUString(m_pBaseType->getRelativName(),
-                                          RTL_TEXTENCODING_UTF8);
 
     RTTypeClass typeClass = RT_TYPE_STRUCT;
     if ( getNodeType() == NT_exception )
         typeClass = RT_TYPE_EXCEPTION;
 
-    RegistryTypeWriter aBlob(pLoader->getApi(), typeClass,
-                             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                             uBaseTypeName, nMember, 0, 0);
-
-    aBlob.setDoku( getDocumentation() );
-    aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
+    typereg::Writer aBlob(
+        TYPEREG_VERSION_0, getDocumentation(),
+        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), typeClass,
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
+        m_pBaseType == 0 ? 0 : 1, nMember, 0, 0);
+    if (m_pBaseType != 0) {
+        aBlob.setSuperTypeName(
+            0,
+            OStringToOUString(
+                m_pBaseType->getRelativName(), RTL_TEXTENCODING_UTF8));
+    }
 
     if ( nMember > 0 )
     {
-        DeclList::iterator iter = getIteratorBegin();
-        DeclList::iterator end = getIteratorEnd();
+        DeclList::const_iterator iter = getIteratorBegin();
+        DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
         AstMember*  pMember = NULL;
         OUString    docu;
@@ -130,17 +134,22 @@ sal_Bool AstStruct::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             if ( pDecl->getNodeType() == NT_member )
             {
                 pMember = (AstMember*)pDecl;
-                aBlob.setFieldData(index++,
-                    OStringToOUString(pMember->getLocalName(), RTL_TEXTENCODING_UTF8),
-                    OStringToOUString(pMember->getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                    pMember->getDocumentation(), OUString(), RT_ACCESS_READWRITE);
+                aBlob.setFieldData(
+                    index++, pMember->getDocumentation(), OUString(),
+                    RT_ACCESS_READWRITE,
+                    OStringToOUString(
+                        pMember->getLocalName(), RTL_TEXTENCODING_UTF8),
+                    OStringToOUString(
+                        pMember->getType()->getRelativName(),
+                        RTL_TEXTENCODING_UTF8),
+                    RTConstValue());
             }
             ++iter;
         }
     }
 
-    const sal_uInt8* pBlob = aBlob.getBlop();
-    sal_uInt32       aBlobSize = aBlob.getBlopSize();
+    sal_uInt32 aBlobSize;
+    void const * pBlob = aBlob.getBlob(&aBlobSize);
 
     if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
                             (RegValue)pBlob, aBlobSize))
