@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:02:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,5 +693,6 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
 
 
