@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:10:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,46 @@ void SdModule::Execute(SfxRequest& rReq)
                 BOOL bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
                 if( bNewDocDirect && !bStartWithTemplate )
                 {
+                    //we start without wizard
+
+                    //check wether we should load a template document
+                    bool bLoadTemplate = false;
+                    const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) );
+                    String aStandardTemplate = SfxObjectFactory::GetStandardTemplate( aServiceName );
+                    bLoadTemplate = aStandardTemplate.Len()>0;
+
+                    if( bLoadTemplate )
+                    {
+                        //load a template document
+
+                        SfxObjectShellLock xDocShell;
+
+                        SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
+                        pSet->Put( SfxBoolItem( SID_TEMPLATE, TRUE ) );
+                        ULONG lErr = SFX_APP()->LoadTemplate( xDocShell, aStandardTemplate, TRUE, pSet );
+
+                        if( lErr )
+                            ErrorHandler::HandleError(lErr);
+                        else
+                        {
+                            SfxObjectShell* pDocShell = xDocShell;
+
+                            SfxViewFrame* pViewFrame = NULL;
+                            SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+                            if ( pFrmItem && pDocShell )
+                            {
+                                pFrame = pFrmItem->GetFrame();
+                                pFrame->InsertDocument( pDocShell );
+                                pViewFrame = pFrame->GetCurrentViewFrame();
+                            }
+                            else if( pDocShell )
+                                pViewFrame = SFX_APP()->CreateViewFrame( *pDocShell );
+                        }
+                        break;
+                    }
+
+                    //create an empty document
+
                     SfxObjectShellLock xDocShell;
                     ::sd::DrawDocShell* pNewDocSh;
                     xDocShell = pNewDocSh = new ::sd::DrawDocShell(
