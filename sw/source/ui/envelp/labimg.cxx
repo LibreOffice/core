@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:24:14 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,20 @@
 #include <tools/resid.hxx>
 #endif
 
-#ifndef _SVX_ADRITEM_HXX
-#include <svx/adritem.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
+#ifndef _SHL_HXX //autogen
+#include <tools/shl.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
 #endif
 #include "labimg.hxx"
 #include "cmdid.h"
@@ -424,23 +429,23 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     if(!bIsLabel && bNoConfigValues)
     {
 
-        SvxAddressItem aAdr;
-        aItem.aPrivFirstName = aAdr.GetFirstName();
-        aItem.aPrivName = aAdr.GetName();
-        aItem.aPrivShortCut = aAdr.GetShortName();
-        aItem.aCompCompany = aAdr.GetToken( POS_COMPANY       );
-        aItem.aCompStreet = aItem.aPrivStreet = aAdr.GetToken( POS_STREET);
+        SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
+        aItem.aPrivFirstName = rUserOpt.GetFirstName();
+        aItem.aPrivName = rUserOpt.GetLastName();
+        aItem.aPrivShortCut = rUserOpt.GetID();
+        aItem.aCompCompany = rUserOpt.GetCompany();
+        aItem.aCompStreet = aItem.aPrivStreet = rUserOpt.GetStreet();
 
-        aItem.aCompCountry = aItem.aPrivCountry = aAdr.GetToken( POS_COUNTRY);
-        aItem.aCompZip = aItem.aPrivZip= aAdr.GetToken( POS_PLZ );
-        aItem.aCompCity = aItem.aPrivCity = aAdr.GetToken( POS_CITY );
-        aItem.aPrivTitle = aAdr.GetToken( POS_TITLE );
-        aItem.aCompPosition = aAdr.GetToken( POS_POSITION );
-        aItem.aPrivPhone = aAdr.GetToken( POS_TEL_PRIVATE );
-        aItem.aCompPhone = aAdr.GetToken( POS_TEL_COMPANY );
-        aItem.aCompFax = aItem.aPrivFax = aAdr.GetToken( POS_FAX    );
-        aItem.aCompMail = aItem.aPrivMail = aAdr.GetToken( POS_EMAIL    );
-        aItem.aCompState = aItem.aPrivState = aAdr.GetToken( POS_STATE  );
+        aItem.aCompCountry = aItem.aPrivCountry = rUserOpt.GetCountry();
+        aItem.aCompZip = aItem.aPrivZip= rUserOpt.GetZip();
+        aItem.aCompCity = aItem.aPrivCity = rUserOpt.GetCity();
+        aItem.aPrivTitle = rUserOpt.GetTitle();
+        aItem.aCompPosition = rUserOpt.GetPosition();
+        aItem.aPrivPhone = rUserOpt.GetTelephoneHome();
+        aItem.aCompPhone = rUserOpt.GetTelephoneWork();
+        aItem.aCompFax = aItem.aPrivFax = rUserOpt.GetFax();
+        aItem.aCompMail = aItem.aPrivMail = rUserOpt.GetEmail();
+        aItem.aCompState = aItem.aPrivState = rUserOpt.GetState();
         aItem.bSynchron = TRUE;
         SetModified();
     }
