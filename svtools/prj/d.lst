@@ -211,6 +211,7 @@ hedabu: ..\inc\editimplementation.hxx %_DEST%\inc%_EXT%\svtools\editimplementati
 hedabu: ..\inc\templatefoldercache.hxx %_DEST%\inc%_EXT%\svtools\templatefoldercache.hxx
 hedabu: ..\inc\folderrestriction.hxx %_DEST%\inc%_EXT%\svtools\folderrestriction.hxx
 hedabu: ..\inc\filenotation.hxx %_DEST%\inc%_EXT%\svtools\filenotation.hxx
+hedabu: ..\inc\urlcontrol.hxx %_DEST%\inc%_EXT%\svtools\urlcontrol.hxx
 hedabu: ..\inc\fileurlbox.hxx %_DEST%\inc%_EXT%\svtools\fileurlbox.hxx
 hedabu: ..\inc\toolboxcontroller.hxx %_DEST%\inc%_EXT%\svtools\toolboxcontroller.hxx
 hedabu: ..\inc\framestatuslistener.hxx %_DEST%\inc%_EXT%\svtools\framestatuslistener.hxx
@@ -379,6 +380,9 @@ hedabu: ..\inc\fontsubstconfig.hxx %_DEST%\inc%_EXT%\svtools\fontsubstconfig.hxx
 hedabu: ..\inc\apearcfg.hxx %_DEST%\inc%_EXT%\svtools\apearcfg.hxx
 hedabu: ..\inc\fltrcfg.hxx %_DEST%\inc%_EXT%\svtools\fltrcfg.hxx
 hedabu: ..\inc\misccfg.hxx %_DEST%\inc%_EXT%\svtools\misccfg.hxx
+
+hedabu: ..\inc\QueryFolderName.hxx %_DEST%\inc%_EXT%\svtools\QueryFolderName.hxx
+hedabu: ..\inc\DocumentInfoPreview.hxx %_DEST%\inc%_EXT%\svtools\DocumentInfoPreview.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
