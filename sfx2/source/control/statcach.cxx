@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:21:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/visitem.hxx>
 #include <comphelper/processfactory.hxx>
 
 #ifndef GCC
@@ -252,7 +253,8 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     nId(nFuncId),
     pController(0),
     pLastItem( 0 ),
-    eLastState( 0 )
+    eLastState( 0 ),
+    bItemVisible( sal_True )
 {
     DBG_MEMTEST();
     DBG_CTOR(SfxStateCache, 0);
@@ -433,6 +435,49 @@ void SfxStateCache::SetState
     SetState_Impl( eState, pState, bMaybeDirty );
 }
 
+//--------------------------------------------------------------------
+
+void SfxStateCache::SetVisibleState( BOOL bShow )
+{
+    SfxItemState        eState( SFX_ITEM_AVAILABLE );
+    const SfxPoolItem*  pState( NULL );
+    sal_Bool            bNotify( sal_False );
+    sal_Bool            bDeleteItem( sal_False );
+
+    if ( bShow != bItemVisible )
+    {
+        bItemVisible = bShow;
+        if ( bShow )
+        {
+            if ( IsInvalidItem(pLastItem) || ( pLastItem == NULL ))
+            {
+                pState = new SfxVoidItem( nId );
+                bDeleteItem = sal_True;
+            }
+            else
+                pState = pLastItem;
+
+            eState = eLastState;
+            bNotify = ( pState != 0 );
+        }
+        else
+        {
+            pState = new SfxVisibilityItem( nId, FALSE );
+            bDeleteItem = sal_True;
+        }
+
+        // Controller updaten
+        for ( SfxControllerItem *pCtrl = pController;
+                pCtrl;
+                pCtrl = pCtrl->GetItemLink() )
+            pCtrl->StateChanged( nId, eState, pState );
+
+        if ( !bDeleteItem )
+            delete pState;
+    }
+}
+
+//--------------------------------------------------------------------
 
 void SfxStateCache::SetState_Impl
 (
