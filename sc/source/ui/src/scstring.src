@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 07:21:13 $
+ *  last change: $Author: dr $ $Date: 2002-05-23 10:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3177,7 +3177,7 @@ String STR_CAPTION_DEFAULT_TEXT
 // Select tables dialog title
 String STR_DLG_SELECTTABLES_TITLE
 {
-    Text = "Tabellen selektieren";
+    Text = "Tabellen auswählen";
     Text[ ENGLISH ] = "Select Sheets";
     Text[ english_us ] = "Select Sheets";
 };
@@ -3185,7 +3185,7 @@ String STR_DLG_SELECTTABLES_TITLE
 // Select tables dialog listbox
 String STR_DLG_SELECTTABLES_LBNAME
 {
-    Text = "~Selektierte Tabellen";
+    Text = "~Ausgewählte Tabellen";
     Text[ ENGLISH ] = "~Selected sheets";
     Text[ english_us ] = "~Selected sheets";
 };
