@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-23 12:20:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,12 @@
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
 #endif
+
+#include <svtools/fontsubstconfig.hxx>
+#include <svtools/accessibilityoptions.hxx>
+#include <svtools/apearcfg.hxx>
+#include <svtools/misccfg.hxx>
+#include <svtools/filter.hxx>
 
 #include "langselect.hxx"
 
@@ -1339,7 +1345,6 @@ void Desktop::Main()
 #endif
     SetSplashScreenProgress(20);
     SetDisplayName( aTitle );
-    Reference < XComponent > xWrapper;
     SvtPathOptions* pPathOptions = NULL;
     SvtLanguageOptions* pLanguageOptions = NULL;
 
@@ -1432,15 +1437,6 @@ void Desktop::Main()
             }
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create BackingComponent" );
         }
-
-        Sequence< Any > aSeq(2);
-        aSeq[1] <<= m_rSplashScreen;
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.office.OfficeWrapper" );
-        xWrapper = Reference < XComponent >( xSMgr->createInstanceWithArguments( DEFINE_CONST_UNICODE( "com.sun.star.office.OfficeWrapper" ), aSeq ), UNO_QUERY );
-
-        SetSplashScreenProgress(65);
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.office.OfficeWrapper" );
-
     }
     catch ( com::sun::star::lang::WrappedTargetException& wte )
     {
@@ -1463,6 +1459,21 @@ void Desktop::Main()
         return;
     }
     */
+
+    aMgrName = String::CreateFromAscii("ofa");
+    aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
+     ResMgr* pOffResMgr = ResMgr::CreateResMgr(U2S(aMgrName));
+    Resource::SetResManager( pOffResMgr );
+
+    SvtFontSubstConfig().Apply();
+
+    SvtTabAppearanceCfg aAppearanceCfg;
+    //aAppearanceCfg.SetInitialized();
+    aAppearanceCfg.SetApplicationDefaults( this );
+    SvtAccessibilityOptions aOptions;
+    aOptions.SetVCLSettings();
+
+    Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
 
     sal_Bool bTerminateRequested = sal_False;
 
@@ -1539,7 +1550,14 @@ void Desktop::Main()
 
     // call Application::Execute to process messages in vcl message loop
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
+
+    // create service for loadin SFX (still needed in startup)
+    Reference < XInterface >( xSMgr->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
+
     Execute();
+
+    Resource::SetResManager( NULL );
+    delete pResMgr;
 
     // Restore old value
     if ( pCmdLineArgs->IsHeadless() )
@@ -1551,9 +1569,6 @@ void Desktop::Main()
     DeregisterServices();
 
     DeInitTestToolLib();
-
-    xWrapper->dispose();
-    xWrapper = 0;
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
     delete pLanguageOptions;
@@ -1569,6 +1584,11 @@ void Desktop::Main()
     utl::ConfigManager::GetConfigManager()->StoreConfigItems();
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
+}
+
+IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
+{
+    return GraphicFilter::GetGraphicFilter()->GetFilterCallback().Call( pData );
 }
 
 sal_Bool Desktop::InitializeConfiguration()
@@ -1665,7 +1685,57 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
 
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 {
-//    OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
+    if ( !SvtTabAppearanceCfg::IsInitialized () )
+        return;
+
+#   define DRAGFULL_OPTION_ALL \
+         ( DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE  \
+         | DRAGFULL_OPTION_OBJECTMOVE  | DRAGFULL_OPTION_OBJECTSIZE \
+         | DRAGFULL_OPTION_DOCKING     | DRAGFULL_OPTION_SPLIT      \
+         | DRAGFULL_OPTION_SCROLL )
+#   define DRAGFULL_OPTION_NONE ((sal_uInt32)~DRAGFULL_OPTION_ALL)
+
+    StyleSettings hStyleSettings   = rSettings.GetStyleSettings();
+    MouseSettings hMouseSettings = rSettings.GetMouseSettings();
+
+    sal_uInt32 nDragFullOptions = hStyleSettings.GetDragFullOptions();
+
+    SvtTabAppearanceCfg aAppearanceCfg;
+    sal_uInt16 nGet = aAppearanceCfg.GetDragMode();
+    switch ( nGet )
+    {
+    case DragFullWindow:
+        nDragFullOptions |= DRAGFULL_OPTION_ALL;
+        break;
+    case DragFrame:
+        nDragFullOptions &= DRAGFULL_OPTION_NONE;
+        break;
+    case DragSystemDep:
+    default:
+        break;
+    }
+
+    sal_uInt32 nFollow = hMouseSettings.GetFollow();
+    hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MOUSE_FOLLOW_MENU) : (nFollow&~MOUSE_FOLLOW_MENU));
+    rSettings.SetMouseSettings(hMouseSettings);
+
+    sal_uInt16 nTabStyle = hStyleSettings.GetTabControlStyle();
+    nTabStyle &= ~STYLE_TABCONTROL_SINGLELINE;
+    if( aAppearanceCfg.IsSingleLineTabCtrl() )
+        nTabStyle |=STYLE_TABCONTROL_SINGLELINE;
+
+    nTabStyle &= ~STYLE_TABCONTROL_COLOR;
+    if( aAppearanceCfg.IsColoredTabCtrl() )
+        nTabStyle |= STYLE_TABCONTROL_COLOR;
+
+    hStyleSettings.SetTabControlStyle(nTabStyle);
+
+    hStyleSettings.SetDragFullOptions( nDragFullOptions );
+    rSettings.SetStyleSettings ( hStyleSettings );
+
+    MiscSettings aMiscSettings( rSettings.GetMiscSettings() );
+    aMiscSettings.SetTwoDigitYearStart( (USHORT) SfxMiscCfg().GetYear2000() );
+    rSettings.SetMiscSettings( aMiscSettings );
 }
 
 // ========================================================================
