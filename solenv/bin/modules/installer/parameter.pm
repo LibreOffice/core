@@ -2,9 +2,6 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.11 $
-#
-#   last change: $Author: hr $ $Date: 2004-11-09 18:32:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +94,7 @@ The following parameter are needed:
 -javalanguage: Source of the Java language files (opt., non-Windows only)
 -buildid: Current BuildID (optional)
 -pro: Product version
--rpm: Create RPMs for Linux
+-format: Package format
 -debian: Create Debian packages for Linux
 -dontunzip: do not unzip all files with flag ARCHIVE
 -dontcallepm : do not call epm to create install sets (opt., non-Windows only)
@@ -118,7 +115,7 @@ perl make_epmlist.pl -f zip.lst -s setup.inf -p OfficeFAT -l 01
 
 Examples for Non-Windows:
 
-perl make_epmlist.pl -f zip.lst -s setup.inf -p OfficeFAT -l 01
+perl make_epmlist.pl -f zip.lst -s setup.inf -p OfficeFAT -l 01 -format rpm
                      -u /export/unpack -buildid 8712 -i /opt/openofficeorg20
                      -packagelist packagelist.txt -ispatchedepm
 --------------------------------------------------------------------------------
@@ -172,8 +169,7 @@ sub getparameter
         elsif ($param eq "-dontunzip") { $installer::globals::dounzip = 0; }
         elsif ($param eq "-c") { $installer::globals::compiler = shift(@ARGV); }
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
-        elsif ($param eq "-rpm") { $installer::globals::rpm = 1; }
-        elsif ($param eq "-debian") { $installer::globals::debian = 1; }
+        elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
         elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
         elsif ($param eq "-debug") { $installer::globals::debug = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
@@ -282,42 +278,12 @@ sub setglobalvariables
 {
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::setglobalvariables"); }
 
-    if ( $installer::globals::compiler =~ /wntmsci/ )
-    {
-        $installer::globals::iswindowsbuild = 1;
-    }
-
-    if ( $installer::globals::compiler =~ /unxlngi/ )
-    {
-        $installer::globals::islinuxbuild = 1;
-
-        if (( $installer::globals::rpm ) && ( $installer::globals::debian ))
-        {
-            print "ERROR: You can specify only one package format for Linux\n";
-            exit(-1);
-        }
-
-        if (( ! $installer::globals::rpm ) && ( ! $installer::globals::debian ))
-        {
-            print "ERROR: You have to specify at least one package format for Linux\n";
-            exit(-1);
-        }
-
-        if ( $installer::globals::rpm )
-        {
-            $installer::globals::islinuxrpmbuild = 1;
-            $installer::globals::packageformat = "rpm";
-        }
-        elsif ( $installer::globals::debian )
-        {
-            $installer::globals::packageformat = "dpkg";    # epm -f dpkg ... for Debian packages
-        }
-    }
+    if ( $installer::globals::compiler =~ /wntmsci/ ) { $installer::globals::iswindowsbuild = 1; }
 
     if (( $installer::globals::compiler =~ /unxsols/ ) || ( $installer::globals::compiler =~ /unxsoli/ ))
     {
         $installer::globals::issolarisbuild = 1;
-        $installer::globals::packageformat = "pkg";
+        if ( $installer::globals::packageformat eq "pkg" ) { $installer::globals::issolarispkgbuild = 1; }
     }
 
     if ( $installer::globals::compiler =~ /unxsols/ ) { $installer::globals::issolarissparcbuild = 1; }
@@ -326,21 +292,13 @@ sub setglobalvariables
 
     if (( $installer::globals::compiler =~ /unx/ ) && ( $installer::globals::addpackagelist )) { $installer::globals::is_unix_multi = 1; }
 
-    # ToDo: Needs to be expanded for additional compiler
+    if ( $installer::globals::compiler =~ /unxlngi/ )
+    {
+        $installer::globals::islinuxbuild = 1;
+        if ( $installer::globals::packageformat eq "rpm" ) { $installer::globals::islinuxrpmbuild = 1; }
+    }
 
-    # epm supports:
-    # aix - AIX software distribution
-    # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-    # depot or swinstall - HP-UX software distribution
-    # dpkg - Debian software distribution
-    # inst or tardist - IRIX software distribution
-    # osx - MacOS X software distribution
-    # pkg - Solaris software distribution
-    # rpm - RedHat software distribution
-    # setld - Tru64 (setld) software distribution
-    # native - "Native" software distribution for the platform
-
-    # Defaulting to native
+    # Defaulting to native package format for epm
 
     if ( $installer::globals::packageformat eq "") { $installer::globals::packageformat = "native"; }
 
@@ -409,11 +367,18 @@ sub setglobalvariables
         push(@installer::globals::binarytablefiles, "gid_File_Pythonmsi_Dll");  # to be removed after scp changes, see parameter.pm
     }
 
-    if (( $installer::globals::languagepack ) || ($installer::globals::product =~ /ada/i ))
+    if ( $installer::globals::languagepack )
+    {
+        @installer::globals::binarytablefiles = ("gid_File_Lib_Lngpckinsthlp");
+        @installer::globals::selfreglibraries = ();
+    }
+
+    if ( $installer::globals::product =~ /ada/i )
     {
         @installer::globals::binarytablefiles = ();
         @installer::globals::selfreglibraries = ();
     }
+
 }
 
 ############################################
@@ -627,8 +592,7 @@ sub outputparameter
     else  { push(@output, "Non-Product version\n"); }
     if ( $installer::globals::rootpath eq "" ) { push(@output, "Using default installpath\n"); }
     else { push(@output, "Installpath: $installer::globals::rootpath\n"); }
-    if ( $installer::globals::rpm ) { push(@output, "Creating RPMs on Linux\n"); }
-    if ( $installer::globals::debian ) { push(@output, "Creating Debian packages on Linux\n"); }
+    push(@output, "Package format: $installer::globals::packageformat\n");
     if (!($installer::globals::packagelist eq ""))  { push(@output, "Package list file: $installer::globals::packagelist\n"); }
     if ((!($installer::globals::packagelist eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Package list file will be ignored for Windows!\n"); }
     if (!($installer::globals::addpackagelist eq ""))   { push(@output, "Addon-Package list file: $installer::globals::addpackagelist\n"); }
@@ -636,7 +600,7 @@ sub outputparameter
     if (!($installer::globals::idttemplatepath eq ""))  { push(@output, "msi templatepath: $installer::globals::idttemplatepath\n"); }
     if ((!($installer::globals::idttemplatepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi template path will be ignored for non Windows builds!\n"); }
     if (!($installer::globals::idtlanguagepath eq ""))  { push(@output, "msi languagepath: $installer::globals::idtlanguagepath\n"); }
-    if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi langugage path will be ignored for non Windows builds!\n"); }
+    if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi language path will be ignored for non Windows builds!\n"); }
     if (!($installer::globals::msichildpath eq "")) { push(@output, "msi child path: $installer::globals::msichildpath\n"); }
     if ((!($installer::globals::msichildpath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi child path will be ignored for non Windows builds!\n"); }
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
