@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-06 11:07:34 $
+#   last change: $Author: vg $ $Date: 2002-12-06 16:11:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.72 $ ';
+$id_str = ' $Revision: 1.73 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -223,7 +223,7 @@ sub GetParentDeps {
         @DepsArray = &GetDependenciesArray($ParentsString, $Prj);
         $$deps_hash{$Prj} = [@DepsArray];
         foreach $Parent (@DepsArray) {
-            if (!defined($$deps_hash{$Parent})) {
+            if ((!defined($$deps_hash{$Parent})) && (!defined($$deps_hash{$Parent . '.lnk'}))) {
                 push (@UnresolvedParents, $Parent);
             };
         };
@@ -257,7 +257,6 @@ sub BuildAll {
                     $build_from_opt = '';
                 };
             };
-            &ensure_clear_module($Prj) if ($incompartible);
             if ($build_since) {
                 if ($build_since ne $Prj) {
                     &RemoveFromDependencies($Prj, \%ParentDepsHash);
@@ -267,6 +266,7 @@ sub BuildAll {
                 };
                 next;
             };
+            &ensure_clear_module(\$Prj) if ($incompartible);
             print $new_line;
             my $module_type = &module_classify($Prj);
 
@@ -1193,16 +1193,19 @@ sub get_workspace_lst
 #
 sub ensure_clear_module {
     my $Prj = shift;
-    my $module_type = &module_classify($Prj);
-    &clear_module and return if ($module_type eq 'mod');
-    if ($module_type eq 'lnk') {
-        $Prj =~ /\.lnk$/;
-        unlink $StandDir.$Prj;
-        $Prj = $`;
-    } else {
-        rmtree($StandDir.$Prj, 1, 1);
+    my $module_type = &module_classify($$Prj);
+    if ($module_type eq 'mod') {
+        &clear_module($$Prj);
+        return;
     };
-    checkout_module($Prj);
+    if ($module_type eq 'lnk') {
+        $$Prj =~ /\.lnk$/;
+        unlink $StandDir.$$Prj;
+        $$Prj = $`;
+    } else {
+        rmtree($StandDir.$$Prj, 1, 1);
+    };
+    checkout_module($$Prj);
 };
 
 #
@@ -1210,5 +1213,9 @@ sub ensure_clear_module {
 #
 sub clear_module {
     my $Prj = shift;
+    if (!defined $ENV{INPATH}) {
+        &print_error("\$ENV\{INPATH\} is not set. Please use setsolar!!");
+    }
     rmtree($StandDir.$Prj.'/'. $ENV{INPATH}, 1, 1);
+    return;
 };
