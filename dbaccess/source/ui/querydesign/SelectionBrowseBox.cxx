@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:49:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::accessibility;
 
 const String g_strOne = String::CreateFromAscii("1");
 const String g_strZero = String::CreateFromAscii("0");
@@ -2676,5 +2677,17 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
                 m_pFunctionCell->SelectEntryPos(0);
         }
     }
+}
+// -----------------------------------------------------------------------------
+Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+{
+    OTableFieldDescRef pEntry = NULL;
+    if(getFields().size() > sal_uInt16(_nColumnPos - 1))
+        pEntry = getFields()[_nColumnPos - 1];
+
+    if ( _nRow == BROW_VIS_ROW && pEntry.isValid() )
+        return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,pEntry->IsVisible() ? STATE_CHECK : STATE_NOCHECK );
+
+    return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }
 // -----------------------------------------------------------------------------
