@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:03:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SfxBindings;
 class ToolbarMenu;
 class SfxStatusForwarder;
@@ -148,7 +152,7 @@ public:
 
 //========================================================================
 
-class ExtrusionDirectionControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC ExtrusionDirectionControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -222,7 +226,7 @@ public:
 
 //========================================================================
 
-class ExtrusionDepthControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC ExtrusionDepthControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -298,7 +302,7 @@ public:
 
 //========================================================================
 
-class ExtrusionLightingControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC ExtrusionLightingControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -361,7 +365,7 @@ public:
 
 //========================================================================
 
-class ExtrusionSurfaceControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC ExtrusionSurfaceControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -376,7 +380,7 @@ public:
 
 //========================================================================
 
-class ExtrusionColorControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC ExtrusionColorControl : public SfxToolBoxControl
 {
 private:
     SvxTbxButtonColorUpdater_Impl*  mpBtnUpdater;
