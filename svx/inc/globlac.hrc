@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 12:43:52 $
+ *  last change: $Author: bm $ $Date: 2002-10-02 14:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,10 @@
 #define AI_HELPINDEX                ACC_CODE( SID_HELPINDEX, KEY_F1, FALSE, TRUE, FALSE )
 
 #define AI_ATTR_CHAR                ACC_CODE( SID_ATTR_CHAR, KEY_F2, FALSE, FALSE, FALSE )
-#define AI_PRESENTATION             ACC_CODE( SID_PRESENTATION, KEY_F2, FALSE, TRUE, FALSE )
+// new shortcut F9 for starting slide-show (see #73417#)
+#define AI_PRESENTATION             ACC_CODE( SID_PRESENTATION, KEY_F9, FALSE, FALSE, FALSE )
+// formerly used shortcut Ctrl-F2.  Still used (in sd) for compatibility
+#define AI_PRESENTATION_COMPAT      ACC_CODE( SID_PRESENTATION, KEY_F2, FALSE, TRUE, FALSE )
 #define AI_ENTER_GROUP              ACC_CODE( SID_ENTER_GROUP, KEY_F3, FALSE, FALSE, FALSE )
 #define AI_COPYOBJECTS              ACC_CODE( SID_COPYOBJECTS, KEY_F3, TRUE, FALSE, FALSE )
 #define AI_LEAVE_GROUP              ACC_CODE( SID_LEAVE_GROUP, KEY_F3, FALSE, TRUE, FALSE )
