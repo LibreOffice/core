@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-16 10:50:07 $
+ *  last change: $Author: ka $ $Date: 2001-08-17 13:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,14 +425,10 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 // Rechteck mit ausgewogenem Kantenverhaeltnis
                 aSize.Width()  = 14100;
                 aSize.Height() = 10000;
-                aIPObj->SetVisAreaSize( OutputDevice::LogicToLogic(
-                                        aSize, MAP_100TH_MM, aIPObj->GetMapUnit() ) );
+                aIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aIPObj->GetMapUnit() ) );
             }
             else
-            {
-                aSize = OutputDevice::LogicToLogic(aSize, aIPObj->GetMapUnit(),
-                                                   MAP_100TH_MM);
-            }
+                aSize = OutputDevice::LogicToLogic(aSize, aIPObj->GetMapUnit(), MAP_100TH_MM);
 
             Point aPos;
             Rectangle aWinRect(aPos, pWin->GetOutputSizePixel() );
@@ -467,7 +463,7 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                 pView->HideMarkHdl(NULL);
                 pOleObj->SetLogicRect(aRect);
-                aIPObj->SetVisAreaSize( aRect.GetSize() );
+                aIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aIPObj->GetMapUnit() ) );
                 pViewShell->ActivateObject(pOleObj, SVVERB_SHOW);
             }
         }
@@ -596,13 +592,11 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     // Rechteck mit ausgewogenem Kantenverhaeltnis
                     aSize.Width()  = 14100;
                     aSize.Height() = 10000;
-                    aIPObj->SetVisAreaSize( OutputDevice::LogicToLogic(
-                                      aSize, MAP_100TH_MM, aIPObj->GetMapUnit() ) );
+                    aIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aIPObj->GetMapUnit() ) );
                 }
                 else
                 {
-                    aSize = OutputDevice::LogicToLogic(aSize, aIPObj->GetMapUnit(),
-                                                       MAP_100TH_MM);
+                    aSize = OutputDevice::LogicToLogic(aSize, aIPObj->GetMapUnit(), MAP_100TH_MM);
                 }
 
                 if ( pView->HasMarkedObj() )
@@ -635,7 +629,7 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                 Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
 
                                 pView->HideMarkHdl(NULL);
-                                aIPObj->SetVisAreaSize( aRect.GetSize() );
+                                aIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aIPObj->GetMapUnit() ) );
 
                                 if ( nSlotId == SID_ATTR_TABLE ||
                                      nSlotId == SID_INSERT_DIAGRAM ||
@@ -674,7 +668,7 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     {
                         pView->HideMarkHdl(NULL);
                         pObj->SetLogicRect(aRect);
-                        aIPObj->SetVisAreaSize( aRect.GetSize() );
+                        aIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aIPObj->GetMapUnit() ) );
                         pViewShell->ActivateObject(pObj, SVVERB_SHOW);
                     }
 
