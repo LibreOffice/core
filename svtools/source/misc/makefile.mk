@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mba $ $Date: 2001-05-03 10:15:50 $
+#   last change: $Author: fs $ $Date: 2001-05-07 15:20:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,8 +90,9 @@ SRC1FILES=\
     demo.src	\
     pver.src	\
     iniman.src 	\
-        imagemgr.src      \
-    ehdl.src
+    ehdl.src \
+    imagemgr.src      \
+    helpagent.src
 
 SRS2NAME=ehdl
 SRC2FILES=\
@@ -123,7 +124,8 @@ LIB2OBJFILES=\
 
 LIB3TARGET=$(SLB)$/misc2.lib
 LIB3OBJFILES=\
-        $(SLO)$/imagemgr.obj              \
+    $(SLO)$/helpagentwindow.obj		\
+    $(SLO)$/imagemgr.obj              \
     $(SLO)$/agprop.obj		\
     $(SLO)$/config.obj		\
     $(SLO)$/confitem.obj	\
