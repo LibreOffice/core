@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-28 09:56:56 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,8 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         }
 
         // show the text using the PrinterGfx text api
-        rGfx.PSSetFont (GetGlyphSetName(nGlyphSetID), GetGlyphSetEncoding(nGlyphSetID));
+        rtl::OString aGlyphSetName(GetGlyphSetName(nGlyphSetID));
+        rGfx.PSSetFont (aGlyphSetName, GetGlyphSetEncoding(nGlyphSetID));
         rGfx.PSShowText (pGlyphID + nChar, nGlyphs, nGlyphs);
 
         nChar += nGlyphs;
@@ -425,7 +426,8 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         // show the text using the PrinterGfx text api
         aPoint.Move (pDeltaSubset[0], 0);
 
-        rGfx.PSSetFont  (GetGlyphSetName(*aSet), GetGlyphSetEncoding(*aSet));
+        rtl::OString aGlyphSetName(GetGlyphSetName(*aSet));
+        rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
         rGfx.PSMoveTo   (aPoint);
         rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset + 1 : NULL);
     }
