@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:02:21 $
+ *  last change: $Author: ka $ $Date: 2001-04-10 12:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,18 +242,20 @@ sal_Bool SdXMLFilter::Import()
 
     do
     {
-        UINT16      nStyleFamilyMask = 0;
-        sal_Bool    bLoadDoc = TRUE;
+        SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
+        SvXMLGraphicHelper*         pGraphicHelper = NULL;
+        UINT16                      nStyleFamilyMask = 0;
+        sal_Bool                    bLoadDoc = TRUE;
 
         try
         {
             SvStorage* pStorage = mrMedium.GetStorage();
 
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-            SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
-
             uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
-            SvXMLGraphicHelper* pGraphicHelper = 0;
+
+            pObjectHelper = NULL;
+            pGraphicHelper = NULL;
 
             if( pStorage )
             {
@@ -399,12 +401,6 @@ sal_Bool SdXMLFilter::Import()
                     }
                 }
             }
-
-            if( pGraphicHelper )
-                SvXMLGraphicHelper::Destroy( pGraphicHelper );
-
-            if( pObjectHelper )
-                SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
         }
         catch( uno::Exception e )
         {
@@ -414,7 +410,14 @@ sal_Bool SdXMLFilter::Import()
             DBG_ERROR( aError.GetBuffer() );
     #endif
         }
-    } while( 0 );
+
+        if( pGraphicHelper )
+            SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+        if( pObjectHelper )
+            SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+    }
+    while( 0 );
 
     mxModel->unlockControllers();
 
@@ -425,7 +428,9 @@ sal_Bool SdXMLFilter::Import()
 
 sal_Bool SdXMLFilter::Export()
 {
-    sal_Bool bDocRet = FALSE;
+    SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
+    SvXMLGraphicHelper*         pGraphicHelper = NULL;
+    sal_Bool                    bDocRet = FALSE;
 
     try
     {
@@ -481,10 +486,7 @@ sal_Bool SdXMLFilter::Export()
 
         {
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-            SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
-
-            uno::Reference< document::XGraphicObjectResolver > xGrfResolver;
-            SvXMLGraphicHelper* pGraphicHelper = 0;
+            uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
 
             // create helper for graphic and ole export if we have a storage
             if( pStorage )
@@ -583,12 +585,6 @@ sal_Bool SdXMLFilter::Export()
                 pServices++;
             }
             while( bDocRet && pServices->mpService );
-
-            if( pGraphicHelper )
-                SvXMLGraphicHelper::Destroy( pGraphicHelper );
-
-            if( pObjectHelper )
-                SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
         }
     }
     catch(uno::Exception e)
@@ -600,6 +596,12 @@ sal_Bool SdXMLFilter::Export()
 #endif
         bDocRet = sal_False;
     }
+
+    if( pGraphicHelper )
+        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+    if( pObjectHelper )
+        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
 
     return bDocRet;
 }
