@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:24:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXSTBMGR_HXX //autogen
-#include <sfx2/stbmgr.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
