@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-08-01 15:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,12 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     }
 
     // Die PaperSize soll in den meisten Faellen von selbst wachsen
-    aPaperMin.Height()=0; // #33102#
+    // #89459#
+    if(IsVerticalWriting())
+        aPaperMin.Width() = 0;
+    else
+        aPaperMin.Height() = 0; // #33102#
+
     if (eHAdj!=SDRTEXTHORZADJUST_BLOCK || bFitToSize) {
         aPaperMin.Width()=0;
     }
