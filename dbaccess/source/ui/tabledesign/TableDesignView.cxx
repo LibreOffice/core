@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:33:04 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 08:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,14 @@ OTableBorderWindow::~OTableBorderWindow()
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();
 
-    DELETEZ(m_pEditorCtrl);
-    DELETEZ(m_pFieldDescWin);
+    {
+        ::std::auto_ptr<Window> aTemp(m_pEditorCtrl);
+        m_pEditorCtrl = NULL;
+    }
+    {
+        ::std::auto_ptr<Window> aTemp(m_pFieldDescWin);
+        m_pFieldDescWin = NULL;
+    }
 }
 // -----------------------------------------------------------------------------
 void OTableBorderWindow::Resize()

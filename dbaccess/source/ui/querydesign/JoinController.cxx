@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-24 13:19:53 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 08:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ OJoinDesignView* OJoinController::getJoinView()
 void OJoinController::disposing()
 {
     OJoinController_BASE::disposing();
+    m_aUndoManager.Clear();
     m_pView         = NULL;
     m_pAddTabDlg    = NULL;
 

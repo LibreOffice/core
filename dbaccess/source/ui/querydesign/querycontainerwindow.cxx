@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 09:52:47 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 08:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,22 @@ namespace dbaui
         if(m_xBeamer.is())
             m_xBeamer->setComponent(NULL,NULL);
         m_xBeamer   = NULL;
-        DELETEZ( m_pBeamer );
-        DELETEZ( m_pBeamerSeparator );
-        DELETEZ( m_pSplitter );
-        DELETEZ( m_pViewSwitch );
+        {
+            ::std::auto_ptr<Window> aTemp(m_pBeamer);
+            m_pBeamer = NULL;
+        }
+        {
+            ::std::auto_ptr<Window> aTemp(m_pBeamerSeparator);
+            m_pBeamerSeparator = NULL;
+        }
+        {
+            ::std::auto_ptr<Window> aTemp(m_pSplitter);
+            m_pSplitter = NULL;
+        }
+        {
+            ::std::auto_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
+            m_pViewSwitch = NULL;
+        }
         DBG_DTOR(OQueryContainerWindow,NULL);
     }
     // -----------------------------------------------------------------------------
@@ -299,6 +311,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/05/06 09:52:47  oj
+ *  #96363# change return type of switchView
+ *
  *  Revision 1.6  2002/05/02 07:54:11  oj
  *  #98916# enable F6 key
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 09:48:50 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 08:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,14 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 // -----------------------------------------------------------------------------
 OQueryViewSwitch::~OQueryViewSwitch()
 {
-    DELETEZ( m_pTextView );
-    DELETEZ( m_pDesignView );
-
+    {
+        ::std::auto_ptr<Window> aTemp(m_pTextView);
+        m_pTextView = NULL;
+    }
+    {
+        ::std::auto_ptr<Window> aTemp(m_pDesignView);
+        m_pDesignView = NULL;
+    }
     DBG_DTOR(OQueryViewSwitch,NULL);
 }
 // -------------------------------------------------------------------------

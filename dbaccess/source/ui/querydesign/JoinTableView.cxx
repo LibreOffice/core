@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 13:00:41 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 08:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,9 +274,6 @@ OJoinTableView::~OJoinTableView()
     m_pLastFocusTabWin  = NULL;
     m_pSelectedConn     = NULL;
     m_aTableMap.clear();
-    // den Undo-Manager des Dokuments leeren (da die UndoActions sich eventuell TabWins von mir halten, das gibt sonst eine
-    // Assertion in Window::~Window)
-    m_pView->getController()->getUndoMgr()->Clear();
     m_pAccessible = NULL;
 }
 //------------------------------------------------------------------------------

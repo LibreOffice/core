@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 08:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()
 {
-    DELETEZ(m_pEdit);
+    ::std::auto_ptr<Window> aTemp(m_pEdit);
+    m_pEdit = NULL;
     DBG_DTOR(OQueryTextView,NULL);
 }
 // -----------------------------------------------------------------------------
