@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 17:05:58 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 18:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <sdb/sdbstat.hxx>      // enum DBObject
 #include <svtools/txtcmp.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
@@ -108,7 +107,7 @@ ScImportParam::ScImportParam() :
     bImport(FALSE),
     bNative(FALSE),
     bSql(TRUE),
-    nType(dbTable)
+    nType(ScDbTable)
 {
 }
 
@@ -136,7 +135,7 @@ void ScImportParam::Clear()
     bImport = FALSE;
     bNative = FALSE;
     bSql = TRUE;
-    nType = dbTable;
+    nType = ScDbTable;
     aDBName.Erase();
     aStatement.Erase();
 }

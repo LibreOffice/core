@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-13 18:04:16 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 19:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <math.h>       // prevent conflict between exception and std::exception
 #endif
 
-#include <sdb/sdbenv.hxx>
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -85,7 +84,6 @@
 #include <offmgr/ofaitem.hxx>
 #include <offmgr/sbaitems.hxx>
 #include <sot/formats.hxx>
-#include <sdb/sdbstat.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -274,9 +272,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 String sTabFlag = sSbaData.GetToken(2,cSbaSep);
                 String sDBSql   = sSbaData.GetToken(3,cSbaSep);     // SQL im Klartext
 
-                BYTE nType = dbTable;       // "0" oder "1"
+                BYTE nType = ScDbTable;     // "0" oder "1"
                 if ( sTabFlag.EqualsAscii("0") )        // "0" = Query, "1" = Table (Default)
-                    nType = dbQuery;
+                    nType = ScDbQuery;
 
                 SbaSelectionListRef pSelectionList = new SbaSelectionList;
                 xub_StrLen nCount = sSbaData.GetTokenCount(cSbaSep);

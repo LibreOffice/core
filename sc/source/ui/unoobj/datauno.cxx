@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-04 10:05:01 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 18:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include <tools/debug.hxx>
 #include <svtools/smplhint.hxx>
 #include <svtools/zforlist.hxx>
-#include <sdb/sdbstat.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -227,10 +226,10 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
     {
         if ( rParam.bSql )
             eMode = sheet::DataImportMode_SQL;
-        else if ( rParam.nType == dbQuery )
+        else if ( rParam.nType == ScDbQuery )
             eMode = sheet::DataImportMode_QUERY;
         else
-            eMode = sheet::DataImportMode_TABLE;        // Type ist immer dbQuery oder dbTable
+            eMode = sheet::DataImportMode_TABLE;        // Type ist immer ScDbQuery oder ScDbTable
     }
 
     pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_DBNAME );
@@ -285,12 +284,12 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
                 case sheet::DataImportMode_TABLE:
                     rParam.bImport = TRUE;
                     rParam.bSql    = FALSE;
-                    rParam.nType   = dbTable;
+                    rParam.nType   = ScDbTable;
                     break;
                 case sheet::DataImportMode_QUERY:
                     rParam.bImport = TRUE;
                     rParam.bSql    = FALSE;
-                    rParam.nType   = dbQuery;
+                    rParam.nType   = ScDbQuery;
                     break;
                 default:
                     DBG_ERROR("falscher Mode");
