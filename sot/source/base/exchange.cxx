@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-07 10:02:22 $
+ *  last change: $Author: ka $ $Date: 2001-03-07 10:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 {
 /*  0 SOT_FORMAT_SYSTEM_START*/                 { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  1 SOT_FORMAT_STRING*/                       { "text/plain;charset=utf-16", "Text", &::getCppuType( (const ::rtl::OUString*) 0 ) },
-/*  2 SOT_FORMAT_BITMAP*/                       { "image/x-cf-dib", "Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*  2 SOT_FORMAT_BITMAP*/                       { "application/x-openoffice;windows_formatname=\"Bitmap\"", "Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  3 SOT_FORMAT_GDIMETAFILE*/                  { "application/x-openoffice;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  4 SOT_FORMAT_PRIVATE*/                      { "application/x-openoffice;windows_formatname=\"Private\"", "Private", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  5 SOT_FORMAT_FILE*/                         { "application/x-openoffice;windows_formatname=\"FileName\"", "FileName", &::getCppuType( (const ::rtl::OUString*) 0 ) },
