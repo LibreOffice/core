@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:59:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,21 +212,22 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
                                 m_aExampleContainerWIN.GetSizePixel());
 
 
+    const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+            String::CreateFromAscii( GetFILTER_XML() ),
+            SwDocShell::Factory().GetFilterContainer() );
     //save the current document into a temporary file
     {
         //temp file needs it's own block
         //creating with extension is not supported by a static method :-(
         String sLeading;
-        String sExt(String::CreateFromAscii(".sxw"));
+        String sExt(pSfxFlt->GetDefaultExtension());
+        sExt.EraseLeadingChars('*');
         utl::TempFile aTempFile( sLeading, &sExt );
         m_sExampleURL = aTempFile.GetURL();
         aTempFile.EnableKillingFile();
     }
     SwView* pView = m_pWizard->GetSwView();
     SfxStringItem aURL( SID_FILE_NAME, m_sExampleURL);
-    const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            String::CreateFromAscii( GetFILTER_XML() ),
-            SwDocShell::Factory().GetFilterContainer() );
 
     SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName());
     pView->GetViewFrame()->GetDispatcher()->Execute( SID_EXPORTDOC, SFX_CALLMODE_SYNCHRON, &aURL, &aFilterName, 0);
