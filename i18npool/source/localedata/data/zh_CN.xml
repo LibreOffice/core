@@ -430,12 +430,12 @@
 <quarter2Word>第2季度</quarter2Word>
 <quarter3Word>第3季度</quarter3Word>
 <quarter4Word>第4季度</quarter4Word>
+<aboveWord>上面</aboveWord>
+<belowWord>下面</belowWord>
 <quarter1Abbreviation>1季</quarter1Abbreviation>
 <quarter2Abbreviation>2季</quarter2Abbreviation>
 <quarter3Abbreviation>3季</quarter3Abbreviation>
 <quarter4Abbreviation>4季</quarter4Abbreviation>
-<aboveWord>上面</aboveWord>
-<belowWord>下面</belowWord>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>
