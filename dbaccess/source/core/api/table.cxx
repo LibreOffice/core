@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 09:57:54 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 14:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,11 +357,14 @@ void ODBTable::refreshColumns()
     if(m_xTable.is())
     {
         xNames = m_xTable->getColumns();
-        Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-        const ::rtl::OUString* pBegin   = aNames.getConstArray();
-        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-        for(;pBegin != pEnd;++pBegin)
-            aVector.push_back(*pBegin);
+        if(xNames.is())
+        {
+            Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
+            const ::rtl::OUString* pBegin   = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+            for(;pBegin != pEnd;++pBegin)
+                aVector.push_back(*pBegin);
+        }
     }
     else
     {
@@ -442,9 +445,9 @@ void ODBTable::refreshIndexes()
 {
     ::std::vector< ::rtl::OUString> aVector;
     Reference<XNameAccess> xNames;
-    if(m_xTable.is())
+    Reference<XIndexesSupplier> xIndexSup(m_xTable,UNO_QUERY);
+    if(m_xTable.is() && xIndexSup.is())
     {
-        Reference<XIndexesSupplier> xIndexSup(m_xTable,UNO_QUERY);
         xNames = xIndexSup->getIndexes();
         Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
         const ::rtl::OUString* pBegin   = aNames.getConstArray();
