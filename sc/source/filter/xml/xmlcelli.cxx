@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:58:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,22 +837,37 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
                 aNote.SetDate(sDate);
                 aNote.SetAuthor(String(pMyAnnotation->sAuthor));
                 aNote.SetShown(pMyAnnotation->bDisplay);
-                if (pMyAnnotation->pRect)
-                    aNote.SetRectangle(*pMyAnnotation->pRect);
-                else
-                    aNote.SetRectangle(aNote.DefaultRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
                 if (pMyAnnotation->pItemSet)
                     aNote.SetItemSet(*(pMyAnnotation->pItemSet));
                 else
                     aNote.SetItemSet(aNote.DefaultItemSet());
                 if ( pMyAnnotation->pOPO )
                 {
-                    EditTextObject* pEditText = NULL;
                     ScNoteEditEngine& aEngine = pDoc->GetNoteEngine();
                     aEngine.SetText(pMyAnnotation->pOPO->GetTextObject());
-                    pEditText = aEngine.CreateTextObject();
-                    aNote.SetEditTextObject(pEditText);    // if pEditText is NULL, then aNote.mpEditObj will be reset().
+                    // No ItemSet and Rectangle indicates notes with simple text.
+                    // i.e. created with calc 1.x sxc file format
+                    if (pMyAnnotation->pItemSet && pMyAnnotation->pRect)
+                     {
+                        const EditTextObject& rTextObj = pMyAnnotation->pOPO->GetTextObject();
+                        sal_uInt16 nCount = aEngine.GetParagraphCount();
+                        for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
+                        {
+                            String aParaText( aEngine.GetText( nPara ) );
+                            if( aParaText.Len() )
+                            {
+                                SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
+                                aEngine.SetParaAttribs(nPara, aSet);
+                            }
+                        }
+                     }
+                     ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
+                    aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
                 }
+                if (pMyAnnotation->pRect)
+                    aNote.SetRectangle(*pMyAnnotation->pRect);
+                else
+                    aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
                 pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
                 if (pMyAnnotation->bDisplay)
                 {
