@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 15:48:49 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ public:
         E_InvalidBaseinstall,   // corrupt base installation
         E_SetupFailed,          // external setup did not run correctly
         E_Configuration,        // error while accessing configuration
+        E_License,              // License not accepted
         E_Unknown               // unknown error
     };
 

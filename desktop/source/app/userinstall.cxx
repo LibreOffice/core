@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 15:48:26 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 
 #include "userinstall.hxx"
 #include "langselect.hxx"
+#include "license.hxx"
 
 #include <stdio.h>
 
@@ -166,11 +167,16 @@ namespace desktop {
                 break;
             case Bootstrap::PATH_EXISTS:
                 // path exists, check if an installation lives there
-                if (aReadmeFile.open(0) == FileBase::E_None) return E_None;
+                if (aReadmeFile.open(0) == FileBase::E_None) {
+                    if (License::check()) return E_None;
+                    else return E_License;
+                }
             case Bootstrap::PATH_VALID:
                 // found a path but need to create user install
+                if (License::check())
                     return create_user_install(aUserInstallPath);
-                break;
+                else
+                    return E_License;
             default:
                 return E_Unknown;
         }
