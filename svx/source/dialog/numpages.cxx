@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:06:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3317,7 +3317,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     pPreviewWIN->SetPositionMode();
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     pDebugFixedText = new FixedText(this, 0);
     pDebugFixedText->Show();
     Size aSize(200, 20);
@@ -3335,13 +3335,13 @@ SvxNumPositionTabPage::~SvxNumPositionTabPage()
     delete pActNum;
     delete pPreviewWIN;
     delete pSaveNum;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     delete pDebugFixedText;
 #endif
 }
 /*-------------------------------------------------------*/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
 {
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -3470,7 +3470,7 @@ void SvxNumPositionTabPage::InitControls()
     else
         bSetDistEmpty = TRUE;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     lcl_PrintDebugOutput(*pDebugFixedText, *aNumFmtArr[nLvl]);
 #endif
 
@@ -3822,7 +3822,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
         return 0;
     long nValue = GetCoreValue(*pFld, eCoreUnit);
     USHORT nMask = 1;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     BOOL bFirst = TRUE;
 #endif
     for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
@@ -3872,7 +3872,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
                 aNumFmt.SetFirstLineOffset( -(short)nValue );
             }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if(bFirst)
                 lcl_PrintDebugOutput(*pDebugFixedText, aNumFmt);
             bFirst = FALSE;
