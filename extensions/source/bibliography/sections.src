@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:22:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,22 @@
 #include "sections.hrc"
 #include "extensio.hrc"
 
-#define FT_POS          6
-#define FTSIZE_LEFT     65
+#define FT_POS          12
+#define FTSIZE_LEFT     88
 #define ED_POS_LEFT     FT_POS+FTSIZE_LEFT+1
-#define ED_SIZE         65
-#define BTN_SIZE        12
+#define ED_SIZE         70
 #define ED_POS_LEFT2    ED_POS_LEFT + ED_SIZE +1
 #define FT_POS_MIDDLE   ED_POS_LEFT2 + 5
 #define FT_POS_RIGHT    FT_POS_MIDDLE + FT_POS_MIDDLE - FT_POS
 
+#define FL_POS          6
+#define PAGE_WIDTH      FT_POS_RIGHT + FTSIZE_LEFT + (FTSIZE_LEFT * 8 / 10) + FL_POS + 5
+#define FL_WIDTH        PAGE_WIDTH - 2 * FL_POS
+
 TabPage RID_TP_GENERAL
 {
     SVLook = TRUE ;
-    Size = MAP_APPFONT( 452, 195 );
+    Size = MAP_APPFONT( PAGE_WIDTH, 209 );
     Text [ de ] = "Allgemein";
     HelpId = HID_BIB_CONTROL_PAGE;
 
@@ -83,157 +86,203 @@ TabPage RID_TP_GENERAL
     {
         Pos = MAP_APPFONT( FT_POS, 6 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_AUTHTYPE
     {
         Pos = MAP_APPFONT( FT_POS_MIDDLE, 6 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_YEAR
     {
         Pos = MAP_APPFONT( FT_POS_RIGHT, 6 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_AUTHOR
     {
         Pos = MAP_APPFONT( FT_POS, 20 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT( FT_POS_MIDDLE, 20 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_PUBLISHER
     {
         Pos = MAP_APPFONT( FT_POS, 34 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_ADDRESS
     {
         Pos = MAP_APPFONT( FT_POS_MIDDLE, 34 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_ISBN
     {
         Pos = MAP_APPFONT( FT_POS_RIGHT, 34 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_CHAPTER
     {
         Pos = MAP_APPFONT( FT_POS, 48 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_PAGE
     {
         Pos = MAP_APPFONT( FT_POS_MIDDLE, 48 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedLine FL_1
+    {
+        Pos = MAP_APPFONT( FL_POS, 62 );
+        Size = MAP_APPFONT( FL_WIDTH, 8 );
     };
     FixedText FT_EDITOR
     {
-        Pos = MAP_APPFONT( FT_POS, 69 );
+        Pos = MAP_APPFONT( FT_POS, 73 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_EDITION
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 67 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 73 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_BOOKTITLE
     {
-        Pos = MAP_APPFONT( FT_POS, 83 );
+        Pos = MAP_APPFONT( FT_POS, 87 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_VOLUME
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 83 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 87 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_HOWPUBLISHED
     {
-        Pos = MAP_APPFONT( FT_POS_RIGHT, 83 );
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 87 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_ORGANIZATION
     {
-        Pos = MAP_APPFONT( FT_POS, 97 );
+        Pos = MAP_APPFONT( FT_POS, 101 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_INSTITUTION
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 97 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 101 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_SCHOOL
     {
-        Pos = MAP_APPFONT( FT_POS_RIGHT, 97 );
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 101 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_REPORT
     {
-        Pos = MAP_APPFONT( FT_POS, 111);
+        Pos = MAP_APPFONT( FT_POS, 115);
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_MONTH
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 111 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 115 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedLine FL_2
+    {
+        Pos = MAP_APPFONT( FL_POS, 129 );
+        Size = MAP_APPFONT( FL_WIDTH, 8 );
     };
     FixedText FT_JOURNAL
     {
-        Pos = MAP_APPFONT( FT_POS, 132 );
+        Pos = MAP_APPFONT( FT_POS, 140 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
 
     FixedText FT_NUMBER
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 132 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 140 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_SERIES
     {
-        Pos = MAP_APPFONT( FT_POS_RIGHT, 132 );
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 140 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_ANNOTE
     {
-        Pos = MAP_APPFONT( FT_POS, 146 );
+        Pos = MAP_APPFONT( FT_POS, 154 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_NOTE
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 146 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 154 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_URL
     {
-        Pos = MAP_APPFONT( FT_POS_RIGHT, 146 );
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 154 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
+    };
+    FixedLine FL_3
+    {
+        Pos = MAP_APPFONT( FL_POS, 168 );
+        Size = MAP_APPFONT( FL_WIDTH, 8 );
     };
     FixedText FT_CUSTOM1
     {
-        Pos = MAP_APPFONT( FT_POS, 167 );
+        Pos = MAP_APPFONT( FT_POS, 179 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_CUSTOM2
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 167 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 179 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_CUSTOM3
     {
-        Pos = MAP_APPFONT( FT_POS_RIGHT, 167 );
+        Pos = MAP_APPFONT( FT_POS_RIGHT, 179 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_CUSTOM4
     {
-        Pos = MAP_APPFONT( FT_POS, 181 );
+        Pos = MAP_APPFONT( FT_POS, 193 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     FixedText FT_CUSTOM5
     {
-        Pos = MAP_APPFONT( FT_POS_MIDDLE, 181 );
+        Pos = MAP_APPFONT( FT_POS_MIDDLE, 193 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
+        Right = TRUE;
     };
     String ST_ERROR_PREFIX
     {
