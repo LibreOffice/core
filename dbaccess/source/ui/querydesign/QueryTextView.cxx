@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 10:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,25 +207,28 @@ void OQueryContainerWindow::showBeamer(const Reference<XFrame>& _xFrame)
         Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
         Reference < XFrames > xFrames = xSup->getFrames();
         xFrames->append( m_xBeamer );
+//  }
+//
+//
+//  if(!m_pBeamer->IsVisible())
+//  {
+        Size aSize = GetOutputSizePixel();
+        Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
+
+        const long  nFrameHeight = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+        Point aPos(0,aBeamer.Height()+nFrameHeight);
+
+        m_pBeamer->SetPosSizePixel(Point(0,0),aBeamer);
+        m_pBeamer->Show();
+
+        m_pSplitter->SetPosSizePixel( Point(0,aBeamer.Height()), Size(aSize.Width(),nFrameHeight) );
+        // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
+        m_pSplitter->SetSplitPosPixel( aBeamer.Height() );
+        m_pView->SetPosSizePixel(aPos,Size(aBeamer.Width(),aSize.Height() - aBeamer.Height()-nFrameHeight));
+
+        m_pSplitter->Show();
+        Resize();
     }
-
-
-    Size aSize = GetOutputSizePixel();
-    Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
-
-    const long  nFrameHeight = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
-    Point aPos(0,aBeamer.Height()+nFrameHeight);
-
-    m_pBeamer->SetPosSizePixel(Point(0,0),aBeamer);
-    m_pBeamer->Show();
-
-    m_pSplitter->SetPosSizePixel( Point(0,aBeamer.Height()), Size(aSize.Width(),nFrameHeight) );
-    // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
-    m_pSplitter->SetSplitPosPixel( aBeamer.Height() );
-    m_pView->SetPosSizePixel(aPos,Size(aBeamer.Width(),aSize.Height() - aBeamer.Height()-nFrameHeight));
-
-    m_pSplitter->Show();
-    Resize();
 }
 // -----------------------------------------------------------------------------
 
