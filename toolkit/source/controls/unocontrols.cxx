@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-23 13:31:49 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 10:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1629,7 +1629,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropert
 //  class UnoRadioButtonControl
 //  ----------------------------------------------------
 UnoRadioButtonControl::UnoRadioButtonControl()
-    : maItemListeners( *this )
+    : maItemListeners( *this ), maActionListeners( *this )
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
@@ -1644,6 +1644,7 @@ UnoRadioButtonControl::UnoRadioButtonControl()
 uno::Any UnoRadioButtonControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XButton*, this ),
                                         SAL_STATIC_CAST( awt::XRadioButton*, this ),
                                         SAL_STATIC_CAST( awt::XItemListener*, this ),
                                         SAL_STATIC_CAST( lang::XEventListener*, SAL_STATIC_CAST( awt::XItemListener*, this ) ),
@@ -1653,6 +1654,7 @@ uno::Any UnoRadioButtonControl::queryAggregation( const uno::Type & rType ) thro
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoRadioButtonControl )
+    getCppuType( ( uno::Reference< awt::XButton>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XRadioButton>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XItemListener>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
@@ -1679,6 +1681,10 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
 
     uno::Reference < awt::XRadioButton >  xRadioButton( mxPeer, uno::UNO_QUERY );
     xRadioButton->addItemListener( this );
+
+    uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+    if ( maActionListeners.getLength() )
+        xButton->addActionListener( &maActionListeners );
 }
 
 void UnoRadioButtonControl::addItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)
@@ -1691,11 +1697,41 @@ void UnoRadioButtonControl::removeItemListener(const uno::Reference < awt::XItem
     maItemListeners.removeInterface( l );
 }
 
+void UnoRadioButtonControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
+{
+    maActionListeners.addInterface( l );
+    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        xButton->addActionListener( &maActionListeners );
+    }
+}
+
+void UnoRadioButtonControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
+{
+    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        xButton->removeActionListener( &maActionListeners );
+    }
+    maActionListeners.removeInterface( l );
+}
+
 void UnoRadioButtonControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= rLabel;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+}
+
+void UnoRadioButtonControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
+{
+    maActionCommand = rCommand;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        xButton->setActionCommand( rCommand );
+    }
 }
 
 void UnoRadioButtonControl::setState( sal_Bool bOn ) throw(uno::RuntimeException)
