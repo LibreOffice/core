@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_interact.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:05:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,14 @@ class ProgressLevel
 
 public:
     inline ProgressLevel(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv );
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     inline ProgressLevel(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         ::rtl::OUString const & status );
     inline ~ProgressLevel();
 
     inline void update( ::rtl::OUString const & status );
+    inline void update();
 };
 
 //______________________________________________________________________________
@@ -126,10 +127,24 @@ inline void ProgressLevel::update( ::rtl::OUString const & status )
         m_xProgressHandler->update( css::uno::makeAny(status) );
 }
 
+//______________________________________________________________________________
+inline void ProgressLevel::update()
+{
+    if (m_xProgressHandler.is())
+        m_xProgressHandler->update( css::uno::Any() );
+}
+
 //##############################################################################
 
 //==============================================================================
-void interactThrow(
+bool interactContinuation(
+    css::uno::Any const & request,
+    css::uno::Type const & continuation,
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+    bool * pabort = 0 );
+
+//==============================================================================
+void interactContinuation_throw(
     css::deployment::DeploymentException const & exc,
     css::uno::Type const & continuation,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
