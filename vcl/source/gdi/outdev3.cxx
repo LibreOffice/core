@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 12:53:26 $
+ *  last change: $Author: th $ $Date: 2001-07-25 18:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2313,6 +2313,8 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
         pFoundData->mnTypeFaces |= IMPL_DEVFONT_SCALABLE;
     if ( pNewData->meCharSet == RTL_TEXTENCODING_SYMBOL )
         pFoundData->mnTypeFaces |= IMPL_DEVFONT_SYMBOL;
+    else
+        pFoundData->mnTypeFaces |= IMPL_DEVFONT_NONESYMBOL;
     if ( pNewData->meWeight != WEIGHT_DONTKNOW )
     {
         if ( pNewData->meWeight >= WEIGHT_SEMIBOLD )
@@ -2523,8 +2525,6 @@ void ImplDevFontList::InitMatchData()
                       pEntry->meFamily, pTempFontAttr );
         if ( ImplIsCJKFont( pEntry->maName ) )
             pEntry->mnMatchType |= IMPL_FONT_ATTR_CJK;
-        if ( pEntry->mnTypeFaces & IMPL_DEVFONT_SYMBOL )
-            pEntry->mnMatchType |= IMPL_FONT_ATTR_SYMBOL;
 
         pEntry = Next();
     }
@@ -2759,6 +2759,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         ULONG                   nSearchType = 0;
         FontWeight              eSearchWeight = eWeight;
         FontWidth               eSearchWidth = rFont.GetWidthType();
+        BOOL                    bSymbolEncoding = (eCharSet == RTL_TEXTENCODING_SYMBOL);
         ImplGetMapName( aSearchName, aSearchShortName, aSearchFamilyName,
                         eSearchWeight, eSearchWidth, nSearchType );
 
@@ -2784,6 +2785,9 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                 }
             }
         }
+
+        if ( !pFoundData && bSymbolEncoding )
+            pFoundData = pFontList->ImplFindFontFromToken( aImplSubsStarSymbol );
 
         // If we haven't found a font, we try this with the other Font Token names, if availble
         if ( !pFoundData && (nToken > 1) )
@@ -2888,6 +2892,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                 if ( ImplIsCJKFont( rName ) )
                     nSearchType |= IMPL_FONT_ATTR_CJK;
             }
+            if ( bSymbolEncoding )
+                nSearchType |= IMPL_FONT_ATTR_SYMBOL;
 
             // We must only match, if we have something to match
             if ( nSearchType ||
@@ -2958,13 +2964,31 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
                     if ( nSearchType & IMPL_FONT_ATTR_SYMBOL )
                     {
-                        if ( nMatchType & IMPL_FONT_ATTR_SYMBOL )
-                            nTestMatch += 10000000*2;
-                        if ( nMatchType & IMPL_FONT_ATTR_FULL )
-                            nTestMatch += 10000000;
+                        // prefer some special known symbol fonts
+                        if ( pData->maSearchName.EqualsAscii( "starsymbol" ) )
+                            nTestMatch += 10000000*6+(10000*3);
+                        else if ( pData->maSearchName.EqualsAscii( "opensymbol" ) )
+                            nTestMatch += 10000000*6;
+                        else if ( pData->maSearchName.EqualsAscii( "starbats" ) ||
+                                  pData->maSearchName.EqualsAscii( "wingdings" ) ||
+                                  pData->maSearchName.EqualsAscii( "monotypesorts" ) ||
+                                  pData->maSearchName.EqualsAscii( "dingbats" ) ||
+                                  pData->maSearchName.EqualsAscii( "zapfdingbats" ) )
+                            nTestMatch += 10000000*5;
+                        else if ( pData->mnTypeFaces & IMPL_DEVFONT_SYMBOL )
+                            nTestMatch += 10000000*4;
+                        else
+                        {
+                            if ( nMatchType & IMPL_FONT_ATTR_SYMBOL )
+                                nTestMatch += 10000000*2;
+                            if ( nMatchType & IMPL_FONT_ATTR_FULL )
+                                nTestMatch += 10000000;
+                        }
                     }
-                    else if ( nMatchType & IMPL_FONT_ATTR_SYMBOL )
+                    else if ( (pData->mnTypeFaces & (IMPL_DEVFONT_SYMBOL | IMPL_DEVFONT_NONESYMBOL)) == IMPL_DEVFONT_SYMBOL )
                         nTestMatch -= 10000000;
+                    else if ( nMatchType & IMPL_FONT_ATTR_SYMBOL )
+                        nTestMatch -= 10000;
 
 
                     if ( (aSearchFamilyName == pData->maMatchFamilyName) &&
