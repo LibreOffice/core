@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:58:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,10 @@
 #include "fmPropBrw.hxx"
 #endif
 
+#ifndef _SVX_DATANAVI_HXX
+#include "datanavi.hxx"
+#endif
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::svxform;
@@ -175,6 +179,7 @@ FmFormObjFactory::FmFormObjFactory()
         FmFieldWinMgr::RegisterChildWindow();
         FmPropBrwMgr::RegisterChildWindow();
         NavigatorFrameManager::RegisterChildWindow();
+        DataNavigatorManager::RegisterChildWindow();
         FmFilterNavigatorWinMgr::RegisterChildWindow();
 
         //////////////////////////////////////////////////////////////////////
