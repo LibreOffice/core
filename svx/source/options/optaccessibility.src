@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:06:33 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,15 +408,15 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ greek ] = "Use te~xt selection cursor in read-only text documents";
         Text[ dutch ] = "Use te~xt selection cursor in read-only text documents";
         Text[ french ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ spanish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ spanish ] = "Utilizar cursor de selecci�n de texto en documentos de texto de s�lo lectura";
         Text[ finnish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ italian ] = "Use te~xt selection cursor in read-only text documents";
         Text[ danish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ swedish ] = "Anv�nd mark�r f�r te~xtmarkering i skrivskyddade textdokument";
         Text[ polish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ portuguese_brazilian ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ japanese ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ korean ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ japanese ] = "読み取り専用の文書ドキュメントでテキスト選択カーソルを使用";
+        Text[ korean ] = "읽기 전용 텍스트 문서에서 텍스트 선택 커서를 사용";
         Text[ chinese_simplified ] = "受保护的文本文字内使用选中文字的鼠标";
         Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標";
         Text[ turkish ] = "Use te~xt selection cursor in read-only text documents";
