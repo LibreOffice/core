@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:26:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2121,7 +2121,7 @@ Resource RID_GLOBSTR
         Text = "Groя-/Kleinschreibung" ;
         Text [ ENGLISH ] = "Change case" ;
         Text[ english_us ] = "Case/Characters";
-        Text[ portuguese ] = "Change case";
+        Text[ portuguese ] = "Caixa/Caracteres";
         Text[ russian ] = "«аглавные/строчные буквы";
         Text[ greek ] = "Change case";
         Text[ dutch ] = "Hoofd-/kleine letters belangrijk";
@@ -3312,7 +3312,7 @@ Resource RID_GLOBSTR
         Text = "Der Quellbereich enthдlt Teilergebnisse, die das Ergebnis verfдlschen kцnnen. Soll er trotzdem verwendet werden?";
         Text [ ENGLISH ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ english_us ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ portuguese ] = "The source range contains subtotals which may distort the results. Use it anyway?";
+        Text[ portuguese ] = "O intervalo fonte contйm subtotais que poderгo falsificar o resultado. Mesmo assim, utilizб-lo?";
         Text[ russian ] = "»сходный диапазон содержит промежуточные итоги, которые могут фальсифицировать результат. ѕрименить его несмотр€ на это?";
         Text[ greek ] = "« ресйпчё рспЁлехузт ресйЁчей месйк№ биспяумбфб фб прпяб мрпсея нб пдзгёупхн уе л№ипт брпфелЁумбфб. »Ёлефе нб чсзуймпрпйзиея;";
         Text[ dutch ] = "Het bronbereik bevat subtotalen die kunnen leiden tot een foutief einresultaat. Wilt u deze toch gebruiken?";
@@ -8431,7 +8431,7 @@ Resource RID_GLOBSTR
         /* ### ACHTUNG: Neuer Text in Resource? Der Inhalt der Zwischenablage konnte nicht eingefьgt werden. : Der Inhalt der Zwischenablage konnte nicht eingef≥gt werden. */
         Text = "Der Inhalt der Zwischenablage konnte nicht eingefьgt werden." ;
         Text [ ENGLISH ] = "The contents of the clipboard could not be inserted." ;
-        Text [ ENGLISH_US ] = "The contents of the clipboard could not be inserted." ;
+        Text [ ENGLISH_US ] = "The contents of the clipboard could not be pasted." ;
         Text [ dutch ] = "De inhoud van het Klembord kon niet worden ingevoegd" ;
         Text [ italian ] = "Non и stato possibile incollare il contenuto degli  appunti" ;
         Text [ spanish ] = "No se pudo pegar el contenido del portapapeles." ;
@@ -8565,7 +8565,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "ЌЉ–ќ";
         Text[ russian ] = "√рафика";
         Text[ polish ] = "Grafika";
-        Text[ japanese ] = "Єё„ћ®ѓЄ";
+        Text[ japanese ] = "Р}";
         Text[ chinese_traditional ] = "єѕІќ";
         Text[ arabic ] = "’ж—…";
         Text[ greek ] = "√сбцйкь";
