@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:59:15 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,19 +404,26 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
     {
         if (!bDisable)
         {
-            //  nur eine Tabelle selektieren:
-            /*
+            // #i18735# select the page that is under the mouse cursor
+            // if multiple tables are selected and the one under the cursor
+            // is not part of them then unselect them
             USHORT nId = GetPageId( rCEvt.GetMousePosPixel() );
             if (nId)
             {
+                BOOL bAlreadySelected = IsPageSelected( nId );
+                //make the clicked page the current one
                 SetCurPageId( nId );
-                USHORT nCount = GetMaxId();
+                //change the selection when the current one is not already
+                //selected or part of a multi selection
+                if(!bAlreadySelected)
+                {
+                    USHORT nCount = GetMaxId();
 
-                for (USHORT i=1; i<=nCount; i++)
-                    SelectPage( i, i==nId );
-                Select();
+                    for (USHORT i=1; i<=nCount; i++)
+                        SelectPage( i, i==nId );
+                    Select();
+                }
             }
-            */
             //  Popup-Menu:
             //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
             pViewData->GetDispatcher().ExecutePopup( ScResId(RID_POPUP_TAB) );
