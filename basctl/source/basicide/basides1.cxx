@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:20:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,13 +1300,14 @@ void __EXPORT BasicIDEShell::Activate( BOOL bMDI )
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
             ((DialogWindow*)pCurWin)->UpdateBrowser();
 
+/*
         // Accelerator hauptsaechlich aus kompatibilitaetsgruenden in
         // ExtraData statt in ViewShell
         Accelerator* pAccel = IDE_DLL()->GetExtraData()->GetAccelerator();
         DBG_ASSERT( pAccel, "Accel?!" );
         pAccel->SetSelectHdl( LINK( this, BasicIDEShell, AccelSelectHdl ) );
         Application::InsertAccel( pAccel );
-
+*/
         ShowObjectDialog( TRUE, FALSE );
     }
 }
@@ -1338,11 +1339,12 @@ void __EXPORT BasicIDEShell::Deactivate( BOOL bMDI )
                 break;
             }
         }
-
+/*
         Accelerator* pAccel = IDE_DLL()->GetExtraData()->GetAccelerator();
         DBG_ASSERT( pAccel, "Accel?!" );
         pAccel->SetSelectHdl( Link() );
         Application::RemoveAccel( pAccel );
+*/
 
         ShowObjectDialog( FALSE, FALSE );
     }
