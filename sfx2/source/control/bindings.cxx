@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 07:58:53 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 13:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2717,6 +2717,15 @@ void SfxBindings::SetActiveFrame( const ::com::sun::star::uno::Reference< ::com:
     else
         SetDispatchProvider_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > (
             pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY ) );
+}
+
+const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxBindings::GetActiveFrame() const
+{
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( pImp->xProv, ::com::sun::star::uno::UNO_QUERY );
+    if ( xFrame.is() || !pDispatcher )
+        return xFrame;
+    else
+        return pDispatcher->GetFrame()->GetFrame()->GetFrameInterface();
 }
 
 void SfxBindings::SetDispatchProvider_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & rProv )
