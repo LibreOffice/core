@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-28 15:24:11 $
+ *  last change: $Author: mba $ $Date: 2002-01-28 15:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ class FileStreamWrapper_Impl : public FileInputStreamWrapper_Base
 protected:
     ::osl::Mutex    m_aMutex;
     String          m_aURL;
-    SvFileStream*   m_pSvStream;
+    SvStream*       m_pSvStream;
 
 public:
     FileStreamWrapper_Impl( const String& rName );
@@ -348,6 +348,7 @@ void FileStreamWrapper_Impl::checkConnected()
     if ( !m_pSvStream )
     {
         m_pSvStream = new SvFileStream( m_aURL, STREAM_STD_READ );
+        m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
 #ifdef DEBUG
         ++nOpenFiles;
 #endif
