@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-15 17:27:18 $
+ *  last change: $Author: mba $ $Date: 2001-03-29 14:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,6 +634,12 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             if ( nIndexOfFilterName < nPropertyCount )
                 // convert to format with factory ( makes load more easy to implement )
                 lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
+            else
+            {
+                lDescriptor.realloc( nPropertyCount + 1 );
+                lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
+                lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
+            }
         }
         else
         {
