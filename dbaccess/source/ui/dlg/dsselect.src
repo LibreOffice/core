@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:31:21 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ japanese ] = "Η—...";
         Text[ chinese_traditional ] = "Ίή²z...";
         Text[ arabic ] = "ΕΟΗΡΙ...";
-        Text[ greek ] = "Διαχείρηση...";
+        Text[ greek ] = "Διαχείριση...";
         Text[ korean ] = "±ΈΌΊ...";
         Text[ turkish ] = "Yφnet...";
         Text[ language_user1 ] = " ";
@@ -233,6 +233,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/09 12:31:21  kz
+ *  Merge SRC612: 09.11.00 - 13:30:55 (NoBranch)
+ *
  *  Revision 1.3  2000/11/06 08:46:10  kz
  *  Merge SRC610: 06.11.00 - 09:45:53 (NoBranch)
  *
