@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:09:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,12 +396,6 @@ using namespace vos;
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEEQUATION_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEOPERATION_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeOperation.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
@@ -1032,6 +1026,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                     pOut->WriteLine( aString );
                 }
             }
+            sal_Int32 i;
             for ( i = 320; i < 383; i++ )
             {
                 if ( ( i >= DFF_Prop_adjustValue ) && ( i <= DFF_Prop_adjust10Value ) )
@@ -1343,9 +1338,9 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     *pAny >>= nGluePointType;
                                 else
                                 {
-                                    const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
+                                    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
                                     rtl::OUString sShapeType;
-                                    pAny = aGeometryItem.GetPropertyValueByName( sPredefinedType );
+                                    pAny = aGeometryItem.GetPropertyValueByName( sType );
                                     if ( pAny )
                                         *pAny >>= sShapeType;
                                     MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
@@ -2126,11 +2121,11 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     PropVec aPropVec;
     PropertyValue aProp;
 
-    /////////////////////////////////////////////////////////////////////////////
-    // "PredefinedType" property, including the predefined CustomShape type name //
-    /////////////////////////////////////////////////////////////////////////////
-    const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
-    aProp.Name  = sPredefinedType;
+    /////////////////////////////////////////////////////////////////////
+    // "Type" property, including the predefined CustomShape type name //
+    /////////////////////////////////////////////////////////////////////
+    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+    aProp.Name  = sType;
     aProp.Value <<= EnhancedCustomShapeTypeNames::Get( eShapeType );
     aPropVec.push_back( aProp );
 
@@ -2161,19 +2156,20 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     ///////////////
     // "ViewBox" //
     ///////////////
+
+    sal_Int32 nCoordWidth = 21600;  // needed to replace handle type center with absolute value
+    sal_Int32 nCoordHeight= 21600;
     if ( IsProperty( DFF_Prop_geoLeft ) || IsProperty( DFF_Prop_geoTop ) || IsProperty( DFF_Prop_geoRight ) || IsProperty( DFF_Prop_geoBottom ) )
     {
         com::sun::star::awt::Rectangle aViewBox;
         const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
         aViewBox.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
         aViewBox.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
-        aViewBox.Width = ((sal_Int32)GetPropertyValue( DFF_Prop_geoRight, 21600 ) ) - aViewBox.X;
-        aViewBox.Height = ((sal_Int32)GetPropertyValue( DFF_Prop_geoBottom, 21600 ) ) - aViewBox.Y;
+        aViewBox.Width = nCoordWidth = ((sal_Int32)GetPropertyValue( DFF_Prop_geoRight, 21600 ) ) - aViewBox.X;
+        aViewBox.Height = nCoordHeight = ((sal_Int32)GetPropertyValue( DFF_Prop_geoBottom, 21600 ) ) - aViewBox.Y;
         aProp.Name = sViewBox;
         aProp.Value <<= aViewBox;
         aPropVec.push_back( aProp );
-
-
     }
     /////////////////////
     // TextRotateAngle //
@@ -2505,12 +2501,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Value <<= aExtrusionPropSeq;
         aPropVec.push_back( aProp );
     }
+
     /////////////////////////////////////////
     // "Equations" PropertySequence element //
     /////////////////////////////////////////
     if ( IsProperty( DFF_Prop_pFormulas ) )
     {
-        sal_uInt16 i, j;
+        sal_uInt16 i;
         sal_uInt16 nNumElem = 0;
         sal_uInt16 nNumElemMem = 0;
         sal_uInt16 nElemSize = 8;
@@ -2518,46 +2515,14 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( SeekToContent( DFF_Prop_pFormulas, rIn ) )
             rIn >> nNumElem >> nNumElemMem >> nElemSize;
 
-        sal_Int16 nPara[ 3 ];
+        sal_Int16 nP1, nP2, nP3;
         sal_uInt16 nFlags;
 
-        uno::Sequence< EnhancedCustomShapeEquation > aEquations( nNumElem );
+        uno::Sequence< rtl::OUString > aEquations( nNumElem );
         for ( i = 0; i < nNumElem; i++ )
         {
-            rIn >> nFlags >> nPara[ 0 ] >> nPara[ 1 ]>> nPara[ 2 ];
-            aEquations[ i ].Operation = nFlags & 0xff;
-
-            sal_Int32 nParameters = 0;
-            switch( aEquations[ i ].Operation )
-            {
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::PROD :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUM :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::IF :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MOD :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COSATAN2 :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SINATAN2 :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUMANGLE :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ELLIPSE :
-                    nParameters = 3;
-                break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MID :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MIN :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MAX :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ATAN2 :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SIN :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COS :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::TAN :
-                    nParameters = 2;
-                break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ABS :
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SQRT :
-                    nParameters = 1;
-                break;
-            }
-            aEquations[ i ].Parameters.realloc( nParameters );
-            for ( j = 0; j < nParameters; j++ )
-                EnhancedCustomShape2d::SetEnhancedCustomShapeEquationParameter(
-                    aEquations[ i ].Parameters[ j ], nPara[ j ], ( nFlags & ( 0x2000 << j ) ) != 0 );
+            rIn >> nFlags >> nP1 >> nP2 >> nP3;
+            aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
         }
         // pushing the whole Equations element
         const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
@@ -2565,6 +2530,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         aProp.Value <<= aEquations;
         aPropVec.push_back( aProp );
     }
+
     ////////////////////////////////////////
     // "Handles" PropertySequence element //
     ////////////////////////////////////////
@@ -2595,6 +2561,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     >> nRangeYMin
                     >> nRangeYMax;
 
+                if ( nPositionX == 2 )  // replacing center position with absolute value
+                    nPositionX = nCoordWidth / 2;
+                if ( nPositionY == 2 )
+                    nPositionY = nCoordHeight / 2;
                 EnhancedCustomShapeParameterPair aPosition;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First,  nPositionX, sal_True, sal_True  );
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, nPositionY, sal_True, sal_False );
@@ -2629,6 +2599,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 }
                 if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
                 {
+                    if ( nCenterX == 2 )
+                        nCenterX = nCoordWidth / 2;
+                    if ( nCenterY == 2 )
+                        nCenterY = nCoordHeight / 2;
                     if ( ( nPositionY >= 0x256 ) || ( nPositionY <= 0x107 ) )   // position y
                         nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );
                     EnhancedCustomShapeParameterPair aPolar;
@@ -2641,6 +2615,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 }
                 if ( nFlags & MSDFF_HANDLE_FLAGS_MAP )
                 {
+                    if ( nCenterX == 2 )
+                        nCenterX = nCoordWidth / 2;
+                    if ( nCenterY == 2 )
+                        nCenterY = nCoordHeight / 2;
                     EnhancedCustomShapeParameterPair aMap;
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, ( nFlags & 0x800  ) != 0, sal_True  );
                     EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, ( nFlags & 0x1000 ) != 0, sal_False );
@@ -2653,6 +2631,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 {
                     if ( (sal_uInt32)nRangeXMin != 0x80000000 )
                     {
+                        if ( nRangeXMin == 2 )
+                            nRangeXMin = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRangeXMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum,  nRangeXMin,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
@@ -2663,6 +2643,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     }
                     if ( (sal_uInt32)nRangeXMax != 0x7fffffff )
                     {
+                        if ( nRangeXMax == 2 )
+                            nRangeXMax = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRangeXMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, nRangeXMax,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
@@ -2673,6 +2655,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     }
                     if ( (sal_uInt32)nRangeYMin != 0x80000000 )
                     {
+                        if ( nRangeYMin == 2 )
+                            nRangeYMin = nCoordHeight / 2;
                         EnhancedCustomShapeParameter aRangeYMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, nRangeYMin,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, sal_True );
@@ -2683,6 +2667,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     }
                     if ( (sal_uInt32)nRangeYMax != 0x7fffffff )
                     {
+                        if ( nRangeYMax == 2 )
+                            nRangeYMax = nCoordHeight / 2;
                         EnhancedCustomShapeParameter aRangeYMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, nRangeYMax,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, sal_False );
@@ -2696,6 +2682,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 {
                     if ( (sal_uInt32)nRangeXMin != 0x7fffffff )
                     {
+                        if ( nRangeXMin == 2 )
+                            nRangeXMin = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, nRangeXMin,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
@@ -2706,6 +2694,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     }
                     if ( (sal_uInt32)nRangeXMax != 0x80000000 )
                     {
+                        if ( nRangeXMax == 2 )
+                            nRangeXMax = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, nRangeXMax,
                             ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
@@ -2775,7 +2765,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aPathPropVec.push_back( aProp );
         }
         // "Path/TextPathAllowed"
-        if ( IsHardAttribute( DFF_Prop_fGtextOK ) )
+        if ( IsHardAttribute( DFF_Prop_fGtextOK ) || ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) )
         {
             const rtl::OUString sTextPathAllowed( RTL_CONSTASCII_USTRINGPARAM ( "TextPathAllowed" ) );
             sal_Bool bTextPathAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 4 ) != 0;
@@ -2853,8 +2843,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         case 0x4: nCommand = EnhancedCustomShapeSegmentCommand::MOVETO; if ( !nCount ) nCount = 1; break;
                         case 0x2: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCount ) nCount = 1; break;
                         case 0x3: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCount ) nCount = 1; break;  // seems to be the relative curveto
-                        case 0x8: nCommand = EnhancedCustomShapeSegmentCommand::ENDSUBPATH; break;
-                        case 0x6: nCommand = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH; break;
+                        case 0x8: nCommand = EnhancedCustomShapeSegmentCommand::ENDSUBPATH; nCount = 0; break;
+                        case 0x6: nCommand = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH; nCount = 0; break;
                         case 0xa:
                         case 0xb:
                         {
@@ -2915,8 +2905,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                                     nCount = nTmp & 0xff;
                                 }
                                 break;
-                                case 0xa: nCommand = EnhancedCustomShapeSegmentCommand::NOFILL; break;
-                                case 0xb: nCommand = EnhancedCustomShapeSegmentCommand::NOSTROKE; break;
+                                case 0xa: nCommand = EnhancedCustomShapeSegmentCommand::NOFILL; nCount = 0; break;
+                                case 0xb: nCommand = EnhancedCustomShapeSegmentCommand::NOSTROKE; nCount = 0; break;
                             }
                         }
                         break;
@@ -2933,14 +2923,22 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aProp.Value <<= aSegments;
             aPathPropVec.push_back( aProp );
         }
-        // Path/StretchPoint
-        if ( IsProperty( DFF_Prop_stretchPointX ) || IsProperty( DFF_Prop_stretchPointY ) )
+        // Path/StretchX
+        if ( IsProperty( DFF_Prop_stretchPointX ) )
         {
-            const rtl::OUString sStretchPoint( RTL_CONSTASCII_USTRINGPARAM ( "StretchPoint" ) );
-            com::sun::star::awt::Point aStretchPoint( GetPropertyValue( DFF_Prop_stretchPointX, 0 ),
-                GetPropertyValue( DFF_Prop_stretchPointY, 0 ) );
-            aProp.Name = sStretchPoint;
-            aProp.Value <<= aStretchPoint;
+            const rtl::OUString sStretchX( RTL_CONSTASCII_USTRINGPARAM ( "StretchX" ) );
+            sal_Int32 nStretchX = GetPropertyValue( DFF_Prop_stretchPointX, 0 );
+            aProp.Name = sStretchX;
+            aProp.Value <<= nStretchX;
+            aPathPropVec.push_back( aProp );
+        }
+        // Path/StretchX
+        if ( IsProperty( DFF_Prop_stretchPointY ) )
+        {
+            const rtl::OUString sStretchY( RTL_CONSTASCII_USTRINGPARAM ( "StretchY" ) );
+            sal_Int32 nStretchY = GetPropertyValue( DFF_Prop_stretchPointY, 0 );
+            aProp.Name = sStretchY;
+            aProp.Value <<= nStretchY;
             aPathPropVec.push_back( aProp );
         }
         // Path/TextFrames
@@ -4836,6 +4834,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             ((SdrObjCustomShape*)pRet)->SetVerticalWriting( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 ) != 0 );
                         }
                         pRet->SetMergedItemSet( aSet );
+                        ((SdrObjCustomShape*)pRet)->MergeDefaultAttributes();
                         pRet->SetSnapRect( aBoundRect );
 
                         EnhancedCustomShape2d aCustomShape2d( pRet );
