@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:37 $
+ *  last change: $Author: pl $ $Date: 2001-05-28 09:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.1.1.1 2001-05-08 11:45:37 pl Exp $ */
+/* $Id: sft.h,v 1.2 2001-05-28 09:58:53 pl Exp $ */
 
 /**
  *
@@ -110,6 +110,12 @@ extern "C" {
 #endif
 
 #ifdef __sparc
+#ifndef G_BIG_ENDIAN
+#define G_BIG_ENDIAN
+#endif
+#endif
+
+#if defined(__powerpc__) || defined(POWERPC)
 #ifndef G_BIG_ENDIAN
 #define G_BIG_ENDIAN
 #endif
