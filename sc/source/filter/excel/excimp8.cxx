@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 12:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,8 @@ void ImportExcel8::Note( void )
 void ImportExcel8::Format( void )
 {
     UINT16  nInd = aIn.ReaduInt16();
-    pExcRoot->pValueFormBuffer->NewValueFormat( nInd, aIn.ReadUniString() );
+    String aTmpStr( aIn.ReadUniString() );
+    pExcRoot->pValueFormBuffer->NewValueFormat( nInd, aTmpStr );
 }
 
 

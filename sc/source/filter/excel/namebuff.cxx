@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-31 13:10:40 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 12:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,8 @@ BOOL NameBuffer::Find( const sal_Char* pRefName, UINT16& rIndex )
 
 void RangeNameBuffer::Store( ByteString& r, const ScTokenArray* p, UINT16 n, const BOOL b )
 {
-    Store( String( r, *pExcRoot->pCharset ), p, n, b );
+    String aTmpStr( r, *pExcRoot->pCharset );
+    Store( aTmpStr, p, n, b );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-18 14:59:47 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 12:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,8 @@ void ImportExcel::Label25( void )
         b16BitLen = TRUE;
     }
 
-    SetTextCell( nC, nR, aIn.ReadByteString( b16BitLen ), nXF );
+    String aTmpStr( aIn.ReadByteString( b16BitLen ) );
+    SetTextCell( nC, nR, aTmpStr, nXF );
 
     pLastFormCell = NULL;
 }
@@ -726,7 +727,8 @@ void ImportExcel::Format235( void )
     if( pExcRoot->eHauptDateiTyp == Biff5 )
         aIn.Ignore( 2 );
 
-    pExcRoot->pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
+    String aTmpStr( aIn.ReadByteString( FALSE ) );
+    pExcRoot->pValueFormBuffer->NewValueFormat( aTmpStr );
 }
 
 
@@ -1639,7 +1641,8 @@ void ImportExcel::Label34( void )
 
     aIn >> nR >> nC >> nXF;
 
-    SetTextCell( nC, nR, aIn.ReadByteString( TRUE ), nXF );
+    String aTmpStr( aIn.ReadByteString( TRUE ) );
+    SetTextCell( nC, nR, aTmpStr, nXF );
 
     pLastFormCell = NULL;
 }
@@ -1997,7 +2000,8 @@ void ImportExcel::Bof4( void )
 void ImportExcel::Format4( void )
 {
     aIn.Ignore( 2 );
-    pExcRoot->pValueFormBuffer->NewValueFormat( aIn.ReadByteString( FALSE ) );
+    String aTmpStr( aIn.ReadByteString( FALSE ) );
+    pExcRoot->pValueFormBuffer->NewValueFormat( aTmpStr );
 }
 
 
