@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:19:01 $
+ *  last change: $Author: nf $ $Date: 2002-06-13 13:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ polish ] = "Use ~Asian vertical layout mode";
         Text[ portuguese_brazilian ] = "Use ~Asian vertical layout mode";
         Text[ japanese ] = "日本語縦書きレイアウトモードの使用";
-        Text[ korean ] = "아시아 형식의 세로 방향 레이아웃 모드 사용 ";
+        Text[ korean ] = "아시아 형식의 세로 쓰기 레이아웃 모드 사용 ";
         Text[ chinese_simplified ] = "使用中日韩竖写模式";
         Text[ chinese_traditional ] = "使用中日韓直書模式(~A)";
         Text[ turkish ] = "Use ~Asian vertical layout mode";
