@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-06 11:21:58 $
+ *  last change: $Author: mt $ $Date: 2002-10-10 12:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,6 +1372,19 @@ XubString EditEngine::GetText( sal_uInt16 nPara ) const
         aStr = pImpEditEngine->GetEditDoc().GetParaAsString( nPara );
     return aStr;
 }
+
+void EditEngine::SetModifyHdl( const Link& rLink )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetModifyHdl( rLink );
+}
+
+Link EditEngine::GetModifyHdl() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetModifyHdl();
+}
+
 
 void EditEngine::ClearModifyFlag()
 {

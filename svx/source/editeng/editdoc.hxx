@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-28 15:20:19 $
+ *  last change: $Author: mt $ $Date: 2002-10-10 12:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,6 +742,7 @@ class EditDoc : public ContentList
 {
 private:
     SfxItemPool*    pItemPool;
+    Link            aModifyHdl;
 
     SvxFont         aDefFont;           //schneller, als jedesmal vom Pool!
     USHORT          nDefTab;
@@ -758,7 +759,10 @@ public:
                     ~EditDoc();
 
     BOOL            IsModified() const      { return bModified; }
-    void            SetModified( BOOL b )   { bModified = b; }
+    void            SetModified( BOOL b );
+
+    void            SetModifyHdl( const Link& rLink ) { aModifyHdl = rLink; }
+    Link            GetModifyHdl() const { return aModifyHdl; }
 
     void            CreateDefFont( BOOL bUseStyles );
     const SvxFont&  GetDefFont() { return aDefFont; }

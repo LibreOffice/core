@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-23 15:50:55 $
+ *  last change: $Author: mt $ $Date: 2002-10-10 12:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     InitDoc( FALSE );
 
     bCallParaInsertedOrDeleted = TRUE;
+
+    aEditDoc.SetModifyHdl( LINK( this, ImpEditEngine, DocModified ) );
 }
 
 ImpEditEngine::~ImpEditEngine()
@@ -3838,4 +3840,10 @@ void ImpEditEngine::LeaveBlockNotifications()
             delete pNotify;
         }
     }
+}
+
+IMPL_LINK( ImpEditEngine, DocModified, void*, EMPTYARG )
+{
+    aModifyHdl.Call( NULL /*GetEditEnginePtr()*/ ); // NULL, because also used for Outliner
+    return 0;
 }

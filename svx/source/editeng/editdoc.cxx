@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-22 11:11:04 $
+ *  last change: $Author: mt $ $Date: 2002-10-10 12:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,7 +1205,7 @@ EditDoc::EditDoc( SfxItemPool* pPool )
 
     // Don't create a empty node, Clear() will be called in EditEngine-CTOR
 
-    bModified = FALSE;
+    SetModified( FALSE );
 };
 
 EditDoc::~EditDoc()
@@ -1450,10 +1450,19 @@ EditPaM EditDoc::Clear()
 
     CreateDefFont( FALSE );
 
-    bModified = FALSE;
+    SetModified( FALSE );
 
     EditPaM aPaM( pNode, 0 );
     return aPaM;
+}
+
+void EditDoc::SetModified( BOOL b )
+{
+    bModified = b;
+    if ( bModified )
+    {
+        aModifyHdl.Call( NULL );
+    }
 }
 
 EditPaM EditDoc::RemoveText()
@@ -1473,7 +1482,7 @@ EditPaM EditDoc::RemoveText()
     pNode->GetContentAttribs().GetItems().Set( aPrevSet );
     pNode->GetCharAttribs().GetDefFont() = aPrevFont;
 
-    bModified = TRUE;
+    SetModified( TRUE );
 
     EditPaM aPaM( pNode, 0 );
     return aPaM;
@@ -1488,7 +1497,7 @@ void EditDoc::InsertText( const EditPaM& rPaM, xub_Unicode c )
     rPaM.GetNode()->Insert( c, rPaM.GetIndex() );
     rPaM.GetNode()->ExpandAttribs( rPaM.GetIndex(), 1, GetItemPool() );
 
-    bModified = TRUE;
+    SetModified( TRUE );
 }
 
 EditPaM EditDoc::InsertText( EditPaM aPaM, const XubString& rStr )
@@ -1502,7 +1511,7 @@ EditPaM EditDoc::InsertText( EditPaM aPaM, const XubString& rStr )
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.Len(), GetItemPool() );
     aPaM.GetIndex() += rStr.Len();
 
-    bModified = TRUE;
+    SetModified( TRUE );
 
     return aPaM;
 }
@@ -1535,7 +1544,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, BOOL bKeepEndingAttribs )
 
     Insert( pNode, nPos+1 );
 
-    bModified = TRUE;
+    SetModified( TRUE );
 
     aPaM.SetNode( pNode );
     aPaM.SetIndex( 0 );
@@ -1554,7 +1563,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
     DBG_ASSERT( pAttrib, "Warum kann ich kein Feature anlegen ?" );
     aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttrib );
 
-    bModified = TRUE;
+    SetModified( TRUE );
 
     aPaM.GetIndex()++;
     return aPaM;
@@ -1575,7 +1584,7 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
     Remove( nRight );
     delete pRight;
 
-    bModified = TRUE;
+    SetModified( TRUE );
 
     return aPaM;
 }
@@ -1586,7 +1595,7 @@ EditPaM EditDoc::RemoveChars( EditPaM aPaM, USHORT nChars )
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
     aPaM.GetNode()->CollapsAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
 
-    bModified = TRUE;
+    SetModified( TRUE );
 
     return aPaM;
 }
@@ -1626,7 +1635,7 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, USHORT nStart, USHORT
     if ( pStartingAttrib )
         pNode->GetCharAttribs().ResortAttribs();
 
-    bModified = TRUE;
+    SetModified( TRUE );
 }
 
 BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, USHORT nWhich )
@@ -1735,7 +1744,7 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
     }
 
     if ( bChanged )
-        bModified = TRUE;
+        SetModified( TRUE );
 
     return bChanged;
 }
@@ -1749,7 +1758,7 @@ void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, US
     DBG_ASSERT( pAttrib, "MakeCharAttrib fehlgeschlagen!" );
     pNode->GetCharAttribs().InsertAttrib( pAttrib );
 
-    bModified = TRUE;
+    SetModified( TRUE );
 }
 
 void EditDoc::InsertAttrib( ContentNode* pNode, USHORT nStart, USHORT nEnd, const SfxPoolItem& rPoolItem )
@@ -1794,7 +1803,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, USHORT nStart, USHORT nEnd, cons
         InsertAttrib( rPoolItem, pNode, nStart, nStart );
     }
 
-    bModified = TRUE;
+    SetModified( TRUE );
 }
 
 void EditDoc::FindAttribs( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos, SfxItemSet& rCurSet )

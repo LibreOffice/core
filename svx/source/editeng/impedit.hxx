@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-06 11:21:59 $
+ *  last change: $Author: mt $ $Date: 2002-10-10 12:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,7 @@ private:
     Link                aEndMovingParagraphsHdl;
     Link                aBeginPasteOrDropHdl;
     Link                aEndPasteOrDropHdl;
+    Link                aModifyHdl;
 
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
 
@@ -684,6 +685,7 @@ private:
     DECL_LINK( StatusTimerHdl, Timer * );
     DECL_LINK( IdleFormatHdl, Timer * );
     DECL_LINK( OnlineSpellHdl, Timer * );
+    DECL_LINK( DocModified, void* );
 
     void                CheckIdleFormatter();
 
@@ -817,8 +819,13 @@ public:
 
     Rectangle       PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
     Rectangle       GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex, sal_uInt16 nFlags = 0 );
+
     sal_Bool        IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( sal_Bool b ) { aEditDoc.SetModified( b ); }
+    void            SetModifyHdl( const Link& rLink ) { aModifyHdl = rLink; }
+    Link            GetModifyHdl() const { return aModifyHdl; }
+
+
     sal_Bool        IsInSelectionMode() { return bInSelection; }
     void            StopSelectionMode();
 
