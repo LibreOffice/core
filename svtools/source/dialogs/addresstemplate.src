@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:09:30 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 12:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,7 +695,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         };
     String STR_FIELD_SALUTATION
     {
-        Text = "Anrede";
+        Text = "Gruﬂformel";
         Text [ english ] = "Salutation";
         Text [ english_us ] = "Salutation";
         Text[ portuguese ] = "Vocativo";
