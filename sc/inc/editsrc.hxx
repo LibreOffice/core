@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:34:02 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,11 +221,12 @@ public:
                         ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleCellTextData > pAccessibleCellTextData );
     virtual             ~ScAccessibilityEditSource();
 
-    virtual SvxEditSource*      Clone() const ;
+    virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual SvxViewForwarder*   GetViewForwarder();
     virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
     virtual void                UpdateData();
+    virtual SfxBroadcaster&     GetBroadcaster();
 
     void                        SetDoUpdateData(sal_Bool bValue);
     sal_Bool                    IsDirty() const;
