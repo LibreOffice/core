@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:10:50 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#define _SV_CTRL_CXX
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -205,7 +203,6 @@ long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
 
 long Control::GetIndexForPoint( const Point& rPoint ) const
 {
-    long nIndex = -1;
     if( ! mpLayoutData )
         FillLayoutData();
     return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
