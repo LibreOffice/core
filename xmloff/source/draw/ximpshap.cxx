@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:29:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,20 @@ SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static bool ImpIsEmptyURL( const ::rtl::OUString& rURL )
+{
+    if( rURL.getLength() == 0 )
+        return true;
+
+    // #i13140# Also compare against 'toplevel' URLs. which also
+    // result in empty filename strings.
+    if( 0 == rURL.compareToAscii( "#./" ) )
+        return true;
+
+    return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLShapeContext, SvXMLImportContext );
@@ -2375,12 +2389,15 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     // #96717# in theorie, if we don't have a url we shouldn't even
     // export this ole shape. But practical its to risky right now
     // to change this so we better dispose this on load
-    //if( !mbIsPlaceholder && (maHref.getLength() == 0) )
+    //if( !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
     //  return;
 
     // #100592# this BugFix prevents that a shape is created. CL
     // is thinking about an alternative.
-    if( !(GetImport().getImportFlags() & IMPORT_EMBEDDED) && !mbIsPlaceholder && (maHref.getLength() == 0) )
+    // #i13140# Check for more than empty string in maHref, there are
+    // other possibilities that maHref results in empty container
+    // storage names
+    if( !(GetImport().getImportFlags() & IMPORT_EMBEDDED) && !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
         return;
 
     char* pService = "com.sun.star.drawing.OLE2Shape";
