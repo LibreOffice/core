@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:48:18 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _OBJECTFORMATTER_HXX
 #include <objectformatter.hxx>
 #endif
-
 #ifndef _OBJECTFORMATTERTXTFRM_HXX
 #include <objectformattertxtfrm.hxx>
 #endif
@@ -465,6 +464,12 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
     if ( _rAnchoredObj.ISA(SwFlyFrm) )
     {
         SwFlyFrm& rFlyFrm = static_cast<SwFlyFrm&>(_rAnchoredObj);
+        // --> OD 2004-11-15 #i34753# - reset flag, which prevents a positioning
+        if ( rFlyFrm.IsFlyLayFrm() )
+        {
+            static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( false );
+        }
+        // <--
         do {
             if ( mpLayAction )
             {
@@ -474,6 +479,13 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             {
                 _FormatLayout( rFlyFrm );
             }
+            // --> OD 2004-11-15 #i34753# - prevent further positioning, if
+            // to-page|to-fly anchored Writer fly frame is already clipped.
+            if ( rFlyFrm.IsFlyLayFrm() && rFlyFrm.IsClipped() )
+            {
+                static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( true );
+            }
+            // <--
             // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame
             // to the object formatter
             SwObjectFormatter::FormatObjsAtFrm( rFlyFrm,
