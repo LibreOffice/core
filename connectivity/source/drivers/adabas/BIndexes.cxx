@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:01:38 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 09:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        if(getINT32(descriptor->getPropertyValue(PROPERTY_ISUNIQUE)))
+        if(getBOOL(descriptor->getPropertyValue(PROPERTY_ISUNIQUE)))
             aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
         aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
 
