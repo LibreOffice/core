@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-10 12:36:28 $
+ *  last change: $Author: os $ $Date: 2000-11-20 11:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace utl
             static  ConfigManager*  pConfigManager;
         public:
             ConfigManager();
+            ConfigManager(com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xConfigProvider);
             ~ConfigManager();
 
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >

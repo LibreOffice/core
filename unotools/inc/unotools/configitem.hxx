@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-10 12:17:06 $
+ *  last change: $Author: os $ $Date: 2000-11-20 11:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ namespace utl
 
         protected:
             ConfigItem(const rtl::OUString rSubTree);
+            ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
             void                    SetModified() {bIsModified = sal_True;}
 

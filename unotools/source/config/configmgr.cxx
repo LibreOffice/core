@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-10 12:36:42 $
+ *  last change: $Author: os $ $Date: 2000-11-20 11:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,14 @@ ConfigManager::ConfigManager() :
     pMgrImpl(new utl::ConfigMgr_Impl)
 {
 }
+/* -----------------------------17.11.00 13:51--------------------------------
+
+ ---------------------------------------------------------------------------*/
+ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
+    pMgrImpl(new utl::ConfigMgr_Impl),
+    xConfigurationProvider(xConfigProv)
+{
+}
 /* -----------------------------28.08.00 15:35--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -147,10 +155,11 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     if(!xConfigurationProvider.is())
     {
         Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
-        xConfigurationProvider = Reference< XMultiServiceFactory >
-            (xMSF->createInstance(
-                    C2U("com.sun.star.configuration.ConfigurationProvider")),
-                        UNO_QUERY);
+        if(xMSF.is())
+            xConfigurationProvider = Reference< XMultiServiceFactory >
+                (xMSF->createInstance(
+                        C2U("com.sun.star.configuration.ConfigurationProvider")),
+                            UNO_QUERY);
     }
     return xConfigurationProvider;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-10 12:17:40 $
+ *  last change: $Author: os $ $Date: 2000-11-20 11:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,19 @@ ConfigItem::ConfigItem(const OUString rSubTree ) :
 {
     xHierarchyAccess = pManager->AddConfigItem(*this);
 }
+/* -----------------------------17.11.00 13:53--------------------------------
+
+ ---------------------------------------------------------------------------*/
+ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree) :
+    pManager(&rManager),
+    sSubTree(rSubTree),
+    bIsModified(sal_False),
+    bInPutValues(sal_False),
+    bHasChangedProperties(sal_False)
+{
+    xHierarchyAccess = pManager->AddConfigItem(*this);
+}
+
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
