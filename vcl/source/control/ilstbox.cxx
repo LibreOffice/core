@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-23 14:34:36 $
+ *  last change: $Author: mt $ $Date: 2002-11-22 11:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,6 +596,8 @@ void ImplListBoxWindow::Clear()
     mnLeft          = 0;
     mbImgsDiffSz    = FALSE;
     delete mpLayoutData, mpLayoutData = NULL;
+
+    mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
 
     Invalidate();
 }
