@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 13:01:44 $
+ *  last change: $Author: os $ $Date: 2000-12-13 08:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
@@ -355,6 +357,35 @@ void    ConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& rProp
 {
     OSL_ENSURE(sal_False, "Base class called");
 }
+/* -----------------------------12.12.00 17:09--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool lcl_IsLocalProperty(const OUString& rSubTree, const OUString& rProperty)
+{
+    static const sal_Char* aLocalProperties[] =
+    {
+        "Office.Common/Path/Current/Storage",
+        "Office.Common/Path/Current/Temp",
+        "Security/MountPoints"
+    };
+    static const int aLocalPropLen[] =
+    {
+        34,
+        31,
+        20
+    };
+    OUString sProperty(rSubTree);
+    sProperty += C2U("/");
+    sProperty += rProperty;
+
+    if(sProperty.equalsAsciiL( aLocalProperties[0], aLocalPropLen[0]) ||
+        sProperty.equalsAsciiL( aLocalProperties[1], aLocalPropLen[1]))
+        return sal_True;
+
+    if(!sProperty.compareToAscii( aLocalProperties[2],  aLocalPropLen[2]))
+        return sal_True;
+    return sal_False;
+}
 /* -----------------------------29.08.00 15:10--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -369,6 +400,14 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
         {
             try
             {
+                if(pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
+                {
+                    OUString sProperty(sSubTree);
+                    sProperty += C2U("/");
+                    sProperty += pNames[i];
+                    pRet[i] = pManager->GetLocalProperty(sProperty);
+                }
+                else
                     pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
             }
     #ifdef DBG_UTIL
@@ -417,38 +456,48 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         const Any* pValues = rValues.getConstArray();
         for(int i = 0; i < rNames.getLength(); i++)
         {
-            try
+            if(pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, pNames[i]))
             {
-                sal_Int32 nLastIndex = pNames[i].lastIndexOf( '/',  pNames[i].getLength());
+                OUString sProperty(sSubTree);
+                sProperty += C2U("/");
+                sProperty += pNames[i];
+                pManager->PutLocalProperty(sProperty, pValues[i]);
+            }
+            else
+            {
+                try
+                {
+                    sal_Int32 nLastIndex = pNames[i].lastIndexOf( '/',  pNames[i].getLength());
 
-                if(nLastIndex > 0)
-                {
-                    OUString sNode =    pNames[i].copy( 0, nLastIndex );
-                    OUString sProperty =    pNames[i].copy( nLastIndex + 1, pNames[i].getLength() - nLastIndex - 1 );
-                    Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
-                    Reference<XNameAccess> xNodeAcc;
-                    aNode >>= xNodeAcc;
-                    Reference<XNameReplace> xNodeReplace(xNodeAcc, UNO_QUERY);
-                    if(xNodeReplace.is())
+                    if(nLastIndex > 0)
                     {
-                        xNodeReplace->replaceByName(sProperty, pValues[i]);
+                        OUString sNode =    pNames[i].copy( 0, nLastIndex );
+                        OUString sProperty =    pNames[i].copy( nLastIndex + 1, pNames[i].getLength() - nLastIndex - 1 );
+                        Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
+                        Reference<XNameAccess> xNodeAcc;
+                        aNode >>= xNodeAcc;
+                        Reference<XNameReplace> xNodeReplace(xNodeAcc, UNO_QUERY);
+                        if(xNodeReplace.is())
+                        {
+                            xNodeReplace->replaceByName(sProperty, pValues[i]);
+                        }
+                        else
+                            bRet = sal_False;
                     }
-                    else
-                        bRet = sal_False;
+                    else //direct value
+                    {
+                        xTopNodeReplace->replaceByName(pNames[i], pValues[i]);
+                    }
                 }
-                else //direct value
-                {
-                    xTopNodeReplace->replaceByName(pNames[i], pValues[i]);
-                }
-            }
 #ifdef DBG_UTIL
-            catch(Exception& rEx)
-            {
-                lcl_CFG_DBG_EXCEPTION("Exception from PutProperties: ", rEx);
-            }
+                catch(Exception& rEx)
+                {
+                    lcl_CFG_DBG_EXCEPTION("Exception from PutProperties: ", rEx);
+                }
 #else
-            catch(Exception&){}
+                catch(Exception&){}
 #endif
+            }
         }
         try
         {
