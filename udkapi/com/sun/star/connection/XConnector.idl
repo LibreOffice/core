@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnector.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:25:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com {  module sun {  module star {  module connection {
 /**
    allows to actively establish an interprocess connection.
  */
-interface XConnector: com::sun::star::uno::XInterface
+published interface XConnector: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::connection::XConnector::connect
