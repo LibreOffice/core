@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 22:01:45 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
 #endif
@@ -193,6 +196,8 @@ using namespace ::com::sun::star;
   #define SEQTYPE(x) &(x)
  #endif
 #endif
+
+static sal_Char __FAR_DATA sEmptyPageName[sizeof("page")] = "page";
 
 const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
 {
@@ -1168,7 +1173,7 @@ sal_Bool SAL_CALL SdDrawPage::supportsService( const OUString& ServiceName )
 }
 
 // XNamed
-void SAL_CALL SdDrawPage::setName( const OUString& aName )
+void SAL_CALL SdDrawPage::setName( const OUString& rName )
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1177,10 +1182,19 @@ void SAL_CALL SdDrawPage::setName( const OUString& aName )
 
     if(mpPage && mpPage->GetPageKind() != PK_NOTES)
     {
+        OUString aName( rName );
+
+        if(aName.compareToAscii( sEmptyPageName, sizeof( sEmptyPageName ) - 1 ) == 0)
+        {
+            sal_Int32 nPageNumber = aName.copy( sizeof( sEmptyPageName ) - 1 ).toInt32();
+            if( nPageNumber == ( ( mpPage->GetPageNum() - 1 ) >> 1 ) + 1 )
+                aName = OUString();
+        }
+
         mpPage->SetName( aName );
 
         SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (mpPage->GetPageNum()-1)>>1, PK_NOTES );
-        pNotesPage->SetName(mpPage->GetName());
+        pNotesPage->SetName(aName);
 
         // fake a mode change to repaint the page tab bar
         SdDrawDocShell* pDocSh = mpModel->GetDocShell();
@@ -1208,10 +1222,21 @@ OUString SAL_CALL SdDrawPage::getName()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(mpPage)
-        return mpPage->GetName();
+    OUString aPageName;
 
-    return OUString();
+    if(mpPage)
+        aPageName = mpPage->GetRealName();
+
+    if( aPageName.getLength() == 0 )
+    {
+        OUStringBuffer sBuffer;
+        sBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sEmptyPageName ) );
+        const sal_Int32 nPageNum = ( ( mpPage->GetPageNum() - 1 ) >> 1 ) + 1;
+        sBuffer.append( nPageNum );
+        aPageName = sBuffer.makeStringAndClear();
+    }
+
+    return aPageName;
 }
 
 // XMasterPageTarget

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:09:05 $
+ *  last change: $Author: cl $ $Date: 2001-02-07 16:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,15 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -111,6 +119,10 @@
 #include "sdoutl.hxx"
 #endif
 
+#ifndef _SDRESID_HXX
+#include "sdresid.hxx"
+#endif
+
 #include "anminfo.hxx"
 #include "unohelp.hxx"
 #include "unoobj.hxx"
@@ -128,7 +140,16 @@
 #include "docshell.hxx"
 #include "helpids.h"
 #include "glob.hxx"
+#include "glob.hrc"
 #include "unolayer.hxx"
+
+#ifndef SEQTYPE
+ #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
+  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
+ #else
+  #define SEQTYPE(x) &(x)
+ #endif
+#endif
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -264,9 +285,17 @@ uno::Any SAL_CALL SdXShape::queryInterface( const ::com::sun::star::uno::Type & 
     {
         aAny <<= uno::Reference< beans::XPropertySet >(this);
     }
+    else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
+    {
+        aAny <<= uno::Reference< lang::XTypeProvider >(this);
+    }
     else if( rType == ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0) )
     {
         aAny <<= uno::Reference< lang::XServiceInfo >(this);
+    }
+    else if( rType == ::getCppuType(( const uno::Reference< document::XEventsSupplier >*)0) )
+    {
+        aAny <<= uno::Reference< document::XEventsSupplier >(this);
     }
     else
     {
@@ -277,6 +306,45 @@ uno::Any SAL_CALL SdXShape::queryInterface( const ::com::sun::star::uno::Type & 
     }
 
     return aAny;
+}
+
+uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
+    throw (uno::RuntimeException)
+{
+    uno::Sequence< uno::Type > aTypeSequence;
+
+    uno::Reference< lang::XTypeProvider > xBaseProvider;
+    mxShapeAgg->queryAggregation( ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) ) >>= xBaseProvider;
+    DBG_ASSERT( xBaseProvider.is(), "SdXShape: No XTypeProvider from aggregatet shape!" );
+
+    if( xBaseProvider.is() )
+    {
+        const uno::Sequence< uno::Type > aBaseTypes( xBaseProvider->getTypes() );
+        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
+        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
+        const sal_Int32 nOwnTypes = 1;      // !DANGER! Keep this updated!
+
+        aTypeSequence.realloc( nBaseTypes  + nOwnTypes );
+        uno::Type* pTypes = aTypeSequence.getArray();
+
+        *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
+
+        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
+            *pTypes++ = *pBaseTypes++;
+    }
+    return aTypeSequence;
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL SdXShape::getImplementationId()
+    throw (uno::RuntimeException)
+{
+    static uno::Sequence< sal_Int8 > aId;
+    if( aId.getLength() == 0 )
+    {
+        aId.realloc( 16 );
+        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    }
+    return aId;
 }
 
 void SAL_CALL SdXShape::acquire()
@@ -1068,4 +1136,599 @@ uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException 
     return aAny;
 }
 
+class SdUnoEventsAccess : public cppu::WeakImplHelper2< com::sun::star::container::XNameReplace, com::sun::star::lang::XServiceInfo >
+{
+private:
+    const OUString      maStrOnClick;
+    const OUString      maStrServiceName;
+    const OUString      maStrEventType;
+    const OUString      maStrPresentation;
+    const OUString      maStrLibrary;
+    const OUString      maStrMacroName;
+    const OUString      maStrClickAction;
+    const OUString      maStrBookmark;
+    const OUString      maStrEffect;
+    const OUString      maStrPlayFull;
+    const OUString      maStrVerb;
+    const OUString      maStrSoundURL;
+    const OUString      maStrSpeed;
+    const OUString      maStrStarBasic;
 
+    SdXShape*   mpShape;
+    uno::Reference< document::XEventsSupplier > mxShape;
+
+public:
+    SdUnoEventsAccess( SdXShape* pShape ) throw();
+
+    // XNameReplace
+    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+};
+
+// XEventsSupplier
+uno::Reference< container::XNameReplace > SAL_CALL SdXShape::getEvents(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return new SdUnoEventsAccess( this );
+}
+
+SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
+: mpShape( pShape ), mxShape( pShape ),
+  maStrOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
+  maStrServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.documents.Events") ),
+  maStrEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
+  maStrPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
+  maStrClickAction( RTL_CONSTASCII_USTRINGPARAM("ClickAction") ),
+  maStrBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
+  maStrEffect( RTL_CONSTASCII_USTRINGPARAM("Effect") ),
+  maStrPlayFull( RTL_CONSTASCII_USTRINGPARAM("PlayFull") ),
+  maStrVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
+  maStrSoundURL( RTL_CONSTASCII_USTRINGPARAM("SoundURL") ),
+  maStrSpeed( RTL_CONSTASCII_USTRINGPARAM("Speed") ),
+  maStrStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") ),
+  maStrLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
+  maStrMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
+{
+}
+
+#define FOUND_CLICKACTION   0x0001
+#define FOUND_BOOKMARK      0x0002
+#define FOUND_EFFECT        0x0004
+#define FOUND_PLAYFULL      0x0008
+#define FOUND_VERB          0x0010
+#define FOUND_SOUNDURL      0x0020
+#define FOUND_SPEED         0x0040
+#define FOUND_EVENTTYPE     0x0080
+#define FOUND_MACRO         0x0100
+#define FOUND_LIBRARY       0x0200
+
+static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
+{
+    const String aEmpty;
+    pInfo->aBookmark = aEmpty;
+    pInfo->bSecondSoundOn = sal_False;
+    pInfo->bSecondPlayFull = sal_False;
+    pInfo->eClickAction = presentation::ClickAction_NONE;
+    pInfo->eSecondEffect = presentation::AnimationEffect_NONE;
+    pInfo->eSecondSpeed = presentation::AnimationSpeed_MEDIUM;
+    pInfo->nVerb = 0;
+}
+
+// XNameReplace
+void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno::Any& aElement )
+    throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpShape == NULL || aName != maStrOnClick )
+        throw container::NoSuchElementException();
+
+    uno::Sequence< beans::PropertyValue > aProperties;
+    if( !aElement.hasValue() || aElement.getValueType() != getElementType() || !(aElement >>= aProperties) )
+        throw lang::IllegalArgumentException();
+
+    sal_Int32 nFound = 0;
+    const beans::PropertyValue* pProperties = aProperties.getConstArray();
+
+    OUString aStrEventType;
+    presentation::ClickAction eClickAction;
+    presentation::AnimationEffect eEffect;
+    presentation::AnimationSpeed eSpeed;
+    OUString aStrSoundURL;
+    sal_Bool bPlayFull;
+    sal_Int32 nVerb;
+    OUString aStrMacro;
+    OUString aStrLibrary;
+    OUString aStrBookmark;
+
+    const sal_Int32 nCount = aProperties.getLength();
+    sal_Int32 nIndex;
+    for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
+    {
+        if( ( ( nFound & FOUND_EVENTTYPE ) == 0 ) && pProperties->Name == maStrEventType )
+        {
+            if( pProperties->Value >>= aStrEventType )
+            {
+                nFound |= FOUND_EVENTTYPE;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_CLICKACTION ) == 0 ) && pProperties->Name == maStrClickAction )
+        {
+            if( pProperties->Value >>= eClickAction )
+            {
+                nFound |= FOUND_CLICKACTION;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_MACRO ) == 0 ) && pProperties->Name == maStrMacroName )
+        {
+            if( pProperties->Value >>= aStrMacro )
+            {
+                nFound |= FOUND_MACRO;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_LIBRARY ) == 0 ) && pProperties->Name == maStrLibrary )
+        {
+            if( pProperties->Value >>= aStrLibrary )
+            {
+                nFound |= FOUND_LIBRARY;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_EFFECT ) == 0 ) && pProperties->Name == maStrEffect )
+        {
+            if( pProperties->Value >>= eEffect )
+            {
+                nFound |= FOUND_EFFECT;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_BOOKMARK ) == 0 ) && pProperties->Name == maStrBookmark )
+        {
+            if( pProperties->Value >>= aStrBookmark )
+            {
+                nFound |= FOUND_BOOKMARK;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_SPEED ) == 0 ) && pProperties->Name == maStrSpeed )
+        {
+            if( pProperties->Value >>= eSpeed )
+            {
+                nFound |= FOUND_SPEED;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_SOUNDURL ) == 0 ) && pProperties->Name == maStrSoundURL )
+        {
+            if( pProperties->Value >>= aStrSoundURL )
+            {
+                nFound |= FOUND_SOUNDURL;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_PLAYFULL ) == 0 ) && pProperties->Name == maStrPlayFull )
+        {
+            if( pProperties->Value >>= bPlayFull )
+            {
+                nFound |= FOUND_PLAYFULL;
+                continue;
+            }
+        }
+        else if( ( ( nFound & FOUND_VERB ) == 0 ) && pProperties->Name == maStrVerb )
+        {
+            if( pProperties->Value >>= nVerb )
+            {
+                nFound |= FOUND_VERB;
+                continue;
+            }
+        }
+
+        throw lang::IllegalArgumentException();
+    }
+
+    sal_Bool bOk = sal_False;
+    do
+    {
+        if( ( nFound & FOUND_EVENTTYPE ) == 0 )
+            break;
+
+        if( aStrEventType == maStrPresentation )
+        {
+            if( ( nFound & FOUND_CLICKACTION ) == 0 )
+                break;
+
+            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( sal_False );
+            if( presentation::ClickAction_NONE == eClickAction && NULL == pInfo )
+            {
+                bOk = sal_True;
+                break;
+            }
+
+            if( NULL == pInfo )
+                pInfo = mpShape->GetAnimationInfo( sal_True );
+
+            DBG_ASSERT( pInfo, "shape animation info could not be created!" );
+            if( NULL == pInfo )
+                break;
+
+            clearEventsInAnimationInfo( pInfo );
+            pInfo->eClickAction = eClickAction;
+
+            switch( eClickAction )
+            {
+            case presentation::ClickAction_NONE:
+            case presentation::ClickAction_PREVPAGE:
+            case presentation::ClickAction_NEXTPAGE:
+            case presentation::ClickAction_FIRSTPAGE:
+            case presentation::ClickAction_LASTPAGE:
+            case presentation::ClickAction_INVISIBLE:
+            case presentation::ClickAction_STOPPRESENTATION:
+                {
+                    bOk = sal_True;
+                }
+                break;
+
+            case presentation::ClickAction_PROGRAM:
+            case presentation::ClickAction_BOOKMARK:
+            case presentation::ClickAction_DOCUMENT:
+                if( nFound & FOUND_BOOKMARK )
+                {
+                    if( eClickAction == presentation::ClickAction_BOOKMARK )
+                    {
+                        const OUString aApiPageName( RTL_CONSTASCII_USTRINGPARAM("page") );
+
+                        if( aStrBookmark.indexOf( aApiPageName ) == 0 )
+                        {
+                            if( aStrBookmark.indexOf( aApiPageName ) == 0 )
+                            {
+                                sal_Int32 nPageNumber = aStrBookmark.copy( aApiPageName.getLength() ).toInt32();
+                                OUStringBuffer sBuffer;
+                                String aPageName( SdResId(STR_PAGE) );
+                                sBuffer.append( aPageName );
+                                sBuffer.append( sal_Unicode( ' ' ) );
+                                sBuffer.append( nPageNumber );
+                                aStrBookmark = sBuffer.makeStringAndClear();
+                            }
+                        }
+                    }
+
+                    pInfo->aBookmark = aStrBookmark;
+                    bOk = sal_True;
+                }
+                break;
+
+            case presentation::ClickAction_MACRO:
+                if( nFound & FOUND_MACRO )
+                {
+                    pInfo->aBookmark = aStrMacro;
+                    bOk = sal_True;
+                }
+                break;
+
+            case presentation::ClickAction_VERB:
+                if( nFound & FOUND_VERB )
+                {
+                    pInfo->nVerb = (USHORT)nVerb;
+                    bOk = sal_True;
+                }
+                break;
+
+            case presentation::ClickAction_VANISH:
+                if( ( nFound & FOUND_EFFECT ) == 0 )
+                    break;
+
+                pInfo->eSecondEffect = eEffect;
+                pInfo->eSecondSpeed = nFound & FOUND_SPEED ? eSpeed : presentation::AnimationSpeed_MEDIUM;
+
+                bOk = sal_True;
+
+                // NOTE: No break here!!!
+
+            case presentation::ClickAction_SOUND:
+                if( nFound & FOUND_SOUNDURL )
+                {
+                    pInfo->aBookmark = aStrSoundURL;
+                    if( eClickAction != presentation::ClickAction_SOUND )
+                        pInfo->bSecondSoundOn = aStrSoundURL.getLength() != 0;
+                    pInfo->bSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : sal_False;
+
+                    bOk = sal_True;
+                }
+                break;
+            }
+        }
+        else
+        {
+            SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( sal_True );
+
+            DBG_ASSERT( pInfo, "shape animation info could not be created!" );
+            if( NULL == pInfo )
+                break;
+
+            clearEventsInAnimationInfo( pInfo );
+            pInfo->eClickAction = presentation::ClickAction_MACRO;
+
+            String aMacro = aStrMacro;
+
+            String aLibName   = aMacro.GetToken(0, sal_Unicode('.'));
+            String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
+            String aMacroName = aMacro.GetToken(2, sal_Unicode('.'));
+
+            OUStringBuffer sBuffer;
+            sBuffer.append( aMacroName );
+            sBuffer.append( sal_Unicode('.') );
+            sBuffer.append( aModulName );
+            sBuffer.append( sal_Unicode('.') );
+            sBuffer.append( aLibName );
+            sBuffer.append( sal_Unicode('.') );
+
+            if( aStrLibrary.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) ) )
+            {
+                sBuffer.append( OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+            }
+            else
+            {
+                sBuffer.append( aStrLibrary );
+            }
+
+            pInfo->aBookmark = sBuffer.makeStringAndClear();
+            bOk = sal_True;
+        }
+    }
+    while(0);
+
+    if( !bOk )
+        throw lang::IllegalArgumentException();
+}
+
+// XNameAccess
+uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
+    throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpShape == NULL || aName != maStrOnClick )
+        throw container::NoSuchElementException();
+
+    SdAnimationInfo* pInfo = mpShape->GetAnimationInfo( sal_False );
+
+    presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
+    if( pInfo )
+        eClickAction = pInfo->eClickAction;
+
+    sal_Int32 nPropertyCount = 2;
+    switch( eClickAction )
+    {
+    case presentation::ClickAction_NONE:
+    case presentation::ClickAction_PREVPAGE:
+    case presentation::ClickAction_NEXTPAGE:
+    case presentation::ClickAction_FIRSTPAGE:
+    case presentation::ClickAction_LASTPAGE:
+    case presentation::ClickAction_INVISIBLE:
+    case presentation::ClickAction_STOPPRESENTATION:
+        break;
+    case presentation::ClickAction_PROGRAM:
+    case presentation::ClickAction_VERB:
+    case presentation::ClickAction_BOOKMARK:
+    case presentation::ClickAction_DOCUMENT:
+    case presentation::ClickAction_MACRO:
+        nPropertyCount += 1;
+        break;
+
+    case presentation::ClickAction_SOUND:
+        nPropertyCount += 2;
+        break;
+
+    case presentation::ClickAction_VANISH:
+        nPropertyCount += 4;
+        break;
+    }
+
+    uno::Sequence< beans::PropertyValue > aProperties( nPropertyCount );
+    beans::PropertyValue* pProperties = aProperties.getArray();
+
+    uno::Any aAny;
+
+    if( eClickAction == presentation::ClickAction_MACRO )
+    {
+        aAny <<= maStrStarBasic;;
+        pProperties->Name = maStrEventType;
+        pProperties->Handle = -1;
+        pProperties->Value = aAny;
+        pProperties->State = beans::PropertyState_DIRECT_VALUE;
+        pProperties++;
+
+        String aMacro = pInfo->aBookmark;
+
+        // aMacro has got following format:
+        // "Macroname.Modulname.Libname.Documentname" or
+        // "Macroname.Modulname.Libname.Applicationsname"
+        String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
+        String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
+        String aLibName   = aMacro.GetToken(2, sal_Unicode('.'));
+        String aDocName   = aMacro.GetToken(3, sal_Unicode('.'));
+
+        OUStringBuffer sBuffer;
+        sBuffer.append( aLibName );
+        sBuffer.append( sal_Unicode('.') );
+        sBuffer.append( aModulName );
+        sBuffer.append( sal_Unicode('.') );
+        sBuffer.append( aMacroName );
+
+        aAny <<= OUString( sBuffer.makeStringAndClear() );
+        pProperties->Name = maStrMacroName;
+        pProperties->Handle = -1;
+        pProperties->Value = aAny;
+        pProperties->State = beans::PropertyState_DIRECT_VALUE;
+        pProperties++;
+
+        aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
+        pProperties->Name = maStrLibrary;
+        pProperties->Handle = -1;
+        pProperties->Value = aAny;
+        pProperties->State = beans::PropertyState_DIRECT_VALUE;
+    }
+    else
+    {
+        aAny <<= maStrPresentation;
+        pProperties->Name = maStrEventType;
+        pProperties->Handle = -1;
+        pProperties->Value = aAny;
+        pProperties->State = beans::PropertyState_DIRECT_VALUE;
+        pProperties++;
+
+        aAny <<= eClickAction;
+        pProperties->Name = maStrClickAction;
+        pProperties->Handle = -1;
+        pProperties->Value = aAny;
+        pProperties->State = beans::PropertyState_DIRECT_VALUE;
+        pProperties++;
+
+        switch( eClickAction )
+        {
+        case presentation::ClickAction_NONE:
+        case presentation::ClickAction_PREVPAGE:
+        case presentation::ClickAction_NEXTPAGE:
+        case presentation::ClickAction_FIRSTPAGE:
+        case presentation::ClickAction_LASTPAGE:
+        case presentation::ClickAction_INVISIBLE:
+        case presentation::ClickAction_STOPPRESENTATION:
+            break;
+        case presentation::ClickAction_BOOKMARK:
+            {
+                String aPageName( SdResId(STR_PAGE) );
+                aPageName += sal_Unicode( ' ' );
+
+                const OUString aStrBookmark( pInfo->aBookmark );
+                if( aStrBookmark.indexOf( aPageName ) == 0 )
+                {
+                    sal_Int32 nPageNumber = aStrBookmark.copy( aPageName.Len() ).toInt32();
+                    OUStringBuffer sBuffer;
+                    sBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "page" ) );
+                    sBuffer.append( nPageNumber );
+                    aAny <<= sBuffer.makeStringAndClear();
+                }
+                else
+                {
+                    aAny <<= aStrBookmark;
+                }
+
+                pProperties->Name = maStrBookmark;
+                pProperties->Handle = -1;
+                pProperties->Value = aAny;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            }
+            break;
+
+        case presentation::ClickAction_DOCUMENT:
+        case presentation::ClickAction_PROGRAM:
+            aAny <<= OUString( pInfo->aBookmark );
+            pProperties->Name = maStrBookmark;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            break;
+
+        case presentation::ClickAction_VANISH:
+            aAny <<= pInfo->eSecondEffect;
+            pProperties->Name = maStrEffect;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
+
+            aAny <<= pInfo->eSecondSpeed;
+            pProperties->Name = maStrSpeed;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            pProperties++;
+
+            // NOTE: no break here!!!
+
+        case presentation::ClickAction_SOUND:
+            if( eClickAction == presentation::ClickAction_SOUND || pInfo->bSecondSoundOn )
+            {
+                aAny <<= OUString( pInfo->aBookmark );
+                pProperties->Name = maStrSoundURL;
+                pProperties->Handle = -1;
+                pProperties->Value = aAny;
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                pProperties++;
+
+                pProperties->Name = maStrPlayFull;
+                pProperties->Handle = -1;
+                pProperties->Value = ::cppu::bool2any(pInfo->bSecondPlayFull);
+                pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            }
+            break;
+
+        case presentation::ClickAction_VERB:
+            aAny <<= (sal_Int32)pInfo->nVerb;
+            pProperties->Name = maStrVerb;
+            pProperties->Handle = -1;
+            pProperties->Value = aAny;
+            pProperties->State = beans::PropertyState_DIRECT_VALUE;
+            break;
+        }
+    }
+
+    aAny <<= aProperties;
+    return aAny;
+}
+
+uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getElementNames(  )
+    throw(uno::RuntimeException)
+{
+    uno::Sequence< OUString > aStr( &maStrOnClick, 1 );
+    return aStr;
+}
+
+sal_Bool SAL_CALL SdUnoEventsAccess::hasByName( const OUString& aName )
+    throw(uno::RuntimeException)
+{
+    return aName == maStrOnClick;
+}
+
+// XElementAccess
+uno::Type SAL_CALL SdUnoEventsAccess::getElementType(  )
+    throw(uno::RuntimeException)
+{
+    return *SEQTYPE(::getCppuType((const uno::Sequence< beans::PropertyValue >*)0));
+}
+
+sal_Bool SAL_CALL SdUnoEventsAccess::hasElements(  ) throw(uno::RuntimeException)
+{
+    return sal_True;
+}
+
+// XServiceInfo
+OUString SAL_CALL SdUnoEventsAccess::getImplementationName(  )
+    throw(uno::RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdUnoEventsAccess" ) );
+}
+
+sal_Bool SAL_CALL SdUnoEventsAccess::supportsService( const OUString& ServiceName )
+    throw(uno::RuntimeException)
+{
+    return ServiceName == maStrServiceName;
+}
+
+uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames(  )
+    throw(uno::RuntimeException)
+{
+    uno::Sequence< OUString > aStr( &maStrServiceName, 1 );
+    return aStr;
+}
