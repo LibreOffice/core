@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:02:09 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,11 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
-
+// --> OD 2004-08-25 #i3317#
+#ifndef _COLFRM_HXX
+#include <colfrm.hxx>
+#endif
+// <--
 // ============================================================================
 // --> OD 2004-06-30 #i28701# -
 // implementation of helper class <SwObjPositioningInProgress>
@@ -153,7 +157,10 @@ SwAnchoredObject::SwAnchoredObject() :
     mbPositioningInProgress( false ),
     mbConsiderForTextWrap( false ),
     mbPositionLocked( false ),
-    mbRestartLayoutProcess( false )
+    mbRestartLayoutProcess( false ),
+    // <--
+    // --> OD 2004-08-25 #i3317#
+    mbTmpConsiderWrapInfluence( false )
     // <--
 {
 }
@@ -505,7 +512,7 @@ void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence(
     object has to be considered on the object positioning
 
     OD 2004-06-30 #i28701#
-    Note: result of this method also decides, if the boolean for the
+    Note: result of this method also decides, if the booleans for the
     layout process are of relevance.
 
     @author OD
@@ -515,7 +522,10 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     bool bRet( false );
 
     const SwFrmFmt& rObjFmt = GetFrmFmt();
-    if ( rObjFmt.GetDoc()->ConsiderWrapOnObjPos() )
+    // --> OD 2004-08-25 #i3317# - add condition <IsTmpConsiderWrapInfluence()>
+    if ( rObjFmt.GetDoc()->ConsiderWrapOnObjPos() ||
+         IsTmpConsiderWrapInfluence() )
+    // <--
     {
         const SwFmtAnchor& rAnchor = rObjFmt.GetAnchor();
         if ( ( rAnchor.GetAnchorId() == FLY_AUTO_CNTNT ||
@@ -731,4 +741,50 @@ SwPageFrm& SwAnchoredObject::GetPageFrmOfAnchor()
 bool SwAnchoredObject::IsFormatPossible() const
 {
     return GetFrmFmt().GetDoc()->IsVisibleLayerId( GetDrawObj()->GetLayer() );
+}
+
+// --> OD 2004-08-25 #i3317#
+void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrapInfluence )
+{
+    mbTmpConsiderWrapInfluence = _bTmpConsiderWrapInfluence;
+}
+
+bool SwAnchoredObject::IsTmpConsiderWrapInfluence() const
+{
+    return mbTmpConsiderWrapInfluence;
+}
+// <--
+
+/** method to determine, if the anchored object is overlapping with a
+    previous column
+
+    OD 2004-08-25 #i3317#
+    overlapping with a previous column means, that the object overlaps
+    with a column, which is a previous one of the column its anchor
+    frame is in.
+    Only applied for at-paragraph and at-character anchored objects.
+
+    @author OD
+*/
+bool SwAnchoredObject::OverlapsPrevColumn() const
+{
+    bool bOverlapsPrevColumn( false );
+
+    if ( mpAnchorFrm && mpAnchorFrm->IsTxtFrm() )
+    {
+        const SwFrm* pColFrm = mpAnchorFrm->FindColFrm();
+        if ( pColFrm && pColFrm->GetPrev() )
+        {
+            const SwFrm* pTmpColFrm = pColFrm->GetPrev();
+            SwRect aChkRect;
+            while ( pTmpColFrm )
+            {
+                aChkRect.Union( pTmpColFrm->Frm() );
+                pTmpColFrm = pTmpColFrm->GetPrev();
+            }
+            bOverlapsPrevColumn = GetObjRect().IsOver( aChkRect );
+        }
+    }
+
+    return bOverlapsPrevColumn;
 }
