@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-04 13:34:24 $
+ *  last change: $Author: mt $ $Date: 2002-11-20 15:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     const sal_uInt16 nInvalidEnd =  nInvalidStart + Abs( nInvalidDiff );
 
     sal_Bool bQuickFormat = sal_False;
-    if ( !bEmptyNodeWithPolygon )
+    if ( !bEmptyNodeWithPolygon && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
     {
         if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff > 0 ) &&
              ( pNode->Search( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
@@ -704,7 +704,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         pParaPortion->GetTextPortions().Reset();
         pParaPortion->GetTextPortions().Insert( pDummyPortion, 0 );
     }
-    else if ( bQuickFormat && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
+    else if ( bQuickFormat )
     {
         // schnellere Methode:
         RecalcTextPortion( pParaPortion, nInvalidStart, nInvalidDiff );
