@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-27 16:44:51 $
+#   last change: $Author: hjs $ $Date: 2001-05-10 16:21:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,10 +142,12 @@ DEPFILESx+=$(uniq $(DEPFILES_TEST))
 .ENDIF			# "$(TESTOBJECTS)"!=""
 
 #DEPFILESx+=$(CXXFILES) $(CFILES) $(HXXFILES) $(RCFILES)
+.IF "$(L10N-framework)"==""
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
 DEPFILESx+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(OBJFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SLOFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
+.ENDIF			# "$(L10N-framework)"==""
 .IF "$(RCFILES)"!=""
 .IF "$(RESNAME)"!=""
 #RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
@@ -1973,7 +1975,38 @@ MAKELANGDIR=makelang.dir
 .ENDIF
 
 .IF "$(lintit)"==""
+.IF "$(L10N-framework)"!=""
+ALLTAR:	\
+        $(OS2_COPY_MK)		\
+        $(DPRTARGET) \
+        $(IDLTARGET)	$(IDL1TARGET)	$(IDL2TARGET)		\
+        $(IDL3TARGET)	$(IDL4TARGET)	$(IDL5TARGET)		\
+        $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
+        $(SDI3TARGET)	$(SDI4TARGET)	$(SDI5TARGET)		\
+        $(XMLPROPERTIESN) \
+        $(XMLXULRESN)	\
+        $(RCTARGET) \
+        $(SRCTARGET)	$(SRSTARGET) \
+        $(SRC1TARGET)	$(SRS1TARGET) \
+        $(SRC2TARGET)	$(SRS2TARGET) \
+        $(SRC3TARGET)	$(SRS3TARGET) \
+        $(SRC4TARGET)	$(SRC5TARGET)	$(SRC6TARGET)		\
+        $(SRC7TARGET)	$(SRC8TARGET)	$(SRC9TARGET)		\
+        $(SRC10TARGET)	$(SRC11TARGET)	$(SRC12TARGET)		\
+        $(SRC13TARGET)	$(SRC14TARGET)	$(SRC15TARGET)		\
+        $(SRC16TARGET) \
+        $(IMGLSTTARGET) \
+        $(INDPRESLIB1TARGETN) \
+        $(RESLIB1TARGETN) $(RESLIB2TARGETN) \
+        $(RESLIB3TARGETN) $(RESLIB4TARGETN) \
+        $(RESLIB5TARGETN) $(RESLIB6TARGETN) \
+        $(RESLIB7TARGETN) $(RESLIB8TARGETN) \
+        $(RESLIBSPLIT1TARGETN) $(RESLIBSPLIT2TARGETN)\
+        $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
+        $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
+        $(RESLIBSPLIT7TARGETN)
 
+.ELSE			# "$(L10N-framework)"!=""
 #		$(NOOPTTARGET) $(EXCEPTIONSTARGET)
 
 ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
@@ -2127,12 +2160,6 @@ TARGETDEPS+=$(ADDOPTTARGET)
 .ENDIF
 .ENDIF
 
-.IF "$(NO_REC_RES)"==""
-ALLTAR: \
-    make_all_current_resources
-.ENDIF
-
-
 .IF "$(GUI)"=="WNT"
 CPPUMAKERFLAGS*=-L
 .ENDIF			# "$(GUI)"=="WNT"
@@ -2155,11 +2182,12 @@ $(UNOUCRTARGET) : $(UNOUCRDEP)
 .ENDIF			# "$(SINGLE_SHOT)" == ""
 .ENDIF			# "$(UNOTYPES)" != ""
 
-.ELSE
+.ENDIF			# "$(L10N-framework)"!=""
+.ELSE			# "$(lintit)"==""
 
 ALLTAR: $(OBJFILES) $(SLOFILES)
 
-.ENDIF
+.ENDIF			# "$(lintit)"==""
 
 .IF "$(SDINAME)"!=""
 $(OBJ)$/$(CINTERNAME).obj : $(SDITARGET)
