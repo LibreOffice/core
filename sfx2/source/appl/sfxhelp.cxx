@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-09 11:38:03 $
+ *  last change: $Author: pb $ $Date: 2001-08-09 07:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -439,6 +442,31 @@ String SfxHelp::GetHelpModuleName_Impl( ULONG nHelpId )
 
 String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
 {
+    String aModuleName( rModuleName );
+    if ( aModuleName.Len() == 0 )
+    {
+        // no active module (quicklaunch?) -> detect default module
+        SvtModuleOptions aModOpt;
+        if ( aModOpt.IsWriter() )
+            aModuleName = DEFINE_CONST_UNICODE("swriter");
+        else if ( aModOpt.IsCalc() )
+            aModuleName = DEFINE_CONST_UNICODE("scalc");
+        else if ( aModOpt.IsImpress() )
+            aModuleName = DEFINE_CONST_UNICODE("simpress");
+        else if ( aModOpt.IsDraw() )
+            aModuleName = DEFINE_CONST_UNICODE("sdraw");
+        else if ( aModOpt.IsMath() )
+            aModuleName = DEFINE_CONST_UNICODE("smath");
+        else if ( aModOpt.IsChart() )
+            aModuleName = DEFINE_CONST_UNICODE("schart");
+        else if ( aModOpt.IsBasicIDE() )
+            aModuleName = DEFINE_CONST_UNICODE("sbasic");
+        else
+        {
+            DBG_ERRORFILE( "no installed module found" );
+        }
+    }
+
     // build up the help URL
     String aHelpURL;
     if ( aTicket.Len() )
@@ -458,7 +486,7 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
         }
 
         aHelpURL += DEFINE_CONST_UNICODE("&HELP_ProgramID=");
-        aHelpURL += rModuleName;
+        aHelpURL += aModuleName;
         aHelpURL += DEFINE_CONST_UNICODE("&HELP_User=");
         aHelpURL += aUser;
         aHelpURL += DEFINE_CONST_UNICODE("&HELP_Ticket=");
@@ -474,7 +502,7 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
     else
     {
         aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
-        aHelpURL += rModuleName;
+        aHelpURL += aModuleName;
 
         if ( !nHelpId )
         {
@@ -491,18 +519,21 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
 
     return aHelpURL;
 }
+
 BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
+    Reference < XDispatchProvider > xFrame;
     Reference < XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-
+        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     Reference < XTask > xActiveTask = xDesktop->getActiveTask();
-    if ( !xActiveTask.is() )
-        return FALSE;
 
-    // try to find the help frame
-    ::rtl::OUString aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("OFFICE_HELP") );
-    Reference < XDispatchProvider > xFrame( xActiveTask->findFrame( aTarget, FrameSearchFlag::GLOBAL ), UNO_QUERY );
+    if ( xActiveTask.is() )
+    {
+        // try to find the help frame
+        ::rtl::OUString aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("OFFICE_HELP") );
+        xFrame = Reference < XDispatchProvider > (
+            xActiveTask->findFrame( aTarget, FrameSearchFlag::GLOBAL ), UNO_QUERY );
+    }
     Sequence < PropertyValue > aProps;
     sal_Int32 nFlag = FrameSearchFlag::GLOBAL;
     if ( aTicket.Len() )
@@ -514,7 +545,9 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         // otherwise the URL can be dispatched to the help frame
         if ( !xFrame.is() )
         {
-            Reference < XFrame > xTask = xActiveTask->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
+            Reference < XFrame > xFrameFinder( xDesktop, UNO_QUERY );
+            Reference < XFrame > xTask = xFrameFinder->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
+            xTask->setName( DEFINE_CONST_OUSTRING("OFFICE_HELP_TASK") );
             xFrame = Reference < XDispatchProvider >( xTask, UNO_QUERY );
             Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
             pWin->SetText( String( SfxResId( STR_HELP_WINDOW_TITLE ) ) );
@@ -538,7 +571,7 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         ::com::sun::star::util::URL aURL;
         aURL.Complete = rURL;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
         xTrans->parseStrict( aURL );
         Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
                                 DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
