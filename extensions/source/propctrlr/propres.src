@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:47:27 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String RID_STR_STANDARD
     Text [ dutch ] = "Standaard" ;
     Text[ chinese_simplified ] = "±Í◊º";
     Text[ russian ] = "—Ú‡Ì‰‡Ú";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyúlnie";
     Text[ japanese ] = "ïWèÄ";
     Text[ chinese_traditional ] = "º–∑«";
     Text[ greek ] = "–ÒÔÂÈÎÔ„ﬁ";
@@ -171,6 +171,9 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/16 15:47:27  kz
+ *  Merge SRC632: 05/16/01 - 17:46:44 (NoBranch)
+ *
  *  Revision 1.6  2001/05/12 06:49:08  hjs
  *  Merge SRC631: 12.05.01 - 08:49:32 (NoBranch)
  *
@@ -192,4 +195,5 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
 
