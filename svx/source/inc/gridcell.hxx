@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 13:38:57 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 12:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,11 +262,11 @@ public:
 class DbCellControl
 {
 protected:
-    DbGridColumn& m_rColumn;
-    Window*       m_pWindow;
-    Window*       m_pPainter;
-    sal_Bool          m_bTransparent : 1;
-    sal_Bool          m_bAlignedController : 1;
+    DbGridColumn&   m_rColumn;
+    Window*         m_pWindow;
+    Window*         m_pPainter;
+    sal_Bool        m_bTransparent : 1;
+    sal_Bool        m_bAlignedController : 1;
 
 public:
     DbCellControl(DbGridColumn& _rColumn, sal_Bool _bText = sal_True)
@@ -305,6 +305,8 @@ public:
 
 protected:
     double GetValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
+
+    void invalidatedController();
 };
 
 //==================================================================
