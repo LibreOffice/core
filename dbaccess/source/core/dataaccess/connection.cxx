@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& 
             ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation(), _rxORB)
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
-            ,m_aTables(*this, m_aMutex)
+            ,m_aTables(*this, m_aMutex,_rxMaster)
                 // same for tables
             ,m_aTableFilter(_rDB.m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_aTableTypeFilter)
@@ -535,7 +535,7 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
         }
         else
         {   // no -> use an own container
-            m_aTables.construct(this,m_aTableFilter, m_aTableTypeFilter);
+            m_aTables.construct(m_aTableFilter, m_aTableTypeFilter);
         }
     }
 
