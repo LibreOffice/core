@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
+ *  last change: $Author: cmc $ $Date: 2002-06-14 16:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,6 +675,26 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
 {
     nStartCp += nDrawCpO;
     nEndCp   += nDrawCpO;
+    if (pPlcxMan->GetManType() == MAN_HDFT)
+    {
+        //What is after happening is that the insert text into
+        //frames/textboxes is all mixed up. nDrawCpO needs to be removed
+        //and a plcfman for HDFT_TEXTBOXES vs TEXTBOXES setup when
+        //working with frames, currently the host plcfman is created and
+        //offsets from that are spread around the frame code, possibly
+        //other adjusts are missing. The right thing to do is to remove
+        //AnDrawCp0 and work with a correct txtbox plcfman with working
+        //with textboxes.
+
+        //There is a set of methods which has word 6 and 97 mixed up
+        //with eachother and they need to refactored out seperately.
+        //And adjusts removed from places like here where they have no
+        //place being.
+        //These additional two lines should work perfectly correctly but the
+        //design here is confused.
+        nStartCp -= pWwFib->ccpText + pWwFib->ccpFtn;
+        nEndCp -= pWwFib->ccpText + pWwFib->ccpFtn;
+    }
     WW8ReaderSave aSave(this,nStartCp);
 
     BOOL bOldAdjust = pPlcxMan->GetDoingDrawTextBox();
@@ -692,6 +712,11 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
     USHORT nCurrentCount = pCtrlStck->Count();
     while (nStart < nEndCp)
     {
+        //nStart is the beginning of the attributes for this range, and
+        //may be before the text itself. So watch out for that
+        long nTxtStart = nStart;
+        if (nTxtStart < nStartCp)
+            nTxtStart = nStartCp;
         // get position of next SPRM
         BOOL bStartAttr = pPlcxMan->Get( &aRes );
         nAktColl = pPlcxMan->GetColl();
@@ -719,7 +744,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                     if (!bDoingSymbol && bSymbol == TRUE)
                     {
                         bDoingSymbol = TRUE;
-                        nStartReplace = nStart;
+                        nStartReplace = nTxtStart;
                         cReplaceSymbol = cSymbol;
                     }
                 }
@@ -730,10 +755,10 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                     {
                         bDoingSymbol = FALSE;
                         String sTemp;
-                        sTemp.Fill(nStart-nStartReplace,cReplaceSymbol);
+                        sTemp.Fill(nTxtStart-nStartReplace,cReplaceSymbol);
                         pDrawEditEngine->QuickInsertText(sTemp,
                             GetESelection(nStartReplace - nStartCp,
-                            nStart - nStartCp ) );
+                            nTxtStart - nStartCp ) );
                     }
                 }
             }
@@ -780,7 +805,7 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
             if( pS->Count() )
             {
                 pDrawEditEngine->QuickSetAttribs( *pS,
-                    GetESelection( nStart - nStartCp, nEnd - nStartCp ) );
+                    GetESelection( nTxtStart - nStartCp, nEnd - nStartCp ) );
                 delete pS;
                 pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
             }
