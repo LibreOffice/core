@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: th $ $Date: 2001-08-07 12:54:02 $
+ *  last change: $Author: th $ $Date: 2001-08-23 13:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
+#endif
+#ifndef _SV_SALBMP_HXX
+#include <salbmp.hxx>
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
@@ -983,15 +986,15 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
     // Fenstergroesse berechnen
     RECT aWinRect;
     aWinRect.left   = 0;
-    aWinRect.right  = (int)nWidth-1;
+    aWinRect.right  = (int)nWidth;
     aWinRect.top    = 0;
-    aWinRect.bottom = (int)nHeight-1;
+    aWinRect.bottom = (int)nHeight;
     AdjustWindowRectEx( &aWinRect,
                         GetWindowStyle( maFrameData.mhWnd ),
                         FALSE,
                         GetWindowExStyle( maFrameData.mhWnd ) );
-    nWidth  = aWinRect.right - aWinRect.left + 1;
-    nHeight = aWinRect.bottom - aWinRect.top + 1;
+    nWidth  = aWinRect.right-aWinRect.left;
+    nHeight = aWinRect.bottom-aWinRect.top;
 
     // Position so berechnen, das Fenster zentiert auf dem Desktop
     // angezeigt wird
@@ -1002,26 +1005,12 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
     int     nScreenWidth;
     int     nScreenHeight;
 
-#if ( WINVER >= 0x0400 )
-    W40IF
-    {
     RECT aRect;
     SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
     nScreenX        = aRect.left;
     nScreenY        = aRect.top;
     nScreenWidth    = aRect.right-aRect.left;
     nScreenHeight   = aRect.bottom-aRect.top;
-    }
-    W40ELSE
-#endif
-#ifndef W40ONLY
-    {
-    nScreenX        = 0;
-    nScreenY        = 0;
-    nScreenWidth    = GetSystemMetrics( SM_CXSCREEN );
-    nScreenHeight   = GetSystemMetrics( SM_CYSCREEN );
-    }
-#endif
 
     if ( maFrameData.mbDefPos )
     {
@@ -1123,40 +1112,48 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
     int     nScreenWidth;
     int     nScreenHeight;
 
-#if ( WINVER >= 0x0400 )
-    W40IF
-    {
     RECT aRect;
     SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
     nScreenX        = aRect.left;
     nScreenY        = aRect.top;
     nScreenWidth    = aRect.right-aRect.left;
     nScreenHeight   = aRect.bottom-aRect.top;
-    }
-    W40ELSE
-#endif
-#ifndef W40ONLY
-    {
-    nScreenX        = 0;
-    nScreenY        = 0;
-    nScreenWidth    = GetSystemMetrics( SM_CXSCREEN );
-    nScreenHeight   = GetSystemMetrics( SM_CYSCREEN );
-    }
-#endif
+
+    UINT    nPosSize    = 0;
+    RECT    aWinRect;
+    GetWindowRect( maFrameData.mhWnd, &aWinRect );
 
     // Fenster-Position/Groesse in den Bildschirm einpassen
-    nX = (int)pState->mnX;
-    nY = (int)pState->mnY;
-    nWidth = (int)pState->mnWidth;
-    nHeight = (int)pState->mnHeight;
+    if ( !(pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y)) )
+        nPosSize |= SWP_NOMOVE;
+    if ( !(pState->mnMask & (SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT)) )
+        nPosSize |= SWP_NOSIZE;
+    if ( pState->mnMask & SAL_FRAMESTATE_MASK_X )
+        nX = (int)pState->mnX;
+    else
+        nX = aWinRect.left;
+    if ( pState->mnMask & SAL_FRAMESTATE_MASK_Y )
+        nY = (int)pState->mnY;
+    else
+        nY = aWinRect.top;
+    if ( pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH )
+        nWidth = (int)pState->mnWidth;
+    else
+        nWidth = aWinRect.right-aWinRect.left;
+    if ( pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT )
+        nHeight = (int)pState->mnHeight;
+    else
+        nHeight = aWinRect.bottom-aWinRect.top;
+
+    // Adjust Window in the screen
+    if ( nX+nWidth > nScreenX+nScreenWidth )
+        nX = (nScreenX+nScreenWidth) - nWidth;
+    if ( nY+nHeight > nScreenY+nScreenHeight )
+        nY = (nScreenY+nScreenHeight) - nHeight;
     if ( nX < nScreenX )
         nX = nScreenX;
     if ( nY < nScreenY )
         nY = nScreenY;
-    if ( nScreenWidth < nWidth )
-        nWidth = nScreenWidth;
-    if ( nScreenHeight < nHeight )
-        nHeight = nScreenHeight;
 
     // Restore-Position setzen
     WINDOWPLACEMENT aPlacement;
@@ -1171,26 +1168,32 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
 
         if ( maFrameData.mbOverwriteState )
         {
-            if ( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
-                maFrameData.mnShowState = SW_SHOWMINIMIZED;
-            else if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
-                maFrameData.mnShowState = SW_SHOWMAXIMIZED;
-            else
-                maFrameData.mnShowState = SW_SHOWNORMAL;
+            if ( pState->mnMask & SAL_FRAMESTATE_MASK_STATE )
+            {
+                if ( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
+                    maFrameData.mnShowState = SW_SHOWMINIMIZED;
+                else if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
+                    maFrameData.mnShowState = SW_SHOWMAXIMIZED;
+                else if ( pState->mnState & SAL_FRAMESTATE_NORMAL )
+                    maFrameData.mnShowState = SW_SHOWNORMAL;
+            }
         }
     }
     else
     {
-        if ( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
+        if ( pState->mnMask & SAL_FRAMESTATE_MASK_STATE )
         {
-            if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
-                aPlacement.flags |= WPF_RESTORETOMAXIMIZED;
-            aPlacement.showCmd = SW_SHOWMINIMIZED;
+            if ( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
+            {
+                if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
+                    aPlacement.flags |= WPF_RESTORETOMAXIMIZED;
+                aPlacement.showCmd = SW_SHOWMINIMIZED;
+            }
+            else if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
+                aPlacement.showCmd = SW_SHOWMAXIMIZED;
+            else if ( pState->mnState & SAL_FRAMESTATE_NORMAL )
+                aPlacement.showCmd = SW_RESTORE;
         }
-        else if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
-            aPlacement.showCmd = SW_SHOWMAXIMIZED;
-        else
-            aPlacement.showCmd = SW_RESTORE;
     }
 
     // Wenn Fenster nicht minimiert/maximiert ist oder nicht optisch
@@ -1201,7 +1204,7 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
     {
         SetWindowPos( maFrameData.mhWnd, 0,
                       nX, nY, nWidth, nHeight,
-                      SWP_NOZORDER | SWP_NOACTIVATE );
+                      SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
     }
     else
     {
@@ -1220,6 +1223,8 @@ BOOL SalFrame::GetWindowState( SalFrameState* pState )
     if ( maFrameData.maState.mnWidth && maFrameData.maState.mnHeight )
     {
         *pState = maFrameData.maState;
+        if ( !(pState->mnState & (SAL_FRAMESTATE_MINIMIZED | SAL_FRAMESTATE_MAXIMIZED)) )
+            pState->mnState |= SAL_FRAMESTATE_NORMAL;
         return TRUE;
     }
 
@@ -2146,7 +2151,7 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
     Font    aAppFont = aStyleSettings.GetAppFont();
     Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
-    BOOL    bReplaceFont = !ImplIsFontAvailable( hDC, XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ) ) );
+    BOOL    bReplaceFont = !ImplIsFontAvailable( hDC, XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI Test" ) ) );
     if ( aSalShlData.mbWNT )
     {
         NONCLIENTMETRICSW aNonClientMetrics;
@@ -2251,6 +2256,39 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
 
     rSettings.SetMouseSettings( aMouseSettings );
     rSettings.SetStyleSettings( aStyleSettings );
+}
+
+// -----------------------------------------------------------------------
+
+SalBitmap* SalFrame::SnapShot()
+{
+    SalBitmap* pSalBitmap = NULL;
+
+    RECT aRect;
+    GetWindowRect( maFrameData.mhWnd, &aRect );
+
+    int     nDX = aRect.right-aRect.left;
+    int     nDY = aRect.bottom-aRect.top;
+    HDC     hDC = GetWindowDC( maFrameData.mhWnd );
+    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
+    HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
+    BOOL    bRet;
+
+    bRet = BitBlt( hBmpDC, 0, 0, nDX, nDY, hDC, 0, 0, SRCCOPY );
+    ImplReleaseCachedDC( CACHED_HDC_1 );
+
+    if ( bRet )
+    {
+        pSalBitmap = new SalBitmap;
+
+        if ( !pSalBitmap->Create( hBmpBitmap, FALSE, FALSE ) )
+        {
+            delete pSalBitmap;
+            pSalBitmap = NULL;
+        }
+    }
+
+    return pSalBitmap;
 }
 
 // -----------------------------------------------------------------------
