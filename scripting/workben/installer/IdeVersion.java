@@ -46,9 +46,13 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         Properties netbeansProps = InstUtil.getNetbeansLocation();
         Properties jeditProps = InstUtil.getJeditLocation();
         Properties ideProps = new Properties();
+        if(netbeansProps!=null )
+        {
         for( int n = 0; n < netbeansProps.size(); n++ ) {
             for( int v = 0; v < versions.length; v++ ) {
+                System.out.println("n: " +n+" v: " +v);
                 String key = versions[v];
+                System.out.println("It got here1");
                 String path = null;
                 if ( (path = netbeansProps.getProperty(key) ) != null ) {
                     //System.out.println( "n="+n+" v="+v + " Netbeans " + " key=" + key + " path=" + path );
@@ -56,10 +60,12 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                 }
             }
         }
+        }
         if(jeditProps!=null)
         {
             for( int j = 0; j < jeditProps.size(); j++ ) {
                 for( int v = 0; v < versions.length; v++ ) {
+                System.out.println("j: " +j+" v: " +v);
                     String key = versions[v];
                     String path = null;
                     if ((path = jeditProps.getProperty(key)) != null) {
@@ -72,16 +78,15 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         props = ideProps;
     }
         catch (IOException eIO) {
-            //Message about no installed versions found
             System.err.println("Failed to parse .netbeans/ide.log");
         //JOptionPane.showMessageDialog(this, "There was a problem reading from the NetBeans ide.log file.", "Parse Error", JOptionPane.ERROR_MESSAGE);
-        //wizard.exitForm(null);
         }
         catch (Exception e) {
             System.err.println("Exception thrown in initComponents");
         }
 
-        tableModel = new MyTableModelIDE (props, versions);
+    tableModel = new MyTableModelIDE (props, versions);
+
     /*
     if (tableModel.getRowCount() == 0)
     {
