@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:26:55 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,12 @@ String STR_SAVECOPYDOC
 {
     Text [de ] = "Kopie Speichern ~unter..." ;
     Text [ en-US ] = "Save Copy ~as..." ;
+};
+
+String STR_NODOCUMENT
+{
+    Text [ de ] = "Keine Dokumente";
+    Text [ en-US ] = "No documents";
 };
 
 // ***********************************************************************
