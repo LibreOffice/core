@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:17:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@
 #include "strings.hrc"
 #include "dlgassim.hxx"
 #include "TemplateScanner.hxx"
+#include "WindowUpdater.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::sd;
@@ -323,6 +324,8 @@ public:
     Timer m_aStartScanTimer;
 
     SfxObjectShellLock xDocShell;
+
+    ::std::auto_ptr<WindowUpdater> mpWindowUpdater;
 
     BOOL m_bPreview;
     USHORT m_nShowPage;
@@ -457,7 +460,8 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
 //  m_aPageListFile('?'),
     m_bUserDataDirty(FALSE),
     m_aAssistentFunc(5),
-    xDocShell (NULL)
+    xDocShell (NULL),
+    mpWindowUpdater (new WindowUpdater())
 {
     m_aPageListFile += sal_Unicode('?'),
     m_bRecentDocumentsReady = FALSE;
@@ -665,6 +669,8 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     SetStartType( ST_EMPTY );
 
     ChangePage();
+
+    mpWindowUpdater->RegisterWindow (&m_aPreview);
 
     UpdatePreview( TRUE );
 }
