@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-23 23:07:26 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 18:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ζµθ§";
                 Text[ russian ] = "Νΰβθγΰφθÿ";
                 Text[ polish ] = "Nawigacja";
-                Text[ japanese ] = "οΎ…οΎ‹οΎο½ΉοΎο½°ο½Όο½®οΎ";
+                Text[ japanese ] = "γƒγƒ“γ‚²γƒΌγ‚·γƒ§γƒ³";
                 Text[ chinese_traditional ] = "η€θ¦½";
                 Text[ arabic ] = "ΗαγαΗΝΙ";
                 Text[ greek ] = "Μετακίνηση";
@@ -300,7 +300,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ζ‹–ζ›³ζ¨΅εΌ";
                 Text[ russian ] = "Πεζθμ οεπεςΰρκθβΰνθÿ";
                 Text[ polish ] = "Tryb przeciΉgania";
-                Text[ japanese ] = "οΎ„οΎοΎ—ο½―ο½ΈοΎοΎ“ο½°οΎ„οΎ";
+                Text[ japanese ] = "γƒ‰γƒ©γƒƒγ‚°γƒΆγƒΌγƒ‰";
                 Text[ chinese_traditional ] = "ζ‹–ζ›³ζ¨΅εΌ";
                 Text[ arabic ] = "ΨΡνήΙ ΗαΣΝΘ";
                 Text[ greek ] = "Κατάσταση συρμού";
@@ -394,7 +394,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ζΎη¤Ί/ιε…¥ε—θ΅¨ζ΅†";
                 Text[ russian ] = "Βκλ./βϋκλ. ξκνξ ροθρκΰ";
                 Text[ polish ] = "W³Ήcz/Wy³Ήcz pole listy";
-                Text[ japanese ] = "οΎο½½οΎ„οΎοΎο½―ο½Έο½½ ο½µοΎ/ο½µοΎ";
+                Text[ japanese ] = "γƒªγ‚Ήγƒγƒγƒƒγ‚―γ‚Ή γ‚ªγƒ³/γ‚ªγƒ•";
                 Text[ chinese_traditional ] = "ι΅―η¤Ί/ι±ε…¥ζΈ…ε–®ζ–Ήε΅";
                 Text[ arabic ] = "ΕΩεΗΡ/ΕΞέΗΑ ΥδΟζή ΗαΗΞΚνΗΡ";
                 Text[ greek ] = "Πλαίσιο επιλογής Ναι/Όχι";
@@ -421,7 +421,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ε‡ζΆε†…ε®Ήθ§†ε›Ύ";
                 Text[ russian ] = "Οεπεκλώχθςό βθδ ρξδεπζθμξγξ";
                 Text[ polish ] = "Prze³Ήcz widok treci";
-                Text[ japanese ] = "ε†…ε®ΉοΎ‹οΎο½­ο½°γ®ε‡γ‚ζ›γ";
+                Text[ japanese ] = "ε†…ε®Ήγƒ“γƒ¥γƒΌγ®ε‡γ‚ζ›γ";
                 Text[ chinese_traditional ] = "ε‡ζ›ε…§ε®ΉζªΆθ¦–";
                 Text[ arabic ] = "ΚΘΟνα ΨΡνήΙ ΪΡΦ ΗαγΝΚζνΗΚ";
                 Text[ greek ] = "Προβολή περιεχομένων Ναι/Όχι";
@@ -488,7 +488,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ι΅µη‰";
                 Text[ russian ] = "Βεπυνθι κξλξνςθςσλ";
                 Text[ polish ] = "Nag³σwek";
-                Text[ japanese ] = "οΎο½―οΎ€οΎ";
+                Text[ japanese ] = "γƒγƒƒγƒ€";
                 Text[ chinese_traditional ] = "ι ι¦–";
                 Text[ arabic ] = "ΡΓΣ ΗαΥέΝΙ";
                 Text[ greek ] = "Κεφαλίδα";
@@ -519,7 +519,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ι΅µθ„";
                 Text[ russian ] = "Νθζνθι κξλξνςθςσλ";
                 Text[ polish ] = "Stopka";
-                Text[ japanese ] = "οΎο½―οΎ€";
+                Text[ japanese ] = "γƒ•γƒƒγ‚Ώ";
                 Text[ chinese_traditional ] = "ι ε°Ύ";
                 Text[ arabic ] = "ΚΠννα ΗαΥέΝΙ";
                 Text[ greek ] = "Υποσέλιδο";
@@ -581,7 +581,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ζΎη¤Ίη„ε¤§ηΊ²ηΊ§";
                 Text[ russian ] = "Οξκΰη σπξβνει ηΰγξλξβκξβ";
                 Text[ polish ] = "Wywietlone poziomy konspektu";
-                Text[ japanese ] = "θ¦‹ε‡Ίγ—οΎοΎοΎοΎ™";
+                Text[ japanese ] = "θ¦‹ε‡Ίγ—γƒ¬γƒ™γƒ«";
                 Text[ chinese_traditional ] = "ι΅―η¤Ίη„ε¤§η¶±η΄";
                 Text[ arabic ] = "γΣΚζνΗΚ ΗαΪδΗζνδ ΗαΩΗεΡΙ";
                 Text[ greek ] = "Εμφανιζόμενα επίπεδα επικεφαλίδων";
@@ -615,7 +615,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ε‡ηΊ§";
                 Text[ russian ] = "Νΰ ξδθν σπξβενό ββεπυ";
                 Text[ polish ] = "Poziom wyΏej";
-                Text[ japanese ] = "οΎοΎοΎοΎ™γ‚’δΈγ’γ‚‹";
+                Text[ japanese ] = "γƒ¬γƒ™γƒ«γ‚’δΈγ’γ‚‹";
                 Text[ chinese_traditional ] = "ε‡η΄";
                 Text[ arabic ] = "γΣΚζμ αΓΪαμ";
                 Text[ greek ] = "Προβιβασμός επιπέδου";
@@ -644,7 +644,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ι™ηΊ§";
                 Text[ russian ] = "Νΰ ξδθν σπξβενό βνθη";
                 Text[ polish ] = "Poziom niΏej";
-                Text[ japanese ] = "οΎοΎοΎοΎ™γ‚’δΈ‹γ’γ‚‹";
+                Text[ japanese ] = "γƒ¬γƒ™γƒ«γ‚’δΈ‹γ’γ‚‹";
                 Text[ chinese_traditional ] = "ι™η΄";
                 Text[ arabic ] = "γΣΚζμ αΓΣέα";
                 Text[ greek ] = "Υποβιβασμός επιπέδου";
@@ -928,7 +928,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ε¤§ηΊ²ηΊ§";
         Text[ russian ] = "Σπξβνθ ρςπσκςσπϋ";
         Text[ polish ] = "Poziomy konspektu";
-        Text[ japanese ] = "ο½±ο½³οΎ„οΎ—ο½²οΎοΎοΎοΎοΎ™";
+        Text[ japanese ] = "γ‚Άγ‚¦γƒγƒ©γ‚¤γƒ³γƒ¬γƒ™γƒ«";
         Text[ chinese_traditional ] = "ε¤§η¶±η΄";
         Text[ arabic ] = "γΣΚζνΗΚ ΗαΚήΣνγ";
         Text[ greek ] = "Επίπεδα διάρθρωσης";
@@ -953,7 +953,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ζ‹–ζ›³ζ¨΅εΌ";
         Text[ russian ] = "Πεζθμ οεπεςΰρκθβΰνθÿ";
         Text[ polish ] = "Tryb przeciΉgania";
-        Text[ japanese ] = "οΎ„οΎοΎ—ο½―ο½ΈοΎοΎ“ο½°οΎ„οΎ";
+        Text[ japanese ] = "γƒ‰γƒ©γƒƒγ‚°γƒΆγƒΌγƒ‰";
         Text[ chinese_traditional ] = "ζ‹–ζ›³ζ¨΅εΌ";
         Text[ arabic ] = "ΨΡνήΙ ΗαΣΝΘ";
         Text[ greek ] = "Κατάσταση συρμού";
@@ -979,7 +979,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ε½“δ½θ¶…ι“Ύζ¥ζ’ε…¥";
         Text[ russian ] = "Βρςΰβθςό κΰκ γθοεπρρϋλκσ";
         Text[ polish ] = "Wstaw jako hiper³Ήcze";
-        Text[ japanese ] = "οΎο½²οΎοΎο½°οΎοΎο½Έγ¨γ—γ¦ζΏε…¥";
+        Text[ japanese ] = "γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―γ¨γ—γ¦ζΏε…¥";
         Text[ chinese_traditional ] = "η•¶δ½θ¶…ι€£ηµζ’ε…¥";
         Text[ arabic ] = "ΕΟΡΗΜ ίΗΡΚΘΗΨ ΚΤΪΘν";
         Text[ greek ] = "Εισαγωγή ως υπερ-σύνδεση";
@@ -1005,7 +1005,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ε½“δ½ι“Ύζ¥ζ’ε…¥";
         Text[ russian ] = "Βρςΰβθςό κΰκ ρρϋλκσ";
         Text[ polish ] = "Wstaw jako ³Ήcze";
-        Text[ japanese ] = "οΎοΎο½Έγ¨γ—γ¦ζΏε…¥";
+        Text[ japanese ] = "γƒªγƒ³γ‚―γ¨γ—γ¦ζΏε…¥";
         Text[ chinese_traditional ] = "η•¶δ½ζ·εΎ‘ζ’ε…¥";
         Text[ arabic ] = "ΕΟΡΗΜ ίΗΡΚΘΗΨ";
         Text[ greek ] = "Εισαγωγή ως σύνδεση";
@@ -1031,7 +1031,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ε½“δ½ε¤ε¶δ»¶ζ’ε…¥";
         Text[ russian ] = "Βρςΰβθςό κΰκ κξοθώ";
         Text[ polish ] = "Wstaw jako kopiκ";
-        Text[ japanese ] = "ο½ΊοΎ‹οΎο½°γ¨γ—γ¦ζΏε…¥";
+        Text[ japanese ] = "γ‚³γƒ”γƒΌγ¨γ—γ¦ζΏε…¥";
         Text[ chinese_traditional ] = "η•¶δ½θ¤‡θ£½δ»¶ζ’ε…¥";
         Text[ arabic ] = "ΕΟΡΗΜ ίδΣΞΙ";
         Text[ greek ] = "Εισαγωγή ως αντίγραφο";
@@ -1081,7 +1081,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ε½“ε‰η„θ§†ηª—";
         Text[ russian ] = "ΐκςθβνξε ξκνξ";
         Text[ polish ] = "Aktywne okno";
-        Text[ japanese ] = "ο½±ο½ΈοΎƒο½¨οΎοΎγªο½³ο½¨οΎοΎ„οΎο½³";
+        Text[ japanese ] = "γ‚Άγ‚―γƒ†γ‚£γƒ–γªγ‚¦γ‚£γƒ³γƒ‰γ‚¦";
         Text[ language_user1 ] = "θλ? Ξςκπϋςξε - - - θλθ: Ξςκπϋςξε - θλθ: Ξςκπϋςξε";
         Text[ chinese_traditional ] = "δ½Ώη”¨δΈ­η„θ¦–ηª—";
         Text[ arabic ] = "ΗαδΗέΠΙ ΗαδΤΨΙ";
@@ -1132,7 +1132,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "δ½Ώη”¨δΈ­η„";
         Text[ russian ] = "ΰκςθβνϋι";
         Text[ polish ] = "aktywny";
-        Text[ japanese ] = "ο½±ο½ΈοΎƒο½¨οΎοΎ";
+        Text[ japanese ] = "γ‚Άγ‚―γƒ†γ‚£γƒ–";
         Text[ chinese_traditional ] = "δ½Ώη”¨δΈ­η„";
         Text[ arabic ] = "δΤΨ";
         Text[ greek ] = "ενεργό";
@@ -1157,7 +1157,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "δΈδ½Ώη”¨";
         Text[ russian ] = "νεΰκςθβνϋι";
         Text[ polish ] = "nieaktywny";
-        Text[ japanese ] = "ιο½±ο½ΈοΎƒο½¨οΎοΎ";
+        Text[ japanese ] = "ιγ‚Άγ‚―γƒ†γ‚£γƒ–";
         Text[ chinese_traditional ] = "δΈδ½Ώη”¨";
         Text[ arabic ] = "ΫνΡ δΤΨ";
         Text[ greek ] = "μη ενεργό";
@@ -1258,8 +1258,8 @@ Window DLG_NAVIGATION_PI
         Text[ swedish ] = "Redigera lδnk";
         Text[ polish ] = "Edytuj ³Ήcze";
         Text[ portuguese_brazilian ] = "Edit link";
-        Text[ japanese ] = "οΎοΎο½Έγ®η·¨ι›†";
-        Text[ korean ] = "Edit link";
+        Text[ japanese ] = "γƒªγƒ³γ‚―γ®η·¨ι›†";
+        Text[ korean ] = "μ—°κ²° νΈμ§‘";
         Text[ chinese_simplified ] = "ηΌ–θΎ‘ι“Ύζ¥";
         Text[ chinese_traditional ] = "η·¨θΌ―ζ·εΎ‘";
         Text[ turkish ] = "Edit link";
@@ -1334,7 +1334,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ζ–‡δ»¶";
         Text[ russian ] = "Τΰιλ";
         Text[ polish ] = "Plik";
-        Text[ japanese ] = "οΎο½§ο½²οΎ™";
+        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«";
         Text[ chinese_traditional ] = "ζª”ζ΅";
         Text[ arabic ] = "Ηαγαέ";
         Text[ greek ] = "Αρχείο";
@@ -1359,7 +1359,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ζ–°ε»Ίζ–‡ζ΅£";
         Text[ russian ] = "Νξβϋι δξκσμενς";
         Text[ polish ] = "Nowy dokument";
-        Text[ japanese ] = "ζ–°γ—γ„οΎ„οΎο½·ο½­οΎ’οΎοΎ„";
+        Text[ japanese ] = "ζ–°γ—γ„γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ";
         Text[ chinese_traditional ] = "ζ–°εΆζ–‡δ»¶";
         Text[ arabic ] = "γΣΚδΟ ΜΟνΟ";
         Text[ greek ] = "Δημιουργία εγγράφου";
@@ -1384,7 +1384,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ζ–‡ε­—";
         Text[ russian ] = "Òεκρς";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "οΎƒο½·ο½½οΎ„";
+        Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒ";
         Text[ chinese_traditional ] = "ζ–‡ε­—";
         Text[ arabic ] = "ΗαδΥ";
         Text[ greek ] = "Κείμενο";
@@ -1513,7 +1513,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ι“Ύζ¥";
         Text[ russian ] = "Ρρϋλκθ";
         Text[ polish ] = "£Ήcza";
-        Text[ japanese ] = "οΎοΎο½Έ";
+        Text[ japanese ] = "γƒªγƒ³γ‚―";
         Text[ chinese_traditional ] = "ζ·εΎ‘";
         Text[ arabic ] = "ΗΡΚΘΗΨΗΚ";
         Text[ greek ] = "Συνδέσεις";
@@ -1639,7 +1639,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "ζ²΅ζ‰ζ‰Ύε°ζ–‡δ»¶οΌ ";
         Text[ russian ] = "Τΰιλ νε νΰιδεν:  ";
         Text[ polish ] = "Pliku nie znaleziono:  ";
-        Text[ japanese ] = "οΎο½§ο½²οΎ™γθ¦‹γ¤γ‹γ‚γΎγ›γ‚“: ";
+        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γθ¦‹γ¤γ‹γ‚γΎγ›γ‚“: ";
         Text[ chinese_traditional ] = "ζ²’ζ‰ζ‰Ύε°ζª”ζ΅οΌ ";
         Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ Ηαγαέ: ";
         Text[ greek ] = "Δεν βρέθηκε το αρχείο: ";
@@ -1701,7 +1701,7 @@ Window DLG_NAVIGATION_PI
     Text[ chinese_simplified ] = "ε©ζ‰‹";
     Text[ russian ] = "Νΰβθγΰςξπ";
     Text[ polish ] = "Nawigator";
-    Text[ japanese ] = "οΎ…οΎ‹οΎο½ΉοΎο½°οΎ€";
+    Text[ japanese ] = "γƒγƒ“γ‚²γƒΌγ‚Ώ";
     Text[ chinese_traditional ] = "ε©ζ‰‹";
     Text[ arabic ] = "ΗαδΗένΜνΚζΡ";
     Text[ greek ] = "Navigator";
@@ -1730,6 +1730,7 @@ ImageList IMG_NAVI_ENTRYBMP
     };
     IdCount = { 12 ; };
 };
+
 
 
 
