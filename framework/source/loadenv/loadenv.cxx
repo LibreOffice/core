@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:19:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 07:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,7 +1341,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 }
 
 /*-----------------------------------------------
-    01.08.2003 13:19
+    30.03.2004 09:12
 -----------------------------------------------*/
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     throw(LoadEnvException, css::uno::RuntimeException)
@@ -1352,19 +1352,10 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // such search is allowed for special requests only ...
     // or better its not allowed for some requests in general :-)
     if (
-        (!TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                                        ) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_ASTEMPLATE , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_HIDDEN     , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_OPENNEWVIEW, sal_False) == sal_True)
-       )
-    {
-        return css::uno::Reference< css::frame::XFrame >();
-    }
-
-    if (
-        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_STREAM )) ||
-        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_OBJECT ))
-        /*TODO should be private:factory here tested too? */
+        (!TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                                          ) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
+        (m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
        )
     {
         return css::uno::Reference< css::frame::XFrame >();
@@ -1373,13 +1364,25 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // get access to the list of possible open tasks
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
 
-    // Attention! The special backing mode frame will be recycled everytimes!
+    // The special backing mode frame will be recycled everytimes!
     FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameListAnalyzer::E_BACKINGCOMPONENT);
     if (aTasksAnalyzer.m_xBackingComponent.is())
         return aTasksAnalyzer.m_xBackingComponent;
 
-    // otherwhise - try to get the current active frame of the desktop
-    // container. Only this frame can be used here.
+    // On the other side some special URLs will open a new frame everytimes (expecting
+    // they can use the backing-mode frame!)
+    if (
+        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_FACTORY )) ||
+        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_STREAM  )) ||
+        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_OBJECT  ))
+       )
+    {
+        return css::uno::Reference< css::frame::XFrame >();
+    }
+
+    // No backing frame! No special URL => recycle active task - if possible.
+    // Means - if it does not already contains a modified document, or
+    // use another office module.
     css::uno::Reference< css::frame::XFrame > xTask = xSupplier->getActiveFrame();
 
     // not a real error - but might a focus problem!
