@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:31:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,7 @@ String SfxObjectShell::GetTitle
 {
 //    if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
 //        return String();
+SfxMedium *pMed = GetMedium();
 
     // Titel erzeugen?
     if ( SFX_TITLE_DETECT == nMaxLength && !pImp->aTitle.Len() )
@@ -652,14 +653,28 @@ String SfxObjectShell::GetTitle
             return DEFINE_CONST_UNICODE( "-not available-" );
         bRecur = sal_True;
 
-        // evtl. ist Titel aus DocInfo verwendbar
+        String aTitle;
         SfxObjectShell *pThis = (SfxObjectShell*) this;
-        String aTitle = pThis->GetDocInfo().GetTitle();
-        aTitle.EraseLeadingChars();
-        aTitle.EraseTrailingChars();
+
+        if ( pMed )
+        {
+            SFX_ITEMSET_ARG( pMed->GetItemSet(), pNameItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
+            if ( pNameItem )
+                aTitle = pNameItem->GetValue();
+        }
+
         if ( !aTitle.Len() )
-            // sonst wie SFX_TITLE_FILENAME
-            aTitle = GetTitle( SFX_TITLE_FILENAME );
+        {
+            // evtl. ist Titel aus DocInfo verwendbar
+            aTitle = pThis->GetDocInfo().GetTitle();
+            aTitle.EraseLeadingChars();
+            aTitle.EraseTrailingChars();
+
+            if ( !aTitle.Len() )
+                // sonst wie SFX_TITLE_FILENAME
+                aTitle = GetTitle( SFX_TITLE_FILENAME );
+        }
+
         pThis->SetTitle( aTitle );
         bRecur = sal_False;
         return X(aTitle);
@@ -673,7 +688,6 @@ String SfxObjectShell::GetTitle
         return X(pImp->aTitle);
 
     // Picklist/Caption wird gemappt
-    SfxMedium *pMed = GetMedium();
     if ( pMed && ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )
     {
         // Wenn ein spezieller Titel beim "Offnen mitgegebent wurde;
