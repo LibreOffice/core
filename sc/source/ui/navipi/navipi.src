@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:53:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "Zeile";
         Text[ hindi ] = "पंक्ति";
         Text[ slovak ] = "Riadok";
+        Text[ hungarian ] = "Sor";
+        Text[ slovenian ] = "Vrstica";
     };
     NumericField ED_ROW
     {
@@ -193,6 +195,8 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ hebrew ] = "Zeile";
         QuickHelpText[ hindi ] = "पंक्ति";
         QuickHelpText[ slovak ] = "Riadok";
+        QuickHelpText[ hungarian ] = "Sor";
+        QuickHelpText[ slovenian ] = "Vrstica";
     };
     FixedText FT_COL
     {
@@ -229,6 +233,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
         Text[ slovak ] = "Stĺpec";
+        Text[ hungarian ] = "Oszlop";
+        Text[ slovenian ] = "Stolpec";
     };
     SpinField ED_COL
     {
@@ -274,6 +280,8 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ hebrew ] = "Spalte";
         QuickHelpText[ hindi ] = "स्तंभ";
         QuickHelpText[ slovak ] = "Stĺpec";
+        QuickHelpText[ hungarian ] = "Oszlop";
+        QuickHelpText[ slovenian ] = "Stolpec";
     };
     Control LB_ENTRIES
     {
@@ -326,6 +334,8 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ hebrew ] = "Dokument";
         QuickHelpText[ hindi ] = "Document";
         QuickHelpText[ slovak ] = "Dokument";
+        QuickHelpText[ hungarian ] = "Dokumentum";
+        QuickHelpText[ slovenian ] = "Dokument";
     };
     ImageList IL_CMD
     {
@@ -383,6 +393,8 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ hebrew ] = "Datenbereich";
                 Text[ hindi ] = "ड़ॉटा फैलाव";
                 Text[ slovak ] = "Oblasť dát";
+                Text[ hungarian ] = "Adattartomány";
+                Text[ slovenian ] = "Obseg podatkov";
             };
             ToolBoxItem
             {
@@ -395,7 +407,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ portuguese_brazilian ] = "In�cio" ;
                 Text [ portuguese ] = "In�cio" ;
                 Text [ finnish ] = "Aloita" ;
-                Text [ danish ] = "Begyndelse" ;
+                Text [ danish ] = "Start" ;
                 Text [ french ] = "D�but" ;
                 Text [ swedish ] = "B�rjan" ;
                 Text [ dutch ] = "Begin" ;
@@ -419,6 +431,8 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ hebrew ] = "Anfang";
                 Text[ hindi ] = "प्रारंभ";
                 Text[ slovak ] = "Spustiť";
+                Text[ hungarian ] = "Kezdet";
+                Text[ slovenian ] = "Začetek";
             };
             ToolBoxItem
             {
@@ -455,6 +469,8 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ hebrew ] = "Ende";
                 Text[ hindi ] = "अंत";
                 Text[ slovak ] = "Koniec";
+                Text[ hungarian ] = "Vége";
+                Text[ slovenian ] = "Konec";
             };
              //--------------------------------------------
              //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
@@ -496,6 +512,8 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ hebrew ] = "‮תוכן עיניינים‬";
                 Text[ hindi ] = "विषयें";
                 Text[ slovak ] = "Obsah";
+                Text[ hungarian ] = "Tartalom";
+                Text[ slovenian ] = "Vsebina";
             };
             ToolBoxItem
             {
@@ -531,6 +549,8 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ hebrew ] = "Umschalten";
                 Text[ hindi ] = "टॉगल";
                 Text[ slovak ] = "Prepnúť";
+                Text[ hungarian ] = "Kapcsoló";
+                Text[ slovenian ] = "Preklopi";
             };
             ToolBoxItem
             {
@@ -566,6 +586,8 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ hebrew ] = "Szenarien";
                 Text[ hindi ] = "विवरण";
                 Text[ slovak ] = "Scenáre";
+                Text[ hungarian ] = "Esetek";
+                Text[ slovenian ] = "Scenariji";
             };
             ToolBoxItem
             {
@@ -580,7 +602,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ spanish ] = "Modo Arrastrar" ;
                 Text [ french ] = "Mode Glisser" ;
                 Text [ swedish ] = "Dral�ge" ;
-                Text [ danish ] = "Tr�kmodus" ;
+                Text [ danish ] = "Tr�ktilstand" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text [ portuguese_brazilian ] = "Modo Arrastar" ;
                 Text[ chinese_simplified ] = "拖曳模式";
@@ -602,6 +624,8 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ hebrew ] = "Dragmodus";
                 Text[ hindi ] = "खींचने का प्रकार";
                 Text[ slovak ] = "Spôsob pretiahnutia";
+                Text[ hungarian ] = "Beszúrás módja";
+                Text[ slovenian ] = "Vlečni način";
             };
         };
     };
@@ -615,7 +639,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ spanish ] = "Modo Arrastrar" ;
         Text [ french ] = "Mode Glisser" ;
         Text [ swedish ] = "Dral�ge" ;
-        Text [ danish ] = "Tr�kmodus" ;
+        Text [ danish ] = "Tr�ktilstand" ;
         Text [ portuguese ] = "Modo Arrastar" ;
         Text [ portuguese_brazilian ] = "Modo Arrastar" ;
         Text[ chinese_simplified ] = "拖曳模式";
@@ -637,6 +661,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "Dragmodus";
         Text[ hindi ] = "खींचने का प्रकार";
         Text[ slovak ] = "Spôsob pretiahnutia";
+        Text[ hungarian ] = "Beszúrás módja";
+        Text[ slovenian ] = "Vlečni način";
     };
     String STR_DISPLAY
     {
@@ -648,7 +674,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ spanish ] = "Visualizaci�n" ;
         Text [ french ] = "Affichage" ;
         Text [ swedish ] = "Visning" ;
-        Text [ danish ] = "Visning" ;
+        Text [ danish ] = "Vis" ;
         Text [ portuguese ] = "Mostrar" ;
         Text [ portuguese_brazilian ] = "Exibir" ;
         Text[ chinese_simplified ] = "显示";
@@ -670,6 +696,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "Anzeige";
         Text[ hindi ] = "दिखाओ";
         Text[ slovak ] = "Zobraziť";
+        Text[ hungarian ] = "Megjelenítés";
+        Text[ slovenian ] = "Prikaz";
     };
     String STR_ACTIVE
     {
@@ -703,6 +731,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "aktiv";
         Text[ hindi ] = "क्रियाशील";
         Text[ slovak ] = "aktívny";
+        Text[ hungarian ] = "aktív";
+        Text[ slovenian ] = "aktivno";
     };
     String STR_NOTACTIVE
     {
@@ -736,6 +766,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "inaktiv";
         Text[ hindi ] = "निष्क्रिय";
         Text[ slovak ] = "neaktívne";
+        Text[ hungarian ] = "inaktív";
+        Text[ slovenian ] = "neaktivno";
     };
     String STR_HIDDEN
     {
@@ -769,6 +801,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "versteckt";
         Text[ hindi ] = "छिपाया हुआ";
         Text[ slovak ] = "skrytý";
+        Text[ hungarian ] = "rejtett";
+        Text[ slovenian ] = "skrito";
     };
     String STR_ACTIVEWIN
     {
@@ -802,6 +836,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "Aktives Fenster";
         Text[ hindi ] = "क्रियाशील विन्डो";
         Text[ slovak ] = "Aktívne okno";
+        Text[ hungarian ] = "Aktív ablak";
+        Text[ slovenian ] = "Aktivno okno";
     };
 
     String STR_QHLP_SCEN_LISTBOX
@@ -836,6 +872,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "Name des Szenarios";
         Text[ hindi ] = "विवरण का नाम";
         Text[ slovak ] = "Názov scenára";
+        Text[ hungarian ] = "Eset neve";
+        Text[ slovenian ] = "Ime scenarija";
     };
 
     String STR_QHLP_SCEN_COMMENT
@@ -870,6 +908,8 @@ Window RID_SCDLG_NAVIGATOR
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "अपवाद";
         Text[ slovak ] = "Komentár";
+        Text[ hungarian ] = "Megjegyzés";
+        Text[ slovenian ] = "Komentar";
     };
 
     Text[ chinese_simplified ] = "助手";
@@ -890,6 +930,8 @@ Window RID_SCDLG_NAVIGATOR
     Text[ hebrew ] = "‮נווט‬";
     Text[ hindi ] = "नाविगेटर";
     Text[ slovak ] = "Navigátor";
+    Text[ hungarian ] = "Navigátor";
+    Text[ slovenian ] = "Krmar";
 };
 
 // SC_CONTENT_...
@@ -985,6 +1027,8 @@ String SCSTR_CONTENT_ROOT
     Text[ hebrew ] = "‮תוכן עיניינים‬";
     Text[ hindi ] = "विषयें";
     Text[ slovak ] = "Obsah";
+    Text[ hungarian ] = "Tartalom";
+    Text[ slovenian ] = "Vsebina";
 };
 String SCSTR_CONTENT_TABLE
 {
@@ -996,7 +1040,7 @@ String SCSTR_CONTENT_TABLE
     Text [ french ] = "Feuilles" ;
     Text [ dutch ] = "Werkbladen" ;
     Text [ swedish ] = "Tabeller" ;
-    Text [ danish ] = "Regneark" ;
+    Text [ danish ] = "Ark" ;
     Text [ portuguese ] = "Folhas" ;
     Text [ portuguese_brazilian ] = "Planilhas" ;
     Text[ chinese_simplified ] = "工作表";
@@ -1018,6 +1062,8 @@ String SCSTR_CONTENT_TABLE
     Text[ hebrew ] = "Tabellen";
     Text[ hindi ] = "शीट्";
     Text[ slovak ] = "Listy";
+    Text[ hungarian ] = "Munkalapok";
+    Text[ slovenian ] = "Delovni listi";
 };
 String SCSTR_CONTENT_RANGENAME
 {
@@ -1051,6 +1097,8 @@ String SCSTR_CONTENT_RANGENAME
     Text[ hebrew ] = "Bereichsnamen";
     Text[ hindi ] = "फैलाव का नाम";
     Text[ slovak ] = "Názvy oblastí";
+    Text[ hungarian ] = "Tartománynevek";
+    Text[ slovenian ] = "Imena obsegov";
 };
 String SCSTR_CONTENT_DBAREA
 {
@@ -1084,6 +1132,8 @@ String SCSTR_CONTENT_DBAREA
     Text[ hebrew ] = "Datenbankbereiche";
     Text[ hindi ] = "लेखासंचय फैलाव";
     Text[ slovak ] = "Databázové oblasti";
+    Text[ hungarian ] = "Adatbázis-tartományok";
+    Text[ slovenian ] = "Obsegi zbirke podatkov";
 };
 String SCSTR_CONTENT_GRAPHIC
 {
@@ -1117,6 +1167,8 @@ String SCSTR_CONTENT_GRAPHIC
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Képek";
+    Text[ slovenian ] = "Grafika";
 };
 String SCSTR_CONTENT_OLEOBJECT
 {
@@ -1150,6 +1202,8 @@ String SCSTR_CONTENT_OLEOBJECT
     Text[ hebrew ] = "OLE-Objekte";
     Text[ hindi ] = "OLE वस्तु";
     Text[ slovak ] = "Objekty OLE";
+    Text[ hungarian ] = "OLE-objektumok";
+    Text[ slovenian ] = "OLE predmeti";
 };
 String SCSTR_CONTENT_NOTE
 {
@@ -1183,6 +1237,8 @@ String SCSTR_CONTENT_NOTE
     Text[ hebrew ] = "‮הערות‬";
     Text[ hindi ] = "टिप्पणी";
     Text[ slovak ] = "Poznámky";
+    Text[ hungarian ] = "Jegyzetek";
+    Text[ slovenian ] = "Opombe";
 };
 String SCSTR_CONTENT_AREALINK
 {
@@ -1216,6 +1272,8 @@ String SCSTR_CONTENT_AREALINK
     Text[ hebrew ] = "Verknüpfte Bereiche";
     Text[ hindi ] = "लिंक किया हुआ विस्तीर्ण ";
     Text[ slovak ] = "Prepojené oblasti";
+    Text[ hungarian ] = "Kapcsolt területek";
+    Text[ slovenian ] = "Povezana področja";
 };
 String SCSTR_CONTENT_DRAWING
 {
@@ -1246,6 +1304,8 @@ String SCSTR_CONTENT_DRAWING
     TEXT[ hebrew ] = "Zeichenobjekte";
     TEXT[ hindi ] = "Drawing objects";
     TEXT[ slovak ] = "Grafické objekty";
+    TEXT[ hungarian ] = "Rajzobjektumok";
+    TEXT[ slovenian ] = "Risani predmeti";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
@@ -1286,6 +1346,8 @@ Menu RID_POPUP_DROPMODE
             Text[ hebrew ] = "Als Hyperlink einfügen";
             Text[ hindi ] = "हाइपरलिंक जैसे जोड़ो";
             Text[ slovak ] = "Vložiť ako hypertextový odkaz";
+            Text[ hungarian ] = "Beszúrás hiperhivatkozásként";
+            Text[ slovenian ] = "Vstavi kot hiperpovezavo";
         };
         MenuItem
         {
@@ -1321,6 +1383,8 @@ Menu RID_POPUP_DROPMODE
             Text[ hebrew ] = "Als Verknüpfung einfügen";
             Text[ hindi ] = "लिंक जैसे जोड़ो";
             Text[ slovak ] = "Vložiť ako odkaz";
+            Text[ hungarian ] = "Beszúrás hivatkozásként";
+            Text[ slovenian ] = "Vstavi kot povezavo";
         };
         MenuItem
         {
@@ -1356,6 +1420,8 @@ Menu RID_POPUP_DROPMODE
             Text[ hebrew ] = "Als Kopie einfügen";
             Text[ hindi ] = "प्रतिलिपि जैसे जोड़ो";
             Text[ slovak ] = "Vložiť ako kópiu";
+            Text[ hungarian ] = "Beszúrás másolatként";
+            Text[ slovenian ] = "Vstavi kot kopijo";
         };
     };
 };
@@ -1397,6 +1463,8 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "मिटाओ";
             Text[ slovak ] = "Zmazať";
+            Text[ hungarian ] = "Törlés";
+            Text[ slovenian ] = "Izbriši";
         };
         MenuItem
         {
@@ -1432,9 +1500,14 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ hebrew ] = "‮מאפינים...‬";
             Text[ hindi ] = "विशेषतायें...";
             Text[ slovak ] = "Vlastnosti...";
+            Text[ hungarian ] = "Tulajdonságok...";
+            Text[ slovenian ] = "Lastnosti...";
         };
     };
 };
+
+
+
 
 
 
