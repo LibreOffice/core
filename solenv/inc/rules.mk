@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-08 10:40:07 $
+#   last change: $Author: hjs $ $Date: 2001-08-08 19:23:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -586,7 +586,7 @@ $(MISC)$/%.dpz :
 .IF "$(GUI)"=="WNT"  || "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
-    dmake $(MFLAGS) $(CALLMACROS) make_zip_deps=true ZIPALLTARGET -u
+    +dmake $(MFLAGS) $(CALLMACROS) make_zip_deps=true ZIPALLTARGET -u
     $(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >> $@
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
 .ELSE

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-08 10:18:54 $
+#   last change: $Author: hjs $ $Date: 2001-08-08 19:23:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1861,6 +1861,8 @@ ALLTAR:	\
         $(OS2_COPY_MK)		\
         $(SUBDIRS)		\
         $(DPRTARGET) \
+        $(DPZTARGET) \
+        ZIPALLTARGET \
         $(IDLTARGET)	$(IDL1TARGET)	$(IDL2TARGET)		\
         $(IDL3TARGET)	$(IDL4TARGET)	$(IDL5TARGET)		\
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
@@ -1920,6 +1922,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(DEPFILES) $(DPCTARGET) \
         $(DPRTARGET) \
         $(DPZTARGET) \
+        ZIPALLTARGET \
         $(IDLTARGET)	$(SDITARGET)	\
         $(UNODOCTARGET)	\
         $(LOCALDBTARGET)	\
