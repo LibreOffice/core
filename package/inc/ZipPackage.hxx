@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 19:58:49 $
+ *  last change: $Author: mtg $ $Date: 2001-11-29 13:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,13 +136,11 @@ protected:
     ::rtl::OUString  sURL;
     sal_Bool         bHasEncryptedEntries;
     InitialisationMode eMode;
-    sal_Int32        nSegmentSize;
 
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XStream > xStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
-    ::com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xInteractionHandler;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
 
     ZipPackageFolder *pRootFolder;
@@ -150,28 +148,6 @@ protected:
 
     void getZipFileContents();
     void writeTempFile();
-    // Pack'n'go functions
-    // this one is for removable media
-    SegmentEnum writeSegment(
-                       const ::rtl::OUString & rFileName,
-                       ::rtl::OUString & rMountPath,
-                       ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xStream,
-                       const sal_Int16 nDiskNum);
-    // this one is for non-removable media
-    SegmentEnum writeSegment(
-                       const ::rtl::OUString & rFileName,
-                       ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xStream );
-    SegmentEnum readSegment(
-                       const ::rtl::OUString & rFileName,
-                       ::rtl::OUString & rMountPath,
-                       ::com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xTempOut,
-                       const sal_Int16 nDiskNum);
-    void getInteractionHandler();
-    sal_Bool HandleError ( com::sun::star::uno::Any &rAny, sal_uInt16 eContinuations );
-    sal_Bool HandleError ( oslFileError, sal_uInt16 eContinuations, const ::rtl::OUString &rFileName );
-    sal_Int32 RequestDisk ( ::rtl::OUString &rMountPath, sal_Int16 nDiskNum);
-    void unSpanFile ( );
-    sal_Bool checkEnd ( com::sun::star::uno::Sequence < sal_Int8 > &rSequence );
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
