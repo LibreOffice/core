@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,19 @@ class FuInsertChart : public FuPoor
     FuInsertChart( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertChart();
+
+    virtual void Activate();           // Function aktivieren
+    virtual void Deactivate();         // Function deaktivieren
+};
+
+/************************************************************************/
+
+class FuInsertMedia : public FuPoor
+{
+ public:
+    FuInsertMedia( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+           SdrModel* pDoc, SfxRequest& rReq);
+    virtual ~FuInsertMedia();
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
