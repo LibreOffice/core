@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: abi $ $Date: 2003-05-08 09:51:01 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,14 +208,10 @@ BaseContent::~BaseContent( )
     }
     m_pMyShell->m_pProvider->release();
 
-    if( m_pDisposeEventListeners )
-        delete m_pDisposeEventListeners;
-    if( m_pContentEventListeners )
-        delete m_pContentEventListeners;
-    if( m_pPropertyListener )
-        delete m_pPropertyListener;
-    if( m_pPropertySetInfoChangeListeners )
-        delete m_pPropertySetInfoChangeListeners;
+    delete m_pDisposeEventListeners;
+    delete m_pContentEventListeners;
+    delete m_pPropertyListener;
+    delete m_pPropertySetInfoChangeListeners;
 }
 
 
@@ -293,22 +289,47 @@ void SAL_CALL
 BaseContent::dispose()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
     lang::EventObject aEvt;
-    aEvt.Source = static_cast< XContent* >( this );
+    cppu::OInterfaceContainerHelper* pDisposeEventListeners;
+    cppu::OInterfaceContainerHelper* pContentEventListeners;
+    cppu::OInterfaceContainerHelper* pPropertySetInfoChangeListeners;
+    PropertyListeners* pPropertyListener;
 
-    if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
+    {
+        vos::OGuard aGuard( m_aMutex );
+        aEvt.Source = static_cast< XContent* >( this );
 
-    if ( m_pContentEventListeners && m_pContentEventListeners->getLength() )
-        m_pContentEventListeners->disposeAndClear( aEvt );
 
-    if( m_pPropertyListener )
-        m_pPropertyListener->disposeAndClear( aEvt );
+        pDisposeEventListeners =
+            m_pDisposeEventListeners, m_pDisposeEventListeners = 0;
 
-    if( m_pPropertySetInfoChangeListeners )
-        m_pPropertySetInfoChangeListeners->disposeAndClear( aEvt );
+        pContentEventListeners =
+            m_pContentEventListeners, m_pContentEventListeners = 0;
 
+        pPropertySetInfoChangeListeners =
+            m_pPropertySetInfoChangeListeners,
+            m_pPropertySetInfoChangeListeners = 0;
+
+        pPropertyListener =
+            m_pPropertyListener, m_pPropertyListener = 0;
+    }
+
+    if ( pDisposeEventListeners && pDisposeEventListeners->getLength() )
+        pDisposeEventListeners->disposeAndClear( aEvt );
+
+    if ( pContentEventListeners && pContentEventListeners->getLength() )
+        pContentEventListeners->disposeAndClear( aEvt );
+
+    if( pPropertyListener )
+        pPropertyListener->disposeAndClear( aEvt );
+
+    if( pPropertySetInfoChangeListeners )
+        pPropertySetInfoChangeListeners->disposeAndClear( aEvt );
+
+    delete pDisposeEventListeners;
+    delete pContentEventListeners;
+    delete pPropertyListener;
+    delete pPropertySetInfoChangeListeners;
 }
 
 
@@ -531,10 +552,13 @@ BaseContent::removePropertiesChangeListener( const Sequence< rtl::OUString >& Pr
                                              const Reference< beans::XPropertiesChangeListener >& Listener )
     throw( RuntimeException )
 {
-    if( ! Listener.is() || ! m_pPropertyListener )
+    if( ! Listener.is() )
         return;
 
     vos::OGuard aGuard( m_aMutex );
+
+    if( ! m_pPropertyListener )
+        return;
 
     for( sal_Int32 i = 0; i < PropertyNames.getLength(); ++i )
         m_pPropertyListener->removeInterface( PropertyNames[i],Listener );
