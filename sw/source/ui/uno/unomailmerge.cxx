@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:34:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,7 +881,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
     DBG_ASSERT( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
-    BOOL bSucc = pMgr->MergeNew( nMergeType, rSh, aDescriptor );
+    // #i25686# printing should be done asynchronously to prevent dangling offices
+    // when mail merge is called as command line macro
+    BOOL bSucc = pMgr->MergeNew( nMergeType, rSh, aDescriptor, sal_False );
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 
     if ( xCurModel.get() != xModel.get() )
