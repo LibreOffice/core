@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UniversalContentBroker.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-06 08:17:36 $
+ *  last change: $Author: kso $ $Date: 2001-02-06 08:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,8 @@ service UniversalContentBroker
 
     //-------------------------------------------------------------------------
     /** enables the caller to let the Content Broker execute commands.
+
+        <p>This interface is required.
 
         <p><pre>
         =======================================================================
