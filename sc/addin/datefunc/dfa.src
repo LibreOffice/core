@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:26:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ japanese ] = "DaysInMonth";
         Text[ chinese_simplified ] = "DaysInMonth";
         Text[ chinese_traditional ] = "DaysInMonth";
-        Text[ arabic ] = "ÌÊ„« ›Ì «·‘Â—";
+        Text[ arabic ] = "DaysInMonth";
         Text[ dutch ] = "DagenInMaand";
         Text[ chinese_simplified ] = "DaysInMonth";
         Text[ greek ] = "«Ï›ÒÂÚ¡Ì‹ÃﬁÌ·";
@@ -701,7 +701,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ japanese ] = "DaysInYear";
         Text[ chinese_simplified ] = "DaysInYear";
         Text[ chinese_traditional ] = "DaysInYear";
-        Text[ arabic ] = "ÌÊ„« ›Ì «·”‰…";
+        Text[ arabic ] = "DaysInYear";
         Text[ dutch ] = "DagenInJaar";
         Text[ chinese_simplified ] = "DaysInYear";
         Text[ greek ] = "«Ï›ÒÂÚ”ÙÔ∏ÙÔÚ";
@@ -754,7 +754,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ japanese ] = "WeeksInYear";
         Text[ chinese_simplified ] = "WeeksInYear";
         Text[ chinese_traditional ] = "WeeksInYear";
-        Text[ arabic ] = "√”»Ê⁄« ›Ì «·”‰…";
+        Text[ arabic ] = "WeeksInYear";
         Text[ dutch ] = "WekenInJaar";
         Text[ chinese_simplified ] = "WeeksInYear";
         Text[ greek ] = "≈‚‰ÔÏ‹‰ÂÚ¡Ì‹∏ÙÔÚ";
