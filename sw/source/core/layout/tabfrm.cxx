@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:58:55 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,12 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     rTab.SetFollow( this );
 }
 
-extern const SwTable   *pLastTable;
-extern const SwTabFrm  *pLastTabFrm;
-extern const SwFrm  *pLastCellFrm;
+extern const SwTable   *pColumnCacheLastTable;
+extern const SwTabFrm  *pColumnCacheLastTabFrm;
+extern const SwFrm     *pColumnCacheLastCellFrm;
+extern const SwTable   *pRowCacheLastTable;
+extern const SwTabFrm  *pRowCacheLastTabFrm;
+extern const SwFrm     *pRowCacheLastCellFrm;
 
 SwTabFrm::~SwTabFrm()
 {
@@ -203,11 +206,14 @@ SwTabFrm::~SwTabFrm()
     // makes use of these global pointers. Obviously
     // this code did not consider that a TabFrm can be
     // deleted.
-    if ( this == pLastTabFrm )
+    if ( this == pColumnCacheLastTabFrm )
     {
-        pLastTable  = NULL;
-        pLastTabFrm = NULL;
-        pLastCellFrm= NULL;
+        pColumnCacheLastTable  = NULL;
+        pColumnCacheLastTabFrm = NULL;
+        pColumnCacheLastCellFrm= NULL;
+        pRowCacheLastTable  = NULL;
+        pRowCacheLastTabFrm = NULL;
+        pRowCacheLastCellFrm= NULL;
     }
 }
 
