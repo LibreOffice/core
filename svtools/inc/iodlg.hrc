@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodlg.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-28 07:03:39 $
+ *  last change: $Author: dv $ $Date: 2001-06-28 10:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
 
 #define FT_SVT_QUERYFOLDERNAME_DLG_NAME     10
 #define ED_SVT_QUERYFOLDERNAME_DLG_NAME     11
-#define GB_SVT_QUERYFOLDERNAME_DLG_NAME     12
+#define FL_SVT_QUERYFOLDERNAME_DLG_NAME     12
 #define BT_SVT_QUERYFOLDERNAME_DLG_OK       13
 #define BT_SVT_QUERYFOLDERNAME_DLG_CANCEL   14
 #define BT_SVT_QUERYFOLDERNAME_DLG_HELP     15
@@ -127,7 +127,6 @@
 #define HID_FILEDLG_STANDARD            (HID_SFX_START +  27)
 #define HID_FILEDLG_MANAGER             (HID_SFX_START +  28)
 #define HID_FILEDLG_URL                 (HID_SFX_START +  29)
-#define HID_FILEDLG_FILE                (HID_SFX_START +  30)
 #define HID_FILEDLG_USE_PASSWD          (HID_SFX_START +  31)
 #define HID_FILEDLG_READ_ONLY           (HID_SFX_START +  32)
 
