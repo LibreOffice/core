@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:25:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,19 +88,19 @@ namespace basegfx
     class B2DRange;
 }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace geometry
+namespace com { namespace sun { namespace star { namespace geometry
 {
     struct RealSize2D;
     struct AffineMatrix2D;
     struct Matrix2D;
-} } } } }
+} } } }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     struct RenderState;
     struct ViewState;
     class  XCanvas;
-} } } } }
+} } } }
 
 
 namespace canvas
@@ -128,77 +128,77 @@ namespace canvas
 
         /** Create a RealSize2D with both coordinate values set to +infinity
          */
-        ::drafts::com::sun::star::geometry::RealSize2D createInfiniteSize2D();
+        ::com::sun::star::geometry::RealSize2D createInfiniteSize2D();
 
 
         // View- and RenderState utilities
         // ===================================================================
 
-        ::drafts::com::sun::star::rendering::RenderState&
-            initRenderState( ::drafts::com::sun::star::rendering::RenderState&                      renderState );
+        ::com::sun::star::rendering::RenderState&
+            initRenderState( ::com::sun::star::rendering::RenderState&                      renderState );
 
-        ::drafts::com::sun::star::rendering::ViewState&
-            initViewState( ::drafts::com::sun::star::rendering::ViewState&                          viewState );
+        ::com::sun::star::rendering::ViewState&
+            initViewState( ::com::sun::star::rendering::ViewState&                          viewState );
 
         ::basegfx::B2DHomMatrix&
             getViewStateTransform( ::basegfx::B2DHomMatrix&                                         transform,
-                                   const ::drafts::com::sun::star::rendering::ViewState&            viewState );
+                                   const ::com::sun::star::rendering::ViewState&            viewState );
 
-        ::drafts::com::sun::star::rendering::ViewState&
-            setViewStateTransform( ::drafts::com::sun::star::rendering::ViewState&                  viewState,
+        ::com::sun::star::rendering::ViewState&
+            setViewStateTransform( ::com::sun::star::rendering::ViewState&                  viewState,
                                    const ::basegfx::B2DHomMatrix&                                   transform );
 
         ::basegfx::B2DHomMatrix&
             getRenderStateTransform( ::basegfx::B2DHomMatrix&                                       transform,
-                                     const ::drafts::com::sun::star::rendering::RenderState&        renderState );
+                                     const ::com::sun::star::rendering::RenderState&        renderState );
 
-        ::drafts::com::sun::star::rendering::RenderState&
-            setRenderStateTransform( ::drafts::com::sun::star::rendering::RenderState&              renderState,
+        ::com::sun::star::rendering::RenderState&
+            setRenderStateTransform( ::com::sun::star::rendering::RenderState&              renderState,
                                      const ::basegfx::B2DHomMatrix&                                 transform );
 
-        ::drafts::com::sun::star::rendering::ViewState&
-            appendToViewState( ::drafts::com::sun::star::rendering::ViewState&                      viewState,
+        ::com::sun::star::rendering::ViewState&
+            appendToViewState( ::com::sun::star::rendering::ViewState&                      viewState,
                                const ::basegfx::B2DHomMatrix&                                       transform );
 
-        ::drafts::com::sun::star::rendering::RenderState&
-            appendToRenderState( ::drafts::com::sun::star::rendering::RenderState&                  renderState,
+        ::com::sun::star::rendering::RenderState&
+            appendToRenderState( ::com::sun::star::rendering::RenderState&                  renderState,
                                  const ::basegfx::B2DHomMatrix&                                     transform );
 
-        ::drafts::com::sun::star::rendering::ViewState&
-            prependToViewState( ::drafts::com::sun::star::rendering::ViewState&                     viewState,
+        ::com::sun::star::rendering::ViewState&
+            prependToViewState( ::com::sun::star::rendering::ViewState&                     viewState,
                                 const ::basegfx::B2DHomMatrix&                                      transform );
 
-        ::drafts::com::sun::star::rendering::RenderState&
-            prependToRenderState( ::drafts::com::sun::star::rendering::RenderState&                 renderState,
+        ::com::sun::star::rendering::RenderState&
+            prependToRenderState( ::com::sun::star::rendering::RenderState&                 renderState,
                                   const ::basegfx::B2DHomMatrix&                                    transform );
 
         ::basegfx::B2DHomMatrix&
             mergeViewAndRenderTransform( ::basegfx::B2DHomMatrix&                                   transform,
-                                         const ::drafts::com::sun::star::rendering::ViewState&      viewState,
-                                         const ::drafts::com::sun::star::rendering::RenderState&    renderState );
+                                         const ::com::sun::star::rendering::ViewState&      viewState,
+                                         const ::com::sun::star::rendering::RenderState&    renderState );
 
-        ::drafts::com::sun::star::rendering::ViewState&
-            mergeViewAndRenderState( ::drafts::com::sun::star::rendering::ViewState&                resultViewState,
-                                     const ::drafts::com::sun::star::rendering::ViewState&          viewState,
-                                     const ::drafts::com::sun::star::rendering::RenderState&        renderState,
+        ::com::sun::star::rendering::ViewState&
+            mergeViewAndRenderState( ::com::sun::star::rendering::ViewState&                resultViewState,
+                                     const ::com::sun::star::rendering::ViewState&          viewState,
+                                     const ::com::sun::star::rendering::RenderState&        renderState,
                                      const ::com::sun::star::uno::Reference<
-                                         ::drafts::com::sun::star::rendering::XCanvas >                 xCanvas );
+                                         ::com::sun::star::rendering::XCanvas >                 xCanvas );
 
-        bool operator==( const ::drafts::com::sun::star::rendering::RenderState&                    rLHS,
-                         const ::drafts::com::sun::star::rendering::RenderState&                    rRHS );
+        bool operator==( const ::com::sun::star::rendering::RenderState&                    rLHS,
+                         const ::com::sun::star::rendering::RenderState&                    rRHS );
 
-        bool operator==( const ::drafts::com::sun::star::rendering::ViewState&                      rLHS,
-                         const ::drafts::com::sun::star::rendering::ViewState&                      rRHS );
+        bool operator==( const ::com::sun::star::rendering::ViewState&                      rLHS,
+                         const ::com::sun::star::rendering::ViewState&                      rRHS );
 
 
         // Matrix utilities
         // ===================================================================
 
-        ::drafts::com::sun::star::geometry::AffineMatrix2D&
-            setIdentityAffineMatrix2D( ::drafts::com::sun::star::geometry::AffineMatrix2D&  matrix );
+        ::com::sun::star::geometry::AffineMatrix2D&
+            setIdentityAffineMatrix2D( ::com::sun::star::geometry::AffineMatrix2D&  matrix );
 
-        ::drafts::com::sun::star::geometry::Matrix2D&
-            setIdentityMatrix2D( ::drafts::com::sun::star::geometry::Matrix2D&              matrix );
+        ::com::sun::star::geometry::Matrix2D&
+            setIdentityMatrix2D( ::com::sun::star::geometry::Matrix2D&              matrix );
 
 
         // Special utilities
@@ -220,6 +220,8 @@ namespace canvas
             Transformation to apply to the input rectangle
 
             @see calcRectToRectTransform()
+
+            @return a reference to the resulting rectangle
          */
         ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&            o_Rect,
                                                         const ::basegfx::B2DRange&      i_Rect,
@@ -367,7 +369,7 @@ namespace canvas
             @return A reference to the resulting sequence of parameters
         */
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& getDeviceInfo(
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvas >& i_rxCanvas,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >& i_rxCanvas,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& o_rxParams );
     }
 }
