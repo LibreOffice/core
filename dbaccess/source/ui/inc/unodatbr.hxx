@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:04:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@ namespace dbaui
         ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
 
         DropDescriptor          m_aAsyncDrop;
-        Timer                   m_aRefreshMenu;     // the timer for the menu "refresh"
 
         ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
 
@@ -176,10 +175,14 @@ namespace dbaui
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
         sal_Bool                m_bHiContrast;          // in which mode we are
         sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
-        sal_Bool                m_bShowToolbox;         // if TRUE the toolbox should be visible otherwise not
         sal_Bool                m_bPreview;             // if TRUE the grid will hide some features
+        sal_Bool                m_bInSuspend;
+        sal_Bool                m_bEnableBrowser;
 
 
+        /** updateTitle will be called when a new frame is attached
+        */
+        virtual void updateTitle( );
     // attribute access
     public:
         SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
@@ -253,7 +256,6 @@ namespace dbaui
         virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
         virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
-        virtual ToolBox* CreateToolBox(Window* pParent);
 #if defined(_MSC_VER) && (_MSC_VER >= 1310 )
         typedef ::com::sun::star::frame::XStatusListener xstlist_type;
         typedef ::com::sun::star::uno::Reference< xstlist_type > xlister_type;
@@ -274,10 +276,7 @@ namespace dbaui
 
         virtual void            AddSupportedFeatures();
         virtual FeatureState    GetState(sal_uInt16 nId) const;
-        virtual void            Execute(sal_uInt16 nId);
-
-        virtual void onToolBoxSelected( sal_uInt16 _nSelectedItem );
-        virtual void onToolBoxClicked( sal_uInt16 _nClickedItem );
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         // IControlActionListener overridables
         virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent );
@@ -384,8 +383,6 @@ namespace dbaui
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
 
-        DECL_LINK( OnShowRefreshDropDown, void* );
-
         void implRemoveStatusListeners();
 
         sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect = sal_False);
@@ -449,8 +446,7 @@ namespace dbaui
         );
 
         // set _rsName as title at the frame
-        void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;
-        void setDefaultTitle() const;
+        void setDefaultTitle();
 
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
