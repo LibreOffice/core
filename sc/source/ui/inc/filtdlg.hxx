@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 09:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
 #endif
@@ -103,6 +100,7 @@ class TypedStrCollection;
 // Gemeinsame Resource-Objekte:
 
 #define _COMMON_FILTER_RSCOBJS \
+    FixedLine       aFlOptions; \
     CheckBox        aBtnCase; \
     CheckBox        aBtnRegExp; \
     CheckBox        aBtnHeader; \
@@ -114,7 +112,6 @@ class TypedStrCollection;
     CheckBox        aBtnDestPers; \
     FixedText       aFtDbAreaLabel; \
     FixedInfo       aFtDbArea; \
-    GroupBox        aGbOptions; \
     OKButton        aBtnOk; \
     CancelButton    aBtnCancel; \
     HelpButton      aBtnHelp; \
@@ -125,6 +122,7 @@ class TypedStrCollection;
 
 
 #define _INIT_COMMON_FILTER_RSCOBJS \
+    aFlOptions      ( this, ScResId( FL_OPTIONS ) ), \
     aBtnCase        ( this, ScResId( BTN_CASE ) ), \
     aBtnRegExp      ( this, ScResId( BTN_REGEXP ) ), \
     aBtnHeader      ( this, ScResId( BTN_HEADER ) ), \
@@ -136,7 +134,6 @@ class TypedStrCollection;
     aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ), \
     aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ), \
     aFtDbArea       ( this, ScResId( FT_DBAREA ) ), \
-    aGbOptions      ( this, ScResId( GB_OPTIONS ) ), \
     aBtnOk          ( this, ScResId( BTN_OK ) ), \
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ), \
     aBtnHelp        ( this, ScResId( BTN_HELP ) ), \
@@ -162,6 +159,8 @@ public:
     virtual BOOL    Close();
 
 private:
+    FixedLine       aFlCriteria;
+    //----------------------------
     ListBox         aLbField1;
     ListBox         aLbCond1;
     ComboBox        aEdVal1;
@@ -180,7 +179,6 @@ private:
     FixedText       aFtField;
     FixedText       aFtCond;
     FixedText       aFtVal;
-    GroupBox        aGbCriteria;
 
     _COMMON_FILTER_RSCOBJS
 

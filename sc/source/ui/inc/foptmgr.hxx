@@ -2,9 +2,9 @@
  *
  *  $RCSfile: foptmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 09:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef SC_FOPTMGR_HXX
 #define SC_FOPTMGR_HXX
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -108,7 +105,7 @@ public:
                                 ScRefButton&        refRbCopyArea,
                                 FixedText&          refFtDbAreaLabel,
                                 FixedInfo&          refFtDbArea,
-                                GroupBox&           refGbOptions,
+                                FixedLine&          refFlOptions,
                                 const String&       refStrNoName,
                                 const String&       refStrUndefined );
             ~ScFilterOptionsMgr();
@@ -132,7 +129,7 @@ private:
     ScRefButton&    rRbCopyPos;
     FixedText&      rFtDbAreaLabel;
     FixedInfo&      rFtDbArea;
-    GroupBox&       rGbOptions;
+    FixedLine&      rFlOptions;
 
     const String&   rStrNoName;
     const String&   rStrUndefined;
