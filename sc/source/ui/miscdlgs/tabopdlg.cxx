@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 
 ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         ScDocument*         pDocument,
-                        const ScRefTripel&  rCursorPos )
+                        const ScRefAddress& rCursorPos )
 
     :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_TABOP ),
         //
@@ -115,7 +115,7 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         //
         pDoc                ( pDocument ),
         theFormulaCell      ( rCursorPos ),
-        nCurTab             ( theFormulaCell.GetTab() ),
+        nCurTab             ( theFormulaCell.Tab() ),
         pEdActive           ( NULL ),
         bDlgLostFocus       ( FALSE )
 {
@@ -192,32 +192,25 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(pEdActive);
 
-        USHORT nStartCol = rRef.aStart.Col();       // fuer RefTripel
-        USHORT nStartRow = rRef.aStart.Row();
-        USHORT nStartTab = rRef.aStart.Tab();
-        USHORT nEndCol = rRef.aEnd.Col();
-        USHORT nEndRow = rRef.aEnd.Row();
-        USHORT nEndTab = rRef.aEnd.Tab();
-
         String      aStr;
-        USHORT      nFmt = ( nStartTab == nCurTab )
+        USHORT      nFmt = ( rRef.aStart.Tab() == nCurTab )
                                 ? SCR_ABS
                                 : SCR_ABS_3D;
 
         if ( pEdActive == &aEdFormulaRange )
         {
-            theFormulaCell = ScRefTripel( nStartCol, nStartRow, nStartTab, FALSE, FALSE, FALSE );
-            theFormulaEnd  = ScRefTripel( nEndCol,   nEndRow,   nEndTab,   FALSE, FALSE, FALSE );
+            theFormulaCell.Set( rRef.aStart, false, false, false);
+            theFormulaEnd.Set( rRef.aEnd, false, false, false);
             rRef.Format( aStr, nFmt, pDoc );
         }
         else if ( pEdActive == &aEdRowCell )
         {
-            theRowCell = ScRefTripel( nStartCol, nStartRow, nStartTab, FALSE, FALSE, FALSE );
+            theRowCell.Set( rRef.aStart, false, false, false);
             rRef.aStart.Format( aStr, nFmt, pDoc );
         }
         else if ( pEdActive == &aEdColCell )
         {
-            theColCell = ScRefTripel( nStartCol, nStartRow, nStartTab, FALSE, FALSE, FALSE );
+            theColCell.Set( rRef.aStart, false, false, false);
             rRef.aStart.Format( aStr, nFmt, pDoc );
         }
 
@@ -276,8 +269,8 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 
 //----------------------------------------------------------------------------
 
-BOOL lcl_Parse( const String& rString, ScDocument* pDoc, USHORT nCurTab,
-                ScRefTripel& rStart, ScRefTripel& rEnd )
+BOOL lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
+                ScRefAddress& rStart, ScRefAddress& rEnd )
 {
     BOOL bRet = FALSE;
     if ( rString.Search(':') != STRING_NOTFOUND )
@@ -323,7 +316,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                 else
                 {
                     if (aEdColCell.GetText().Len() == 0 &&
-                        theFormulaCell.GetCol() != theFormulaEnd.GetCol())
+                        theFormulaCell.Col() != theFormulaEnd.Col())
                         nError = TABOPERR_NOCOLFORMULA;
                     else
                         nMode = 1;
@@ -342,7 +335,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                         ConvertSingleRef( pDoc, aEdFormulaRange.GetText(), nCurTab,
                                           theFormulaCell );
                     }
-                    else if (theFormulaCell.GetRow() != theFormulaEnd.GetRow())
+                    else if (theFormulaCell.Row() != theFormulaEnd.Row())
                         nError = TABOPERR_NOROWFORMULA;
                     else
                         nMode = 0;
