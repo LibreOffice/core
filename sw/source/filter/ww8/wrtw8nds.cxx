@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:56:26 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 13:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,9 @@
 #endif
 #ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX
+#include <fmtrowsplt.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -2188,6 +2191,9 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             aAt.Insert( 1, aAt.Count() );
         }
 
+        const SwTableLine* pLine = pBoxArr[0]->GetBox()->GetUpper();
+        const SwFrmFmt *pLineFmt = pLine ? pLine->GetFrmFmt() : 0;
+
         // Zeilenhoehe ausgeben   sprmTDyaRowHeight
         long nHeight = 0;
         if( bFixRowHeight )
@@ -2198,14 +2204,13 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         }
         else
         {
-            const SwTableLine* pLine = pBoxArr[ 0 ]->GetBox()->GetUpper();
-            const SwFmtFrmSize& rLSz = pLine->GetFrmFmt()->GetFrmSize();
+            const SwFmtFrmSize& rLSz = pLineFmt->GetFrmSize();
             if( ATT_VAR_SIZE != rLSz.GetSizeType() && rLSz.GetHeight() )
                 nHeight = ATT_MIN_SIZE == rLSz.GetSizeType()
                                                 ? rLSz.GetHeight()
                                                 : -rLSz.GetHeight();
         }
-        if( nHeight )
+        if (nHeight)
         {
             if( rWW8Wrt.bWrtWW8 )
                 SwWW8Writer::InsUInt16( aAt, 0x9407 );
@@ -2215,15 +2220,17 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         }
 
         /*
-        #i4569#
-        Writer always behaves as if it has 0x3403 set as true sprmTFCantSplit
-        - our tables may be never split in the line
+        By default the row can be split in word, and now in writer we have a
+        feature equivalent to this, Word stores 1 for fCantSplit if the row
+        cannot be split, we set true if we can split it. An example is #i4569#
         */
-        if( rWW8Wrt.bWrtWW8 )
-            SwWW8Writer::InsUInt16( aAt, 0x3403 );
+        const SwFmtRowSplit& rSplittable = pLineFmt->GetRowSplit();
+        BYTE nCantSplit = (!rSplittable.GetValue()) ? 1 : 0;
+        if (rWW8Wrt.bWrtWW8)
+            SwWW8Writer::InsUInt16(aAt, 0x3403);
         else
-            aAt.Insert( 185, aAt.Count() );
-        aAt.Insert( (BYTE)1, aAt.Count() );
+            aAt.Insert(185, aAt.Count());
+        aAt.Insert(nCantSplit, aAt.Count());
 
 
         if (rWW8Wrt.bWrtWW8)
