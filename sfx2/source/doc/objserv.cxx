@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-06 09:28:17 $
+ *  last change: $Author: mav $ $Date: 2002-06-20 07:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
 
             // merge in results of the dialog execution
-            // filename and filtername is not here
+            // filename and filtername are not here
             // they will be merged in pRequest later
             if( pTempSet )
                 pParams->Put( *pTempSet );
@@ -499,6 +499,14 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                     SetError(ERRCODE_SFX_ALREADYOPEN);
                     return sal_False;
                 }
+            }
+
+            // old filter options should be cleared in case different filter is used
+            SFX_ITEMSET_ARG( pMedSet, pOldFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+            if ( !pOldFilterNameItem || pOldFilterNameItem->GetValue().CompareTo( aFilterName ) != COMPARE_EQUAL )
+            {
+                pParams->ClearItem( SID_FILTER_DATA );
+                pParams->ClearItem( SID_FILE_FILTEROPTIONS );
             }
 
             // --**-- pParams->Put( *pDlg->GetItemSet() );
@@ -598,6 +606,15 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         // merge in results of the dialog execution
         if( pTempSet )
             pParams->Put( *pTempSet );
+
+        // old filter options should be cleared in case different filter is used
+        SFX_ITEMSET_ARG( pMedSet, pOldFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        if ( !pOldFilterNameItem || pOldFilterNameItem->GetValue().CompareTo( aFilterName ) != COMPARE_EQUAL )
+        {
+            pParams->ClearItem( SID_FILTER_DATA );
+            pParams->ClearItem( SID_FILE_FILTEROPTIONS );
+        }
+
         pParams->Put( SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
         pParams->Put( SfxStringItem( SID_FILTER_NAME, aFilterName) );
         pRequest->AppendItem(SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
