@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: od $ $Date: 2002-10-10 09:32:50 $
+ *  last change: $Author: fme $ $Date: 2002-10-30 14:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,10 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                 rRet.nMain =  rPt.Y() - pCnt->Frm().Top();
             return pCnt;
         }
+        else if ( rPt.Y() <= pUp->Frm().Top() )
+        {
+            rRet.nMain = LONG_MAX;
+        }
         else if( rPt.X() < pUp->Frm().Left() &&
                  rPt.Y() <= ( bVert ? pUp->Frm().Top() : pUp->Frm().Bottom() ) )
         {
@@ -1014,7 +1018,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         }
         if ( !pUpFrm )
             nUp.nMain = LONG_MAX;
-        if ( nUp.nMain >= 0 )
+        if ( nUp.nMain >= 0 && LONG_MAX != nUp.nMain )
         {
             bNegAllowed = FALSE;
             if ( nUpLst.nMain < 0 ) //nicht den falschen erwischen, wenn der Wert
@@ -1023,8 +1027,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
                 nUpLst = nUp;
             }
         }
-    } while ( pUpFrm && ( ( bNegAllowed && nUp.nMain < 0 ) || ( nUp <= nUpLst &&
-              ( nUp.nMain != LONG_MAX && nUpLst.nMain != LONG_MAX ) ) ) );
+    } while ( pUpFrm && ( ( bNegAllowed && nUp.nMain < 0 ) || ( nUp <= nUpLst ) ) );
 
     const SwCntntFrm *pDownLst;
     const SwCntntFrm *pDownFrm = pCnt;
