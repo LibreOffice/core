@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:44:57 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,20 @@
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#include <svx/svxdlg.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <list>
+
+typedef ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString > > EventList;
+
 //............................................................................
 namespace pcr
 {
@@ -360,6 +374,30 @@ namespace pcr
     using namespace ::com::sun::star::table;
     using namespace ::com::sun::star::form::binding;
     using namespace ::dbtools;
+
+//
+// XNameReplace impl for transition to new SvxMacroAssignDlg
+class EventsNameReplace_Impl:
+        public ::cppu::WeakImplHelper1 < ::com::sun::star::container::XNameReplace >
+{
+    public:
+        EventsNameReplace_Impl( );
+        ~EventsNameReplace_Impl( );
+
+        void AddEvent( ::rtl::OUString sEventName, ::rtl::OUString sMacroURL );
+
+        //XNameReplace
+        void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+        ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+
+
+    private:
+        EventList m_eventList;
+};
 
     //========================================================================
     //= helper
@@ -1354,6 +1392,8 @@ namespace pcr
     //------------------------------------------------------------------------
     void OPropertyBrowserController::ChangeEventProperty( const ::rtl::OUString& _Name )
     {
+
+        OSL_TRACE("ChangeEventProp with arg = %s",::rtl::OUStringToOString(_Name, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         SfxMacroAssignDlg* pMacroDlg = NULL;
         String rName(_Name.getStr());
 
@@ -1415,6 +1455,7 @@ namespace pcr
 
                     for( sal_Int32 i = 0 ; i < nLen ; i++ )
                     {
+                        OSL_TRACE("whats this? = %s",::rtl::OUStringToOString(pNames[i], RTL_TEXTENCODING_ASCII_US ).pData->buffer);
                         Any aElem = xEventCont->getByName( pNames[i] );
                         aElem >>= pDescs[i];
                     }
@@ -1437,6 +1478,8 @@ namespace pcr
             ::rtl::OUString aListenerClassName;
             Sequence< ::rtl::OUString> aMethSeq;
 
+            EventsNameReplace_Impl eventsNameReplace;
+
             for (i = 0 ; i < nLength ; i++ ,++pListeners)
             {
                 // Namen besorgen
@@ -1458,8 +1501,13 @@ namespace pcr
 
                     for (sal_uInt32 j = 0 ; j < nMethCount ; ++j,++pMethods )
                     {
+                        ::rtl::OUString sEventName = *pMethods;
+                        ::rtl::OUString sMacroURL;
 
                         EventDisplayDescription* pEventDisplayDescription = GetEvtTranslation(*pMethods);
+                        // pMethod now contains the event name!!
+                        //nope contains keyReleased != on-keyup
+                        OSL_TRACE("method is = %s",::rtl::OUStringToOString(*pMethods, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
 
                         // be sure that the event method isn't mentioned twice
                         if (pEventDisplayDescription != NULL)
@@ -1513,6 +1561,7 @@ namespace pcr
 
                                         SvxMacro aTypeTranslator( sScriptCode, sScriptType );
                                         pMacro = new SvxMacro( sScriptCode, sLibName, aTypeTranslator.GetScriptType() );
+                                        sMacroURL = sScriptCode;
                                     }
 
                                     aTable.Insert(aNameArray.size(), pMacro);
@@ -1520,12 +1569,27 @@ namespace pcr
                             }
 
                             aNameArray.push_back(pEventDisplayDescription->sDisplayName);
+                            eventsNameReplace.AddEvent(sEventName,sMacroURL);
                         }
                     }
                 }
             }
 
-            SvxMacroItem aMacroItem;
+            Reference< css::container::XNameReplace > xNameReplace( &eventsNameReplace );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if( !pFact )
+            {
+                return;
+            }
+            SfxItemSet rSet( SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
+            VclAbstractDialog* pDlg = pFact->CreateSvxMacroAssignDlg( getDialogParent(), rSet, xNameReplace, nIndex );
+                //VclAbstractDialog* pDlg = pFact->CreateSvxMacroAssignDlg( (Window*)0, rSet, xNameReplace );
+            if( !pDlg )
+            {
+                return;
+            }
+
+            /*SvxMacroItem aMacroItem;
 
             aMacroItem.SetMacroTable(aTable);
 
@@ -1535,22 +1599,32 @@ namespace pcr
             SfxMacroTabPage* pMacroTabPage = (SfxMacroTabPage*)pMacroDlg->GetTabPage();
 
             for (sal_uInt32 j = 0 ; j < aNameArray.size(); j++ )
+            {
+                OSL_TRACE("adding event = %s",::rtl::OUStringToOString(aNameArray[j], RTL_TEXTENCODING_ASCII_US ).pData->buffer);
                 pMacroTabPage->AddEvent( aNameArray[j], (sal_uInt16)j);
+            }
 
             if (nIndex<aNameArray.size())
                 pMacroTabPage->SelectEvent( aNameArray[nIndex], nIndex);
 
             if ( pMacroDlg->Execute() == RET_OK )
+            */
+
+            //DF definite problem here
+            // OK & Cancel seem to be both returning 0
+            if ( pDlg->Execute() == 0 )
             {
+                OSL_TRACE("here?");
                 setDocumentModified( ); // OJ: #96105#
 
-                const SvxMacroTableDtor& aTab = pMacroTabPage->GetMacroTbl();
+                //const SvxMacroTableDtor& aTab = pMacroTabPage->GetMacroTbl();
 
                 if ( nObjIdx>=0 && m_xEventManager.is() )
                     m_xEventManager->revokeScriptEvents( nObjIdx );
 
 
-                sal_uInt16 nEventCount = (sal_uInt16)aTab.Count();
+                //sal_uInt16 nEventCount = (sal_uInt16)aTab.Count();
+                sal_uInt16 nEventCount = eventsNameReplace.getElementNames().getLength();
                 sal_uInt16 nEventIndex = 0;
 
                 Sequence< ScriptEventDescriptor > aSeqScriptEvts(nEventCount);
@@ -1562,7 +1636,9 @@ namespace pcr
 
                 pListeners = m_aObjectListenerTypes.getConstArray();
 
+                //this will contain the macro url
                 ::rtl::OUString sScriptCode;
+                OSL_TRACE("nlen = %d",nLength);
                 for (i = 0 ; i < nLength ; ++i, ++pListeners )
                 {
                     // Methode ansprechen
@@ -1589,10 +1665,25 @@ namespace pcr
 
                             if ( pEventDisplayDescription )
                             {
-                                SvxMacro* pMacro = aTab.Get( nIndex++ );
-                                if ( pMacro )
+                                OSL_TRACE("method is = %s",::rtl::OUStringToOString(*pMethods, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+                                //SvxMacro* pMacro = aTab.Get( nIndex++ );
+                                Sequence< css::beans::PropertyValue > props;
+                                ::rtl::OUString macroURL;
+                                if( sal_True == ( eventsNameReplace.getByName( *pMethods ) >>= props ) )
                                 {
-                                    sScriptCode = pMacro->GetMacName();
+                                    sal_Int32 nCount = props.getLength();
+                                    for( sal_Int32 index = 0; index < nCount ; ++index )
+                                    {
+                                        if ( props[ index ].Name.compareToAscii( "Script" ) == 0 )
+                                            props[ index ].Value >>= macroURL;
+                                    }
+                                }
+                                OSL_TRACE("macroURL = %s",::rtl::OUStringToOString(macroURL, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+                                //if ( pMacro )
+                                if( macroURL.getLength() > 0 )
+                                {
+                                    //sScriptCode = pMacro->GetMacName();
+                                    sScriptCode = macroURL;
                                     if ( nEventIndex < nEventCount )
                                     {
                                         if ( m_xEventManager.is() )
@@ -1603,6 +1694,7 @@ namespace pcr
                                         {   // Dialog editor mode
                                             pWriteScriptEvents->ListenerType = aListener;
                                         }
+                                        /*
                                         if ( pMacro->GetLanguage().EqualsAscii("StarBasic") )
                                         {
                                             sal_Bool bApplicationMacro = pMacro->GetLibName().EqualsAscii("StarOffice");
@@ -1610,10 +1702,18 @@ namespace pcr
                                             sScriptCode = ::rtl::OUString::createFromAscii( bApplicationMacro ? "application:" : "document:" );
                                             sScriptCode += pMacro->GetMacName();
                                         }
+                                        */
 
+                                        // the url as returned from the dialog
                                         pWriteScriptEvents->ScriptCode = sScriptCode;
+                                        //leave this as is
                                         pWriteScriptEvents->EventMethod = *pMethods;
-                                        pWriteScriptEvents->ScriptType = pMacro->GetLanguage();
+                                        //needs to be set to "Script"
+                                        // pWriteScriptEvents->ScriptType = pMacro->GetLanguage();
+                                        pWriteScriptEvents->ScriptType = ::rtl::OUString::createFromAscii("Script");
+                OSL_TRACE("code = %s",::rtl::OUStringToOString(pWriteScriptEvents->ScriptCode, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+                OSL_TRACE("method = %s",::rtl::OUStringToOString(pWriteScriptEvents->EventMethod, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+                OSL_TRACE("type = %s",::rtl::OUStringToOString(pWriteScriptEvents->ScriptType, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
 
                                         ++nEventIndex;
                                         ++pWriteScriptEvents;
@@ -1664,13 +1764,17 @@ namespace pcr
                     }
                 }
             }
+            else
+            {
+                OSL_TRACE("did not click ok?");
+            }
         }
         catch (Exception&)
         {
             DBG_ERROR("OPropertyBrowserController::ChangeEventProperty : caught an exception !")
         }
 
-        delete pMacroDlg;
+        //delete pMacroDlg;
     }
 
     //------------------------------------------------------------------------
@@ -4180,6 +4284,126 @@ namespace pcr
             OSL_ENSURE( sal_False, "OPropertyBrowserController::doDesignSQLCommand: caught an exception!" );
         }
     }
+
+//*****************************************************************************
+//  constructor
+//*****************************************************************************
+EventsNameReplace_Impl::EventsNameReplace_Impl()
+{
+}
+
+//*****************************************************************************
+//  destructor
+//*****************************************************************************
+EventsNameReplace_Impl::~EventsNameReplace_Impl()
+{
+    m_eventList.clear();
+}
+
+//*****************************************************************************
+//  public method - AddEvent
+//*****************************************************************************
+void EventsNameReplace_Impl::AddEvent( ::rtl::OUString sEventName, ::rtl::OUString sMacroURL )
+{
+    OSL_TRACE("event = %s, macroURL = %s",
+        rtl::OUStringToOString(sEventName, RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+        rtl::OUStringToOString(sMacroURL, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+    m_eventList.push_back( ::std::make_pair( sEventName, sMacroURL) );
+}
+
+//*****************************************************************************
+//  XNameReplace
+//*****************************************************************************
+void SAL_CALL EventsNameReplace_Impl::replaceByName( const ::rtl::OUString& aName, const Any& aElement ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException)
+{
+    Sequence< css::beans::PropertyValue > props;
+    if( sal_False == ( aElement >>= props ) )
+    {
+        throw css::lang::IllegalArgumentException( ::rtl::OUString::createFromAscii(""),
+                Reference< XInterface > (), 2);
+    }
+    ::rtl::OUString macroURL;
+    sal_Int32 nPropCount = props.getLength();
+    for( sal_Int32 index = 0 ; index < nPropCount ; ++index )
+    {
+        if ( props[ index ].Name.compareToAscii( "Script" ) == 0 )
+            props[ index ].Value >>= macroURL;
+    }
+
+    EventList::iterator it = m_eventList.begin();
+    EventList::iterator it_end = m_eventList.end();
+    for(;it!=it_end;++it)
+    {
+        if( aName.equals( it->first ) )
+            break;
+
+    }
+    if(it==it_end)
+        throw css::container::NoSuchElementException( ::rtl::OUString::createFromAscii("No such element in event configuration"),
+                Reference< XInterface > () );
+
+    it->second = macroURL;
+}
+
+Any SAL_CALL EventsNameReplace_Impl::getByName( const ::rtl::OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException)
+{
+    Any aRet;
+    Sequence< css::beans::PropertyValue > props(2);
+    props[0].Name = ::rtl::OUString::createFromAscii("EventType");
+    props[0].Value <<= ::rtl::OUString::createFromAscii("Script");
+    props[1].Name = ::rtl::OUString::createFromAscii("Script");
+    EventList::const_iterator it = m_eventList.begin();
+    EventList::const_iterator it_end = m_eventList.end();
+    for(;it!=it_end;++it)
+    {
+        if( aName.equals( it->first ) )
+            break;
+
+    }
+    if(it==it_end)
+        throw css::container::NoSuchElementException( ::rtl::OUString::createFromAscii("No such element in event configuration"),
+            Reference< XInterface > () );
+
+    props[1].Value <<= it->second;
+    aRet <<= props;
+    return aRet;
+}
+
+Sequence< ::rtl::OUString > SAL_CALL EventsNameReplace_Impl::getElementNames(  ) throw (RuntimeException)
+{
+    Sequence< ::rtl::OUString > ret(m_eventList.size());
+    EventList::const_iterator it = m_eventList.begin();
+    EventList::const_iterator it_end = m_eventList.end();
+    for(int i=0;it!=it_end;++it,++i)
+    {
+        ret[ i ] = it->first;
+    }
+    return ret;
+}
+
+sal_Bool SAL_CALL EventsNameReplace_Impl::hasByName( const ::rtl::OUString& aName ) throw (RuntimeException)
+{
+    EventList::const_iterator it = m_eventList.begin();
+    EventList::const_iterator it_end = m_eventList.end();
+    for(;it!=it_end;++it)
+    {
+        if( aName.equals( it->first ) )
+            return sal_True;
+    }
+    return sal_False;
+}
+
+Type SAL_CALL EventsNameReplace_Impl::getElementType(  ) throw (RuntimeException)
+{
+    //DF definitly not sure about this??
+    return ::getCppuType((const Sequence< css::beans::PropertyValue >*)0);
+}
+
+sal_Bool SAL_CALL EventsNameReplace_Impl::hasElements(  ) throw (RuntimeException)
+{
+    return ( m_eventList.empty() );
+}
+
 
 //............................................................................
 } // namespace pcr
