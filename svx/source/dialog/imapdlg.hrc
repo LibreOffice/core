@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-11 10:48:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 14:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 
 #define STB_STATUS              1
 
-#define IL_IMAPDLG              1
-#define ILH_IMAPDLG             2
+#define IL_IMAPDLG              1024
+#define ILH_IMAPDLG             1025
 
 /******************************************************************************/
 
