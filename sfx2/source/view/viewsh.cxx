@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:39:21 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,15 +334,12 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     SfxObjectShellRef xDocShell = GetViewFrame()->GetObjectShell();
                     if ( xDocShell.Is() )
                     {
-                        // Get PDF Filter from container
-                        SfxFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
-                        if ( pFilterContainer )
-                        {
-                            String aPDFExtension = String::CreateFromAscii( ".pdf" );
-                            const SfxFilter* pFilter = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
-                            if ( pFilter != NULL )
-                                break;
-                        }
+                        // Get PDF Filter
+                        String aPDFExtension = String::CreateFromAscii( ".pdf" );
+                        const SfxFilter* pFilter =
+                            SfxFilterMatcher( String::CreateFromAscii( xDocShell->GetFactory().GetShortName()) ).GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
+                        if ( pFilter != NULL )
+                            break;
                     }
 
                     rSet.DisableItem( nSID );
