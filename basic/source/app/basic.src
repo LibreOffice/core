@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: gh $ $Date: 2002-06-26 13:06:16 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 15:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ ModalDialog RID_CALLDLG {
     TabStop = TRUE;
     DefButton = TRUE;
   };
+    Text[ dutch ] = "Dynamische koppeling nr.";
 };
 
 ModalDialog IDD_ABOUT_DIALOG {
@@ -167,6 +168,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
             Size = MAP_APPFONT( 110, 10 );
             TEXT = "®1995-1998 Sun Microsystems, Inc.";
             CENTER = TRUE;
+        TEXT[ dutch ] = "(r)1995-1998 Sun Microsystems, Inc.";
     };
 //  FixedIcon RID_ICON {
 //          Pos = MAP_APPFONT( 20, 26 );
@@ -214,6 +216,7 @@ ModalDialog IDD_FIND_DIALOG {
             TEXT = "~Cancel";
             TABSTOP = TRUE;
     };
+    TEXT[ danish ] = "Testværktøj: Søg tekst";
 };
 
 ModalDialog IDD_REPLACE_DIALOG {
@@ -232,6 +235,7 @@ ModalDialog IDD_REPLACE_DIALOG {
             Pos = MAP_APPFONT( 5, 30 );
             Size = MAP_APPFONT( 55, 10 );
             TEXT = "~Replace by";
+        TEXT[ dutch ] = "Verva~ngende tekst";
     };
     Edit RID_FIND {
             BORDER = TRUE;
@@ -258,6 +262,7 @@ ModalDialog IDD_REPLACE_DIALOG {
             TEXT = "~Cancel";
             TABSTOP = TRUE;
     };
+    TEXT[ danish ] = "Testværktøj: Erstat tekst";
 };
 
 InfoBox IDS_NOPRINTERERROR {
@@ -266,71 +271,96 @@ InfoBox IDS_NOPRINTERERROR {
 ErrorBox IDS_CANTLOAD {
     TITLE = "Testtool Error";
     MESSAGE = "Library cannot be loaded!";
+    MESSAGE[ danish ] = "Bibliotek kan ikke indlæses!";
 };
 ErrorBox IDS_CANTSAVE {
     TITLE = "Testtool Error";
     MESSAGE = "Library cannot be saved!";
+    MESSAGE[ danish ] = "Bibliotek kan ikke gemmes!";
 };
 ErrorBox IDS_NOMAINPGM {
     TITLE = "Testtool Error";
     MESSAGE = "This window does not contain a main program!";
+    MESSAGE[ danish ] = "Dette vindue indeholder ikke noget hovedprogram!";
 };
 ErrorBox IDS_READERROR {
     TITLE = "Testtool Error";
     MESSAGE = "File cannot be read!";
+    MESSAGE[ danish ] = "Filen kan ikke indlæses!";
 };
 ErrorBox IDS_WRITEERROR {
     TITLE = "Testtool Error";
     MESSAGE = "File cannot be saved!";
+    MESSAGE[ danish ] = "Filen kan ikke gemmes!";
 };
 ErrorBox IDS_PATTERNNOTFOUND {
     TITLE = "Testtool Error";
     MESSAGE = "Search key not found!";
+    MESSAGE[ danish ] = "Søgeordet blev ikke fundet!";
 };
 ErrorBox IDS_INVALID_VALUE {
     TITLE = "Testtool Error";
     MESSAGE = "The value is invalid and cannot be set.";
+    MESSAGE[ danish ] = "Værdien er ugyldig og kan derfor ikke anvendes.";
 };
 
 QueryBox IDS_ASKSAVEERROR {
     TITLE = "Testtool";
     MESSAGE = "Error saving files! Run anyway?";
     BUTTONS = WB_YES_NO;
+    MESSAGE[ danish ] = "Fejl under forsøg på at gemme filerne! Vil du fortsætte alligevel?";
 };
 QueryBox IDS_ASK_DIRTY_SAVE {
     TITLE = "Testtool";
     MESSAGE = "File has been changed. Save?";
     BUTTONS = WB_YES_NO_CANCEL;
+    MESSAGE[ danish ] = "Filen er blevet ændret. Vil du gemme den?";
 };
 QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     TITLE = "Testtool";
     MESSAGE = "File has been changed on data medium\nand in the Editor. Save?";
     BUTTONS = WB_YES_NO_CANCEL;
+    MESSAGE[ dutch ] = "Bestand is op de opslageenheid en\nin de editor gewijzigd. Opslaan?";
+    MESSAGE[ danish ] = "Filen er blevet ændret på datamediet ogd\ni editoren. Vil du gemme den?";
+    Title[ dutch ] = "Testtool";
 };
 QueryBox IDS_ASK_DISKCHANGE_SAVE {
     TITLE = "Testtool";
     MESSAGE = "File has been changed on data medium.\nOverwrite?";
     BUTTONS = WB_YES_NO_CANCEL;
+    MESSAGE[ dutch ] = "Bestand is op de opslageenheid gewijzigd.\nOverschrijven?";
+    MESSAGE[ danish ] = "Filen er blevet ændret på datamediet.\nVil du overskrive den?";
+    Title[ dutch ] = "Testtool";
 };
 QueryBox IDS_ASKRELOAD {
     TITLE = "Testtool";
     MESSAGE = "File has been changed on data medium. Reload?";
     BUTTONS = WB_YES_NO;
+    MESSAGE[ dutch ] = "Bestand is op de opslageenheid gewijzigd. Opnieuw laden?";
+    MESSAGE[ danish ] = "Filen er blevet ændret på datamediet. Vil du genindlæse den?";
+    Title[ dutch ] = "Testtool";
 };
 QueryBox IDS_ASKDIRTYRELOAD {
     TITLE = "Testtool";
     MESSAGE = "File has been changed on data medium\nand in the Editor. Reload?";
     BUTTONS = WB_YES_NO;
+    MESSAGE[ dutch ] = "Bestand is op de opslageenheid en\nin de editor gewijzigd. Opnieuw laden?";
+    MESSAGE[ danish ] = "Filen er blevet ændret på datamediet ogd\ni editoren. Vil du genindlæse den?";
+    Title[ dutch ] = "Testtool";
 };
 QueryBox IDS_RUNNING {
     TITLE = "Testtool";
     MESSAGE = "BASIC is still running! Exit anyway?";
     BUTTONS = WB_YES_NO;
+    MESSAGE[ danish ] = "BASIC-programmet kører stadig! Vil du afslutte alligevel?";
 };
 QueryBox IDS_LOSS_OF_INFORMATION {
     TITLE = "Testtool";
     MESSAGE = "Saving in an external format causes information loss.";
     BUTTONS = WB_OK_CANCEL;
+    MESSAGE[ dutch ] = "Door het opslaan in een externe indeling kunnen gegevens verloren gaan";
+    MESSAGE[ danish ] = "Lagring i et fremmed format medfører datatab";
+    Title[ dutch ] = "Testtool";
 };
 
 InfoBox IDS_NOT_YET_IMPLEMENTED
@@ -341,12 +371,15 @@ InfoBox IDS_NOT_YET_IMPLEMENTED
 
 String IDS_WARNING1 {
     TEXT = "Warning ";
+    TEXT[ dutch ] = "Waarschuwing";
 };
 String IDS_ERROR1 {
     TEXT = "Error ";
+    TEXT[ dutch ] = "Fout";
 };
 String IDS_ERROR2 {
     TEXT = " in line ";
+    TEXT[ dutch ] = "in regel";
 };
 String IDS_NO_LONGNAME {
     TEXT = "No entries in Hid.Lst";
@@ -354,6 +387,7 @@ String IDS_NO_LONGNAME {
 String IDS_WARNING_PREFIX
 {
     Text = "Warning: ";
+    Text[ dutch ] = "Waarschuwing:";
 };
 String IDS_OBJECT
 {
@@ -363,16 +397,20 @@ String IDS_OBJECT
 String IDS_EDIT_VAR
 {
     Text = "Edit ($Arg1)";
+    Text[ language_user1 ] = "Keine Dati, sondern eine Variable";
+    Text[ dutch ] = "Bewerken ($Arg1)";
 };
 
 String IDS_APPNAME {
     TEXT = "Testtool";
+    TEXT[ danish ] = "Testværktøj";
 };
 String IDS_APPNAME2 {
     TEXT = "StarTestTool";
 };
 String IDS_APPMODE_BREAK {
     text = "Break";
+    text[ dutch ] = "Afbreekpunt";
 };
 String IDS_APPMODE_RUN {
     text = "Run";
@@ -419,9 +457,11 @@ TEXT = "*.TXT";
 
 String IDS_LOADDLG {
     TEXT = "Testtool: Load File";
+    TEXT[ danish ] = "Testværktøj: Indlæs fil";
 };
 String IDS_SAVEDLG {
     TEXT = "Testtool: Save File";
+    TEXT[ danish ] = "Testværktøj: Gem fil";
 };
 String IDS_BASFILTER {
     TEXT = "Source files (*.BAS)";
@@ -437,12 +477,15 @@ String IDS_RESFILTER {
 };
 String IDS_TXTFILTER {
     TEXT = "Results as text file (*.TXT)";
+    TEXT[ dutch ] = "Resultaat als tekstbestand (*.TXT)";
 };
 String IDS_PAGE {
     TEXT = "Page ";
+    TEXT[ dutch ] = "Pagina";
 };
 String IDS_PRINTMSG {
     TEXT = "Printout of ";
+    TEXT[ dutch ] = "Afdruk van";
 };
 String IDS_CONTINUE {
     TEXT = "Continue";
@@ -573,6 +616,7 @@ Menu RID_EDIT {
         Identifier = RID_EDITUNDO;
         TEXT = "~Undo";
 //      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
+            TEXT[ dutch ] = "~Ongedaan maken";
         };
     MenuItem  {
         Identifier = RID_EDITREDO;
@@ -657,6 +701,7 @@ Menu RID_RUN {
         Identifier = RID_TOGLEBRKPNT;
         TEXT = "Set / Delete Break Point";
         AccelKey = KeyCode { Code = KEY_F9; };
+            TEXT[ dutch ] = "Afbreekpunt instellen/wissen";
         };
     MenuItem  {
         Identifier = RID_RUNBREAK;
@@ -665,7 +710,8 @@ Menu RID_RUN {
         };
     MenuItem  {
         Identifier = RID_RUNSTOP;
-        TEXT = "~Stop";
+        TEXT = "~Stopp";
+            TEXT[ dutch ] = "~Annuleren";
         };
     MenuItem  {
         Identifier = RID_RUNNEXTERR;
@@ -699,6 +745,7 @@ Menu RID_TT_EXTRAS {
     MenuItem  {
             Identifier = RID_DECLARE_HELPER;
             TEXT = "~Record Dialogs";
+            TEXT[ dutch ] = "~Dialoogvensters opnemen";
         };
     };
 };
@@ -773,6 +820,7 @@ ModelessDialog IDD_PRINT_DIALOG {
             Size = MAP_APPFONT( 47, 19 );
             TEXT = "Cancel";
     };
+    TEXT[ danish ] = "Testværktøj: Udskriv fil";
 };
 
 
@@ -831,6 +879,8 @@ TabPage RID_TP_GENERIC {
             Pos = MAP_APPFONT( 4, 4 );
             Size = MAP_APPFONT( 228, 8 );
             Text = "Area";
+        Text[ danish ] = "Område";
+        Text[ catalan ] = "Àrea";
     };
     ComboBox RID_CB_AREA {
             HScroll              = TRUE;
@@ -847,6 +897,7 @@ TabPage RID_TP_GENERIC {
             Size = MAP_APPFONT( 40, 12 );
             Text = "New";
             TabStop = TRUE;
+        Text[ portuguese_brazilian ] = "Novo";
     };
     PushButton RID_PD_DEL_AREA {
             Pos = MAP_APPFONT( 188, 16 );
@@ -858,6 +909,7 @@ TabPage RID_TP_GENERIC {
             Pos = MAP_APPFONT( 4, 36 );
             Size = MAP_APPFONT( 228, 8 );
             Text = "Setting";
+        Text[ danish ] = "Indstilling";
     };
     ComboBox RID_CB_VALUE {
             HScroll              = TRUE;
@@ -873,6 +925,7 @@ TabPage RID_TP_GENERIC {
             Size = MAP_APPFONT( 40, 12 );
             Text = "New";
             TabStop = TRUE;
+        Text[ portuguese_brazilian ] = "Novo";
     };
     PushButton RID_PB_DEL_VALUE {
             Pos = MAP_APPFONT( 188, 64 );
@@ -891,21 +944,25 @@ TabPage RID_TP_SPECIAL {
             Pos = MAP_APPFONT( 4, 2 );
             Size = MAP_APPFONT( 230, 8 );
             Text = "Directories";
+        Text[ danish ] = "Biblioteker";
     };
     FixedText LOG_TEXT {
             Pos = MAP_APPFONT( 7, 12 );
             Size = MAP_APPFONT( 76, 12 );
             Text = "Log base directory";
+        Text[ dutch ] = "Log home-directory";
     };
     FixedText BASIS_TEXT {
             Pos = MAP_APPFONT( 7, 28 );
             Size = MAP_APPFONT( 76, 12 );
             Text = "Base directory";
+        Text[ dutch ] = "Home-directory";
     };
     FixedText HID_TEXT {
             Pos = MAP_APPFONT( 7, 44 );
             Size = MAP_APPFONT( 76, 12 );
             Text = "HID directory";
+        Text[ dutch ] = "HID-directory";
     };
     Edit LOG_NAME {
             Border = TRUE;
@@ -947,11 +1004,13 @@ TabPage RID_TP_SPECIAL {
             Pos = MAP_APPFONT( 4, 60 );
             Size = MAP_APPFONT( 230, 8 );
             Text = "Other settings";
+        Text[ danish ] = "Andre indstillinger";
     };
     FixedText TIMEOUT_TEXT {
             Pos = MAP_APPFONT( 8, 70 );
             Size = MAP_APPFONT( 70, 12 );
             Text = "Server Timeout";
+        Text[ dutch ] = "Server-time-out";
     };
     TimeField SERVER_TIMEOUT {
             Border = TRUE;
@@ -967,6 +1026,7 @@ TabPage RID_TP_SPECIAL {
             Pos = MAP_APPFONT( 8, 83 );
             Size = MAP_APPFONT( 115, 12 );
             Text = "AutoReload";
+        Text[ dutch ] = "Autom. opnieuw laden";
     };
 /*  ComboBox LB_FONT {
             Pos = MAP_APPFONT( 127, 70 );
@@ -1065,6 +1125,7 @@ FloatingWindow IDD_DISPLAY_HID {
             Pos = MAP_APPFONT( 4, 120 );
             Size = MAP_APPFONT( 128, 10 );
             Text = "Slots";
+        Text[ dutch ] = "Sleuven";
     };
     MultiListBox RID_MLB_SLOTS {
             Border = TRUE;
@@ -1227,6 +1288,7 @@ ModelessDialog IDD_EDIT_VAR {
             Pos = MAP_APPFONT( 53, 8 );
             Size = MAP_APPFONT( 111, 10 );
             Text = "Name of variable";
+        Text[ dutch ] = "Naam variabelen";
     };
     FixedText RID_FT_CONTENT_VALUE {
             Pos = MAP_APPFONT( 53, 21 );
@@ -1282,6 +1344,7 @@ ModelessDialog IDD_EDIT_VAR {
             Size = MAP_APPFONT( 111, 12 );
             Text = "Edit";
             TabStop = TRUE;
+        Text[ dutch ] = "Bewerken";
     };
     OKButton RID_OK {
             Pos = MAP_APPFONT( 33, 58 );
@@ -1293,6 +1356,7 @@ ModelessDialog IDD_EDIT_VAR {
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
         };
+    Text[ dutch ] = "Variabele bewerken";
 };
 
 FloatingWindow LOAD_CONF {
@@ -1307,6 +1371,9 @@ FloatingWindow LOAD_CONF {
             Size = MAP_APPFONT( 155, 10 );
             Text = "Slot IDs";
             Center = TRUE;
+        Text[ dutch ] = "Sleuf-ID's";
+        Text[ danish ] = "Slot-id'er";
+        Text[ turkish ] = "Slot IDs";
     };
     FixedText FILENAME {
             SVLook = TRUE;
@@ -1314,6 +1381,8 @@ FloatingWindow LOAD_CONF {
             Size = MAP_APPFONT( 155, 10 );
             Text = "File.win";
             Center = TRUE;
+        Text[ danish ] = "Datei.win";
     };
+    Text[ danish ] = "Læser konfigurationsfiler";
 };
 
