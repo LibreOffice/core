@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 12:08:55 $
+ *  last change: $Author: hr $ $Date: 2000-11-09 15:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <string>
-#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -71,6 +69,7 @@
 #include "cmdid.h"
 #include "hintids.hxx"
 #include "uiparam.hxx"
+#include <algorithm>
 
 
 #ifndef _SFXENUMITEM_HXX //autogen
@@ -332,8 +331,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 //      Pen aSolidPen(PEN_SOLID);
         long nWidth = aFrmSize.Width();
         long nHeight = aFrmSize.Height();
-        Fraction aXScale( aWinSize.Width(),
-                            std::max( (long)(nWidth + nWidth / 8), (long) 1 ) );
+        Fraction aXScale( aWinSize.Width(), std::max( (long)(nWidth + nWidth / 8), (long) 1 ) );
         Fraction aYScale( aWinSize.Height(), std::max( nHeight, (long) 1 ) );
         MapMode aMapMode( GetMapMode() );
         aMapMode.SetScaleX( aXScale );
@@ -430,6 +428,9 @@ void SwColumnOnlyExample::SetFrameSize(const Size& rS, long nDist)
 
 /*-----------------25.02.94 21:22-------------------
    $Log: not supported by cvs2svn $
+   Revision 1.2  2000/11/07 12:08:55  hjs
+   use min/max from stl
+
    Revision 1.1.1.1  2000/09/18 17:14:37  hr
    initial import
 
