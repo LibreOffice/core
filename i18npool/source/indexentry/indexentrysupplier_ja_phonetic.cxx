@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_ja_phonetic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $Date: 2002/06/18 22:29:26 $
+ *  last change: $Author: vg $Date: 2002/07/25 04:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define INDEXENTRYSUPPLIER_ja_phonetic
 #include <indexentrysupplier_asian.hxx>
 #include <data/indexdata_ja_phonetic.h>
-#include <strings.h>
+#include <string.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
