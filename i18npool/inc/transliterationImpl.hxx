@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:07:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _I18N_TRANSLITERATIONIMPL_HXX_
 
 #include <com/sun/star/i18n/XLocaleData.hpp>
-#include <drafts/com/sun/star/i18n/XExtendedTransliteration.hpp>
+#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -80,7 +80,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class TransliterationImpl : public cppu::WeakImplHelper2
 <
-    drafts::com::sun::star::i18n::XExtendedTransliteration,
+    com::sun::star::i18n::XExtendedTransliteration,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -119,7 +119,7 @@ public:
     virtual rtl::OUString SAL_CALL transliterateChar2String( sal_Unicode inChar )
         throw(com::sun::star::uno::RuntimeException) ;
     virtual sal_Unicode SAL_CALL transliterateChar2Char( sal_Unicode inChar )
-        throw(drafts::com::sun::star::i18n::MultipleCharsOutputException,
+        throw(com::sun::star::i18n::MultipleCharsOutputException,
                 com::sun::star::uno::RuntimeException) ;
 
 /*
@@ -152,15 +152,15 @@ public:
 
 private:
 #define maxCascade 27
-    com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
+    com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
     sal_Int16 numCascade;
     sal_Bool caseignoreOnly;
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr;
     com::sun::star::uno::Reference< XLocaleData > localedata;
-    com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedTransliteration > caseignore;
+    com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > caseignore;
 
     virtual sal_Bool SAL_CALL loadModuleByName( const rtl::OUString& implName,
-        com::sun::star::uno::Reference<drafts::com::sun::star::i18n::XExtendedTransliteration> & body, const com::sun::star::lang::Locale& rLocale)
+        com::sun::star::uno::Reference<com::sun::star::i18n::XExtendedTransliteration> & body, const com::sun::star::lang::Locale& rLocale)
         throw(com::sun::star::uno::RuntimeException);
 
     void clear();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:43:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 #ifndef _I18N_NATIVENUMBERSUPPLIER_HXX_
 #define _I18N_NATIVENUMBERSUPPLIER_HXX_
 
-#include <drafts/com/sun/star/i18n/XNativeNumberSupplier.hpp>
-#include <drafts/com/sun/star/i18n/NativeNumberMode.hpp>
-#include <drafts/com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -74,7 +74,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //      ----------------------------------------------------
 class NativeNumberSupplier : public cppu::WeakImplHelper2
 <
-        drafts::com::sun::star::i18n::XNativeNumberSupplier,
+        com::sun::star::i18n::XNativeNumberSupplier,
         com::sun::star::lang::XServiceInfo
 >
 {
@@ -90,12 +90,12 @@ public:
                 sal_Int16 nNativeNumberMode )
                 throw (::com::sun::star::uno::RuntimeException);
 
-        virtual ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
+        virtual ::com::sun::star::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
                 const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
                 throw (::com::sun::star::uno::RuntimeException);
 
         virtual sal_Int16 SAL_CALL convertFromXmlAttributes(
-                const ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes& aAttr )
+                const ::com::sun::star::i18n::NativeNumberXmlAttributes& aAttr )
                 throw (::com::sun::star::uno::RuntimeException);
 
         //XServiceInfo

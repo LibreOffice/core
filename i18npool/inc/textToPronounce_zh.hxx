@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textToPronounce_zh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:44:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ public:
         sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar)
         throw(com::sun::star::uno::RuntimeException,
-            drafts::com::sun::star::i18n::MultipleCharsOutputException);
+            com::sun::star::i18n::MultipleCharsOutputException);
 };
 
 #define TRANSLITERATION_TextToPronounce_zh( name ) \
