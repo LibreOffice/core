@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-03-27 08:36:25 $
+ *  last change: $Author: gt $ $Date: 2002-06-11 08:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 /*
  * Bitmaps f"ur SvxFrameWindow
  */
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
+
 Image RID_SVX_RELOAD_NORMAL
 {
     ImageBitmap = Bitmap { File = "reload.bmp" ; };
@@ -81,6 +84,14 @@ ImageList RID_SVXIL_FRAME
     ImageBitmap = Bitmap { File = "fr_ames.bmp" ; };
     IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
     IdCount = { 12 ; };
+//  MASKCOLOR;
+};
+ImageList RID_SVXIL_FRAME_HC
+{
+    ImageBitmap = Bitmap { File = "frh_frames.bmp" ; };
+    IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
+    IdCount = { 12 ; };
+//  MASKCOLOR;
 };
 String RID_SVXSTR_TRANSPARENT
 {

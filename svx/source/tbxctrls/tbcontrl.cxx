@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-06-06 12:06:40 $
+ *  last change: $Author: gt $ $Date: 2002-06-11 08:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,15 @@ public:
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual SfxPopupWindow* Clone() const;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
+    inline BOOL     IsHighContrast( void ) const;
 };
+
+inline BOOL SvxFrameWindow::IsHighContrast( void ) const
+{
+    return GetDisplayBackground().GetColor().IsDark();
+}
 
 //========================================================================
 // class SvxLineWindow_Impl ---------------------------------------------------
@@ -1140,10 +1148,10 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, SfxBindings& rBindings, BO
 
     SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK ), rBindings ),
 
-    aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK ) ),
-    aImgList    ( SVX_RES( RID_SVXIL_FRAME ) )
+    aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK ) )
 
 {
+    aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
 
     /*
      *  1       2        3         4
@@ -1180,6 +1188,20 @@ SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
     return new SvxFrameWindow_Impl( GetId(), (SfxBindings&)GetBindings(), FALSE );
 }
 
+void SvxFrameWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxPopupWindow::DataChanged( rDCEvt );
+
+    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
+
+        USHORT  nNumOfItems = aFrameSet.GetItemCount();
+
+        for( USHORT i = 1 ; i <= nNumOfItems ; ++i )
+            aFrameSet.SetItemImage( i, aImgList.GetImage( i ) );
+    }
+}
 // -----------------------------------------------------------------------
 
 #define FRM_VALID_LEFT      0x01
