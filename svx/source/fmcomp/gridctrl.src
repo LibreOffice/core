@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-11 18:14:02 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î";
                         Text[ russian ] = "Ïîëå äàòû";
                         Text[ polish ] = "Pole daty";
-                        Text[ japanese ] = "“ú•tÎŞ¯¸½";
+                        Text[ japanese ] = "“ú•tÌ¨°ÙÄŞ";
                         Text[ chinese_traditional ] = "¤é´ÁÄæ¦ì";
                         Text[ dutch ] = "Datumveld";
                         Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î";
@@ -353,7 +353,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î";
                         Text[ russian ] = "×èñëîâîå ïîëå";
                         Text[ polish ] = "Pole numeryczne";
-                        Text[ japanese ] = "”šÎŞ¯¸½";
+                        Text[ japanese ] = "”Ô†Ì¨°ÙÄŞ";
                         Text[ chinese_traditional ] = "¼Æ¦rÄæ¦ì";
                         Text[ dutch ] = "Numeriek veld";
                         Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î";
