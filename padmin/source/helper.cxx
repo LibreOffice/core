@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-02 17:30:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ bool padmin::chooseDirectory( Window* pParent, String& rInOutPath )
                 bRet = true;
             }
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "could not get FolderPicker service\n" );
 #endif
