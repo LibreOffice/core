@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:18:54 $
+ *  last change: $Author: os $ $Date: 2001-02-13 10:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,7 +1643,7 @@ String  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
         DBG_ASSERT(pTypeListBox, "No ListBox")
-        sRet = pTypeListBox->GetSelectEntryPos();
+        sRet = String::CreateFromInt32(pTypeListBox->GetSelectEntryPos());
     }
     else if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
     {
@@ -1754,6 +1754,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/20 09:18:54  jp
+    must change: processfactory moved
+
     Revision 1.3  2000/10/25 12:07:02  jp
     Spellchecker/Hyphenator are not longer member of the shells
 
