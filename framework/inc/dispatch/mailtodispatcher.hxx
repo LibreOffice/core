@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailtodispatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:22:39 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,6 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
-#include <classes/taskcreator.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
-#include <services/frame.hxx>
-#endif
-
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
 #endif
@@ -84,6 +76,10 @@
 
 #ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
 #include <macros/xtypeprovider.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
+#include <macros/xserviceinfo.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
@@ -110,16 +106,16 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHDESCRIPTOR_HPP_
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
@@ -130,34 +126,6 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
-#include <com/sun/star/frame/XFrameLoader.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
-#include <com/sun/star/frame/XLoadEventListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
-#include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SYSTEM_XSIMPLEMAILCLIENTSUPPLIER_HPP_
-#include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -166,24 +134,11 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef _CPPUHELPER_WEAKREF_HXX_
-#include <cppuhelper/weakref.hxx>
-#endif
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
-
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         ,
-                                                        OUStringHashCode        ,
-                                                        std::equal_to< ::rtl::OUString > > IMPL_ListenerHashContainer;
-
 
 //_________________________________________________________________________________________________________________
 //  exported const
@@ -193,229 +148,66 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
+/**
+    @short          protocol handler for "mailto:" URLs
+    @descr          It's a special dispatch object which is used registered for "mailto:*" URLs and
+                    will be automaticly used from the framework dispatch mechanism if such URL occured.
 
-/*-************************************************************************************************************//**
-    @short          helper for desktop only(!) to create new tasks on demand for dispatches
-    @descr          Use this class as member only! Never use it as baseclass.
-                    XInterface will be ambigous and we hold a weakcss::uno::Reference to ouer OWNER - not to ouer SUPERCLASS!
-
-    @implements     XInterface
-                    XDispatch
-                    XLoadEventListener
-                    XFrameActionListener
-                    XEventListener
-    @base           OMutexMember
-                    OWeakObject
+    @base           ThreadHelpBase
+                        exports a lock member to guarantee right initialize value of it
+    @base           OWeakObject
+                        provides XWeak and ref count mechanism
 
     @devstatus      ready to use
-*//*-*************************************************************************************************************/
-class MailToDispatcher :   // interfaces
-                                public css::lang::XTypeProvider         ,
-                                public css::frame::XDispatch            ,
-                                public css::lang::XEventListener        ,
-                                // baseclasses
-                                // Order is neccessary for right initialization!
-                                public ThreadHelpBase                   ,
-                                public cppu::OWeakObject
-{
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
 
+    @modified       02.05.2002 08:12, as96863
+*/
+class MailToDispatcher : // interfaces
+                         public  css::lang::XTypeProvider      ,
+                         public  css::lang::XServiceInfo       ,
+                         public  css::frame::XNotifyingDispatch, // => XDispatch
+                         // baseclasses
+                         // Order is neccessary for right initialization!
+                         private ThreadHelpBase                ,
+                         public  cppu::OWeakObject
+{
+    /* member */
+    private:
+
+        /// reference to global uno service manager which had created us
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+
+    /* interface */
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+        // ctor/dtor
+                 MailToDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+        virtual ~MailToDispatcher(                                                                        );
 
-        /*-****************************************************************************************************//**
-            @short      standard ctor
-            @descr      These initialize a new instance of ths class with needed informations for work.
-
-            @seealso    using at owner
-
-            @param      "xFactory"  , css::uno::Reference to servicemanager for creation of new services
-            @param      "xOwner"    , css::uno::Reference to our owner, the Desktop!!!
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        MailToDispatcher(  const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    ,
-                            const   css::uno::Reference< css::frame::XFrame >&              xOwner      );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
-
+        // XInterface, XTypeProvider, XServiceInfo
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
+        DECLARE_XSERVICEINFO
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XDispatch
-        //---------------------------------------------------------------------------------------------------------
+        // XNotifyingDispatch
+        virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
+                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException );
 
-        /*-****************************************************************************************************//**
-            @short      dispatch URL with arguments
-            @descr      Every dispatch create a new task. If load of URL failed task will deleted automaticly!
+        // XDispatch
+        virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL       ,
+                                                    const css::uno::Sequence< css::beans::PropertyValue >&    lArguments ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
+                                                    const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException );
+        virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
+                                                    const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException );
 
-            @seealso    -
-
-            @param      "aURL"          , URL to dispatch.
-            @param      "seqArguments"  , list of optional arguments.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL dispatch( const   css::util::URL&                                     aURL            ,
-                                        const   css::uno::Sequence< css::beans::PropertyValue >&    seqProperties   ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      add listener for state events
-            @descr      You can add a listener to get information about status of dispatch: OK or Failed.
-
-            @seealso    method loadFinished()
-            @seealso    method loadCancelled()
-
-            @param      "xControl"  , css::uno::Reference to a valid listener for state events.
-            @param      "aURL"      , URL about listener will be informed, if something occured.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL addStatusListener(    const   css::uno::Reference< css::frame::XStatusListener >& xControl,
-                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      remove listener for state events
-            @descr      You can remove a listener if information of dispatch isn't important for you any longer.
-
-            @seealso    method loadFinished()
-            @seealso    method loadCancelled()
-
-            @param      "xControl"  , css::uno::Reference to a valid listener.
-            @param      "aURL"      , URL on which listener has registered.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL removeStatusListener( const   css::uno::Reference< css::frame::XStatusListener >& xControl,
-                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException );
-
-
-        //---------------------------------------------------------------------------------------------------------
-        //   XEventListener
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      dispose current instance
-            @descr      If service helper isn't required any longer call this method to release all used ressources.
-
-            @seealso    -
-
-            @param      "aEvent", information about source of this event.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
-
-        /*-****************************************************************************************************//**
-            @short      standard destructor
-            @descr      This method destruct an instance of this class and clear some member.
-                        This method is protected, because its not allowed to use an instance of this class as a member!
-                        You MUST use a pointer.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual ~MailToDispatcher();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
+    /* internal */
     private:
 
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+        sal_Bool implts_dispatch( const css::util::URL&                                  aURL       ,
+                                  const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
 
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void impl_sendStatusEvent(  const   css::uno::Reference< css::frame::XFrame >&  xEventSource    ,
-                                    const   ::rtl::OUString&                            sURL            ,
-                                            sal_Bool                                    bLoadState      );
-
-
-        void impl_getSequenceFromStringList( css::uno::Sequence< ::rtl::OUString >&, const ::rtl::OUString& );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      css::uno::References to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool impldbg_checkParameter_MailToDispatcher    (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
-                                                                        const   css::uno::Reference< css::frame::XFrame >&              xOwner          );
-        static sal_Bool impldbg_checkParameter_dispatch             (   const   css::util::URL&                                         aURL            ,
-                                                                        const   css::uno::Sequence< css::beans::PropertyValue >&        seqArguments    );
-        static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
-                                                                        const   css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
-                                                                        const   css::util::URL&                                         aURL            );
-    #endif  // #ifdef ENABLE_ASSERTIONS
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        css::uno::WeakReference< css::frame::XFrame >                   m_xOwnerWeak        ;           /// css::uno::WeakReference to owner (Don't use a hard css::uno::Reference. Owner can't delete us then!)
-        css::uno::Reference< css::lang::XMultiServiceFactory >          m_xFactory          ;           /// factory shared with our owner to create new services!
-        IMPL_ListenerHashContainer                                      m_aListenerContainer;           /// hash table for listener at specified URLs
-        sal_Bool                                                        m_bAlreadyDisposed  ;           /// Protection against multiple disposing calls.
-        css::uno::Reference< css::system::XSimpleMailClientSupplier >   m_xSimpleMailClientSupplier;    /// simple mail client supplier
 };      //  class MailToDispatcher
 
 }       //  namespace framework

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailtodispatcher.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:26:39 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,73 +67,21 @@
 #include <dispatch/mailtodispatcher.hxx>
 #endif
 
-#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
-#include <classes/argumentanalyzer.hxx>
+#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <threadhelp/readguard.hxx>
 #endif
 
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XTOOLKIT_HPP_
-#include <com/sun/star/awt/XToolkit.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_WINDOWDESCRIPTOR_HPP_
-#include <com/sun/star/awt/WindowDescriptor.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
-#include <com/sun/star/awt/PosSize.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
-#include <com/sun/star/container/XEnumeration.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SYSTEM_XSIMPLEMAILCLIENTSUPPLIER_HPP_
-#include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SYSTEM_SIMPLEMAILCLIENTFLAGS_HPP_
-#include <com/sun/star/system/SimpleMailClientFlags.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
 #include <com/sun/star/system/XSystemShellExecute.hpp>
@@ -143,18 +91,15 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#include <vos/mutex.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
-
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -162,24 +107,9 @@
 
 namespace framework{
 
-using namespace ::com::sun::star::awt           ;
-using namespace ::com::sun::star::beans         ;
-using namespace ::com::sun::star::container     ;
-using namespace ::com::sun::star::frame         ;
-using namespace ::com::sun::star::lang          ;
-using namespace ::com::sun::star::mozilla       ;
-using namespace ::com::sun::star::uno           ;
-using namespace ::com::sun::star::util          ;
-using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
-using namespace ::vos                           ;
-
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________
-
-#define MAILTO                                  "mailto:"
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -189,291 +119,221 @@ using namespace ::vos                           ;
 //  declarations
 //_________________________________________________________________________________________________________________
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-MailToDispatcher::MailToDispatcher(   const   Reference< XMultiServiceFactory >&  xFactory    ,
-                                        const   Reference< XFrame >&                xOwner      )
+//_________________________________________________________________________________________________________________
+// XInterface, XTypeProvider, XServiceInfo
+
+DEFINE_XINTERFACE_4(MailToDispatcher                                ,
+                    OWeakObject                                     ,
+                    DIRECT_INTERFACE(css::lang::XTypeProvider      ),
+                    DIRECT_INTERFACE(css::lang::XServiceInfo       ),
+                    DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
+                    DIRECT_INTERFACE(css::frame::XDispatch         ))
+
+DEFINE_XTYPEPROVIDER_4(MailToDispatcher              ,
+                       css::lang::XTypeProvider      ,
+                       css::lang::XServiceInfo       ,
+                       css::frame::XNotifyingDispatch,
+                       css::frame::XDispatch         )
+
+DEFINE_XSERVICEINFO_MULTISERVICE(MailToDispatcher                   ,
+                                 ::cppu::OWeakObject                ,
+                                 SERVICENAME_PROTOCOLHANDLER        ,
+                                 IMPLEMENTATIONNAME_MAILTODISPATCHER)
+
+DEFINE_INIT_SERVICE(MailToDispatcher,
+                    {
+                        /*Attention
+                            I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
+                            to create a new instance of this class by our own supported service factory.
+                            see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                        */
+                    }
+                   )
+
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      standard ctor
+    @descr      These initialize a new instance of ths class with needed informations for work.
+
+    @param      xFactory
+                    reference to uno servicemanager for creation of new services
+
+    @modified   30.04.2002 14:10, as96863
+*/
+MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         //  Init baseclasses first
-        :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
-        ,   OWeakObject             (                                )
+        : ThreadHelpBase( &Application::GetSolarMutex() )
+        , OWeakObject   (                               )
         // Init member
-        ,   m_xOwnerWeak            ( xOwner                         )
-        ,   m_xFactory              ( xFactory                       )
-        ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
-        ,   m_bAlreadyDisposed      ( sal_False                      )
+        , m_xFactory    ( xFactory                      )
 {
-    // Safe impossible cases
-    // We need valid informations about ouer ownerfor work.
-    LOG_ASSERT( impldbg_checkParameter_MailToDispatcher( xFactory, xOwner ), "MailToDispatcher::MailToDispatcher()\nInvalid parameter detected!\n" )
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      standard dtor
+    @descr      -
+
+    @modified   30.04.2002 14:10, as96863
+*/
 MailToDispatcher::~MailToDispatcher()
 {
-    // Warn programmer if he forgot to dispose this instance.
-    // We must release all our references ...
-    // and a dtor isn't the best place to do that!
+    m_xFactory = NULL;
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_3     (   MailToDispatcher                   ,
-                            OWeakObject                         ,
-                            DIRECT_INTERFACE(   XTypeProvider   ),
-                            DIRECT_INTERFACE(   XDispatch       ),
-                            DIRECT_INTERFACE(   XEventListener  )
-                        )
+//_________________________________________________________________________________________________________________
 
-DEFINE_XTYPEPROVIDER_3  (   MailToDispatcher       ,
-                            XTypeProvider       ,
-                            XDispatch           ,
-                            XEventListener
-                        )
+/**
+    @short      dispatch URL with arguments
+    @descr      We use threadsafe internal method to do so. It returns a state value - but we ignore it.
+                Because we doesn't support status listener notifications here. Status events are not guaranteed -
+                and we call another service internaly which doesn't return any notifications too.
 
+    @param      aURL
+                    mail URL which should be executed
+    @param      lArguments
+                    list of optional arguments for this mail request
 
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
-void SAL_CALL MailToDispatcher::dispatch(  const   URL&                        aURL            ,
-                                            const   Sequence< PropertyValue >&  seqProperties   ) throw( RuntimeException )
+    @modified   30.04.2002 14:15, as96863
+*/
+void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                                  aURL       ,
+                                          const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter
-    LOG_ASSERT( impldbg_checkParameter_dispatch( aURL, seqProperties ), "MailToDispatcher::dispatch()\nInvalid parameter detected.\n" )
+    // dispatch() is an [oneway] call ... and may our user release his reference to us immediatly.
+    // So we should hold us self alive till this call ends.
+    css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    implts_dispatch(aURL,lArguments);
+    // No notification for status listener!
+}
 
-    Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
-    LOG_ASSERT( !(xFrame.is()==sal_False), "MailToDispatcher::dispatch()\nDispatch failed ... can't get reference to owner!\n" )
-    if( xFrame.is() == sal_True )
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      dispatch with guaranteed notifications about success
+    @descr      We use threadsafe internal method to do so. Return state of this function will be used
+                for notification if an optional listener is given.
+
+    @param      aURL
+                    mail URL which should be executed
+    @param      lArguments
+                    list of optional arguments for this mail request
+    @param      xListener
+                    reference to a valid listener for state events
+
+    @modified   30.04.2002 14:49, as96863
+*/
+void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL&                                             aURL      ,
+                                                          const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                          const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
+{
+    // This class was designed to die by reference. And if user release his reference to us immediatly after calling this method
+    // we can run into some problems. So we hold us self alive till this method ends.
+    // Another reason: We can use this reference as source of sending event at the end too.
+    css::uno::Reference< css::frame::XNotifyingDispatch > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+
+    sal_Bool bState = implts_dispatch(aURL,lArguments);
+    if (xListener.is())
     {
-        // mailto URL
-        OUString aURLProtocol( aURL.Protocol );
-        if ( aURLProtocol.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( MAILTO )) )
+        css::frame::DispatchResultEvent aEvent;
+        if (bState)
+            aEvent.State = css::frame::DispatchResultState::SUCCESS;
+        else
+            aEvent.State = css::frame::DispatchResultState::FAILURE;
+        aEvent.Source = xThis;
+
+        xListener->dispatchFinished( aEvent );
+    }
+}
+
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      threadsafe helper for dispatch calls
+    @descr      We support two interfaces for the same process - dispatch URLs. That the reason for this internal
+                function. It implements the real dispatch operation and returns a state value which inform caller
+                about success. He can notify listener then by using this return value.
+
+    @param      aURL
+                    mail URL which should be executed
+    @param      lArguments
+                    list of optional arguments for this mail request
+
+    @return     <TRUE/> if dispatch could be started successfully
+                Note: Our internal used shell executor doesn't return any state value - so we must
+                belive that call was successfully.
+                <FALSE/> if neccessary ressource couldn't be created or an exception was thrown.
+
+    @modified   30.04.2002 14:49, as96863
+*/
+sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&                                  aURL       ,
+                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
+{
+    sal_Bool bSuccess = sal_False;
+
+    // don't accept other protocols
+    // Normaly we shouldn't be used for other URLs then "mailto" ...
+    // but ...
+    if (aURL.Protocol.compareToAscii("mailto:",7)==0)
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
+        /* SAFE */{
+            ReadGuard aReadLock( m_aLock );
+            xFactory = m_xFactory;
+        /* SAFE */}
+
+        css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute( xFactory->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE), css::uno::UNO_QUERY );
+        if (xSystemShellExecute.is())
         {
-            Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                                                                            m_xFactory->createInstance(
-                                                                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
-            if ( xSystemShellExecute.is() )
+            try
             {
-                try
-                {
-                    // start mail client
-                    ::rtl::OUString aURLString( aURL.Complete );
-                    xSystemShellExecute->execute( aURLString, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
-                }
-                catch ( ::com::sun::star::lang::IllegalArgumentException& )
-                {
-                }
-                catch ( ::com::sun::star::system::SystemShellExecuteException& )
-                {
-                }
+                // start mail client
+                // Because there is no notofocation about success - we use case of
+                // no detected exception as SUCCESS - FAILED otherwhise.
+                ::rtl::OUString sURL( aURL.Complete );
+                xSystemShellExecute->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+                bSuccess = sal_True;
+            }
+            catch (css::lang::IllegalArgumentException&)
+            {
+            }
+            catch (css::system::SystemShellExecuteException&)
+            {
             }
         }
     }
+
+    return bSuccess;
 }
-
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
-void SAL_CALL MailToDispatcher::addStatusListener( const   Reference< XStatusListener >&   xControl,
-                                                    const   URL&                            aURL    ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter
-    LOG_ASSERT( impldbg_checkParameter_addStatusListener( xControl, aURL ), "OMenuDispatcher::addStatusListener()\nInvalid parameter detected.\n" )
-    // Add listener to container.
-    m_aListenerContainer.addInterface( aURL.Complete, xControl );
-}
-
-//*****************************************************************************************************************
-//  XDispatch
-//*****************************************************************************************************************
-void SAL_CALL MailToDispatcher::removeStatusListener(  const   Reference< XStatusListener >&   xControl,
-                                                        const   URL&                            aURL    ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter
-    LOG_ASSERT( impldbg_checkParameter_removeStatusListener( xControl, aURL ), "OMenuDispatcher::removeStatusListener()\nInvalid parameter detected.\n" )
-    // Add listener to container.
-    m_aListenerContainer.removeInterface( aURL.Complete, xControl );
-}
-
-
-//*****************************************************************************************************************
-//   XEventListener
-//*****************************************************************************************************************
-void SAL_CALL MailToDispatcher::disposing( const EventObject& aEvent ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    LOG_ASSERT( !(m_bAlreadyDisposed==sal_True), "MailToDispatcher::disposing()\nObject already disposed .. don't call it again!\n" )
-
-    if( m_bAlreadyDisposed == sal_False )
-    {
-        m_bAlreadyDisposed = sal_True;
-
-        // Forget mail client supplier
-        m_xSimpleMailClientSupplier = 0;
-
-        // Forget our factory.
-        m_xFactory = Reference< XMultiServiceFactory >();
-    }
-}
-
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-void MailToDispatcher::impl_sendStatusEvent(   const   Reference< XFrame >&    xEventSource    ,
-                                                const   OUString&               sURL            ,
-                                                sal_Bool                        bLoadState      )
-{
-    // Get listener for given URL!
-    OInterfaceContainerHelper* pListenerForURL = m_aListenerContainer.getContainer( sURL );
-    // Send messages to all listener.
-    // Do nothing, if there no listener or "getContainer()" works not correct!
-    if( pListenerForURL != NULL )
-    {
-        // Build event for send to listener.
-        FeatureStateEvent aEvent;
-        aEvent.FeatureURL.Complete  =   sURL                        ;
-        aEvent.FeatureDescriptor    =   FEATUREDESCRIPTOR_LOADSTATE ;
-        aEvent.IsEnabled            =   bLoadState                  ;
-        aEvent.Requery              =   sal_False                   ;
-        aEvent.State              <<=   xEventSource                ;
-
-        // Send message to all listener on this URL.
-        OInterfaceIteratorHelper aIterator(*pListenerForURL);
-        while( aIterator.hasMoreElements() )
-        {
-            ((XStatusListener*)aIterator.next())->statusChanged( aEvent );
-        }
-    }
-}
-
-
-void MailToDispatcher::impl_getSequenceFromStringList( css::uno::Sequence< ::rtl::OUString >& aStringSeq, const ::rtl::OUString& aStringList )
-{
-    sal_Int32 nParamIndex = 0;
-    sal_Int32 nPos = 0;
-    do
-    {
-        OUString aName = aStringList.getToken( 0, ',', nParamIndex );
-        aStringSeq.realloc( aStringSeq.getLength() + 1 );
-        aName = INetURLObject::decode( aName, '%', INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
-        aStringSeq[nPos++] = aName;
-    }
-    while ( nParamIndex >= 0 );
-}
-
 
 //_________________________________________________________________________________________________________________
-//  debug methods
+
+/**
+    @short      add/remove listener for state events
+    @descr      Because we use an external process to forward such mail URLs, and this process doesn't
+                return any notifications about success or failed state - we doesn't support such status
+                listener. We have no status to send.
+
+    @param      xListener
+                    reference to a valid listener for state events
+    @param      aURL
+                    URL about listener will be informed, if something occured
+
+    @modified   30.04.2002 14:49, as96863
+*/
+void SAL_CALL MailToDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+                                                   const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
+{
+    // not suported yet
+}
+
 //_________________________________________________________________________________________________________________
 
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
-        But ... look for right testing! See using of this methods!
------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
-
-//*****************************************************************************************************************
-sal_Bool MailToDispatcher::impldbg_checkParameter_MailToDispatcher(   const   Reference< XMultiServiceFactory >&  xFactory    ,
-                                                                        const   Reference< XFrame >&                xOwner      )
+void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+                                                      const css::util::URL&                                     aURL      ) throw( css::uno::RuntimeException )
 {
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFactory     ==  NULL        )   ||
-            ( &xOwner       ==  NULL        )   ||
-            ( xFactory.is() ==  sal_False   )   ||
-            ( xOwner.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
+    // not suported yet
 }
 
-//*****************************************************************************************************************
-// We don't know anything about right values of aURL and seqArguments!
-// Check valid references only.
-sal_Bool MailToDispatcher::impldbg_checkParameter_dispatch(    const   URL&                        aURL        ,
-                                                                const   Sequence< PropertyValue >&  seqArguments)
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL         ==  NULL    )   ||
-            ( &seqArguments ==  NULL    )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We need a valid URL. What is meaning with "register for nothing"?!
-// xControl must correct to - nobody can advised otherwise!
-sal_Bool MailToDispatcher::impldbg_checkParameter_addStatusListener(   const   Reference< XStatusListener >&   xControl,
-                                                                        const   URL&                            aURL    )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xControl                 ==  NULL    )   ||
-            ( &aURL                     ==  NULL    )   ||
-            ( aURL.Complete.getLength() <   1       )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// The same goes for these case! We have added valid listener for correct URL only.
-// We can't remove invalid listener for nothing!
-sal_Bool MailToDispatcher::impldbg_checkParameter_removeStatusListener(    const   Reference< XStatusListener >&   xControl,
-                                                                            const   URL&                            aURL    )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xControl                 ==  NULL    )   ||
-            ( &aURL                     ==  NULL    )   ||
-            ( aURL.Complete.getLength() <   1       )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
-
-}       //  namespace framework
+} //  namespace framework
