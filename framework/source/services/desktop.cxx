@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: as $ $Date: 2001-08-14 12:53:56 $
+ *  last change: $Author: kz $ $Date: 2001-09-12 16:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1768,7 +1768,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropertySetInfo()
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException)
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.

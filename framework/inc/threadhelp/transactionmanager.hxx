@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionmanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-08-20 13:00:36 $
+ *  last change: $Author: kz $ $Date: 2001-09-12 16:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ class TransactionManager : public  ITransactionManager
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        inline virtual void unregisterTransaction()
+        inline virtual void unregisterTransaction() throw( css::uno::RuntimeException, css::lang::DisposedException )
         {
             // This call could not rejected!
             // Safe access to internal member.

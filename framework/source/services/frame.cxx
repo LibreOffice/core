@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: as $ $Date: 2001-08-29 13:52:07 $
+ *  last change: $Author: kz $ $Date: 2001-09-12 16:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2101,7 +2101,7 @@ void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
 
     @onerror    -
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertySetInfo ()
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertySetInfo () throw (::com::sun::star::uno::RuntimeException)
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
