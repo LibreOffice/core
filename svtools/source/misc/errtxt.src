@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-20 12:29:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,7 +1232,7 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "ÔÚÍ¬Ê±¶ÁÈ¡Õâ¸ö¶ÔÏóÊ±·¢Éú´íÎó";
         Text[ russian ] = "Îøèáêà ïğè êîëëåêòèâíîì äîñòóïå ê îáúåêòó";
         Text[ polish ] = "Nast¹pi³o naruszenie zasad wspó³u¿ytkowania podczas dostêpu do obiektu";
-        Text[ japanese ] = "µÌŞ¼Şª¸Äã‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ö‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°B";
         Text[ chinese_traditional ] = "¦b¦P®É¦s¨ú³o­Óª«¥ó®Éµo¥Í¿ù»~";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá ÇáãÔÊÑß Åáì ÇáßÇÆä";
         Text[ dutch ] = "Fout bij gelijktijdige toegang tot object";
@@ -1530,7 +1530,7 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "ÎÄ¼şµÄ¸ñÊ½´íÎó";
         Text[ russian ] = "Ôàéë ïğåäñòàâëåí â íåïğàâèëüíîì ôîğìàòå";
         Text[ polish ] = "Format pliku jest nieprawid³owy";
-        Text[ japanese ] = "Ì§²Ù‘®‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
+        Text[ japanese ] = "Ì§²Ù‚Ì‘®‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡¿ù»~";
         Text[ arabic ] = "ÊäÓíŞ Çáãáİ ÛíÑ ÕÍíÍ";
         Text[ dutch ] = "Bestand heeft verkeerd formaat";
@@ -1932,13 +1932,13 @@ Resource RID_ERRHDL
         TEXT [ danish ] = "Fejl under læsning af filen " ;
         TEXT [ french ] = "Erreur de lecture du fichier " ;
         TEXT [ swedish ] = "Fel vid läsning av fil " ;
-        TEXT [ dutch ] = "Fout bij lezen van het bestand  " ;
+        TEXT [ dutch ] = "Fout bij lezen van bestand  " ;
         TEXT [ spanish ] = "Error al leer el archivo " ;
         TEXT [ english_us ] = "Error reading file " ;
         TEXT[ chinese_simplified ] = "ÔÚ¶ÁÎÄ¼şÊ±·¢Éú´íÎó ";
-        TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè ôàéëà   ";
-        TEXT[ polish ] = "B³¹d odczytu pliku ";
-        TEXT[ japanese ] = "Ì§²Ù‚Ì“Ç‚İæ‚è´×° ";
+        TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè ôàéëà";
+        TEXT[ polish ] = "B³¹d w odczytywaniu pliku ";
+        TEXT[ japanese ] = "Ì§²Ù“Ç‚İæ‚è‚ÌÛ‚Ì´×°";
         TEXT[ chinese_traditional ] = "ÅªÀÉ®×®Éµo¥Í¿ù»~ ";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ Çáãáİ ";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç ôïõ áñ÷åßïõ ";
@@ -2060,11 +2060,11 @@ Resource RID_ERRHDL
     {
         Text = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
         Text [ ENGLISH ] = "Error reading from the internet.\nServer error message: $(ARG1)" ;
-        Text [ english_us ] = "Error reading data from the Internet.\nServer error message: $(ARG1)" ;
+        Text [ english_us ] = "Error reading data from the Internet\n.Server error message: $(ARG1)" ;
         Text [ italian ] = "Non è stato possibile leggere i dati da Internet.\nMessaggio di errore del server: $(ARG1)" ;
         Text [ spanish ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)" ;
         Text [ french ] = "Erreur de lecture des données à partir de l'Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
-        Text [ dutch ] = "Fout bij lezen van gegevens uit internet.\nFoutmelding van server: $(ARG1)" ;
+        Text [ dutch ] = "Fout bij lezen van gegevens uit internet\n.Foutmelding van server: $(ARG1)" ;
         Text [ swedish ] = "Det gick inte att läsa data via Internet.\nServerfelmeddelande: $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at læses dataene over Internettet\nServerfejlmelding: $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
@@ -2075,7 +2075,7 @@ Resource RID_ERRHDL
         Text[ japanese ] = "ÃŞ°À‚Í²İÀ°È¯Ä‚Å“Ç‚İæ‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n»°ÊŞ° ´×° Ò¯¾°¼Ş: $(ARG1)";
         Text[ chinese_traditional ] = "µLªk³z¹L Internet Åª¨ú¸ê®Æ¡C\n¦øªA¾¹³ø§i¡G$(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
-        Text[ dutch ] = "Fout bij lezen van gegevens uit internet.\nFoutmelding van server: $(ARG1)";
+        Text[ dutch ] = "Fout bij lezen van gegevens uit internet\n.Foutmelding van server: $(ARG1)";
         Text[ chinese_simplified ] = "ÎŞ·¨Í¨¹ı¹ú¼Ê»¥ÁªÍø¶ÁÈ¡Êı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
         Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç äåäïìİíùí áğü ôï Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
         Text[ korean ] = "µ¥ÀÌÅÍ¸¦ ÀÎÅÍ³İ¿¡¼­ ÀĞÁö ¸øÇß½À´Ï´Ù.\n¼­¹ö ¿À·ù ¸Ş½ÃÁö: $(ARG1)";
@@ -2180,14 +2180,14 @@ Resource RID_ERRHDL
         Text [ danish ] = "Skal typografien $(ARG1) erstattes?" ;
         Text [ portuguese ] = "Substituir o estilo $(ARG1)?" ;
         Text [ portuguese_brazilian ] = "Soll der Style $(ARG1) ersetzt werden?" ;
-        Text[ chinese_simplified ] = "Òª¸üÌæÑùÊ½ $(ARG1) £¿";
+        Text[ chinese_simplified ] = "ÒªÌæ»»ÑùÊ½ $(ARG1) £¿";
         Text[ russian ] = "Çàìåíèòü ñòèëü $(ARG1)?";
         Text[ polish ] = "Zamieniæ styl $(ARG1)?";
-        Text[ japanese ] = "½À²Ù $(ARG1)‚ğ’uŠ·‚µ‚Ü‚·‚©B";
+        Text[ japanese ] = "½À²Ù $(ARG1) ‚ğ’uŠ·‚µ‚Ü‚·‚©";
         Text[ chinese_traditional ] = "­n§ó´À³o­Ó¼Ë¦¡ $(ARG1)¡H";
         Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÈÏÇá ÇáäãØ $(ARG1)¿";
         Text[ dutch ] = "Opmaakprofiel $(ARG1) vervangen?";
-        Text[ chinese_simplified ] = "Òª¸üÌæÑùÊ½ $(ARG1) £¿";
+        Text[ chinese_simplified ] = "ÒªÌæ»»ÑùÊ½ $(ARG1) £¿";
         Text[ greek ] = "Íá áíôéêáôáóôáèåß ôï óôõë $(ARG1);";
         Text[ korean ] = "½ºÅ¸ÀÏ$(ARG1)À»(¸¦) ´ëÃ¼ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "$(ARG1) biçimi değiştirilsin mi?";
@@ -3016,6 +3016,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
