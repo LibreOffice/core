@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-12 16:53:40 $
+ *  last change: $Author: gh $ $Date: 2002-12-02 15:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ static const char * const components[] =
         // Reading of files in specific encodings like UTF-8 using
         // createUnoService( "com.sun.star.io.TextInputStream" ) and such
     , SAL_MODULENAME( "tinstrm" )
+    , SAL_MODULENAME( "toutstrm" )
     , SAL_MODULENAME( "insp" )
     , SAL_MODULENAME( "corefl" )
         // RemoteUno
