@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:06:56 $
+ *  last change: $Author: jp $ $Date: 2001-03-05 13:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #define ITEMID_TWOLINES         0
 #define ITEMID_CHARROTATE       0
 #define ITEMID_CHARSCALE_W      0
+#define ITEMID_CHARRELIEF       0
+
 
 #include <svtools/sbx.hxx>
 #define GLOBALOVERFLOW3
@@ -219,6 +221,7 @@
 #include "scripttypeitem.hxx"
 #include "charrotateitem.hxx"
 #include "charscaleitem.hxx"
+#include "charreliefitem.hxx"
 #include "itemtype.hxx"
 #include "dialmgr.hxx"
 #include "langtab.hxx"
@@ -264,6 +267,8 @@ TYPEINIT1_AUTOFACTORY(SvxTwoLinesItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxScriptTypeItem, SfxUInt16Item);
 TYPEINIT1_AUTOFACTORY(SvxCharRotateItem, SfxUInt16Item);
 TYPEINIT1_AUTOFACTORY(SvxCharScaleWidthItem, SfxUInt16Item);
+TYPEINIT1_AUTOFACTORY(SvxCharReliefItem, SfxEnumItem);
+
 
 TYPEINIT1(SvxScriptSetItem, SfxSetItem );
 
@@ -4251,6 +4256,114 @@ SfxItemPresentation SvxCharScaleWidthItem::GetPresentation(
         break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
+}
+
+/*************************************************************************
+|*    class SvxCharReliefItem
+*************************************************************************/
+
+SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
+                                         const sal_uInt16 nId )
+    : SfxEnumItem( nId, eValue )
+{
+}
+
+SfxPoolItem* SvxCharReliefItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SvxCharReliefItem( *this );
+}
+
+SfxPoolItem* SvxCharReliefItem::Create(SvStream & rStrm, USHORT) const
+{
+    sal_uInt16 nVal;
+    rStrm >> nVal;
+    return new SvxCharScaleWidthItem( (FontRelief)nVal, Which() );
+}
+
+SvStream& SvxCharReliefItem::Store(SvStream & rStrm, USHORT nIVer) const
+{
+    sal_uInt16 nVal = GetValue();
+    rStrm << nVal;
+    return rStrm;
+}
+
+USHORT SvxCharReliefItem::GetVersion( USHORT nFFVer ) const
+{
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
+}
+
+String SvxCharReliefItem::GetValueTextByPos( USHORT nPos ) const
+{
+    DBG_ASSERT( RID_SVXITEMS_RELIEF_ENGRAVED - RID_SVXITEMS_RELIEF_NONE,
+                    "enum overflow" );
+    return String( SVX_RES( RID_SVXITEMS_RELIEF_BEGIN + nPos ));
+}
+
+USHORT SvxCharReliefItem::GetValueCount() const
+{
+    return RID_SVXITEMS_RELIEF_ENGRAVED - RID_SVXITEMS_RELIEF_NONE;
+}
+
+SfxItemPresentation SvxCharReliefItem::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    XubString&          rText, const International *
+)   const
+{
+    SfxItemPresentation eRet = ePres;
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        rText = GetValueTextByPos( GetValue() );
+        break;
+
+    default:
+        eRet = SFX_ITEM_PRESENTATION_NONE;
+    }
+    return eRet;
+}
+
+sal_Bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
+                                        BYTE nMemberId )
+{
+    sal_Bool bRet = sal_True;
+    switch( nMemberId )
+    {
+    case MID_RELIEF:
+        {
+            sal_Int16 nVal;
+            rVal >>= nVal;
+            SetValue( (FontRelief)nVal );
+        }
+        break;
+    default:
+        bRet = sal_False;
+        break;
+    }
+    return bRet;
+}
+
+sal_Bool SvxCharReliefItem::QueryValue( com::sun::star::uno::Any& rVal,
+                                        BYTE nMemberId ) const
+{
+    sal_Bool bRet = sal_True;
+    switch( nMemberId )
+    {
+    case MID_RELIEF:
+        rVal <<= (sal_Int16)GetValue();
+        break;
+    default:
+        bRet = sal_False;
+        break;
+    }
+    return bRet;
 }
 
 /*************************************************************************

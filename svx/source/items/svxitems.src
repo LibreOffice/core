@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:19:13 $
+ *  last change: $Author: jp $ $Date: 2001-03-05 13:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7532,4 +7532,21 @@ String RID_SVXITEMS_CHARSCALE_OFF
     Text = "keine Zeichenskalierung";
     Text [ English ] = "no scaled characters";
 };
+
+String RID_SVXITEMS_RELIEF_NONE
+{
+    Text = "Kein Relief" ;
+    Text [ English ] = "No Emboss" ;
+};
+String RID_SVXITEMS_RELIEF_EMBOSSED
+{
+    Text = "Relief";
+    Text [ English ] = "Emboss";
+};
+String RID_SVXITEMS_RELIEF_ENGRAVED
+{
+    Text = "Gravur";
+    Text [ English ] = "Engrave";
+};
+
  // ********************************************************************** EOF
