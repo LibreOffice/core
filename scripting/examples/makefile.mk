@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-08-21 15:48:05 $
+#   last change: $Author: rt $ $Date: 2004-02-10 16:03:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,8 +81,12 @@ ZIP3TARGET=ScriptsJavaScript
 ZIP3LIST=javascript
 
 ZIP4FLAGS=-r
-ZIP4TARGET=scriptbindinglib
-ZIP4DIR=$(PRJ)$/workben/bindings
-ZIP4LIST=*.xlb *.xdl *.xba
+ZIP4TARGET=ScriptsPython
+ZIP4LIST=python
+
+ZIP5FLAGS=-r
+ZIP5TARGET=scriptbindinglib
+ZIP5DIR=$(PRJ)$/workben/bindings
+ZIP5LIST=*.xlb *.xdl *.xba
 
 .INCLUDE : target.mk
