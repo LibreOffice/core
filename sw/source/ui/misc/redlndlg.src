@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:07:52 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ Menu MN_REDLINE_POPUP
             Text [ italian ] = "Modifica commento..." ;
             Text [ spanish ] = "Modificar comentario..." ;
             Text [ french ] = "Éditer le commentaire..." ;
-            Text [ dutch ] = "Commentaar bewerken..." ;
+            Text [ dutch ] = "Opmerkingen bewerken..." ;
             Text [ portuguese ] = "Editar comentário..." ;
             Text[ chinese_simplified ] = "ç¼–è¾‘æ³¨è§£...";
             Text[ russian ] = "Ïðàâêà êîììåíòàðèåâ...";
@@ -244,7 +244,7 @@ Menu MN_REDLINE_POPUP
                         Text[ turkish ] = "Yazan";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Autor";
-                        Text[ finnish ] = "Laatija";
+                        Text[ finnish ] = "Tekijä";
                         Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
                     };
                     MenuItem
