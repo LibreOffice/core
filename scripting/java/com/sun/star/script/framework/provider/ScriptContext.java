@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptContext.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-11-04 17:45:27 $
+*  last change: $Author: rt $ $Date: 2004-01-05 12:54:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -104,7 +104,6 @@ public class ScriptContext extends PropertySet implements XScriptContext
     public final static String HM_COMPONENT_CONTEXT = "ComponentContext";
 
     private final static String DOC_REF = "SCRIPTING_DOC_REF";
-    private final static String DOC_STORAGE_ID = "SCRIPTING_DOC_STORAGE_ID";
     private final static String DOC_URI = "SCRIPTING_DOC_URI";
 
 
@@ -124,17 +123,12 @@ public class ScriptContext extends PropertySet implements XScriptContext
             m_xModel = ( XModel ) UnoRuntime.queryInterface(
                 XModel.class,
                 invocationCtxPropSet.getPropertyValue( DOC_REF ) );
-            m_iStorageID = new Integer ( AnyConverter.toInt( invocationCtxPropSet.getPropertyValue(
-                    DOC_STORAGE_ID ) ) );
             m_sDocURI = ( String )
                 invocationCtxPropSet.getPropertyValue( DOC_URI );
 
             LogUtils.DEBUG( "DOC_REF query for URL = " + m_xModel.getURL() );
-            LogUtils.DEBUG( "DOC_STORAGE_ID = " + m_iStorageID );
             LogUtils.DEBUG( "DOC_URI query for URL = " + m_sDocURI );
 
-            registerProperty( DOC_STORAGE_ID, new Type(Integer.class),
-            (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_iStorageID");
             registerProperty( DOC_URI, new Type(String.class),
             (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_sDocURI");
         }
@@ -146,10 +140,10 @@ public class ScriptContext extends PropertySet implements XScriptContext
         {
             wte.printStackTrace();
         }
-        catch ( IllegalArgumentException iae )
+/*        catch ( IllegalArgumentException iae )
         {
             iae.printStackTrace();
-        }
+        } */
         registerProperty( HM_DOC_REF, new Type(XModel.class),
             (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_xModel");
         registerProperty( HM_DESKTOP, new Type(XDesktop.class),
