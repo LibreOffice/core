@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-08 14:05:02 $
+ *  last change: $Author: mib $ $Date: 2002-10-10 12:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2219,7 +2219,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         aAny >>= nHeight;
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                             nHeight );
-        if( SizeType::MIN == nSizeType && 0==nRelHeight && !bSyncHeight )
+        if( SizeType::FIX != nSizeType && 0==nRelHeight && !bSyncHeight )
             GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_HEIGHT,
                                       sValue.makeStringAndClear() );
         else
