@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:27:58 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 #endif
 
 #include "svxdlg.hxx" //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <dialogs.hrc> //CHINA001
 
 #define HHC HangulHanjaConversion
 

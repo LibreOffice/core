@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:05:36 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@
 #endif
 
 #include "svxdlg.hxx" //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <dialogs.hrc> //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;

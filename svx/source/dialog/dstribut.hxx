@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:26:19 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 16:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _SVX_DSTRIBUT_HXX
 
 #ifndef _SVX_DLG_CTRL_HXX
-#include <svx/dlgctrl.hxx>
+#include <dlgctrl.hxx>
 #endif
 
 #ifndef _SV_GROUP_HXX

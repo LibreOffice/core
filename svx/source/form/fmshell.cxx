@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:08:38 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 16:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@
 #endif
 
 #include "svxdlg.hxx" //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <dialogs.hrc> //CHINA001
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
