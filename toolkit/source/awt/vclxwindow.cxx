@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-06 16:08:33 $
+ *  last change: $Author: mt $ $Date: 2002-01-15 16:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1465,7 +1465,7 @@ sal_Int16 VCLXWindow::getAccessibleRole(  ) throw (::com::sun::star::uno::Runtim
     return NULL;
 }
 
-::com::sun::star::lang::Locale VCLXWindow::getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalComponentStateException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::lang::Locale VCLXWindow::getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
     return ::com::sun::star::lang::Locale();
@@ -1481,22 +1481,6 @@ void VCLXWindow::removePropertyChangeListener( const ::com::sun::star::uno::Refe
     ::vos::OGuard aGuard( GetMutex() );
 }
 
-void VCLXWindow::setAccessibleDescription( const ::rtl::OUString& sNewDescription ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-void VCLXWindow::setAccessibleName( const ::rtl::OUString& sNewName ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-void VCLXWindow::setAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& xNewParent ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-
 // ::drafts::com::sun::star::accessibility::XAccessibleComponent
 sal_Bool VCLXWindow::contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1508,18 +1492,6 @@ sal_Bool VCLXWindow::contains( const ::com::sun::star::awt::Point& aPoint ) thro
 {
     ::vos::OGuard aGuard( GetMutex() );
     return NULL;
-}
-
-sal_Int32 VCLXWindow::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return 0;
-}
-
-sal_Int32 VCLXWindow::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return 0;
 }
 
 ::com::sun::star::awt::Rectangle VCLXWindow::getBounds(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -1538,33 +1510,6 @@ sal_Int32 VCLXWindow::getBackground(  ) throw (::com::sun::star::uno::RuntimeExc
 {
     ::vos::OGuard aGuard( GetMutex() );
     return ::com::sun::star::awt::Point();
-}
-
-void VCLXWindow::setLocation( const ::com::sun::star::awt::Point& aRelativePosition ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-void VCLXWindow::setSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > VCLXWindow::getFont(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return NULL;
-}
-
-void VCLXWindow::setFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-::com::sun::star::awt::FontDescriptor VCLXWindow::getFontMetrics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return ::com::sun::star::awt::FontDescriptor();
 }
 
 sal_Bool VCLXWindow::isShowing(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -1590,48 +1535,8 @@ void VCLXWindow::grabFocus(  ) throw (::com::sun::star::uno::RuntimeException)
     ::vos::OGuard aGuard( GetMutex() );
 }
 
-void VCLXWindow::setBounds( const ::com::sun::star::awt::Rectangle& aBoundingBox ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-sal_Int32 VCLXWindow::getCursor(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return 0;
-}
-
-void VCLXWindow::setCursor( sal_Int32 nCursorIndex ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
-sal_Bool VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return FALSE;
-}
-
-void VCLXWindow::setEnabled( sal_Bool bEnabledState ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-}
-
 ::com::sun::star::uno::Any VCLXWindow::getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
     return ::com::sun::star::uno::Any();
 }
-
-::rtl::OUString VCLXWindow::getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return ::rtl::OUString();
-}
-
-::rtl::OUString VCLXWindow::getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    return ::rtl::OUString();
-}
-
