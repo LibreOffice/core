@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-13 10:29:05 $
+ *  last change: $Author: rt $ $Date: 2002-08-02 20:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ String RID_SVXSTR_TRANSPARENT
     Text[ turkish ] = "Dolgu yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sin relleno";
-    Text[ finnish ] = "Ei t?ytt?";
+    Text[ finnish ] = "Ei täyttöä";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¹€à¸•à¸´à¸¡";
 };
 String RID_SVXSTR_FILLPATTERN
 {
@@ -137,7 +138,7 @@ String RID_SVXSTR_FILLPATTERN
     Text[ chinese_simplified ] = "å›¾æ¡ˆ";
     Text[ russian ] = "Óçîğ";
     Text[ polish ] = "Deseñ";
-    Text[ japanese ] = "ï¾Šï¾Ÿï¾€ï½°ï¾";
+    Text[ japanese ] = "ãƒ‘ã‚¿ãƒ¼ãƒ³";
     Text[ chinese_traditional ] = "åœ–æ¡ˆ";
     Text[ arabic ] = "äŞÔ";
     Text[ greek ] = "Ìïôßâï";
@@ -145,6 +146,7 @@ String RID_SVXSTR_FILLPATTERN
     Text[ turkish ] = "Desen";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modelo";
+    Text[ thai ] = "à¸¥à¸§à¸”à¸¥à¸²à¸¢";
 };
 String RID_SVXSTR_FRAME
 {
@@ -172,6 +174,7 @@ String RID_SVXSTR_FRAME
     Text[ turkish ] = "Kenarlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Borde";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
 };
 String RID_SVXSTR_FRAME_STYLE
 {
@@ -191,7 +194,7 @@ String RID_SVXSTR_FRAME_STYLE
     Text[ chinese_simplified ] = "è¾¹è·æ ·å¼";
     Text[ russian ] = "Ñòèëü îáğàìëåíèÿ";
     Text[ polish ] = "Styl obramowania";
-    Text[ japanese ] = "å¤–æ ï½½ï¾€ï½²ï¾™";
+    Text[ japanese ] = "å¤–æ ã‚¹ã‚¿ã‚¤ãƒ«";
     Text[ chinese_traditional ] = "é‚Šæ¡†æ¨£å¼";
     Text[ arabic ] = "äãØ ÇáÍÏæÏ";
     Text[ greek ] = "Óôõë ğåñéãñÜììáôïò";
@@ -199,6 +202,7 @@ String RID_SVXSTR_FRAME_STYLE
     Text[ turkish ] = "Kenarlık biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de borde";
+    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
 };
 String RID_SVXSTR_FRAME_COLOR
 {
@@ -208,7 +212,7 @@ String RID_SVXSTR_FRAME_COLOR
     Text [ italian ] = "Colore bordo" ;
     Text [ portuguese_brazilian ] = "Cor da Borda" ;
     Text [ portuguese ] = "Cor do contorno" ;
-    Text [ finnish ] = "Reunan v?ri" ;
+    Text [ finnish ] = "Reunan väri" ;
     Text [ danish ] = "Rammefarve" ;
     Text [ french ] = "Couleur de bordure" ;
     Text [ swedish ] = "Inramningsfärg" ;
@@ -219,13 +223,14 @@ String RID_SVXSTR_FRAME_COLOR
     Text[ russian ] = "Öâåò îáğàìëåíèÿ";
     Text[ polish ] = "Kolor obramowania";
     Text[ japanese ] = "å¤–æ ã®è‰²";
-    Text[ chinese_traditional ] = "é‚Šæ¡†é¡”è‰²";
+    Text[ chinese_traditional ] = "é‚Šæ¡†é¡è‰²";
     Text[ arabic ] = "áæä ÇáÍÏæÏ";
     Text[ greek ] = "×ñşìáôá ğåñéãñáììÜôùí";
     Text[ korean ] = "í…Œë‘ë¦¬ ìƒ‰";
     Text[ turkish ] = "Kenarlık rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color del borde";
+    Text[ thai ] = "à¸ªà¸µà¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
 };
 ListBox RID_SVXTBX_STYLE
 {
@@ -263,6 +268,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fondo de carácter";
     Text[ finnish ] = "Korostetaan";
+    Text[ thai ] = "à¹„à¸®à¹„à¸¥à¸•à¹Œ";
 };
 String RID_SVXSTR_BACKGROUND
 {
@@ -288,6 +294,7 @@ String RID_SVXSTR_BACKGROUND
     Text[ turkish ] = "Artalan";
     Text[ catalan ] = "Fondo";
     Text[ finnish ] = "Tausta";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
 };
 String RID_SVXSTR_AUTOMATIC
 {
@@ -301,7 +308,7 @@ String RID_SVXSTR_AUTOMATIC
     Text[ french ] = "Automatique";
     Text[ spanish ] = "Automático";
     Text[ italian ] = "Automatico";
-    Text[ danish ] = "Automatic";
+    Text[ danish ] = "Automatisk";
     Text[ swedish ] = "Automatiskt";
     Text[ polish ] = "Automatycznie";
     Text[ portuguese_brazilian ] = "Automatic";
@@ -312,7 +319,8 @@ String RID_SVXSTR_AUTOMATIC
     Text[ turkish ] = "Automatic";
     Text[ arabic ] = "ÊáŞÇÆí";
     Text[ catalan ] = "Automatic";
-    Text[ finnish ] = "Automaattisesti";
+    Text[ finnish ] = "Automaattinen";
+    Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 Image RID_SVXIMG_GRAF_RED
 {
