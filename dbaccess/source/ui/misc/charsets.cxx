@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:02:10 $
+ *  last change: $Author: fs $ $Date: 2001-10-15 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,12 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
+#ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+#ifndef _TOOLS_RCID_H
+#include <tools/rcid.h>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -87,26 +92,29 @@ namespace dbaui
         :OCharsetMap()
         ,Resource(RSC_CHARSETS)
     {
-        String aNameList = String(ResId(STR_CHARSETNAMES));
-        for (sal_Int32 i=0; i<aNameList.GetTokenCount(); ++i)
-            m_aDisplayNames.push_back(aNameList.GetToken(i));
+#ifdef DBG_UTIL
+        sal_Bool bAlreadyAsserted = sal_False;
+#endif
 
-        FreeResource();
-
-        if (m_aDisplayNames.size() != m_aNames.size())
+        sal_Int32 nSize = size();
+        m_aDisplayNames.reserve( nSize );
+        for (sal_Int32 i=1; i<=nSize; ++i)
         {
-            DBG_ERROR("OCharsetDisplay::OCharsetDisplay: invalid number of display names!");
-            if (m_aDisplayNames.size() < m_aNames.size())
-            {
-                m_aDisplayNames.reserve(m_aNames.size());
-                while (m_aDisplayNames.size() < m_aNames.size())
-                    m_aDisplayNames.push_back(::rtl::OUString::createFromAscii("<unknown>"));
-            }
+            ResId aLocalId( (USHORT)i );
+
+            if ( IsAvailableRes( aLocalId.SetRT( RSC_STRING ) ) )
+                m_aDisplayNames.push_back( String( aLocalId ) );
             else
             {
-                DBG_ERROR("OCharsetDisplay::OCharsetDisplay: this is serious ... more display names than logical names!");
+                DBG_ASSERT( !bAlreadyAsserted, "OCharsetDisplay::OCharsetDisplay: invalid resources!" );
+#ifdef DBG_UTIL
+                bAlreadyAsserted = sal_True;
+#endif
+                m_aDisplayNames.push_back( ::rtl::OUString::createFromAscii( "<unknown>" ) );
             }
         }
+
+        FreeResource();
     }
 
     //-------------------------------------------------------------------------
@@ -202,15 +210,15 @@ namespace dbaui
     //-------------------------------------------------------------------------
     CharsetDisplayDerefHelper OCharsetDisplay::ExtendedCharsetIterator::operator*() const
     {
-        DBG_ASSERT(m_nPosition < m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
+        DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
         return CharsetDisplayDerefHelper(*m_aPosition, m_pContainer->m_aDisplayNames[m_nPosition]);
     }
 
     //-------------------------------------------------------------------------
     const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator++()
     {
-        DBG_ASSERT(m_nPosition < m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
-        if (m_nPosition < m_pContainer->m_aDisplayNames.size())
+        DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDisplayNames.size(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
+        if (m_nPosition < (sal_Int32)m_pContainer->m_aDisplayNames.size())
         {
             ++m_nPosition;
             ++m_aPosition;
@@ -243,6 +251,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/05/10 12:02:10  fs
+ *  #86849# be a little more tolerant when display names are missing
+ *
  *  Revision 1.2  2000/11/29 22:26:32  fs
  *  #80003# re-implemented, now base on dbtools::OCharsetMap
  *

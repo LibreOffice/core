@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 13:53:33 $
+ *  last change: $Author: fs $ $Date: 2001-10-15 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,32 +114,71 @@ Resource RSC_DATASOURCE_TYPES
 
 Resource RSC_CHARSETS
 {
-    String STR_CHARSETNAMES
+    String 1
     {
-        Text = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
-        Text [ english ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
-        Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
-
-        Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
-        Text[ portuguese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
-        Text[ russian ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ñèñòåìà;UTF-8";
-        Text[ greek ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Óýóôçìá;UTF-8";
-        Text[ dutch ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeem;UTF-8";
-        Text[ french ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Système;UTF-8";
-        Text[ spanish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
-        Text[ finnish ] = "Ansi;Mac;DOS;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ italian ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema; UTF-8";
-        Text[ danish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ swedish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
-        Text[ polish ] = "Ansi;Mac;IBMPC(437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
-        Text[ portuguese_brazilian ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
-        Text[ japanese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ï½¼ï½½ï¾ƒï¾‘;UTF-8";
-        Text[ korean ] = "Ansi;Mac;IBMPC(437);IBMPC(850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ì‹œìŠ¤í…œ;UTF-8";
-        Text[ chinese_simplified ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ç³»ç»Ÿ;UTF-8";
-        Text[ chinese_traditional ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ç³»çµ±;UTF-8";
-        Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
-        Text[ arabic ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);äÙÇã";
-        Text[ catalan ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
+        Text = "Ansi";
+        Text [ english ] = "Ansi";
+        Text [ english_us ] = "Ansi";
+    };
+    String 2
+    {
+        Text = "Mac";
+        Text [ english ] = "Mac";
+        Text [ english_us ] = "Mac";
+    };
+    String 3
+    {
+        Text = "IBMPC (437)";
+        Text [ english ] = "IBMPC (437)";
+        Text [ english_us ] = "IBMPC (437)";
+    };
+    String 4
+    {
+        Text = "IBMPC (850) / DOS";
+        Text [ english ] = "IBMPC (850) / DOS";
+        Text [ english_us ] = "IBMPC (850) / DOS";
+    };
+    String 5
+    {
+        Text = "IBMPC (860)";
+        Text [ english ] = "IBMPC (860)";
+        Text [ english_us ] = "IBMPC (860)";
+    };
+    String 6
+    {
+        Text = "IBMPC (861)";
+        Text [ english ] = "IBMPC (861)";
+        Text [ english_us ] = "IBMPC (861)";
+    };
+    String 7
+    {
+        Text = "IBMPC (863)";
+        Text [ english ] = "IBMPC (863)";
+        Text [ english_us ] = "IBMPC (863)";
+    };
+    String 8
+    {
+        Text = "IBMPC (865)";
+        Text [ english ] = "IBMPC (865)";
+        Text [ english_us ] = "IBMPC (865)";
+    };
+    String 9
+    {
+        Text = "IBMPC (866)";
+        Text [ english ] = "IBMPC (866)";
+        Text [ english_us ] = "IBMPC (866)";
+    };
+    String 10
+    {
+        Text = "System";
+        Text [ english ] = "System";
+        Text [ english_us ] = "System";
+    };
+    String 11
+    {
+        Text = "UTF-8";
+        Text [ english ] = "UTF-8";
+        Text [ english_us ] = "UTF-8";
     };
 };
 
@@ -305,6 +344,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2001/08/29 13:53:33  rt
+ *  Merge SRC638: 29.08.01 - 15:52:55
+ *
  *  Revision 1.34  2001/08/24 10:58:50  kz
  *  Merge SRC638: 24.08.01 - 12:58:04
  *
