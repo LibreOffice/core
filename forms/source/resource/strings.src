@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 22:09:06 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ arabic ] = "ÕœÀ Œÿ√ √À‰«¡  Õ„Ì· ⁄‰’— «· Õﬂ„ Â–«. ·Â–«  „ «” »œ«·Â »⁄‰’— ‰«∆».";
     Text[ turkish ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
     Text[ catalan ] = "S'ha produÔt un error mentre aquest control es carregava. Per tant, s'ha reemplaÁat per un marcador.";
-    Text[ finnish ] = "Ohjainta ladattaessa on ilmennyt virhe. Ohjain korvattiin paikkamerkill‰.";
+    Text[ finnish ] = "Ohjainta ladattaessa ilmeni virhe, joten ohjain korvattiin paikkamerkill‰.";
 };
 
 String RID_STR_READERROR
@@ -455,6 +455,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ arabic ] = "Remove graphics";
     Text[ catalan ] = "Remove graphics";
 };
+
 
 
 
