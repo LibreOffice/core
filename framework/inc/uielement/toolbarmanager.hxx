@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:50:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,10 +226,11 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                             nImageInfo( 0 ),
                             bMirrored( false ),
                             bRotated( false ) {}
-            USHORT      nId;
-            sal_Int16   nImageInfo;
-            sal_Bool    bMirrored : 1,
-                        bRotated  : 1;
+            USHORT                  nId;
+            std::vector<USHORT>     aIds;
+            sal_Int16               nImageInfo;
+            sal_Bool                bMirrored : 1,
+                                    bRotated  : 1;
         };
 
         typedef std::vector< ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > >           ToolBarControllerVector;
