@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,10 @@
 #include "XMLSectionExport.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLREDLINEEXPORT_HXX
+#include "XMLRedlineExport.hxx"
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
@@ -274,23 +278,33 @@ void XMLTextParagraphExport::exportListAndSectionChange(
 
             // close all elements of aOld ...
             // (order: newest to oldest)
-            vector<Reference<XTextSection> > ::iterator aOldForward =
-                aOldStack.begin();
-            while ((aOldForward != aOldStack.end()) &&
-                   (*aOldForward != *aOld))
+            if (aOld != aOldStack.rend())
             {
-                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
-                aOldForward++;
-            }
-            if (aOldForward != aOldStack.end())
-            {
-                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
+                vector<Reference<XTextSection> > ::iterator aOldForward =
+                    aOldStack.begin();
+                while ((aOldForward != aOldStack.end()) &&
+                       (*aOldForward != *aOld))
+                {
+                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                                                            sal_False);
+                    pSectionExport->ExportSectionEnd(*aOldForward,
+                                                     bAutoStyles);
+                    aOldForward++;
+                }
+                if (aOldForward != aOldStack.end())
+                {
+                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                                                            sal_False);
+                    pSectionExport->ExportSectionEnd(*aOldForward,
+                                                     bAutoStyles);
+                }
             }
 
             // ...then open all of aNew
             // (order: oldest to newest)
             while (aNew != aNewStack.rend())
             {
+                pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
                 pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
                 aNew++;
             }

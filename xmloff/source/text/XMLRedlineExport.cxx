@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-12 14:35:03 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,28 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/beans/XEnumeration.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XREDLINESSUPPLIER_HPP_
+#include <com/sun/star/document/XRedlinesSupplier.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
+#include <com/sun/star/text/XTextContent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
+#include <com/sun/star/text/XTextSection.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
@@ -108,7 +128,12 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::document::XRedlinesSupplier;
+using ::com::sun::star::container::XEnumerationAccess;
+using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::text::XText;
+using ::com::sun::star::text::XTextContent;
+using ::com::sun::star::text::XTextSection;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -132,61 +157,126 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp) :
     sRedlineDateTime(RTL_CONSTASCII_USTRINGPARAM("RedlineDateTime")),
     sRedlineSuccessorData(RTL_CONSTASCII_USTRINGPARAM("RedlineSuccessorData")),
     sRedlineType(RTL_CONSTASCII_USTRINGPARAM("RedlineType")),
+    sRedlineText(RTL_CONSTASCII_USTRINGPARAM("RedlineText")),
     sStyle(RTL_CONSTASCII_USTRINGPARAM("Style")),
     sTextTable(RTL_CONSTASCII_USTRINGPARAM("TextTable")),
     sUnknownChange(RTL_CONSTASCII_USTRINGPARAM("UnknownChange")),
     sChangePrefix(RTL_CONSTASCII_USTRINGPARAM("ct")),
+    sStartRedline(RTL_CONSTASCII_USTRINGPARAM("StartRedline")),
+    sEndRedline(RTL_CONSTASCII_USTRINGPARAM("EndRedline")),
+    sRedlineIdentifier(RTL_CONSTASCII_USTRINGPARAM("RedlineIdentifier")),
     rExport(rExp),
     aChangesList()
 {
 }
 
+
 XMLRedlineExport::~XMLRedlineExport()
 {
 }
+
 
 void XMLRedlineExport::ExportChange(
     const Reference<XPropertySet> & rPropSet,
     sal_Bool bAutoStyle)
 {
-    if (bAutoStyle)
-    {
-        CollectChange(rPropSet);
-    }
-    else
+    if (!bAutoStyle)
     {
         ExportChangeInline(rPropSet);
     }
 }
 
-void XMLRedlineExport::CollectChange(
-    const Reference<XPropertySet> & rPropSet)
+
+void XMLRedlineExport::ExportChangesList(sal_Bool bAutoStyle)
 {
-    // collect change in the big list
-    aChangesList.push_back(rPropSet);
+    if (bAutoStyle)
+    {
+        ExportChangesListAutoStyles();
+    }
+    else
+    {
+        ExportChangesListElements();
+    }
 }
 
-void XMLRedlineExport::ExportChangesList()
-{
-    // write changes list only if we have redlines
-    if (aChangesList.size() > 0)
-    {
-        // changes container element
-        SvXMLElementExport aChanges(rExport, XML_NAMESPACE_TEXT,
-                                    sXML_tracked_changes, sal_True, sal_True);
 
-        // iterate over all changes and call ExportChangeRegion, the
-        // discard changes lists
-        ChangesListType::iterator aEnd = aChangesList.end();
-        for(ChangesListType::iterator aIter = aChangesList.begin();
-            aIter != aEnd;
-            aIter++)
+void XMLRedlineExport::ExportChangesListElements()
+{
+    // get redlines (aka tracked changes) from the model
+    Reference<XRedlinesSupplier> xSupplier(rExport.GetModel(), uno::UNO_QUERY);
+    if (xSupplier.is())
+    {
+        Reference<XEnumerationAccess> aEnumAccess = xSupplier->getRedlines();
+
+        // only export if we actually have redlines
+        if (aEnumAccess->hasElements())
         {
-            ExportChangedRegion(*aIter);
+            // changes container element
+            SvXMLElementExport aChanges(rExport, XML_NAMESPACE_TEXT,
+                                        sXML_tracked_changes,
+                                        sal_True, sal_True);
+
+            // get enumeration and iterate over elements
+            Reference<XEnumeration> aEnum = aEnumAccess->createEnumeration();
+            while (aEnum->hasMoreElements())
+            {
+                Any aAny = aEnum->nextElement();
+                Reference<XPropertySet> xPropSet;
+                aAny >>= xPropSet;
+
+                DBG_ASSERT(xPropSet.is(),
+                           "can't get XPropertySet; skipping Redline");
+                if (xPropSet.is())
+                {
+                    // and finally, export change
+                    ExportChangedRegion(xPropSet);
+                }
+                // else: no XPropertySet -> no export
+            }
         }
-        aChangesList.clear();
+        // else: no redlines -> no export
     }
-    // else: no redlines -> no export
+    // else: no XRedlineSupplier -> no export
+}
+
+void XMLRedlineExport::ExportChangesListAutoStyles()
+{
+    // get redlines (aka tracked changes) from the model
+    Reference<XRedlinesSupplier> xSupplier(rExport.GetModel(), uno::UNO_QUERY);
+    if (xSupplier.is())
+    {
+        Reference<XEnumerationAccess> aEnumAccess = xSupplier->getRedlines();
+
+        // only export if we actually have redlines
+        if (aEnumAccess->hasElements())
+        {
+            // get enumeration and iterate over elements
+            Reference<XEnumeration> aEnum = aEnumAccess->createEnumeration();
+            while (aEnum->hasMoreElements())
+            {
+                Any aAny = aEnum->nextElement();
+                Reference<XPropertySet> xPropSet;
+                aAny >>= xPropSet;
+
+                DBG_ASSERT(xPropSet.is(),
+                           "can't get XPropertySet; skipping Redline");
+                if (xPropSet.is())
+                {
+                    // get XText for export of redline auto styles
+                    aAny = xPropSet->getPropertyValue(sRedlineText);
+                    Reference<XText> xText;
+                    aAny >>= xText;
+                    if (xText.is())
+                    {
+                        // export the auto styles
+                        rExport.GetTextParagraphExport()->
+                            collectTextAutoStyles(xText);
+                        // default parameters: bProgress, bExportParagraph ???
+                    }
+                }
+            }
+        }
+    }
 }
 
 void XMLRedlineExport::ExportChangeInline(
@@ -224,73 +314,55 @@ void XMLRedlineExport::ExportChangeInline(
 void XMLRedlineExport::ExportChangedRegion(
     const Reference<XPropertySet> & rPropSet)
 {
-    // determine collapsed, start, end
-    Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
-    sal_Bool bCollapsed = *(sal_Bool *)aAny.getValue();
-    aAny = rPropSet->getPropertyValue(sIsStart);
-    sal_Bool bStart = *(sal_Bool *)aAny.getValue();
+    // export changed-region element (with change-ID)
+    rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_id, GetRedlineID(rPropSet) );
+    SvXMLElementExport aChangedRegion(rExport, XML_NAMESPACE_TEXT,
+                                      sXML_changed_region, sal_True, sal_True);
 
-    // only export changed-region once per change
-    if (bStart || bCollapsed)
+    // scope for (first) change element
     {
-        // export changed-region element (with change-ID)
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_id,
-                             GetRedlineID(rPropSet) );
-        SvXMLElementExport aChangedRegion(rExport, XML_NAMESPACE_TEXT,
-                                          sXML_changed_region,
-                                          sal_True, sal_True);
+        Any aAny = rPropSet->getPropertyValue(sRedlineType);
+        OUString sType;
+        aAny >>= sType;
+        SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
+                                   ConvertTypeName(sType), sal_True, sal_True);
 
-        // scope for change element
+        ExportChangeInfo(rPropSet);
+
+        // get XText from the redline and export (if the XText exists)
+        aAny = rPropSet->getPropertyValue(sRedlineText);
+        Reference<XText> xText;
+        aAny >>= xText;
+        if (xText.is())
         {
-            Any aAny = rPropSet->getPropertyValue(sRedlineType);
-            OUString sType;
-            aAny >>= sType;
-            SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
-                                       ConvertTypeName(sType),
-                                       sal_True, sal_True);
-
-            ExportChangeInfo(rPropSet);
-
-            // if the region is collapsed, we need to export it's content
-            if (bCollapsed)
-            {
-                // get XText from the redline text portion
-                Reference<XText> xText(rPropSet, uno::UNO_QUERY);
-                if (xText.is())
-                {
-                    rExport.GetTextParagraphExport()->
-                        collectTextAutoStyles(xText);
-                    // default parameters: bProgress, bExportParagraph ???
-                    rExport.GetTextParagraphExport()->exportText(xText);
-                    // default parameters: bProgress, bExportParagraph ???
-                }
-                // else: no text, no export. Bummer!
-            }
-            // else: not collapsed: content will be exported inline
+            rExport.GetTextParagraphExport()->exportText(xText);
+            // default parameters: bProgress, bExportParagraph ???
         }
-
-        // changed change? Hierarchical changes can onl be two levels
-        // deep. Here we check for the second level.
-        Any aAny = rPropSet->getPropertyValue(sRedlineSuccessorData);
-        Sequence<PropertyValue> aSuccessorData;
-        aAny >>= aSuccessorData;
-
-        // if we actually got a hierarchical change, make element and
-        // process change info
-        if (aSuccessorData.getLength() > 0)
-        {
-            // The only change that can be "undone" is an insertion -
-            // after all, you can't re-insert an deletion, but you can
-            // delete an insertion. This assumption is asserted in
-            // ExportChangeInfo(Sequence<PropertyValue>&).
-            SvXMLElementExport aSecondChangeElem(
-                rExport, XML_NAMESPACE_TEXT, sXML_insertion,
-                sal_True, sal_True);
-
-            ExportChangeInfo(aSuccessorData);
-        }
+        // else: no text interface -> content is inline and will
+        //       be exported there
     }
-    // else: region end: don't export
+
+    // changed change? Hierarchical changes can onl be two levels
+    // deep. Here we check for the second level.
+    Any aAny = rPropSet->getPropertyValue(sRedlineSuccessorData);
+    Sequence<PropertyValue> aSuccessorData;
+    aAny >>= aSuccessorData;
+
+    // if we actually got a hierarchical change, make element and
+    // process change info
+    if (aSuccessorData.getLength() > 0)
+    {
+        // The only change that can be "undone" is an insertion -
+        // after all, you can't re-insert an deletion, but you can
+        // delete an insertion. This assumption is asserted in
+        // ExportChangeInfo(Sequence<PropertyValue>&).
+        SvXMLElementExport aSecondChangeElem(
+            rExport, XML_NAMESPACE_TEXT, sXML_insertion,
+            sal_True, sal_True);
+
+        ExportChangeInfo(aSuccessorData);
+    }
+    // else: no hierarchical change
 }
 
 
@@ -317,14 +389,10 @@ const OUString XMLRedlineExport::ConvertTypeName(
 }
 
 
-/*
- * Create a Redline-ID
- */
+/** Create a Redline-ID */
 const OUString XMLRedlineExport::GetRedlineID(
     const Reference<XPropertySet> & rPropSet)
 {
-    OUString sRedlineIdentifier(
-        RTL_CONSTASCII_USTRINGPARAM("RedlineIdentifier"));
     Any aAny = rPropSet->getPropertyValue(sRedlineIdentifier);
     OUString sTmp;
     aAny >>= sTmp;
@@ -416,6 +484,76 @@ void XMLRedlineExport::ExportChangeInfo(
     // finally write element
     SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
                                    sXML_change_info, sal_True, sal_True);
+}
+
+void XMLRedlineExport::ExportStartOrEndRedline(
+    const Reference<XPropertySet> & rPropSet,
+    sal_Bool bStart)
+{
+    // get appropriate (start or end) property
+    Any aAny =
+        rPropSet->getPropertyValue(bStart ? sStartRedline : sEndRedline);
+    Sequence<PropertyValue> aValues;
+    aAny >>= aValues;
+
+    // seek for redline ID
+    sal_Int32 nLength = aValues.getLength();
+    for(sal_Int32 i = 0; i < nLength; i++)
+    {
+        if (sRedlineIdentifier.equals(aValues[i].Name))
+        {
+            OUString sId;
+            aValues[i].Value >>= sId;
+
+            // TODO: use GetRedlineID or elimiate that function
+            OUStringBuffer sBuffer(sChangePrefix);
+            sBuffer.append(sId);
+
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_change_id,
+                                 sBuffer.makeStringAndClear());
+
+            // export the element
+            // (whitespace because we're not inside paragraphs)
+            SvXMLElementExport aChangeElem(
+                rExport, XML_NAMESPACE_TEXT,
+                bStart ? sXML_change_start : sXML_change_end,
+                sal_True, sal_True);
+
+            // and break out of loop, in case a second RedlineIdentifier Value
+            break;
+        }
+        // else: ignore Value
+    }
+}
+
+void XMLRedlineExport::ExportStartOrEndRedline(
+    const Reference<XTextContent> & rContent,
+    sal_Bool bStart)
+{
+    Reference<XPropertySet> xPropSet(rContent, uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        ExportStartOrEndRedline(xPropSet, bStart);
+    }
+    else
+    {
+        DBG_ERROR("XPropertySet expected");
+    }
+}
+
+void XMLRedlineExport::ExportStartOrEndRedline(
+    const Reference<XTextSection> & rSection,
+    sal_Bool bStart)
+{
+    Reference<XPropertySet> xPropSet(rSection, uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        ExportStartOrEndRedline(xPropSet, bStart);
+    }
+    else
+    {
+        DBG_ERROR("XPropertySet expected");
+    }
 }
 
 

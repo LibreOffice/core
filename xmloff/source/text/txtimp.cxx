@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:31 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@
 #ifndef _XMLOFF_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
 #include "XMLTrackedChangesImportContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLCHANGEIMPORTCONTEXT_HXX
+#include "XMLChangeImportContext.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::std;
@@ -228,6 +231,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_bibliography, XML_TOK_TEXT_BIBLIOGRAPHY_INDEX },
     { XML_NAMESPACE_TEXT, sXML_index_title,     XML_TOK_TEXT_INDEX_TITLE },
     { XML_NAMESPACE_TEXT, sXML_tracked_changes, XML_TOK_TEXT_TRACKED_CHANGES },
+    { XML_NAMESPACE_TEXT, sXML_change_start,    XML_TOK_TEXT_CHANGE_START },
+    { XML_NAMESPACE_TEXT, sXML_change_end,      XML_TOK_TEXT_CHANGE_END },
+    { XML_NAMESPACE_TEXT, sXML_change,          XML_TOK_TEXT_CHANGE },
 
     XML_TOKEN_MAP_END
 };
@@ -394,9 +400,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_sheet_name, XML_TOK_TEXT_SHEET_NAME },
 
     // redlining (aka change tracking)
-    { XML_NAMESPACE_TEXT, sXML_change_start, XML_TOK_TEXT_CHANGE_START },
-    { XML_NAMESPACE_TEXT, sXML_change_end  , XML_TOK_TEXT_CHANGE_END },
-    { XML_NAMESPACE_TEXT, sXML_change, XML_TOK_TEXT_CHANGE },
+    { XML_NAMESPACE_TEXT, sXML_change_start, XML_TOK_TEXTP_CHANGE_START },
+    { XML_NAMESPACE_TEXT, sXML_change_end  , XML_TOK_TEXTP_CHANGE_END },
+    { XML_NAMESPACE_TEXT, sXML_change, XML_TOK_TEXTP_CHANGE },
 
     XML_TOKEN_MAP_END
 };
@@ -1049,7 +1055,8 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
     sal_Bool bOrdered = sal_False;
     sal_Bool bHeading = sal_False;
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+    switch( nToken )
     {
     case XML_TOK_TEXT_H:
         bHeading = sal_True;
@@ -1193,6 +1200,16 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                                        rLocalName);
         break;
 
+    case XML_TOK_TEXT_CHANGE:
+    case XML_TOK_TEXT_CHANGE_START:
+    case XML_TOK_TEXT_CHANGE_END:
+        pContext = new XMLChangeImportContext(
+            rImport, nPrefix, rLocalName,
+            (XML_TOK_TEXT_CHANGE_END != nToken),
+            (XML_TOK_TEXT_CHANGE_START != nToken),
+            sal_True);
+        break;
+
     default:
         if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
         {
@@ -1204,6 +1221,14 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
 //  if( !pContext )
 //      pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    // handle open redlines
+    if ( (XML_TOK_TEXT_CHANGE != nToken) &&
+         (XML_TOK_TEXT_CHANGE_END != nToken) &&
+         (XML_TOK_TEXT_CHANGE_START != nToken) )
+    {
+        ResetOpenRedlineId();
+    }
 
     return pContext;
 }
@@ -1470,7 +1495,7 @@ void XMLTextImportHelper::RedlineAdd(
 }
 
 Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
-    Reference<XTextCursor> xOldCursor,
+    Reference<XTextCursor> & rOldCursor,
     const OUString& rId)
 {
     // dummy implementation: do nothing
@@ -1481,7 +1506,29 @@ Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
 void XMLTextImportHelper::RedlineSetCursor(
     const OUString& rId,
     sal_Bool bStart,
-    Reference<XTextRange> & rRange)
+    sal_Bool bIsOutsideOfParagraph)
 {
     // dummy implementation: do nothing
+}
+
+void XMLTextImportHelper::RedlineAdjustStartNodeCursor(
+    sal_Bool bStart)
+{
+    // dummy implementation: do nothing
+}
+
+OUString XMLTextImportHelper::GetOpenRedlineId()
+{
+    return sOpenRedlineIdentifier;
+}
+
+void XMLTextImportHelper::SetOpenRedlineId( ::rtl::OUString& rId)
+{
+    sOpenRedlineIdentifier = rId;
+}
+
+void XMLTextImportHelper::ResetOpenRedlineId()
+{
+    OUString sEmpty;
+    SetOpenRedlineId(sEmpty);
 }

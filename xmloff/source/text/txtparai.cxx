@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
 #include "XMLEventsImportContext.hxx"
+#endif
+#ifndef _XMLOFF_XMLCHANGEIMPORTCONTEXT_HXX
+#include "XMLChangeImportContext.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1383,13 +1386,13 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
 {
     if (XML_NAMESPACE_TEXT == nNamespace)
     {
-        if (sLocalName.equalsAsciiL(sXML_key1, sizeof(sXML_key1)))
+        if (sLocalName.equalsAsciiL(sXML_key1, sizeof(sXML_key1)-1))
         {
             Any aAny;
             aAny <<= sValue;
             rPropSet->setPropertyValue(sPrimaryKey, aAny);
         }
-        else if (sLocalName.equalsAsciiL(sXML_key2, sizeof(sXML_key2)))
+        else if (sLocalName.equalsAsciiL(sXML_key2, sizeof(sXML_key2)-1))
         {
             Any aAny;
             aAny <<= sValue;
@@ -1408,83 +1411,6 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
     }
 }
 
-
-// ---------------------------------------------------------------------
-
-/**
- * import change tracking/redlining markers
- * <text:change>, <text:change-start>, <text:change-end>
- */
-class XMLChangeImportContext : public SvXMLImportContext
-{
-    sal_Bool bStart;
-    sal_Bool bEnd;
-
-public:
-
-    TYPEINFO();
-
-    XMLChangeImportContext(SvXMLImport& rImport,
-                           sal_Int16 nPrefix,
-                           const OUString& rLocalName,
-                           enum XMLTextPElemTokens nToken);
-
-    ~XMLChangeImportContext();
-
-    virtual void StartElement(
-        const Reference<xml::sax::XAttributeList> & xAttrList);
-};
-
-TYPEINIT1( XMLChangeImportContext, SvXMLImportContext );
-
-XMLChangeImportContext::XMLChangeImportContext(
-    SvXMLImport& rImport,
-    sal_Int16 nPrefix,
-    const OUString& rLocalName,
-    enum XMLTextPElemTokens nToken) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
-        bStart( (XML_TOK_TEXT_CHANGE == nToken) ||
-                (XML_TOK_TEXT_CHANGE_START == nToken)),
-        bEnd( (XML_TOK_TEXT_CHANGE == nToken) ||
-              (XML_TOK_TEXT_CHANGE_END == nToken))
-{
-}
-
-XMLChangeImportContext::~XMLChangeImportContext()
-{
-}
-
-void XMLChangeImportContext::StartElement(
-    const Reference<xml::sax::XAttributeList>& xAttrList)
-{
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (sLocalName.equalsAsciiL(sXML_change_id,
-                                      sizeof(sXML_change_id)-1)) )
-        {
-            // Id found! Now call RedlineImportHelper
-
-            // prepare parameters
-            OUString& rID = xAttrList->getValueByIndex(nAttr);
-            UniReference<XMLTextImportHelper> rHelper =
-                GetImport().GetTextImport();
-            Reference<XTextRange> & rPos = rHelper->GetCursor()->getStart();
-
-            // call for bStart and bEnd (may both be true)
-            if (bStart)
-                rHelper->RedlineSetCursor(rID, sal_True, rPos);
-            if (bEnd)
-                rHelper->RedlineSetCursor(rID, sal_False, rPos);
-        }
-        // else: ignore
-    }
-}
 
 // ---------------------------------------------------------------------
 
@@ -1726,11 +1652,14 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             rHints);
         break;
 
-    case XML_TOK_TEXT_CHANGE_START:
-    case XML_TOK_TEXT_CHANGE_END:
-    case XML_TOK_TEXT_CHANGE:
-        pContext = new XMLChangeImportContext(rImport, nPrefix, rLocalName,
-                                              (enum XMLTextPElemTokens)nToken);
+    case XML_TOK_TEXTP_CHANGE_START:
+    case XML_TOK_TEXTP_CHANGE_END:
+    case XML_TOK_TEXTP_CHANGE:
+        pContext = new XMLChangeImportContext(
+            rImport, nPrefix, rLocalName,
+            (nToken != XML_TOK_TEXTP_CHANGE_END),
+            (nToken != XML_TOK_TEXTP_CHANGE_START),
+            sal_False);
         break;
 
     default:

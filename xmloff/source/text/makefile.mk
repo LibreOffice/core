@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+#   last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ CXXFILES = \
         XMLChangedRegionImportContext.cxx \
         XMLChangeElementImportContext.cxx \
         XMLChangeInfoContext.cxx \
+        XMLChangeImportContext.cxx \
         XMLFootnoteBodyImportContext.cxx \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLFootnoteImportContext.cxx \
@@ -167,6 +168,7 @@ SLOFILES =	\
         $(SLO)$/XMLChangedRegionImportContext.obj \
         $(SLO)$/XMLChangeElementImportContext.obj \
         $(SLO)$/XMLChangeInfoContext.obj \
+        $(SLO)$/XMLChangeImportContext.obj \
         $(SLO)$/XMLFootnoteBodyImportContext.obj \
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \

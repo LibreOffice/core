@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-19 08:44:50 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,7 +1055,15 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                         aPrevNumInfo, aNextNumInfo,
                                         bAutoStyles );
 
+            // export start + end redlines (for wholly redlined tables)
+            if (! bAutoStyles)
+                pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_True);
+
             exportTable( xTxtCntnt, bAutoStyles, bProgress  );
+
+            if (! bAutoStyles)
+                pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, sal_False);
+
             bHasContent = sal_True;
         }
         else if( xServiceInfo->supportsService( sTextFrameService ) )
@@ -1285,7 +1293,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sRedline))
             {
                 // disable change tracking until implemented properly:
-                // pRedlineExport->ExportChange(xPropSet, bAutoStyles);
+                pRedlineExport->ExportChange(xPropSet, bAutoStyles);
             }
             else
                 DBG_ERROR("unknown text portion type");
@@ -2289,10 +2297,10 @@ void XMLTextParagraphExport::exportTextDeclarations()
     pFieldExport->ExportFieldDeclarations();
 }
 
-void XMLTextParagraphExport::exportTrackedChanges()
+void XMLTextParagraphExport::exportTrackedChanges(sal_Bool bAutoStyles)
 {
     // disable change tracking until implemented properly:
-    // pRedlineExport->ExportChangesList();
+    pRedlineExport->ExportChangesList( bAutoStyles );
 }
 
 void XMLTextParagraphExport::exportTextAutoStyles()

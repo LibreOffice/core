@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-12 14:35:03 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace beans { struct PropertyValue; }
+    namespace text { class XTextContent; }
+    namespace text { class XTextSection; }
  } } }
 namespace rtl {
     class OUString;
@@ -106,10 +108,15 @@ class XMLRedlineExport
     const ::rtl::OUString sRedlineComment;
     const ::rtl::OUString sRedlineDateTime;
     const ::rtl::OUString sRedlineSuccessorData;
+    const ::rtl::OUString sRedlineText;
     const ::rtl::OUString sRedlineType;
     const ::rtl::OUString sStyle;
     const ::rtl::OUString sTextTable;
     const ::rtl::OUString sUnknownChange;
+    const ::rtl::OUString sStartRedline;
+    const ::rtl::OUString sEndRedline;
+    const ::rtl::OUString sRedlineIdentifier;
+
 
     const ::rtl::OUString sChangePrefix;
 
@@ -133,16 +140,8 @@ public:
         /// if (bAutoStyle) CollectChange(..) else ExoirtChangeInline(...)
         sal_Bool bAutoStyle);
 
-
-    /// put a RedlinePortion into the list of changes
-    void CollectChange(
-        /// PropertySet of RedlinePortion
-        const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet);
-
-    /// process the list of changes that have been previously
-    /// registered using the CollectChange() method
-    void ExportChangesList();
+    /// export the list of changes
+    void ExportChangesList(sal_Bool bAutoStyles);
 
     /// export the change mark contained in the text body
     void ExportChangeInline(
@@ -150,7 +149,35 @@ public:
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet);
 
+    /// export redline marks which start or end at start nodes,
+    /// i.e. that include the complete paragraph/table/section
+    void ExportStartOrEndRedline(
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet,
+        sal_Bool bStart);   /// start or end of text entity (e.g. paragraph)?
+
+    /// convenience method, calls XPropertySet-version of this method
+    void ExportStartOrEndRedline(
+        /// XTextContent; must also be an XPropertySet
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextContent> & rContent,
+        sal_Bool bStart);
+
+    /// convenience method, calls XPropertySet-version of this method
+    void ExportStartOrEndRedline(
+        /// XTextSection; must also be an XPropertySet
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextSection> & rSection,
+        sal_Bool bStart);
+
 private:
+
+    /// export the changes list (<text:tracked-changes>)
+    void ExportChangesListElements();
+
+    /// export the auto styles needed by the changes list
+    void ExportChangesListAutoStyles();
+
     /// export the changed-region element
     void ExportChangedRegion(
         const ::com::sun::star::uno::Reference<

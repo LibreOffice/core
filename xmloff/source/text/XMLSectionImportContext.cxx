@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,12 +258,17 @@ void XMLSectionImportContext::StartElement(
                     }
                 }
 
-                // insert X, <paragraph>, X; then insert
-                // section over the first X character, and delete the
-                // last paragraph (and X) when closing a section.
+                // insert marker, <paragraph>, marker; then insert
+                // section over the first marker character, and delete the
+                // last paragraph (and marker) when closing a section.
                 Reference<XTextRange> xStart =
                     rHelper->GetCursor()->getStart();
-                OUString sMarkerString(RTL_CONSTASCII_USTRINGPARAM("X"));
+#ifdef PRODUCT
+                static const sal_Char sMarker[] = " ";
+#else
+                static const sal_Char sMarker[] = "X";
+#endif
+                OUString sMarkerString(RTL_CONSTASCII_USTRINGPARAM(sMarker));
                 rHelper->InsertString(sMarkerString);
                 rHelper->InsertControlCharacter(
                     ControlCharacter::APPEND_PARAGRAPH );
@@ -284,6 +289,10 @@ void XMLSectionImportContext::StartElement(
                 // and delete first marker (in section)
                 rHelper->GetText()->insertString(
                     rHelper->GetCursorAsRange(), sEmpty, sal_True);
+
+                // finally, check for redlines that should start at
+                // the section start node
+                rHelper->RedlineAdjustStartNodeCursor(sal_True); // start ???
             }
         }
     }
