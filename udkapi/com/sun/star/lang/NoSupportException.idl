@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NoSupportException.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,7 @@ module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-// DocMerge from xml: exception com::sun::star::lang::NoSupportException
-/** This exception is thrown when a method of an interface is not
+/** This exception is thrown when a feature of an interface is not
     supported.
 
     <p>An example is a <code>setParent(...)</code> method and the object
