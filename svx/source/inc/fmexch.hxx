@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,18 +137,18 @@ public:
 SV_DECL_IMPL_REF( SvxFmExplCtrlExch );
 
 //========================================================================
-class SvxFmFieldExch : public SotDataObject
-{
-    String aFieldDesc;
-    SvDataTypeList  aDataTypeList;
+//class SvxFmFieldExch : public SotDataObject
+//{
+//  String aFieldDesc;
+//  SvDataTypeList  aDataTypeList;
+//
+//public:
+//  SvxFmFieldExch(const String& rFieldDesc);
+//
+//  virtual const SvDataTypeList& GetTypeList() const { return aDataTypeList; }
+//  virtual sal_Bool  GetData( SvData* );
+//};
 
-public:
-    SvxFmFieldExch(const String& rFieldDesc);
-
-    virtual const SvDataTypeList& GetTypeList() const { return aDataTypeList; }
-    virtual sal_Bool  GetData( SvData* );
-};
-
-SV_DECL_IMPL_REF( SvxFmFieldExch );
+//SV_DECL_IMPL_REF( SvxFmFieldExch );
 #endif
 

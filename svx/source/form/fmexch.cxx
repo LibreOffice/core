@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 14:47:49 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,27 +197,27 @@ void SvxFmExplCtrlExch::AddHiddenControlsFormat(const ::com::sun::star::uno::Seq
 //========================================================================
 
 //------------------------------------------------------------------------
-SvxFmFieldExch::SvxFmFieldExch(const String& rFieldDesc)
-               :aFieldDesc(rFieldDesc)
-{
-    if (!nFieldFormat)
-        nFieldFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_FIELDEXCHANGE_FORMAT));
-    if(!nControlFormat)
-        nControlFormat = Exchange::RegisterSotFormatName(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE);
-
-    aDataTypeList.Insert( *new SvDataType(nControlFormat) );
-    aDataTypeList.Insert( *new SvDataType(nFieldFormat) );
-}
+//SvxFmFieldExch::SvxFmFieldExch(const String& rFieldDesc)
+//             :aFieldDesc(rFieldDesc)
+//{
+//  if (!nFieldFormat)
+//      nFieldFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_FIELDEXCHANGE_FORMAT));
+//  if(!nControlFormat)
+//      nControlFormat = Exchange::RegisterSotFormatName(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE);
+//
+//  aDataTypeList.Insert( *new SvDataType(nControlFormat) );
+//  aDataTypeList.Insert( *new SvDataType(nFieldFormat) );
+//}
 
 //------------------------------------------------------------------------
-sal_Bool SvxFmFieldExch::GetData( SvData* pData )
-{
-    if (pData->GetFormat() == nFieldFormat || pData->GetFormat() == nControlFormat)
-    {
-        pData->SetData(aFieldDesc);
-        return sal_True;
-    }
-    return sal_False;
-}
+//sal_Bool SvxFmFieldExch::GetData( SvData* pData )
+//{
+//  if (pData->GetFormat() == nFieldFormat || pData->GetFormat() == nControlFormat)
+//  {
+//      pData->SetData(aFieldDesc);
+//      return sal_True;
+//  }
+//  return sal_False;
+//}
 
 
