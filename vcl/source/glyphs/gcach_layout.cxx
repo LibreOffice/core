@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.13 $
- *  last change: $Author: hdu $ $Date: 2002-08-22 16:44:29 $
+ *  $Revision: 1.14 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,78 +86,41 @@
 #include <cstdio>
 #endif
 
-// =======================================================================
-
-ServerFontLayout::ServerFontLayout( ServerFont* pServerFont,
-    const ImplLayoutArgs& rArgs )
-:   GenericSalLayout( rArgs ),
-    mpServerFont( pServerFont )
-{}
-
-// =======================================================================
-// Layout Engine Abstract Base Class
-// =======================================================================
-
-class ServerFontLayoutEngine
-{
-public:
-    virtual ServerFontLayout*   operator()( ServerFont*, const ImplLayoutArgs& rArgs );
-};
-
 static ServerFontLayoutEngine aSimpleLayoutEngine;
 
 // =======================================================================
 // layout implementation for ServerFont
 // =======================================================================
 
-bool ServerFont::InitLayoutEngine()
-{
-    // setup default layout engine
-    mpLayoutData = (void*)&aSimpleLayoutEngine;
-    return true;
-}
-
-// -----------------------------------------------------------------------
-
-void ServerFont::DoneLayoutEngine()
-{
-    ServerFontLayoutEngine* pLE = (ServerFontLayoutEngine*)mpLayoutData;
-    if( (pLE != NULL) && (pLE != &aSimpleLayoutEngine) )
-        delete pLE;
-    mpLayoutData = NULL;
-}
-
-// -----------------------------------------------------------------------
-
-ServerFontLayout* ServerFont::LayoutText( const ImplLayoutArgs& rLayoutArgs )
+ServerFontLayout::ServerFontLayout( const ImplLayoutArgs& rArgs, ServerFont& rFont )
+:   GenericSalLayout( rArgs ),
+    mrServerFont( rFont )
 {
     ServerFontLayoutEngine* pLE = NULL;
-    if( !(rLayoutArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED) )
-    {
-        if( !mpLayoutData )
-            InitLayoutEngine();
-        pLE = (ServerFontLayoutEngine*)mpLayoutData;
-    }
+    if( ~rArgs.mnFlags & (SAL_LAYOUT_COMPLEX_DISABLED|SAL_LAYOUT_BIDI_STRONG) )
+        pLE = rFont.GetLayoutEngine();
     if( !pLE )
         pLE = &aSimpleLayoutEngine;
 
-    ServerFontLayout* pSalLayout = (*pLE)( this, rLayoutArgs );
-    if( rLayoutArgs.mpDXArray )
-        pSalLayout->ApplyDXArray( rLayoutArgs.mpDXArray );
-    if( rLayoutArgs.mnLayoutWidth )
-        pSalLayout->Justify( rLayoutArgs.mnLayoutWidth );
-    return pSalLayout;
+    (*pLE)( *this, rArgs );
+
+    if( rArgs.mpDXArray )
+        ApplyDXArray( rArgs.mpDXArray );
+    if( rArgs.mnLayoutWidth )
+        Justify( rArgs.mnLayoutWidth );
 }
 
-// -----------------------------------------------------------------------
+// =======================================================================
 
-ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
+bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout,
     const ImplLayoutArgs& rArgs )
 {
+    FreetypeServerFont& rFont = reinterpret_cast<FreetypeServerFont&>(rLayout.GetServerFont());
+
     bool bRightToLeft = (SAL_LAYOUT_BIDI_RTL & rArgs.mnFlags) != 0;
 
-    int nGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
-    GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
+    int nGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+    GlyphItem* pGlyphItems = new GlyphItem[ nGlyphCount ];
 
     Point aNewPos( 0, 0 );
     bool bWantFallback = false;
@@ -165,15 +128,15 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
     int nGlyphWidth = 0;
     for( int i = 0; i < nGlyphCount; ++i )
     {
-        int nLogicalIndex = bRightToLeft ? rArgs.mnEndCharIndex-1-i : rArgs.mnFirstCharIndex+i;
-        int nGlyphIndex = pFont->GetGlyphIndex( rArgs.mpStr[ nLogicalIndex ] );
+        int nLogicalIndex = bRightToLeft ? rArgs.mnEndCharPos-1-i : rArgs.mnMinCharPos+i;
+        int nGlyphIndex = rFont.GetGlyphIndex( rArgs.mpStr[ nLogicalIndex ] );
         if( !nGlyphIndex )
             bWantFallback = true;
 
         // apply pair kerning if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
         {
-            int nKern = pFont->GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
+            int nKern = rFont.GetGlyphKernValue( nOldGlyphId, nGlyphIndex );
             nGlyphWidth += nKern;
             nOldGlyphId = nGlyphIndex;
         }
@@ -181,10 +144,11 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
         // update position of this glyph using all previous info
         aNewPos.X() += nGlyphWidth;
 
-        const GlyphMetric& rGM = pFont->GetGlyphMetric( nGlyphIndex );
+        const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
         nGlyphWidth = rGM.GetCharWidth();
-        pGlyphBuffer[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos,
-            GlyphItem::CLUSTER_START, nGlyphWidth );
+        int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
+        pGlyphItems[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos,
+            nGlyphFlags, nGlyphWidth );
     }
 
     // apply asian kerning if requested
@@ -193,10 +157,10 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
     {
         bool bVertical = false; // TODO
 
-        const xub_Unicode* pStr = rArgs.mpStr + rArgs.mnFirstCharIndex;
+        const xub_Unicode* pStr = rArgs.mpStr + rArgs.mnMinCharPos;
         // #99658# also do asian kerning one beyond substring
         int nLen = nGlyphCount;
-        if( rArgs.mnFirstCharIndex + nLen < rArgs.mnLength )
+        if( rArgs.mnMinCharPos + nLen < rArgs.mnLength )
             ++nLen;
         long nOffset = 0;
         for( int i = 1; i < nLen; ++i )
@@ -210,24 +174,23 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
                 long nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
                 if( nDelta<0 && nKernFirst!=0 && nKernNext!=0 )
                 {
-                    nGlyphWidth = pGlyphBuffer[i-1].mnOrigWidth;
+                    nGlyphWidth = pGlyphItems[i-1].mnOrigWidth;
                     nDelta = (nDelta * nGlyphWidth + 2) / 4;
                     if( i == nGlyphCount )
-                        pGlyphBuffer[i-1].mnNewWidth += nDelta;
+                        pGlyphItems[i-1].mnNewWidth += nDelta;
                     nOffset += nDelta;
                 }
             }
 
             if( i < nGlyphCount )
-                pGlyphBuffer[i].maLinearPos.X() += nOffset;
+                pGlyphItems[i].maLinearPos.X() += nOffset;
         }
     }
 
     // create layout object
-    ServerFontLayout* pSalLayout = new ServerFontLayout( pFont, rArgs );
-    pSalLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
-    pSalLayout->SetWantFallback( bWantFallback );
-    return pSalLayout;
+    rLayout.SetGlyphItems( pGlyphItems, nGlyphCount );
+    rLayout.SetWantFallback( bWantFallback );
+    return true;
 }
 
 // =======================================================================
@@ -241,6 +204,7 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
 #include <layout/LEFontInstance.h>
 #include <layout/LEScripts.h>
 #include <unicode/uscript.h>
+#include <unicode/ubidi.h>
 
 using namespace U_ICU_NAMESPACE;
 
@@ -250,11 +214,11 @@ class IcuFontFromServerFont
 : public LEFontInstance
 {
 private:
-    FreetypeServerFont* const mpServerFont;
+    FreetypeServerFont&     mrServerFont;
 
 public:
-                            IcuFontFromServerFont( FreetypeServerFont* pFont )
-                            : mpServerFont(pFont)
+                            IcuFontFromServerFont( FreetypeServerFont& rFont )
+                            : mrServerFont( rFont )
                             {}
 
     virtual const void*     getFontTable(LETag tableTag) const;
@@ -294,11 +258,11 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
     pTagName[4] = 0;
 
     ULONG nLength;
-    const unsigned char* pBuffer = mpServerFont->GetTable( pTagName, &nLength );
+    const unsigned char* pBuffer = mrServerFont.GetTable( pTagName, &nLength );
 #ifdef VERBOSE_DEBUG
     fprintf(stderr,"IcuGetTable(\"%s\") => %p\n", pTagName, pBuffer);
-    int mnHeight = mpServerFont->GetFontSelData().mnHeight;
-    const char* pName = mpServerFont->GetFontFileName()->getStr();
+    int mnHeight = mrServerFont.GetFontSelData().mnHeight;
+    const char* pName = mrServerFont.GetFontFileName()->getStr();
     fprintf(stderr,"font( h=%d, s=%\"%s\" )\n", mnHeight, pName );
 #endif
     return (const void*)pBuffer;
@@ -308,7 +272,7 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
 
 le_bool IcuFontFromServerFont::canDisplay( LEUnicode32 ch ) const
 {
-    le_bool rc = (mpServerFont->GetRawGlyphIndex( ch ) != 0);
+    le_bool rc = (mrServerFont.GetRawGlyphIndex( ch ) != 0);
     return rc;
 }
 
@@ -316,7 +280,7 @@ le_bool IcuFontFromServerFont::canDisplay( LEUnicode32 ch ) const
 
 le_int32 IcuFontFromServerFont::getUnitsPerEM() const
 {
-    return mpServerFont->GetEmUnits();
+    return mrServerFont.GetEmUnits();
 }
 
 // -----------------------------------------------------------------------
@@ -347,7 +311,7 @@ LEGlyphID IcuFontFromServerFont::mapCharToGlyph( LEUnicode32 c1,
     LEUnicode32 c2 = c1;
     if( pMapper )
         c2 = pMapper->mapChar( c1 );
-    LEGlyphID nGlyphIndex = mpServerFont->GetRawGlyphIndex( c2 );
+    LEGlyphID nGlyphIndex = mrServerFont.GetRawGlyphIndex( c2 );
     return nGlyphIndex;
 }
 
@@ -368,7 +332,7 @@ le_int32 IcuFontFromServerFont::getName(
 void IcuFontFromServerFont::getGlyphAdvance( LEGlyphID nGlyphIndex,
     LEPoint &advance ) const
 {
-    const GlyphMetric& rGM = mpServerFont->GetGlyphMetric( nGlyphIndex );
+    const GlyphMetric& rGM = mrServerFont.GetGlyphMetric( nGlyphIndex );
     advance.fX = rGM.GetCharWidth();
     advance.fY = 0;
 }
@@ -389,7 +353,7 @@ le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID glyph,
 
 float IcuFontFromServerFont::getXPixelsPerEm() const
 {
-    const ImplFontSelectData& r = mpServerFont->GetFontSelData();
+    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
     float fX = r.mnWidth ? r.mnWidth : r.mnHeight;
     return fX;
 }
@@ -398,7 +362,7 @@ float IcuFontFromServerFont::getXPixelsPerEm() const
 
 float IcuFontFromServerFont::getYPixelsPerEm() const
 {
-    float fY = mpServerFont->GetFontSelData().mnHeight;
+    float fY = mrServerFont.GetFontSelData().mnHeight;
     return fY;
 }
 
@@ -408,9 +372,9 @@ float IcuFontFromServerFont::xUnitsToPoints( float xUnits ) const
 {
     // TODO: avoid assumption: pixels==points
     float fPoints = xUnits;
-    const ImplFontSelectData& r = mpServerFont->GetFontSelData();
+    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
     fPoints *= r.mnWidth ? r.mnWidth : r.mnHeight;
-    fPoints /= mpServerFont->GetEmUnits();
+    fPoints /= mrServerFont.GetEmUnits();
     return fPoints;
 }
 
@@ -420,8 +384,8 @@ float IcuFontFromServerFont::yUnitsToPoints( float yUnits ) const
 {
     // TODO: avoid assumption pixels==points
     float fPoints = yUnits;
-    fPoints *= mpServerFont->GetFontSelData().mnHeight;
-    fPoints /= mpServerFont->GetEmUnits();
+    fPoints *= mrServerFont.GetFontSelData().mnHeight;
+    fPoints /= mrServerFont.GetEmUnits();
     return fPoints;
 }
 
@@ -438,8 +402,8 @@ void IcuFontFromServerFont::unitsToPoints( LEPoint &units, LEPoint &points ) con
 float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
 {
     float fPixels = xPixels;
-    fPixels *= mpServerFont->GetEmUnits();
-    const ImplFontSelectData& r = mpServerFont->GetFontSelData();
+    fPixels *= mrServerFont.GetEmUnits();
+    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
     fPixels /= r.mnWidth ? r.mnWidth : r.mnHeight;
     return fPixels;
 }
@@ -449,8 +413,8 @@ float IcuFontFromServerFont::xPixelsToUnits( float xPixels ) const
 float IcuFontFromServerFont::yPixelsToUnits( float yPixels ) const
 {
     float fPixels = yPixels;
-    fPixels *= mpServerFont->GetEmUnits();
-    fPixels /= mpServerFont->GetFontSelData().mnHeight;
+    fPixels *= mrServerFont.GetEmUnits();
+    fPixels /= mrServerFont.GetFontSelData().mnHeight;
     return fPixels;
 }
 
@@ -482,17 +446,16 @@ private:
     LayoutEngine*           mpIcuLE;
 
 public:
-                            IcuLayoutEngine( FreetypeServerFont* pServerFont );
+                            IcuLayoutEngine( FreetypeServerFont& );
     virtual                 ~IcuLayoutEngine();
-    bool                    IsReady() const { return (mpIcuLE != NULL); }
 
-    virtual ServerFontLayout* operator()( ServerFont*, const ImplLayoutArgs& );
+    virtual bool            operator()( ServerFontLayout&, const ImplLayoutArgs& );
 };
 
 // -----------------------------------------------------------------------
 
-IcuLayoutEngine::IcuLayoutEngine( FreetypeServerFont* pServerFont )
-:   maIcuFont( pServerFont ),
+IcuLayoutEngine::IcuLayoutEngine( FreetypeServerFont& rServerFont )
+:   maIcuFont( rServerFont ),
     mpIcuLE( NULL ),
     meScriptCode( USCRIPT_INVALID_CODE )
 {}
@@ -507,7 +470,7 @@ IcuLayoutEngine::~IcuLayoutEngine()
 
 // -----------------------------------------------------------------------
 
-ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
+bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     const ImplLayoutArgs& rArgs )
 {
     LEUnicode* pIcuChars;
@@ -529,7 +492,7 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
     // find matching script
     // TODO: handle errors better
     // TODO: consider script changes
-    le_int32 eScriptCode = uscript_getScript( pIcuChars[rArgs.mnFirstCharIndex], &rcI18n );
+    le_int32 eScriptCode = uscript_getScript( pIcuChars[rArgs.mnMinCharPos], &rcI18n );
 
     // get layout engine matching to this script
     // no engine change necessary if script is latin
@@ -551,81 +514,154 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
 
     // fall back to default layout if needed
     if( !mpIcuLE )
-        return aSimpleLayoutEngine( pFont, rArgs );
+        return aSimpleLayoutEngine( rLayout, rArgs );
 
-    // TODO: split up BiDi runs
-    le_bool bRightToLeft = (SAL_LAYOUT_BIDI_RTL & rArgs.mnFlags) != 0;
+    // run Bidi algorithms if necessary
+    bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
+    UBiDi* pParaBidi;
+    UBiDi* pLineBidi;
+    int32_t* pVisualMap;
+    UTextOffset nMinBidiPos;
+    UTextOffset nEndBidiPos;
+    int nRunCount = 1;
 
-    // run ICU layout engine
-    int nGlyphCount = mpIcuLE->layoutChars( pIcuChars, rArgs.mnFirstCharIndex,
-        rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex, rArgs.mnLength,
-        bRightToLeft, 0.0, 0.0, rcIcu );
-    if( LE_FAILURE(rcIcu) )
-        return NULL;
-
-    // import layout info from icu
-    struct IcuPosition{ float fX, fY; };
-    LEGlyphID* pIcuGlyphs = (LEGlyphID*)alloca( nGlyphCount * sizeof(LEGlyphID) );
-    le_int32* pCharIndices = (le_int32*)alloca( nGlyphCount * sizeof(le_int32) );
-    IcuPosition* pGlyphPositions = (IcuPosition*)alloca( (nGlyphCount+1) * sizeof(IcuPosition) );
-
-    mpIcuLE->getGlyphs( pIcuGlyphs, rcIcu );
-    mpIcuLE->getCharIndices( pCharIndices, rcIcu );
-    mpIcuLE->getGlyphPositions( (float*)pGlyphPositions, rcIcu );
-    mpIcuLE->reset();
-    if( LE_FAILURE(rcIcu) )
-        return NULL;
-
-    // export layout info to ServerFontLayout
-    GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
-    bool bWantFallback = false;
-
-    Point aNewPos;
-    const IcuPosition* pPos = pGlyphPositions;
-    FreetypeServerFont* pFtFont = reinterpret_cast<FreetypeServerFont*>(pFont);
-    for( int i = 0; i < nGlyphCount; ++i, ++pPos )
+    if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
     {
-        //TODO: remove workaround below for ICU getting pCharIndex wrong
-        int nCharIndex = rArgs.mnFirstCharIndex + pCharIndices[i];
-        int nGlyphIndex = pIcuGlyphs[i];
-        if( nGlyphIndex != 0 )
-        {
-            // apply vertical flags, etc.
-            sal_Unicode aChar = rArgs.mpStr[ pCharIndices[ i ] ];
-            nGlyphIndex = pFtFont->FixupGlyphIndex( nGlyphIndex, aChar );
-        }
-        else
-            bWantFallback = true;
-
-        aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
-        const GlyphMetric& rGM = pFont->GetGlyphMetric( nGlyphIndex );
-        int nGlyphWidth = rGM.GetCharWidth();
-        long nGlyphFlags = (nGlyphWidth > 0) ? GlyphItem::CLUSTER_START : 0;
-        pGlyphBuffer[i] = GlyphItem( nCharIndex, nGlyphIndex, aNewPos,
-            nGlyphFlags, nGlyphWidth );
-        //TODO: apply kerning if requested, set MOVED flag
+        pParaBidi   = NULL;
+        pLineBidi   = NULL;
+        pVisualMap  = NULL;
+        nMinBidiPos = rArgs.mnMinCharPos;
+        nEndBidiPos = rArgs.mnEndCharPos;
     }
-    aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
+    else
+    {
+        pParaBidi = ubidi_openSized( rArgs.mnLength, 0, &rcI18n );
+        ubidi_setPara( pParaBidi, rArgs.mpStr, rArgs.mnLength,
+            (bRightToLeft ? UBIDI_DEFAULT_RTL : UBIDI_DEFAULT_LTR), NULL, &rcI18n );
+        pLineBidi = pParaBidi;
+        if( (0 < rArgs.mnMinCharPos) || (rArgs.mnEndCharPos < rArgs.mnLength) )
+        {
+            pLineBidi = ubidi_openSized( rArgs.mnEndCharPos - rArgs.mnMinCharPos, 0, &rcI18n );
+            ubidi_setLine( pParaBidi, rArgs.mnMinCharPos, rArgs.mnEndCharPos, pLineBidi, &rcI18n );
+        }
+        nRunCount = ubidi_countRuns( pLineBidi, &rcI18n );
+        pVisualMap = (int32_t*)alloca( nRunCount * sizeof(*pVisualMap) );
+        ubidi_getVisualMap( pLineBidi, pVisualMap, &rcI18n );
+        if( U_FAILURE(rcI18n) )
+            return false;
+    }
 
-    ServerFontLayout* pSalLayout = new ServerFontLayout( pFont, rArgs );
-    pSalLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
-    pSalLayout->SetWantFallback( bWantFallback );
-    return pSalLayout;
+    // layout bidi/script runs and export them to a ServerFontLayout
+    Point aNewPos( 0, 0 );
+    bool bWantFallback = false;
+    int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) + 16;
+    int nSumGlyphCount = 0;
+
+    // allocate temporary arrays
+    GlyphItem* pGlyphItems = new GlyphItem[ nGlyphCapacity ];
+    struct IcuPosition{ float fX, fY; };
+    LEGlyphID* pIcuGlyphs = (LEGlyphID*)alloca( nGlyphCapacity * sizeof(LEGlyphID) );
+    le_int32* pCharIndices = (le_int32*)alloca( nGlyphCapacity * sizeof(le_int32) );
+    IcuPosition* pGlyphPositions = (IcuPosition*)alloca( (nGlyphCapacity+1) * sizeof(IcuPosition) );
+
+    for( int i = 0; i < nRunCount; ++i )
+    {
+        if( pVisualMap )
+        {
+            nMinBidiPos = pVisualMap[i];
+            bRightToLeft = (UBIDI_RTL == ubidi_getVisualRun( pLineBidi, i, &nMinBidiPos, &nEndBidiPos ));
+            nEndBidiPos += nMinBidiPos;
+        }
+
+        // run ICU layout engine
+        int nRunGlyphCount = mpIcuLE->layoutChars( pIcuChars, nMinBidiPos,
+            nEndBidiPos - nMinBidiPos, rArgs.mnLength, bRightToLeft,
+            aNewPos.X(), aNewPos.Y(), rcIcu );
+        if( LE_FAILURE(rcIcu) )
+            break;
+
+        // import layout info from icu
+        // TODO: reallocate also temporary arrays if necessary
+        if( nRunGlyphCount >= nGlyphCapacity )
+            break;
+        mpIcuLE->getGlyphs( pIcuGlyphs, rcIcu );
+        mpIcuLE->getCharIndices( pCharIndices, rcIcu );
+        mpIcuLE->getGlyphPositions( &pGlyphPositions->fX, rcIcu );
+        mpIcuLE->reset();
+        if( LE_FAILURE(rcIcu) )
+            break;
+
+        if( nGlyphCapacity < nSumGlyphCount + nRunGlyphCount )
+        {
+            nGlyphCapacity = 2 * (nSumGlyphCount + nRunGlyphCount) + 16;
+            GlyphItem* pNewGI = new GlyphItem[ nGlyphCapacity ];
+            for( int j = 0; j < nSumGlyphCount; ++j )
+                pNewGI[j] = pGlyphItems[j];
+            delete[] pGlyphItems;
+            pGlyphItems = pNewGI;
+        }
+
+        // convert results to GlyphItems
+        const IcuPosition* pPos = pGlyphPositions;
+        FreetypeServerFont& rFont = reinterpret_cast<FreetypeServerFont&>(rLayout.GetServerFont());
+        for( int i = 0; i < nRunGlyphCount; ++i, ++pPos )
+        {
+            //TODO: remove workaround below for ICU getting pCharIndex wrong
+            int nCharPos = nMinBidiPos + pCharIndices[i];
+            int nGlyphIndex = pIcuGlyphs[i];
+            if( !nGlyphIndex )
+                bWantFallback = true;
+            {
+                // apply vertical flags, etc.
+                sal_Unicode aChar = rArgs.mpStr[ pCharIndices[ i ] ];
+                nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
+            }
+
+            aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
+            const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
+            int nGlyphWidth = rGM.GetCharWidth();
+            long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+            if( bRightToLeft )
+                nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+            pGlyphItems[ nSumGlyphCount+i ]
+                = GlyphItem( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+            //TODO: apply kerning if requested, set MOVED flag
+        }
+        aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
+        nSumGlyphCount += nRunGlyphCount;
+    }
+
+    // cleanup Bidi engine
+    if( pLineBidi != pParaBidi )
+        ubidi_close( pLineBidi );
+    if( pParaBidi != NULL )
+        ubidi_close( pParaBidi );
+
+    if( LE_FAILURE(rcIcu) )
+    {
+        delete[] pGlyphItems;
+        return false;
+    }
+
+    // create ServerFontLayout using GlyphItems from above
+    rLayout.SetGlyphItems( pGlyphItems, nSumGlyphCount );
+    rLayout.SetWantFallback( bWantFallback );
+    return true;
 }
 
 #endif // ENABLE_ICU_LAYOUT
 
 // =======================================================================
 
-bool FreetypeServerFont::InitLayoutEngine()
+ServerFontLayoutEngine* FreetypeServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
 #ifdef ENABLE_ICU_LAYOUT
-    IcuLayoutEngine* pLE = new IcuLayoutEngine( this );
-    mpLayoutData = (void*)pLE;
+    if( !mpLayoutEngine )
+        mpLayoutEngine = new IcuLayoutEngine( *this );
 #endif // ENABLE_ICU_LAYOUT
 
-    return (mpLayoutData != NULL);
+    return mpLayoutEngine;
 }
 
 // =======================================================================
