@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.8 2000-11-29 10:41:38 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.9 2001-01-09 13:07:48 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2000-11-29 10:41:38 $ $Revision: 1.8 $
+//	$Author: oj $ $Date: 2001-01-09 13:07:48 $ $Revision: 1.9 $
 //
 // Description:
 //
@@ -229,6 +229,7 @@ using namespace connectivity;
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
 %type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter
+%type <pParseNode> catalog_name schema_name table_node
 %%
 
 /* Parse Tree an OSQLParser zurueckliefern
@@ -322,7 +323,7 @@ schema_element:
 	;
 
 base_table_def:
-		SQL_TOKEN_CREATE SQL_TOKEN_TABLE table_name '(' base_table_element_commalist ')'
+		SQL_TOKEN_CREATE SQL_TOKEN_TABLE table_node '(' base_table_element_commalist ')'
 		{$$ = SQL_NEW_RULE;
 		$$->append($1);
 		$$->append($2);
@@ -405,11 +406,11 @@ column_def_opt:
 			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_REFERENCES table_name
+	|       SQL_TOKEN_REFERENCES table_node
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);}
-	|       SQL_TOKEN_REFERENCES table_name '(' column_commalist ')'
+	|       SQL_TOKEN_REFERENCES table_node '(' column_commalist ')'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -425,7 +426,7 @@ table_constraint_def:
 			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_FOREIGN SQL_TOKEN_KEY '(' column_commalist ')' SQL_TOKEN_REFERENCES table_name
+	|       SQL_TOKEN_FOREIGN SQL_TOKEN_KEY '(' column_commalist ')' SQL_TOKEN_REFERENCES table_node
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -434,7 +435,7 @@ table_constraint_def:
 			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
 			$$->append($6);
 			$$->append($7);}
-	|       SQL_TOKEN_FOREIGN SQL_TOKEN_KEY '(' column_commalist ')' SQL_TOKEN_REFERENCES table_name '(' column_commalist ')'
+	|       SQL_TOKEN_FOREIGN SQL_TOKEN_KEY '(' column_commalist ')' SQL_TOKEN_REFERENCES table_node '(' column_commalist ')'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -472,7 +473,7 @@ column_commalist:
 	;
 
 view_def:
-		SQL_TOKEN_CREATE SQL_TOKEN_VIEW table_name opt_column_commalist SQL_TOKEN_AS select_statement opt_with_check_option
+		SQL_TOKEN_CREATE SQL_TOKEN_VIEW table_node opt_column_commalist SQL_TOKEN_AS select_statement opt_with_check_option
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -502,7 +503,7 @@ opt_column_commalist:
 	;
 
 privilege_def:
-		SQL_TOKEN_GRANT privileges SQL_TOKEN_ON table_name SQL_TOKEN_TO grantee_commalist
+		SQL_TOKEN_GRANT privileges SQL_TOKEN_ON table_node SQL_TOKEN_TO grantee_commalist
 		opt_with_grant_option
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -679,7 +680,7 @@ commit_statement:
 	;
 /*
 delete_statement_positioned:
-		SQL_TOKEN_DELETE SQL_TOKEN_FROM table_name SQL_TOKEN_WHERE SQL_TOKEN_CURRENT SQL_TOKEN_OF cursor
+		SQL_TOKEN_DELETE SQL_TOKEN_FROM table_node SQL_TOKEN_WHERE SQL_TOKEN_CURRENT SQL_TOKEN_OF cursor
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -691,7 +692,7 @@ delete_statement_positioned:
 	;
 */
 delete_statement_searched:
-		SQL_TOKEN_DELETE SQL_TOKEN_FROM table_name opt_where_clause
+		SQL_TOKEN_DELETE SQL_TOKEN_FROM table_node opt_where_clause
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -709,7 +710,7 @@ fetch_statement:
 	;
 
 insert_statement:
-		SQL_TOKEN_INSERT SQL_TOKEN_INTO table_name opt_column_commalist values_or_query_spec
+		SQL_TOKEN_INSERT SQL_TOKEN_INTO table_node opt_column_commalist values_or_query_spec
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -791,7 +792,7 @@ opt_all_distinct:
 	;
 /*
 update_statement_positioned:
-		SQL_TOKEN_UPDATE table_name SQL_TOKEN_SET assignment_commalist
+		SQL_TOKEN_UPDATE table_node SQL_TOKEN_SET assignment_commalist
 		SQL_TOKEN_WHERE SQL_TOKEN_CURRENT SQL_TOKEN_OF cursor
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -826,7 +827,7 @@ update_source:
 	  | SQL_TOKEN_DEFAULT
 	;
 update_statement_searched:
-		SQL_TOKEN_UPDATE table_name SQL_TOKEN_SET assignment_commalist opt_where_clause
+		SQL_TOKEN_UPDATE table_node SQL_TOKEN_SET assignment_commalist opt_where_clause
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -925,12 +926,12 @@ as:
 		}
 	;
 table_ref:
-		table_name
+		table_node
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 		}
-	|	table_name as range_variable op_column_commalist
+	|	table_node as range_variable op_column_commalist
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1506,14 +1507,15 @@ scalar_exp_commalist:
 		}
 	;
 select_sublist:
-		table_name '.' '*'
+/*		table_node '.' '*'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3 = newNode("*", SQL_NODE_PUNCTUATION));
 		}
-	|	derived_column
+*/
+		derived_column
 
 	;
 
@@ -1777,7 +1779,7 @@ op_parameter:
 		}
 	;
 odbc_call_spec:
-		op_parameter SQL_TOKEN_CALL table_name op_odbc_call_parameter
+		op_parameter SQL_TOKEN_CALL table_node op_odbc_call_parameter
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2027,7 +2029,7 @@ cast_operand:
 	  | SQL_TOKEN_NULL
 	;
 cast_target:
-		table_name
+		table_node
 	  | data_type
 	;
 cast_spec:
@@ -2441,7 +2443,7 @@ char_primary:
 			}
 	;
 collate_clause:
-		SQL_TOKEN_COLLATE table_name
+		SQL_TOKEN_COLLATE table_node
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2597,7 +2599,7 @@ fold:
 		}
 	;
 form_conversion:
-		SQL_TOKEN_CONVERT '(' string_value_exp SQL_TOKEN_USING table_name ')'
+		SQL_TOKEN_CONVERT '(' string_value_exp SQL_TOKEN_USING table_node ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2609,7 +2611,7 @@ form_conversion:
 		}
 	;
 char_translation:
-		SQL_TOKEN_TRANSLATE '(' string_value_exp SQL_TOKEN_USING table_name ')'
+		SQL_TOKEN_TRANSLATE '(' string_value_exp SQL_TOKEN_USING table_node ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2663,11 +2665,42 @@ derived_column:
 		}
 	;
 /* Tabellenname */
+table_node:
+		catalog_name
+	|	schema_name
+	|	table_name
+;
+catalog_name:
+		SQL_TOKEN_NAME '.' schema_name
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+		}
+	|	SQL_TOKEN_NAME ':' schema_name
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode(":", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+		}
+;
+schema_name:
+		SQL_TOKEN_NAME '.' table_name 
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+		}
+;
+
 table_name:
 			SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);}
-	|	    SQL_TOKEN_NAME '.' SQL_TOKEN_NAME %prec SQL_TOKEN_NAME
+/*	|	    SQL_TOKEN_NAME '.' SQL_TOKEN_NAME %prec SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
@@ -2694,16 +2727,17 @@ table_name:
 			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($5);}
 */	;
+/* Columns */
 column_ref:
 			column
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);}
-	|       SQL_TOKEN_NAME '.' column_val %prec '.'
+	|       table_node '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($3);}
-	|       SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val %prec '.'
+/*	|       SQL_TOKEN_NAME '.' SQL_TOKEN_NAME '.' column_val %prec '.'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode(".", SQL_NODE_PUNCTUATION));
@@ -3294,9 +3328,8 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 			// get the field type
 			m_xField->getPropertyValue(FIELD_STR_TYPE) >>= nType;
 		}
-		catch(Exception&)
+		catch ( ... )
 		{
-			OSL_ENSHURE(0,"OSQLParser::predicateTree throws an Exception!");
 		}
 
 		if (m_nFormatKey && m_xFormatter.is())
@@ -3463,6 +3496,10 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 				s_nRuleIDs[eRule] = StrToRuleID("table_exp"); break;
 			case OSQLParseNode::table_ref:
 				s_nRuleIDs[eRule] = StrToRuleID("table_ref"); break;
+			case OSQLParseNode::catalog_name:
+				s_nRuleIDs[eRule] = StrToRuleID("catalog_name"); break;
+			case OSQLParseNode::schema_name:
+				s_nRuleIDs[eRule] = StrToRuleID("schema_name"); break;
 			case OSQLParseNode::table_name:
 				s_nRuleIDs[eRule] = StrToRuleID("table_name"); break;
 			case OSQLParseNode::opt_column_commalist:
@@ -3632,7 +3669,6 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 		}
 		catch(Exception&)
 		{
-			OSL_ENSHURE(0,"OSQLParser::stringToDouble throws an Exception!");
 		}
 	}
 	return aValue;
@@ -3669,9 +3705,8 @@ sal_Int16 OSQLParser::buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& 
 										m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
 			aValue >>= nScale;
 		}
-		catch(Exception&)
+		catch ( ... )
 		{
-			OSL_ENSHURE(0,"OSQLParser::buildNode_STR_NUM throws an Exception!");
 		}
 
 		pComp->append(new OSQLInternalNode(stringToDouble(pLiteral->getTokenValue(),nScale),SQL_NODE_STRING));
@@ -3764,7 +3799,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
 			aValue >>= nType;
 		}
 	}
-	catch(Exception&)
+	catch ( ... )
 	{
 		return nErg;
 	}
@@ -3798,9 +3833,8 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
 															m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
 								aValue >>= nScale;
 							}
-							catch(Exception&)
+							catch ( ... )
 							{
-								OSL_ENSHURE(0,"OSQLParser::SQL_NODE_APPROXNUM throws an Exception!");
 							}
 
 							pAppend->append(new OSQLInternalNode(stringToDouble(pLiteral->getTokenValue(),nScale),SQL_NODE_STRING));
@@ -3879,7 +3913,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 				aValue >>= nType;
 			}
 		}
-		catch(Exception&)
+		catch ( ... )
 		{
 			return nErg;
 		}
@@ -3920,7 +3954,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 									double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
 									nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
 								}
-								catch(Exception&)
+								catch ( ... )
 								{
 									try
 									{
@@ -3940,7 +3974,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 										}
 
 									}
-									catch(Exception&)
+									catch ( ... )
 									{
 										nErg = -1;
 										m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
@@ -3969,7 +4003,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 									double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
 									nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
 								}
-								catch(Exception&)
+								catch ( ... )
 								{
 									try
 									{
@@ -3988,7 +4022,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 											m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
 										}
 									}
-									catch(Exception&)
+									catch ( ... )
 									{
 										nErg = -1;
 										m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 16:51:52 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,5 +1399,46 @@ OSQLParseNode* OSQLParseNode::replace (OSQLParseNode* pOldSubNode, OSQLParseNode
     ::std::replace(m_aChilds.begin(), m_aChilds.end(), pOldSubNode, pNewSubNode);
     return pOldSubNode;
 }
+// -----------------------------------------------------------------------------
+sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
+                                            ::com::sun::star::uno::Any &_rCatalog,
+                                            ::rtl::OUString &_rSchema,
+                                            ::rtl::OUString &_rTable)
+{
+    OSL_ENSURE(_pTableNode,"Wrong use of getTableComponents! _pTableNode is not allowed to be null!");
+    if(_pTableNode)
+    {
+        const OSQLParseNode* pTableNode = _pTableNode;
+        // clear the parameter given
+        _rCatalog = Any();
+        _rSchema = _rTable = ::rtl::OUString();
+        // see rule catalog_name: in sqlbison.y
+        if (SQL_ISRULE(pTableNode,catalog_name))
+        {
+            OSL_ENSURE(pTableNode->getChild(0) && pTableNode->getChild(0)->isToken(),"Invalid parsenode!");
+            _rCatalog <<= pTableNode->getChild(0)->getTokenValue();
+            pTableNode = pTableNode->getChild(2);
+        }
+        // check if we have schema_name rule
+        if(SQL_ISRULE(pTableNode,schema_name))
+        {
+            _rSchema = pTableNode->getChild(0)->getTokenValue();
+            pTableNode = pTableNode->getChild(2);
+        }
+        // check if we have table_name rule
+        if(SQL_ISRULE(pTableNode,table_name))
+        {
+            _rTable = pTableNode->getChild(0)->getTokenValue();
+        }
+        else
+        {
+            OSL_ENSURE(0,"Error in parse tree!");
+        }
+    }
+    return _rTable.getLength() != 0;
+}
+// -----------------------------------------------------------------------------
+
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-04 10:59:52 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 13:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,26 +209,37 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
 
     OSL_ENSHURE(pTableName != NULL,"OSQLParseTreeIterator::traverseOneTableName: pTableName == NULL");
 
-    ::rtl::OUString aTableName;
+    Any aCatalog;
+    ::rtl::OUString aSchema,aTableName,aComposedName;
     ::rtl::OUString aTableRange(rTableRange);
 
     // Tabellenname abholen
-    pTableName->parseNodeToStr(aTableName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
-    // Wenn keine Range Variable angegeben, dann den Tabellennamen verwenden.
-    if (!aTableRange.getLength())
-        aTableRange = aTableName;
+    OSQLParseNode::getTableComponents(pTableName,aCatalog,aSchema,aTableName);
 
-    if(aTableName.getLength())
+    // create the composed name like DOMAIN.USER.TABLE1
+    ::dbtools::composeTableName(m_xDatabaseMetaData,
+                                aCatalog.hasValue() ? ::comphelper::getString(aCatalog) : ::rtl::OUString(),
+                                aSchema,
+                                aTableName,
+                                aComposedName,
+                                sal_False);
+    // if there is no alias for the table name assign the orignal name to it
+    if (!aTableRange.getLength())
+        aTableRange = aComposedName;
+
+    if(aComposedName.getLength())
     {
         try
         {
-            if(!m_xTables->hasByName(aTableName)) // name not in XNameAccess
+            if(!m_xTables->hasByName(aComposedName)) // name not in XNameAccess
             {
+                // exists the name in the metadata ?!
+                if(!aSchema.getLength())
+                    aSchema = ::rtl::OUString::createFromAscii("%");
 
-                const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
                 Sequence< ::rtl::OUString > aSeq;
-                Reference< XResultSet> xRes = m_xDatabaseMetaData->getTables(Any(),sAll,aTableName,aSeq);
-                aTableName = ::rtl::OUString(); // now clear the name to avoid reassignment
+                Reference< XResultSet> xRes = m_xDatabaseMetaData->getTables(aCatalog,aSchema,aTableName,aSeq);
+                aComposedName = ::rtl::OUString(); // now clear the name to avoid reassignment
                 if(xRes.is() && xRes->next())
                 {
                     ::rtl::OUString sCatalog, sSchema, sName;
@@ -236,12 +247,12 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                     ::dbtools::composeTableName(m_xDatabaseMetaData, xCurrentRow->getString(1),
                                                                      xCurrentRow->getString(2),
                                                                      xCurrentRow->getString(3),
-                                                                     aTableName,
+                                                                     aComposedName,
                                                                      sal_False);
                 }
             }
-            if(m_xTables->hasByName(aTableName)) // the name can be changed before
-                m_xTables->getByName(aTableName) >>= m_aTables[aTableRange];
+            if(m_xTables->hasByName(aComposedName)) // the name can be changed before
+                m_xTables->getByName(aComposedName) >>= m_aTables[aTableRange];
 
         }
         catch(Exception&)
@@ -258,16 +269,20 @@ OSQLParseNode * OSQLParseTreeIterator::getQualified_join(OSQLParseNode *pTableRe
     aTableRange = ::rtl::OUString();
 
     OSQLParseNode *pNode = getTableRef(pTableRef->getChild(0),aTableRange);
-    if(pNode)
+    if(isTableNode(pNode))
         traverseOneTableName(pNode,aTableRange);
+    else
+        OSL_ENSURE(0,"To tableNode found!");
     sal_uInt32 nPos = 4;
     if(SQL_ISRULE(pTableRef,cross_union) || pTableRef->getChild(1)->getTokenID() != SQL_TOKEN_NATURAL)
         nPos = 3;
 
 
     pNode = getTableRef(pTableRef->getChild(nPos),aTableRange);
-    if(pNode)
+    if(isTableNode(pNode))
         traverseOneTableName(pNode,aTableRange);
+    else
+        OSL_ENSURE(0,"To tableNode found!");
     return pNode;
 }
 //-----------------------------------------------------------------------------
@@ -285,7 +300,7 @@ OSQLParseNode * OSQLParseTreeIterator::getTableRef(OSQLParseNode *pTableRef,::rt
         else
         {
             // Tabellennamen gefunden
-            if(!SQL_ISRULE(pTableName,table_name))
+            if(!isTableNode(pTableName))
                 pTableName = pTableRef->getChild(0);
             aTableRange = ::rtl::OUString();
             if(pTableRef->count() == 4)
@@ -340,16 +355,16 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLParseNode *pSelect)
     { // from clause durchlaufen
         aTableRange = ::rtl::OUString();
 
-        if (SQL_ISRULE(pTableRefCommalist->getChild(i),table_name))
+        if (isTableNode(pTableRefCommalist->getChild(i)))
         {
             pTableName = pTableRefCommalist->getChild(i);
-            traverseOneTableName(pTableName,aTableRange);// Keine Range Variable
+            traverseOneTableName(pTableName,aTableRange);// aTableRange will be set inside to the tablename
         }
         else if (SQL_ISRULE(pTableRefCommalist->getChild(i),table_ref))
         {
             // Tabellenreferenz kann aus Tabellennamen, Tabellennamen (+),'('joined_table')'(+) bestehen
             pTableName = pTableRefCommalist->getChild(i)->getChild(0);
-            if (SQL_ISRULE(pTableName,table_name))
+            if(isTableNode(pTableName))
             {   // Tabellennamen gefunden
                 if(pTableRefCommalist->getChild(i)->count() == 4)   // Tabellenrange an Pos 2
                     aTableRange = pTableRefCommalist->getChild(i)->getChild(2)->getTokenValue();
@@ -534,14 +549,18 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     }
     else if (SQL_ISRULE(pSelectNode->getChild(2),scalar_exp_commalist))
     {
-        // SELECT column(,column) oder SELECT COUNT(*) ...
+        // SELECT column[,column] oder SELECT COUNT(*) ...
         OSQLParseNode * pSelection = pSelectNode->getChild(2);
 
         for (sal_uInt32 i = 0; i < pSelection->count(); i++)
         {
             OSQLParseNode *pColumnRef = pSelection->getChild(i);
 
-            if (SQL_ISRULE(pColumnRef,select_sublist))
+            //if (SQL_ISRULE(pColumnRef,select_sublist))
+            if (SQL_ISRULE(pColumnRef,derived_column) &&
+                SQL_ISRULE(pColumnRef->getChild(0),column_ref) &&
+                pColumnRef->getChild(0)->count() == 3 &&
+                SQL_ISPUNCTUATION(pColumnRef->getChild(0)->getChild(2),"*"))
             {
                 // alle Spalten der Tabelle
                 ::rtl::OUString aTableRange;
@@ -1447,6 +1466,13 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
     if(pHavingClause->count() < 1)
         pHavingClause = NULL;
     return pHavingClause;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode) const
+{
+    return _pTableNode && (SQL_ISRULE(_pTableNode,catalog_name) ||
+                           SQL_ISRULE(_pTableNode,schema_name)  ||
+                           SQL_ISRULE(_pTableNode,table_name));
 }
 
 

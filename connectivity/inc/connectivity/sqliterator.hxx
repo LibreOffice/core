@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:25:37 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 13:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,9 @@ namespace connectivity
         // Ermittelt fuer eine Funktion, Spalten den zugehoeren TableRange,
         // wenn nicht eindeutig, dann leer
         sal_Bool getColumnTableRange(const OSQLParseNode* pNode, ::rtl::OUString &rTableRange) const;
+
+        // return true when the tableNode is a rule like catalog_name, schema_name or table_name
+        sal_Bool isTableNode(const OSQLParseNode* _pTableNode) const;
     };
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 16:47:35 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 13:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ namespace connectivity
             table_exp,
             table_ref_commalist,
             table_ref,
+            catalog_name,
+            schema_name,
             table_name,
             opt_column_commalist,
             column_commalist,
@@ -356,6 +358,12 @@ namespace connectivity
 
         // makes the logic formula a little more smaller
         static void compress(OSQLParseNode*& pSearchCondition);
+        // return the catalog, schema and tablename form this node
+        // _pTableNode must be a rule of that above or a SQL_TOKEN_NAME
+        static sal_Bool getTableComponents(const OSQLParseNode* _pTableNode,
+                                            ::com::sun::star::uno::Any &_rCatalog,
+                                            ::rtl::OUString &_rSchema,
+                                            ::rtl::OUString &_rTable);
 
     protected:
         // ParseNodeToStr konkateniert alle Token (Blaetter) des ParseNodes
