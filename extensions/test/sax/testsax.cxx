@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsax.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:19:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ INT32 OSaxParserTest::test( const UString& TestName,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.xml.sax.Parser" == TestName )  {
-        TRY {
+        try {
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
@@ -291,13 +291,12 @@ INT32 OSaxParserTest::test( const UString& TestName,
                 }
             }
         }
-        CATCH( Exception , e )  {
+        catch( Exception& e )  {
             BUILD_ERROR( 0 , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        END_CATCH;
 
         hTestHandle ++;
 
@@ -635,27 +634,26 @@ void OSaxParserTest::testSimple(    const XParserRef &rParser )
         rParser->setDocumentHandler( rDocHandler );
         rParser->setEntityResolver( rEntityResolver );
 
-        TRY {
+        try {
             rParser->parseStream( source );
             ERROR_ASSERT( pDocHandler->m_iElementCount      == 4 , "wrong element count"    );
             ERROR_ASSERT( pDocHandler->m_iAttributeCount    == 2 , "wrong attribut count"   );
             ERROR_ASSERT( pDocHandler->m_iCharCount         == 130 , "wrong char count"     );
             ERROR_ASSERT( pDocHandler->m_iWhitespaceCount   == 0, "wrong whitespace count" );
         }
-        CATCH( SAXParseException , e ) {
+        catch( SAXParseException& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
         }
-        AND_CATCH( SAXException , e ) {
+        catch( SAXException& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
 
         }
-        AND_CATCH( Exception , e ) {
+        catch( Exception& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 1 , "unknown exception" );
         }
-        END_CATCH;
 
     }
 
@@ -697,27 +695,26 @@ void OSaxParserTest::testNamespaces( const XParserRef &rParser )
         rParser->setDocumentHandler( rDocHandler );
         rParser->setEntityResolver( rEntityResolver );
 
-        TRY {
+        try {
             rParser->parseStream( source );
             ERROR_ASSERT( pDocHandler->m_iElementCount      == 6 , "wrong element count"    );
             ERROR_ASSERT( pDocHandler->m_iAttributeCount    == 2 , "wrong attribut count"   );
             ERROR_ASSERT( pDocHandler->m_iCharCount         == 33, "wrong char count"       );
             ERROR_ASSERT( pDocHandler->m_iWhitespaceCount   == 0 , "wrong whitespace count" );
         }
-        CATCH( SAXParseException , e ) {
+        catch( SAXParseException& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
         }
-        AND_CATCH( SAXException , e ) {
+        catch( SAXException& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
 
         }
-        AND_CATCH( Exception , e ) {
+        catch( Exception& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 1 , "unknown exception" );
         }
-        END_CATCH;
     }
 }
 
@@ -754,23 +751,22 @@ void OSaxParserTest::testEncoding( const XParserRef &rParser )
 
         rParser->setDocumentHandler( rDocHandler );
         rParser->setEntityResolver( rEntityResolver );
-        TRY {
+        try {
             rParser->parseStream( source );
         }
-        CATCH( SAXParseException , e ) {
+        catch( SAXParseException& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
         }
-        AND_CATCH( SAXException , e ) {
+        catch( SAXException& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
 
         }
-        AND_CATCH( Exception , e ) {
+        catch( Exception& e ) {
             BUILD_ERROR( 1 , USTRING_TO_PCHAR( e.Message ) );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 1 , "unknown exception" );
         }
-        END_CATCH;
 
     }
 
@@ -798,10 +794,10 @@ void OSaxParserTest::testFile( const XParserRef & rParser )
         rParser->setEntityResolver( rEntityResolver );
         rParser->setErrorHandler( rErrorHandler );
 
-        TRY {
+        try {
             rParser->parseStream( source );
         }
-        CATCH( SAXParseException , e ) {
+        catch( SAXParseException& e ) {
             UsrAny any;
             any.set( &e , SAXParseException_getReflection() );
             while(TRUE) {
@@ -816,17 +812,16 @@ void OSaxParserTest::testFile( const XParserRef & rParser )
                 }
             }
         }
-        AND_CATCH( SAXException , e ) {
+        catch( SAXException& e ) {
             printf( "%s\n" , UStringToString( e.Message , CHARSET_SYSTEM ).GetStr()  );
 
         }
-        AND_CATCH( Exception , e ) {
+        catch( Exception& e ) {
             printf( "normal exception ! %s\n", e.getName() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             printf( "any exception !!!!\n" );
         }
-        END_CATCH;
     }
 }
 
@@ -851,7 +846,7 @@ void OSaxParserTest::testPerformance( const XParserRef & rParser )
         rParser->setEntityResolver( rEntityResolver );
         rParser->setErrorHandler( rErrorHandler );
 
-        TRY {
+        try {
             TimeValue aStartTime, aEndTime;
             osl_getSystemTime( &aStartTime );
             rParser->parseStream( source );
@@ -863,7 +858,7 @@ void OSaxParserTest::testPerformance( const XParserRef & rParser )
             printf( "Performance reading : %g s\n" , fEnd - fStart );
 
         }
-        CATCH( SAXParseException , e ) {
+        catch( SAXParseException& e ) {
             UsrAny any;
             any.set( &e , SAXParseException_getReflection() );
             while(TRUE) {
@@ -878,17 +873,16 @@ void OSaxParserTest::testPerformance( const XParserRef & rParser )
                 }
             }
         }
-        AND_CATCH( SAXException , e ) {
+        catch( SAXException& e ) {
             printf( "%s\n" , UStringToString( e.Message , CHARSET_SYSTEM ).GetStr()  );
 
         }
-        AND_CATCH( Exception , e ) {
+        catch( Exception& e ) {
             printf( "normal exception ! %s\n", e.getName() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             printf( "any exception !!!!\n" );
         }
-        END_CATCH;
     }
 
 }
