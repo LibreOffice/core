@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ooo.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:24:12 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ModalDialog RID_DEFAULTABOUT
         Text[ portuguese_brazilian ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         Text[ japanese ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         Text[ korean ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
-        Text[ chinese_simplified ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ chinese_simplified ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created with contributions from the OpenOffice.org community, of which Sun Microsystems Inc. is the founding member.\nOpenOffice.org acknowledges all community members, especially those mentioned ";
         Text[ chinese_traditional ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         Text[ turkish ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         Text[ thai ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
