@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-08 16:15:10 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,19 +240,19 @@ public:
         @param pElements an array of bytes
         @param len number of bytes
     */
-    inline ByteSequence( const sal_Int8 * pElements, sal_Int32 len ) SAL_THROW( () );
+    inline ByteSequence( const sal_Int8 * pElements, sal_Int32 len );
     /** Constructor: Creates sequence of given length and initializes all bytes to 0.
 
         @param len initial sequence length
     */
-    inline ByteSequence( sal_Int32 len ) SAL_THROW( () );
+    inline ByteSequence( sal_Int32 len );
     /** Constructor: Creates sequence of given length and does NOT initialize data.
                      Use this ctor for performance optimization only.
 
         @param len initial sequence length
         @param nodefault dummy parameter forcing explicit BYTESEQ_NODEFAULT
     */
-    inline ByteSequence( sal_Int32 len , enum __ByteSequence_NoDefault nodefault ) SAL_THROW( () );
+    inline ByteSequence( sal_Int32 len , enum __ByteSequence_NoDefault nodefault );
     /** Constructor:
         Creates a sequence from a C-Handle without acquiring the handle, thus taking
         over owenership. Eitherway the handle is release by the destructor.
@@ -295,7 +295,7 @@ public:
 
         @return pointer to elements array
     */
-    inline sal_Int8 * SAL_CALL getArray() SAL_THROW( () );
+    inline sal_Int8 * SAL_CALL getArray();
 
     /** Non-const index operator:
         Obtains a reference to byte indexed at given position.
@@ -309,7 +309,7 @@ public:
         @param nIndex index
         @return non-const C++ reference to element at index nIndex
     */
-    inline sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) SAL_THROW( () );
+    inline sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex );
 
     /** Const index operator: Obtains a reference to byte indexed at given position.
                               The implementation does NOT check for array bounds!
@@ -339,7 +339,7 @@ public:
 
         @param nSize new size of sequence
     */
-    inline void SAL_CALL realloc( sal_Int32 nSize ) SAL_THROW( () );
+    inline void SAL_CALL realloc( sal_Int32 nSize );
 
     /** Returns the UNnacquired C handle of the sequence
 
