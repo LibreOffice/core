@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-03-01 10:30:47 $
+ *  last change: $Author: cd $ $Date: 2002-05-31 06:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,9 @@
 
 #define STR_FUNCTION_ALREADY_IN_TOOLBOX ( RC_DIALOG_BEGIN + 95 )
 #define STR_BASICNAME                   ( RC_DIALOG_BEGIN + 96 )
+
+#define BMP_COLLAPSED_HC                ( RC_DIALOG_BEGIN + 97 )
+#define BMP_EXPANDED_HC                 ( RC_DIALOG_BEGIN + 98 )
 
 #endif // #ifndef _SFX_DIALOG_HRC
 
