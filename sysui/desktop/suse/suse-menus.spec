@@ -5,16 +5,16 @@ Release: 1
 Group: Office
 Copyright: LGPL / SISSL
 AutoReqProv: no
-Requires: openofficeorg-core, suse-release
+Requires: openofficeorg-core01, suse-release
 %define _unpackaged_files_terminate_build 0
 %description 
 OpenOffice.org desktop integration
 
-%triggerin -- openofficeorg-core
+%triggerin -- openofficeorg-core01
 # create file in /etc that contains the office installation path
 cat > /tmp/install.$$ << EOF
 sleep 2
-ln -sf \`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core\` /etc/%PREFIX
+ln -sf \`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01\` /etc/%PREFIX
 rm -f /tmp/install.$$
 EOF
 
