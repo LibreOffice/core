@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 13:43:35 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 15:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
+#endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
 #endif
 #ifndef _PORHYPH_HXX
 #include <porhyph.hxx>  //
@@ -485,6 +488,16 @@ sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
 }
 
 /*************************************************************************
+ *              virtual SwHyphPortion::HandlePortion()
+ *************************************************************************/
+
+void SwHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    String aString( '-' );
+    rPH.Special( GetLen(), aString, GetWhichPor() );
+}
+
+/*************************************************************************
  *                 virtual SwHyphPortion::Format()
  *************************************************************************/
 
@@ -516,6 +529,15 @@ sal_Bool SwHyphStrPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) c
 {
     rTxt = aExpand;
     return sal_True;
+}
+
+/*************************************************************************
+ *              virtual SwHyphStrPortion::HandlePortion()
+ *************************************************************************/
+
+void SwHyphStrPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Special( GetLen(), aExpand, GetWhichPor() );
 }
 
 /*************************************************************************
@@ -690,6 +712,19 @@ sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTx
         return SwHyphPortion::GetExpTxt( rInf, rTxt );
     }
     return sal_False;
+}
+
+/*************************************************************************
+ *              virtual SwSoftHyphPortion::HandlePortion()
+ *************************************************************************/
+
+void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    const String aString( '-' );
+    const USHORT nWhich = ! Width() ?
+                          POR_SOFTHYPH_COMP :
+                          GetWhichPor();
+    rPH.Special( GetLen(), aString, nWhich );
 }
 
 /*************************************************************************

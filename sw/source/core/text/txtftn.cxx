@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-13 11:28:08 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 15:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "ndtxt.hxx"
 #include "txtatr.hxx"
 
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
+#endif
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
 #endif
@@ -1641,6 +1644,17 @@ sal_Bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) 
     rTxt = aExpand;
     rTxt += aErgo;
     return sal_True;
+}
+
+/*************************************************************************
+ *              virtual SwQuoVadisPortion::HandlePortion()
+ *************************************************************************/
+
+void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    String aString( aExpand );
+    aString += aErgo;
+    rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
 /*************************************************************************

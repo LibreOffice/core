@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttypes.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 15:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,5 +71,64 @@
 #define KSHORT USHORT
 #define KSHRT_MAX USHRT_MAX
 
+// Portiontypen
+#define POR_LIN         0x0000
+#define POR_FLYCNT      0x0001
+
+#define POR_HOLE        0x0080
+#define POR_TMPEND      0x0081
+#define POR_BRK         0x0082
+#define POR_KERN        0x0083
+#define POR_ARROW       0x0084
+#define POR_MULTI       0x0085
+
+#define POR_TXT         0x8000
+#define POR_LAY         0x8001
+#define POR_PARA        0x8002
+#define POR_URL         0x8003
+#define POR_HNG         0x8004
+
+#define POR_DROP        0x8080
+#define POR_TOX         0x8089
+#define POR_ISOTOX      0x808a
+#define POR_REF         0x808b
+#define POR_ISOREF      0x808c
+
+#define POR_EXP         0xc080
+#define POR_BLANK       0xc081
+#define POR_POSTITS     0xc082
+
+#define POR_HYPH        0xd080
+#define POR_HYPHSTR     0xd081
+#define POR_SOFTHYPH    0xd082
+#define POR_SOFTHYPHSTR 0xd083
+#define POR_SOFTHYPH_COMP 0xd084
+
+#define POR_FLD         0xe080
+#define POR_HIDDEN      0xe081
+#define POR_QUOVADIS    0xe082
+#define POR_ERGOSUM     0xe083
+#define POR_COMBINED    0xe084
+#define POR_FTN         0xe085
+
+#define POR_FTNNUM      0xe880
+#define POR_NUMBER      0xe881
+#define POR_BULLET      0xe882
+#define POR_GRFNUM      0xe883
+
+#define POR_GLUE        0x0480
+
+#define POR_MARGIN      0x04c0
+
+#define POR_FIX         0x06c0
+#define POR_FLY         0x06c1
+
+#define POR_TAB         0x0750
+
+#define POR_TABRIGHT    0x07d0
+#define POR_TABCENTER   0x07d1
+#define POR_TABDECIMAL  0x07d2
+
+#define POR_TABLEFT     0x0740
 
 #endif  //_TXTTYPES_HXX

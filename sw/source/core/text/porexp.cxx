@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 14:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOptions
 #endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
+#endif
 #ifndef _INFTXT_HXX
 #include <inftxt.hxx>
 #endif
@@ -96,6 +99,16 @@ sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo &rInf,
     // Nicht etwa: return 0 != rTxt.Len();
     // Weil: leere Felder ersetzen CH_TXTATR gegen einen Leerstring
     return sal_True;
+}
+
+/*************************************************************************
+ *              virtual SwExpandPortion::HandlePortion()
+ *************************************************************************/
+
+void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    String aString;
+    rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
 /*************************************************************************
@@ -277,6 +290,15 @@ sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt )
     return sal_True;
 }
 
+/*************************************************************************
+ *              virtual SwBlankPortion::HandlePortion()
+ *************************************************************************/
+
+void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    String aString( cChar );
+    rPH.Special( GetLen(), aString, GetWhichPor() );
+}
 
 /*************************************************************************
  *                      class SwPostItsPortion
@@ -328,6 +350,4 @@ sal_Bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf,
         rTxt.Erase();
     return sal_True;
 }
-
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:12:37 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 15:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ class SwTestFormat;
 class SwStripes;
 struct SwCrsrMoveState;
 struct SwFillData;
+class SwPortionHandler;
 
 #ifdef VERTICAL_LAYOUT
 #define GRID_ON         0
@@ -473,6 +474,10 @@ public:
 
     void CriticalLines(const OutputDevice& rOut,SwStripes &rStripes,long nOffs);
 
+    // visit all portions for Accessibility
+    void VisitPortions( SwPortionHandler& rPH ) const;
+
+
 #ifdef VERTICAL_LAYOUT
     // Swaps width and height of the text frame
     void SwapWidthAndHeight();
@@ -495,6 +500,7 @@ public:
     // vertical to horizontal layout.
     long SwitchVerticalToHorizontal( long nLimit ) const;
 #endif
+
 };
 
 /*************************************************************************

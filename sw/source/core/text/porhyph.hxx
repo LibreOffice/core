@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porhyph.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 14:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ class SwHyphPortion : public SwExpandPortion
 public:
     inline  SwHyphPortion( ) { SetWhichPor( POR_HYPH ); }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     OUTPUT_OPERATOR
 };
@@ -86,6 +87,7 @@ class SwHyphStrPortion : public SwHyphPortion
 public:
     inline  SwHyphStrPortion( const XubString &rStr );
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
     OUTPUT_OPERATOR
 };
 
@@ -102,6 +104,7 @@ class SwSoftHyphPortion : public SwHyphPortion
 public:
     SwSoftHyphPortion();
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
     virtual SwLinePortion *Compress();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );

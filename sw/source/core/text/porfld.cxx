@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 14:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
+#endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
 #endif
 #ifndef _PORLAY_HXX
 #include <porlay.hxx>
@@ -487,6 +490,15 @@ sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) c
     if( !rTxt.Len() && rInf.OnWin() && rInf.GetOpt().IsField() && !HasFollow() )
         rTxt = ' ';
     return sal_True;
+}
+
+/*************************************************************************
+ *              virtual SwFldPortion::HandlePortion()
+ *************************************************************************/
+
+void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Special( GetLen(), aExpand, GetWhichPor() );
 }
 
 /*************************************************************************

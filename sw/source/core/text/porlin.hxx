@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 15:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ class XubString;
 class SwTxtSizeInfo;
 class SwTxtPaintInfo;
 class SwTxtFormatInfo;
+class SwPortionHandler;
 
 // Die Ausgabeoperatoren der Portions sind virtuelle Methoden der Portion.
 // Das CLASSIO-Makro implementiert die 'freischwebende' Funktion.
@@ -93,65 +94,6 @@ class SwTxtFormatInfo;
 //#define PORGRP_?  0x0020
 #define PORGRP_TABNOTLFT 0x0010
 #define PORGRP_TOXREF   0x0008
-
-// Portiontypen
-#define POR_LIN         0x0000
-#define POR_FLYCNT      0x0001
-
-#define POR_HOLE        0x0080
-#define POR_TMPEND      0x0081
-#define POR_BRK         0x0082
-#define POR_KERN        0x0083
-#define POR_ARROW       0x0084
-#define POR_MULTI       0x0085
-
-#define POR_TXT         0x8000
-#define POR_LAY         0x8001
-#define POR_PARA        0x8002
-#define POR_URL         0x8003
-#define POR_HNG         0x8004
-
-#define POR_DROP        0x8080
-#define POR_TOX         0x8089
-#define POR_ISOTOX      0x808a
-#define POR_REF         0x808b
-#define POR_ISOREF      0x808c
-
-#define POR_EXP         0xc080
-#define POR_BLANK       0xc081
-#define POR_POSTITS     0xc082
-
-#define POR_HYPH        0xd080
-#define POR_HYPHSTR     0xd081
-#define POR_SOFTHYPH    0xd082
-#define POR_SOFTHYPHSTR 0xd083
-
-#define POR_FLD         0xe080
-#define POR_HIDDEN      0xe081
-#define POR_QUOVADIS    0xe082
-#define POR_ERGOSUM     0xe083
-#define POR_COMBINED    0xe084
-#define POR_FTN         0xe085
-
-#define POR_FTNNUM      0xe880
-#define POR_NUMBER      0xe881
-#define POR_BULLET      0xe882
-#define POR_GRFNUM      0xe883
-
-#define POR_GLUE        0x0480
-
-#define POR_MARGIN      0x04c0
-
-#define POR_FIX         0x06c0
-#define POR_FLY         0x06c1
-
-#define POR_TAB         0x0750
-
-#define POR_TABRIGHT    0x07d0
-#define POR_TABCENTER   0x07d1
-#define POR_TABDECIMAL  0x07d2
-
-#define POR_TABLEFT     0x0740
 
 /*************************************************************************
  *                      class SwLinePortion
@@ -202,8 +144,11 @@ public:
     // liefert 0 zurueck, wenn keine Nutzdaten enthalten sind.
     virtual SwLinePortion *Compress();
 
+    // Accessibility: call functions at the SwPortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     inline void SetWhichPor( const MSHORT nNew )    { nWhichPor = nNew; }
-    inline const MSHORT GetWhichPor( )          { return nWhichPor; }
+    inline const MSHORT GetWhichPor( ) const        { return nWhichPor; }
 
 // Gruppenabfragen:
     inline const sal_Bool InTxtGrp( )   const { return nWhichPor & PORGRP_TXT ? sal_True : sal_False; }

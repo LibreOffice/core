@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 09:41:07 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 15:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #pragma hdrstop
 
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
+#endif
+
 #include "errhdl.hxx"   // ASSERT
 
 #include "txtcfg.hxx"
@@ -75,7 +79,6 @@
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "blink.hxx"
-
 #ifndef PRODUCT
 
 sal_Bool ChkChain( SwLinePortion *pStart )
@@ -445,4 +448,12 @@ sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) 
     return sal_False;
 }
 
+/*************************************************************************
+ *              virtual SwLinePortion::HandlePortion()
+ *************************************************************************/
+
+void SwLinePortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    rPH.Text( GetLen() );
+}
 

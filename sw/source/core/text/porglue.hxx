@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porglue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 14:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ public:
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     OUTPUT_OPERATOR
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 15:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,11 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
+#ifdef VERTICAL_LAYOUT
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
+#endif
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>      // GetDoc()
@@ -131,7 +136,14 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
-
+#ifdef VERTICAL_LAYOUT
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
+#endif
 #ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
 #endif
@@ -191,6 +203,9 @@
 #endif
 #ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
+#endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
 #endif
 
 #ifdef DEBUG
@@ -1299,8 +1314,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             case PREP_FTN_GONE :    return;
 
             case PREP_POS_CHGD :
-            {   // Auch in (spaltigen) Bereichen ist ein InvalidateSize notwendig,
-                // damit formatiert wird und ggf. das bUndersized gesetzt wird.
+            {
+                // Auch in (spaltigen) Bereichen ist ein InvalidateSize notwendig,
+                // damit formatiert wird und ggf. das bUndersized gesetzt wird.
                 if( IsInFly() || IsInSct() )
                 {
                     SwTwips nTmpBottom = GetUpper()->Frm().Top() +
@@ -1319,6 +1335,13 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 }
                 if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue())
                     break;
+
+#ifdef VERTICAL_LAYOUT
+                GETGRID( FindPageFrm() )
+                if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
+                    break;
+#endif
+
                 return;
             }
         }
@@ -1472,6 +1495,15 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
         case PREP_POS_CHGD :
         {
+#ifdef VERTICAL_LAYOUT
+            if ( GetValidPrtAreaFlag() )
+            {
+                GETGRID( FindPageFrm() )
+                if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
+                    InvalidatePrt();
+            }
+#endif
+
             // Falls wir mit niemandem ueberlappen:
             // Ueberlappte irgendein Fly _vor_ der Positionsaenderung ?
             sal_Bool bFormat = pPara->HasFly();
@@ -2221,4 +2253,26 @@ void SwTxtFrm::RecalcAllLines()
     }
 }
 
+void SwTxtFrm::VisitPortions( SwPortionHandler& rPH ) const
+{
+    const SwParaPortion* pPara = GetPara();
 
+    if( pPara )
+    {
+        const SwLineLayout* pLine = pPara;
+        while ( pLine )
+        {
+            const SwLinePortion* pPor = pLine->GetFirstPortion();
+            while ( pPor )
+            {
+                pPor->HandlePortion( rPH );
+                pPor = pPor->GetPortion();
+            }
+
+            rPH.LineBreak();
+            pLine = pLine->GetNext();
+        }
+    }
+
+    rPH.Finish();
+}

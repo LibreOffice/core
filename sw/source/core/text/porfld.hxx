@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 14:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ public:
 
     inline const XubString &GetExp() const { return aExpand; }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 

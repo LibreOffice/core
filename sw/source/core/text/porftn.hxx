@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porftn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
+ *  last change: $Author: fme $ $Date: 2002-02-19 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ public:
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
     inline void SetNumber( const XubString& rStr ) { aErgo = rStr; }
     inline const XubString &GetQuoTxt() const { return aExpand; }
