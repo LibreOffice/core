@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: hjs $ $Date: 2003-09-19 13:39:41 $
+#   last change: $Author: vg $ $Date: 2003-10-06 18:30:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,7 +164,7 @@ CFLAGS+=-Zm200
 #.ENDIF
 
 #.IF"$(bndchk)"==""
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 CFLAGS+=-Zm500 -wd4290 -wd4786 -wd4800
 .ENDIF
 #.ENDIF
@@ -228,8 +228,8 @@ CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
 .ELSE
-CDEFSSLOMT+=-DWIN32 -D_MT 
-CDEFSSLOMT+=-DWIN32 -D_MT 
+CDEFSSLOMT+=-DWIN32 -D_MT
+CDEFSSLOMT+=-DWIN32 -D_MT
 CDEFSOBJST+=-DWIN32
 CDEFSOBJST+=-DWIN32
 CDEFSOBJMT+=-DWIN32 -D_MT
@@ -245,7 +245,7 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=-Ox -Oy-
 CFLAGSNOOPT=-Od
 CFLAGSOUTOBJ=-Fo
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 CFLAGSWALL=-Wall -wd4294 -wd4640
 .ELSE			# "$(COMEX)"=="8"
 CFLAGSWALL=-W4
@@ -253,7 +253,7 @@ CFLAGSWALL=-W4
 CFLAGSDFLTWARN=-W3
 
 .IF "$(syntax)"!=""
-CFLAGS=-v -fsyntax-only -Wall $(INCLUDE) 
+CFLAGS=-v -fsyntax-only -Wall $(INCLUDE)
 # -I$(SOLARROOT)$/H-i386-cygwin32$/i386-cygwin32/include
 #plattform hart setzen - macht sonst ms cl.exe
 CDEFS+=-D_M_IX86
@@ -277,7 +277,7 @@ CDEFS+=-D_MT
 CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
 .ENDIF
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 #CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=450 -D__STL_USE_ABBREVS
 CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
@@ -289,7 +289,7 @@ COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(DESTINATION_MINOR)_$(FUNCORD)_$(__DATE
 .IF "$(USE_SHELL)"=="4nt"
 LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 .ELSE			# "$(USE_SHELL)"=="4nt"
-LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86 
+LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 
 .IF "$(PRODUCT)"!="full"
@@ -366,14 +366,19 @@ STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
 
-.IF "$(COMEX)"!="8"
-LIBSTLPORT=stlport_vc6.lib
-LIBSTLPORTST=stlport_vc6_static.lib
-ATL_INCLUDE=$(COMPATH)$/atl$/include
+.IF "$(COMEX)" =="8" || "$(COMEX)" > "9"
+.IF "$(COMEX)"=="10"
+LIBSTLPORT=stlport_vc71.lib
+LIBSTLPORTST=stlport_vc71_static.lib
 .ELSE
 LIBSTLPORT=stlport_vc7.lib
 LIBSTLPORTST=stlport_vc7_static.lib
+.ENDIF
 ATL_INCLUDE=$(COMPATH)$/atlmfc$/include
+.ELSE
+LIBSTLPORT=stlport_vc6.lib
+LIBSTLPORTST=stlport_vc6_static.lib
+ATL_INCLUDE=$(COMPATH)$/atl$/include
 .ENDIF
 
 .IF "$(USE_SHELL)"=="4nt"
@@ -432,11 +437,11 @@ AFLAGS=
 CXX*=gcc
 ### Der gcc vertraegt kein Semikolon im Include-Pfad         RT
 # old:
-#CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF) 
+#CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF)
 # new:
 CYGINC=$(INCLUDE:s/-I /-I/:+"  ":s/;/ -I/:s/-I  //:s/   / /)
 CFLAGS=-c -Wall -I$(CYGINC) $(OLE2DEF)
-### 
+###
 CFLAGS+=-nostdinc -fPIC
 CFLAGSCC=-pipe -mpentium
 CFLAGSCXX=-pipe -mpentium -fguiding-decls
@@ -455,8 +460,8 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=-O3
 CFLAGSNOOPT=-O
 CFLAGSOUTOBJ=-o
-#plattform hart setzen 
-CDEFS+=-D_M_IX86 
+#plattform hart setzen
+CDEFS+=-D_M_IX86
 
 STATIC= -static
 DYNAMIC= -dynamic
