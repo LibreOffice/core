@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:57:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ namespace
                 }
                 catch(Exception)
                 {
-                    OSL_ENSURE(0,"Exception catched!");
+                    OSL_ENSURE( 0, "lcl_isPropertySetDefaulted: Exception caught!" );
                 }
             }
             // the code below doesn't function -> I don't kow why
@@ -300,13 +300,13 @@ void lcl_createDefintionObject(const ::rtl::OUString& _rName
 // -------------------------------------------------------------------------
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
+connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUString& _rName)
 {
     Reference<XColumnsSupplier > xSup;
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
         xSup.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
-    Reference< XNamed > xRet;
+    connectivity::sdbcx::ObjectType xRet;
     if ( m_xMetaData.is() )
     {
         Reference<XPropertySet> xTableDefinition;
@@ -332,13 +332,8 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
             if(sCatalog.getLength())
                 aCatalog <<= sCatalog;
             ::rtl::OUString sType,sDescription;
-            Sequence< ::rtl::OUString> aTypeFilter(3);
-            static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-            static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-            static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-            aTypeFilter[0] = s_sTableTypeView;
-            aTypeFilter[1] = s_sTableTypeTable;
-            aTypeFilter[2] = sAll;  // just to be sure to include anything else ....
+            Sequence< ::rtl::OUString> aTypeFilter;
+            getAllTableTypeFilter( aTypeFilter );
 
             Reference< XResultSet > xRes =  m_xMetaData.is() ? m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter) : Reference< XResultSet >();
             if(xRes.is() && xRes->next())
@@ -441,10 +436,9 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
     m_bInAppend = sal_False;
     Reference<XPropertySet> xTableDefinition;
     Reference<XNameAccess> xColumnDefinitions;
-    Reference< XNamed > xName(descriptor,UNO_QUERY);
-    if ( xName.is() )
+    if ( descriptor.is() )
     {
-        lcl_createDefintionObject(xName->getName(),m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_False);
+        lcl_createDefintionObject(getNameForObject(descriptor),m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_False);
         Reference<XColumnsSupplier> xSup(descriptor,UNO_QUERY);
         Reference<XDataDescriptorFactory> xFac(xColumnDefinitions,UNO_QUERY);
         Reference<XAppend> xAppend(xColumnDefinitions,UNO_QUERY);
@@ -562,7 +556,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     {
         if(!m_xMasterContainer.is() || m_xMasterContainer->hasByName(sName))
         {
-            Reference<XNamed> xName = createObject(sName);
+            ObjectType xName = createObject(sName);
             insertElement(sName,xName);
             // and notify our listeners
             ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xName), Any());
@@ -605,21 +599,15 @@ void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObj
 
 Sequence< ::rtl::OUString > OTableContainer::getTableTypeFilter(const Sequence< ::rtl::OUString >& _rTableTypeFilter) const
 {
-    static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
     Sequence< ::rtl::OUString > sTableTypes;
-    if(_rTableTypeFilter.getLength() == 0)
+    if ( _rTableTypeFilter.getLength() == 0 )
     {
-        // we want all catalogues, all schemas, all tables
-        sTableTypes.realloc(3);
-
-        static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-        static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-        sTableTypes[0] = s_sTableTypeView;
-        sTableTypes[1] = s_sTableTypeTable;
-        sTableTypes[2] = sAll;  // just to be sure to include anything else ....
+        getAllTableTypeFilter( sTableTypes );
     }
     else
+    {
         sTableTypes = _rTableTypeFilter;
+    }
     return sTableTypes;
 }
 // -----------------------------------------------------------------------------
@@ -635,5 +623,62 @@ void OTableContainer::notifyDataSourceModified()
 {
     // nothing to do here
 }
+
+// -----------------------------------------------------------------------------
+// two ways to obtain all tables from XDatabaseMetaData::getTables, via passing a particular
+// table type filter:
+// adhere to the standard, which requests to pass a NULL table type filter, if
+// you want to retrieve all tables
+#define FILTER_MODE_STANDARD 0
+// only pass %, which is not allowed by the standard, but understood by some drivers
+#define FILTER_MODE_WILDCARD 1
+// only pass TABLE and VIEW
+#define FILTER_MODE_FIXED    2
+// do the thing which showed to be the safest way, understood by nearly all
+// drivers, even the ones which do not understand the standard
+#define FILTER_MODE_MIX_ALL  3
+
+void OTableContainer::getAllTableTypeFilter( Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const
+{
+    sal_Int32 nFilterMode = FILTER_MODE_MIX_ALL;
+        // for compatibility reasons, this is the default: we used this way before we
+        // introduced the TableTypeFilterMode setting
+
+    // obtain the data source we belong to, and the TableTypeFilterMode setting
+    Any aFilterModeSetting;
+    if ( getDataSourceSetting( getDataSource( (Reference< XInterface >)m_rParent ), "TableTypeFilterMode", aFilterModeSetting ) )
+    {
+        OSL_VERIFY( aFilterModeSetting >>= nFilterMode );
+    }
+
+    const ::rtl::OUString sAll( RTL_CONSTASCII_USTRINGPARAM( "%" ) );
+    const ::rtl::OUString sView( RTL_CONSTASCII_USTRINGPARAM( "VIEW" ) );
+    const ::rtl::OUString sTable( RTL_CONSTASCII_USTRINGPARAM( "TABLE" ) );
+
+    switch ( nFilterMode )
+    {
+    default:
+        OSL_ENSURE( sal_False, "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
+    case FILTER_MODE_MIX_ALL:
+        _rFilter.realloc( 3 );
+        _rFilter[0] = sView;
+        _rFilter[1] = sTable;
+        _rFilter[2] = sAll;
+        break;
+    case FILTER_MODE_FIXED:
+        _rFilter.realloc( 2 );
+        _rFilter[0] = sView;
+        _rFilter[1] = sTable;
+        break;
+    case FILTER_MODE_WILDCARD:
+        _rFilter.realloc( 1 );
+        _rFilter[0] = sAll;
+        break;
+    case FILTER_MODE_STANDARD:
+        _rFilter.realloc( 0 );
+        break;
+    }
+}
+
 // -----------------------------------------------------------------------------
 
