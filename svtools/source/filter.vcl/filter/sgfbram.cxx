@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgfbram.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,14 +656,14 @@ BOOL SgfFilterPScr(SvStream&, SgfHeader&, SgfEntry&)
 |*
 |*    CheckSgfTyp()
 |*
-|*    Beschreibung      Feststellen, uwas fr ein SGF/SGV es sich handelt.
+|*    Beschreibung      Feststellen, um was fuer ein SGF/SGV es sich handelt.
 |*    Ersterstellung    JOE 23.06.93
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 BYTE CheckSgfTyp(SvStream& rInp, USHORT& nVersion)
 {
-#ifdef DEBUG  // Recordgr”áen checken. Neuer Compiler hat vielleichte anderes Allignment!
+#if OSL_DEBUG_LEVEL > 1 // Recordgroessen checken. Neuer Compiler hat vielleichte anderes Allignment!
     if (sizeof(SgfHeader)!=SgfHeaderSize ||
         sizeof(SgfEntry) !=SgfEntrySize  ||
         sizeof(SgfVector)!=SgfVectorSize ||
