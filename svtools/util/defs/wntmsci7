@@ -11005,3 +11005,15 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?AppendSetupEntry@SvtDynMenu@@QAEXABUSvtDynMenuEntry@@@Z
 ?GetList@SvtDynMenu@@QBE?AV?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@XZ
 ?impl_getNextUserEntryNr@SvtDynMenu@@ABEJXZ
+?CreateContextMenu@SvTreeListBox@@UAEPAVPopupMenu@@XZ
+?EnableContextMenuHandling@SvTreeListBox@@QAEXE@Z
+?EnableContextMenuHandling@SvTreeListBox@@QAEXXZ
+?ExcecuteContextMenuAction@SvTreeListBox@@UAEXG@Z
+?IsContextMenuHandlingEnabled@SvTreeListBox@@QBEEXZ
+??RFilterTitleMatch@?%O:\SRC653\src\svtools\source\filepicker\filepicker.cxx115830585@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC653\src\svtools\source\filepicker\iodlg.cxx28050422@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC653\src\svtools\source\filepicker\iodlg.cxx28050422@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC653\src\svtools\source\filepicker\iodlg.cxx28050422@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC653\src\svtools\source\filepicker\iodlg.cxx28050422@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC653\src\svtools\source\filepicker\iodlg.cxx28050422@@YAEABVString@@AAV2@@Z
+?lcl_DecoratedFilter@?%O:\SRC653\src\svtools\source\filepicker\iodlgimp.cxx2353026374@@YA?AVString@@ABV2@@Z
