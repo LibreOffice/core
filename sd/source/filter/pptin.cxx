@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:12:09 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@
 #ifndef _SVX_SVDOPAGE
 #include <svx/svdopage.hxx>
 #endif
+#ifndef _SVDOMEDIA_HXX
+#include <svx/svdomedia.hxx>
+#endif
 #ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
 #endif
@@ -226,6 +229,18 @@
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
 #endif
@@ -233,6 +248,9 @@
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
+#include <ppt/pptinanimations.hxx>
+
+using namespace ::com::sun::star;
 
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium, MSFilterTracer* pTracer )
@@ -876,6 +894,7 @@ sal_Bool ImplSdPPTImport::Import()
                 if ( pObj )
                     pMPage->NbcInsertObject( pObj );
 
+                sal_Bool bNewAnimationsUsed = sal_False;
                 ProcessData aProcessData( *(*pList)[ nAktPageNum ], (SdPage*)pMPage );
                 sal_uInt32 nFPosMerk = rStCtrl.Tell();
                 DffRecordHeader aPageHd;
@@ -883,47 +902,87 @@ sal_Bool ImplSdPPTImport::Import()
                 {
                     if ( mbTracing )
                         mpTracer->AddAttribute( rtl::OUString::createFromAscii( "MasterPage" ), rtl::OUString::valueOf( (sal_Int32) (nAktPageNum + 1) ) );
-                    sal_uInt32 nPageRecEnd = aPageHd.GetRecEndFilePos();
-                    DffRecordHeader aPPDrawHd;
-                    if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, nPageRecEnd, &aPPDrawHd ) )
+
+                    while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
                     {
-                        sal_uInt32 nPPDrawEnd = aPPDrawHd.GetRecEndFilePos();
-                        DffRecordHeader aEscherF002Hd;
-                        if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, nPPDrawEnd, &aEscherF002Hd ) )
+                        DffRecordHeader aHd;
+                         rStCtrl >> aHd;
+                        switch( aHd.nRecType )
                         {
-                            sal_uInt32 nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
-                            DffRecordHeader aEscherObjListHd;
-                            if ( SeekToRec( rStCtrl, DFF_msofbtSpgrContainer, nEscherF002End, &aEscherObjListHd ) )
+                            case PPT_PST_PPDrawing :
                             {
-                                sal_uInt32 nObjCount = 0;
-                                while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
+                                aHd.SeekToBegOfRecord( rStCtrl );
+                                DffRecordHeader aPPDrawHd;
+                                if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, aHd.GetRecEndFilePos(), &aPPDrawHd ) )
                                 {
-                                    DffRecordHeader aHd;
-                                    rStCtrl >> aHd;
-                                    if ( ( aHd.nRecType == DFF_msofbtSpContainer ) || ( aHd.nRecType == DFF_msofbtSpgrContainer ) )
+                                    sal_uInt32 nPPDrawEnd = aPPDrawHd.GetRecEndFilePos();
+                                    DffRecordHeader aEscherF002Hd;
+                                    if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, nPPDrawEnd, &aEscherF002Hd ) )
                                     {
-                                        if ( nObjCount++ )      // skipping the first object
+                                        sal_uInt32 nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
+                                        DffRecordHeader aEscherObjListHd;
+                                        if ( SeekToRec( rStCtrl, DFF_msofbtSpgrContainer, nEscherF002End, &aEscherObjListHd ) )
                                         {
-                                            Rectangle aEmpty;
-                                            aHd.SeekToBegOfRecord( rStCtrl );
-                                            SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
-                                            if ( pObj )
+                                            sal_uInt32 nObjCount = 0;
+                                            while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
                                             {
-                                                pObj->SetLayer( nBackgroundObjectsLayerID );
-                                                pMPage->NbcInsertObject( pObj );
+                                                DffRecordHeader aHd;
+                                                rStCtrl >> aHd;
+                                                if ( ( aHd.nRecType == DFF_msofbtSpContainer ) || ( aHd.nRecType == DFF_msofbtSpgrContainer ) )
+                                                {
+                                                    if ( nObjCount++ )      // skipping the first object
+                                                    {
+                                                        Rectangle aEmpty;
+                                                        aHd.SeekToBegOfRecord( rStCtrl );
+                                                        SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                                                        if ( pObj )
+                                                        {
+                                                            pObj->SetLayer( nBackgroundObjectsLayerID );
+                                                            pMPage->NbcInsertObject( pObj );
+                                                        }
+                                                    }
+                                                }
+                                                aHd.SeekToEndOfRecord( rStCtrl );
                                             }
                                         }
                                     }
-                                    aHd.SeekToEndOfRecord( rStCtrl );
                                 }
                             }
+                            break;
+
+                            case PPT_PST_ProgTags :
+                            {
+                                DffRecordHeader aProgTagHd;
+                                if ( SeekToContentOfProgTag( 10, rStCtrl, aPageHd, aProgTagHd ) )
+                                {
+                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aProgTagHd.GetRecEndFilePos() ) )
+                                    {
+                                        DffRecordHeader aProgTagContentHd;
+                                        rStCtrl >> aProgTagContentHd;
+                                        switch( aProgTagContentHd.nRecType )
+                                        {
+                                            case DFF_msofbtAnimGroup :
+                                            {
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xPage( pMPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY );
+                                                ppt::AnimationImporter aImporter( this, rStCtrl );
+                                                aImporter.import( xPage, aProgTagContentHd );
+                                                bNewAnimationsUsed = sal_True;
+                                            }
+                                            break;
+                                        }
+                                        aProgTagContentHd.SeekToEndOfRecord( rStCtrl );
+                                    }
+                                }
+                            }
+                            break;
                         }
+                        aHd.SeekToEndOfRecord( rStCtrl );
                     }
                     if ( mbTracing )
                         mpTracer->RemoveAttribute( rtl::OUString::createFromAscii( "MasterPage" ) );
                 }
                 rStCtrl.Seek( nFPosMerk );
-                ImportPageEffect( (SdPage*)pMPage );
+                ImportPageEffect( (SdPage*)pMPage, bNewAnimationsUsed );
 
                 ///////////////////////
                 // background object //
@@ -973,6 +1032,8 @@ sal_Bool ImplSdPPTImport::Import()
     // importing slide pages          //
     ////////////////////////////////////
     {
+        double p = 2;
+
         UINT32          nFPosMerk = rStCtrl.Tell();
         PptPageKind     ePageKind = eAktPageKind;
         UINT16          nPageNum = nAktPageNum;
@@ -986,6 +1047,8 @@ sal_Bool ImplSdPPTImport::Import()
         {
             for ( USHORT nPageNum = 0; nPageNum < nPageAnz; nPageNum++ )
             {
+                sal_Bool bNewAnimationsUsed = sal_False;
+
                 ePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPageNum, PPT_SLIDEPAGE );
                 SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
@@ -1003,7 +1066,67 @@ sal_Bool ImplSdPPTImport::Import()
                 pSdrModel->InsertPage( pPage );         // SJ: #i29625# because of form controls, the
                 ImportPage( pPage, pMasterPersist );    //  page must be inserted before importing
                 SetHeaderFooterPageSettings( pPage, pMasterPersist );
-                ImportPageEffect( (SdPage*)pPage );
+                // CWS preseng01: pPage->SetPageKind( PK_STANDARD );
+
+                DffRecordHeader aPageHd;
+                if ( SeekToAktPage( &aPageHd ) )
+                {
+                    aPageHd.SeekToContent( rStCtrl );
+                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
+                    {
+                        DffRecordHeader aHd;
+                        rStCtrl >> aHd;
+                        switch ( aHd.nRecType )
+                        {
+                            case PPT_PST_ProgTags :
+                            {
+                                DffRecordHeader aProgTagHd;
+                                if ( SeekToContentOfProgTag( 10, rStCtrl, aPageHd, aProgTagHd ) )
+                                {
+                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aProgTagHd.GetRecEndFilePos() ) )
+                                    {
+                                        DffRecordHeader aProgTagContentHd;
+                                        rStCtrl >> aProgTagContentHd;
+                                        switch( aProgTagContentHd.nRecType )
+                                        {
+/*
+                                            case PPT_PST_CommentContainer :
+                                            {
+
+                                            }
+                                            break;
+*/
+                                            case DFF_msofbtAnimGroup :
+                                            {
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xPage( pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY );
+                                                ppt::AnimationImporter aImporter( this, rStCtrl );
+                                                aImporter.import( xPage, aProgTagContentHd );
+                                                bNewAnimationsUsed = sal_True;
+                                            }
+                                            break;
+
+                                            case PPT_PST_NewlyAddedAtomByXP11008 :  // ???
+                                            break;
+
+                                            case PPT_PST_NewlyAddedAtomByXP12011 :  // ??? don't know, this atom is always 8 bytes big
+                                            break;                                  // and is appearing in nearly every l10 progtag
+                                        }
+                                        aProgTagContentHd.SeekToEndOfRecord( rStCtrl );
+                                    }
+                                }
+                            }
+                            break;
+
+                            case PPT_PST_HeadersFooters :
+                            case PPT_PST_PPDrawing :
+                            default:
+                            break;
+                        }
+
+                        aHd.SeekToEndOfRecord( rStCtrl );
+                    }
+                    ImportPageEffect( (SdPage*)pPage, bNewAnimationsUsed );
+                }
 
                 // creating the corresponding note page
                 eAktPageKind = PPT_NOTEPAGE;
@@ -1375,14 +1498,16 @@ sal_Bool ImplSdPPTImport::Import()
                     pList->First();
             }
         }
-        pDoc->SetPresManual( ( nFlags & 1 ) == 0 );
-        pDoc->SetAnimationAllowed( ( nFlags & 2 ) == 0 );
-        pDoc->SetPresAll( ( nFlags & 4 ) == 0 );
-        pDoc->SetCustomShow( ( nFlags & 8 ) != 0 );
-        pDoc->SetPresEndless( ( nFlags & 0x80 ) != 0 );
-        pDoc->SetPresFullScreen( ( nFlags & 0x10 ) == 0 );
-//      pDoc->SetPresPause( );
-//      pDoc->SetPresShowLogo( );
+        sd::PresentationSettings& rPresSettings = pDoc->getPresentationSettings();
+
+        rPresSettings.mbManual = ( nFlags & 1 ) == 0;
+        rPresSettings.mbAnimationAllowed = ( nFlags & 2 ) == 0;
+        rPresSettings.mbAll = ( nFlags & 4 ) == 0;
+        rPresSettings.mbCustomShow = ( nFlags & 8 ) != 0;
+        rPresSettings.mbEndless = ( nFlags & 0x80 ) != 0;
+        rPresSettings.mbFullScreen = ( nFlags & 0x10 ) == 0;
+//      rPresSettings.mnPauseTimeout;
+//      rPresSettings.mbShowLogo;
         if ( nStartSlide )
         {
             sal_uInt32 nSlideCount = GetPageCount();
@@ -1390,7 +1515,7 @@ sal_Bool ImplSdPPTImport::Import()
             {
                 SdPage* pPage = pDoc->GetSdPage( nStartSlide - 1, PK_STANDARD );
                 if ( pPage )
-                    pDoc->SetPresPage( pPage->GetName() );
+                    rPresSettings.maPresPage = pPage->GetName();
             }
         }
     }
@@ -1486,7 +1611,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
 //
 //////////////////////////////////////////////////////////////////////////
 
-void ImplSdPPTImport::ImportPageEffect( SdPage* pPage )
+void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed )
 {
     ULONG nFilePosMerk = rStCtrl.Tell();
 
@@ -1677,11 +1802,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage )
                                 }
 
                                 if ( nSpeed == 0 )
-                                    pPage->SetFadeSpeed( FADE_SPEED_SLOW );     // langsam
+                                    pPage->setTransitionDuration( 3.0 );        // langsam
                                 else if ( nSpeed == 1 )
-                                    pPage->SetFadeSpeed( FADE_SPEED_MEDIUM );   // mittel
+                                    pPage->setTransitionDuration( 2.0 );    // mittel
                                 else if ( nSpeed == 2 )
-                                    pPage->SetFadeSpeed( FADE_SPEED_FAST );     // schnell
+                                    pPage->setTransitionDuration( 1.0 );    // schnell
 
                                 if ( nBuildFlags & 0x400 )                      // slidechange by time
                                 {   // Standzeit (in Ticks)
@@ -1761,6 +1886,59 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage )
     for ( i = 0; (sal_uInt32)i < aAnimInfo.Count(); i++ )
         ( (SdAnimationInfo*)aAnimInfo.GetObject( i ) )->nPresOrder = i + 1;
 
+    if ( !bNewAnimationsUsed )
+    {
+        SdrObjListIter aIter( *pPage, IM_FLAT );
+
+        List    aAnimInfo;
+        while ( aIter.IsMore() )
+        {
+            SdrObject* pObj = aIter.Next();
+            const SdAnimationInfo *pInfo = pDoc->GetAnimationInfo( pObj );
+            if ( pInfo )
+            {
+                uno::Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( pObj );
+                if ( aXShape.is() )
+                {
+                    uno::Reference< beans::XPropertySet > aXPropSet( aXShape, uno::UNO_QUERY );
+                    if ( aXPropSet.is() )
+                    {
+                        if ( ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
+                            || ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE ) )
+                        {
+                            uno::Any aAny;
+                            sal_Int32 nPresOrder = pInfo->nPresOrder;
+                            aAny <<= nPresOrder;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PresentationOrder" )), sal_True );
+                            if ( pInfo->eEffect != com::sun::star::presentation::AnimationEffect_NONE )
+                            {
+                                aAny <<= pInfo->eEffect;
+                                SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Effect" )), sal_True );
+                            }
+                            if ( pInfo->eTextEffect != com::sun::star::presentation::AnimationEffect_NONE )
+                            {
+                                aAny <<= pInfo->eTextEffect;
+                                SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" )), sal_True );
+                            }
+                            aAny <<= pInfo->eSpeed;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Speed" )), sal_True );
+                            aAny <<= pInfo->bDimHide;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimHide" )), sal_True );
+                            aAny <<= pInfo->bDimPrevious;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" )), sal_True );
+                            aAny <<= (sal_Int32)( (sal_uInt32)( pInfo->aDimColor.GetBlue() | ( pInfo->aDimColor.GetGreen() << 8 ) | ( pInfo->aDimColor.GetRed() << 16 ) ) );
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DimColor" )), sal_True );
+                            aAny <<= pInfo->bSoundOn;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" )), sal_True );
+                            rtl::OUString aStr( pInfo->aSoundFile );
+                            aAny <<= aStr;
+                            SvxMSDffManager::SetPropValue( aAny, aXPropSet, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" )), sal_True );
+                        }
+                    }
+                }
+            }
+        }
+    }
     rStCtrl.Seek( nFilePosMerk );
 }
 
@@ -1879,6 +2057,74 @@ String ImplSdPPTImport::ReadSound(UINT32 nSoundRef) const
     }
     rStCtrl.Seek( nPosMerk );
     return aRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// media object import, the return value is the url to the media object
+//
+//////////////////////////////////////////////////////////////////////////
+
+String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
+{
+    String aRetVal;
+    DffRecordHeader* pHd( const_cast<ImplSdPPTImport*>(this)->aDocRecManager.GetRecordHeader( PPT_PST_ExObjList, SEEK_FROM_BEGINNING ) );
+    if ( pHd )
+    {
+        pHd->SeekToContent( rStCtrl );
+        while ( ( rStCtrl.Tell() < pHd->GetRecEndFilePos() ) && !aRetVal.Len() )
+        {
+            DffRecordHeader aHdMovie;
+            rStCtrl >> aHdMovie;
+            switch( aHdMovie.nRecType )
+            {
+                case PPT_PST_ExAviMovie :
+                case PPT_PST_ExMCIMovie :
+                {
+                    DffRecordHeader aExVideoHd;
+                    if ( SeekToRec( rStCtrl, PPT_PST_ExVideo, aHdMovie.GetRecEndFilePos(), &aExVideoHd ) )
+                    {
+                        DffRecordHeader aExMediaAtomHd;
+                        if ( SeekToRec( rStCtrl, PPT_PST_ExMediaAtom, aExVideoHd.GetRecEndFilePos(), &aExMediaAtomHd ) )
+                        {
+                            sal_uInt32 nRef;
+                            rStCtrl >> nRef;
+                            if ( nRef == nMediaRef )
+                            {
+                                aExVideoHd.SeekToContent( rStCtrl );
+                                while( rStCtrl.Tell() < aExVideoHd.GetRecEndFilePos() )
+                                {
+                                    DffRecordHeader aHd;
+                                    rStCtrl >> aHd;
+                                    switch( aHd.nRecType )
+                                    {
+                                        case PPT_PST_CString :
+                                        {
+                                            aHd.SeekToBegOfRecord( rStCtrl );
+                                            String aStr;
+                                            if ( ReadString( aStr ) )
+                                            {
+                                                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aStr, aRetVal ) )
+                                                {
+                                                    aRetVal = INetURLObject( aRetVal ).GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    }
+                                    aHd.SeekToEndOfRecord( rStCtrl );
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            aHdMovie.SeekToEndOfRecord( rStCtrl );
+        }
+    }
+    return aRetVal;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -2882,9 +3128,30 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                     pObj->InsertUserData( pInfo );
                                 }
                                 ( (ImplSdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aInteractiveInfoAtom, aMacroName );
+                                if ( aInteractiveInfoAtom.nAction == 6 ) // Sj -> media action
+                                {
+                                    rHdClientData.SeekToContent( rStCtrl );
+                                    DffRecordHeader aObjRefAtomHd;
+                                    if ( SeekToRec( rSt, PPT_PST_ExObjRefAtom, nHdRecEnd, &aObjRefAtomHd ) )
+                                    {
+                                        sal_uInt32 nRef;
+                                        rSt >> nRef;
+                                        String aMediaURL( ReadMedia( nRef ) );
+                                        if ( !aMediaURL.Len() )
+                                            aMediaURL = ReadSound( nRef );
+                                        if ( aMediaURL.Len() )
+                                        {
+                                            SdrMediaObj* pMediaObj = new SdrMediaObj( pObj->GetSnapRect() );
+                                            pMediaObj->SetModel( pObj->GetModel() );
+                                            pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
+                                            delete pObj, pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
+                                            pMediaObj->setURL( aMediaURL );
+                                        }
+                                    }
+                                }
                             }
-                            break;
                         }
+                        break;
                     }
                     aHd.SeekToEndOfRecord( rSt );
                 }
