@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:40:58 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 
 class SfxBindings;
 class Timer;
+class SfxMenuImageControl_Impl;
 
 SV_DECL_PTRARR_DEL( SfxMenuCtrlArr_Impl, SfxMenuControl*, 2, 2 );
 
@@ -87,6 +88,7 @@ private:
     SfxVirtualMenu* pParent;
     SfxMenuCtrlArr_Impl* pAppCtrl;
     SfxMenuControl* pItems;
+    SfxMenuImageControl_Impl* pImageControl;
     SfxBindings*    pBindings;
     ResMgr*         pResMgr;
     PopupMenu*      pWindowMenu;

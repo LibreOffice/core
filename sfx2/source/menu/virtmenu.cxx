@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:41:46 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <vcl/system.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
+#include <svtools/imageitm.hxx>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -127,6 +128,54 @@ static long nAutoDeactivateTimeout_Impl = -1;
 
 typedef SfxMenuControl* SfxMenuControlPtr;
 SV_IMPL_PTRARR(SfxMenuCtrlArr_Impl, SfxMenuControlPtr);
+
+class SfxMenuImageControl_Impl : public SfxControllerItem
+{
+    SfxVirtualMenu*     pMenu;
+    long                lRotation;
+    BOOL                bIsMirrored;
+
+protected:
+    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+public:
+                        SfxMenuImageControl_Impl( USHORT nSlotId, SfxBindings& rBindings, SfxVirtualMenu* pVMenu )
+                            : SfxControllerItem( nSlotId, rBindings )
+                            , pMenu( pVMenu )
+                            , lRotation( 0 )
+                            , bIsMirrored( FALSE )
+                        {}
+    void                Update();
+};
+
+void SfxMenuImageControl_Impl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+{
+    const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
+    if ( pItem )
+    {
+        lRotation = pItem->GetRotation();
+        bIsMirrored = pItem->IsMirrored();
+        Update();
+    }
+}
+
+void SfxMenuImageControl_Impl::Update()
+{
+    SfxViewFrame* pViewFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
+    SfxModule* pModule = pViewFrame->GetObjectShell()->GetModule();
+    SfxSlotPool* pPool = pModule->GetSlotPool();
+    Menu* pSVMenu = pMenu->GetSVMenu();
+    for (USHORT nPos = 0; nPos<pSVMenu->GetItemCount(); nPos++)
+    {
+        USHORT nId = pSVMenu->GetItemId( nPos );
+        const SfxSlot* pSlot = pPool->GetSlot( nId );
+        if ( pSlot && pSlot->IsMode( SFX_SLOT_ROTATEIMAGE ) )
+        {
+            pSVMenu->SetItemImageMirrorMode( nId, FALSE );
+            pSVMenu->SetItemImageAngle( nId, lRotation );
+            pSVMenu->SetItemImageMirrorMode( nId, bIsMirrored );
+        }
+    }
+}
 
 //=========================================================================
 
@@ -531,6 +580,8 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
         }
     }
 
+    pImageControl->Update();
+
     return 0;
 }
 
@@ -561,6 +612,8 @@ void SfxVirtualMenu::UpdateImages()
                     pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bIsHiContrastMode ) );
             }
         }
+
+        pImageControl->Update();
     }
 }
 
@@ -788,6 +841,8 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
             if ( nId && nId > END_ITEMID_WINDOWLIST )
                 pBindings->Update(nId);
         }
+
+        pBindings->Update( SID_IMAGE_ORIENTATION );
 
         // HelpText on-demand
         if ( !bHelpInitialized )
