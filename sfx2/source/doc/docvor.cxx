@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:23:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,18 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #include <stdio.h>
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
 #ifndef _SV_PRNSETUP_HXX //autogen
 #include <svtools/prnsetup.hxx>
 #endif
@@ -104,6 +111,8 @@
 #include <tools/color.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <sot/exchange.hxx>
+#include <comphelper/storagehelper.hxx>
 #pragma hdrstop
 
 #include "helpid.hrc"
@@ -138,6 +147,8 @@
 
 static const char cDelim = ':';
 BOOL SfxOrganizeListBox_Impl::bDropMoveOk = TRUE;
+
+using namespace ::com::sun::star;
 
 //=========================================================================
 
@@ -1665,17 +1676,22 @@ sal_Bool SfxOrganizeDlg_Impl::GetServiceName_Impl( String& rName, String& rFileU
     rFileURL = pTemplates->GetPath( nRegion, nIndex );
     if ( rFileURL.Len() > 0 )
     {
-        SvStorageRef aStorage = new SvStorage( rFileURL );
-        if ( !aStorage->GetError() )
+        try
         {
+            uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                                                    rFileURL,
+                                                    embed::ElementModes::READWRITE );
+            ULONG nFormat = SotStorage::GetFormatID( xStorage );
             const SfxFilter* pFilter =
-                SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage->GetFormat() );
+                SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nFormat );
             if ( pFilter )
             {
                 rName = pFilter->GetServiceName();
                 bRet = TRUE;
             }
         }
+        catch( uno::Exception& )
+        {}
     }
 
     return bRet;
