@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 09:18:53 $
+ *  last change: $Author: ssa $ $Date: 2001-07-19 10:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,9 @@ static sal_Int32 processMessage(oslPipe pPipe, HWND Sender, COPYDATASTRUCT *pDat
                 oslPipe pAccept;
 
                 pAccept = __osl_createPipeImpl();
+                OSL_ASSERT(pAccept);
 
+                osl_incrementInterlockedCount(&(pAccept->m_Reference));
                 rtl_string_assign(&( pAccept->m_NameA ) , pPipe->m_NameA );
                 pAccept->m_DstWnd = Sender;
 
