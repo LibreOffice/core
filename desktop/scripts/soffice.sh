@@ -139,7 +139,7 @@ case $sd_platform in
 esac
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
-java_ld_library_path=`"$sd_prog/javaldx" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"`
+java_ld_library_path=`"$sd_prog/javaldx"`
 if [ "$java_ld_library_path" != "" ] ; then
     case $sd_platform in
         AIX)
