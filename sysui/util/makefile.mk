@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-06-26 18:34:17 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:28:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,88 +64,11 @@ PRJ=..
 
 PRJNAME=sysui
 TARGET=sysui
-TARGET1=fps
-TARGET2=fop
 USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-
-# --- fps dynlib ----------------------------------------------
-
-.IF "$(GUI)"=="WNT"
-
-SHL1TARGET=$(TARGET1)
-
-SHL1STDLIBS=$(CPPULIB)\
-            $(CPPUHELPERLIB)\
-            $(SALLIB)\
-            $(VCLLIB)\
-            $(TOOLSLIB)\
-            shell32.lib\
-            ole32.lib\
-            gdi32.lib\
-            oleaut32.lib\
-            tools32.lib\
-            comdlg32.lib\
-            kernel32.lib\
-            comsupp.lib\
-            oleaut32.lib
-
-SHL1DEPN=
-SHL1IMPLIB=i$(SHL1TARGET)
-
-SHL1LIBS=$(SLB)$/fps.lib\
-         $(SLB)$/utils.lib\
-         $(SOLARLIBDIR)$/shell9x.lib\
-         $(SOLARLIBDIR)$/user9x.lib\
-         $(SOLARLIBDIR)$/kernel9x.lib\
-         $(SOLARLIBDIR)$/comdlg9x.lib
-
-SHL1OBJS=$(SLOFILES)
-            
-SHL1RES=$(RES)$/$(TARGET1).res
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
-
-# --- fop dynlib --------------------------------------------------
-
-SHL2TARGET=$(TARGET2)
-
-SHL2STDLIBS=$(CPPULIB)\
-            $(CPPUHELPERLIB)\
-            $(SALLIB)\
-            $(TOOLSLIB)\
-            $(VCLLIB)\
-            ole32.lib\
-            gdi32.lib\
-            shell32.lib\
-            comsupp.lib\
-            oleaut32.lib
-
-SHL2DEPN=
-SHL2IMPLIB=i$(SHL2TARGET)
-
-SHL2LIBS=\
-    $(SLB)$/fop.lib\
-    $(SLB)$/utils.lib\
-    $(SOLARLIBDIR)$/shell9x.lib\
-    $(SOLARLIBDIR)$/user9x.lib
-
-SHL2OBJS=$(SLOFILES) 
-SHL2DEF=$(MISC)$/$(SHL2TARGET).def
-
-DEF2NAME=$(SHL2TARGET)
-DEF2EXPORTFILE=	exports.dxp
-
-
-# "$(GUI)"=="WNT"
-.ENDIF			
-
 
 .INCLUDE :  target.mk
 
