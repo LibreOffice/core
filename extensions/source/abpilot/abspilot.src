@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:45:31 $
+ *  last change: $Author: kz $ $Date: 2001-12-19 17:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ french ] = "%PRODUCTNAME permet l'accès aux données des adresses présentes dans votre système. Cette fonction nécessite la création d'une source de données %PRODUCTNAME dans laquelle vos carnets d'adresses existeront sous forme de tables.\n\nCet AutoPilote vous assite lors du paramétrage de cette source de données.";
         Text[ spanish ] = "%PRODUCTNAME le permite acceder a las direcciones que se encuentren en su sistema.\nPara ello se creará una fuente de datos %PRODUCTNAME en la que las libretas de direcciones estarán disponibles en tablas.\n\nEste AutoPiloto le apoya durante la creación de esta fuente de datos.";
         Text[ finnish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
-        Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della Rubrica già presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle Rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi sarà di sostegno durante l'impostazione della sorgente dati.";
+        Text[ italian ] = "%PRODUCTNAME vi permette di accedere a dati della Rubrica già presenti nel vostro sistema.\nA questo scopo viene creata una sorgente dati %PRODUCTNAME con la quale avrete accesso alle Rubriche sotto forma di tabelle.\n\nQuesto Pilota automatico vi aiuterà ad impostare la sorgente dati.";
         Text[ danish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ swedish ] = "%PRODUCTNAME ger dig möjlighet att ha tillgång till adressdata som redan finns i ditt system. För att du ska kunna göra detta skapas en %PRODUCTNAME-datakälla där dina adressböcker är tillgängliga som tabeller.\n\nDenna AutoPilot hjälper dig att skapa datakällan.";
         Text[ polish ] = "%PRODUCTNAME umo¿liwia dostêp do danych adresowych istniej¹cych ju¿ w systemie komputera. Utworzone zostanie w tym celu Ÿród³o danych programu %PRODUCTNAME, udostêpniaj¹ce ksi¹¿ki adresowe u¿ytkownika, wyœwietlane w postaci tabel.\n\nW tworzeniu Ÿród³a danych pomocny bêdzie niniejszy AutoPilot.";
@@ -1028,6 +1028,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/12/14 16:45:31  kz
+ *  Merge SRC641: 14.12.01 - 17:43:23
+ *
  *  Revision 1.23  2001/11/01 21:38:56  obo
  *  Merge SRC641: 01.11.01 - 22:39:39
  *
@@ -1100,6 +1103,7 @@ Bitmap BMP_HEADERIMAGE
  *
  *  Revision 1.0 26.07.01 09:03:45  fs
  ************************************************************************/
+
 
 
 
