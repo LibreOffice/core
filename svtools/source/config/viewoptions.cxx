@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2001-10-19 08:16:30 $
+ *  last change: $Author: as $ $Date: 2001-10-31 12:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ namespace css = ::com::sun::star;
 #define DEFAULT_PAGEID                          0
 #define DEFAULT_VISIBLE                         sal_False
 
-#define DEBUG_VIEWOPTIONS
+//#define DEBUG_VIEWOPTIONS
 
 #ifdef DEBUG_VIEWOPTIONS
     #define _LOG_COUNTER_( _SVIEW_, _NREAD_, _NWRITE_ )                                                                                     \
