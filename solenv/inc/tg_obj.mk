@@ -18,6 +18,11 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
     +echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
+    @+nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(OBJTARGET)"!=""
 

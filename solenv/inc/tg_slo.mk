@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_slo.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 16:54:25 $
+#   last change: $Author: hjs $ $Date: 2001-12-10 13:00:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,11 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
     +echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(SLOTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
+    @+nm `cat $(SLOTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SLOTARGET)"!=""
 
