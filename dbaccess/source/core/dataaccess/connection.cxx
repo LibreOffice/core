@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:08:12 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             }
         }
     }
-    catch(const SQLException&)
+    catch(Exception&)
     {
     }
     osl_decrementInterlockedCount( &m_refCount );
