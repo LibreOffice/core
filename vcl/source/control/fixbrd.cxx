@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixbrd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:12:18 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#define _SV_FIXBRD_CXX
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
