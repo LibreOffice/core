@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:55:13 $
+ *  last change: $Author: mtg $ $Date: 2001-05-17 13:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                 aString = xAttribs->getValueByName ( sInitialisationVectorAttribute );
                 Sequence < sal_uInt8 > aDecodeBuffer;
                 Base64Codec::decodeBase64 (aDecodeBuffer, aString);
-                aSequence[nNumProperty].Name = sIterationCountProperty;
+                aSequence[nNumProperty].Name = sInitialisationVectorProperty;
                 aSequence[nNumProperty++].Value <<= aDecodeBuffer;
             }
             else
@@ -177,7 +177,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                 aSequence[nNumProperty++].Value <<= aDecodeBuffer;
 
                 aString = xAttribs->getValueByName ( sIterationCountAttribute );
-                aSequence[nNumProperty].Name = sIterationCountAttribute;
+                aSequence[nNumProperty].Name = sIterationCountProperty;
                 aSequence[nNumProperty++].Value <<= aString.toInt32();
             }
             else
