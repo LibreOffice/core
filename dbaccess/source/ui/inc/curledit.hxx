@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:07:36 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 09:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class OConnectionURLEdit : public Edit
 {
     ODsnTypeCollection  m_aTypeCollection;
     FixedText*          m_pForcedPrefix;
+    String              m_sSaveValueNoPrefix;
 
 public:
     OConnectionURLEdit(Window* pParent, WinBits nStyle = WB_BORDER);
@@ -104,6 +105,9 @@ public:
     virtual String  GetTextNoPrefix() const;
     /// set a new text, leave the current prefix unchanged
     virtual void    SetTextNoPrefix(const String& _rText);
+
+    void    SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
+    String  GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
 };
 
 //.........................................................................
@@ -115,6 +119,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/24 12:07:36  fs
+ *  S/GetTextNoPrefix
+ *
  *  Revision 1.1  2000/10/05 10:08:07  fs
  *  initial checkin
  *
