@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:21:44 $
+#   last change: $Author: vg $ $Date: 2005-03-23 16:19:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ		= ..$/..$/..$/..$/..
 PRJNAME = jurt
 PACKAGE = com$/sun$/star$/lib$/util
@@ -75,8 +74,8 @@ JAVACLASSFILES= 									\
     $(CLASSDIR)$/$(PACKAGE)$/IInvokeHook.class		\
     $(CLASSDIR)$/$(PACKAGE)$/IInvokable.class		\
     $(CLASSDIR)$/$(PACKAGE)$/NativeLibraryLoader.class \
-    $(CLASSDIR)$/$(PACKAGE)$/StringHelper.class
-
+    $(CLASSDIR)$/$(PACKAGE)$/StringHelper.class \
+    $(CLASSDIR)$/$(PACKAGE)$/UrlToFileMapper.class
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
