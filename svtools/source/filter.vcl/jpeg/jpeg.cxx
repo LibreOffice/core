@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-21 14:24:13 $
+ *  last change: $Author: ka $ $Date: 2001-12-21 10:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,10 @@ void* JPEGReader::CreateBitmap( void* pParam )
     if ( bSetLogSize )
     {
         unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
-        if ( ( nUnit == 1 ) || ( nUnit == 2 ) )
+
+        if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) &&
+            ( (JPEGCreateBitmapParam*) pParam )->X_density &&
+            ( (JPEGCreateBitmapParam*) pParam )->Y_density )
         {
             Point       aEmptyPoint;
             Fraction    aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
@@ -236,6 +239,7 @@ void* JPEGReader::CreateBitmap( void* pParam )
             aBmp.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
         }
     }
+
     pAcc = aBmp.AcquireWriteAccess();
 
     if( pAcc )
