@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 14:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _DBTREE_HXX
 #define _DBTREE_HXX
 
-#ifndef _SVTREEBOX_HXX //autogen
+#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
 #endif
 
@@ -72,7 +72,12 @@ namespace com{namespace sun{namespace star{namespace container{
     class XNameAccess;
 }}}}
 
-#include "swtypes.hxx"
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
 
 class SwDBTreeList : public SvTreeListBox
 {
@@ -86,23 +91,24 @@ class SwDBTreeList : public SvTreeListBox
     BOOL            bInitialized;
     BOOL            bShowColumns;
 
-    com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
+    STAR_REFERENCE( container::XNameAccess ) xDBContext;
     DECL_LINK( DBCompare, SvSortData* );
 
     void            InitTreeList();
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
 
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual BOOL    QueryDrop( DropEvent& rEvt);
-
-    void            StartExecuteDrag();
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
 public:
-     SwDBTreeList(Window* pParent, const ResId& rResId, const String& rDefDBName = aEmptyStr, const BOOL bShowCol = FALSE );
-    ~SwDBTreeList();
+     SwDBTreeList( Window* pParent, const ResId& rResId,
+                     const String& rDefDBName = aEmptyStr,
+                    const BOOL bShowCol = FALSE );
+    virtual ~SwDBTreeList();
 
-    String  GetDBName(String& rTableName, String& rColumnName, BOOL* pbIsTable = 0);
-    void    Select(const String& rDBName, const String& rTableName, const String& rColumnName);
+    String  GetDBName( String& rTableName, String& rColumnName, BOOL* pbIsTable = 0);
+    void    Select( const String& rDBName, const String& rTableName,
+                    const String& rColumnName );
 
     void    Show();
     void    ShowColumns(BOOL bShowCol);

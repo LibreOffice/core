@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 10:04:34 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 14:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +100,28 @@
 #endif
 
 
-#ifndef _DRAG_HXX //autogen
-#include <vcl/drag.hxx>
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _DBTREE_HXX
+#include <dbtree.hxx>
 #endif
 
-#include "helpid.h"
-#include "dbmgr.hxx"
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-
-#include "dbui.hrc"
-#include "dbtree.hxx"
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
+#ifndef _DBUI_HRC
+#include <dbui.hrc>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -148,7 +158,8 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
     {
-        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
+        Reference<XInterface> xInstance = xMgr->createInstance(
+                    C2U( "com.sun.star.sdb.DatabaseContext" ));
         xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
     }
     DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
@@ -164,7 +175,7 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
 ------------------------------------------------------------------------*/
 
 
- SwDBTreeList::~SwDBTreeList()
+SwDBTreeList::~SwDBTreeList()
 {
 }
 
@@ -477,44 +488,29 @@ void  SwDBTreeList::Show()
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-void  SwDBTreeList::Command( const CommandEvent& rCEvt )
+void SwDBTreeList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
-    switch( rCEvt.GetCommand() )
-    {
-        case COMMAND_STARTDRAG:
-            StartExecuteDrag();
-            ExecuteDrag(Pointer(POINTER_MOVEDATA), Pointer(POINTER_COPYDATA),
-                        Pointer(POINTER_LINKDATA), DRAG_COPYABLE | DRAG_LINKABLE);
-        break;
-        default:
-            SvTreeListBox::Command(rCEvt);
-    }
-}
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-void SwDBTreeList::StartExecuteDrag()
-{
-    DragServer::Clear();
     String sTableName, sColumnName;
-    String  sDBName(GetDBName(sTableName, sColumnName));
-    if(sDBName.Len())
+    String  sDBName( GetDBName( sTableName, sColumnName ));
+    if( sDBName.Len() )
     {
-        if (sColumnName.Len())
+        TransferDataContainer* pContainer = new TransferDataContainer;
+        STAR_REFERENCE( datatransfer::XTransferable ) xRef( pContainer );
+
+        if( sColumnName.Len() )
         {
             String aCopyData = sDBName;
             aCopyData   += char(11);
             aCopyData   += sTableName;
             aCopyData   += char(11);
-            aCopyData   += String(String::CreateFromAscii("0"));
+            aCopyData   += '0';
             aCopyData   += char(11);
             aCopyData   += sColumnName;
 
             // Datenbankfeld draggen
-            DragServer::CopyData(aCopyData.GetBuffer(), aCopyData.Len() + 1,
-                                    SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE);
+            pContainer->CopyAnyData( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE,
+                                (sal_Char*)aCopyData.GetBuffer(),
+                                (aCopyData.Len() + 1) * sizeof( sal_Unicode ));
         }
 
         sDBName += '.';
@@ -524,16 +520,20 @@ void SwDBTreeList::StartExecuteDrag()
             sDBName += '.';
             sDBName += sColumnName;
         }
-        DragServer::CopyString(sDBName);
+
+        pContainer->CopyAnyData( FORMAT_STRING, (sal_Char*)sDBName.GetBuffer(),
+                                (sDBName.Len() + 1) * sizeof( sal_Unicode ));
+
+        pContainer->StartDrag( this, DND_ACTION_COPY | DND_ACTION_LINK,
+                                Link() );
     }
 }
 
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
-
-BOOL  SwDBTreeList::QueryDrop( DropEvent& rEvt)
+sal_Int8 SwDBTreeList::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return FALSE;
+    return DND_ACTION_NONE;
 }
 
