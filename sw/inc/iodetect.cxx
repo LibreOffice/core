@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:00:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,7 @@ const USHORT MAXFILTER =
 #ifdef DEBUG_SH
         1 +
 #endif
-        //21;
-        19;
+        18;
 
 #define FORAMTNAME_SW4      "StarWriter 4.0"
 #define FORAMTNAME_SW3      "StarWriter 3.0"
