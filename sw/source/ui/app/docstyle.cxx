@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-08-03 14:09:48 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,16 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
+
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:
@@ -676,6 +686,10 @@ BOOL  SwDocStyleSheet::HasClearParentSupport() const
  --------------------------------------------------------------------*/
 String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 {
+    IntlWrapper aIntlWrapper(
+        ::comphelper::getProcessServiceFactory(),
+        GetAppLocaleData().getLocale());
+
     String sPlus(String::CreateFromAscii(" + "));
     if ( SFX_STYLE_FAMILY_PAGE == nFamily )
     {
@@ -704,7 +718,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                         if ( !IsInvalidItem( pItem ) &&
                              rPool.GetPool().GetPresentation(
                                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                                eUnit, aItemPresentation ) )
+                                eUnit, aItemPresentation, &aIntlWrapper ) )
                         {
                             if ( aDesc.Len() && aItemPresentation.Len() )
                                 aDesc += sPlus;
@@ -752,7 +766,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                         if ( !IsInvalidItem( pItem ) &&
                              rPool.GetPool().GetPresentation(
                                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                                eUnit, aItemPresentation ) )
+                                eUnit, aItemPresentation, &aIntlWrapper ) )
                         {
                             BOOL bIsDefault = FALSE;
                             switch ( pItem->Which() )
