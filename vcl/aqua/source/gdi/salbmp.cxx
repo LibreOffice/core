@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-25 05:25:03 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-26 03:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,236 @@
 
 // ==================================================================
 
+static inline long GetNewPixMapBitDepth( const USHORT nBits )
+{
+    long nPixMapBitDepth = 0;
+
+    if ( nBits <= kThousandsColor )
+    {
+        nPixMapBitDepth = (long)nBits;
+    } // if
+    else
+    {
+        nPixMapBitDepth = kTrueColor;
+    } // else
+
+    return nPixMapBitDepth;
+} // GetNewPixMapDepth
+
+// ------------------------------------------------------------------
+
+static inline long GetNewPixMapOffset( const long   nPixMapBitDepth,
+                                       const short  nWidth
+                                     )
+{
+    long  nPixMapWidth  = nPixMapBitDepth * (long)nWidth;
+    long  nPixMapOffset = ( ( nPixMapWidth + 15L ) >> 4L ) << 1L;
+
+    return nPixMapOffset;
+} // GetNewPixMapOffset
+
+// ------------------------------------------------------------------
+
+static inline long GetNewPixMapImageSize ( const short  nHeight,
+                                           const long   nPixMapRowOffset
+                                         )
+{
+    long nPixMapImageSize = (long)nHeight * nPixMapRowOffset;
+
+    return nPixMapImageSize;
+} // GetNewPixMapImageSize
+
+// ------------------------------------------------------------------
+
+static inline short GetNewPixMapRowBytes( const long nPixMapRowOffset )
+{
+    short nPixMapRowBytes = (short)nPixMapRowOffset + 0x8000;
+
+    return nPixMapRowBytes;
+} // GetNewPixMapRowBytes
+
+// ------------------------------------------------------------------
+
+static inline short GetNewPixMapColorDepth( const USHORT nBits )
+{
+    short nPixMapColorDepth = 0;
+
+    if ( nBits <= 8 )
+    {
+        nPixMapColorDepth = 1 << ((short)nBits);
+    }
+
+    return nPixMapColorDepth;
+} // GetNewPixMapColorDepth
+
+// ------------------------------------------------------------------
+
+static void GetNewPixMapBoudsRect( const short   nWidth,
+                                   const short   nHeight,
+                                   Rect         *rPixMapBoundsRect
+                                 )
+{
+    short  nPixMapRectLeft   = 0;
+    short  nPixMapRectTop    = 0;
+    short  nPixMapRectRight  = nWidth;
+    short  nPixMapRectBottom = nHeight;
+
+    // Set the dimensions of the PixMap
+
+    MacSetRect( rPixMapBoundsRect,
+                nPixMapRectLeft,
+                nPixMapRectTop,
+                nPixMapRectRight,
+                nPixMapRectBottom
+              );
+} // GetNewPixMapBoudsRect
+
+// ------------------------------------------------------------------
+
+static inline short GetNewPixMapMinCTabCount( const short           nPixMapColorDepth,
+                                              const BitmapPalette&  rPal
+                                            )
+{
+    short nPalEntryCount = rPal.GetEntryCount();
+    short nMinCTabCount  = 0;
+
+    if ( nPixMapColorDepth < nPalEntryCount )
+    {
+        nMinCTabCount = nPixMapColorDepth;
+    } // if
+    else
+    {
+        nMinCTabCount = nPalEntryCount;
+    } // else
+
+    return nMinCTabCount;
+} // GetNewPixMapMinCTabCount
+
+// ------------------------------------------------------------------
+
+static short GetCTableSize( )
+{
+    GDPtr  pGDevice  = NULL;
+    short  nCTabSize = 0;
+
+    pGDevice = *GetGDevice ( );
+
+    if ( pGDevice != NULL )
+    {
+        PixMapPtr  pPixMap = NULL;
+
+        pPixMap = *(*pGDevice).gdPMap;
+
+        if ( pPixMap != NULL )
+        {
+            CTabPtr pCTable = NULL;
+
+            pCTable = *(*pPixMap).pmTable;
+
+            if ( pCTable != NULL )
+            {
+                nCTabSize = pCTable->ctSize;
+            } // if
+        } // if
+    } // if
+
+    return nCTabSize;
+} // GetCTableSize
+
+// ------------------------------------------------------------------
+
+static CTabHandle NewCTableHandleClear( )
+{
+    const short  nCTableSize = GetCTableSize( );
+
+    CTabHandle   hCTable           = 0;
+    long         nCTableHandleSize = 0;
+
+    nCTableHandleSize =   (  ( nCTableSize + 1 ) * sizeof( ColorSpec  ) )
+                        + ( sizeof( ColorTable ) - sizeof( CSpecArray ) );
+
+    hCTable = (CTabHandle) NewHandleClear( nCTableHandleSize );
+
+    if ( ( hCTable != NULL ) && ( *hCTable != NULL ) )
+    {
+          (**hCTable).ctSeed = GetCTSeed ( );
+      } // if
+
+    return hCTable;
+} // NewCTableHandleClear
+
+// ------------------------------------------------------------------
+
+PixMapHandle GetNewPixMap ( const Size&           rSize,
+                            const USHORT          nBits,
+                            const BitmapPalette  &rPal,
+                            const SalGraphics    *rSalGraphics
+                          )
+{
+    // Handles only 16 and 32 bit color depth
+
+    PixMapHandle  hPixMap = NULL;
+    short         nWidth  = rSize.Width();
+    short         nHeight = rSize.Height();
+
+    if ( ( nWidth > 0 ) && ( nHeight > 0 ) )
+    {
+        hPixMap = NewPixMap();
+
+        if ( ( hPixMap != NULL ) && ( *hPixMap != NULL ) )
+        {
+            const long   nPixMapBitDepth   = GetNewPixMapBitDepth( nBits);
+            const long   nPixMapRowOffset  = GetNewPixMapOffset( nPixMapBitDepth, nWidth );
+            const long   nPixMapImageSize  = GetNewPixMapImageSize( nHeight, nPixMapRowOffset );
+            const short  nPixMapRowBytes   = GetNewPixMapRowBytes( nPixMapRowOffset );
+            const short  nPixMapColorDepth = GetNewPixMapColorDepth( nBits );
+            Rect         aPixMapBoundsRect;
+
+            GetNewPixMapBoudsRect( nWidth, nHeight, &aPixMapBoundsRect );
+
+            Ptr pPixMapData = NewPtrClear( nPixMapImageSize );
+
+            if ( pPixMapData != NULL )
+            {
+                (**hPixMap).baseAddr    = pPixMapData;
+                (**hPixMap).rowBytes    = nPixMapRowBytes;
+                (**hPixMap).bounds      = aPixMapBoundsRect;
+                (**hPixMap).pmVersion   = 0;
+                (**hPixMap).packType    = 0;
+                (**hPixMap).packSize    = 0;
+                (**hPixMap).hRes        = 0x00640000;
+                (**hPixMap).vRes        = 0x00480000;
+                (**hPixMap).pixelSize   = nPixMapBitDepth;
+                (**hPixMap).pixelFormat = 0;
+                (**hPixMap).pmExt       = NULL;
+                (**hPixMap).pixelType   = RGBDirect;
+                (**hPixMap).cmpCount    = 3;
+
+                if( nPixMapBitDepth == kThousandsColor)
+                {
+                    (**hPixMap).cmpSize = 5;
+                } // if
+                else
+                {
+                    (**hPixMap).cmpSize = 8;
+                } // else
+
+                (**hPixMap).pmTable = NewCTableHandleClear( );
+            }
+            else
+            {
+                DisposePixMap( hPixMap );
+            } // else
+        } // if
+    } // if
+
+    return hPixMap;
+} // GetNewPixMap
+
+// ==================================================================
+
+// ==================================================================
+
 SalBitmap::SalBitmap() :
         mpVirDev( 0 ),
         mnBitCount( 0 )
@@ -131,10 +361,9 @@ BOOL SalBitmap::Create( const Size&           rSize,
                      && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
                    )
                 {
-                    mhPixMap
-                        = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
+                    mhPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
 
-                    if ( mhPixMap != NULL )
+                    if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
                     {
                         mnBitCount = GetPixDepth( mhPixMap);
                         maSize     = rSize;
@@ -341,27 +570,32 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
                                     if ( ( hCTab != NULL ) && ( *hCTab != NULL ) )
                                     {
-                                        USHORT          nColors    = (**hCTab).ctSize + 1;
-                                        BitmapPalette  &rPal       = pBuffer->maPalette;
-                                        SInt8           nCTabFlags = noErr;
-
-                                        rPal.SetEntryCount( nColors );
-
-                                        // Map each color in the QuickDraw color
-                                        // table to a BitmapColor
+                                        SInt8 nCTabFlags  = noErr;
 
                                         nCTabFlags = HGetState( (Handle)hCTab );
 
                                         if ( nCTabFlags == noErr )
                                         {
-                                            USHORT  i;
+                                            USHORT          nCTabCount  = 0;
+                                            USHORT          nCTTabIndex = 0;
+                                            BitmapPalette  &rPal        = pBuffer->maPalette;
 
                                             HLock( (Handle)hCTab );
 
-                                            for ( i = 0; i < nColors; i++ )
+                                            // Map each color in the QuickDraw color
+                                            // table to a BitmapColor
+
+                                            nCTabCount = (**hCTab).ctSize + 1;
+
+                                            rPal.SetEntryCount( nCTabCount );
+
+                                            for ( nCTTabIndex = 0;
+                                                  nCTTabIndex < nCTabCount;
+                                                  nCTTabIndex++
+                                                )
                                             {
-                                                BitmapColor &rCol     = rPal[i];
-                                                ColorSpec    aColSpec = (**hCTab).ctTable[i];
+                                                BitmapColor &rCol     = rPal[nCTTabIndex];
+                                                ColorSpec    aColSpec = (**hCTab).ctTable[nCTTabIndex];
 
                                                 rCol.SetRed   ( (BYTE)( aColSpec.rgb.red   >> 8 ) );
                                                 rCol.SetGreen ( (BYTE)( aColSpec.rgb.green >> 8 ) );
@@ -461,4 +695,7 @@ void SalBitmap::ReleaseGraphics( SalGraphics* pGraphics )
         mpVirDev->ReleaseGraphics( pGraphics );
     } // if
 } // SalBitmap::ReleaseGraphics
+
+// ==================================================================
+
 
