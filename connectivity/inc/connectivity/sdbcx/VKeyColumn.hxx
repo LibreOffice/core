@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:44:33 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace connectivity
             virtual ~OKeyColumn();
 
             virtual void construct();
+            DECLARE_SERVICE_INFO();
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FColumns.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@ namespace connectivity
         protected:
             OFileTable* m_pTable;
 
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         public:
             OColumns(   OFileTable* _pTable,
                         ::osl::Mutex& _rMutex,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ namespace connectivity
             sal_Bool    m_IsAscending;
             DECLARE_CTY_PROPERTY(OIndexColumn_PROP,OColumn)
         public:
-            OIndexColumn(sal_Bool _bCase);
             OIndexColumn(   sal_Bool _IsAscending,
                             const ::rtl::OUString& _Name,
                             const ::rtl::OUString& _TypeName,
@@ -95,6 +94,7 @@ namespace connectivity
                             sal_Bool        _bCase);
 
             virtual void construct();
+            DECLARE_SERVICE_INFO();
         };
     }
 }

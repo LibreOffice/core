@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTypeDef.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,31 +62,26 @@
 #ifndef _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
 #define _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
 
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
 
 namespace connectivity
 {
     namespace sdbcx
     {
-        namespace starsdbcx = ::com::sun::star::sdbcx;
-        namespace starlang  = ::com::sun::star::lang;
-
-        typedef ::cppu::WeakComponentImplHelper4< starsdbcx::XDataDescriptorFactory,
-                                                  starsdbcx::XColumnsSupplier,
+        typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::sdbcx::XColumnsSupplier,
                                                   ::com::sun::star::container::XNamed,
-                                                  starlang::XServiceInfo> OColumns_BASE;
+                                                  ::com::sun::star::lang::XServiceInfo> ODescriptor_BASE;
     }
 }
 

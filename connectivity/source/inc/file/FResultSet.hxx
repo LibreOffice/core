@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:24:42 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
                                    UINT32 nParameter=SQL_NO_PARAMETER);
             void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
                                     connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
-                        UINT32 AddParameter(connectivity::OSQLParseNode * pParameter, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>& _xCol);
+                        UINT32 AddParameter(connectivity::OSQLParseNode * pParameter, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
             void GetAssignValues();
 
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);

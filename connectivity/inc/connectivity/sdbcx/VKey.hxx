@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:21:54 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,63 +62,33 @@
 #ifndef _CONNECTIVITY_SDBCX_KEY_HXX_
 #define _CONNECTIVITY_SDBCX_KEY_HXX_
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
 
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
+#ifndef _CONNECTIVITY_SDBCX_KEYDESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VKeyDescriptor.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #endif
 //#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 //#include "connectivity/CommonTools.hxx"
 //#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include "connectivity/sdbcx/VCollection.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
-#include "connectivity/sdbcx/VTypeDef.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
-#include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
-#include "connectivity/sdbcx/IRefreshable.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#endif
 
 namespace connectivity
 {
     namespace sdbcx
     {
+        class OKey;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OKey> OKey_PROP;
 
-        class OKey :    public comphelper::OBaseMutex,
-                        public OColumns_BASE,
-                        public IRefreshableColumns,
-                        public ::comphelper::OPropertyArrayUsageHelper<OKey>,
-                        public ODescriptor
+        class OKey :    public OKeyDescriptor,
+                        public ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                        public OKey_PROP
         {
         protected:
-            ::rtl::OUString m_ReferencedTable;
-            sal_Int32       m_Type;
-            sal_Int32       m_UpdateRule;
-            sal_Int32       m_DeleteRule;
-
-            OCollection*    m_pColumns;
-
-            using OColumns_BASE::rBHelper;
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            DECLARE_CTY_PROPERTY(OKey_PROP,OKey)
         public:
-            DECLARE_CTY_DEFAULTS( OColumns_BASE);
+            DECLARE_CTY_DEFAULTS( OKeyDescriptor);
 
-            OKey(sal_Bool _bCase);
             OKey(   const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _ReferencedTable,
                     sal_Int32       _Type,
@@ -130,32 +100,11 @@ namespace connectivity
 
             DECLARE_SERVICE_INFO();
             //XInterface
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
-                        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-            // ODescriptor
-            virtual void construct();
-
-            // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
-            // XPropertySet
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-            }
-
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // XDataDescriptorFactory
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
-            // XColumnsSupplier
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
-
-            // XNamed
-                        virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return m_Name;
-            }
-                        virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
-            {}
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
         };
     }
 }

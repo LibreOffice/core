@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:40:53 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,18 @@ namespace connectivity
 
         SvStream& operator << (SvStream &rStream, ODbaseIndex&);
         SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
+
+        class ODbaseIndexDescriptor;
+        typedef ::comphelper::OPropertyArrayUsageHelper<ODbaseIndexDescriptor> ODbaseIndexDescriptor_PROP;
+
+        class ODbaseIndexDescriptor :    public ODbaseIndex
+                                        ,public ODbaseIndexDescriptor_PROP
+        {
+            DECLARE_CTY_PROPERTY(ODbaseIndexDescriptor_PROP,ODbaseIndexDescriptor)
+        public:
+            ODbaseIndexDescriptor(ODbaseTable* _pTable);
+            DECLARE_SERVICE_INFO();
+        };
     }
 }
 

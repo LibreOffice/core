@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:21:54 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,73 +61,27 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #define _CONNECTIVITY_SDBCX_COLUMN_HXX_
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
-#include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "connectivity/CommonTools.hxx"
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#ifndef _CONNECTIVITY_SDBCX_COLUMNDECRIPTOR_HXX_
+#include "connectivity/sdbcx/VColumnDescriptor.hxx"
 #endif
 
 namespace connectivity
 {
     namespace sdbcx
     {
-        typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                                ::com::sun::star::container::XNamed,
-                                                ::com::sun::star::lang::XServiceInfo> OColumn_BASE;
+        class OColumn;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OColumn> OColumn_PROP;
 
-
-        class OColumn : public comphelper::OBaseMutex,
-                        public OColumn_BASE,
-                        public ::comphelper::OPropertyArrayUsageHelper<OColumn>,
-                        public ODescriptor
-
+        class OColumn : public OColumnDescriptor,
+                        public ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                        public OColumn_PROP
         {
         protected:
-            ::rtl::OUString m_TypeName;
-            ::rtl::OUString m_Description;
-            ::rtl::OUString m_DefaultValue;
-
-            sal_Int32       m_IsNullable;
-            sal_Int32       m_Precision;
-            sal_Int32       m_Scale;
-            sal_Int32       m_Type;
-
-            sal_Bool        m_IsAutoIncrement;
-            sal_Bool        m_IsRowVersion;
-            sal_Bool        m_IsCurrency;
-
-            using OColumn_BASE::rBHelper;
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            DECLARE_CTY_PROPERTY(OColumn_PROP,OColumn)
         public:
-            DECLARE_CTY_DEFAULTS( OColumn_BASE);
-
-            OColumn(sal_Bool _bCase);
             OColumn(const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _TypeName,
                     const ::rtl::OUString& _DefaultValue,
@@ -139,37 +93,16 @@ namespace connectivity
                     sal_Bool        _IsRowVersion,
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase);
+            ~OColumn();
 
-            virtual ~OColumn();
-
+            DECLARE_CTY_DEFAULTS(OColumnDescriptor);
             DECLARE_SERVICE_INFO();
-            //  IMPLEMENT_SERVICE_INFO(OColumn,"com.sun.star.sdbcx.VColumn","com.sun.star.sdbcx.Column");
-
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-            // ODescriptor
-            virtual void construct();
-            // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
-            // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-            }
-
+            // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
-
-            // XNamed
-            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                return m_Name;
-            }
-            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
-            {
-                m_Name = aName;
-            }
         };
     }
 }

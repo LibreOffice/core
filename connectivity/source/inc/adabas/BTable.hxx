@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:43:08 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@ namespace connectivity
 
         public:
             DECLARE_CTY_DEFAULTS( OTable_TYPEDEF);
-            OAdabasTable( OAdabasConnection* _pConnection);
             OAdabasTable(   OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,

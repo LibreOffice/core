@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:13:05 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,10 +153,10 @@ namespace connectivity
         class OOperandAttr : public OOperandRow
         {
         protected:
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> m_xColumn;
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xColumn;
 
         public:
-            OOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>& _xColumn);
+            OOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
 
             virtual sal_Bool isIndexed() const {return sal_False;}
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0) { return NULL;}
@@ -167,7 +167,7 @@ namespace connectivity
         class OFILEOperandAttr : public OOperandAttr
         {
         public:
-            OFILEOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>& _xColumn);
+            OFILEOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
 
             virtual sal_Bool isIndexed() const;
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
@@ -180,7 +180,7 @@ namespace connectivity
         {
         public:
             OOperandParam(connectivity::OSQLParseNode* pNode, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
-            void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>& _xColumn, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
+            void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
 
             TYPEINFO();
         };

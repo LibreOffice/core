@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:19:40 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 07:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
-#include <com/sun/star/beans/XFastPropertySet.hpp>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -102,7 +102,9 @@
 #define DECLARE_CTY_PROPERTY(realclass,baseclass) \
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const \
     {                                                               \
-        return baseclass::createArrayHelper( );                     \
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps; \
+        describeProperties(aProps);                                 \
+        return new cppu::OPropertyArrayHelper(aProps);              \
     }                                                               \
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() \
     {                                                               \
@@ -178,7 +180,7 @@ namespace connectivity
             {}
     };
 
-    typedef ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> > OSQLColumns;
+    typedef ORefVector< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> > OSQLColumns;
 
     // =======================================================================================
     // search from __first to __last the column with the name _rVal
