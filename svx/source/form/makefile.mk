@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 15:51:42 $
+#   last change: $Author: hr $ $Date: 2004-09-08 16:17:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,7 +131,8 @@ SLOFILES = \
     $(SLO)$/siimport.obj	\
     $(SLO)$/sdbdatacolumn.obj \
     $(SLO)$/formcontrolling.obj \
-    $(SLO)$/fmdispatch.obj
+    $(SLO)$/fmdispatch.obj \
+    $(SLO)$/formpdfexport.obj
 
 .IF "$(OS)$(CPU)"=="SOLARISI" 
 NOOPTFILES=$(SLO)$/fmprop.obj
