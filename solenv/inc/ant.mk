@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:02 $
+#   last change: $Author: hr $ $Date: 2004-02-04 12:37:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,14 +82,15 @@ J2EE_HOME=$(SOLARROOT)$/j2sdkee1.3
 # --- ANT build environment  ---------------------------------------
 
 ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/ant
+ANT_LIB*:=$(ANT_HOME)
 
 .IF "$(ANT_OPTIONAL)" ==""
-ANT_OPTIONAL=$(ANT_HOME)$/optional.jar
+ANT_OPTIONAL=$(ANT_LIB)$/optional.jar
 .ENDIF
 
 .IF "$(ANT_CLASSPATH)"==""
 .IF "$(WDK3RDPARTY)"==""
-ANT_CLASSPATH:=$(ANT_HOME)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_HOME)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_HOME)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(ANT_HOME)$/junit.jar
+ANT_CLASSPATH:=$(ANT_LIB)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(ANT_LIB)/junit.jar
 .ELSE
 ANT_CLASSPATH:=$(CLASSDIR)$/xercesImpl.jar$(PATH_SEPERATOR)$(CLASSDIR)$/xml-apis.jar$(PATH_SEPERATOR)$(CLASSDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(CLASSDIR)$/junit.jar
 .ENDIF
@@ -99,7 +100,7 @@ ANT_CLASSPATH!:=$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/antprj.jar
 .ENDIF
 .ENDIF
 
-ANT=java -Xmx128m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME) -Dant.home=$(ANT_HOME)
+ANT=$(WRAPCMD) java -classpath $(CLASSPATH) -Xmx128m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME) -Dant.home=$(ANT_HOME)
 #ANT=java -version
 
 .IF "$(ANT_BUILDFILE)"==""
