@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 16:26:49 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3013,7 +3013,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ dutch ] = "Sluiten~n";
         Text[ french ] = "~Fermer";
         Text[ spanish ] = "~Cerrar";
-        Text[ italian ] = "Chiudi";
+        Text[ italian ] = "C~hiudi";
         Text[ danish ] = "Luk";
         Text[ swedish ] = "Stä~ng";
         Text[ polish ] = "Zamknij";
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
