@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:50:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,8 +365,8 @@ PPDParser::PPDParser( const String& rFile ) :
 
     // now get the Values
     parse( aLines );
-#ifdef __DEBUG
-    fprintf( stderr, "acquired %d Keys from PPD %s:\n", m_aKeys.Count(), BSTRING( m_aFile ).GetBuffer() );
+#if OSL_DEBUG_LEVEL > 2
+    fprintf( stderr, "acquired %d Keys from PPD %s:\n", m_aKeys.size(), BSTRING( m_aFile ).GetBuffer() );
     for( PPDParser::hash_type::const_iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
     {
         const PPDKey* pKey = it->second;
@@ -390,7 +390,7 @@ PPDParser::PPDParser( const String& rFile ) :
         for( int j = 0; j < pKey->countValues(); j++ )
         {
             fprintf( stderr, "\t\t" );
-            PPDValue* pValue = pKey->getValue( j );
+            const PPDValue* pValue = pKey->getValue( j );
             if( pValue == pKey->m_pDefaultValue )
                 fprintf( stderr, "(Default:) " );
             char* pVType = "<unknown>";
@@ -411,15 +411,14 @@ PPDParser::PPDParser( const String& rFile ) :
                      BSTRING( pValue->m_aValueTranslation ).GetBuffer() );
         }
     }
-    fprintf( stderr, "constraints: (%d found)\n", m_aConstraints.Count() );
-    for( int j = 0; j < m_aConstraints.Count(); j++ )
+    fprintf( stderr, "constraints: (%d found)\n", m_aConstraints.size() );
+    for( std::list< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
     {
-        PPDConstraint* pCon = m_aConstraints.GetObject( j );
         fprintf( stderr, "*\"%s\" \"%s\" *\"%s\" \"%s\"\n",
-                 BSTRING( pCon->m_pKey1->getKey() ).GetBuffer(),
-                 pCon->m_pOption1 ? BSTRING( pCon->m_pOption1->m_aOption ).GetBuffer() : "<nil>",
-                 BSTRING( pCon->m_pKey2->getKey() ).GetBuffer(),
-                 pCon->m_pOption2 ? BSTRING( pCon->m_pOption2->m_aOption ).GetBuffer() : "<nil>"
+                 BSTRING( cit->m_pKey1->getKey() ).GetBuffer(),
+                 cit->m_pOption1 ? BSTRING( cit->m_pOption1->m_aOption ).GetBuffer() : "<nil>",
+                 BSTRING( cit->m_pKey2->getKey() ).GetBuffer(),
+                 cit->m_pOption2 ? BSTRING( cit->m_pOption2->m_aOption ).GetBuffer() : "<nil>"
                  );
     }
 #endif
