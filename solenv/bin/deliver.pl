@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2002-04-29 16:36:59 $
+#   last change: $Author: hjs $ $Date: 2002-05-16 17:07:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.28 $ ';
+$id_str = ' $Revision: 1.29 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -390,6 +390,9 @@ sub init_globals
     my $updminor      = $ENV{'UPDMINOR'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
+    my $l10n_framework    = $ENV{'L10N_framework'};
+    $l10n_framework = "INVALID" if ! defined $l10n_framework;
+
     # special security check for release engineers
     if ( defined($updater) && !defined($build_sosl) && !$opt_force) {
         my $path = cwd();
@@ -441,7 +444,8 @@ sub init_globals
                 [ '%DLLSUFFIX%',        $dllsuffix      ],
                 [ '%GUI%',              $gui            ],
                 [ '%OUTPATH%',          $outpath        ],
-                [ '%UPD%',              $upd            ]
+                [ '%UPD%',              $upd            ],
+                [ '%L10N_FRAMEWORK%',   $l10n_framework ]
               );
 
     # find out if the system supports symlinks
