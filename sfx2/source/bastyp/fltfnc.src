@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:44:14 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 21:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ String STR_FILTER_COMPONENT
     Text[ polish ] = "Sk³adnik %PRODUCTNAME ";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Component";
     Text[ japanese ] = "%PRODUCTNAME ΊέΞί°ΘέΔ";
-    Text[ korean ] = "%PRODUCTNAME ΔΔΖχ³ΝΖ®";
+    Text[ korean ] = "%PRODUCTNAME ±ΈΌΊΏδΌÒ";
     Text[ chinese_simplified ] = "%PRODUCTNAME ²ΏΌώ";
     Text[ chinese_traditional ] = "%PRODUCTNAME ³΅¥σ";
     Text[ arabic ] = "ΕΝΟμ γίζδΗΚ  %PRODUCTNAME";
@@ -155,7 +155,7 @@ String STR_FILTER_NOT_INSTALLED
     Text[ chinese_traditional ] = "±zΏοΎάªΊΉLΒoΎΉ $(FILTER)ΑΩ¨S¦³¦wΈΛ¦n΅C\n²{¦b­n¦wΈΛ΅H";
     Text[ arabic ] = "ΗαέαΚΡ $(FILTER)΅ ΗαΠν Κγ ΗΞΚνΗΡε΅ ΫνΡ γΛΘΚ.\nεα ΚΡνΟ ΕΜΡΗΑ ΗαΚΛΘνΚ ΗαΒδΏ";
     Text[ greek ] = "Το επιλεγμένο φίλτρο $(FILTER) δεν έχει εγκατασταθεί.\nΘέλετε να εγκατασταθεί τώρα;";
-    Text[ korean ] = "Ό±ΕΓµΘ ΗΚΕΝ $(FILTER)΄Β Ό³Δ΅µΗΎξ ΐΥΑφ ΎΚ½ΐ΄Ο΄Ω.\nΑφ±έ Ό³Δ΅ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ ?";
+    Text[ korean ] = "Ό±ΕΓµΘ ΗΚΕΝ $(FILTER)ΐΊ£¨΄Β£© Ό³Δ΅µΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.\nΑφ±έ Ό³Δ΅ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ ?";
     Text[ turkish ] = "Seηilen $(FILTER) filtresi kurulu deπil.\nήimdi kurmak ister misiniz ?";
     Text[ language_user1 ] = " ";
 };
@@ -180,7 +180,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ chinese_traditional ] = "³o­Σª©¥»ΑΩ¨S¦³΄£¨Ρ±z©ÒΏοΎάªΊΉLΒoΎΉ $(FILTER)΅C\n½Π°ΡΎ\\§Ϊ­ΜªΊΊτ­¶΄£¨ΡªΊ©wΑΚ³nΕιªΊΈκ°T΅C";
     Text[ arabic ] = "αΗ ΚΝΚζν δΣΞΚί Ϊαμ ΗαέαΚΡ $(FILTER)΅ ΗαΠν Κγ ΗΞΚνΗΡε.\nνγίδί ΗαΝΥζα Ϊαμ γΪαζγΗΚ Ϊδ ΕγίΗδνΙ ΨαΘ ΗαέαΚΡ έν γζήΪδΗ Ϊαμ ΗαΕδΚΡδΚ.";
     Text[ greek ] = "Το επιλεγμένο φίλτρο $(FILTER) δεν περιέχεται στην έκδοσή σας.\nΠληροφορίες για δυνατότητες παραγγελίας θα βρείτε στην αρχική μας σελίδα.";
-    Text[ korean ] = "Ό±ΕΓΗΡ ΗΚΕΝ$(FILTER)΄Β ΐΜ ΉφΐόΏ΅ µιΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.\nΑΦΉ® ½ΕΓ» °΅΄ΙΌΊΏ΅ ΄λΗΡ Α¤ΊΈΈ¦ ΎςΐΈ·ΑΈι ΐϊΘρ Θ¨ΖδΐΜΑφΈ¦ ΊΈ½Κ½ΓΏΐ.";
+    Text[ korean ] = "Ό±ΕΓΗΡ ΗΚΕΝ$(FILTER)ΐΊ£¨΄Β£© ΐΜ ΉφΐόΏ΅ µιΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.\nΑΦΉ® ½ΕΓ» ΉζΉύΏ΅ ΄λΗΡ Α¤ΊΈΈ¦ ΎςΐΈ·ΑΈι ΐϊΘρ Θ¨ΖδΐΜΑφΈ¦ ΊΈ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Seηilen $(FILTER) filtresi sόrόmόnόzde bulunmuyor.\nSipariώ etmek iηin gereken bilgileri web sitemizde bulabilirsiniz.";
     Text[ language_user1 ] = " ";
 };
