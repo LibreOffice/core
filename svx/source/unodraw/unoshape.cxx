@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: er $ $Date: 2001-07-25 19:00:08 $
+ *  last change: $Author: cl $ $Date: 2001-07-31 08:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,8 +437,10 @@ void SvxShape::Init() throw()
 //----------------------------------------------------------------------
 void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 {
-    if( pObj != pNewObj )
+    if( pNewObj && ( (pObj != pNewObj) || (pModel == NULL) ) )
     {
+        DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
+
         pObj = pNewObj;
 
         Init();
