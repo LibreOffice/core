@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:30:46 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,6 @@
 #include <vos/mutex.hxx>
 #endif
 
-#ifndef _RTL_LOGFILE_HXX_
-#include <rtl/logfile.hxx>
-#endif
-
-#include <time.h>
-
 //-----------------------------------------------
 // namespace
 
@@ -160,23 +154,23 @@ namespace framework{
 //-----------------------------------------------
 // definitions
 
-#define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
-
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
 
 //-----------------------------------------------
-DEFINE_XINTERFACE_4(StatusIndicatorFactory                              ,
+DEFINE_XINTERFACE_5(StatusIndicatorFactory                              ,
                     OWeakObject                                         ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider          ),
                     DIRECT_INTERFACE(css::lang::XServiceInfo           ),
                     DIRECT_INTERFACE(css::lang::XInitialization        ),
-                    DIRECT_INTERFACE(css::task::XStatusIndicatorFactory))
+                    DIRECT_INTERFACE(css::task::XStatusIndicatorFactory),
+                    DIRECT_INTERFACE(css::util::XUpdatable             ))
 
-DEFINE_XTYPEPROVIDER_4(StatusIndicatorFactory            ,
+DEFINE_XTYPEPROVIDER_5(StatusIndicatorFactory            ,
                        css::lang::XTypeProvider          ,
                        css::lang::XServiceInfo           ,
                        css::lang::XInitialization        ,
-                       css::task::XStatusIndicatorFactory)
+                       css::task::XStatusIndicatorFactory,
+                       css::util::XUpdatable             )
 
 DEFINE_XSERVICEINFO_MULTISERVICE(StatusIndicatorFactory                   ,
                                  ::cppu::OWeakObject                      ,
@@ -195,17 +189,19 @@ DEFINE_INIT_SERVICE(StatusIndicatorFactory,
 
 //-----------------------------------------------
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-    //  Init baseclasses first
-    : ThreadHelpBase     (&Application::GetSolarMutex() )
-    , ::cppu::OWeakObject(                              )
-    // Init member
-    , m_xSMGR            (xSMGR                         )
+    : ThreadHelpBase      (         )
+    , ::cppu::OWeakObject (         )
+    , m_xSMGR             (xSMGR    )
+    , m_pWakeUp           (0        )
+    , m_bAllowReschedule  (sal_False)
+    , m_bAllowParentShow  (sal_False)
 {
 }
 
 //-----------------------------------------------
 StatusIndicatorFactory::~StatusIndicatorFactory()
 {
+    impl_stopWakeUpThread();
 }
 
 //-----------------------------------------------
@@ -218,8 +214,9 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    m_xFrame       = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_FRAME , css::uno::Reference< css::frame::XFrame >());
-    m_xPluggWindow = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_WINDOW, css::uno::Reference< css::awt::XWindow >() );
+    m_xFrame           = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_FRAME          , css::uno::Reference< css::frame::XFrame >());
+    m_xPluggWindow     = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_WINDOW         , css::uno::Reference< css::awt::XWindow >() );
+    m_bAllowParentShow = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_ALLOWPARENTSHOW, (sal_Bool)sal_False                        );
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -238,6 +235,17 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFacto
 }
 
 //-----------------------------------------------
+void SAL_CALL StatusIndicatorFactory::update()
+    throw(css::uno::RuntimeException)
+{
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+    m_bAllowReschedule = sal_True;
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+}
+
+//-----------------------------------------------
 void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                    const ::rtl::OUString&                                    sText ,
                                          sal_Int32                                           nRange)
@@ -253,17 +261,18 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
     m_aStack.push_back (aInfo                );
 
     m_xActiveChild = xChild;
-    m_nStartTime   = impl_get10ThSec();
-
     css::uno::Reference< css::task::XStatusIndicator > xProgress = m_xProgress;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
+    implts_makeParentVisibleIfAllowed();
+
     if (xProgress.is())
         xProgress->start(sText, nRange);
 
-    impl_reschedule();
+    impl_startWakeUpThread();
+    impl_reschedule(sal_True);
 }
 
 //-----------------------------------------------
@@ -275,7 +284,10 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     // reset the internal info structure related to this child
     IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
-        pItem->reset();
+    {
+        pItem->m_nValue = 0;
+        pItem->m_sText  = ::rtl::OUString();
+    }
 
     css::uno::Reference< css::task::XStatusIndicator > xActive   = m_xActiveChild;
     css::uno::Reference< css::task::XStatusIndicator > xProgress = m_xProgress;
@@ -283,13 +295,15 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    if (xChild != xActive)
-        return; // not the top most child => dont change UI
-
-    if (xProgress.is())
+    // not the top most child => dont change UI
+    // But dont forget Reschedule!
+    if (
+        (xChild == xActive) &&
+        (xProgress.is()   )
+       )
         xProgress->reset();
 
-    impl_reschedule();
+    impl_reschedule(sal_True);
 }
 
 //-----------------------------------------------
@@ -321,24 +335,26 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
-    if (!xProgress.is())
-        return;
-
     if (xActive.is())
     {
         // There is at least one further child indicator.
         // Actualize our progress, so it shows these values from now.
-        xProgress->setText (sText );
-        xProgress->setValue(nValue);
+        if (xProgress.is())
+        {
+            xProgress->setText (sText );
+            xProgress->setValue(nValue);
+        }
     }
     else
     {
         // Our stack is empty. No further child exists.
         // Se we must "end" our progress realy
-        xProgress->end();
+        if (xProgress.is())
+            xProgress->end();
+        impl_stopWakeUpThread();
     }
 
-    impl_reschedule();
+    impl_reschedule(sal_True);
 }
 
 //-----------------------------------------------
@@ -358,13 +374,17 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
     aWriteLock.unlock();
     // SAFE -> ----------------------------------
 
-    if (xChild != xActive)
-        return;
-
-    if (xProgress.is())
+    // paint only the top most indicator
+    // but dont forget to Reschedule!
+    if (
+        (xChild == xActive) &&
+        (xProgress.is()   )
+       )
+    {
         xProgress->setText(sText);
+    }
 
-    impl_reschedule();
+    impl_reschedule(sal_True);
 }
 
 //-----------------------------------------------
@@ -384,27 +404,47 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
 
     css::uno::Reference< css::task::XStatusIndicator > xActive    = m_xActiveChild;
     css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_xProgress;
-    sal_Int32                                          nStartTime = m_nStartTime;
 
     aWriteLock.unlock();
     // SAFE -> ----------------------------------
 
-    if (xChild != xActive)
-        return;
-
     if (
-        (xProgress.is()     ) &&
-        (nOldValue != nValue)
+        (xChild    == xActive) &&
+        (nOldValue != nValue ) &&
+        (xProgress.is()      )
        )
     {
         xProgress->setValue(nValue);
     }
 
-    // We start rescheduling only after 1 second - this code was successfully introduced by the sfx2
-    // implementation of the progress bar.
-    sal_Bool bReschedule = ((impl_get10ThSec()-nStartTime ) > TIMEOUT_START_RESCHEDULE);
-    if (bReschedule)
-        impl_reschedule();
+    impl_reschedule(sal_False);
+}
+
+//-----------------------------------------------
+void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
+{
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+
+    if (!m_bAllowParentShow)
+        return;
+
+    css::uno::Reference< css::frame::XFrame > xFrame      (m_xFrame.get()      , css::uno::UNO_QUERY);
+    css::uno::Reference< css::awt::XWindow >  xPluggWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
+
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
+
+    css::uno::Reference< css::awt::XWindow > xParent;
+    {
+        if (xFrame.is())
+            xParent = xFrame->getContainerWindow();
+        else
+            xParent = xPluggWindow;
+    }
+
+    if (xParent.is())
+        xParent->setVisible(sal_True);
 }
 
 //-----------------------------------------------
@@ -459,8 +499,22 @@ void StatusIndicatorFactory::impl_createProgress()
 }
 
 //-----------------------------------------------
-void StatusIndicatorFactory::impl_reschedule()
+void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
 {
+    sal_Bool bReschedule = bForce;
+    if (!bReschedule)
+    {
+        // SAFE ->
+        WriteGuard aWriteLock(m_aLock);
+        bReschedule        = m_bAllowReschedule;
+        m_bAllowReschedule = sal_False;
+        aWriteLock.unlock();
+        // <- SAFE
+    }
+
+    if (!bReschedule)
+        return;
+
     // SAFE -> ----------------------------------
     WriteGuard aGlobalLock(LockHelper::getGlobalLock());
 
@@ -475,10 +529,38 @@ void StatusIndicatorFactory::impl_reschedule()
 }
 
 //-----------------------------------------------
+void StatusIndicatorFactory::impl_startWakeUpThread()
+{
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    if (!m_pWakeUp)
+        m_pWakeUp = new WakeUpThread(this);
+    m_pWakeUp->create();
+    aWriteLock.unlock();
+    // <- SAFE
+}
+
+//-----------------------------------------------
+void StatusIndicatorFactory::impl_stopWakeUpThread()
+{
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    if (m_pWakeUp)
+    {
+        // Thread kill itself after terminate()!
+        m_pWakeUp->terminate();
+        m_pWakeUp = 0;
+    }
+    aWriteLock.unlock();
+    // <- SAFE
+}
+
+/*
+//-----------------------------------------------
 sal_uInt32 StatusIndicatorFactory::impl_get10ThSec()
 {
     sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
     return n10Ticks / CLOCKS_PER_SEC;
 }
-
+*/
 } // namespace framework
