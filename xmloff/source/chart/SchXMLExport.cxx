@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-04 12:29:49 $
+ *  last change: $Author: bm $ $Date: 2001-03-21 12:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,6 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     msStringBuffer.setLength( 0 );
     SvXMLElementExport* pSeries = NULL;
     rtl::OUString aSeriesASName;
-    sal_Int32 nRepeated = 0;
     sal_Bool bWrite = sal_False;
     sal_Int32 nAttachedAxis;
 
@@ -1084,10 +1083,11 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         // Note: if only the nth data-point has autostyles there is an element
         // without style and repeat="n-1" attribute written in advance.
 
+        sal_Int32 nRepeated = 1;
         if( mxExpPropMapper.is())
         {
             const sal_Int32 nSeriesCount =
-                ( bRowSourceColumns ? ( mnRowCount - nRowOffset ): ( mnColCount - nColOffset ));
+                ( bRowSourceColumns ? mnRowCount: mnColCount );
             sal_Bool bIsEmpty = sal_False;
             rtl::OUString aLastASName;
             aASName = rtl::OUString();
@@ -1103,48 +1103,37 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 if( bExportContent )
                 {
                     if( bIsEmpty )
+                        aASName = ::rtl::OUString();
+                    else
+                        aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
+
+                    if( aASName.equals( aLastASName ))
                     {
-                        if( aLastASName.getLength())
-                        {
-                            aASName = rtl::OUString();
-                            bWrite = sal_True;
-                        }
-                        else
-                        {
-                            // not when entering here initially
-                            if( nElement )
-                                nRepeated++;
-                        }
+                        nRepeated++;
                     }
                     else
                     {
-                        aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
-                        if( aASName.equals( aLastASName ))
+                        // write last style
+                        if( nElement )          // don't write when first getting here
                         {
-                            nRepeated++;
-                        }
-                        else
-                        {
-                            // not when entering here initially
-                            if( nElement )
-                                bWrite = sal_True;
-                        }
-                    }
+                            if( nRepeated > 1 )
+                            {
+                                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_repeated,
+                                                       rtl::OUString::valueOf( (sal_Int64)( nRepeated ) ));
+                            }
 
-                    // write last autostyle
-                    if( bWrite )
-                    {
-                        if( nRepeated )
-                        {
-                            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_repeated,
-                                                   rtl::OUString::valueOf( (sal_Int64)(nRepeated + 1) ));
-                            nRepeated = 0;
+                            if( aLastASName.getLength() &&
+                                ! aLastASName.equals( aSeriesASName ))
+                            {
+                                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
+                            }
+                            SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
                         }
-                        if( aLastASName.getLength())
-                            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
-                        SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
+
+                        // reset repeat counter for new style
+                        nRepeated = 1;
+                        aLastASName = aASName;
                     }
-                    aLastASName = aASName;
                 }
                 else
                 {
@@ -1154,17 +1143,19 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 aPropertyStates.clear();
             } // for
 
-            // write final autostyle
-            if( bExportContent && ! bIsEmpty )
+            // write autostyle for last data point(s) read
+            if( bExportContent &&
+                ! bIsEmpty &&
+                aLastASName.getLength() &&
+                ! aLastASName.equals( aSeriesASName ))
             {
-                if( nRepeated )
+                if( nRepeated > 1 )
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_repeated,
-                                           rtl::OUString::valueOf( (sal_Int64)(nRepeated + 1) ));
-                    nRepeated = 0;
+                                           rtl::OUString::valueOf( (sal_Int64)( nRepeated ) ));
                 }
-                if( aLastASName.getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
+
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
                 SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
             }
         }
