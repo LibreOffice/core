@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-25 08:23:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,16 @@ EmbedServer_Impl::~EmbedServer_Impl()
 }
 
 // XInterface --------------------------------------------------
-uno::Any SAL_CALL EmbedServer_Impl::queryInterface( const uno::Type& aType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL
+EmbedServer_Impl::queryInterface(
+    const uno::Type& aType )
+    throw(
+        uno::RuntimeException
+    )
 {
-    uno::Any a= ::cppu::queryInterface( aType, static_cast<lang::XTypeProvider*>(this));
+    uno::Any a=
+        ::cppu::queryInterface(
+            aType, static_cast<lang::XTypeProvider*>(this));
     if( a == uno::Any())
         return OWeakObject::queryInterface( aType);
     else
@@ -200,7 +207,11 @@ void SAL_CALL EmbedServer_Impl::release(  ) throw (uno::RuntimeException)
 
 
 // XTypeProvider --------------------------------------------------
-uno::Sequence< uno::Type > SAL_CALL EmbedServer_Impl::getTypes( ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL
+EmbedServer_Impl::getTypes( )
+    throw(
+        uno::RuntimeException
+    )
 {
     static ::cppu::OTypeCollection *pCollection = 0;
     if( ! pCollection )
@@ -209,8 +220,11 @@ uno::Sequence< uno::Type > SAL_CALL EmbedServer_Impl::getTypes( ) throw(uno::Run
         if( ! pCollection )
         {
             static ::cppu::OTypeCollection collection(
-                getCppuType(reinterpret_cast< uno::Reference< uno::XWeak>*>(0)),
-                getCppuType(reinterpret_cast< uno::Reference< lang::XTypeProvider>*>(0)) );
+                getCppuType(
+                    reinterpret_cast<uno::Reference< uno::XWeak>*>(0)),
+                getCppuType(
+                    reinterpret_cast<
+                    uno::Reference< lang::XTypeProvider>*>(0)));
             pCollection = &collection;
         }
     }
