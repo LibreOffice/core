@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:49:50 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,14 @@ using namespace ::com::sun::star::linguistic2;
 // Achtung: in edlingu.cxx stehen die Variablen!
 extern const SwTxtNode *pLinguNode;
 extern       SwTxtFrm  *pLinguFrm;
+
+bool lcl_IsSkippableWhiteSpace( xub_Unicode cCh )
+{
+    return 0x3000 == cCh ||
+           ' ' == cCh ||
+           '\t' == cCh ||
+           0x0a == cCh;
+}
 
 /*
  * Ein Zeichen wurde eingefuegt.
@@ -494,7 +502,6 @@ void SwTxtNode::SetWrong( SwWrongList *pNew )
     pWrong = pNew;
 }
 
-
 SwScanner::SwScanner( const SwTxtNode& rNd, const SwWrongList* pWrng,
                       USHORT nType, xub_StrLen nStart, xub_StrLen nEnde,
                       BOOL bRev, BOOL bOS )
@@ -522,78 +529,69 @@ BOOL SwScanner::NextWord()
     ASSERT( ! bReverse,
             "SwScanner::NextWord() currently not implemented for reverse mode" )
 
+    nBegin += nLen;
+
+    // first we have to skip some whitespace characters
     const XubString& rText = rNode.GetTxt();
-    if( bReverse || nBegin + nLen >= nEndPos )
+    while ( nBegin < rText.Len() &&
+            lcl_IsSkippableWhiteSpace( rText.GetChar( nBegin ) ) )
+        ++nBegin;
+
+    if ( nBegin >= rText.Len() || nBegin >= nEndPos )
         return FALSE;
 
     // get next language in order to find next or previous word
-    xub_StrLen nNextBegin = nBegin + nLen;
-
-    // first we have to skip some whitespace characters
-    while ( nNextBegin < rText.Len() &&
-            ( 0x3000 == rText.GetChar( nNextBegin ) ||
-                ' ' == rText.GetChar( nNextBegin ) ||
-                '\t' == rText.GetChar( nNextBegin ) ||
-                0x0a == rText.GetChar( nNextBegin ) ) )
-    {
-        ++nNextBegin;
-    }
-
-    if ( nNextBegin >= rText.Len() )
-        return FALSE;
-
     const USHORT nNextScript =
-            pBreakIt->xBreak->getScriptType( rText, nNextBegin );
+            pBreakIt->xBreak->getScriptType( rText, nBegin );
     if ( nNextScript != GetI18NScriptTypeOfLanguage( aCurrLang ) )
     {
-        LanguageType aNextLang = rNode.GetLang( nNextBegin, nNextScript );
-        if ( aNextLang != aCurrLang )
-        {
-            bStart = sal_True;
-            nBegin = nNextBegin;
-            aCurrLang = aNextLang;
-        }
+        LanguageType aNextLang = rNode.GetLang( nBegin, nNextScript );
+        aCurrLang = aNextLang;
     }
 
-    Boundary aBound;
-    if( bStart )
-    {
-        aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
+    // get the word boundaries
+    Boundary aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
             pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
-        bStart = aBound.startPos != aBound.endPos;
-    }
-    if( !bStart )
+
+    // we have to differenciate between these cases:
+    if ( aBound.startPos <= nBegin )
     {
-        aBound = pBreakIt->xBreak->nextWord( rText, nBegin,
-                 pBreakIt->GetLocale( aCurrLang ), nWordType );
+        ASSERT( aBound.endPos >= nBegin, "Unexpected aBound result" )
+
+        // restrict boundaries to script boundaries and nEndPos
+        const USHORT nCurrScript =
+                pBreakIt->xBreak->getScriptType( rText, nBegin );
+
+        XubString aTmpWord = rText.Copy( nBegin, aBound.endPos - nBegin );
+        const long nScriptEnd = nBegin +
+            pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
+        const long nEnd = Min( aBound.endPos, nScriptEnd );
+
+        // restrict word start to last script change position
+        long nScriptBegin = 0;
+        if ( aBound.startPos < nBegin )
+        {
+            // search from nBegin backwards until the next script change
+            aTmpWord = rText.Copy( aBound.startPos, nBegin - aBound.startPos + 1 );
+            nScriptBegin = aBound.startPos +
+                pBreakIt->xBreak->beginOfScript( aTmpWord, nBegin - aBound.startPos,
+                                                nCurrScript );
+        }
+
+        nBegin = (xub_StrLen)Max( aBound.startPos, nScriptBegin );
+        nLen = (xub_StrLen)(nEnd - nBegin);
     }
     else
-        bStart = FALSE;
-
-    // restrict boundaries to script boundaries and nEndPos
-    const USHORT nCurrScript =
-            pBreakIt->xBreak->getScriptType( rText, nBegin );
-
-    // restrict word end to next script change position
-    ASSERT( aBound.endPos >= nBegin, "SwScanner is getting into trouble" )
-    XubString aTmpWord = rText.Copy( nBegin, aBound.endPos - nBegin );
-    long nScriptEnd = nBegin +
-                      pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
-    long nEnd = Min( aBound.endPos, nScriptEnd );
-
-    // restrict word start to last script change position
-    long nScriptBegin = aBound.startPos;
-    if ( aBound.startPos < nBegin )
     {
-        // search from nBegin backwards until the next script change
-        aTmpWord = rText.Copy( aBound.startPos, nBegin - aBound.startPos + 1 );
-        nScriptBegin = aBound.startPos +
-            pBreakIt->xBreak->beginOfScript( aTmpWord, nBegin - aBound.startPos,
-                                             nCurrScript );
+        const USHORT nCurrScript =
+                pBreakIt->xBreak->getScriptType( rText, aBound.startPos );
+        XubString aTmpWord = rText.Copy( aBound.startPos, aBound.endPos - aBound.startPos );
+        const long nScriptEnd = aBound.startPos +
+            pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
+        const long nEnd = Min( aBound.endPos, nScriptEnd );
+        nBegin = (xub_StrLen)aBound.startPos;
+        nLen = (xub_StrLen)(nEnd - nBegin);
     }
-
-    nBegin = Max( aBound.startPos, nScriptBegin );
-    nLen = nEnd - nBegin;
 
     if( ! nLen )
         return FALSE;
@@ -676,7 +674,7 @@ BOOL SwScanner::NextWord( LanguageType aLang )
         bStart = FALSE;
 
     nBegin = (xub_StrLen)aBound.startPos;
-    nLen = aBound.endPos - nBegin;
+    nLen = (xub_StrLen)(aBound.endPos - nBegin);
     if( !nLen )
         return FALSE;
 
@@ -822,10 +820,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
             // first we have to skip some whitespace characters
             while ( ( bReverse ? nNextBegin : ( nNextBegin < aText.Len() ) ) &&
-                    ( 0x3000 == aText.GetChar( nNextBegin ) ||
-                      ' ' == aText.GetChar( nNextBegin ) ||
-                      '\t' == aText.GetChar( nNextBegin ) ||
-                      0x0a == aText.GetChar( nNextBegin ) ) )
+                    lcl_IsSkippableWhiteSpace( aText.GetChar( nNextBegin ) ) )
             {
                 nNextBegin += nInc;
             }
@@ -950,10 +945,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 
             // first we have to skip some whitespace characters
             while ( ( bReverse ? nNextBegin : ( nNextBegin < aText.Len() ) ) &&
-                    ( 0x3000 == aText.GetChar( nNextBegin ) ||
-                      ' ' == aText.GetChar( nNextBegin ) ||
-                      '\t' == aText.GetChar( nNextBegin ) ||
-                      0x0a == aText.GetChar( nNextBegin ) ) )
+                    lcl_IsSkippableWhiteSpace( aText.GetChar( nNextBegin ) ) )
             {
                 nNextBegin += nInc;
             }
@@ -1051,7 +1043,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             LanguageType eActLang = pNode->GetLang( nBegin );
             Boundary aBound = pBreakIt->xBreak->getWordBoundary( pNode->aText, nBegin,
                             pBreakIt->GetLocale( eActLang ), WordType::DICTIONARY_WORD, TRUE );
-            nBegin = aBound.startPos;
+            nBegin = xub_StrLen(aBound.startPos);
         }
 
         // get the position in the wrong list
@@ -1139,10 +1131,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
             // first we have to skip some whitespace characters
             while ( nNextBegin < pNode->aText.Len() &&
-                    ( 0x3000 == pNode->aText.GetChar( nNextBegin ) ||
-                      ' ' == pNode->aText.GetChar( nNextBegin ) ||
-                      '\t' == pNode->aText.GetChar( nNextBegin ) ||
-                      0x0a == pNode->aText.GetChar( nNextBegin ) ) )
+                    lcl_IsSkippableWhiteSpace( pNode->aText.GetChar( nNextBegin ) ) )
                 nNextBegin++;
 
             if ( nNextBegin < pNode->aText.Len() )
