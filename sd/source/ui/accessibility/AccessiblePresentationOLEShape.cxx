@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: AccessiblePresentationShape.cxx,v $
+ *  $RCSfile: AccessiblePresentationOLEShape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: af $ $Date: 2002-03-06 16:54:01 $
  *
@@ -59,8 +59,10 @@
  *
  ************************************************************************/
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_PRESENTATION_SHAPE_HXX
-#include "AccessiblePresentationShape.hxx"
+
+
+#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_PRESENTATION_OLE_SHAPE_HXX
+#include "AccessiblePresentationOLEShape.hxx"
 #endif
 
 #include "SdShapeTypes.hxx"
@@ -75,18 +77,19 @@ namespace accessibility {
 
 //=====  internal  ============================================================
 
-AccessiblePresentationShape::AccessiblePresentationShape (const ::com::sun::star::uno::Reference<
+AccessiblePresentationOLEShape::AccessiblePresentationOLEShape (
+    const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    :   AccessibleShape (rxShape, rxParent, NULL)
+    :   AccessibleOLEShape (rxShape, rxParent)
 {
 }
 
 
 
 
-AccessiblePresentationShape::~AccessiblePresentationShape (void)
+AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 {
 }
 
@@ -96,10 +99,10 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 //=====  XServiceInfo  ========================================================
 
 ::rtl::OUString SAL_CALL
-    AccessiblePresentationShape::getImplementationName (void)
+    AccessiblePresentationOLEShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessiblePresentationShape"));
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessiblePresentationOLEShape"));
 }
 
 
@@ -107,7 +110,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 /// Set this object's name if is different to the current name.
 ::rtl::OUString SAL_CALL
-    AccessiblePresentationShape::createAccessibleBaseName (void)
+    AccessiblePresentationOLEShape::createAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;
@@ -115,27 +118,18 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
     switch (nShapeType)
     {
-        case PRESENTATION_TITLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressTitle"));
+        case PRESENTATION_OLE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressOLE"));
             break;
-        case PRESENTATION_OUTLINER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressOutliner"));
+        case PRESENTATION_CHART:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressChart"));
             break;
-        case PRESENTATION_SUBTITLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressSubtitle"));
-            break;
-        case PRESENTATION_PAGE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressPage"));
-            break;
-        case PRESENTATION_NOTES:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressNotes"));
-            break;
-        case PRESENTATION_HANDOUT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressHandout"));
+        case PRESENTATION_TABLE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressTable"));
             break;
         default:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (
-                                         "UnknownAccessibleImpressShape"));
+                                         "UnknownAccessibleImpressOLEShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
@@ -149,35 +143,35 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 
 ::rtl::OUString SAL_CALL
-    AccessiblePresentationShape::createAccessibleDescription (void)
+    AccessiblePresentationOLEShape::createAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    //    return createAccessibleName ();
+    //    return createAccessibleName();
     DescriptionGenerator aDG (mxShape);
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
     switch (nShapeType)
     {
-        case PRESENTATION_TITLE:
+        case PRESENTATION_OLE:
             aDG.initialize (::rtl::OUString::createFromAscii ("PresentationOLEShape"));
+            //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
+            aDG.addProperty (OUString::createFromAscii ("CLSID"),
+                DescriptionGenerator::STRING);
             break;
-        case PRESENTATION_OUTLINER:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationOutlinerShape"));
+        case PRESENTATION_CHART:
+            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationChartShape"));
+            //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
+            aDG.addProperty (OUString::createFromAscii ("CLSID"),
+                DescriptionGenerator::STRING);
             break;
-        case PRESENTATION_SUBTITLE:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationSubtitleShape"));
-            break;
-        case PRESENTATION_PAGE:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationPageShape"));
-            break;
-        case PRESENTATION_NOTES:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationNotesShape"));
-            break;
-        case PRESENTATION_HANDOUT:
-            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationHandoutShape"));
+        case PRESENTATION_TABLE:
+            aDG.initialize (::rtl::OUString::createFromAscii ("PresentationTableShape"));
+            //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
+            aDG.addProperty (OUString::createFromAscii ("CLSID"),
+                DescriptionGenerator::STRING);
             break;
         default:
             aDG.initialize (::rtl::OUString::createFromAscii (
-                "Unknown accessible presentation shape"));
+                "Unknown accessible presentation OLE shape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
