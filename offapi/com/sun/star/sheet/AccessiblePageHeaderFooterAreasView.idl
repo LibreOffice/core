@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderFooterAreasView.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:54:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com {  module sun {  module star {  module sheet {
      @since #107627#
 
  */
-service AccessiblePageHeaderFooterAreasView
+published service AccessiblePageHeaderFooterAreasView
 {
     /** This interface gives access to the three Header/Footer areas in the
         page preview.
