@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "basicparser.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XSchemaHandler.hpp>
+#include <com/sun/star/configuration/backend/XSchemaHandler.hpp>
 
 namespace configmgr
 {
@@ -78,7 +78,7 @@ namespace configmgr
         namespace lang      = ::com::sun::star::lang;
 
         namespace sax           = ::com::sun::star::xml::sax;
-        namespace backenduno    = ::drafts::com::sun::star::configuration::backend;
+        namespace backenduno    = ::com::sun::star::configuration::backend;
 
 // -----------------------------------------------------------------------------
 
