@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 15:23:02 $
+#   last change: $Author: rt $ $Date: 2004-10-28 08:53:25 $
 #
 #   Bugs:  'update' tag will not change you from one release to another.
 #          See webpages to checkout OpenOffice.org from you office directory.
@@ -187,10 +187,10 @@ BUILD_SUBDIRS =  \
 	xmlscript \
 	zlib
 
-build_all .SETDIR=instsetoo/prj:
+build_all .SETDIR=instsetoo_native/prj:
 	@+perl $(SOLARENV)$/bin$/build.pl --all $(PROFULLSWITCH)
 
-depend .SETDIR=instsetoo/prj:
+depend .SETDIR=instsetoo_native/prj:
 	@+perl $(SOLARENV)$/bin$/build.pl --all $(PROFULLSWITCH) depend=t
 
 
