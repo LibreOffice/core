@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-10 09:52:38 $
+ *  last change: $Author: cmc $ $Date: 2002-11-01 15:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3485,15 +3485,12 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             {
                 //Either
                 //a) its a simple text object or
-                //b) its a [round]rectangle with text and square wrapping.
+                //b) its a rectangle with text and square wrapping.
                 bTextFrame =
                 (
                     (pImpRec->eShapeType == mso_sptTextSimple) ||
                     (
-                        (
-                            (pImpRec->eShapeType == mso_sptRectangle) ||
-                            (pImpRec->eShapeType == mso_sptRoundRectangle)
-                        )
+                        (pImpRec->eShapeType == mso_sptRectangle)
                         && (eWrapMode == mso_wrapSquare)
                         && ShapeHasText(pImpRec->nShapeId, rObjData.nOldFilePos)
                     )
