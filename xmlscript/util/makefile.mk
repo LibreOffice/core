@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-04 14:28:51 $
+#   last change: $Author: obo $ $Date: 2003-09-04 09:21:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,13 +64,12 @@ PRJ=..
 PRJNAME=xmlscript
 TARGET=xcr
 NO_BSYMBOLIC=TRUE
+#USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 #-------------------------------------------------------------------
 
@@ -105,5 +104,7 @@ DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 
 .INCLUDE :	target.mk
 
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk
+$(MISC)$/$(SHL1TARGET).flt : makefile.mk xcr.flt
+    @echo ------------------------------
+    @echo Making: $@
     +$(TYPE) xcr.flt > $@
