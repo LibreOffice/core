@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:56:25 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,6 +702,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         ULONG nBold = 0;
         const ULONG nPorWidth = pPor->Width();
         USHORT nMaxBaseLineOfst = 0;
+        USHORT nNumberOfPortions = 0;
 
         while( nTmpIdx <= nUnderEnd && pPor )
         {
@@ -717,7 +718,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                  SVX_CASEMAP_KAPITAELCHEN == pFnt->GetCaseMap() )
                 break;
 
-            if ( ! aIter.GetFnt()->GetEscapement() )
+            if ( !aIter.GetFnt()->GetEscapement() )
             {
                 nSumWidth += pPor->Width();
                 const ULONG nFontHeight = aIter.GetFnt()->GetHeight();
@@ -741,12 +742,14 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                     nBold += pPor->Width();
             }
 
+            ++nNumberOfPortions;
+
             nTmpIdx += pPor->GetLen();
             pPor = pPor->GetPortion();
         }
 
         // resulting height
-        if ( nSumWidth && nSumWidth != nPorWidth )
+        if ( nNumberOfPortions > 1 && nSumWidth )
         {
             const ULONG nNewFontHeight = nAdjustBaseLine ?
                                          nSumHeight :
