@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-17 14:17:27 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
     else QUERYINT( container::XIndexAccess );
     else QUERYINT( container::XElementAccess );
     else
-        aAny <<= SvxShape::queryAggregation( rType );
+        SvxShape::queryAggregation( rType, aAny );
 
     return aAny;
 }
@@ -199,23 +199,7 @@ void SAL_CALL SvxShapeGroup::release() throw ( )
 uno::Sequence< uno::Type > SAL_CALL SvxShapeGroup::getTypes()
     throw (uno::RuntimeException)
 {
-    if( maTypeSequence.getLength() == 0 )
-    {
-        const uno::Sequence< uno::Type > aBaseTypes( SvxShape::getTypes() );
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 2;      // !DANGER! Keep this updated!
-
-        maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapes>*)0);
-        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapeGroup>*)0);
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
-    }
-    return maTypeSequence;
+    return SvxShape::getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
@@ -477,22 +461,7 @@ void SAL_CALL SvxShapeConnector::release() throw ( )
 uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
     throw (uno::RuntimeException)
 {
-    if( maTypeSequence.getLength() == 0 )
-    {
-        const uno::Sequence< uno::Type > aBaseTypes( SvxShapeText::getTypes() );
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 1;      // !DANGER! Keep this updated!
-
-        maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XConnectorShape>*)0);
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
-    }
-    return maTypeSequence;
+    return SvxShape::getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
@@ -659,22 +628,7 @@ void SAL_CALL SvxShapeControl::release() throw ( )
 uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
     throw (uno::RuntimeException)
 {
-    if( maTypeSequence.getLength() == 0 )
-    {
-        const uno::Sequence< uno::Type > aBaseTypes( SvxShapeText::getTypes() );
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 1;      // !DANGER! Keep this updated!
-
-        maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XControlShape>*)0);
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
-    }
-    return maTypeSequence;
+    return SvxShape::getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
@@ -1644,7 +1598,6 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         {
             // normal link
             String              aFilterName;
-#ifndef SVX_LIGHT
             const SfxFilter*    pSfxFilter = NULL;
             SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
 
@@ -1652,7 +1605,6 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
 
             if( !pSfxFilter )
             {
-#endif
                 INetURLObject aURLObj( aURL );
 
                 if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
@@ -1668,11 +1620,9 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
                     GraphicFilter* pGrfFilter = GetGrfFilter();
                     aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                 }
-#ifndef SVX_LIGHT
             }
             else
                 aFilterName = pSfxFilter->GetFilterName();
-#endif
 
             ((SdrGrafObj*)pObj)->SetGraphicLink( aURL, aFilterName );
         }

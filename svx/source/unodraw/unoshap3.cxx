@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ uno::Any SAL_CALL Svx3DSceneObject::queryAggregation( const uno::Type & rType )
     else QUERYINT( container::XIndexAccess );
     else QUERYINT( container::XElementAccess );
     else
-        return SvxShape::queryAggregation( rType );
+        SvxShape::queryAggregation( rType, aAny );
 
     return aAny;
 }
@@ -173,22 +173,8 @@ void SAL_CALL Svx3DSceneObject::release() throw ( )
 uno::Sequence< uno::Type > SAL_CALL Svx3DSceneObject::getTypes()
     throw (uno::RuntimeException)
 {
-    if( maTypeSequence.getLength() == 0 )
-    {
-        const uno::Sequence< uno::Type > aBaseTypes( SvxShape::getTypes() );
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 1;      // !DANGER! Keep this updated!
 
-        maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapes>*)0);
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
-    }
-    return maTypeSequence;
+    return SvxShape::getTypes();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()

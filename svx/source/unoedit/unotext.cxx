@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-26 14:19:39 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 16:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,12 +1637,8 @@ ESelection SvxUnoTextBase::InsertField( const SvxFieldItem& rField ) throw()
     return GetSelection();  // Selektion mit dem Feld
 }
 
-// XInterface
-uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
+sal_Bool SvxUnoTextBase::queryAggregation( const uno::Type & rType, uno::Any& aAny )
 {
-    uno::Any aAny;
-
     QUERYINT( text::XText );
     else QUERYINT( text::XSimpleText );
     else if( rType == ::getCppuType((const uno::Reference< text::XTextRange >*)0) )
@@ -1656,7 +1652,18 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
     else QUERYINT( text::XTextRangeMover );
     else QUERYINT( lang::XTypeProvider );
     else QUERYINT( lang::XUnoTunnel );
+    else
+        return sal_False;
 
+    return sal_True;
+}
+
+// XInterface
+uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    uno::Any aAny;
+    queryAggregation( rType, aAny );
     return aAny;
 }
 

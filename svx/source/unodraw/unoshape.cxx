@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-27 13:09:01 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@
 #include "svdglob.hxx"
 #endif
 #include "svdstr.hrc"
+#include "unomaster.hxx"
 
 using namespace ::osl;
 using namespace ::vos;
@@ -215,6 +216,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
+
+#define QUERYINT( xint ) \
+    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+        aAny <<= uno::Reference< xint >(this)
 
 const SfxItemPropertyMap* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
 {
@@ -278,6 +283,13 @@ DECLARE_LIST( SvxShapeList, SvxShape * );
 * class SvxShape                                                       *
 ***********************************************************************/
 
+struct SvxShapeImpl
+{
+    SfxItemSet*     mpItemSet;
+    sal_uInt32      mnObjId;
+    SvxShapeMaster* mpMaster;
+};
+
 //UNO3_GETIMPLEMENTATION_IMPL( SvxShape );
 uno::Sequence< uno::Type > SvxShape::maTypeSequence;
 
@@ -288,7 +300,8 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
     pModel(NULL),
     aSize(100,100),
     mnLockCount(0),
-    aDisposeListeners( maMutex )
+    aDisposeListeners( maMutex ),
+    mpImpl(NULL)
 {
     Init();
 }
@@ -301,7 +314,8 @@ SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMap* pPropertyMap )
     pModel(NULL),
     aSize(100,100),
     mnLockCount(0),
-    aDisposeListeners( maMutex )
+    aDisposeListeners( maMutex ),
+    mpImpl(NULL)
 
 {
     Init();
@@ -315,7 +329,8 @@ SvxShape::SvxShape() throw()
     pModel(NULL),
     aSize(100,100),
     mnLockCount(0),
-    aDisposeListeners( maMutex )
+    aDisposeListeners( maMutex ),
+    mpImpl(NULL)
 
 {
     Init();
@@ -330,6 +345,83 @@ SvxShape::~SvxShape() throw()
 
     if( pModel )
         EndListening( *pModel );
+
+    if( mpImpl )
+    {
+        if(mpImpl->mpMaster)
+            mpImpl->mpMaster->dispose();
+
+        delete mpImpl;
+    }
+}
+
+//----------------------------------------------------------------------
+
+sal_uInt32 SvxShape::getShapeKind() const
+{
+    return mpImpl ? mpImpl->mnObjId : OBJ_NONE;
+}
+
+//----------------------------------------------------------------------
+
+void SvxShape::setMaster( SvxShapeMaster* pMaster )
+{
+    mpImpl->mpMaster = pMaster;
+}
+
+SvxShapeMaster* SvxShape::getMaster()
+{
+    return mpImpl ? mpImpl->mpMaster : NULL;
+}
+
+const SvxShapeMaster* SvxShape::getMaster() const
+{
+    return mpImpl ? mpImpl->mpMaster : NULL;
+}
+
+//----------------------------------------------------------------------
+sal_Bool SvxShape::queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny )
+{
+    if( mpImpl->mpMaster )
+    {
+        if( mpImpl->mpMaster->queryAggregation( rType, aAny ) )
+            return sal_True;
+    }
+
+    if( rType == ::getCppuType((const uno::Reference< beans::XPropertyState >*)0) )
+        aAny <<= uno::Reference< beans::XPropertyState >(this);
+    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
+        aAny <<= uno::Reference< beans::XPropertySet >(this);
+    else if( rType == ::getCppuType((const uno::Reference< drawing::XShape >*)0) )
+        aAny <<= uno::Reference< drawing::XShape >(this);
+    else if( rType == ::getCppuType((const uno::Reference< uno::XAggregation >*)0) )
+        aAny <<= uno::Reference< uno::XAggregation >(this);
+    else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
+        aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
+    else if( rType == ::getCppuType((const uno::Reference< drawing::XShapeDescriptor >*)0) )
+        aAny <<= uno::Reference< drawing::XShapeDescriptor >(this);
+    else if( rType == ::getCppuType((const uno::Reference< document::XActionLockable >*)0) )
+        aAny <<= uno::Reference< document::XActionLockable >(this);
+    else if( rType == ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0) )
+        aAny <<= uno::Reference< lang::XUnoTunnel >(this);
+    else if( rType == ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0) )
+        aAny <<= uno::Reference< drawing::XGluePointsSupplier >(this);
+    else if( rType == ::getCppuType((const uno::Reference< container::XNamed >*)0) )
+        aAny <<= uno::Reference< container::XNamed >(this);
+    else if( rType == ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0) )
+        aAny <<= uno::Reference< lang::XServiceInfo >(this);
+    else if( rType == ::getCppuType((const uno::Reference< container::XChild >*)0) )
+        aAny <<= uno::Reference< container::XChild >(this);
+    else if( rType == ::getCppuType((const uno::Reference< lang::XComponent >*)0) )
+        aAny <<= uno::Reference< lang::XComponent >(this);
+    else if( rType == ::getCppuType((const uno::Reference< uno::XInterface >*)0) )
+        aAny <<= uno::Reference< uno::XInterface >(static_cast< XInterface * >(static_cast< OWeakObject * >(this)));
+    else if( rType == ::getCppuType((const uno::Reference< uno::XWeak >*)0) )
+        aAny <<= uno::Reference< uno::XWeak >(this);
+    else
+        return sal_False;
+
+    return sal_True;
 }
 
 //----------------------------------------------------------------------
@@ -381,7 +473,14 @@ SvxShape* SvxShape::GetShapeForSdrObj( SdrObject* pObj ) throw()
 //----------------------------------------------------------------------
 void SvxShape::Init() throw()
 {
-    mpItemSet = NULL;
+    if( NULL == mpImpl )
+    {
+        mpImpl = new SvxShapeImpl;
+        mpImpl->mpItemSet = NULL;
+        mpImpl->mpMaster = NULL;
+        mpImpl->mnObjId = 0;
+    }
+
     mbIsMultiPropertyCall = sal_False;
 
     // only init if we already have an object
@@ -404,33 +503,32 @@ void SvxShape::Init() throw()
     if( nInventor == SdrInventor || nInventor == E3dInventor || nInventor == FmFormInventor )
     {
         UHashMapEntry* pMap = pSdrShapeIdentifierMap;
-        sal_uInt32 nObjId;
 
         if(nInventor == FmFormInventor)
         {
-            nObjId = OBJ_UNO;
+            mpImpl->mnObjId = OBJ_UNO;
         }
         else
         {
-            nObjId = pObj->GetObjIdentifier();
+            mpImpl->mnObjId = pObj->GetObjIdentifier();
             if( nInventor == E3dInventor )
-                nObjId |= E3D_INVENTOR_FLAG;
+                mpImpl->mnObjId |= E3D_INVENTOR_FLAG;
         }
 
-        switch(nObjId)
+        switch(mpImpl->mnObjId)
         {
         case OBJ_CCUT:          // Kreisabschnitt
         case OBJ_CARC:          // Kreisbogen
         case OBJ_SECT:          // Kreissektor
-            nObjId = OBJ_CIRC;
+            mpImpl->mnObjId = OBJ_CIRC;
             break;
 
         case E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG:
-            nObjId = E3D_SCENE_ID | E3D_INVENTOR_FLAG;
+            mpImpl->mnObjId = E3D_SCENE_ID | E3D_INVENTOR_FLAG;
             break;
         }
 
-        while(pMap->aIdentifier.getLength() && ( pMap->nId != nObjId ) )
+        while(pMap->aIdentifier.getLength() && ( pMap->nId != mpImpl->mnObjId ) )
             pMap++;
 
         if(pMap->aIdentifier)
@@ -595,6 +693,8 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
 
 void SvxShape::addStaticTypes( sal_Int16 nNewTypes, /* uno::Type* */ ... ) throw()
 {
+    DBG_ERROR("SvxShape::addStaticTypes() : obsolete function called");
+/*
     const sal_Int32 nOldCount = maTypeSequence.getLength();
     DBG_ASSERT( nOldCount, "illegal call of addStaticType() before SvxShape::getStaticTypes()!" );
 
@@ -606,6 +706,7 @@ void SvxShape::addStaticTypes( sal_Int16 nNewTypes, /* uno::Type* */ ... ) throw
     for( sal_Int32 i = 0 ; i < nNewTypes; i++ )
         *pTypes++ = *va_arg( marker, uno::Type*);
     va_end( marker );
+*/
 }
 
 //----------------------------------------------------------------------
@@ -613,29 +714,246 @@ void SvxShape::addStaticTypes( sal_Int16 nNewTypes, /* uno::Type* */ ... ) throw
 uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
     throw (uno::RuntimeException)
 {
-    if( maTypeSequence.getLength() == 0 )
+    if( mpImpl->mpMaster )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        return mpImpl->mpMaster->getTypes();
+    }
+    else
+    {
+        return _getTypes();
+    }
+}
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if( maTypeSequence.getLength() == 0 )
+//----------------------------------------------------------------------
+
+uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
+{
+    switch( mpImpl->mnObjId )
+    {
+    // shapes without text
+    case OBJ_OLE2:
+    case OBJ_PAGE:
+    case OBJ_FRAME:
+    case OBJ_OLE2_PLUGIN:
+    case OBJ_OLE2_APPLET:
+    case E3D_CUBEOBJ_ID|E3D_INVENTOR_FLAG:
+    case E3D_SPHEREOBJ_ID|E3D_INVENTOR_FLAG:
+    case E3D_LATHEOBJ_ID|E3D_INVENTOR_FLAG:
+    case E3D_EXTRUDEOBJ_ID|E3D_INVENTOR_FLAG:
+    case E3D_POLYGONOBJ_ID|E3D_INVENTOR_FLAG:
         {
-            static ::cppu::OTypeCollection aSvxShapeTypeCollection(
-                ::getCppuType((const uno::Reference< drawing::XShape >*)0),
-                ::getCppuType((const uno::Reference< lang::XComponent >*)0),
-                ::getCppuType((const uno::Reference< beans::XPropertySet >*)0),
-                ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0),
-                ::getCppuType((const uno::Reference< beans::XPropertyState >*)0),
-                ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0),
-                ::getCppuType((const uno::Reference< container::XChild >*)0),
-                ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0),
-                ::getCppuType((const uno::Reference< container::XNamed >*)0) );
+            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
 
-            maTypeSequence = aSvxShapeTypeCollection.getTypes();
+            if( aTypeSequence.getLength() == 0 )
+            {
+                // Ready for multithreading; get global mutex for first call of this method only! see before
+                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+                // Control these pointer again ... it can be, that another instance will be faster then these!
+                if( aTypeSequence.getLength() == 0 )
+                {
+                    aTypeSequence.realloc( 11 );
+                    uno::Type* pTypes = aTypeSequence.getArray();
+
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                }
+            }
+            return aTypeSequence;
+        }
+    // group shape
+    case OBJ_GRUP:
+        {
+            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
+
+            if( aTypeSequence.getLength() == 0 )
+            {
+                // Ready for multithreading; get global mutex for first call of this method only! see before
+                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+                // Control these pointer again ... it can be, that another instance will be faster then these!
+                if( aTypeSequence.getLength() == 0 )
+                {
+                    aTypeSequence.realloc( 13 );
+                    uno::Type* pTypes = aTypeSequence.getArray();
+
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapes>*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapeGroup>*)0);
+                }
+            }
+            return aTypeSequence;
+        }
+    // connector shape
+    case OBJ_EDGE:
+        {
+            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
+
+            if( aTypeSequence.getLength() == 0 )
+            {
+                // Ready for multithreading; get global mutex for first call of this method only! see before
+                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+                // Control these pointer again ... it can be, that another instance will be faster then these!
+                if( aTypeSequence.getLength() == 0 )
+                {
+                    aTypeSequence.realloc( 15 );
+                    uno::Type* pTypes = aTypeSequence.getArray();
+
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XConnectorShape>*)0);
+                    // from SvxUnoTextBase::getTypes()
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
+                }
+            }
+            return aTypeSequence;
+        }
+    // control shape
+    case OBJ_UNO:
+        {
+            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
+
+            if( aTypeSequence.getLength() == 0 )
+            {
+                // Ready for multithreading; get global mutex for first call of this method only! see before
+                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+                // Control these pointer again ... it can be, that another instance will be faster then these!
+                if( aTypeSequence.getLength() == 0 )
+                {
+                    aTypeSequence.realloc( 12 );
+                    uno::Type* pTypes = aTypeSequence.getArray();
+
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XControlShape>*)0);
+                }
+            }
+            return aTypeSequence;
+        }
+    // 3d scene shape
+    case E3D_POLYSCENE_ID|E3D_INVENTOR_FLAG:
+        {
+            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
+
+            if( aTypeSequence.getLength() == 0 )
+            {
+                // Ready for multithreading; get global mutex for first call of this method only! see before
+                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+                // Control these pointer again ... it can be, that another instance will be faster then these!
+                if( aTypeSequence.getLength() == 0 )
+                {
+                    aTypeSequence.realloc( 12 );
+                    uno::Type* pTypes = aTypeSequence.getArray();
+
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapes>*)0);
+                }
+            }
+            return aTypeSequence;
+        }
+    // shapes with text
+    case OBJ_RECT:
+    case OBJ_CIRC:
+    case OBJ_MEASURE:
+    case OBJ_LINE:
+    case OBJ_POLY:
+    case OBJ_PLIN:
+    case OBJ_PATHLINE:
+    case OBJ_PATHFILL:
+    case OBJ_FREELINE:
+    case OBJ_FREEFILL:
+    case OBJ_PATHPOLY:
+    case OBJ_PATHPLIN:
+    case OBJ_GRAF:
+    case OBJ_TEXT:
+    case OBJ_CAPTION:
+    default:
+        {
+            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
+
+            if( aTypeSequence.getLength() == 0 )
+            {
+                // Ready for multithreading; get global mutex for first call of this method only! see before
+                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+                // Control these pointer again ... it can be, that another instance will be faster then these!
+                if( aTypeSequence.getLength() == 0 )
+                {
+                    aTypeSequence.realloc( 14 );
+                    uno::Type* pTypes = aTypeSequence.getArray();
+
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
+                    // from SvxUnoTextBase::getTypes()
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
+                }
+            }
+            return aTypeSequence;
         }
     }
-    return maTypeSequence;
 }
 
 //----------------------------------------------------------------------
@@ -708,6 +1026,8 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
 
 // XShape
 
+//----------------------------------------------------------------------
+
 sal_Bool needLogicRectHack( SdrObject* pObj )
 {
     if( pObj->GetObjInventor() == SdrInventor)
@@ -734,6 +1054,8 @@ sal_Bool needLogicRectHack( SdrObject* pObj )
     return sal_False;
 }
 
+//----------------------------------------------------------------------
+
 Rectangle getLogicRectHack( SdrObject* pObj )
 {
     if(needLogicRectHack(pObj))
@@ -745,6 +1067,8 @@ Rectangle getLogicRectHack( SdrObject* pObj )
         return pObj->GetLogicRect();
     }
 }
+
+//----------------------------------------------------------------------
 
 void setLogicRectHack( SdrObject* pObj, const Rectangle& rRect )
 {
@@ -759,6 +1083,7 @@ void setLogicRectHack( SdrObject* pObj, const Rectangle& rRect )
 }
 
 //----------------------------------------------------------------------
+
 awt::Point SAL_CALL SvxShape::getPosition() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -769,7 +1094,8 @@ awt::Point SAL_CALL SvxShape::getPosition() throw(uno::RuntimeException)
         Point aPt( aRect.Left(), aRect.Top() );
 
         // Position is relativ to anchor, so recalc to absolut position
-        aPt -= pObj->GetAnchorPos();
+        if( pModel->IsWriter() )
+            aPt -= pObj->GetAnchorPos();
 
         ForceMetricTo100th_mm(aPt);
         return ::com::sun::star::awt::Point( aPt.X(), aPt.Y() );
@@ -796,7 +1122,8 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::Run
             ForceMetricToItemPoolMetric(aLocalPos);
 
             // Position ist absolut, relativ zum Anker stellen
-            aLocalPos += pObj->GetAnchorPos();
+            if( pModel->IsWriter() )
+                aLocalPos += pObj->GetAnchorPos();
 
             long nDX = aLocalPos.X() - aRect.Left();
             long nDY = aLocalPos.Y() - aRect.Top();
@@ -947,7 +1274,20 @@ void SAL_CALL SvxShape::removeEventListener( const Reference< lang::XEventListen
 Reference< beans::XPropertySetInfo > SAL_CALL
     SvxShape::getPropertySetInfo() throw(uno::RuntimeException)
 {
-    return new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    if( mpImpl->mpMaster )
+    {
+        return mpImpl->mpMaster->getPropertySetInfo();
+    }
+    else
+    {
+        return _getPropertySetInfo();
+    }
+}
+
+Reference< beans::XPropertySetInfo > SAL_CALL
+    SvxShape::_getPropertySetInfo() throw(uno::RuntimeException)
+{
+    return aPropSet.getPropertySetInfo();
 }
 
 //----------------------------------------------------------------------
@@ -1167,6 +1507,19 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    if( mpImpl->mpMaster )
+    {
+        mpImpl->mpMaster->setPropertyValue( rPropertyName, rVal );
+    }
+    else
+    {
+        _setPropertyValue( rPropertyName, rVal );
+    }
+}
+
+void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
     OGuard aGuard( Application::GetSolarMutex() );
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(rPropertyName);
@@ -1198,7 +1551,10 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 ForceMetricToItemPoolMetric(aVclPoint);
 
                 // #88491# position relative to anchor
-                aVclPoint += pObj->GetAnchorPos();
+                if( pModel->IsWriter() )
+                {
+                    aVclPoint += pObj->GetAnchorPos();
+                }
 
                 ((SdrCaptionObj*)pObj)->SetTailPos(aVclPoint);
 
@@ -1628,13 +1984,13 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             SfxItemSet* pSet;
             if( mbIsMultiPropertyCall && !bIsNotPersist )
             {
-                if( mpItemSet == NULL )
+                if( mpImpl->mpItemSet == NULL )
                 {
-                    pSet = mpItemSet = pObj->GetItemSet().Clone();
+                    pSet = mpImpl->mpItemSet = pObj->GetItemSet().Clone();
                 }
                 else
                 {
-                    pSet = mpItemSet;
+                    pSet = mpImpl->mpItemSet;
                 }
             }
             else
@@ -1711,7 +2067,6 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
 //----------------------------------------------------------------------
 
-#ifndef SVX_LIGHT
 const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 {
     SvGlobalName aClassName;
@@ -1749,9 +2104,21 @@ const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 
     return aClassName;
 }
-#endif
+
+//----------------------------------------------------------------------
 
 uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpImpl && mpImpl->mpMaster )
+        return mpImpl->mpMaster->getPropertyValue( PropertyName );
+    else
+        return _getPropertyValue( PropertyName );
+}
+
+//----------------------------------------------------------------------
+
+uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1776,7 +2143,10 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 Point aVclPoint = ((SdrCaptionObj*)pObj)->GetTailPos();
 
                 // #88491# make pos relative to anchor
-                aVclPoint -= pObj->GetAnchorPos();
+                if( pModel->IsWriter() )
+                {
+                    aVclPoint -= pObj->GetAnchorPos();
+                }
 
                 // #88657# metric of pool maybe twips (writer)
                 ForceMetricTo100th_mm(aVclPoint);
@@ -1794,20 +2164,9 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             }
             case OWN_ATTR_INTERNAL_OLE:
             {
-#ifndef SVX_LIGHT
-/*              sal_Bool bInternal = sal_False;
-                if( pObj && pObj->ISA(SdrOle2Obj))
-                {
-                    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-                    if (rIPRef.Is() )
-                    {
-                        const SvGlobalName &rClassName = rIPRef->GetClassName();*/
-                        rtl::OUString sCLSID;
-                        sal_Bool bInternal = SvFactory::IsIntern( GetClassName_Impl(sCLSID), 0 );
-//                  }
-//              }
-                aAny = uno::Any( &bInternal, ::getBooleanCppuType() );
-#endif
+                rtl::OUString sCLSID;
+                sal_Bool bInternal = SvFactory::IsIntern( GetClassName_Impl(sCLSID), 0 );
+                aAny <<= bInternal;
                 break;
             }
             case OWN_ATTR_TRANSFORMATION:
@@ -1856,8 +2215,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             }
             case OWN_ATTR_ISFONTWORK:
             {
-                sal_Bool bIsFontWork = pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsFontwork();
-                aAny.setValue( &bIsFontWork, ::getBooleanCppuType() );
+                aAny <<= (sal_Bool)(pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsFontwork());
                 break;
             }
             case OWN_ATTR_FRAMERECT:
@@ -1917,7 +2275,6 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             case OWN_ATTR_OLE_VISAREA:
             {
                 awt::Rectangle aVisArea;
-#ifndef SVX_LIGHT
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
@@ -1928,14 +2285,12 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                         aVisArea = awt::Rectangle( aTmpArea.Left(), aTmpArea.Top(), aTmpArea.GetWidth(), aTmpArea.GetHeight() );
                     }
                 }
-#endif
                 aAny <<= aVisArea;
                 break;
             }
             case OWN_ATTR_OLESIZE:
             {
                 awt::Size aSize;
-#ifndef SVX_LIGHT
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
@@ -1946,7 +2301,6 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                         aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
                     }
                 }
-#endif
                 aAny <<= aSize;
                 break;
             }
@@ -1972,9 +2326,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             case OWN_ATTR_CLSID:
             {
                 OUString aCLSID;
-#ifndef SVX_LIGHT
                 SvGlobalName aClassName = GetClassName_Impl(aCLSID);
-#endif
                 aAny <<= aCLSID;
                 break;
             }
@@ -2166,6 +2518,8 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
     return aAny;
 }
 
+//----------------------------------------------------------------------
+
 // XMultiPropertySet
 void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
@@ -2175,33 +2529,41 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     const uno::Any* pValues = aValues.getConstArray();
 
 
-    uno::Reference< beans::XPropertySet > xSet;
-    queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
-
     try
     {
         mbIsMultiPropertyCall = sal_True;
 
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-            xSet->setPropertyValue( *pNames++, *pValues++ );
+        if( mpImpl->mpMaster )
+        {
+            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+                setPropertyValue( *pNames++, *pValues++ );
+        }
+        else
+        {
+            uno::Reference< beans::XPropertySet > xSet;
+            queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
+
+            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+                xSet->setPropertyValue( *pNames++, *pValues++ );
+        }
 
         mbIsMultiPropertyCall = sal_False;
 
-        if( mpItemSet )
+        if( mpImpl->mpItemSet )
         {
-            pObj->SetItemSetAndBroadcast( *mpItemSet );
-            delete mpItemSet;
-            mpItemSet = NULL;
+            pObj->SetItemSetAndBroadcast( *mpImpl->mpItemSet );
+            delete mpImpl->mpItemSet;
+            mpImpl->mpItemSet = NULL;
         }
     }
     catch( beans::UnknownPropertyException& e )
     {
         mbIsMultiPropertyCall = sal_False;
 
-        if( mpItemSet )
+        if( mpImpl->mpItemSet )
         {
-            delete mpItemSet;
-            mpItemSet = NULL;
+            delete mpImpl->mpItemSet;
+            mpImpl->mpItemSet = NULL;
         }
 
         const OUString aMsg( RTL_CONSTASCII_USTRINGPARAM("UnknownPropertyException"));
@@ -2211,6 +2573,8 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     }
 }
 
+//----------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL SvxShape::getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException)
 {
     const sal_Int32 nCount = aPropertyNames.getLength();
@@ -2219,18 +2583,35 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     uno::Sequence< uno::Any > aRet( nCount );
     uno::Any* pValue = aRet.getArray();;
 
-    uno::Reference< beans::XPropertySet > xSet;
-    queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
-
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++ )
+    if( mpImpl->mpMaster )
     {
-        try
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++ )
         {
-            *pValue = xSet->getPropertyValue( *pNames++ );
+            try
+            {
+                *pValue = getPropertyValue( *pNames++ );
+            }
+            catch( uno::Exception& )
+            {
+                DBG_ERROR( "SvxShape::getPropertyValues, unknown property asked" );
+            }
         }
-        catch( uno::Exception& )
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xSet;
+        queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
+
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pValue++ )
         {
-            DBG_ERROR( "SvxShape::getPropertyValues, unknown property asked" );
+            try
+            {
+                *pValue = xSet->getPropertyValue( *pNames++ );
+            }
+            catch( uno::Exception& )
+            {
+                DBG_ERROR( "SvxShape::getPropertyValues, unknown property asked" );
+            }
         }
     }
 
@@ -2319,6 +2700,19 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pM
 beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
+    if( mpImpl->mpMaster )
+    {
+        return mpImpl->mpMaster->getPropertyState( PropertyName );
+    }
+    else
+    {
+        return _getPropertyState( PropertyName );
+    }
+}
+
+beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& PropertyName )
+    throw(beans::UnknownPropertyException, uno::RuntimeException)
+{
     OGuard aGuard( Application::GetSolarMutex() );
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
@@ -2374,10 +2768,19 @@ uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( cons
     const OUString* pNames = aPropertyName.getConstArray();
 
     uno::Sequence< beans::PropertyState > aRet( nCount );
-    beans::PropertyState* pState = aRet.getArray();;
+    beans::PropertyState* pState = aRet.getArray();
 
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-        pState[nIdx] = getPropertyState( pNames[nIdx] );
+    if( mpImpl->mpMaster )
+    {
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+            pState[nIdx] = getPropertyState( pNames[nIdx] );
+
+    }
+    else
+    {
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+            pState[nIdx] = getPropertyState( pNames[nIdx] );
+    }
 
     return aRet;
 }
@@ -2385,6 +2788,19 @@ uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( cons
 //----------------------------------------------------------------------
 
 void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
+    throw(beans::UnknownPropertyException, uno::RuntimeException)
+{
+    if( mpImpl->mpMaster )
+    {
+        mpImpl->mpMaster->setPropertyToDefault( PropertyName );
+    }
+    else
+    {
+        _setPropertyToDefault( PropertyName );
+    }
+}
+
+void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -2415,6 +2831,19 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
 //----------------------------------------------------------------------
 
 uno::Any SAL_CALL SvxShape::getPropertyDefault( const OUString& aPropertyName )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpImpl->mpMaster )
+    {
+        return mpImpl->mpMaster->getPropertyDefault( aPropertyName );
+    }
+    else
+    {
+        return _getPropertyDefault( aPropertyName );
+    }
+}
+
+uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -2494,6 +2923,19 @@ const char* sUNO_service_drawing_ConnectorShape             = STAR_NAMESPACE "dr
 
 
 uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
+    throw(uno::RuntimeException)
+{
+    if( mpImpl->mpMaster )
+    {
+        return mpImpl->mpMaster->getSupportedServiceNames();
+    }
+    else
+    {
+        return _getSupportedServiceNames();
+    }
+}
+
+uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     if( pObj && pObj->GetObjInventor() == SdrInventor)
@@ -3193,9 +3635,10 @@ uno::Any SAL_CALL SvxShapeText::queryInterface( const uno::Type & rType )
 uno::Any SAL_CALL SvxShapeText::queryAggregation( const uno::Type & rType )
     throw( uno::RuntimeException )
 {
-    uno::Any aAny( SvxShape::queryAggregation( rType ) );
-    if( !aAny.hasValue() )
-        aAny = SvxUnoTextBase::queryAggregation( rType );
+    uno::Any aAny;
+
+    if( !SvxShape::queryAggregation( rType, aAny ) )
+        SvxUnoTextBase::queryAggregation( rType, aAny );
 
     return aAny;
 }
@@ -3237,35 +3680,7 @@ sal_Bool SAL_CALL SvxShapeText::supportsService( const OUString& ServiceName ) t
 uno::Sequence< uno::Type > SAL_CALL SvxShapeText::getTypes()
     throw( uno::RuntimeException )
 {
-    if( SvxShape::maTypeSequence.getLength() == 0 )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if( SvxShape::maTypeSequence.getLength() == 0 )
-        {
-            // initialize base types
-            SvxShape::getTypes();
-
-            const int nOwnCount = SvxShape::maTypeSequence.getLength();
-
-            uno::Sequence< uno::Type > aTextTypes( SvxUnoTextBase::getTypes() );
-
-            const int nTextCount = aTextTypes.getLength();
-
-            SvxShape::maTypeSequence.realloc( nOwnCount + nTextCount );
-
-            uno::Type* pTypes = SvxShape::maTypeSequence.getArray();
-            pTypes = &(pTypes[nOwnCount]);
-
-            uno::Type* pTextTypes = aTextTypes.getArray();
-
-            for( int i = 0; i < nTextCount; i++ )
-                *pTypes++ = *pTextTypes++;
-        }
-    }
-    return SvxShape::maTypeSequence;
+    return SvxShape::getTypes();
 }
 
 sal_Int64 SAL_CALL SvxShapeText::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException) \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 14:02:59 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,13 @@ SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMap* pPrope
 
 SvxOle2Shape::~SvxOle2Shape() throw()
 {
+}
+
+::com::sun::star::uno::Any SAL_CALL SvxOle2Shape::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Any aAny;
+    SvxShape::queryAggregation( rType, aAny );
+    return aAny;
 }
 
 //XPropertySet
