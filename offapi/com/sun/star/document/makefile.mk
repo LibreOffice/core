@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-29 15:04:58 $
+#   last change: $Author: cl $ $Date: 2002-12-06 12:36:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ IDLFILES=\
     FilterAdapter.idl\
     FilterFactory.idl\
     FilterOptionsRequest.idl\
+    HeaderFooterSettings.idl\
     ImportFilter.idl\
     LinkTarget.idl\
     LinkTargets.idl\
