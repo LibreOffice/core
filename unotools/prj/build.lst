@@ -1,4 +1,4 @@
-ut	unotools	:	comphelper cppuhelper offuh tools ucbhelper NULL
+ut	unotools	:	comphelper cppuhelper offuh tools ucbhelper svtools NULL
 ut	unotools								usr1	-	all	ut_mkout NULL
 ut	unotools\source\misc					nmake	-	all	ut_misc NULL
 ut	unotools\source\streaming				nmake	-	all	ut_streaming NULL
