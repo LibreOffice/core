@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:08:27 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,18 +126,20 @@
 #define ID_Wait            39
 #define ID_GetErrorCount   40
 #define ID_GetWarningCount 41
-#define ID_GetUseFileWarningCount 42
-#define ID_GetErrorList    43
-#define ID_GetWarningList  44
-#define ID_GetUseFileWarningList 45
-#define ID_GetTestCaseName 46
-#define ID_GetTestCaseFileName 47
-#define ID_GetTestCaseLineNr 48
-#define ID_StopOnSyntaxError 49
-#define ID_SetChildEnv     50
-#define ID_GetChildEnv     51
-#define ID_GetLinkDestination 52
-#define ID_GetRegistryValue 53
+#define ID_GetQAErrorCount 42
+#define ID_GetUseFileWarningCount 43
+#define ID_GetErrorList    44
+#define ID_GetWarningList  45
+#define ID_GetQAErrorList  46
+#define ID_GetUseFileWarningList 47
+#define ID_GetTestCaseName 48
+#define ID_GetTestCaseFileName 49
+#define ID_GetTestCaseLineNr 50
+#define ID_StopOnSyntaxError 51
+#define ID_SetChildEnv     52
+#define ID_GetChildEnv     53
+#define ID_GetLinkDestination 54
+#define ID_GetRegistryValue 55
 #define ID_DoNothing    99
 
 void ReadFlatArray( const ControlDefLoad arWas [], CNames *&pNames );
@@ -324,10 +326,12 @@ public:
 
     ULONG nErrorCount;
     ULONG nWarningCount;
+    ULONG nQAErrorCount;
     ULONG nIncludeFileWarningCount;
 
     SbxDimArrayRef xErrorList;
     SbxDimArrayRef xWarningList;
+    SbxDimArrayRef xQAErrorList;
     SbxDimArrayRef xIncludeFileWarningList;
 
     BOOL bIsStart;                      // set tu TRUE while command Start is initiating the communication
@@ -435,7 +439,8 @@ public:
 #define ADD_QA_ERROR_LOG(aMsg)                                          \
     if ( pImpl->bEnableQaErrors )                                       \
     {                                                                   \
-        ADD_AUTO_LOG(LOG_QA_ERROR, aMsg, NULL)                          \
+        ADD_AUTO_LOG(LOG_QA_ERROR, aMsg, &pImpl->xQAErrorList)          \
+        pImpl->nQAErrorCount++;                                         \
     }
 
 #endif
