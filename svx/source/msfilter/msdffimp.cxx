@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 16:10:13 $
+ *  last change: $Author: sj $ $Date: 2002-09-27 10:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,34 +790,38 @@ DffPropertyReader::~DffPropertyReader()
 
 static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
                             const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
-                                sal_Int32& rnArrowWidth, XPolygon& rXPoly, sal_Bool& rbArrowCenter )
+                                sal_Int32& rnArrowWidth, XPolygon& rXPoly, sal_Bool& rbArrowCenter,
+                                    String& rsArrowName )
 {
-    double  fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
-    double  fLenghtMul, fWidthMul;
+    double      fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
+    double      fLenghtMul, fWidthMul;
+    sal_Int32   nLineNumber;
     switch( eLineLenght )
     {
         default :
-        case mso_lineMediumLenArrow     : fLenghtMul = 3.0; break;
-        case mso_lineShortArrow         : fLenghtMul = 2.0; break;
-        case mso_lineLongArrow          : fLenghtMul = 5.0; break;
+        case mso_lineMediumLenArrow     : fLenghtMul = 3.0; nLineNumber = 2; break;
+        case mso_lineShortArrow         : fLenghtMul = 2.0; nLineNumber = 1; break;
+        case mso_lineLongArrow          : fLenghtMul = 5.0; nLineNumber = 3; break;
     }
     switch( eLineWidth )
     {
         default :
-        case mso_lineMediumWidthArrow   : fWidthMul = 3.0; break;
+        case mso_lineMediumWidthArrow   : fWidthMul = 3.0; nLineNumber += 3; break;
         case mso_lineNarrowArrow        : fWidthMul = 2.0; break;
-        case mso_lineWideArrow          : fWidthMul = 5.0; break;
+        case mso_lineWideArrow          : fWidthMul = 5.0; nLineNumber += 6; break;
     }
     rbArrowCenter = sal_False;
     switch ( eLineEnd )
     {
         case mso_lineArrowEnd :
         {
-            XPolygon aTriangle( 3 );
+            XPolygon aTriangle( 4 );
             aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth ) );
             aTriangle[ 2 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth ) );
+            aTriangle[ 3 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             rXPoly = aTriangle;
+            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
 
@@ -837,36 +841,41 @@ static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd
                 case mso_lineNarrowArrow        : fWidthMul = 3.5; break;
                 case mso_lineWideArrow          : fWidthMul = 6.0; break;
             }
-            XPolygon aTriangle( 6 );
+            XPolygon aTriangle( 7 );
             aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth * 0.91 ) );
             aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.85 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
             aTriangle[ 3 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth * 0.36 ) );
             aTriangle[ 4 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.15 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
             aTriangle[ 5 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth * 0.91 ) );
+            aTriangle[ 6 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             rXPoly = aTriangle;
+            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowOpenEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
         case mso_lineArrowStealthEnd :
         {
-            XPolygon aTriangle( 4 );
+            XPolygon aTriangle( 5 );
             aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth ) );
             aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth * 0.60 ) );
             aTriangle[ 3 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth ) );
+            aTriangle[ 4 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             rXPoly = aTriangle;
+            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowStealthEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
         case mso_lineArrowDiamondEnd :
         {
-            XPolygon aTriangle(4);
+            XPolygon aTriangle( 5 );
             aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ) );
             aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
             aTriangle[ 3 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ) );
+            aTriangle[ 4 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
             rXPoly = aTriangle;
             rbArrowCenter = sal_True;
-
+            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowDiamondEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
         case mso_lineArrowOvalEnd :
@@ -875,9 +884,11 @@ static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd
                                 (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
                                     (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 );
             rbArrowCenter = sal_True;
+            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowOvalEnd " ), RTL_TEXTENCODING_UTF8 );
         }
         break;
     }
+    rsArrowName.Append( String::CreateFromInt32( nLineNumber ) );
     rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
 }
 
@@ -1076,10 +1087,11 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
                 XPolygon    aPoly;
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
-                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter );
+                String      aArrowName;
+                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter, aArrowName );
 
                 rSet.Put( XLineStartWidthItem( nArrowWidth ) );
-                rSet.Put( XLineStartItem( String( RTL_CONSTASCII_STRINGPARAM( "linestart" ), RTL_TEXTENCODING_MS_1252 ), aPoly ) );
+                rSet.Put( XLineStartItem( aArrowName, aPoly ) );
                 rSet.Put( XLineStartCenterItem( bArrowCenter ) );
             }
             /////////////
@@ -1094,10 +1106,11 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
                 XPolygon    aPoly;
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
-                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter );
+                String      aArrowName;
+                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter, aArrowName );
 
                 rSet.Put( XLineEndWidthItem( nArrowWidth ) );
-                rSet.Put( XLineEndItem( String( RTL_CONSTASCII_STRINGPARAM( "lineend" ), RTL_TEXTENCODING_MS_1252 ), aPoly ) );
+                rSet.Put( XLineEndItem( aArrowName, aPoly ) );
                 rSet.Put( XLineEndCenterItem( bArrowCenter ) );
             }
             if ( IsProperty( DFF_Prop_lineEndCapStyle ) )

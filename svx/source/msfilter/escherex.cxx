@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-28 12:09:00 $
+ *  last change: $Author: sj $ $Date: 2002-09-27 10:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,98 +513,93 @@ void EscherPropertyContainer::CreateFillProperties(
     CreateLineProperties( rXPropSet, bEdge );
 }
 
+static sal_Bool GetLineArrow( const sal_Bool bLineStart,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        ESCHER_LineEnd& reLineEnd, sal_Int32& rnArrowLength, sal_Int32& rnArrowWidth )
+{
+    static String sLineStart    ( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ) );
+    static String sLineStartName( RTL_CONSTASCII_USTRINGPARAM( "LineStartName" ) );
+    static String sLineEnd      ( RTL_CONSTASCII_USTRINGPARAM( "LineEnd" ) );
+    static String sLineEndName  ( RTL_CONSTASCII_USTRINGPARAM( "LineEndName" ) );
+
+    const String sLine      ( bLineStart ? sLineStart : sLineEnd );
+    const String sLineName  ( bLineStart ? sLineStartName : sLineEndName );
+
+    sal_Bool bIsArrow = sal_False;
+
+    ::com::sun::star::uno::Any aAny;
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, sLine, sal_False ) )
+    {
+        PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aAny ) );
+        if ( aPolyPoly.Count() && aPolyPoly[ 0 ].GetSize() )
+        {
+            bIsArrow = sal_True;
+
+            reLineEnd     = ESCHER_LineArrowEnd;
+            rnArrowLength = 1;
+            rnArrowWidth  = 1;
+
+            if ( EscherPropertyValueHelper::GetPropertyValue(
+                aAny, rXPropSet, sLineName, sal_False ) )
+            {
+                String aArrowStartName = *(::rtl::OUString*)aAny.getValue();
+                if ( aArrowStartName.GetTokenCount( ' ' ) == 2 )
+                {
+                    sal_Bool b = sal_True;
+                    String aArrowName( aArrowStartName.GetToken( 0, ' ' ) );
+                    if (  aArrowName.EqualsAscii( "msArrowEnd" ) )
+                        reLineEnd = ESCHER_LineArrowEnd;
+                    else if (  aArrowName.EqualsAscii( "msArrowOpenEnd" ) )
+                        reLineEnd = ESCHER_LineArrowOpenEnd;
+                    else if ( aArrowName.EqualsAscii( "msArrowStealthEnd" ) )
+                        reLineEnd = ESCHER_LineArrowStealthEnd;
+                    else if ( aArrowName.EqualsAscii( "msArrowDiamondEnd" ) )
+                        reLineEnd = ESCHER_LineArrowDiamondEnd;
+                    else if ( aArrowName.EqualsAscii( "msArrowOvalEnd" ) )
+                        reLineEnd = ESCHER_LineArrowOvalEnd;
+                    else
+                        b = sal_False;
+
+                    // now we have the arrow, and try to determine the arrow size;
+                    if ( b )
+                    {
+                        String aArrowSize( aArrowStartName.GetToken( 1, ' ' ) );
+                        sal_Int32 nArrowSize = aArrowSize.ToInt32();
+                        rnArrowWidth = ( nArrowSize - 1 ) / 3;
+                        rnArrowLength = nArrowSize - ( rnArrowWidth * 3 ) - 1;
+                    }
+                }
+            }
+        }
+    }
+    return bIsArrow;
+}
+
+
 void EscherPropertyContainer::CreateLineProperties(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
         sal_Bool bEdge )
 {
     ::com::sun::star::uno::Any aAny;
     sal_uInt32 nLineFlags = 0x80008;
-    ESCHER_LineEnd eLineEnd = ESCHER_LineArrowEnd;
 
-    if ( EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ) ), sal_False ) )
+    ESCHER_LineEnd eLineEnd;
+    sal_Int32 nArrowLength;
+    sal_Int32 nArrowWidth;
+    if ( GetLineArrow( sal_True, rXPropSet, eLineEnd, nArrowLength, nArrowWidth ) )
     {
-        PolyPolygon aPolyPoly( GetPolyPolygon( aAny ) );
-        if ( aPolyPoly.Count() )
-        {
-            const Polygon& rPoly = aPolyPoly[ 0 ];
-            sal_uInt16 nPolyCount = rPoly.GetSize();
-
-            if ( nPolyCount )
-            {
-                switch ( nPolyCount )
-                {
-                    case 0x4 :
-                    {
-                        switch( rPoly[ 0 ].X() )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd;    break;
-                            case 0x529 : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                    break;
-                    case 0x7 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                    case 0xa : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                    case 0xd :
-                    {
-                        switch ( rPoly[ 0 ].X() )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                            case 0x64 : eLineEnd = ESCHER_LineArrowOvalEnd; break;
-                            case 0x87c : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                }
-                AddOpt( ESCHER_Prop_lineStartArrowLength, 2 );
-                AddOpt( ESCHER_Prop_lineStartArrowWidth, 2 );
-                AddOpt( ESCHER_Prop_lineStartArrowhead, eLineEnd );
-                nLineFlags |= 0x100010;
-            }
-        }
+        AddOpt( ESCHER_Prop_lineStartArrowLength, nArrowLength );
+        AddOpt( ESCHER_Prop_lineStartArrowWidth, nArrowWidth );
+        AddOpt( ESCHER_Prop_lineStartArrowhead, eLineEnd );
+        nLineFlags |= 0x100010;
     }
-
-    eLineEnd = ESCHER_LineArrowEnd;
-
-    if ( EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineEnd"  ) ), sal_False ) )
+    if ( GetLineArrow( sal_False, rXPropSet, eLineEnd, nArrowLength, nArrowWidth ) )
     {
-        PolyPolygon aPolyPoly( GetPolyPolygon( aAny ) );
-        if ( aPolyPoly.Count() )
-        {
-            const Polygon& rPoly = aPolyPoly[ 0 ];
-            sal_uInt16 nPolyCount = rPoly.GetSize();
-
-            if ( nPolyCount )
-            {
-                switch ( nPolyCount )
-                {
-                    case 0x4 :
-                    {
-                        switch( rPoly[ 0 ].X() )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd;    break;
-                            case 0x529 : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                    break;
-                    case 0x7 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                    case 0xa : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                    case 0xd :
-                    {
-                        switch ( rPoly[ 0 ].X() )
-                        {
-                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
-                            case 0x64 : eLineEnd = ESCHER_LineArrowOvalEnd; break;
-                            case 0x87c : eLineEnd = ESCHER_LineArrowStealthEnd; break;
-                        }
-                    }
-                }
-                AddOpt( ESCHER_Prop_lineEndArrowLength, 2 );
-                AddOpt( ESCHER_Prop_lineEndArrowWidth, 2 );
-                AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
-                nLineFlags |= 0x100010;
-            }
-        }
+        AddOpt( ESCHER_Prop_lineEndArrowLength, nArrowLength );
+        AddOpt( ESCHER_Prop_lineEndArrowWidth, nArrowWidth );
+        AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
+        nLineFlags |= 0x100010;
     }
     if ( EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineStyle"  ) ), sal_False ) )
