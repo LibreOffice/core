@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:59:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef SC_XILINK_HXX
 #define SC_XILINK_HXX
 
+#include <map>
+
 #ifndef SC_XLLINK_HXX
 #include "xllink.hxx"
 #endif
@@ -86,14 +88,34 @@ Classes for import of different kinds of internal/external references.
 
 // Excel sheet indexes ========================================================
 
-/** This buffer contains the creation order of all sheets inside the Excel workbook.
-    @descr  The creation order list is contained in the TABID record.
-    Example: If the list contains 3;1;2 this means that the second sheet in the file
-    was created first, than the third sheet in the file was created and finally the
-    first sheet. */
+/** A buffer containing information about names and creation order of sheets.
+
+    The first purpose of this buffer is to translate original Excel
+    sheet names into Calc sheet indexes. This is not trivial because the filter
+    may rename the Calc sheets during creation. This buffer stores the original
+    Excel sheet names with the corresponding Calc sheet indexes.
+
+    The second purpose is to store the creation order of all sheets inside the
+    Excel workbook. The creation order list is contained in the TABID record
+    and needed to import the change log. Example: If the list contains 3;1;2
+    this means that the second sheet in the file was created first, than the
+    third sheet in the file was created and finally the first sheet.
+ */
 class XclImpTabInfo
 {
 public:
+    // original Excel sheet names ---------------------------------------------
+
+    /** Appends an original Excel sheet name with corresponding Calc sheet index. */
+    void                        AppendXclTabName( const String& rXclTabName, SCTAB nScTab );
+    /** Inserts a Calc sheet index (increases all following sheet indexes). */
+    void                        InsertScTab( SCTAB nScTab );
+
+    /** Returns the Calc sheet index from the passed original Excel sheet name. */
+    SCTAB                       GetScTabFromXclName( const String& rXclTabName ) const;
+
+    // record creation order - TABID record -----------------------------------
+
     /** Reads the TABID record. */
     void                        ReadTabid( XclImpStream& rStrm );
 
@@ -106,6 +128,9 @@ public:
     sal_uInt16                  GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId = 0xFFFF ) const;
 
 private:
+    typedef ::std::map< String, SCTAB > XclTabNameMap;
+
+    XclTabNameMap               maTabNames;     /// All Excel sheet names with Calc sheet index.
     ScfUInt16Vec                maTabIdVec;     /// The vector with sheet indexes.
 };
 
