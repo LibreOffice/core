@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 12:07:44 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 10:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
+#include <com/sun/star/awt/TextAlign.hpp>  //added by BerryJia for fixing Bug102407 2002-11-4
+#endif
+#ifndef _COM_SUN_STAR_STYLE_PARAGRAPHADJUST_HPP_
+#include <com/sun/star/style/ParagraphAdjust.hpp>   //added by BerryJia for fixing Bug102407 2002-11-4
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -763,6 +769,55 @@ void SvxShapeControl::convertPropertyName( const OUString& rApiName, OUString& r
     }
 }
 
+//added by BerryJia for fixing Bug102407 2002-11-04
+static struct
+{
+    sal_Int16 nAPIValue;
+    sal_Int16 nFormValue;
+}
+SvxShapeControlPropertyValueMapping[] =
+{
+    {style::ParagraphAdjust_LEFT,           (sal_Int16)awt::TextAlign::LEFT},
+    {style::ParagraphAdjust_CENTER,         (sal_Int16)awt::TextAlign::CENTER},
+    {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
+    {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::LEFT},
+    {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
+    {style::ParagraphAdjust_MAKE_FIXED_SIZE,(sal_Int16)awt::TextAlign::LEFT},
+    {-1,-1}
+};
+
+void SvxShapeControl::valueAlignToParaAdjust(Any& rValue)
+{
+    sal_Int16 nValue;
+    rValue >>= nValue;
+    sal_uInt16 i = 0;
+    while (-1 != SvxShapeControlPropertyValueMapping[i].nFormValue)
+    {
+        if (nValue == SvxShapeControlPropertyValueMapping[i].nFormValue)
+        {
+            rValue <<= (SvxShapeControlPropertyValueMapping[i].nAPIValue);
+            return;
+        }
+        i++;
+    }
+}
+
+void SvxShapeControl::valueParaAdjustToAlign(Any& rValue)
+{
+    sal_Int32 nValue;
+    rValue >>= nValue;
+    sal_uInt16 i = 0;
+    while (-1 != SvxShapeControlPropertyValueMapping[i].nAPIValue)
+    {
+        if ( nValue == SvxShapeControlPropertyValueMapping[i].nAPIValue)
+        {
+            rValue <<= (SvxShapeControlPropertyValueMapping[i].nFormValue);
+            return;
+        }
+        i++;
+    }
+}
+
 void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
@@ -788,7 +843,12 @@ void SAL_CALL SvxShapeControl::setPropertyValue( const OUString& aPropertyName, 
                 }
                 else
                 {
-                    xControl->setPropertyValue( aFormsName, aValue );
+                    //modified by BerryJia for fixing Bug102407 2002-11-4
+                    Any rValue;
+                    rValue = aValue;
+                    if (::rtl::OUString::createFromAscii("Align") == aFormsName)
+                        valueParaAdjustToAlign(rValue);
+                    xControl->setPropertyValue( aFormsName, rValue );
                 }
             }
         }
@@ -823,7 +883,12 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
                 }
                 else
                 {
-                    return xControl->getPropertyValue( aFormsName );
+                    //modified by BerryJia for fixing Bug102407 2002-11-4
+                    Any rValue;
+                    rValue = xControl->getPropertyValue( aFormsName );
+                    if (::rtl::OUString::createFromAscii("Align") == aFormsName)
+                        valueAlignToParaAdjust(rValue);
+                    return rValue;
                 }
             }
         }
