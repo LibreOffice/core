@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:18:36 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@
 #error please use asm/interlck_sparc.s
 #elif defined ( SOLARIS) && defined ( X86 )
 #error please use asm/interlck_x86.s
-#elif defined ( GCC ) && defined ( X86 )
+#elif defined ( GCC ) && ( defined ( X86 ) || defined ( X86_64 ) )
+/* That's possible on x86-64 too since oslInterlockedCount is a sal_Int32 */
 
 /*****************************************************************************/
 /* osl_incrementInterlockedCount */
@@ -81,7 +82,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     __asm__ __volatile__ (
         "movl $1, %0\n\t"
         "lock\n\t"
-        "xadd %0, %2\n\t"
+        "xaddl %0, %2\n\t"
         "incl %0"
     :   "=&r" (nCount), "=m" (*pCount)
     :   "m" (*pCount)
@@ -97,7 +98,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     __asm__ __volatile__ (
         "movl $-1, %0\n\t"
         "lock\n\t"
-        "xadd %0, %2\n\t"
+        "xaddl %0, %2\n\t"
         "decl %0"
     :   "=&r" (nCount), "=m" (*pCount)
     :   "m" (*pCount)
