@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:17:08 $
+ *  last change:$Date: 2003-09-08 12:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,15 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+import util.XMLTools;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.document.XExporter;
@@ -69,17 +78,11 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.xml.sax.XDocumentHandler;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-import util.XMLTools;
 
 /**
  * Test for object which is represented by service
@@ -111,7 +114,7 @@ public class XMLStylesExporter extends TestCase {
      * New spreadsheet document created.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -152,11 +155,10 @@ public class XMLStylesExporter extends TestCase {
     *      {@link ifc.document._XExporter} interface </li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF() );
+        XMultiServiceFactory xMSF =  (XMultiServiceFactory) tParam.getMSF() ;
         XInterface oObj = null;
         FilterChecker filter = new FilterChecker(log);
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
@@ -180,7 +182,8 @@ public class XMLStylesExporter extends TestCase {
             XNameAccess StyleFamilies = styleSup.getStyleFamilies();
             String[] styleFamiliesNames = StyleFamilies.getElementNames();
             XNameContainer StyleFamilyName = (XNameContainer)
-                StyleFamilies.getByName(styleFamiliesNames[0]);
+                AnyConverter.toObject(new Type(XNameContainer.class),
+                    StyleFamilies.getByName(styleFamiliesNames[0]));
             Object SC = SOF.createInstance(
                 xSheetDoc, "com.sun.star.style.CellStyle");
             XStyle StyleCell = (XStyle)
