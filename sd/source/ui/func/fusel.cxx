@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:44:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-03 07:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,12 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
+    // The following code is executed for right clicks as well as for left
+    // clicks in order to modify the selection for the right button as a
+    // preparation for the context menu.  The functions BegMarkObject() and
+    // BegDragObject(), however, are not called for right clicks because a)
+    // it makes no sense and b) to have IsAction() return FALSE when called
+    // from Command() which is a prerequisite for the context menu.
     if ((rMEvt.IsLeft() || rMEvt.IsRight())
         && !pView->IsAction()
         && (pView->IsFrameDragSingles() || !pView->HasMarkablePoints()))
@@ -324,7 +330,8 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 aDragTimer.Start();
             }
 
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+            if ( ! rMEvt.IsRight())
+                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             bReturn = TRUE;
         }
         else
@@ -491,21 +498,23 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         aDragTimer.Start();
 
                         pHdl=pView->HitHandle(aMDPos, *pWindow);
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                        if ( ! rMEvt.IsRight())
+                            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
                     }
                     else
                     {
                         /**********************************************************
                         * Objekt selektieren
                         **********************************************************/
-                        pView->BegMarkObj(aMDPos);
+                        if ( ! rMEvt.IsRight())
+                            pView->BegMarkObj(aMDPos);
                     }
                 }
             }
         }
     }
     else if ( !bReadOnly
-              && (rMEvt.IsLeft() || rMEvt.IsLeft())
+              && (rMEvt.IsLeft() || rMEvt.IsRight())
               && !pView->IsAction())
     {
         /**********************************************************************
@@ -520,7 +529,8 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             /******************************************************************
             * Handle draggen
             ******************************************************************/
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+            if ( ! rMEvt.IsRight())
+                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
         {
@@ -537,14 +547,16 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if (!rMEvt.IsShift())
                 pView->UnmarkAllPoints();
 
-            pView->BegMarkPoints(aMDPos, (OutputDevice*) NULL);
+            if ( ! rMEvt.IsRight())
+                pView->BegMarkPoints(aMDPos, (OutputDevice*) NULL);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
             /******************************************************************
             * Objekt verschieben
             ******************************************************************/
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
+            if ( ! rMEvt.IsRight())
+                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
         }
         else if (eHit == SDRHIT_HANDLE)
         {
@@ -574,7 +586,8 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (pHdl)
                 {
                     pView->MarkPoint(*pHdl);
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                    if ( ! rMEvt.IsRight())
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
                 }
             }
             else
@@ -583,7 +596,8 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // dragging of selected point(s)
                 pHdl = pView->HitHandle(aMDPos, *pWindow);
                 if(pHdl)
-                    pView->BegDragObj(aMDPos, (OutputDevice*)NULL, pHdl, nDrgLog);
+                    if ( ! rMEvt.IsRight())
+                        pView->BegDragObj(aMDPos, (OutputDevice*)NULL, pHdl, nDrgLog);
             }
         }
         else
@@ -614,7 +628,8 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
             {
                 // Objekt verschieben
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                if ( ! rMEvt.IsRight())
+                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
             else if (pView->HasMarkedObj())
             {
@@ -624,14 +639,16 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (!rMEvt.IsShift())
                     pView->UnmarkAllPoints();
 
-                pView->BegMarkPoints(aMDPos, (OutputDevice*) NULL);
+                if ( ! rMEvt.IsRight())
+                    pView->BegMarkPoints(aMDPos, (OutputDevice*) NULL);
             }
             else
             {
                 /**************************************************************
                 * Objekt selektieren
                 **************************************************************/
-                pView->BegMarkObj(aMDPos);
+                if ( ! rMEvt.IsRight())
+                    pView->BegMarkObj(aMDPos);
             }
 
             ForcePointer(&rMEvt);
