@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:48:06 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <outl_pch.hxx>
 
 #pragma hdrstop
@@ -494,6 +493,18 @@ EESpellState Outliner::HasSpellErrors()
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->HasSpellErrors();
+}
+
+sal_Bool Outliner::HasConvertibleTextPortion( LanguageType nLang )
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->HasConvertibleTextPortion( nLang );
+}
+
+BOOL Outliner::ConvertNextDocument()
+{
+    DBG_CHKTHIS(Outliner,0);
+    return FALSE;
 }
 
 void Outliner::SetDefaultLanguage( LanguageType eLang )
