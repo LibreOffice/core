@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:27 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,9 +222,20 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_TIMEFORMAT,         "TimeFormat");
     XMLFORM_CONSTASCII_STRING( PROPERTY_PERSISTENCE_MAXTEXTLENGTH,  "PersistenceMaxTextLength");
 
+    XMLFORM_CONSTASCII_STRING( PROPERTY_BOUND_CELL,         "BoundCell");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,    "CellRange");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_ADDRESS,            "Address");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_FILE_REPRESENTATION,"PersistentRepresentation");
+
     // services
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION,         "com.sun.star.form.Forms" );
     XMLFORM_CONSTASCII_STRING( SERVICE_NUMBERFORMATSSUPPLIER,   "com.sun.star.util.NumberFormatsSupplier" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_SPREADSHEET_DOCUMENT,    "com.sun.star.sheet.SpreadsheetDocument");
+    XMLFORM_CONSTASCII_STRING( SERVICE_CELLVALUEBINDING,        "drafts.com.sun.star.table.CellValueBinding" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_LISTINDEXCELLBINDING,    "drafts.com.sun.star.table.ListPositionCellBinding" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_CELLRANGELISTSOURCE,     "drafts.com.sun.star.table.CellRangeListSource" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion");
+    XMLFORM_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion");
 
     // old service names (compatibility)
     XMLFORM_CONSTASCII_STRING( SERVICE_PERSISTENT_COMPONENT_FORM,           "stardiv.one.form.component.Form");
