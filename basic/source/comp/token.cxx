@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:20:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { _OPTIONAL_,   "Optional" },
     { OR,       "Or" },
     { OUTPUT,   "Output" },
+    { PARAMARRAY,   "ParamArray" },
     { PRESERVE, "Preserve" },
     { PRINT,    "Print" },
     { PRIVATE,  "Private" },
@@ -630,6 +631,7 @@ special:
     {
         SbiToken eTok = tp->t;
         if( eTok == CLASSMODULE ||
+            eTok == PARAMARRAY ||
             eTok == ENUM ||
             eTok == PROPERTY ||
             eTok == GET )
