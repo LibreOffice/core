@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-30 09:04:57 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text [ English ] = "Table;Query;Sql;Sql [Native]" ;
     Text[ english_us ] = "Table;Query;Sql;Sql [Native]";
     Text[ portuguese ] = "Tabela; Consulta; Sql;Sql [Native]";
-    Text[ russian ] = "Òàáëèöà;Çàïğîñ;Sql;Sql [Native]";
+    Text[ russian ] = "Òàáëèöà;Çàïğîñ;Sql;Sql [\"ğîäíîé\"]";
     Text[ greek ] = "Ğßíáêáò;Åñşôçìá;Sql;Sql [Native]";
     Text[ dutch ] = "Tabel;Query;Sql;Sql [Native]";
     Text[ french ] = "Table;Requête;Sql;Sql [Natif]";
@@ -111,7 +111,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;Sql;Sql [Native]";
     Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Native]";
     Text[ catalan ] = "Taula;Consulta;SQL;SQL [Natiu]";
-    Text[ finnish ] = "Taulukko;kysely;Sql;Sql [alkuperäinen]";
+    Text[ finnish ] = "Taulukko;kysely;Sql;Sql [suora]";
     Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡;à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡;Sql;Sql [à¹‚à¸”à¸¢à¸à¸³à¹€à¸™à¸´à¸”]";
 };
 String RID_BIB_STR_FRAME_TITLE
@@ -137,7 +137,7 @@ String RID_BIB_STR_FRAME_TITLE
     Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça veritabanı";
     Text[ catalan ] = "Base de dades bibliogràfica";
-    Text[ finnish ] = "Bibliografiatietokanta";
+    Text[ finnish ] = "Lähdeluettelotietokanta";
     Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
 };
 String RID_MAP_QUESTION
@@ -146,9 +146,9 @@ String RID_MAP_QUESTION
     Text [ English ] = "Dow you want to edit the column arrangement" ;
     Text[ english_us ] = "Do you want to edit the column arrangement?";
     Text[ portuguese ] = "Editar disposição de colunas?";
-    Text[ russian ] = "Âû õîòèòå èçìåíèòü ğàçìåùåíèå êîëîíîê?";
+    Text[ russian ] = "Èçìåíèòü ğàñïîëîæåíèå ñòîëáöîâ?";
     Text[ greek ] = "Èİëåôå íá ãßíåé åğåîåñãáóßá ôçò áíôéóôïß÷éóçò óôçëşí;";
-    Text[ dutch ] = "Wilt u de kolomindeling veranderen?";
+    Text[ dutch ] = "Wilt u de kolomindeling wijzigen?";
     Text[ french ] = "Souhaitez-vous éditer l'assignation des colonnes ?";
     Text[ spanish ] = "¿Desea modificar el orden de las columnas?";
     Text[ italian ] = "Volete modificare l'ordine delle colonne?";
