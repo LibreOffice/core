@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-30 15:59:54 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Schlieﬂen" ;
         Text [ English ] = "Close" ;
+        Text[ english_us ] = "Close";
+        Text[ portuguese ] = "Close";
+        Text[ russian ] = "Close";
+        Text[ greek ] = " ÎÂﬂÛÈÏÔ";
+        Text[ dutch ] = "Close";
+        Text[ french ] = "Close";
+        Text[ spanish ] = "Close";
+        Text[ italian ] = "Close";
+        Text[ danish ] = "Close";
+        Text[ swedish ] = "St‰ng";
+        Text[ polish ] = "Close";
+        Text[ portuguese_brazilian ] = "Close";
+        Text[ japanese ] = "Close";
+        Text[ korean ] = "Close";
+        Text[ chinese_simplified ] = "Close";
+        Text[ chinese_traditional ] = "Close";
+        Text[ turkish ] = "Close";
+        Text[ arabic ] = "≈€·«ﬁ";
     };
     HelpButton PB_HELP
     {
@@ -105,6 +123,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Size = MAP_APPFONT ( 237 , 95 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
+        Text[ english_us ] = "Options";
+        Text[ portuguese ] = "Options";
+        Text[ russian ] = "Options";
+        Text[ greek ] = "≈ÈÎÔ„›Ú";
+        Text[ dutch ] = "Options";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Options";
+        Text[ italian ] = "Options";
+        Text[ danish ] = "Options";
+        Text[ swedish ] = "Alternativ";
+        Text[ polish ] = "Options";
+        Text[ portuguese_brazilian ] = "Options";
+        Text[ japanese ] = "Options";
+        Text[ korean ] = "Options";
+        Text[ chinese_simplified ] = "Options";
+        Text[ chinese_traditional ] = "Options";
+        Text[ turkish ] = "Options";
+        Text[ arabic ] = "«·ŒÌ«—« ";
     };
     FixedText FT_EDIT_MODULES_LANGUAGE
     {
@@ -113,6 +149,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Sprache" ;
         Text [ English ] = "Language" ;
+        Text[ english_us ] = "Language";
+        Text[ portuguese ] = "Language";
+        Text[ russian ] = "Language";
+        Text[ greek ] = "√Î˛ÛÛ·";
+        Text[ dutch ] = "Language";
+        Text[ french ] = "Language";
+        Text[ spanish ] = "Language";
+        Text[ italian ] = "Language";
+        Text[ danish ] = "Language";
+        Text[ swedish ] = "SprÂk";
+        Text[ polish ] = "Language";
+        Text[ portuguese_brazilian ] = "Language";
+        Text[ japanese ] = "Language";
+        Text[ korean ] = "Language";
+        Text[ chinese_simplified ] = "Language";
+        Text[ chinese_traditional ] = "Language";
+        Text[ turkish ] = "Language";
+        Text[ arabic ] = "«··€…";
     };
     ListBox LB_EDIT_MODULES_LANGUAGE
     {
@@ -136,6 +190,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         TabStop = TRUE ;
         Text = "Prio +" ;
         Text [ English ] = "Prio +" ;
+        Text[ english_us ] = "Prio +";
+        Text[ portuguese ] = "Prio +";
+        Text[ russian ] = "Prio +";
+        Text[ greek ] = "Prio +";
+        Text[ dutch ] = "Prio +";
+        Text[ french ] = "Prio +";
+        Text[ spanish ] = "Prio +";
+        Text[ italian ] = "Prio +";
+        Text[ danish ] = "Prio +";
+        Text[ swedish ] = "Prio +";
+        Text[ polish ] = "Prio +";
+        Text[ portuguese_brazilian ] = "Prio +";
+        Text[ japanese ] = "Prio +";
+        Text[ korean ] = "Prio +";
+        Text[ chinese_simplified ] = "Prio +";
+        Text[ chinese_traditional ] = "Prio +";
+        Text[ turkish ] = "Prio +";
+        Text[ arabic ] = "Prio +";
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
     {
@@ -144,6 +216,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         TabStop = TRUE ;
         Text = "Prio -" ;
         Text [ English ] = "Prio -" ;
+        Text[ english_us ] = "Prio -";
+        Text[ portuguese ] = "Prio -";
+        Text[ russian ] = "Prio -";
+        Text[ greek ] = "Prio -";
+        Text[ dutch ] = "Prio -";
+        Text[ french ] = "Prio -";
+        Text[ spanish ] = "Prio -";
+        Text[ italian ] = "Prio -";
+        Text[ danish ] = "Prio -";
+        Text[ swedish ] = "Prio -";
+        Text[ polish ] = "Prio -";
+        Text[ portuguese_brazilian ] = "Prio -";
+        Text[ japanese ] = "Prio -";
+        Text[ korean ] = "Prio -";
+        Text[ chinese_simplified ] = "Prio -";
+        Text[ chinese_traditional ] = "Prio -";
+        Text[ turkish ] = "Prio -";
+        Text[ arabic ] = "Prio -";
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
     {
@@ -152,6 +242,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         TabStop = TRUE ;
         Text = "Zur¸ck" ;
         Text [ English ] = "Back" ;
+        Text[ english_us ] = "Back";
+        Text[ portuguese ] = "Back";
+        Text[ russian ] = "Back";
+        Text[ greek ] = "–ﬂÛ˘";
+        Text[ dutch ] = "Back";
+        Text[ french ] = "Back";
+        Text[ spanish ] = "Back";
+        Text[ italian ] = "Back";
+        Text[ danish ] = "Back";
+        Text[ swedish ] = "Tillbaka";
+        Text[ polish ] = "Back";
+        Text[ portuguese_brazilian ] = "Back";
+        Text[ japanese ] = "Back";
+        Text[ korean ] = "Back";
+        Text[ chinese_simplified ] = "Back";
+        Text[ chinese_traditional ] = "Back";
+        Text[ turkish ] = "Back";
+        Text[ arabic ] = "«·”«»ﬁ";
     };
 
     GroupBox GB_EDIT_MODULES_DICS
@@ -160,6 +268,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Size = MAP_APPFONT ( 237 , 70 ) ;
         Text = "Benutzerwˆrterb¸cher" ;
         Text [ ENGLISH ] = "Personal dictionaries" ;
+        Text[ english_us ] = "Personal dictionaries";
+        Text[ portuguese ] = "Personal dictionaries";
+        Text[ russian ] = "Personal dictionaries";
+        Text[ greek ] = "–ÒÔÛ˘ÈÍ‹ ÎÂÓÈÍ‹";
+        Text[ dutch ] = "Personal dictionaries";
+        Text[ french ] = "Personal dictionaries";
+        Text[ spanish ] = "Personal dictionaries";
+        Text[ italian ] = "Personal dictionaries";
+        Text[ danish ] = "Personal dictionaries";
+        Text[ swedish ] = "Anv‰ndarordbˆcker";
+        Text[ polish ] = "Personal dictionaries";
+        Text[ portuguese_brazilian ] = "Personal dictionaries";
+        Text[ japanese ] = "Personal dictionaries";
+        Text[ korean ] = "Personal dictionaries";
+        Text[ chinese_simplified ] = "Personal dictionaries";
+        Text[ chinese_traditional ] = "Personal dictionaries";
+        Text[ turkish ] = "Personal dictionaries";
+        Text[ arabic ] = "ﬁÊ«„Ì” «·„” Œœ„";
     };
     Control CLB_EDIT_MODULES_DICS
     {
@@ -175,6 +301,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         TabStop = TRUE ;
         Text = "Neu" ;
         Text [ English ] = "New" ;
+        Text[ english_us ] = "New";
+        Text[ portuguese ] = "New";
+        Text[ russian ] = "New";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
+        Text[ dutch ] = "New";
+        Text[ french ] = "New";
+        Text[ spanish ] = "New";
+        Text[ italian ] = "New";
+        Text[ danish ] = "New";
+        Text[ swedish ] = "Ny";
+        Text[ polish ] = "New";
+        Text[ portuguese_brazilian ] = "New";
+        Text[ japanese ] = "New";
+        Text[ korean ] = "New";
+        Text[ chinese_simplified ] = "New";
+        Text[ chinese_traditional ] = "New";
+        Text[ turkish ] = "New";
+        Text[ arabic ] = "ÃœÌœ";
     };
     PushButton PB_EDIT_MODULES_PRIO_EDIT_DIC
     {
@@ -183,6 +327,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         TabStop = TRUE ;
         Text = "Bearbeiten" ;
         Text [ English ] = "Edit" ;
+        Text[ english_us ] = "Edit";
+        Text[ portuguese ] = "Edit";
+        Text[ russian ] = "Edit";
+        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·";
+        Text[ dutch ] = "Edit";
+        Text[ french ] = "Edit";
+        Text[ spanish ] = "Edit";
+        Text[ italian ] = "Edit";
+        Text[ danish ] = "Edit";
+        Text[ swedish ] = "Redigera";
+        Text[ polish ] = "Edit";
+        Text[ portuguese_brazilian ] = "Edit";
+        Text[ japanese ] = "Edit";
+        Text[ korean ] = "Edit";
+        Text[ chinese_simplified ] = "Edit";
+        Text[ chinese_traditional ] = "Edit";
+        Text[ turkish ] = "Edit";
+        Text[ arabic ] = " Õ—Ì—";
     };
     PushButton PB_EDIT_MODULES_PRIO_DEL_DIC
     {
@@ -191,6 +353,24 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         TabStop = TRUE ;
         Text = "Lˆschen" ;
         Text [ English ] = "Delete" ;
+        Text[ english_us ] = "Delete";
+        Text[ portuguese ] = "Delete";
+        Text[ russian ] = "Delete";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ dutch ] = "Delete";
+        Text[ french ] = "Delete";
+        Text[ spanish ] = "Delete";
+        Text[ italian ] = "Delete";
+        Text[ danish ] = "Delete";
+        Text[ swedish ] = "Radera";
+        Text[ polish ] = "Delete";
+        Text[ portuguese_brazilian ] = "Delete";
+        Text[ japanese ] = "Delete";
+        Text[ korean ] = "Delete";
+        Text[ chinese_simplified ] = "Delete";
+        Text[ chinese_traditional ] = "Delete";
+        Text[ turkish ] = "Delete";
+        Text[ arabic ] = "Õ–›";
     };
 
     Bitmap BMP_CHKBUT_UNCHECKED
@@ -205,17 +385,89 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     {
         Text = "Rechtschreibung";
         Text [ English ] = "Spelling";
+        Text[ english_us ] = "Spelling";
+        Text[ portuguese ] = "Spelling";
+        Text[ russian ] = "Spelling";
+        Text[ greek ] = "Spelling";
+        Text[ dutch ] = "Spelling";
+        Text[ french ] = "Spelling";
+        Text[ spanish ] = "Spelling";
+        Text[ italian ] = "Spelling";
+        Text[ danish ] = "Spelling";
+        Text[ swedish ] = "R‰ttstavning";
+        Text[ polish ] = "Spelling";
+        Text[ portuguese_brazilian ] = "Spelling";
+        Text[ japanese ] = "Spelling";
+        Text[ korean ] = "Spelling";
+        Text[ chinese_simplified ] = "Spelling";
+        Text[ chinese_traditional ] = "Spelling";
+        Text[ turkish ] = "Spelling";
+        Text[ arabic ] = " œﬁÌﬁ ≈„·«∆Ì";
     };
     String ST_HYPH
     {
         Text = "Silbentrennung" ;
         Text [ English ] = "Hyphenation" ;
+        Text[ english_us ] = "Hyphenation";
+        Text[ portuguese ] = "Hyphenation";
+        Text[ russian ] = "Hyphenation";
+        Text[ greek ] = "”ıÎÎ·‚ÈÛÏ¸Ú";
+        Text[ dutch ] = "Hyphenation";
+        Text[ french ] = "Hyphenation";
+        Text[ spanish ] = "Hyphenation";
+        Text[ italian ] = "Hyphenation";
+        Text[ danish ] = "Hyphenation";
+        Text[ swedish ] = "Avstavning";
+        Text[ polish ] = "Hyphenation";
+        Text[ portuguese_brazilian ] = "Hyphenation";
+        Text[ japanese ] = "Hyphenation";
+        Text[ korean ] = "Hyphenation";
+        Text[ chinese_simplified ] = "Hyphenation";
+        Text[ chinese_traditional ] = "Hyphenation";
+        Text[ turkish ] = "Hyphenation";
+        Text[ arabic ] = "Hyphenation";
     };
     String ST_THES
     {
         Text = "Thesaurus" ;
         Text [ English ] = "Thesaurus" ;
+        Text[ english_us ] = "Thesaurus";
+        Text[ portuguese ] = "Thesaurus";
+        Text[ russian ] = "Thesaurus";
+        Text[ greek ] = "»ÁÛ·ıÒ¸Ú Î›ÓÂ˘Ì";
+        Text[ dutch ] = "Thesaurus";
+        Text[ french ] = "Thesaurus";
+        Text[ spanish ] = "Thesaurus";
+        Text[ italian ] = "Thesaurus";
+        Text[ danish ] = "Thesaurus";
+        Text[ swedish ] = "Synonymordlista";
+        Text[ polish ] = "Thesaurus";
+        Text[ portuguese_brazilian ] = "Thesaurus";
+        Text[ japanese ] = "Thesaurus";
+        Text[ korean ] = "Thesaurus";
+        Text[ chinese_simplified ] = "Thesaurus";
+        Text[ chinese_traditional ] = "Thesaurus";
+        Text[ turkish ] = "Thesaurus";
+        Text[ arabic ] = "ﬁ«„Ê” «·„—«œ›« ";
     };
+    Text[ english_us ] = "Edit modules";
+    Text[ portuguese ] = "Edit modules";
+    Text[ russian ] = "Edit modules";
+    Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ· ÎÂÈÙÔıÒ„ÈÍ˛Ì ÏÔÌ‹‰˘Ì";
+    Text[ dutch ] = "Edit modules";
+    Text[ french ] = "Edit modules";
+    Text[ spanish ] = "Edit modules";
+    Text[ italian ] = "Edit modules";
+    Text[ danish ] = "Edit modules";
+    Text[ swedish ] = "Redigera moduler";
+    Text[ polish ] = "Edit modules";
+    Text[ portuguese_brazilian ] = "Edit modules";
+    Text[ japanese ] = "Edit modules";
+    Text[ korean ] = "Edit modules";
+    Text[ chinese_simplified ] = "Edit modules";
+    Text[ chinese_traditional ] = "Edit modules";
+    Text[ turkish ] = "Edit modules";
+    Text[ arabic ] = " Õ—Ì— «·ÊÕœ«  «·‰„ÿÌ…";
 };
 
 // RID_SVXDLG_LNG_ED_NUM_PREBREAK -------------------------------------------
@@ -259,6 +511,24 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Spin = TRUE ;
         SpinSize = 1;
     };
+    Text[ english_us ] = "Hyphenation";
+    Text[ portuguese ] = "Hyphenation";
+    Text[ russian ] = "Hyphenation";
+    Text[ greek ] = "”ıÎÎ·‚ÈÛÏ¸Ú";
+    Text[ dutch ] = "Hyphenation";
+    Text[ french ] = "Hyphenation";
+    Text[ spanish ] = "Hyphenation";
+    Text[ italian ] = "Hyphenation";
+    Text[ danish ] = "Hyphenation";
+    Text[ swedish ] = "Avstavning";
+    Text[ polish ] = "Hyphenation";
+    Text[ portuguese_brazilian ] = "Hyphenation";
+    Text[ japanese ] = "Hyphenation";
+    Text[ korean ] = "Hyphenation";
+    Text[ chinese_simplified ] = "Hyphenation";
+    Text[ chinese_traditional ] = "Hyphenation";
+    Text[ turkish ] = "Hyphenation";
+    Text[ arabic ] = "Hyphenation";
 };
 
 // RID_SFXPAGE_LINGU --------------------------------------------------------
@@ -275,6 +545,24 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 248 , 130 ) ;
         Text = "Linguistik" ;
         Text [ ENGLISH ] = "Linguistic" ;
+        Text[ english_us ] = "Linguistic";
+        Text[ portuguese ] = "Linguistic";
+        Text[ russian ] = "Linguistic";
+        Text[ greek ] = "Linguistic";
+        Text[ dutch ] = "Linguistic";
+        Text[ french ] = "Linguistic";
+        Text[ spanish ] = "Linguistic";
+        Text[ italian ] = "Linguistic";
+        Text[ danish ] = "Linguistic";
+        Text[ swedish ] = "Lingvistik";
+        Text[ polish ] = "Linguistic";
+        Text[ portuguese_brazilian ] = "Linguistic";
+        Text[ japanese ] = "Linguistic";
+        Text[ korean ] = "Linguistic";
+        Text[ chinese_simplified ] = "Linguistic";
+        Text[ chinese_traditional ] = "Linguistic";
+        Text[ turkish ] = "Linguistic";
+        Text[ arabic ] = "«··€…";
     };
     FixedText FT_LINGU_MODULES
     {
@@ -283,6 +571,24 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 175 , 8 ) ;
         Text = "Verf¸gbare Sprachmodule:" ;
         Text [ English ] = "Available language modules:" ;
+        Text[ english_us ] = "Available language modules:";
+        Text[ portuguese ] = "Available language modules:";
+        Text[ russian ] = "Available language modules:";
+        Text[ greek ] = "ƒÈ·Ë›ÛÈÏÂÚ ÎÂÈÙÔıÒ„ÈÍ›Ú ÏÔÌ‹‰ÂÚ „Î˛ÛÛ·Ú:";
+        Text[ dutch ] = "Available language modules:";
+        Text[ french ] = "Available language modules:";
+        Text[ spanish ] = "Available language modules:";
+        Text[ italian ] = "Available language modules:";
+        Text[ danish ] = "Available language modules:";
+        Text[ swedish ] = "Tillg‰ngliga sprÂkmoduler:";
+        Text[ polish ] = "Available language modules:";
+        Text[ portuguese_brazilian ] = "Available language modules:";
+        Text[ japanese ] = "Available language modules:";
+        Text[ korean ] = "Available language modules:";
+        Text[ chinese_simplified ] = "Available language modules:";
+        Text[ chinese_traditional ] = "Available language modules:";
+        Text[ turkish ] = "Available language modules:";
+        Text[ arabic ] = "ÊÕœ«  «··€… «·‰„ÿÌ… «·„ Ê›—…:";
     };
     Control CLB_LINGU_MODULES
     {
@@ -298,6 +604,24 @@ TabPage RID_SFXPAGE_LINGU
         TabStop = TRUE ;
         Text = "~Bearbeiten..." ;
         Text [ English ] = "~Edit..." ;
+        Text[ english_us ] = "~Edit...";
+        Text[ portuguese ] = "~Edit...";
+        Text[ russian ] = "~Edit...";
+        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·...";
+        Text[ dutch ] = "~Edit...";
+        Text[ french ] = "~Edit...";
+        Text[ spanish ] = "~Edit...";
+        Text[ italian ] = "~Edit...";
+        Text[ danish ] = "~Edit...";
+        Text[ swedish ] = "R~edigera...";
+        Text[ polish ] = "~Edit...";
+        Text[ portuguese_brazilian ] = "~Edit...";
+        Text[ japanese ] = "~Edit...";
+        Text[ korean ] = "~Edit...";
+        Text[ chinese_simplified ] = "~Edit...";
+        Text[ chinese_traditional ] = "~Edit...";
+        Text[ turkish ] = "~Edit...";
+        Text[ arabic ] = " Õ—Ì—...";
     };
     FixedText FT_LINGU_OPTIONS
     {
@@ -306,6 +630,24 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 175 , 8 ) ;
         Text = "Optionen:" ;
         Text [ English ] = "Options:" ;
+        Text[ english_us ] = "Options:";
+        Text[ portuguese ] = "Options:";
+        Text[ russian ] = "Options:";
+        Text[ greek ] = "≈ÈÎÔ„›Ú:";
+        Text[ dutch ] = "Options:";
+        Text[ french ] = "Options:";
+        Text[ spanish ] = "Options:";
+        Text[ italian ] = "Options:";
+        Text[ danish ] = "Options:";
+        Text[ swedish ] = "Alternativ:";
+        Text[ polish ] = "Options:";
+        Text[ portuguese_brazilian ] = "Options:";
+        Text[ japanese ] = "Options:";
+        Text[ korean ] = "Options:";
+        Text[ chinese_simplified ] = "Options:";
+        Text[ chinese_traditional ] = "Options:";
+        Text[ turkish ] = "Options:";
+        Text[ arabic ] = "«·ŒÌ«—« :";
     };
     Control CLB_LINGU_OPTIONS
     {
@@ -321,67 +663,301 @@ TabPage RID_SFXPAGE_LINGU
         TabStop = TRUE ;
         Text = "B~earbeiten..." ;
         Text [ English ] = "E~dit..." ;
+        Text[ english_us ] = "E~dit...";
+        Text[ portuguese ] = "E~dit...";
+        Text[ russian ] = "E~dit...";
+        Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·...";
+        Text[ dutch ] = "E~dit...";
+        Text[ french ] = "E~dit...";
+        Text[ spanish ] = "E~dit...";
+        Text[ italian ] = "E~dit...";
+        Text[ danish ] = "E~dit...";
+        Text[ swedish ] = "Re~digera...";
+        Text[ polish ] = "E~dit...";
+        Text[ portuguese_brazilian ] = "E~dit...";
+        Text[ japanese ] = "E~dit...";
+        Text[ korean ] = "E~dit...";
+        Text[ chinese_simplified ] = "E~dit...";
+        Text[ chinese_traditional ] = "E~dit...";
+        Text[ turkish ] = "E~dit...";
+        Text[ arabic ] = " Õ—Ì—...";
     };
 
     String STR_CAPITAL_WORDS
     {
         Text = "Groﬂgeschriebene Wˆrter pr¸fen" ;
         Text[ ENGLISH ] = "Check uppercase words" ;
+        Text[ english_us ] = "Check uppercase words";
+        Text[ portuguese ] = "Check uppercase words";
+        Text[ russian ] = "Check uppercase words";
+        Text[ greek ] = "Check uppercase words";
+        Text[ dutch ] = "Check uppercase words";
+        Text[ french ] = "Check uppercase words";
+        Text[ spanish ] = "Check uppercase words";
+        Text[ italian ] = "Check uppercase words";
+        Text[ danish ] = "Check uppercase words";
+        Text[ swedish ] = "Kontrollera ord med stor bokst‰ver";
+        Text[ polish ] = "Check uppercase words";
+        Text[ portuguese_brazilian ] = "Check uppercase words";
+        Text[ japanese ] = "Check uppercase words";
+        Text[ korean ] = "Check uppercase words";
+        Text[ chinese_simplified ] = "Check uppercase words";
+        Text[ chinese_traditional ] = "Check uppercase words";
+        Text[ turkish ] = "Check uppercase words";
+        Text[ arabic ] = " œﬁÌﬁ «·ﬂ·„«  «·„ﬂ Ê»… »√Õ—› ﬂ»Ì—…";
     };
     String STR_WORDS_WITH_DIGITS
     {
         Text = "Wˆrter mit Ziffern pr¸fen" ;
         Text[ ENGLISH ] = "Check words with numbers " ;
+        Text[ english_us ] = "Check words with numbers ";
+        Text[ portuguese ] = "Check words with numbers ";
+        Text[ russian ] = "Check words with numbers ";
+        Text[ greek ] = "Check words with numbers ";
+        Text[ dutch ] = "Check words with numbers ";
+        Text[ french ] = "Check words with numbers ";
+        Text[ spanish ] = "Check words with numbers ";
+        Text[ italian ] = "Check words with numbers ";
+        Text[ danish ] = "Check words with numbers ";
+        Text[ swedish ] = "Kontrollera ord med siffror";
+        Text[ polish ] = "Check words with numbers ";
+        Text[ portuguese_brazilian ] = "Check words with numbers ";
+        Text[ japanese ] = "Check words with numbers ";
+        Text[ korean ] = "Check words with numbers ";
+        Text[ chinese_simplified ] = "Check words with numbers ";
+        Text[ chinese_traditional ] = "Check words with numbers ";
+        Text[ turkish ] = "Check words with numbers ";
+        Text[ arabic ] = " œﬁÌﬁ «·ﬂ·„«  «· Ì  Õ ÊÌ ⁄·Ï √—ﬁ«„";
     };
     String STR_CAPITALIZATION
     {
         Text = "Groﬂ-/Kleinschreibung pr¸fen" ;
         Text[ ENGLISH ] = "Check capitalization of words" ;
+        Text[ english_us ] = "Check capitalization words";
+        Text[ portuguese ] = "Check capitalization words";
+        Text[ russian ] = "Check capitalization words";
+        Text[ greek ] = "Check capitalization words";
+        Text[ dutch ] = "Check capitalization words";
+        Text[ french ] = "Check capitalization words";
+        Text[ spanish ] = "Check capitalization words";
+        Text[ italian ] = "Check capitalization words";
+        Text[ danish ] = "Check capitalization words";
+        Text[ swedish ] = "Kontrollera stor och liten bokstav";
+        Text[ polish ] = "Check capitalization words";
+        Text[ portuguese_brazilian ] = "Check capitalization words";
+        Text[ japanese ] = "Check capitalization words";
+        Text[ korean ] = "Check capitalization words";
+        Text[ chinese_simplified ] = "Check capitalization words";
+        Text[ chinese_traditional ] = "Check capitalization words";
+        Text[ turkish ] = "Check capitalization words";
+        Text[ arabic ] = " œﬁÌﬁ «·ﬂ «»… »√Õ—› ﬂ»Ì—… √Ê ’€Ì—…";
     };
     String STR_SPELL_SPECIAL
     {
         Text = "Sonderbereiche pr¸fen" ;
         Text[ English ] = "Proof special regions" ;
+        Text[ english_us ] = "Proof special regions";
+        Text[ portuguese ] = "Proof special regions";
+        Text[ russian ] = "Proof special regions";
+        Text[ greek ] = "Proof special regions";
+        Text[ dutch ] = "Proof special regions";
+        Text[ french ] = "Proof special regions";
+        Text[ spanish ] = "Proof special regions";
+        Text[ italian ] = "Proof special regions";
+        Text[ danish ] = "Proof special regions";
+        Text[ swedish ] = "Kontrollera specialomrÂden";
+        Text[ polish ] = "Proof special regions";
+        Text[ portuguese_brazilian ] = "Proof special regions";
+        Text[ japanese ] = "Proof special regions";
+        Text[ korean ] = "Proof special regions";
+        Text[ chinese_simplified ] = "Proof special regions";
+        Text[ chinese_traditional ] = "Proof special regions";
+        Text[ turkish ] = "Proof special regions";
+        Text[ arabic ] = " œﬁÌﬁ «·„‰«ÿﬁ «·Œ«’…";
     };
     String STR_ALL_LANGUAGES
     {
         Text = "In allen Sprachen pr¸fen" ;
         Text[ English ] = "Spell in all languages" ;
+        Text[ english_us ] = "Spell in all languages";
+        Text[ portuguese ] = "Spell in all languages";
+        Text[ russian ] = "Spell in all languages";
+        Text[ greek ] = "Spell in all languages";
+        Text[ dutch ] = "Spell in all languages";
+        Text[ french ] = "Spell in all languages";
+        Text[ spanish ] = "Spell in all languages";
+        Text[ italian ] = "Spell in all languages";
+        Text[ danish ] = "Spell in all languages";
+        Text[ swedish ] = "Kontrollera i alla sprÂk";
+        Text[ polish ] = "Spell in all languages";
+        Text[ portuguese_brazilian ] = "Spell in all languages";
+        Text[ japanese ] = "Spell in all languages";
+        Text[ korean ] = "Spell in all languages";
+        Text[ chinese_simplified ] = "Spell in all languages";
+        Text[ chinese_traditional ] = "Spell in all languages";
+        Text[ turkish ] = "Spell in all languages";
+        Text[ arabic ] = "«· œﬁÌﬁ ›Ì ﬂ· «··€« ";
     };
     String STR_SPELL_AUTO
     {
         Text = "Automatische Pr¸fung" ;
         Text[ English ] = "Online Checking" ;
+        Text[ english_us ] = "Online Checking";
+        Text[ portuguese ] = "Online Checking";
+        Text[ russian ] = "Online Checking";
+        Text[ greek ] = "¡ıÙ¸Ï·ÙÔÚ ›ÎÂ„˜ÔÚ";
+        Text[ dutch ] = "Online Checking";
+        Text[ french ] = "Online Checking";
+        Text[ spanish ] = "Online Checking";
+        Text[ italian ] = "Online Checking";
+        Text[ danish ] = "Online Checking";
+        Text[ swedish ] = "Automatisk kontroll";
+        Text[ polish ] = "Online Checking";
+        Text[ portuguese_brazilian ] = "Online Checking";
+        Text[ japanese ] = "Online Checking";
+        Text[ korean ] = "Online Checking";
+        Text[ chinese_simplified ] = "Online Checking";
+        Text[ chinese_traditional ] = "Online Checking";
+        Text[ turkish ] = "Online Checking";
+        Text[ arabic ] = " œﬁÌﬁ  ·ﬁ«∆Ì";
     };
     String STR_HIDE_MARKINGS
     {
         Text = "Kennung ausblenden" ;
         Text[ English ] = "Hide the marking" ;
+        Text[ english_us ] = "Hide the marking";
+        Text[ portuguese ] = "Hide the marking";
+        Text[ russian ] = "Hide the marking";
+        Text[ greek ] = "Hide the marking";
+        Text[ dutch ] = "Hide the marking";
+        Text[ french ] = "Hide the marking";
+        Text[ spanish ] = "Hide the marking";
+        Text[ italian ] = "Hide the marking";
+        Text[ danish ] = "Hide the marking";
+        Text[ swedish ] = "Dˆlj felmarkering";
+        Text[ polish ] = "Hide the marking";
+        Text[ portuguese_brazilian ] = "Hide the marking";
+        Text[ japanese ] = "Hide the marking";
+        Text[ korean ] = "Hide the marking";
+        Text[ chinese_simplified ] = "Hide the marking";
+        Text[ chinese_traditional ] = "Hide the marking";
+        Text[ turkish ] = "Hide the marking";
+        Text[ arabic ] = "⁄œ„  ÕœÌœ «·√Œÿ«¡";
     };
     String STR_OLD_GERMAN
     {
         Text = "Alte deutsche Rechtschreibung" ;
         Text[ English ] = "Pre reform german spelling" ;
+        Text[ english_us ] = "Pre reform german spelling";
+        Text[ portuguese ] = "Pre reform german spelling";
+        Text[ russian ] = "Pre reform german spelling";
+        Text[ greek ] = "Pre reform german spelling";
+        Text[ dutch ] = "Pre reform german spelling";
+        Text[ french ] = "Pre reform german spelling";
+        Text[ spanish ] = "Pre reform german spelling";
+        Text[ italian ] = "Pre reform german spelling";
+        Text[ danish ] = "Pre reform german spelling";
+        Text[ swedish ] = "Gammal tysk r‰ttstavning";
+        Text[ polish ] = "Pre reform german spelling";
+        Text[ portuguese_brazilian ] = "Pre reform german spelling";
+        Text[ japanese ] = "Pre reform german spelling";
+        Text[ korean ] = "Pre reform german spelling";
+        Text[ chinese_simplified ] = "Pre reform german spelling";
+        Text[ chinese_traditional ] = "Pre reform german spelling";
+        Text[ turkish ] = "Pre reform german spelling";
+        Text[ arabic ] = " œﬁÌﬁ ≈„·«∆Ì √·„«‰Ì ﬁœÌ„";
     };
     String STR_NUM_PRE_BREAK
     {
         Text = "Zeichen vor dem Umbruch: " ;
         Text[ ENGLISH ] = "Characters before hyphenation: " ;
+        Text[ english_us ] = "Characters before hyphenation";
+        Text[ portuguese ] = "Characters before hyphenation";
+        Text[ russian ] = "Characters before hyphenation";
+        Text[ greek ] = "Characters before hyphenation";
+        Text[ dutch ] = "Characters before hyphenation";
+        Text[ french ] = "Characters before hyphenation";
+        Text[ spanish ] = "Characters before hyphenation";
+        Text[ italian ] = "Characters before hyphenation";
+        Text[ danish ] = "Characters before hyphenation";
+        Text[ swedish ] = "Tecken fˆre brytning";
+        Text[ polish ] = "Characters before hyphenation";
+        Text[ portuguese_brazilian ] = "Characters before hyphenation";
+        Text[ japanese ] = "Characters before hyphenation";
+        Text[ korean ] = "Characters before hyphenation";
+        Text[ chinese_simplified ] = "Characters before hyphenation";
+        Text[ chinese_traditional ] = "Characters before hyphenation";
+        Text[ turkish ] = "Characters before hyphenation";
+        Text[ arabic ] = "Characters before hyphenation";
     };
     String STR_NUM_POST_BREAK
     {
         Text = "Zeichen nach dem Umbruch: " ;
         Text[ ENGLISH ] = "Characters behind hyphenation: " ;
+        Text[ english_us ] = "Characters behind hyphenation";
+        Text[ portuguese ] = "Characters behind hyphenation";
+        Text[ russian ] = "Characters behind hyphenation";
+        Text[ greek ] = "Characters behind hyphenation";
+        Text[ dutch ] = "Characters behind hyphenation";
+        Text[ french ] = "Characters behind hyphenation";
+        Text[ spanish ] = "Characters behind hyphenation";
+        Text[ italian ] = "Characters behind hyphenation";
+        Text[ danish ] = "Characters behind hyphenation";
+        Text[ swedish ] = "Tecken efter brytning";
+        Text[ polish ] = "Characters behind hyphenation";
+        Text[ portuguese_brazilian ] = "Characters behind hyphenation";
+        Text[ japanese ] = "Characters behind hyphenation";
+        Text[ korean ] = "Characters behind hyphenation";
+        Text[ chinese_simplified ] = "Characters behind hyphenation";
+        Text[ chinese_traditional ] = "Characters behind hyphenation";
+        Text[ turkish ] = "Characters behind hyphenation";
+        Text[ arabic ] = "Characters behind hyphenation";
     };
     String STR_HYPH_AUTO
     {
         Text = "Trennen ohne Nachfrage" ;
         Text[ ENGLISH ] = "Hyphenation without interaction" ;
+        Text[ english_us ] = "Hyphenation without interaction";
+        Text[ portuguese ] = "Hyphenation without interaction";
+        Text[ russian ] = "Hyphenation without interaction";
+        Text[ greek ] = "Hyphenation without interaction";
+        Text[ dutch ] = "Hyphenation without interaction";
+        Text[ french ] = "Hyphenation without interaction";
+        Text[ spanish ] = "Hyphenation without interaction";
+        Text[ italian ] = "Hyphenation without interaction";
+        Text[ danish ] = "Hyphenation without interaction";
+        Text[ swedish ] = "Automatisk avstavning";
+        Text[ polish ] = "Hyphenation without interaction";
+        Text[ portuguese_brazilian ] = "Hyphenation without interaction";
+        Text[ japanese ] = "Hyphenation without interaction";
+        Text[ korean ] = "Hyphenation without interaction";
+        Text[ chinese_simplified ] = "Hyphenation without interaction";
+        Text[ chinese_traditional ] = "Hyphenation without interaction";
+        Text[ turkish ] = "Hyphenation without interaction";
+        Text[ arabic ] = "Hyphenation without interaction";
     };
     String STR_HYPH_SPECIAL
     {
         Text = "Sonderbereiche trennen" ;
         Text[ ENGLISH ] = "Hyphenate special regions" ;
+        Text[ english_us ] = "Hyphenate special regions";
+        Text[ portuguese ] = "Hyphenate special regions";
+        Text[ russian ] = "Hyphenate special regions";
+        Text[ greek ] = "Hyphenate special regions";
+        Text[ dutch ] = "Hyphenate special regions";
+        Text[ french ] = "Hyphenate special regions";
+        Text[ spanish ] = "Hyphenate special regions";
+        Text[ italian ] = "Hyphenate special regions";
+        Text[ danish ] = "Hyphenate special regions";
+        Text[ swedish ] = "Avstava specialomrÂden";
+        Text[ polish ] = "Hyphenate special regions";
+        Text[ portuguese_brazilian ] = "Hyphenate special regions";
+        Text[ japanese ] = "Hyphenate special regions";
+        Text[ korean ] = "Hyphenate special regions";
+        Text[ chinese_simplified ] = "Hyphenate special regions";
+        Text[ chinese_traditional ] = "Hyphenate special regions";
+        Text[ turkish ] = "Hyphenate special regions";
+        Text[ arabic ] = "Hyphenate special regions";
     };
 
     Bitmap BMP_CHKBUT_UNCHECKED
