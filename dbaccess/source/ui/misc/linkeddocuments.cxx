@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 14:10:12 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#include <com/sun/star/task/XJobExecutor.hpp>
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
@@ -149,7 +150,9 @@
 #ifndef _DBU_MISCRES_HRC_
 #include "dbumiscres.hrc"
 #endif
-
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
 //......................................................................
 namespace dbaui
 {
@@ -163,6 +166,7 @@ namespace dbaui
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::task;
 
     //==================================================================
     //= OLinkedDocumentsAccess
@@ -508,7 +512,33 @@ namespace dbaui
 
         return ERRCODE_NONE != aResult;
     }
+    //------------------------------------------------------------------
+    sal_Bool OLinkedDocumentsAccess::newReportWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
+        const String& _rObjectName, const Reference< XConnection >& _rxConnection)
+    {
+        try
+        {
+            ::svx::ODataAccessDescriptor aDesc;
+            if ( _rDataSourceName.Len() )
+                aDesc[::svx::daDataSource] <<= ::rtl::OUString(_rDataSourceName);
+            if ( _nCommandType != -1 )
+                aDesc[::svx::daCommandType] <<= _nCommandType;
+            if ( _rObjectName.Len() )
+                aDesc[::svx::daCommand] <<= ::rtl::OUString(_rObjectName);
+            if ( _rxConnection.is() )
+                aDesc[::svx::daConnection] <<= _rxConnection;
 
+            Reference< XJobExecutor > xReportWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            if ( xReportWizard.is() )
+                xReportWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newReport: caught an exception while loading the object!");
+        }
+        return sal_True;
+    }
     //------------------------------------------------------------------
     sal_Bool OLinkedDocumentsAccess::newForm(sal_Int32 _nNewFormId)
     {
@@ -628,6 +658,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/16 14:10:12  fs
+ *  #88813# +newFormWithPilot
+ *
  *  Revision 1.2  2001/08/07 14:37:48  fs
  *  #87029# use the new template dialog for selecting a template
  *
