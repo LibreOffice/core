@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:44:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,9 @@ class TextConvWrapper : public svx::HangulHanjaConversion
     EditView *      pEditView;
     Window *        pWin;
 
-    LanguageType    nLang;
+//    LanguageType    nSourceLang;    // Language of text portions to look for
+//    LanguageType    nTargetLang;    // Language of replacement text
+
     sal_Bool        bStartChk;
     sal_Bool        bStartDone;
     sal_Bool        bEndDone;
@@ -122,7 +124,11 @@ protected:
 public:
     TextConvWrapper( Window* pWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF,
-            const ::com::sun::star::lang::Locale& rLocale,
+            const ::com::sun::star::lang::Locale& rSourceLocale,
+            const ::com::sun::star::lang::Locale& rTargetLocale,
+            const Font* pTargetFont,
+            INT32 nOptions,
+            sal_Bool bIsInteractive,
             BOOL bIsStart, EditView* pView );
 
     virtual ~TextConvWrapper();
