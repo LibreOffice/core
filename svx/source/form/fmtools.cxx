@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:52:51 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 11:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1862,11 +1862,11 @@ void SAL_CALL FmSlotDispatch::removeEventListener( const Reference< ::com::sun::
 }
 
 //------------------------------------------------------------------------------
-void FmSlotDispatch::StateChanged(sal_Int16 nSID, SfxItemState eState, const SfxPoolItem* pState)
+void FmSlotDispatch::StateChanged(USHORT _nSID, SfxItemState _eState, const SfxPoolItem* _pState)
 {
-    DBG_ASSERT(nSID == m_nSlot, "FmSlotDispatch::StateChanged : where did this come from ?");
+    DBG_ASSERT(_nSID == m_nSlot, "FmSlotDispatch::StateChanged : where did this come from ?");
 
-    ::com::sun::star::frame::FeatureStateEvent eEvent = BuildEvent(eState, pState);
+    ::com::sun::star::frame::FeatureStateEvent eEvent = BuildEvent(_eState, _pState);
     NOTIFY_LISTENERS(m_aStatusListeners, ::com::sun::star::frame::XStatusListener, statusChanged, eEvent);
 }
 
@@ -1874,7 +1874,7 @@ void FmSlotDispatch::StateChanged(sal_Int16 nSID, SfxItemState eState, const Sfx
 ::com::sun::star::frame::FeatureStateEvent FmSlotDispatch::BuildEvent(SfxItemState eState, const SfxPoolItem* pState)
 {
     ::com::sun::star::frame::FeatureStateEvent aReturn;
-    aReturn.Source = (Reference< XInterface >)(*this);
+    aReturn.Source = static_cast< ::cppu::OWeakObject* >( this );
     aReturn.FeatureURL = m_aUrl;
     aReturn.IsEnabled = (SFX_ITEM_DISABLED != eState) && m_aExecutor.IsSet();
     aReturn.Requery = sal_False;

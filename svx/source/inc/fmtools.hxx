@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:40:36 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 11:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ public:
 
 protected:
     // SfxControllerItem
-    virtual void StateChanged(sal_Int16 nSID, SfxItemState eState, const SfxPoolItem* pState);
+    virtual void StateChanged(USHORT _nSID, SfxItemState _eState, const SfxPoolItem* _pState);
 
     ::com::sun::star::frame::FeatureStateEvent BuildEvent(SfxItemState eState, const SfxPoolItem* pState);
 
