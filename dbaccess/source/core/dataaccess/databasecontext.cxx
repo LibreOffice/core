@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:00:17 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 07:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,24 @@ namespace dbaccess
 {
 //........................................................................
 
+    namespace
+    {
+        Reference< XEventListener > addHelperListener(ODatabaseContext* _pDatabaseContext,const Reference< XInterface >& _xComponent)
+        {
+            Reference< XEventListener > xListenerHelper;
+            Reference< XComponent > xComponent(_xComponent, UNO_QUERY);
+            if (xComponent.is())
+            {
+                xListenerHelper = new ::comphelper::OEventListenerHelper(static_cast<XEventListener*>(_pDatabaseContext));
+                xComponent->addEventListener(xListenerHelper);
+            }
+            else
+                DBG_ERROR("ODatabaseContext::getRegisteredObject: missing the XComponent interface!");
+
+            return xListenerHelper;
+        }
+    }
+
 //============================================================
 //= ODatabaseContext
 //==========================================================================
@@ -274,8 +292,9 @@ void ODatabaseContext::disposing()
             ++aIter
         )
     {
-        Reference< XComponent > xComp(aIter->second.get(), UNO_QUERY);
-        if (xComp.is())
+        aIter->second.second = WeakReferenceHelper();
+        Reference< XComponent > xComp(aIter->second.first.get(), UNO_QUERY);
+        if ( xComp.is() )
             xComp->dispose();
     }
     m_aDatabaseObjects.clear();
@@ -294,7 +313,7 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     ObjectCacheIterator aExistent = m_aDatabaseObjects.find(_rName);
     if (aExistent != m_aDatabaseObjects.end())
     {
-        Reference< XInterface > xExistent = aExistent->second.get();
+        Reference< XInterface > xExistent = aExistent->second.first.get();
         if (xExistent.is())
             return xExistent;
         // the adapter still exists, but the object is already dead
@@ -306,7 +325,11 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
         throw NoSuchElementException((::rtl::OUString::createFromAscii("There is no object named ") += _rName) += ::rtl::OUString::createFromAscii("."), Reference<XNamingService>(this));
 
     Reference< XInterface > xNewObject = *(new ODatabaseSource(*this, aObjectBase, _rName, m_xServiceManager));
-    m_aDatabaseObjects[_rName] = WeakReferenceHelper(xNewObject);
+    // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
+    // properties
+    Reference< XEventListener > xListenerHelper = addHelperListener(this,xNewObject);
+
+    m_aDatabaseObjects.insert(ObjectCache::value_type(_rName,ObjectCacheType(WeakReferenceHelper(xNewObject),WeakReferenceHelper(xListenerHelper))));
 
     // check if we have any session persistent properties to initialize the new object with
     if (m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_rName))
@@ -333,16 +356,7 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
             DBG_ERROR("ODatabaseContext::getRegisteredObject: missing an interface!");
     }
 
-    // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
-    // properties
-    Reference< XComponent > xComponent(xNewObject, UNO_QUERY);
-    if (xComponent.is())
-    {
-        ::comphelper::OEventListenerHelper* pHelper = new ::comphelper::OEventListenerHelper(static_cast<XEventListener*>(this));
-        xComponent->addEventListener(pHelper);
-    }
-    else
-        DBG_ERROR("ODatabaseContext::getRegisteredObject: missing the XComponent interface!");
+
 
     return xNewObject;
 }
@@ -419,16 +433,11 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     pObjectImpl->inserted(*this, _rName, aObjectNode.cloneAsRoot());
     pObjectImpl->flush();
 
-    // add the object to our bag
-    m_aDatabaseObjects[_rName] = WeakReferenceHelper(_rxObject);
-
     // add as dispose listener to the data source object, so we know when it's dying to save the session-persistent
     // properties
-    Reference< XComponent > xComponent(_rxObject, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->addEventListener(static_cast<XEventListener*>(this));
-    else
-        DBG_ERROR("ODatabaseContext::registerObject: missing the XComponent interface!");
+    Reference< XEventListener > xListenerHelper = addHelperListener(this,_rxObject);
+    // add the object to our bag
+    m_aDatabaseObjects[_rName] = ObjectCacheType(WeakReferenceHelper(_rxObject),WeakReferenceHelper(xListenerHelper));
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), makeAny(_rxObject), Any());
@@ -449,7 +458,8 @@ void SAL_CALL ODatabaseContext::disposing( const EventObject& _rSource ) throw(R
             ++aLookup
         )
     {
-        if (Reference< XInterface >(aLookup->second.get(), UNO_QUERY).get() == xSource.get())
+        Reference< XInterface > xDataSource(aLookup->second.first.get(), UNO_QUERY);
+        if ( xDataSource == xSource )
             break;
     }
     DBG_ASSERT(aLookup != m_aDatabaseObjects.end(), "ODatabaseContext::disposing(EventObject): where does this come from (not from my data sources)?");
@@ -523,13 +533,15 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     sal_Bool bAlreadyAccessed = aExistent != m_aDatabaseObjects.end();
     if (bAlreadyAccessed)
     {
-        xExistent = aExistent->second.get();
+        xExistent = aExistent->second.first.get();
         if (xExistent.is())
         {
             Reference< XComponent > xComponent(xExistent, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->removeEventListener(static_cast<XEventListener*>(this));
-
+            if ( xComponent.is() )
+            {
+                Reference<XEventListener> xListenerHelper(aExistent->second.second.get(),UNO_QUERY);
+                xComponent->removeEventListener(xListenerHelper);
+            }
             // solaris compiler needs a construct like this and can't work with comphelper::getImplementation ...
             Reference< XUnoTunnel > xTunnel(xExistent, UNO_QUERY);
             ODatabaseSource* pObjectImpl = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-27 08:42:15 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 07:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceManager;
     ::utl::OConfigurationTreeRoot                                                               m_aRootNode;
 
-    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::WeakReferenceHelper, ObjectCache );
+    typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper > ObjectCacheType;
+    DECLARE_STL_USTRINGACCESS_MAP( ObjectCacheType, ObjectCache );
     ObjectCache     m_aDatabaseObjects;
 
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >, PropertyCache );
