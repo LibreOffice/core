@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:36:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 11:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #define NO_DEBUG_CRT
 
 #include <osl/diagnose.h>
+#include< osl/thread.h>
 
 #define NO_DEBUG_CRT
 
@@ -107,6 +108,14 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
     fprintf(stderr,"Trace Message : ");
 #endif
 #endif
+
+    if ( IsDebuggerPresent() )
+    {
+        sal_Char    szMessage[512];
+        szMessage[sizeof(szMessage)-1] = 0;
+        _vsnprintf( szMessage, sizeof(szMessage) -1, lpszFormat, args );
+        OutputDebugString( szMessage );
+    }
 
     vfprintf(stderr,lpszFormat, args);
 
