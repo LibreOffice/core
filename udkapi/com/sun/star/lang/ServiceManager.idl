@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 15:32:25 $
+ *  last change: $Author: dbo $ $Date: 2001-06-13 10:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 #endif
 
+#ifndef __com_sun_star_lang_XMultiComponentFactory_idl__
+#include <com/sun/star/lang/XMultiComponentFactory.idl>
+#endif
+
 #ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
 #endif
@@ -126,9 +130,7 @@ module com {  module sun {  module star {  module lang {
  */
 service ServiceManager
 {
-    // DocMerge: empty anyway
     service com::sun::star::lang::MultiServiceFactory;
-
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XComponent
     /** Normally you should call the method
@@ -180,6 +182,9 @@ service ServiceManager
      */
     interface com::sun::star::lang::XMultiServiceFactory;
 
+    /** Use this interface to raise services giving a <type>com.sun.star.uno.XComponentContext</type>.
+     */
+    interface com::sun::star::lang::XMultiComponentFactory;
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XServiceInfo
     /** Services should always support this interface. For a
@@ -197,6 +202,9 @@ service ServiceManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/19 15:32:25  mi
+    documentation syntax fixed
+
     Revision 1.5  2000/12/13 15:47:00  mi
     symtactical documentation and minor semantic documentation flaws fixed
 
