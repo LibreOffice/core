@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-10 18:39:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2066,7 +2066,7 @@ void Desktop::OpenDefault()
         else if ( pArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
         else if ( pArgs->IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DATABASE );
+            aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service:com.sun.star.sdb.DatabaseWizardDialog"));
         else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
         else if ( pArgs->IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
@@ -2087,7 +2087,7 @@ void Desktop::OpenDefault()
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DATABASE );
+            aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service:com.sun.star.sdb.DatabaseWizardDialog"));
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
         else
@@ -2100,31 +2100,72 @@ void Desktop::OpenDefault()
             OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY );
 
-    Reference<XComponent> aComp;
-    try
+    // TODO: the dispatch has to be done for loadComponentFromURL as well. Please ask AS for moer detail.
+    if ( !aName.compareToAscii( "service:"  , 8 ) )
     {
-        aComp = Reference< XComponent >(xDesktop->loadComponentFromURL(
-            aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs ), UNO_QUERY);
-    }
-    catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
-    {
-        OUString aMsg = OUString::createFromAscii(
-            "Desktop::OpenDefault() IllegalArgumentException while calling loadComponentFromURL: ")
-            + iae.Message;
-        OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
-    }
-    catch (com::sun::star::io::IOException& ioe)
-    {
-        OUString aMsg = OUString::createFromAscii(
-            "Desktop::OpenDefault() IOException while calling loadComponentFromURL: ")
-            + ioe.Message;
-        OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
-    }
+        URL             aURL ;
+        aURL.Complete = aName;
 
-    // shut down again if no component could be loaded
-    OSL_ENSURE(aComp.is(), "Desktop::OpenDesfault(), no component was loaded.");
-    if (!aComp.is())
-        Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
+        Reference < XDispatch >         xDispatcher ;
+        Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
+        Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
+
+        if( xParser.is() == sal_True )
+            xParser->parseStrict( aURL );
+
+        if( xProvider.is() == sal_True )
+            xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+
+        if( xDispatcher.is() == sal_True )
+        {
+            try
+            {
+                // We have to be listener to catch errors during dispatching URLs.
+                // Otherwise it would be possible to have an office running without an open
+                // window!!
+                Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
+                if ( xDisp.is() )
+                    xDisp->dispatchWithNotification( aURL, aNoArgs, DispatchWatcher::GetDispatchWatcher() );
+                else
+                    xDispatcher->dispatch( aURL, aNoArgs );
+            }
+            catch ( ::com::sun::star::uno::Exception& )
+            {
+                OUString aMsg = OUString::createFromAscii(
+                    "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: ");
+                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+            }
+        }
+    }
+    else
+    {
+
+
+        Reference<XComponent> aComp;
+        try
+        {
+            aComp = Reference< XComponent >(xDesktop->loadComponentFromURL(
+                aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs ), UNO_QUERY);
+        }
+        catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
+        {
+            OUString aMsg = OUString::createFromAscii(
+                "Desktop::OpenDefault() IllegalArgumentException while calling loadComponentFromURL: ")
+                + iae.Message;
+            OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+        }
+        catch (com::sun::star::io::IOException& ioe)
+        {
+            OUString aMsg = OUString::createFromAscii(
+                "Desktop::OpenDefault() IOException while calling loadComponentFromURL: ")
+                + ioe.Message;
+            OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+        }
+        // shut down again if no component could be loaded
+        OSL_ENSURE(aComp.is(), "Desktop::OpenDesfault(), no component was loaded.");
+        if (!aComp.is())
+            Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
+    }
 }
 
 
@@ -2133,6 +2174,11 @@ String GetURL_Impl( const String& rName )
     // if rName is a vnd.sun.star.script URL do not attempt to parse it
     // as INetURLObj does not handle handle there URLs
     if (rName.CompareToAscii("vnd.sun.star.script" , 19) == COMPARE_EQUAL)
+    {
+        return rName;
+    }
+
+    if ( rName.CompareToAscii("service:" , 8) == COMPARE_EQUAL )
     {
         return rName;
     }
