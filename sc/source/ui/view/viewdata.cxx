@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 17:34:19 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 08:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,6 @@
 #include <svx/editstat.hxx>
 #include <svx/outliner.hxx>
 #include <offmgr/app.hxx>
-
-#ifdef ONE_LINGU
-#else
-#include <offmgr/osplcfg.hxx>
-#endif
 
 #include <vcl/system.hxx>
 
@@ -2097,27 +2092,10 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
     //  #66115# Der Speller muss auch gesetzt werden, wenn Online-Spelling aus ist,
     //  weil die EditEngine sich vom Speller die Sprache fuer AutoKorrektur holt
 
-#ifdef ONE_LINGU
     //! no way to set the outliner's spelling language?
     //  (may not bee needed - default language is always used)
 
     rOutl.SetSpeller( OFF_APP()->GetSpellChecker() );
-#else
-    SpellCheck& rSpeller = *OFF_APP()->GetSpellChecker();
-    if ( bOnlineSpell )
-    {
-        if (!rSpeller.LoadDll())
-        {
-            //! Fehlermeldung?
-        }
-    }
-    //  Zeichenobjekt hat keine eigene Sprache...
-    LanguageType eLang = (LanguageType) rSpeller.GetDefaultLanguage();
-    if ( eLang == LANGUAGE_SYSTEM )
-        eLang = System::GetLanguage();          // Spelling nie mit SYSTEM
-    rSpeller.SetActualLanguage( eLang );
-    rOutl.SetSpeller(&rSpeller);
-#endif
 }
 
 ScAddress ScViewData::GetCurPos() const

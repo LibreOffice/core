@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:06 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 08:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,7 @@
 #include <offmgr/app.hxx>
 #include <sfx2/misccfg.hxx>
 
-#ifdef ONE_LINGU
-#else
 #include <offmgr/osplcfg.hxx>
-#endif
 
 #include <vcl/msgbox.hxx>
 #include <vcl/system.hxx>
@@ -704,30 +701,18 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
                             ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
                 pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
-#ifdef ONE_LINGU
                 pEngine->SetSpeller( OFF_APP()->GetSpellChecker() );
-#endif
             }
 
             const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
             pPattern->FillEditItemSet( pDefaults );
             pEngine->SetDefaults( pDefaults, FALSE );               //! noetig ?
 
-#ifdef ONE_LINGU
             USHORT nCellLang = ((const SvxLanguageItem&)
                                     pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
             if ( nCellLang == LANGUAGE_SYSTEM )
                 nCellLang = System::GetLanguage();          // never use SYSTEM for spelling
             pEngine->SetDefaultLanguage( nCellLang );
-#else
-            SpellCheck& rSpeller = *OFF_APP()->GetSpellChecker();
-            USHORT nCellLang = ((const SvxLanguageItem&)
-                                    pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
-            if ( nCellLang == LANGUAGE_SYSTEM )
-                nCellLang = System::GetLanguage();          // Spelling nie mit SYSTEM
-            rSpeller.SetActualLanguage( nCellLang );
-            pEngine->SetSpeller(&rSpeller);
-#endif
 
             if ( eType == CELLTYPE_STRING )
             {

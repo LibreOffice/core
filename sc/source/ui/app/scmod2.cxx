@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:09:23 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 08:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
-
-#ifdef ONE_LINGU
 
 #include <comphelper/processfactory.hxx>
 #include <vos/xception.hxx>
@@ -203,10 +201,5 @@ BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
 
     return bHasLang;
 }
-
-
-#endif  // ONE_LINGU
-
-
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 08:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,6 @@
 //#include <svx/postdlg.hxx>
 #include <svx/sizeitem.hxx>
 #include <offmgr/app.hxx>
-
-#ifdef ONE_LINGU
-#else
-#include <offmgr/osplcfg.hxx>
-#endif
 
 #include <sfx2/misccfg.hxx>
 #include <sfx2/printer.hxx>
@@ -351,24 +346,15 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
 {
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
-#ifdef ONE_LINGU
     USHORT nDefLang;
     BOOL bAutoSpell, bHideAuto;
     ScModule::GetSpellSettings( nDefLang, bAutoSpell, bHideAuto );
-#else
-    OfaCfgSpellCheck* pSpellCheckCfg = OFF_APP()->GetSpellChecker();
-#endif
     ScModule* pScMod = SC_MOD();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
     ScViewOptions aViewOpt = pScMod->GetViewOptions();
-#ifdef ONE_LINGU
     aDocOpt.SetAutoSpell( bAutoSpell );
     aViewOpt.SetHideAutoSpell( bHideAuto );
-#else
-    aDocOpt.SetAutoSpell( pSpellCheckCfg->IsAutoSpell() );
-    aViewOpt.SetHideAutoSpell( pSpellCheckCfg->IsHideSpell() );
-#endif
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
     aDocOpt.SetYear2000( SFX_APP()->GetMiscConfig()->GetYear2000() );
@@ -378,11 +364,7 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
 
     //  Druck-Optionen werden jetzt direkt vor dem Drucken gesetzt
 
-#ifdef ONE_LINGU
     aDocument.SetLanguage( (LanguageType) nDefLang );
-#else
-    aDocument.SetLanguage( (LanguageType) pSpellCheckCfg->GetDefaultLanguage() );
-#endif
 }
 
 //---------------------------------------------------------------------

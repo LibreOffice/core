@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-13 11:58:19 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 08:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/macrconf.hxx>
 #include <svx/langitem.hxx>
-
-#ifdef ONE_LINGU
-#else
-#include <offmgr/osplcfg.hxx>
-#endif
 
 #include <svtools/whiter.hxx>
 #include <offmgr/app.hxx>
@@ -573,15 +568,11 @@ void ScModule::GetState( SfxItemSet& rSet )
                     if ( pDocSh )
                         bAuto = pDocSh->GetDocument()->GetDocOptions().IsAutoSpell();
                     else
-#ifdef ONE_LINGU
                     {
                         USHORT nDummyLang;
                         BOOL bDummy;
                         GetSpellSettings( nDummyLang, bAuto, bDummy );
                     }
-#else
-                        bAuto = OFF_APP()->GetSpellChecker()->IsAutoSpell();
-#endif
                     rSet.Put( SfxBoolItem( nWhich, bAuto ) );
                 }
                 break;
@@ -595,15 +586,11 @@ void ScModule::GetState( SfxItemSet& rSet )
                     else if ( pDocSh )
                         bHide = pDocSh->GetDocument()->GetViewOptions().IsHideAutoSpell();
                     else
-#ifdef ONE_LINGU
                     {
                         USHORT nDummyLang;
                         BOOL bDummy;
                         GetSpellSettings( nDummyLang, bDummy, bHide );
                     }
-#else
-                        bHide = OFF_APP()->GetSpellChecker()->IsHideSpell();
-#endif
                     rSet.Put( SfxBoolItem( nWhich, bHide ) );
                 }
                 break;
@@ -849,14 +836,9 @@ ScNavipiCfg& ScModule::GetNavipiCfg()
 
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
-#ifdef ONE_LINGU
     USHORT nOldSpellLang;
     BOOL bOldAutoSpell, bOldHideAuto;
     GetSpellSettings( nOldSpellLang, bOldAutoSpell, bOldHideAuto );
-#else
-    OfaCfgSpellCheck* pSpellCfg = OFF_APP()->GetSpellChecker();
-    DBG_ASSERT( pSpellCfg, "SpellChecker not initialised :-(" );
-#endif
 
     if (!pAppCfg)
         GetAppOptions();
@@ -992,19 +974,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pDocSh->SetDocumentModified();
             }
         }
-#ifdef ONE_LINGU
         if ( bOldHideAuto != bHideAutoSpell )
         {
             SetHideAutoProperty( bHideAutoSpell );
             bSaveSpellCheck = TRUE;
         }
-#else
-        if ( pSpellCfg->IsHideSpell() != bHideAutoSpell )       // Applikation immer
-        {
-            pSpellCfg->SetHideSpell( bHideAutoSpell );
-            bSaveSpellCheck = TRUE;
-        }
-#endif
         ScInputHandler* pInputHandler = GetInputHdl();
         if ( pInputHandler )
             pInputHandler->UpdateSpellSettings();               // EditEngine-Flags
@@ -1090,19 +1064,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             }
         }
 
-#ifdef ONE_LINGU
         if ( bOldAutoSpell != bDoAutoSpell )
         {
             SetAutoSpellProperty( bDoAutoSpell );
             bSaveSpellCheck = TRUE;
         }
-#else
-        if ( pSpellCfg->IsAutoSpell() != bDoAutoSpell )     // Applikation immer
-        {
-            pSpellCfg->SetAutoSpell( bDoAutoSpell );
-            bSaveSpellCheck = TRUE;
-        }
-#endif
         if ( pDocSh )
             pDocSh->PostPaintGridAll();                     // wegen Markierungen
         ScInputHandler* pInputHandler = GetInputHdl();
@@ -1158,19 +1124,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //----------------------------------------------------------
 
-#ifdef ONE_LINGU
 //  if ( bSaveSpellCheck )
 //  {
         //  currently LinguProperties are saved only at program exit.
         //  if a save method becomes available, it should be called here.
 //  }
-#else
-    if ( bSaveSpellCheck )
-    {
-        pSpellCfg->SetDefault( FALSE );
-        pSpellCfg->StoreConfig();
-    }
-#endif
 
     if ( bSaveAppOptions )
         pAppCfg->OptionsChanged();

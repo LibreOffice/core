@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 08:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 #include <svx/editview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/system.hxx>
-
-#ifndef ONE_LINGU
-#include <hm2/splchk.hxx>
-#endif
 
 #include "spelleng.hxx"
 #include "tabvwsh.hxx"
@@ -312,18 +308,7 @@ BOOL __EXPORT ScSpellingEngine::SpellNextDocument()
                     if (eLnge != eOldLnge)
                     {
                         eOldLnge = eLnge;
-#ifdef ONE_LINGU
                         SetDefaultLanguage( eLnge );
-#else
-                        SpellCheck* pSpCheck = GetSpeller();
-                        if (pSpCheck)
-                            pSpCheck->SetActualLanguage(eLnge);
-                        else
-                        {
-                            DBG_ERROR(
-                            "ScSpellingEngine::SpellNextDoc: Kein Spell Checker");
-                        }
-#endif
                     }
                 }
                 pDoc->GetCellType(nCol, nRow, nOrgTab, eCellType);

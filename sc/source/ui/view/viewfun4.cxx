@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 08:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,6 @@
 #include <so3/ipobj.hxx>
 #include <so3/svstor.hxx>
 #include <offmgr/app.hxx>
-
-#ifdef ONE_LINGU
-#else
-#include <offmgr/osplcfg.hxx>
-#endif
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -274,32 +269,22 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
         return;
     }
 
-#ifdef ONE_LINGU
     com::sun::star::uno::Reference<com::sun::star::linguistic::XSpellChecker1>
                                         xSpeller = OFF_APP()->GetSpellChecker();
-    //! test if thesaurus is available? (STR_EXPORT_ASCII_WARNING)
-#else
-    SpellCheck& rOptSpellCheck = *OFF_APP()->GetSpellChecker();
-    if(!rOptSpellCheck.LoadDll())                   // Speller da?
-    {
-        ErrorMessage(STR_EXPORT_ASCII_WARNING);     //! haeh ???
-        delete pEditSel;
-        return;
-    }
-#endif
+    //! if (...)  // thesaurus not available
+    //! {
+    //!     ErrorMessage(STR_EXPORT_ASCII_WARNING);
+    //!     delete pEditSel;
+    //!     return;
+    //! }
 
     const SfxPoolItem* pItem = pDoc->GetAttr(nCol, nRow, nTab, ATTR_FONT_LANGUAGE);
     SvxLanguageItem*   pLangIt = PTR_CAST( SvxLanguageItem, pItem );
     if (pLangIt)
     {
         eLnge = (LanguageType) pLangIt->GetValue();
-#ifdef ONE_LINGU
         if (eLnge == LANGUAGE_DONTKNOW)         //! can this happen?
             eLnge = pDoc->GetLanguage();
-#else
-        if (eLnge == LANGUAGE_DONTKNOW)
-            eLnge = (LanguageType) rOptSpellCheck.GetDefaultLanguage();
-#endif
     }
     else
         eLnge = LANGUAGE_ENGLISH_US;
@@ -309,11 +294,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     pThesaurusEngine = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
     pThesaurusEngine->SetEditTextObjectPool( pDoc->GetEditPool() );
     pThesaurusEngine->SetRefDevice(GetViewData()->GetActiveWin());
-#ifdef ONE_LINGU
     pThesaurusEngine->SetSpeller(xSpeller);
-#else
-    pThesaurusEngine->SetSpeller(&rOptSpellCheck);
-#endif
     MakeEditView(pThesaurusEngine, nCol, nRow );
     const ScPatternAttr* pPattern = NULL;
     SfxItemSet* pEditDefaults = new SfxItemSet(pThesaurusEngine->GetEmptyItemSet());
@@ -456,42 +437,20 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
         }
     }
 
-#ifdef ONE_LINGU
     //! no way to set a spelling error handler
     com::sun::star::uno::Reference<com::sun::star::linguistic::XSpellChecker1>
                                         xSpeller = OFF_APP()->GetSpellChecker();
-#else
-    SpellCheck& rOptSpellCheck = *OFF_APP()->GetSpellChecker();
-    if(!rOptSpellCheck.LoadDll())
-    {
-        ErrorMessage(STR_IMPORT_ERROR);     //! haeh?
-        delete pEditSel;
-        delete pUndoDoc;
-        delete pRedoDoc;
-        return;
-    }
-#endif
 
     //  ab hier kein return mehr
 
     BOOL bOldDis = pDoc->IsIdleDisabled();
     pDoc->DisableIdle(TRUE);    // nicht mit Online-Spelling durcheinanderkommen (#42726#)
 
-#ifdef ONE_LINGU
-#else
-    // ErrorLink setzen, alten merken
-    Link aOldLnk = rOptSpellCheck.ChgErrorLink(
-                        LINK(this, ScViewFunc, SpellError));
-#endif
     pSpellingEngine = new ScSpellingEngine( pDoc->GetEnginePool(),
                                            GetViewData(), pUndoDoc, pRedoDoc,
                                            nCol, nRow, nTab,
                                            bMarked, LANGUAGE_ENGLISH_US, pEditSel);
-#ifdef ONE_LINGU
     pSpellingEngine->SetSpeller(xSpeller);
-#else
-    pSpellingEngine->SetSpeller(&rOptSpellCheck);
-#endif
     MakeEditView(pSpellingEngine, nCol, nRow );
     pSpellingEngine->SetRefDevice(GetViewData()->GetActiveWin());
                                         // dummy Zelle simulieren:
@@ -539,11 +498,6 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
         delete pUndoDoc;
         delete pRedoDoc;
     }
-#ifdef ONE_LINGU
-#else
-    // alten ErrorLink wiederherstellen
-    rOptSpellCheck.ChgErrorLink( aOldLnk );
-#endif
     GetViewData()->SetSpellingView( NULL );
     KillEditView(TRUE);
     delete pSpellingEngine;
