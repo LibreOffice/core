@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-19 15:58:40 $
+ *  last change: $Author: tl $ $Date: 2001-03-29 08:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,12 +196,6 @@ void SwTxtFormatter::CtorInit( SwTxtFrm *pFrm, SwTxtFormatInfo *pNewInf )
 
 SwTxtFormatter::~SwTxtFormatter()
 {
-    // restore hyphenation options if necessary
-    if (GetInfo().IsRestoreHyphOptions())
-    {
-        GetInfo().RestoreHyphOptions();
-    }
-
     // Auesserst unwahrscheinlich aber denkbar.
     // z.B.: Feld spaltet sich auf, Widows schlagen zu
     if( GetInfo().GetRest() )
