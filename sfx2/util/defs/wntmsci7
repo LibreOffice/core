@@ -8716,3 +8716,4 @@ threadFunc
 ?UpdateTitle@SfxObjectShell@@QAE?AVString@@PAVSfxMedium@@G@Z
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx3099125669@@YAXABVSbxVariableRef@@PAX@Z
 ?__query@?$Reference@VXServiceInfo@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXServiceInfo@lang@345@PAVXInterface@2345@@Z
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx1123628068@@YAXABVSbxVariableRef@@PAX@Z
