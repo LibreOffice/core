@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: od $ $Date: 2002-12-02 07:53:01 $
+ *  last change: $Author: od $ $Date: 2002-12-03 15:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,11 +112,13 @@ struct CurrentPreviewSettings
     Size        aPreviewDocSize;
     SwTwips     nColWidth;
     SwTwips     nRowHeight;
+    bool        bDoesLayoutRowsFitIntoWindow;
     sal_uInt16  nPaintPhyStartPageNum;
     sal_uInt16  nPaintStartCol;
     sal_uInt16  nPaintStartRow;
     Point       aPaintStartPageOffset;
     Point       aPaintPreviewDocOffset;
+    Point       aAdditionalPaintOffset;
 
     inline CurrentPreviewSettings();
     inline void Clear();
@@ -134,11 +136,13 @@ inline CurrentPreviewSettings::CurrentPreviewSettings()
       aPreviewDocSize( Size(0,0) ),
       nColWidth( 0 ),
       nRowHeight( 0 ),
+      bDoesLayoutRowsFitIntoWindow( false ),
       nPaintPhyStartPageNum( 0 ),
       nPaintStartCol( 0 ),
       nPaintStartRow( 0 ),
       aPaintStartPageOffset( Point(0,0) ),
-      aPaintPreviewDocOffset( Point(0,0) )
+      aPaintPreviewDocOffset( Point(0,0) ),
+      aAdditionalPaintOffset( Point(0,0) )
 {};
 
 inline void CurrentPreviewSettings::Clear()
@@ -153,12 +157,15 @@ inline void CurrentPreviewSettings::Clear()
     aPreviewDocSize.Width() = 0;
     aPreviewDocSize.Height() = 0;
     nColWidth = nRowHeight = 0;
+    bDoesLayoutRowsFitIntoWindow = false;
     nPaintPhyStartPageNum = 0;
     nPaintStartCol = nPaintStartRow = 0;
     aPaintStartPageOffset.X() = 0;
     aPaintStartPageOffset.Y() = 0;
     aPaintPreviewDocOffset.X() = 0;
     aPaintPreviewDocOffset.Y() = 0;
+    aAdditionalPaintOffset.X() = 0;
+    aAdditionalPaintOffset.Y() = 0;
 };
 // end of declaration/definition of struct <CurrentPreviewSettings>
 
@@ -347,7 +354,7 @@ public:
     USHORT  GetRestoreActions() const{return nRestoreActions;}
 
     // OD 27.11.2002 #103492#
-    inline CurrentPreviewSettings& GetCurrPreviewSettings()
+    inline CurrentPreviewSettings& CurrPrevwSet()
     {
         return maCurrPreviewSettings;
     }
