@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPersistentPropertySet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 module com { module sun { module star { module ucb {
 
 // forward.
-interface XPropertySetRegistry;
+ published interface XPropertySetRegistry;
 
 //=============================================================================
 /** A persistent propertyset, which can be saved in and restored from a
@@ -79,7 +79,7 @@ interface XPropertySetRegistry;
      @version  1.0
      @author   Kai Sommerfeld
   */
-interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
+published interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
 {
     //-------------------------------------------------------------------------
     /** returns the registry used to store the property set.
