@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:20:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,208 +59,292 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-
 // ============================================================================
 
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
 
-#ifndef _STREAM_HXX
-#include <tools/stream.hxx>
-#endif
-
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
 #endif
 
-
+// ============================================================================
+// Decryption
 // ============================================================================
 
-#if SC_XCL_USEDECR
+XclImpDecrypter::XclImpDecrypter() :
+    mnError( EXC_ENCR_ERROR_UNSUPP_CRYPT ),
+    mnOldPos( STREAM_SEEK_TO_END ),
+    mnRecSize( 0 )
+{
+}
+
+XclImpDecrypter::XclImpDecrypter( const XclImpDecrypter& rSrc ) :
+    mnError( rSrc.mnError ),
+    mnOldPos( STREAM_SEEK_TO_END ),
+    mnRecSize( 0 )
+{
+}
+
 XclImpDecrypter::~XclImpDecrypter()
 {
 }
 
-sal_uInt16 XclImpDecrypter::GetHash( const ByteString& rPass )
+XclImpDecrypterRef XclImpDecrypter::Clone() const
 {
-    sal_uInt16 nLen = static_cast< sal_uInt16 >( ::std::min< xub_StrLen >( rPass.Len(), 0xFFFF ) );
-    sal_uInt16 nHash = nLen;
-    if( nLen )
-        nHash ^= 0xCE4B;
-
-    for( sal_uInt16 nIndex = 0; nIndex < nLen; ++nIndex )
-    {
-        sal_uInt16 nChar = static_cast< sal_uInt8 >( rPass.GetChar( nIndex ) );
-        sal_uInt8 nRot = static_cast< sal_uInt8 >( (nIndex + 1) % 15 );
-        ::rotate_left( nChar, nRot, 15 );
-        nHash ^= nChar;
-    }
-    return nHash;
+    XclImpDecrypterRef xNewDecr;
+    if( IsValid() )
+        xNewDecr.reset( OnClone() );
+    return xNewDecr;
 }
 
-sal_uInt16 XclImpDecrypter::GetKey( const ByteString& rPass )
+void XclImpDecrypter::Update( SvStream& rStrm, sal_uInt16 nRecSize )
 {
-    xub_StrLen nLen = rPass.Len();
-    if( !nLen ) return 0;
-
-    sal_uInt16 nKey = 0;
-    sal_uInt16 nKeyBase = 0x8000;
-    sal_uInt16 nKeyEnd = 0xFFFF;
-    for( xub_StrLen nIndex = 0; nIndex < nLen; ++nIndex )
+    if( IsValid() )
     {
-        sal_Char nChar = rPass.GetChar( nLen - nIndex - 1 ) & 0x7F;
-        for( sal_uInt8 nBit = 0; nBit < 8; ++nBit )
+        ULONG nNewPos = rStrm.Tell();
+        if( (mnOldPos != nNewPos) || (mnRecSize != nRecSize) )
         {
-            ::rotate_left( nKeyBase, 1 );
-            if( nKeyBase & 1 ) nKeyBase ^= 0x1020;
-            if( nChar & 1 ) nKey ^= nKeyBase;
-            nChar >>= 1;
-            ::rotate_left( nKeyEnd, 1 );
-            if( nKeyEnd & 1 ) nKeyEnd ^= 0x1020;
+            OnUpdate( mnOldPos, nNewPos, nRecSize );
+            mnOldPos = nNewPos;
+            mnRecSize = nRecSize;
         }
     }
-    return nKey ^ nKeyEnd;
 }
 
-
-// ----------------------------------------------------------------------------
-
-XclImpBiff5Decrypter::XclImpBiff5Decrypter( const String& rPass, sal_uInt16 nKey, sal_uInt16 nHash ) :
-    mbIsValid( false )
+sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nBytes )
 {
-    ByteString aPass( rPass, RTL_TEXTENCODING_MS_1252 );    //! correct?
-    xub_StrLen nLen = aPass.Len();
-    if( (0 < nLen) && (nLen < 16) && (GetKey( aPass ) == nKey) && (GetHash( aPass ) == nHash) )
-    {
-        static const sal_uInt8 pFillChars[] =
-        {
-            0xBB, 0xFF, 0xFF, 0xBA,
-            0xFF, 0xFF, 0xB9, 0x80,
-            0x00, 0xBE, 0x0F, 0x00,
-            0xBF, 0x0F, 0x00
-        };
-        const sal_uInt8* pFillChar = pFillChars;
-
-        xub_StrLen nIndex;
-        for( nIndex = 0; nIndex < nLen; ++nIndex )
-            mpKey[ nIndex ] = aPass.GetChar( nIndex );
-        for( ; nIndex < 16; ++nIndex, ++pFillChar )
-            mpKey[ nIndex ] = *pFillChar;
-
-        SVBT16 nOrigKey;
-        ShortToSVBT16( nKey, nOrigKey );
-        sal_uInt8* pKeyChar = mpKey;
-        for( nIndex = 0; nIndex < 16; ++nIndex, ++pKeyChar )
-        {
-            *pKeyChar ^= nOrigKey[ nIndex & 0x01 ];
-            ::rotate_left( *pKeyChar, 2 );
-        }
-
-        mbIsValid = true;
-    }
-}
-
-bool XclImpBiff5Decrypter::IsValid() const
-{
-    return mbIsValid;
-}
-
-void XclImpBiff5Decrypter::SetOffset( sal_uInt16 nRecSize )
-{
-    mnOffset = nRecSize & 0x0F;
-}
-
-sal_uInt32 XclImpBiff5Decrypter::ReadDecrypt( SvStream& rStrm, void* pData, sal_uInt32 nBytes )
-{
-    DBG_ASSERT( mbIsValid, "XclImpBiff5Decrypter::ReadDecrypt - invalid decrypter" );
-
-    sal_uInt32 nRet = 0;
+    sal_uInt16 nRet = 0;
     if( pData && nBytes )
     {
-        sal_uInt8* pCurrKey = mpKey + ((rStrm.Tell() + mnOffset) & 0x0F);
-        sal_uInt8* pKeyLast = mpKey + 0x0F;
-
-        nRet = rStrm.Read( pData, nBytes );
-
-        sal_uInt32 nBytesLeft = nBytes;
-        sal_uInt8* pBuffer = reinterpret_cast< sal_uInt8* >( pData );
-        const sal_uInt8* pBufferEnd = pBuffer + nBytes;
-        for( ; pBuffer < pBufferEnd; ++pBuffer )
+        if( IsValid() )
         {
-            ::rotate_left( *pBuffer, 3 );
-            *pBuffer ^= *pCurrKey;
-            if( pCurrKey < pKeyLast ) ++pCurrKey; else pCurrKey = mpKey;
+            Update( rStrm, mnRecSize );
+            nRet = OnRead( rStrm, reinterpret_cast< sal_uInt8* >( pData ), nBytes );
+            mnOldPos = rStrm.Tell();
         }
+        else
+            nRet = static_cast< sal_uInt16 >( rStrm.Read( pData, nBytes ) );
     }
     return nRet;
 }
 
+void XclImpDecrypter::SetHasValidPassword( bool bValid )
+{
+    mnError = bValid ? ERRCODE_NONE : EXC_ENCR_ERROR_WRONG_PASS;
+}
 
 // ----------------------------------------------------------------------------
 
-XclImpBiff8Decrypter::XclImpBiff8Decrypter( const String& rPass )
+XclImpBiff5Decrypter::XclImpBiff5Decrypter( const XclImpRoot& rRoot, sal_uInt16 nKey, sal_uInt16 nHash )
 {
-    DBG_ERRORFILE( "XclImpBiff8Decrypter::XclImpBiff8Decrypter - not implemented" );
+    Init( XclCryptoHelper::GetBiff5WbProtPassword(), nKey, nHash );
+    if( !IsValid() )
+    {
+        //! TODO: correct byte string encoding in all cases?
+        ByteString aPass( rRoot.QueryPassword(), RTL_TEXTENCODING_MS_1252 );
+        Init( aPass, nKey, nHash );
+    }
 }
 
-bool XclImpBiff8Decrypter::IsValid() const
+XclImpBiff5Decrypter::XclImpBiff5Decrypter( const XclImpBiff5Decrypter& rSrc ) :
+    XclImpDecrypter( rSrc )
 {
-    return false;
+    if( rSrc.IsValid() )
+    {
+        memcpy( mpnPassw, rSrc.mpnPassw, sizeof( mpnPassw ) );
+        maCodec.InitKey( mpnPassw );
+    }
 }
 
-void XclImpBiff8Decrypter::SetOffset( sal_uInt16 nRecSize )
+XclImpBiff5Decrypter* XclImpBiff5Decrypter::OnClone() const
 {
+    return new XclImpBiff5Decrypter( *this );
 }
 
-sal_uInt32 XclImpBiff8Decrypter::ReadDecrypt( SvStream& rStrm, void* pData, sal_uInt32 nBytes )
+void XclImpBiff5Decrypter::OnUpdate( ULONG nOldStrmPos, ULONG nNewStrmPos, sal_uInt16 nRecSize )
 {
-    return rStrm.Read( pData, nBytes );
+    maCodec.InitCipher();
+    maCodec.Skip( (nNewStrmPos + nRecSize) & 0x0F );
 }
-#endif
 
+sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes )
+{
+    sal_uInt16 nRet = static_cast< sal_uInt16 >( rStrm.Read( pnData, nBytes ) );
+    maCodec.Decode( pnData, nRet );
+    return nRet;
+}
+
+void XclImpBiff5Decrypter::Init( const ByteString& rPass, sal_uInt16 nKey, sal_uInt16 nHash )
+{
+    xub_StrLen nLen = rPass.Len();
+    bool bValid = (0 < nLen) && (nLen < 16);
+
+    if( bValid )
+    {
+        // transform ByteString to sal_uInt8 array
+        memset( mpnPassw, 0, sizeof( mpnPassw ) );
+        for( xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+            mpnPassw[ nChar ] = static_cast< sal_uInt8 >( rPass.GetChar( nChar ) );
+        // init codec
+        maCodec.InitKey( mpnPassw );
+        bValid = maCodec.VerifyKey( nKey, nHash );
+    }
+
+    SetHasValidPassword( bValid );
+}
+
+// ----------------------------------------------------------------------------
+
+XclImpBiff8Decrypter::XclImpBiff8Decrypter(
+        const XclImpRoot& rRoot, sal_uInt8 pnDocId[ 16 ],
+        sal_uInt8 pnSaltData[ 16 ], sal_uInt8 pnSaltHash[ 16 ] )
+{
+    Init( XclCryptoHelper::GetBiff8WbProtPassword(), pnDocId, pnSaltData, pnSaltHash );
+    if( !IsValid() )
+        Init( rRoot.QueryPassword(), pnDocId, pnSaltData, pnSaltHash );
+}
+
+XclImpBiff8Decrypter::XclImpBiff8Decrypter( const XclImpBiff8Decrypter& rSrc ) :
+    XclImpDecrypter( rSrc )
+{
+    if( rSrc.IsValid() )
+    {
+        memcpy( mpnPassw, rSrc.mpnPassw, sizeof( mpnPassw ) );
+        memcpy( mpnDocId, rSrc.mpnDocId, sizeof( mpnDocId ) );
+        maCodec.InitKey( mpnPassw, mpnDocId );
+    }
+}
+
+XclImpBiff8Decrypter* XclImpBiff8Decrypter::OnClone() const
+{
+    return new XclImpBiff8Decrypter( *this );
+}
+
+void XclImpBiff8Decrypter::OnUpdate( ULONG nOldStrmPos, ULONG nNewStrmPos, sal_uInt16 nRecSize )
+{
+    if( nNewStrmPos != nOldStrmPos )
+    {
+        sal_uInt32 nOldBlock = GetBlock( nOldStrmPos );
+        sal_uInt16 nOldOffset = GetOffset( nOldStrmPos );
+
+        sal_uInt32 nNewBlock = GetBlock( nNewStrmPos );
+        sal_uInt16 nNewOffset = GetOffset( nNewStrmPos );
+
+        /*  Rekey cipher, if block changed or if previous offset in same block. */
+        if( (nNewBlock != nOldBlock) || (nNewOffset < nOldOffset) )
+        {
+            maCodec.InitCipher( nNewBlock );
+            nOldOffset = 0;     // reset nOldOffset for next if() statement
+        }
+
+        /*  Seek to correct offset. */
+        if( nNewOffset > nOldOffset )
+            maCodec.Skip( nNewOffset - nOldOffset );
+    }
+}
+
+sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes )
+{
+    sal_uInt16 nRet = 0;
+
+    sal_uInt8* pnCurrData = pnData;
+    sal_uInt16 nBytesLeft = nBytes;
+    while( nBytesLeft )
+    {
+        sal_uInt16 nBlockLeft = EXC_ENCR_BLOCKSIZE - GetOffset( rStrm.Tell() );
+        sal_uInt16 nDecBytes = ::std::min< sal_uInt16 >( nBytesLeft, nBlockLeft );
+
+        // read the block from stream
+        nRet += static_cast< sal_uInt16 >( rStrm.Read( pnCurrData, nDecBytes ) );
+        // decode the block inplace
+        maCodec.Decode( pnCurrData, nDecBytes, pnCurrData, nDecBytes );
+        if( GetOffset( rStrm.Tell() ) == 0 )
+            maCodec.InitCipher( GetBlock( rStrm.Tell() ) );
+
+        pnCurrData += nDecBytes;
+        nBytesLeft -= nDecBytes;
+    }
+
+    return nRet;
+}
+
+void XclImpBiff8Decrypter::Init(
+        const String& rPass, sal_uInt8 pnDocId[ 16 ],
+        sal_uInt8 pnSaltData[ 16 ], sal_uInt8 pnSaltHash[ 16 ] )
+{
+    xub_StrLen nLen = rPass.Len();
+    bool bValid = (0 < nLen) && (nLen < 16);
+
+    if( bValid )
+    {
+        // transform String to sal_uInt16 array
+        memset( mpnPassw, 0, sizeof( mpnPassw ) );
+        for( xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+            mpnPassw[ nChar ] = static_cast< sal_uInt16 >( rPass.GetChar( nChar ) );
+        // copy document ID
+        memcpy( mpnDocId, pnDocId, sizeof( mpnDocId ) );
+        // init codec
+        maCodec.InitKey( mpnPassw, mpnDocId );
+        bValid = maCodec.VerifyKey( pnSaltData, pnSaltHash );
+    }
+
+    SetHasValidPassword( bValid );
+}
+
+sal_uInt32 XclImpBiff8Decrypter::GetBlock( ULONG nStrmPos ) const
+{
+    return static_cast< sal_uInt32 >( nStrmPos / EXC_ENCR_BLOCKSIZE );
+}
+
+sal_uInt16 XclImpBiff8Decrypter::GetOffset( ULONG nStrmPos ) const
+{
+    return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
+}
 
 // ============================================================================
+// Stream
+// ============================================================================
 
-XclImpStreamPos::XclImpStreamPos(
-        sal_uInt32 nStrmPos, sal_uInt32 nNextPos,
-        sal_uInt32 nCurrSize, sal_uInt32 nRecLeft, sal_uInt16 nRecSize ) :
-    mnPos( nStrmPos ),
-    mnNextPos( nNextPos ),
-    mnCurrSize( nCurrSize ),
-    mnRecLeft( nRecLeft ),
-    mnRecSize( nRecSize )
+XclImpStreamPos::XclImpStreamPos() :
+    mnPos( STREAM_SEEK_TO_BEGIN ),
+    mnNextPos( STREAM_SEEK_TO_BEGIN ),
+    mnCurrSize( 0 ),
+    mnRawRecId( EXC_ID_UNKNOWN ),
+    mnRawRecSize( 0 ),
+    mnRawRecLeft( 0 ),
+    mbValid( false )
 {
 }
 
 void XclImpStreamPos::Set(
-        sal_uInt32 nStrmPos, sal_uInt32 nNextPos,
-        sal_uInt32 nCurrSize, sal_uInt32 nRecLeft, sal_uInt16 nRecSize )
+        const SvStream& rStrm, ULONG nNextPos, sal_uInt32 nCurrSize,
+        sal_uInt16 nRawRecId, sal_uInt16 nRawRecSize, sal_uInt16 nRawRecLeft,
+        bool bValid )
 {
-    mnPos = nStrmPos;
+    mnPos = rStrm.Tell();
     mnNextPos = nNextPos;
     mnCurrSize = nCurrSize;
-    mnRecLeft = nRecLeft;
-    mnRecSize = nRecSize;
+    mnRawRecId = nRawRecId;
+    mnRawRecSize = nRawRecSize;
+    mnRawRecLeft = nRawRecLeft;
+    mbValid = bValid;
 }
 
 void XclImpStreamPos::Get(
-        sal_uInt32& rnStrmPos, sal_uInt32& rnNextPos,
-        sal_uInt32& rnCurrSize, sal_uInt32& rnRecLeft, sal_uInt16& rnRecSize ) const
+        SvStream& rStrm, ULONG& rnNextPos, sal_uInt32& rnCurrSize,
+        sal_uInt16& rnRawRecId, sal_uInt16& rnRawRecSize, sal_uInt16& rnRawRecLeft,
+        bool& rbValid ) const
 {
-    rnStrmPos = mnPos;
+    rStrm.Seek( mnPos );
     rnNextPos = mnNextPos;
     rnCurrSize = mnCurrSize;
-    rnRecLeft = mnRecLeft;
-    rnRecSize = mnRecSize;
+    rnRawRecId = mnRawRecId;
+    rnRawRecSize = mnRawRecSize;
+    rnRawRecLeft = mnRawRecLeft;
+    rbValid = mbValid;
 }
-
 
 // ============================================================================
 
@@ -311,12 +395,10 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
     return eBiff;
 }
 
-XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bContHandling ) :
+XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bContLookup ) :
     mrStrm( rInStrm ),
     mrRoot( rRoot ),
-    maFirstRec( STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_BEGIN, 0, 0, 0 ),
-    maGlobPos( STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_BEGIN, 0, 0, 0 ),
-    mnGlobRecId( 0 ),
+    mnGlobRecId( EXC_ID_UNKNOWN ),
     mbGlobValidRec( false ),
     mbHasGlobPos( false ),
     mnNextRecPos( STREAM_SEEK_TO_BEGIN ),
@@ -325,16 +407,14 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bCo
     mbHasComplRec( false ),
     mnRecId( EXC_ID_UNKNOWN ),
     mnAltContId( EXC_ID_UNKNOWN ),
-    mnRecSize( 0 ),
-    mnRecLeft( 0 ),
+    mnRawRecId( EXC_ID_UNKNOWN ),
+    mnRawRecSize( 0 ),
+    mnRawRecLeft( 0 ),
     mcNulSubst( '?' ),
-    mbCont( bContHandling ),
-#if SC_XCL_USEDECR
+    mbCont( bContLookup ),
     mbUseDecr( false ),
-#endif
     mbValidRec( false ),
-    mbValid( false ),
-    mbWarnings( true )
+    mbValid( false )
 {
     mnStreamSize = mrStrm.Seek( STREAM_SEEK_TO_END );
     mrStrm.Seek( STREAM_SEEK_TO_BEGIN );
@@ -345,157 +425,98 @@ XclImpStream::~XclImpStream()
 {
 }
 
-bool XclImpStream::GetNextRecord( sal_uInt16& rnRecId, sal_uInt16& rnRecSize )
-{
-    mrStrm.Seek( mnNextRecPos );
-    bool bRet = (mnNextRecPos < mnStreamSize);
-    if( bRet )
-    {
-        mrStrm >> rnRecId >> rnRecSize;  // read direct
-#if SC_XCL_USEDECR
-        SetDecrypterOffset( rnRecSize );
-#endif
-    }
-    else
-        rnRecId = rnRecSize = 0;
-    return bRet;
-}
-
-void XclImpStream::SetupRecord()
-{
-    mnRecLeft = mnRecSize;
-    mnCurrRecSize = mnComplRecSize = mnRecSize;
-    mbHasComplRec = !mbCont;
-    maFirstRec.Set( Tell(), mnNextRecPos, mnComplRecSize, mnRecLeft, mnRecSize );
-}
-
-bool XclImpStream::IsContinueId( sal_uInt16 nRecId )
-{
-    return (nRecId == EXC_ID_CONT) || (nRecId == mnAltContId);
-}
-
 bool XclImpStream::StartNextRecord()
 {
-    maPosStack.Clear();
+    maPosStack.clear();
 
-    /*  counter to ignore zero records (id==len==0) (i.e. the application
+    /*  #i4266# Counter to ignore zero records (id==len==0) (i.e. the application
         "Crystal Report" writes zero records between other records) */
     sal_uInt32 nZeroRecCount = 5;
     bool bIsZeroRec = false;
 
     do
     {
-        mbValidRec = GetNextRecord( mnRecId, mnRecSize );
-        bIsZeroRec = !mnRecId && !mnRecSize;
+        mbValidRec = ReadNextRawRecHeader();
+        bIsZeroRec = !mnRawRecId && !mnRawRecSize;
         if( bIsZeroRec ) --nZeroRecCount;
-        mnNextRecPos = Tell() + mnRecSize;
+        mnNextRecPos = mrStrm.Tell() + mnRawRecSize;
     }
-    while( mbValidRec && ((mbCont && IsContinueId( mnRecId )) || (bIsZeroRec && nZeroRecCount)) );
+    while( mbValidRec && ((mbCont && IsContinueId( mnRawRecId )) || (bIsZeroRec && nZeroRecCount)) );
 
-    if( bIsZeroRec )
-        mbValidRec = false;
+    mbValidRec = mbValidRec && !bIsZeroRec;
     mbValid = mbValidRec;
-    mnAltContId = EXC_ID_UNKNOWN;
     SetupRecord();
+
     return mbValidRec;
 }
 
-void XclImpStream::InitializeRecord( bool bContHandling, sal_uInt16 nAltContId )
+void XclImpStream::ResetRecord( bool bContLookup, sal_uInt16 nAltContId )
 {
     if( mbValidRec )
     {
-        maPosStack.Clear();
+        maPosStack.clear();
         RestorePosition( maFirstRec );
-        mnCurrRecSize = mnComplRecSize = mnRecSize;
-        mbHasComplRec = !bContHandling;
-        mbCont = bContHandling;
+        mnCurrRecSize = mnComplRecSize = mnRawRecSize;
+        mbHasComplRec = !bContLookup;
+        mbCont = bContLookup;
         mnAltContId = nAltContId;
+        EnableDecryption();
     }
 }
 
-#if SC_XCL_USEDECR
-void XclImpStream::EnableDecryption( XclImpDecrypter* pDecrypter )
+void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
 {
-    mpDecrypter.reset( pDecrypter );
-    SetDecrypterOffset( mnRecSize );
-    UseDecryption( true );
+    mxDecrypter = xDecrypter;
+    EnableDecryption();
+    SetupDecrypter();
 }
 
-void XclImpStream::UseDecryption( bool bUse )
+void XclImpStream::CopyDecrypterFrom( const XclImpStream& rStrm )
 {
-    mbUseDecr = (mpDecrypter.get() && mpDecrypter->IsValid()) ? bUse : false;
-}
-#endif
-
-bool XclImpStream::GetContinue()
-{
-    bool bRet = mbCont || IsContinueId( mnRecId );
-    if( bRet )
-    {
-        sal_uInt16 nNewNum;
-        bRet = GetNextRecord( nNewNum, mnRecSize ) && IsContinueId( nNewNum );
-    }
-    if( bRet )
-    {
-        mnRecLeft = mnRecSize;
-        mnNextRecPos = Tell() + mnRecSize;
-        mnCurrRecSize += mnRecSize;
-    }
-    return bRet;
+    XclImpDecrypterRef xNewDecr;
+    if( rStrm.mxDecrypter.get() )
+        xNewDecr = rStrm.mxDecrypter->Clone();
+    SetDecrypter( xNewDecr );
 }
 
-bool XclImpStream::CheckDataLeft( sal_uInt32 nBytes )
+bool XclImpStream::HasValidDecrypter() const
 {
-    bool bNewValid = mbValid && ((mnRecLeft >= nBytes) ? true : (mnRecLeft ? false : GetContinue()));
-    DBG_ASSERT( !mbWarnings || bNewValid || !mbValid, "XclImpStream - record overread" ); // one assertion per record
-    return (mbValid = bNewValid);   // really assignment
+    return mxDecrypter.get() && mxDecrypter->IsValid();
 }
 
-void XclImpStream::StartContinue()
+void XclImpStream::EnableDecryption( bool bEnable )
 {
-    bool bNewValid = (mbValid && !mnRecLeft) ? GetContinue() : false;
-    DBG_ASSERT( !mbWarnings || bNewValid || !mbValid, "XclImpStream - record overread" ); // one assertion per record
-    mbValid = bNewValid;
+    mbUseDecr = bEnable && HasValidDecrypter();
 }
-
 
 // ----------------------------------------------------------------------------
 
 void XclImpStream::PushPosition()
 {
-    if( mbValid )
-        maPosStack.Push( new XclImpStreamPos(
-            Tell(), mnNextRecPos, mnCurrRecSize, mnRecLeft, mnRecSize ) );
-}
-
-void XclImpStream::RestorePosition( const XclImpStreamPos& rPos )
-{
-    sal_uInt32 nPos;
-    rPos.Get( nPos, mnNextRecPos, mnCurrRecSize, mnRecLeft, mnRecSize );
-    mrStrm.Seek( nPos );
-    mbValid = true;
+    maPosStack.push_back( XclImpStreamPos() );
+    StorePosition( maPosStack.back() );
 }
 
 void XclImpStream::PopPosition()
 {
-    XclImpStreamPos* pPos = maPosStack.Pop();
-    DBG_ASSERT( pPos, "XclImpStream::PopPosition - stack empty" );
-    if( pPos )
+    DBG_ASSERT( !maPosStack.empty(), "XclImpStream::PopPosition - stack empty" );
+    if( !maPosStack.empty() )
     {
-        RestorePosition( *pPos );
-        delete pPos;
+        RestorePosition( maPosStack.back() );
+        maPosStack.pop_back();
     }
 }
 
 void XclImpStream::RejectPosition()
 {
-    DBG_ASSERT( !maPosStack.Empty(), "XclImpStream::RejectPosition - stack empty" );
-    delete maPosStack.Pop();
+    DBG_ASSERT( !maPosStack.empty(), "XclImpStream::RejectPosition - stack empty" );
+    if( !maPosStack.empty() )
+        maPosStack.pop_back();
 }
 
 void XclImpStream::StoreGlobalPosition()
 {
-    maGlobPos.Set( Tell(), mnNextRecPos, mnCurrRecSize, mnRecLeft, mnRecSize );
+    StorePosition( maGlobPos );
     mnGlobRecId = mnRecId;
     mbGlobValidRec = mbValidRec;
     mbHasGlobPos = true;
@@ -510,19 +531,21 @@ void XclImpStream::SeekGlobalPosition()
         mnRecId = mnGlobRecId;
         mnComplRecSize = mnCurrRecSize;
         mbHasComplRec = !mbCont;
-        mbValidRec = mbValid = mbGlobValidRec;
-#if SC_XCL_USEDECR
-        SetDecrypterOffset( mnRecSize );
-#endif
+        mbValidRec = mbGlobValidRec;
     }
+}
+
+sal_uInt32 XclImpStream::GetRecPos() const
+{
+    return mbValid ? (mnCurrRecSize - mnRawRecLeft) : EXC_REC_SEEK_TO_END;
 }
 
 sal_uInt32 XclImpStream::GetRecSize()
 {
-    if( IsValid() && !mbHasComplRec )
+    if( !mbHasComplRec )
     {
         PushPosition();
-        while( GetContinue() );     // GetContinue() adds up mnCurrRecSize
+        while( JumpToNextContinue() );  // JumpToNextContinue() adds up mnCurrRecSize
         mnComplRecSize = mnCurrRecSize;
         mbHasComplRec = true;
         PopPosition();
@@ -530,136 +553,141 @@ sal_uInt32 XclImpStream::GetRecSize()
     return mnComplRecSize;
 }
 
+sal_uInt32 XclImpStream::GetRecLeft()
+{
+    return mbValid ? (GetRecSize() - GetRecPos()) : 0;
+}
 
 // ----------------------------------------------------------------------------
 
-void XclImpStream::ReadAtom( sal_Int8& rnValue )
+XclImpStream& XclImpStream::operator>>( sal_Int8& rnValue )
 {
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
-        mpDecrypter->ReadDecrypt( mrStrm, &rnValue, 1 );
-    else
-#endif
-        mrStrm >> rnValue;
-    --mnRecLeft;
-}
-
-void XclImpStream::ReadAtom( sal_uInt8& rnValue )
-{
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
-        mpDecrypter->ReadDecrypt( mrStrm, &rnValue, 1 );
-    else
-#endif
-        mrStrm >> rnValue;
-    --mnRecLeft;
-}
-
-void XclImpStream::ReadAtom( sal_Int16& rnValue )
-{
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
+    if( EnsureRawReadSize( 1 ) )
     {
-        SVBT16 pBuffer;
-        mpDecrypter->ReadDecrypt( mrStrm, pBuffer, 2 );
-        rnValue = static_cast< sal_Int16 >( SVBT16ToShort( pBuffer ) );
+        if( mbUseDecr )
+            mxDecrypter->Read( mrStrm, &rnValue, 1 );
+        else
+            mrStrm >> rnValue;
+        --mnRawRecLeft;
     }
-    else
-#endif
-        mrStrm >> rnValue;
-    mnRecLeft -= 2;
+    return *this;
 }
 
-void XclImpStream::ReadAtom( sal_uInt16& rnValue )
+XclImpStream& XclImpStream::operator>>( sal_uInt8& rnValue )
 {
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
+    if( EnsureRawReadSize( 1 ) )
     {
-        SVBT16 pBuffer;
-        mpDecrypter->ReadDecrypt( mrStrm, pBuffer, 2 );
-        rnValue = SVBT16ToShort( pBuffer );
+        if( mbUseDecr )
+            mxDecrypter->Read( mrStrm, &rnValue, 1 );
+        else
+            mrStrm >> rnValue;
+        --mnRawRecLeft;
     }
-    else
-#endif
-        mrStrm >> rnValue;
-    mnRecLeft -= 2;
+    return *this;
 }
 
-void XclImpStream::ReadAtom( sal_Int32& rnValue )
+XclImpStream& XclImpStream::operator>>( sal_Int16& rnValue )
 {
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
+    if( EnsureRawReadSize( 2 ) )
     {
-        SVBT32 pBuffer;
-        mpDecrypter->ReadDecrypt( mrStrm, pBuffer, 4 );
-        rnValue = static_cast< sal_Int32 >( SVBT32ToLong( pBuffer ) );
+        if( mbUseDecr )
+        {
+            SVBT16 pnBuffer;
+            mxDecrypter->Read( mrStrm, pnBuffer, 2 );
+            rnValue = static_cast< sal_Int16 >( SVBT16ToShort( pnBuffer ) );
+        }
+        else
+            mrStrm >> rnValue;
+        mnRawRecLeft -= 2;
     }
-    else
-#endif
-        mrStrm >> rnValue;
-    mnRecLeft -= 4;
+    return *this;
 }
 
-void XclImpStream::ReadAtom( sal_uInt32& rnValue )
+XclImpStream& XclImpStream::operator>>( sal_uInt16& rnValue )
 {
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
+    if( EnsureRawReadSize( 2 ) )
     {
-        SVBT32 pBuffer;
-        mpDecrypter->ReadDecrypt( mrStrm, pBuffer, 4 );
-        rnValue = SVBT32ToLong( pBuffer );
+        if( mbUseDecr )
+        {
+            SVBT16 pnBuffer;
+            mxDecrypter->Read( mrStrm, pnBuffer, 2 );
+            rnValue = SVBT16ToShort( pnBuffer );
+        }
+        else
+            mrStrm >> rnValue;
+        mnRawRecLeft -= 2;
     }
-    else
-#endif
-        mrStrm >> rnValue;
-    mnRecLeft -= 4;
+    return *this;
 }
 
-void XclImpStream::ReadAtom( float& rfValue )
+XclImpStream& XclImpStream::operator>>( sal_Int32& rnValue )
 {
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
+    if( EnsureRawReadSize( 4 ) )
     {
-        SVBT32 pBuffer;
-        mpDecrypter->ReadDecrypt( mrStrm, pBuffer, 4 );
-        sal_uInt32 nValue = SVBT32ToLong( pBuffer );
-        memcpy( &rfValue, &nValue, 4 );
+        if( mbUseDecr )
+        {
+            SVBT32 pnBuffer;
+            mxDecrypter->Read( mrStrm, pnBuffer, 4 );
+            rnValue = static_cast< sal_Int32 >( SVBT32ToLong( pnBuffer ) );
+        }
+        else
+            mrStrm >> rnValue;
+        mnRawRecLeft -= 4;
     }
-    else
-#endif
-        mrStrm >> rfValue;
-    mnRecLeft -= 4;
+    return *this;
 }
 
-void XclImpStream::ReadAtom( double& rfValue )
+XclImpStream& XclImpStream::operator>>( sal_uInt32& rnValue )
 {
-#if SC_XCL_USEDECR
-    if( mbUseDecr )
+    if( EnsureRawReadSize( 4 ) )
     {
-        SVBT64 pBuffer;
-        mpDecrypter->ReadDecrypt( mrStrm, pBuffer, 8 );
-        rfValue = SVBT64ToDouble( pBuffer );
+        if( mbUseDecr )
+        {
+            SVBT32 pnBuffer;
+            mxDecrypter->Read( mrStrm, pnBuffer, 4 );
+            rnValue = SVBT32ToLong( pnBuffer );
+        }
+        else
+            mrStrm >> rnValue;
+        mnRawRecLeft -= 4;
     }
-    else
-#endif
-        mrStrm >> rfValue;
-    mnRecLeft -= 8;
+    return *this;
 }
 
-sal_uInt32 XclImpStream::ReadData( void* pData, sal_uInt32 nBytes )
+XclImpStream& XclImpStream::operator>>( float& rfValue )
 {
-#if SC_XCL_USEDECR
-    sal_uInt32 nRet = mbUseDecr ?
-        mpDecrypter->ReadDecrypt( mrStrm, pData, nBytes ) : mrStrm.Read( pData, nBytes );
-#else
-    sal_uInt32 nRet = mrStrm.Read( pData, nBytes );
-#endif
-    mnRecLeft -= nRet;
-    return nRet;
+    if( EnsureRawReadSize( 4 ) )
+    {
+        if( mbUseDecr )
+        {
+            SVBT32 pnBuffer;
+            mxDecrypter->Read( mrStrm, pnBuffer, 4 );
+            sal_uInt32 nValue = SVBT32ToLong( pnBuffer );
+            memcpy( &rfValue, &nValue, 4 );
+        }
+        else
+            mrStrm >> rfValue;
+        mnRawRecLeft -= 4;
+    }
+    return *this;
 }
 
-
-// ----------------------------------------------------------------------------
+XclImpStream& XclImpStream::operator>>( double& rfValue )
+{
+    if( EnsureRawReadSize( 8 ) )
+    {
+        if( mbUseDecr )
+        {
+            SVBT64 pnBuffer;
+            mxDecrypter->Read( mrStrm, pnBuffer, 8 );
+            rfValue = SVBT64ToDouble( pnBuffer );
+        }
+        else
+            mrStrm >> rfValue;
+        mnRawRecLeft -= 8;
+    }
+    return *this;
+}
 
 sal_Int8 XclImpStream::ReadInt8()
 {
@@ -720,22 +748,23 @@ double XclImpStream::ReadDouble()
 sal_uInt32 XclImpStream::Read( void* pData, sal_uInt32 nBytes )
 {
     sal_uInt32 nRet = 0;
-    if( IsValid() && pData && nBytes )
+    if( mbValid && pData && nBytes )
     {
-        sal_uInt8* pBuffer = reinterpret_cast< sal_uInt8* >( pData );
+        sal_uInt8* pnBuffer = reinterpret_cast< sal_uInt8* >( pData );
         sal_uInt32 nBytesLeft = nBytes;
 
-        while( IsValid() && nBytesLeft )
+        while( mbValid && nBytesLeft )
         {
-            sal_uInt32 nReadSize = ::std::min( nBytesLeft, mnRecLeft );
-            sal_uInt32 nReadRet = ReadData( pBuffer, nReadSize );
+            sal_uInt16 nReadSize = GetMaxRawReadSize( nBytesLeft );
+            sal_uInt16 nReadRet = ReadRawData( pnBuffer, nReadSize );
             nRet += nReadRet;
             mbValid = (nReadSize == nReadRet);
-            DBG_ASSERT( !mbWarnings || IsValid(), "XclImpStream::Read - stream read error" );
-            pBuffer += nReadRet;
+            DBG_ASSERT( mbValid, "XclImpStream::Read - stream read error" );
+            pnBuffer += nReadRet;
             nBytesLeft -= nReadRet;
-            if( IsValid() && nBytesLeft )
-                StartContinue();
+            if( mbValid && nBytesLeft )
+                JumpToNextContinue();
+            DBG_ASSERT( mbValid, "XclImpStream::Read - record overread" );
         }
     }
     return nRet;
@@ -744,21 +773,21 @@ sal_uInt32 XclImpStream::Read( void* pData, sal_uInt32 nBytes )
 sal_uInt32 XclImpStream::CopyToStream( SvStream& rOutStrm, sal_uInt32 nBytes )
 {
     sal_uInt32 nRet = 0;
-    if( IsValid() && nBytes )
+    if( mbValid && nBytes )
     {
         const sal_uInt32 nMaxBuffer = 0x1000;
-        sal_uInt8* pBuffer = new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ];
+        sal_uInt8* pnBuffer = new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ];
         sal_uInt32 nBytesLeft = nBytes;
 
-        while( IsValid() && nBytesLeft )
+        while( mbValid && nBytesLeft )
         {
             sal_uInt32 nReadSize = ::std::min( nBytesLeft, nMaxBuffer );
-            nRet += Read( pBuffer, nReadSize );
-            rOutStrm.Write( pBuffer, nReadSize );
+            nRet += Read( pnBuffer, nReadSize );
+            rOutStrm.Write( pnBuffer, static_cast< ULONG >( nReadSize ) );
             nBytesLeft -= nReadSize;
         }
 
-        delete[] pBuffer;
+        delete[] pnBuffer;
     }
     return nRet;
 }
@@ -781,69 +810,47 @@ void XclImpStream::Seek( sal_uInt32 nPos )
     if( mbValidRec )
     {
         sal_uInt32 nCurrPos = GetRecPos();
-        if( nPos > nCurrPos )       // forward
-            Ignore( nPos - nCurrPos );
-        else if( nPos < nCurrPos )  // backward
+        if( !mbValid || (nPos < nCurrPos) ) // from invalid state or backward
         {
             RestorePosition( maFirstRec );
             Ignore( nPos );
+        }
+        else if( nPos > nCurrPos )          // forward
+        {
+            Ignore( nPos - nCurrPos );
         }
     }
 }
 
 void XclImpStream::Ignore( sal_uInt32 nBytes )
 {
+    // implementation similar to Read(), but without really reading anything
     sal_uInt32 nBytesLeft = nBytes;
-    while( IsValid() && nBytesLeft )
+    while( mbValid && nBytesLeft )
     {
-        sal_uInt32 nReadSize = ::std::min( nBytesLeft, mnRecLeft );
-        mrStrm.SeekRel( static_cast< sal_Int32 >( nReadSize ) );
-        mnRecLeft -= nReadSize;
+        sal_uInt16 nReadSize = GetMaxRawReadSize( nBytesLeft );
+        mrStrm.SeekRel( nReadSize );
+        mnRawRecLeft -= nReadSize;
         nBytesLeft -= nReadSize;
         if( nBytesLeft )
-            StartContinue();
+            JumpToNextContinue();
+        DBG_ASSERT( mbValid, "XclImpStream::Ignore - record overread" );
     }
 }
-
 
 // ----------------------------------------------------------------------------
 
-void XclImpStream::StartStringContinue( bool& rb16Bit )
-{
-    DBG_ASSERT( !mbWarnings || !mnRecLeft, "XclImpStream::StartStringContinue - unexpected garbage" );
-
-    if( mbCont && GetRecLeft() )
-        StartContinue();
-    else if( mnRecId == EXC_ID_CONT )   // start next CONTINUE for TXO import
-    {
-        sal_uInt16 nNewNum, nNewSize;
-        mbValidRec = GetNextRecord( nNewNum, nNewSize ) && (nNewNum || nNewSize);
-        mbValid = mbValidRec && (nNewNum == EXC_ID_CONT);
-        if( mbValid )
-        {
-            mnRecSize = nNewSize;
-            mnNextRecPos = Tell() + nNewSize;
-            SetupRecord();
-        }
-    }
-    else
-        mbValid = false;
-
-    if( mbValid )
-        rb16Bit = HasFlag( ReaduInt8(), EXC_STRF_16BIT );
-}
-
 sal_uInt32 XclImpStream::ReadUniStringExtHeader(
         bool& rb16Bit, bool& rbRich, bool& rbFareast,
-        sal_uInt16& rnCrun, sal_uInt32& rnExtInf, sal_uInt8 nFlags )
+        sal_uInt16& rnFormatRuns, sal_uInt32& rnExtInf, sal_uInt8 nFlags )
 {
-    DBG_ASSERT( !HasFlag( nFlags, EXC_STRF_UNKNOWN ), "XclImpStream::ReadUniStringExt - unknown flags" );
-    rb16Bit = HasFlag( nFlags, EXC_STRF_16BIT );
-    rbRich = HasFlag( nFlags, EXC_STRF_RICH );
-    rbFareast = HasFlag( nFlags, EXC_STRF_FAREAST );
-    rnCrun = rbRich ? ReaduInt16() : 0;
+    DBG_ASSERT( !::get_flag( nFlags, EXC_STRF_UNKNOWN ), "XclImpStream::ReadUniStringExt - unknown flags" );
+    rb16Bit = ::get_flag( nFlags, EXC_STRF_16BIT );
+    rbRich = ::get_flag( nFlags, EXC_STRF_RICH );
+    rbFareast = ::get_flag( nFlags, EXC_STRF_FAREAST );
+    rnFormatRuns = rbRich ? ReaduInt16() : 0;
     rnExtInf = rbFareast ? ReaduInt32() : 0;
-    return rnExtInf + 4UL * rnCrun;
+    return rnExtInf + 4 * rnFormatRuns;
 }
 
 sal_uInt32 XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags )
@@ -854,10 +861,13 @@ sal_uInt32 XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags
     return ReadUniStringExtHeader( rb16Bit, bRich, bFareast, nCrun, nExtInf, nFlags );
 }
 
-void XclImpStream::AppendRawUniString( String& rString, sal_uInt16 nChars, bool b16Bit )
+// ----------------------------------------------------------------------------
+
+String XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
-    sal_uInt32 nCharsLeft = nChars;
-    sal_uInt32 nReadSize;
+    String aRet;
+    sal_uInt16 nCharsLeft = nChars;
+    sal_uInt16 nReadSize;
 
     sal_Unicode* pcBuffer = new sal_Unicode[ nCharsLeft + 1 ];
 
@@ -865,12 +875,12 @@ void XclImpStream::AppendRawUniString( String& rString, sal_uInt16 nChars, bool 
     {
         if( b16Bit )
         {
-            nReadSize = ::std::min( nCharsLeft, mnRecLeft / 2 );
-            DBG_ASSERT( !mbWarnings || (nReadSize <= nCharsLeft) || !(mnRecLeft & 0x1),
+            nReadSize = ::std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
+            DBG_ASSERT( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
                 "XclImpStream::ReadRawUniString - missing a byte" );
         }
         else
-            nReadSize = ::std::min( nCharsLeft, mnRecLeft );
+            nReadSize = GetMaxRawReadSize( nCharsLeft );
 
         sal_Unicode* pcUniChar = pcBuffer;
         sal_Unicode* pcEndChar = pcBuffer + nReadSize;
@@ -895,76 +905,60 @@ void XclImpStream::AppendRawUniString( String& rString, sal_uInt16 nChars, bool 
         }
 
         *pcEndChar = '\0';
-        rString.Append( pcBuffer );
+        aRet.Append( pcBuffer );
 
         nCharsLeft -= nReadSize;
         if( nCharsLeft )
-            StartStringContinue( b16Bit );
+            JumpToNextStringContinue( b16Bit );
     }
 
     delete[] pcBuffer;
-}
-
-void XclImpStream::IgnoreRawUniString( sal_uInt16 nChars, bool b16Bit )
-{
-    sal_uInt32 nCharsLeft = nChars;
-    sal_uInt32 nReadSize;
-
-    while( IsValid() && nCharsLeft )
-    {
-        if( b16Bit )
-        {
-            nReadSize = ::std::min( nCharsLeft, mnRecLeft / 2 );
-            DBG_ASSERT( !mbWarnings || (nReadSize <= nCharsLeft) || !(mnRecLeft & 0x1),
-                "XclImpStream::IgnoreRawUniString - missing a byte" );
-            Ignore( nReadSize * 2 );
-        }
-        else
-        {
-            nReadSize = ::std::min( nCharsLeft, mnRecLeft );
-            Ignore( nReadSize );
-        }
-
-        nCharsLeft -= nReadSize;
-        if( nCharsLeft )
-            StartStringContinue( b16Bit );
-    }
-}
-
-void XclImpStream::AppendUniString( String& rString, sal_uInt16 nChars, sal_uInt8 nFlags )
-{
-    bool b16Bit;
-    sal_uInt32 nExtSize = ReadUniStringExtHeader( b16Bit, nFlags );
-    AppendRawUniString( rString, nChars, b16Bit );
-    SkipUniStringExtData( nExtSize );
-}
-
-String XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
-{
-    String aRet;
-    AppendRawUniString( aRet, nChars, b16Bit );
     return aRet;
 }
 
 String XclImpStream::ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
 {
-    String aRet;
-    AppendUniString( aRet, nChars, nFlags );
+    bool b16Bit;
+    sal_uInt32 nExtSize = ReadUniStringExtHeader( b16Bit, nFlags );
+    String aRet( ReadRawUniString( nChars, b16Bit ) );
+    SkipUniStringExtData( nExtSize );
     return aRet;
 }
 
 String XclImpStream::ReadUniString( sal_uInt16 nChars )
 {
-    String aRet;
-    AppendUniString( aRet, nChars );
-    return aRet;
+    return ReadUniString( nChars, ReaduInt8() );
 }
 
 String XclImpStream::ReadUniString()
 {
-    String aRet;
-    AppendUniString( aRet );
-    return aRet;
+    return ReadUniString( ReaduInt16() );
+}
+
+void XclImpStream::IgnoreRawUniString( sal_uInt16 nChars, bool b16Bit )
+{
+    sal_uInt16 nCharsLeft = nChars;
+    sal_uInt16 nReadSize;
+
+    while( IsValid() && nCharsLeft )
+    {
+        if( b16Bit )
+        {
+            nReadSize = ::std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
+            DBG_ASSERT( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
+                "XclImpStream::IgnoreRawUniString - missing a byte" );
+            Ignore( nReadSize * 2 );
+        }
+        else
+        {
+            nReadSize = GetMaxRawReadSize( nCharsLeft );
+            Ignore( nReadSize );
+        }
+
+        nCharsLeft -= nReadSize;
+        if( nCharsLeft )
+            JumpToNextStringContinue( b16Bit );
+    }
 }
 
 void XclImpStream::IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
@@ -975,37 +969,162 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
     SkipUniStringExtData( nExtSize );
 }
 
-void XclImpStream::AppendRawByteString( String& rString, sal_uInt16 nChars )
+void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 {
-    sal_Char* pcBuffer = new sal_Char[ nChars + 1 ];
-    sal_uInt32 nCharsRead = ReadData( pcBuffer, nChars );
-    pcBuffer[ nCharsRead ] = '\0';
-    rString.Append( String( pcBuffer, mrRoot.GetCharSet() ) );
-    delete[] pcBuffer;
+    IgnoreUniString( nChars, ReaduInt8() );
 }
+
+void XclImpStream::IgnoreUniString()
+{
+    IgnoreUniString( ReaduInt16() );
+}
+
+// ----------------------------------------------------------------------------
 
 String XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
-    String aRet;
-    AppendRawByteString( aRet, nChars );
+    sal_Char* pcBuffer = new sal_Char[ nChars + 1 ];
+    sal_uInt16 nCharsRead = ReadRawData( pcBuffer, nChars );
+    pcBuffer[ nCharsRead ] = '\0';
+    String aRet( pcBuffer, mrRoot.GetCharSet() );
+    delete[] pcBuffer;
     return aRet;
 }
 
 String XclImpStream::ReadByteString( bool b16BitLen )
 {
-    String aRet;
-    AppendByteString( aRet, b16BitLen );
-    return aRet;
+    return ReadRawByteString( ReadByteStrLen( b16BitLen ) );
 }
 
-
-// ----------------------------------------------------------------------------
-
-sal_uInt32 XclImpStream::Tell() const
+void XclImpStream::IgnoreRawByteString( sal_uInt16 nChars )
 {
-    return mrStrm.Tell();
+    Ignore( nChars );
 }
 
+void XclImpStream::IgnoreByteString( bool b16BitLen )
+{
+    IgnoreRawByteString( ReadByteStrLen( b16BitLen ) );
+}
+
+// private --------------------------------------------------------------------
+
+void XclImpStream::StorePosition( XclImpStreamPos& rPos )
+{
+    rPos.Set( mrStrm, mnNextRecPos, mnCurrRecSize, mnRawRecId, mnRawRecSize, mnRawRecLeft, mbValid );
+}
+
+void XclImpStream::RestorePosition( const XclImpStreamPos& rPos )
+{
+    rPos.Get( mrStrm, mnNextRecPos, mnCurrRecSize, mnRawRecId, mnRawRecSize, mnRawRecLeft, mbValid );
+    SetupDecrypter();
+}
+
+bool XclImpStream::ReadNextRawRecHeader()
+{
+    mrStrm.Seek( mnNextRecPos );
+    bool bRet = (mnNextRecPos < mnStreamSize);
+    if( bRet )
+        mrStrm >> mnRawRecId >> mnRawRecSize;
+    return bRet;
+}
+
+void XclImpStream::SetupDecrypter()
+{
+    if( mxDecrypter.get() )
+        mxDecrypter->Update( mrStrm, mnRawRecSize );
+}
+
+void XclImpStream::SetupRawRecord()
+{
+    // pre: mnRawRecSize contains current raw record size
+    // pre: mrStrm points to start of raw record data
+    mnNextRecPos = mrStrm.Tell() + mnRawRecSize;
+    mnRawRecLeft = mnRawRecSize;
+    mnCurrRecSize += mnRawRecSize;
+    SetupDecrypter();   // decrypter works on raw record level
+}
+
+void XclImpStream::SetupRecord()
+{
+    mnRecId = mnRawRecId;
+    mnAltContId = EXC_ID_UNKNOWN;
+    mnCurrRecSize = 0;
+    mnComplRecSize = mnRawRecSize;
+    mbHasComplRec = !mbCont;
+    SetupRawRecord();
+    SetNulSubstChar();
+    EnableDecryption();
+    StorePosition( maFirstRec );
+}
+
+bool XclImpStream::IsContinueId( sal_uInt16 nRecId ) const
+{
+    return (nRecId == EXC_ID_CONT) || (nRecId == mnAltContId);
+}
+
+bool XclImpStream::JumpToNextContinue()
+{
+    mbValid = mbValid && (mbCont || IsContinueId( mnRecId ));
+    if( mbValid )
+        mbValid = ReadNextRawRecHeader() && IsContinueId( mnRawRecId );
+    if( mbValid )   // do not setup a following non-CONTINUE record
+        SetupRawRecord();
+    return mbValid;
+}
+
+bool XclImpStream::JumpToNextStringContinue( bool& rb16Bit )
+{
+    DBG_ASSERT( !mnRawRecLeft, "XclImpStream::JumpToNextStringContinue - unexpected garbage" );
+
+    if( mbCont && GetRecLeft() )
+    {
+        JumpToNextContinue();
+    }
+    else if( mnRecId == EXC_ID_CONT )
+    {
+        // CONTINUE handling is off, but we have started reading in a CONTINUE record
+        // -> start next CONTINUE for TXO import
+        mbValidRec = ReadNextRawRecHeader() && (mnRawRecId || mnRawRecSize);
+        mbValid = mbValidRec && (mnRawRecId == EXC_ID_CONT);
+        // we really start a new record here - no chance to return to string origin
+        if( mbValid )
+            SetupRecord();
+    }
+    else
+        mbValid = false;
+
+    if( mbValid )
+        rb16Bit = ::get_flag( ReaduInt8(), EXC_STRF_16BIT );
+    return mbValid;
+}
+
+bool XclImpStream::EnsureRawReadSize( sal_uInt16 nBytes )
+{
+    if( mbValid && nBytes )
+    {
+        while( mbValid && !mnRawRecLeft ) JumpToNextContinue();
+        mbValid = mbValid && (nBytes <= mnRawRecLeft);
+        DBG_ASSERT( mbValid, "XclImpStream::EnsureRawReadSize - record overread" );
+    }
+    return mbValid;
+}
+
+sal_uInt16 XclImpStream::GetMaxRawReadSize( sal_uInt32 nBytes ) const
+{
+    return static_cast< sal_uInt16 >( ::std::min< sal_uInt32 >( nBytes, mnRawRecLeft ) );
+}
+
+sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
+{
+    DBG_ASSERT( (nBytes <= mnRawRecLeft), "XclImpStream::ReadRawData - record overread" );
+    sal_uInt16 nRet = 0;
+    if( mbUseDecr )
+        nRet = mxDecrypter->Read( mrStrm, pData, nBytes );
+    else
+        nRet = static_cast< sal_uInt16 >( mrStrm.Read( pData, nBytes ) );
+    mnRawRecLeft -= nRet;
+    return nRet;
+}
 
 // ============================================================================
 
