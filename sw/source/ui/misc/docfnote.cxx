@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:35:22 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,13 +153,13 @@ SwFootNoteOptionDlg::~SwFootNoteOptionDlg()
 
 IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 {
-    SfxItemSet *pSet = 0;
+    SfxItemSet aDummySet(rSh.GetAttrPool(), 1, 1 );
     SfxTabPage *pPage = GetTabPage( TP_FOOTNOTEOPTION );
     if ( pPage )
-        pPage->FillItemSet( (SfxItemSet&)pSet );
+        pPage->FillItemSet( aDummySet );
     pPage = GetTabPage( TP_ENDNOTEOPTION  );
     if ( pPage )
-        pPage->FillItemSet( (SfxItemSet&)pSet );
+        pPage->FillItemSet( aDummySet );
     aOldOkHdl.Call( pBtn );
     return 0;
 }
@@ -490,7 +490,7 @@ SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
     return pFmt;
 }
 
-BOOL SwEndNoteOptionPage::FillItemSet( SfxItemSet &rSet )
+BOOL SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 {
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo() : new SwFtnInfo();
 
