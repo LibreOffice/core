@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:48:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,8 +200,18 @@ const sal_uInt16 EXC_ID3_BOF                = 0x0209;
 const sal_uInt16 EXC_ID4_BOF                = 0x0409;
 const sal_uInt16 EXC_ID5_BOF                = 0x0809;
 
+const sal_uInt16 EXC_BOF_BIFF2              = 0x0200;
+const sal_uInt16 EXC_BOF_BIFF3              = 0x0300;
+const sal_uInt16 EXC_BOF_BIFF4              = 0x0400;
 const sal_uInt16 EXC_BOF_BIFF5              = 0x0500;
 const sal_uInt16 EXC_BOF_BIFF8              = 0x0600;
+
+const sal_uInt16 EXC_BOF_GLOBALS            = 0x0005;   /// BIFF5-BIFF8 workbook globals.
+const sal_uInt16 EXC_BOF_VBMODULE           = 0x0006;   /// BIFF5-BIFF8 Visual BASIC module.
+const sal_uInt16 EXC_BOF_SHEET              = 0x0010;   /// Simple worksheet.
+const sal_uInt16 EXC_BOF_CHART              = 0x0020;   /// Chart-only sheet.
+const sal_uInt16 EXC_BOF_MACROSHEET         = 0x0040;   /// BIFF2-BIFF4 macro sheet.
+const sal_uInt16 EXC_BOF_WORKSPACE          = 0x0100;   /// BIFF3-BIFF8 workspace file.
 
 // (0x000A) EOF ---------------------------------------------------------------
 
