@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:30:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,10 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
         throw task::ErrorCodeIOException( ::rtl::OUString(),
                                             uno::Reference< uno::XInterface >(),
                                             ERRCODE_IO_INVALIDPARAMETER );
+    }
+    catch( task::ErrorCodeIOException& )
+    {
+        throw;
     }
     catch( uno::Exception& )
     {
