@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 11:23:52 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 08:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 
 using namespace utl;
@@ -2228,7 +2234,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
         else // the connection is no table supplier so I make it myself
         {
             if(!m_xActiveConnection.is())
-                throw SQLException();
+                throw SQLException(::rtl::OUString(DBACORE_RESSTRING(RID_STR_CONNECTION_INVALID)),*this,SQLSTATE_GENERAL,1000,Any() );
             m_pTables = new OTableContainer(OConfigurationNode(),OConfigurationTreeRoot(),*this,m_aMutex,m_xActiveConnection);
             _rxRetTables = m_pTables;
             Sequence< ::rtl::OUString> aTableFilter(1);

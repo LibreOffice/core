@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 11:14:53 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 08:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     Reference<XPropertySet> xIndexColsSup;
     Reference<XNameAccess> xIndexColumns;
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
-    OSL_ENSURE(xIndexes.is(),"No indexes!");
     if(xIndexes.is())
     {
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
@@ -1008,6 +1007,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/04/02 11:14:53  oj
+    changes for character stream
+
     Revision 1.12  2001/02/06 12:51:13  rt
     #65293# syntax
 
