@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 10:52:15 $
+ *  last change: $Author: ka $ $Date: 2001-05-31 11:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,16 @@ void GalleryPreview::Command(const CommandEvent& rCEvt )
 
 // ------------------------------------------------------------------------
 
+void GalleryPreview::KeyInput( const KeyEvent& rKEvt )
+{
+    if( mpTheme && rKEvt.GetKeyCode().GetCode() == KEY_SPACE )
+        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
+    else
+        Window::KeyInput( rKEvt );
+}
+
+// ------------------------------------------------------------------------
+
 sal_Int8 GalleryPreview::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet;
@@ -356,6 +366,16 @@ void GalleryIconView::Command( const CommandEvent& rCEvt )
 
 // ------------------------------------------------------------------------
 
+void GalleryIconView::KeyInput( const KeyEvent& rKEvt )
+{
+    if( mpTheme && rKEvt.GetKeyCode().GetCode() == KEY_SPACE )
+        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
+    else
+        ValueSet::KeyInput( rKEvt );
+}
+
+// ------------------------------------------------------------------------
+
 sal_Int8 GalleryIconView::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     return( ( (GalleryBrowser2*) GetParent() )->AcceptDrop( *this, rEvt ) );
@@ -493,6 +513,16 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
 
     if( ( GetRowAtYPosPixel( rCEvt.GetMousePosPixel().Y() ) != BROWSER_ENDOFSELECTION ) && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) )
         ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, &rCEvt.GetMousePosPixel() );
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryListView::KeyInput( const KeyEvent& rKEvt )
+{
+    if( mpTheme && rKEvt.GetKeyCode().GetCode() == KEY_SPACE )
+        ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
+    else
+        BrowseBox::KeyInput( rKEvt );
 }
 
 // ------------------------------------------------------------------------
