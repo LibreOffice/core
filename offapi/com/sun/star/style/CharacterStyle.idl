@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterStyle.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: os $ $Date: 2001-02-14 12:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,30 @@ service CharacterStyle
     //-------------------------------------------------------------------------
     /// specifies the style properties.
     service CharacterProperties;
+    /** This value contains the character height as difference in point to the height of
+     the character in the parent style.
+     */
+    [property] float CharDiffHeight;
+    /** This value contains the character height as percentage value relative to the height of
+     the character in the parent style.
+     */
+    [property] short CharPropHeight;
+    /** This value contains the character height as difference in point to the height of
+     the character in the parent style in Asian text.
+     */
+    [property] float CharDiffHeightAsian;
+    /** This value contains the character height as percentage value relative to the height of
+     the character in the parent style in Asian text.
+     */
+    [property] short CharPropHeightAsian;
+    /** This value contains the character height as difference in point to the height of
+     the character in the parent style in complex text.
+     */
+    [property] float CharDiffHeightComplex;
+    /** This value contains the character height as percentage value relative to the height of
+     the character in the parent style in complex text.
+     */
+    [property] short CharPropHeightComplex;
 };
 
 //=============================================================================
