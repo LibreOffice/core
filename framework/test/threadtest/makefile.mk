@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:40:25 $
+#   last change: $Author: hr $ $Date: 2004-02-02 23:06:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,10 +86,6 @@ APP1OBJS=		$(SLO)$/threadtest.obj							\
                 $(SLO)$/lockhelper.obj
 
 # [ed] 6/16/02 Add the transaction manager library on OS X
-
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-APP1OBJS+=	$(SLO)$/transactionmanager.obj
-.ENDIF
 
 APP1STDLIBS=	$(CPPULIB)										\
                 $(CPPUHELPERLIB)								\
