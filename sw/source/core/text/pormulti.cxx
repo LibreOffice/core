@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-16 15:27:47 $
+ *  last change: $Author: ama $ $Date: 2001-02-28 08:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,10 +822,63 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     return sal_False;
 }
 
+/*-----------------16.02.01 16:39-------------------
+ * lcl_HasRotation(..)
+ * is a little help function for GetMultiCreator(..)
+ * It extracts the charrotation from a charrotate-attribute or a character style.
+ * The rValue is set to TRUE, if the charrotate-attribute's value is set and
+ * no charrotate-format reference is passed.
+ * If there is a charrotate-format reference, then the rValue is set only,
+ * if the charrotate-attribute's value is set _and_ identical
+ * to the charrotate-format's value.
+ * --------------------------------------------------*/
+
+sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
+    const SvxCharRotateItem* &rpRef, sal_Bool &rValue )
+{
+    if( RES_CHRATR_ROTATE == rAttr.Which() )
+    {
+        rValue = 0 != rAttr.GetCharRotate().GetValue();
+        if( !rpRef )
+            rpRef = &rAttr.GetCharRotate();
+        else if( rAttr.GetCharRotate().GetValue() != rpRef->GetValue() )
+            rValue = sal_False;
+        return sal_True;
+    }
+    SwCharFmt* pFmt = NULL;
+    if( RES_TXTATR_INETFMT == rAttr.Which() )
+        pFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
+    else if( RES_TXTATR_CHARFMT == rAttr.Which() )
+        pFmt = rAttr.GetCharFmt().GetCharFmt();
+    if ( pFmt )
+    {
+        const SfxPoolItem* pItem;
+        if( SFX_ITEM_SET == pFmt->GetAttrSet().
+            GetItemState( RES_CHRATR_ROTATE, TRUE, &pItem ) )
+        {
+            rValue = 0 != ((SvxCharRotateItem*)pItem)->GetValue();
+            if( !rpRef )
+                rpRef = (SvxCharRotateItem*)pItem;
+            else if( ((SvxCharRotateItem*)pItem)->GetValue() !=
+                        rpRef->GetValue() )
+                rValue = sal_False;
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
 {
-    const SvxTwoLinesItem* p2Lines = NULL;
     const SvxCharRotateItem* pRotate = NULL;
+    const SfxPoolItem* pRotItem;
+    if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
+        GetItemState( RES_CHRATR_ROTATE, TRUE, &pRotItem ) &&
+        ((SvxCharRotateItem*)pRotItem)->GetValue() )
+        pRotate = (SvxCharRotateItem*)pRotItem;
+    else
+        pRotItem = NULL;
+    const SvxTwoLinesItem* p2Lines = NULL;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
         GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) &&
@@ -835,11 +888,13 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         pItem = NULL;
 
     const SwpHints *pHints = pFrm->GetTxtNode()->GetpSwpHints();
-    if( !pHints && !p2Lines )
+    if( !pHints && !p2Lines && !pRotate )
         return NULL;
     const SwTxtAttr *pRuby = NULL;
     sal_Bool bTwo = sal_False;
+    sal_Bool bRot = sal_False;
     USHORT n2Lines = USHRT_MAX;
+    USHORT nRotate = USHRT_MAX;
     USHORT nCount = pHints ? pHints->Count() : 0;
     USHORT i;
     for( i = 0; i < nCount; ++i )
@@ -853,7 +908,14 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
             if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
                 pRuby = pTmp;
             else if( RES_CHRATR_ROTATE == pTmp->Which() )
-                pRuby = pTmp;
+            {
+                const SvxCharRotateItem* pRoTmp = NULL;
+                if( lcl_HasRotation( *pTmp, pRoTmp, bRot ) )
+                {
+                    nRotate = bRot ? i : nCount;
+                    pRotate = pRoTmp;
+                }
+            }
             else
             {
                 const SvxTwoLinesItem* p2Tmp = NULL;
@@ -872,8 +934,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         SwMultiCreator *pRet = new SwMultiCreator;
         pRet->pItem = NULL;
         pRet->pAttr = pRuby;
-        pRet->nId = ( RES_TXTATR_CJK_RUBY == pRuby->Which() ) ?
-                    SW_MC_RUBY : SW_MC_ROTATE;
+        pRet->nId = SW_MC_RUBY;
         return pRet;
     }
     if( n2Lines < nCount || ( pItem && pItem == p2Lines &&
@@ -988,6 +1049,148 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         }
         if( bOn && aEnd.Count() )
             rPos = aEnd[ aEnd.Count()-1 ];
+        return pRet;
+    }
+    if( nRotate < nCount || ( pRotItem && pRotItem == pRotate &&
+        rPos < GetTxt().Len() ) )
+    {   // The winner is a rotate-attribute,
+        // the end of the multiportion depends on the following attributes...
+        SwMultiCreator *pRet = new SwMultiCreator;
+        pRet->nId = SW_MC_ROTATE;
+
+        // We note the endpositions of the 2-line attributes in aEnd as stack
+        SvXub_StrLens aEnd;
+
+        // The bOn flag signs the state of the last 2-line attribute in the
+        // aEnd-stack, which could interrupts the winning rotation attribute.
+        sal_Bool bOn = pItem ? sal_True : sal_False;
+        aEnd.Insert( GetTxt().Len(), 0 );
+        // n2Lines is the index of the last 2-line-attribute, which contains
+        // the actual position.
+        i = 0;
+        xub_StrLen n2Start = rPos;
+        while( i < nCount )
+        {
+            const SwTxtAttr *pTmp = (*pHints)[i++];
+            if( *pTmp->GetAnyEnd() <= n2Start )
+                continue;
+            if( n2Start < *pTmp->GetStart() )
+            {
+                if( bOn || aEnd[ aEnd.Count()-1 ] < *pTmp->GetStart() )
+                    break;
+                n2Start = *pTmp->GetStart();
+                while( aEnd.Count() && aEnd[ aEnd.Count()-1 ] <= n2Start )
+                {
+                    bOn = !bOn;
+                    aEnd.Remove( aEnd.Count()-1, 1 );
+                }
+                if( !aEnd.Count() )
+                {
+                    aEnd.Insert( n2Start, 0 );
+                    bOn = sal_False;
+                }
+            }
+            // A ruby attribute stops immediately
+            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            {
+                bOn = sal_True;
+                break;
+            }
+            p2Lines = NULL;
+            if( lcl_Has2Lines( *pTmp, p2Lines, bTwo ) )
+            {
+                if( bTwo == bOn )
+                {
+                    if( aEnd[ aEnd.Count()-1 ] > *pTmp->GetEnd() )
+                        aEnd.Insert( *pTmp->GetEnd(), aEnd.Count() );
+                    else if( aEnd.Count() > 1 )
+                        aEnd.Remove( aEnd.Count()-1, 1 );
+                    else
+                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                }
+                else
+                {
+                    bOn = bTwo;
+                    if( aEnd[ aEnd.Count()-1 ] < *pTmp->GetEnd() )
+                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                }
+            }
+        }
+        if( !bOn && aEnd.Count() )
+            n2Start = aEnd[ aEnd.Count()-1 ];
+
+        if( aEnd.Count() )
+            aEnd.Remove( 0, aEnd.Count() );
+
+        bOn = sal_True;
+        if( nRotate < nCount )
+        {
+            pRet->pItem = NULL;
+            pRet->pAttr = (*pHints)[nRotate];
+            aEnd.Insert( *pRet->pAttr->GetEnd(), 0 );
+            if( pRotItem )
+            {
+                aEnd[ 0 ] = GetTxt().Len();
+                bOn = ((SvxCharRotateItem*)pRotItem)->GetValue() ==
+                        pRotate->GetValue();
+            }
+        }
+        else
+        {
+            pRet->pItem = pRotItem;
+            pRet->pAttr = NULL;
+            aEnd.Insert( GetTxt().Len(), 0 );
+        }
+        i = 0;
+        while( i < nCount )
+        {
+            const SwTxtAttr *pTmp = (*pHints)[i++];
+            if( *pTmp->GetAnyEnd() <= rPos )
+                continue;
+            if( rPos < *pTmp->GetStart() )
+            {
+                if( !bOn || aEnd[ aEnd.Count()-1 ] < *pTmp->GetStart() )
+                    break;
+                rPos = *pTmp->GetStart();
+                while( aEnd.Count() && aEnd[ aEnd.Count()-1 ] <= rPos )
+                {
+                    bOn = !bOn;
+                    aEnd.Remove( aEnd.Count()-1, 1 );
+                }
+                if( !aEnd.Count() )
+                {
+                    aEnd.Insert( rPos, 0 );
+                    bOn = sal_True;
+                }
+            }
+            if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
+            {
+                bOn = sal_False;
+                break;
+            }
+            if( lcl_HasRotation( *pTmp, pRotate, bTwo ) )
+            {
+                if( bTwo == bOn )
+                {
+                    if( aEnd[ aEnd.Count()-1 ] < *pTmp->GetEnd() )
+                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                }
+                else
+                {
+                    bOn = bTwo;
+                    if( aEnd[ aEnd.Count()-1 ] > *pTmp->GetEnd() )
+                        aEnd.Insert( *pTmp->GetEnd(), aEnd.Count() );
+                    else if( aEnd.Count() > 1 )
+                        aEnd.Remove( aEnd.Count()-1, 1 );
+                    else
+                        aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
+                }
+            }
+        }
+        if( bOn && aEnd.Count() )
+            rPos = aEnd[ aEnd.Count()-1 ];
+        if( rPos > n2Start )
+            rPos = n2Start;
         return pRet;
     }
     return NULL;
