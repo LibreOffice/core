@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-05 15:00:23 $
+ *  last change: $Author: ama $ $Date: 2002-02-08 14:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,14 @@
 #endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
+#endif
+#ifdef VERTICAL_LAYOUT
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
+#endif
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
 #endif
 
 #include "ftnfrm.hxx"
@@ -1336,7 +1344,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     nUpper += pAttrs->GetTopLine( &rThis );
 
 #ifdef VERTICAL_LAYOUT
-    if( rThis.IsInDocBody() )
+    if( rThis.IsInDocBody() && rThis.GetAttrSet()->GetParaGrid().GetValue() )
     {
         const SwPageFrm* pPg = rThis.FindPageFrm();
         GETGRID( pPg )

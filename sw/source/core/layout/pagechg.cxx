@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-05 15:50:59 $
+ *  last change: $Author: ama $ $Date: 2002-02-08 14:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 #include "bodyfrm.hxx"
 #include "ftnfrm.hxx"
 #include "tabfrm.hxx"
+#include "txtfrm.hxx"
 #include "layact.hxx"
 #include "flyfrms.hxx"
 #include "frmsh.hxx"
@@ -192,8 +193,7 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
 
 #ifdef VERTICAL_LAYOUT
     BOOL bNoGrid = TRUE;
-    if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() &&
-        ( !Lower() || !Lower()->IsColumnFrm() ) )
+    if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() )
     {
         GETGRID( ((SwPageFrm*)GetUpper()) )
         if( pGrid )
@@ -307,9 +307,6 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
             const SwFmtCol aOld; //ChgColumns() verlaesst sich darauf, dass ein
                                  //Old-Wert hereingereicht wird.
             pBodyFrm->ChgColumns( aOld, rCol );
-#ifdef VERTICAL_LAYOUT
-            bHasGrid = FALSE;
-#endif
         }
     }
 }
@@ -358,6 +355,30 @@ SwPageFrm::~SwPageFrm()
 }
 
 #ifdef VERTICAL_LAYOUT
+
+void SwPageFrm::CheckGrid( BOOL bInvalidate )
+{
+    BOOL bOld = bHasGrid;
+    bHasGrid = TRUE;
+    GETGRID( this )
+    bHasGrid = 0 != pGrid;
+    if( bInvalidate || bOld != bHasGrid )
+    {
+        SwLayoutFrm* pBody = FindBodyCont();
+        if( pBody )
+        {
+            pBody->InvalidatePrt();
+            SwCntntFrm* pFrm = pBody->ContainsCntnt();
+            while( pBody->IsAnLower( pFrm ) )
+            {
+                ((SwTxtFrm*)pFrm)->Prepare( PREP_CLEAR );
+                pFrm = pFrm->GetNextCntntFrm();
+            }
+        }
+        SetCompletePaint();
+    }
+}
+
 
 void SwPageFrm::CheckDirection( BOOL bVert )
 {
@@ -590,6 +611,8 @@ void SwPageFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
             PrepareHeader();
         if ( nInvFlags & 0x10 )
             PrepareFooter();
+        if ( nInvFlags & 0x20 )
+            CheckGrid( nInvFlags & 0x40 );
     }
 }
 
@@ -619,17 +642,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 SwLayoutFrm *pB = FindBodyCont();
                 ASSERT( pB, "Seite ohne Body." );
                 pB->ChgColumns( rOldCol, rNewCol );
-#ifdef VERTICAL_LAYOUT
-                if( rNewCol.GetNumCols() > 1 )
-                    bHasGrid = FALSE;
-                else if( pDesc )
-                {
-                    bHasGrid = TRUE;
-                    GETGRID( this )
-                    if( !pGrid )
-                        bHasGrid = FALSE;
-                }
-#endif
+                rInvFlags |= 0x20;
             }
 
             //2. Kopf- und Fusszeilen.
@@ -677,19 +690,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             SwLayoutFrm *pB = FindBodyCont();
             ASSERT( pB, "Seite ohne Body." );
             pB->ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
-#ifdef VERTICAL_LAYOUT
-            if( ((const SwFmtCol*)pNew)->GetNumCols() > 1 )
-                bHasGrid = FALSE;
-            else if( pDesc )
-            {
-                bHasGrid = TRUE;
-                GETGRID( this )
-                if( !pGrid )
-                    bHasGrid = FALSE;
-            }
-
-#endif
-            rInvFlags |= 0x02;
+            rInvFlags |= 0x22;
         }
         break;
 
@@ -700,6 +701,11 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_FOOTER:
             rInvFlags |= 0x10;
             break;
+#ifdef VERTICAL_LAYOUT
+        case RES_TEXTGRID:
+            rInvFlags |= 0x60;
+            break;
+#endif
 
         case RES_PAGEDESC_FTNINFO:
             //Die derzeit einzig sichere Methode:
@@ -1289,24 +1295,6 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
 
 void SwPageFrm::PrepareRegisterChg()
 {
-#ifdef VERTICAL_LAYOUT
-    if( pDesc )
-    {
-        const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
-        BOOL bOld = bHasGrid;
-        if( pFmt )
-            bHasGrid = TRUE;
-        else
-            bHasGrid = FALSE;
-        if( bOld || bHasGrid )
-        {
-            SwLayoutFrm* pBody = FindBodyCont();
-            if( pBody && pBody->Lower() && !pBody->Lower()->IsColumnFrm() )
-                pBody->InvalidatePrt();
-            SetCompletePaint();
-        }
-    }
-#endif
     SwCntntFrm *pFrm = FindFirstBodyCntnt();
     while( pFrm )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-05 14:59:11 $
+ *  last change: $Author: ama $ $Date: 2002-02-08 14:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ public:
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #ifdef VERTICAL_LAYOUT
     virtual void  CheckDirection( BOOL bVert );
+    void CheckGrid( BOOL bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     BOOL HasGrid() const { return bHasGrid; }
 #endif

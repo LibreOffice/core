@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-06 11:32:52 $
+ *  last change: $Author: ama $ $Date: 2002-02-08 14:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3018,7 +3018,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
         pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() ) )
     {
         const SwLayoutFrm* pBody = FindBodyCont();
-        if( pBody && pBody->Lower() && !pBody->Lower()->IsColumnFrm() )
+        if( pBody )
         {
             SwRect aGrid( pBody->Prt() );
             aGrid += pBody->Frm().Pos();
