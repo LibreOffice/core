@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-25 16:39:54 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 15:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,12 @@
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
+#include "valueimp.hxx"
+
 #define _SV_VALUESET_CXX
 #define private public
 
 #include <valueset.hxx>
-#include "valueimp.hxx"
 
 // ------------
 // - ValueSet -

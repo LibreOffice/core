@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-05 15:52:03 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 15:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
+#endif
+#ifndef _COLOR_HXX
+#include <tools/color.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 #ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
