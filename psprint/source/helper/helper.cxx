@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-10 11:48:46 $
+ *  last change: $Author: pl $ $Date: 2002-07-17 13:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
                     if( rOutFile.write( pWriteBuffer, nBytesToWrite, nRead ) || nRead != nBytesToWrite )
                         bSuccess = false;
 
-                    delete pWriteBuffer;
+                    delete [] pWriteBuffer;
                 }
                 else
                 {
@@ -302,7 +302,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
             else
                 bSuccess = false;
 
-            delete pBuffer;
+            delete [] pBuffer;
         }
         else if( nType == 3 )
             bEof = true;
