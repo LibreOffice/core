@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 16:18:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,80 +164,80 @@ const sal_Char cFactory[] = "private:factory/swriter";
 /* -----------------09.06.99 14:39-------------------
  *
  * --------------------------------------------------*/
-SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
-            uno::Reference< container::XNamed > & xN,
-            uno::Reference< container::XNameAccess > & xNA ) :
-    ModalDialog(pWin, SW_RES(DLG_RENAME_XNAMED)),
-   xNamed(xN),
-   xNameAccess(xNA),
-   aNewNameFT(this, ResId(FT_NEW_NAME)),
-   aNewNameED(this, ResId(ED_NEW_NAME)),
-   aNameFL(this, ResId(FL_NAME)),
-   aOk(this, ResId(PB_OK)),
-   aCancel(this, ResId(PB_CANCEL)),
-   aHelp(this, ResId(PB_HELP))
-{
-    FreeResource();
-    sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
-
-    String sTmp(GetText());
-    aNewNameED.SetText(xNamed->getName());
-    aNewNameED.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    sTmp += String(xNamed->getName());
-    SetText(sTmp);
-
-    aOk.SetClickHdl(LINK(this, SwRenameXNamedDlg, OkHdl));
-    aNewNameED.SetModifyHdl(LINK(this, SwRenameXNamedDlg, ModifyHdl));
-    aOk.Enable(sal_False);
-}
-/* -----------------09.06.99 15:34-------------------
- *
- * --------------------------------------------------*/
-IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, pOk)
-{
-    try
-    {
-        xNamed->setName(aNewNameED.GetText());
-    }
-    catch(uno::RuntimeException&)
-    {
-        DBG_ERROR("Name wurde nicht geaendert")
-    }
-    EndDialog(RET_OK);
-    return 0;
-}
-/* -----------------09.06.99 15:48-------------------
- *
- * --------------------------------------------------*/
-IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
-{
-    String sTmp(pEdit->GetText());
-
-    // prevent from pasting illegal characters
-    sal_uInt16 nLen = sTmp.Len();
-    String sMsg;
-    for(sal_uInt16 i = 0; i < pEdit->GetForbiddenChars().Len(); i++)
-    {
-        sal_uInt16 nTmpLen = sTmp.Len();
-        sTmp.EraseAllChars(pEdit->GetForbiddenChars().GetChar(i));
-        if(sTmp.Len() != nTmpLen)
-            sMsg += pEdit->GetForbiddenChars().GetChar(i);
-    }
-    if(sTmp.Len() != nLen)
-    {
-        pEdit->SetText(sTmp);
-        String sWarning(sRemoveWarning);
-        sWarning += sMsg;
-        InfoBox(this, sWarning).Execute();
-    }
-
-    aOk.Enable(sTmp.Len() && !xNameAccess->hasByName(sTmp)
-    && (!xSecondAccess.is() || !xSecondAccess->hasByName(sTmp))
-    && (!xThirdAccess.is() || !xThirdAccess->hasByName(sTmp))
-    );
-    return 0;
-}
-
+//CHINA001 SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
+//CHINA001 uno::Reference< container::XNamed > & xN,
+//CHINA001 uno::Reference< container::XNameAccess > & xNA ) :
+//CHINA001 ModalDialog(pWin, SW_RES(DLG_RENAME_XNAMED)),
+//CHINA001 xNamed(xN),
+//CHINA001 xNameAccess(xNA),
+//CHINA001 aNewNameFT(this, ResId(FT_NEW_NAME)),
+//CHINA001 aNewNameED(this, ResId(ED_NEW_NAME)),
+//CHINA001 aNameFL(this, ResId(FL_NAME)),
+//CHINA001 aOk(this, ResId(PB_OK)),
+//CHINA001 aCancel(this, ResId(PB_CANCEL)),
+//CHINA001 aHelp(this, ResId(PB_HELP))
+//CHINA001 {
+//CHINA001 FreeResource();
+//CHINA001 sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
+//CHINA001
+//CHINA001 String sTmp(GetText());
+//CHINA001 aNewNameED.SetText(xNamed->getName());
+//CHINA001 aNewNameED.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+//CHINA001 sTmp += String(xNamed->getName());
+//CHINA001 SetText(sTmp);
+//CHINA001
+//CHINA001 aOk.SetClickHdl(LINK(this, SwRenameXNamedDlg, OkHdl));
+//CHINA001 aNewNameED.SetModifyHdl(LINK(this, SwRenameXNamedDlg, ModifyHdl));
+//CHINA001 aOk.Enable(sal_False);
+//CHINA001 }
+//CHINA001 /* -----------------09.06.99 15:34-------------------
+//CHINA001 *
+//CHINA001 * --------------------------------------------------*/
+//CHINA001 IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, pOk)
+//CHINA001 {
+//CHINA001 try
+//CHINA001 {
+//CHINA001 xNamed->setName(aNewNameED.GetText());
+//CHINA001  }
+//CHINA001 catch(uno::RuntimeException&)
+//CHINA001 {
+//CHINA001 DBG_ERROR("Name wurde nicht geaendert")
+//CHINA001  }
+//CHINA001 EndDialog(RET_OK);
+//CHINA001 return 0;
+//CHINA001 }
+//CHINA001 /* -----------------09.06.99 15:48-------------------
+//CHINA001 *
+//CHINA001 * --------------------------------------------------*/
+//CHINA001 IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
+//CHINA001 {
+//CHINA001 String sTmp(pEdit->GetText());
+//CHINA001
+//CHINA001 // prevent from pasting illegal characters
+//CHINA001 sal_uInt16 nLen = sTmp.Len();
+//CHINA001 String sMsg;
+//CHINA001 for(sal_uInt16 i = 0; i < pEdit->GetForbiddenChars().Len(); i++)
+//CHINA001 {
+//CHINA001 sal_uInt16 nTmpLen = sTmp.Len();
+//CHINA001 sTmp.EraseAllChars(pEdit->GetForbiddenChars().GetChar(i));
+//CHINA001 if(sTmp.Len() != nTmpLen)
+//CHINA001 sMsg += pEdit->GetForbiddenChars().GetChar(i);
+//CHINA001  }
+//CHINA001 if(sTmp.Len() != nLen)
+//CHINA001 {
+//CHINA001 pEdit->SetText(sTmp);
+//CHINA001 String sWarning(sRemoveWarning);
+//CHINA001 sWarning += sMsg;
+//CHINA001 InfoBox(this, sWarning).Execute();
+//CHINA001  }
+//CHINA001
+//CHINA001 aOk.Enable(sTmp.Len() && !xNameAccess->hasByName(sTmp)
+//CHINA001 && (!xSecondAccess.is() || !xSecondAccess->hasByName(sTmp))
+//CHINA001 && (!xThirdAccess.is() || !xThirdAccess->hasByName(sTmp))
+//CHINA001 );
+//CHINA001 return 0;
+//CHINA001 }
+//CHINA001
 /************************************************************************
 
 ************************************************************************/
