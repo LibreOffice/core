@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:00:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 10:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,19 +82,19 @@
 using namespace ::com::sun::star;
 
 ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData, const Any& rSelection ) :
-    ModalDialog( pParent, ResId( RID_PDF_EXPORT_DLG, &rResMgr ) ),
-    maBtnOK( this, ResId( BT_OK ) ),
-    maBtnCancel( this, ResId( BT_CANCEL ) ),
-    maBtnHelp( this, ResId( BT_HELP ) ),
-    maFlPages( this, ResId( FL_PAGES ) ),
-    maRbAll( this, ResId( RB_ALL ) ),
-    maRbRange( this, ResId( RB_RANGE ) ),
-    maRbSelection( this, ResId( RB_SELECTION ) ),
-    maEdPages( this, ResId( ED_PAGES ) ),
-    maFlCompression( this, ResId( FL_COMPRESSION ) ),
-    maRbScreen( this, ResId( RB_SCREEN ) ),
-    maRbPrint( this, ResId( RB_PRINT ) ),
-    maRbPress( this, ResId( RB_PRESS ) ),
+    ModalDialog( pParent, ResId( RID_PDF_OLD_EXPORT_DLG, &rResMgr ) ),
+    maBtnOK( this, ResId( BT_OLD_OK ) ),
+    maBtnCancel( this, ResId( BT_OLD_CANCEL ) ),
+    maBtnHelp( this, ResId( BT_OLD_HELP ) ),
+    maFlPages( this, ResId( FL_OLD_PAGES ) ),
+    maRbAll( this, ResId( RB_OLD_ALL ) ),
+    maRbRange( this, ResId( RB_OLD_RANGE ) ),
+    maRbSelection( this, ResId( RB_OLD_SELECTION ) ),
+    maEdPages( this, ResId( ED_OLD_PAGES ) ),
+    maFlCompression( this, ResId( FL_OLD_COMPRESSION ) ),
+    maRbScreen( this, ResId( RB_OLD_SCREEN ) ),
+    maRbPrint( this, ResId( RB_OLD_PRINT ) ),
+    maRbPress( this, ResId( RB_OLD_PRESS ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
     maSelection( rSelection )
 {
