@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:35:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,12 @@ SfxObjectShell::~SfxObjectShell()
         String aTmp;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
         ::utl::UCBContentHelper::Kill( aTmp );
+    }
+
+    if ( pImp->mpObjectContainer )
+    {
+        pImp->mpObjectContainer->CloseEmbeddedObjects();
+        delete pImp->mpObjectContainer;
     }
 
     if ( pImp->bOwnsStorage && pImp->m_xDocStorage.is() )
