@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:50:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5011,7 +5011,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // unary/binary operators
         HelpId = HID_SMA_UNBINOPS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -5549,7 +5549,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // relations
         HelpId = HID_SMA_RELATIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -6260,7 +6260,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // set operations
         HelpId = HID_SMA_SETOPERATIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -7005,7 +7005,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // functions
         HelpId = HID_SMA_FUNCTIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -7835,7 +7835,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // operators
         HelpId = HID_SMA_OPERATORS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -8280,7 +8280,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // attributs
         HelpId = HID_SMA_ATTRIBUTES_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -9051,7 +9051,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // parentheses
         HelpId = HID_SMA_BRACKETS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -9692,7 +9692,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // format
         HelpId = HID_SMA_FORMAT_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -10194,7 +10194,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         // misc
         HelpId = HID_SMA_FORMAT_TBX ;
-        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
         Size = MAP_APPFONT ( 65 , 95 ) ;
         SVLook = TRUE ;
         Hide = TRUE ;
@@ -11135,6 +11135,18 @@ FloatingWindow RID_TOOLBOXWINDOW
             };
         };
     };
+    FixedLine FL_TOOLBOX_CAT_DELIM
+    {
+        //Pos = MAP_APPFONT ( 0 , 0 ) ;
+        //Size = MAP_APPFONT ( 65 , 38 ) ;
+        //Pos = MAP_APPFONT ( 0 , 45 ) ;
+        //Size = MAP_APPFONT ( 65 , 95 ) ;
+
+        Pos = MAP_APPFONT ( 0 , 38 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+
+    };
+
     Text [ portuguese ] = "Selecção" ;
     Text [ english_us ] = "Selection" ;
     Text [ portuguese_brazilian ] = "Seleção" ;
