@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-14 14:19:26 $
+ *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,8 @@ NodeResult BackendAccess::getNodeData(const NodeRequest& aRequest,
                                       INodeDataListener *aListener)
     CFG_UNO_THROW_ALL()
 {
-    SchemaBuilder *schemaBuilder = new backend::SchemaBuilder() ;
+    rtl::OUString component = aRequest.getPath().getModuleName().toString() ;
+    SchemaBuilder *schemaBuilder = new backend::SchemaBuilder( component ) ;
     uno::Reference<backenduno::XSchemaHandler> schemaHandler = schemaBuilder ;
     uno::Sequence<uno::Reference<backenduno::XLayer> > layers ;
     uno::Reference<backenduno::XSchema> schema ;
@@ -205,7 +206,8 @@ void BackendAccess::updateNodeData(const UpdateRequest& aUpdate)
 NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
     CFG_UNO_THROW_ALL()
 {
-    SchemaBuilder *schemaBuilder = new backend::SchemaBuilder() ;
+    rtl::OUString component = aRequest.getPath().getModuleName().toString() ;
+    SchemaBuilder *schemaBuilder = new backend::SchemaBuilder(component) ;
     uno::Reference<backenduno::XSchemaHandler> schemaHandler = schemaBuilder ;
     uno::Sequence<uno::Reference<backenduno::XLayer> > layers ;
     uno::Reference<backenduno::XSchema> schema ;
@@ -226,7 +228,8 @@ TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
 {
     uno::Reference<backenduno::XSchema> schema =
         mBackend->getComponentSchema(aRequest.getComponentName().toString()) ;
-    SchemaBuilder *schemaBuilder = new SchemaBuilder() ;
+    rtl::OUString component = aRequest.getComponentName().toString();
+    SchemaBuilder *schemaBuilder = new SchemaBuilder( component ) ;
     uno::Reference<backenduno::XSchemaHandler> handler = schemaBuilder ;
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getTemplateData()");

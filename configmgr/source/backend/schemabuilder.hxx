@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+ *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace configmgr
         :   public SchemaBuilder_Base
         {
         public:
-            SchemaBuilder();
+            SchemaBuilder( const OUString& aExpectedComponentName );
             virtual ~SchemaBuilder();
 
         // checking the result

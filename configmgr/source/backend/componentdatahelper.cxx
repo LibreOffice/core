@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 10:30:22 $
+ *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ DataBuilderContext::DataBuilderContext(  )
 : m_aParentStack()
 , m_aActiveComponent()
 , m_pContext()
+, m_aExpectedComponentName(OUString())
 {
 
 }
@@ -101,6 +102,17 @@ DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext )
 : m_aParentStack()
 , m_aActiveComponent()
 , m_pContext(_pContext)
+, m_aExpectedComponentName(OUString())
+{
+
+}
+// -----------------------------------------------------------------------------
+
+DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext, const OUString& aExpectedComponentName )
+: m_aParentStack()
+, m_aActiveComponent()
+, m_pContext(_pContext)
+, m_aExpectedComponentName( aExpectedComponentName )
 {
 
 }
@@ -436,6 +448,11 @@ void DataBuilderContext::startActiveComponent(OUString const & _aComponent)
     if (!m_aParentStack.empty())
         raiseMalformedDataException("Invalid Component Data: Starting component while node is still open");
 
+    if (m_aExpectedComponentName.getLength()!=0)
+    {
+        if (m_aExpectedComponentName.compareTo ( _aComponent)!= 0 )
+            raiseMalformedDataException("Invalid Component Data: Component name does not match request");
+    }
     m_aActiveComponent = _aComponent;
 
     OSL_POSTCOND(hasActiveComponent(), "Component Builder Context: Could not start Component/Template");

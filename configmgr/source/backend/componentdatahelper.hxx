@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 10:30:22 $
+ *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,9 +137,11 @@ namespace configmgr
             Stack< ISubtree * >         m_aParentStack;
             OUString                    m_aActiveComponent;
             uno::XInterface *           m_pContext;
+            OUString                    m_aExpectedComponentName;
         public:
             DataBuilderContext();
-            explicit DataBuilderContext(uno::XInterface * _pContext);
+            explicit DataBuilderContext(uno::XInterface * _pContext );
+            explicit DataBuilderContext(uno::XInterface * _pContext, const OUString& aExpectedComponentName );
             ~DataBuilderContext();
 
             bool        isDone() const;

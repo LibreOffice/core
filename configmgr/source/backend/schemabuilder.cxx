@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-20 10:23:48 $
+ *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,13 @@ namespace configmgr
         static void check_if_complete()
         {
             uno::Reference< backenduno::XSchemaHandler >
-                test(new SchemaBuilder());
+                 test(new SchemaBuilder(OUString()));
         }
 // -----------------------------------------------------------------------------
 
-SchemaBuilder::SchemaBuilder(  )
+SchemaBuilder::SchemaBuilder( const OUString& aExpectedComponentName  )
 : m_aData()
-, m_aContext(static_cast<backenduno::XSchemaHandler*>(this))
+, m_aContext(static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName )
 , m_aFactory()
 {
 
