@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:51:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,6 @@ class X11SalFrame : public SalFrame
     int             nVisibility_;
 
     int             nScreenSaversTimeout_;
-    Timer           maResizeTimer;
-    bool            mbMoved;
-    bool            mbSized;
     Rectangle       maPaintRegion;
 
     Timer           maAlwaysOnTopRaiseTimer;
@@ -220,7 +217,6 @@ class X11SalFrame : public SalFrame
     long            HandleReparentEvent ( XReparentEvent    *pEvent );
     long            HandleClientMessage ( XClientMessageEvent*pEvent );
 
-    DECL_LINK( HandleResizeTimer, void* );
     DECL_LINK( HandleAlwaysOnTopRaise, void* );
 
     void            passOnSaveYourSelf();
