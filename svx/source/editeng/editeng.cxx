@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-21 11:03:39 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,18 @@ USHORT EditEngine::GetAsianCompressionMode() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditEngine->GetAsianCompressionMode();
+}
+
+void EditEngine::SetKernAsianPunctuation( BOOL b )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    pImpEditEngine->SetKernAsianPunctuation( b );
+}
+
+BOOL EditEngine::IsKernAsianPunctuation() const
+{
+    DBG_CHKTHIS( EditView, 0 );
+    return pImpEditEngine->IsKernAsianPunctuation();
 }
 
 void EditEngine::SetPolygon( const XPolyPolygon& rPoly )

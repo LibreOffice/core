@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-03 10:13:45 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     maBackgroundColor   = COL_AUTO;
 
     nAsianCompressionMode = text::CharacterCompressionType::NONE;
+    bKernAsianPunctuation = FALSE;
 
 
     aStatus.GetControlWord() =  EE_CNTRL_USECHARATTRIBS | EE_CNTRL_DOIDLEFORMAT |

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-06 15:15:58 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2278,6 +2278,19 @@ void ImpEditEngine::SetAsianCompressionMode( USHORT n )
     if ( n != nAsianCompressionMode )
     {
         nAsianCompressionMode = n;
+        if ( ImplHasText() )
+        {
+            FormatFullDoc();
+            UpdateViews();
+        }
+    }
+}
+
+void ImpEditEngine::SetKernAsianPunctuation( BOOL b )
+{
+    if ( b != bKernAsianPunctuation )
+    {
+        bKernAsianPunctuation = b;
         if ( ImplHasText() )
         {
             FormatFullDoc();

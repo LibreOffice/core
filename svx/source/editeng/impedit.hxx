@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 09:58:54 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,7 @@ private:
     sal_uInt16          nStretchY;
 
     USHORT              nAsianCompressionMode;
+    BOOL                bKernAsianPunctuation;
 
     sal_uInt16          nBigTextObjectStart;
     ::com::sun::star::uno::Reference<
@@ -884,6 +885,9 @@ public:
 
     void                SetAsianCompressionMode( USHORT n );
     USHORT              GetAsianCompressionMode() const { return nAsianCompressionMode; }
+
+    void                SetKernAsianPunctuation( BOOL b );
+    BOOL                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
 
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 09:58:54 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 12:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2207,6 +2207,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         pCJKLanguageItem = (const SvxLanguageItem*) &pNode->GetContentAttribs().GetItem( EE_CHAR_LANGUAGE_CJK );
 
     rFont.SetCJKContextLanguage( pCJKLanguageItem->GetLanguage() );
+
+    if ( rFont.GetKerning() && IsKernAsianPunctuation() && ( nScriptType == i18n::ScriptType::ASIAN ) )
+        rFont.SetKerning( rFont.GetKerning() | KERNING_ASIAN );
 
     if ( aStatus.DoNotUseColors() )
     {
