@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:17:11 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,8 +435,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 break;
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;
-                aString.Erase();
-                aIn.AppendRawByteString( aString, nLen );
+                aString = aIn.ReadRawByteString( nLen );
 
                 aStack << aPool.Store( aString );
                 break;
