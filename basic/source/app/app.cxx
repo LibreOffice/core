@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: gh $ $Date: 2002-07-29 12:21:30 $
+ *  last change: $Author: gh $ $Date: 2002-07-30 06:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ void TestToolDebugMessageFilter( const sal_Char *pString )
     // OSL
     if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND ) return;
     if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND ) return;
+    if ( aMessage.Search( CByteString("Cannot open Configuration: Connector: unknown delegatee com.sun.star.connection.Connector.portal") ) != STRING_NOTFOUND ) return;
 
     // VCL
     if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND ) return;
