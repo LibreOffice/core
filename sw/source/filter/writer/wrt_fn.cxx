@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrt_fn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:03:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
@@ -145,14 +142,21 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
     if( !pCNd )
         return rWrt;
 
-    USHORT nId;
-    switch( pCNd->GetNodeType() )
+    USHORT nId = RES_TXTNODE;
+    switch (pCNd->GetNodeType())
     {
-    case ND_TEXTNODE:   nId = RES_TXTNODE;  break;
-    case ND_GRFNODE:    nId = RES_GRFNODE;  break;
-    case ND_OLENODE:    nId = RES_OLENODE;  break;
-    default:
-        ASSERT( FALSE, "was fuer ein Node ist es denn nun?" );
+        case ND_TEXTNODE:
+            nId = RES_TXTNODE;
+             break;
+        case ND_GRFNODE:
+            nId = RES_GRFNODE;
+            break;
+        case ND_OLENODE:
+            nId = RES_OLENODE;
+            break;
+        default:
+            ASSERT(false, "was fuer ein Node ist es denn nun?");
+            break;
     }
     FnNodeOut pOut;
     if( 0 != ( pOut = pTab[ nId - RES_NODE_BEGIN ] ))
