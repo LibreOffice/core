@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 11:00:53 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _SVIMPLBOX_HXX
 #include <svimpbox.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #ifndef _SVTOOLS_SVTDATA_HXX
 #include "svtdata.hxx"
@@ -101,12 +104,13 @@
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
 
-// #i27063# never access VCL after DeInitVCL - also no destructors
-// FIXME: static images are currently leaked letting the OS clean up
-Image*  SvImpLBox::s_aDefCollapsed      = NULL;
-Image*  SvImpLBox::s_aDefExpanded       = NULL;
-Image*  SvImpLBox::s_aDefCollapsedHC    = NULL;
-Image*  SvImpLBox::s_aDefExpandedHC     = NULL;
+namespace
+{
+    struct DefCollapsed : public rtl::Static<Image, DefCollapsed> {};
+    struct DefExpanded : public rtl::Static<Image, DefExpanded> {};
+    struct DefCollapsedHC : public rtl::Static<Image, DefCollapsedHC> {};
+    struct DefExpandedHC : public rtl::Static<Image, DefExpandedHC> {};
+}
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
 
@@ -3535,28 +3539,30 @@ void SvImpLBox::CancelPendingEdit()
 // -----------------------------------------------------------------------
 void SvImpLBox::implInitDefaultNodeImages()
 {
-    if ( s_aDefCollapsed )
+    if ( !!DefCollapsed::get() )
         // assume that all or nothing is initialized
         return;
 
-    s_aDefCollapsed = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED ) );
-    s_aDefCollapsedHC = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED_HC ) );
-    s_aDefExpanded = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
-    s_aDefExpandedHC = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED_HC ) );
+    DefCollapsed::get() = Image( SvtResId( RID_IMG_TREENODE_COLLAPSED ) );
+    DefCollapsedHC::get() = Image( SvtResId( RID_IMG_TREENODE_COLLAPSED_HC ) );
+    DefExpanded::get() = Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
+    DefExpandedHC::get() = Image( SvtResId( RID_IMG_TREENODE_EXPANDED_HC ) );
 }
 
 // -----------------------------------------------------------------------
 const Image& SvImpLBox::GetDefaultExpandedNodeImage( BmpColorMode _eMode )
 {
     implInitDefaultNodeImages();
-    return ( BMP_COLOR_NORMAL == _eMode ) ? *s_aDefExpanded : *s_aDefExpandedHC;
+    return (BMP_COLOR_NORMAL == _eMode) ?
+        DefExpanded::get() : DefExpandedHC::get();
 }
 
 // -----------------------------------------------------------------------
 const Image& SvImpLBox::GetDefaultCollapsedNodeImage( BmpColorMode _eMode )
 {
     implInitDefaultNodeImages();
-    return ( BMP_COLOR_NORMAL == _eMode ) ? *s_aDefCollapsed : *s_aDefCollapsedHC;
+    return (BMP_COLOR_NORMAL == _eMode) ?
+        DefCollapsed::get() : DefCollapsedHC::get();
 }
 
 // -----------------------------------------------------------------------
