@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:13:10 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include <algorithm>
 
 #ifndef _EEITEM_HXX //autogen
 #include "eeitem.hxx"
@@ -370,8 +372,10 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) c
     // #101701#
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
+    Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
+    ::std::swap( aSize.Width(), aSize.Height() );
     return SvxEditSourceHelper::EEToUserSpace( rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) ),
-                                               Size( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() ),
+                                               aSize,
                                                rEditEngine.IsVertical() == TRUE );
 }
 
@@ -416,8 +420,10 @@ OutputDevice* SvxEditEngineForwarder::GetRefDevice() const
 sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
     // #101701#
+    Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
+    ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
-                                                      Size( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() ),
+                                                      aSize,
                                                       rEditEngine.IsVertical() == TRUE ));
 
     EPosition aDocPos = rEditEngine.FindDocPosition( aEEPos );

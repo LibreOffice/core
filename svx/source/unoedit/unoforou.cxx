@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:13:10 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include <algorithm>
 
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
