@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:47:48 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,7 +744,7 @@ void FixedBitmap::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSC_FIXEDBITMAP_BITMAP & nObjMask )
     {
@@ -992,7 +992,7 @@ void FixedImage::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSC_FIXEDIMAGE_IMAGE & nObjMask )
     {
