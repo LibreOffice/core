@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 09:04:43 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 11:30:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,7 @@ GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -81,7 +79,7 @@ RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=\
     $(SRS)$/smres.srs \
     $(SRS)$/smslots.srs \
-    $(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)$/sfx.srs
+    $(SOLARCOMMONRESDIR)$/sfx.srs
 
 SHL1TARGET= sm$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= smimp
