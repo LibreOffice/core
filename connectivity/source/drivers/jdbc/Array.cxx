@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Array.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:19:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,20 +101,20 @@ void java_sql_Array::saveClassRef( jclass pClass )
 }
 ::rtl::OUString SAL_CALL java_sql_Array::getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    jstring out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        char * cSignature = "(I)Ljava/lang/String;";
-        char * cMethodName = "getBaseTypeName";
+        static char * cSignature = "(I)Ljava/lang/String;";
+        static char * cMethodName = "getBaseTypeName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
-            out = (jstring)t.pEnv->CallObjectMethod( object, mID);
+            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,*this);
-            if(out)
-                aStr = JavaString2String(t.pEnv,out);
+            aStr = JavaString2String(t.pEnv,out);
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -129,10 +129,12 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        char * cSignature = "()I";
-        char * cMethodName = "getBaseType";
+        static char * cSignature = "()I";
+        static char * cMethodName = "getBaseType";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID );
             ThrowSQLException(t.pEnv,*this);
@@ -149,10 +151,12 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     if( t.pEnv )
     {
         jobject obj = XNameAccess2Map(t.pEnv,typeMap);
-        char * cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
-        char * cMethodName = "getArray";
+        static char * cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
+        static char * cMethodName = "getArray";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
             out = (jobjectArray)t.pEnv->CallObjectMethod( object, mID, obj);
             ThrowSQLException(t.pEnv,*this);
@@ -170,10 +174,12 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     if( t.pEnv )
     {
         jobject obj = XNameAccess2Map(t.pEnv,typeMap);
-        char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
-        char * cMethodName = "getArray";
+        static char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
+        static char * cMethodName = "getArray";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
             out = (jobjectArray)t.pEnv->CallObjectMethod( object, mID, index,count,obj);
             ThrowSQLException(t.pEnv,*this);
@@ -189,19 +195,20 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-        jvalue args[1];
         // Parameter konvertieren
-        args[0].l = XNameAccess2Map(t.pEnv,typeMap);
+        jobject obj = XNameAccess2Map(t.pEnv,typeMap);
         // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
-        char * cMethodName = "getResultSet";
+        static char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
+        static char * cMethodName = "getResultSet";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
-            out = t.pEnv->CallObjectMethod( object, mID, args[0].l);
+            out = t.pEnv->CallObjectMethod( object, mID, obj);
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
-            t.pEnv->DeleteLocalRef((jobjectArray)args[0].l);
+            t.pEnv->DeleteLocalRef(obj);
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
@@ -214,19 +221,20 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
-        jvalue args[1];
         // Parameter konvertieren
-        args[0].l = XNameAccess2Map(t.pEnv,typeMap);
+        jobject obj = XNameAccess2Map(t.pEnv,typeMap);
         // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
-        char * cMethodName = "getResultSetAtIndex";
+        static char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
+        static char * cMethodName = "getResultSetAtIndex";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
-            out = t.pEnv->CallObjectMethod( object, mID, index,count,args[0].l);
+            out = t.pEnv->CallObjectMethod( object, mID, index,count,obj);
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
-            t.pEnv->DeleteLocalRef((jobjectArray)args[0].l);
+            t.pEnv->DeleteLocalRef(obj);
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
