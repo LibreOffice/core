@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-05 15:51:18 $
+ *  last change: $Author: fme $ $Date: 2002-12-04 09:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,6 @@
 #include <redlnitr.hxx>     // SwRedlineItr
 #endif
 
-#ifdef VERTICAL_LAYOUT
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
@@ -169,7 +168,6 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
 #endif
 
 #ifndef _DOC_HXX
@@ -516,7 +514,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     SwLinePortion *pPor = NewPortion( rInf );
 
-#ifdef VERTICAL_LAYOUT
+    // Asian grid stuff
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
@@ -528,7 +526,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     // the pointer is stored, because after formatting of non-asian text,
     // the width of the kerning portion has to be adjusted
     SwKernPortion* pGridKernPortion = 0;
-#endif
 
     sal_Bool bFull;
     SwTwips nUnderLineStart = 0;
@@ -546,13 +543,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if( pPor->InFldGrp() && ! pPor->IsFtnPortion() )
             ((SwFldPortion*)pPor)->CheckScript( rInf );
 
-#ifdef VERTICAL_LAYOUT
         if( ! bHasGrid && rInf.HasScriptSpace() &&
-            rInf.GetLast() && rInf.GetLast()->InTxtGrp()
-#else
-        if( rInf.HasScriptSpace() && rInf.GetLast() && rInf.GetLast()->InTxtGrp()
-#endif
-            && rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
+            rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
+            rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
             BYTE nNxtActual = rInf.GetFont()->GetActual();
             BYTE nLstActual = nNxtActual;
@@ -619,7 +612,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 }
             }
         }
-#ifdef VERTICAL_LAYOUT
         else if ( bHasGrid && ! pGridKernPortion && ! pMulti )
         {
             // insert a grid kerning portion
@@ -662,14 +654,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             if ( pGridKernPortion != pPor )
                 InsertPortion( rInf, pGridKernPortion );
         }
-#endif
 
         // the multi-portion has it's own format function
-#ifdef BIDI
         if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
-#else
-        if( pPor->IsMultiPortion() && !pMulti )
-#endif
             bFull = BuildMultiPortion( rInf, *((SwMultiPortion*)pPor) );
         else
             bFull = pPor->Format( rInf );
@@ -711,10 +698,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                      ( ( pPor->IsDropPortion() || pPor->IsMultiPortion() )&&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
-#ifdef VERTICAL_LAYOUT
                    // 5. Grid Mode
                      || ( bHasGrid && SW_CJK != pFnt->GetActual() )
-#endif
                    )
                 )
             // we store the beginning of the critical portion as our
@@ -734,11 +719,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if ( !bFull )
         {
             rInf.ClrUnderFlow();
-#ifdef VERTICAL_LAYOUT
             if( ! bHasGrid && rInf.HasScriptSpace() && pPor->InTxtGrp() &&
-#else
-            if( rInf.HasScriptSpace() && pPor->InTxtGrp() &&
-#endif
                 pPor->GetLen() && !pPor->InFldGrp() )
             {
                 // The distance between two different scripts is set
@@ -768,7 +749,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             }
         }
 
-#ifdef VERTICAL_LAYOUT
         if ( bHasGrid && pPor != pGridKernPortion && ! pMulti )
         {
             xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
@@ -823,7 +803,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 // next portion should snap to grid
                 pGridKernPortion = 0;
         }
-#endif
 
         rInf.SetFull( bFull );
 
@@ -994,10 +973,8 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
 
     nNextAttr = pScriptInfo->NextScriptChg( rInf.GetIdx() );
 
-#ifdef BIDI
     xub_StrLen nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
     nNextAttr = Min( nNextAttr, nNextDir );
-#endif
 
     if( nNextChg > nNextAttr )
         nNextChg = nNextAttr;
@@ -1025,34 +1002,6 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
     if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
         nNextChg = Min( nExpect, rInf.GetTxt().Len() );
-
-    // 4294: Vorsicht vor STRING_LEN-Ueberrundungen !
-    if( MAX_TXTPORLEN < nNextChg && STRING_LEN - MAX_TXTPORLEN > rInf.GetIdx() )
-    {
-        const xub_StrLen nMaxChg = rInf.GetIdx() + MAX_TXTPORLEN;
-
-        if( nMaxChg < nNextChg )
-        {
-            // 6441: uebel ist, wenn die Portion passt...
-            const SwScriptInfo& rSI =
-                ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
-
-            USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
-                                rSI.CountCompChg() &&
-                                ! rInf.IsMulti() &&
-                                ! pPor->InFldGrp() &&
-                                ! pPor->IsDropPortion() ?
-                                10000 :
-                                    0 ;
-
-            const KSHORT nWidth =
-                rInf.GetTxtSize(
-                     &rInf.GetParaPortion()->GetScriptInfo(),
-                     rInf.GetIdx(), MAX_TXTPORLEN, nMaxComp ).Width();
-            if( nWidth > rInf.Width() )
-                nNextChg = Min( nMaxChg, rInf.GetTxt().Len() );
-        }
-    }
 
     // we keep an invariant during method calls:
     // there are no portion ending characters like hard spaces
@@ -1129,14 +1078,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetArrowDone( sal_True );
         }
 
-#ifdef VERTICAL_LAYOUT
         if ( ! pPor && ! pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
             if ( pGrid )
                 pPor = new SwKernPortion( *pCurr );
         }
-#endif
 
         // 2) Die Zeilenreste (mehrzeilige Felder)
         if( !pPor )
@@ -1190,14 +1137,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         if( !pPor && GetDropFmt() && ! rInf.IsMulti() )
             pPor = (SwLinePortion*)NewDropPortion( rInf );
 
-#ifdef VERTICAL_LAYOUT
         if ( ! pPor && ! pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
             if ( pGrid )
                 pPor = new SwKernPortion( *pCurr );
         }
-#endif
     }
     return pPor;
 }
@@ -1302,34 +1247,20 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
     if( !pPor )
     {
-#ifdef BIDI
         if( !pMulti || pMulti->IsBidi() )
-#else
-        if( !pMulti )
-#endif
         {   // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
             xub_StrLen nEnd = rInf.GetIdx();
-#ifdef BIDI
             SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd, pMulti );
-#else
-            SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd );
-#endif
             if( pCreate )
             {
                 SwMultiPortion* pTmp = NULL;
 
-#ifdef BIDI
                 if ( SW_MC_BIDI == pCreate->nId )
                     pTmp = new SwBidiPortion( nEnd, pCreate->nLevel );
                 else if ( SW_MC_RUBY == pCreate->nId )
                 {
-#else
-                if( SW_MC_RUBY == pCreate->nId )
-                {
-#endif
                     Seek( rInf.GetIdx() );
-#ifdef VERTICAL_LAYOUT
                     sal_Bool bRubyTop;
                     sal_Bool* pRubyPos = 0;
 
@@ -1345,10 +1276,6 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
                                               *rInf.GetDoc(), nEnd, 0, pRubyPos );
-#else
-                    pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
-                                              *rInf.GetDoc(), nEnd );
-#endif
                 }
                 else if( SW_MC_ROTATE == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd );
@@ -1538,10 +1465,8 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
 xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "SwTxtFormatter::FormatLine( nStart ) with unswapped frame" );
-#endif
 
     SwHookOut aHook( GetInfo() );
     if( GetInfo().GetLen() < GetInfo().GetTxt().Len() )
@@ -1750,7 +1675,6 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
     KSHORT nLineHeight = pCurr->Height();
     pCurr->SetClipping( sal_False );
 
-#ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
     if ( pGrid && GetInfo().SnapToGrid() )
     {
@@ -1790,7 +1714,6 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
         pCurr->SetRealHeight( nLineHeight );
         return;
     }
-#endif
 
     // Das Dummyflag besitzen Zeilen, die nur Flyportions enthalten, diese
     // sollten kein Register etc. beachten. Dummerweise hat kann es eine leere
@@ -1860,16 +1783,11 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
 
         if( IsRegisterOn() )
         {
-#ifdef VERTICAL_LAYOUT
             SwTwips nTmpY = Y() + pCurr->GetAscent() + nLineHeight - pCurr->Height();
             SWRECTFN( pFrm )
             if ( bVert )
                 nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
             nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
-#else
-            SwTwips nTmpY = Y() + pCurr->GetAscent()
-                            + nLineHeight - pCurr->Height() - RegStart();
-#endif
             KSHORT nDiff = KSHORT( nTmpY % RegDiff() );
             if( nDiff )
                 nLineHeight += RegDiff() - nDiff;
@@ -1989,11 +1907,7 @@ KSHORT SwTxtFormatter::_CalcFitToContent()
     sal_Bool bFull = sal_False;
     while( pPor && !IsStop() && !bFull)
     {
-#ifdef BIDI
         if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
-#else
-        if( pPor->IsMultiPortion() && !pMulti )
-#endif
             bFull = BuildMultiPortion( GetInfo(), *((SwMultiPortion*)pPor) );
         else
             bFull = pPor->Format( GetInfo() );
