@@ -121,7 +121,6 @@ Dim sOldExtension as String
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
-
 		MaxFileIndex = Ubound(FilesList(),1)
 		For i = 0 To MaxFileIndex
 			If bCancelTask Then
@@ -184,12 +183,12 @@ Dim sOldExtension as String
 				End If
 				If bDoSave Then
 					InsertDocNamesToLogDocument(sFullName, TargetFile)
-&apos;					On Local Error Resume Next
+					On Local Error Resume Next
 					FileProperties(0).Name = &quot;FilterName&quot;
 					FileProperties(0).Value = CurFilterName
 					oDocument.StoreAsUrl(TargetFile,FileProperties())
 					oDocument.Dispose()
-&apos;					On Local Error Goto 0
+					On Local Error Goto 0
 				End If
 &apos;				oTaskenum = StarDesktop.Tasks.CreateEnumeration
 &apos;				While oTaskEnum.HasmoreElements
@@ -317,7 +316,16 @@ Dim i as Integer
 Dim bLogExists as Boolean
 	If ImportDialog.chkLogfile.State = 1 Then
 		i = 2
-		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
+Dim oArg() as new com.sun.star.beans.PropertyValue
+Dim oUrl as new com.sun.star.util.URL
+Dim oDisp as Object
+	oUrl.Complete = &quot;private:factory/swriter&quot;
+&apos;	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+
+	oDisp.dispatch(oUrl, oArg())
+	printdbgInfo oDisp
+&apos;	oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
 		oLogCursor = oLogDocument.Text.CreateTextCursor
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
@@ -366,7 +374,7 @@ Dim i as Integer
 			oLogCursor.HyperLinkURL = LocUrl
 			oLogCursor.HyperLinkName = LocUrl
 			oLogCursor.HyperLinkTarget = LocUrl
-			LocFileName = FileNameOutOfPath(LocUrl, &quot;/&quot;)
+			LocFileName = FileNameOutOfPath(LocUrl)
 			oCell.InsertString(oLogCursor, LocFileName,False)
 		Next i 
 		oLogDocument.Store()

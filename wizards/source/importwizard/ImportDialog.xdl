@@ -24,7 +24,7 @@
   <dlg:text dlg:id="LabelCurDocumentRetrieval" dlg:tab-index="13" dlg:left="15" dlg:top="91" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocumentRetrieval"/>
   <dlg:text dlg:id="LabelCurProgress" dlg:tab-index="14" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="8" dlg:page="4" dlg:value="LabelCurProgress"/>
   <dlg:text dlg:id="LabelCurDocument" dlg:tab-index="15" dlg:left="15" dlg:top="118" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocument"/>
-  <dlg:img dlg:id="ImportPreview" dlg:tab-index="16" dlg:left="6" dlg:top="5" dlg:width="258" dlg:height="26"/>
+  <dlg:img dlg:id="ImportPreview" dlg:tab-index="16" dlg:left="5" dlg:top="6" dlg:width="258" dlg:height="26"/>
   <dlg:button dlg:id="cbBack" dlg:tab-index="17" dlg:left="155" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34573" dlg:value="cbBack">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.Main.PrevStep" script:language="StarBasic"/>
   </dlg:button>
