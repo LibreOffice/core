@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:32:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include "DrawViewShell.hxx"
+
+#include "ViewShellHint.hxx"
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -332,7 +334,9 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_INSERTFILE:  // BASIC
         {
+            Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
             pFuActual = new FuInsertFile( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+            Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
             Cancel();
             rReq.Done ();
 
