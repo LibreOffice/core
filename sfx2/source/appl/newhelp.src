@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:05:13 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,6 +640,7 @@ CheckBox RID_HELP_ONSTARTUP_BOX
 };
 String RID_HELP_ONSTARTUP_TEXT
 {
+    Text [ de ] = "%PRODUCTNAME %MODULENAME-Hilfe beim Start anzeigen";
     Text [ en-US ] = "~Display %PRODUCTNAME %MODULENAME Help at Startup";
 };
 
