@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-12 09:11:14 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,12 @@ struct MarkData_Impl
 class SfxFrame;
 class SfxDialogLibraryContainer;
 class SfxScriptLibraryContainer;
-
+class SfxImageManager;
+class SfxToolBoxConfig;
+class SfxAcceleratorManager;
 struct SfxObjectShell_Impl
 {
+    SfxAcceleratorManager*  pAccMgr;
     SfxDocumentInfo*    pDocInfo;
     SfxConfigManager*   pCfgMgr;
     SfxInPlaceObject*   pInPlaceObj;        // das dazugeh"orige SO2-Objekt, falls this ein SfxInPlaceObject ist
@@ -149,6 +152,8 @@ struct SfxObjectShell_Impl
     sal_uInt16              nAutoLoadLocks;
     SfxModule*          pModule;
     SfxFrame* pFrame;
+    SfxImageManager* pImageManager;
+    SfxToolBoxConfig*   pTbxConfig;
     SfxEventConfigItem_Impl* pEventConfig;
     SfxObjectShellFlags eFlags;
     AsynchronLink*      pCloser;
@@ -161,6 +166,7 @@ struct SfxObjectShell_Impl
     sal_uInt16              nStyleFilter;
 
     SfxObjectShell_Impl() :
+        pAccMgr(0),
         nTime(),
         bIsTmp( sal_False),
         bClosing( sal_False),
@@ -201,6 +207,8 @@ struct SfxObjectShell_Impl
         pModule(  0 ),
         bModuleSearched( sal_False ),
         pFrame( 0 ),
+        pImageManager( 0 ),
+        pTbxConfig( 0 ),
         pEventConfig(NULL),
         bIsHelpObjSh( sal_False ),
         bForbidCaching( sal_False ),
