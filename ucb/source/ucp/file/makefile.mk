@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kso $ $Date: 2002-06-25 13:04:58 $
+#   last change: $Author: abi $ $Date: 2002-10-29 13:41:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,8 +101,7 @@ SHL1STDLIBS=\
     $(CPPULIB) \
     $(SALLIB)  \
     $(VOSLIB) \
-    $(UCBHELPERLIB)	\
-    $(UNOTOOLSLIB)
+    $(UCBHELPERLIB)
 
 .IF "$(OS)"=="MACOSX"
 .ELSE

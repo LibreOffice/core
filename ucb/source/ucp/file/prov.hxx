@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2002-04-25 10:54:26 $
+ *  last change: $Author: abi $ $Date: 2002-10-29 13:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XFILEIDENTIFIERCONVERTER_HPP_
 #include <com/sun/star/ucb/XFileIdentifierConverter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
 
 // FileProvider
@@ -270,8 +273,26 @@ namespace fileaccess {
 
     private:
         // methods
+
+        com::sun::star::uno::Reference<
+        com::sun::star::lang::XMultiServiceFactory >
+        getConfiguration() const;
+
+        com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+        getHierAccess( const com::sun::star::uno::Reference<
+                       com::sun::star::lang::XMultiServiceFactory >& sProvider,
+                       const char* file ) const;
+
+        rtl::OUString
+        getKey( const com::sun::star::uno::Reference<
+                com::sun::star::container::XHierarchicalNameAccess >&
+                xHierAccess,
+                const char* key ) const;
+
         void SAL_CALL initSubstVars( void );
         void SAL_CALL subst( rtl::OUString& sValue );
+
         rtl::OUString m_sInstPath;
         rtl::OUString m_sUserPath;
 

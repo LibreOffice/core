@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: abi $ $Date: 2002-04-25 10:54:26 $
+ *  last change: $Author: abi $ $Date: 2002-10-29 13:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@
 #include "prov.hxx"
 #endif
 
-#include <unotools/configmgr.hxx>
 
 #include <algorithm>
 
@@ -117,7 +116,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::ucb;
-
+using namespace com::sun::star::container;
 
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,
@@ -338,153 +337,6 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
     }
 }
 
-
-
-//  FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServiceFactory )
-//      : m_xMultiServiceFactory( xMultiServiceFactory ),
-//        m_pMyShell( 0 )
-//  {
-//      if( ! m_pMyShell )
-//          m_pMyShell = new shell( m_xMultiServiceFactory, this );
-
-//      try
-//      {
-//          rtl::OUString sProviderService =
-//              rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
-
-
-//          // New access to configuration with locally cached components
-//          rtl::OUString plugin = rtl::OUString::createFromAscii( "plugin" );
-//          Any aAny;
-//          aAny <<= plugin;
-//          PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
-//                                      -1,
-//                                      aAny,
-//                                      PropertyState_DIRECT_VALUE );
-
-//          Sequence< Any > seq(1);
-//          seq[0] <<= aProp;
-
-//          Reference< XMultiServiceFactory >
-//              sProvider(
-//                  m_xMultiServiceFactory->createInstanceWithArguments( sProviderService,seq ),
-//                  UNO_QUERY );
-
-
-//          /*
-//            // Old access to configuration without locally cached components
-//            Reference< XMultiServiceFactory >
-//            sProvider(
-//            m_xMultiServiceFactory->createInstance( sProviderService ),
-//            UNO_QUERY );
-//          */
-
-//          rtl::OUString sReaderService =
-//              rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
-
-//          Sequence< Any > aArguments( 1 );
-
-//          aArguments[0] <<=
-//              rtl::OUString::createFromAscii( "org.openoffice.Webtop.Security" );
-
-//          Reference< container::XHierarchicalNameAccess > xHierAccess;
-//          if( sProvider.is() )
-//              xHierAccess =
-//                  Reference< container::XHierarchicalNameAccess >(
-//                      sProvider->createInstanceWithArguments( sReaderService,aArguments ),
-//                      UNO_QUERY );
-
-//          Reference< container::XNameAccess > xSubNode;
-//          if( xHierAccess.is() )
-//              xSubNode = Reference< container::XNameAccess >( xHierAccess,UNO_QUERY );
-
-//          rtl::OUString d = rtl::OUString::createFromAscii( "oowSecDir" );
-//          rtl::OUString a = rtl::OUString::createFromAscii( "oowSecAlias" );
-
-//          rtl::OUString aRootDirectory;
-//          if( xSubNode.is() )
-//          {
-//              Any aAny = xSubNode->getByName( rtl::OUString::createFromAscii("MountPoints" ) );
-//              Reference< container::XNameAccess > xSubSubNode;
-//              aAny >>= xSubSubNode;
-
-//              Sequence< rtl::OUString > seqNames =
-//                  xSubSubNode->getElementNames();
-//              for( sal_Int32 k = 0; k < seqNames.getLength(); ++k )
-//              {
-//                  Any nocheinany = xSubSubNode->getByName( seqNames[k] );
-//                  Reference< container::XNameAccess > xAuaAuaAuaNode;
-//                  nocheinany >>= xAuaAuaAuaNode;
-
-//                  Any vorletztesany = xAuaAuaAuaNode->getByName( d );
-//                  rtl::OUString aDirectory;
-//                  vorletztesany >>= aDirectory;
-
-//                  Any letztesany    = xAuaAuaAuaNode->getByName( a );
-//                  rtl::OUString aAliasName;
-//                  letztesany >>= aAliasName;
-
-//                  rtl::OUString aUnqDir;
-//                  rtl::OUString aUnqAl;
-
-//                  initSubstVars();
-
-//                  rtl::OUString aDir = subst( aDirectory );
-//                  // old,assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aDir, aUnqDir );
-//                  // new, assuming system path:
-//                  osl::FileBase::getFileURLFromSystemPath( aDir,aUnqDir );
-
-//                  rtl::OUString aAlias = subst( aAliasName );
-//                  // old, assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aAlias, aUnqAl );
-//                  // new, assuming system path:
-//                  osl::FileBase::getFileURLFromSystemPath( aAlias,aUnqAl );
-
-//                  if ( !aUnqDir.getLength() )
-//                      osl::FileBase::getFileURLFromSystemPath( aDirectory,aUnqDir );
-//                  // m_pMyShell->getUnqFromUrl( aDirectory,aUnqDir );
-
-//                  if ( !aUnqAl.getLength() )
-//                      osl::FileBase::getFileURLFromSystemPath( aAliasName,aUnqAl );
-//                  // m_pMyShell->getUnqFromUrl( aAliasName,aUnqAl );
-
-//                  rtl::OUString aRealUnqDir;
-//                  rtl::OUString aRealUnqAlias;
-
-//                  getResolvedURL( aUnqDir.pData, &aRealUnqDir.pData );
-//                  aRealUnqAlias = aUnqAl;
-
-//                  if ( !aRealUnqAlias.getLength() )
-//                      aRealUnqAlias = aUnqAl;
-
-//                  if ( aRealUnqDir.getLength() && aRealUnqAlias.getLength() )
-//                  {
-//                      m_pMyShell->m_vecMountPoint.push_back(
-//                          shell::MountPoint( aRealUnqAlias, aRealUnqDir ) );
-//                      m_pMyShell->m_bFaked = true;
-//                  }
-
-//              }
-
-//              // Cut trailing slashes
-
-//              for ( sal_uInt32 j = 0; j < m_pMyShell->m_vecMountPoint.size(); j++ )
-//              {
-//                  sal_Int32   nLen = m_pMyShell->m_vecMountPoint[j].m_aDirectory.getLength();
-
-//                  if ( m_pMyShell->m_vecMountPoint[j].m_aDirectory.lastIndexOf( '/' ) == nLen - 1 )
-//                      m_pMyShell->m_vecMountPoint[j].m_aDirectory = m_pMyShell->m_vecMountPoint[j].m_aDirectory.copy( 0, nLen - 1 );
-//              }
-
-//              // Now sort the mount point entries according to the length
-
-//              std::stable_sort( m_pMyShell->m_vecMountPoint.begin(), m_pMyShell->m_vecMountPoint.end(), moreLength );
-//          }
-//      }
-//      catch( ... )
-//      {
-
-//      }
-//  }
 
 FileProvider::~FileProvider()
 {
@@ -1054,19 +906,18 @@ rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUStri
 ////////////////////////
 void SAL_CALL FileProvider::initSubstVars()
 {
-    m_sUserPath = rtl::OUString();
-    m_sInstPath = rtl::OUString();
+    Reference<XMultiServiceFactory>  sProvider(getConfiguration());
+    Reference<XHierarchicalNameAccess>
+        xHierAccess( getHierAccess(sProvider,
+                                   "org.openoffice.Office.Common"));
+    m_sInstPath = getKey(xHierAccess,"Path/Current/OfficeInstall");
 
-    utl::ConfigManager* pCfgMgr = utl::ConfigManager::GetConfigManager();
-    if( pCfgMgr != NULL )
-    {
-        com::sun::star::uno::Any aAny = pCfgMgr->GetDirectConfigProperty( utl::ConfigManager::OFFICEINSTALL );
-        aAny >>= m_sInstPath;
 
-        aAny = pCfgMgr->GetDirectConfigProperty( utl::ConfigManager::INSTALLPATH );
-        aAny >>= m_sUserPath;
-    }
+    xHierAccess = getHierAccess(sProvider,
+                                "org.openoffice.Setup");
+    m_sUserPath = getKey(xHierAccess,"Office/ooSetupInstallPath");
 }
+
 
 void SAL_CALL FileProvider::subst( rtl::OUString& sValue )
 {
@@ -1074,4 +925,94 @@ void SAL_CALL FileProvider::subst( rtl::OUString& sValue )
         sValue = m_sUserPath;
     else if( sValue.compareToAscii( "$(instpath)" ) == 0 )
         sValue = m_sInstPath;
+}
+
+
+
+Reference< XMultiServiceFactory > FileProvider::getConfiguration() const
+{
+    Reference< XMultiServiceFactory > sProvider;
+    if( m_xMultiServiceFactory.is() )
+    {
+        Any aAny;
+        aAny <<= rtl::OUString::createFromAscii( "plugin" );
+        PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
+                             -1,
+                             aAny,
+                             PropertyState_DIRECT_VALUE );
+
+        Sequence< Any > seq(1);
+        seq[0] <<= aProp;
+
+        try
+        {
+            rtl::OUString sProviderService =
+                rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+            sProvider =
+                Reference< XMultiServiceFactory >(
+                    m_xMultiServiceFactory->createInstanceWithArguments(
+                        sProviderService,seq ),
+                    UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& )
+        {
+            OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
+        }
+    }
+
+    return sProvider;
+}
+
+
+
+Reference< XHierarchicalNameAccess >
+FileProvider::getHierAccess( const Reference< XMultiServiceFactory >& sProvider,
+                                const char* file ) const
+{
+    Reference< XHierarchicalNameAccess > xHierAccess;
+
+    if( sProvider.is() )
+    {
+        Sequence< Any > seq(1);
+        rtl::OUString sReaderService =
+            rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+
+        seq[0] <<= rtl::OUString::createFromAscii( file );
+
+        try
+        {
+            xHierAccess =
+                Reference< XHierarchicalNameAccess >
+                ( sProvider->createInstanceWithArguments( sReaderService,seq ),
+                  UNO_QUERY );
+        }
+        catch( const com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    return xHierAccess;
+}
+
+
+
+rtl::OUString
+FileProvider::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
+                         const char* key ) const
+{
+    rtl::OUString instPath;
+    if( xHierAccess.is() )
+    {
+        Any aAny;
+        try
+        {
+            aAny =
+                xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii( key ) );
+        }
+        catch( const com::sun::star::container::NoSuchElementException& )
+        {
+        }
+        aAny >>= instPath;
+    }
+    return instPath;
 }
