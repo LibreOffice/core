@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:22:09 $
+#   last change: $Author: hr $ $Date: 2003-04-04 16:05:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,10 +68,6 @@ USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
 GEN_HID=                TRUE
-
-#COMP3TYPELIST=		fwl
-#COMP4TYPELIST=		fwk
-#COMP5TYPELIST=		lgd
 
 # --- Settings -----------------------------------------------------
 
@@ -193,6 +189,7 @@ SHL3TARGET=		fwl$(UPD)$(DLLPOSTFIX)
 SHL3IMPLIB=		ifwl
 
 SHL3OBJS=       $(SLO)$/contenthandlerfactory.obj   \
+                $(SLO)$/detectorfactory.obj         \
                 $(SLO)$/filterfactory.obj			\
                 $(SLO)$/frameloaderfactory.obj		\
                 $(SLO)$/mediatypedetectionhelper.obj\
