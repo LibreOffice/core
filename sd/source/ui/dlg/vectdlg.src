@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:29:13 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ ModalDialog DLG_VECTORIZE
         Text[ swedish ] = "~Antal f鋜ger:";
         Text[ dutch ] = "~Aantal kleuren:";
         Text[ spanish ] = "~Cantidad de colores:";
-        Text[ chinese_simplified ] = "颜色的数目：";
+        Text[ chinese_simplified ] = "彩色数目：";
         Text[ russian ] = "暑腓麇耱忸 鲡弪钼:";
         Text[ polish ] = "Liczba kolor體:";
         Text[ japanese ] = "怓偺悢:";
