@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergedcomponentdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 13:21:22 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
