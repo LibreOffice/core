@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:31:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,20 +218,23 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
 {
     if (m_bDisposing) return CacheLocation();
 
-    CacheRef aCache = m_aCacheList.get(_aRequest.getOptions());
+    CacheRef aCache = this->getCacheAlways(_aRequest.getOptions());
+
     if (!aCache.is()) return CacheLocation();
+
+    osl::MutexGuard aCacheLineGuard(aCache->mutex());
 
     // load the Node direct from the session, without using the cache
     ComponentRequest aForcedRequest(_aRequest);
     aForcedRequest.forceReload();
 
-    ComponentResult aLoadedInstance = this->getComponentData(aForcedRequest);
+    ComponentResult aLoadedInstance = this->getComponentData(aForcedRequest,false);
     AbsolutePath aRequestPath = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
     NodeInstance aNodeInstance(aLoadedInstance.mutableInstance().mutableData(),aRequestPath) ;
     NodeResult aLoadedNodeInstance(aNodeInstance) ;
 
     CacheLocation aResult;
-    if (aLoadedInstance.is())
+    if (aLoadedNodeInstance.is())
     {
         Name aModuleName = aLoadedNodeInstance->root().getModuleName();
 
