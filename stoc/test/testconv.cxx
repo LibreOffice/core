@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-07 16:38:28 $
+ *  last change: $Author: hr $ $Date: 2002-08-19 14:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
 #ifdef UNX
 #define REG_PREFIX      "lib"
 #ifdef MACOSX
-#define DLL_POSTFIX     ".dylib.framework"
+#define DLL_POSTFIX     ".dylib"
 #else
 #define DLL_POSTFIX     ".so"
 #endif
