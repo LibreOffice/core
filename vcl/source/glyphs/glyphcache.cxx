@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:27:39 $
+ *  last change: $Author: hdu $ $Date: 2001-05-23 10:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ bool operator==( const ImplFontSelectData& rA, const ImplFontSelectData& rB )
     &&  ((rA.mnWidth==rB.mnWidth) || (!rA.mnWidth && (rA.mnHeight==rB.mnWidth)))
     &&  (rA.mnHeight        == rB.mnHeight)
     &&  (rA.mnOrientation   == rB.mnOrientation)
-    &&  (rA.mbVertical      == rB.mbVertical) )
+    &&  (rA.mbVertical      == rB.mbVertical)
+    &&  (rA.mbNonAntialiased== rB.mbNonAntialiased) )
         return true;
     return false;
 }
@@ -324,6 +325,7 @@ inline void GlyphCache::UsingGlyph( ServerFont&, GlyphData& rGlyphData )
 }
 
 // -----------------------------------------------------------------------
+
 
 inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphData )
 {
