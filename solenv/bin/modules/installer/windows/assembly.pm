@@ -2,9 +2,9 @@
 #
 #   $RCSfile: assembly.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-16 13:47:42 $
+#   last change: $Author: kz $ $Date: 2004-11-26 18:36:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,8 @@ sub get_msiassembly_filemanifest
 
     my $filemanifest = "";
 
-    $filemanifest = $onefile->{'Name'};
+    $filemanifest = $onefile->{'uniquename'};
+    # $filemanifest = $onefile->{'Name'};
 
     return $filemanifest;
 }
@@ -141,7 +142,9 @@ sub get_msiassembly_attributes
 {
     my ( $onefile ) = @_;
 
-    my $fileattributes = "0";
+    my $fileattributes = "";
+
+    if ( $onefile->{'Attributes'} ne "" ) { $fileattributes = $onefile->{'Attributes'}; }
 
     return $fileattributes;
 }
@@ -208,6 +211,31 @@ sub get_msiassembly_file_by_gid
     return $onefile;
 }
 
+##############################################################
+# Collecting all files with flag ASSEMBLY.
+##############################################################
+
+sub collect_all_assemblyfiles
+{
+    my ($filesref) = @_;
+
+    my @assemblyfiles = ();
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'} };
+
+        if ( $styles =~ /\bASSEMBLY\b/ )
+        {
+            push( @assemblyfiles, $onefile );
+        }
+    }
+
+    return \@assemblyfiles;
+}
+
 ####################################################################################
 # Creating the file MsiAssembly.idt dynamically
 # Content:
@@ -220,21 +248,17 @@ sub create_msiassembly_table
 {
     my ($filesref, $basedir) = @_;
 
+    $installer::globals::msiassemblyfiles = collect_all_assemblyfiles($filesref);
+
     my @msiassemblytable = ();
 
     installer::windows::idtglobal::write_idt_header(\@msiassemblytable, "msiassembly");
 
-    # Registering all libraries listed in @installer::globals::msiassemblyfiles
+    # Registering all libraries listed in $installer::globals::msiassemblyfiles
 
-    for ( my $i = 0; $i <= $#installer::globals::msiassemblyfiles; $i++ )
+    for ( my $i = 0; $i <= $#{$installer::globals::msiassemblyfiles}; $i++ )
     {
-        # my $libraryname = $installer::globals::msiassemblyfiles[$i];
-        my $librarygid = $installer::globals::msiassemblyfiles[$i];
-
-        # my $onefile = get_msiassembly_file($filesref, $libraryname);
-        my $onefile = get_msiassembly_file_by_gid($filesref, $librarygid);
-
-        if ( $onefile eq "" ) { next; } # library not part of this product
+        my $onefile = ${$installer::globals::msiassemblyfiles}[$i];
 
         my %msiassembly = ();
 
@@ -272,6 +296,7 @@ sub get_msiassemblyname_name
     if ( $number == 1 ) { $name = "name"; }
     elsif ( $number == 2 ) { $name = "publicKeyToken"; }
     elsif ( $number == 3 ) { $name = "version"; }
+    elsif ( $number == 4 ) { $name = "culture"; }
 
     return $name;
 }
@@ -292,44 +317,38 @@ sub create_msiassemblyname_table
 
     installer::windows::idtglobal::write_idt_header(\@msiassemblynametable, "msiassemblyname");
 
-    # Registering all libraries listed in @installer::globals::msiassemblynamecontent
-
-    for ( my $i = 0; $i <= $#installer::globals::msiassemblynamecontent; $i++ )
+    for ( my $i = 0; $i <= $#{$installer::globals::msiassemblyfiles}; $i++ )
     {
-        # my $libraryname = $installer::globals::msiassemblynamecontent[$i];
-        my $librarygid = $installer::globals::msiassemblynamecontent[$i];
-
-        # my $onefile = get_msiassembly_file($filesref, $libraryname);
-        my $onefile = get_msiassembly_file_by_gid($filesref, $librarygid);
-
-        if ( $onefile eq "" )   # library not part of this product
-        {
-            $i = $i + 3;    # next library
-            next;
-        }
+        my $onefile = ${$installer::globals::msiassemblyfiles}[$i];
 
         my $component = get_msiassembly_component($onefile);
+        my $oneline = "";
 
-        for ( my $j = 1; $j <= 3; $j++ )
+        # Order: (Assembly)name, publicKeyToken, version, culture.
+
+        if ( $onefile->{'Assemblyname'} )
         {
-            # the content is for an assembly is saved in @installer::globals::msiassemblynamecontent
-            # in the order: Libraryname, Name, publicKeyToken, Version. Then the next library is defined.
-
-            my $counter = $i + $j;
-
-            my %msiassemblyname = ();
-
-            $msiassemblyname{'Component_'} = $component;
-            $msiassemblyname{'Name'} = get_msiassemblyname_name($j);
-            $msiassemblyname{'Value'} = $installer::globals::msiassemblynamecontent[$counter];
-
-            my $oneline = $msiassemblyname{'Component_'} . "\t" . $msiassemblyname{'Name'} . "\t" .
-                            $msiassemblyname{'Value'} . "\n";
-
+            $oneline = $component . "\t" . "name" . "\t" . $onefile->{'Assemblyname'} . "\n";
             push(@msiassemblynametable, $oneline);
         }
 
-        $i = $i + 3; # increasing the counter!
+        if ( $onefile->{'PublicKeyToken'} )
+        {
+            $oneline = $component . "\t" . "publicKeyToken" . "\t" . $onefile->{'PublicKeyToken'} . "\n";
+            push(@msiassemblynametable, $oneline);
+        }
+
+        if ( $onefile->{'Version'} )
+        {
+            $oneline = $component . "\t" . "version" . "\t" . $onefile->{'Version'} . "\n";
+            push(@msiassemblynametable, $oneline);
+        }
+
+        if ( $onefile->{'Culture'} )
+        {
+            $oneline = $component . "\t" . "culture" . "\t" . $onefile->{'Culture'} . "\n";
+            push(@msiassemblynametable, $oneline);
+        }
     }
 
     # Saving the file
@@ -355,15 +374,9 @@ sub add_assembly_condition_into_component_table
     my $changed = 0;
     my $infoline = "";
 
-    for ( my $i = 0; $i <= $#installer::globals::msiassemblyfiles; $i++ )
+    for ( my $i = 0; $i <= $#{$installer::globals::msiassemblyfiles}; $i++ )
     {
-        # my $libraryname = $installer::globals::msiassemblyfiles[$i];
-        my $librarygid = $installer::globals::msiassemblyfiles[$i];
-
-        # my $onefile = get_msiassembly_file($filesref, $libraryname);
-        my $onefile = get_msiassembly_file_by_gid($filesref, $librarygid);
-
-        if ( $onefile eq "" ) { next; } # library not part of this product
+        my $onefile = ${$installer::globals::msiassemblyfiles}[$i];
 
         my $filecomponent = get_msiassembly_component($onefile);
 
@@ -384,7 +397,7 @@ sub add_assembly_condition_into_component_table
                 {
                     # setting the condition
 
-                    $condition = "NET_FRAMEWORK_INSTALLED=1";
+                    $condition = "MsiNetAssemblySupport";
                     $oneline = $component . "\t" . $componentid . "\t" . $directory . "\t" . $attributes . "\t" . $condition . "\t" . $keypath . "\n";
                     ${$componenttable}[$j] = $oneline;
                     $changed = 1;
