@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:52:18 $
+ *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,47 @@
 
 #pragma hdrstop
 
-#include <swtypes.hxx>
-#include <cmdid.h>
+
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_ //autogen
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
+#include <com/sun/star/text/ChapterFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDPART_HPP_
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
+#include <com/sun/star/text/BibliographyDataField.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
@@ -106,33 +143,6 @@
 #ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
-#include <vos/mutex.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
-#include <com/sun/star/text/ChapterFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDPART_HPP_
-#include <com/sun/star/text/ReferenceFieldPart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
-#include <com/sun/star/text/BibliographyDataField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
-#include <com/sun/star/text/XTextDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
-#include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
 #endif
@@ -144,9 +154,6 @@
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
 #endif
 #ifndef _CHPFLD_HXX
 #include <chpfld.hxx>
@@ -1024,13 +1031,24 @@ void SwXDocumentIndex::removeVetoableChangeListener(const OUString& PropertyName
   -----------------------------------------------------------------------*/
 void SwXDocumentIndex::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
-    if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
-        (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            ((SwModify*)GetRegisteredIn())->Remove(this);
-    else
-        ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    BOOL bRemove = FALSE;
+    switch( pOld ? pOld->Which() : 0 )
+    {
+    case RES_REMOVE_UNO_OBJECT:
+    case RES_OBJECTDYING:
+        bRemove = (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject;
+        break;
+    case RES_FMT_CHG:
+        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        bRemove = ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
+                  ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR();
+        break;
+    }
+    if( bRemove )
+    {
+        ((SwModify*)GetRegisteredIn())->Remove( this );
         aLstnrCntnr.Disposing();
+    }
 }
 /* -----------------18.02.99 13:39-------------------
  *
@@ -1872,14 +1890,30 @@ SwXDocumentIndexMark*   SwXDocumentIndexMark::GetObject(SwTOXType* pType,
   -----------------------------------------------------------------------*/
 void SwXDocumentIndexMark::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-        aLstnrCntnr.Disposing();
+    switch( pOld ? pOld->Which() : 0 )
+    {
+    case RES_REMOVE_UNO_OBJECT:
+    case RES_OBJECTDYING:
+        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
+
+    case RES_FMT_CHG:
+        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
+            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
+            Invalidate();
+        break;
+    case  RES_TOXMARK_DELETED:
+        if( (void*)m_pTOXMark == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
+    }
 }
 /* -----------------------------16.10.00 11:24--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SwXDocumentIndexMark::Invalidate()
+void SwXDocumentIndexMark::Invalidate()
 {
     if(GetRegisteredIn())
     {

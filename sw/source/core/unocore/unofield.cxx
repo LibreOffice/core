@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-31 20:53:42 $
+ *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
+#define COM_TEXT_FLDMASTER      "com.sun.star.text.FieldMaster."
 
 static const sal_uInt16 aDocInfoSubTypeFromService[] =
 {
@@ -1272,11 +1273,7 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
     m_pProps(0),
     m_bCallUpdate(sal_False)
 {
-    pFmtFld->GetFld()->GetTyp()->Add(this);
-    //TODO: GetObject impl., darin soll das fuer dieses FmtFld bereits vorhandene
-    //Objekt gesucht werden
-    if (pDc)
-        pDc->GetUnoCallBack()->Add(this);
+    pDc->GetUnoCallBack()->Add(this);
 }
 /*-- 14.12.98 11:37:15---------------------------------------------------
 
@@ -2234,7 +2231,8 @@ sal_Bool SwXTextField::supportsService(const OUString& rServiceName) throw( uno:
 {
     OUString sServiceName = SwXServiceProvider::GetProviderName(m_nServiceId);
     return sServiceName == rServiceName ||
-        rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent"));
+        rServiceName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent"));
 }
 /* -----------------19.03.99 14:11-------------------
  *
@@ -2265,11 +2263,24 @@ void SwXTextField::Invalidate()
  * --------------------------------------------------*/
 void SwXTextField::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    switch( pOld ? pOld->Which() : 0 )
     {
-        aLstnrCntnr.Disposing();
-        m_pDoc = 0;
+    case RES_REMOVE_UNO_OBJECT:
+    case RES_OBJECTDYING:
+        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
+
+    case RES_FMT_CHG:
+        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
+            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
+            Invalidate();
+        break;
+    case RES_FIELD_DELETED:
+        if( (void*)pFmtFld == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
     }
 }
 /*-- 14.12.98 11:37:21---------------------------------------------------
@@ -2299,7 +2310,8 @@ OUString SwXTextFieldMasters::getImplementationName(void) throw( RuntimeExceptio
  ---------------------------------------------------------------------------*/
 BOOL SwXTextFieldMasters::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextFieldMasters") == rServiceName;
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                            "com.sun.star.text.TextFieldMasters" ));
 }
 /* -----------------------------06.04.00 13:22--------------------------------
 
@@ -2337,18 +2349,47 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
     Falls wir grosszuegig werden wollen, dann koennte man com.sun.star.text
     auch optional weglassen
   -----------------------------------------------------------------------*/
-BOOL lcl_ConvertDatabaseName(String& rName)
+
+sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
 {
-    rName.Erase(0, 9); //DataBase.
-    USHORT nDotCount = rName.GetTokenCount('.');
-    if(nDotCount < 2)
-       return FALSE;
-    rName.SearchAndReplace('.', DB_DELIM);
-    xub_StrLen  nFound = rName.SearchBackward( '.' );
-        rName.SetChar(nFound, DB_DELIM);
-    rName.Insert(C2S("DataBase."), 0);
-    return TRUE;
+    if( rName.EqualsAscii( COM_TEXT_FLDMASTER, 0,
+                            RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER )) )
+        rName.Erase(0, 30);
+
+    sal_uInt16 nResId = USHRT_MAX;
+    xub_StrLen nFound = 0;
+    rTypeName = rName.GetToken( 0, '.', nFound );
+    if(rTypeName.EqualsAscii("User"))
+        nResId = RES_USERFLD;
+    else if(rTypeName.EqualsAscii("DDE"))
+        nResId = RES_DDEFLD;
+    else if(rTypeName.EqualsAscii("SetExpression"))
+    {
+        nResId = RES_SETEXPFLD;
+
+        OUString sFldTypName( rName.GetToken( 1, '.' ));
+        OUString sUIName( SwStyleNameMapper::GetUIName( sFldTypName,
+                                                        GET_POOLID_TXTCOLL ));
+        if( sUIName != sFldTypName )
+            rName.SetToken( 1, '.', sUIName );
+    }
+    else if(rTypeName.EqualsAscii("DataBase"))
+    {
+        rName.Erase( 0, RTL_CONSTASCII_LENGTH( "DataBase." ));
+        USHORT nDotCount = rName.GetTokenCount('.');
+        if( 2 >= nDotCount )
+        {
+            rName.SearchAndReplace('.', DB_DELIM);
+            rName.SetChar( rName.SearchBackward( '.' ), DB_DELIM );
+            rName.InsertAscii( "DataBase.", 0 );
+            nResId = RES_DBFLD;
+        }
+    }
+    else if( rTypeName.EqualsAscii("Bibliography"))
+        nResId = RES_AUTHORITY;
+    return nResId;
 }
+
 //-----------------------------------------------------------------------------
 uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
@@ -2356,40 +2397,13 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     vos::OGuard  aGuard(Application::GetSolarMutex());
     if(!GetDoc())
         throw uno::RuntimeException();
-    String sName(rName);
-    if(COMPARE_EQUAL == sName.CompareToAscii("com.sun.star.text.FieldMaster.", 30))
-    {
-        sName.Erase(0, 30);
-    }
-    sal_uInt16 nResId = USHRT_MAX;
-    xub_StrLen nFound = 0;
-    String sTypeName = sName.GetToken(0, '.', nFound);
-    if(COMPARE_EQUAL == sTypeName.CompareToAscii("User"))
-        nResId = RES_USERFLD;
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DDE"))
-        nResId = RES_DDEFLD;
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("SetExpression"))
-    {
-        nResId = RES_SETEXPFLD;
-        const OUString sTypeName(sName.GetToken(1, '.'));
-        OUString sUIName = SwStyleNameMapper::GetUIName(sTypeName, GET_POOLID_TXTCOLL );
-        if(sUIName != sTypeName)
-            sName.SetToken(1, '.', sUIName);
-    }
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DataBase"))
-    {
-        if(!lcl_ConvertDatabaseName(sName))
-            throw NoSuchElementException();
-        nResId = RES_DBFLD;
-    }
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("Bibliography"))
-    {
-        nResId = RES_AUTHORITY;
-    }
-    else
+
+    String sName(rName), sTypeName;
+    sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
+    if( USHRT_MAX == nResId )
         throw NoSuchElementException();
 
-    sName.Erase(0, nFound);
+    sName.Erase(0, sTypeName.Len()+1);
     SwFieldType* pType = GetDoc()->GetFldType(nResId, sName);
     if(!pType)
         throw NoSuchElementException();
@@ -2411,27 +2425,27 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
     switch( rFldType.Which() )
     {
     case RES_USERFLD:
-        rName += C2S("com.sun.star.text.FieldMaster.");
-        rName += C2S("User.");
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "User."));
         rName += rFldType.GetName();
         break;
     case RES_DDEFLD:
-        rName += C2S("com.sun.star.text.FieldMaster.");
-        rName += C2S("DDE.");
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "DDE."));
         rName += rFldType.GetName();
         break;
 
     case RES_SETEXPFLD:
-        rName += C2S("com.sun.star.text.FieldMaster.");
-        rName += C2S("SetExpression.");
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "SetExpression."));
         rName += String(SwStyleNameMapper::GetProgName( rFldType.GetName(),
                                                         GET_POOLID_TXTCOLL ));
         break;
 
     case RES_DBFLD:
         {
-            rName += C2S("com.sun.star.text.FieldMaster.");
-            rName += C2S("DataBase.");
+            rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+            rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "DataBase."));
             String sDBName(rFldType.GetName());
             sDBName.SearchAndReplaceAll(DB_DELIM, '.');
             rName += sDBName;
@@ -2439,8 +2453,8 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
         break;
 
     case RES_AUTHORITY:
-        rName += C2S("com.sun.star.text.FieldMaster.");
-        rName += C2S("Bibliography");
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER ));
+        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "Bibliography"));
         break;
 
     default:
@@ -2497,37 +2511,14 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( RuntimeExc
     vos::OGuard  aGuard(Application::GetSolarMutex());
     if(!GetDoc())
         throw uno::RuntimeException();
-    String sName(rName);
-    if(sName.CompareToAscii("com.sun.star.text.FieldMaster.", 30) == COMPARE_EQUAL)
-        sName.Erase(0, 30);
 
-    sal_uInt16 nResId = USHRT_MAX;
-    xub_StrLen nFound = 0;
-    String sTypeName = sName.GetToken(0, '.', nFound);
-    if(COMPARE_EQUAL == sTypeName.CompareToAscii("User"))
-        nResId = RES_USERFLD;
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DDE"))
-        nResId = RES_DDEFLD;
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("SetExpression"))
-    {
-        nResId = RES_SETEXPFLD;
-        const OUString sTypeName(sName.GetToken(1, '.'));
-        OUString sUIName = SwStyleNameMapper::GetUIName( sTypeName, GET_POOLID_TXTCOLL );
-        if(sUIName != sTypeName)
-            sName.SetToken(1, '.', sUIName);
-    }
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DataBase"))
-    {
-        if(!lcl_ConvertDatabaseName(sName))
-            throw NoSuchElementException();
-        nResId = RES_DBFLD;
-    }
-    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("Bibliography"))
-    {
-        nResId = RES_AUTHORITY;
-    }
-    sName.Erase(0, nFound);
-    sal_Bool bRet = nResId != USHRT_MAX && 0 != GetDoc()->GetFldType(nResId, sName);
+    String sName(rName), sTypeName;
+    sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
+    if( USHRT_MAX == nResId )
+        throw NoSuchElementException();
+
+    sName.Erase(0, sTypeName.Len()+1);
+    sal_Bool bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName);
     return bRet;
 }
 /*-- 21.12.98 10:37:34---------------------------------------------------
@@ -2564,7 +2555,8 @@ OUString SwXTextFieldTypes::getImplementationName(void) throw( RuntimeException 
  ---------------------------------------------------------------------------*/
 BOOL SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextFields") == rServiceName;
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                            "com.sun.star.text.TextFields" ));
 }
 /* -----------------------------06.04.00 13:24--------------------------------
 
@@ -2663,7 +2655,8 @@ OUString SwXFieldEnumeration::getImplementationName(void) throw( RuntimeExceptio
  ---------------------------------------------------------------------------*/
 BOOL SwXFieldEnumeration::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.FieldEnumeration") == rServiceName;
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                            "com.sun.star.text.FieldEnumeration" ));
 }
 /* -----------------------------06.04.00 13:25--------------------------------
 

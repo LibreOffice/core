@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calbck.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2001-11-06 08:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,29 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"      // fuer RES_..
-#include "frame.hxx"
-#include "errhdl.hxx"
-#include "hints.hxx"
-
-#define ITERATION           // iterative SwModify::_Insert-Methode
-#include "calbck.hxx"
-#include "swcache.hxx"
-#include "swfntcch.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>      // fuer RES_..
+#endif
+#ifndef _FRAME_HXX
+#include <frame.hxx>
+#endif
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
+#ifndef _SWCACHE_HXX
+#include <swcache.hxx>
+#endif
+#ifndef _SWFNTCCH_HXX
+#include <swfntcch.hxx>
+#endif
 
 static SwClientIter* pClientIters = 0;
-
 
 TYPEINIT0(SwClient);    //rtti
 
@@ -240,17 +251,31 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
     LockModify();
 
-    bInModify =
+
 #ifdef PRODUCT
-                TRUE
+    bInModify = TRUE;
 #else
-        // Modifies von RES_OBJECTDYING sollte kein ASSRT ausloesen
-        !pOldValue ||
-        (RES_OBJECTDYING != pOldValue->Which() &&
-                        RES_REMOVE_UNO_OBJECT != pOldValue->Which()) ||
-            ((SwPtrMsgPoolItem *)pOldValue)->pObject != this
+    if( !pOldValue )
+        bInModify = TRUE;
+    else
+        // following Modifies don't calls an ASSRT
+        switch( pOldValue->Which() )
+        {
+        case RES_OBJECTDYING:
+         case RES_REMOVE_UNO_OBJECT:
+            bInModify = ((SwPtrMsgPoolItem *)pOldValue)->pObject != this;
+            break;
+
+        case RES_FOOTNOTE_DELETED:
+        case RES_REFMARK_DELETED:
+        case RES_TOXMARK_DELETED:
+        case RES_FIELD_DELETED:
+            bInModify = FALSE;
+            break;
+        default:
+            bInModify = TRUE;
+        }
 #endif
-        ;
 
     SwClientIter aIter( *this );
     SwClient * pLast = aIter.GoStart();
@@ -333,7 +358,6 @@ void SwModify::Add(SwClient *pDepend)
 
         pDepend->pRegisteredIn = this;
     }
-
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoclbck.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-31 20:51:57 $
+ *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,17 @@
 
 #pragma hdrstop
 
-#include <swtypes.hxx>
+#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _SFXPOOLITEM_HXX
-#include <svtools/poolitem.hxx>
-#endif
 
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
@@ -92,9 +93,6 @@
 #ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
 #endif
-#ifndef _HINTS_HXX
-#include <hints.hxx>
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -103,12 +101,6 @@
 #endif
 #ifndef _TXTRFMRK_HXX
 #include <txtrfmrk.hxx>
-#endif
-#ifndef _UNOFIELD_HXX
-#include <unofield.hxx>
-#endif
-#ifndef _FMTFLD_HXX
-#include <fmtfld.hxx>
 #endif
 
 /* -----------------------------06.01.00 13:51--------------------------------
@@ -124,102 +116,10 @@ SwUnoCallBack::SwUnoCallBack(SwModify *pToRegisterIn)   :
 SwUnoCallBack::~SwUnoCallBack()
 {
 }
-/* -----------------------------06.01.00 13:51--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwUnoCallBack::Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue )
-{
-    switch( pOldValue ? pOldValue->Which() : 0 )
-    {
-        case  RES_FOOTNOTE_DELETED:
-        {
-            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
-            SwClientIter aIter( *this );
-            for( SwXFootnote* pxFootnote = (SwXFootnote*)
-                aIter.First( TYPE( SwXFootnote )); pxFootnote;
-                pxFootnote = (SwXFootnote*)aIter.Next() )
-            {
-                const SwFmtFtn* pFmt = pxFootnote->FindFmt();
-                if( !pFmt || (void*)pFmt == pDelPtr )
-                {
-                    pxFootnote->Invalidate();
-                    if( pFmt )
-                        break;
-                }
-            }
-        }
-        break;
-
-        case RES_REFMARK_DELETED:
-        {
-            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
-            SwClientIter aIter( *this );
-            for( SwXReferenceMark* pxRefMark = (SwXReferenceMark*)
-                    aIter.First( TYPE( SwXReferenceMark )); pxRefMark;
-                    pxRefMark = (SwXReferenceMark*)aIter.Next() )
-            {
-                SwDoc* pDoc = pxRefMark->GetDoc();
-                if( pDoc )
-                {
-                    const SwFmtRefMark* pFmt = pDoc->GetRefMark(
-                                                    pxRefMark->GetMarkName());
-                    if( !pFmt )
-                        pxRefMark->Invalidate();
-                    else if( pFmt == pxRefMark->GetMark() &&
-                                (void*)pFmt == pDelPtr )
-                    {
-                        pxRefMark->Invalidate();
-                        break;
-                    }
-                }
-            }
-        }
-        break;
-
-        case  RES_TOXMARK_DELETED:
-        {
-            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
-            SwClientIter aIter( *this );
-            for( SwXDocumentIndexMark* pxIdxMark = (SwXDocumentIndexMark*)
-                aIter.First( TYPE( SwXDocumentIndexMark )); pxIdxMark;
-                pxIdxMark = (SwXDocumentIndexMark*)aIter.Next( ) )
-            {
-                if( !pxIdxMark->GetTOXType() || !pxIdxMark->GetTOXMark() )
-                    pxIdxMark->Invalidate();
-                else if( (void*)pxIdxMark->GetTOXMark() == pDelPtr )
-                {
-                    pxIdxMark->Invalidate();
-                    break;
-                }
-            }
-        }
-        break;
-
-        case RES_FIELD_DELETED:
-        {
-            void* pDelPtr = ((SwPtrMsgPoolItem *)pOldValue)->pObject;
-            SwClientIter aIter( *this );
-            for( SwXTextField* pxTextField = (SwXTextField*)
-                aIter.First( TYPE( SwXTextField ));  pxTextField;
-                pxTextField = (SwXTextField*)aIter.Next() )
-            {
-                const SwFmtFld* pFmtFld = pxTextField->GetFldFmt();
-                if( !pFmtFld || !pFmtFld->GetFld() )
-                    pxTextField->Invalidate();
-                else if( (void*)pFmtFld == pDelPtr )
-                {
-                    pxTextField->Invalidate();
-                    break;
-                }
-            }
-        }
-        break;
-    }
-}
 /* -----------------------------01.09.00 12:03--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXReferenceMark*   SwUnoCallBack::GetRefMark(const SwFmtRefMark& rMark)
+SwXReferenceMark* SwUnoCallBack::GetRefMark(const SwFmtRefMark& rMark)
 {
     SwClientIter aIter( *this );
     SwXReferenceMark* pxRefMark = (SwXReferenceMark*)aIter.First( TYPE( SwXReferenceMark ));
@@ -239,7 +139,7 @@ SwXReferenceMark*   SwUnoCallBack::GetRefMark(const SwFmtRefMark& rMark)
 /* -----------------------------05.09.00 12:38--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXFootnote*    SwUnoCallBack::GetFootnote(const SwFmtFtn& rMark)
+SwXFootnote* SwUnoCallBack::GetFootnote(const SwFmtFtn& rMark)
 {
     SwClientIter aIter( *this );
     SwXFootnote* pxFootnote = (SwXFootnote*)aIter.First( TYPE( SwXFootnote ));
@@ -274,38 +174,4 @@ SwXDocumentIndexMark* SwUnoCallBack::GetTOXMark(const SwTOXMark& rMark)
     }
     return 0;
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/04/03 12:47:46  mtg
-    #78699# Handle a RES_FIELD_DELETED callback
-
-    Revision 1.3  2000/11/30 11:30:49  dvo
-    #80616# remaining API issues needed for XML index im-/export fixed
-    - added: now TOXMarks always return the same UNO wrapper object, making them comparable
-    - added: SwXDocumentIndexes::GetObject(): converts SwTOXBaseSection into SwXDocumentIndex
-    - added: DocumentIndex-property to SwXTextSection (returns smallest enclosing index)
-    - fixed: XInsertTextContentRelative now disregards IsProtected() flag (like remainder of API)
-    - added: Bibliography now supports ContentSection and HeaderSection properties
-
-    Revision 1.2  2000/10/16 10:31:05  os
-    #79422# SwXDocumentIndexMark: invalidation uses SwUnoCallBack
-
-    Revision 1.1.1.1  2000/09/19 00:08:28  hr
-    initial import
-
-    Revision 1.4  2000/09/18 16:04:31  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  2000/09/05 15:12:22  os
-    new: GetFootnote()
-
-    Revision 1.2  2000/09/01 14:22:15  os
-    new::GetRefMark()
-
-    Revision 1.1  2000/01/07 13:49:03  os
-    #67019# #65681# SwXReferenceMarks/SwXFootnotes: Modify via UnoCallBack
-
-
-------------------------------------------------------------------------*/
 

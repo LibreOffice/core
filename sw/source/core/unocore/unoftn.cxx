@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 08:59:51 $
+ *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -525,7 +528,7 @@ const SwFmtFtn*     SwXFootnote::FindFmt() const
 /* -----------------------------07.01.00 12:39--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SwXFootnote::Invalidate()
+void SwXFootnote::Invalidate()
 {
     if(GetRegisteredIn())
     {
@@ -538,13 +541,25 @@ void    SwXFootnote::Invalidate()
 /* -----------------18.01.99 09:12-------------------
  *
  * --------------------------------------------------*/
-void    SwXFootnote::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFootnote::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    switch( pOld ? pOld->Which() : 0 )
     {
-        aLstnrCntnr.Disposing();
-        SetDoc(0);
+    case RES_REMOVE_UNO_OBJECT:
+    case RES_OBJECTDYING:
+        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
+    case RES_FMT_CHG:
+        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
+            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
+            Invalidate();
+        break;
+    case RES_FOOTNOTE_DELETED:
+        if( (void*)pFmtFtn == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
     }
 }
 /*-- 11.09.00 13:12:03---------------------------------------------------
@@ -626,6 +641,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/06/20 08:59:51  os
+    #88484# optimization
+
     Revision 1.10  2001/06/13 12:03:44  jp
     Task #88180#: code optimization
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _TXTRFMRK_HXX //autogen
 #include <txtrfmrk.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -407,11 +410,26 @@ void    SwXReferenceMark::Invalidate()
 /*-- 11.12.98 10:28:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void    SwXReferenceMark::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXReferenceMark::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
-    ClientModify( this, pOld, pNew );
-    if(!GetRegisteredIn())
-        aLstnrCntnr.Disposing();
+    switch( pOld ? pOld->Which() : 0 )
+    {
+    case RES_REMOVE_UNO_OBJECT:
+    case RES_OBJECTDYING:
+        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
+    case RES_FMT_CHG:
+        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
+            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
+            Invalidate();
+        break;
+    case RES_REFMARK_DELETED:
+        if( (void*)pMark == ((SwPtrMsgPoolItem *)pOld)->pObject )
+            Invalidate();
+        break;
+    }
 }
 
 /*-- 12.09.00 12:58:20---------------------------------------------------
@@ -479,6 +497,9 @@ void SwXReferenceMark::removeVetoableChangeListener(
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/12 16:12:45  os
+    new: Redline container
+
     Revision 1.1.1.1  2000/09/19 00:08:28  hr
     initial import
 

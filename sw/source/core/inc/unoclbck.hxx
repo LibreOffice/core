@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoclbck.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: jp $ $Date: 2001-11-06 08:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,6 @@ class SwUnoCallBack : public SwModify
 public:
     SwUnoCallBack(SwModify *pToRegisterIn);
     virtual ~SwUnoCallBack();
-
-    virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
 
     // returns the API object of a reference mark if available
     SwXReferenceMark*   GetRefMark(const SwFmtRefMark& rMark);
