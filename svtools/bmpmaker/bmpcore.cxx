@@ -1,0 +1,426 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bmpcore.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2001-05-10 13:56:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <tools/color.hxx>
+#include <vcl/bmpacc.hxx>
+#include "bmpcore.hxx"
+
+#define FILETEST(FileEntry) ((FileEntry).Exists())
+
+// --------------
+// - BmpCreator -
+// --------------
+
+BmpCreator::BmpCreator()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+BmpCreator::~BmpCreator()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void BmpCreator::Message( const String& rText, BYTE cExitCode )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, String& rPrefix,
+                             String& rName, const LangInfo& rLang )
+{
+       const char* pResPath = getenv( "SOLARSRC" );
+
+    if( pResPath && *pResPath )
+    {
+        String              aString( String::CreateFromAscii( ByteString( pResPath ).GetBuffer() ) );
+        String              aResPath( ( DirEntry( aString ) += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "res" ) ) ) ).GetFull() );
+        SvFileStream        aOutStream;
+        Bitmap              aTotalBmp;
+        Bitmap              aBmp;
+        Size                aSize;
+        String              aText;
+        String              aName( rName );
+        String              aFileName;
+        ULONG               nSRSPos;
+        long                nBmpPos = 0L;
+        USHORT              nId;
+        USHORT              nN = 1;
+        DirEntry            aInPath( rIn + DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) ) );
+        DirEntry            aOutFile( rOut );
+        DirEntry            SolarPath1( aResPath );
+        DirEntry            SolarPath2( aResPath );
+        String              aDefaultName( rPrefix ); aDefaultName.Append( String( RTL_CONSTASCII_USTRINGPARAM( "00000.bmp" ) ) );
+        BOOL                bInserted = FALSE;
+        BOOL                bFirst = TRUE;
+
+        // Falls nicht deutsch, noch die Vorwahlnummer hintenran
+        if( rLang.mnLangNum != 49 )
+        {
+            String aNumStr( String::CreateFromInt32( rLang.mnLangNum ) );
+
+            if( aNumStr.Len() == 1 )
+                aNumStr.Insert( '0', 0 );
+
+            aName = DirEntry( aName ).GetBase();
+            aName += aNumStr;
+            aName += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
+            SolarPath1 += DirEntry( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
+        }
+
+        aOutFile += DirEntry( aName );
+
+        // Die Namen werden spaeter ersetzt
+        SolarPath1 += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
+        SolarPath2 += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
+
+        // Anzahl der Bitmaps bestimmen
+        for ( nTotCount = 0UL, nSRSPos = pSRS->Tell(); aText.Search( '}' ) == STRING_NOTFOUND; )
+        {
+            ByteString aTmp;
+
+            if ( !pSRS->ReadLine( aTmp ) )
+                break;
+
+            aText.Assign( String::CreateFromAscii( aTmp.GetBuffer() ) );
+            aText.EraseLeadingChars( ' ' );
+            aText.EraseLeadingChars( '\t' );
+            aText.EraseAllChars( ';' );
+
+            if ( ByteString( aText, RTL_TEXTENCODING_UTF8 ).IsNumericAscii() )
+                nTotCount++;
+        }
+
+        if( !nTotCount )
+            Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: No imagelist resource found: " ) ).Append( aString ), EXIT_MISSING_RESOURCE );
+
+        // Wieder an Anfang und los gehts
+        aText = String();
+        pSRS->Seek( nSRSPos );
+
+        // write info
+        String aInfo( RTL_CONSTASCII_USTRINGPARAM( "CREATING ImageList for language: " ) );
+        aInfo += String( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
+        aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " [ " ) );
+        aInfo += aInPath.GetPath().GetFull();
+        aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
+        aInfo += SolarPath1.GetPath().GetFull();
+        if( SolarPath2 != SolarPath1 )
+        {
+            aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
+            aInfo += SolarPath2.GetPath().GetFull();
+        }
+        aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
+        Message( aInfo );
+
+        for ( ; aText.Search( '}' ) == STRING_NOTFOUND; )
+        {
+            ByteString aTmp;
+
+            if ( !pSRS->ReadLine( aTmp ) )
+                break;
+
+            aText.Assign( String::CreateFromAscii( aTmp.GetBuffer() ) );
+            aText.EraseLeadingChars( ' ' );
+            aText.EraseLeadingChars( '\t' );
+            aText.EraseAllChars( ';' );
+
+            aTmp = ByteString( aText, RTL_TEXTENCODING_UTF8 );
+
+            if( aTmp.IsNumericAscii() )
+            {
+                nId = atoi( aTmp.GetBuffer() );
+
+                if ( nId < 10000 )
+                {
+                    const String aTmp( aText );
+
+                    aText.Assign( String::CreateFromInt32( 0 ) );
+                    aText.Append( aTmp );
+                }
+
+                aString.Assign( rPrefix );
+                aString.Append( aText );
+                aString.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ) );
+                aInPath.SetName( aString );
+            }
+            else
+                continue;
+
+            if( !FILETEST( aInPath ) )
+            {
+                // Falls nicht deutsch, suchen wir zuerst im jeweiligen Sprach-Unterverz.
+                if( rLang.mnLangNum != 49 )
+                {
+                    SolarPath1.SetName( aString );
+
+                    if ( !FILETEST( SolarPath1 ) )
+                    {
+                        SolarPath2.SetName( aString );
+
+                        if( !FILETEST( SolarPath2 ) )
+                            aBmp = Bitmap();
+                        else
+                        {
+                            SvFileStream aIStm( aFileName = SolarPath2.GetFull(), STREAM_READ );
+                            aIStm >> aBmp;
+                        }
+                    }
+                    else
+                    {
+                        SvFileStream aIStm( aFileName = SolarPath1.GetFull(), STREAM_READ );
+                        aIStm >> aBmp;
+                    }
+                }
+                else
+                {
+                    SolarPath2.SetName( aString );
+
+                    if( !FILETEST( SolarPath2 ) )
+                        aBmp = Bitmap();
+                    else
+                    {
+                        SvFileStream aIStm( aFileName = SolarPath2.GetFull(), STREAM_READ );
+                        aIStm >> aBmp;
+                    }
+                }
+            }
+            else
+            {
+                SvFileStream aIStm( aFileName = aInPath.GetFull(), STREAM_READ );
+                aIStm >> aBmp;
+            }
+
+            aSize = aBmp.GetSizePixel();
+
+            // falls Bitmap defekt ist, malen wir ein rotes Kreuz
+            if( !aSize.Width() || !aSize.Height() )
+            {
+                Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
+
+                aSize = aOneSize;
+
+                if( aSize.Width() && aSize.Height() )
+                {
+                    aBmp = Bitmap( aSize, !!aTotalBmp ? aTotalBmp.GetBitCount() : 4 );
+                    aBmp.Erase( COL_WHITE );
+
+                    BitmapWriteAccess* pAcc = aBmp.AcquireWriteAccess();
+
+                    if( pAcc )
+                    {
+                        Point aPoint;
+                        const Rectangle aRect( aPoint, aOneSize );
+
+                        pAcc->SetLineColor( Color( COL_LIGHTRED ) );
+                        pAcc->DrawRect( aRect );
+                        pAcc->DrawLine( aRect.TopLeft(), aRect.BottomRight() );
+                        pAcc->DrawLine( aRect.TopRight(), aRect.BottomLeft() );
+                        aBmp.ReleaseAccess( pAcc );
+                    }
+                }
+            }
+
+            // Beim ersten Mal Zugriffs-Bitmap mit der
+            // richtigen Groesse, 4Bit und der Standardpalette anlegen
+            if( bFirst && aSize.Width() && aSize.Height() )
+            {
+                aTotSize = aOneSize = aSize;
+                aTotSize.Width() *= nTotCount;
+                aTotalBmp = Bitmap( aTotSize, 4 );
+                bFirst = FALSE;
+            }
+
+            if( ( aSize.Width() > aOneSize.Width() ) || ( aSize.Height() > aOneSize.Height() ) )
+                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different dimensions in file: " ) ).Append( aString ), EXIT_DIMENSIONERROR );
+            else if( aBmp.GetBitCount() != aTotalBmp.GetBitCount() )
+                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Different color depth in file: ") ).Append( aString ), EXIT_COLORDEPTHERROR );
+            else
+            {
+                const Rectangle aDst( Point( nBmpPos * aOneSize.Width(), 0L ), aSize );
+                Point aPoint;
+                const Rectangle aSrc( aPoint, aSize );
+
+                if( !!aTotalBmp && !!aBmp && !aDst.IsEmpty() && !aSrc.IsEmpty() )
+                    aTotalBmp.CopyPixel( aDst, aSrc, &aBmp );
+            }
+
+            nBmpPos++;
+        }
+
+        if ( !!aTotalBmp && aTotSize.Width() && aTotSize.Height() )
+        {
+            const String aFile( aOutFile.GetFull() );
+
+            aOutStream.Open( aFile, STREAM_WRITE | STREAM_TRUNC );
+
+            if( !aOutStream.IsOpen() )
+                Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not open output file: " ) ).Append( aFile ), EXIT_IOERROR );
+            else
+            {
+                aOutStream << aTotalBmp;
+
+                if( aOutStream.GetError() )
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not write to output file: " ) ).Append( aFile ), EXIT_IOERROR );
+                else
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Successfully generated ImageList " ) ).Append( aFile ) );
+
+                aOutStream.Close();
+            }
+        }
+        else
+            Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not generate  " ) ).Append( aOutFile.GetFull() ), EXIT_COMMONERROR );
+
+        Message( ' ' );
+    }
+    else
+    {
+        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: SOLARSRC environment variable not set!" ) ), EXIT_MISSING_SOLARSRC_ENV );
+        return;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void BmpCreator::Create( const String& rSRSName, const String& rInName,
+                         const String& rOutName, const LangInfo& rLang )
+{
+    DirEntry    aFileName( rSRSName );
+    DirEntry    aInDir( rInName );
+    DirEntry    aOutDir( rOutName );
+    BOOL        bDone = FALSE;
+
+    aFileName.ToAbs();
+    aInDir.ToAbs();
+    aOutDir.ToAbs();
+
+    pSRS = new SvFileStream ( aFileName.GetFull(), STREAM_STD_READ );
+
+    if( pSRS->GetError() )
+        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Kein SRS file!" ) ), EXIT_NOSRSFILE );
+    else
+    {
+        String      aText;
+        ByteString  aByteText;
+        BOOL        bLangDep = FALSE;
+
+        do
+        {
+            do
+            {
+                if (!pSRS->ReadLine(aByteText))
+                    break;
+            }
+            while ( aByteText.Search( "ImageList" ) == STRING_NOTFOUND );
+
+            do
+            {
+                if (!pSRS->ReadLine( aByteText ) )
+                    break;
+            }
+            while ( aByteText.Search( "File" ) == STRING_NOTFOUND );
+            aText = String::CreateFromAscii( aByteText.GetBuffer() );
+
+            USHORT nStart = aText.Search('"') + 1;
+            USHORT nEnd = aText.Search( '"', nStart+1 );
+            String aName( aText, nStart, nEnd-nStart );
+            String aPrefix( aName, 0, 2 );
+
+            do
+            {
+                if( !bLangDep &&
+                    aByteText.Search( "File" ) != STRING_NOTFOUND &&
+                    aByteText.Search( '[' ) != STRING_NOTFOUND &&
+                    aByteText.Search( ']' ) != STRING_NOTFOUND )
+                {
+                    bLangDep = TRUE;
+                }
+
+                if (!pSRS->ReadLine(aByteText))
+                     break;
+            }
+            while (aByteText.Search( "IdList" ) == STRING_NOTFOUND );
+            aText = String::CreateFromAscii( aByteText.GetBuffer() );
+
+            // if image list is not language dependent,
+            // don't do anything for languages except german
+            if( aText.Len() )
+            {
+                bDone = TRUE;
+                ImplCreate( *pSRS, aInDir, aOutDir, aPrefix, aName, rLang );
+            }
+            else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
+            {
+                Message( String( RTL_CONSTASCII_USTRINGPARAM( "INFO: ImageList is not language dependent! Nothing to do for this language." ) ) );
+                bDone = TRUE;
+            }
+        }
+        while ( aText.Len() );
+    }
+
+    if( !bDone )
+        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: No ImageList found in SRS file!" ) ), EXIT_NOIMGLIST );
+
+    delete pSRS;
+}
