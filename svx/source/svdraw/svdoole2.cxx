@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:44:20 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,8 @@ void SdrOle2Obj::Connect()
             {
                 pInfo->SetDeleted(FALSE);
             }
+
+            mpImpl->mbConnected = true;
         }
 
         // In Cache einfuegen
@@ -412,7 +414,6 @@ void SdrOle2Obj::Connect()
             xBC->addModifyListener( xListener );
         }
 
-        mpImpl->mbConnected = true;
     }
 }
 
@@ -570,7 +571,13 @@ XubString SdrOle2Obj::GetName() const
 
 void SdrOle2Obj::SetPersistName( const String& rPersistName )
 {
+    if( mpImpl->mbConnected )
+        Disconnect();
+
     mpImpl->aPersistName = rPersistName;
+
+    Connect();
+
     SetChanged();
 }
 
@@ -1283,7 +1290,11 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
                     uno::Reference< util::XModifyListener > xListener( pModifyListener );
                     xBC->addModifyListener( xListener );
                 }
+
             }
+
+            // we are always connected if we loaded it
+            mpImpl->mbConnected = true;
         }
     }
 
