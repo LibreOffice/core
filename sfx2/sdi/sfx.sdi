@@ -6716,7 +6716,7 @@ SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
-    Container = TRUE,
+    Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
