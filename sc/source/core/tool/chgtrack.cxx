@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-11-21 11:33:03 $
+ *  last change: $Author: sab $ $Date: 2001-01-30 17:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,45 @@ ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange
     aDateTime.ConvertToUTC();
 }
 
+ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScBigRange& rRange,
+                        const ULONG nTempAction, const ULONG nTempRejectAction,
+                        const ScChangeActionState eTempState, const DateTime& aTempDateTime,
+                        const String& aTempUser,  const String& aTempComment)
+        :
+        aBigRange( rRange ),
+        pNext( NULL ),
+        pPrev( NULL ),
+        pLinkAny( NULL ),
+        pLinkDeletedIn( NULL ),
+        pLinkDeleted( NULL ),
+        pLinkDependent( NULL ),
+        nAction( nTempAction ),
+        nRejectAction( nTempRejectAction ),
+        eType( eTypeP ),
+        eState( eTempState ),
+        aDateTime( aTempDateTime ),
+        aUser( aTempUser ),
+        aComment( aTempComment )
+{
+}
+
+ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScBigRange& rRange,
+                        const ULONG nTempAction)
+        :
+        aBigRange( rRange ),
+        pNext( NULL ),
+        pPrev( NULL ),
+        pLinkAny( NULL ),
+        pLinkDeletedIn( NULL ),
+        pLinkDeleted( NULL ),
+        pLinkDependent( NULL ),
+        nAction( nTempAction ),
+        nRejectAction( 0 ),
+        eType( eTypeP ),
+        eState( SC_CAS_VIRGIN )
+{
+    aDateTime.ConvertToUTC();
+}
 
 ScChangeAction::ScChangeAction( SvStream& rStrm, ScMultipleReadHeader& rHdr,
             ScChangeTrack* pTrack )
@@ -865,6 +904,13 @@ ScChangeActionIns::ScChangeActionIns( SvStream& rStrm,
 {
 }
 
+ScChangeActionIns::ScChangeActionIns(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String& sComment,
+                                                const ScChangeActionType eType)
+        :
+        ScChangeAction(eType, aBigRange, nActionNumber, nRejectingNumber, eState, aDateTime, aUser, sComment)
+{
+}
 
 ScChangeActionIns::~ScChangeActionIns()
 {
@@ -987,6 +1033,24 @@ ScChangeActionDel::ScChangeActionDel( SvStream& rStrm,
     rStrm >> n16s; nDy = n16s;
 }
 
+ScChangeActionDel::ScChangeActionDel(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                    const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
+                                    const ScChangeActionType eType, const short nD, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
+        :
+        ScChangeAction(eType, aBigRange, nActionNumber, nRejectingNumber, eState, aDateTime, aUser, sComment),
+        pTrack( pTrackP ),
+        pFirstCell( NULL ),
+        pLinkMove( NULL ),
+        pCutOff( NULL ),
+        nCutOff( 0 ),
+        nDx( 0 ),
+        nDy( 0 )
+{
+    if (eType == SC_CAT_DELETE_COLS)
+        nDx = nD;
+    else if (eType == SC_CAT_DELETE_ROWS)
+        nDy = nD;
+}
 
 ScChangeActionDel::~ScChangeActionDel()
 {
@@ -1370,6 +1434,18 @@ ScChangeActionMove::ScChangeActionMove( SvStream& rStrm,
     rStrm >> aFromRange;
 }
 
+ScChangeActionMove::ScChangeActionMove(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                    const ScBigRange& aToBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
+                                    const ScBigRange& aFromBigRange, ScChangeTrack* pTrackP) // wich of nDx and nDy is set is depend on the type
+        :
+        ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eState, aDateTime, aUser, sComment),
+        aFromRange(aFromBigRange),
+        pTrack( pTrackP ),
+        pFirstCell( NULL ),
+        nStartLastCut(0),
+        nEndLastCut(0)
+{
+}
 
 ScChangeActionMove::~ScChangeActionMove()
 {
@@ -1559,6 +1635,32 @@ ScChangeActionContent::ScChangeActionContent( SvStream& rStrm,
     }
 }
 
+ScChangeActionContent::ScChangeActionContent(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String& sComment,
+                                                ScBaseCell* pTempOldCell)
+        :
+        ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
+        pOldCell(pTempOldCell),
+        pNewCell(NULL),
+        pNextContent(NULL),
+        pPrevContent(NULL),
+        pNextInSlot(NULL),
+        ppPrevInSlot(NULL)
+
+{
+}
+
+ScChangeActionContent::ScChangeActionContent(const ULONG nActionNumber, ScBaseCell* pTempOldCell, const ScBigRange& aBigRange)
+        :
+        ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
+        pOldCell(pTempOldCell),
+        pNewCell(NULL),
+        pNextContent(NULL),
+        pPrevContent(NULL),
+        pNextInSlot(NULL),
+        ppPrevInSlot(NULL)
+{
+}
 
 ScChangeActionContent::~ScChangeActionContent()
 {
@@ -2237,6 +2339,12 @@ ScChangeActionReject::ScChangeActionReject( SvStream& rStrm,
 {
 }
 
+ScChangeActionReject::ScChangeActionReject(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String& sComment)
+        :
+        ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber, nRejectingNumber, eState, aDateTime, aUser, sComment)
+{
+}
 
 BOOL ScChangeActionReject::Store( SvStream& rStrm, ScMultipleWriteHeader& rHdr ) const
 {
@@ -2273,6 +2381,15 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
+ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const StrCollection& aTempUserCollection) :
+        pDoc( pDocP ),
+        aUserCollection(aTempUserCollection)
+{
+    Init();
+    StartListening( *SfxGetpApp() );
+    ppContentSlots = new ScChangeActionContent* [ nContentSlots ];
+    memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
+}
 
 ScChangeTrack::~ScChangeTrack()
 {
@@ -4588,4 +4705,19 @@ BOOL ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTable,
     return bRejected;
 }
 
+
+ULONG ScChangeTrack::AddLoadedGenerated(ScBaseCell* pOldCell, const ScBigRange& aBigRange )
+{
+    ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, pOldCell, aBigRange );
+    if ( pAct )
+    {
+        if ( pFirstGeneratedDelContent )
+            pFirstGeneratedDelContent->pPrev = pAct;
+        pAct->pNext = pFirstGeneratedDelContent;
+        pFirstGeneratedDelContent = pAct;
+        aGeneratedTable.Insert( pAct->GetActionNumber(), pAct );
+        return pAct->GetActionNumber();
+    }
+    return 0;
+}
 

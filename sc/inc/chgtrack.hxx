@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-19 15:02:26 $
+ *  last change: $Author: sab $ $Date: 2001-01-30 17:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,17 @@ protected:
 
                                 ScChangeAction( ScChangeActionType,
                                                 const ScRange& );
+                                ScChangeAction( ScChangeActionType,
+                                                const ScBigRange&,
+                                                const ULONG nAction,
+                                                const ULONG nRejectAction,
+                                                const ScChangeActionState eState,
+                                                const DateTime& aDateTime,
+                                                const String& aUser,
+                                                const String& aComment );
+                                ScChangeAction( ScChangeActionType,
+                                                const ScBigRange&,
+                                                const ULONG nAction);
                                 ScChangeAction( SvStream&,
                                     ScMultipleReadHeader&, ScChangeTrack* );
     virtual                     ~ScChangeAction();
@@ -346,7 +357,7 @@ protected:
                                     }
             BOOL                RemoveDeletedIn( const ScChangeAction* );
             void                RemoveAllDeletedIn();
-            void                SetDeletedIn( ScChangeAction* );
+//          void                SetDeletedIn( ScChangeAction* );
 
             ScChangeActionLinkEntry*    AddDeleted( ScChangeAction* p )
                                     {
@@ -384,6 +395,7 @@ protected:
 
 public:
 
+            void                SetDeletedIn( ScChangeAction* );
             BOOL                IsInsertType() const
                                     {
                                         return eType == SC_CAT_INSERT_COLS ||
@@ -505,6 +517,8 @@ class ScChangeActionIns : public ScChangeAction
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
 
 public:
+                                ScChangeActionIns(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment, const ScChangeActionType eType);
 
     virtual void                GetDescription( String&, ScDocument*,
                                     BOOL bSplitRange = FALSE ) const;
@@ -610,6 +624,9 @@ class ScChangeActionDel : public ScChangeAction
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
 public:
+                                ScChangeActionDel(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
+                                                const ScChangeActionType eType, const short nD, ScChangeTrack* pTrack); // wich of nDx and nDy is set is depend on the type
 
                                 // ob dieses das unterste einer Reihe (oder
                                 // auch einzeln) ist
@@ -689,6 +706,10 @@ class ScChangeActionMove : public ScChangeAction
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
 public:
+                                ScChangeActionMove(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aToBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
+                                                const ScBigRange& aFromBigRange, ScChangeTrack* pTrack);
+
             const ScBigRange&   GetFromRange() const { return aFromRange; }
             void                GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const;
 
@@ -817,6 +838,10 @@ public:
                                         pNextInSlot( NULL ),
                                         ppPrevInSlot( NULL )
                                     {}
+                                ScChangeActionContent(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment,
+                                                ScBaseCell* pOldCell); // to use for XML Import
+                                ScChangeActionContent(const ULONG nActionNumber, ScBaseCell* pOldCell, const ScBigRange& aBigRange); // to use for XML Import of Generated Actions
     virtual                     ~ScChangeActionContent();
 
         ScChangeActionContent*  GetNextContent() const { return pNextContent; }
@@ -886,6 +911,10 @@ class ScChangeActionReject : public ScChangeAction
     virtual BOOL                Reject( ScDocument* p ) { return FALSE; }
 
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
+
+public:
+                                ScChangeActionReject(const ULONG nActionNumber, const ScChangeActionState eState, const ULONG nRejectingNumber,
+                                                const ScBigRange& aBigRange, const String& aUser, const DateTime& aDateTime, const String &sComment);
 };
 
 
@@ -1033,7 +1062,6 @@ class ScChangeTrack : public SfxListener
                                     short nDx, short nDy, short nDz );
             void                Remove( ScChangeAction* );
             void                MasterLinks( ScChangeAction* );
-            void                AppendLoaded( ScChangeAction* pAppend );
 
                                 // Content on top an Position
         ScChangeActionContent*  SearchContentAt( const ScBigAddress&,
@@ -1044,11 +1072,11 @@ class ScChangeTrack : public SfxListener
         ScChangeActionContent*  SearchGeneratedDelContentAt(
                                     const ScBigAddress&,
                                     ScChangeActionType eNotInDelType ) const;
+            void                DeleteGeneratedDelContent(
+                                    ScChangeActionContent* );
         ScChangeActionContent*  GenerateDelContent( const ScAddress&,
                                     const ScBaseCell*,
                                     const ScDocument* pFromDoc );
-            void                DeleteGeneratedDelContent(
-                                    ScChangeActionContent* );
             void                DeleteCellEntries(
                                     ScChangeActionCellListEntry*&,
                                     ScChangeAction* pDeletor );
@@ -1074,6 +1102,7 @@ public:
                                     }
 
                                 ScChangeTrack( ScDocument* );
+                                ScChangeTrack( ScDocument*, const StrCollection& );
     virtual                     ~ScChangeTrack();
             void                Clear();
 
@@ -1277,6 +1306,11 @@ public:
             BOOL                Store( SvStream& rStrm );
             USHORT              GetLoadedFileFormatVersion() const
                                     { return nLoadedFileFormatVersion; }
+
+            ULONG               AddLoadedGenerated(ScBaseCell* pOldCell, const ScBigRange& aBigRange );
+            void                AppendLoaded( ScChangeAction* pAppend );
+            void                SetActionMax(ULONG nTempActionMax) { nActionMax = nTempActionMax; }
+
 };
 
 
