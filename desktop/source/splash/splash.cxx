@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:21:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _RTL_BOOTSTRAP_HXX_
+#include <rtl/bootstrap.hxx>
+#endif
+
+#include <rtl/logfile.hxx>
 
 
 using namespace ::rtl;
@@ -90,17 +95,22 @@ namespace desktop
 SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     : IntroWindow()
     , _vdev(*((IntroWindow*)this))
+    , _cProgressColor( -1 )
     , _iProgress(0)
     , _iMax(100)
     , _bPaintBitmap(sal_True)
     , _bPaintProgress(sal_False)
+    , _tlx(-1)
+    , _tly(-1)
+    , _barwidth(-1)
     , _xoffset(12)
     , _yoffset(18)
-    , _barheight(8)
+    , _barheight(-1)
     , _barspace(2)
 {
     _rFactory = rSMgr;
 
+    loadConfig();
     initBitmap();
     Size aSize = _aIntroBmp.GetSizePixel();
     SetOutputSizePixel( aSize );
@@ -114,18 +124,39 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
         see: http://so-doc.germany.sun.com/Teams/StarOffice_Applications/Extras/Design/Splash_About/splash_progressbar.html
         */
         Point xtopleft(212,216);
-        _tlx = xtopleft.X();    // top-left x
-        _tly = xtopleft.Y();    // top-left y
-        _barwidth = 263;
+        if ( -1 == _tlx || -1 == _tly )
+        {
+            _tlx = xtopleft.X();    // top-left x
+            _tly = xtopleft.Y();    // top-left y
+        }
+        if ( -1 == _barwidth )
+            _barwidth = 263;
+        if ( -1 == _barheight )
+            _barheight = 8;
         // <--
     }
     else
     {
-        _barheight = 6;
-        _barwidth  = _width - (2 * _yoffset);
-        _tlx = _xoffset;           // top-left x
-        _tly = _height - _yoffset; // top-left y
+        if ( -1 == _barwidth )
+            _barwidth  = _width - (2 * _yoffset);
+        if ( -1 == _barheight )
+            _barheight = 6;
+        if ( -1 == _tlx || -1 == _tly )
+        {
+            _tlx = _xoffset;           // top-left x
+            _tly = _height - _yoffset; // top-left y
+        }
     }
+
+    if ( -1 == _cProgressColor.GetColor() )
+    {
+        // progress bar: new color only for big bitmap format
+        if ( _width > 500 )
+            _cProgressColor = Color( 157, 202, 18 );
+        else
+            _cProgressColor = Color( COL_BLUE );
+    }
+
     Application::AddEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
 
@@ -175,6 +206,9 @@ void SAL_CALL SplashScreen::setText(const OUString& aText)
 void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "::SplashScreen::setValue (lo119109)" );
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "value=%d", nValue );
+
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if (_bVisible) {
         Show();
@@ -221,6 +255,76 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
     return 0;
 }
 
+OUString implReadBootstrapKey( const ::rtl::Bootstrap& _rIniFile, const OUString& _rKey )
+{
+    OUString sValue;
+    _rIniFile.getFrom( _rKey, sValue );
+    return sValue;
+}
+
+void SplashScreen::loadConfig()
+{
+    // detect execute path
+    ::vos::OStartupInfo().getExecutableFile( _sExecutePath );
+    sal_uInt32 nLastIndex = _sExecutePath.lastIndexOf( '/' );
+    if ( nLastIndex > 0 )
+        _sExecutePath = _sExecutePath.copy( 0, nLastIndex + 1 );
+
+    // read keys from soffice.ini (sofficerc)
+    OUString sIniFileName = _sExecutePath;
+    sIniFileName += OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "soffice" ) ) );
+    rtl::Bootstrap aIniFile( sIniFileName );
+
+    OUString sProgressColor = implReadBootstrapKey(
+        aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressColor" ) ) );
+    OUString sSize = implReadBootstrapKey(
+        aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressSize" ) ) );
+    OUString sPosition = implReadBootstrapKey(
+        aIniFile, OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressPosition" ) ) );
+
+    if ( sProgressColor.getLength() )
+    {
+        UINT8 nRed = 0;
+        UINT8 nGreen = 0;
+        UINT8 nBlue = 0;
+        sal_Int32 idx = 0;
+        sal_Int32 temp = sProgressColor.getToken( 0, ',', idx ).toInt32();
+        if ( idx != -1 )
+        {
+            nRed = static_cast< UINT8 >( temp );
+            temp = sProgressColor.getToken( 0, ',', idx ).toInt32();
+        }
+        if ( idx != -1 )
+        {
+            nGreen = static_cast< UINT8 >( temp );
+            nBlue = static_cast< UINT8 >( sProgressColor.getToken( 0, ',', idx ).toInt32() );
+            _cProgressColor = Color( nRed, nGreen, nBlue );
+        }
+    }
+
+    if ( sSize.getLength() )
+    {
+        sal_Int32 idx = 0;
+        sal_Int32 temp = sSize.getToken( 0, ',', idx ).toInt32();
+        if ( idx != -1 )
+        {
+            _barwidth = temp;
+            _barheight = sSize.getToken( 0, ',', idx ).toInt32();
+        }
+    }
+
+    if ( sPosition.getLength() )
+    {
+        sal_Int32 idx = 0;
+        sal_Int32 temp = sPosition.getToken( 0, ',', idx ).toInt32();
+        if ( idx != -1 )
+        {
+            _tlx = temp;
+            _tly = sPosition.getToken( 0, ',', idx ).toInt32();
+        }
+    }
+}
+
 void SplashScreen::initBitmap()
 {
     String aBmpFileName;
@@ -233,12 +337,7 @@ void SplashScreen::initBitmap()
         xub_StrLen nIndex = 0;
         aBmpFileName += String( DEFINE_CONST_UNICODE("intro.bmp") );
         // retrieve our current installation path
-        OUString aExecutePath;
-        ::vos::OStartupInfo().getExecutableFile( aExecutePath );
-        sal_uInt32  lastIndex = aExecutePath.lastIndexOf('/');
-        if ( lastIndex > 0 )
-            aExecutePath = aExecutePath.copy( 0, lastIndex+1 );
-        INetURLObject aObj( aExecutePath, INET_PROT_FILE );
+        INetURLObject aObj( _sExecutePath, INET_PROT_FILE );
         aObj.insertName( aBmpFileName );
         SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
         if ( !aStrm.GetError() )
@@ -286,22 +385,12 @@ void SplashScreen::Paint( const Rectangle& r)
         // draw progress...
         long length = (_iProgress * _barwidth / _iMax) - (2 * _barspace);
         if (length < 0) length = 0;
-        // --> PB 2004-11-17 #118510# new branding (now in green)
-        const Color cGreen(157,202,18); // light green
-        const Color cBlue(COL_BLUE);
-        const Color cGray(COL_LIGHTGRAY);
 
         // border
         _vdev.SetFillColor();
-        _vdev.SetLineColor(cGray);
-        _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth,
-            _tly+_barheight));
-
-        // progress bar, new color only for big bitmap format
-        if (_width > 500 )
-            _vdev.SetFillColor(cGreen);
-        else
-            _vdev.SetFillColor(cBlue);
+        _vdev.SetLineColor( Color( COL_LIGHTGRAY ) );
+        _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
+        _vdev.SetFillColor( _cProgressColor );
         _vdev.SetLineColor();
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace,
             _tlx+_barspace+length, _tly+_barheight-_barspace));
