@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:38:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1503,7 +1503,7 @@ namespace
                 }
             }
 
-            sal_uInt32 nPos;
+            sal_uInt32 nPos = 0;
             if(SQL_ISRULE(pCondition->getChild(0), column_ref ))
             {
                 nPos = 0;
@@ -1574,6 +1574,9 @@ namespace
                                                 &pController->getParser()->getContext());
                 }
             }
+            // else ???
+
+
             if( eOk == ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(nPos),aDragLeft)))
             {
                 if(bHaving)
@@ -2762,6 +2765,10 @@ void OQueryDesignView::setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable)
         case ID_BROWSER_QUERY_VIEW_ALIASES:
             nRow = BROW_COLUMNALIAS_ROW;
             break;
+        default:
+            // ????????????
+            nRow = 0;
+            break;
     }
     m_pSelectionBox->SetRowVisible(nRow,_bEnable);
     m_pSelectionBox->Invalidate();
@@ -2780,6 +2787,10 @@ sal_Bool OQueryDesignView::isSlotEnabled(sal_Int32 _nSlotId)
             break;
         case ID_BROWSER_QUERY_VIEW_ALIASES:
             nRow = BROW_COLUMNALIAS_ROW;
+            break;
+        default:
+            // ?????????
+            nRow = 0;
             break;
     }
     return m_pSelectionBox->IsRowVisible(nRow);
