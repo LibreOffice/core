@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScStyleObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:13:13 $
+ *  last change:$Date: 2003-09-08 12:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,15 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+import java.util.Vector;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
@@ -75,18 +84,10 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.table.XCell;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import java.util.Vector;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -158,7 +159,6 @@ public class ScStyleObj extends TestCase {
     */
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XInterface oObj = null;
 
         // creation of the testobject here
         // first we write what we are intend to do to log file
