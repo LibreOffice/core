@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:36:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ public:
     SFX_DECL_VIEWFACTORY(ViewShellBase);
     SFX_DECL_INTERFACE(SD_IF_SDVIEWSHELLBASE);
 
-    //    ViewShellBase (SfxViewFrame *pFrame, USHORT nFlags);
     /** This constructor is used by the view factory of the SFX macros.
         Note that LateInit() has to be called after the constructor
         terminates and before doing anything else.
@@ -117,7 +116,7 @@ public:
     ViewShellBase (
         SfxViewFrame *pFrame,
         SfxViewShell* pOldShell,
-        ViewShell::ShellType eDefaultSubShell = ViewShell::ST_IMPRESS);
+        ViewShell::ShellType eDefaultSubShell = ViewShell::ST_NONE);
 
     virtual ~ViewShellBase (void);
 
@@ -162,12 +161,11 @@ public:
     */
     void GetState (SfxItemSet& rSet);
 
-    /** Make sure that mpMainController points to a controller that matches
-        the current stacked view shell.  If that is not the case the current
-        controller is replaced by a new one.  Otherwise this method returns
-        without changing anything.
+    /** Make sure that the given controller is known and used by the frame.
+        @param pController
+            The new controller.  Usually that of the main view shell.
     */
-    void UpdateController (void);
+    void UpdateController (SfxBaseController* pController);
 
     SvBorder GetBorder (bool bOuterResize);
     virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize);
@@ -215,10 +213,16 @@ public:
         ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
         sal_Bool bBrowse = sal_False);
+
+    /** Pass the given properties to the main view shell.  After that we
+        ensure that the right view shell type is displayed in the center
+        pane.
+    */
     virtual void ReadUserDataSequence (
         const ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
         sal_Bool bBrowse = sal_False);
+
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );
     virtual void Activate (BOOL IsMDIActivate);
@@ -292,6 +296,19 @@ private:
         const Point& rOrigin,
         const Size& rSize,
         bool bOuterResize);
+
+    /** Determine from the properties of the document shell the initial type
+        of the view shell in the center pane.  We use this method to avoid
+        starting with the wrong type.  When ReadUserDataSequence() is called
+        we check that the right type is active and change again if that is
+        not the case because something went wrong.
+    */
+    ViewShell::ShellType GetInitialViewShellType (void);
+
+    /** Wait for the ViewTabBar to become visible so that its correct height
+        can calculated and the border can be updated.
+    */
+    DECL_LINK(WindowEventHandler,VclWindowEvent*);
 };
 
 
