@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-07 14:27:21 $
+ *  last change: $Author: mba $ $Date: 2001-03-07 15:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1668,9 +1668,10 @@ void SmDocShell::UIActivate (BOOL bActivate)
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                     SID_GETEDITTEXT, SFX_CALLMODE_STANDARD,
                     new SfxVoidItem (SID_GETEDITTEXT), 0L);
-            SfxInPlaceObject::UIActivate (bActivate);
             Resize();
         }
+
+        SfxInPlaceObject::UIActivate (bActivate);
     }
 }
 
