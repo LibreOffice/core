@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-29 07:33:57 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,39 +138,6 @@ using namespace ::rtl;
 #include "loadenv.hxx"
 #include "docfile.hxx"
 #include "docfilt.hxx"
-
-Reference< XInterface > SAL_CALL SfxFrameLoaderFactory::createInstance(void) throw(Exception, RuntimeException)
-{
-    Reference < XFrameLoader > xLoader( pCreateFunction( xSMgr ), UNO_QUERY );
-    SfxFrameLoader* pLoader = (SfxFrameLoader*) xLoader.get();
-    pLoader->SetFilterName( aImplementationName );
-    return xLoader;
-}
-
-Reference< XInterface > SAL_CALL SfxFrameLoaderFactory::createInstanceWithArguments(const Sequence<Any>& Arguments) throw(Exception, RuntimeException)
-{
-    return createInstance();
-}
-
-::rtl::OUString SAL_CALL SfxFrameLoaderFactory::getImplementationName() throw(RuntimeException)
-{
-    return aImplementationName;
-}
-
-sal_Bool SAL_CALL SfxFrameLoaderFactory::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
-{
-    if ( ServiceName.compareToAscii("com.sun.star.frame.FrameLoader") == COMPARE_EQUAL )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-Sequence< ::rtl::OUString > SAL_CALL SfxFrameLoaderFactory::getSupportedServiceNames(void) throw(RuntimeException)
-{
-    Sequence< ::rtl::OUString > aRet(1);
-    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader");
-    return aRet;
-}
 
 SfxFrameLoader::SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
     : pMatcher( 0 )
@@ -861,7 +828,7 @@ UNOSEQUENCE< UNOOUSTRING > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNa
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 2 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.FrameLoader" );
+    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.SynchronousFrameLoader" );
     seqServiceNames.getArray() [1] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedFilterDetect" );
     return seqServiceNames ;
 }
