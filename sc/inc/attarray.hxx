@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:00:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ struct ScLineFlags
 
 struct ScAttrEntry
 {
-    USHORT                  nRow;
+    SCROW                   nRow;
     const ScPatternAttr*    pPattern;
 };
 
@@ -111,12 +111,12 @@ struct ScAttrEntry
 class ScAttrArray
 {
 private:
-    USHORT          nCol;
-    USHORT          nTab;
+    SCCOL           nCol;
+    SCTAB           nTab;
     ScDocument*     pDocument;
 
-    USHORT          nCount;
-    USHORT          nLimit;
+    SCSIZE          nCount;
+    SCSIZE          nLimit;
     ScAttrEntry*    pData;
 
 friend class ScDocument;                // fuer FillInfo
@@ -124,93 +124,95 @@ friend class ScDocumentIterator;
 friend class ScAttrIterator;
 friend class ScHorizontalAttrIterator;
 friend void lcl_IterGetNumberFormat( ULONG& nFormat,
-        const ScAttrArray*& rpArr, USHORT& nAttrEndRow,
-        const ScAttrArray* pNewArr, USHORT nRow, ScDocument* pDoc );
+        const ScAttrArray*& rpArr, SCROW& nAttrEndRow,
+        const ScAttrArray* pNewArr, SCROW nRow, ScDocument* pDoc );
 
     BOOL    ApplyFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                            USHORT nStartRow, USHORT nEndRow,
-                            BOOL bLeft, USHORT nDistRight, BOOL bTop, USHORT nDistBottom );
+                            SCROW nStartRow, SCROW nEndRow,
+                            BOOL bLeft, SCCOL nDistRight, BOOL bTop, SCROW nDistBottom );
 
 public:
-            ScAttrArray( USHORT nNewCol, USHORT nNewTab, ScDocument* pDoc );
+            ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc );
             ~ScAttrArray();
 
-    void    SetTab(USHORT nNewTab)  { nTab = nNewTab; }
-    void    SetCol(USHORT nNewCol)  { nCol = nNewCol; }
+    void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
+    void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
 
     void    TestData() const;
     void    Reset( const ScPatternAttr* pPattern, BOOL bAlloc = TRUE );
-    BOOL    Concat(USHORT nPos);
+    BOOL    Concat(SCSIZE nPos);
 
-    const ScPatternAttr* GetPattern( USHORT nRow ) const;
-    const ScPatternAttr* GetPatternRange( USHORT& rStartRow, USHORT& rEndRow, USHORT nRow ) const;
-    void    MergePatternArea( USHORT nStartRow, USHORT nEndRow, SfxItemSet** ppSet, BOOL bDeep ) const;
+    const ScPatternAttr* GetPattern( SCROW nRow ) const;
+    const ScPatternAttr* GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const;
+    void    MergePatternArea( SCROW nStartRow, SCROW nEndRow, SfxItemSet** ppSet, BOOL bDeep ) const;
 
     void    MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
-                            USHORT nStartRow, USHORT nEndRow, BOOL bLeft, USHORT nDistRight ) const;
+                            SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight ) const;
     void    ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                            USHORT nStartRow, USHORT nEndRow, BOOL bLeft, USHORT nDistRight );
+                            SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight );
 
-    void    SetPattern( USHORT nRow, const ScPatternAttr* pPattern, BOOL bPutToPool = FALSE );
-    void    SetPatternArea( USHORT nStartRow, USHORT nEndRow, const ScPatternAttr* pPattern, BOOL bPutToPool = FALSE);
-    void    ApplyStyleArea( USHORT nStartRow, USHORT nEndRow, ScStyleSheet* pStyle );
-    void    ApplyCacheArea( USHORT nStartRow, USHORT nEndRow, SfxItemPoolCache* pCache );
-    void    ApplyLineStyleArea( USHORT nStartRow, USHORT nEndRow,
+    void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, BOOL bPutToPool = FALSE );
+    void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern, BOOL bPutToPool = FALSE);
+    void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
+    void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache );
+    void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const SvxBorderLine* pLine, BOOL bColorOnly );
 
-    void    ClearItems( USHORT nStartRow, USHORT nEndRow, const USHORT* pWhich );
-    void    ChangeIndent( USHORT nStartRow, USHORT nEndRow, BOOL bIncrement );
+    void    ClearItems( SCROW nStartRow, SCROW nEndRow, const USHORT* pWhich );
+    void    ChangeIndent( SCROW nStartRow, SCROW nEndRow, BOOL bIncrement );
 
-    short   GetNextUnprotected( short nRow, BOOL bUp ) const;   // inkl. aktuelle
+            /// Including current, may return -1
+    SCsROW  GetNextUnprotected( SCsROW nRow, BOOL bUp ) const;
 
-    short   SearchStyle( short nRow, const ScStyleSheet* pSearchStyle,
+            /// May return -1 if not found
+    SCsROW  SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
                             BOOL bUp, ScMarkArray* pMarkArray = NULL );
-    BOOL    SearchStyleRange( short& rRow, short& rEndRow, const ScStyleSheet* pSearchStyle,
+    BOOL    SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
                             BOOL bUp, ScMarkArray* pMarkArray = NULL );
 
-    BOOL    ApplyFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags );
-    BOOL    RemoveFlags( USHORT nStartRow, USHORT nEndRow, INT16 nFlags );
+    BOOL    ApplyFlags( SCROW nStartRow, SCROW nEndRow, INT16 nFlags );
+    BOOL    RemoveFlags( SCROW nStartRow, SCROW nEndRow, INT16 nFlags );
 
-    BOOL    Search( USHORT nRow, short& nIndex ) const;
+    BOOL    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
-    BOOL    HasLines( USHORT nRow1, USHORT nRow2, Rectangle& rSizes,
+    BOOL    HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
                         BOOL bLeft, BOOL bRight ) const;
-    BOOL    HasAttrib( USHORT nRow1, USHORT nRow2, USHORT nMask ) const;
-    BOOL    ExtendMerge( USHORT nThisCol, USHORT nStartRow, USHORT nEndRow,
-                                USHORT& rPaintCol, USHORT& rPaintRow,
+    BOOL    HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
+    BOOL    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
+                                SCCOL& rPaintCol, SCROW& rPaintRow,
                                 BOOL bRefresh, BOOL bAttrs );
-    BOOL    RemoveAreaMerge( USHORT nStartRow, USHORT nEndRow );
+    BOOL    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
 
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
     BOOL    IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
-    void    DeleteAreaSafe(USHORT nStartRow, USHORT nEndRow);
-    void    SetPatternAreaSafe( USHORT nStartRow, USHORT nEndRow,
+    void    DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow);
+    void    SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                                     const ScPatternAttr* pWantedPattern, BOOL bDefault );
-    void    CopyAreaSafe( USHORT nStartRow, USHORT nEndRow, short nDy, ScAttrArray& rAttrArray );
+    void    CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray );
 
     BOOL    IsEmpty() const;
 
-    USHORT  GetFirstEntryPos() const;
-    USHORT  GetLastEntryPos( BOOL bIncludeBottom ) const;
+    SCROW   GetFirstEntryPos() const;
+    SCROW   GetLastEntryPos( BOOL bIncludeBottom ) const;
 
-    BOOL    HasVisibleAttr( USHORT& rFirstRow, USHORT& rLastRow, BOOL bSkipFirst ) const;
-    BOOL    HasVisibleAttrIn( USHORT nStartRow, USHORT nEndRow ) const;
+    BOOL    HasVisibleAttr( SCROW& rFirstRow, SCROW& rLastRow, BOOL bSkipFirst ) const;
+    BOOL    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     BOOL    IsVisibleEqual( const ScAttrArray& rOther,
-                            USHORT nStartRow, USHORT nEndRow ) const;
-    BOOL    IsAllEqual( const ScAttrArray& rOther, USHORT nStartRow, USHORT nEndRow ) const;
+                            SCROW nStartRow, SCROW nEndRow ) const;
+    BOOL    IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW nEndRow ) const;
 
-    BOOL    TestInsertCol( USHORT nStartRow, USHORT nEndRow) const;
-    BOOL    TestInsertRow( USHORT nSize ) const;
-    void    InsertRow( USHORT nStartRow, USHORT nSize );
-    void    DeleteRow( USHORT nStartRow, USHORT nSize );
-    void    DeleteRange( USHORT nStartIndex, USHORT nEndIndex );
-    void    DeleteArea( USHORT nStartRow, USHORT nEndRow );
-    void    MoveTo( USHORT nStartRow, USHORT nEndRow, ScAttrArray& rAttrArray );
-    void    CopyArea( USHORT nStartRow, USHORT nEndRow, short nDy, ScAttrArray& rAttrArray,
+    BOOL    TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
+    BOOL    TestInsertRow( SCSIZE nSize ) const;
+    void    InsertRow( SCROW nStartRow, SCSIZE nSize );
+    void    DeleteRow( SCROW nStartRow, SCSIZE nSize );
+    void    DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex );
+    void    DeleteArea( SCROW nStartRow, SCROW nEndRow );
+    void    MoveTo( SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray );
+    void    CopyArea( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray,
                         INT16 nStripFlags = 0 );
 
-    void    DeleteHardAttr( USHORT nStartRow, USHORT nEndRow );
+    void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 
     void    Save( SvStream& rStream ) const;
     void    Load( SvStream& rStream );
@@ -225,31 +227,31 @@ public:
 class ScAttrIterator
 {
     const ScAttrArray*  pArray;
-    short               nPos;
-    USHORT              nRow;
-    USHORT              nEndRow;
+    SCSIZE              nPos;
+    SCROW               nRow;
+    SCROW               nEndRow;
 public:
-    inline              ScAttrIterator( const ScAttrArray* pNewArray, USHORT nStart, USHORT nEnd );
-    inline const ScPatternAttr* Next( USHORT& rTop, USHORT& rBottom );
-    USHORT              GetNextRow() const { return nRow; }
+    inline              ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd );
+    inline const ScPatternAttr* Next( SCROW& rTop, SCROW& rBottom );
+    SCROW               GetNextRow() const { return nRow; }
 };
 
 
-inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, USHORT nStart, USHORT nEnd ) :
+inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd ) :
     pArray( pNewArray ),
     nRow( nStart ),
     nEndRow( nEnd )
 {
-    if ( nStart )
+    if ( nStart > 0 )
         pArray->Search( nStart, nPos );
     else
         nPos = 0;
 }
 
-inline const ScPatternAttr* ScAttrIterator::Next( USHORT& rTop, USHORT& rBottom )
+inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
 {
     const ScPatternAttr* pRet;
-    if ( nPos < (short) pArray->nCount && nRow <= nEndRow )
+    if ( nPos < pArray->nCount && nRow <= nEndRow )
     {
         rTop = nRow;
         rBottom = Min( pArray->pData[nPos].nRow, nEndRow );
