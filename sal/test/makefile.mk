@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:27 $
+#   last change: $Author: sb $ $Date: 2001-04-23 09:19:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,29 +71,26 @@ USE_LDUMP2=TRUE
 
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 
 # ------------------------------------------------------------------
 
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-
 OBJFILES= \
                 $(OBJ)$/testprofile.obj		\
-                $(OBJ)$/testint64.obj		\
                 $(OBJ)$/teststring.obj		\
                 $(OBJ)$/testuuid.obj		\
-                $(OBJ)$/testowstring.obj	\
                 $(OBJ)$/teststrbuf.obj		\
-                $(OBJ)$/testbyteseq.obj         \
+                $(OBJ)$/testbyteseq.obj		\
+                $(OBJ)$/testuri.obj			\
                 $(OBJ)$/test.obj
+#				$(OBJ)$/testint64.obj		\
+#				$(OBJ)$/testowstring.obj	\
 
 .IF "$(GUI)" == "WNT"
 SALLIB= isal.lib
 .ELSE
-SALLIB= -lsal1
+SALLIB= -lsal2
 .ENDIF
 
 
@@ -104,9 +101,6 @@ APP2STDLIBS=$(SALLIB) $(TSLLIB)
 
 
 # --- Targets ------------------------------------------------------
-
-#all: \
-#	ALLTAR	
 
 .INCLUDE :  target.mk
 
@@ -119,5 +113,3 @@ $(MISC)$/tsl$(UPD)$(DLLPOSTFIX).flt:
     @echo WEP>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
-
-
