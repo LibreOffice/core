@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1511,7 +1511,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_simplified ] = "½«ΙΈΡ΅½αΉϋΈ΄ΦΖµ½(~R)...";
         Text[ russian ] = "Πεησλόςΰς τθλόςπΰ β";
         Text[ polish ] = "Kopiuj rezultaty filtrowania do";
-        Text[ japanese ] = "Μ¨Ωΐ‹‰Κ‚Μ“\\‚θ•t‚―ζ(~R)...";
+        Text[ japanese ] = "Μ¨Ωΐ‹‰Κ‚Μ“\\‚θ•t‚―ζ(~R)";
         Text[ chinese_traditional ] = "±NΏzΏοµ²ªG½Ζ»s¨μ(~R)...";
         Text[ arabic ] = "δΣΞ δΚνΜΙ ΗαΚΥένΙ Εαμ";
         Text[ greek ] = "Αντιγραφή αποτελεσμάτων στο";
@@ -1644,7 +1644,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ polish ] = "Zalepka";
         Text[ japanese ] = "ΐήΠ°";
         Text[ chinese_traditional ] = "ΌΛ¥»";
-        Text[ arabic ] = "δγζΠΜ ΨΘΗΪν";
+        Text[ arabic ] = "δγζΠΜ γΥΨδΪ";
         Text[ greek ] = "Δοκιμαστικό";
         Text[ korean ] = "΄υΉΜ";
         Text[ turkish ] = "taklit";
@@ -1955,7 +1955,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_simplified ] = "Έ΄ΦΖΙΈΡ΅½αΉϋµ½(~R)...";
         Text[ russian ] = "Πεησλόςΰς τθλόςπΰ β";
         Text[ polish ] = "Kopiuj rezultaty filtrowania do";
-        Text[ japanese ] = "Μ¨Ωΐ‹‰Κ‚Μ“\\‚θ•t‚―ζ(~R)...";
+        Text[ japanese ] = "Μ¨Ωΐ‹‰Κ‚Μ“\\‚θ•t‚―ζ(~R)";
         Text[ chinese_traditional ] = "½Ζ»sΏzΏοµ²ªG¨μ(~R)...";
         Text[ arabic ] = "δΣΞ δΚνΜΙ ΗαΚΥένΙ Εαμ";
         Text[ greek ] = "Αντιγραφή αποτελεσμάτων στο";
@@ -2088,7 +2088,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ polish ] = "Zalepka";
         Text[ japanese ] = "ΐήΠ°";
         Text[ chinese_traditional ] = "ΌΛ¥»";
-        Text[ arabic ] = "δγζΠΜ ΨΘΗΪν";
+        Text[ arabic ] = "δγζΠΜ γΥΨδΪ";
         Text[ greek ] = "Δοκιμαστικό";
         Text[ korean ] = "΄υΉΜ";
         Text[ turkish ] = "Taklit";
@@ -3409,7 +3409,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ polish ] = "Zalepka";
         Text[ japanese ] = "ΐήΠ°";
         Text[ chinese_traditional ] = "ΌΛ¦΅";
-        Text[ arabic ] = "δγζΠΜ ΨΘΗΪν";
+        Text[ arabic ] = "δγζΠΜ γΥΨδΪ";
         Text[ greek ] = "Δοκιμαστικό";
         Text[ korean ] = "΄υΉΜ";
         Text[ turkish ] = "Taklit";
