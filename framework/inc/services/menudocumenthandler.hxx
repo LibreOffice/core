@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-09 18:30:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,11 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -160,8 +165,14 @@ class ReadMenuDocumentHandlerBase : public ::com::sun::star::xml::sax::XDocument
 class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        OReadMenuDocumentHandler( MenuBar* pMenuBar );
+        // #110897#
+        OReadMenuDocumentHandler(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            MenuBar* pMenuBar );
         virtual ~OReadMenuDocumentHandler();
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
@@ -191,14 +202,23 @@ class OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
         int         m_nElementDepth;
         sal_Bool    m_bMenuBarMode;
         MenuBar*    m_pMenuBar;
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };  // OReadMenuDocumentHandler
 
 
 class OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        OReadMenuBarHandler( MenuBar* pMenuBar, USHORT* pItemId );
+        // #110897#
+        OReadMenuBarHandler(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            MenuBar* pMenuBar, USHORT* pItemId );
         virtual ~OReadMenuBarHandler();
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
@@ -228,6 +248,9 @@ class OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
         int         m_nElementDepth;
         sal_Bool    m_bMenuMode;
         MenuBar*    m_pMenuBar;
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };  // OReadMenuBarHandler
 
 
