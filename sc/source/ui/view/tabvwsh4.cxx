@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:26:07 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,8 +1409,9 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 
     HideNoteMarker();   // Notiz-Anzeige
 
-    BOOL bHideCursor = ( nCode == KEY_RETURN && bInPlace ) ||
-                            nCode == KEY_TAB;
+    // don't do extra HideCursor/ShowCursor calls if EnterHandler will switch to a different sheet
+    BOOL bOnRefSheet = ( GetViewData()->GetRefTabNo() == GetViewData()->GetTabNo() );
+    BOOL bHideCursor = ( ( nCode == KEY_RETURN && bInPlace ) || nCode == KEY_TAB ) && bOnRefSheet;
 
     if (bHideCursor)
         HideAllCursors();
@@ -1517,7 +1518,8 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                     BOOL bEditReturn = bControl && !bShift;         // An Edit-Engine weiter
                     if ( !bUsed && !bEditReturn )
                     {
-                        HideAllCursors();
+                        if ( bOnRefSheet )
+                            HideAllCursors();
 
                         BYTE nMode = SC_ENTER_NORMAL;
                         if ( bShift && bControl )
@@ -1538,7 +1540,8 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                         else
                             UpdateInputHandler(TRUE);
 
-                        ShowAllCursors();
+                        if ( bOnRefSheet )
+                            ShowAllCursors();
 
                         //  hier kein UpdateInputHandler, weil bei Referenzeingabe auf ein
                         //  anderes Dokument diese ViewShell nicht die ist, auf der eingegeben
