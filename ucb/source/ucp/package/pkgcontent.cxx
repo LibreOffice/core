@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-30 11:25:15 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 10:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,8 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
   m_aUri( rUri ),
   m_aProps( rProps ),
   m_eState( PERSISTENT ),
-  m_pProvider( pProvider )
+  m_pProvider( pProvider ),
+  m_bDirty( sal_False )
 {
 }
 
@@ -274,7 +275,8 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
   m_xPackage( Package ),
   m_aUri( rUri ),
   m_eState( TRANSIENT ),
-  m_pProvider( pProvider )
+  m_pProvider( pProvider ),
+  m_bDirty( sal_False )
 {
     if ( Info.Type.compareToAscii( PACKAGE_FOLDER_CONTENT_TYPE ) == 0 )
     {
@@ -306,6 +308,8 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 // virtual
 Content::~Content()
 {
+    // flush pending data.
+    flushData();
 }
 
 //=========================================================================
@@ -678,11 +682,7 @@ Reference< XContent > SAL_CALL Content::createNewContent(
               ( Info.Type.compareToAscii( PACKAGE_STREAM_CONTENT_TYPE ) != 0 ) )
             return Reference< XContent >();
 
-        OUString aURL = m_xIdentifier->getContentIdentifier();
-
-        VOS_ENSURE( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ),
-                    "Content::createNewContent - invalid URL!" );
-
+        OUString aURL = m_aUri.getUri();
         aURL += OUString::createFromAscii( "/" );
 
         if ( Info.Type.compareToAscii( PACKAGE_FOLDER_CONTENT_TYPE ) == 0 )
@@ -1104,15 +1104,14 @@ Any Content::open( const OpenCommandArgument2& rArg,
 
             try
             {
-                Sequence< sal_Int8 > aBuffer( 65536 );
+                Sequence< sal_Int8 > aBuffer;
                 sal_Int32  nRead = xIn->readSomeBytes( aBuffer, 65536 );
 
                 while ( nRead > 0 )
                 {
                     aBuffer.realloc( nRead );
                     xOut->writeBytes( aBuffer );
-                    aBuffer.realloc( 65536 );
-
+                    aBuffer.realloc( 0 );
                     nRead = xIn->readSomeBytes( aBuffer, 65536 );
                 }
 
@@ -1305,14 +1304,6 @@ void Content::destroy( sal_Bool bDeletePhysical )
 void Content::transfer( const TransferInfo& rInfo )
     throw( CommandAbortedException )
 {
-    // targeturl->XNamed::setParent( this )
-
-    // setParent hat weder returnwert noch wirft es exceptions
-    // --> nach setparent checken, ob neues elem existiert und
-    //     by move checken, ob altes elem weg ist.
-
-    // dynamische props nicht vergessen!
-
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     // Persistent?
@@ -1331,13 +1322,8 @@ void Content::transfer( const TransferInfo& rInfo )
         throw CommandAbortedException();
 
     // Is source not a parent of me / not me?
-    OUString aId = m_xIdentifier->getContentIdentifier();
-    sal_Int32 nPos = aId.lastIndexOf( '/' );
-    if ( nPos != ( aId.getLength() - 1 ) )
-    {
-        // No trailing slash found. Append.
-        aId += OUString::createFromAscii( "/" );
-    }
+    OUString aId = m_aUri.getParentUri();
+    aId += OUString::createFromAscii( "/" );
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
     {
@@ -1617,8 +1603,6 @@ sal_Bool Content::exchangeIdentity(
 //=========================================================================
 void Content::queryChildren( ContentRefList& rChildren )
 {
-    // @@@ Adapt method to your URL scheme...
-
     // Obtain a list with a snapshot of all currently instanciated contents
     // from provider and extract the contents which are direct children
     // of this content.
@@ -1831,6 +1815,8 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
 sal_Bool Content::renameData( const Reference< XContentIdentifier >& xOldId,
                                const Reference< XContentIdentifier >& xNewId )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     PackageUri aURI( xOldId->getContentIdentifier() );
     Reference< XHierarchicalNameAccess > xNA = getPackage( aURI );
     if ( !xNA.is() )
@@ -1853,6 +1839,8 @@ sal_Bool Content::renameData( const Reference< XContentIdentifier >& xOldId,
 
         // No success indicator!? No return value / exceptions specified.
         xNamed->setName( aNewURI.getName() );
+
+        m_bDirty = sal_True;
         return sal_True;
     }
     catch ( NoSuchElementException & )
@@ -1866,6 +1854,8 @@ sal_Bool Content::renameData( const Reference< XContentIdentifier >& xOldId,
 //=========================================================================
 sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
         return sal_False;
@@ -1888,7 +1878,7 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             }
 
             Sequence< Any > aArgs( 1 );
-            aArgs[ 0 ]  <<= isFolder();
+            aArgs[ 0 ] <<= isFolder();
 
             Reference< XInterface > xNew
                 = xFac->createInstanceWithArguments( aArgs );
@@ -1914,6 +1904,7 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             }
 
             xParentContainer->insertByName( m_aProps.aTitle, makeAny( xNew ) );
+            m_bDirty = sal_True;
         }
         catch ( RuntimeException & )
         {
@@ -1964,6 +1955,7 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 
         xPropSet->setPropertyValue( OUString::createFromAscii( "MediaType" ),
                                     makeAny( m_aProps.aMediaType ) );
+        m_bDirty = sal_True;
 
         //////////////////////////////////////////////////////////////////
         // Store data stream...
@@ -1982,8 +1974,7 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             }
 
             xSink->setInputStream( xStream );
-
-            // flushData();
+            m_bDirty = sal_True;
         }
 
         return sal_True;
@@ -2016,6 +2007,8 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 //=========================================================================
 sal_Bool Content::removeData()
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
         return sal_False;
@@ -2036,6 +2029,7 @@ sal_Bool Content::removeData()
         }
 
         xContainer->removeByName( m_aUri.getName() );
+        m_bDirty = sal_True;
         return sal_True;
     }
     catch ( NoSuchElementException & )
@@ -2054,6 +2048,11 @@ sal_Bool Content::removeData()
 //=========================================================================
 sal_Bool Content::flushData()
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    if ( !m_bDirty )
+        return sal_True;
+
     // Note: XChangesBatch is only implemented by the package itself, not
     //       by the single entries. Maybe this has to change...
 
@@ -2072,6 +2071,7 @@ sal_Bool Content::flushData()
     try
     {
         xBatch->commitChanges();
+        m_bDirty = sal_False;
         return sal_True;
     }
     catch ( WrappedTargetException & )
@@ -2085,6 +2085,8 @@ sal_Bool Content::flushData()
 //=========================================================================
 Reference< XInputStream > Content::getInputStream()
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     Reference< XInputStream > xStream;
     Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )
@@ -2120,6 +2122,8 @@ Reference< XInputStream > Content::getInputStream()
 //=========================================================================
 Reference< XEnumeration > Content::getIterator()
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     Reference< XEnumeration > xIter;
     Reference< XHierarchicalNameAccess > xNA = getPackage();
     if ( !xNA.is() )

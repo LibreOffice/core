@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 14:41:57 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 10:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public:
              const Reference< XHierarchicalNameAccess > & xNA,
              ContentProvider* pOwner )
     : m_aName( rName ), m_xNA( xNA ), m_pOwner( pOwner ) {}
-    ~Package() { m_pOwner->removePackage( m_aName ); }
+    virtual ~Package() { m_pOwner->removePackage( m_aName ); }
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL
