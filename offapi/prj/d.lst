@@ -31,6 +31,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\document
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\embed
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\component
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\control
@@ -94,6 +95,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\com\sun\star\datatransfer\dnd\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd
 ..\com\sun\star\document\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\document
 ..\com\sun\star\drawing\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing
+..\com\sun\star\embed\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\embed
 ..\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form
 ..\com\sun\star\form\component\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\component
 ..\com\sun\star\form\control\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\control
