@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 15:35:21 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text[ dutch ] = "%PRODUCTNAME 4.0 HTML";
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 HTML";
     Text[ greek ] = "%PRODUCTNAME 4.0 HTML";
-    Text[ korean ] = "HTML (%PRODUCTNAME 4.0)";
+    Text[ korean ] = "%PRODUCTNAME 4.0°°HTML ";
     Text[ turkish ] = "%PRODUCTNAME 4.0 HTML";
     Text[ language_user1 ] = " ";
 };
@@ -145,8 +145,8 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text [ dutch ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ portuguese ] = "HTML (%PRODUCTNAME 5.0)" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ russian ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ polish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ russian ] = "HTML ‚ %PRODUCTNAME 5.0 ";
+    Text[ polish ] = "%PRODUCTNAME 5.0 - HTML";
     Text[ japanese ] = "%PRODUCTNAME 5.0 HTML";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 HTML";
     Text[ arabic ] = "%PRODUCTNAME 5.0 HTML";
@@ -161,6 +161,24 @@ String STR_WRITER_WEBDOC_FULLTYPE
 {
     Text = "%PRODUCTNAME 6.0 HTML" ;
     Text [ English ] = "StarOffice 6.0 HTML" ;
+    Text[ english_us ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ portuguese ] = "HTML (%PRODUCTNAME 5.0)";
+    Text[ russian ] = "HTML ‚ %PRODUCTNAME 6.0 ";
+    Text[ greek ] = "%PRODUCTNAME 6.0 HTML";
+    Text[ dutch ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ french ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ spanish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ italian ] = "HTML %PRODUCTNAME 5.0";
+    Text[ danish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ swedish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ polish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ korean ] = "%PRODUCTNAME 5.£∞HTML ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ arabic ] = "%PRODUCTNAME 5.0 HTML";
 };
 String STR_SHELLNAME_WEBTEXT
 {
@@ -509,7 +527,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text[ russian ] = "œ‡ÌÂÎ¸ „‡ÙË˜ÂÒÍËı Ó·˙ÂÍÚÓ‚/Web";
     Text[ polish ] = "Pasek obiektÛw graficznych/Web";
     Text[ japanese ] = "ê}å`ï`âÊµÃﬁºﬁ™∏ƒ ﬁ∞/Web";
-    Text[ chinese_traditional ] = "πœ§˘™´•Û¶C/Web";
+    Text[ chinese_traditional ] = "πœßŒ™´•Û¶C/Web";
     Text[ arabic ] = "‘—Ìÿ ﬂ«∆‰«  ’Ê—…/ ÊÌ»";
     Text[ dutch ] = "Objectbalk afbeeldingen/Web";
     Text[ chinese_simplified ] = "Õº–Œ∂‘œÛ¿∏/Web";
