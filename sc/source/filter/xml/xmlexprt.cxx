@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-27 12:47:48 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 16:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,6 +1330,15 @@ void ScXMLExport::_ExportContent()
 
 void ScXMLExport::_ExportStyles( sal_Bool bUsed )
 {
+    ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
+    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+    if (xMultiServiceFactory.is())
+    {
+        uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.Defaults")));
+        uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
+        if (xProperties.is())
+            aStylesExp.exportDefaultStyle(xProperties, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper);
+    }
     uno::Reference <style::XStyleFamiliesSupplier> xStyleFamiliesSupplier (xModel, uno::UNO_QUERY);
     if (xStyleFamiliesSupplier.is())
     {
@@ -1360,7 +1369,6 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
     }
     exportDataStyles();
 
-    ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     aStylesExp.exportStyleFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles")),
         XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper, FALSE, XML_STYLE_FAMILY_TABLE_CELL);
 }
@@ -2051,7 +2059,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             rtl::OUString sCLSID;
             if (aAny >>= sCLSID)
             {
-                if ( sCLSID.equalsIgnoreCase(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "12DCAE26-281F-416F-a234-c3086127382e" ))) )
+                if ( sCLSID.equalsIgnoreCase(GetChartExport()->getChartCLSID()) )
                 {
                     uno::Reference < container::XNamed > xNamed (xShape, uno::UNO_QUERY );
                     rtl::OUString sOUName ( xNamed->getName() );
