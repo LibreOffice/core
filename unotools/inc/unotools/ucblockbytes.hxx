@@ -118,7 +118,7 @@ public:
     String                  GetRealURL() const;
     DateTime                GetExpireDate() const;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream );
     sal_Bool                setStream_Impl( const NS_UNO::Reference < NS_IO::XStream > &rxStream );
     void                    terminate_Impl (void);
