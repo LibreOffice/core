@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: os $ $Date: 2002-03-27 16:05:39 $
+ *  last change: $Author: os $ $Date: 2002-04-05 08:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10229,6 +10229,27 @@ DockingWindow RID_CMDBOXWINDOW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Comandos";
 };
+#define _ID_LIST \
+    IdList =\
+    {\
+        SID_NEXTERR ;\
+        SID_PREVERR ;\
+        SID_VIEW050 ;\
+        SID_VIEW100 ;\
+        SID_VIEW200 ;\
+        SID_ZOOMIN ;\
+        SID_ZOOMOUT ;\
+        SID_ADJUST ;\
+        SID_DRAW ;\
+        SID_TOOLBOX ;\
+        SID_FONT ;\
+        SID_FONTSIZE ;\
+        SID_DISTANCE ;\
+        SID_ALIGN ;\
+        SID_FORMULACURSOR ;\
+        SID_SYMBOLS_CATALOGUE ;\
+    };\
+    IdCount =    {        16;    };
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
@@ -10245,29 +10266,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File [ SWEDISH ] = "lc_out46.bmp" ;
     };
     MaskColor = IMAGE_STDBTN_COLOR ;
-    IdList =
-    {
-        SID_NEXTERR ;
-        SID_PREVERR ;
-        SID_VIEW050 ;
-        SID_VIEW100 ;
-        SID_VIEW200 ;
-        SID_ZOOMIN ;
-        SID_ZOOMOUT ;
-        SID_ADJUST ;
-        SID_DRAW ;
-        SID_TOOLBOX ;
-        SID_FONT ;
-        SID_FONTSIZE ;
-        SID_DISTANCE ;
-        SID_ALIGN ;
-        SID_FORMULACURSOR ;
-        SID_SYMBOLS_CATALOGUE ;
-    };
-    IdCount =
-    {
-        16;
-    };
+    _ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_SC
@@ -10285,29 +10284,43 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ SWEDISH ] = "sc_out46.bmp" ;
     };
     MaskColor = IMAGE_STDBTN_COLOR ;
-    IdList =
+    _ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LCH
+{
+    ImageBitmap = Bitmap
     {
-        SID_NEXTERR ;
-        SID_PREVERR ;
-        SID_VIEW050 ;
-        SID_VIEW100 ;
-        SID_VIEW200 ;
-        SID_ZOOMIN ;
-        SID_ZOOMOUT ;
-        SID_ADJUST ;
-        SID_DRAW ;
-        SID_TOOLBOX ;
-        SID_FONT ;
-        SID_FONTSIZE ;
-        SID_DISTANCE ;
-        SID_ALIGN ;
-        SID_FORMULACURSOR ;
-        SID_SYMBOLS_CATALOGUE ;
+        File = "lch_out.bmp" ;
+        File [ ENGLISH ] = "lch_out01.bmp" ;
+        File [ DANISH ] = "lch_out45.bmp" ;
+        File [ ENGLISH_US ] = "lch_out01.bmp" ;
+        File [ SPANISH ] = "lch_out34.bmp" ;
+        File [ FRENCH ] = "lch_out33.bmp" ;
+        File [ ITALIAN ] = "lch_out39.bmp" ;
+        File [ DUTCH ] = "lch_out31.bmp" ;
+        File [ SWEDISH ] = "lch_out46.bmp" ;
     };
-    IdCount =
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    _ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    ImageBitmap = Bitmap
     {
-        16;
+        File = "sch_out.bmp" ;
+        File [ ENGLISH ] = "sch_out01.bmp" ;
+        File [ DANISH ] = "sch_out45.bmp" ;
+        File [ ENGLISH_US ] = "sch_out01.bmp" ;
+        File [ SPANISH ] = "sch_out34.bmp" ;
+        File [ FRENCH ] = "sch_out33.bmp" ;
+        File [ ITALIAN ] = "sch_out39.bmp" ;
+        File [ DUTCH ] = "sch_out31.bmp" ;
+        File [ SWEDISH ] = "sch_out46.bmp" ;
     };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    _ID_LIST
 };
 
 String RID_DOCUMENTSTR
