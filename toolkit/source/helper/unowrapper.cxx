@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-27 15:52:59 $
+ *  last change: $Author: tbe $ $Date: 2002-05-27 16:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,28 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
     if ( !xPeer.is() )
     {
-        xPeer = (::com::sun::star::awt::XWindowPeer*) new VCLXMenuWindow( pMenu );
+        sal_Int32 nIndexInParent = -1;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent;
+
+        Window* pParent = pWindow->GetAccessibleParentWindow();
+        if ( pParent )
+        {
+            // get accessible parent
+            xParent = pParent->GetAccessible();
+
+            // get index in parent
+            for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
+            {
+                Window* pChild = pParent->GetAccessibleChildWindow( --n );
+                if ( pChild == pWindow )
+                {
+                    nIndexInParent = n;
+                    break;
+                }
+            }
+        }
+
+        xPeer = (::com::sun::star::awt::XWindowPeer*) new VCLXMenuWindow( pMenu, nIndexInParent, xParent );
         SetWindowInterface( pWindow, xPeer );
     }
 
