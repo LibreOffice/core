@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 15:11:54 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,12 +205,16 @@ void ZipFile::StaticGetCipher ( const ORef < EncryptionData > & xEncryptionData,
     }
 }
 
-void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData, sal_Int32 nSize, sal_Int8 * & pHeader )
+void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData,
+                                sal_Int32 nSize,
+                                const ::rtl::OUString& aMediaType,
+                                sal_Int8 * & pHeader )
 {
     // I think it's safe to restrict vector and salt length to 2 bytes !
     sal_Int16 nIVLength = static_cast < sal_Int16 > ( rData->aInitVector.getLength() );
     sal_Int16 nSaltLength = static_cast < sal_Int16 > ( rData->aSalt.getLength() );
     sal_Int16 nDigestLength = static_cast < sal_Int16 > ( rData->aDigest.getLength() );
+    sal_Int16 nMediaTypeLength = static_cast < sal_Int16 > ( aMediaType.getLength() * sizeof( sal_Unicode ) );
 
     // First the header
     *(pHeader++) = ( n_ConstHeader >> 0 ) & 0xFF;
@@ -247,6 +251,10 @@ void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData, sal_Int3
     *(pHeader++) = ( nDigestLength >> 0 ) & 0xFF;
     *(pHeader++) = ( nDigestLength >> 8 ) & 0xFF;
 
+    // Then the mediatype length
+    *(pHeader++) = ( nMediaTypeLength >> 0 ) & 0xFF;
+    *(pHeader++) = ( nMediaTypeLength >> 8 ) & 0xFF;
+
     // Then the salt content
     memcpy ( pHeader, rData->aSalt.getConstArray(), nSaltLength );
     pHeader += nSaltLength;
@@ -258,8 +266,16 @@ void ZipFile::StaticFillHeader ( const ORef < EncryptionData > & rData, sal_Int3
     // Then the digest content
     memcpy ( pHeader, rData->aDigest.getConstArray(), nDigestLength );
     pHeader += nDigestLength;
+
+    // Then the mediatype itself
+    memcpy ( pHeader, aMediaType.getStr(), nMediaTypeLength );
+    pHeader += nMediaTypeLength;
 }
-sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData, sal_Int32 &rSize, Reference < XInputStream > &rStream )
+
+sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData,
+                                    sal_Int32 &rSize,
+                                    ::rtl::OUString& aMediaType,
+                                    Reference < XInputStream > &rStream )
 {
     sal_Bool bOk = sal_False;
     const sal_Int32 nHeaderSize = n_ConstHeaderSize - 4;
@@ -290,6 +306,9 @@ sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData, sal_Int32 &r
             sal_Int16 nDigestLength = pBuffer[nPos++] & 0xFF;
             nDigestLength        |= ( pBuffer[nPos++] & 0xFF ) << 8;
 
+            sal_Int16 nMediaTypeLength = pBuffer[nPos++] & 0xFF;
+            nMediaTypeLength |= ( pBuffer[nPos++] & 0xFF ) << 8;
+
             if ( nSaltLength == rStream->readBytes ( aBuffer, nSaltLength ) )
             {
                 rData->aSalt.realloc ( nSaltLength );
@@ -302,7 +321,13 @@ sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData, sal_Int32 &r
                     {
                         rData->aDigest.realloc ( nDigestLength );
                         memcpy ( rData->aDigest.getArray(), aBuffer.getConstArray(), nDigestLength );
-                        bOk = sal_True;
+
+                        if ( nMediaTypeLength == rStream->readBytes ( aBuffer, nMediaTypeLength ) )
+                        {
+                            aMediaType = ::rtl::OUString( (sal_Unicode*)aBuffer.getConstArray(),
+                                                            nMediaTypeLength / sizeof( sal_Unicode ) );
+                            bOk = sal_True;
+                        }
                     }
                 }
             }
@@ -311,57 +336,113 @@ sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData, sal_Int32 &r
     return bOk;
 }
 
+Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference< XInputStream >& xStream,
+                                                                const ORef < EncryptionData > &rData )
+        throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
+{
+    if ( rData.isEmpty() )
+        throw ZipIOException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
+                            Reference< XInterface >() );
+
+    if ( !rData->aKey.getLength() )
+        throw packages::WrongPasswordException();
+
+    Reference< XSeekable > xSeek( xStream, UNO_QUERY );
+    if ( !xSeek.is() )
+        throw ZipIOException( OUString::createFromAscii( "The stream must be seekable!\n" ),
+                            Reference< XInterface >() );
+
+
+    // if we have a digest, then this file is an encrypted one and we should
+    // check if we can decrypt it or not
+    OSL_ENSURE( rData->aDigest.getLength(), "Can't detect password correctness without digest!\n" );
+    if ( rData->aDigest.getLength() )
+    {
+        sal_Int32 nSize = xSeek->getLength();
+        nSize = nSize > n_ConstDigestLength ? n_ConstDigestLength : nSize;
+
+        // skip header
+        xSeek->seek( n_ConstHeaderSize + rData->aInitVector.getLength() +
+                                rData->aSalt.getLength() + rData->aDigest.getLength() );
+
+        // Only want to read enough to verify the digest
+        Sequence < sal_Int8 > aReadBuffer ( nSize );
+
+        xStream->readBytes( aReadBuffer, nSize );
+
+        if ( !StaticHasValidPassword( aReadBuffer, rData ) )
+            throw packages::WrongPasswordException();
+    }
+
+    return new XUnbufferedStream ( xStream, rData );
+}
+
+sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffer, const ORef < EncryptionData > &rData )
+{
+    if ( !rData.isValid() || !rData->aKey.getLength() )
+        return sal_False;
+
+    sal_Bool bRet = sal_False;
+    sal_Int32 nSize = aReadBuffer.getLength();
+
+    // make a temporary cipher
+    rtlCipher aCipher;
+    StaticGetCipher ( rData, aCipher );
+
+    Sequence < sal_Int8 > aDecryptBuffer ( nSize );
+    rtlDigest aDigest = rtl_digest_createSHA1();
+    rtlDigestError aDigestResult;
+    Sequence < sal_uInt8 > aDigestSeq ( RTL_DIGEST_LENGTH_SHA1 );
+    rtlCipherError aResult = rtl_cipher_decode ( aCipher,
+                                  aReadBuffer.getConstArray(),
+                                  nSize,
+                                  reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
+                                  nSize);
+    OSL_ASSERT (aResult == rtl_Cipher_E_None);
+
+    aDigestResult = rtl_digest_updateSHA1 ( aDigest,
+                                            static_cast < const void * > ( aDecryptBuffer.getConstArray() ), nSize );
+    OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+
+    aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
+    OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+
+    // If we don't have a digest, then we have to assume that the password is correct
+    if (  rData->aDigest.getLength() != 0  &&
+          ( aDigestSeq.getLength() != rData->aDigest.getLength() ||
+            0 != rtl_compareMemory ( aDigestSeq.getConstArray(),
+                                     rData->aDigest.getConstArray(),
+                                    aDigestSeq.getLength() ) ) )
+    {
+        // We should probably tell the user that the password they entered was wrong
+    }
+    else
+        bRet = sal_True;
+
+    rtl_digest_destroySHA1 ( aDigest );
+
+    return bRet;
+}
+
 sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ORef < EncryptionData > &rData )
 {
     sal_Bool bRet = sal_False;
     if ( rData->aKey.getLength() )
     {
-        // make a temporary cipher
-        rtlCipher aCipher;
-        StaticGetCipher ( rData, aCipher );
-
         xSeek->seek( rEntry.nOffset );
         sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
 
         // Only want to read enough to verify the digest
         nSize = nSize > n_ConstDigestLength ? n_ConstDigestLength : nSize;
-        Sequence < sal_Int8 > aReadBuffer ( nSize ), aDecryptBuffer ( nSize );
+        Sequence < sal_Int8 > aReadBuffer ( nSize );
 
         xStream->readBytes( aReadBuffer, nSize );
 
-        rtlDigest aDigest = rtl_digest_createSHA1();
-        rtlDigestError aDigestResult;
-        Sequence < sal_uInt8 > aDigestSeq ( RTL_DIGEST_LENGTH_SHA1 );
-        rtlCipherError aResult = rtl_cipher_decode ( aCipher,
-                                      aReadBuffer.getConstArray(),
-                                      nSize,
-                                      reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
-                                      nSize);
-        OSL_ASSERT (aResult == rtl_Cipher_E_None);
-
-        aDigestResult = rtl_digest_updateSHA1 ( aDigest, static_cast < const void * > ( aDecryptBuffer.getConstArray() ), nSize );
-        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
-
-        aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
-        OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
-
-        // If we don't have a digest, then we have to assume that the password is correct
-        if (  rData->aDigest.getLength() != 0  &&
-              ( aDigestSeq.getLength() != rData->aDigest.getLength() ||
-                0 != rtl_compareMemory ( aDigestSeq.getConstArray(),
-                                         rData->aDigest.getConstArray(),
-                                        aDigestSeq.getLength() ) ) )
-        {
-            // We should probably tell the user that the password they entered was wrong,
-            // but for now we'll just give the upper levels the raw unencrypted data
-        }
-        else
-            bRet = sal_True;
-
-        rtl_digest_destroySHA1 ( aDigest );
+        bRet = StaticHasValidPassword( aReadBuffer, rData );
     }
     return bRet;
 }
+
 #if 0
 Reference < XInputStream > ZipFile::createFileStream(
             ZipEntry & rEntry,
@@ -458,10 +539,11 @@ Reference < XInputStream > ZipFile::createMemoryStream(
 Reference < XInputStream > ZipFile::createUnbufferedStream(
             ZipEntry & rEntry,
             const ORef < EncryptionData > &rData,
-            sal_Bool bRawStream,
-            sal_Bool bIsEncrypted )
+            sal_Int8 nStreamMode,
+            sal_Bool bIsEncrypted,
+            ::rtl::OUString aMediaType )
 {
-    return new XUnbufferedStream ( rEntry, xStream, rData, bRawStream, bIsEncrypted );
+    return new XUnbufferedStream ( rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType );
 }
 
 
@@ -500,17 +582,50 @@ Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
     if ( bIsEncrypted && !rData.isEmpty() && rData->aDigest.getLength() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
-    return createUnbufferedStream ( rEntry, rData, bNeedRawStream, bIsEncrypted );
-    /*
-    return rEntry.nSize > n_ConstMaxMemoryStreamSize ?
-               createFileStream ( rEntry, rData, bNeedRawStream, bIsEncrypted ) :
-               createMemoryStream ( rEntry, rData, bNeedRawStream, bIsEncrypted);
-    */
-    //return createMemoryStream( rEntry, rData, sal_False );
-
+    return createUnbufferedStream ( rEntry,
+                                    rData,
+                                    bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
+                                    bIsEncrypted );
 }
 
-Reference< XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
+Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
+        const vos::ORef < EncryptionData > &rData,
+        sal_Bool bIsEncrypted )
+    throw ( packages::WrongPasswordException,
+            IOException,
+            ZipException,
+            RuntimeException )
+{
+    if ( rEntry.nOffset <= 0 )
+        readLOC( rEntry );
+
+    // An exception must be thrown in case stream is encrypted and
+    // there is no key or the key is wrong
+    sal_Bool bNeedRawStream = sal_False;
+    if ( bIsEncrypted )
+    {
+        // in case no digest is provided there is no way
+        // to detect password correctness
+        if ( rData.isEmpty() )
+            throw ZipException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
+                                Reference< XInterface >() );
+
+        // if we have a digest, then this file is an encrypted one and we should
+        // check if we can decrypt it or not
+        OSL_ENSURE( rData->aDigest.getLength(), "Can't detect password correctness without digest!\n" );
+        if ( rData->aDigest.getLength() && !hasValidPassword ( rEntry, rData ) )
+                throw packages::WrongPasswordException();
+    }
+    else
+        bNeedRawStream = ( rEntry.nMethod == STORED );
+
+    return createUnbufferedStream ( rEntry,
+                                    rData,
+                                    bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
+                                    bIsEncrypted );
+}
+
+Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
         const vos::ORef < EncryptionData > &rData,
         sal_Bool bIsEncrypted )
     throw(IOException, ZipException, RuntimeException)
@@ -518,13 +633,25 @@ Reference< XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createUnbufferedStream ( rEntry, rData, sal_True, bIsEncrypted );
-    /*
-    return ( rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize > n_ConstMaxMemoryStreamSize ) ?
-               createFileStream ( rEntry, rData, sal_True, bIsEncrypted ) :
-               createMemoryStream ( rEntry, rData, sal_True, bIsEncrypted );
-    */
-    //return createMemoryStream( rEntry, rData, sal_True );
+    return createUnbufferedStream ( rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted );
+}
+
+Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
+        ZipEntry& rEntry,
+        const vos::ORef < EncryptionData > &rData,
+        const ::rtl::OUString& aMediaType )
+    throw ( packages::NoEncryptionException,
+            IOException,
+            ZipException,
+            RuntimeException )
+{
+    if ( rData.isEmpty() )
+        throw packages::NoEncryptionException();
+
+    if ( rEntry.nOffset <= 0 )
+        readLOC( rEntry );
+
+    return createUnbufferedStream ( rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, sal_True, aMediaType );
 }
 
 sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
