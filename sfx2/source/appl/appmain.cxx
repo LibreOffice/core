@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 14:31:02 $
+ *  last change: $Author: mba $ $Date: 2001-02-09 11:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <svtools/itempool.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/helpopt.hxx>
+#include <vos/process.hxx>
 
 #include "appimp.hxx"
 #include "sfxtypes.hxx"
@@ -272,10 +273,15 @@ USHORT SfxApplication::ParseCommandLine_Impl()
 
     BOOL   bPrintEvent = FALSE;
     BOOL   bOpenEvent  = TRUE;
-    USHORT nCount = Application::GetCommandLineParamCount();
+
+    ::vos::OExtCommandLine aCmdLine;
+    USHORT nCount = aCmdLine.getCommandArgCount();
     for( USHORT i=0; i < nCount; i++ )
     {
-        String aArg = Application::GetCommandLineParam( i );
+        String aArg;
+        ::rtl::OUString aDummy;
+        aCmdLine.getCommandArg( i, aDummy );
+        aArg = aDummy;
 
         if ( aArg.EqualsIgnoreCaseAscii("-minimized") == sal_True )
             pAppData_Impl->bMinimized = TRUE;
