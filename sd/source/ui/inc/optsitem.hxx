@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:39:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,11 @@
 // ------------
 
 class SfxConfigItem;
-class FrameView;
 class SdOptions;
+
+namespace sd {
+class FrameView;
+}
 
 // -----------------
 // - SdOptionsItem -
@@ -235,7 +238,7 @@ class SdOptionsLayoutItem : public SfxPoolItem, public SdOptionsLayout
 public:
 
                             SdOptionsLayoutItem( USHORT nWhich);
-                            SdOptionsLayoutItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
+                            SdOptionsLayoutItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -288,7 +291,7 @@ class SdOptionsContentsItem : public SfxPoolItem, public SdOptionsContents
 public:
 
                             SdOptionsContentsItem( USHORT nWhich);
-                            SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
+                            SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -416,7 +419,7 @@ class SdOptionsMiscItem : public SfxPoolItem, public SdOptionsMisc
 public:
 
                             SdOptionsMiscItem( USHORT nWhich);
-                            SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
+                            SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -488,7 +491,7 @@ class SdOptionsSnapItem : public SfxPoolItem, public SdOptionsSnap
 public:
 
                             SdOptionsSnapItem( USHORT nWhich);
-                            SdOptionsSnapItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
+                            SdOptionsSnapItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -533,7 +536,7 @@ class SdOptionsZoomItem : public SfxPoolItem, public SdOptionsZoom
 public:
 
                             SdOptionsZoomItem( USHORT nWhich);
-                            SdOptionsZoomItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
+                            SdOptionsZoomItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -592,7 +595,7 @@ class SdOptionsGridItem : public SvxGridItem
 
 public:
                             SdOptionsGridItem( USHORT nWhich );
-                            SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
+                            SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     void                    SetOptions( SdOptions* pOpts ) const;
 };
@@ -689,7 +692,7 @@ class SdOptionsPrintItem : public SfxPoolItem, public SdOptionsPrint
 public:
 
                             SdOptionsPrintItem( USHORT nWhich);
-                            SdOptionsPrintItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
+                            SdOptionsPrintItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
