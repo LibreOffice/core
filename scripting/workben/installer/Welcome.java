@@ -124,11 +124,40 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
         String key = versions[i];
         String progPath = ( String )props.getProperty( key );
         if ( progPath != null ){
-            progPath = progPath  + "program";
-            if( userDir.equals( progPath ) ){
+            String os = System.getProperty("os.name");
+    
+            if (os.indexOf("Windows") != -1) {
+                progPath = progPath  +  System.getProperty("file.separator") + "program";
+            }
+            else
+            {
+                progPath = progPath  +  "program";              
+            }
+            
+            File tmpFile = new File(progPath+ "oostubversion.txt");
+            try{
+            tmpFile.createNewFile();
+            
+            //System.out.println(new File(userDir).toURL().toString());
+            //System.out.println("versionMatch: progPath " + progPath + " userDir " + userDir + " iMatch " + iMatch);
+            if( new File(userDir+ "oostubversion.txt").exists())
+            {
                 versionMatch = true;
                 break;
             }
+            }
+            catch( IOException e)
+            {
+                // Fail silently
+            }
+            tmpFile.delete();
+            
+            /*
+                        URL url = new URL("file://" + parts[1].trim());
+            String opSys =System.getProperty("os.name");
+            if (opSys.indexOf("Windows")!=-1){
+                System.out.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );            
+            */
         }
     }   
     return versionMatch;

@@ -74,28 +74,15 @@ public class InstUtil {
         StringBuffer thePath = new StringBuffer(str.toString());
         
         String os = System.getProperty("os.name");
-        
+    
         if (os.indexOf("Windows") != -1) {
-            /*String appData = winGetAppData;
-            if (os.equals("Windows 2000")) {
+            boolean bSVersionInHomeDir = new File(thePath.toString() + "sversion.ini").exists(); 
+
+            if (!bSVersionInHomeDir) {
                 thePath.append("Application Data");
                 thePath.append(sep);
-                theFile = new File(thePath.toString());
-            } else if (os.indexOf("Windows") != -1) {
-                thePath.append(sep);
-                thePath.append("sversion.ini");
-                theFile = new File(thePath.toString());
-                if (!theFile.exists())
-                {
-                    thePath.delete(0, thePath.length());
-                    thePath.append(str);
-                    thePath.append("Application Data");
-                    thePath.append(sep);
-                    thePath.append("sversion.ini");
-                    theFile = new File(thePath.toString());
-                }
-            }*/
-            theFile = findVersionFile(new File(str.toString()));
+            } 
+            theFile = findVersionFile(new File(thePath.toString()));
         } else if (os.indexOf("SunOS") != -1) {
             thePath.append(".sversionrc");
             theFile = new File(thePath.toString());
@@ -112,6 +99,7 @@ public class InstUtil {
         {
             throw new IOException("Could not locate the OpenOffice settings file.\nAre you sure StarOffice is installed on your system?");
         }
+    System.out.println("buildSversionLocation: os " + os + " thePath " + thePath + " theFile " + theFile);
         return theFile;
     }
 
@@ -399,7 +387,7 @@ public class InstUtil {
                         URL url = new URL("file://" + parts[1].trim());
             String opSys =System.getProperty("os.name");
             if (opSys.indexOf("Windows")!=-1){
-                //System.err.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
+                System.out.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
                 String windowsPath = URLDecoder.decode( url.getPath() );
                 boolean firstSlash = true;
                 while( windowsPath.indexOf("/") != -1 ) {
@@ -416,7 +404,7 @@ public class InstUtil {
                 }
                 int lastSlash = windowsPath.lastIndexOf("\\");
                 windowsPath = windowsPath.substring( 0, lastSlash );
-                //System.out.println( "InstUtil URLDecoder windowsPath " + windowsPath );
+                System.out.println( "InstUtil URLDecoder windowsPath " + windowsPath );
                 results.put( parts[0].trim(), windowsPath );
             }
             else {
