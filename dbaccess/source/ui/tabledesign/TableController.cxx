@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:33:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMulti
 OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_bNew(sal_True)
-    ,m_pTypeInfo(static_cast<dbaui::OTypeInfo*>(0))
+    ,m_pTypeInfo()
     ,m_bAllowAutoIncrementValue(sal_False)
 {
     InvalidateAll();
