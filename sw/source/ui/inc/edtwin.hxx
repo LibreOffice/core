@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:41:48 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,9 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bWasShdwCrsr    : 1, //ShadowCrsr war im MouseButtonDown an
                     bLockInput      : 1; //Lock waehrend die Rechenleiste aktiv ist
 
+    USHORT          nKS_NUMDOWN_Count; // #i23725#
+    USHORT          nKS_NUMINDENTINC_Count;
+
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
     inline void     EnterArea();
@@ -304,6 +307,8 @@ public:
 
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     void StopQuickHelp();
+
+    BOOL SwEditWin::RulerMarginDrag( SwView& rView , const MouseEvent& rMEvt);
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();
