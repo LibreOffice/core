@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-17 08:47:27 $
+ *  last change: $Author: ab $ $Date: 2002-04-23 07:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,7 +1041,7 @@ void EditorWindow::ToggleHighlightMode()
 void EditorWindow::CreateProgress( const String& rText, ULONG nRange )
 {
     DBG_ASSERT( !pProgress, "ProgressInfo existiert schon" );
-    pProgress = new ProgressInfo( ProgressInfo( IDE_DLL()->GetShell()->GetViewFrame()->GetObjectShell(), rText, nRange ) );
+    pProgress = new ProgressInfo( IDE_DLL()->GetShell()->GetViewFrame()->GetObjectShell(), rText, nRange );
 }
 
 void EditorWindow::DestroyProgress()
