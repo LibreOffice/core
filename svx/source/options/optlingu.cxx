@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:32:03 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ DECLARE_TABLE( LangImplNameTable, Sequence< OUString > * );
 
 class SvxLinguData_Impl
 {
-    //contains services an implementation names sorted by implementation names
+    //contains services and implementation names sorted by implementation names
     ServiceInfoArr                      aDisplayServiceArr;
     ULONG                               nDisplayServices;
 
@@ -656,7 +656,90 @@ public:
 
     const ULONG &   GetDisplayServiceCount() const          { return nDisplayServices; }
     void            SetDisplayServiceCount( ULONG nVal )    { nDisplayServices = nVal; }
+
+    // returns the list of service implementation names for the specified
+    // language and service (TYPE_SPELL, TYPE_HYPH, TYPE_THES) sorted in
+    // the proper order for the SvxEditModulesDlg (the ones from the
+    // configuration (keeping that order!) first and then the other ones.
+    // I.e. the ones available but not configured in arbitrary order).
+    // They available ones may contain names that do not(!) support that
+    // language.
+    Sequence< OUString > GetSortedImplNames( INT16 nLang, BYTE nType );
+
+    ServiceInfo_Impl * GetInfoByImplName( const OUString &rSvcImplName );
 };
+
+
+INT32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, const OUString &rTxt )
+{
+    INT32 nRes = -1;
+    INT32 nLen = rSeq.getLength();
+    const OUString *pString = rSeq.getConstArray();
+    for (INT32 i = 0;  i < nLen  &&  nRes == -1;  ++i)
+    {
+        if (pString[i] == rTxt)
+            nRes = i;
+    }
+    return nRes;
+}
+
+
+Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( INT16 nLang, BYTE nType )
+{
+    LangImplNameTable *pTable = 0;
+    switch (nType)
+    {
+        case TYPE_SPELL : pTable = &aCfgSpellTable; break;
+        case TYPE_HYPH  : pTable = &aCfgHyphTable; break;
+        case TYPE_THES  : pTable = &aCfgThesTable; break;
+    }
+    Sequence< OUString > aRes;
+    const Sequence< OUString > *pCfgImplNames = pTable->Get( nLang );  // get configured services
+    if (pCfgImplNames)
+        aRes = *pCfgImplNames;      // add configured services
+    INT32 nIdx = aRes.getLength();
+    DBG_ASSERT( (INT32) nDisplayServices >= nIdx, "size mismatch" );
+    aRes.realloc( nDisplayServices );
+    OUString *pRes = aRes.getArray();
+
+    // add not configured services
+    for (INT32 i = 0;  i < (INT32) nDisplayServices;  ++i)
+    {
+        ServiceInfo_Impl* pInfo = aDisplayServiceArr.Get(i);
+        OUString aImplName;
+        switch (nType)
+        {
+            case TYPE_SPELL : aImplName = pInfo->sSpellImplName; break;
+            case TYPE_HYPH  : aImplName = pInfo->sHyphImplName; break;
+            case TYPE_THES  : aImplName = pInfo->sThesImplName; break;
+        }
+
+        if (aImplName.getLength()  &&  lcl_SeqGetIndex( aRes, aImplName) == -1)    // name not yet added
+        {
+            DBG_ASSERT( nIdx < aRes.getLength(), "index out of range" )
+            if (nIdx < aRes.getLength())
+                pRes[ nIdx++ ] = aImplName;
+        }
+    }
+
+    return aRes;
+}
+
+
+ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImplName )
+{
+    ServiceInfo_Impl* pInfo = 0;
+    for (ULONG i = 0;  i < nDisplayServices  &&  !pInfo;  ++i)
+    {
+        ServiceInfo_Impl *pTmp = aDisplayServiceArr.Get(i);
+        if (pTmp->sSpellImplName == rSvcImplName ||
+            pTmp->sHyphImplName  == rSvcImplName ||
+            pTmp->sThesImplName  == rSvcImplName)
+            pInfo = pTmp;
+    }
+    return pInfo;
+}
+
 
 //-----------------------------------------------------------------------------
 
@@ -768,13 +851,18 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
             pInfo->sSpellImplName = pSpellNames[nIdx];
             pInfo->xSpell = Reference<XSpellChecker>(
                             xMSF->createInstanceWithArguments(pInfo->sSpellImplName, aArgs), UNO_QUERY);
-            lcl_MergeLocales( aAllServiceLocales, pInfo->xSpell->getLocales() );
 
             Reference<XServiceDisplayName> xDispName(pInfo->xSpell, UNO_QUERY);
             if(xDispName.is())
                 pInfo->sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
-            lcl_MergeDisplayArray( *this, pInfo );
+            const Sequence< Locale > aLocales( pInfo->xSpell->getLocales() );
+            //! suppress display of entries with no supported languages (see feature 110994)
+            if (aLocales.getLength())
+            {
+                lcl_MergeLocales( aAllServiceLocales, aLocales );
+                lcl_MergeDisplayArray( *this, pInfo );
+            }
         }
 
         //read hyphenator
@@ -787,13 +875,18 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
             pInfo->sHyphImplName = pHyphNames[nIdx];
             pInfo->xHyph = Reference<XHyphenator>(
                             xMSF->createInstanceWithArguments(pInfo->sHyphImplName, aArgs), UNO_QUERY);
-            lcl_MergeLocales( aAllServiceLocales, pInfo->xHyph->getLocales() );
 
             Reference<XServiceDisplayName> xDispName(pInfo->xHyph, UNO_QUERY);
             if(xDispName.is())
                 pInfo->sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
-            lcl_MergeDisplayArray( *this, pInfo );
+            const Sequence< Locale > aLocales( pInfo->xHyph->getLocales() );
+            //! suppress display of entries with no supported languages (see feature 110994)
+            if (aLocales.getLength())
+            {
+                lcl_MergeLocales( aAllServiceLocales, aLocales );
+                lcl_MergeDisplayArray( *this, pInfo );
+            }
         }
 
         //read thesauri
@@ -806,13 +899,18 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
             pInfo->sThesImplName = pThesNames[nIdx];
             pInfo->xThes = Reference<XThesaurus>(
                             xMSF->createInstanceWithArguments(pInfo->sThesImplName, aArgs), UNO_QUERY);
-            lcl_MergeLocales( aAllServiceLocales, pInfo->xThes->getLocales() );
 
             Reference<XServiceDisplayName> xDispName(pInfo->xThes, UNO_QUERY);
             if(xDispName.is())
                 pInfo->sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
-            lcl_MergeDisplayArray( *this, pInfo );
+            const Sequence< Locale > aLocales( pInfo->xThes->getLocales() );
+            //! suppress display of entries with no supported languages (see feature 110994)
+            if (aLocales.getLength())
+            {
+                lcl_MergeLocales( aAllServiceLocales, aLocales );
+                lcl_MergeDisplayArray( *this, pInfo );
+            }
         }
 
         Sequence< OUString > aCfgSvcs;
@@ -1029,31 +1127,6 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, BOOL bEnable 
 }
 
 
-// SvxModulesData_Impl ---------------------------------------------------
-
-// list of service-implemantation names associated to a specific modules
-// UI name.
-struct SvxModulesData_Impl
-{
-    // list of service implementation names
-    OUString    aSpellImplName;
-    OUString    aHyphImplName;
-    OUString    aThesImplName;
-
-    // is at least one of them configured to be used in any language?
-    BOOL        bIsConfigured;
-
-    SvxModulesData_Impl(const OUString &rSpellImpl,
-                        const OUString &rHyphImpl,
-                        const OUString &rThesImpl, BOOL bVal) :
-        aSpellImplName  (rSpellImpl),
-        aHyphImplName   (rHyphImpl),
-        aThesImplName   (rThesImpl),
-        bIsConfigured   (bVal)
-    {
-    }
-};
-
 // class SvxLinguTabPage -------------------------------------------------
 
 #define CBCOL_FIRST     0
@@ -1170,11 +1243,6 @@ SvxLinguTabPage::~SvxLinguTabPage()
 {
     if (pLinguData)
         delete pLinguData;
-    for(sal_uInt16 nEntry = 0; nEntry < aLinguModulesCLB.GetEntryCount(); nEntry++)
-    {
-        SvxModulesData_Impl* pData = (SvxModulesData_Impl*)aLinguModulesCLB.GetEntry(nEntry)->GetUserData();
-        delete pData;
-    }
 }
 
 //------------------------------------------------------------------------
@@ -1468,12 +1536,6 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
         const ServiceInfoArr &rAllDispSrvcArr = pLinguData->GetDisplayServiceArray();
         const ULONG nDispSrvcCount = pLinguData->GetDisplayServiceCount();
 
-        for (USHORT n = 0;  n < aLinguModulesCLB.GetEntryCount();  ++n)
-        {
-            SvxModulesData_Impl* pData = (SvxModulesData_Impl*)
-                                            aLinguModulesCLB.GetEntry(n)->GetUserData();
-            delete pData;
-        }
         aLinguModulesCLB.Clear();
 
         ServiceInfo_Impl* pInfo;
@@ -1482,11 +1544,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
             pInfo = rAllDispSrvcArr.Get(i);
             aLinguModulesCLB.InsertEntry(pInfo->sDisplayName);
             SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
-            pEntry->SetUserData( new SvxModulesData_Impl(
-                                        pInfo->sSpellImplName,
-                                        pInfo->sHyphImplName,
-                                        pInfo->sThesImplName,
-                                        pInfo->bConfigured ) );
+            pEntry->SetUserData( (void *) pInfo );
             aLinguModulesCLB.CheckEntryPos( i, pInfo->bConfigured );
         }
         aLinguModulesEditPB.Enable( nDispSrvcCount > 0 );
@@ -2241,8 +2299,6 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
         sal_Int32 nEntryPos = 1;
-        const ServiceInfoArr &rAllDispSrvcArr = rLinguData.GetDisplayServiceArray();
-        const ULONG nDispSrvcCount = rLinguData.GetDisplayServiceCount();
 
         ULONG n;
         ServiceInfo_Impl* pInfo;
@@ -2255,13 +2311,14 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                                          String(), TRUE, FALSE, TYPE_SPELL, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-
-        const Sequence< OUString > *pSpellSrvc =
-                rLinguData.GetSpellTable().Get( eCurLanguage );
+        //
+        Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
+        const OUString *pName = aNames.getConstArray();
+        ULONG nNames = (ULONG) aNames.getLength();
         sal_Int32 nLocalIndex = 0;  // index relative to parent
-        for (n = 0;  n < nDispSrvcCount;  ++n)
+        for (n = 0;  n < nNames;  ++n)
         {
-            pInfo = rAllDispSrvcArr.Get(n);
+            pInfo = rLinguData.GetInfoByImplName( pName[n] );
             BOOL bIsSuppLang = pInfo->xSpell.is()  &&
                                pInfo->xSpell->hasLocale( aCurLocale );
             const OUString &rImplName = pInfo->sSpellImplName;
@@ -2269,8 +2326,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
-                BOOL bChecked = pSpellSrvc ?
-                        lcl_SeqGetEntryPos( *pSpellSrvc, rImplName ) >= 0 : FALSE;
+                const Sequence< OUString > *pCfgImplNames = rLinguData.GetSpellTable().Get( eCurLanguage );
+                DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
+                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, rImplName ) >= 0;
                 lcl_SetCheckButton( pEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( rImplName, FALSE,
                                         bChecked, TYPE_SPELL, (BYTE)nLocalIndex++ );
@@ -2286,13 +2344,14 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, TYPE_HYPH, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-
-        const Sequence< OUString > *pHyphSrvc = pHyphSrvc =
-                rLinguData.GetHyphTable().Get( eCurLanguage );
+        //
+        aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
+        pName = aNames.getConstArray();
+        nNames = (ULONG) aNames.getLength();
         nLocalIndex = 0;
-        for (n = 0;  n < nDispSrvcCount;  ++n)
+        for (n = 0;  n < nNames;  ++n)
         {
-            pInfo = rAllDispSrvcArr.Get(n);
+            pInfo = rLinguData.GetInfoByImplName( pName[n] );
             BOOL bIsSuppLang = pInfo->xHyph.is()  &&
                                pInfo->xHyph->hasLocale( aCurLocale );
             const OUString &rImplName = pInfo->sHyphImplName;
@@ -2300,8 +2359,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
-                BOOL bChecked = pHyphSrvc ?
-                        lcl_SeqGetEntryPos( *pHyphSrvc, rImplName ) >= 0 : FALSE;
+                const Sequence< OUString > *pCfgImplNames = rLinguData.GetHyphTable().Get( eCurLanguage );
+                DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
+                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, rImplName ) >= 0;
                 lcl_SetCheckButton( pEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( rImplName, FALSE,
                                         bChecked, TYPE_HYPH, (BYTE)nLocalIndex++ );
@@ -2317,13 +2377,14 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, TYPE_THES, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
-
-        const Sequence< OUString > *pThesSrvc = pHyphSrvc =
-                rLinguData.GetThesTable().Get( eCurLanguage );
+        //
+        aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
+        pName = aNames.getConstArray();
+        nNames = (ULONG) aNames.getLength();
         nLocalIndex = 0;
-        for (n = 0;  n < nDispSrvcCount;  ++n)
+        for (n = 0;  n < nNames;  ++n)
         {
-            pInfo = rAllDispSrvcArr.Get(n);
+            pInfo = rLinguData.GetInfoByImplName( pName[n] );
             BOOL bIsSuppLang = pInfo->xThes.is()  &&
                                pInfo->xThes->hasLocale( aCurLocale );
             const OUString &rImplName = pInfo->sThesImplName;
@@ -2331,8 +2392,9 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
-                BOOL bChecked = pThesSrvc ?
-                        lcl_SeqGetEntryPos( *pThesSrvc, rImplName ) >= 0 : FALSE;
+                const Sequence< OUString > *pCfgImplNames = rLinguData.GetThesTable().Get( eCurLanguage );
+                DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
+                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, rImplName ) >= 0;
                 lcl_SetCheckButton( pEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( rImplName, FALSE,
                                         bChecked, TYPE_THES, (BYTE)nLocalIndex++ );
