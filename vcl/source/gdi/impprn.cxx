@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 16:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,92 @@ void ImplQPrinter::Destroy()
 
 // -----------------------------------------------------------------------
 
+void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf )
+{
+    for( MetaAction* pAct = rMtf.FirstAction(); pAct && !mbAborted; pAct = rMtf.NextAction() )
+    {
+        const ULONG     nType = pAct->GetType();
+        sal_Bool        bExecuted = sal_False;
+
+        if( nType == META_COMMENT_ACTION )
+        {
+            // search for special comments ( ..._BEGIN/..._END )
+            MetaCommentAction* pComment = (MetaCommentAction*) pAct;
+
+            if( pComment->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
+            {
+                pAct = rMtf.NextAction();
+
+                // if next action is a GradientEx action, execute this and
+                // skip actions until a XGRAD_SEQ_END comment is found
+                if( pAct && ( pAct->GetType() == META_GRADIENTEX_ACTION ) )
+                {
+                    MetaGradientExAction* pGradientEx = (MetaGradientExAction*) pAct;
+
+                    // execute GradientEx action
+                    DrawGradient( pGradientEx->GetPolyPolygon(), pGradientEx->GetGradient() );
+
+                    // seek to end of this comment
+                    do
+                    {
+                        pAct = rMtf.NextAction();
+                    }
+                    while( pAct &&
+                           ( ( pAct->GetType() != META_COMMENT_ACTION ) ||
+                             ( ( (MetaCommentAction*) pAct )->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) != COMPARE_EQUAL ) ) );
+
+                    bExecuted = sal_True;
+                }
+            }
+        }
+        else if( nType == META_TRANSPARENT_ACTION )
+        {
+            DrawPolyPolygon( ( (MetaTransparentAction*) pAct )->GetPolyPolygon() );
+            bExecuted = sal_True;
+        }
+        else if( nType == META_FLOATTRANSPARENT_ACTION )
+        {
+            MetaFloatTransparentAction* pFloatAction = (MetaFloatTransparentAction*) pAct;
+            GDIMetaFile&                rMtf = (GDIMetaFile&) pFloatAction->GetGDIMetaFile();
+            MapMode                     aDrawMap( rMtf.GetPrefMapMode() );
+            Point                       aDestPoint( LogicToPixel( pFloatAction->GetPoint() ) );
+            Size                        aDestSize( LogicToPixel( pFloatAction->GetSize() ) );
+
+            if( aDestSize.Width() && aDestSize.Height() )
+            {
+                Size aTmpPrefSize( LogicToPixel( rMtf.GetPrefSize(), aDrawMap ) );
+
+                if( !aTmpPrefSize.Width() )
+                    aTmpPrefSize.Width() = aDestSize.Width();
+
+                if( !aTmpPrefSize.Height() )
+                    aTmpPrefSize.Height() = aDestSize.Height();
+
+                Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
+                Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
+
+                aDrawMap.SetScaleX( aScaleX *= aDrawMap.GetScaleX() );
+                aDrawMap.SetScaleY( aScaleY *= aDrawMap.GetScaleY() );
+                aDrawMap.SetOrigin( PixelToLogic( aDestPoint, aDrawMap ) );
+
+                Push();
+                SetMapMode( aDrawMap );
+                ImplPrintMtf( rMtf );
+                Pop();
+            }
+
+            bExecuted = sal_True;
+        }
+
+        if( !bExecuted && pAct )
+            pAct->Execute( this );
+
+        Application::Reschedule();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
 {
     // Ist Drucken abgebrochen wurden?
@@ -188,14 +274,7 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
             if ( mbAborted )
                 break;
 
-            for( MetaAction* pAct = aMtf.FirstAction(); pAct; pAct = aMtf.NextAction() )
-            {
-                pAct->Execute( this );
-                Application::Reschedule();
-
-                if( mbAborted )
-                    break;
-            }
+            ImplPrintMtf( aMtf );
 
             if( !mbAborted )
                 EndPage();

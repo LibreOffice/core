@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 16:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,10 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
 
         case( META_GRADIENT_ACTION ):
             mpRect = new Rectangle( ( (MetaGradientAction*) mpAct )->GetRect() );
+        break;
+
+        case( META_GRADIENTEX_ACTION ):
+            mpRect = new Rectangle( ( (MetaGradientExAction*) mpAct )->GetPolyPolygon().GetBoundRect() );
         break;
 
         case( META_HATCH_ACTION ):

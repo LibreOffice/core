@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:56:44 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 16:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,44 +150,56 @@ DBG_NAMEEX( Gradient );
 
 #ifndef REMOTE_APPSERVER
 
-void OutputDevice::ImplDrawPolygon( const Polygon& rPoly )
+void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly )
 {
-    USHORT nPoints = rPoly.GetSize();
+    if( pClipPolyPoly )
+        ImplDrawPolyPolygon( rPoly, pClipPolyPoly );
+    else
+    {
+        USHORT nPoints = rPoly.GetSize();
 
-    if ( nPoints < 2 )
-        return;
+        if ( nPoints < 2 )
+            return;
 
-    const SalPoint* pPtAry = (const SalPoint*)rPoly.ImplGetConstPointAry();
-    mpGraphics->DrawPolygon( nPoints, pPtAry );
+        const SalPoint* pPtAry = (const SalPoint*)rPoly.ImplGetConstPointAry();
+        mpGraphics->DrawPolygon( nPoints, pPtAry );
+    }
 }
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly )
+void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly )
 {
-    USHORT nPoly = rPolyPoly.Count();
+    PolyPolygon* pPolyPoly;
 
-    if ( !nPoly )
-        return;
-
-    if ( nPoly == 1 )
+    if( pClipPolyPoly )
     {
-        const Polygon   rPoly = rPolyPoly.GetObject( 0 );
+        pPolyPoly = new PolyPolygon;
+        rPolyPoly.GetIntersection( *pClipPolyPoly, *pPolyPoly );
+    }
+    else
+        pPolyPoly = (PolyPolygon*) &rPolyPoly;
+
+    if( pPolyPoly->Count() == 1 )
+    {
+        const Polygon   rPoly = pPolyPoly->GetObject( 0 );
         USHORT          nSize = rPoly.GetSize();
-        if ( nSize >= 2 )
+
+        if( nSize >= 2 )
         {
             const SalPoint* pPtAry = (const SalPoint*)rPoly.ImplGetConstPointAry();
             mpGraphics->DrawPolygon( nSize, pPtAry );
         }
     }
-    else
+    else if( pPolyPoly->Count() )
     {
-        ULONG*              pPointAry = new ULONG[nPoly];
-        PCONSTSALPOINT*     pPointAryAry = new PCONSTSALPOINT[nPoly];
+        USHORT              nCount = pPolyPoly->Count();
+        ULONG*              pPointAry = new ULONG[nCount];
+        PCONSTSALPOINT*     pPointAryAry = new PCONSTSALPOINT[nCount];
         USHORT              i = 0;
         do
         {
-            const Polygon&  rPoly = rPolyPoly.GetObject( i );
+            const Polygon&  rPoly = pPolyPoly->GetObject( i );
             USHORT          nSize = rPoly.GetSize();
             if ( nSize )
             {
@@ -196,18 +208,21 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly )
                 i++;
             }
             else
-                nPoly--;
+                nCount--;
         }
-        while ( i < nPoly );
+        while( i < nCount );
 
-        if ( nPoly == 1 )
+        if( nCount == 1 )
             mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry );
         else
-            mpGraphics->DrawPolyPolygon( nPoly, pPointAry, pPointAryAry );
+            mpGraphics->DrawPolyPolygon( nCount, pPointAry, pPointAryAry );
 
         delete pPointAry;
         delete pPointAryAry;
     }
+
+    if( pClipPolyPoly )
+        delete pPolyPoly;
 }
 
 #endif
@@ -228,7 +243,7 @@ inline UINT8 ImplGetGradientColorValue( long nValue )
 
 void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
-                                           BOOL bMtf )
+                                           BOOL bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // rotiertes BoundRect ausrechnen
     Rectangle aRect = rRect;
@@ -398,7 +413,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
             mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
 #ifndef REMOTE_APPSERVER
         else
-            ImplDrawPolygon( aPoly );
+            ImplDrawPolygon( aPoly, pClipPolyPoly );
 #endif
 
         // neues Polygon berechnen
@@ -473,7 +488,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
 
 void OutputDevice::ImplDrawRadialGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
-                                           BOOL bMtf )
+                                           BOOL bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // Feststellen ob Ausgabe ueber Polygon oder PolyPolygon
     // Bei Rasteroperationen ungleich Overpaint immer PolyPolygone,
@@ -609,10 +624,10 @@ void OutputDevice::ImplDrawRadialGradient( const Rectangle& rRect,
         if ( bMtf )
             mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
         else
-            ImplDrawPolyPolygon( *pPolyPoly );
+            ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
     }
     else
-        ImplDrawPolygon( aPoly );
+        ImplDrawPolygon( aPoly, pClipPolyPoly );
 #else
     pPolyPoly->Insert( aPoly );
     aPoly = Polygon( aRect );
@@ -652,10 +667,10 @@ void OutputDevice::ImplDrawRadialGradient( const Rectangle& rRect,
             if ( bMtf )
                 mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
             else
-                ImplDrawPolyPolygon( *pPolyPoly );
+                ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
         }
         else
-            ImplDrawPolygon( aPoly );
+            ImplDrawPolygon( aPoly, pClipPolyPoly );
 #else
         pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
         pPolyPoly->Replace( aPoly, 1 );
@@ -686,7 +701,7 @@ void OutputDevice::ImplDrawRadialGradient( const Rectangle& rRect,
                 mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
 #ifndef REMOTE_APPSERVER
             else
-                ImplDrawPolygon( rPoly );
+                ImplDrawPolygon( rPoly, pClipPolyPoly );
 #endif
         }
         delete pPolyPoly;
@@ -697,7 +712,7 @@ void OutputDevice::ImplDrawRadialGradient( const Rectangle& rRect,
 
 void OutputDevice::ImplDrawRectGradient( const Rectangle& rRect,
                                          const Gradient& rGradient,
-                                         BOOL bMtf )
+                                         BOOL bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // Feststellen ob Ausgabe ueber Polygon oder PolyPolygon
     // Bei Rasteroperationen ungleich Overpaint immer PolyPolygone,
@@ -850,10 +865,10 @@ void OutputDevice::ImplDrawRectGradient( const Rectangle& rRect,
         if ( bMtf )
             mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
         else
-            ImplDrawPolyPolygon( *pPolyPoly );
+            ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
     }
     else
-        ImplDrawPolygon( aPoly );
+        ImplDrawPolygon( aPoly, pClipPolyPoly );
 #else
     pPolyPoly->Insert( aPoly );
     aPoly = Polygon( aRect );
@@ -890,10 +905,10 @@ void OutputDevice::ImplDrawRectGradient( const Rectangle& rRect,
             if ( bMtf )
                 mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
             else
-                ImplDrawPolyPolygon( *pPolyPoly );
+                ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
         }
         else
-            ImplDrawPolygon( aPoly );
+            ImplDrawPolygon( aPoly, pClipPolyPoly );
 #else
         pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
         pPolyPoly->Replace( aPoly, 1 );
@@ -924,7 +939,7 @@ void OutputDevice::ImplDrawRectGradient( const Rectangle& rRect,
                 mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
 #ifndef REMOTE_APPSERVER
             else
-                ImplDrawPolygon( rPoly );
+                ImplDrawPolygon( rPoly, pClipPolyPoly );
 #endif
         }
         delete pPolyPoly;
@@ -1037,17 +1052,17 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
             {
                 case GRADIENT_LINEAR:
                 case GRADIENT_AXIAL:
-                    ImplDrawLinearGradient( aRect, aGradient, FALSE );
+                    ImplDrawLinearGradient( aRect, aGradient, FALSE, NULL );
                 break;
 
                 case GRADIENT_RADIAL:
                 case GRADIENT_ELLIPTICAL:
-                    ImplDrawRadialGradient( aRect, aGradient, FALSE );
+                    ImplDrawRadialGradient( aRect, aGradient, FALSE, NULL );
                 break;
 
                 case GRADIENT_SQUARE:
                 case GRADIENT_RECT:
-                    ImplDrawRectGradient( aRect, aGradient, FALSE );
+                    ImplDrawRectGradient( aRect, aGradient, FALSE, NULL );
                 break;
             }
         }
@@ -1094,6 +1109,9 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         {
             const Rectangle aRect( rPolyPoly.GetBoundRect() );
 
+            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
+            mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
+
             if( OUTDEV_PRINTER == meOutDevType )
             {
                 Push( PUSH_CLIPREGION );
@@ -1117,6 +1135,8 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 Pop();
                 EnableOutput( bOldOutput );
             }
+
+            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
         }
 
         if( !IsDeviceOutputNecessary() )
@@ -1154,10 +1174,61 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 #ifndef REMOTE_APPSERVER
         if( OUTDEV_PRINTER == meOutDevType )
         {
-            Push( PUSH_CLIPREGION );
-            IntersectClipRegion( rPolyPoly );
-            DrawGradient( rPolyPoly.GetBoundRect(), aGradient );
-            Pop();
+            const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
+            if( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
+            {
+                // Rechteck in Pixel umrechnen
+                Rectangle aRect( ImplLogicToDevicePixel( aBoundRect ) );
+                aRect.Justify();
+
+                // Wenn Rechteck leer ist, brauchen wir nichts machen
+                if ( !aRect.IsEmpty() )
+                {
+                    if( !mpGraphics && !ImplGetGraphics() )
+                        return;
+
+                    if( mbInitClipRegion )
+                        ImplInitClipRegion();
+
+                    if( !mbOutputClipped )
+                    {
+                        PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+
+                        // Gradienten werden ohne Umrandung gezeichnet
+                        if( mbLineColor || mbInitLineColor )
+                        {
+                            mpGraphics->SetLineColor();
+                            mbInitLineColor = TRUE;
+                        }
+
+                        mbInitFillColor = TRUE;
+
+                        // calculate step count if neccessary
+                        if ( !aGradient.GetSteps() )
+                            aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
+
+                        // Farbverlauf ausgeben
+                        switch( aGradient.GetStyle() )
+                        {
+                            case GRADIENT_LINEAR:
+                            case GRADIENT_AXIAL:
+                                ImplDrawLinearGradient( aRect, aGradient, FALSE, &aClipPolyPoly );
+                            break;
+
+                            case GRADIENT_RADIAL:
+                            case GRADIENT_ELLIPTICAL:
+                                ImplDrawRadialGradient( aRect, aGradient, FALSE, &aClipPolyPoly );
+                            break;
+
+                            case GRADIENT_SQUARE:
+                            case GRADIENT_RECT:
+                                ImplDrawRectGradient( aRect, aGradient, FALSE, &aClipPolyPoly );
+                            break;
+                        }
+                    }
+                }
+            }
         }
         else
         {
@@ -1248,17 +1319,17 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
         {
             case GRADIENT_LINEAR:
             case GRADIENT_AXIAL:
-                ImplDrawLinearGradient( aRect, aGradient, TRUE );
+                ImplDrawLinearGradient( aRect, aGradient, TRUE, NULL );
             break;
 
             case GRADIENT_RADIAL:
             case GRADIENT_ELLIPTICAL:
-                ImplDrawRadialGradient( aRect, aGradient, TRUE );
+                ImplDrawRadialGradient( aRect, aGradient, TRUE, NULL );
             break;
 
             case GRADIENT_SQUARE:
             case GRADIENT_RECT:
-                ImplDrawRectGradient( aRect, aGradient, TRUE );
+                ImplDrawRectGradient( aRect, aGradient, TRUE, NULL );
             break;
         }
 
