@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:52:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #include "osl/file.hxx"
 #include "osl/module.hxx"
 #include "rtl/byteseq.hxx"
+#include "rtl/ustrbuf.hxx"
 #include "boost/scoped_array.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
 #include <algorithm>
 #include <map>
@@ -80,6 +82,7 @@
 using namespace rtl;
 using namespace osl;
 using namespace std;
+;
 
 #ifdef WNT
 #define HKEY_SUN_JRE "Software\\JavaSoft\\Java Runtime Environment"
@@ -88,7 +91,7 @@ using namespace std;
 
 #ifdef UNX
 namespace {
-char *g_arJavaNames[] = {
+char const *g_arJavaNames[] = {
     "",
     "j2re",
     "j2se",
@@ -99,7 +102,7 @@ char *g_arJavaNames[] = {
 };
 /* These are directory names which could contain multiple java installations.
  */
-char *g_arCollectDirs[] = {
+char const *g_arCollectDirs[] = {
     "",
     "j2re/",
     "j2se/",
@@ -112,7 +115,7 @@ char *g_arCollectDirs[] = {
 /* These are directories in which a java installation is
    looked for.
 */
-char *g_arSearchPaths[] = {
+char const *g_arSearchPaths[] = {
     "",
     "usr/",
     "usr/local/",
@@ -128,6 +131,7 @@ extern VendorSupportMapEntry gVendorMap[];
 
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
+rtl::OUString decodeOutput(const rtl::OString& s);
 
 class FileHandleGuard
 {
@@ -154,6 +158,7 @@ inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
         OSL_ENSURE(eError == osl_File_E_None, "unexpected situation");
     }
 }
+
 
 class FileHandleReader
 {
@@ -233,6 +238,84 @@ FileHandleReader::readLine(rtl::OString * pLine)
     }
 }
 
+class AsynchReader: public Thread
+{
+    unsigned int  m_nDataSize;
+    boost::scoped_array<sal_Char> m_arData;
+
+    bool m_bError;
+    bool m_bDone;
+    FileHandleGuard m_aGuard;
+
+    void SAL_CALL run();
+public:
+
+    AsynchReader(oslFileHandle & rHandle);
+
+    /** only call this function after this thread has finished.
+
+        That is, call join on this instance and then call getData.
+
+     */
+    OString getData();
+};
+
+AsynchReader::AsynchReader(oslFileHandle & rHandle): m_aGuard(rHandle), m_bError(false),
+                                                     m_nDataSize(0), m_bDone(false)
+{
+}
+
+OString AsynchReader::getData()
+{
+    OSL_ASSERT(isRunning() == sal_False );
+    return OString(m_arData.get(), m_nDataSize);
+}
+
+void AsynchReader::run()
+{
+    const sal_uInt64 BUFFER_SIZE = 4096;
+    sal_Char aBuffer[BUFFER_SIZE];
+    while (true)
+    {
+        sal_uInt64 nRead;
+        switch (osl_readFile(
+                    m_aGuard.getHandle(), aBuffer, BUFFER_SIZE, &nRead))
+        {
+        case osl_File_E_PIPE: //HACK! for windows
+            nRead = 0;
+        case osl_File_E_None:
+            break;
+        default:
+            m_bError = true;
+            return;
+        }
+
+        if (nRead == 0)
+        {
+            m_bDone = true;
+            break;
+        }
+        else if (nRead <= BUFFER_SIZE)
+        {
+            //Save the data we have in m_arData into a temporary array
+            boost::scoped_array<sal_Char> arTmp( new sal_Char[m_nDataSize]);
+            memcpy(arTmp.get(), m_arData.get(), m_nDataSize);
+            //Enlarge m_arData to hold the newly read data
+            m_arData.reset(new sal_Char[m_nDataSize + nRead]);
+            //Copy back the data that was already in m_arData
+            memcpy(m_arData.get(), arTmp.get(), m_nDataSize);
+            //Add the newly read data to m_arData
+            memcpy(m_arData.get() + m_nDataSize, aBuffer, nRead);
+            m_nDataSize += nRead;
+            if (nRead < BUFFER_SIZE)
+            {
+                m_bDone = true;
+                break;
+            }
+        }
+    }
+}
+
 
 bool getJavaProps(const OUString & exePath,
                   std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
@@ -255,22 +338,21 @@ bool getJavaProps(const OUString & exePath,
         != osl_File_E_None)
         return false;
     //prepare the arguments
-    OUString arg1(RTL_CONSTASCII_USTRINGPARAM("-Dfile.encoding=UTF8"));
-    OUString arg2 = OUString(RTL_CONSTASCII_USTRINGPARAM("-classpath"));// + sClassPath;
-    OUString arg3 = sClassPath;
-    OUString arg4(RTL_CONSTASCII_USTRINGPARAM("JREProperties"));
-    rtl_uString *args[] = {arg1.pData, arg2.pData, arg3.pData, arg4.pData};
+    OUString arg1 = OUString(RTL_CONSTASCII_USTRINGPARAM("-classpath"));// + sClassPath;
+    OUString arg2 = sClassPath;
+    OUString arg3(RTL_CONSTASCII_USTRINGPARAM("JREProperties"));
+    rtl_uString *args[] = {arg1.pData, arg2.pData, arg3.pData};
 
     oslProcess javaProcess= 0;
     oslFileHandle fileOut= 0;
     oslFileHandle fileErr= 0;
 
     FileHandleReader stdoutReader(fileOut);
-    FileHandleReader stderrReader(fileErr);
+    AsynchReader stderrReader(fileErr);
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
                                              args,
-                                             4,                 //sal_uInt32   nArguments,
+                                             3,                 //sal_uInt32   nArguments,
                                              osl_Process_HIDDEN, //oslProcessOption Options,
                                              Security().getHandle(), //oslSecurity Security,
                                              usStartDir.pData,//usStartDir.pData,//usWorkDir.pData, //rtl_uString *strWorkDir,
@@ -290,27 +372,11 @@ bool getJavaProps(const OUString & exePath,
     {
         *bProcessRun = true;
     }
-#if OSL_DEBUG_LEVEL >=2
-     OString aLine;
-     FileHandleReader::Result rserr = FileHandleReader::RESULT_OK;
-     bool bIntro = false;
-     while (1)
-     {
-         rserr = stderrReader.readLine(&aLine);
-         if (rserr != FileHandleReader::RESULT_OK)
-             break;
-         else
-         {
-             if (bIntro == false)
-             {
-                 fprintf(stdout, "#error while executing process: \n");
-                 bIntro = true;
-             }
-         }
-         fprintf(stdout,"%s\n", aLine.getStr());
-     }
-#endif
 
+    //Start asynchronous reading (different thread) of error stream
+    stderrReader.create();
+
+    //Use this thread to read output stream
     FileHandleReader::Result rs = FileHandleReader::RESULT_OK;
     while (1)
     {
@@ -318,7 +384,7 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
-        OUString sLine = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
+        OUString sLine = decodeOutput(aLine);
         sLine = sLine.trim();
         if (sLine.getLength() == 0)
             continue;
@@ -334,11 +400,40 @@ bool getJavaProps(const OUString & exePath,
     if (rs != FileHandleReader::RESULT_ERROR && props.size()>0)
         ret = true;
 
+    //process error stream data
+    stderrReader.join();
+#if OSL_DEBUG_LEVEL >=2
+    OString data = stderrReader.getData();
+    fprintf(stdout,"%s\n", data.getStr());
+#endif
+
+
    TimeValue waitMax= {5 ,0};
    procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
    OSL_ASSERT(procErr == osl_Process_E_None);
 
    return ret;
+}
+
+/* converts the properties printed by JREProperties.class into
+    readable strings. The strings are encoded as integer values separated
+    by spaces.
+ */
+rtl::OUString decodeOutput(const rtl::OString& s)
+{
+    OUString sEncoded = OStringToOUString(s, RTL_TEXTENCODING_ASCII_US);
+    OUStringBuffer buff(512);
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aToken = sEncoded.getToken( 0, ' ', nIndex );
+        if (aToken.getLength())
+        {
+            sal_Unicode value = (sal_Unicode) aToken.toInt32();
+            buff.append(value);
+        }
+    } while (nIndex >= 0);
+   return buff.makeStringAndClear();
 }
 
 
