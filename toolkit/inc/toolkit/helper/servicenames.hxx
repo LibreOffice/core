@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicenames.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:55:59 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ extern const sal_Char __FAR_DATA szServiceName_UnoControlScrollBarModel[], szSer
 extern const sal_Char __FAR_DATA szServiceName_UnoControlFixedLine[], szServiceName2_UnoControlFixedLine[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlFixedLineModel[], szServiceName2_UnoControlFixedLineModel[];
 extern const sal_Char __FAR_DATA szServiceName_PrinterServer[], szServiceName2_PrinterServer[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlRoadmap[], szServiceName2_UnoControlRoadmap[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlRoadmapModel[], szServiceName2_UnoControlRoadmapModel[];
 
 extern const sal_Char __FAR_DATA szServiceName_UnoSpinButtonControl[], szServiceName_UnoSpinButtonModel[];
 
