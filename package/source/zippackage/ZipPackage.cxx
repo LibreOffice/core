@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-27 16:55:07 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 10:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@ using namespace com::sun::star::package;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::package::ZipConstants;
 
-ZipPackage::ZipPackage (Reference < XInputStream > xNewInput,
+ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
+                        const Reference < XMultiServiceFactory > &xNewFactory,
                         ZipPackageBuffer *pNewBuffer,
                         ZipOutputStream *pNewZipOut)
 : pContent(NULL)
@@ -85,6 +86,7 @@ ZipPackage::ZipPackage (Reference < XInputStream > xNewInput,
 , xZipFile (NULL)
 , xBuffer (NULL)
 , xZipOut(NULL)
+, xFactory(xNewFactory)
 {
     pZipFile    = new ZipFile(xStream);
 
@@ -171,7 +173,7 @@ ZipPackage::ZipPackage (Reference < XInputStream > xNewInput,
     }
 }
 
-ZipPackage::ZipPackage( void )
+ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pContent(NULL)
 , pZipFile(NULL)
 , pZipOut(NULL)
@@ -182,6 +184,7 @@ ZipPackage::ZipPackage( void )
 , xZipFile (NULL)
 , xBuffer (NULL)
 , xZipOut(NULL)
+, xFactory(xNewFactory)
 {
 }
 
@@ -286,7 +289,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             if (isZipFile(aEntry))
             {
                 Reference < XInputStream > xStream = pZipFile->getInputStream(aEntry);
-                ZipPackage *pInZip = new ZipPackage (xStream, pZipBuffer, pZipOut);
+                ZipPackage *pInZip = new ZipPackage (xStream, xFactory, pZipBuffer, pZipOut );
                 aContainedZips.push_back (Reference < XSingleServiceFactory > (pInZip));
                 pPkgFolder = pInZip->getRootFolder();
                 pPkgFolder->setName(sStreamName);
@@ -450,21 +453,20 @@ void SAL_CALL ZipPackage::commitChanges(  )
     std::vector < ManifestEntry * > aManList;
     pRootFolder->saveContents(OUString::createFromAscii(""), aManList);
 #endif
-    ZipEntry aEntry;
+    ZipEntry *pEntry = new ZipEntry;
     ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
     Reference < XOutputStream > xOutStream = pBuffer;
-    aEntry.nVersion = -1;
-    aEntry.nFlag = -1;
-    aEntry.nMethod = STORED;
-    aEntry.nTime = -1;
-    aEntry.nCrc = -1;
-    aEntry.nCompressedSize = -1;
-    aEntry.nSize = -1;
-    aEntry.nOffset = -1;
-    aEntry.sName = OUString::createFromAscii("META-INF/manifest.xml");
-    pZipOut->putNextEntry(aEntry);
-    ManifestWriter aWriter ( xOutStream, aManList);
+    pEntry->nVersion = -1;
+    pEntry->nFlag = -1;
+    pEntry->nMethod = STORED;
+    pEntry->nTime = -1;
+    pEntry->nCrc = -1;
+    pEntry->nOffset = -1;
+    pEntry->sName = OUString::createFromAscii("META-INF/manifest.xml");
+    pZipOut->putNextEntry(*pEntry);
+    ManifestWriter aWriter ( xOutStream, xFactory, aManList);
     aWriter.Write();
+    pEntry->nSize = pEntry->nCompressedSize = pBuffer->getPosition();
     pBuffer->aBuffer.realloc(pBuffer->getPosition());
     pZipOut->write(pBuffer->aBuffer, 0, pBuffer->getPosition());
     pZipOut->closeEntry();
@@ -504,7 +506,7 @@ sal_Bool ZipPackage::isZipFile(com::sun::star::package::ZipEntry &rEntry)
 Reference < XInterface >SAL_CALL ZipPackage_create(
     const Reference< XMultiServiceFactory > & xMgr )
 {
-    return Reference< XInterface >( *new ZipPackage( ) );
+    return Reference< XInterface >( *new ZipPackage(xMgr) );
     //return Reference < XInterface > (NULL);
 }
 

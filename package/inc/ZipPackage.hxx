@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-27 16:51:45 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 10:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,14 @@ private:
     ::com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xBuffer;
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
     sal_Bool isZipFile(com::sun::star::package::ZipEntry &rEntry);
 public:
-    ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
+    ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
+                const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
                 ZipPackageBuffer *pNewBuffer,
                 ZipOutputStream *pNewZipOut);
-    ZipPackage (void);
+    ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
     ZipPackageFolder * getRootFolder()
     {
         return pRootFolder;
