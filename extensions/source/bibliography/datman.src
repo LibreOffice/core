@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 08:12:52 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: rt $ $Date: 2000-12-01 08:12:52 $ $Revision: 1.4 $
+// $Author: kz $ $Date: 2000-12-08 17:57:27 $ $Revision: 1.5 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -201,7 +201,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ polish ] = "Autor";
         Text[ portuguese_brazilian ] = "Author";
         Text[ japanese ] = "挊幰";
-        Text[ korean ] = "历磊";
+        Text[ korean ] = "累己磊";
         Text[ chinese_simplified ] = "作者";
         Text[ chinese_traditional ] = "";
         Text[ arabic ] = "轻隳彷";
