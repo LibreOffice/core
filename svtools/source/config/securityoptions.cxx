@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-21 10:17:58 $
+ *  last change: $Author: mba $ $Date: 2002-09-11 12:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                         SvtPathOptions aOpt;
                                                         sal_uInt32 nCount = m_seqSecureURLs.getLength();
                                                         for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
-                                                            m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] ).ToLowerAscii();
+                                                            m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
                                                     }
                                                     break;
 
@@ -355,7 +355,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
             SvtPathOptions aOpt;
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
-                m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] ).ToLowerAscii();
+                m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
