@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-27 07:16:25 $
+ *  last change: $Author: tra $ $Date: 2001-06-27 08:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
 
-#include "filedlghelper.hrc"
+#include <svtools/svtools.hrc>
 
 //------------------------------------------------------------
 // namespace directives
@@ -101,7 +101,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 //
 //------------------------------------------------------------
 
-#define RES_NAME sfx
+#define RES_NAME svt
 
 // because the label of a listbox is
 // a control itself (static text) we
@@ -112,6 +112,9 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 const rtl::OUString TILDE = OUString::createFromAscii( "~" );
 const sal_Unicode TILDE_SIGN = L'~';
+
+#define FOLDERPICKER_TITLE            500
+#define FOLDER_PICKER_DEF_DESCRIPTION 501
 
 //------------------------------------------------------------
 // we have to translate control ids to resource ids
@@ -124,17 +127,19 @@ struct _Entry
 };
 
 _Entry CtrlIdToResIdTable[] = {
-    { CHECKBOX_AUTOEXTENSION,                   STR_CB_AUTO_EXTENSION },
-    { CHECKBOX_PASSWORD,                        STR_CB_PASSWORD },
-    { CHECKBOX_FILTEROPTIONS,                   STR_CB_FILTER_OPTIONS },
-    { CHECKBOX_READONLY,                        STR_CB_READONLY },
-    { CHECKBOX_LINK,                            STR_CB_INSERT_AS_LINK },
-    { CHECKBOX_PREVIEW,                         STR_CB_SHOW_PREVIEW },
-    { PUSHBUTTON_PLAY,                          STR_PB_PLAY },
-    { LISTBOX_VERSION + LB_LABEL_OFFSET,        STR_LB_VERSION },
-    { LISTBOX_TEMPLATE + LB_LABEL_OFFSET,       STR_LB_TEMPLATES },
-    { LISTBOX_IMAGE_TEMPLATE + LB_LABEL_OFFSET, STR_LB_IMAGE_TEMPLATE },
-    { CHECKBOX_SELECTION,                       STR_CB_SELECTION },
+    { CHECKBOX_AUTOEXTENSION,                   STR_SVT_FILEPICKER_AUTO_EXTENSION },
+    { CHECKBOX_PASSWORD,                        STR_SVT_FILEPICKER_PASSWORD },
+    { CHECKBOX_FILTEROPTIONS,                   STR_SVT_FILEPICKER_FILTER_OPTIONS },
+    { CHECKBOX_READONLY,                        STR_SVT_FILEPICKER_READONLY },
+    { CHECKBOX_LINK,                            STR_SVT_FILEPICKER_INSERT_AS_LINK },
+    { CHECKBOX_PREVIEW,                         STR_SVT_FILEPICKER_SHOW_PREVIEW },
+    { PUSHBUTTON_PLAY,                          STR_SVT_FILEPICKER_PLAY },
+    { LISTBOX_VERSION + LB_LABEL_OFFSET,        STR_SVT_FILEPICKER_VERSION },
+    { LISTBOX_TEMPLATE + LB_LABEL_OFFSET,       STR_SVT_FILEPICKER_TEMPLATES },
+    { LISTBOX_IMAGE_TEMPLATE + LB_LABEL_OFFSET, STR_SVT_FILEPICKER_IMAGE_TEMPLATE },
+    { CHECKBOX_SELECTION,                       STR_SVT_FILEPICKER_SELECTION },
+    { FOLDERPICKER_TITLE,                       STR_SVT_FOLDERPICKER_DEFAULT_TITLE },
+    { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION }
 };
 
 const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
