@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:23:08 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 11:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "²Δ¤@¬qΈ¨(~F)";
         Text[ arabic ] = "ΗαέήΡΙ ΗαΓζαμ";
         Text[ greek ] = "Πρώτη παράγραφο~ς";
-        Text[ korean ] = "ΓΉ ΄ά¶τ(~F)";
+        Text[ korean ] = "ΓΉ ΄ά¶τ";
         Text[ turkish ] = "έlk paragraf";
     };
     CheckBox CB_TRANSPARENT
@@ -318,7 +318,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "½όΉψ(~C)";
         Text[ arabic ] = "ΗαΞΨ ΗαίέΗέν";
         Text[ greek ] = "Περίγραμμα";
-        Text[ korean ] = "ΐ±°ϋ(~C)";
+        Text[ korean ] = "ΐ±°ϋ";
         Text[ turkish ] = "Kontu~r";
     };
     CheckBox CB_ONLYOUTSIDE
