@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsLayouter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:22:44 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,12 @@ public:
     /** Return the number of columns.
     */
     sal_Int32 GetColumnCount (void) const;
+
+    /** Returns whether the column count is fixed (<TRUE/>) or variable
+        (<FALSE/>).  It is fixed if SetColumnCount() was called with the
+        same value for minimal and maximal column count.
+    */
+    bool IsColumnCountFixed (void) const;
 
     /** Return the scale factor that can be set at the map mode of the
         output window.
