@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-24 20:27:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ portuguese_brazilian ] = "Add tables ...";
             Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á...";
             Text[ korean ] = "Å×ÀÌºí Ãß°¡ ...";
-            Text[ chinese_simplified ] = "Ôö¼Ó±í¸ñ...";
+            Text[ chinese_simplified ] = "ĞÂÔö±í¸ñ...";
             Text[ chinese_traditional ] = "·s¼Wªí®æ...";
             Text[ turkish ] = "Add tables ...";
             Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá...";
@@ -625,11 +625,12 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ japanese ] = "‚±‚ÌÃ°ÌŞÙ‚ğíœ‚·‚é‚ÆA‚±‚ê‚É‘®‚·‚é‚·‚×‚Ä‚ÌØÚ°¼®İ‚àíœ‚³‚ê‚Ä‚µ‚Ü‚·B‘±s‚µ‚Ü‚·‚©B";
     Text[ korean ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ chinese_simplified ] = "Èç¹ûÉ¾³ıÕâ¸ö±í¸ñ£¬¾Í»áÒ»Í¬É¾³ıËùÓĞµÄ´ÓÊô¹ØÏµ¡£Òª¼ÌĞø£¿";
-    Text[ chinese_traditional ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ chinese_traditional ] = "¦pªG§R°£³o­Óªí®æ¡A¤]´N·|¤@°_§R°£¥ş³¡ªº±qÄİÃö«Y¡C­nÄ~Äò¡H";
     Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ catalan ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
 };
+
 
 
 
