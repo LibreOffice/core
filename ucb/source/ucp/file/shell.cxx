@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
+ *  last change: $Author: abi $ $Date: 2001-07-09 13:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
 #include <com/sun/star/beans/IllegalTypeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -930,6 +933,43 @@ shell::setv( sal_Int32 CommandId,
                     if( err != osl::FileBase::E_None )
                     {
                         --propChanged; // unsuccessful setting
+                        uno::Sequence< uno::Any > names( 1 );
+                        ret[0] <<= aUnqPath;
+                        IOErrorCode ioError;
+                        switch( err )
+                        {
+                            case osl::FileBase::E_NOMEM:  // not enough memory for allocating structures <br>
+                                ioError = IOErrorCode_OUT_OF_MEMORY;
+                                break;
+                            case osl::FileBase::E_INVAL:  // the format of the parameters was not valid<p>
+                                ioError = IOErrorCode_INVALID_PARAMETER;
+                                break;
+                            case osl::FileBase::E_NAMETOOLONG:  // File name too long<br>
+                                ioError = IOErrorCode_NAME_TOO_LONG;
+                                break;
+                            case osl::FileBase::E_NOENT:        // No such file or directory<br>
+                            case osl::FileBase::E_NOLINK:       // Link has been severed<br>
+                                ioError = IOErrorCode_NOT_EXISTING;
+                                break;
+                            case osl::FileBase::E_ACCES:        // permission denied<br>
+                                ioError = IOErrorCode_ACCESS_DENIED;
+                                break;
+                            case osl::FileBase::E_LOOP:         // Too many symbolic links encountered<br>
+                            case osl::FileBase::E_FAULT:        // Bad address<br>
+                            case osl::FileBase::E_IO:           // I/O error<br>
+                            case osl::FileBase::E_NOSYS:        // Function not implemented<br>
+                            case osl::FileBase::E_MULTIHOP:     // Multihop attempted<br>
+                            case osl::FileBase::E_INTR:         // function call was interrupted<p>
+                            default:
+                                ioError = IOErrorCode_GENERAL;
+                                break;
+                        }
+                        ret[i] <<= InteractiveAugmentedIOException(
+                            rtl::OUString(),
+                            0,
+                            task::InteractionClassification_ERROR,
+                            ioError,
+                            names );
                     }
                 }
                 else
