@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-15 14:43:06 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:02:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ LIB1FILES=	\
     $(SLB)$/text.lib \
     $(SLB)$/draw.lib \
     $(SLB)$/chart.lib \
-    $(SLB)$/forms.lib
+    $(SLB)$/forms.lib \
+    $(SLB)$/transform.lib
 
 # --- Shared-Library -----------------------------------------------
 
@@ -110,7 +111,8 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(UNOTOOLSLIB)	\
         $(ONELIB)		\
-        $(GOODIESLIB)
+        $(GOODIESLIB)	\
+        $(SALHELPERLIB)
 
 # SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC"
@@ -132,7 +134,8 @@ LIB2FILES=  \
             $(LB)$/sxl_forms.lib\
             $(LB)$/sxl_script.lib\
             $(LB)$/sxl_style.lib\
-            $(LB)$/sxl_text.lib
+            $(LB)$/sxl_text.lib \
+            $(LB)$/sxl_transform.lib
 .ENDIF
 
 # --- Def-File ---------------------------------------------------------
