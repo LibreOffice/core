@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:29:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ String SV_HELPTEXT_CLOSEDOCUMENT
     TEXT[ danish ] = "Luk dokument";
     TEXT[ swedish ] = "St�ng dokument";
     TEXT[ polish ] = "Zamknij dokument";
-    TEXT[ portuguese_brazilian ] = "DocumentClose";
+    TEXT[ portuguese_brazilian ] = "Fechar documento";
     TEXT[ japanese ] = "ドキュメントを閉じる";
     TEXT[ chinese_simplified ] = "关闭文档";
     TEXT[ chinese_traditional ] = "關閉文件";
@@ -522,7 +522,7 @@ String SV_SHORTCUT_CONTEXTHELP
     TEXT[ italian ] = "Guida contestuale";
     TEXT[ swedish ] = "Sammanhangshj�lp";
     TEXT[ polish ] = "Context Help";
-    TEXT[ portuguese_brazilian ] = "Context Help";
+    TEXT[ portuguese_brazilian ] = "Ajuda de contexto";
     TEXT[ japanese ] = "状況依存ヘルプ";
     TEXT[ korean ] = "문맥 도움말";
     TEXT[ turkish ] = "Yard�m ��eri�i";
@@ -553,7 +553,7 @@ String SV_SHORTCUT_ACTIVEHELP
     TEXT[ italian ] = "Guida attiva";
     TEXT[ swedish ] = "Aktiv hj�lp";
     TEXT[ polish ] = "Aktywna pomoc";
-    TEXT[ portuguese_brazilian ] = "Dicas ativadas";
+    TEXT[ portuguese_brazilian ] = "Dicas estendidas";
     TEXT[ japanese ] = "詳細ヒント";
     TEXT[ korean ] = "설명";
     TEXT[ turkish ] = "Geli�tirilmi� �pu�lar�";
@@ -584,7 +584,7 @@ String SV_SHORTCUT_DOCKUNDOCK
     TEXT[ italian ] = "Ancora/sgancia finestra";
     TEXT[ swedish ] = "F�rankring av f�nster p�/av";
     TEXT[ polish ] = "Dock/Undock Windows";
-    TEXT[ portuguese_brazilian ] = "Dock/Undock Windows";
+    TEXT[ portuguese_brazilian ] = "Fixar/Soltar janelas";
     TEXT[ japanese ] = "ウィンドウの結合/切り離し";
     TEXT[ korean ] = "창을 고정/분리";
     TEXT[ turkish ] = "Dock/Undock Windows";
@@ -615,7 +615,7 @@ String SV_SHORTCUT_NEXTSUBWINDOW
     TEXT[ italian ] = "Alla finestra/barra dei simboli seguente";
     TEXT[ swedish ] = "Till n�sta symbollist/f�nster";
     TEXT[ polish ] = "To Next Toolbar/Window";
-    TEXT[ portuguese_brazilian ] = "To Next Toolbar/Window";
+    TEXT[ portuguese_brazilian ] = "Para a pr�xima janela / barra de ferramenta";
     TEXT[ japanese ] = "次のツールバー/ウィンドウへ";
     TEXT[ korean ] = "다음 도구 모음/창으로";
     TEXT[ turkish ] = "Sonraki Ara� �ubu�una/Pencereye";
@@ -646,7 +646,7 @@ String SV_SHORTCUT_PREVSUBWINDOW
     TEXT[ italian ] = "Alla finestra/barra dei simboli precedente";
     TEXT[ swedish ] = "Till f�reg�ende symbollist/f�nster";
     TEXT[ polish ] = "To Previous Toolbar/Window";
-    TEXT[ portuguese_brazilian ] = "To Previous Toolbar/Window";
+    TEXT[ portuguese_brazilian ] = "Para a janela / barra de ferramenta anterior";
     TEXT[ japanese ] = "前のツールバー/ウィンドウへ";
     TEXT[ korean ] = "이전 도구 모음/창으로";
     TEXT[ turkish ] = "�nceki Ara� �ubu�una/Pencereye";
@@ -677,7 +677,7 @@ String SV_SHORTCUT_TODOCUMENT
     TEXT[ italian ] = "Al documento";
     TEXT[ swedish ] = "Till dokument";
     TEXT[ polish ] = "To Document";
-    TEXT[ portuguese_brazilian ] = "To Document";
+    TEXT[ portuguese_brazilian ] = "Para o documento";
     TEXT[ japanese ] = "ドキュメントへ";
     TEXT[ korean ] = "문서로";
     TEXT[ turkish ] = "Belgeye";
@@ -708,7 +708,7 @@ String SV_SHORTCUT_MENUBAR
     TEXT[ italian ] = "Alla barra dei menu";
     TEXT[ swedish ] = "Till menylist";
     TEXT[ polish ] = "To Menu Bar";
-    TEXT[ portuguese_brazilian ] = "To Menu Bar";
+    TEXT[ portuguese_brazilian ] = "Para a barra de ferramentas";
     TEXT[ japanese ] = "メニューバーへ";
     TEXT[ korean ] = "메뉴 표시줄로";
     TEXT[ turkish ] = "Men� �ubu�una";
@@ -727,6 +727,7 @@ String SV_SHORTCUT_MENUBAR
     TEXT[ hindi ] = "To Menu Bar";
     TEXT[ slovak ] = "Na menu";
 };
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:29:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ arabic ] = "≈·€«¡ «·√„—";
     TEXT[ dutch ] = "Annuleren";
     TEXT[ chinese_simplified ] = "ÂèñÊ∂à";
-    TEXT[ greek ] = "¡Í˝Ò˘ÛÁ";
+    TEXT[ greek ] = "¢ÍıÒÔ";
     TEXT[ korean ] = "Ï∑®ÏÜå";
     TEXT[ turkish ] = "›ptal";
     TEXT[ language_user1 ] = " ";
@@ -320,7 +320,7 @@ String SV_BUTTONTEXT_IGNORE
     Text[ swedish ] = "~Ignorera";
     Text[ polish ] = "Ignoruj";
     Text[ portuguese_brazilian ] = "~Ignorar";
-    Text[ japanese ] = "ÁÑ°Ë¶ñ„Åô„Çã";
+    Text[ japanese ] = "ÁÑ°Ë¶ñ„Åô„Çã(~I)";
     Text[ korean ] = "Î¨¥Ïãú(~I)";
     Text[ chinese_simplified ] = "ÂøΩÁï•(~I)";
     Text[ chinese_traditional ] = "ÂøΩÁï•(~I)";
@@ -350,7 +350,7 @@ String SV_BUTTONTEXT_ABORT
     Text[ danish ] = "~Cancel";
     Text[ swedish ] = "~Avbryt";
     Text[ polish ] = "Anuluj";
-    Text[ portuguese_brazilian ] = "~Cancelar";
+    Text[ portuguese_brazilian ] = "~Abortar";
     Text[ japanese ] = "‰∏≠Ê≠¢(~A)";
     Text[ korean ] = "Ï§ëÎã®(~A)";
     Text[ chinese_simplified ] = "ÂèñÊ∂à(~A)";
@@ -399,6 +399,7 @@ YES         ~Kyll‰
 NO          ~Ei
 RETRY       ~Yrit‰uudelleen
 */
+
 
 
 
