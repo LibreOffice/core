@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascharanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:01:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,20 +139,6 @@ const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
     return static_cast<const SwTxtFrm&>(GetAnchorFrm());
 }
 
-/** method to cast <SwAnchoredObjectPosition::GetFrmOfObj()> to needed type
-
-    @author OD
-*/
-SwFlyInCntFrm* SwAsCharAnchoredObjectPosition::GetFlyInCntFrmOfObj() const
-{
-    ASSERT( !IsObjFly() || ( GetFrmOfObj() && GetFrmOfObj()->ISA(SwFlyInCntFrm) ),
-            "SwAnchoredObjectPosition::GetFlyInCntFrmOfObj() - missing frame for object or wrong frame type" );
-
-    SwFlyInCntFrm* pRetFlyInCntFrm =
-        const_cast<SwFlyInCntFrm*>(static_cast<const SwFlyInCntFrm*>(GetFrmOfObj()));
-    return pRetFlyInCntFrm;
-}
-
 /** calculate position for object
 
     OD 30.07.2003 #110978#
@@ -172,11 +158,9 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 
     Point aAnchorPos( mrProposedAnchorPos );
 
-    SwFlyInCntFrm* pFlyInCntFrm = GetFlyInCntFrmOfObj();
-
     const SwFrmFmt& rFrmFmt = GetFrmFmt();
 
-    SwRect aObjBoundRect( GetObject().GetCurrentBoundRect() );
+    SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
     SwTwips nObjWidth = (aObjBoundRect.*fnRect->fnGetWidth)();
 
     // determine spacing values considering layout-/text-direction
@@ -319,21 +303,9 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 rAnchorFrm.SwitchHorizontalToVertical( aAbsAnchorPos );
 
             // set proposed anchor position at the drawing object.
-            // OD 20.06.2003 #108784# - consider 'virtual' drawing objects
-            if ( GetObject().ISA(SwDrawVirtObj) )
-            {
-                SwDrawVirtObj& rDrawVirtObj = static_cast<SwDrawVirtObj&>(GetObject());
-
-                rDrawVirtObj.NbcSetAnchorPos( aAbsAnchorPos );
-                rDrawVirtObj.AdjustRelativePosToReference();
-            }
-            else
-            {
-                GetObject().NbcSetAnchorPos( aAbsAnchorPos );
-                // OD 20.06.2003 #108784# - correct movement of 'virtual' drawing
-                // objects caused by the <SetAnchorPos(..)> of the 'master' drawing object.
-                static_cast<SwDrawContact&>(GetContact()).CorrectRelativePosOfVirtObjs();
-            }
+            // OD 2004-04-06 #i26791# - distinction between 'master' drawing
+            // object and 'virtual' drawing object no longer needed.
+            GetObject().SetAnchorPos( aAbsAnchorPos );
 
             // move drawing object to set its correct relative position.
             {
@@ -350,15 +322,9 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 if ( rAnchorFrm.IsVertical() )
                     aDiff = Point( -aDiff.Y(), aDiff.X() );
 
-                // OD 20.06.2003 #108784# - consider 'virtual' drawing objects
-                if ( !GetObject().ISA(SwDrawVirtObj) )
-                {
-                    // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
-                    GetObject().Move( Size( aDiff.X(), aDiff.Y() ) );
-                    // OD 23.06.2003 #108784# - correct movement of 'virtual' drawing
-                    // objects caused by the <Move(..)> of the 'master' drawing object
-                    static_cast<SwDrawContact&>(GetContact()).MoveOffsetOfVirtObjs( Size( -aDiff.X(), -aDiff.Y() ) );
-                }
+                // OD 2004-04-06 #i26791# - distinction between 'master' drawing
+                // object and 'virtual' drawing object no longer needed.
+                GetObject().Move( Size( aDiff.X(), aDiff.Y() ) );
             }
         }
 
@@ -391,23 +357,29 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         else
             aRelAttr = Point( 0, nRelPos );
 
+        // OD 2004-03-23 #i26791#
+        ASSERT( GetAnchoredObj().ISA(SwFlyInCntFrm),
+                "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong anchored object." );
+        const SwFlyInCntFrm& rFlyInCntFrm =
+                static_cast<const SwFlyInCntFrm&>(GetAnchoredObj());
         if ( !(mnFlags & AS_CHAR_QUICK) &&
-             ( aAnchorPos != pFlyInCntFrm->GetRefPoint() ||
-               aRelAttr != pFlyInCntFrm->GetCurRelPos() ) )
+             ( aAnchorPos != rFlyInCntFrm.GetRefPoint() ||
+               aRelAttr != rFlyInCntFrm.GetCurrRelPos() ) )
         {
             // set new anchor position and relative position
+            SwFlyInCntFrm* pFlyInCntFrm = &(const_cast<SwFlyInCntFrm&>(rFlyInCntFrm));
             pFlyInCntFrm->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
             if( nObjWidth != (pFlyInCntFrm->Frm().*fnRect->fnGetWidth)() )
             {
                 // recalculate object bound rectangle, if object width has changed.
-                aObjBoundRect = GetObject().GetCurrentBoundRect();
+                aObjBoundRect = GetAnchoredObj().GetObjRect();
                 aObjBoundRect.Left( aObjBoundRect.Left() - rLRSpace.GetLeft() );
                 aObjBoundRect.Width( aObjBoundRect.Width() + rLRSpace.GetRight() );
                 aObjBoundRect.Top( aObjBoundRect.Top() - rULSpace.GetUpper() );
                 aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
             }
         }
-        ASSERT( (pFlyInCntFrm->Frm().*fnRect->fnGetHeight)(),
+        ASSERT( (rFlyInCntFrm.Frm().*fnRect->fnGetHeight)(),
             "SwAnchoredObjectPosition::CalcPosition(..) - fly frame has an invalid height" );
     }
 
