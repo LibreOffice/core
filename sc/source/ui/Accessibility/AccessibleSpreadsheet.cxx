@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:12:43 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,7 +677,7 @@ void SAL_CALL
 }
 
 void SAL_CALL
-        ScAccessibleSpreadsheet::selectAllAccessible(  )
+        ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
