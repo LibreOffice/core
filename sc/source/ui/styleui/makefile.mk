@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2002-05-31 18:04:06 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:21:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,8 @@ CXXFILES =  \
 SLOFILES =  \
     $(SLO)$/styledlg.obj \
 
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
     scstyles.src \
     styledlg.src
 
