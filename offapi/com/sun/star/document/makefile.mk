@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: as $ $Date: 2001-12-19 13:07:04 $
+#   last change: $Author: mi $ $Date: 2002-04-26 11:03:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,8 @@ IDLFILES=\
     XExporter.idl\
     XExtendedFilterDetection.idl\
     XFilter.idl\
+    XFilterAdapter.idl\
+    FilterAdapter.idl\
     XImporter.idl\
     XLinkTargetSupplier.idl\
     XRedlinesSupplier.idl \
