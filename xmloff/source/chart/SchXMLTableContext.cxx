@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:24:47 $
+ *  last change: $Author: bm $ $Date: 2001-03-15 20:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ SchXMLTableRowContext::SchXMLTableRowContext(
 
     std::vector< SchXMLCell > aNewRow;
     aNewRow.reserve( mrTable.nNumberOfColsEstimate );
-    while( mrTable.aData.size() <= mrTable.nRowIndex )
+    while( mrTable.aData.size() <= (unsigned long)mrTable.nRowIndex )
         mrTable.aData.push_back( aNewRow );
 }
 
