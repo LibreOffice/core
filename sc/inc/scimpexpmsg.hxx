@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scimpexpmsg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-14 09:26:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,13 @@
 #ifndef SC_SCIMPEXPMSG_HXX
 #define SC_SCIMPEXPMSG_HXX
 
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
 
 enum ScImpExpMsg
 {
