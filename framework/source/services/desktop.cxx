@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 12:58:40 $
+ *  last change: $Author: as $ $Date: 2001-05-04 13:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,13 @@ sal_Bool SAL_CALL Desktop::terminate() throw( RuntimeException )
         #endif
 
         impl_sendNotifyTerminationEvent();
+    }
+    // If somewhere break this terminate operation and we must return FALSE ...
+    // we must reactivate our quit timer!
+    // Otherwise we live for ever.
+    else
+    {
+        m_aChildTaskContainer.enableQuitTimer( this );
     }
 
     // Return result of this question.
