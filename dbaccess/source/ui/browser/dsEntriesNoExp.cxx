@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:41:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry*
 }
 
 // -----------------------------------------------------------------------------
-String SbaTableQueryBrowser::GetEntryText( SvLBoxEntry* _pEntry )
+String SbaTableQueryBrowser::GetEntryText( SvLBoxEntry* _pEntry ) const
 {
     return m_pTreeView->getListBox()->GetEntryText(_pEntry);
 }
@@ -183,11 +183,7 @@ void SbaTableQueryBrowser::AddSupportedFeatures()
     SbaXDataBrowserController::AddSupportedFeatures();
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Title")]                           = ID_BROWSER_TITLE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/FormLetter")]    = ID_BROWSER_FORMLETTER;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertColumns")] = ID_BROWSER_INSERTCOLUMNS;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertContent")] = ID_BROWSER_INSERTCONTENT;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBrowserExplorer")]               = ID_BROWSER_EXPLORER;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/DocumentDataSource")] = ID_BROWSER_DOCUMENT_DATASOURCE;
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBFormLetter")]                   = ID_BROWSER_FORMLETTER;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBInsertColumns")]                = ID_BROWSER_INSERTCOLUMNS;
@@ -196,14 +192,6 @@ void SbaTableQueryBrowser::AddSupportedFeatures()
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:CloseWin")]                        = ID_BROWSER_CLOSE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBRebuildData")]                   = ID_BROWSER_REFRESH_REBUILD;
-
-            // TODO reenable our own code if we really have a handling for the formslots
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToFirst"),        SID_FM_RECORD_FIRST     ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToLast"),     SID_FM_RECORD_LAST      ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNew"),      SID_FM_RECORD_NEW       ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNext"),     SID_FM_RECORD_NEXT      ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToPrev"),     SID_FM_RECORD_PREV      )
-
 }
 // -------------------------------------------------------------------------
 String SbaTableQueryBrowser::getURL() const
