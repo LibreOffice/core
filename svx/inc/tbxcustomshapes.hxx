@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcustomshapes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:39:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,6 @@
 
 class SVX_DLLPUBLIC SvxTbxCtlCustomShapes : public SfxToolBoxControl
 {
-private:
-
-    const sal_uInt16    nSlotId;
-    rtl::OUString       aLastAction;
-    rtl::OUString       aSubTbxResName;
-
 public:
     virtual void                Select( BOOL bMod1 = FALSE );
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
@@ -95,7 +89,16 @@ public:
             SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SvxTbxCtlCustomShapes() {}
 
-            void SetLastAction( const rtl::OUString& rAction ) { aLastAction = rAction; }
+    //interface XSubToolbarController:
+    virtual ::sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    rtl::OUString       m_aSubTbName;
+    rtl::OUString       m_aSubTbxResName;
+    rtl::OUString       m_aCommand;
 };
 
 
