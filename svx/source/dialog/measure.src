@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:00:03 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ danish ] = "Eksempel" ;
         Text [ portuguese_brazilian ] = "Vorschau" ;
         Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïðîñìîòð";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËÞ­°";
