@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:13:02 $
+ *  last change: $Author: kz $ $Date: 2001-09-21 20:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,11 +282,11 @@ Resource RID_SVXERRCODE
         TEXT = "$(ARG1) wird von der Prüfung nicht unterstützt bzw. ist gegenwärtig nicht aktiviert.\nÜberprüfen Sie Ihre Installation und installieren Sie gegebenenfalls das benötigte Sprachmodul\nbzw. aktivieren sie in 'Extras - Optionen -  Spracheinstellungen - Linguistik' das entsprechende Spachmodul." ;
         TEXT [ English ] = "$(ARG1) is not available or is currently not active.\nPlease check your installation and install the desired language\nor activate in 'Tools - Options - Language Settings - Writing Aids' the desired module." ;
         TEXT[ english_us ] = "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\n or activate it under 'Tools - Options -  Language Settings - Writing Aids'.";
-        TEXT[ portuguese ] = "$(ARG1) não está disponível para a verificação ortográfica. \nConfira a sua instalação e, se necessário, instale a língua desejada.";
-        TEXT[ russian ] = "$(ARG1) äëÿ ïğîâåğêè íåäîñòóïåí.\nÏğîâåğüòå, ïîæàëóéñòà. Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ÿçûê.";
+        TEXT[ portuguese ] = "$(ARG1) não tem suporte para verificação ortográfica ou encontra-se desactivado. \nConfira a sua instalação e, se necessário, instale o módulo linguístico desejado\nou então active-o em 'Ferramentas - Opções - Configuração da língua - Linguística'.";
+        TEXT[ russian ] = "$(ARG1) íå ïîääåğæèâàåòñÿ ïğîâåğêîé ïğàâîïèñàíèÿ èëè â íàñòîÿùèé ìîìåíò íåäîñòóïåí.\nÏğîâåğüòå Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ÿçûêîâîé ìîäóëü\nèëè âêëş÷èòå äàííûé ÿçûêîâîé ìîäóëü â 'Ñåğâèñ - Ïàğàìåòğû - Íàñòğîéêè ÿçûêà - Ëèíãâèñòèêà'.";
         TEXT[ greek ] = "$(ARG1) äåí åßíáé äéáèİóéìï ãéá ôïí ïñèïãñáöéêü İëåã÷ï.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé åãêáôáóôŞóôå áí ÷ñåéáóôåß ôçí ãëşóóá ğïõ åğéèõì? ";
         TEXT[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
-        TEXT[ french ] = "$(ARG1) n'est pas disponible pour vérification. \nVeuillez vérifier l'installation et installer le cas échéant la langue souhaitée.";
+        TEXT[ french ] = "$(ARG1) n'est pas supporté par la vérification ou n'est actuellement pas actif.\nVérifiez l'installation et installez le cas échéant le module de langue requis, ou activez-le sous 'Outils - Options - Paramètres linguistiques - Linguistique'.";
         TEXT[ spanish ] = "$(ARG1) no está disponible para la revisión ortográfica o esta no lo apoya.\n Examine su instalación e instale en caso dado el idioma deseado\no active el módulo correspondiente en 'Herramientas - Opciones - Configuración de idiomas - Lingüística'.";
         TEXT[ finnish ] = "$(ARG1) ei ole k?ytett?viss? oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
         TEXT[ italian ] = "$(ARG1) non è supportato per il controllo oppure non è attivato al momento.\nControllate l'installazione ed installate, se necessario, la lingua desiderata\noppure impostate il modulo linquistico corrispondente in 'Strumenti - Opzioni - Impostazioni lingua - Linguistica'.";
@@ -294,9 +294,9 @@ Resource RID_SVXERRCODE
         TEXT[ swedish ] = "$(ARG1) understöds inte av kontrollen resp., är inte aktiverat för närvarande.\nKontrollera installationen och installera eventuellt den nödvändiga språkmodulen\nresp. aktivera motsvarande språkmodul i \"Verktyg - Alternativ - Språkinställningar - Lingvistik\".";
         TEXT[ polish ] = "$(ARG1) nie jest obs³ugiwany przez funkcjê sprawdzania pisowni lub nie zosta³ uaktywniony.\nNale¿y sprawdziæ instalacjê i zainstalowaæ ewentualnie wymagany modu³ jêzyka\nlub uaktywniæ go po wybraniu sekwencji 'Narzêdzia - Opcje - Konfiguracja jêzyków - Pisownia'.";
         TEXT[ portuguese_brazilian ] = "$(ARG1) ist f? die Pr?ung nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache.";
-        TEXT[ japanese ] = "$(ARG1)ã¯ï½½ï¾ï¾Ÿï¾™ï¾ï½ªï½¯ï½¸ã«ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚\nã”ä½¿ç”¨ã®ï¾Œï¾Ÿï¾›ï½¸ï¾ï¾—ï¾‘ã®ï½²ï¾ï½½ï¾„ï½°ï¾™ã‚’å†ï¾ï½ªï½¯ï½¸ã—ã¦ã€å ´åˆã«ã‚ˆã£ã¦ã¯ã€ã”å¸Œæœ›ã®è¨€èªã‚’ï½²ï¾ï½½ï¾„-ï¾™ã—ã¦ãã ã•ã„ã€‚";
+        TEXT[ japanese ] = "$(ARG1)ã¯ï½½ï¾ï¾Ÿï¾™ï¾ï½ªï½¯ï½¸ã§æ”¯æ´ã•ã‚Œã¾ã›ã‚“ã€‚ã¤ã¾ã‚Šç¾åœ¨ï½±ï½¸ï¾ƒï½¨ï¾Œï¾ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚\nä½¿ç”¨ä¸­ã®ï¾Œï¾Ÿï¾›ï½¸ï¾ï¾—ï¾‘ã®ï½²ï¾ï½½ï¾„ï½°ï¾™ã‚’ï¾ï½ªï½¯ï½¸ã—ã¦é¸æŠã•ã‚Œã¦ã„ãªã‘ã‚Œã°ã€ãã“ã§ï½½ï¾ï¾Ÿï¾™ï¾ï½ªï½¯ï½¸ã«å¿…è¦ãªè¨€èªã‚’ï½²ï¾ï½½ï¾„-ï¾™ã—ã¾ã™ã€‚\nã‚ã‚‹ã„ã¯ï¾’ï¾†ï½­ï½°ã®ï¾‚ï½°ï¾™ â†’ ï½µï¾Œï¾Ÿï½¼ï½®ï¾ â†’ è¨€èªè¨­å®š â†’ æ–‡ç« æ ¡æ­£ã§å¿…è¦ãªè¨€èªï¾“ï½¼ï¾ï½­ï½°ï¾™ã‚’ï½²ï¾ï½½ï¾„ï½°ï¾™ã—ã¾ã™ã€‚";
         TEXT[ korean ] = "$(ARG1)ì„(ë¥¼) ë§ì¶¤ë²• ê²€ì‚¬ì— ì´ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n ì‚¬ìš©ìì˜ ì„¤ì¹˜ë¥¼ ì ê²€í•œ ë‹¤ìŒ, í•„ìš”ì‹œ ìš”êµ¬ë˜ëŠ”  ì–¸ì–´ë¥¼ ì„¤ì¹˜í•˜ì‹­ì‹œì˜¤.";
-        TEXT[ chinese_simplified ] = "$(ARG1)ä¸å­˜åœ¨ã€‚\nè¯·æ‚¨æ£€æŸ¥å®‰è£…ï¼Œå¦‚æœ‰å¿…è¦è¯·å®‰è£…æ‰€éœ€çš„è¯­è¨€ç‰ˆæœ¬ã€‚";
+        TEXT[ chinese_simplified ] = "$(ARG1)ä¸æ”¯æŒæ‹¼å†™æ£€æŸ¥åŠŸèƒ½æˆ–è€…ç›®å‰æœªå¯ç”¨è¯¥åŠŸèƒ½ã€‚\nè¯·æ‚¨æ£€æŸ¥å®‰è£…ï¼Œå¦‚æœ‰å¿…è¦è¯·å®‰è£…æ‰€éœ€çš„è¯­è¨€æ¨¡å—\næˆ–è€…å€ŸåŠ©èœå•å‘½ä»¤â€œå·¥å…· - é€‰é¡¹... - è¯­è¨€è®¾å®š - è¯­è¨€è§„åˆ™â€å¯ç”¨ç›¸åº”çš„è¯­è¨€æ¨¡å—ã€‚";
         TEXT[ chinese_traditional ] = "$(ARG1)ä¸å­˜åœ¨ã€‚\nè«‹æ‚¨æª¢æŸ¥å®‰è£ï¹è‹¥æœ‰å¿…è¦è«‹æ‚¨å®‰è£æ‰€éœ€çš„èªè¨€ç‰ˆæœ¬ã€‚";
         TEXT[ turkish ] = "$(ARG1) yazım denetiminde kullanılamıyor.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         TEXT[ arabic ] = "$(ARG1) ÛíÑ ãÊæİÑÉ ááÊÏŞíŞ ÇáÅãáÇÆí.\nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æŞã ÈÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ.";
@@ -682,6 +682,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
