@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-12 13:58:48 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,6 @@ void SvXMLExport::_InitCtor()
         pNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
     }
 
-
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
 
     sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
@@ -557,6 +556,40 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 if(aAny >>= aWasUsed)
                     pNumExport->SetWasUsed(aWasUsed);
             }
+        }
+    }
+
+    // namespaces for user defined attributes
+    Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY );
+    if( xFactory.is() )
+    {
+        try
+        {
+            Reference < XInterface > xIfc =
+                xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "com.sun.star.xml.NamespaceMap")) );
+            if( xIfc.is() )
+            {
+                Reference< XNameAccess > xNamespaceMap( xIfc, UNO_QUERY );
+                if( xNamespaceMap.is() )
+                {
+                    Sequence< OUString > aPrefixes( xNamespaceMap->getElementNames() );
+
+                    OUString* pPrefix = aPrefixes.getArray();
+                    const sal_Int32 nCount = aPrefixes.getLength();
+                    sal_Int32 nIndex;
+                    OUString aURL;
+
+                    for( nIndex = 0; nIndex < nCount; nIndex++, *pPrefix++ )
+                    {
+                        if( xNamespaceMap->getByName( *pPrefix ) >>= aURL )
+                            _GetNamespaceMap().Add( *pPrefix, aURL, XML_NAMESPACE_UNKNOWN );
+                    }
+                }
+            }
+        }
+        catch( com::sun::star::uno::Exception& )
+        {
         }
     }
 }
