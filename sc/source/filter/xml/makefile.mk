@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: sab $ $Date: 2000-12-19 18:30:01 $
+#   last change: $Author: sab $ $Date: 2000-12-21 17:37:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,7 +124,8 @@ CXXFILES = \
         XMLTableSourceContext.cxx \
         XMLTextPContext.cxx \
         XMLTableShapeResizer.cxx \
-        XMLChangeTrackingExportHelper.cxx
+        XMLChangeTrackingExportHelper.cxx \
+        xmlfonte.cxx
 
 SLOFILES =  \
         $(SLO)$/xmlwrap.obj \
@@ -168,7 +169,8 @@ SLOFILES =  \
         $(SLO)$/XMLTableSourceContext.obj \
         $(SLO)$/XMLTextPContext.obj \
         $(SLO)$/XMLTableShapeResizer.obj \
-        $(SLO)$/XMLChangeTrackingExportHelper.obj
+        $(SLO)$/XMLChangeTrackingExportHelper.obj \
+        $(SLO)$/xmlfonte.obj
 
 
 # --- Tagets -------------------------------------------------------

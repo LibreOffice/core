@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 09:37:47 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,7 @@ UniReference < SvXMLImportPropertyMapper >
                 {
                     ((XMLTableStylesContext *)this)->xCellImpPropMapper =
                         new ScXMLCellImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper() );
-                    xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateCharExtPropMapper());
+                    xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateCharExtPropMapper(const_cast<XMLFontStylesContext*>(GetScImport().GetFontDecls())));
                 }
                 xMapper = xCellImpPropMapper;
             }

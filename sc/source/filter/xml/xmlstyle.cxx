@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-13 17:11:43 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,8 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
+    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
+
     XMLPropertyState* pPadding = NULL;
     XMLPropertyState* pPadding_Bottom = NULL;
     XMLPropertyState* pPadding_Left = NULL;

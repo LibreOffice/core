@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ using namespace rtl;
 
 enum ScXMLDocTokens
 {
+    XML_TOK_DOC_FONTDECLS,
     XML_TOK_DOC_STYLES,
     XML_TOK_DOC_AUTOSTYLES,
     XML_TOK_DOC_MASTERSTYLES,
@@ -761,6 +762,8 @@ public:
     // namespace office
     SvXMLImportContext *CreateMetaContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
+    SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
     SvXMLImportContext *CreateStylesContext(const NAMESPACE_RTL(OUString)& rLocalName,

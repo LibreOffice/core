@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:26:37 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ class ScXMLExport : public SvXMLExport
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper    aChangeTrackingExportHelper;
 
+    virtual void _ExportFontDecls();
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
@@ -217,6 +218,7 @@ protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
     virtual XMLPageExport* CreatePageExport();
     virtual XMLShapeExport* CreateShapeExport();
+    virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 public:
     ScXMLExport( const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xTempModel, const ::rtl::OUString& rFileName,
                  const ::com::sun::star::uno::Reference<

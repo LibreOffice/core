@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #ifndef _XMLOFF_XMLSCRIPTI_HXX
 #include <xmloff/xmlscripti.hxx>
 #endif
-
+#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
+#include <xmloff/XMLFontStylesContext.hxx>
+#endif
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
@@ -138,6 +140,7 @@ sal_Char __READONLY_DATA sXML_np__table[] = "table";
 
 static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
+    { XML_NAMESPACE_OFFICE, sXML_font_decls,        XML_TOK_DOC_FONTDECLS   },
     { XML_NAMESPACE_OFFICE, sXML_styles,            XML_TOK_DOC_STYLES      },
     { XML_NAMESPACE_OFFICE, sXML_automatic_styles,  XML_TOK_DOC_AUTOSTYLES  },
     { XML_NAMESPACE_OFFICE, sXML_master_styles,     XML_TOK_DOC_MASTERSTYLES},
@@ -723,6 +726,9 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
     const SvXMLTokenMap& rTokenMap = GetScImport().GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
+    case XML_TOK_DOC_FONTDECLS:
+        pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
+        break;
     case XML_TOK_DOC_STYLES:
         pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_False);
         break;
@@ -1415,6 +1421,22 @@ ScXMLImport::~ScXMLImport()
 }
 
 // ---------------------------------------------------------------------
+
+SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+{
+    SvXMLImportContext *pContext = NULL;
+    if (!pContext)
+    {
+        XMLFontStylesContext *pFSContext =
+            new XMLFontStylesContext( *this, nPrefix,
+                                        rLocalName, xAttrList,
+                                        gsl_getSystemTextEncoding() );
+        SetFontDecls( pFSContext );
+        pContext = pFSContext;
+    }
+    return pContext;
+}
 
 SvXMLImportContext *ScXMLImport::CreateStylesContext(const NAMESPACE_RTL(OUString)& rLocalName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:26:37 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,12 @@ void ScXMLExport::_ExportMeta()
         AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
     }
     SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
+}
+
+void ScXMLExport::_ExportFontDecls()
+{
+    GetFontAutoStylePool(); // make sure the pool is created
+    SvXMLExport::_ExportFontDecls();
 }
 
 void ScXMLExport::_ExportChangeTracking()
@@ -1404,7 +1410,7 @@ void ScXMLExport::_ExportAutoStyles()
                                     nColumn = pDoc->GetNextDifferentFlaggedCol(nTable, static_cast<USHORT>(nColumn));
                                     if (nColumn == MAXCOL)
                                         nColumn++;
-                                    for (sal_Int32 i = nOld + 1; (i < nColumn) && (i <= nColumns) ; i++)
+                                    for (sal_Int32 i = nOld + 1; i < nColumn; i++)
                                         aColumnStyles.AddFieldStyleName(nTable, i, nIndex);
                                 }
                                 if (aCellAddress.EndColumn > nColumns)
@@ -1461,7 +1467,7 @@ void ScXMLExport::_ExportAutoStyles()
                                     nRow = pDoc->GetNextDifferentFlaggedRow(nTable, static_cast<USHORT>(nRow));
                                     if (nRow == MAXROW)
                                         nRow++;
-                                    for (sal_Int32 i = nOld + 1; (i < nRow) && (i <= nRows) ; i++)
+                                    for (sal_Int32 i = nOld + 1; i < nRow; i++)
                                         aRowStyles.AddFieldStyleName(nTable, i, nIndex);
                                 }
                                 if (aCellAddress.EndRow > nRows)
