@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:37:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 17:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,14 +832,14 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
                         }
                         else if (rEntry.eOp == SC_TOPVAL && rEntry.pStr &&
                                     rEntry.pStr->EqualsAscii("10"))
-                            nSelPos = pFilterBox->GetEntryPos( SC_AUTOFILTER_TOP10 );
+                            nSelPos = SC_AUTOFILTER_TOP10;
                         else
-                            nSelPos = pFilterBox->GetEntryPos( SC_AUTOFILTER_CUSTOM );
+                            nSelPos = SC_AUTOFILTER_CUSTOM;
                     }
                 }
 
             if (!bValid)
-                nSelPos = pFilterBox->GetEntryPos( SC_AUTOFILTER_CUSTOM );
+                nSelPos = SC_AUTOFILTER_CUSTOM;
         }
     }
 
