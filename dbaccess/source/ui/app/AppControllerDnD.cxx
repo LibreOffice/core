@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:05:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ bool OApplicationController::ensureConnection(Reference<XConnection>& _xConnecti
     {
         WaitObject aWO(getView());
         String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
-        sConnectingContext.SearchAndReplaceAscii("$name$", sDataSourceName);
+        sConnectingContext.SearchAndReplaceAscii("$name$", getStrippedDatabaseName());
 
         aFind->second = connect(sDataSourceName, sConnectingContext, rtl::OUString(), sal_True);
         // otherwise we got a loop when connecting to db throws an error
@@ -518,7 +518,7 @@ bool OApplicationController::ensureConnection(Reference<XConnection>& _xConnecti
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::isDataSourceReadOnly() const
 {
-    Reference<XStorable> xStore(m_xDataSource,UNO_QUERY);
+    Reference<XStorable> xStore(m_xModel,UNO_QUERY);
     return !xStore.is() || xStore->isReadonly();
 }
 // -----------------------------------------------------------------------------
@@ -559,7 +559,7 @@ Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
         {
             case E_REPORT: // TODO: seperate handling of forms and reports
                 {
-                    Reference< XReportDocumentsSupplier > xSupp(m_xDataSource,UNO_QUERY);
+                    Reference< XReportDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
                     OSL_ENSURE(xSupp.is(),"Data source doesn't return a XReportDocumentsSupplier -> GPF");
                     if ( xSupp.is() )
                         xElements = xSupp->getReportDocuments();
@@ -567,7 +567,7 @@ Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
                 break;
             case E_FORM:
                 {
-                    Reference< XFormDocumentsSupplier > xSupp(m_xDataSource,UNO_QUERY);
+                    Reference< XFormDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
                     OSL_ENSURE(xSupp.is(),"Data source doesn't return a XFormDocumentsSupplier -> GPF");
                     if ( xSupp.is() )
                         xElements = xSupp->getFormDocuments();
@@ -631,11 +631,10 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
         }
     }
 
-    Reference<XModifiable> xModi(m_xDataSource,UNO_QUERY);
+    Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
     m_bCurrentlyModified = (xModi.is() && xModi->isModified());
     sal_Bool bNew = sal_False;
-    Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
-    if ( bInteractive && xModel.is() && !xModel->getURL().getLength() && getView() )
+    if ( bInteractive && m_xModel.is() && !m_xModel->getURL().getLength() && getView() )
     {
         WinBits nBits(WB_STDMODAL|WB_SAVEAS);
         ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
@@ -662,9 +661,9 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
                     try
                     {
                         Sequence< PropertyValue > aArgs;
-                        xModel->attachResource(sFileName,aArgs);
-                        attachModel(xModel);
-                        Reference<XStorable> xStr(xModel,UNO_QUERY);
+                        m_xModel->attachResource(sFileName,aArgs);
+                        attachModel(m_xModel);
+                        Reference<XStorable> xStr(m_xModel,UNO_QUERY);
                         if ( xStr.is() )
                             xStr->store();
 
@@ -710,14 +709,14 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
     {
         case E_FORM:
         {
-            Reference< XFormDocumentsSupplier > xSupp(m_xDataSource,UNO_QUERY);
+            Reference< XFormDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
             if ( xSupp.is() )
                 xNameAccess = xSupp->getFormDocuments();
             break;
         }
         case E_REPORT:
         {
-            Reference< XReportDocumentsSupplier > xSupp(m_xDataSource,UNO_QUERY);
+            Reference< XReportDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
             if ( xSupp.is() )
                 xNameAccess = xSupp->getReportDocuments();
             break;
@@ -740,10 +739,15 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
     }
 
     Reference<XConnection> xConnection;
-    ensureConnection(xConnection);
+    try
+    {
+        ensureConnection(xConnection);
+    }
+    catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
+    catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
+    catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
     OSL_ENSURE(xNameAccess.is(),"Data source doesn't return a name access -> GPF");
-    ::std::auto_ptr<OLinkedDocumentsAccess> aHelper( new OLinkedDocumentsAccess(getView(), getORB(), xNameAccess,xConnection));
-    return aHelper;
+    return ::std::auto_ptr<OLinkedDocumentsAccess>( new OLinkedDocumentsAccess(getView(), getORB(), xNameAccess,xConnection,getDatabaseName()));
 }
 // -----------------------------------------------------------------------------
 TransferableHelper* OApplicationController::copyObject()
