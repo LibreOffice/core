@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberedSortingInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module ucb {
     used to be on the safe side, that no one asks for sorting by a property
     which is not contained in a <type>ContentResultSet</type>.
 */
-struct NumberedSortingInfo
+published struct NumberedSortingInfo
 {
     //-------------------------------------------------------------------------
     /** sort the resultset by this column. Index starts with <code>1</code>.
