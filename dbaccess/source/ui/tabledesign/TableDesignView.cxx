@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 07:47:39 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 09:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:
-            if( GetDescWin()->HasChildPathFocus() )
+            if( GetDescWin() && GetDescWin()->HasChildPathFocus() )
                 m_eChildFocus = DESCRIPTION;
             else
                 m_eChildFocus = EDITOR;
