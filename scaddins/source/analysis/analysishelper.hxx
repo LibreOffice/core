@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:46:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear, sal_Bool bLeapYear );
 sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
-void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear );
+void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( ::com::sun::star::lang::IllegalArgumentException );
 sal_Int32           GetNullDate( const REF( CSS::beans::XPropertySet )& xOptions ) THROWDEF_RTE;
 sal_Int32           GetDiffDate360(
                         sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
