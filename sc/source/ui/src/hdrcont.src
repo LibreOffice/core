@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:28:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
         Text[ korean ] = "¼¿ Æ÷¸ËÆÃ(~F)...";\
         Text[ turkish ] = "Hücreleri formatla...";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "~Formatear celdas...";\
     };
 
 
@@ -120,6 +121,7 @@
         Text[ korean ] = "Àß¶ó³»±â(~T)";\
         Text[ turkish ] = "~Kes";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "Co~rtar";\
     };\
     MenuItem\
     {\
@@ -147,6 +149,7 @@
         Text[ korean ] = "º¹»ç(~C)";\
         Text[ turkish ] = "Kopyala";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "Co~piar";\
     };\
     MenuItem\
     {\
@@ -176,6 +179,7 @@
         Text[ korean ] = "ºÙ¿©³Ö±â(~P)";\
         Text[ turkish ] = "~Yapýþtýr";\
         Text[ language_user1 ] = " ";\
+        Text[ catalan ] = "P~egar";\
     };
 
  //-------------------------------------------------------------------------------
@@ -216,6 +220,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "Çà³ôÀÌ(~H)...";
             Text[ turkish ] = "Satýr yüksekliði...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Altura de fila...";
         };
         MenuItem
         {
@@ -245,6 +250,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "ÃÖÀû  Çà ³ôÀÌ(~R)...";
             Text[ turkish ] = "~En uygun yükseklik...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Optimar altura de fila...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -277,6 +283,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "Çà »ðÀÔ(~I)";
             Text[ turkish ] = "Satýr ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Insertar filas";
         };
         MenuItem
         {
@@ -305,6 +312,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "Çà »èÁ¦(~D)";
             Text[ turkish ] = "Satýr sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar filas";
         };
         MenuItem
         {
@@ -335,6 +343,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "³»¿ë »èÁ¦(~L)...";
             Text[ turkish ] = "Ýçerikleri sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar contenidos...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -365,6 +374,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "¼û±â±â(~H)";
             Text[ turkish ] = "~Gizle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Ocultar";
         };
         MenuItem
         {
@@ -392,6 +402,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "³ªÅ¸³»±â(~S)";
             Text[ turkish ] = "G~öster";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Mostrar";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -424,6 +435,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â( ~S)...";
             Text[ turkish ] = "Ö~zel yapýþtýr...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Peg~ado especial...";
         };
     };
 };
@@ -465,6 +477,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "¿­ ³Êºñ(~U)...";
             Text[ turkish ] = "Sütun geniþliði...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Ancho de columna...";
         };
         MenuItem
         {
@@ -492,6 +505,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "ÃÖÀû ¿­ ³Êºñ(~P)...";
             Text[ turkish ] = "En uygun geniþlik...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Optimar ancho de columna...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -524,6 +538,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "¿­ »ðÀÔ(~I)";
             Text[ turkish ] = "Sütun ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Insertar columnas";
         };
         MenuItem
         {
@@ -552,6 +567,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "¿­ »èÁ¦(~D)";
             Text[ turkish ] = "Sütun sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar columnas";
         };
         MenuItem
         {
@@ -582,6 +598,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "³»¿ë »èÁ¦(~E)...";
             Text[ turkish ] = "Ýçerikleri sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar contenidos...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -612,6 +629,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "¼û±â±â(~H)";
             Text[ turkish ] = "~Gizle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Ocultar";
         };
         MenuItem
         {
@@ -639,6 +657,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "³ªÅ¸³»±â(~S)";
             Text[ turkish ] = "G~öster";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Mostrar";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -671,6 +690,7 @@ Menu RID_POPUP_COLHEADER
             Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â( ~S)...";
             Text[ turkish ] = "Ö~zel yapýþtýr...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Peg~ado especial...";
         };
     };
 };
