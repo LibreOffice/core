@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-22 18:10:51 $
+ *  last change: $Author: sj $ $Date: 2000-12-04 14:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,8 +213,15 @@
 #include <svx/msocximex.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 
 enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 
@@ -668,8 +675,15 @@ class PropValue
 
     public :
 
-        static sal_Bool GetPropertyValue( ::com::sun::star::uno::Any& rAny, const ::com::sun::star::uno::Reference
-                    < ::com::sun::star::beans::XPropertySet > &, const String& );
+        static sal_Bool GetPropertyValue(
+                ::com::sun::star::uno::Any& rAny,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                        const String& rPropertyName,
+                            sal_Bool bTestPropertyAvailability = sal_False );
+
+        static ::com::sun::star::beans::PropertyState GetPropertyState(
+                    const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &,
+                        const String& rPropertyName );
 };
 
 class PropStateValue : public PropValue
