@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ void dummy_can_throw_anything( char const * )
 //==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW( () )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     char const * start = p;
 #endif
 
@@ -118,7 +118,7 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
             buf.append( (sal_Unicode)'.' );
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OUString ret( buf.makeStringAndClear() );
     OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
@@ -200,7 +200,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr,"generated rtti for %s\n", rttiName );
 #endif
                 if (pTypeDescr->pBaseTypeDescription)
