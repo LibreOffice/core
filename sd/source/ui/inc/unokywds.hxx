@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-15 12:06:57 $
+ *  last change: $Author: cl $ $Date: 2001-03-29 07:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,13 @@ SD_CONSTASCII_ACTION( sUNO_Service_ImageMapPolygonObject, UNO_PREFIX "image.Imag
 
 // properties
 SD_CONSTASCII_ACTION( sUNO_Prop_Background, "Background" );
+SD_CONSTASCII_ACTION( sUNO_Prop_VisibleArea, "VisibleArea" );
+SD_CONSTASCII_ACTION( sUNO_Prop_MapUnit, "MapUnit" );
+SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale, "CharLocale" );
+SD_CONSTASCII_ACTION( sUNO_Prop_TabStop, "TabStop" );
+SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus, "AutomaticControlFocus" );
+SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode, "ApplyFormDesignMode" );
+
 
 #endif
 

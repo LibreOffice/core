@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:36:13 $
+ *  last change: $Author: cl $ $Date: 2001-03-29 07:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,20 +168,24 @@ using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 
-#define WID_MODEL_LANGUAGE      1
-#define WID_MODEL_TABSTOP       2
-#define WID_MODEL_VISAREA       3
-#define WID_MODEL_MAPUNIT       4
+const sal_Int32 WID_MODEL_LANGUAGE  = 1;
+const sal_Int32 WID_MODEL_TABSTOP   = 2;
+const sal_Int32 WID_MODEL_VISAREA   = 3;
+const sal_Int32 WID_MODEL_MAPUNIT   = 4;
+const sal_Int32 WID_MODEL_CONTFOCUS = 5;
+const sal_Int32 WID_MODEL_DSGNMODE  = 6;
 
 const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 {
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     const static SfxItemPropertyMap aDrawModelPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN(UNO_NAME_MODEL_LANGUAGE),    WID_MODEL_LANGUAGE,     &::getCppuType((const lang::Locale*)0), 0,  0},
-        { MAP_CHAR_LEN(UNO_NAME_MODEL_TABSTOP),     WID_MODEL_TABSTOP,      &::getCppuType((const sal_Int32*)0),    0,  0},
-        { MAP_CHAR_LEN("VisibleArea"),              WID_MODEL_VISAREA,      &::getCppuType((const awt::Rectangle*)0),0, 0},
-        { MAP_CHAR_LEN("MapUnit"),                  WID_MODEL_MAPUNIT,      &::getCppuType((const sal_Int16*)0),    beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_CharLocale),       WID_MODEL_LANGUAGE,     &::getCppuType((const lang::Locale*)0),     0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_TabStop),          WID_MODEL_TABSTOP,      &::getCppuType((const sal_Int32*)0),        0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_VisibleArea),      WID_MODEL_VISAREA,      &::getCppuType((const awt::Rectangle*)0),   0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_MapUnit),          WID_MODEL_MAPUNIT,      &::getCppuType((const sal_Int16*)0),        beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_AutomContFocus ),  WID_MODEL_CONTFOCUS,    &::getBooleanCppuType(),                    0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_ApplyFrmDsgnMode), WID_MODEL_DSGNMODE,     &::getBooleanCppuType(),                    0,  0},
         { 0,0,0,0,0 }
     };
 
@@ -778,7 +782,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 {
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS( mbImpressDoc ? 23 : 12 );
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? 24 : 13 );
 
     sal_uInt16 i = 0;
 
@@ -790,6 +794,7 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapRectangleObject));
     aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_Service_ImageMapCircleObject));
@@ -892,6 +897,22 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             }
 #endif
             break;
+        case WID_MODEL_CONTFOCUS:
+            {
+                sal_Bool bFocus;
+                if( !(aValue >>= bFocus ) )
+                    throw lang::IllegalArgumentException();
+                pDoc->SetAutoControlFocus( bFocus );
+            }
+            break;
+        case WID_MODEL_DSGNMODE:
+            {
+                sal_Bool bMode;
+                if( !(aValue >>= bMode ) )
+                    throw lang::IllegalArgumentException();
+                pDoc->SetOpenInDesignMode( bMode );
+            }
+            break;
         case WID_MODEL_MAPUNIT:
         default:
             throw beans::UnknownPropertyException();
@@ -914,47 +935,53 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
     switch( pMap ? pMap->nWID : -1 )
     {
-    case WID_MODEL_LANGUAGE:
-    {
-        LanguageType eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
-        lang::Locale aLocale;
-        SvxLanguageToLocale( aLocale, eLang );
-        aAny <<= aLocale;
-        break;
-    }
-    case WID_MODEL_TABSTOP:
-        aAny <<= (sal_Int32)pDoc->GetDefaultTabulator();
-        break;
-    case WID_MODEL_VISAREA:
+        case WID_MODEL_LANGUAGE:
         {
-#ifndef SVX_LIGHT
-            SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
-            if( !pEmbeddedObj )
-                break;
-
-            const Rectangle& aRect = pEmbeddedObj->GetVisArea();
-            awt::Rectangle aVisArea( aRect.nLeft, aRect.nTop, aRect.getWidth(), aRect.getHeight() );
-
-            aAny <<= aVisArea;
-#endif
+            LanguageType eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
+            lang::Locale aLocale;
+            SvxLanguageToLocale( aLocale, eLang );
+            aAny <<= aLocale;
+            break;
         }
-        break;
-    case WID_MODEL_MAPUNIT:
-        {
+        case WID_MODEL_TABSTOP:
+            aAny <<= (sal_Int32)pDoc->GetDefaultTabulator();
+            break;
+        case WID_MODEL_VISAREA:
+            {
 #ifndef SVX_LIGHT
-            SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
-            if( !pEmbeddedObj )
-                break;
+                SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+                if( !pEmbeddedObj )
+                    break;
 
-            sal_Int16 nMeasureUnit = 0;
-            SvxMapUnitToMeasureUnit( pEmbeddedObj->GetMapUnit(), nMeasureUnit );
-            aAny <<= (sal_Int16)nMeasureUnit;
+                const Rectangle& aRect = pEmbeddedObj->GetVisArea();
+                awt::Rectangle aVisArea( aRect.nLeft, aRect.nTop, aRect.getWidth(), aRect.getHeight() );
+
+                aAny <<= aVisArea;
 #endif
-        }
-        break;
-    default:
-        throw beans::UnknownPropertyException();
-        break;
+            }
+            break;
+        case WID_MODEL_MAPUNIT:
+            {
+#ifndef SVX_LIGHT
+                SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+                if( !pEmbeddedObj )
+                    break;
+
+                sal_Int16 nMeasureUnit = 0;
+                SvxMapUnitToMeasureUnit( pEmbeddedObj->GetMapUnit(), nMeasureUnit );
+                aAny <<= (sal_Int16)nMeasureUnit;
+#endif
+            }
+            break;
+        case WID_MODEL_CONTFOCUS:
+            aAny <<= (sal_Bool)pDoc->GetAutoControlFocus();
+            break;
+        case WID_MODEL_DSGNMODE:
+            aAny <<= pDoc->GetOpenInDesignMode();
+            break;
+        default:
+            throw beans::UnknownPropertyException();
+            break;
     }
 
     return aAny;
