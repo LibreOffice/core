@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctr_socket.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 11:09:54 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,14 @@ namespace stoc_connector {
         _error(sal_False)
     {
         // make it unique
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
         m_sDescription += OUString::valueOf( (sal_Int64) &m_socket , 10 );
+    }
+
+    SocketConnection::~SocketConnection()
+    {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     void SocketConnection::completeConnectionString()

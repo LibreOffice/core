@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextOutputStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:50:46 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,16 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
+#include <rtl/unload.h>
 
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextOutputStream"
@@ -87,13 +90,13 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::registry;
 
 
-namespace io_TextStream
+namespace io_TextOutputStream
 {
-
+    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 //===========================================================================
 // Implementation XTextOutputStream
 
-typedef WeakImplHelper2< XTextOutputStream, XActiveDataSource > TextOutputStreamHelper;
+typedef WeakImplHelper3< XTextOutputStream, XActiveDataSource, XServiceInfo > TextOutputStreamHelper;
 class OCommandEnvironment;
 
 class OTextOutputStream : public TextOutputStreamHelper
@@ -131,6 +134,11 @@ public:
         throw(RuntimeException);
     virtual Reference< XOutputStream > SAL_CALL getOutputStream(  )
         throw(RuntimeException);
+
+    // Methods XServiceInfo
+    virtual OUString              SAL_CALL getImplementationName() SAL_THROW( () );
+    virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) SAL_THROW( () );
+    virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) SAL_THROW( () );
 };
 
 OTextOutputStream::OTextOutputStream()
@@ -265,9 +273,14 @@ Reference< XOutputStream > OTextOutputStream::getOutputStream()
 }
 
 
-Reference< XInterface > SAL_CALL TextOutputStream_CreateInstance( const Reference< XMultiServiceFactory > &)
+Reference< XInterface > SAL_CALL TextOutputStream_CreateInstance( const Reference< XComponentContext > &)
 {
     return Reference < XInterface >( ( OWeakObject * ) new OTextOutputStream() );
+}
+
+OUString TextOutputStream_getImplementationName() SAL_THROW(  () )
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
 }
 
 
@@ -280,22 +293,57 @@ Sequence< OUString > TextOutputStream_getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+            seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
             pNames = &seqNames;
         }
     }
     return *pNames;
 }
 
+OUString OTextOutputStream::getImplementationName() SAL_THROW( () )
+{
+    return TextOutputStream_getImplementationName();
+}
 
+sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName) SAL_THROW( () )
+{
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
+
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+        if( pArray[i] == ServiceName )
+            return sal_True;
+
+    return sal_False;
+}
+
+Sequence< OUString > OTextOutputStream::getSupportedServiceNames(void) SAL_THROW( () )
+{
+    return TextOutputStream_getSupportedServiceNames();
 }
 
 
-//==================================================================================================
-// Component exports
+}
+
+using namespace io_TextOutputStream;
+
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        TextOutputStream_CreateInstance, TextOutputStream_getImplementationName ,
+        TextOutputStream_getSupportedServiceNames, createSingleComponentFactory ,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -306,50 +354,13 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL = io_TextStream::TextOutputStream_getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            io_TextStream::TextOutputStream_CreateInstance,
-            io_TextStream::TextOutputStream_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
 

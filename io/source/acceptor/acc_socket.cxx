@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-11 15:43:48 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ namespace io_acceptor {
     {
     public:
         SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort, const OUString & sConnectionDescription );
+        ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
@@ -203,9 +204,15 @@ namespace io_acceptor {
         _closed(sal_False),
         _error(sal_False)
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
         m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
         m_sDescription += OUString::valueOf( (sal_Int64) &m_socket , 10 );
+    }
+
+    SocketConnection::~SocketConnection()
+    {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     void SocketConnection::completeConnectionString()

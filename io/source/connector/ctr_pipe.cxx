@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctr_pipe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:20:57 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,15 @@ namespace stoc_connector {
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription )
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
         m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
         m_sDescription += OUString::valueOf( (sal_Int64) &m_pipe , 10 );
+    }
+
+    PipeConnection::~PipeConnection()
+    {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: omark.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ private:
 
 OMarkableOutputStream::OMarkableOutputStream( )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_pBuffer = new MemRingBuffer;
     m_nCurrentPos = 0;
     m_nCurrentMark = 0;
@@ -197,6 +198,7 @@ OMarkableOutputStream::~OMarkableOutputStream()
 {
     m_nCurrentMark;
     delete m_pBuffer;
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
@@ -460,10 +462,7 @@ sal_Bool OMarkableOutputStream::supportsService(const OUString& ServiceName) thr
 // XServiceInfo
 Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames(void) throw ()
 {
-
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = OMarkableOutputStream_getServiceName();
-    return seq;
+    return OMarkableOutputStream_getSupportedServiceNames();
 }
 
 
@@ -474,16 +473,11 @@ Sequence< OUString > OMarkableOutputStream::getSupportedServiceNames(void) throw
 * external binding
 *
 *------------------------*/
-Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance( const Reference < XMultiServiceFactory > & ) throw(Exception)
+Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance( const Reference < XComponentContext > & ) throw(Exception)
 {
     OMarkableOutputStream *p = new OMarkableOutputStream( );
 
     return Reference < XInterface > ( ( OWeakObject * ) p );
-}
-
-OUString OMarkableOutputStream_getServiceName()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.MarkableOutputStream" ) );
 }
 
 OUString    OMarkableOutputStream_getImplementationName()
@@ -494,7 +488,7 @@ OUString    OMarkableOutputStream_getImplementationName()
 Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OMarkableOutputStream_getServiceName();
+    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.MarkableOutputStream" ) );
 
     return aRet;
 }
@@ -595,6 +589,7 @@ private:
 
 OMarkableInputStream::OMarkableInputStream()
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_nCurrentPos = 0;
     m_nCurrentMark = 0;
     m_pBuffer = new MemRingBuffer;
@@ -606,6 +601,7 @@ OMarkableInputStream::~OMarkableInputStream()
     if( m_pBuffer ) {
         delete m_pBuffer;
     }
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
@@ -975,10 +971,7 @@ sal_Bool OMarkableInputStream::supportsService(const OUString& ServiceName) thro
 // XServiceInfo
 Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw ()
 {
-
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = OMarkableInputStream_getServiceName();
-    return seq;
+    return OMarkableInputStream_getSupportedServiceNames();
 }
 
 
@@ -988,27 +981,21 @@ Sequence< OUString > OMarkableInputStream::getSupportedServiceNames(void) throw 
 *
 *------------------------*/
 Reference < XInterface > SAL_CALL OMarkableInputStream_CreateInstance(
-    const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
+    const Reference < XComponentContext > & rSMgr ) throw(Exception)
 {
     OMarkableInputStream *p = new OMarkableInputStream( );
     return Reference< XInterface > ( (OWeakObject * ) p );
 }
 
-OUString OMarkableInputStream_getServiceName()
-{
-    return OUString::createFromAscii( "com.sun.star.io.MarkableInputStream" );
-}
-
 OUString    OMarkableInputStream_getImplementationName()
 {
-    return OUString::createFromAscii( "com.sun.star.comp.io.stm.MarkableInputStream" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.MarkableInputStream" ));
 }
 
 Sequence<OUString> OMarkableInputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OMarkableInputStream_getServiceName();
-
+    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.MarkableInputStream" ));
     return aRet;
 }
 

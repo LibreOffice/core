@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2001-05-15 08:37:58 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:32:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ UNOTYPES=	com.sun.star.io.XTextInputStream \
         com.sun.star.lang.XSingleServiceFactory \
         com.sun.star.lang.XMultiServiceFactory \
         com.sun.star.lang.XTypeProvider \
+        com.sun.star.lang.XServiceInfo \
         com.sun.star.registry.XRegistryKey \
         com.sun.star.uno.XAggregation \
         com.sun.star.uno.XWeak	\
@@ -93,6 +94,7 @@ SLOFILES= \
     $(SLO)$/TextInputStream.obj
 
 SHL1TARGET= $(TARGET)
+SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS= \
         $(SALLIB)	\

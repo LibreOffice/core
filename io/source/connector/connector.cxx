@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 09:47:38 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,10 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 
@@ -83,25 +85,36 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector
 {
-    typedef WeakImplHelper1< XConnector > MyImplHelper;
+    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
-    class OConnector : public MyImplHelper
+    class OConnector : public WeakImplHelper2< XConnector, XServiceInfo >
     {
-        Reference< XMultiServiceFactory > _xMultiServiceFactory;
-
+        Reference< XMultiComponentFactory > _xSMgr;
+        Reference< XComponentContext > _xCtx;
     public:
-        OConnector(Reference< XMultiServiceFactory > xMultiServiceFactory);
-
+        OConnector(const Reference< XComponentContext > &xCtx);
+        ~OConnector();
         // Methods
         virtual Reference< XConnection > SAL_CALL OConnector::connect(
             const OUString& sConnectionDescription )
             throw( NoConnectException, ConnectionSetupException, RuntimeException);
 
+    public: // XServiceInfo
+        virtual OUString              SAL_CALL getImplementationName() SAL_THROW( () );
+        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) SAL_THROW( () );
+        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) SAL_THROW( () );
     };
 
-    OConnector::OConnector(Reference< XMultiServiceFactory > xMultiServiceFactory)
-        : _xMultiServiceFactory(xMultiServiceFactory)
+    OConnector::OConnector(const Reference< XComponentContext > &xCtx)
+        : _xCtx( xCtx )
+        , _xSMgr( xCtx->getServiceManager() )
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
+
+    OConnector::~OConnector()
+    {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     class TokenContainer
@@ -293,7 +306,8 @@ namespace stoc_connector
             OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
             OSL_TRACE("connector: trying to get service %s\n", tmp.getStr());
 #endif
-            Reference<XConnector> xConnector(_xMultiServiceFactory->createInstance(delegatee), UNO_QUERY);
+            Reference<XConnector> xConnector(
+                _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY );
 
             if(!xConnector.is())
             {
@@ -307,14 +321,7 @@ namespace stoc_connector
 
             r = xConnector->connect(sConnectionDescription.copy(index + 1).trim());
         }
-
         return r;
-    }
-
-
-    Reference< XInterface > SAL_CALL connector_CreateInstance( const Reference< XMultiServiceFactory > & xMultiServiceFactory)
-    {
-        return Reference < XInterface >( ( OWeakObject * ) new OConnector(xMultiServiceFactory) );
     }
 
     Sequence< OUString > connector_getSupportedServiceNames()
@@ -333,13 +340,60 @@ namespace stoc_connector
         return *pNames;
     }
 
-}
+    OUString connector_getImplementationName()
+    {
+        return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+    }
 
+    OUString OConnector::getImplementationName() SAL_THROW ( () )
+    {
+        return connector_getImplementationName();
+    }
+
+    sal_Bool OConnector::supportsService(const OUString& ServiceName) SAL_THROW( () )
+    {
+        Sequence< OUString > aSNL = getSupportedServiceNames();
+        const OUString * pArray = aSNL.getConstArray();
+
+        for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+            if( pArray[i] == ServiceName )
+                return sal_True;
+
+        return sal_False;
+    }
+
+    Sequence< OUString > OConnector::getSupportedServiceNames(void) SAL_THROW( () )
+    {
+        return connector_getSupportedServiceNames();
+    }
+
+    Reference< XInterface > SAL_CALL connector_CreateInstance( const Reference< XComponentContext > & xCtx)
+    {
+        return Reference < XInterface >( ( OWeakObject * ) new OConnector(xCtx) );
+    }
+
+
+}
 using namespace stoc_connector;
 
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        connector_CreateInstance, connector_getImplementationName ,
+        connector_getSupportedServiceNames, createSingleComponentFactory ,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -350,50 +404,15 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL = connector_getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            connector_CreateInstance, connector_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
+
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 09:48:01 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,13 @@ class ODataInputStream :
                            >
 {
 public:
-    ODataInputStream( const Reference< XMultiServiceFactory > &r  ) :
-        m_bValidStream( sal_False ),
-        m_rFactory( r )
-        {}
+    ODataInputStream( )
+        : m_bValidStream( sal_False )
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
 
+    ~ODataInputStream();
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                                                             throw ( NotConnectedException,
@@ -160,14 +162,17 @@ public: // XServiceInfo
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
 protected:
-    Reference < XMultiServiceFactory > m_rFactory;
 
     Reference < XConnectable >  m_pred;
     Reference < XConnectable >  m_succ;
-
     Reference < XInputStream >  m_input;
     sal_Bool m_bValidStream;
 };
+
+ODataInputStream::~ODataInputStream()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
 // XInputStream
 sal_Int32 ODataInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -521,13 +526,8 @@ sal_Bool ODataInputStream::supportsService(const OUString& ServiceName) throw ()
 // XServiceInfo
 Sequence< OUString > ODataInputStream::getSupportedServiceNames(void) throw ()
 {
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = ODataInputStream_getServiceName();
-    return seq;
+    return ODataInputStream_getSupportedServiceNames();
 }
-
-
-
 
 /***
 *
@@ -536,29 +536,21 @@ Sequence< OUString > ODataInputStream::getSupportedServiceNames(void) throw ()
 *
 ****/
 
-Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw( Exception)
+Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference < XComponentContext > & rSMgr ) throw( Exception)
 {
-    ODataInputStream *p = new ODataInputStream( rSMgr );
+    ODataInputStream *p = new ODataInputStream;
     return Reference< XInterface > ( (OWeakObject * ) p );
-}
-
-
-OUString ODataInputStream_getServiceName()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.DataInputStream" ) );
 }
 
 OUString ODataInputStream_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.io.stm.DataInputStream" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.DataInputStream" ) );
 }
 
 Sequence<OUString> ODataInputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = ODataInputStream_getServiceName();
-
+    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.DataInputStream" ) );
     return aRet;
 }
 
@@ -573,10 +565,12 @@ class ODataOutputStream :
               XServiceInfo >
 {
 public:
-    ODataOutputStream( const Reference< XMultiServiceFactory >  &r) :
-        m_rFactory(r),
-        m_bValidStream( sal_False )
-        {}
+    ODataOutputStream()
+        : m_bValidStream( sal_False )
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    ~ODataOutputStream();
 
 public: // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
@@ -624,14 +618,16 @@ public: // XServiceInfo
     sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw ();
 
 protected:
-    Reference < XMultiServiceFactory >  m_rFactory;
     Reference < XConnectable >  m_succ;
     Reference < XConnectable >  m_pred;
-
-Reference<  XOutputStream > m_output;
+    Reference<  XOutputStream > m_output;
     sal_Bool m_bValidStream;
 };
 
+ODataOutputStream::~ODataOutputStream()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
 
 // XOutputStream
@@ -940,37 +936,29 @@ sal_Bool ODataOutputStream::supportsService(const OUString& ServiceName) throw (
 // XServiceInfo
 Sequence< OUString > ODataOutputStream::getSupportedServiceNames(void) throw ()
 {
-
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = ODataOutputStream_getServiceName();
-    return seq;
+    return ODataOutputStream_getSupportedServiceNames();
 }
 
 
 
 
-Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
+Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference < XComponentContext > & rSMgr ) throw(Exception)
 {
-    ODataOutputStream *p = new ODataOutputStream( rSMgr );
+    ODataOutputStream *p = new ODataOutputStream;
     Reference< XInterface > xService = *p;
     return xService;
 }
 
-OUString ODataOutputStream_getServiceName()
-{
-    return OUString::createFromAscii( "com.sun.star.io.DataOutputStream" );
-}
 
 OUString ODataOutputStream_getImplementationName()
 {
-    return OUString::createFromAscii( "com.sun.star.comp.io.stm.DataOutputStream" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.DataOutputStream" ) );
 }
 
 Sequence<OUString> ODataOutputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = ODataOutputStream_getServiceName();
-
+    aRet.getArray()[0] =  OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.DataOutputStream" ) );
     return aRet;
 }
 
@@ -1001,38 +989,6 @@ typedef hash_map
     equalObjectContainer_Impl
 > ObjectContainer_Impl;
 
-//------------------------------
-//------------------------------
-//------------------------------
-//  struct equalXPersistObjectRef_Impl
-//  {
-//      sal_Int32 operator()(const Reference< XPersistObject > & s1, c
-//                           const Reference< XPersistObject > & s2) const
-//      {
-//          return s1 == s2;
-//      }
-//  };
-
-//  //-----------------------------------------------------------------------------
-//  struct hashXPersistObjectRef_Impl
-//  {
-//      size_t operator()(const Reference< XPersistObject > & xRef) const
-//      {
-//          return (size_t)(XInterface *)xRef;
-//      }
-//  };
-
-
-//  typedef NAMESPACE_STD(hash_map)
-//  <
-//      XPersistObjectRef,
-//      sal_Int32,
-//      hashXPersistObjectRef_Impl,
-//      equalXPersistObjectRef_Impl
-//  > XPersistObjectRefHashMap_Impl;
-
-/**
- */
 /*---------------------------------------------
 *
 *
@@ -1045,8 +1001,14 @@ class OObjectOutputStream :
             public XMarkableStream
 {
 public:
-    OObjectOutputStream( const Reference < XMultiServiceFactory > &r ) :
-                        ODataOutputStream(r) , m_nMaxId(0) , m_bValidMarkable(sal_False) {}
+    OObjectOutputStream()
+        : m_nMaxId(0) ,
+          m_bValidMarkable(sal_False)
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+
+    ~OObjectOutputStream();
 
 public:
     Any     SAL_CALL queryInterface( const Type &type );
@@ -1125,6 +1087,10 @@ private:
     sal_Bool                            m_bValidMarkable;
 };
 
+OObjectOutputStream::~OObjectOutputStream()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
 Any OObjectOutputStream::queryInterface( const Type &aType )
 {
@@ -1285,16 +1251,11 @@ sal_Int32 OObjectOutputStream::offsetToMark(sal_Int32 nMark)
 
 
 
-Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr )
+Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference < XComponentContext > & rCtx )
     throw(Exception)
 {
-    OObjectOutputStream *p = new OObjectOutputStream( rSMgr );
+    OObjectOutputStream *p = new OObjectOutputStream;
     return  Reference< XInterface > ( SAL_STATIC_CAST( OWeakObject * , p ) );
-}
-
-OUString OObjectOutputStream_getServiceName()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.ObjectOutputStream" ) );
 }
 
 OUString OObjectOutputStream_getImplementationName()
@@ -1305,7 +1266,7 @@ OUString OObjectOutputStream_getImplementationName()
 Sequence<OUString> OObjectOutputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OObjectOutputStream_getServiceName();
+    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.ObjectOutputStream" ) );
     return aRet;
 }
 
@@ -1365,9 +1326,7 @@ sal_Bool OObjectOutputStream::supportsService(const OUString& ServiceName) throw
 // XServiceInfo
 Sequence< OUString > OObjectOutputStream::getSupportedServiceNames(void) throw ()
 {
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = OObjectOutputStream_getServiceName();
-    return seq;
+    return OObjectOutputStream_getSupportedServiceNames();
 }
 
 
@@ -1380,10 +1339,15 @@ class OObjectInputStream :
     public XMarkableStream
 {
 public:
-    OObjectInputStream( const Reference < XMultiServiceFactory > &r) :
-        ODataInputStream(r),
-        m_bValidMarkable(sal_False)
-        {}
+    OObjectInputStream( const Reference < XComponentContext > &r)
+        : m_bValidMarkable(sal_False)
+        , m_rCxt( r )
+        , m_rSMgr( r->getServiceManager() )
+        {
+            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+        }
+    ~OObjectInputStream();
+
 public:
     Any     SAL_CALL queryInterface( const Type &type );
     void    SAL_CALL acquire()                       { ODataInputStream::acquire(); }
@@ -1464,12 +1428,18 @@ public: // XServiceInfo
 private:
     void connectToMarkable();
 private:
+    Reference < XMultiComponentFactory > m_rSMgr;
+    Reference < XComponentContext >     m_rCxt;
     sal_Bool                m_bValidMarkable;
     Reference < XMarkableStream > m_rMarkable;
     vector < Reference<  XPersistObject > > m_aPersistVector;
 
 };
 
+OObjectInputStream::~OObjectInputStream()
+{
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
 Any OObjectInputStream::queryInterface( const Type &aType )
 {
@@ -1525,7 +1495,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
         if( aName.getLength() )
         {
             // load the object
-            Reference< XInterface > x = m_rFactory->createInstance( aName );
+            Reference< XInterface > x = m_rSMgr->createInstanceWithContext( aName, m_rCxt );
             xLoadedObj = Reference< XPersistObject >( x, UNO_QUERY );
             if( xLoadedObj.is() )
             {
@@ -1698,36 +1668,27 @@ sal_Bool OObjectInputStream::supportsService(const OUString& ServiceName) throw 
 // XServiceInfo
 Sequence< OUString > OObjectInputStream::getSupportedServiceNames(void) throw ()
 {
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = OObjectInputStream_getServiceName();
-    return seq;
+    return OObjectInputStream_getSupportedServiceNames();
 }
 
 
 
 
-Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
+Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference < XComponentContext > & rCtx ) throw(Exception)
 {
-    OObjectInputStream *p = new OObjectInputStream( rSMgr );
-    return Reference< XInterface> (
-        SAL_STATIC_CAST( OWeakObject *, p ) );
-}
-
-OUString OObjectInputStream_getServiceName()
-{
-    return OUString::createFromAscii( "com.sun.star.io.ObjectInputStream" );
+    OObjectInputStream *p = new OObjectInputStream( rCtx );
+    return Reference< XInterface> ( SAL_STATIC_CAST( OWeakObject *, p ) );
 }
 
 OUString OObjectInputStream_getImplementationName()
 {
-    return OUString::createFromAscii( "com.sun.star.comp.io.stm.ObjectInputStream" );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.ObjectInputStream" ) );
 }
 
 Sequence<OUString> OObjectInputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OObjectInputStream_getServiceName();
-
+    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.ObjectInputStream" ) );
     return aRet;
 }
 

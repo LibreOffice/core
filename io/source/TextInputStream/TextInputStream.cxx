@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-27 15:10:58 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,20 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
+#include <rtl/unload.h>
+
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextInputStream"
@@ -88,13 +92,14 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::registry;
 
 
-namespace io_TextStream
+namespace io_TextInputStream
 {
+    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 //===========================================================================
 // Implementation XTextInputStream
 
-typedef WeakImplHelper2< XTextInputStream, XActiveDataSink > TextInputStreamHelper;
+typedef WeakImplHelper3< XTextInputStream, XActiveDataSink, XServiceInfo > TextInputStreamHelper;
 class OCommandEnvironment;
 
 #define INITIAL_UNICODE_BUFFER_CAPACITY     0x100
@@ -153,12 +158,18 @@ public:
         throw(RuntimeException);
     virtual Reference< XInputStream > SAL_CALL getInputStream()
         throw(RuntimeException);
+
+    // Methods XServiceInfo
+    virtual OUString              SAL_CALL getImplementationName() SAL_THROW( () );
+    virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) SAL_THROW( () );
+    virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) SAL_THROW( () );
 };
 
 OTextInputStream::OTextInputStream()
     : mSeqSource( READ_BYTE_COUNT ), mpBuffer( NULL ), mnBufferSize( 0 )
     , mnCharsInBuffer( 0 ), mbReachedEOF( sal_False )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     mbEncodingInitialized = false;
 }
 
@@ -169,6 +180,7 @@ OTextInputStream::~OTextInputStream()
         rtl_destroyUnicodeToTextContext( mConvText2Unicode, mContextText2Unicode );
         rtl_destroyUnicodeToTextConverter( mConvText2Unicode );
     }
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void OTextInputStream::implResizeBuffer( void )
@@ -462,11 +474,15 @@ Reference< XInputStream > OTextInputStream::getInputStream()
 }
 
 
-Reference< XInterface > SAL_CALL TextInputStream_CreateInstance( const Reference< XMultiServiceFactory > &)
+Reference< XInterface > SAL_CALL TextInputStream_CreateInstance( const Reference< XComponentContext > &)
 {
     return Reference < XInterface >( ( OWeakObject * ) new OTextInputStream() );
 }
 
+OUString TextInputStream_getImplementationName()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+}
 
 Sequence< OUString > TextInputStream_getSupportedServiceNames()
 {
@@ -477,22 +493,56 @@ Sequence< OUString > TextInputStream_getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+            seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
             pNames = &seqNames;
         }
     }
     return *pNames;
 }
 
+OUString OTextInputStream::getImplementationName() SAL_THROW( () )
+{
+    return TextInputStream_getImplementationName();
+}
+
+sal_Bool OTextInputStream::supportsService(const OUString& ServiceName) SAL_THROW( () )
+{
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
+
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+        if( pArray[i] == ServiceName )
+            return sal_True;
+
+    return sal_False;
+}
+
+Sequence< OUString > OTextInputStream::getSupportedServiceNames(void) SAL_THROW( () )
+{
+    return TextInputStream_getSupportedServiceNames();
+}
 
 }
 
+using namespace io_TextInputStream;
 
-//==================================================================================================
-// Component exports
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        TextInputStream_CreateInstance, TextInputStream_getImplementationName ,
+        TextInputStream_getSupportedServiceNames, createSingleComponentFactory ,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -503,50 +553,13 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL = io_TextStream::TextInputStream_getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            io_TextStream::TextInputStream_CreateInstance,
-            io_TextStream::TextInputStream_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
 

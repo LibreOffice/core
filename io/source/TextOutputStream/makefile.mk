@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-05-15 08:12:05 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:32:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ UNOTYPES=	com.sun.star.io.XTextOutputStream \
         com.sun.star.lang.XMultiServiceFactory \
         com.sun.star.lang.XTypeProvider \
         com.sun.star.lang.XSingleComponentFactory   \
+        com.sun.star.lang.XServiceInfo \
         com.sun.star.uno.XComponentContext          \
         com.sun.star.registry.XRegistryKey \
         com.sun.star.uno.XAggregation \
@@ -92,6 +93,7 @@ SLOFILES= \
     $(SLO)$/TextOutputStream.obj
 
 SHL1TARGET= $(TARGET)
+SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS= \
         $(SALLIB)	\
@@ -104,7 +106,6 @@ SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 

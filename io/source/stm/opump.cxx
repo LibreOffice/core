@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 15:57:18 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ namespace io_stm {
 Pump::Pump()
     : m_aThread( NULL )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 Pump::~Pump()
@@ -152,6 +153,7 @@ Pump::~Pump()
     // exit gracefully
     osl_joinWithThread( m_aThread );
     osl_destroyThread( m_aThread );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void Pump::fireError( list< Reference< XStreamListener > > &aList , Any & exception )
@@ -475,14 +477,9 @@ Sequence< OUString > Pump::getSupportedServiceNames(void) throw(  )
 }
 
 
-Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception)
+Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception)
 {
     return Reference< XInterface >( *new Pump );
-}
-
-OUString OPumpImpl_getServiceName()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pump" ) );
 }
 
 OUString OPumpImpl_getImplementationName()
@@ -492,7 +489,7 @@ OUString OPumpImpl_getImplementationName()
 
 Sequence<OUString> OPumpImpl_getSupportedServiceNames(void)
 {
-    OUString s = OPumpImpl_getServiceName();
+    OUString s( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pump" ) );
     Sequence< OUString > seq( &s , 1 );
     return seq;
 }

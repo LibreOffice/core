@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:15:46 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES = 	$(SLO)$/opipe.obj\
         $(SLO)$/opump.obj
 
 SHL1TARGET= $(TARGET)
+SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS= \
         $(SALLIB) 	 \
@@ -100,7 +101,6 @@ SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Targets ------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 09:47:21 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,11 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 #include <com/sun/star/connection/XAcceptor.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include "acceptor.hxx"
 
@@ -83,14 +85,13 @@ using namespace ::com::sun::star::connection;
 
 namespace io_acceptor
 {
-    typedef WeakImplHelper1< XAcceptor > MyImplHelper;
+    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
-    class OAcceptor : public MyImplHelper
+    class OAcceptor : public WeakImplHelper2< XAcceptor, XServiceInfo >
     {
     public:
-        OAcceptor(Reference< XMultiServiceFactory > xMultiServiceFactory);
-        ~OAcceptor();
-
+        OAcceptor(const Reference< XComponentContext > & xCtx);
+        virtual ~OAcceptor();
     public:
         // Methods
         virtual Reference< XConnection > SAL_CALL accept( const OUString& sConnectionDescription )
@@ -100,23 +101,33 @@ namespace io_acceptor
                    RuntimeException);
         virtual void SAL_CALL stopAccepting(  ) throw( RuntimeException);
 
+    public: // XServiceInfo
+        virtual OUString              SAL_CALL getImplementationName() SAL_THROW( () );
+        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) SAL_THROW( () );
+        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) SAL_THROW( () );
+
+    private:
         PipeAcceptor *m_pPipe;
         SocketAcceptor *m_pSocket;
         Mutex m_mutex;
         OUString m_sLastDescription;
         sal_Bool m_bInAccept;
 
-        Reference<XMultiServiceFactory> _xMultiServiceFactory;
-        Reference<XAcceptor>            _xAcceptor;
+        Reference< XMultiComponentFactory > _xSMgr;
+        Reference< XComponentContext > _xCtx;
+        Reference<XAcceptor>         _xAcceptor;
     };
 
 
-    OAcceptor::OAcceptor(Reference< XMultiServiceFactory > xMultiServiceFactory)
+    OAcceptor::OAcceptor( const Reference< XComponentContext > & xCtx )
         : m_pPipe( 0 )
-        ,m_pSocket( 0 )
-        ,_xMultiServiceFactory(xMultiServiceFactory)
+        , m_pSocket( 0 )
+        , _xSMgr( xCtx->getServiceManager() )
+        , _xCtx( xCtx )
         , m_bInAccept( sal_False )
-    {}
+    {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
 
     OAcceptor::~OAcceptor()
     {
@@ -128,6 +139,7 @@ namespace io_acceptor
         {
             delete m_pSocket;
         }
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     // helper class
@@ -348,7 +360,8 @@ namespace io_acceptor
                 OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
                 OSL_TRACE("trying to get service %s\n", tmp.getStr());
 #endif
-                _xAcceptor = Reference<XAcceptor>(_xMultiServiceFactory->createInstance(delegatee), UNO_QUERY);
+                _xAcceptor = Reference<XAcceptor>(
+                    _xSMgr->createInstanceWithContext(delegatee, _xCtx), UNO_QUERY);
 
                 if(!_xAcceptor.is())
                 {
@@ -398,10 +411,14 @@ namespace io_acceptor
 
     }
 
-
-    Reference< XInterface > SAL_CALL acceptor_CreateInstance( const Reference< XMultiServiceFactory > & xMultiServiceFactory)
+    OUString acceptor_getImplementationName()
     {
-        return Reference < XInterface >( ( OWeakObject * ) new OAcceptor(xMultiServiceFactory) );
+        return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+    }
+
+    Reference< XInterface > SAL_CALL acceptor_CreateInstance( const Reference< XComponentContext > & xCtx)
+    {
+        return Reference < XInterface >( ( OWeakObject * ) new OAcceptor(xCtx) );
     }
 
     Sequence< OUString > acceptor_getSupportedServiceNames()
@@ -420,14 +437,51 @@ namespace io_acceptor
         return *pNames;
     }
 
+    OUString OAcceptor::getImplementationName() SAL_THROW( () )
+    {
+        return acceptor_getImplementationName();
+    }
+
+    sal_Bool OAcceptor::supportsService(const OUString& ServiceName) SAL_THROW( () )
+    {
+        Sequence< OUString > aSNL = getSupportedServiceNames();
+        const OUString * pArray = aSNL.getConstArray();
+
+        for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+            if( pArray[i] == ServiceName )
+                return sal_True;
+
+        return sal_False;
+    }
+
+    Sequence< OUString > OAcceptor::getSupportedServiceNames(void) SAL_THROW( () )
+    {
+        return acceptor_getSupportedServiceNames();
+    }
+
+
 }
 
 using namespace io_acceptor;
 
-
+static struct ImplementationEntry g_entries[] =
+{
+    {
+        acceptor_CreateInstance, acceptor_getImplementationName ,
+        acceptor_getSupportedServiceNames, createSingleComponentFactory ,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -438,49 +492,13 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL = acceptor_getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            acceptor_CreateInstance, acceptor_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
 

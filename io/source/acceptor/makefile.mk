@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2001-03-15 11:10:54 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES= \
         $(SLO)$/acc_socket.obj
 
 SHL1TARGET= $(TARGET)
+SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS= \
         $(SALLIB)	\
@@ -99,7 +100,6 @@ SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opipe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ private:
 
 OPipeImpl::OPipeImpl()
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_nBytesToSkip  = 0;
 
     m_bOutputStreamClosed   = sal_False;
@@ -187,6 +188,7 @@ OPipeImpl::~OPipeImpl()
 {
     osl_destroyCondition( m_conditionBytesAvail );
     delete m_pFIFO;
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 
@@ -462,9 +464,7 @@ sal_Bool OPipeImpl::supportsService(const OUString& ServiceName) throw(  )
 // XServiceInfo
 Sequence< OUString > OPipeImpl::getSupportedServiceNames(void) throw(  )
 {
-    Sequence<OUString> seq(1);
-    seq.getArray()[0] = OPipeImpl_getServiceName();
-    return seq;
+    return OPipeImpl_getSupportedServiceNames();
 }
 
 
@@ -478,7 +478,7 @@ Sequence< OUString > OPipeImpl::getSupportedServiceNames(void) throw(  )
 
 
 Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
-    const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
+    const Reference < XComponentContext > & rCtx ) throw(Exception)
 {
     OPipeImpl *p = new OPipeImpl;
 
@@ -486,21 +486,15 @@ Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
 }
 
 
-OUString OPipeImpl_getServiceName()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-}
-
 OUString    OPipeImpl_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
 Sequence<OUString> OPipeImpl_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OPipeImpl_getServiceName();
-
+    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
     return aRet;
 }
 }

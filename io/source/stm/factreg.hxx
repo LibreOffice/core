@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factreg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,47 +58,44 @@
  *
  *
  ************************************************************************/
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
 
 namespace io_stm {
 
+extern rtl_StandardModuleCount g_moduleCount;
+
 // OPipeImpl
-Reference< XInterface > SAL_CALL OPipeImpl_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
-OUString OPipeImpl_getServiceName();
+Reference< XInterface > SAL_CALL OPipeImpl_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
 OUString    OPipeImpl_getImplementationName();
 Sequence<OUString> OPipeImpl_getSupportedServiceNames(void);
 
-Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
-OUString ODataInputStream_getServiceName();
+Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
 OUString    ODataInputStream_getImplementationName();
 Sequence<OUString> ODataInputStream_getSupportedServiceNames(void);
 
-Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
-OUString ODataOutputStream_getServiceName();
+Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
 OUString ODataOutputStream_getImplementationName();
 Sequence<OUString> ODataOutputStream_getSupportedServiceNames(void);
 
-Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
-OUString OMarkableOutputStream_getServiceName();
+Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
 OUString OMarkableOutputStream_getImplementationName();
 Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames(void);
 
-Reference< XInterface > SAL_CALL OMarkableInputStream_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
-OUString OMarkableInputStream_getServiceName();
+Reference< XInterface > SAL_CALL OMarkableInputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
 OUString    OMarkableInputStream_getImplementationName() ;
 Sequence<OUString> OMarkableInputStream_getSupportedServiceNames(void);
 
-Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception);
-OUString OObjectOutputStream_getServiceName();
+Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw(Exception);
 OUString OObjectOutputStream_getImplementationName();
 Sequence<OUString> OObjectOutputStream_getSupportedServiceNames(void);
 
-Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw(Exception);
-OUString OObjectInputStream_getServiceName();
+Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw(Exception);
 OUString    OObjectInputStream_getImplementationName() ;
 Sequence<OUString> OObjectInputStream_getSupportedServiceNames(void);
 
-Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw (Exception);
-OUString OPumpImpl_getServiceName();
+Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance( const Reference< XComponentContext > & rSMgr ) throw (Exception);
 OUString OPumpImpl_getImplementationName();
 Sequence<OUString> OPumpImpl_getSupportedServiceNames(void);
 

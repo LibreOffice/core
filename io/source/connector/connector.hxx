@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 11:09:54 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include <rtl/unload.h>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -76,6 +77,8 @@
 
 namespace stoc_connector
 {
+    extern rtl_StandardModuleCount g_moduleCount;
+
     template<class T>
     struct ReferenceHash
     {
@@ -106,6 +109,7 @@ namespace stoc_connector
     {
     public:
         PipeConnection( const ::rtl::OUString & s, const ::rtl::OUString &sConnectionDescription );
+        virtual ~PipeConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
@@ -134,6 +138,7 @@ namespace stoc_connector
     {
     public:
         SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort, const ::rtl::OUString & sConnectionDescription  );
+        virtual ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )

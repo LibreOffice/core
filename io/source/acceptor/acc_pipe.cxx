@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_pipe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 11:10:54 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ namespace io_acceptor
     {
     public:
         PipeConnection( const OUString & s , const OUString &sConnectionDescription);
+        ~PipeConnection();
 
         virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
@@ -109,9 +110,16 @@ namespace io_acceptor
         m_nStatus( 0 ),
         m_sDescription( sConnectionDescription )
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+
         // make it unique
         m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
         m_sDescription += OUString::valueOf( (sal_Int64) &m_pipe , 10 );
+    }
+
+    PipeConnection::~PipeConnection()
+    {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
