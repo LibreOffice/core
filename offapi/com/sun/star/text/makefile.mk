@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: os $ $Date: 2001-02-02 10:49:51 $
+#   last change: $Author: os $ $Date: 2001-02-14 12:53:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ IDLFILES=\
     DocumentStatistic.idl\
     Endnote.idl\
     FilenameDisplayFormat.idl\
+    FontEmphasis.idl\
     Footnote.idl\
     FootnoteNumbering.idl\
     Footnotes.idl\
