@@ -17,7 +17,6 @@
         <type>  com.sun.star.system.XSimpleMailClientSupplier   </type>
         <type>  com.sun.star.system.XSimpleMailMessage      </type>
         <type>  com.sun.star.system.SimpleMailClientFlags   </type>
-        <type>  com.sun.star.lang.XComponentContext         </type>
         <type>  com.sun.star.lang.XEventListener            </type>
         <type>  com.sun.star.lang.XMultiServiceFactory      </type>
         <type>  com.sun.star.lang.XSingleServiceFactory     </type>
