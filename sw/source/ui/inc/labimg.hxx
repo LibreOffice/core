@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 11:55:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,14 @@
 #include <unotools/configitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 // class SwLabItem ----------------------------------------------------------
 
 class SwLabCfgItem;
-class SwLabItem : public SfxPoolItem
+class SW_DLLPUBLIC SwLabItem : public SfxPoolItem
 {
 
 public:
