@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkywd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-12 17:59:15 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_link, "LINK" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_meta, "META" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_nextid, "NEXTID" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_nobr, "NOBR" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_object, "OBJECT" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_of, "OF" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_option, "OPTION" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_param, "PARAM" );
@@ -572,6 +573,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_until, "UNTIL" );
 
 // Attribute mit einem URI als Wert
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_action, "ACTION" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_archive, "ARCHIVE" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_background, "BACKGROUND" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_classid, "CLASSID" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_codebase, "CODEBASE" );

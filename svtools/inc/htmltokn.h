@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltokn.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:51 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,8 @@ enum HTML_TOKEN_IDS
     HTML_NOSCRIPT_OFF, // Netscape 3.0
     HTML_NOTE_ON, // HTML 3.0
     HTML_NOTE_OFF, // HTML 3.0
+    HTML_OBJECT_ON, // HotJava
+    HTML_OBJECT_OFF, // HotJava
     HTML_ORDERLIST_ON,
     HTML_ORDERLIST_OFF,
     HTML_PARABREAK_ON,
@@ -454,6 +456,7 @@ HTML_OPTION_SGMLID_END,
 // Attribute mit einem URI als Wert
 HTML_OPTION_URI_START           = HTML_OPTION_SGMLID_END,
     HTML_O_ACTION               = HTML_OPTION_URI_START,
+    HTML_O_ARCHIVE,
     HTML_O_BACKGROUND,
     HTML_O_CLASSID,
     HTML_O_CODEBASE, // HotJava
@@ -602,11 +605,14 @@ HTML_OPTION_END
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/inc/htmltokn.h,v 1.1.1.1 2000-09-18 16:58:51 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/inc/htmltokn.h,v 1.2 2002-08-01 13:24:45 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:58:51  hr
+      initial import
+
       Revision 1.44  2000/09/18 14:13:11  willem.vandorp
       OpenOffice header added.
 

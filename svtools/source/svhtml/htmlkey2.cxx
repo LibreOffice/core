@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkey2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-09 15:53:26 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_noframe, "NOFRAME" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_noframes, "NOFRAMES" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_noscript, "NOSCRIPT" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_note, "NOTE" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_object, "OBJECT" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_orderlist, "OL" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_parabreak, "P" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_person, "PERSON" );
@@ -559,6 +560,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_until, "UNTIL" );
 
 // Attribute mit einem URI als Wert
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_action, "ACTION" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_archive, "ARCHIVE" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_background, "BACKGROUND" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_classid, "CLASSID" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_O_codebase, "CODEBASE" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkywd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-09 15:53:26 $
+ *  last change: $Author: mib $ $Date: 2002-08-01 13:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLTokenTab[] = {
     {{sHTML_noframes},      HTML_NOFRAMES_ON},  // Netscape 2.0
     {{sHTML_noscript},      HTML_NOSCRIPT_ON},  // Netscape 3.0
     {{sHTML_note},          HTML_NOTE_ON},  // HTML 3.0
+    {{sHTML_object},       HTML_OBJECT_ON},
     {{sHTML_orderlist},    HTML_ORDERLIST_ON},
     {{sHTML_parabreak},    HTML_PARABREAK_ON},
     {{sHTML_person},        HTML_PERSON_ON},    // HTML 3.0
@@ -873,6 +874,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
 
 // Attribute mit einem URI als Wert
     {{sHTML_O_action},      HTML_O_ACTION},
+    {{sHTML_O_archive},     HTML_O_ARCHIVE},
     {{sHTML_O_background},  HTML_O_BACKGROUND},
     {{sHTML_O_classid}, HTML_O_CLASSID},
     {{sHTML_O_codebase},    HTML_O_CODEBASE}, // HotJava
