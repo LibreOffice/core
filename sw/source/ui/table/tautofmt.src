@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-19 12:06:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ norwegian ] = "For~mats" ;
         Text [ italian ] = "Formattazione" ;
         Text [ portuguese_brazilian ] = "Formatos" ;
-        Text [ portuguese ] = "Formatar" ;
+        Text [ portuguese ] = "Formato" ;
         Text [ finnish ] = "Mu~odot" ;
         Text [ danish ] = "Formatering" ;
         Text [ french ] = "Formatage" ;
