@@ -3950,7 +3950,7 @@ SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem InsertColumnSection FN_INSERT_COLUMN_SECTION
+SfxStringItem InsertSection FN_INSERT_REGION
 (SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3)
 [
     /* flags: */
@@ -4820,31 +4820,6 @@ SfxVoidItem InsertReferenceField FN_INSERT_REF_FIELD
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem InsertSection FN_INSERT_REGION
-(SfxUInt16Item Columns SID_ATTR_COLUMNS,SfxStringItem RegionName FN_PARAM_REGION_NAME,SfxStringItem RegionCondition FN_PARAM_REGION_CONDITION,SfxBoolItem RegionHidden FN_PARAM_REGION_HIDDEN,SfxBoolItem RegionProtect FN_PARAM_REGION_PROTECT,SfxStringItem LinkName FN_PARAM_1,SfxStringItem FilterName FN_PARAM_2,SfxStringItem SubRegion FN_PARAM_3)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
 
     /* config: */
     AccelConfig = TRUE,
