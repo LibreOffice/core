@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:29:43 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,21 +137,23 @@ void MyApp::Main()
     //-------------------------------------------------
     // create the global service-manager
     //-------------------------------------------------
-    Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
-    Reference< XMultiServiceFactory > xFactory(  xCtx->getServiceManager(), UNO_QUERY );
-    if( xFactory.is() )
-        setProcessServiceFactory( xFactory );
-
-    /*
-     * Initialize the Java UNO AccessBridge if accessibility is turned on
-     */
-
-    if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+    Reference< XComponentContext > xCtx;
+    Reference< XMultiServiceFactory > xFactory;
+    try
     {
-        BOOL bQuitApp;
-        if( !InitAccessBridge( true, bQuitApp ) )
-            if( bQuitApp )
-                return;
+        Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
+        xFactory = Reference< XMultiServiceFactory >(  xCtx->getServiceManager(), UNO_QUERY );
+        if( xFactory.is() )
+            setProcessServiceFactory( xFactory );
+    }
+    catch( com::sun::star::uno::Exception& rExc)
+    {
+    }
+
+    if( ! xFactory.is() )
+    {
+        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
     }
 
     /*
@@ -162,10 +164,12 @@ void MyApp::Main()
     aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
     sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFactory, aArgs );
 
-#if OSL_DEBUG_LEVEL > 1
     if ( !bSuccess )
-        fprintf( stderr, "Error creating UCB\n" );
-#endif
+    {
+        fprintf( stderr, "Error creating UCB, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
+    }
+
 
     pPADialog = PADialog::Create( NULL , FALSE );
     Application::SetDisplayName( pPADialog->GetText() );
