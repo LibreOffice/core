@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:49:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 {
     BOOL bCallBase = TRUE;
-    if ( !pViewShell->GetDoc()->GetProtocol().IsInPlaceActive() )
+    if ( !pViewShell->GetDoc()->IsInPlaceActive() )
     {
         switch ( rCEvt.GetCommand() )
         {
@@ -1535,7 +1535,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_ATTR_ZOOM:
         {
-            if ( !GetDoc()->GetProtocol().IsInPlaceActive() )
+            if ( !GetDoc()->IsInPlaceActive() )
             {
                 //CHINA001 SvxZoomDialog *pDlg = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
@@ -1638,7 +1638,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
         case SID_FITINWINDOW:
-            if ( GetDoc()->GetProtocol().IsInPlaceActive() )
+            if ( GetDoc()->IsInPlaceActive() )
                 rSet.DisableItem( nWh );
             break;
 
