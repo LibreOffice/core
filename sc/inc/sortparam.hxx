@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortparam.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:15:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
-
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #define MAXSORT     3
 
@@ -83,7 +85,7 @@
 struct ScSubTotalParam;
 struct ScQueryParam;
 
-struct ScSortParam
+struct SC_DLLPUBLIC ScSortParam
 {
     SCCOL       nCol1;
     SCROW       nRow1;
