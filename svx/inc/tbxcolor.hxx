@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcolor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:15:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,25 +71,31 @@ namespace svx
 //........................................................................
 
     //====================================================================
-    //= ColorToolboxAccess
+    //= ToolboxAccess
     //====================================================================
-    class ColorToolboxAccess
+    class ToolboxAccess
     {
     private:
+        bool                                                    m_bDocking;
+        ::rtl::OUString                                         m_sToolboxResName;
         ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::frame::XLayoutManager >   m_xLayouter;
 
     public:
-        ColorToolboxAccess();
+        ToolboxAccess( const ::rtl::OUString& rToolboxName );
 
     public:
-        /** toggles the color toolbox
+        /** toggles the toolbox
         */
-        void    toggleToolbox() const;
+        void        toggleToolbox() const;
 
-        /** determines whether the color toolbox is currently visible
+        /** determines whether the toolbox is currently visible
         */
-        bool    isToolboxVisible() const;
+        bool        isToolboxVisible() const;
+
+        /** forces that the toolbox is docked
+        */
+        inline void forceDocking() { m_bDocking = true; }
     };
 
 //........................................................................
