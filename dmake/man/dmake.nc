@@ -61,7 +61,7 @@ OPTIONS
 
 
 
-Version 4.10                          UW                                     1
+Version 4.3                           UW                                     1
 
 
 
@@ -127,7 +127,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                     2
+Version 4.3                           UW                                     2
 
 
 
@@ -193,7 +193,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                     3
+Version 4.3                           UW                                     3
 
 
 
@@ -260,7 +260,7 @@ INDEX
 
 
 
-Version 4.10                          UW                                     4
+Version 4.3                           UW                                     4
 
 
 
@@ -327,7 +327,7 @@ STARTUP
 
 
 
-Version 4.10                          UW                                     5
+Version 4.3                           UW                                     5
 
 
 
@@ -394,7 +394,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                     6
+Version 4.3                           UW                                     6
 
 
 
@@ -461,7 +461,7 @@ SYNTAX
 
 
 
-Version 4.10                          UW                                     7
+Version 4.3                           UW                                     7
 
 
 
@@ -528,7 +528,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                     8
+Version 4.3                           UW                                     8
 
 
 
@@ -595,7 +595,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                     9
+Version 4.3                           UW                                     9
 
 
 
@@ -662,7 +662,7 @@ ATTRIBUTES
 
 
 
-Version 4.10                          UW                                    10
+Version 4.3                           UW                                    10
 
 
 
@@ -729,7 +729,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    11
+Version 4.3                           UW                                    11
 
 
 
@@ -796,7 +796,7 @@ MACROS
 
 
 
-Version 4.10                          UW                                    12
+Version 4.3                           UW                                    12
 
 
 
@@ -863,7 +863,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    13
+Version 4.3                           UW                                    13
 
 
 
@@ -935,7 +935,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    14
+Version 4.3                           UW                                    14
 
 
 
@@ -1007,7 +1007,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    15
+Version 4.3                           UW                                    15
 
 
 
@@ -1079,7 +1079,7 @@ RULES AND TARGETS
 
 
 
-Version 4.10                          UW                                    16
+Version 4.3                           UW                                    16
 
 
 
@@ -1151,7 +1151,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    17
+Version 4.3                           UW                                    17
 
 
 
@@ -1223,7 +1223,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    18
+Version 4.3                           UW                                    18
 
 
 
@@ -1295,7 +1295,7 @@ RECIPES
 
 
 
-Version 4.10                          UW                                    19
+Version 4.3                           UW                                    19
 
 
 
@@ -1367,7 +1367,7 @@ TEXT DIVERSIONS
 
 
 
-Version 4.10                          UW                                    20
+Version 4.3                           UW                                    20
 
 
 
@@ -1440,7 +1440,7 @@ SPECIAL TARGETS
 
 
 
-Version 4.10                          UW                                    21
+Version 4.3                           UW                                    21
 
 
 
@@ -1513,7 +1513,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    22
+Version 4.3                           UW                                    22
 
 
 
@@ -1587,7 +1587,7 @@ CONTROL MACROS
 
 
 
-Version 4.10                          UW                                    23
+Version 4.3                           UW                                    23
 
 
 
@@ -1662,7 +1662,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    24
+Version 4.3                           UW                                    24
 
 
 
@@ -1737,7 +1737,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    25
+Version 4.3                           UW                                    25
 
 
 
@@ -1812,7 +1812,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    26
+Version 4.3                           UW                                    26
 
 
 
@@ -1889,7 +1889,7 @@ RUNTIME MACROS
 
 
 
-Version 4.10                          UW                                    27
+Version 4.3                           UW                                    27
 
 
 
@@ -1966,7 +1966,7 @@ FUNCTION MACROS
 
 
 
-Version 4.10                          UW                                    28
+Version 4.3                           UW                                    28
 
 
 
@@ -2045,7 +2045,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    29
+Version 4.3                           UW                                    29
 
 
 
@@ -2124,7 +2124,7 @@ CONDITIONAL MACROS
 
 
 
-Version 4.10                          UW                                    30
+Version 4.3                           UW                                    30
 
 
 
@@ -2203,7 +2203,7 @@ BINDING TARGETS
 
 
 
-Version 4.10                          UW                                    31
+Version 4.3                           UW                                    31
 
 
 
@@ -2282,7 +2282,7 @@ PERCENT(%) RULES AND MAKING INFERENCES
 
 
 
-Version 4.10                          UW                                    32
+Version 4.3                           UW                                    32
 
 
 
@@ -2361,7 +2361,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    33
+Version 4.3                           UW                                    33
 
 
 
@@ -2440,7 +2440,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    34
+Version 4.3                           UW                                    34
 
 
 
@@ -2519,7 +2519,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    35
+Version 4.3                           UW                                    35
 
 
 
@@ -2598,7 +2598,7 @@ MAKING TARGETS
 
 
 
-Version 4.10                          UW                                    36
+Version 4.3                           UW                                    36
 
 
 
@@ -2677,7 +2677,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Version 4.10                          UW                                    37
+Version 4.3                           UW                                    37
 
 
 
@@ -2756,7 +2756,7 @@ MAKING LIBRARIES
 
 
 
-Version 4.10                          UW                                    38
+Version 4.3                           UW                                    38
 
 
 
@@ -2835,7 +2835,7 @@ MULTI PROCESSING
 
 
 
-Version 4.10                          UW                                    39
+Version 4.3                           UW                                    39
 
 
 
@@ -2914,7 +2914,7 @@ CONDITIONALS
 
 
 
-Version 4.10                          UW                                    40
+Version 4.3                           UW                                    40
 
 
 
@@ -2993,7 +2993,7 @@ EXAMPLES
 
 
 
-Version 4.10                          UW                                    41
+Version 4.3                           UW                                    41
 
 
 
@@ -3072,7 +3072,7 @@ COMPATIBILITY
 
 
 
-Version 4.10                          UW                                    42
+Version 4.3                           UW                                    42
 
 
 
@@ -3151,7 +3151,7 @@ AUTHOR
 
 
 
-Version 4.10                          UW                                    43
+Version 4.3                           UW                                    43
 
 
 
@@ -3230,6 +3230,6 @@ WARNINGS
 
 
 
-Version 4.10                          UW                                    44
+Version 4.3                           UW                                    44
 
 
