@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:38:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ namespace frm
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
         sal_Int32 calcFormatKey() const;
-        void getFormatDescription(::rtl::OUString& sFormat, LanguageType& eLanguage);
 
         DECLARE_DEFAULT_LEAF_XTOR( OFormattedModel );
 
@@ -175,9 +174,13 @@ namespace frm
         // OBoundControlModel overridables
         virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( );
-        virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( );
         virtual sal_Bool    commitControlValueToDbColumn( bool _bPostReset );
+
+        virtual ::com::sun::star::uno::Any
+                            translateExternalValueToControlValue( ) const;
+        virtual ::com::sun::star::uno::Any
+                            translateControlValueToExternalValue( ) const;
+        virtual void onConnectedExternalValue( );
 
         virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
@@ -188,9 +191,25 @@ namespace frm
         virtual sal_Bool    approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
 
     protected:
+        /** retrieves the type which should be used to communicate with the current
+            external binding
+
+            The type depends on the current number format, and the types which are supported
+            by the current external binding. As a least fallback, |double|'s type is returned.
+            (In approveValueBinding, we ensure that only bindings supporting |double|'s are
+            accepted.)
+
+            @precond hasExternalValueBinding returns <TRUE/>
+        */
+        ::com::sun::star::uno::Type
+                            getExternalValueType() const;
+
+    private:
         DECLARE_XCLONEABLE();
 
         void implConstruct();
+
+        void    updateFormatterNullDate();
     };
 
     //==================================================================
