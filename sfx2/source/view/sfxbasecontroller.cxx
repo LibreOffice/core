@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:16:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,8 +189,8 @@
 #define XSTATUSINDICATORSUPPLIER                ::com::sun::star::task::XStatusIndicatorSupplier
 #define XCOMPONENT                              ::com::sun::star::lang::XComponent
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
-#define XKEYHANDLER                             ::drafts::com::sun::star::awt::XKeyHandler
-#define XMOUSECLICKHANDLER                      ::drafts::com::sun::star::awt::XMouseClickHandler
+#define XKEYHANDLER                             ::com::sun::star::awt::XKeyHandler
+#define XMOUSECLICKHANDLER                      ::com::sun::star::awt::XMouseClickHandler
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
@@ -1041,7 +1041,7 @@ void SAL_CALL SfxBaseController::removeKeyHandler( const ::com::sun::star::uno::
     }
 }
 
-void SAL_CALL SfxBaseController::addMouseClickHandler( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxBaseController::addMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( !m_pData->m_bHasMouseClickListeners )
@@ -1049,7 +1049,7 @@ void SAL_CALL SfxBaseController::addMouseClickHandler( const ::com::sun::star::u
     m_pData->m_aListenerContainer.addInterface( ::getCppuType((const REFERENCE< XMOUSECLICKHANDLER >*)0), xHandler );
 }
 
-void SAL_CALL SfxBaseController::removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxBaseController::removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const REFERENCE< XMOUSECLICKHANDLER >*)0), xHandler );
