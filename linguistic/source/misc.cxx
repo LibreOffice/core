@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-12-14 18:02:41 $
+ *  last change: $Author: tl $ $Date: 2002-11-08 09:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ Reference< XDictionaryEntry > SearchDicList(
                     if (bSearchSpellEntry || lcl_HasHyphInfo( xEntry ))
                         break;
                 }
+                xEntry = 0;
             }
         }
     }
