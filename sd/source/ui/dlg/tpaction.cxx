@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-14 12:15:41 $
+ *  last change: $Author: iha $ $Date: 2002-09-25 17:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ void SdTPAction::Construct()
     if (!bOnMaster)
         pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_INVISIBLE, LIST_APPEND);
     pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_SOUND, LIST_APPEND);
-    if (bOLEAction)
+    if (bOLEAction && aLbOLEAction.GetEntryCount())
         pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_VERB, LIST_APPEND);
     if (!bOnMaster)
         pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_VANISH, LIST_APPEND);
