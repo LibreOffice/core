@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:27:12 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:20:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,7 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES= \
         module_writer.par              \
-        file_writer.par                \
-        configurationitem_writer.par
+        file_writer.par
 
 .IF "$(GUI)"=="WNT"
 PARFILES += \
@@ -88,8 +87,7 @@ PARFILES += \
 ULFFILES= \
         module_writer.ulf              \
         registryitem_writer.ulf        \
-        folderitem_writer.ulf          \
-        configurationitem_writer.ulf
+        folderitem_writer.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
