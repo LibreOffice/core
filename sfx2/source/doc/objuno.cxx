@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-07 10:11:03 $
+ *  last change: $Author: mba $ $Date: 2001-01-18 10:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,13 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 ::com::sun::star::util::DateTime aDateTime ;
                 aValue >>= aDateTime ;
                 _pInfo->SetPrinted( SfxStamp( rStamp.GetName(), impl_DateTime_Struct2Object(aDateTime) ) );
+                break;
+            }
+            case MID_DOCINFO_TEMPLATEDATE :
+            {
+                ::com::sun::star::util::DateTime aDateTime ;
+                aValue >>= aDateTime ;
+                _pInfo->SetTemplateDate( impl_DateTime_Struct2Object(aDateTime) );
                 break;
             }
             default:
