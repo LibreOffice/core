@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentContext.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 
 module com {  module sun {  module star {  module lang {
-interface XMultiComponentFactory;
+ published interface XMultiComponentFactory;
 }; }; }; };
 
 module com {  module sun {  module star {  module uno {
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module uno {
     <type scope="com::sun::star::lang">XSingleComponentFactory</type>.
     Arbitrary values (e.g. deployment values) can be retrieved from the context.
 */
-interface XComponentContext : XInterface
+published interface XComponentContext : XInterface
 {
     /** Gets a value from the context.
 
