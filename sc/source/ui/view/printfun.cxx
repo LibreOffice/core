@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,8 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, USHORT nT
         nTabPages           ( 0 ),
         bState              ( FALSE ),
         bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE )
+        bMultiArea          ( FALSE ),
+        bSourceRangeValid   ( FALSE )
 {
     pDev = pPrinter;
     aSrcOffset = pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), MAP_100TH_MM );
@@ -315,7 +316,8 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, USHORT nTab
         nTabPages           ( 0 ),
         bState              ( FALSE ),
         bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE )
+        bMultiArea          ( FALSE ),
+        bSourceRangeValid   ( FALSE )
 {
     pDev = pOutDev;
     Construct( pOptions );
@@ -329,7 +331,8 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         pUserArea           ( NULL ),
         pPageData           ( NULL ),
         bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE )
+        bMultiArea          ( FALSE ),
+        bSourceRangeValid   ( FALSE )
 {
     pDev = pOutDev;
 
@@ -364,6 +367,12 @@ void ScPrintFunc::GetPrintState( ScPrintState& rState )
     rState.nTotalPages  = nTotalPages;
     rState.nPageStart   = nPageStart;
     rState.nDocPages    = nDocPages;
+}
+
+BOOL ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
+{
+    rRange = aLastSourceRange;
+    return bSourceRangeValid;
 }
 
 void ScPrintFunc::FillPageData()
@@ -2309,6 +2318,9 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
 
     if ( pPrinter && bDoPrint )
         pPrinter->EndPage();
+
+    aLastSourceRange = ScRange( nX1, nY1, nPrintTab, nX2, nY2, nPrintTab );
+    bSourceRangeValid = TRUE;
 }
 
 void ScPrintFunc::SetOffset( const Point& rOfs )
@@ -2704,7 +2716,10 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                     pProgress->Reschedule(); //Mag der Anwender noch oder hat er genug?
                 }
                 if (bPageSelected)
+                {
                     ++nPrinted;
+                    bSourceRangeValid = FALSE;      // last page was no cell range
+                }
                 ++nPageNo;
             }
         }
