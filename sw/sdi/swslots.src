@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 20:41:00 $
+ *  last change: $Author: fme $ $Date: 2001-08-14 10:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,30 +204,8 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
 };
 SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
-    SlotName = "AutoFormatBeiEingabe";
-    SlotName [ english ] =  "AutoFormatWhileTyping";
-    SlotName[ english_us ] = "AutoFormat";
-    SlotName[ portuguese ] = "AutoFormato";
-    SlotName[ russian ] = "Àâòîôîðìàò";
-    SlotName[ dutch ] = "AutoOpmaak";
-    SlotName[ french ] = "AutoFormat";
-    SlotName[ spanish ] = "AutoFormato";
-    SlotName[ italian ] = "Foramttazione automatica";
-    SlotName[ danish ] = "AutoFormat";
-    SlotName[ swedish ] = "Autoformat";
-    SlotName[ polish ] = "Autoformat";
-    SlotName[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
-    SlotName[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
-    SlotName[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
-    SlotName[ arabic ] = "ÊäÓíÞ ÊáÞÇÆí";
-    SlotName[ dutch ] = "AutoOpmaak";
-    SlotName[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
-    SlotName[ greek ] = "ÁõôïÌïñöÞ";
-    SlotName[ korean ] = "ÀÚµ¿¼­½Ä";
-    SlotName[ turkish ] = "Otomatik formatlama";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "AutoFormato";
-    SlotName[ finnish ] = "Automaattinen muotoilu";
+    SlotName = "AutoFormat bei Eingabe";
+    SlotName [ english ] =  "AutoFormat while Typing";
 };
 SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
 {
