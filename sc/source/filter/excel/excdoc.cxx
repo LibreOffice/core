@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:55:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,17 +110,20 @@
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
 
+#ifndef SC_XETABLE_HXX
+#include "xetable.hxx"
+#endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
-#endif
-#ifndef SC_XESTYLE_HXX
-#include "xestyle.hxx"
 #endif
 #ifndef SC_XEPAGE_HXX
 #include "xepage.hxx"
 #endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
+#endif
+#ifndef SC_XEESCHER_HXX
+#include "xeescher.hxx"
 #endif
 #ifndef SC_XEPIVOT_HXX
 #include "xepivot.hxx"
@@ -139,66 +142,22 @@ static String lcl_GetVbaTabName( SCTAB n )
 }
 
 
-
-
-ExcRecordListRefs::~ExcRecordListRefs()
-{
-}
-
-
-
-
-DefRowXFs::DefRowXFs( void )
-{
-    nLastList = 0;
-    nLastRow = 0;
-}
-
-
-BOOL DefRowXFs::ChangeXF( SCROW nRow, sal_uInt32& rnXFId )
-{
-    XclExpDefRowXFVec::const_iterator aBegin = maXFList.begin(), aIter = aBegin, aEnd = maXFList.end();
-    if( nRow > nLastRow )
-        aIter += nLastList;
-
-    for( ; aIter != aEnd; ++aIter )
-    {
-        if( nRow == aIter->mnRow )
-        {
-            rnXFId = aIter->mnXFId;
-
-            nLastList = aIter - aBegin;
-            nLastRow = aIter->mnRow;
-
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-
-
-
-
-ExcTable::ExcTable( RootData* pRD ) :
-    ExcRoot( pRD ),
-    nScTab( 0 ),
+ExcTable::ExcTable( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
+    mnScTab( SCTAB_MAX ),
     nExcTab( EXC_NOTAB ),
-    pRowBlock( NULL ),
-    pDefRowXFs( NULL ),
     pTabNames( new NameBuffer( 0, 16 ) )
 {
 }
 
 
-ExcTable::ExcTable( RootData* pRD, SCTAB nScTable ) :
-    ExcRoot( pRD ),
-    nScTab( nScTable ),
-    nExcTab( pRD->pER->GetTabInfo().GetXclTab( nScTable ) ),
-    pRowBlock( NULL ),
-    pDefRowXFs( NULL ),
+ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
+    XclExpRoot( rRoot ),
+    mnScTab( nScTab ),
+    nExcTab( rRoot.GetTabInfo().GetXclTab( nScTab ) ),
     pTabNames( new NameBuffer( 0, 16 ) )
 {
+    SetCurrScTab( mnScTab );
 }
 
 
@@ -211,50 +170,21 @@ ExcTable::~ExcTable()
 
 void ExcTable::Clear( void )
 {
-    if( pDefRowXFs )
-    {
-        delete pDefRowXFs;
-        pDefRowXFs = NULL;
-    }
 }
 
 
-void ExcTable::AddRow( ExcRow* pRow )
+void ExcTable::Add( XclExpRecordBase* pRec )
 {
-    DBG_ASSERT( pRowBlock, "ExcTable::AddRow() - missing RowBlock!" );
-    ExcRowBlock* pNewRowBlock = pRowBlock->Append( pRow );
-    if( pNewRowBlock )
-    {
-        pRowBlock = pNewRowBlock;
-        Add( pRowBlock );
-    }
+    DBG_ASSERT( pRec, "-ExcTable::Add(): pRec ist NULL!" );
+    aRecList.AppendRecord( XclExpRecordList<>::RecordRefType( pRec ) );
 }
 
 
-void ExcTable::AddUsedRow( ExcRow*& rpRow )
+void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 {
-    if( rpRow->IsDefault() )
-        delete rpRow;
-    else
-        AddRow( rpRow );
-}
-
-
-void ExcTable::SetDefRowXF( SCROW nRow, sal_uInt32 nXFId )
-{
-    if( !pDefRowXFs )
-        pDefRowXFs = new DefRowXFs;
-
-    pDefRowXFs->Append( nRow, nXFId );
-}
-
-
-void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
-{
-    RootData&           rR              = *pExcRoot;
-    const XclExpRoot&   rRoot           = *rR.pER;
-    ScDocument&         rDoc            = *rR.pDoc;
-    XclExpTabInfo&      rTabInfo      = rRoot.GetTabInfo();
+    RootData& rR = *mpRD;
+    ScDocument& rDoc = GetDoc();
+    XclExpTabInfo& rTabInfo = GetTabInfo();
 
     if ( rR.eDateiTyp < Biff8 )
         Add( new ExcBofW );
@@ -281,7 +211,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         if( rR.bWriteVBAStorage )
         {
             Add( new XclObproj );
-            const String*   p = rRoot.GetExtDocOptions().GetCodename();
+            const String*   p = GetExtDocOptions().GetCodename();
             if( p )
                 Add( new XclCodename( *p ) );
         }
@@ -325,25 +255,24 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( new XclExpWindowProtection(false) );
         Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
         Add( new XclExpBoolRecord( 0x0013, false ) );   // PASSWORD
-        Add( new XclExpWindow1( rRoot ) );
+        Add( new XclExpWindow1( GetRoot() ) );
         Add( new ExcDummy_040 );
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy_041 );
 
         // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
-        Add( new XclExpRefRecord( rRoot.GetFontBuffer() ) );
-        Add( new XclExpRefRecord( rRoot.GetNumFmtBuffer() ) );
-        Add( new XclExpRefRecord( rRoot.GetXFBuffer() ) );
-        Add( new XclExpRefRecord( rRoot.GetPalette() ) );
+        Add( new XclExpRefRecord( GetFontBuffer() ) );
+        Add( new XclExpRefRecord( GetNumFmtBuffer() ) );
+        Add( new XclExpRefRecord( GetXFBuffer() ) );
+        Add( new XclExpRefRecord( GetPalette() ) );
 
         // Bundlesheet
-        ExcBundlesheetBase* pBS;
         for( nC = 0 ; nC < nScTabCount ; nC++ )
             if( rTabInfo.IsExportTab( nC ) )
             {
-                pBS = new ExcBundlesheet( rR, nC );
-                Add( pBS );
-                rBSRecList.Append( pBS );
+                ExcBoundsheetList::RecordRefType xBoundsheet( new ExcBundlesheet( rR, nC ) );
+                aRecList.AppendRecord( xBoundsheet );
+                rBoundsheetList.AppendRecord( xBoundsheet );
             }
     }
     else
@@ -354,19 +283,19 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
             Add( new XclExpWindowProtection(false));
         Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
         Add( new ExcDummy8_040 );
-        Add( new XclExpWindow1( rRoot ) );
+        Add( new XclExpWindow1( GetRoot() ) );
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy8_041 );
 
         // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
-        Add( new XclExpRefRecord( rRoot.GetFontBuffer() ) );
-        Add( new XclExpRefRecord( rRoot.GetNumFmtBuffer() ) );
-        Add( new XclExpRefRecord( rRoot.GetXFBuffer() ) );
-        Add( new XclExpRefRecord( rRoot.GetPalette() ) );
+        Add( new XclExpRefRecord( GetFontBuffer() ) );
+        Add( new XclExpRefRecord( GetNumFmtBuffer() ) );
+        Add( new XclExpRefRecord( GetXFBuffer() ) );
+        Add( new XclExpRefRecord( GetPalette() ) );
 
         // Pivot Cache
-        rRoot.GetPivotTableManager().CreatePivotTables();
-        Add( new XclExpPivotCacheRefRecord( rRoot ) );
+        GetPivotTableManager().CreatePivotTables();
+        Add( new XclExpPivotCacheRefRecord( GetRoot() ) );
 
         // Change tracking
         if( rDoc.GetChangeTrack() )
@@ -379,34 +308,33 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( new ExcDummy8_UsesElfs );
 
         // Bundlesheet
-        ExcBundlesheetBase* pBS;
         for( nC = 0 ; nC < nScTabCount ; nC++ )
             if( rTabInfo.IsExportTab( nC ) )
             {
-                pBS = new ExcBundlesheet8( rR, nC );
-                Add( pBS );
-                rBSRecList.Append( pBS );
+                ExcBoundsheetList::RecordRefType xBoundsheet( new ExcBundlesheet8( rR, nC ) );
+                aRecList.AppendRecord( xBoundsheet );
+                rBoundsheetList.AppendRecord( xBoundsheet );
             }
 
         for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
         {
             aTmpString = lcl_GetVbaTabName( nAdd );
-            pBS = new ExcBundlesheet8( aTmpString );
-            Add( pBS );
-            rBSRecList.Append( pBS );
+            ExcBoundsheetList::RecordRefType xBoundsheet( new ExcBundlesheet8( aTmpString ) );
+            aRecList.AppendRecord( xBoundsheet );
+            rBoundsheetList.AppendRecord( xBoundsheet );
         }
 
         // COUNTRY - in BIFF8 in workbook globals
-        Add( new XclExpCountry( rRoot ) );
+        Add( new XclExpCountry( GetRoot() ) );
         // SUPBOOK, XCT, CRN, EXTERNNAME, EXTERNSHEET
-        Add( new XclExpRefRecord( rRoot.GetLinkManager() ) );
+        Add( new XclExpRefRecord( GetLinkManager() ) );
         // NAME
         Add( pNameList );
 
         // MSODRAWINGGROUP per-document data
         Add( new XclMsodrawinggroup( rR, ESCHER_DggContainer ) );
         // SST, EXTSST
-        Add( new XclExpRefRecord( rRoot.GetSst() ) );
+        Add( new XclExpRefRecord( GetSst() ) );
     }
 
     Add( new ExcEof );
@@ -415,142 +343,43 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 
 void ExcTable::FillAsTable( void )
 {
-    RootData&           rR          = *pExcRoot;
-    const XclExpRoot&   rRoot       = *rR.pER;
-    ScDocument&         rDoc        = rRoot.GetDoc();
-    XclExpTabInfo&      rTabInfo    = rRoot.GetTabInfo();
-    XclExpXFBuffer&     rXFBuffer   = rRoot.GetXFBuffer();
+    RootData& rR = *mpRD;
+    XclBiff eBiff = GetBiff();
+    ScDocument& rDoc = GetDoc();
+    SCTAB nScTab = GetCurrScTab();
+    XclExpTabInfo& rTabInfo = GetTabInfo();
+    XclExpXFBuffer& rXFBuffer = GetXFBuffer();
 
     if( nScTab >= rTabInfo.GetScTabCount() )
     {
-        CodenameList*       pL = rRoot.GetExtDocOptions().GetCodenames();
-        if( pL )
-        {
-            const String*   p = pL->Next();
-            if( p )
+        if( CodenameList* pL = GetExtDocOptions().GetCodenames() )
+            if( const String* p = pL->Next() )
                 NullTab( p );
-        }
-
         return;
     }
 
-     SCCOL                  nLastCol, nFirstCol;
-     SCROW                  nLastRow, nFirstRow;            // in Tabelle
-     SCROW                  nPrevRow = 0;
-     SCCOL                  nColMin;                    // fuer aktuelle Zeile
-                                                        //  Row-Records
-    SCCOL                   nCol = 0;
-    SCROW                   nRow = 0;
-
-    SCCOL                   nMaxFlagCol = rDoc.GetLastFlaggedCol( nScTab );
-    SCROW                  nMaxFlagRow = rDoc.GetLastFlaggedRow( nScTab );
-
-    ExcCell*                pAktExcCell;
     SvNumberFormatter&      rFormatter = *rR.pDoc->GetFormatTable();
     const BiffTyp           eDateiTyp = rR.eDateiTyp;
 
-    XclExpHyperlinkList*    pHlinks = new XclExpHyperlinkList;
-    XclExpTableOpManager    aTableOpList;
-    XclExpTableOp*          pTableOpRec = NULL;
-
-    ExcArrays               aArrayFormList;
-    ExcArray*               pLastArray = NULL;
-
-    ExcArrays               aShrdFmlaList;
-    ExcShrdFmla*            pShrdFmla = NULL;
-
-    XclExpDval*             pRecDval = NULL;        // data validation
-
-    XclExpNoteList*         pNoteList = NULL;       // cell notes
-
-    ExcFmlaResultStr*       pFormulaResult = NULL;
-
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
-    DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= static_cast<sal_uInt16>(MAXTAB)), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    DBG_ASSERT( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
-    rDoc.GetTableArea( nScTab, nLastCol, nLastRow );
+    if ( eBiff >= xlBiff8 )
+        // list holding OBJ records and creating MSODRAWING per-sheet data
+        rR.pObjRecs = new XclObjList( GetRoot() );
 
-    if( nLastRow > rR.nRowMax )     // max. Zeilenzahl ueberschritten?
-    {
-        nLastRow = rR.nRowMax;
-        rR.bCellCut = TRUE;
-    }
+    // cell table: DEFROWHEIGHT, DEFCOLWIDTH, COLINFO, DIMENSIONS, ROW, cell records
+    mxCellTable.reset( new XclExpCellTable( GetRoot() ) );
 
-    // find outline range
-    ScOutlineTable*         pOLTable    = rDoc.GetOutlineTable( nScTab );
-    ScOutlineArray*         pOLColArray = NULL;
-    ScOutlineArray*         pOLRowArray = NULL;
-    if( pOLTable )
-    {
-        SCCOLROW            nStart, nEnd;
-        SCCOL               nMaxOLCol = 0;
-        SCROW               nMaxOLRow = 0;
-
-        pOLColArray = pOLTable->GetColArray();
-        if( pOLColArray )
-        {
-            pOLColArray->GetRange( nStart, nEnd );
-            nMaxOLCol = static_cast<SCCOL>(nEnd + 1);
-        }
-        nMaxFlagCol = Max( nMaxFlagCol, nMaxOLCol );
-
-        pOLRowArray = pOLTable->GetRowArray();
-        if( pOLRowArray )
-        {
-            pOLRowArray->GetRange( nStart, nEnd );
-            nMaxOLRow = nEnd + 1;
-        }
-        nMaxFlagRow = Max( nMaxFlagRow, nMaxOLRow );
-    }
-    nMaxFlagCol = Min( nMaxFlagCol, MAXCOL );
-    nMaxFlagRow = Min( Min( nMaxFlagRow, MAXROW ), rR.nRowMax );
-
-    ExcEOutline aExcOLCol( pOLColArray );
-    ExcEOutline aExcOLRow( pOLRowArray );
-
-    DBG_ASSERT( !rR.pCellMerging, "ExcTable::FillAsTable - old merging list found" );
-    rR.pCellMerging = new XclExpCellMerging;
-
-
-//    ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, nLastCol, nLastRow );
-    ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, MAXCOL, nLastRow );
-    const ScBaseCell*       pAktScCell;
-    const ScPatternAttr*    pPatt;
-    ExcBlankMulblank*       pLastBlank = NULL;
-    ExcRKMulRK*             pLastRKMulRK = NULL;
-    BOOL                    bIter;
-
-    // jetz schon, um erste Zeile zu bekommen
-    bIter = aIterator.GetNext();
-    if( bIter )
-    {
-        nCol = aIterator.GetStartCol();
-        nRow = aIterator.GetRow();
-
-        if( nRow > rR.nRowMax )     // max. Zeilenzahl ueberschritten?
-        {
-            rR.bCellCut = TRUE;
-            NullTab();
-            return;
-        }
-        pAktScCell = aIterator.GetCell();
-        pPatt = aIterator.GetPattern();
-    }
 
     // WSBOOL needs data from page settings, create it here, add it later
-    ::std::auto_ptr< XclExpPageSettings > pPageSett( new XclExpPageSettings( rRoot ) );
-    bool bFitToPages = pPageSett->GetPageData().mbFitToPages;
+    ScfRef< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
-    if( eDateiTyp < Biff8 )
+    if( eBiff <= xlBiff7 )
     {
         Add( new ExcBof );
         Add( new ExcDummy_02a );
-        // GUTS (count & size of outline icons)
-        Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
-        Add( new ExcDummy_02c );
-        // COUNTRY - in BIFF5/7 in every worksheet
-        Add( new XclExpCountry( rRoot ) );
-        Add( new XclExpWsbool( bFitToPages ) );
     }
     else
     {
@@ -560,358 +389,48 @@ void ExcTable::FillAsTable( void )
         Add( new XclIteration( rDoc ) );
         Add( new XclDelta( rDoc ) );
         Add( new ExcDummy8_02 );
-        // GUTS (count & size of outline icons)
-        Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
-        Add( new XclExpWsbool( bFitToPages ) );
     }
 
-    Add( pPageSett.release() );
+    // GUTS (count & size of outline icons)
+    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_GUTS ) );
+    // DEFROWHEIGHT, created by the cell table
+    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_DEFROWHEIGHT ) );
+
+    // COUNTRY - in BIFF5/7 in every worksheet
+    if( eBiff <= xlBiff7 )
+        Add( new XclExpCountry( GetRoot() ) );
+
+    Add( new XclExpWsbool( bFitToPages ) );
+
+    // page settings (SETUP and various other records)
+    aRecList.AppendRecord( xPageSett );
 
     if( rDoc.IsTabProtected( nScTab ) )
         Add( new XclProtection() );
 
-    if ( eDateiTyp < Biff8 && rR.pExtSheetCntAndRecs )
+    if ( (eBiff <= xlBiff7) && rR.pExtSheetCntAndRecs )
         Add( new ExcExternDup( *rR.pExtSheetCntAndRecs ) );
 
-    Add( new XclExpUInt16Record( EXC_ID_DEFCOLWIDTH, 10 ) );
-
-    // COLINFO records for all columns
-    XclExpColinfo* pColinfo = NULL;
-    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
-    {
-        sal_uInt32 nColXFId = rXFBuffer.Insert( rDoc.GetPattern( nScCol, MAXROW, nScTab ) );
-        if( !pColinfo || !pColinfo->Expand( nScCol, nScTab, nColXFId, aExcOLCol ) )
-        {
-            pColinfo = new XclExpColinfo( rRoot, nScCol, nScTab, nColXFId, aExcOLCol );
-            Add( pColinfo );
-        }
-    }
-
-    // Dimensions
-    ExcDimensions*          pDimensions = new ExcDimensions( rR.eDateiTyp );
-    Add( pDimensions );
-
-    if ( rR.eDateiTyp >= Biff8 )
+    if ( eBiff >= xlBiff8 )
     {
         // Scenarios
         Add( new ExcEScenarioManager( rDoc, nScTab ) );
-        // list holding OBJ records and creating MSODRAWING per-sheet data
-        rR.pObjRecs = new XclObjList( rRoot );
         // AutoFilter
         Add( new ExcAutoFilterRecs( rR, nScTab ) );
-        // list of NOTE records
-        pNoteList = new XclExpNoteList;
     }
 
-    // NOTE
-    const ScPostIt*         pNote = NULL;
+    // cell table: DEFCOLWIDTH, COLINFO, DIMENSIONS, ROW, cell records
+    aRecList.AppendRecord( mxCellTable );
 
-    // rows & cols
-    nFirstRow = nRow;
-    nColMin = nFirstCol = nCol;
-    pRowBlock = new ExcRowBlock;
-    Add( pRowBlock );
-
-    // at least one ROW rec
-    if( !bIter )
-        AddRow( new ExcRow( rRoot, 0, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this ) );
-
-    while( bIter )
-    {
-        nCol = aIterator.GetStartCol();     // nur bei erstem Durchlauf doppelt!
-        pAktScCell = aIterator.GetCell();
-        pPatt = aIterator.GetPattern();
-
-        pAktExcCell = NULL;
-        pNote = NULL;
-        pTableOpRec = NULL;
-
-        // add ROW recs from empty rows
-        while( nPrevRow < nRow )
-        {
-            ExcRow* pRow = new ExcRow( rRoot, nPrevRow, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this );
-            AddUsedRow( pRow );
-            nPrevRow++;
-        }
-
-        ScAddress   aScPos( nCol, nRow, nScTab );
-        rR.sAddNoteText.Erase();
-
-        if( pAktScCell )
-        {// nicht-leere Zelle
-            pLastBlank = NULL;
-            pNote = pAktScCell->GetNotePtr();
-
-            switch( pAktScCell->GetCellType() )
-            {
-                case CELLTYPE_NONE:
-                    pLastRKMulRK = NULL;
-                    break;
-                case CELLTYPE_VALUE:
-                {
-                    double  fVal = ( ( ScValueCell * ) pAktScCell )->GetValue();
-                    INT32   nRKValue;
-                    if ( pPatt && (fVal == 0.0 || fVal == 1.0) &&
-                            rFormatter.GetType(
-                            ((const SfxUInt32Item&)pPatt->GetItem(
-                            ATTR_VALUE_FORMAT )).GetValue() ) == NUMBERFORMAT_LOGICAL )
-                    {
-                        pLastRKMulRK = NULL;
-                        pAktExcCell = new ExcBoolerr( aScPos, pPatt, rR, UINT8(fVal), FALSE );
-                    }
-                    else if( XclTools::GetRKFromDouble( nRKValue, fVal ) )
-                    {
-                        if( pLastRKMulRK )
-                        {
-                            ExcRKMulRK* pNewRK = pLastRKMulRK->Extend( aScPos, pPatt, rR, nRKValue );
-                            if( pNewRK )
-                                pLastRKMulRK = pNewRK;
-
-                            pAktExcCell = pNewRK;
-                        }
-                        else
-                            pAktExcCell = pLastRKMulRK = new ExcRKMulRK( aScPos, pPatt, rR, nRKValue );
-                    }
-                    else
-                    {
-                        pAktExcCell = new ExcNumber( aScPos, pPatt, rR, fVal );
-                        pLastRKMulRK = NULL;
-                    }
-                }
-                break;
-                case CELLTYPE_STRING:
-                {
-                    pLastRKMulRK = NULL;
-                    String  aTemp;
-
-                    ( ( ScStringCell* ) pAktScCell )->GetString( aTemp );
-
-                    if ( rR.eDateiTyp < Biff8 )
-                        pAktExcCell = new ExcLabel( aScPos, pPatt, rR, aTemp );
-                    else
-                        pAktExcCell = new XclExpLabelSst( *rR.pER, aScPos, aTemp, pPatt );
-                }
-                break;
-                case CELLTYPE_FORMULA:
-                {
-                    pLastRKMulRK = NULL;
-                    ScFormulaCell* pFormCell = (ScFormulaCell*) pAktScCell;
-
-                    // current cell number format
-                    sal_uInt32 nCellNumFmt = pPatt ?
-                        static_cast< const SfxUInt32Item& >( pPatt->GetItem( ATTR_VALUE_FORMAT ) ).GetValue() :
-                        rRoot.GetNumFmtBuffer().GetStandardFormat();
-                    // alternative number format passed to XF buffer
-                    sal_uInt32 nFmlaNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
-
-                    /*  #73420# Xcl doesn't know boolean number formats, we write
-                        "TRUE";"TRUE";"FALSE" (language dependent). Don't do it for
-                        automatic formula formats, because Xcl gets them right. */
-                    /*  #i8640# Don't set text format, if we have string results */
-                    if( ((nCellNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0) &&
-                            (pFormCell->GetFormatType() != NUMBERFORMAT_LOGICAL) &&
-                            (pFormCell->GetFormatType() != NUMBERFORMAT_TEXT) )
-                        nFmlaNumFmt = pFormCell->GetStandardFormat( rFormatter, nCellNumFmt );
-                    /*  #73420# If cell number format is Boolean and automatic formula
-                        format is Boolean don't write that ugly special format. */
-                    else if( (pFormCell->GetFormatType() == NUMBERFORMAT_LOGICAL) &&
-                            (rFormatter.GetType( nCellNumFmt ) == NUMBERFORMAT_LOGICAL) )
-                        nFmlaNumFmt = rRoot.GetNumFmtBuffer().GetStandardFormat();
-
-                    ExcFormula* pFmlaCell = new ExcFormula(
-                        aScPos, pPatt, rR, nFmlaNumFmt, *pFormCell->GetCode(),
-                        &pLastArray, ( ScMatrixMode ) pFormCell->GetMatrixFlag(), &pShrdFmla, &aShrdFmlaList, pFormCell, &pFormulaResult);
-                    pAktExcCell = pFmlaCell;
-                    pTableOpRec = aTableOpList.InsertCell( pFormCell->GetCode(), *pFmlaCell );
-                }
-                break;
-                case CELLTYPE_EDIT:
-                {
-                    pLastRKMulRK = NULL;
-                    ScEditCell& rEditCell = *static_cast< ScEditCell* >( const_cast< ScBaseCell* >( pAktScCell ) );
-                    if( rR.eDateiTyp < Biff8 )
-                        pAktExcCell = new ExcRString( aScPos, pPatt, rR, rEditCell );
-                    else
-                        pAktExcCell = new XclExpLabelSst( *rR.pER, aScPos, rEditCell, pPatt );
-
-                    XclExpHyperlink*& rpHlink = rR.pLastHlink;
-                    if( rpHlink )
-                    {
-                        rpHlink->SetPosition( aScPos );
-                        pHlinks->Append( rpHlink );
-                        rpHlink = NULL;
-                    }
-                }
-                break;
-                case CELLTYPE_NOTE:
-                {
-                    pAktScCell = NULL;  // #i11733# empty note cell is empty cell
-                    pAktExcCell = NULL;
-                    pLastRKMulRK = NULL;
-                    DBG_ASSERT( pNote, "-ExcTable::Table(): Note-Cell ohne Note!" );
-                }
-                break;
-#ifdef DBG_UTIL
-                case CELLTYPE_DESTROYED:
-                    pAktExcCell = NULL;
-                    pLastRKMulRK = NULL;
-                    break;
-#endif
-                default:
-                    DBG_ERROR( "*ExcTable::Table(): Unbekannter Zelltyp" );
-                    pAktExcCell = NULL;
-                    pLastRKMulRK = NULL;
-            }
-        }
-
-        // #i11733# not "else" - pAktScCell may be set to NULL above (empty note cell)
-        if( !pAktScCell )
-        {// leere Zelle mit Attributierung
-            SCCOL   nColCnt = aIterator.GetEndCol() - aIterator.GetStartCol() + 1;
-
-            if( pLastBlank && pLastBlank->GetLastCol() + 1 == aIterator.GetStartCol() )
-            {
-                pLastBlank->Add( aScPos, pPatt, rR, static_cast<sal_uInt16>(nColCnt), *this );
-                pAktExcCell = NULL;    // kein NEUER Record!
-            }
-            else
-            {
-                pLastBlank = new ExcBlankMulblank( aScPos, pPatt, rR, static_cast<sal_uInt16>(nColCnt), *this );
-                pAktExcCell = pLastBlank;
-            }
-        }
-
-        if( pAktExcCell )
-        {
-            Add( pAktExcCell );
-
-            if( pLastArray )
-            {
-                if( aArrayFormList.Insert( pLastArray ) )
-                    Add( pLastArray );  // really new
-                else
-                    delete pLastArray;  // allready added
-
-                pLastArray = NULL;
-            }
-
-            if( pShrdFmla )
-            {
-                aShrdFmlaList.Append( pShrdFmla );
-                Add( pShrdFmla );
-                pShrdFmla = NULL;
-            }
-        }
-
-        if( pTableOpRec )
-            Add( pTableOpRec );
-
-        if(pFormulaResult)
-        {
-            Add( pFormulaResult );
-            pFormulaResult = NULL;
-        }
-
-
-        // notes
-        if( rRoot.GetBiff() < xlBiff8 )
-        {
-            String sNoteText;
-            String sNoteAuthor;
-            if( pNote )
-            {
-                sNoteText = pNote->GetText();
-                sNoteAuthor = pNote->GetAuthor();
-            }
-            if( rR.sAddNoteText.Len() )
-            {
-                if( sNoteText.Len() )
-                    (sNoteText += (sal_Unicode) 0x0A) += (sal_Unicode) 0x0A;
-                sNoteText += rR.sAddNoteText;
-            }
-            if( sNoteText.Len() || sNoteAuthor.Len() )
-                Add( new ExcNote( aScPos, sNoteText, rR ) );
-        }
-        else
-        {
-            if( pNote || rR.sAddNoteText.Len() )
-                pNoteList->Append( new XclExpNote( rRoot, aScPos, pNote, rR.sAddNoteText ) );
-        }
-
-        if( pPatt && (rR.eDateiTyp >= Biff8) )
-        {
-            // merged cells
-            ScMergeAttr& rItem = (ScMergeAttr&) pPatt->GetItem( ATTR_MERGE );
-            if( rItem.IsMerged() )
-            {
-                sal_uInt32 nXFId = (pAktExcCell ? pAktExcCell->GetXFId() :
-                            (pLastBlank ? pLastBlank->GetXFId() :
-                            (pLastRKMulRK ? pLastRKMulRK->GetXFId() :
-                            XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_DEFAULTCELL ))));
-                for( SCCOL iCol = aIterator.GetStartCol(); iCol <= aIterator.GetEndCol(); iCol++ )
-                    rR.pCellMerging->Append( static_cast<sal_uInt16>(iCol), static_cast<sal_uInt16>(rItem.GetColMerge()), static_cast<sal_uInt16>(nRow), static_cast<sal_uInt16>(rItem.GetRowMerge()), nXFId );
-            }
-
-            // data validation
-            const SfxPoolItem* pItem;
-            if( pPatt->GetItemSet().GetItemState( ATTR_VALIDDATA, FALSE, &pItem ) == SFX_ITEM_SET )
-            {
-                sal_uInt32 nHandle = ((const SfxUInt32Item*)pItem)->GetValue();
-                if( !pRecDval )
-                    pRecDval = new XclExpDval( rRoot );
-                ScRange aRange( aScPos );
-                aRange.aEnd.SetCol( aIterator.GetEndCol() );
-                pRecDval->InsertCellRange( aRange, nHandle );
-            }
-        }
-
-        bIter = aIterator.GetNext();
-
-        // new row number
-        if( bIter )
-        {
-            nRow = aIterator.GetRow();
-            if( nRow > rR.nRowMax )     // Excel row limit
-                bIter = FALSE;
-        }
-
-        // new row -> add previous ROW rec
-        if( !bIter || (nPrevRow < nRow) )
-        {
-            AddRow( new ExcRow( rRoot, nPrevRow, nScTab, nColMin, nCol, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this ) );
-
-            nPrevRow++;
-            nColMin = aIterator.GetStartCol();
-            nFirstCol = Min( nFirstCol, nColMin );
-            pLastBlank = NULL;
-            pLastRKMulRK = NULL;
-        }
-    }
-
-    // remaining rows with attributes
-    while( nRow < nMaxFlagRow )
-    {
-        nRow++;
-        ExcRow* pRow = new ExcRow( rRoot, nRow, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this );
-        AddUsedRow( pRow );
-    }
-
-    // insert merged cells
-    Add( rR.pCellMerging );
-    rR.pCellMerging = NULL;
+    // MERGEDCELLS record, generated by the cell table
+    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_MERGEDCELLS ) );
     // label ranges
-    if( rR.eDateiTyp >= Biff8 )
-        Add( new XclExpLabelranges( rRoot ) );
-    // insert data validation
-    if( pRecDval )
-        Add( pRecDval );
-    pRecDval = NULL;
-    // update dimensions
-    pDimensions->SetLimits( nFirstCol, nFirstRow, nLastCol, nLastRow );
-    // update formula cells for multiple operations
-    aTableOpList.UpdateCells();
+    if( eBiff >= xlBiff8 )
+        Add( new XclExpLabelranges( GetRoot() ) );
+    // data validation (DVAL and list of DV records), generated by the cell table
+    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_DVAL ) );
 
-    if( rR.eDateiTyp < Biff8 )
+    if( eBiff <= xlBiff7 )
     {
         Add( new ExcWindow2( nExcTab ) );
         Add( new ExcSelection( 0, 0, 3 ) );
@@ -924,37 +443,33 @@ void ExcTable::FillAsTable( void )
         rR.pObjRecs->EndSheet();
         // all MSODRAWING and OBJ stuff of this sheet goes here
         Add( rR.pObjRecs );
-        // NOTE records
-        Add( pNoteList );
 
         // pivot tables
-        Add( new XclExpPivotTablesRefRecord( rRoot ) );
+        Add( new XclExpPivotTablesRefRecord( GetRoot() ) );
 
         // WINDOW2
-        Add( new ExcWindow28( rRoot, nScTab ) );
+        Add( new ExcWindow28( GetRoot(), nScTab ) );
     }
 
-    if( rR.eDateiTyp >= Biff8 )
+    // list of NOTE records, generated by the cell table
+    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_NOTE ) );
+
+    if( eBiff >= xlBiff8 )
     {
         // web queries
-        Add( new XclExpWebQueryBuffer( rRoot ) );
+        Add( new XclExpWebQueryBuffer( GetRoot() ) );
 
         // conditional formats
-        Add( new XclExpCondFormatBuffer( rRoot ) );
+        Add( new XclExpCondFormatBuffer( GetRoot() ) );
 
         if( rR.bWriteVBAStorage )
-        {
-            CodenameList*       pL = rRoot.GetExtDocOptions().GetCodenames();
-            if( pL )
-            {
-                const String* p = nExcTab ? pL->Next() : pL->First();
-                if( p )
+            if( CodenameList* pL = GetExtDocOptions().GetCodenames() )
+                if( const String* p = nExcTab ? pL->Next() : pL->First() )
                     Add( new XclCodename( *p ) );
-            }
-        }
     }
 
-    Add( pHlinks );
+    // list of HLINK records, generated by the cell table
+    aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_HLINK ) );
 
     // change tracking
     if( rR.pUserBViewList )
@@ -973,11 +488,11 @@ void ExcTable::FillAsTable( void )
 
 void ExcTable::NullTab( const String* pCodename )
 {
+    SCTAB nScTab = GetCurrScTab();
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
-    DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= static_cast<sal_uInt16>(MAXTAB)), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    DBG_ASSERT( nExcTab <= static_cast<sal_uInt16>(MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
-    RootData&       rR = *pExcRoot;
-    const XclExpRoot& rRoot = *rR.pER;
+    RootData& rR = *mpRD;
 
     if ( rR.eDateiTyp < Biff8 )
     {
@@ -993,7 +508,7 @@ void ExcTable::NullTab( const String* pCodename )
         else
         {
             // create at least the MSODRAWING per-sheet data
-            rR.pObjRecs = new XclObjList( rRoot );
+            rR.pObjRecs = new XclObjList( GetRoot() );
             // all drawing obects
             rR.pEscher->AddSdrPage( rR );
             //! close Escher group shape and ESCHER_DgContainer
@@ -1003,22 +518,17 @@ void ExcTable::NullTab( const String* pCodename )
         }
         // WINDOW2
 
-        Add( new ExcWindow28( rRoot , nScTab ) );
+        Add( new ExcWindow28( GetRoot() , nScTab ) );
     }
     Add( new ExcEof );
 }
 
 
-BOOL ExcTable::ModifyToDefaultRowXF( SCROW nRow, sal_uInt32& rnXFId )
-{
-    if( pDefRowXFs )
-        return pDefRowXFs->ChangeXF( nRow, rnXFId );
-    return FALSE;
-}
-
-
 void ExcTable::Write( XclExpStream& rStr )
 {
+    SetCurrScTab( mnScTab );
+    if( mxCellTable.get() )
+        mxCellTable->Finalize();
     aRecList.Save( rStr );
 }
 
@@ -1027,38 +537,35 @@ void ExcTable::Write( XclExpStream& rStr )
 
 ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    aHeader( rRoot.mpRD ),
+    aHeader( rRoot ),
     pExpChangeTrack( NULL )
 {
-    mpRD->pPrgrsBar = new ScProgress(
-        GetDocShell(), ScGlobal::GetRscString(STR_SAVE_DOC),
-        ( UINT32 ) GetDoc().GetCellCount() * 2 );
 }
 
 
 ExcDocument::~ExcDocument()
 {
-    maTableList.Clear();    //! for the following assertion
+    maTableList.RemoveAllRecords();    //! for the following assertion
     delete pExpChangeTrack;
 }
 
 
 void ExcDocument::ReadDoc( void )
 {
-    aHeader.FillAsHeader( aBundleSheetRecList );
+    aHeader.FillAsHeader( maBoundsheetList );
 
     SCTAB nScTabCount = ::std::max< SCTAB >(
         GetTabInfo().GetScTabCount(), static_cast<SCTAB>(GetTabInfo().GetXclCodenameCount()) );
 
-    while( GetCurrScTab() < nScTabCount )
+    for( SCTAB nScTab = 0; nScTab < nScTabCount; ++nScTab )
     {
-        if( GetTabInfo().IsExportTab( GetCurrScTab() ) )
+        SetCurrScTab( nScTab );
+        if( GetTabInfo().IsExportTab( nScTab ) )
         {
-            ExcTable* pTab = new ExcTable( mpRD, GetCurrScTab() );
-            maTableList.Append( pTab );
-            pTab->FillAsTable();
+            ExcTableList::RecordRefType xTab( new ExcTable( GetRoot(), GetCurrScTab() ) );
+            maTableList.AppendRecord( xTab );
+            xTab->FillAsTable();
         }
-        IncCurrScTab();
     }
 
     if ( GetBiff() >= xlBiff8 )
@@ -1080,34 +587,29 @@ void ExcDocument::Write( SvStream& rSvStrm )
         if ( GetBiff() >= xlBiff8 )
             mpRD->pEscher->GetStrm().Seek(0);   // ready for take off
 
-        GetPalette().Reduce();
-        GetXFBuffer().Reduce();
+        GetPalette().Finalize();
+        GetXFBuffer().Finalize();
 
-        XclExpStream        aXclStrm( rSvStrm, GetRoot() );
-        ExcTable*           pTab = maTableList.First();
-        ExcBundlesheetBase* pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
+        XclExpStream aXclStrm( rSvStrm, GetRoot() );
 
         aHeader.Write( aXclStrm );
 
-        while( pTab )
+        DBG_ASSERT( maTableList.Size() == maBoundsheetList.Size(),
+            "ExcDocument::Write - different number of sheets and BOUNDSHEET records" );
+
+        for( size_t nTab = 0, nTabCount = maTableList.Size(); nTab < nTabCount; ++nTab )
         {
-            DBG_ASSERT( pAktBS, "-ExcDocument::Write(): BundleSheetRecs und Tabs passen nicht zusammen!" );
-            pAktBS->SetStreamPos( aXclStrm.GetStreamPos() );
-            pTab->Write( aXclStrm );
-            pTab = maTableList.Next();
-            pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.Next();
+            // set current stream position in BOUNDSHEET record
+            ExcBoundsheetRef xBoundsheet = maBoundsheetList.GetRecord( nTab );
+            if( xBoundsheet.get() )
+                xBoundsheet->SetStreamPos( aXclStrm.GetStreamPos() );
+            // write the table
+            maTableList.GetRecord( nTab )->Write( aXclStrm );
         }
 
-        DBG_ASSERT( !pAktBS, "+ExcDocument::Write(): mehr BundleSheetRecs als Tabs!" );
-
-        // BundleSheetRecs anpassen
-        pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
-        while( pAktBS )
-        {
-            pAktBS->UpdateStreamPos( aXclStrm );
-            pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.Next();
-        }
-
+        // write the table stream positions into the BOUNDSHEET records
+        for( size_t nBSheet = 0, nBSheetCount = maBoundsheetList.Size(); nBSheet < nBSheetCount; ++nBSheet )
+            maBoundsheetList.GetRecord( nBSheet )->UpdateStreamPos( aXclStrm );
     }
     if( pExpChangeTrack )
         pExpChangeTrack->Write();
