@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-07-02 20:42:12 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,6 +1154,13 @@ ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
             return nPairs;
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+{
+    return 0;
 }
 
 // -----------------------------------------------------------------------
