@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:45:10 $
+ *  last change: $Author: os $ $Date: 2001-07-16 10:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,7 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
         pDesc->SetIndexOptions(pCurTOX->GetOptions());
     pDesc->SetMainEntryCharStyle(pCurTOX->GetMainEntryCharStyle());
     if(pDesc->GetTOXType() != TOX_INDEX)
-        pDesc->SetLevel(pCurTOX->GetLevel());
+        pDesc->SetLevel((BYTE)pCurTOX->GetLevel());
     pDesc->SetCreateFromObjectNames(pCurTOX->IsFromObjectNames());
     pDesc->SetSequenceName(pCurTOX->GetSequenceName());
     pDesc->SetCaptionDisplay(pCurTOX->GetCaptionDisplay());
@@ -1051,109 +1051,121 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         {
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_COMMA_SEPARATED, pForm->IsCommaSeparated());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, 0 != (nIdxOptions&TOI_ALPHA_DELIMITTER));
-            if(nCurrentLevel < pForm->GetFormMax() &&
-                xInfo->hasPropertyByName(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT))))
+            sal_uInt16 nStartLevel = USHRT_MAX;
+            sal_uInt16 nEndLevel = USHRT_MAX;
+            if(nCurrentLevel < pForm->GetFormMax())
+                nStartLevel = nEndLevel = nCurrentLevel;
+            else
             {
-                String sTokenType;
-                 uno::Sequence< beans::PropertyValues> aSequPropVals(10);
-                long nTokenIndex = 0;
-                long nParamCount = 2;
-                sal_Bool bTabRightAligned = sal_False;
-                SwFormTokenEnumerator aTokenEnum(pForm->GetPattern(nCurrentLevel));
-                while(aTokenEnum.HasNextToken())
+                nStartLevel = 0;
+                nEndLevel = pForm->GetFormMax() - 1;
+            }
+
+            if(xInfo->hasPropertyByName(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT))))
+            {
+                for(sal_uInt16 nCurrLevel = nStartLevel; nCurrLevel <= nEndLevel; nCurrLevel++)
                 {
-                    if( aSequPropVals.getLength() <= nTokenIndex)
-                        aSequPropVals.realloc(nTokenIndex + 10);
+                    String sTokenType;
+                    uno::Sequence< beans::PropertyValues> aSequPropVals(10);
+                    long nTokenIndex = 0;
+                    long nParamCount = 2;
+                    sal_Bool bTabRightAligned = sal_False;
+                    SwFormTokenEnumerator aTokenEnum(pForm->GetPattern(nCurrLevel));
+                    while(aTokenEnum.HasNextToken())
+                    {
+                        if( aSequPropVals.getLength() <= nTokenIndex)
+                            aSequPropVals.realloc(nTokenIndex + 10);
 
-                    SwFormToken aToken = aTokenEnum.GetNextToken();
-                    switch(aToken.eTokenType)
-                    {
-                        case TOKEN_ENTRY_NO     :
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenEntryNumber"));
-                            // fuer Inhaltsverzeichnis Numerierung
-                        break;
-                        case TOKEN_ENTRY_TEXT   :
-                        case TOKEN_ENTRY        :
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenEntryText"));
-                        break;
-                        case TOKEN_TAB_STOP     :
-                            nParamCount += 3;
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenTabStop"));
-                        break;
-                        case TOKEN_TEXT         :
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenText"));
-                            nParamCount += 1;
-                        break;
-                        case TOKEN_PAGE_NUMS    :
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenPageNumber"));
-                        break;
-                        case TOKEN_CHAPTER_INFO :
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenChapterInfo"));
+                        SwFormToken aToken = aTokenEnum.GetNextToken();
+                        switch(aToken.eTokenType)
                         {
-                            aToken.nChapterFormat;
+                            case TOKEN_ENTRY_NO     :
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenEntryNumber"));
+                                // fuer Inhaltsverzeichnis Numerierung
+                            break;
+                            case TOKEN_ENTRY_TEXT   :
+                            case TOKEN_ENTRY        :
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenEntryText"));
+                            break;
+                            case TOKEN_TAB_STOP     :
+                                nParamCount += 3;
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenTabStop"));
+                            break;
+                            case TOKEN_TEXT         :
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenText"));
+                                nParamCount += 1;
+                            break;
+                            case TOKEN_PAGE_NUMS    :
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenPageNumber"));
+                            break;
+                            case TOKEN_CHAPTER_INFO :
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenChapterInfo"));
+                            {
+                                aToken.nChapterFormat;
+                            }
+                            break;
+                            case TOKEN_LINK_START   :
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenHyperlinkStart"));
+                            break;
+                            case TOKEN_LINK_END     :
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                        "TokenHyperlinkEnd"));
+                            break;
+                            case TOKEN_AUTHORITY :
+                            {
+                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
+                                                    "TokenBibliographyDataField"));
+                                ToxAuthorityField eField = (ToxAuthorityField)aToken.nAuthorityField;
+                            }
+                            break;
                         }
-                        break;
-                        case TOKEN_LINK_START   :
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenHyperlinkStart"));
-                        break;
-                        case TOKEN_LINK_END     :
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenHyperlinkEnd"));
-                        break;
-                        case TOKEN_AUTHORITY :
+                        beans::PropertyValues aPropVals(nParamCount);
+                        beans::PropertyValue* pPropValArr = aPropVals.getArray();
+                        pPropValArr[0].Name = C2U("TokenType");
+                        pPropValArr[0].Value <<= OUString(sTokenType);
+                        pPropValArr[1].Name = C2U("CharacterStyleName");
+                        pPropValArr[1].Value <<= OUString(aToken.sCharStyleName);
+                        if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
-                            sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                "TokenBibliographyDataField"));
-                            ToxAuthorityField eField = (ToxAuthorityField)aToken.nAuthorityField;
+                            pPropValArr[2].Name = C2U("TabStopRightAligned");
+                            BOOL bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
+                            pPropValArr[2].Value.setValue(&bTemp, ::getBooleanCppuType());
+                            pPropValArr[3].Name = C2U("TabStopFillCharacter");
+                            pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
+                            pPropValArr[4].Name = C2U("TabStopPosition");
+                            SwTwips nTempPos = aToken.nTabStopPosition >= 0 ?
+                                                            aToken.nTabStopPosition : 0;
+                            nTempPos = TWIP_TO_MM100(nTempPos);
+                            pPropValArr[4].Value <<= (sal_Int32)nTempPos;
                         }
-                        break;
+                        else if(TOKEN_TEXT == aToken.eTokenType)
+                        {
+                            pPropValArr[2].Name = C2U("Text");
+                            pPropValArr[2].Value <<= OUString(aToken.sText);
+                        }
+                    beans::PropertyValues* pValues = aSequPropVals.getArray();
+                        pValues[nTokenIndex] = aPropVals;
+                        nTokenIndex++;
                     }
-                     beans::PropertyValues aPropVals(nParamCount);
-                     beans::PropertyValue* pPropValArr = aPropVals.getArray();
-                    pPropValArr[0].Name = C2U("TokenType");
-                    pPropValArr[0].Value <<= OUString(sTokenType);
-                    pPropValArr[1].Name = C2U("CharacterStyleName");
-                    pPropValArr[1].Value <<= OUString(aToken.sCharStyleName);
-                    if(TOKEN_TAB_STOP == aToken.eTokenType)
-                    {
-                        pPropValArr[2].Name = C2U("TabStopRightAligned");
-                        BOOL bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
-                        pPropValArr[2].Value.setValue(&bTemp, ::getBooleanCppuType());
-                        pPropValArr[3].Name = C2U("TabStopFillCharacter");
-                        pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
-                        pPropValArr[4].Name = C2U("TabStopPosition");
-                        SwTwips nTempPos = aToken.nTabStopPosition >= 0 ?
-                                                        aToken.nTabStopPosition : 0;
-                        nTempPos = TWIP_TO_MM100(nTempPos);
-                        pPropValArr[4].Value <<= (sal_Int32)nTempPos;
-                    }
-                    else if(TOKEN_TEXT == aToken.eTokenType)
-                    {
-                        pPropValArr[2].Name = C2U("Text");
-                        pPropValArr[2].Value <<= OUString(aToken.sText);
-                    }
-                 beans::PropertyValues* pValues = aSequPropVals.getArray();
-                    pValues[nTokenIndex] = aPropVals;
-                    nTokenIndex++;
+                    aSequPropVals.realloc(nTokenIndex);
+
+                    uno::Any aFormatAccess = xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
+                    DBG_ASSERT(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
+                        "wrong property type")
+
+
+                    uno::Reference< container::XIndexReplace >  xFormatAccess =
+                        *(uno::Reference< container::XIndexReplace > *)aFormatAccess.getValue();
+                    uno::Any aLevelProp(&aSequPropVals, ::getCppuType((uno::Sequence<beans::PropertyValues>*)0));
+                    xFormatAccess->replaceByIndex(nCurrLevel, aLevelProp);
                 }
-                aSequPropVals.realloc(nTokenIndex);
-
-                uno::Any aFormatAccess = xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
-                DBG_ASSERT(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
-                    "wrong property type")
-
-
-                 uno::Reference< container::XIndexReplace >  xFormatAccess =
-                    *(uno::Reference< container::XIndexReplace > *)aFormatAccess.getValue();
-                 uno::Any aLevelProp(&aSequPropVals, ::getCppuType((uno::Sequence<beans::PropertyValues>*)0));
-                xFormatAccess->replaceByIndex(nCurrentLevel, aLevelProp);
             }
         }
         if(bInitialCreate || !nPage || nPage == TOX_PAGE_STYLES)
@@ -1826,11 +1838,11 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     LanguageHdl(0);
     for( long nCnt = 0; nCnt < aSortAlgorithmLB.GetEntryCount(); ++nCnt )
     {
-        const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( nCnt );
+        const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( (USHORT)nCnt );
         DBG_ASSERT(pEntryData, "no entry data available")
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
-            aSortAlgorithmLB.SelectEntryPos( nCnt );
+            aSortAlgorithmLB.SelectEntryPos( (USHORT)nCnt );
             break;
         }
     }
@@ -1909,7 +1921,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
                     nOLEData |= nData;
                 }
             }
-            rDesc.SetOLEOptions(nOLEData);
+            rDesc.SetOLEOptions((USHORT)nOLEData);
         }
         break;
         case TOX_AUTHORITIES:
