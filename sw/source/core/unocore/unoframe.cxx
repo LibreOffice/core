@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-07 15:11:35 $
+ *  last change: $Author: mib $ $Date: 2000-12-08 08:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,9 +299,13 @@ const SfxItemPropertyMap* GetFrameDescMap()
         { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
+        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
         {0,0,0,0}
     };
-    #define FRM_PROP_COUNT 50
+    #define FRM_PROP_COUNT 54
     return aFrameDescPropertyMap_Impl;
 }
 // unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
@@ -360,13 +364,17 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),            0,                      &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
         { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
         {0,0,0,0}
     };
-    #define GRPH_PROP_COUNT 55
+    #define GRPH_PROP_COUNT 59
     return aGraphicDescPropertyMap_Impl;
 }
 
@@ -594,7 +602,16 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
     GetProperty(C2S(UNO_NAME_BOTTOM_BORDER),    pBottom);
     uno::Any* pDistance     = 0;
     GetProperty(C2S(UNO_NAME_BORDER_DISTANCE),  pDistance);
-    if( pLeft || pRight || pTop ||  pBottom || pDistance)
+    uno::Any* pLeftDistance     = 0;
+    GetProperty(C2S(UNO_NAME_LEFT_BORDER_DISTANCE), pLeftDistance);
+    uno::Any* pRightDistance    = 0;
+    GetProperty(C2S(UNO_NAME_RIGHT_BORDER_DISTANCE),    pRightDistance);
+    uno::Any* pTopDistance  = 0;
+    GetProperty(C2S(UNO_NAME_TOP_BORDER_DISTANCE),  pTopDistance);
+    uno::Any* pBottomDistance   = 0;
+    GetProperty(C2S(UNO_NAME_BOTTOM_BORDER_DISTANCE),   pBottomDistance);
+    if( pLeft || pRight || pTop ||  pBottom || pDistance ||
+        pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance )
     {
         SvxBoxItem aBox;
         if( pLeft )
@@ -607,6 +624,14 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pBottom, CONVERT_TWIPS|BOTTOM_BORDER);
         if( pDistance )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pDistance, CONVERT_TWIPS|BORDER_DISTANCE);
+        if( pLeftDistance )
+            bRet &= ((SfxPoolItem&)aBox).PutValue(*pLeftDistance, CONVERT_TWIPS|LEFT_BORDER_DISTANCE);
+        if( pRightDistance )
+            bRet &= ((SfxPoolItem&)aBox).PutValue(*pRightDistance, CONVERT_TWIPS|RIGHT_BORDER_DISTANCE);
+        if( pTopDistance )
+            bRet &= ((SfxPoolItem&)aBox).PutValue(*pTopDistance, CONVERT_TWIPS|TOP_BORDER_DISTANCE);
+        if( pBottomDistance )
+            bRet &= ((SfxPoolItem&)aBox).PutValue(*pBottomDistance, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE);
         rSet.Put(aBox);
     }
     {
