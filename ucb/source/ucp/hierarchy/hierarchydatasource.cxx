@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-08-21 07:07:18 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
  *************************************************************************/
 
+#include "osl/getglobalmutex.hxx"
+#include "rtl/instance.hxx"
+
 #ifndef _HIERARCHYDATASOURCE_HXX
 #include "hierarchydatasource.hxx"
 #endif
@@ -92,11 +95,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#endif
-#if SUPD<638
-#ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
-#include <com/sun/star/util/XStringEscape.hpp>
-#endif
 #endif
 
 using namespace com::sun::star;
@@ -140,9 +138,6 @@ class HierarchyDataAccess : public cppu::OWeakObject,
                             public container::XHierarchicalNameAccess,
                             public container::XNameContainer,
                             public util::XChangesNotifier,
-#if SUPD<638
-                            public util::XStringEscape,
-#endif
                             public util::XChangesBatch
 {
     osl::Mutex m_aMutex;
@@ -156,9 +151,6 @@ class HierarchyDataAccess : public cppu::OWeakObject,
     uno::Reference< container::XElementAccess >          m_xCfgEA;
     uno::Reference< util::XChangesNotifier >             m_xCfgCN;
     uno::Reference< util::XChangesBatch >                m_xCfgCB;
-#if SUPD<638
-    uno::Reference< util::XStringEscape >                m_xCfgSE;
-#endif
     bool m_bReadOnly;
 
 public:
@@ -266,16 +258,6 @@ public:
     virtual uno::Sequence< util::ElementChange > SAL_CALL
     getPendingChanges()
         throw ( uno::RuntimeException );
-
-#if SUPD<638
-    // XStringEscape
-    virtual rtl::OUString SAL_CALL
-    escapeString( const rtl::OUString & aString )
-        throw ( lang::IllegalArgumentException, uno::RuntimeException );
-    virtual rtl::OUString SAL_CALL
-    unescapeString( const rtl::OUString & aEscapedString )
-        throw ( lang::IllegalArgumentException, uno::RuntimeException );
-#endif
 };
 
 }; // namespace hcp_impl
@@ -741,9 +723,6 @@ uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const uno::Type & aType )
                 static_cast< container::XHierarchicalNameAccess * >( this ),
                 static_cast< container::XNameAccess * >( this ),
                 static_cast< container::XElementAccess * >( this ),
-#if SUPD<638
-                static_cast< util::XStringEscape * >( this ),
-#endif
                 static_cast< util::XChangesNotifier * >( this ) );
 
     // Interfaces supported only in read-write mode.
@@ -768,34 +747,29 @@ uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const uno::Type & aType )
 XTYPEPROVIDER_COMMON_IMPL( HierarchyDataAccess );
 
 //=========================================================================
-// virtual
-uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
-    throw( uno::RuntimeException )
-{
-    static cppu::OTypeCollection * pCollection = 0;
 
-    if ( !pCollection )
+namespace
+{
+    struct InitReadOnlyTypes
     {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pCollection )
-          {
-            if ( m_bReadOnly )
-            {
-                static cppu::OTypeCollection aCollection(
+        cppu::OTypeCollection * operator()()
+        {
+            static cppu::OTypeCollection aInstance(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
                     CPPU_TYPE_REF( container::XHierarchicalNameAccess ),
                     CPPU_TYPE_REF( container::XNameAccess ),
-#if SUPD<638
-                    CPPU_TYPE_REF( util::XStringEscape ),
-#endif
                     CPPU_TYPE_REF( util::XChangesNotifier ) );
-                  pCollection = &aCollection;
-            }
-            else
-            {
-                static cppu::OTypeCollection aCollection(
+            return &aInstance;
+        }
+    };
+
+    struct InitWritableTypes
+    {
+        cppu::OTypeCollection * operator()()
+        {
+            static cppu::OTypeCollection aInstance(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -803,16 +777,35 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
                     CPPU_TYPE_REF( container::XHierarchicalNameAccess ),
                     CPPU_TYPE_REF( container::XNameContainer ),
                     CPPU_TYPE_REF( util::XChangesBatch ),
-#if SUPD<638
-                    CPPU_TYPE_REF( util::XStringEscape ),
-#endif
                     CPPU_TYPE_REF( util::XChangesNotifier ) );
-                  pCollection = &aCollection;
-            }
+            return &aInstance;
         }
-    }
+    };
+}
 
-    return (*pCollection).getTypes();
+//=========================================================================
+// virtual
+uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
+    throw( uno::RuntimeException )
+{
+    if ( m_bReadOnly )
+    {
+        return (*rtl_Instance< cppu::OTypeCollection,
+                               InitReadOnlyTypes,
+                               ::osl::MutexGuard,
+                               ::osl::GetGlobalMutex >::create(
+                                    InitReadOnlyTypes(),
+                                    ::osl::GetGlobalMutex() ) ).getTypes();
+    }
+    else
+    {
+        return (*rtl_Instance< cppu::OTypeCollection,
+                               InitWritableTypes,
+                               ::osl::MutexGuard,
+                               ::osl::GetGlobalMutex >::create(
+                                    InitWritableTypes(),
+                                    ::osl::GetGlobalMutex() ) ).getTypes();
+    }
 }
 
 //=========================================================================
@@ -1024,53 +1017,6 @@ void SAL_CALL HierarchyDataAccess::removeChangesListener(
             "HierarchyDataAccess : Data source is not an XChangesNotifier!" );
     xOrig->removeChangesListener( aListener );
 }
-
-#if SUPD<638
-
-//=========================================================================
-//
-// XStringEscape methods.
-//
-//=========================================================================
-
-// virtual
-rtl::OUString SAL_CALL
-HierarchyDataAccess::escapeString( const rtl::OUString & aString )
-    throw ( lang::IllegalArgumentException, uno::RuntimeException )
-{
-    uno::Reference< util::XStringEscape > xOrig
-        = ENSURE_ORIG_INTERFACE( util::XStringEscape, SE );
-
-    OSL_ENSURE( xOrig.is(),
-            "HierarchyDataAccess : Data source is not an XStringEscape!" );
-    if ( xOrig.is() )
-    {
-        // Not all configuration objects support this interface...
-        return xOrig->escapeString( aString );
-    }
-    return rtl::OUString();
-}
-
-//=========================================================================
-// virtual
-rtl::OUString SAL_CALL
-HierarchyDataAccess::unescapeString( const rtl::OUString & aEscapedString )
-    throw ( lang::IllegalArgumentException, uno::RuntimeException )
-{
-    uno::Reference< util::XStringEscape > xOrig
-        = ENSURE_ORIG_INTERFACE( util::XStringEscape, SE );
-
-    OSL_ENSURE( xOrig.is(),
-            "HierarchyDataAccess : Data source is not an XStringEscape!" );
-    if ( xOrig.is() )
-    {
-        // Not all configuration objects support this interface...
-        return xOrig->unescapeString( aEscapedString );
-    }
-    return rtl::OUString();
-}
-
-#endif /* SUPD<638 */
 
 //=========================================================================
 //
