@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@
 #include "viewfrm.hxx"
 #include "imgmgr.hxx"
 #include "imagemgr.hxx"
+#include "sfxresid.hxx"
+#include "../doc/doc.hrc"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -351,8 +353,25 @@ void SfxMenuControl::StateChanged
         bCheck = ((SfxEnumItemInterface *)pState)->GetBoolValue();
     }
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
+    {
         // MenuText aus SfxStringItem holen
-        pOwnMenu->SetItemText( GetId(), ((const SfxStringItem*)pState)->GetValue());
+        String aStr( ((const SfxStringItem*)pState)->GetValue() );
+        if ( aStr.CompareToAscii("($1)",4) == COMPARE_EQUAL )
+        {
+            String aEntry(SfxResId(STR_UPDATEDOC));
+            aEntry += ' ';
+            aEntry += aStr.Copy(4);
+            aStr = aEntry;
+        }
+        else if ( aStr.CompareToAscii("($2)",4) == COMPARE_EQUAL )
+        {
+            String aEntry(SfxResId(STR_CLOSEDOC_ANDRETURN));
+            aEntry += aStr.Copy(4);
+            aStr = aEntry;
+        }
+
+        pOwnMenu->SetItemText( GetId(), aStr );
+    }
 
 #ifdef enum_item_menu_ok
     else if ( aType == TYPE(SfxEnumItem) )
@@ -618,5 +637,3 @@ void SfxUnoMenuControl::Select()
 {
     pUnoCtrl->Execute();
 }
-
-
