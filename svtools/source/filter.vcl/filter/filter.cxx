@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:57:49 $
+ *  last change: $Author: sj $ $Date: 2001-03-28 15:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,6 +1116,13 @@ USHORT GraphicFilter::GetImportFormatNumber( const String& rFormatName )
 
 // ------------------------------------------------------------------------
 
+USHORT GraphicFilter::GetImportFormatNumberForMediaType( const String& rMediaType )
+{
+    return pConfig->GetImportFormatNumberForMediaType( rMediaType );
+}
+
+// ------------------------------------------------------------------------
+
 USHORT GraphicFilter::GetImportFormatNumberForShortName( const String& rShortName )
 {
     return pConfig->GetImportFormatNumberForShortName( rShortName );
@@ -1126,6 +1133,13 @@ USHORT GraphicFilter::GetImportFormatNumberForShortName( const String& rShortNam
 String GraphicFilter::GetImportFormatName( USHORT nFormat )
 {
     return pConfig->GetImportFormatName( nFormat );
+}
+
+// ------------------------------------------------------------------------
+
+String GraphicFilter::GetImportFormatMediaType( USHORT nFormat )
+{
+    return pConfig->GetImportFormatMediaType( nFormat );
 }
 
 // ------------------------------------------------------------------------
@@ -1179,6 +1193,13 @@ USHORT GraphicFilter::GetExportFormatNumber( const String& rFormatName )
 
 // ------------------------------------------------------------------------
 
+USHORT GraphicFilter::GetExportFormatNumberForMediaType( const String& rMediaType )
+{
+    return pConfig->GetExportFormatNumberForMediaType( rMediaType );
+}
+
+// ------------------------------------------------------------------------
+
 USHORT GraphicFilter::GetExportFormatNumberForShortName( const String& rShortName )
 {
     return pConfig->GetExportFormatNumberForShortName( rShortName );
@@ -1189,6 +1210,13 @@ USHORT GraphicFilter::GetExportFormatNumberForShortName( const String& rShortNam
 String GraphicFilter::GetExportFormatName( USHORT nFormat )
 {
     return pConfig->GetExportFormatName( nFormat );
+}
+
+// ------------------------------------------------------------------------
+
+String GraphicFilter::GetExportFormatMediaType( USHORT nFormat )
+{
+    return pConfig->GetExportFormatMediaType( nFormat );
 }
 
 // ------------------------------------------------------------------------
