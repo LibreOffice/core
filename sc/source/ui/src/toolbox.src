@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:08:59 $
+ *  last change: $Author: rt $ $Date: 2001-11-22 23:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-11-13 23:08:59 $ $Revision: 1.32 $
+ // $Author: rt $ $Date: 2001-11-22 23:50:15 $ $Revision: 1.33 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -154,7 +154,7 @@ String SCSTR_QHELP_POSWND
     Text[ korean ] = "ì‹œíŠ¸ ì˜ì—­";
     Text[ turkish ] = "Tablo bölümü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Área de hoja";
+    Text[ catalan ] = "Àrea del full";
 };
 
 String SCSTR_QHELP_INPUTWND
@@ -182,7 +182,7 @@ String SCSTR_QHELP_INPUTWND
     Text[ korean ] = "ì…ë ¥í–‰";
     Text[ turkish ] = "Giriş satırı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Línea de entrada";
+    Text[ catalan ] = "Línia d'entrada";
 };
 
 String SCSTR_QHELP_BTNCALC
@@ -210,7 +210,7 @@ String SCSTR_QHELP_BTNCALC
     Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿ ê¸°ëŠ¥";
     Text[ turkish ] = "Fonksyon OtoPilotu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoPiloto de funciones";
+    Text[ catalan ] = "AutoPilot: funcions";
 };
 
 String SCSTR_QHELP_BTNOK
@@ -239,7 +239,7 @@ String SCSTR_QHELP_BTNOK
     Text[ korean ] = "ì ìš©";
     Text[ turkish ] = "Kabul";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aplicar";
+    Text[ catalan ] = "Accepta";
 };
 
 String SCSTR_QHELP_BTNCANCEL
@@ -267,7 +267,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text[ korean ] = "ì•„ë‹ˆì˜¤";
     Text[ turkish ] = "İptal";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rechazar";
+    Text[ catalan ] = "Cancel·la";
 };
 
 String SCSTR_QHELP_BTNSUM
@@ -323,7 +323,7 @@ String SCSTR_QHELP_BTNEQUAL
     Text[ korean ] = "í•¨ìˆ˜";
     Text[ turkish ] = "İşlev";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Función";
+    Text[ catalan ] = "Funció";
 };
 
  //-----------------------------------------------------------------------------
@@ -355,7 +355,7 @@ String RID_OBJECTBAR_APP
     Text[ korean ] = "í•¨ìˆ˜ ëª¨ìŒ";
     Text[ turkish ] = "İşlev çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de funciones";
+    Text[ catalan ] = "Barra de funcions";
 };
 
 ToolBox RID_OBJECTBAR_APP
@@ -541,7 +541,7 @@ String RID_PLUGINTOOLBOX
     Text[ turkish ] = "PlugIn işlev çubuğu";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisäosien toimintopalkki";
-    Text[ catalan ] = "Barra de funciones para Plug-ins";
+    Text[ catalan ] = "Barra de funcions per als connectors";
 };
 
 ToolBox RID_PLUGINTOOLBOX
@@ -717,7 +717,7 @@ String RID_OBJECTBAR_FORMAT
     Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ê°œì²´ ëª¨ìŒ";
     Text[ turkish ] = "Tablo nesne çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos para tablas";
+    Text[ catalan ] = "Barra d'objectes del full de càlcul";
 };
 
 ToolBox RID_OBJECTBAR_FORMAT
@@ -979,7 +979,7 @@ String RID_OBJECTBAR_PREVIEW
     Text[ korean ] = "í˜ì´ì§€ ë¯¸ë¦¬ë³´ê¸° ê°œì²´ ëª¨ìŒ";
     Text[ turkish ] = "Sayfa önizleme nesne çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de vista preliminar";
+    Text[ catalan ] = "Barra d'objectes de la visualització de pàgina";
 };
 
 ToolBox RID_OBJECTBAR_PREVIEW
@@ -1094,7 +1094,7 @@ String RID_OBJECTBAR_TOOLS
     Text[ turkish ] = "Ana araç çubuğu";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Päätyökalurivi";
-    Text[ catalan ] = "Barra de herramientas";
+    Text[ catalan ] = "Barra d'eines principal";
 };
 
 ToolBox RID_OBJECTBAR_TOOLS
@@ -1297,7 +1297,7 @@ FloatingWindow RID_TBXCTL_INSERT
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää";
-    Text[ catalan ] = "Insertar";
+    Text[ catalan ] = "Insereix";
 };
 
 FloatingWindow RID_TBXCTL_INSCELLS
@@ -1360,7 +1360,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text[ turkish ] = "Hücre ekle";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää solut";
-    Text[ catalan ] = "Insertar celdas";
+    Text[ catalan ] = "Insereix cel·les";
 };
 
 FloatingWindow RID_TBXCTL_INSOBJ
@@ -1436,7 +1436,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
     Text[ turkish ] = "Nesne ekle";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää objekti";
-    Text[ catalan ] = "Insertar objeto";
+    Text[ catalan ] = "Insereix un objecte";
 };
 
  // Image-Liste fuer ToolBoxen -----------------------------------------------
@@ -1759,6 +1759,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
