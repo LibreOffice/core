@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,7 +629,7 @@ NeonUri::NeonUri( const OUString & inUri )
         = theInputUri.copy( 0, RTL_CONSTASCII_LENGTH( "https:" ) );
 
     uri theUri;
-    uri* pUriDefs = aProtocol.equalsIgnoreCase( "https:" )
+    uri* pUriDefs = aProtocol.equalsIgnoreAsciiCase( "https:" )
                   ? &sUriDefaultsHTTPS : &sUriDefaultsHTTP;
 
     if ( uri_parse( theInputUri.getStr(), &theUri, pUriDefs ) != 0 )

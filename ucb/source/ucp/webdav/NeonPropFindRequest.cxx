@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,12 +238,13 @@ int NeonPropFindRequest::propfind_iter( void* userdata,
 
     if ( !bHasValue )
     {
-        if ( rtl_str_equalsIgnoreCase( pname->name, "resourcetype" ) )
+        if ( rtl_str_compareIgnoreAsciiCase(
+                                    pname->name, "resourcetype" ) == 0 )
         {
             OString aValue( value );
             if ( aValue.getLength() )
             {
-                aValue = aValue.toLowerCase();
+                aValue = aValue.toAsciiLowerCase();
                 if ( aValue.compareTo(
                         RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
                 {
@@ -261,19 +262,21 @@ int NeonPropFindRequest::propfind_iter( void* userdata,
                 thePropertyValue.Value <<= OUString();
             }
         }
-        else if ( rtl_str_equalsIgnoreCase( pname->name, "supportedlock" ) )
+        else if ( rtl_str_compareIgnoreAsciiCase(
+                                    pname->name, "supportedlock" ) == 0 )
         {
             Sequence< LockEntry > aEntries;
             LockEntrySequence::createFromXML( value, aEntries );
             thePropertyValue.Value <<= aEntries;
         }
-        else if ( rtl_str_equalsIgnoreCase( pname->name, "lockdiscovery" ) )
+        else if ( rtl_str_compareIgnoreAsciiCase(
+                                    pname->name, "lockdiscovery" ) == 0 )
         {
             Sequence< Lock > aLocks;
             LockSequence::createFromXML( value, aLocks );
             thePropertyValue.Value <<= aLocks;
         }
-        else if ( rtl_str_equalsIgnoreCase( pname->name, "source" ) )
+        else if ( rtl_str_compareIgnoreAsciiCase( pname->name, "source" ) == 0 )
         {
             Sequence< Link > aLinks;
             LinkSequence::createFromXML( value, aLinks );

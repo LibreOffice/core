@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,26 +589,28 @@ Any SAL_CALL Content::execute( const Command& aCommand,
             NeonUri sourceURI( transferArgs.SourceURL );
             NeonUri targetURI( m_xIdentifier->getContentIdentifier() );
 
-            // Check scheme
+            // Check source's and target's URL scheme
             //
-            const OUString aHttpScheme
-                    = OUString::createFromAscii( HTTP_URL_SCHEME );
-            const OUString aDavScheme
-                    = OUString::createFromAscii( WEBDAV_URL_SCHEME );
-
-            const OUString aScheme = sourceURI.GetScheme();
-            if ( aScheme.equalsIgnoreCase( aDavScheme ) )
-                sourceURI.SetScheme( aHttpScheme );
+            const OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
+            if ( aScheme.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+            {
+                sourceURI.SetScheme(
+                    OUString::createFromAscii( HTTP_URL_SCHEME ) );
+            }
             else
             {
-                if ( !aScheme.equalsIgnoreCase( aHttpScheme ) &&
-                       !aScheme.equalsIgnoreCase(
-                        OUString::createFromAscii( HTTPS_URL_SCHEME ) ) )
+                if ( !aScheme.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( HTTP_URL_SCHEME ) ) &&
+                     !aScheme.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( HTTPS_URL_SCHEME ) ) )
                     throw InteractiveBadTransferURLException();
             }
 
-            if ( targetURI.GetScheme().equalsIgnoreCase( aDavScheme ) )
-                targetURI.SetScheme( aHttpScheme );
+            if ( targetURI.GetScheme().toAsciiLowerCase().equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+                targetURI.SetScheme(
+                    OUString::createFromAscii( HTTP_URL_SCHEME ) );
 
             // @@@ This implementation of 'transfer' only works
             //     if the source and target are located at same host.

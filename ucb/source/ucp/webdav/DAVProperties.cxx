@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,6 @@ void DAVProperties::createUCBPropName( const char * nspace,
 // static
 bool DAVProperties::isUCBDeadProperty( const NeonPropName & rName )
 {
-    return rtl_str_equalsIgnoreCase( rName.nspace,
-                                       "http://ucb.openoffice.org/dav/props/" );
+    return ( rtl_str_compareIgnoreAsciiCase(
+                rName.nspace, "http://ucb.openoffice.org/dav/props/" ) == 0 );
 }

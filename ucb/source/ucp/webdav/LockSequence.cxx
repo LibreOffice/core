@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockSequence.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,11 +186,11 @@ int LockSequence::endelement_callback( void * userdata,
     switch ( s->id )
     {
         case DAV_ELM_depth:
-            if ( rtl_str_equalsIgnoreCase( cdata, "0" ) )
+            if ( rtl_str_compareIgnoreAsciiCase( cdata, "0" ) == 0 )
                 pCtx->pLock->Depth = ucb::LockDepth_ZERO;
-            else if ( rtl_str_equalsIgnoreCase( cdata, "1" ) )
+            else if ( rtl_str_compareIgnoreAsciiCase( cdata, "1" ) == 0 )
                 pCtx->pLock->Depth = ucb::LockDepth_ONE;
-            else if ( rtl_str_equalsIgnoreCase( cdata, "infinity" ) )
+            else if ( rtl_str_compareIgnoreAsciiCase( cdata, "infinity" ) == 0 )
                 pCtx->pLock->Depth = ucb::LockDepth_INFINITY;
             else
                 OSL_ENSURE( sal_False,
@@ -215,12 +215,12 @@ int LockSequence::endelement_callback( void * userdata,
                                 of token, separators, and quoted-string>
             */
 
-            if ( rtl_str_equalsIgnoreCase( cdata, "Infinite" ) )
+            if ( rtl_str_compareIgnoreAsciiCase( cdata, "Infinite" ) == 0 )
             {
                 pCtx->pLock->Timeout = sal_Int64( -1 );
             }
-            else if ( rtl_str_equalsIgnoreCase_WithLength(
-                                            cdata, 7, "Second-", 7 ) )
+            else if ( rtl_str_compareIgnoreAsciiCase_WithLength(
+                                            cdata, 7, "Second-", 7 ) == 0 )
             {
                 pCtx->pLock->Timeout
                     = rtl::OUString::createFromAscii( cdata + 7 ).toInt64();

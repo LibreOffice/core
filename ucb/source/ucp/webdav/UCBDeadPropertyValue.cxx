@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,44 +340,43 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
             {
                 // Decode aCtx.pValue! It may contain XML reserved chars.
                 rtl::OUString aStringValue = decodeValue( *aCtx.pValue );
-
-                if ( aCtx.pType->equalsIgnoreCase( aTypeString ) )
+                if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeString ) )
                 {
                     rOutData <<= aStringValue;
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeLong ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeLong ) )
                 {
                     rOutData <<= aStringValue.toInt32();
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeShort ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeShort ) )
                 {
                     rOutData <<= sal_Int16( aStringValue.toInt32() );
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeBoolean ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
                 {
-                    if ( aStringValue.equalsIgnoreCase(
+                    if ( aStringValue.equalsIgnoreAsciiCase(
                             rtl::OUString::createFromAscii( "true" ) ) )
                         rOutData <<= sal_Bool( sal_True );
                     else
                         rOutData <<= sal_Bool( sal_False );
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeChar ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeChar ) )
                 {
                     rOutData <<= aStringValue.toChar();
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeByte ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeByte ) )
                 {
                     rOutData <<= sal_Int8( aStringValue.toChar() );
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeHyper ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeHyper ) )
                 {
                     rOutData <<= aStringValue.toInt64();
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeFloat ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeFloat ) )
                 {
                     rOutData <<= aStringValue.toFloat();
                 }
-                else if ( aCtx.pType->equalsIgnoreCase( aTypeDouble ) )
+                else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeDouble ) )
                 {
                     rOutData <<= aStringValue.toDouble();
                 }

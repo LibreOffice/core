@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,13 +175,14 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
 
     // Check URL scheme...
 
-    const OUString aScheme = Identifier->getContentProviderScheme();
-    if ( !aScheme.equalsIgnoreCase(
-            OUString::createFromAscii( WEBDAV_URL_SCHEME ) ) &&
-         !aScheme.equalsIgnoreCase(
-             OUString::createFromAscii( HTTP_URL_SCHEME ) ) &&
-         !aScheme.equalsIgnoreCase(
-             OUString::createFromAscii( HTTPS_URL_SCHEME ) ) )
+    const OUString aScheme
+        = Identifier->getContentProviderScheme().toAsciiLowerCase();
+    if ( !aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( HTTP_URL_SCHEME ) ) &&
+         !aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( HTTPS_URL_SCHEME ) ) &&
+         !aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
         throw IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
