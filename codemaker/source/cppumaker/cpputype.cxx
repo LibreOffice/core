@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ts $ $Date: 2000-12-11 13:57:15 $
+ *  last change: $Author: jsc $ $Date: 2001-01-02 15:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ sal_Bool CppuType::hasNestedType(const ::rtl::OString& type)
     {
         OUString typeName(OStringToOUString(type, RTL_TEXTENCODING_UTF8));
 
-        for (sal_Int32 i = 0; !ret && (i < m_nestedTypeNames.getLength()); i++)
+        for (sal_uInt32 i = 0; !ret && (i < m_nestedTypeNames.getLength()); i++)
             ret = typeName.equals(m_nestedTypeNames.getElement(i).copy(5));
     }
 
@@ -531,7 +531,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
     {
         o << "// includes for nested types\n\n";
 
-        for (sal_Int32 i = 0; i < getNestedTypeNames().getLength(); i++)
+        for (sal_uInt32 i = 0; i < getNestedTypeNames().getLength(); i++)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
@@ -564,7 +564,7 @@ void CppuType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, cons
 
     if (bOpen)
     {
-        for (int i=0; i < count; i++)
+        for (sal_uInt32 i=0; i < count; i++)
         {
             o << "namespace " << typeName.getToken(i, '/');
             if (bOneLine)
@@ -595,12 +595,12 @@ void CppuType::dumpLGetCppuType(FileStream& o)
 
     if (m_reader.getTypeClass() == RT_TYPE_TYPEDEF)
     {
-        o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( )\n{\n";
+        o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) throw()\n{\n";
     } else
     {
         o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
         dumpType(o, m_typeName, sal_True, sal_False);
-        o << "* )\n{\n";
+        o << "* ) throw()\n{\n";
     }
     inc();
 
@@ -646,7 +646,7 @@ void CppuType::dumpGetCppuType(FileStream& o)
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* )\n{\n";
+    o << "* ) throw()\n{\n";
     inc();
 
     if ( m_typeName.equals("com/sun/star/uno/Exception") )
@@ -769,8 +769,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* )\n"
-      << "{\n";
+    o << "* ) throw()\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -1079,7 +1078,7 @@ void CppuType::dumpType(FileStream& o, const OString& type,
 
     if (bConst) o << "const ";
 
-    int i;
+    sal_uInt32 i;
     for (i=0; i < seqNum; i++)
     {
         o << "::com::sun::star::uno::Sequence< ";
@@ -1455,7 +1454,7 @@ OString CppuType::indent()
 {
     OStringBuffer tmp(m_indentLength);
 
-    for (int i=0; i < m_indentLength; i++)
+    for (sal_uInt32 i=0; i < m_indentLength; i++)
     {
         tmp.append(' ');
     }
@@ -1466,7 +1465,7 @@ OString CppuType::indent(sal_uInt32 num)
 {
     OStringBuffer tmp(m_indentLength + num);
 
-    for (int i=0; i < m_indentLength + num; i++)
+    for (sal_uInt32 i=0; i < m_indentLength + num; i++)
     {
         tmp.append(' ');
     }
@@ -1515,12 +1514,12 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* );\n\n";
+    o << "* ) throw();\n\n";
 
     if (getNestedTypeNames().getLength() > 0)
     {
         o << indent() << "// nested types\n\n";
-        for (sal_Int32 i = 0; i < getNestedTypeNames().getLength(); i++)
+        for (sal_uInt32 i = 0; i < getNestedTypeNames().getLength(); i++)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
@@ -1537,7 +1536,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
 
                 o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
                 dumpType(o, nestedName, sal_True, sal_False);
-                o << "* );\n\n";
+                o << "* ) throw();\n\n";
             }
         }
     }
@@ -1561,7 +1560,7 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     {
         inc();
         o << indent() << "// nested types\n\n";
-        for (sal_Int32 i = 0; i < getNestedTypeNames().getLength(); i++)
+        for (sal_uInt32 i = 0; i < getNestedTypeNames().getLength(); i++)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
@@ -1646,7 +1645,7 @@ sal_Bool InterfaceType::dumpHxxFile(FileStream& o)
     if (getNestedTypeNames().getLength() > 0)
     {
         o << indent() << "// nested types\n\n";
-        for (sal_Int32 i = 0; i < getNestedTypeNames().getLength(); i++)
+        for (sal_uInt32 i = 0; i < getNestedTypeNames().getLength(); i++)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
@@ -1826,7 +1825,7 @@ void InterfaceType::dumpMethods(FileStream& o)
             dumpType(o, paramType, bConst, bRef);
             o << " " << paramName;
 
-            if (j+1 < paramCount) o << ", ";
+            if (j+1 < (sal_uInt16)paramCount) o << ", ";
         }
         o << " )";
 
@@ -1874,7 +1873,7 @@ void InterfaceType::dumpGetCppuType(FileStream& o)
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* )\n{\n";
+    o << "* ) throw()\n{\n";
     inc();
 
     if ( m_typeName.equals("com/sun/star/uno/XInterface") )
@@ -1935,7 +1934,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* )\n{\n";
+    o << "* ) throw()\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -1978,7 +1977,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
         if (count)
         {
             o << indent() << "typelib_TypeDescriptionReference * pMembers[" << count << "] = { ";
-            for (sal_uInt16 i = 0; i < count; i++)
+            for (sal_uInt32 i = 0; i < count; i++)
             {
                 o << "0";
                 if (i+1 < count)
@@ -2780,7 +2779,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* );\n\n";
+    o << "* ) throw();\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -3008,7 +3007,7 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
             RTFieldAccess   access = RT_ACCESS_INVALID;
             OString         fieldName;
             OString         fieldType;
-            for (sal_Int16 i=0; i < fieldCount; i++)
+            for (sal_uInt16 i=0; i < fieldCount; i++)
             {
                 access = aSuperReader.getFieldAccess(i);
 
@@ -3131,7 +3130,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* );\n\n";
+    o << "* ) throw();\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -3490,7 +3489,7 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* );\n\n";
+    o << "* ) throw();\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -3573,7 +3572,7 @@ void EnumType::dumpGetCppuType(FileStream& o)
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* )\n{\n";
+    o << "* ) throw()\n{\n";
     inc();
 
     o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -3612,7 +3611,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
         o << "inline";
     o << " const ::com::sun::star::uno::Type& SAL_CALL getCppuType( ";
     dumpType(o, m_typeName, sal_True, sal_False);
-    o << "* )\n{\n";
+    o << "* ) throw()\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -3649,7 +3648,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
         for (i = 0; i < count; i++)
         {
             o << indent() << "::rtl::OUString sEnumValue" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
-                << m_reader.getFieldName(i) << "\") );\n";
+                << m_reader.getFieldName((sal_uInt16)i) << "\") );\n";
             o << indent() << "enumValueNames[" << i << "] = sEnumValue" << i << ".pData;\n";
         }
 
@@ -3659,7 +3658,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
         for (i = 0; i < count; i++)
         {
             o << indent() << "enumValues[" << i << "] = ";
-            constValue = m_reader.getFieldConstValue(i);
+            constValue = m_reader.getFieldConstValue((sal_uInt16)i);
             if (constValue.m_type == RT_TYPE_INT32)
                 value = constValue.m_value.aLong;
             else
@@ -3735,7 +3734,7 @@ sal_Bool TypeDefType::dumpHFile(FileStream& o)
 //  o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
 //    << "class Type;\n} } } }\n\n";
 //  o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << m_typeName.replace('/', '_')
-//    <<  "_Type( );\n\n";
+//    <<  "_Type( ) throw();\n\n";
 
     o << "#endif // "<< headerDefine << endl;
 
@@ -3800,7 +3799,7 @@ void TypeDefType::dumpCGetCppuType(FileStream& o)
       <<  "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( )\n" << "{\n";
+    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) throw()\n{\n";
     inc();
 
     o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -3880,7 +3879,7 @@ void TypeDefType::dumpLGetCppuType(FileStream& o)
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
-    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( )\n{\n";
+    o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) throw()\n{\n";
     inc();
 
     o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n"
@@ -4077,7 +4076,7 @@ OString scopedName(const OString& scope, const OString& type,
 //  tmpBuf.append(type.getToken(0, '/'));
 //  for (int i=1; i < count; i++)
     OStringBuffer tmpBuf(type.getLength() + count);
-    for (int i=0; i < count; i++)
+    for (sal_uInt32 i=0; i < count; i++)
     {
         tmpBuf.append("::");
         tmpBuf.append(type.getToken(i, '/'));
@@ -4116,7 +4115,7 @@ OString shortScopedName(const OString& scope, const OString& type,
 
     OStringBuffer tmpBuf(type.lastIndexOf('/') + offset);
 
-    for (int i=0; i < count - 1; i++)
+    for (sal_uInt32 i=0; i < count - 1; i++)
     {
         tmpBuf.append("::");
         tmpBuf.append(type.getToken(i, '/'));
