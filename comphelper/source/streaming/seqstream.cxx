@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seqstream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:33:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 namespace comphelper
 {
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::osl;
@@ -160,6 +161,24 @@ void SAL_CALL SequenceInputStream::closeInput(  )
 
     m_nPos = -1;
 }
+
+void SAL_CALL SequenceInputStream::seek( sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException)
+{
+    if ( location > m_aData.getLength()-1 || location < 0 || location > SAL_MAX_INT32 )
+        throw IllegalArgumentException();
+    m_nPos = (sal_Int32) location;
+}
+
+sal_Int64 SAL_CALL SequenceInputStream::getPosition() throw (IOException, RuntimeException)
+{
+    return m_nPos;
+}
+
+sal_Int64 SAL_CALL SequenceInputStream::getLength(  ) throw (IOException, RuntimeException)
+{
+    return m_aData.getLength();
+}
+
 //--------------------------------------------------------------------------
 OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double _nResizeFactor, sal_Int32 _nMinimumResize, sal_Int32 _nMaximumResize)
     :m_rSequence(_rSeq)
