@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:42:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #endif
 #endif
 #include <stdlib.h>
+#include <math.h>
 #include "swrect.hxx"
 
 
@@ -279,6 +280,61 @@ void SwRect::Justify()
         nX = nX + nWidth + 1;
         nWidth = -nWidth;
     }
+}
+
+/*************************************************************************
+|*
+|*  SwRect::GetDistance()
+|*
+|*  Ersterstellung      MB 24. Mov. 04
+|*
+|*************************************************************************/
+
+float SwRect::GetDistance( const Point &rPOINT, Point rClosest ) const {
+
+    // 2d intervall or rectangle area
+    const long fXMin = Left();
+    const long fXMax = Right();
+    const long fYMin = Top();
+    const long fYMax = Bottom();
+
+    float fSqrDistance = 0.0f;
+    rClosest = rPOINT;
+
+    // A point is in the box whenever xmin <= x <= xmax and
+    // ymin <= y <= ymax and zmin <= z <= zmax.
+    if(!(IsInside(rPOINT))) {
+
+        if(rPOINT.X() < fXMin) {
+            long fDelta = rPOINT.X() - fXMin;
+            fSqrDistance += fDelta*fDelta;
+            rClosest.X() = fXMin;
+        }
+        else if(rPOINT.X() > fXMax) {
+            long fDelta = rPOINT.X() - fXMax;
+            fSqrDistance += fDelta*fDelta;
+            rClosest.X() = fXMax;
+        }
+        else {
+            rClosest.X() = rPOINT.X();
+        }
+
+        if(rPOINT.Y() < fYMin ) {
+            long fDelta = rPOINT.Y() - fYMin;
+            fSqrDistance += fDelta*fDelta;
+            rClosest.Y() = fYMin;
+        }
+        else if(rPOINT.Y() > fYMax) {
+            long fDelta = rPOINT.Y() - fYMax;
+            fSqrDistance += fDelta*fDelta;
+            rClosest.Y() = fYMax;
+        }
+        else {
+            rClosest.Y() = rPOINT.Y();
+        }
+    }
+
+    return sqrtf(fSqrDistance);
 }
 
 
