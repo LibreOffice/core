@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2002-08-02 12:11:21 $
+#   last change: $Author: hr $ $Date: 2002-08-20 15:05:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,21 +71,12 @@ TARGET=fontsubset
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"=="MACOSX"
-
-dummy:
-    @echo "Nothing to build for Mac OS X"
- 
-.ELSE		# "$(OS)"=="MACOSX"
-
 SLOFILES=\
     $(SLO)$/list.obj		\
     $(SLO)$/sft.obj			\
     $(SLO)$/xlat.obj		\
     $(SLO)$/ttcr.obj		\
     $(SLO)$/gsub.obj
-
-.ENDIF		# "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: pl $ $Date: 2001-05-08 11:46:04 $
+#   last change: $Author: hr $ $Date: 2002-08-20 15:10:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,13 +73,6 @@ TARGET=gfx
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"=="MACOSX"
-
-dummy:
-    @echo "Nothing to build for Mac OS X"
- 
-.ELSE		# "$(OS)"=="MACOSX"
-
 SLOFILES=\
     $(SLO)$/printerjob.obj		\
     $(SLO)$/text_gfx.obj		\
@@ -87,8 +80,6 @@ SLOFILES=\
     $(SLO)$/common_gfx.obj		\
     $(SLO)$/glyphset.obj		\
     $(SLO)$/bitmap_gfx.obj
-
-.ENDIF		# "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------
 
