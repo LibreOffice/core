@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: gh $ $Date: 2000-10-12 13:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ final void SalGraphics::BeginSetClipRegion( ULONG )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nDX, long nDY )
 {
-#ifdef DBG_UTIL
+#ifdef DEBUG
     if( nDX <= 0 || nX + nDX > 32767 )
         fprintf( stderr, "CombineClipRegion %ld %ld\n", nX, nDX );
     if( nDY <= 0 || nX + nDY > 32767 )
@@ -780,7 +780,7 @@ final void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
     {
         if( !nPoints )
         {
-#ifdef DBG_UTIL
+#ifdef DEBUG
             fprintf( stderr, "SalGraphics::DrawPolygon !nPoints\n" );
 #endif
         }
@@ -958,7 +958,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
         {
             aTransfer.scale_x = 1;
             aTransfer.scale_y = 1;
-#if defined DEBUG
+#ifdef DEBUG
             fprintf( stderr, "Warning: XpEPS_GetBoundingBox returned NULL\n" );
 #endif
         }
