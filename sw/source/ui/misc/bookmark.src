@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:30:25 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT [ spanish ] = "Marcas de texto" ;
         TEXT [ english_us ] = "Bookmarks" ;
         TEXT[ chinese_simplified ] = "КйЗ©";
-        TEXT[ russian ] = "Закладки";
+        TEXT[ russian ] = "Текстовые пометки";
         TEXT[ polish ] = "Zakіadki";
         TEXT[ japanese ] = "Г·ЅДП°ё";
         TEXT[ chinese_traditional ] = "¤є¤ејРЕТ";
@@ -164,7 +164,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ turkish ] = "Metin iюareti";
     };
     TEXT[ chinese_simplified ] = "ІеИлКйЗ©";
-    TEXT[ russian ] = "Вставка закладок";
+    TEXT[ russian ] = "Вставка текстовой пометки";
     TEXT[ polish ] = "Wstaw zakіadkк";
     TEXT[ japanese ] = "Г·ЅДП°ё‚М‘}“ь";
     TEXT[ chinese_traditional ] = "ґЎ¤J¤є¤ејРЕТ";
