@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:52 $
+ *  last change: $Author: dfoster $ $Date: 2002-09-25 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <sal/config.h>
-#include <util/util.hxx>
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -157,7 +156,7 @@ ScriptStorageManager::ScriptStorageManager(const Reference< XComponentContext > 
     }
     catch (Exception &e)
     {
-        throw RuntimeException(OUSTR("ScriptStorageManager::ScriptStorageManager: ") + e.Message, Reference< XInterface >());
+        throw RuntimeException(OUSTR("ScriptStorageManager::ScriptStorageManager: ").concat(e.Message), Reference< XInterface >());
     }
 }
 
