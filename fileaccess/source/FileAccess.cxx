@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-19 07:25:37 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 
         while ( xResultSet->next() )
         {
-            OUString aId = xContentAccess->queryContentIdentfierString();
+            OUString aId = xContentAccess->queryContentIdentifierString();
             OUString* pFile = new OUString( aId );
             pFiles->Insert( pFile, LIST_APPEND );
         }
