@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-29 12:37:04 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 15:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,16 +134,8 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
     return FALSE;
 }
 
-// XNameContainer
-void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    if( hasByName( aApiName ) )
-        throw container::ElementExistException();
-
-    String aName;
-    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
-
     SfxItemSet* mpInSet1 = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
     SfxItemSet* mpInSet2 = mpStylePool ? new SfxItemSet( *mpStylePool, mnWhich, mnWhich ) : NULL;
     maItemSetVector.push_back( std::pair< SfxItemSet*, SfxItemSet*>( mpInSet1, mpInSet2 ) );
@@ -156,6 +148,19 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const
     if( mpInSet2 )
         mpInSet2->Put( *pNewItem, mnWhich );
     delete pNewItem;
+}
+
+// XNameContainer
+void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
+    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+{
+    if( hasByName( aApiName ) )
+        throw container::ElementExistException();
+
+    String aName;
+    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+
+    ImplInsertByName( aName, aElement );
 }
 
 
@@ -219,6 +224,39 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
         }
         aIter++;
     }
+
+    // if it is not in our own sets, modify the pool!
+    sal_Bool bFound = sal_False;
+
+    USHORT nSurrogate;
+    USHORT nCount = mpModelPool ? mpModelPool->GetItemCount( mnWhich ) : 0;
+    for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+        {
+            pItem->PutValue( aElement, mnMemberId );
+            bFound = sal_True;
+            break;
+        }
+    }
+
+    nCount = mpStylePool ? mpStylePool->GetItemCount( mnWhich ) : 0;
+    for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+    {
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
+        if( pItem && pItem->GetName() == aSearchName )
+        {
+            pItem->PutValue( aElement, mnMemberId );
+            bFound = sal_True;
+            break;
+        }
+    }
+
+    if( bFound )
+        ImplInsertByName( aName, aElement );
+    else
+        throw container::NoSuchElementException();
 
     if( !hasByName( aName ) )
         throw container::NoSuchElementException();

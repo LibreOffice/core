@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-29 12:37:04 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 15:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ private:
     BYTE            mnMemberId;
 
     ItemPoolVector maItemSetVector;
+
+    void SAL_CALL ImplInsertByName( const rtl::OUString& aName, const com::sun::star::uno::Any& aElement );
 
 public:
     SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId = 0 ) throw();

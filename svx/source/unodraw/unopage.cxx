@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 15:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,10 +661,9 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                  case OBJ_OLE2:
                      {
 #ifndef SVX_LIGHT
-                        SvPersist *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
-
                         if( pObj )
                         {
+                            SvPersist *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
                             const SvInfoObject *pInfo = pPersist->Find( pObj->GetName() );
                             DBG_ASSERT( pInfo, "no info object for OLE object found" );
 
