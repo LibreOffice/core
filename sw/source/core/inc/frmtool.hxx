@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:29:57 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,10 @@ protected:
     const SwRect aPrt;
     FASTBOOL     bHadFollow;
     FASTBOOL     bInvaKeep;
+#ifdef ACCESSIBLE_LAYOUT
+    FASTBOOL     bValidSize;
+#endif
+
 public:
     SwFrmNotify( SwFrm *pFrm );
     ~SwFrmNotify();

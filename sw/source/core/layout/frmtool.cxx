@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:34:43 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,9 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
     aFrm( pF->Frm() ),
     aPrt( pF->Prt() ),
     bInvaKeep( FALSE )
+#ifdef ACCESSIBLE_LAYOUT
+    ,bValidSize( pF->GetValidSizeFlag() )
+#endif
 {
     bHadFollow = pF->IsCntntFrm() ?
                     (((SwCntntFrm*)pF)->GetFollow() ? TRUE : FALSE) :
@@ -419,6 +422,14 @@ SwFrmNotify::~SwFrmNotify()
             }
         }
     }
+#ifdef ACCESSIBLE_LAYOUT
+    else if( pFrm->IsTxtFrm() && bValidSize != pFrm->GetValidSizeFlag() )
+    {
+        ViewShell *pVSh  = pFrm->GetShell();
+        if( pVSh )
+            pVSh->Imp()->InvalidateAccessibleFrmContent( pFrm );
+    }
+#endif
 }
 
 /*************************************************************************
