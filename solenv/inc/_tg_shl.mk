@@ -13,6 +13,17 @@ STDSHL=
 SHL1ARCHIVES=
 .ENDIF
 
+# decide how to link
+.IF "$(SHL1CODETYPE)"=="C"
+SHL1LINKER=$(LINKC)
+SHL1STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL1LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL1CODETYPE)"=="C"
+SHL1LINKER=$(LINK)
+SHL1STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL1LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL1CODETYPE)"=="C"
+
 .IF "$(SHL1USE_EXPORTS)"==""
 SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
@@ -260,14 +271,14 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL1STDLIBS) $(STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL1LINKER) @$(mktmp \
+        $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL1STACK) $(SHL1BASEX)	\
         -out:$@ \
@@ -278,13 +289,13 @@ $(SHL1TARGETN) : \
         $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1OBJS) \
         $(SHL1LIBS) \
         $(SHL1STDLIBS) \
-        $(STDSHL) $(STDSHL1) \
+        $(SHL1STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
         $(SHL1STACK) -out:$(SHL1TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -293,13 +304,13 @@ $(SHL1TARGETN) : \
         $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)   \
         $(SHL1LIBS)                         \
         $(SHL1STDLIBS)                      \
-        $(STDSHL) $(STDSHL1)                           \
+        $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL1USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
         $(SHL1STACK) -out:$(SHL1TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -308,7 +319,7 @@ $(SHL1TARGETN) : \
         $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL1TARGET)_link.lst \
         @$(mktmp $(SHL1STDLIBS)                      \
-        $(STDSHL) $(STDSHL1)                           \
+        $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
     )
 .ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
@@ -316,7 +327,7 @@ $(SHL1TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL1TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL1TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL1LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL1BASEX) \
         $(SHL1STACK) $(MAPFILE) \
         -out:$@ \
@@ -324,11 +335,11 @@ $(SHL1TARGETN) : \
         $(STDOBJ) \
         $(SHL1OBJS) \
         $(SHL1STDLIBS) \
-        $(STDSHL) $(STDSHL1) \
+        $(SHL1STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
         ) >> $(MISC)$/$(SHL1TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL1TARGET).lnk
+        $(SHL1LINKER) @$(MISC)$/$(SHL1TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -338,9 +349,9 @@ $(SHL1TARGETN) : \
     @+echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
-    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL1VERSIONMAP)"!=""
@@ -357,10 +368,10 @@ $(SHL1TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
+    @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -412,6 +423,17 @@ STDSHL=
 .ELSE
 SHL2ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL2CODETYPE)"=="C"
+SHL2LINKER=$(LINKC)
+SHL2STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL2LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL2CODETYPE)"=="C"
+SHL2LINKER=$(LINK)
+SHL2STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL2LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL2CODETYPE)"=="C"
 
 .IF "$(SHL2USE_EXPORTS)"==""
 SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
@@ -660,14 +682,14 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL2STDLIBS) $(STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL2LINKER) @$(mktmp \
+        $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL2STACK) $(SHL2BASEX)	\
         -out:$@ \
@@ -678,13 +700,13 @@ $(SHL2TARGETN) : \
         $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2OBJS) \
         $(SHL2LIBS) \
         $(SHL2STDLIBS) \
-        $(STDSHL) $(STDSHL2) \
+        $(SHL2STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
         $(SHL2STACK) -out:$(SHL2TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -693,13 +715,13 @@ $(SHL2TARGETN) : \
         $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)   \
         $(SHL2LIBS)                         \
         $(SHL2STDLIBS)                      \
-        $(STDSHL) $(STDSHL2)                           \
+        $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL2USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
         $(SHL2STACK) -out:$(SHL2TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -708,7 +730,7 @@ $(SHL2TARGETN) : \
         $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL2TARGET)_link.lst \
         @$(mktmp $(SHL2STDLIBS)                      \
-        $(STDSHL) $(STDSHL2)                           \
+        $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
     )
 .ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
@@ -716,7 +738,7 @@ $(SHL2TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL2TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL2TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL2LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL2BASEX) \
         $(SHL2STACK) $(MAPFILE) \
         -out:$@ \
@@ -724,11 +746,11 @@ $(SHL2TARGETN) : \
         $(STDOBJ) \
         $(SHL2OBJS) \
         $(SHL2STDLIBS) \
-        $(STDSHL) $(STDSHL2) \
+        $(SHL2STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
         ) >> $(MISC)$/$(SHL2TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL2TARGET).lnk
+        $(SHL2LINKER) @$(MISC)$/$(SHL2TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -738,9 +760,9 @@ $(SHL2TARGETN) : \
     @+echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
-    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL2VERSIONMAP)"!=""
@@ -757,10 +779,10 @@ $(SHL2TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
+    @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -812,6 +834,17 @@ STDSHL=
 .ELSE
 SHL3ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL3CODETYPE)"=="C"
+SHL3LINKER=$(LINKC)
+SHL3STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL3LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL3CODETYPE)"=="C"
+SHL3LINKER=$(LINK)
+SHL3STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL3LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL3CODETYPE)"=="C"
 
 .IF "$(SHL3USE_EXPORTS)"==""
 SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
@@ -1060,14 +1093,14 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL3STDLIBS) $(STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL3LINKER) @$(mktmp \
+        $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL3STACK) $(SHL3BASEX)	\
         -out:$@ \
@@ -1078,13 +1111,13 @@ $(SHL3TARGETN) : \
         $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3OBJS) \
         $(SHL3LIBS) \
         $(SHL3STDLIBS) \
-        $(STDSHL) $(STDSHL3) \
+        $(SHL3STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
         $(SHL3STACK) -out:$(SHL3TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -1093,13 +1126,13 @@ $(SHL3TARGETN) : \
         $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)   \
         $(SHL3LIBS)                         \
         $(SHL3STDLIBS)                      \
-        $(STDSHL) $(STDSHL3)                           \
+        $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL3USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
         $(SHL3STACK) -out:$(SHL3TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -1108,7 +1141,7 @@ $(SHL3TARGETN) : \
         $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL3TARGET)_link.lst \
         @$(mktmp $(SHL3STDLIBS)                      \
-        $(STDSHL) $(STDSHL3)                           \
+        $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
     )
 .ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
@@ -1116,7 +1149,7 @@ $(SHL3TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL3TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL3TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL3LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL3BASEX) \
         $(SHL3STACK) $(MAPFILE) \
         -out:$@ \
@@ -1124,11 +1157,11 @@ $(SHL3TARGETN) : \
         $(STDOBJ) \
         $(SHL3OBJS) \
         $(SHL3STDLIBS) \
-        $(STDSHL) $(STDSHL3) \
+        $(SHL3STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
         ) >> $(MISC)$/$(SHL3TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL3TARGET).lnk
+        $(SHL3LINKER) @$(MISC)$/$(SHL3TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1138,9 +1171,9 @@ $(SHL3TARGETN) : \
     @+echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
-    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL3VERSIONMAP)"!=""
@@ -1157,10 +1190,10 @@ $(SHL3TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
+    @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -1212,6 +1245,17 @@ STDSHL=
 .ELSE
 SHL4ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL4CODETYPE)"=="C"
+SHL4LINKER=$(LINKC)
+SHL4STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL4LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL4CODETYPE)"=="C"
+SHL4LINKER=$(LINK)
+SHL4STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL4LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL4CODETYPE)"=="C"
 
 .IF "$(SHL4USE_EXPORTS)"==""
 SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
@@ -1460,14 +1504,14 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL4STDLIBS) $(STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL4LINKER) @$(mktmp \
+        $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL4STACK) $(SHL4BASEX)	\
         -out:$@ \
@@ -1478,13 +1522,13 @@ $(SHL4TARGETN) : \
         $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4OBJS) \
         $(SHL4LIBS) \
         $(SHL4STDLIBS) \
-        $(STDSHL) $(STDSHL4) \
+        $(SHL4STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
         $(SHL4STACK) -out:$(SHL4TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -1493,13 +1537,13 @@ $(SHL4TARGETN) : \
         $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)   \
         $(SHL4LIBS)                         \
         $(SHL4STDLIBS)                      \
-        $(STDSHL) $(STDSHL4)                           \
+        $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL4USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
         $(SHL4STACK) -out:$(SHL4TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -1508,7 +1552,7 @@ $(SHL4TARGETN) : \
         $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL4TARGET)_link.lst \
         @$(mktmp $(SHL4STDLIBS)                      \
-        $(STDSHL) $(STDSHL4)                           \
+        $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
     )
 .ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
@@ -1516,7 +1560,7 @@ $(SHL4TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL4TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL4TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL4LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL4BASEX) \
         $(SHL4STACK) $(MAPFILE) \
         -out:$@ \
@@ -1524,11 +1568,11 @@ $(SHL4TARGETN) : \
         $(STDOBJ) \
         $(SHL4OBJS) \
         $(SHL4STDLIBS) \
-        $(STDSHL) $(STDSHL4) \
+        $(SHL4STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
         ) >> $(MISC)$/$(SHL4TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL4TARGET).lnk
+        $(SHL4LINKER) @$(MISC)$/$(SHL4TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1538,9 +1582,9 @@ $(SHL4TARGETN) : \
     @+echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
-    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL4VERSIONMAP)"!=""
@@ -1557,10 +1601,10 @@ $(SHL4TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
+    @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -1612,6 +1656,17 @@ STDSHL=
 .ELSE
 SHL5ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL5CODETYPE)"=="C"
+SHL5LINKER=$(LINKC)
+SHL5STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL5LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL5CODETYPE)"=="C"
+SHL5LINKER=$(LINK)
+SHL5STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL5LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL5CODETYPE)"=="C"
 
 .IF "$(SHL5USE_EXPORTS)"==""
 SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
@@ -1860,14 +1915,14 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL5STDLIBS) $(STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL5LINKER) @$(mktmp \
+        $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL5STACK) $(SHL5BASEX)	\
         -out:$@ \
@@ -1878,13 +1933,13 @@ $(SHL5TARGETN) : \
         $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5OBJS) \
         $(SHL5LIBS) \
         $(SHL5STDLIBS) \
-        $(STDSHL) $(STDSHL5) \
+        $(SHL5STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
         $(SHL5STACK) -out:$(SHL5TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -1893,13 +1948,13 @@ $(SHL5TARGETN) : \
         $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)   \
         $(SHL5LIBS)                         \
         $(SHL5STDLIBS)                      \
-        $(STDSHL) $(STDSHL5)                           \
+        $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL5USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
         $(SHL5STACK) -out:$(SHL5TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -1908,7 +1963,7 @@ $(SHL5TARGETN) : \
         $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL5TARGET)_link.lst \
         @$(mktmp $(SHL5STDLIBS)                      \
-        $(STDSHL) $(STDSHL5)                           \
+        $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
     )
 .ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
@@ -1916,7 +1971,7 @@ $(SHL5TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL5TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL5TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL5LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL5BASEX) \
         $(SHL5STACK) $(MAPFILE) \
         -out:$@ \
@@ -1924,11 +1979,11 @@ $(SHL5TARGETN) : \
         $(STDOBJ) \
         $(SHL5OBJS) \
         $(SHL5STDLIBS) \
-        $(STDSHL) $(STDSHL5) \
+        $(SHL5STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
         ) >> $(MISC)$/$(SHL5TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL5TARGET).lnk
+        $(SHL5LINKER) @$(MISC)$/$(SHL5TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -1938,9 +1993,9 @@ $(SHL5TARGETN) : \
     @+echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
-    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL5VERSIONMAP)"!=""
@@ -1957,10 +2012,10 @@ $(SHL5TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
+    @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -2012,6 +2067,17 @@ STDSHL=
 .ELSE
 SHL6ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL6CODETYPE)"=="C"
+SHL6LINKER=$(LINKC)
+SHL6STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL6LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL6CODETYPE)"=="C"
+SHL6LINKER=$(LINK)
+SHL6STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL6LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL6CODETYPE)"=="C"
 
 .IF "$(SHL6USE_EXPORTS)"==""
 SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
@@ -2260,14 +2326,14 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL6STDLIBS) $(STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL6LINKER) @$(mktmp \
+        $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL6STACK) $(SHL6BASEX)	\
         -out:$@ \
@@ -2278,13 +2344,13 @@ $(SHL6TARGETN) : \
         $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6OBJS) \
         $(SHL6LIBS) \
         $(SHL6STDLIBS) \
-        $(STDSHL) $(STDSHL6) \
+        $(SHL6STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
         $(SHL6STACK) -out:$(SHL6TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -2293,13 +2359,13 @@ $(SHL6TARGETN) : \
         $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)   \
         $(SHL6LIBS)                         \
         $(SHL6STDLIBS)                      \
-        $(STDSHL) $(STDSHL6)                           \
+        $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL6USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
         $(SHL6STACK) -out:$(SHL6TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -2308,7 +2374,7 @@ $(SHL6TARGETN) : \
         $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL6TARGET)_link.lst \
         @$(mktmp $(SHL6STDLIBS)                      \
-        $(STDSHL) $(STDSHL6)                           \
+        $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
     )
 .ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
@@ -2316,7 +2382,7 @@ $(SHL6TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL6TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL6TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL6LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL6BASEX) \
         $(SHL6STACK) $(MAPFILE) \
         -out:$@ \
@@ -2324,11 +2390,11 @@ $(SHL6TARGETN) : \
         $(STDOBJ) \
         $(SHL6OBJS) \
         $(SHL6STDLIBS) \
-        $(STDSHL) $(STDSHL6) \
+        $(SHL6STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
         ) >> $(MISC)$/$(SHL6TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL6TARGET).lnk
+        $(SHL6LINKER) @$(MISC)$/$(SHL6TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2338,9 +2404,9 @@ $(SHL6TARGETN) : \
     @+echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
-    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL6VERSIONMAP)"!=""
@@ -2357,10 +2423,10 @@ $(SHL6TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
+    @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -2412,6 +2478,17 @@ STDSHL=
 .ELSE
 SHL7ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL7CODETYPE)"=="C"
+SHL7LINKER=$(LINKC)
+SHL7STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL7LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL7CODETYPE)"=="C"
+SHL7LINKER=$(LINK)
+SHL7STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL7LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL7CODETYPE)"=="C"
 
 .IF "$(SHL7USE_EXPORTS)"==""
 SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
@@ -2660,14 +2737,14 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL7STDLIBS) $(STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL7LINKER) @$(mktmp \
+        $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL7STACK) $(SHL7BASEX)	\
         -out:$@ \
@@ -2678,13 +2755,13 @@ $(SHL7TARGETN) : \
         $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7OBJS) \
         $(SHL7LIBS) \
         $(SHL7STDLIBS) \
-        $(STDSHL) $(STDSHL7) \
+        $(SHL7STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
         $(SHL7STACK) -out:$(SHL7TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -2693,13 +2770,13 @@ $(SHL7TARGETN) : \
         $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)   \
         $(SHL7LIBS)                         \
         $(SHL7STDLIBS)                      \
-        $(STDSHL) $(STDSHL7)                           \
+        $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL7USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
         $(SHL7STACK) -out:$(SHL7TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -2708,7 +2785,7 @@ $(SHL7TARGETN) : \
         $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL7TARGET)_link.lst \
         @$(mktmp $(SHL7STDLIBS)                      \
-        $(STDSHL) $(STDSHL7)                           \
+        $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
     )
 .ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
@@ -2716,7 +2793,7 @@ $(SHL7TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL7TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL7TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL7LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL7BASEX) \
         $(SHL7STACK) $(MAPFILE) \
         -out:$@ \
@@ -2724,11 +2801,11 @@ $(SHL7TARGETN) : \
         $(STDOBJ) \
         $(SHL7OBJS) \
         $(SHL7STDLIBS) \
-        $(STDSHL) $(STDSHL7) \
+        $(SHL7STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
         ) >> $(MISC)$/$(SHL7TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL7TARGET).lnk
+        $(SHL7LINKER) @$(MISC)$/$(SHL7TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -2738,9 +2815,9 @@ $(SHL7TARGETN) : \
     @+echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
-    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL7VERSIONMAP)"!=""
@@ -2757,10 +2834,10 @@ $(SHL7TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
+    @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -2812,6 +2889,17 @@ STDSHL=
 .ELSE
 SHL8ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL8CODETYPE)"=="C"
+SHL8LINKER=$(LINKC)
+SHL8STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL8LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL8CODETYPE)"=="C"
+SHL8LINKER=$(LINK)
+SHL8STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL8LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL8CODETYPE)"=="C"
 
 .IF "$(SHL8USE_EXPORTS)"==""
 SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
@@ -3060,14 +3148,14 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL8STDLIBS) $(STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL8LINKER) @$(mktmp \
+        $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL8STACK) $(SHL8BASEX)	\
         -out:$@ \
@@ -3078,13 +3166,13 @@ $(SHL8TARGETN) : \
         $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8OBJS) \
         $(SHL8LIBS) \
         $(SHL8STDLIBS) \
-        $(STDSHL) $(STDSHL8) \
+        $(SHL8STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
         $(SHL8STACK) -out:$(SHL8TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -3093,13 +3181,13 @@ $(SHL8TARGETN) : \
         $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)   \
         $(SHL8LIBS)                         \
         $(SHL8STDLIBS)                      \
-        $(STDSHL) $(STDSHL8)                           \
+        $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL8USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
         $(SHL8STACK) -out:$(SHL8TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -3108,7 +3196,7 @@ $(SHL8TARGETN) : \
         $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL8TARGET)_link.lst \
         @$(mktmp $(SHL8STDLIBS)                      \
-        $(STDSHL) $(STDSHL8)                           \
+        $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
     )
 .ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
@@ -3116,7 +3204,7 @@ $(SHL8TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL8TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL8TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL8LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL8BASEX) \
         $(SHL8STACK) $(MAPFILE) \
         -out:$@ \
@@ -3124,11 +3212,11 @@ $(SHL8TARGETN) : \
         $(STDOBJ) \
         $(SHL8OBJS) \
         $(SHL8STDLIBS) \
-        $(STDSHL) $(STDSHL8) \
+        $(SHL8STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
         ) >> $(MISC)$/$(SHL8TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL8TARGET).lnk
+        $(SHL8LINKER) @$(MISC)$/$(SHL8TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3138,9 +3226,9 @@ $(SHL8TARGETN) : \
     @+echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
-    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL8VERSIONMAP)"!=""
@@ -3157,10 +3245,10 @@ $(SHL8TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
+    @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -3212,6 +3300,17 @@ STDSHL=
 .ELSE
 SHL9ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL9CODETYPE)"=="C"
+SHL9LINKER=$(LINKC)
+SHL9STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL9LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL9CODETYPE)"=="C"
+SHL9LINKER=$(LINK)
+SHL9STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL9LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL9CODETYPE)"=="C"
 
 .IF "$(SHL9USE_EXPORTS)"==""
 SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
@@ -3460,14 +3559,14 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL9STDLIBS) $(STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL9LINKER) @$(mktmp \
+        $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL9STACK) $(SHL9BASEX)	\
         -out:$@ \
@@ -3478,13 +3577,13 @@ $(SHL9TARGETN) : \
         $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9OBJS) \
         $(SHL9LIBS) \
         $(SHL9STDLIBS) \
-        $(STDSHL) $(STDSHL9) \
+        $(SHL9STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
         $(SHL9STACK) -out:$(SHL9TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -3493,13 +3592,13 @@ $(SHL9TARGETN) : \
         $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)   \
         $(SHL9LIBS)                         \
         $(SHL9STDLIBS)                      \
-        $(STDSHL) $(STDSHL9)                           \
+        $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL9USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
         $(SHL9STACK) -out:$(SHL9TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -3508,7 +3607,7 @@ $(SHL9TARGETN) : \
         $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL9TARGET)_link.lst \
         @$(mktmp $(SHL9STDLIBS)                      \
-        $(STDSHL) $(STDSHL9)                           \
+        $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
     )
 .ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
@@ -3516,7 +3615,7 @@ $(SHL9TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL9TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL9TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL9LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL9BASEX) \
         $(SHL9STACK) $(MAPFILE) \
         -out:$@ \
@@ -3524,11 +3623,11 @@ $(SHL9TARGETN) : \
         $(STDOBJ) \
         $(SHL9OBJS) \
         $(SHL9STDLIBS) \
-        $(STDSHL) $(STDSHL9) \
+        $(SHL9STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
         ) >> $(MISC)$/$(SHL9TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL9TARGET).lnk
+        $(SHL9LINKER) @$(MISC)$/$(SHL9TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3538,9 +3637,9 @@ $(SHL9TARGETN) : \
     @+echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
-    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL9VERSIONMAP)"!=""
@@ -3557,10 +3656,10 @@ $(SHL9TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
+    @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
@@ -3612,6 +3711,17 @@ STDSHL=
 .ELSE
 SHL10ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL10CODETYPE)"=="C"
+SHL10LINKER=$(LINKC)
+SHL10STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL10LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL10CODETYPE)"=="C"
+SHL10LINKER=$(LINK)
+SHL10STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL10LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL10CODETYPE)"=="C"
 
 .IF "$(SHL10USE_EXPORTS)"==""
 SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
@@ -3860,14 +3970,14 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL10STDLIBS) $(STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL10LINKER) @$(mktmp \
+        $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL10STACK) $(SHL10BASEX)	\
         -out:$@ \
@@ -3878,13 +3988,13 @@ $(SHL10TARGETN) : \
         $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10OBJS) \
         $(SHL10LIBS) \
         $(SHL10STDLIBS) \
-        $(STDSHL) $(STDSHL10) \
+        $(SHL10STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
         $(SHL10STACK) -out:$(SHL10TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -3893,13 +4003,13 @@ $(SHL10TARGETN) : \
         $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)   \
         $(SHL10LIBS)                         \
         $(SHL10STDLIBS)                      \
-        $(STDSHL) $(STDSHL10)                           \
+        $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL10USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
         $(SHL10STACK) -out:$(SHL10TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -3908,7 +4018,7 @@ $(SHL10TARGETN) : \
         $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL10TARGET)_link.lst \
         @$(mktmp $(SHL10STDLIBS)                      \
-        $(STDSHL) $(STDSHL10)                           \
+        $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
     )
 .ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
@@ -3916,7 +4026,7 @@ $(SHL10TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL10TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL10TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL10LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL10BASEX) \
         $(SHL10STACK) $(MAPFILE) \
         -out:$@ \
@@ -3924,11 +4034,11 @@ $(SHL10TARGETN) : \
         $(STDOBJ) \
         $(SHL10OBJS) \
         $(SHL10STDLIBS) \
-        $(STDSHL) $(STDSHL10) \
+        $(SHL10STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
         ) >> $(MISC)$/$(SHL10TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL10TARGET).lnk
+        $(SHL10LINKER) @$(MISC)$/$(SHL10TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -3938,9 +4048,9 @@ $(SHL10TARGETN) : \
     @+echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
-    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL10VERSIONMAP)"!=""
@@ -3957,10 +4067,10 @@ $(SHL10TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
+    @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
