@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase6.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:36:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,9 @@ namespace cppu
 
         @attention
         The BaseClass has to be complete in a sense, that ::com::sun::star::uno::XInterface
-        and ::com::sun::star::lang::XTypeProvider are implemented properly.  The BaseClass
-        also has to have a default ctor.
+        and ::com::sun::star::lang::XTypeProvider are implemented properly.  The
+        BaseClass must have at least one ctor that can be called with six or
+        fewer arguments, of which none is of non-const reference type.
 
         @derive
         Inherit from this class giving your additional interface(s) to be implemented as
@@ -212,7 +213,35 @@ namespace cppu
     {
         /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData6 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, ImplInheritanceHelper6<BaseClass, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6> > > {};
+    protected:
+        template< typename T1 >
+        explicit ImplInheritanceHelper6(T1 const & arg1): BaseClass(arg1) {}
+        template< typename T1, typename T2 >
+        ImplInheritanceHelper6(T1 const & arg1, T2 const & arg2):
+            BaseClass(arg1, arg2) {}
+        template< typename T1, typename T2, typename T3 >
+        ImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3):
+            BaseClass(arg1, arg2, arg3) {}
+        template< typename T1, typename T2, typename T3, typename T4 >
+        ImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3, T4 const & arg4):
+            BaseClass(arg1, arg2, arg3, arg4) {}
+        template<
+            typename T1, typename T2, typename T3, typename T4, typename T5 >
+        ImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3, T4 const & arg4,
+            T5 const & arg5):
+            BaseClass(arg1, arg2, arg3, arg4, arg5) {}
+        template<
+            typename T1, typename T2, typename T3, typename T4, typename T5,
+            typename T6 >
+        ImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3, T4 const & arg4,
+            T5 const & arg5, T6 const & arg6):
+            BaseClass(arg1, arg2, arg3, arg4, arg5, arg6) {}
     public:
+        ImplInheritanceHelper6() {}
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
             {
                 ::com::sun::star::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
@@ -238,7 +267,9 @@ namespace cppu
         @attention
         The BaseClass has to be complete in a sense, that ::com::sun::star::uno::XInterface,
         ::com::sun::star::uno::XAggregation and ::com::sun::star::lang::XTypeProvider
-        are implemented properly.  The BaseClass also has to have a default ctor.
+        are implemented properly.  The BaseClass must have at least one ctor
+        that can be called with six or fewer arguments, of which none is of
+        non-const reference type.
 
         @derive
         Inherit from this class giving your additional interface(s) to be implemented as
@@ -251,7 +282,35 @@ namespace cppu
     {
         /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData6 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, AggImplInheritanceHelper6<BaseClass, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6> > > {};
+    protected:
+        template< typename T1 >
+        explicit AggImplInheritanceHelper6(T1 const & arg1): BaseClass(arg1) {}
+        template< typename T1, typename T2 >
+        AggImplInheritanceHelper6(T1 const & arg1, T2 const & arg2):
+            BaseClass(arg1, arg2) {}
+        template< typename T1, typename T2, typename T3 >
+        AggImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3):
+            BaseClass(arg1, arg2, arg3) {}
+        template< typename T1, typename T2, typename T3, typename T4 >
+        AggImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3, T4 const & arg4):
+            BaseClass(arg1, arg2, arg3, arg4) {}
+        template<
+            typename T1, typename T2, typename T3, typename T4, typename T5 >
+        AggImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3, T4 const & arg4,
+            T5 const & arg5):
+            BaseClass(arg1, arg2, arg3, arg4, arg5) {}
+        template<
+            typename T1, typename T2, typename T3, typename T4, typename T5,
+            typename T6 >
+        AggImplInheritanceHelper6(
+            T1 const & arg1, T2 const & arg2, T3 const & arg3, T4 const & arg4,
+            T5 const & arg5, T6 const & arg6):
+            BaseClass(arg1, arg2, arg3, arg4, arg5, arg6) {}
     public:
+        AggImplInheritanceHelper6() {}
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
             { return BaseClass::queryInterface( rType ); }
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
