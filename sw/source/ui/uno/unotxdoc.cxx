@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 09:18:47 $
+ *  last change: $Author: os $ $Date: 2000-12-07 12:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,13 @@ void SAL_CALL SwXTextDocument::acquire()throw()
 void SAL_CALL SwXTextDocument::release()throw()
 {
     SfxBaseModel::release();
+}
+/* -----------------------------07.12.00 11:37--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XAdapter > SwXTextDocument::queryAdapter(  ) throw(RuntimeException)
+{
+    return SfxBaseModel::queryAdapter();
 }
 /* -----------------------------16.03.00 14:12--------------------------------
 
