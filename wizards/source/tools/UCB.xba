@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Recursive" script:language="StarBasic">&apos;Option explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="UCB" script:language="StarBasic">&apos;Option explicit
 Public oDocument
 Dim oDocInfo as object
 Const SBMAXDIRCOUNT = 10
@@ -18,7 +18,6 @@ End Sub
 
 &apos; Prozedur, die die rekursive Auslesefunktion anwirft
 Function ReadDirectories(ByVal AnchorDir As String, bRecursive as Boolean,  bcheckFileType as Boolean, bGetByTitle as Boolean, Optional sFileContent(), Optional sExtension as String)
-
 Dim i as integer
 Dim Status as Object
 Dim FileCountinDir as Integer
@@ -41,63 +40,67 @@ Dim sFileArray(StartUbound,1) as String
 	iDirCount = 1
 	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 	oUcbObject = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	Do
-		AnchorDir = sDirArray(DirIndex)
-		DirContent() = oUcbObject.GetFolderContents(AnchorDir,True)
-		DirIndex = DirIndex + 1
-		If Ubound(DirContent()) &lt;&gt; -1 Then
-			FileCountinDir = Ubound(DirContent())+ 1
-			For i = 0 to FilecountinDir -1
-				Filename = DirContent(i)
-				If oUcbObject.IsFolder(FileName) Then
-					If brecursive Then
-						AddFoldertoList(FileName, DirIndex)
-					End If
-				Else
-					If bcheckFileType Then
-						RealFileContent  = GetRealFileContent(oDocInfo, FileName)
+	If oUcbObject.Exists(AnchorDir) Then
+		Do
+			AnchorDir = sDirArray(DirIndex)
+			DirContent() = oUcbObject.GetFolderContents(AnchorDir,True)
+			DirIndex = DirIndex + 1
+			If Ubound(DirContent()) &lt;&gt; -1 Then
+				FileCountinDir = Ubound(DirContent())+ 1
+				For i = 0 to FilecountinDir -1
+					Filename = DirContent(i)
+					If oUcbObject.IsFolder(FileName) Then
+						If brecursive Then
+							AddFoldertoList(FileName, DirIndex)
+						End If
 					Else
-						RealFileContent = GetFileNameExtension(FileName)
-					End If
-					If RealFileContent &lt;&gt; &quot;&quot; Then
-						&apos; Retrieve the Index in the Array, where a Filename is positioned
-						If Not IsMissing(sFileContent()) Then
-							If (FieldinArray(sFileContent(), Ubound(sFileContent), RealFileContent)) Then
-								&apos; The extension of the current file passes the filter and is therefor admitted to the
-								&apos; fileList
-								If Not IsMissing(sExtension) Then
-									If sExtension &lt;&gt; &quot;&quot; Then
-										&apos; Consider that some Formats like old StarOffice Templates with the extension &quot;.vor&quot; can only be
-										&apos; precisely identified by their mimetype and their extension
-										FileExtension = GetFileNameExtension(FileName)
-										If FileExtension = sExtension Then
-											AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)	
+						If bcheckFileType Then
+							RealFileContent  = GetRealFileContent(oDocInfo, FileName)
+						Else
+							RealFileContent = GetFileNameExtension(FileName)
+						End If
+						If RealFileContent &lt;&gt; &quot;&quot; Then
+							&apos; Retrieve the Index in the Array, where a Filename is positioned
+							If Not IsMissing(sFileContent()) Then
+								If (FieldinArray(sFileContent(), Ubound(sFileContent), RealFileContent)) Then
+									&apos; The extension of the current file passes the filter and is therefor admitted to the
+									&apos; fileList
+									If Not IsMissing(sExtension) Then
+										If sExtension &lt;&gt; &quot;&quot; Then
+											&apos; Consider that some Formats like old StarOffice Templates with the extension &quot;.vor&quot; can only be
+											&apos; precisely identified by their mimetype and their extension
+											FileExtension = GetFileNameExtension(FileName)
+											If FileExtension = sExtension Then
+												AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)	
+											End If
+										Else
+											AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)									
 										End If
 									Else
-										AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)									
+										AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)
 									End If
-								Else
-									AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)
 								End If
+							Else
+								AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)
 							End If
-						Else
-							AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)
-						End If
-						If CurIndex = MaxIndex Then
-							MaxIndex = MaxIndex + StartUbound
-							ReDim Preserve sFileArray(MaxIndex,1) as String
+							If CurIndex = MaxIndex Then
+								MaxIndex = MaxIndex + StartUbound
+								ReDim Preserve sFileArray(MaxIndex,1) as String
+							End If
 						End If
 					End If
-				End If
-			Next i
+				Next i
+			End If
+		Loop Until DirIndex &gt;= iDirCount
+		If CurIndex &gt; -1 Then
+			ReDim Preserve sFileArray(CurIndex,1) as String
+		Else 
+			ReDim sFileArray() as String
 		End If
-	Loop Until DirIndex &gt;= iDirCount
-	If CurIndex &gt; -1 Then
-		ReDim Preserve sFileArray(CurIndex,1) as String
-	Else 
-		ReDim sFileArray() as String
+	Else
+		Msgbox(&quot;Directory &apos;&quot; &amp; ConvertFromUrl(AnchorDir) &amp; &quot;&apos; does not exist!&quot;, 16, GetProductName())
 	End If
-	ReadDirectories = sFileArray()
+	ReadDirectories() = sFileArray()
 End Function
 
 
@@ -252,4 +255,23 @@ Dim MaxIndex as Integer
 		LoadDataFromFile() = False
 	End If
 End Function
+
+
+Function CreateFolder(sNewFolder) as Boolean
+Dim oUcb as Object
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	On Local Error Goto NOSPACEONDRIVE
+	If Not oUcb.Exists(sNewFolder) Then
+		oUcb.CreateFolder(sNewFolder)
+	End If
+	CreateFolder = True
+NOSPACEONDRIVE:
+	If Err &lt;&gt; 0 Then
+		Msgbox &quot;Folder &apos;&quot; &amp; ConvertFromUrl(sNewFolder) &amp; &quot;&apos; could not be created! Probably your harddisk is out of space!&quot;
+		CreateFolder() = False
+		Resume LETSGO
+		LETSGO:
+	End If		
+End Function
+
 </script:module>
