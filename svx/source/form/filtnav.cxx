@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-30 08:21:08 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 
 #ifndef _SV_EXCHANGE_HXX
 #include <vcl/exchange.hxx>
-#endif
-
-#ifndef _DTRANS_HXX
-#include <so3/dtrans.hxx>
 #endif
 
 #ifndef _SVX_FMEXCH_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 14:32:13 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,6 @@
 
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-
-#ifndef _DTRANS_HXX //autogen
-#include <so3/dtrans.hxx>
 #endif
 
 #ifndef _SFXDISPATCH_HXX //autogen
