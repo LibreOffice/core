@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 11:24:53 $
+ *  last change: $Author: kso $ $Date: 2002-10-18 09:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
          if( 0 == props.nTidCacheSize )
          {
              delete [] m_pTidIn;
-             m_pOidIn = 0;
+            m_pTidIn = 0;
          }
          else
          {

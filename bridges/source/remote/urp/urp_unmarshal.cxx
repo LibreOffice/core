@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+ *  last change: $Author: kso $ $Date: 2002-10-18 09:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include <string.h>
 
 #include <osl/diagnose.h>
@@ -222,6 +223,379 @@ sal_Bool Unmarshal::unpackOid( rtl_uString **ppOid )
     return bReturn;
 }
 
+sal_Bool Unmarshal::unpack( void *pDestination ,
+                            typelib_TypeDescription *pTypeDescr )
+{
+    // Note: We implement unpack functionality without recursions in order
+    //       to avoid stack overflows caused by rotten URP blocks.
+
+    m_aItemsToUnpack.push( UnpackItem( pDestination, pTypeDescr ) );
+
+    sal_Bool bReturn = sal_True;
+    do
+    {
+        void * pDest = m_aItemsToUnpack.top().pDest;
+        typelib_TypeDescription * pType = m_aItemsToUnpack.top().pType;
+        m_aItemsToUnpack.pop();
+
+        switch( pType->eTypeClass )
+        {
+        case typelib_TypeClass_VOID:
+            // do nothing
+            break;
+        case typelib_TypeClass_BYTE:
+        {
+            bReturn = unpackInt8( pDest );
+            break;
+        }
+        case typelib_TypeClass_BOOLEAN:
+        {
+            bReturn = ! checkOverflow( 1 );
+            if( bReturn )
+            {
+                *((sal_Bool*)pDest) = (sal_Bool ) ( *m_pos);
+                m_pos ++;
+            }
+            else
+            {
+                *((sal_Bool*)pDest) = 0;
+            }
+            break;
+        }
+
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        {
+            unpackInt16( pDest );
+            break;
+        }
+        case typelib_TypeClass_ENUM:
+        case typelib_TypeClass_FLOAT:
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        {
+            bReturn = unpackInt32( pDest );
+            break;
+        }
+        case typelib_TypeClass_DOUBLE:
+        case typelib_TypeClass_HYPER:
+        case typelib_TypeClass_UNSIGNED_HYPER:
+        {
+            sal_uInt64 *p = ( sal_uInt64 * ) pDest;
+            *p = 0;
+            bReturn = ! checkOverflow( 8 );
+            if( bReturn )
+            {
+                if( isSystemLittleEndian() )
+                {
+                    ((sal_Int8*) p )[7] = m_pos[0];
+                    ((sal_Int8*) p )[6] = m_pos[1];
+                    ((sal_Int8*) p )[5] = m_pos[2];
+                    ((sal_Int8*) p )[4] = m_pos[3];
+                    ((sal_Int8*) p )[3] = m_pos[4];
+                    ((sal_Int8*) p )[2] = m_pos[5];
+                    ((sal_Int8*) p )[1] = m_pos[6];
+                    ((sal_Int8*) p )[0] = m_pos[7];
+                }
+                else
+                {
+                    ((sal_Int8*) p )[0] = m_pos[0];
+                    ((sal_Int8*) p )[1] = m_pos[1];
+                    ((sal_Int8*) p )[2] = m_pos[2];
+                    ((sal_Int8*) p )[3] = m_pos[3];
+                    ((sal_Int8*) p )[4] = m_pos[4];
+                    ((sal_Int8*) p )[5] = m_pos[5];
+                    ((sal_Int8*) p )[6] = m_pos[6];
+                    ((sal_Int8*) p )[7] = m_pos[7];
+                }
+                m_pos += 8;
+            }
+            break;
+        }
+        case typelib_TypeClass_STRING:
+        {
+            unpackString( pDest );
+            break;
+        }
+        case typelib_TypeClass_ANY:
+        {
+            uno_Any *pAny = ( uno_Any * )pDest;
+
+            pAny->pType = 0;
+            // Type is acquired with typelib_typedescription_acquire
+
+            bReturn = unpackType( &(pAny->pType) );
+
+            typelib_TypeDescription *pDataType = 0;
+            if( bReturn && pAny->pType )
+            {
+                typelib_typedescriptionreference_getDescription( &pDataType , pAny->pType );
+
+                if( pDataType )
+                {
+                    switch (pDataType->eTypeClass)
+                    {
+                    case typelib_TypeClass_HYPER:
+                    case typelib_TypeClass_UNSIGNED_HYPER:
+                        if (sizeof(void *) < sizeof(sal_Int64))
+                        {
+                            pAny->pData = rtl_allocateMemory( sizeof(sal_Int64) );
+                        }
+                        else
+                        {
+                            pAny->pData = &pAny->pReserved;
+                        }
+                        break;
+                    case typelib_TypeClass_FLOAT:
+                        if (sizeof(void *) < sizeof(float))
+                        {
+                            pAny->pData = rtl_allocateMemory( sizeof(float) );
+                        }
+                        else
+                        {
+                            pAny->pData = &pAny->pReserved;
+                        }
+                        break;
+                    case typelib_TypeClass_DOUBLE:
+                        if (sizeof(void *) < sizeof(double))
+                        {
+                            pAny->pData = rtl_allocateMemory( sizeof(double) );
+                        }
+                        else
+                        {
+                            pAny->pData = &pAny->pReserved;
+                        }
+                        break;
+                    case typelib_TypeClass_STRUCT:
+                    case typelib_TypeClass_UNION:
+                    case typelib_TypeClass_EXCEPTION:
+                    case typelib_TypeClass_ARRAY:
+                        pAny->pData = rtl_allocateMemory( pDataType->nSize );
+                        break;
+                    case typelib_TypeClass_ANY:
+                    {
+                        m_pBridgeImpl->addError(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "can't unmarshal any: any in any not supported!" ) ) );
+
+                        pAny->pData = 0;
+                        Type type; // void
+                        pAny->pType = type.getTypeLibType();
+                        typelib_typedescriptionreference_acquire( pAny->pType );
+
+                        bReturn = sal_False;
+                        break;
+                    }
+                    default:
+                        pAny->pData = &pAny->pReserved;
+                    }
+
+                    if ( bReturn )
+                    {
+                        m_aItemsToUnpack.push(
+                            UnpackItem( pAny->pData, pDataType ) );
+                    }
+                }
+                else
+                {
+                    OUStringBuffer error;
+                    error.appendAscii( "can't unmarshal any because typedescription for " );
+                    error.append( pAny->pType->pTypeName );
+                    error.appendAscii( " is missing" );
+                    m_pBridgeImpl->addError( error.makeStringAndClear() );
+                }
+            }
+
+            if( pDataType )
+            {
+                typelib_typedescription_release( pDataType );
+            }
+            else
+            {
+                pAny->pData = 0;
+                Type type; // void
+                pAny->pType = type.getTypeLibType();
+                typelib_typedescriptionreference_acquire( pAny->pType );
+
+                bReturn = sal_False;
+            }
+
+            break;
+        }
+        case typelib_TypeClass_INTERFACE:
+        {
+            *(remote_Interface**)pDest = 0;
+
+            rtl_uString *pString = 0;
+            bReturn = unpackOid( &pString ) && bReturn;
+
+            if( bReturn && pString && pString->length )
+            {
+                m_callback( (remote_Interface**) pDest ,
+                            pString,
+                            pType->pWeakRef ,
+                            m_pEnvRemote,
+                            urp_releaseRemoteCallback );
+            }
+            if( pString )
+            {
+                rtl_uString_release( pString );
+            }
+            break;
+        }
+        case typelib_TypeClass_TYPE:
+        {
+            bReturn = unpackType( pDest );
+            break;
+        }
+        case typelib_TypeClass_STRUCT:
+        case typelib_TypeClass_EXCEPTION:
+        {
+            typelib_CompoundTypeDescription * pCompType =
+                (typelib_CompoundTypeDescription *)pType;
+
+            // direct members
+            typelib_TypeDescriptionReference ** ppTypeRefs = pCompType->ppTypeRefs;
+            sal_Int32 * pMemberOffsets = pCompType->pMemberOffsets;
+            sal_Int32 nDescr = pCompType->nMembers;
+
+            // at least assume 1 byte per member
+            bReturn = bReturn && ! checkOverflow( nDescr * 1 );
+            for ( sal_Int32 nPos = nDescr; nPos; --nPos )
+            {
+                typelib_TypeDescription * pMemberType = 0;
+                typelib_typedescriptionreference_getDescription(
+                    &pMemberType, ppTypeRefs[ nPos - 1 ] );
+
+                m_aItemsToUnpack.push(
+                    UnpackItem( (char*)pDest + pMemberOffsets[ nPos - 1 ],
+                                pMemberType,
+                                true /* construct even in error case */ ) );
+
+                m_aTypesToRelease.push_back( pMemberType );
+            }
+
+            // parent
+            if (pCompType->pBaseTypeDescription)
+            {
+                m_aItemsToUnpack.push(
+                    UnpackItem( pDest,
+                                (typelib_TypeDescription *)
+                                    pCompType->pBaseTypeDescription ) );
+            }
+            break;
+        }
+        case typelib_TypeClass_SEQUENCE:
+        {
+            sal_Int32 nLen;
+            bReturn = unpackCompressedSize( &nLen );
+
+            // urp protocol does not allow to use the elementsize as a guess, if enough data
+            // is available. However, at least one byte per member must be within the message
+            bReturn = bReturn && ! checkOverflow( 1 * nLen );
+            uno_Sequence *pSequence = 0;
+            if( nLen && bReturn )
+            {
+                typelib_TypeDescriptionReference * pETRef =
+                    ((typelib_IndirectTypeDescription *)pType)->pType;
+
+                typelib_TypeDescription * pET = 0;
+                typelib_typedescriptionreference_getDescription( &pET , pETRef );
+
+                if( pET )
+                {
+                    sal_Int32 nElementSize = pET->nSize;
+
+                    pSequence = (uno_Sequence *)rtl_allocateMemory(
+                        SAL_SEQUENCE_HEADER_SIZE + nElementSize * nLen );
+                    pSequence->nRefCount = 1;
+                    pSequence->nElements = nLen;
+
+                    if( typelib_TypeClass_BYTE == pET->eTypeClass )
+                    {
+                        memcpy( pSequence->elements , m_pos , nLen );
+                        m_pos += nLen;
+                    }
+                    else
+                    {
+                        for( sal_Int32 i = 0 ; i < nLen ; i ++ )
+                        {
+                            m_aItemsToUnpack.push(
+                                UnpackItem(
+                                    ((char*)pSequence->elements)
+                                        + i * nElementSize,
+                                    pET ) );
+                        }
+                    }
+                    m_aTypesToRelease.push_back( pET );
+                }
+                else
+                {
+                    bReturn = sal_False;
+                    uno_constructData( &pSequence , pType );
+                    OUStringBuffer error;
+                    error.appendAscii( "can't unmarshal sequence, because there is no typedescription for element type " );
+                    error.append( pETRef->pTypeName );
+                    error.appendAscii( " available" );
+                    m_pBridgeImpl->addError( error.makeStringAndClear() );
+                }
+            }
+            else
+            {
+                uno_constructData( &pSequence , pType );
+            }
+
+            *((uno_Sequence **)pDest) = pSequence;
+            break;
+        }
+        case typelib_TypeClass_UNION:
+        case typelib_TypeClass_ARRAY:
+        case typelib_TypeClass_SERVICE:
+        case typelib_TypeClass_MODULE:
+        case typelib_TypeClass_INTERFACE_METHOD:
+        case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+        case typelib_TypeClass_UNKNOWN:
+        default:
+        {
+            ::rtl::OUStringBuffer buffer( 128 );
+            buffer.appendAscii( RTL_CONSTASCII_STRINGPARAM("Unsupported typeclass during unmarshaling ("));
+            buffer.append( ( sal_Int32 ) pType->eTypeClass , 10 );
+            buffer.appendAscii( ")" );
+            m_pBridgeImpl->addError( buffer.makeStringAndClear() );
+            bReturn = sal_False;
+        }
+        }
+
+        if ( !bReturn )
+        {
+            // construct default data for every remaining item.
+            while ( !m_aItemsToUnpack.empty() )
+            {
+                const UnpackItem & rItem = m_aItemsToUnpack.top();
+
+                if ( rItem.bMustBeConstructed )
+                    uno_constructData( rItem.pDest , rItem.pType );
+
+                m_aItemsToUnpack.pop();
+            }
+        }
+    }
+    while ( !m_aItemsToUnpack.empty() );
+
+    // release pending type descriptions
+    TypeDescVector::const_iterator it = m_aTypesToRelease.begin();
+    const TypeDescVector::const_iterator end = m_aTypesToRelease.end();
+    while ( it != end )
+    {
+        typelib_typedescription_release( *it );
+        it++;
+    }
+    m_aTypesToRelease.clear();
+
+    return bReturn;
+}
+
 sal_Bool Unmarshal::unpackType( void *pDest )
 {
     *(typelib_TypeDescriptionReference **) pDest = 0;
@@ -355,201 +729,6 @@ sal_Bool Unmarshal::unpackType( void *pDest )
     }
     // pTypeRef is already acquired
     *(typelib_TypeDescriptionReference**)pDest = pTypeRef;
-    return bReturn;
-}
-
-sal_Bool Unmarshal::unpackAny( void *pDest )
-{
-    uno_Any *pAny = ( uno_Any * )pDest;
-
-    pAny->pType = 0;
-    // Type is acquired with typelib_typedescription_acquire
-
-    sal_Bool bReturn = unpackType( &(pAny->pType) );
-
-    typelib_TypeDescription *pType = 0;
-    if( bReturn && pAny->pType )
-    {
-        typelib_typedescriptionreference_getDescription( &pType , pAny->pType );
-
-        if( pType )
-        {
-            switch (pType->eTypeClass)
-            {
-            case typelib_TypeClass_HYPER:
-            case typelib_TypeClass_UNSIGNED_HYPER:
-                if (sizeof(void *) < sizeof(sal_Int64))
-                {
-                    pAny->pData = rtl_allocateMemory( sizeof(sal_Int64) );
-                }
-                else
-                {
-                    pAny->pData = &pAny->pReserved;
-                }
-                break;
-            case typelib_TypeClass_FLOAT:
-                if (sizeof(void *) < sizeof(float))
-                {
-                    pAny->pData = rtl_allocateMemory( sizeof(float) );
-                }
-                else
-                {
-                    pAny->pData = &pAny->pReserved;
-                }
-                break;
-            case typelib_TypeClass_DOUBLE:
-                if (sizeof(void *) < sizeof(double))
-                {
-                    pAny->pData = rtl_allocateMemory( sizeof(double) );
-                }
-                else
-                {
-                    pAny->pData = &pAny->pReserved;
-                }
-                break;
-            case typelib_TypeClass_STRUCT:
-            case typelib_TypeClass_UNION:
-            case typelib_TypeClass_EXCEPTION:
-            case typelib_TypeClass_ARRAY:
-                pAny->pData = rtl_allocateMemory( pType->nSize );
-                break;
-            default:
-                pAny->pData = &pAny->pReserved;
-            }
-
-            bReturn = unpack( pAny->pData , pType );
-        }
-        else
-        {
-            OUStringBuffer error;
-            error.appendAscii( "can't unmarshal any because typedescription for " );
-            error.append( pAny->pType->pTypeName );
-            error.appendAscii( " is missing" );
-            m_pBridgeImpl->addError( error.makeStringAndClear() );
-        }
-    }
-
-    if( pType )
-    {
-        typelib_typedescription_release( pType );
-    }
-    else
-    {
-        pAny->pData = 0;
-        Type type; // void
-        pAny->pType = type.getTypeLibType();
-        typelib_typedescriptionreference_acquire( pAny->pType );
-
-        bReturn = sal_False;
-    }
-    return bReturn;
-}
-
-
-sal_Bool Unmarshal::unpackRecursive( void *pDest , typelib_TypeDescription *pType )
-{
-    sal_Bool bReturn = sal_True;
-
-    switch( pType->eTypeClass )
-    {
-    case typelib_TypeClass_STRUCT:
-    case typelib_TypeClass_EXCEPTION:
-    {
-        typelib_CompoundTypeDescription * pCompType =
-            (typelib_CompoundTypeDescription *)pType;
-
-        if (pCompType->pBaseTypeDescription)
-        {
-            bReturn =
-                unpack( pDest , (typelib_TypeDescription * ) pCompType->pBaseTypeDescription );
-        }
-
-        // then construct members
-        typelib_TypeDescriptionReference ** ppTypeRefs = pCompType->ppTypeRefs;
-        sal_Int32 * pMemberOffsets = pCompType->pMemberOffsets;
-        sal_Int32 nDescr = pCompType->nMembers;
-
-        // at least assume 1 byte per member
-        bReturn = bReturn && ! checkOverflow( nDescr * 1 );
-        for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
-        {
-            typelib_TypeDescription * pMemberType = 0;
-            TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[nPos] );
-            // Even if bReturn is false, all values must be default constructed !
-            if( bReturn )
-            {
-                bReturn = unpack( (char*)pDest + pMemberOffsets[nPos] , pMemberType ) && bReturn;
-            }
-            else
-            {
-                uno_constructData( (char*)pDest + pMemberOffsets[nPos]  , pMemberType );
-            }
-            TYPELIB_DANGER_RELEASE( pMemberType );
-        }
-        break;
-    }
-    case typelib_TypeClass_SEQUENCE:
-    {
-        sal_Int32 nLen;
-        bReturn = unpackCompressedSize( &nLen );
-
-        // urp protocol does not allow to use the elementsize as a guess, if enough data
-        // is available. However, at least one byte per member must be within the message
-        bReturn = bReturn && ! checkOverflow( 1 * nLen );
-        uno_Sequence *pSequence = 0;
-        if( nLen && bReturn )
-        {
-            typelib_TypeDescriptionReference * pETRef =
-                ((typelib_IndirectTypeDescription *)pType)->pType;
-
-            typelib_TypeDescription * pET = 0;
-            typelib_typedescriptionreference_getDescription( &pET , pETRef );
-
-            if( pET )
-            {
-                sal_Int32 nElementSize = pET->nSize;
-
-                pSequence = (uno_Sequence *)rtl_allocateMemory(
-                    SAL_SEQUENCE_HEADER_SIZE + nElementSize * nLen );
-                pSequence->nRefCount = 1;
-                pSequence->nElements = nLen;
-
-                if( typelib_TypeClass_BYTE == pET->eTypeClass )
-                {
-                    memcpy( pSequence->elements , m_pos , nLen );
-                    m_pos += nLen;
-                }
-                else
-                {
-                    for( sal_Int32 i = 0 ; i < nLen ; i ++ )
-                    {
-                        bReturn = unpack( ((char*)pSequence->elements)+ i*nElementSize,pET ) && bReturn;
-                    }
-                }
-                typelib_typedescription_release( pET );
-            }
-            else
-            {
-                bReturn = sal_False;
-                uno_constructData( &pSequence , pType );
-                OUStringBuffer error;
-                error.appendAscii( "can't unmarshal sequence, because there is no typedescription for element type " );
-                error.append( pETRef->pTypeName );
-                error.appendAscii( " available" );
-                m_pBridgeImpl->addError( error.makeStringAndClear() );
-            }
-        }
-        else
-        {
-            uno_constructData( &pSequence , pType );
-        }
-
-        *((uno_Sequence **)pDest) = pSequence;
-        break;
-    }
-    default:
-        OSL_ASSERT( 0 );
-    }
     return bReturn;
 }
 
