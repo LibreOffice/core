@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-04-29 12:53:07 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_LISTENER_HXX
 #include "IAccessibleViewForwarderListener.hxx"
+#endif
+#ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_PARENT_HXX
+#include "IAccessibleParent.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
 #include "AccessibleShapeTreeInfo.hxx"
@@ -129,7 +132,8 @@ class CMShapeIterator;
 */
 class ChildrenManagerImpl
     :   public cppu::WeakImplHelper1< ::com::sun::star::document::XEventListener>,
-        public IAccessibleViewForwarderListener
+        public IAccessibleViewForwarderListener,
+        public IAccessibleParent
 {
 public:
     /** Create a children manager, which manages the children of the given
@@ -299,6 +303,22 @@ public:
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder);
 
+    //=====  IAccessibleParent  ===============================================
+
+    /** Replace the specified child with a replacement.
+        @param pCurrentChild
+            This child is to be replaced.
+        @param pReplacement
+            The replacement for the current child.
+        @return
+            The returned value indicates wether the replacement has been
+            finished successfully.
+    */
+    virtual sal_Bool ReplaceChild (
+        AccessibleShape* pCurrentChild,
+        AccessibleShape* pReplacement)
+        throw (::com::sun::star::uno::RuntimeException);
+
 
 protected:
     /// Mutex guarding objects of this class.
@@ -327,11 +347,11 @@ protected:
         ::com::sun::star::drawing::XShapes> mxShapeList;
 
     /** This list of additional accessible shapes that can or shall not be
-        created by the shape factory.  All visible accessible shapes in this
-        list are inserted into the list of visible shapes
-        <member>maVisibleChildren</member>.
+        created by the shape factory.
     */
-    std::vector<AccessibleShape*> maAccessibleShapes;
+    typedef std::vector< ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible> > AccessibleShapeList;
+    AccessibleShapeList maAccessibleShapes;
 
     /** Rectangle that describes the visible area in which a shape has to lie
         at least partly, to be accessible through this class.  Used to
@@ -462,7 +482,12 @@ public:
     explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& xShape);
 
-    explicit ChildDescriptor (AccessibleShape* pShape);
+    /** Create a new descriptor for the specified shape with empty reference
+        to the original shape.
+    */
+    explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
+
 
     bool operator == (const ChildDescriptor& aDescriptor)
     {
