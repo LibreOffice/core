@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:14:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,20 +263,20 @@ TabPage TP_NUM_POSITION
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "~Mindestabstand Nummer <-> Text" ;
         Text [ ENGLISH ] = "Distance text <-> numbering" ;
-        Text [ english_us ] = "Minimum space numbering <-> text" ;
-        Text [ swedish ] = "Minsta avstånd nummer <-> text" ;
+        Text [ english_us ] = "~Minimum space numbering <-> text" ;
+        Text [ swedish ] = "~Minimiavstånd nummer <-> text" ;
         Text [ danish ] = "Min. afstand nummer <-> tekst" ;
         Text [ italian ] = "Distanza testo <-> numerazione" ;
         Text [ spanish ] = "Distancia mínima Número <-> Texto" ;
-        Text [ french ] = "Écart minimum numéro <-> texte" ;
+        Text [ french ] = "Écart ~minimum numéro <-> texte" ;
         Text [ dutch ] = "Min. afstand nummer <-> tekst" ;
         Text [ portuguese_brazilian ] = "Abstand Te~xt <-> Numerierung" ;
         Text [ portuguese ] = "Distância mínima número <-> texto" ;
-        Text[ chinese_simplified ] = "×îĞ¡¼ä¸ô ±àºÅÖÁÕıÎÄ(~B)";
+        Text[ chinese_simplified ] = "±àºÅÖÁÕıÎÄµÄ×îĞ¡¼ä¸ô";
         Text[ russian ] = "Ìèí. èíòåğâàë íîìåğ <-> òåêñò";
-        Text[ polish ] = "Odstêp conajmniej Numer <-> tekst";
+        Text[ polish ] = "Min. odstêp miêdzy numerem a tekstem";
         Text[ japanese ] = "”Ô†‚ÆÃ·½Ä‚ÌÅ¬ŠÔŠu(~B)";
-        Text[ chinese_traditional ] = "³Ì¤p¶¡¹j ½s¸¹ <-> ¤º¤å(~B)";
+        Text[ chinese_traditional ] = "½s¸¹©M¤º¤å¤§¶¡ªº³Ì¤Ö¶¡¹j";
         Text[ arabic ] = "ÃŞá ãÓÇİÉ Èíä ÇáÑŞã <-> ÇáäÕ";
         Text[ greek ] = "ÅëÜ÷éóôç áğüóôáóç Áñéè~ìüò <-> Êåßìåíï";
         Text[ korean ] = "ÃÖ¼Ò°£°İ  ¹øÈ£ <-> ÅØ½ºÆ®(~B)";
