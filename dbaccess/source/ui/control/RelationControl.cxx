@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:28:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ namespace dbaui
     {
         DBG_CHKTHIS(ORelationControl,NULL);
 
-        ULONG nHelpId;
+        ULONG nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
 
         Reference< XPropertySet> xDef;
         switch ( getColumnIdent(nColumnId) )
@@ -377,6 +377,9 @@ namespace dbaui
             case DEST_COLUMN:
                 xDef    = m_xDestDef;
                 nHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
+                break;
+            default:
+                //  ?????????
                 break;
         }
 
