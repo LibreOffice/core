@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-02 13:13:08 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 14:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
 #endif
         if( ::com::sun::star::i18n::UnicodeType::PRIVATE_USE ==
                 rCC.getType( rTxt, nStt ))
-            ;
+            return TRUE;
     }
     return FALSE;
 }
