@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicTestCase.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-11-18 16:13:12 $
+ *  last change:$Date: 2004-03-19 14:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,7 @@ public class BasicTestCase extends TestCase {
                 tParam.get("mozab.url") + "\"");
         } catch (BasicException e) {
             log.println(e.info);
-            helper.ProcessHandler ph =
-                            (helper.ProcessHandler) tParam.get("AppProvider");
-
-            if (ph != null) ph.kill();
+            throw new RuntimeException(e.info);
         }
     }
 
@@ -201,11 +198,13 @@ public class BasicTestCase extends TestCase {
 
             if (!bObjectWasCreated) {
                 log.println("Couldn't create object");
+                throw new RuntimeException("Couldn't create object");
             }
 
         } catch (BasicException e) {
             log.println(e.info);
             bObjectWasCreated = false;
+            throw new RuntimeException(e.info);
         }
 
         TestEnvironment tEnv = new TestEnvironment(new XInterface(){});
@@ -231,6 +230,7 @@ public class BasicTestCase extends TestCase {
             Res = oBasicHandler.perform("disposeObject", objName);
         } catch (BasicException e) {
             oLog.println(e.info);
+            throw new RuntimeException(e.info);
         }
     }
 
