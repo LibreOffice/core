@@ -375,9 +375,9 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(3,1) = &quot;smath: StarOffice XML (Math)&quot;
 	XMLFilterName(3,2) = &quot;sxm&quot;
 
-	XMLFilterName(4,0) = &quot;application/vnd.stardivision.writer;application/vnd.stardivision.writer/web;application/x-starwriter&quot;
-	XMLFilterName(4,1) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
-	XMLFilterName(4,2) = &quot;stw&quot;
+	XMLFilterName(4,0) = &quot;application/vnd.stardivision.writer;application/x-starwriter|application/vnd.stardivision.writer/web&quot;
+	XMLFilterName(4,1) = &quot;swriter: writer_StarOffice_XML_Writer_Template|swriter/web: writer_web_StarOffice_XML_Writer_Web_Template&quot;
+	XMLFilterName(4,2) = &quot;stw|stw&quot;
 
 	XMLFilterName(5,0) = &quot;application/vnd.stardivision.calc;application/x-starcalc&quot;
 	XMLFilterName(5,1) = &quot;scalc: calc_StarOffice_XML_Calc_Template&quot;

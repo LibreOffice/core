@@ -136,12 +136,12 @@ Dim sTemplateValueName as String
 							sLocTemplatePath = OldsLocTemplatePath
 						End If
 					Else
-						sLocTemplatePath = &quot;&quot;
+						sLocTemplatePath = SOWorkPath
 					End If
 				End If
 				GetTemplateDefaultPath = ConvertToUrl(sLocTemplatePath)
 			Else
-				GetTemplateDefaultPath = &quot;&quot;
+				GetTemplateDefaultPath = SOWorkPath
 			End If
 		Case SBXMLMODE
 			If Index = 3 Then

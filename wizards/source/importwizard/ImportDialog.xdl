@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="ImportDialog" dlg:title="ImportDialog" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34570">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="ImportDialog" dlg:title="ImportDialog" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34570">
  <dlg:bulletinboard>
   <dlg:text dlg:id="TemplateExportLabel" dlg:tab-index="0" dlg:left="12" dlg:top="94" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="TemplateExportLabel"/>
   <dlg:textfield dlg:id="TemplateImportPath" dlg:tab-index="1" dlg:left="73" dlg:top="76" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34583">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XTextListener" dlg:event-method="textChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-textchange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:textfield>
   <dlg:textfield dlg:id="TemplateExportPath" dlg:tab-index="2" dlg:left="73" dlg:top="92" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34584"/>
   <dlg:checkbox dlg:id="DocumentPathCheckbox" dlg:tab-index="3" dlg:left="12" dlg:top="121" dlg:width="240" dlg:height="10" dlg:page="2" dlg:help-url="HID:34586" dlg:value="DocumentPathCheckbox">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.SetEnabledDocument_InputPath"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.DialogModul.SetEnabledDocument_InputPath" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="DocumentSearchSubDir" dlg:tab-index="4" dlg:left="12" dlg:top="134" dlg:width="240" dlg:height="10" dlg:page="2" dlg:help-url="HID:34587" dlg:value="DocumentSearchSubDir"/>
   <dlg:text dlg:id="DocumentImportLabel" dlg:tab-index="5" dlg:left="10" dlg:top="151" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="DocumentImportLabel"/>
   <dlg:text dlg:id="DocumentExportLabel" dlg:tab-index="6" dlg:left="10" dlg:top="167" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="DocumentExportLabel"/>
   <dlg:textfield dlg:id="DocumentImportPath" dlg:tab-index="7" dlg:left="73" dlg:top="149" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34588">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XTextListener" dlg:event-method="textChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-textchange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:textfield>
   <dlg:textfield dlg:id="DocumentExportPath" dlg:tab-index="8" dlg:left="73" dlg:top="165" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34589"/>
   <dlg:text dlg:id="SummaryHeaderLabel" dlg:tab-index="9" dlg:left="6" dlg:top="37" dlg:width="258" dlg:height="8" dlg:page="3" dlg:value="SummaryHeaderLabel"/>
@@ -26,63 +26,63 @@
   <dlg:text dlg:id="LabelCurDocument" dlg:tab-index="15" dlg:left="15" dlg:top="118" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocument"/>
   <dlg:img dlg:id="ImportPreview" dlg:tab-index="16" dlg:left="6" dlg:top="5" dlg:width="258" dlg:height="26"/>
   <dlg:button dlg:id="cbBack" dlg:tab-index="17" dlg:left="155" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34573" dlg:value="cbBack">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.PrevStep"/>
+   <script:event script:event-name="on-performaction" script:macro-name="ImportWizard.Main.PrevStep" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cbCancel" dlg:tab-index="18" dlg:left="6" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34572" dlg:value="cbCancel">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.CallCancelTask"/>
+   <script:event script:event-name="on-performaction" script:macro-name="ImportWizard.Main.CallCancelTask" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cbHelp" dlg:tab-index="19" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="14" dlg:tag="34571" dlg:help-url="HID:34571" dlg:value="cbHelp">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Recursive.ShowHelperDialog"/>
+   <script:event script:event-name="on-performaction" script:macro-name="Tools.Recursive.ShowHelperDialog" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cbGoOn" dlg:tab-index="20" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34574" dlg:value="cbGoOn">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.NextStep"/>
+   <script:event script:event-name="on-performaction" script:macro-name="ImportWizard.Main.NextStep" script:language="StarBasic"/>
   </dlg:button>
   <dlg:text dlg:id="WelcomeTextLabel" dlg:tab-index="21" dlg:left="6" dlg:top="38" dlg:width="258" dlg:height="20" dlg:page="1" dlg:value="WelcomeTextLabel" dlg:multiline="true"/>
   <dlg:text dlg:id="WelcomeTextLabel3" dlg:tab-index="22" dlg:left="6" dlg:top="58" dlg:width="258" dlg:height="12" dlg:page="1" dlg:value="WelcomeTextLabel3"/>
   <dlg:button dlg:id="Button1" dlg:tab-index="23" dlg:left="248" dlg:top="75" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="TemplateImportPath" dlg:help-url="HID:34585" dlg:value="...">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.TakoverFolderName"/>
+   <script:event script:event-name="on-performaction" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="Button2" dlg:tab-index="24" dlg:left="248" dlg:top="91" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="TemplateExportPath" dlg:help-url="HID:34585" dlg:value="...">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.TakoverFolderName"/>
+   <script:event script:event-name="on-performaction" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="Button3" dlg:tab-index="25" dlg:left="248" dlg:top="148" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="DocumentImportPath" dlg:help-url="HID:34590" dlg:value="...">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.TakoverFolderName"/>
+   <script:event script:event-name="on-performaction" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="Button4" dlg:tab-index="26" dlg:left="248" dlg:top="164" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="DocumentExportPath" dlg:help-url="HID:34590" dlg:value="...">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.TakoverFolderName"/>
+   <script:event script:event-name="on-performaction" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
   <dlg:radiogroup>
    <dlg:radio dlg:id="OptSODocuments" dlg:tab-index="27" dlg:left="6" dlg:top="72" dlg:width="258" dlg:height="9" dlg:page="1" dlg:tag="XML" dlg:help-url="HID:34575" dlg:value="OptSODocuments">
-    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleCheckboxes"/>
+    <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleCheckboxes" script:language="StarBasic"/>
    </dlg:radio>
    <dlg:radio dlg:id="OptMSDocuments" dlg:tab-index="28" dlg:left="6" dlg:top="113" dlg:width="258" dlg:height="9" dlg:page="1" dlg:tag="MS" dlg:help-url="HID:34576" dlg:value="OptMSDocuments">
-    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleCheckboxes"/>
+    <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleCheckboxes" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>
   <dlg:checkbox dlg:id="ChkFirstSOApplication" dlg:tab-index="29" dlg:left="12" dlg:top="85" dlg:width="120" dlg:height="9" dlg:page="1" dlg:help-url="HID:34596" dlg:value="ChkFirstSOApplication">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="ChkSecondSOApplication" dlg:tab-index="30" dlg:left="136" dlg:top="85" dlg:width="120" dlg:height="9" dlg:page="1" dlg:help-url="HID:34597" dlg:value="ChkSecondSOApplication">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="ChkThirdSOApplication" dlg:tab-index="31" dlg:left="12" dlg:top="98" dlg:width="120" dlg:height="9" dlg:page="1" dlg:help-url="HID:34598" dlg:value="ChkThirdSOApplication">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="ChkFourthSOApplication" dlg:tab-index="32" dlg:left="136" dlg:top="98" dlg:width="120" dlg:height="9" dlg:page="1" dlg:help-url="HID:34599" dlg:value="ChkFourthSOApplication">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="ChkFirstMSApplication" dlg:tab-index="33" dlg:disabled="true" dlg:left="12" dlg:top="126" dlg:width="120" dlg:height="9" dlg:page="1" dlg:help-url="HID:34578" dlg:value="ChkFirstMSApplication">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="ChkSecondMSApplication" dlg:tab-index="34" dlg:disabled="true" dlg:left="136" dlg:top="126" dlg:width="120" dlg:height="9" dlg:page="1" dlg:help-url="HID:34579" dlg:value="ChkSecondMSApplication">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="ChkThirdMSApplication" dlg:tab-index="35" dlg:disabled="true" dlg:left="12" dlg:top="139" dlg:width="120" dlg:height="9" dlg:page="1" dlg:help-url="HID:34580" dlg:value="ChkThirdMSApplication">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.ToggleNextButton"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.Main.ToggleNextButton" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:text dlg:id="WelcomeTextLabel2" dlg:tab-index="36" dlg:disabled="true" dlg:left="6" dlg:top="152" dlg:width="258" dlg:height="18" dlg:page="1" dlg:value="WelcomeTextLabel2" dlg:multiline="true"/>
   <dlg:checkbox dlg:id="TemplateCheckbox" dlg:tab-index="37" dlg:left="12" dlg:top="48" dlg:width="240" dlg:height="10" dlg:page="2" dlg:help-url="HID:34581" dlg:value="TemplateCheckbox">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.SetEnabledTemplate_InputPath"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="ImportWizard.DialogModul.SetEnabledTemplate_InputPath" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="TemplateSearchSubDir" dlg:tab-index="38" dlg:left="12" dlg:top="61" dlg:width="240" dlg:height="10" dlg:page="2" dlg:help-url="HID:34582" dlg:value="TemplateSearchSubDir"/>
   <dlg:text dlg:id="TemplateImportLabel" dlg:tab-index="39" dlg:left="12" dlg:top="78" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="TemplateImportLabel"/>

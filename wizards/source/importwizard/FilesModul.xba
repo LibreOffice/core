@@ -68,9 +68,9 @@ End Sub
 
 
 Sub ConvertAllDocuments(sFilterName())
-Dim FileProperties() as new com.sun.star.beans.PropertyValue
-Dim OpenProperties(0) as new com.sun.star.beans.PropertyValue
-Dim TemplateProperties(1) as new com.sun.star.beans.PropertyValue
+Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
+Dim WriterWebProperties(0) as new com.sun.star.beans.PropertyValue
+Dim OpenProperties(1) as new com.sun.star.beans.PropertyValue
 Dim FilesList(0,2) as String
 Dim sViewPath as String
 Dim i as Integer
@@ -120,12 +120,10 @@ Dim sOldExtension as String
 		InitializeProgressPage(ImportDialog)
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
-		TemplateProperties(0).Name = &quot;Hidden&quot;
-		TemplateProperties(0).Value = True
-		TemplateProperties(1).Name = &quot;AsTemplate&quot;
-		TemplateProperties(1).Value = True
+		OpenProperties(1).Name = &quot;AsTemplate&quot;
 
 		MaxFileIndex = Ubound(FilesList(),1)
+		Msgbox &quot;Jetzt gehts los!&quot;
 		For i = 0 To MaxFileIndex
 			If bCancelTask Then
 				bConversionIsRunnig = False
@@ -141,17 +139,18 @@ Dim sOldExtension as String
 			sOldExtension = GetFileNameExtension(sFullName, &quot;/&quot;)
 			Select Case sOldExtension
 				Case &quot;vor&quot;, &quot;dot&quot;, &quot;xlt&quot;, &quot;pot&quot;
-					oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, TemplateProperties())				
+					OpenProperties(1).Value = False
 				Case Else
-					oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
+					OpenProperties(1).Value = True
 			End Select
+			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
 			If bSetFonts Then
 				CheckScripts(oDocument, 1)
 			End If
 
 			If Not IsNull(oDocument) Then
 				Select Case sExtension
-					Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;mml&quot;
+					Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;sxm&quot;
 						SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
 						TargetStemDir = RTrimStr(Applications(ApplIndex,SBDOCTARGET), &quot;/&quot;)
 					Case Else 								&apos; Templates and Helper-Applications remain
@@ -186,13 +185,12 @@ Dim sOldExtension as String
 				End If
 				If bDoSave Then
 					InsertDocNamesToLogDocument(sFullName, TargetFile)
-					On Local Error Resume Next
-&apos; Note:	 Files are automatically stored in Default format
-&apos;					FileProperties(0).Name = &quot;FilterName&quot;
-&apos;					FileProperties(0).Value = CurFilterName
-					oDocument.StoreToUrl(TargetFile,FileProperties())
+&apos;					On Local Error Resume Next
+					FileProperties(0).Name = &quot;FilterName&quot;
+					FileProperties(0).Value = CurFilterName
+					oDocument.StoreAsUrl(TargetFile,FileProperties())
 					oDocument.Dispose()
-					On Local Error Goto 0
+&apos;					On Local Error Goto 0
 				End If
 &apos;				oTaskenum = StarDesktop.Tasks.CreateEnumeration
 &apos;				While oTaskEnum.HasmoreElements
@@ -325,11 +323,11 @@ Dim bLogExists as Boolean
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
 		oLogCursor = oLogTable.GetCellbyPosition(0,0).createTextCursor
-&apos; Todo: Strings in Resourcen
 		oLogCursor.SetString(sSourceDocuments)
 		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor
 		oLogCursor.SetString(sTargetDocuments)
 		bInsertRow = False
+&apos; Todo: Strings in Resourcen
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
 		Do
 			bLogExists = oUcb.Exists(sLogUrl)
