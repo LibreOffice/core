@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #endif
 
 
-SbiScanner::SbiScanner( const String& rBuf, StarBASIC* p ) : aBuf( rBuf )
+SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
 {
     pBasic   = p;
     pLine    = NULL;
@@ -199,20 +199,20 @@ BOOL SbiScanner::NextSym()
     if( !pLine )
     {
         USHORT n = nBufPos;
-        USHORT nLen = aBuf.Len();
+        USHORT nLen = aBuf.getLength();
         if( nBufPos >= nLen )
             return FALSE;
-        const sal_Unicode* p = aBuf.GetBuffer();
+        const sal_Unicode* p = aBuf.getStr();
         p += n;
         while( ( n < nLen ) && ( *p != '\n' ) && ( *p != '\r' ) )
             p++, n++;
-        aLine = aBuf.Copy( nBufPos, n - nBufPos );
+        aLine = aBuf.copy( nBufPos, n - nBufPos );
         if( ( n < nLen ) && *p == '\r' && *( p+1 ) == '\n' )
             n += 2;
         else
             n++;
         nBufPos = n;
-        pLine = aLine.GetBuffer();
+        pLine = aLine.getStr();
         nOldLine = ++nLine;
         nCol = nCol1 = nCol2 = nOldCol1 = nOldCol2 = 0;
         nColLock = 0;
@@ -240,7 +240,7 @@ BOOL SbiScanner::NextSym()
         short n = nCol;
         for ( ; (BasicSimpleCharClass::isAlphaNumeric( *pLine & 0xFF ) || ( *pLine == '_' ) ); pLine++ )
             nCol++;
-        aSym = aLine.Copy( n, nCol - n );
+        aSym = aLine.copy( n, nCol - n );
         // Abschliessendes '_' durch Space ersetzen, wenn Zeilenende folgt
         // (sonst falsche Zeilenfortsetzung)
         if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )
@@ -427,7 +427,7 @@ BOOL SbiScanner::NextSym()
                 if( *pLine != cSep || cSep == ']' ) break;
             } else aError = cSep, GenError( SbERR_EXPECTED );
         }
-        aSym = aLine.Copy( n, nCol - n - 1 );
+        aSym = aLine.copy( n, nCol - n - 1 );
         // Doppelte Stringbegrenzer raus
         String s( cSep );
         s += cSep;
@@ -454,7 +454,7 @@ BOOL SbiScanner::NextSym()
             case '>': if( *pLine == '=' ) n = 2; break;
             case ':': if( *pLine == '=' ) n = 2; break;
         }
-        aSym = aLine.Copy( nCol, n );
+        aSym = aLine.copy( nCol, n );
         pLine += n-1; nCol += n;
     }
 
