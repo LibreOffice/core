@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-04 16:26:00 $
+#   last change: $Author: hjs $ $Date: 2002-03-14 12:42:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,7 +146,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpa
 
 
 #add new files to patch
-$(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(T_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+$(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES)
 .IF "$(GUI)"=="WNT"
     @$(TOUCH) $@
 .ELSE			# "$(GUI)"=="WNT"
@@ -237,11 +237,13 @@ $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).unpack
 .IF "$(P_ADDITIONAL_FILES)"!=""
 $(P_ADDITIONAL_FILES) :
     +-echo dummy > $@
+    +-$(TOUCH) $@
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     +-echo dummy > $@
+    +-$(TOUCH) $@
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)

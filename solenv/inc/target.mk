@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-05 14:11:37 $
+#   last change: $Author: hjs $ $Date: 2002-03-14 12:42:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2843,8 +2843,8 @@ $(MISC)$/helpids.don: $(HELPIDFILES)
     @echo Making helpids:
     @echo ---------------
     @echo r:\bat\mkhids.btm $(PRJ)\$(INPATH)\misc\help.id $(HELPIDFILES)
-    rem @copy /uq r:\bat\mkhids.btm r:\bat\mkhids.bat
-    rem @r:\bat\mkhids.bat $(PRJ)\$(INPATH)\misc\help.id $(HELPIDFILES)
+#	rem @copy /uq r:\bat\mkhids.btm r:\bat\mkhids.bat
+#	rem @r:\bat\mkhids.bat $(PRJ)\$(INPATH)\misc\help.id $(HELPIDFILES)
     @$(TOUCH) $(MISC)\helpids.don
 
 .IF "$(depend)"==""

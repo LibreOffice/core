@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-13 16:58:18 $
+#   last change: $Author: hjs $ $Date: 2002-03-14 12:41:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ MKFILENAME:=RULES.MK
 .IF	"$(debug)"!=""
 SEMADEBUG=echo $(VCSID) hat das File $@ mit debug=$(debug) uebersetzt >$(MISC)\$*.!d!
 .ELSE
-SEMADEBUG=@+rem dummy
+#SEMADEBUG=@+rem dummy
 .ENDIF
 
 $(OBJ)$/%.obj : %.cxx
@@ -81,9 +81,9 @@ $(OBJ)$/%.obj : %.cxx
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
-    @+echo.
+    @+$(ECHONL)
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx 
 .ELSE
@@ -101,9 +101,9 @@ $(OBJ)$/%.obj : %.cpp
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cpp
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
-    @+echo.
+    @+$(ECHONL)
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp 
 .ELSE
@@ -129,9 +129,9 @@ $(SLO)$/%.obj : %.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
-    @+echo.
+    @+$(ECHONL)
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
 .ENDIF			# "$(GUI)"=="UNX"
 
@@ -147,9 +147,9 @@ $(SLO)$/%.obj : %.cpp
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ENDIF
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
-    @+echo.
+    @+$(ECHONL)
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
 .ENDIF
 
@@ -166,7 +166,7 @@ $(SLO)$/%.obj : $(MISC)$/%.cxx
 .ENDIF
 .ELSE
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
-    @+echo.
+    @+$(ECHONL)
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
 .ENDIF
 
@@ -183,7 +183,7 @@ $(OBJ)$/%.obj : $(MISC)$/%.cxx
 .ENDIF
 .ELSE
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
-    @+echo.
+    @+$(ECHONL)
     $(CC) @$(mktmp $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(PCHSLOFLAGSU) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
 .ENDIF
 
@@ -200,7 +200,7 @@ $(OBJ)$/%.obj : %.c
 .ENDIF
 .ELSE
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c )
-    @+echo.
+    @+$(ECHONL)
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $*.c
 .ELSE
@@ -218,9 +218,9 @@ $(OBJ)$/%.obj : $(MISCX)$/%.c
     $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISCX)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
-    @+echo.
+    @+$(ECHONL)
     $(CC) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(PCHOBJFLAGSU) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
     $(SEMADEBUG)
 .ENDIF
@@ -233,9 +233,9 @@ $(SLO)$/%.obj : $(MISCX)$/%.c
     $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISCX)$/$*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& nul
     @+$(TYPE) $(mktmp $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
-    @+echo.
+    @+$(ECHONL)
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(PCHSLOFLAGSU) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c 
 .ELSE
@@ -252,7 +252,7 @@ $(SLO)$/%.obj : %.c
     $(cc) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+-$(RM) $@ >& nul
 .IF "$(COM)"=="GCC"
        $(CC) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(PCHSLOFLAGSU) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
 .ELSE
@@ -332,9 +332,9 @@ $(MISC)$/o_%.dpcc : %.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @+$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
 .IF "$(LAZY_DEPS)"==""	
-    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
 .ELSE			# "$(LAZY_DEPS)"==""	
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
@@ -597,7 +597,7 @@ $(MISC)$/%.dpj : makefile.mk
 .IF "$(GUI)"=="UNX"
     @+echo > $@
 .ELSE
-    @+echo. > $@
+    @+$(ECHONL) > $@
 .ENDIF
 .ELSE 			# "$(ndep)"==""
 .IF "$(GUI)"=="UNX"
@@ -619,7 +619,7 @@ $(SLO)$/%.obj : %.asm
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
        +-if exist $*.err @del $*.err
 .ELSE			# "$(ASM)"=="ml"
-        @+if exist $@ $(RM) /q $@ >& nul
+        @+-$(RM) $@ >& nul
         $(ASM) $(AFLAGS) $*.asm,$(SLO)\$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
@@ -629,20 +629,15 @@ $(SLO)$/%.obj : %.asm
 $(OBJ)$/%.obj : %.asm
        @echo ------------------------------
        @echo Making: $@
-.IF "$(COM)"=="WTC"
-       $(ASM) $(AFLAGS) $*.asm -fo=$(OBJ)\$*.obj
-       +-if exist $*.err @del $*.err
-.ELSE
 .IF "$(COM)"=="MSC"
 .IF "$(ASM)"=="ml"
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
        +-if exist $*.err @del $*.err
 .ELSE			# "$(ASM)"=="ml"
-        @+if exist $@ $(RM) /q $@ >& nul
+        @+if exist $@ $(RM) $@ >& nul
         $(ASM) $(AFLAGS) $*.asm,$(OBJ)\$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
-.ENDIF
        @$(SEMADEBUG)
 #
 # keine rule fuer *.java - abh. innerhalb eines packages!

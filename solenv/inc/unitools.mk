@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 11:58:56 $
+#   last change: $Author: hjs $ $Date: 2002-03-14 12:42:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,29 +64,43 @@
 AWK*=awk
 SORT*=sort
 SED*=sed
-TYPE*=type
-RENAME*=ren
+.IF "$(use_shell)"!="4nt"
+# expect cygwin tools to exist
+COPY*=cp
+COPYRECURSE=-r
+COPYUPDATE=-u
+ECHON=echo -n
+ECHONL=echo
+FIND*=find
+GNUCOPY*=cp
+GNUMAKE*=make
+GREP*=grep
+LS*=ls
+MKDIR*=mkdir.pl
+PERL*:=perl
+RENAME*=mv
+TOUCH*=touch
+TYPE*=cat
+.ELSE
 COPY*=copy
-COPYUPDATE=/u
 COPYRECURSE=/s
-MKDIR*=call mkdir
-MKDIRHIER=$(MKDIR) 
+COPYUPDATE=/u
 ECHON*=echos
-.IF "$(GUI)"=="OS2"
-GREP*=echo which grep ?
-FIND*=$(SOLARROOT)$/util$/os2$/find.exe
-LS*=dir /b
-.ENDIF
-.IF "$(GUI)"=="WNT"
-GREP*=$(ENV_TOOLS)$/grep32.exe
+ECHONL=echo.
 FIND*=$(BUILD_TOOLS)$/find.exe
-LS*=$(BUILD_TOOLS)$/ls.exe
 GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
 GNUMAKE*=$(ENV_TOOLS)$/gnumake.exe
+GREP*=$(ENV_TOOLS)$/grep32.exe
+LS*=$(BUILD_TOOLS)$/ls.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
-TOUCH*=$(BUILD_TOOLS)$/touch.exe
 PERL*:=call perl5.btm
+RENAME*=ren
+TOUCH*=$(BUILD_TOOLS)$/touch.exe
+TYPE*=type
+.ENDIF
+MKDIRHIER=$(MKDIR) 
+.IF "$(GUI)"=="WNT"
 SCP_CHECK_TOOL=checkscp.exe
 
 #signing for win32 only
@@ -118,6 +132,7 @@ GREP=grep
 FIND=find
 LS=ls
 ECHON=echo -n
+ECHONL=echo
 .ENDIF
 .ELSE
 SED*=sed
@@ -147,6 +162,7 @@ GREP=grep
 FIND=find
 LS=ls
 ECHON=echo -n
+ECHONL=echo
 .ENDIF
 
 MAKEDEPEND*=makedepend

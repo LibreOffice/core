@@ -49,8 +49,8 @@ V *:= 		# RCS suffix
     DIRSEPSTR		:=	\
 #	/ 				*=  $(DIRSEPSTR)$(DIRSEPSTR)
 .ELSE
-   SHELL	    !:= $(SHELL:s,/,\,)
-   COMMAND          *=  $(CMNDNAME:s,/,\,) $(CMNDARGS)
+   SHELL	    !:= $(SHELL)
+   COMMAND          *=  $(CMNDNAME) $(CMNDARGS)
    SHELLFLAGS       *:= -c
    GROUPFLAGS       *:=
    SHELLMETAS       *:= *";?<>|()&][$$\#`'
@@ -62,6 +62,7 @@ V *:= 		# RCS suffix
    DIVFILE          *=  $(TMPFILE:s,/,${__.DIVSEP-sh-${USESHELL}})
    __.DIVSEP-sh-yes *:= \\\
    __.DIVSEP-sh-no  *:= \\
+   DIRSEPSTR :=/
 .ENDIF
 
 

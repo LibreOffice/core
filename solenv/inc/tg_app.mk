@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-15 12:14:36 $
+#   last change: $Author: hjs $ $Date: 2002-03-14 12:38:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -199,7 +199,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+-$(RM) $@ $@.xSYM $@.idb
     $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP$(TNR)OBJS) `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP$(TNR)STDLIBS) $(APP$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
-
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP$(TNR)LINKRES)" != ""
