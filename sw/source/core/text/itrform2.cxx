@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-06 07:24:35 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ using namespace ::com::sun::star::i18n;
 #ifdef VERTICAL_LAYOUT
 extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
                        const SwScriptInfo* pSI );
+extern USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat );
 #endif
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
@@ -817,7 +818,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // Restportions von mehrzeiligen Feldern haben bisher noch
         // nicht den richtigen Ascent.
         if ( !pPor->GetLen() && !pPor->IsFlyPortion()
-            && !pPor->IsGrfNumPortion() && !pPor->IsMultiPortion() )
+            && !pPor->IsGrfNumPortion() && ! pPor->InNumberGrp()
+            && !pPor->IsMultiPortion() )
             CalcAscent( rInf, pPor );
 
         InsertPortion( rInf, pPor );
@@ -1129,10 +1131,10 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             }
         }
     }
-    else if ( ! rInf.IsMulti() )
+    else
     {
         // 1) Die Fussnotenzahlen
-        if( !rInf.IsFtnDone() )
+        if( !rInf.IsFtnDone() && ! rInf.IsMulti() )
         {
             sal_Bool bFtnNum = pFrm->IsFtnNumFrm();
             rInf.GetParaPortion()->SetFtnNum( bFtnNum );
@@ -1143,7 +1145,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 
         // 2) Die ErgoSumTexte gibt es natuerlich auch im TextMaster,
         // entscheidend ist, ob der SwFtnFrm ein Follow ist.
-        if( !rInf.IsErgoDone() && !pPor )
+        if( !rInf.IsErgoDone() && !pPor && ! rInf.IsMulti() )
         {
             if( pFrm->IsInFtn() && !pFrm->GetIndPrev() )
                 pPor = (SwLinePortion*)NewErgoSumPortion( rInf );
@@ -1153,16 +1155,18 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         // 3) Die Numerierungen
         if( !rInf.IsNumDone() && !pPor )
         {
+            ASSERT( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
+                     "Rotated number portion trouble" )
+
             // Wenn wir im Follow stehen, dann natuerlich nicht.
             if( GetTxtFrm()->GetTxtNode()->GetNum() ||
                 GetTxtFrm()->GetTxtNode()->GetOutlineNum() )
-            {
                 pPor = (SwLinePortion*)NewNumberPortion( rInf );
-            }
+
             rInf.SetNumDone( sal_True );
         }
         // 4) Die DropCaps
-        if( !pPor && GetDropFmt() )
+        if( !pPor && GetDropFmt() && ! rInf.IsMulti() )
             pPor = (SwLinePortion*)NewDropPortion( rInf );
 
 #ifdef VERTICAL_LAYOUT
@@ -1274,6 +1278,28 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     }
 
     SwLinePortion *pPor = WhichFirstPortion( rInf );
+
+    // The number portion inside a vertical frame has to be contained in an
+    // SwRotatedPortion.
+    if ( pPor && pPor->InNumberGrp() && ! pMulti )
+    {
+        const SwFont* pNumFnt = ((SwFldPortion*)pPor)->GetFont();
+
+        if ( pNumFnt )
+        {
+            USHORT nDir = UnMapDirection( pNumFnt->GetOrientation(),
+                                          rInf.GetTxtFrm()->IsVertical() );
+            if ( 0 != nDir )
+            {
+                delete pPor;
+                pPor = new SwRotatedPortion( 0, 900 == nDir ?
+                                                DIR_BOTTOM2TOP :
+                                                DIR_TOP2BOTTOM );
+
+                rInf.SetNumDone( sal_False );
+            }
+        }
+    }
 
     if( !pPor )
     {

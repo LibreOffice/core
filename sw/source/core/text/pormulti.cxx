@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-02 07:56:16 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1982,6 +1982,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         aInf.Width( KSHORT(nActWidth) );
         aInf.RealWidth( KSHORT(nActWidth) );
         aInf.SetFirstMulti( bFirstMulti );
+        aInf.SetNumDone( rInf.IsNumDone() );
 
         if( pFirstRest )
         {
@@ -2275,6 +2276,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     rInf.SetTxt( *pOldTxt );
     rInf.SetPaintOfst( nOldPaintOfst );
     rInf.SetStop( aInf.IsStop() );
+    rInf.SetNumDone( sal_True );
     SeekAndChg( rInf );
     delete pFirstRest;
     delete pSecondRest;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-12 11:17:31 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 nOfst += rLine.Height() - nPorHeight + nPorAscent;
                 break;
             case SvxParaVertAlignItem::AUTOMATIC :
-                if ( bAutoToCentered )
+                if ( bAutoToCentered || GetInfo().GetTxtFrm()->IsVertical() )
                 {
                     nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
                     break;

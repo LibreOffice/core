@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-20 16:05:51 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 12:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,8 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 }
                 // we do not allow a vertical font
 #ifdef VERTICAL_LAYOUT
-                pNumFnt->SetVertical( 0, pFrm->IsVertical() );
+                pNumFnt->SetVertical( pNumFnt->GetOrientation(),
+                                      pFrm->IsVertical() );
 #else
                 pNumFnt->SetVertical( 0 );
 #endif
@@ -462,7 +463,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
                     // we do not allow a vertical font
 #ifdef VERTICAL_LAYOUT
-                    pNumFnt->SetVertical( 0, pFrm->IsVertical() );
+                    pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
 #else
                     pNumFnt->SetVertical( 0 );
 #endif

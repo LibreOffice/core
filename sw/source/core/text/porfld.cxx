@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-07 11:14:46 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,9 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
     rInf.SetNumDone( !rInf.GetRest() );
     if( rInf.IsNumDone() )
     {
-        SetAscent( rInf.GetAscent() );
+//        SetAscent( rInf.GetAscent() );
+        ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" )
+
         long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
         // Ein Vorschlag von Juergen und Volkmar:
         // Der Textteil hinter der Numerierung sollte immer
@@ -617,7 +619,14 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
             SetHide( sal_True );
         }
 
-        if( Width() < nDiff )
+        // A numbering portion can be inside a SwRotatedPortion. Then the
+        // Height has to be changed
+        if ( rInf.IsMulti() )
+        {
+            if ( Height() < nDiff )
+                Height( KSHORT( nDiff ) );
+        }
+        else if( Width() < nDiff )
             Width( KSHORT(nDiff) );
     }
     return bFull;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-28 09:00:59 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1504,6 +1504,19 @@ void SwTxtFormatInfo::Init()
     X(0);
     bArrowDone = bFull = bFtnDone = bErgoDone = bNumDone = bNoEndHyph =
         bNoMidHyph = bStop = bNewLine = bUnderFlow = sal_False;
+
+    // generally we do not allow number portions in follows, except...
+    if ( GetTxtFrm()->IsFollow() )
+    {
+        const SwTxtFrm* pMaster = GetTxtFrm()->FindMaster();
+        const SwLinePortion* pPara = pMaster->GetPara();
+
+        // there is a master for this follow and the master does not have
+        // any contents (especially it does not have a number portion)
+        bNumDone = ! pPara ||
+                   ! ((SwParaPortion*)pPara)->GetFirstPortion()->IsFlyPortion();
+    }
+
     pRoot = 0;
     pLast = 0;
     pFly = 0;
