@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:00:08 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -99,7 +102,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-using namespace ::drafts::com::sun::star::form;
+using namespace ::com::sun::star::form::binding;
 
 //==================================================================
 //------------------------------------------------------------------------------
@@ -157,7 +160,7 @@ InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiSer
 DBG_NAME( ORadioButtonModel )
 //------------------------------------------------------------------
 ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_CONTROL_RADIOBUTTON, sal_False, sal_True )
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_CONTROL_RADIOBUTTON, sal_False, sal_True, sal_True )
                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( ORadioButtonModel, NULL );
@@ -193,12 +196,22 @@ IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
 StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 3);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_BINDDB_RADIOBUTTON;
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_RADIOBUTTON;
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_RADIOBUTTON;
+    sal_Int32 nOldLen = aSupported.getLength();
+    aSupported.realloc( nOldLen + 8 );
+    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+    *pStoreTo++ = BINDABLE_CONTROL_MODEL;
+    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = FRM_SUN_COMPONENT_RADIOBUTTON;
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_RADIOBUTTON;
+    *pStoreTo++ = BINDABLE_DATABASE_RADIO_BUTTON;
+
     return aSupported;
 }
 
@@ -377,21 +390,11 @@ void ORadioButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(10)
-        // the "State" property is transient, so change this
-        //  ModifyPropertyAttributes(_rAggregateProps, PROPERTY_STATE, PropertyAttribute::TRANSIENT, 0);
-
-        DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
+    BEGIN_DESCRIBE_PROPERTIES( 3, OBoundControlModel )
         DECL_PROP1(REFVALUE,            ::rtl::OUString,            BOUND);
         DECL_PROP1(DEFAULTCHECKED,      sal_Int16,                  BOUND);
-        DECL_PROP1(NAME,                ::rtl::OUString,            BOUND);
-        DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
-        DECL_PROP1(CONTROLSOURCE,       rtl::OUString,              BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,               BOUND,READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,               BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,          READONLY, TRANSIENT);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
