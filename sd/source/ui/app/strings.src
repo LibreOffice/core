@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-28 09:50:04 $
+ *  last change: $Author: ka $ $Date: 2002-03-13 16:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4192,30 +4192,15 @@ String STR_UNDO_COPYOBJECTS
     Text[ turkish ] = "Ηoπalt";
     Text[ catalan ] = "Reproduir";
 };
+String STR_TITLE_NAMEGROUP
+{
+    Text = "Objekt benennen" ;
+    Text [ ENGLISH ] = "Name object" ;
+};
 String STR_DESC_NAMEGROUP
 {
-    Text = "Geben Sie bitte den Namen des Objektes ein" ;
-    Text [ ENGLISH ] = "Please name the object" ;
-    Text [ english_us ] = "Please enter a name for the object" ;
-    Text [ dutch ] = "Typ een naam voor het groepsobject" ;
-    Text [ italian ] = "Date un nome all'oggetto gruppo" ;
-    Text [ spanish ] = "Inserte el nombre del objeto" ;
-    Text [ french ] = "Saisissez le nom de l'objet" ;
-    Text [ swedish ] = "Mata in namnet pε objektet" ;
-    Text [ danish ] = "Indtast venligst objektets navn" ;
-    Text [ portuguese ] = "Introduza por favor o nome do objecto." ;
-    Text [ portuguese_brazilian ] = "Geben Sie bitte den Namen des Objektes ein" ;
-    Text[ chinese_simplified ] = "θ―·ζ‚¨δΈΊθΏ™δΈªε―Ήθ±΅θΎ“ε…¥δΈ€δΈªεη§°";
-    Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ δλÿ ύςξγξ ξαϊεκςΰ";
-    Text[ polish ] = "Wpisz nazwκ obiektu";
-    Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ®εε‰γ‚’ε…¥ε›γ—γ¦γγ γ•γ„";
-    Text[ greek ] = "Παρακαλώ εισάγετε το όνομα του αντικειμένου";
-    Text[ korean ] = "κ°μ²΄μ μ΄λ¦„μ„ μ…λ ¥ν•μ‹­μ‹μ¤";
-    Text[ chinese_traditional ] = "θ«‹ζ‚¨η‚Ίι€™ε€‹η‰©δ»¶θΌΈε…¥δΈ€ε€‹εη¨±";
-    Text[ arabic ] = "γδ έΦαί ΗίΚΘ ΗΣγ ΗαίΗΖδ";
-    Text[ turkish ] = "Nesne iηin bir ad girin";
-    Text[ catalan ] = "Introdueix el nom de l'objecte";
-    Text[ finnish ] = "Kirjoita objektin nimi:";
+    Text = "Name" ;
+    Text [ ENGLISH ] = "Name" ;
 };
 String STR_UNDEFINED_NAME
 {
