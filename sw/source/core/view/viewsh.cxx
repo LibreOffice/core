@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:43:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,7 +906,7 @@ void ViewShell::Reformat()
     {
 
         StartAction();
-        GetLayout()->InvalidateAllCntnt();
+        GetLayout()->InvalidateAllCntnt( INV_SIZE | INV_POS | INV_PRTAREA );
         EndAction();
     }
 }
@@ -1996,8 +1996,9 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
     {
         SwViewOption aOpt( *pSh->GetViewOptions() );
         aOpt.SetFldName( rOpt.IsFldName() );
-        aOpt.SetHidden( rOpt.IsHidden() );
+        aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
+        aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
         if ( !(aOpt == *pSh->GetViewOptions()) )
             pSh->ImplApplyViewOptions( aOpt );
         pSh = (ViewShell*)pSh->GetNext();
@@ -2026,10 +2027,10 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     BOOL bReformat   = FALSE;
 
-    if( pOpt->IsHidden() != rOpt.IsHidden() )
+    if( pOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
         ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
-                                            SetHiddenFlag( !rOpt.IsHidden() );
+                                            SetHiddenFlag( !rOpt.IsShowHiddenField() );
         bReformat = TRUE;
     }
     if ( pOpt->IsShowHiddenPara() != rOpt.IsShowHiddenPara() )
@@ -2043,12 +2044,16 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         }
         bReformat = TRUE;
     }
+    if ( !bReformat && pOpt->IsShowHiddenChar() != rOpt.IsShowHiddenChar() )
+    {
+        bReformat = GetDoc()->ContainsHiddenChars();
+    }
 
     // bReformat wird TRUE, wenn ...
     // - Feldnamen anzeigen oder nicht ...
     // ( - SwEndPortion muessen _nicht_ mehr generiert werden. )
     // - Das Window ist natuerlich was ganz anderes als der Drucker...
-    bReformat = bReformat || pOpt->IsFldName()   != rOpt.IsFldName();
+    bReformat = bReformat || pOpt->IsFldName() != rOpt.IsFldName();
 
     // Der Mapmode wird veraendert, Minima/Maxima werden von der UI beachtet
     if( pOpt->GetZoom() != rOpt.GetZoom() && !IsPreView() )
@@ -2353,3 +2358,4 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
             pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
 }
+
