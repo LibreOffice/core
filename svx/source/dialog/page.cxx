@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 11:35:23 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _RESARY_HXX //autogen
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #endif
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
