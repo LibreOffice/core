@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:05:00 $
+ *  last change: $Author: ka $ $Date: 2001-03-14 12:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -553,16 +556,26 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
         case( SDTRANSFER_OBJECTTYPE_DRAWOLE ):
         {
             SvEmbeddedObject*   pEmbObj = (SvEmbeddedObject*) pObject;
-            SvStorageRef        xWorkStore( new SvStorage( *rxOStm ) );
-
-            rxOStm->SetBufferSize( 0xff00 );
+            SvStorageRef        xWorkStore( new SvStorage( FALSE, String() ) );
+            const String        aStoreName( xWorkStore->GetName() );
 
             // write document storage
+            xWorkStore->SetVersion( SOFFICE_FILEFORMAT_50 );
             pEmbObj->SetupStorage( xWorkStore );
             bRet = pEmbObj->DoSaveAs( xWorkStore );
             pEmbObj->DoSaveCompleted();
             xWorkStore->Commit();
-            rxOStm->Commit();
+            xWorkStore.Clear();
+
+            SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aStoreName, STREAM_READ );
+
+            if( pSrcStm )
+            {
+                rxOStm->SetBufferSize( 0xff00 );
+                *rxOStm << *pSrcStm;
+                rxOStm->Commit();
+                delete pSrcStm;
+            }
 
             bRet = ( rxOStm->GetError() == ERRCODE_NONE );
         }
