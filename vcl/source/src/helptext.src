@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:07:43 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 14:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String SV_HELPTEXT_CLOSE
     Text = "Schlieﬂen" ;
     Text [ English ] = "Close" ;
     TEXT[ italian ] = "Chiudi";
-    TEXT[ portuguese_brazilian ] = "Schlieﬂen";
+    TEXT[ portuguese_brazilian ] = "Schlie?en";
     TEXT[ portuguese ] = "Fechar";
     TEXT[ danish ] = "Luk";
     TEXT[ french ] = "Fermer";
