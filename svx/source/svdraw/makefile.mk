@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 14:16:29 $
+#   last change: $Author: rt $ $Date: 2003-11-24 16:52:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,18 +62,38 @@
 
 PRJ=..$/..
 
-PRJNAME=SVX
+PRJNAME=svx
 TARGET=svdraw
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
+         $(SLO)$/svdobj.obj          \
+         $(SLO)$/svdoattr.obj        \
+         $(SLO)$/svdotext.obj        \
+         $(SLO)$/svdotxat.obj        \
+         $(SLO)$/svdotxdr.obj        \
+         $(SLO)$/svdotxed.obj        \
+         $(SLO)$/svdotxfl.obj        \
+         $(SLO)$/svdotxln.obj        \
+         $(SLO)$/svdotxtr.obj        \
+         $(SLO)$/svdorect.obj        \
+         $(SLO)$/svdoedge.obj        \
+         $(SLO)$/svdomeas.obj        \
+         $(SLO)$/svdopath.obj        \
+         $(SLO)$/svdocapt.obj        \
+         $(SLO)$/svdocirc.obj        \
+         $(SLO)$/svdograf.obj        \
+         $(SLO)$/svdogrp.obj         \
+         $(SLO)$/svdoole2.obj        \
+         $(SLO)$/svdopage.obj        \
+         $(SLO)$/svdouno.obj         \
+         $(SLO)$/svdoutl.obj         \
+         $(SLO)$/svdovirt.obj        \
          $(SLO)$/svdoutlinercache.obj \
          $(SLO)$/dialdll.obj         \
          $(SLO)$/gradtrns.obj         \
@@ -102,29 +122,7 @@ SLOFILES=\
          $(SLO)$/svdmodel.obj        \
          $(SLO)$/svdmrkv.obj         \
          $(SLO)$/svdmrkv1.obj        \
-         $(SLO)$/svdoattr.obj        \
-         $(SLO)$/svdobj.obj          \
          $(SLO)$/impgrfll.obj        \
-         $(SLO)$/svdocapt.obj        \
-         $(SLO)$/svdocirc.obj        \
-         $(SLO)$/svdoedge.obj        \
-         $(SLO)$/svdograf.obj        \
-         $(SLO)$/svdogrp.obj         \
-         $(SLO)$/svdomeas.obj        \
-         $(SLO)$/svdoole2.obj        \
-         $(SLO)$/svdopage.obj        \
-         $(SLO)$/svdopath.obj        \
-         $(SLO)$/svdorect.obj        \
-         $(SLO)$/svdotext.obj        \
-         $(SLO)$/svdotxat.obj        \
-         $(SLO)$/svdotxdr.obj        \
-         $(SLO)$/svdotxed.obj        \
-         $(SLO)$/svdotxfl.obj        \
-         $(SLO)$/svdotxln.obj        \
-         $(SLO)$/svdotxtr.obj        \
-         $(SLO)$/svdouno.obj         \
-         $(SLO)$/svdoutl.obj         \
-         $(SLO)$/svdovirt.obj        \
          $(SLO)$/svdpage.obj         \
          $(SLO)$/svdpagv.obj         \
          $(SLO)$/svdpntv.obj         \
@@ -155,4 +153,3 @@ SRS1NAME=svdstr
 SRC1FILES= svdstr.src
 
 .INCLUDE :  target.mk
-
