@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-13 16:42:43 $
+ *  last change: $Author: mba $ $Date: 2000-12-14 10:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 if ( ( !bNeedsReload &&
                     ( pMed->GetURLObject().GetProtocol() == INET_PROT_FILE
-                              && INetURLObject( pMed->GetName(), INET_PROT_FILE ) == aPhysObj
+                            && pMed->GetURLObject().getFSysPath(INetURLObject::FSYS_DETECT) == aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT)
                             && !SfxContentHelper::IsYounger( aPhysObj.GetMainURL(),
                                                              pMed->GetURLObject().GetMainURL() )
                       || pMed->IsRemote()
