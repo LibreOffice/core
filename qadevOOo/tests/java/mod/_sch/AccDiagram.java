@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccDiagram.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-04-28 12:29:23 $
+ *  last change: $Date: 2003-05-27 13:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 package mod._sch;
 
 import lib.TestCase;
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestParameters;
 import java.io.PrintWriter;
 import lib.TestEnvironment;
@@ -94,7 +95,7 @@ public class AccDiagram extends TestCase {
 
         if (xChartDoc != null) xChartDoc.dispose();
         log.println( "creating a chart document" );
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         try {
             log.println( "creating a chartdocument" );
             xChartDoc = SOF.createChartDoc(null);
@@ -111,7 +112,7 @@ public class AccDiagram extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         //at.printAccessibleTree(log,xRoot);
