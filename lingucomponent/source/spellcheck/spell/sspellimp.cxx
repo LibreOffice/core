@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khendricks $ $Date: 2001-12-04 00:34:55 $
+ *  last change: $Author: khendricks $ $Date: 2002-01-07 15:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,47 +175,49 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         /* dictionaries.  So here we need to parse the user edited dictionary list */
         /* to see what dictionaries the user has installed */
 
-        SvtPathOptions aPathOpt;
-        OUString diclst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
-        OUString dlst;
-    osl::FileBase::getSystemPathFromFileURL(diclst,dlst);
 
-        /* invoke the dictionary manager to parse and return the dictionary list */
-        OString aTmp(OU2A(dlst));
-    DictMgr* dMgr = new DictMgr(aTmp.getStr());
-        dictentry * pdict;
-        numdict = 0;
-        if (dMgr)
-             numdict = dMgr->get_list(&pdict);
+    if (!numdict) {
 
-        if (numdict) {
-        aDicts = new MySpell* [numdict];
-        aDEncs  = new rtl_TextEncoding [numdict];
-            aDLocs = new Locale [numdict];
-            aDNames = new OUString [numdict];
-        aSuppLocales.realloc(numdict);
-            Locale * pLocale = aSuppLocales.getArray();
-            int numlocs = 0;
-            int newloc;
-            for (int i = 0; i < numdict; i++) {
-            Locale nLoc( A2OU(pdict->lang), A2OU(pdict->region), OUString() );
-                newloc = 1;
-            for (int j = 0; j < numlocs; j++) {
-                    if (nLoc == pLocale[j]) newloc = 0;
+            SvtPathOptions aPathOpt;
+            OUString diclst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
+            OUString dlst;
+        osl::FileBase::getSystemPathFromFileURL(diclst,dlst);
+
+            /* invoke the dictionary manager to parse and return the dictionary list */
+            OString aTmp(OU2A(dlst));
+        DictMgr* dMgr = new DictMgr(aTmp.getStr());
+            dictentry * pdict;
+            if (dMgr)
+                 numdict = dMgr->get_list(&pdict);
+
+            if (numdict) {
+            aDicts = new MySpell* [numdict];
+            aDEncs  = new rtl_TextEncoding [numdict];
+                aDLocs = new Locale [numdict];
+                aDNames = new OUString [numdict];
+            aSuppLocales.realloc(numdict);
+                Locale * pLocale = aSuppLocales.getArray();
+                int numlocs = 0;
+                int newloc;
+                for (int i = 0; i < numdict; i++) {
+                Locale nLoc( A2OU(pdict->lang), A2OU(pdict->region), OUString() );
+                    newloc = 1;
+                for (int j = 0; j < numlocs; j++) {
+                        if (nLoc == pLocale[j]) newloc = 0;
+                    }
+                    if (newloc) {
+                        pLocale[numlocs] = nLoc;
+                        numlocs++;
+                    }
+                    aDLocs[i] = nLoc;
+                    aDicts[i] = NULL;
+                    aDEncs[i] = 0;
+                    aDNames[i] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(pdict->filename);
+                    pdict++;
                 }
-                if (newloc) {
-                    pLocale[numlocs] = nLoc;
-                    numlocs++;
-                }
-                aDLocs[i] = nLoc;
-                aDicts[i] = NULL;
-                aDEncs[i] = 0;
-                aDNames[i] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(pdict->filename);
-                pdict++;
-            }
-            aSuppLocales.realloc(numlocs);
+                aSuppLocales.realloc(numlocs);
 
-        } else {
+            } else {
             /* no dictionary.lst so just use default en_US dictionary  */
             numdict = 1;
             aDicts = new MySpell*[1];
@@ -229,11 +231,15 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 aDLocs[0] = nLoc;
                 aDicts[0] = NULL;
                 aDNames[0] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU("en_US");
-        }
+            }
 
-        if (dMgr) {
-              delete dMgr;
-              dMgr = NULL;
+            /* de-allocation of memory is handled inside the DictMgr */
+            pdict = NULL;
+            if (dMgr) {
+                  delete dMgr;
+                  dMgr = NULL;
+            }
+
         }
 
     return aSuppLocales;
@@ -295,10 +301,10 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
                       OString aTmpaff(OU2A(aff));
                       OString aTmpdict(OU2A(dict));
                       aDicts[i] = new MySpell(aTmpaff.getStr(),aTmpdict.getStr());
-                      MySpell * pms = aDicts[i];
                       aDEncs[i] = 0;
-                      if (pms)
-            aDEncs[i] = rtl_getTextEncodingFromUnixCharset(pms->get_dic_encoding());
+                      if (aDicts[i]) {
+            aDEncs[i] = rtl_getTextEncodingFromUnixCharset(aDicts[i]->get_dic_encoding());
+                      }
                }
                pMS = aDicts[i];
                    aEnc = aDEncs[i];
@@ -313,6 +319,7 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
                     } else {
                         return -1;
                     }
+                    pMS = NULL;
             }
         }
     }
