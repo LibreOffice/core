@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:45:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Umschalten" ;
                 Text [ English ] = "Switch" ;
                 Text [ english_us ] = "Toggle" ;
-                Text [ portuguese_brazilian ] = "Umschalten" ;
+                Text [ portuguese_brazilian ] = "Alternar" ;
                 Text [ swedish ] = "Växla" ;
                 Text [ danish ] = "Skift" ;
                 Text [ italian ] = "Commuta" ;
@@ -176,6 +176,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Commuta";
                 Text[ finnish ] = "Vaihda";
                 Text[ thai ] = "à¸ªà¸¥à¸±à¸š";
+                Text[ czech ] = "PÅ™epnout";
+                Text[ hebrew ] = "Umschalten";
+                Text[ hindi ] = "à¤Ÿà¤¾à¤—à¤²";
             };
             ToolBoxItem
             {
@@ -184,7 +187,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Navigation" ;
                 Text [ English ] = "Navigation" ;
                 Text [ english_us ] = "Navigation" ;
-                Text [ portuguese_brazilian ] = "Navigation" ;
+                Text [ portuguese_brazilian ] = "Navegação" ;
                 Text [ swedish ] = "Navigation" ;
                 Text [ danish ] = "Navigation" ;
                 Text [ italian ] = "Navigazione" ;
@@ -204,6 +207,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Navegació";
                 Text[ finnish ] = "Siirtyminen";
                 Text[ thai ] = "à¸™à¸³à¸—à¸²à¸‡";
+                Text[ czech ] = "Navigace";
+                Text[ hebrew ] = "Navigation";
+                Text[ hindi ] = "à¤¨à¤¾à¤µà¤¿à¤—à¥‡à¤¶à¤¨";
             };
             /*            ToolBoxItem
             {
@@ -232,7 +238,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Backward" ;
                 Text [ norwegian ] = "Bakover" ;
                 Text [ italian ] = "Indietro" ;
-                Text [ portuguese_brazilian ] = "Para tr?s" ;
+                Text [ portuguese_brazilian ] = "Voltar" ;
                 Text [ portuguese ] = "Anterior" ;
                 Text [ finnish ] = "Edellinen" ;
                 Text [ danish ] = "Tilbage" ;
@@ -252,6 +258,9 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Geri";
                 Text[ catalan ] = "Enrere";
                 Text[ thai ] = "à¸à¸¥à¸±à¸šà¹„à¸›";
+                Text[ czech ] = "ZpÄ›t";
+                Text[ hebrew ] = "â€®×§×•×“×â€¬";
+                Text[ hindi ] = "à¤ªà¥€à¤›à¥‡";
             };
             ToolBoxItem
             {
@@ -263,7 +272,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Forward" ;
                 Text [ norwegian ] = "Fram" ;
                 Text [ italian ] = "Avanti" ;
-                Text [ portuguese_brazilian ] = "Para Frente" ;
+                Text [ portuguese_brazilian ] = "Avançar" ;
                 Text [ portuguese ] = "Seguinte" ;
                 Text [ finnish ] = "Eteenpäin" ;
                 Text [ danish ] = "Fremad" ;
@@ -283,6 +292,9 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "İleri";
                 Text[ catalan ] = "Endavant";
                 Text[ thai ] = "à¸ªà¹ˆà¸‡à¸•à¹ˆà¸­";
+                Text[ czech ] = "VpÅ™ed";
+                Text[ hebrew ] = "VorwÃ¤rts";
+                Text[ hindi ] = "à¤†à¤—à¥‡ à¤•à¥€ à¤“à¤°";
             };
             ToolBoxItem
             {
@@ -307,7 +319,7 @@ Window DLG_NAVIGATION_PI
                 Text [ dutch ] = "Sleepmodus" ;
                 Text [ swedish ] = "Draläge" ;
                 Text [ danish ] = "Trækmodus" ;
-                Text [ portuguese_brazilian ] = "Dragmodus" ;
+                Text [ portuguese_brazilian ] = "Modo Arrastar" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
@@ -317,10 +329,13 @@ Window DLG_NAVIGATION_PI
                 Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
                 Text[ greek ] = "ÊáôÜóôáóç óõñìïı";
                 Text[ korean ] = "ëŒê¸° ëª¨ë“œ";
-                Text[ turkish ] = "Sürükleme kipi";
+                Text[ turkish ] = "Sürükleme türü";
                 Text[ catalan ] = "Mode d'arrossegament";
                 Text[ finnish ] = "Vetotila";
                 Text[ thai ] = "à¸¥à¸²à¸à¹‚à¸«à¸¡à¸”";
+                Text[ czech ] = "ZpÅ¯sob pÅ™etÃ¡hnutÃ­";
+                Text[ hebrew ] = "Dragmodus";
+                Text[ hindi ] = "à¤–à¥€à¤‚à¤šà¤¨à¥‡ à¤•à¤¾ à¤ªà¥à¤°à¤•à¤¾à¤°";
             };
             ToolBoxItem
             {
@@ -335,7 +350,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Chapter up" ;
                 Text [ norwegian ] = "Kapittel opp" ;
                 Text [ italian ] = "Capitolo superiore" ;
-                Text [ portuguese_brazilian ] = "Cap?tulo acima" ;
+                Text [ portuguese_brazilian ] = "Promover Capítulo" ;
                 Text [ portuguese ] = "Subir um capítulo" ;
                 Text [ finnish ] = "Siirrä luku ylemmälle tasolle" ;
                 Text [ danish ] = "Kapitel op" ;
@@ -347,7 +362,7 @@ Window DLG_NAVIGATION_PI
                  //HelpText[english_us-wrong] = "Move chapter down";//"Move chapter up"
                 Text[ chinese_simplified ] = "ç« å‡çº§";
                 Text[ russian ] = "Ïåğåíåñòè ââåğõ";
-                Text[ polish ] = "Rozdzia³ do góry";
+                Text[ polish ] = "Rozdzia³ wy¿ej";
                 Text[ japanese ] = "ç« ã‚’ä¸Šã«ç§»å‹•";
                 Text[ chinese_traditional ] = "ç« å‡ç´š";
                 Text[ arabic ] = "İÕá áÃÚáì";
@@ -356,6 +371,9 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Bölümü yukarı al";
                 Text[ catalan ] = "Un capítol cap amunt";
                 Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸šà¸—";
+                Text[ czech ] = "Kapitolu o ÃºroveÅˆ vÃ½Å¡e";
+                Text[ hebrew ] = "Kapitel hoch";
+                Text[ hindi ] = "à¤…à¤§à¥à¤¯à¤¾à¤¯ à¤•à¥‹ à¤‰à¤¤à¥à¤¤à¥‡à¤œà¤¿à¤¤ à¤•à¤°à¥‹";
             };
             ToolBoxItem
             {
@@ -366,7 +384,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Chapter down" ;
                 Text [ norwegian ] = "Kapittel ned" ;
                 Text [ italian ] = "Capitolo inferiore" ;
-                Text [ portuguese_brazilian ] = "Cap?tulo abaixo" ;
+                Text [ portuguese_brazilian ] = "Rebaixar Capítulo" ;
                 Text [ portuguese ] = "Descer um capítulo" ;
                 Text [ finnish ] = "Siirrä luku alemmalle tasolle" ;
                 Text [ danish ] = "Kapitel ned" ;
@@ -377,7 +395,7 @@ Window DLG_NAVIGATION_PI
                 Text [ english_us ] = "Demote Chapter" ;
                 Text[ chinese_simplified ] = "ç« é™çº§";
                 Text[ russian ] = "Ïåğåíåñòè âíèç";
-                Text[ polish ] = "Rozdzia³ w dó³";
+                Text[ polish ] = "Rozdzia³ ni¿ej";
                 Text[ japanese ] = "ç« ã‚’ä¸‹ã«ç§»å‹•";
                 Text[ chinese_traditional ] = "ç« é™ç´š";
                 Text[ arabic ] = "İÕá áÃÓİá";
@@ -386,6 +404,9 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Bölümü aşağı çek";
                 Text[ catalan ] = "Un capítol cap avall";
                 Text[ thai ] = "à¸¥à¸”à¸šà¸—";
+                Text[ czech ] = "Kapitolu o ÃºroveÅˆ nÃ­Å¾e";
+                Text[ hebrew ] = "Kapitel hinunter";
+                Text[ hindi ] = "à¤¡à¤¿à¤®à¥‹à¤Ÿà¥ à¤…à¤§à¥à¤¯à¤¾à¤¯";
             };
             ToolBoxItem
             {
@@ -404,7 +425,7 @@ Window DLG_NAVIGATION_PI
                 Text [ dutch ] = "Keuzevak in-/uitschakelen" ;
                 Text [ swedish ] = "Urvalsbox på/av" ;
                 Text [ danish ] = "Vis/skjul liste" ;
-                Text [ portuguese_brazilian ] = "Auswahlbox an-/ausschalten" ;
+                Text [ portuguese_brazilian ] = "Ativar/Desativar Caixa de Listagem" ;
                 Text [ portuguese ] = "Act./Desactivar caixa de selecção" ;
                 Text[ chinese_simplified ] = "æ˜¾ç¤º/éšå…¥åˆ—è¡¨æ¡†";
                 Text[ russian ] = "Ñïèñîê";
@@ -418,6 +439,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Quadre de llista activat/desactivat";
                 Text[ finnish ] = "Luetteloruutu käytössä / poissa käytöstä";
                 Text[ thai ] = "à¸à¸¥à¹ˆà¸­à¸‡à¸£à¸²à¸¢à¸à¸²à¸£ à¹€à¸›à¸´à¸”/à¸›à¸´à¸”";
+                Text[ czech ] = "PolÃ­Äko pro vÃ½bÄ›r zap/vyp";
+                Text[ hebrew ] = "Auswahlbox an-/ausschalten";
+                Text[ hindi ] = "à¤¸à¥‚à¤šà¥€ à¤¬à¥‰à¤•à¥à¤¸ à¤¶à¥à¤°à¥/à¤¬à¤‚à¤¦";
             };
             ToolBoxItem
             {
@@ -432,11 +456,11 @@ Window DLG_NAVIGATION_PI
                 Text [ dutch ] = "Inhoudsopgave in-/uitschakelen" ;
                 Text [ swedish ] = "Växla innehållsvisning" ;
                 Text [ danish ] = "Skift til/fra indholdsvisning" ;
-                Text [ portuguese_brazilian ] = "Inhaltsansicht umschalten" ;
+                Text [ portuguese_brazilian ] = "Visão do Conteúdo" ;
                 Text [ portuguese ] = "Comutar vista do conteúdo" ;
                 Text[ chinese_simplified ] = "åˆ‡æ¢å†…å®¹è§†å›¾";
                 Text[ russian ] = "Ïğåäñòàâëåíèå";
-                Text[ polish ] = "Prze³¹cz widok treœci";
+                Text[ polish ] = "Widok zawartoœci";
                 Text[ japanese ] = "å†…å®¹ãƒ“ãƒ¥ãƒ¼ã®åˆ‡ã‚Šæ›ãˆ";
                 Text[ chinese_traditional ] = "åˆ‡æ›å…§å®¹æª¢è¦–";
                 Text[ arabic ] = "ÊÈÏíá ØÑíŞÉ ÚÑÖ ÇáãÍÊæíÇÊ";
@@ -446,6 +470,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Commuta visualització del contingut";
                 Text[ finnish ] = "Sisältönäkymä";
                 Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+                Text[ czech ] = "NÃ¡hled obsahu";
+                Text[ hebrew ] = "Inhaltsansicht umschalten";
+                Text[ hindi ] = "à¤µà¤¿à¤·à¤¯ à¤•à¤¾ à¤¦à¥ƒà¤¶à¥à¤¯";
             };
             ToolBoxItem
             {
@@ -460,7 +487,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Set Bookmarks" ;
                 Text [ norwegian ] = "Sett inn Bokmerker" ;
                 Text [ italian ] = "Imposta contrassegno" ;
-                Text [ portuguese_brazilian ] = "Definir Marcas" ;
+                Text [ portuguese_brazilian ] = "Definir Lembrete" ;
                 Text [ portuguese ] = "Definir marca" ;
                 Text [ finnish ] = "Määritä muistutus" ;
                 Text [ danish ] = "Sæt bogmærke" ;
@@ -471,7 +498,7 @@ Window DLG_NAVIGATION_PI
                 Text [ english_us ] = "Set Reminder" ;
                 Text[ chinese_simplified ] = "è®¾ç½®æ ‡è®°";
                 Text[ russian ] = "Ïîñòàâèòü âğåìåííóş çàêëàäêó";
-                Text[ polish ] = "OsadŸ znaczniki";
+                Text[ polish ] = "Ustaw znacznik";
                 Text[ japanese ] = "è¦šãˆæ­¢ã‚ã‚’ä»˜ã‘ã‚‹";
                 Text[ chinese_traditional ] = "è¨­å®šæé†’";
                 Text[ arabic ] = "æÖÚ ÚáÇãÉ ÊĞßíÑ";
@@ -480,6 +507,9 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Anımsatıcı yerleştir";
                 Text[ catalan ] = "Defineix un recordatori";
                 Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸•à¸±à¸§à¹€à¸•à¸·à¸­à¸™";
+                Text[ czech ] = "VloÅ¾it upomÃ­nku";
+                Text[ hebrew ] = "Merker setzen";
+                Text[ hindi ] = "à¤¯à¤¾à¤¦ à¤¦à¤¿à¤²à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¥‡ à¤•à¥‹ à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
             };
             ToolBoxItem
             {
@@ -494,7 +524,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Header" ;
                 Text [ norwegian ] = "Header" ;
                 Text [ italian ] = "Intestazione" ;
-                Text [ portuguese_brazilian ] = "Cabe?alho" ;
+                Text [ portuguese_brazilian ] = "Cabeçalho" ;
                 Text [ portuguese ] = "Cabeçalho" ;
                 Text [ finnish ] = "Ylätunniste" ;
                 Text [ danish ] = "Sidehoved" ;
@@ -511,9 +541,12 @@ Window DLG_NAVIGATION_PI
                 Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
                 Text[ greek ] = "Êåöáëßäá";
                 Text[ korean ] = "ë¨¸ë¦¬ê¸€";
-                Text[ turkish ] = "Üstbilgi";
+                Text[ turkish ] = "Başlık";
                 Text[ catalan ] = "Encapçalament";
                 Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
+                Text[ czech ] = "ZÃ¡hlavÃ­";
+                Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×¢×œ×™×•× ×”â€¬";
+                Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥€ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
             };
             ToolBoxItem
             {
@@ -525,7 +558,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Footer" ;
                 Text [ norwegian ] = "Footer" ;
                 Text [ italian ] = "Piè di pagina" ;
-                Text [ portuguese_brazilian ] = "Rodap?" ;
+                Text [ portuguese_brazilian ] = "Rodapé" ;
                 Text [ portuguese ] = "Rodapé" ;
                 Text [ finnish ] = "Alatunniste" ;
                 Text [ danish ] = "Sidefod" ;
@@ -543,9 +576,12 @@ Window DLG_NAVIGATION_PI
                 Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
                 Text[ greek ] = "Õğïóİëéäï";
                 Text[ korean ] = "ë°”ë‹¥ê¸€";
-                Text[ turkish ] = "Altbilgi";
+                Text[ turkish ] = "Dipnot";
                 Text[ catalan ] = "Peu de pàgina";
                 Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
+                Text[ czech ] = "ZÃ¡patÃ­";
+                Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×ª×—×ª×•× ×”â€¬";
+                Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥€ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ ";
             };
             ToolBoxItem
             {
@@ -556,7 +592,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Anchor<->Text" ;
                 Text [ norwegian ] = "Anker<->Tekst" ;
                 Text [ italian ] = "Ancoraggio<->Testo" ;
-                Text [ portuguese_brazilian ] = "?ncora<->Texto" ;
+                Text [ portuguese_brazilian ] = "Âncora<->Texto" ;
                 Text [ portuguese ] = "Âncora<->Texto" ;
                 Text [ finnish ] = "Ankkuri<->Teksti" ;
                 Text [ danish ] = "Anker<->Tekst" ;
@@ -568,7 +604,7 @@ Window DLG_NAVIGATION_PI
                 /* ### ACHTUNG: Neuer Text in Resource? Springen zwischen Fußnotenankern und dem Fußnotentext : Springen zwischen Fu˜notenankern und dem Fu˜notentext */
                 Text[ chinese_simplified ] = "æ ‡è®°<->æ­£æ–‡";
                 Text[ russian ] = "ßêîğü<->Òåêñò";
-                Text[ polish ] = "Kotwica<->Tekst";
+                Text[ polish ] = "Zakotwiczenie<->Tekst";
                 Text[ japanese ] = "è„šæ³¨";
                 Text[ chinese_traditional ] = "æ¨™è™Ÿ<->å…§æ–‡";
                 Text[ arabic ] = "ãÑÓÇÉ<->äÕ";
@@ -577,6 +613,9 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Sabitleyici<->Metin";
                 Text[ catalan ] = "Ancora<->Text";
                 Text[ thai ] = "à¸ªà¸¡à¸­<->à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+                Text[ czech ] = "UkotvenÃ­<->Text";
+                Text[ hebrew ] = "Anker<->Text";
+                Text[ hindi ] = "à¤à¤¨à¥à¤•à¤°<->à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
             };
             ToolBoxItem
             {
@@ -597,11 +636,11 @@ Window DLG_NAVIGATION_PI
                 Text [ french ] = "Niveaux de titres affichés" ;
                 Text [ swedish ] = "Visade överskriftsnivåer" ;
                 Text [ danish ] = "Viste overskriftsniveauer" ;
-                Text [ portuguese_brazilian ] = "Angezeigte ?berschriftenebenen" ;
+                Text [ portuguese_brazilian ] = "Níveis de Títulos Mostrados" ;
                 Text [ portuguese ] = "Níveis de títulos mostrados" ;
                 Text[ chinese_simplified ] = "æ˜¾ç¤ºçš„å¤§çº²çº§";
                 Text[ russian ] = "Ïîêàçàòü çàãîëîâêè äî óğîâíÿ";
-                Text[ polish ] = "Wyœwietlone poziomy konspektu";
+                Text[ polish ] = "Wyœwietlone poziomy nag³ówków";
                 Text[ japanese ] = "è¦‹å‡ºã—ãƒ¬ãƒ™ãƒ«";
                 Text[ chinese_traditional ] = "é¡¯ç¤ºçš„å¤§ç¶±ç´š";
                 Text[ arabic ] = "ãÓÊæíÇÊ ÇáÚäÇæíä ÇáÙÇåÑÉ";
@@ -611,6 +650,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Nivells d'encapçalament mostrats";
                 Text[ finnish ] = "Otsikkotasojen näyttö";
                 Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸£à¸°à¸”à¸±à¸šà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
+                Text[ czech ] = "ZobrazenÃ© ÃºrovnÄ› zÃ¡hlavÃ­";
+                Text[ hebrew ] = "Angezeigte Ãœberschriftenebenen";
+                Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• à¤¸à¥à¤¤à¤°à¥‹à¤‚ à¤•à¥‹ à¤¦à¤¿à¤–à¤¾à¤¯à¤¾ à¤¹à¥ˆ";
             };
             ToolBoxItem
             {
@@ -625,7 +667,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Increase Level" ;
                 Text [ norwegian ] = "+++Increase Level" ;
                 Text [ italian ] = "Livello superiore" ;
-                Text [ portuguese_brazilian ] = "Aumentar N?vel" ;
+                Text [ portuguese_brazilian ] = "Promover Nível" ;
                 Text [ portuguese ] = "Subir um nível" ;
                 Text [ finnish ] = "Korota tasoa" ;
                 Text [ danish ] = "Niveau op" ;
@@ -645,6 +687,9 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Düzeyi yukarı al";
                 Text[ catalan ] = "Promou el nivell";
                 Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸£à¸°à¸”à¸±à¸š";
+                Text[ czech ] = "O ÃºroveÅˆ vÃ½Å¡e";
+                Text[ hebrew ] = "Ebene hoch";
+                Text[ hindi ] = "à¤¸à¥à¤¤à¤° à¤•à¥‹ à¤‰à¤¤à¥à¤¤à¥‡à¤œà¤¿à¤¤ à¤•à¤°à¥‹";
             };
             ToolBoxItem
             {
@@ -655,7 +700,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Decrease Level" ;
                 Text [ norwegian ] = "+++Decrease Level" ;
                 Text [ italian ] = "Livello inferiore" ;
-                Text [ portuguese_brazilian ] = "Diminuir N?vel" ;
+                Text [ portuguese_brazilian ] = "Rebaixar Nível" ;
                 Text [ portuguese ] = "Descer um nível" ;
                 Text [ finnish ] = "Alenna tasoa" ;
                 Text [ danish ] = "Niveau ned" ;
@@ -671,10 +716,13 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "é™ç´š";
                 Text[ arabic ] = "ãÓÊæì áÃÓİá";
                 Text[ greek ] = "Õğïâéâáóìüò åğéğİäïõ";
-                Text[ korean ] = "ìˆ˜ì¤€ ë‚®ì¶”ê¸°";
+                Text[ korean ] = "ìˆ˜ì¤€ ë‚®ì¶¤";
                 Text[ turkish ] = "Düzeyi aşağı çek";
                 Text[ catalan ] = "Baixa un nivell";
                 Text[ thai ] = "à¸¥à¸”à¸£à¸°à¸”à¸±à¸š";
+                Text[ czech ] = "O ÃºroveÅˆ nÃ­Å¾e";
+                Text[ hebrew ] = "Ebene senken";
+                Text[ hindi ] = "à¤¡à¤¿à¤®à¥‹à¤Ÿà¥ à¤¸à¥à¤¤à¤°";
             };
         };
     };
@@ -693,7 +741,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Umschalten" ;
                 Text [ English ] = "Switch" ;
                 Text [ english_us ] = "Toggle" ;
-                Text [ portuguese_brazilian ] = "Umschalten" ;
+                Text [ portuguese_brazilian ] = "Alternar" ;
                 Text [ swedish ] = "Växla" ;
                 Text [ danish ] = "Skift" ;
                 Text [ italian ] = "Commuta" ;
@@ -709,10 +757,13 @@ Window DLG_NAVIGATION_PI
                 Text[ arabic ] = "ÇáÊÈÏíá";
                 Text[ greek ] = "ÅíáëëáãŞ";
                 Text[ korean ] = "í† ê¸€";
-                Text[ turkish ] = "Toggle";
+                Text[ turkish ] = "Değiştir";
                 Text[ catalan ] = "Commuta";
                 Text[ finnish ] = "Vaihda";
                 Text[ thai ] = "à¸ªà¸¥à¸±à¸š";
+                Text[ czech ] = "PÅ™epnout";
+                Text[ hebrew ] = "Umschalten";
+                Text[ hindi ] = "à¤Ÿà¤¾à¤—à¤²";
             };
             ToolBoxItem
             {
@@ -725,7 +776,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Bearbeiten" ;
                 Text [ English ] = "Edit" ;
                 Text [ english_us ] = "Edit" ;
-                Text [ portuguese_brazilian ] = "Bearbeiten" ;
+                Text [ portuguese_brazilian ] = "Editar" ;
                 Text [ swedish ] = "Redigera" ;
                 Text [ danish ] = "Rediger" ;
                 Text [ italian ] = "Modifica" ;
@@ -745,6 +796,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Edita";
                 Text[ finnish ] = "Muokkaa";
                 Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";
+                Text[ czech ] = "Upravit";
+                Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
+                Text[ hindi ] = "à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
             };
             ToolBoxItem
             {
@@ -753,7 +807,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Aktualisieren" ;
                 Text [ English ] = "Update" ;
                 Text [ english_us ] = "Update" ;
-                Text [ portuguese_brazilian ] = "Aktualisieren" ;
+                Text [ portuguese_brazilian ] = "Atualizar" ;
                 Text [ swedish ] = "Uppdatera" ;
                 Text [ danish ] = "Opdater" ;
                 Text [ italian ] = "Aggiorna" ;
@@ -773,6 +827,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Actualitza";
                 Text[ finnish ] = "Päivitä";
                 Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡";
+                Text[ czech ] = "Aktualizovat";
+                Text[ hebrew ] = "Aktualisieren";
+                Text[ hindi ] = "à¤…à¤ªà¤¡à¥‡à¤Ÿà¥ à¤•à¤°à¥‹";
             };
             ToolBoxItem
             {
@@ -782,7 +839,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Einfügen" ;
                 Text [ English ] = "Insert" ;
                 Text [ english_us ] = "Insert" ;
-                Text [ portuguese_brazilian ] = "Einf?en" ;
+                Text [ portuguese_brazilian ] = "Inserir" ;
                 Text [ swedish ] = "Infoga" ;
                 Text [ danish ] = "Sæt ind" ;
                 Text [ italian ] = "Inserisci" ;
@@ -802,6 +859,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Insereix";
                 Text[ finnish ] = "Lisää";
                 Text[ thai ] = "à¹à¸—à¸£à¸";
+                Text[ czech ] = "VloÅ¾it";
+                Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+                Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
             };
             ToolBoxItem
             {
@@ -814,7 +874,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Inhalte mitspeichern" ;
                 Text [ English ] = "Save content" ;
                 Text [ english_us ] = "Save Contents as well" ;
-                Text [ portuguese_brazilian ] = "Inhalte mitspeichern" ;
+                Text [ portuguese_brazilian ] = "Salvar também o conteúdo" ;
                 Text [ swedish ] = "Spara med innehåll" ;
                 Text [ danish ] = "Gem med indhold" ;
                 Text [ italian ] = "Salva anche i contenuti" ;
@@ -823,7 +883,7 @@ Window DLG_NAVIGATION_PI
                 Text [ dutch ] = "Inhoud opslaan" ;
                 Text [ portuguese ] = "Guardar também conteúdos" ;
                 Text[ russian ] = "Ñîõğàíÿòü ñîäåğæèìîå â ñîñòàâíîì äîêóìåíòå";
-                Text[ polish ] = "Zapisz zawartoœæ";
+                Text[ polish ] = "Zapisz tak¿e zawartoœæ";
                 Text[ japanese ] = "å†…å®¹ã‚’ä¿å­˜ã™ã‚‹";
                 Text[ chinese_simplified ] = "å­˜ç›˜å†…å®¹";
                 Text[ chinese_traditional ] = "å„²å­˜å…§å®¹";
@@ -834,6 +894,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Desa continguts";
                 Text[ finnish ] = "Tallenna myös sisältö";
                 Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹€à¸›à¹‡à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¸”à¸µ";
+                Text[ czech ] = "UloÅ¾it takÃ© obsah";
+                Text[ hebrew ] = "Inhalte mitspeichern";
+                Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‹à¤‚ à¤•à¥‹ à¤­à¥€ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
             };
             ToolBoxItem
             {
@@ -847,7 +910,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Nach oben verschieben" ;
                 Text [ English ] = "Move up" ;
                 Text [ english_us ] = "Move Up" ;
-                Text [ portuguese_brazilian ] = "Nach unten verschieben" ;
+                Text [ portuguese_brazilian ] = "Mover para cima" ;
                 Text [ swedish ] = "Flytta uppåt" ;
                 Text [ danish ] = "Flyt opad" ;
                 Text [ italian ] = "Sposta verso l'alto" ;
@@ -867,6 +930,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Mou cap amunt";
                 Text[ finnish ] = "Siirrä ylemmäs";
                 Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸‚à¸¶à¹‰à¸™";
+                Text[ czech ] = "PÅ™esunout nahoru";
+                Text[ hebrew ] = "â€®×”×–×– ×œ××¢×œ×”â€¬";
+                Text[ hindi ] = "à¤Šà¤ªà¤° à¤•à¥€ à¤“à¤° à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤°à¥‹";
             };
             ToolBoxItem
             {
@@ -876,7 +942,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Nach unten verschieben" ;
                 Text [ English ] = "Move down" ;
                 Text [ english_us ] = "Move Down" ;
-                Text [ portuguese_brazilian ] = "Nach oben verschieben" ;
+                Text [ portuguese_brazilian ] = "Mover para baixo" ;
                 Text [ swedish ] = "Flytta nedåt" ;
                 Text [ danish ] = "Flyt nedad" ;
                 Text [ italian ] = "Sposta verso il basso" ;
@@ -896,6 +962,9 @@ Window DLG_NAVIGATION_PI
                 Text[ catalan ] = "Mou cap avall";
                 Text[ finnish ] = "Siirrä alemmas";
                 Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸¥à¸‡";
+                Text[ czech ] = "PÅ™esunout dolÅ¯";
+                Text[ hebrew ] = "â€®×”×–×– ×œ××˜×”â€¬";
+                Text[ hindi ] = "à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤“à¤° à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤°à¥‹";
             };
         };
     };
@@ -954,11 +1023,11 @@ Window DLG_NAVIGATION_PI
         Text [ french ] = "Niveaux de plan" ;
         Text [ swedish ] = "Dispositionsnivåer" ;
         Text [ danish ] = "Dispositionsniveauer" ;
-        Text [ portuguese_brazilian ] = "Gliederungsebenen" ;
+        Text [ portuguese_brazilian ] = "Nível do Tópico" ;
         Text [ portuguese ] = "Níveis de esquema" ;
         Text[ chinese_simplified ] = "å¤§çº²çº§";
         Text[ russian ] = "Óğîâíè ñòğóêòóğû";
-        Text[ polish ] = "Poziomy konspektu";
+        Text[ polish ] = "Poziom konspektu";
         Text[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¬ãƒ™ãƒ«";
         Text[ chinese_traditional ] = "å¤§ç¶±ç´š";
         Text[ arabic ] = "ãÓÊæíÇÊ ÇáÊŞÓíã";
@@ -968,6 +1037,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Nivell de contorn";
         Text[ finnish ] = "Jäsennystaso";
         Text[ thai ] = "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
+        Text[ czech ] = "ÃšroveÅˆ osnovy";
+        Text[ hebrew ] = "Gliederungsebenen";
+        Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¥à¤¤à¤°";
     };
     String ST_DRAGMODE
     {
@@ -980,7 +1052,7 @@ Window DLG_NAVIGATION_PI
         Text [ french ] = "Mode Glisser" ;
         Text [ swedish ] = "Draläge" ;
         Text [ danish ] = "Trækmodus" ;
-        Text [ portuguese_brazilian ] = "Dragmodus" ;
+        Text [ portuguese_brazilian ] = "Modo Arrastar" ;
         Text [ portuguese ] = "Modo Arrastar" ;
         Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
         Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
@@ -990,10 +1062,13 @@ Window DLG_NAVIGATION_PI
         Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
         Text[ greek ] = "ÊáôÜóôáóç óõñìïı";
         Text[ korean ] = "ëŒê¸° ëª¨ë“œ";
-        Text[ turkish ] = "Sürükleme kipi";
+        Text[ turkish ] = "Sürükleme türü";
         Text[ catalan ] = "Mode d'arrossegament";
         Text[ finnish ] = "Vetotila";
         Text[ thai ] = "à¸¥à¸²à¸à¹‚à¸«à¸¡à¸”";
+        Text[ czech ] = "ZpÅ¯sob pÅ™etÃ¡hnutÃ­";
+        Text[ hebrew ] = "Dragmodus";
+        Text[ hindi ] = "à¤–à¥€à¤‚à¤šà¤¨à¥‡ à¤•à¤¾ à¤ªà¥à¤°à¤•à¤¾à¤°";
     };
     String ST_HYPERLINK
     {
@@ -1001,7 +1076,7 @@ Window DLG_NAVIGATION_PI
         Text = "Als Hyperlink einfügen" ;
         Text [ English ] = "Insert as hyperlink" ;
         Text [ english_us ] = "Insert as Hyperlink" ;
-        Text [ portuguese_brazilian ] = "Hyperlink" ;
+        Text [ portuguese_brazilian ] = "Inserir como Hiperlink" ;
         Text [ swedish ] = "Infoga som hyperlänk" ;
         Text [ danish ] = "Indsæt som hyperlink" ;
         Text [ italian ] = "Inserisci come hyperlink" ;
@@ -1017,10 +1092,13 @@ Window DLG_NAVIGATION_PI
         Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ ÊÔÚÈí";
         Text[ greek ] = "ÅéóáãùãŞ ùò õğåñ-óıíäåóç";
         Text[ korean ] = "í•˜ì´í¼ë§í¬ë¡œ ì‚½ì…";
-        Text[ turkish ] = "Hyperlink olarak ekle";
+        Text[ turkish ] = "Hiperlink olarak ekle";
         Text[ catalan ] = "Insereix com a hiperenllaç";
         Text[ finnish ] = "Lisää hyperlinkkinä";
         Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
+        Text[ czech ] = "VloÅ¾it jako hypertextovÃ½ odkaz";
+        Text[ hebrew ] = "Als Hyperlink einfÃ¼gen";
+        Text[ hindi ] = "à¤¹à¤¾à¤‡à¤ªà¤°à¤²à¤¿à¤‚à¤• à¤œà¥ˆà¤¸à¥‡ à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     String ST_LINK_REGION
     {
@@ -1028,7 +1106,7 @@ Window DLG_NAVIGATION_PI
         Text = "Als Verknüpfung einfügen" ;
         Text [ English ] = "Insert as link" ;
         Text [ english_us ] = "Insert as Link" ;
-        Text [ portuguese_brazilian ] = "Verkn?fung" ;
+        Text [ portuguese_brazilian ] = "Inserir como vínculo" ;
         Text [ swedish ] = "Infoga som länk" ;
         Text [ danish ] = "Indsæt som kæde" ;
         Text [ italian ] = "Inserisci come collegamento" ;
@@ -1048,6 +1126,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Insereix com a enllaç";
         Text[ finnish ] = "Lisää linkkinä";
         Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+        Text[ czech ] = "VloÅ¾it jako odkaz";
+        Text[ hebrew ] = "Als VerknÃ¼pfung einfÃ¼gen";
+        Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤œà¥ˆà¤¸à¥‡ à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     String ST_COPY_REGION
     {
@@ -1055,7 +1136,7 @@ Window DLG_NAVIGATION_PI
         Text = "Als Kopie einfügen" ;
         Text [ English ] = "Insert as copy" ;
         Text [ english_us ] = "Insert as Copy" ;
-        Text [ portuguese_brazilian ] = "Kopie" ;
+        Text [ portuguese_brazilian ] = "Inserir como Cópia" ;
         Text [ swedish ] = "Infoga som kopia" ;
         Text [ danish ] = "Indsæt som kopi" ;
         Text [ italian ] = "Inserisci come copia" ;
@@ -1075,6 +1156,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Insereix com a còpia";
         Text[ finnish ] = "Lisää kopiona";
         Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™à¸ªà¸³à¹€à¸™à¸²";
+        Text[ czech ] = "VloÅ¾it jako kopii";
+        Text[ hebrew ] = "Als Kopie einfÃ¼gen";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤œà¥ˆà¤¸à¥‡ à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     String ST_DISPLAY
     {
@@ -1087,11 +1171,11 @@ Window DLG_NAVIGATION_PI
         Text [ dutch ] = "Weergave" ;
         Text [ swedish ] = "Visa" ;
         Text [ danish ] = "Visning" ;
-        Text [ portuguese_brazilian ] = "Anzeige" ;
+        Text [ portuguese_brazilian ] = "Exibir" ;
         Text [ portuguese ] = "Mostrar" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤º";
         Text[ russian ] = "Ïîêàçàòü";
-        Text[ polish ] = "Wyœwietlenie";
+        Text[ polish ] = "Wyœwietl";
         Text[ japanese ] = "è¡¨ç¤º";
         Text[ chinese_traditional ] = "é¡¯ç¤º";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -1101,6 +1185,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Visualitza";
         Text[ finnish ] = "Näytä";
         Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸œà¸¥";
+        Text[ czech ] = "Zobrazit";
+        Text[ hebrew ] = "Anzeige";
+        Text[ hindi ] = "à¤¦à¤¿à¤–à¤¾à¤“";
     };
     String ST_ACTIVE_VIEW
     {
@@ -1113,7 +1200,7 @@ Window DLG_NAVIGATION_PI
         Text [ french ] = "Fenêtre active" ;
         Text [ swedish ] = "Aktivt fönster" ;
         Text [ danish ] = "Aktivt vindue" ;
-        Text [ portuguese_brazilian ] = "Aktives Fenster" ;
+        Text [ portuguese_brazilian ] = "Janela Ativa" ;
         Text [ portuguese ] = "Janela activa" ;
         Text[ chinese_simplified ] = "å½“å‰çš„è§†çª—";
         Text[ russian ] = "Àêòèâíîå îêíî";
@@ -1128,6 +1215,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Finestra activa";
         Text[ finnish ] = "Aktiivinen ikkuna";
         Text[ thai ] = "à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "AktivnÃ­ okno";
+        Text[ hebrew ] = "Aktives Fenster";
+        Text[ hindi ] = "à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤² à¤µà¤¿à¤¨à¥à¤¡à¥‹";
     };
     String ST_HIDDEN
     {
@@ -1140,7 +1230,7 @@ Window DLG_NAVIGATION_PI
         Text [ dutch ] = "verborgen" ;
         Text [ swedish ] = "gömd" ;
         Text [ danish ] = "skjult" ;
-        Text [ portuguese_brazilian ] = "versteckt" ;
+        Text [ portuguese_brazilian ] = "oculto" ;
         Text [ portuguese ] = "oculto" ;
         Text[ chinese_simplified ] = "éšå…¥";
         Text[ russian ] = "ñêğûòûé";
@@ -1154,6 +1244,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "ocult";
         Text[ finnish ] = "piilotettu";
         Text[ thai ] = "à¸‹à¹ˆà¸­à¸™";
+        Text[ czech ] = "skrytÃ½";
+        Text[ hebrew ] = "versteckt";
+        Text[ hindi ] = "à¤›à¤¿à¤ªà¤¾ à¤¹à¥à¤†";
     };
     String ST_ACTIVE
     {
@@ -1166,7 +1259,7 @@ Window DLG_NAVIGATION_PI
         Text [ french ] = "actif" ;
         Text [ swedish ] = "aktiv" ;
         Text [ danish ] = "aktiv" ;
-        Text [ portuguese_brazilian ] = "aktiv" ;
+        Text [ portuguese_brazilian ] = "ativo" ;
         Text [ portuguese ] = "activo" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨ä¸­çš„";
         Text[ russian ] = "àêòèâíûé";
@@ -1180,6 +1273,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "actiu";
         Text[ finnish ] = "aktiivinen";
         Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "aktivnÃ­";
+        Text[ hebrew ] = "aktiv";
+        Text[ hindi ] = "à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤²";
     };
     String ST_INACTIVE
     {
@@ -1192,7 +1288,7 @@ Window DLG_NAVIGATION_PI
         Text [ dutch ] = "inactief" ;
         Text [ swedish ] = "inaktiv" ;
         Text [ danish ] = "inaktiv" ;
-        Text [ portuguese_brazilian ] = "inaktiv" ;
+        Text [ portuguese_brazilian ] = "inativo" ;
         Text [ portuguese ] = "inactivo" ;
         Text[ chinese_simplified ] = "ä¸ä½¿ç”¨";
         Text[ russian ] = "íåàêòèâíûé";
@@ -1206,6 +1302,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "inactiu";
         Text[ finnish ] = "ei käytössä";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¹ƒà¸Šà¹‰";
+        Text[ czech ] = "neaktivnÃ­";
+        Text[ hebrew ] = "inaktiv";
+        Text[ hindi ] = "à¤¨à¤¿à¤·à¥à¤•à¥à¤°à¤¿à¤¯";
     };
     String ST_EDIT_ENTRY
     {
@@ -1218,7 +1317,7 @@ Window DLG_NAVIGATION_PI
         Text [ spanish ] = "Edi~tar..." ;
         Text [ french ] = "Éditer..." ;
         Text [ dutch ] = "~Bewerken..." ;
-        Text [ portuguese_brazilian ] = "Bearbeiten..." ;
+        Text [ portuguese_brazilian ] = "Editar..." ;
         Text [ portuguese ] = "~Editar..." ;
         Text[ chinese_simplified ] = "ç¼–è¾‘...";
         Text[ russian ] = "Ïğàâêà...";
@@ -1228,10 +1327,13 @@ Window DLG_NAVIGATION_PI
         Text[ arabic ] = "ÊÍÑíÑ...";
         Text[ greek ] = "Åğåîåñãáóßá...";
         Text[ korean ] = "í¸ì§‘...";
-        Text[ turkish ] = "~Düzenle...";
+        Text[ turkish ] = "Düzenle...";
         Text[ catalan ] = "Edita...";
         Text[ finnish ] = "Muokkaa...";
         Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚...";
+        Text[ czech ] = "Upravit...";
+        Text[ hebrew ] = "â€®×¢×¨×™×›×”...â€¬";
+        Text[ hindi ] = "à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
     };
     String ST_UPDATE
     {
@@ -1245,10 +1347,10 @@ Window DLG_NAVIGATION_PI
         Text [ swedish ] = "Uppd~atera" ;
         Text [ danish ] = "Opdater" ;
         Text [ portuguese ] = "~Actualizar" ;
-        Text [ portuguese_brazilian ] = "Aktualisieren" ;
+        Text [ portuguese_brazilian ] = "~Atualizar" ;
         Text[ chinese_simplified ] = "æ›´æ–°(~U)";
         Text[ russian ] = "Îáíîâèòü";
-        Text[ polish ] = "Aktualizuj";
+        Text[ polish ] = "~Aktualizuj";
         Text[ japanese ] = "æ›´æ–°(~U)";
         Text[ chinese_traditional ] = "æ›´æ–°(~U)";
         Text[ arabic ] = "ÊÍÏíË";
@@ -1258,6 +1360,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "~Actualitza";
         Text[ finnish ] = "~Päivitä";
         Text[ thai ] = "~à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡";
+        Text[ czech ] = "Aktualizovat";
+        Text[ hebrew ] = "â€®×¢×“×›×•×Ÿâ€¬";
+        Text[ hindi ] = "~à¤…à¤ªà¤¡à¥‡à¤Ÿà¥ à¤•à¤°à¥‹";
     };
     String ST_EDIT_CONTENT
     {
@@ -1270,7 +1375,7 @@ Window DLG_NAVIGATION_PI
         Text [ spanish ] = "Editar" ;
         Text [ french ] = "Édition" ;
         Text [ dutch ] = "Bewerken" ;
-        Text [ portuguese_brazilian ] = "Bearbeiten" ;
+        Text [ portuguese_brazilian ] = "Editar" ;
         Text [ portuguese ] = "Editar" ;
         Text[ chinese_simplified ] = "ç¼–è¾‘";
         Text[ russian ] = "Ïğàâêà";
@@ -1284,6 +1389,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Edita";
         Text[ finnish ] = "Muokkaa";
         Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
+        Text[ hindi ] = "à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
     };
     String ST_EDIT_LINK
     {
@@ -1301,15 +1409,18 @@ Window DLG_NAVIGATION_PI
         Text[ danish ] = "Rediger kæde";
         Text[ swedish ] = "Redigera länk";
         Text[ polish ] = "Edytuj ³¹cze";
-        Text[ portuguese_brazilian ] = "Edit link";
+        Text[ portuguese_brazilian ] = "Editar vínculo";
         Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®ç·¨é›†";
         Text[ korean ] = "ë§í¬ í¸ì§‘";
         Text[ chinese_simplified ] = "ç¼–è¾‘é“¾æ¥";
         Text[ chinese_traditional ] = "ç·¨è¼¯æ·å¾‘";
-        Text[ turkish ] = "Edit link";
+        Text[ turkish ] = "Bağlantıyı düzenle";
         Text[ arabic ] = "Edit link";
         Text[ catalan ] = "Edita enllaç";
         Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸•à¸±à¸§à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+        Text[ czech ] = "Upravit odkaz";
+        Text[ hebrew ] = "VerknÃ¼pfung bearbeiten";
+        Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
     };
     String ST_INSERT
     {
@@ -1338,6 +1449,9 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Ekle";
         Text[ catalan ] = "Insereix";
         Text[ thai ] = "à¹à¸—à¸£à¸";
+        Text[ czech ] = "VloÅ¾it";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+        Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     String ST_INDEX
     {
@@ -1353,8 +1467,8 @@ Window DLG_NAVIGATION_PI
         Text[ italian ] = "Indice";
         Text[ danish ] = "Indeks";
         Text[ swedish ] = "~Förteckning";
-        Text[ polish ] = "Indeks";
-        Text[ portuguese_brazilian ] = "?n~ice";
+        Text[ polish ] = "~Indeks";
+        Text[ portuguese_brazilian ] = "Índ~ice";
         Text[ japanese ] = "ç›®æ¬¡ã¨ç´¢å¼•(~I)";
         Text[ korean ] = "ìƒ‰ì¸ ë° ëª©ì°¨(~I)";
         Text[ chinese_simplified ] = "ç›®å½•(~I)";
@@ -1364,13 +1478,16 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Í~ndex";
         Text[ finnish ] = "~Hakemisto";
         Text[ thai ] = "~à¸”à¸±à¸Šà¸™à¸µ";
+        Text[ czech ] = "RejstÅ™Ã­k";
+        Text[ hebrew ] = "~Verzeichnis";
+        Text[ hindi ] = "~à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾";
     };
     String ST_FILE
     {
         Text = "Datei" ;
         Text [ English ] = "File" ;
         Text [ english_us ] = "File" ;
-        Text [ portuguese_brazilian ] = "Datei" ;
+        Text [ portuguese_brazilian ] = "Arquivo" ;
         Text [ swedish ] = "Fil" ;
         Text [ danish ] = "Fil" ;
         Text [ italian ] = "File" ;
@@ -1390,13 +1507,16 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Fitxer";
         Text[ finnish ] = "Tiedosto";
         Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡";
+        Text[ czech ] = "Soubor";
+        Text[ hebrew ] = "â€®×§×•×‘×¥â€¬";
+        Text[ hindi ] = "à¤«à¤¾à¤‡à¤²";
     };
     String ST_NEW_FILE
     {
         Text = "Neues Dokument" ;
         Text [ English ] = "New document" ;
         Text [ english_us ] = "New Document" ;
-        Text [ portuguese_brazilian ] = "Neues Dokument" ;
+        Text [ portuguese_brazilian ] = "Novo Documento" ;
         Text [ swedish ] = "Nytt dokument" ;
         Text [ danish ] = "Nyt dokument" ;
         Text [ italian ] = "Nuovo documento" ;
@@ -1416,13 +1536,16 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Document nou";
         Text[ finnish ] = "Uusi asiakirja";
         Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸«à¸¡à¹ˆ";
+        Text[ czech ] = "NovÃ½ dokument";
+        Text[ hebrew ] = "â€®××¡××š ×—×“×©â€¬";
+        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°";
     };
     String ST_TEXT
     {
         Text = "Text" ;
         Text [ English ] = "Text" ;
         Text [ english_us ] = "Text" ;
-        Text [ portuguese_brazilian ] = "Text" ;
+        Text [ portuguese_brazilian ] = "Texto" ;
         Text [ swedish ] = "Text" ;
         Text [ danish ] = "Tekst" ;
         Text [ italian ] = "Testo" ;
@@ -1442,6 +1565,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Text";
         Text[ finnish ] = "Teksti";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "Text";
+        Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
+        Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
     };
     String ST_DELETE
     {
@@ -1450,7 +1576,7 @@ Window DLG_NAVIGATION_PI
         Text [ English ] = "Delete" ;
         Text [ norwegian ] = "Slett" ;
         Text [ italian ] = "Elimina" ;
-        Text [ portuguese_brazilian ] = "Apagar" ;
+        Text [ portuguese_brazilian ] = "Excluir" ;
         Text [ portuguese ] = "Eliminar" ;
         Text [ finnish ] = "Poista" ;
         Text [ danish ] = "Slet" ;
@@ -1470,6 +1596,9 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Sil";
         Text[ catalan ] = "Suprimeix";
         Text[ thai ] = "à¸¥à¸š";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+        Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
     };
     String ST_DELETE_ENTRY
     {
@@ -1477,7 +1606,7 @@ Window DLG_NAVIGATION_PI
         Text [ English ] = "~Delete" ;
         Text [ norwegian ] = "Slett" ;
         Text [ italian ] = "Elimina" ;
-        Text [ portuguese_brazilian ] = "Apagar" ;
+        Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
@@ -1488,7 +1617,7 @@ Window DLG_NAVIGATION_PI
         Text [ english_us ] = "~Delete" ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "~Usuñ";
         Text[ japanese ] = "å‰Šé™¤(~D)";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
@@ -1497,13 +1626,16 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "~Sil";
         Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "~à¸¥à¸š";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
     };
     String ST_UPDATE_SEL
     {
         Text = "Selektion" ;
         Text [ English ] = "Selection" ;
         Text [ english_us ] = "Selection" ;
-        Text [ portuguese_brazilian ] = "Selektion" ;
+        Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ swedish ] = "Markering" ;
         Text [ danish ] = "Markering" ;
         Text [ italian ] = "Selezione" ;
@@ -1513,7 +1645,7 @@ Window DLG_NAVIGATION_PI
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "é€‰ä¸­";
         Text[ russian ] = "Âûäåëåííîå";
-        Text[ polish ] = "Selekcja";
+        Text[ polish ] = "Zaznaczenie";
         Text[ japanese ] = "é¸æŠç¯„å›²";
         Text[ chinese_traditional ] = "é¸å–";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
@@ -1523,13 +1655,16 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Selecció";
         Text[ finnish ] = "Valinta";
         Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "VÃ½bÄ›r";
+        Text[ hebrew ] = "â€®××‘×—×¨â€¬";
+        Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
     };
     String ST_UPDATE_INDEX
     {
         Text = "Verzeichnisse" ;
         Text [ English ] = "Indexes" ;
         Text [ english_us ] = "Indexes" ;
-        Text [ portuguese_brazilian ] = "Verzeichnisse" ;
+        Text [ portuguese_brazilian ] = "Índices" ;
         Text [ swedish ] = "Förteckningar" ;
         Text [ danish ] = "Indeks" ;
         Text [ italian ] = "Indici" ;
@@ -1545,10 +1680,13 @@ Window DLG_NAVIGATION_PI
         Text[ arabic ] = "İåÇÑÓ";
         Text[ greek ] = "ÅõñåôŞñéá";
         Text[ korean ] = "ìƒ‰ì¸ ë° ëª©ì°¨";
-        Text[ turkish ] = "Dizin";
+        Text[ turkish ] = "Dizinler";
         Text[ catalan ] = "Índex";
         Text[ finnish ] = "Hakemistot";
         Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ";
+        Text[ czech ] = "RejstÅ™Ã­ky";
+        Text[ hebrew ] = "Verzeichnisse";
+        Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾";
     };
     String ST_UPDATE_LINK
     {
@@ -1556,7 +1694,7 @@ Window DLG_NAVIGATION_PI
         Text = "Verknüpfungen" ;
         Text [ English ] = "Links" ;
         Text [ english_us ] = "Links" ;
-        Text [ portuguese_brazilian ] = "Verkn?fungen" ;
+        Text [ portuguese_brazilian ] = "Vínculos" ;
         Text [ swedish ] = "Länkar" ;
         Text [ danish ] = "Kæder" ;
         Text [ italian ] = "Collegamenti" ;
@@ -1572,17 +1710,20 @@ Window DLG_NAVIGATION_PI
         Text[ arabic ] = "ÇÑÊÈÇØÇÊ";
         Text[ greek ] = "Óõíäİóåéò";
         Text[ korean ] = "ë§í¬";
-        Text[ turkish ] = "Bağlantı";
+        Text[ turkish ] = "Bağlantılar";
         Text[ catalan ] = "Enllaços";
         Text[ finnish ] = "Linkit";
         Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+        Text[ czech ] = "Odkazy";
+        Text[ hebrew ] = "â€®×§×™×©×•×¨×™×â€¬";
+        Text[ hindi ] = "à¤²à¤¿à¤‚à¤•à¥à¤¸";
     };
     String ST_UPDATE_ALL
     {
         Text = "Alles" ;
         Text [ English ] = "All" ;
         Text [ english_us ] = "All" ;
-        Text [ portuguese_brazilian ] = "Alles" ;
+        Text [ portuguese_brazilian ] = "Tudo" ;
         Text [ swedish ] = "Allt" ;
         Text [ danish ] = "Alt" ;
         Text [ italian ] = "Tutto" ;
@@ -1602,13 +1743,16 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "Tot";
         Text[ finnish ] = "Kaikki";
         Text[ thai ] = "à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
+        Text[ czech ] = "VÅ¡e";
+        Text[ hebrew ] = "â€®×”×›×œâ€¬";
+        Text[ hindi ] = "à¤¸à¤¬";
     };
     String ST_REMOVE_INDEX
     {
         Text = "~Verzeichnis aufheben" ;
         Text [ English ] = "Dismiss index" ;
         Text [ english_us ] = "~Remove Index" ;
-        Text [ portuguese_brazilian ] = "Verzeichnis aufheben" ;
+        Text [ portuguese_brazilian ] = "~Remover Índice" ;
         Text [ swedish ] = "Upphä~v förteckning" ;
         Text [ danish ] = "Ophæv indeks" ;
         Text [ italian ] = "Rimuovi indice" ;
@@ -1618,16 +1762,19 @@ Window DLG_NAVIGATION_PI
         Text [ portuguese ] = "~Remover índice" ;
         Text[ chinese_simplified ] = "å–æ¶ˆç›®å½•(~R)";
         Text[ russian ] = "Óäàëèòü óêàçàòåëü";
-        Text[ polish ] = "Usuñ indeks";
+        Text[ polish ] = "~Usuñ indeks";
         Text[ japanese ] = "è§£é™¤(~R)";
         Text[ chinese_traditional ] = "å–æ¶ˆç›®éŒ„(~R)";
         Text[ arabic ] = "ÅÒÇáÉ ÇáİåÑÓ";
         Text[ greek ] = "ÊáôÜñãçóç åõñåôçñßïõ";
         Text[ korean ] = "ìƒ‰ì¸ ì œê±°(~R)";
-        Text[ turkish ] = "D~izini kaldır";
+        Text[ turkish ] = "~Dizini kaldır";
         Text[ catalan ] = "Elimina el dire~ctori";
         Text[ finnish ] = "~Poista hakemisto";
         Text[ thai ] = "à¹€~à¸­à¸²à¸”à¸±à¸Šà¸™à¸µà¸­à¸­à¸";
+        Text[ czech ] = "Odstranit rejstÅ™Ã­k";
+        Text[ hebrew ] = "~Verzeichnis aufheben";
+        Text[ hindi ] = "~à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤¹à¤Ÿà¤¾à¤“";
     };
     String ST_REMOVE_TBL_PROTECTION
     {
@@ -1646,15 +1793,18 @@ Window DLG_NAVIGATION_PI
         Text [ english_us ] = "~Unprotect" ;
         Text[ chinese_simplified ] = "å–æ¶ˆä¿æŠ¤(~U)";
         Text[ russian ] = "Ñíÿòü çàùèòó";
-        Text[ polish ] = "Usuñ ochronê";
+        Text[ polish ] = "~Nie chroñ";
         Text[ japanese ] = "ä¿è­·ã®è§£é™¤(~U)";
         Text[ chinese_traditional ] = "å–æ¶ˆä¿è­·(~U)";
         Text[ arabic ] = "ÅáÛÇÁ ÇáÍãÇíÉ";
         Text[ greek ] = "¢ñóç ğñïóôáóßáò";
         Text[ korean ] = "ë³´í˜¸ í•´ì œ(~U)";
-        Text[ turkish ] = "Korumayı ~kaldır";
+        Text[ turkish ] = "~Korumayı kaldır";
         Text[ catalan ] = "~Desprotegeix";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¸›à¹‰à¸­à¸‡à¸à¸±à¸™";
+        Text[ czech ] = "Odemknout";
+        Text[ hebrew ] = "Schutz ~aufheben";
+        Text[ hindi ] = "à¤…~à¤°à¤•à¥à¤·à¤¿à¤¤";
     };
     String ST_INVISIBLE
     {
@@ -1670,8 +1820,8 @@ Window DLG_NAVIGATION_PI
         Text[ italian ] = "Nascosto";
         Text[ danish ] = "skjult";
         Text[ swedish ] = "gömd";
-        Text[ polish ] = "schowany";
-        Text[ portuguese_brazilian ] = "hidden";
+        Text[ polish ] = "ukryty";
+        Text[ portuguese_brazilian ] = "oculto";
         Text[ japanese ] = "éš ã—";
         Text[ korean ] = "ìˆ¨ê¹€";
         Text[ chinese_simplified ] = "éšå…¥çš„";
@@ -1681,13 +1831,16 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "ocult";
         Text[ finnish ] = "piilotettu";
         Text[ thai ] = "à¸‹à¹ˆà¸­à¸™";
+        Text[ czech ] = "skrytÃ½";
+        Text[ hebrew ] = "versteckt";
+        Text[ hindi ] = "à¤›à¤¿à¤ªà¤¾ à¤¹à¥à¤†";
     };
     String ST_BROKEN_LINK
     {
         Text = "Datei nicht gefunden: ";
         Text[English] = "File not found: ";
         Text[ italian ] = "File non trovato: ";
-        Text[ portuguese_brazilian ] = "File not found: ";
+        Text[ portuguese_brazilian ] = "Arquivo não encontrado:";
         Text[ portuguese ] = "Ficheiro não encontrado: ";
         Text[ danish ] = "Fil blev ikke fundet: ";
         Text[ french ] = "Fichier introuvable : ";
@@ -1697,7 +1850,7 @@ Window DLG_NAVIGATION_PI
         Text[ english_us ] = "File not found: ";
         Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°æ–‡ä»¶ï¼š ";
         Text[ russian ] = "Ôàéë íå íàéäåí:  ";
-        Text[ polish ] = "Pliku nie znaleziono:  ";
+        Text[ polish ] = "Nie znaleziono pliku:";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: ";
         Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°æª”æ¡ˆï¼š ";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì Çáãáİ: ";
@@ -1707,6 +1860,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "No es troba el fitxer: ";
         Text[ finnish ] = "Tiedostoa ei löytynyt: ";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¹à¸Ÿà¹‰à¸¡: ";
+        Text[ czech ] = "Soubor nenalezen: ";
+        Text[ hebrew ] = "Datei nicht gefunden:";
+        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¤¾: ";
     };
     String ST_RENAME
     {
@@ -1722,8 +1878,8 @@ Window DLG_NAVIGATION_PI
         Text[ italian ] = "Rinomina";
         Text[ danish ] = "Omdøb";
         Text[ swedish ] = "~Byt namn";
-        Text[ polish ] = "Zmieñ nazwê";
-        Text[ portuguese_brazilian ] = "Rename";
+        Text[ polish ] = "~Zmieñ nazwê";
+        Text[ portuguese_brazilian ] = "~Renomear";
         Text[ japanese ] = "åå‰ã®å¤‰æ›´(~R)";
         Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°(~R)";
         Text[ chinese_simplified ] = "é‡å‘½å(~R)";
@@ -1733,6 +1889,9 @@ Window DLG_NAVIGATION_PI
         Text[ catalan ] = "~Reanomena";
         Text[ finnish ] = "~Nimeä uudelleen";
         Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
+        Text[ czech ] = "PÅ™ejmenovat";
+        Text[ hebrew ] = "~Umbenennen";
+        Text[ hindi ] = "~à¤ªà¥à¤¨à¤ƒ à¤¨à¤¾à¤® à¤¦à¥‹";
     };
     String ST_READONLY_IDX
     {
@@ -1749,16 +1908,19 @@ Window DLG_NAVIGATION_PI
         Text[ danish ] = "Skrivebeskyttet";
         Text[ swedish ] = "~Skrivskyddad";
         Text[ polish ] = "Tylko do odczytu";
-        Text[ portuguese_brazilian ] = "Readonly";
+        Text[ portuguese_brazilian ] = "S~omente leitura";
         Text[ japanese ] = "èª­ã¿å–ã‚Šå°‚ç”¨(~O)";
         Text[ korean ] = "ì½ê¸° ì „ìš©(~O)";
         Text[ chinese_simplified ] = "é˜²æ”¹å†™(~O)";
         Text[ chinese_traditional ] = "å”¯è®€(~O)";
         Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
-        Text[ turkish ] = "Sa~lt okunur";
+        Text[ turkish ] = "Okuma ~amaçlı";
         Text[ catalan ] = "Només le~ctura";
         Text[ finnish ] = "Vain ~luku";
         Text[ thai ] = "à¸­à¹ˆà¸²à¸™~à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
+        Text[ czech ] = "Pouze ke ÄtenÃ­";
+        Text[ hebrew ] = "~SchreibgeschÃ¼tzt";
+        Text[ hindi ] = "à¤•à¥‡à¤µà¤² ~à¤ªà¤¢à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤";
     };
     Text[ chinese_simplified ] = "åŠ©æ‰‹";
     Text[ russian ] = "Íàâèãàòîğ";
@@ -1768,9 +1930,12 @@ Window DLG_NAVIGATION_PI
     Text[ arabic ] = "ÇáäÇİíÌíÊæÑ";
     Text[ greek ] = "Navigator";
     Text[ korean ] = "ë„¤ë¹„ê²Œì´í„°";
-    Text[ turkish ] = "Navigatör";
+    Text[ turkish ] = "Dolaşma";
     Text[ catalan ] = "Navegador";
     Text[ thai ] = "à¸•à¸±à¸§à¸™à¸³";
+    Text[ czech ] = "NavigÃ¡tor";
+    Text[ hebrew ] = "â€®× ×•×•×˜â€¬";
+    Text[ hindi ] = "à¤¨à¤¾à¤µà¤¿à¤—à¥‡à¤Ÿà¤°";
 };
 #define NAVI_ENTRY_IDS \
     IdList =           \
@@ -1805,6 +1970,19 @@ ImageList IMG_NAVI_ENTRYBMPH
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
