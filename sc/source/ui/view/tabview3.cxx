@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-16 16:27:05 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 14:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,6 +1446,17 @@ void ScTabView::MarkDataArea( BOOL bIncludeCursor )
     ShowAllCursors();
 
     SelectionChanged();
+}
+
+void ScTabView::MarkMatrixFormula()
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    ScAddress aCursor( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
+    ScRange aMatrix;
+    if ( pDoc->GetMatrixFormulaRange( aCursor, aMatrix ) )
+    {
+        MarkRange( aMatrix, FALSE );        // cursor is already within the range
+    }
 }
 
 void ScTabView::MarkRange( const ScRange& rRange, BOOL bSetCursor, BOOL bContinue )

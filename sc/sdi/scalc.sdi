@@ -7388,3 +7388,29 @@ ScProtectionAttr Protection SID_SCATTR_PROTECTION
     GroupId = GID_FORMAT;
 ]
 
+//--------------------------------------------------------------------------
+SfxVoidItem SelectArrayFormula SID_MARKARRAYFORMULA
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+

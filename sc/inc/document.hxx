@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: er $ $Date: 2002-11-27 21:09:38 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 14:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,6 +611,8 @@ public:
     BOOL            HasSelectedBlockMatrixFragment( USHORT nStartCol, USHORT nStartRow,
                                             USHORT nEndCol, USHORT nEndRow,
                                             const ScMarkData& rMark ) const;
+
+    BOOL            GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 
     BOOL            IsEmbedded() const;
     void            GetEmbedded( ScTripel& rStart, ScTripel& rEnd ) const;

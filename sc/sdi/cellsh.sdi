@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: mba $ $Date: 2002-08-29 14:19:09 $ $Revision: 1.10 $
+ // $Author: nn $ $Date: 2002-11-28 14:56:06 $ $Revision: 1.11 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -125,6 +125,7 @@ interface CellSelection : Selection
     FID_FILL_SERIES     [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_FILL_AUTO       [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_MARKDATAAREA    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_MARKARRAYFORMULA [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_SETINPUTMODE    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_FOCUS_INPUTLINE [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
     SID_CUT             [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
@@ -381,6 +382,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/08/29 14:19:09  mba
+    #98951#: make sure that slot names are unique
+
     Revision 1.9  2002/06/04 07:56:02  mba
     #98570#: Recording of SearchDialog actions
 

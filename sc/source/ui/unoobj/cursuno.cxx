@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 14:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include "hints.hxx"
 #include "markdata.hxx"
 #include "dociter.hxx"
-#include "cell.hxx"
 #include "unoguard.hxx"
 #include "miscuno.hxx"
 
@@ -184,46 +183,18 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray() throw(uno::RuntimeExcept
     ScRange aRange = *rRanges.GetObject(0);
 
     aRange.Justify();
-    ScAddress aCursor = aRange.aStart;      //  bei Block immer den Start nehmen
-    ScAddress aOrigin = aCursor;
-    BOOL bFound = FALSE;
+    ScAddress aCursor = aRange.aStart;      //  use the start address of the range
 
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
-        ScBaseCell* pCell = pDoc->GetCell( aCursor );
-        if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+        ScRange aMatrix;
+
+        // finding the matrix range is now in GetMatrixFormulaRange in the document
+        if ( pDoc->GetMatrixFormulaRange( aCursor, aMatrix ) )
         {
-            if ( ((ScFormulaCell*)pCell)->GetMatrixOrigin( aOrigin ) )
-            {
-                if ( aOrigin != aCursor )
-                    pCell = pDoc->GetCell( aOrigin );
-                if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-                {
-                    USHORT nSizeX, nSizeY;
-                    ((ScFormulaCell*)pCell)->GetMatColsRows(nSizeX,nSizeY);
-                    if ( !(nSizeX && nSizeY) )
-                    {
-                        // GetMatrixEdge computes also dimensions of the matrix
-                        // if not already done (may occur if document is loaded
-                        // from old file format).
-                        // Needs an "invalid" initialized address.
-                        aOrigin = UINT32(0xffffffff);
-                        ((ScFormulaCell*)pCell)->GetMatrixEdge(aOrigin);
-                        ((ScFormulaCell*)pCell)->GetMatColsRows(nSizeX,nSizeY);
-                    }
-                    if ( nSizeX && nSizeY )
-                    {
-                        ScAddress aEnd( aOrigin.Col() + nSizeX - 1,
-                                        aOrigin.Row() + nSizeY - 1,
-                                        aOrigin.Tab() );
-                        ScRange aNew( aOrigin, aEnd );
-                        SetNewRange( aNew );
-                        bFound = TRUE;
-                    }
-                }
-            }
+            SetNewRange( aMatrix );
         }
     }
     // thats a Bug, that this assertion comes; the API Reference says, that

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 15:09:12 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 14:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,10 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
 
         case SID_MARKDATAAREA:
             pTabViewShell->MarkDataArea();
+            break;
+
+        case SID_MARKARRAYFORMULA:
+            pTabViewShell->MarkMatrixFormula();
             break;
 
         case SID_SETINPUTMODE:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-25 15:21:55 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 14:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,7 @@ public:
     void            MarkColumns();
     void            MarkRows();
     void            MarkDataArea( BOOL bIncludeCursor = TRUE );
+    void            MarkMatrixFormula();
     void            Unmark();
 
     void            MarkRange( const ScRange& rRange, BOOL bSetCursor = TRUE, BOOL bContinue = FALSE );

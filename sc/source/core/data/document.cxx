@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-27 15:08:07 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 14:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3339,6 +3339,50 @@ BOOL ScDocument::HasSelectedBlockMatrixFragment( USHORT nStartCol, USHORT nStart
                     bOk = FALSE;
 
     return !bOk;
+}
+
+
+BOOL ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix )
+{
+    //  if rCell is part of a matrix formula, return its complete range
+
+    BOOL bRet = FALSE;
+    ScBaseCell* pCell = GetCell( rCellPos );
+    if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+    {
+        ScAddress aOrigin = rCellPos;
+        if ( ((ScFormulaCell*)pCell)->GetMatrixOrigin( aOrigin ) )
+        {
+            if ( aOrigin != rCellPos )
+                pCell = GetCell( aOrigin );
+            if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+            {
+                USHORT nSizeX, nSizeY;
+                ((ScFormulaCell*)pCell)->GetMatColsRows(nSizeX,nSizeY);
+                if ( !(nSizeX && nSizeY) )
+                {
+                    // GetMatrixEdge computes also dimensions of the matrix
+                    // if not already done (may occur if document is loaded
+                    // from old file format).
+                    // Needs an "invalid" initialized address.
+                    aOrigin = UINT32(0xffffffff);
+                    ((ScFormulaCell*)pCell)->GetMatrixEdge(aOrigin);
+                    ((ScFormulaCell*)pCell)->GetMatColsRows(nSizeX,nSizeY);
+                }
+                if ( nSizeX && nSizeY )
+                {
+                    ScAddress aEnd( aOrigin.Col() + nSizeX - 1,
+                                    aOrigin.Row() + nSizeY - 1,
+                                    aOrigin.Tab() );
+
+                    rMatrix.aStart = aOrigin;
+                    rMatrix.aEnd = aEnd;
+                    bRet = TRUE;
+                }
+            }
+        }
+    }
+    return bRet;
 }
 
 
