@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-03-04 14:59:16 $
+ *  last change: $Author: os $ $Date: 2002-04-04 11:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, SvxNameDialog*, pNameDialog 
         for( sal_uInt32 i=0; i< nCount; i++ )
         {
             SdrObject* pTemp = pPage->GetObj(i);
-            if(pObj != pTemp &&  (!pTemp->ISA(SdrObjGroup) || pTemp->GetName() == sNewName))
+            if(pObj != pTemp && pTemp->ISA(SdrObjGroup) && pTemp->GetName() == sNewName)
             {
                 nRet = 0;
                 break;
