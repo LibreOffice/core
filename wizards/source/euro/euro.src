@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 19:02:37 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ Text[ english_us ] = "~Cancel";
     Text[ swedish ] = "~Avbryt";
     Text[ polish ] = "~Zako�cz";
     Text[ portuguese_brazilian ] = "~Cancel";
-    Text[ japanese ] = "終了(~C)";
+    Text[ japanese ] = "キャンセル(~C)";
     Text[ korean ] = "종료(~C)";
     Text[ chinese_simplified ] = "结束(~C)";
     Text[ chinese_traditional ] = "結束(~C)";
@@ -186,7 +186,7 @@ Text[ english_us ] = "Note: Currency amounts from external links and currency co
     Text[ swedish ] = "OBS: valutabelopp som har externa referenser, liksom valutaomr�kningsfaktorer i formler kan inte konverteras.";
     Text[ polish ] = "Wskaz�wka: Kwot (waluty) z zewn�trznych po��cze� oraz przelicznik�w waluty w formu�ach kom�rek nie mo�na skonwertowa�.";
     Text[ portuguese_brazilian ] = "Hint: Currency amounts that refer to external Links as well as currency -converting factors in Cell formulas cannot be converted.";
-    Text[ japanese ] = "指示: 外部参照する為替相場と数式の通貨換算ファクタは変換できません。";
+    Text[ japanese ] = "注意: 外部参照する為替相場と数式の通貨換算ファクタは変換できません。";
     Text[ korean ] = "알림: 수식내의 통화변환 요소와 외부참조에 연결된 통화량은 변환되지 않습니다.";
     Text[ chinese_simplified ] = "提示：无法转换引用外来数据的货币金额和公式中的货币换算系数。";
     Text[ chinese_traditional ] = "提示：無法轉換含有外來引用的貨幣數額及公式的貨幣換算值。";
