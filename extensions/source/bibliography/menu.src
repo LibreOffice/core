@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:00:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ Menu RID_MAIN_MENU
                         Text[ portuguese_brazilian ] = "~Data source...";
                         Text[ japanese ] = "√ﬁ∞¿ø∞Ω(~D)...";
                         Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫(~D)...";
-                        Text[ chinese_simplified ] = " ˝æ›¿¥‘¥(~D)...";
+                        Text[ chinese_simplified ] = " ˝æ›‘¥(~D)...";
                         Text[ chinese_traditional ] = "∏ÍÆ∆∑Ω(~D)...";
                         Text[ arabic ] = "„’œ— «·»Ì«‰« ...";
                         Text[ turkish ] = "~Veri kayna˝...";
@@ -345,6 +345,7 @@ Menu RID_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
 
 
 
