@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-26 08:01:49 $
+ *  last change: $Author: pl $ $Date: 2002-09-26 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1827,7 +1827,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             mpIMEInfos->DestroyAttribs();
         }
 
-        Invalidate();   // Erstmal einfach zum Testen
+        ImplAlignAndPaint( 0, maText.Len() );
         xub_StrLen nCursorPos = mpIMEInfos->nPos + pData->GetCursorPos();
         SetSelection( Selection( nCursorPos, nCursorPos ) );
         SetInsertMode( !pData->IsCursorOverwrite() );
