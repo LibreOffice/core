@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.11 2000-12-04 16:54:27 dvo Exp $
+	$Id: text.mod,v 1.12 2000-12-05 14:54:25 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -781,7 +781,7 @@
 <!ATTLIST text:illustration-index-source text:caption-sequence-name 
 									%string; #IMPLIED>
 <!ATTLIST text:illustration-index-source text:caption-sequence-format 
-								(text|category-and-value|caption) #IMPLIED>
+									CDATA #IMPLIED>
 
 <!ELEMENT text:illustration-index-entry-template 
 								( text:index-entry-page-number |
@@ -804,7 +804,7 @@
 <!ATTLIST text:table-index-source text:caption-sequence-name 
 									%string; #IMPLIED>
 <!ATTLIST text:table-index-source text:caption-sequence-format 
-								(text|category-and-value|caption) #IMPLIED>
+								CDATA #IMPLIED>
 
 <!ELEMENT text:table-index-entry-template ( text:index-entry-page-number |
 											text:index-entry-text |
