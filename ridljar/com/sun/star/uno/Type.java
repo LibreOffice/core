@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:39:31 $
+ *  last change: $Author: lla $ $Date: 2000-12-05 15:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2000-11-08 15:39:31 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-12-05 15:14:50 $
  * @author      Markus Meyer
  * @author      Kay Ramme
  * @since       UDK1.0
@@ -231,8 +231,8 @@ public class Type {
         new String[]{"java.lang.Short",       "S"},                       // UNSIGNED SHORT
         new String[]{"java.lang.Integer",     "I"},                       // LONG
         new String[]{"java.lang.Integer",     "I"},                       // UNSIGNED_LONG
-        new String[]{"java.lang.Long",        "L"},                       // HYPER
-        new String[]{"java.lang.Long",        "L"},                       // UNSIGNED_HYPER
+        new String[]{"java.lang.Long",        "J"},                       // HYPER
+        new String[]{"java.lang.Long",        "J"},                       // UNSIGNED_HYPER
         new String[]{"java.lang.Float",       "F"},                       // FLOAT
         new String[]{"java.lang.Double",      "D"},                       // DOUBLE
         new String[]{"java.lang.String",      "Ljava.lang.String;"},      // STRING
