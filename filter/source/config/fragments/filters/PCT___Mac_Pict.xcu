@@ -1,4 +1,4 @@
-    <node oor:name="PCT - Mac Pict" oor:op="replace">
+    <node oor:name="PCT - Mac Pict" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>pct_Mac_Pict</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
