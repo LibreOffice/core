@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-16 13:12:24 $
+ *  last change: $Author: cl $ $Date: 2001-10-08 15:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     AddShape( "com.sun.star.drawing.Shape3DSceneObject" );
     if( mxShape.is() )
     {
+        SetStyle();
+
         mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
         if( mxChilds.is() )
             GetImport().GetShapeImport()->pushGroupForSorting( mxChilds );
