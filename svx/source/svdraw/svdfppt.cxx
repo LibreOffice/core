@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-31 11:12:50 $
+ *  last change: $Author: sj $ $Date: 2002-06-13 16:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3211,7 +3211,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             if ( pE->nBackgroundOffset )
                                             {
                                                 // do not follow master colorscheme ?
-                                                sal_Bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) == 0;
+                                                sal_Bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
                                                 rStCtrl.Seek( pE->nBackgroundOffset );
                                                 rSlidePersist.pBackgroundHelper->SetBackground( bTemporary, ImportObj( rStCtrl, (void*)&aProcessData, NULL ) );
