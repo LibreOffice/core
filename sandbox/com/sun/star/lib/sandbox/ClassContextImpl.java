@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cdt $ $Date: 2000-10-24 15:33:09 $
+ *  last change: $Author: kr $ $Date: 2000-10-27 09:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,10 @@ import java.util.zip.ZipEntry;
 
 import sun.tools.jar.JarVerifierStream;
 
+
 final class ClassContextImpl extends ClassLoader implements ClassContext {
     private static int instances;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private URL codeBase;
     private ProtectionDomain protectionDomain;
@@ -176,8 +177,18 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
 
     public Class findClass(String className) throws ClassNotFoundException {
         Class xClass = findLoadedClass(className);
-        if(xClass == null)
-            xClass = findSystemClass(className);
+
+        // It is a nasty hack to test if want to generate
+        // a proxy, but exception throw here sometimes
+        // kills the java vm (jdk1.2.2)
+        if(xClass == null && !className.startsWith("JSGen"))
+            xClass = getClass().forName(className);
+
+        // see above, throwing the exception here
+        // kills sometimes the javavm
+//          if(xClass == null) {
+//              throw new ClassNotFoundException();
+//          }
 
         return xClass;
     }
@@ -199,15 +210,14 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
 
 
         Class xClass = null;
-        try {
-        xClass = Class.forName( className );
-        }
-        catch(ClassNotFoundException en)
-        {
+
         try {
             xClass = findClass(className);
         }
         catch(ClassNotFoundException e) {
+        }
+
+        if(xClass == null) {
             try {
                 ResourceProxy resourceProxy =
                     ResourceProxy.load(new URL(codeBase, className.replace('.', '/') + ".class"), protectionDomain);
@@ -244,7 +254,7 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
                                                  + " " + codeBase);
             }
         }
-    }
+
         if (xClass != null && resolve)
             resolveClass(xClass);
 
