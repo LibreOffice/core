@@ -1,5 +1,6 @@
 ..\%__SRC%\class\juh.jar %_DEST%\bin%_EXT%\juh.jar
 ..\%__SRC%\bin\juh.dll %_DEST%\bin%_EXT%\juh.dll
 ..\%__SRC%\lib\libjuh.so %_DEST%\lib%_EXT%\libjuh.so
+..\%__SRC%\lib\libjuh.dylib %_DEST%\lib%_EXT%\libjuh.dylib
 
 
