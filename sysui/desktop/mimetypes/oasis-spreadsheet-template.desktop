@@ -2,8 +2,8 @@
 Version=1.0
 Encoding=UTF-8
 Hidden=false
-Icon=spreadsheet
+Icon=oasis-spreadsheet-template
 Type=MimeType
 Patterns=*.ots
-MimeType=application/x-vnd.oasis.openoffice.spreadsheet-template
-Comment=Open Office Spreadsheet Template
+MimeType=application/vnd.oasis.opendocument.spreadsheet-template
+Comment=OpenDocument Spreadsheet Template
