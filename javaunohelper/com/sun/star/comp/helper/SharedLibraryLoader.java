@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedLibraryLoader.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 17:12:59 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ import com.sun.star.registry.XRegistryKey;
  * @see         com.sun.star.loader.SharedLibrary
  * @see         com.sun.star.comp.servicemanager.ServiceManager
  * @see         com.sun.star.lang.ServiceManager
- * @since       UDK1.0
  */
 public class SharedLibraryLoader {
     /**
