@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:58:29 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ public:
     bool IsTxtAttr( xub_StrLen nSwPos );
     bool IsRedlineAtEnd( xub_StrLen nPos ) const;
     bool IsDropCap( int nSwPos );
+    bool RequiresImplicitBookmark();
 
     void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
@@ -705,6 +706,20 @@ bool WW8_SwAttrIter::IsDropCap( int nSwPos )
     return false;
 }
 
+bool WW8_SwAttrIter::RequiresImplicitBookmark()
+{
+    SwImplBookmarksIter bkmkIterEnd = rWrt.maImplicitBookmarks.end();
+    ULONG test = rNd.GetIndex();
+    for (SwImplBookmarksIter aIter = rWrt.maImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter)
+    {
+        ULONG sample  = aIter->second;
+
+        if(sample == rNd.GetIndex())
+            return true;
+    }
+    return false;
+}
+
 // HasItem ist fuer die Zusammenfassung des Doppel-Attributes Underline
 // und WordLineMode als TextItems. OutAttr() ruft die Ausgabefunktion,
 // die dann ueber HasItem() nach anderen Items an der
@@ -895,20 +910,29 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
 
     if (rUrl.Len() > 1 && rUrl.GetChar(0) == INET_MARK_TOKEN)
     {
-        sMark = rUrl.Copy(1);
-        TruncateBookmark(sMark);
+        sMark = BookmarkToWriter( rUrl.Copy(1) );
 
-        // i21465 Check for outline references
-        String sSearchableRef( INetURLObject::decode( sMark, INET_HEX_ESCAPE,
-            INetURLObject::DECODE_WITH_CHARSET,
-            RTL_TEXTENCODING_UTF8 ));
-        xub_StrLen nPos = sSearchableRef.SearchBackward( cMarkSeperator );
+        xub_StrLen nPos = sMark.SearchBackward( cMarkSeperator );
 
-        String sRefType( sSearchableRef.Copy( nPos+1 ) );
+        String sRefType( sMark.Copy( nPos+1 ) );
         sRefType.EraseAllChars();
 
+        // i21465 Only interested in outline references
         if(sRefType.EqualsAscii( pMarkToOutline ) )
-            sMark = sSearchableRef.Copy(0, nPos);
+        {
+            String sLink = sMark.Copy(0, nPos);
+            SwImplBookmarksIter bkmkIterEnd = rWrt.maImplicitBookmarks.end();
+            for (SwImplBookmarksIter aIter = rWrt.maImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter)
+            {
+                String bkmkName  = aIter->first;
+
+                if(bkmkName == sLink)
+                {
+                    sMark = String(RTL_CONSTASCII_STRINGPARAM("_toc"));
+                    sMark += String::CreateFromInt32(aIter->second);
+                }
+            }
+        }
     }
     else
     {
@@ -1514,6 +1538,14 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
     }
 
+    if (aAttrIter.RequiresImplicitBookmark())
+    {
+        ULONG test = pNd->GetIndex();
+        String sBkmkName = String(RTL_CONSTASCII_STRINGPARAM("_toc"));
+        sBkmkName += String::CreateFromInt32(pNd->GetIndex());
+        rWW8Wrt.AddBookmark(sBkmkName);
+    }
+
     ASSERT( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
 
     String aStr( pNd->GetTxt() );
@@ -2028,16 +2060,20 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     width is maxed and cells relative, so we need the frame (generally page)
     width that the table is in to work out the true widths.
     */
-    SwFmtHoriOrient aHori(pFmt->GetHoriOrient());
-    bool bRelBoxSize = (pFmt->GetHoriOrient().GetHoriOrient() == HORI_FULL);
-    unsigned long nTblSz = static_cast<unsigned long>(pFmt->GetFrmSize().GetWidth());
-    if (nTblSz == USHRT_MAX && !bRelBoxSize)
+    const SwFmtFrmSize &rSize = pFmt->GetFrmSize();
+    int nWidthPercent = rSize.GetWidthPercent();
+    if (pFmt->GetHoriOrient().GetHoriOrient() == HORI_FULL)
+        nWidthPercent = 100;
+    bool bRelBoxSize = nWidthPercent != 0;
+    unsigned long nTblSz = static_cast<unsigned long>(rSize.GetWidth());
+    if (nTblSz > USHRT_MAX/2 && !bRelBoxSize)
     {
-        ASSERT(bRelBoxSize, "huge table width but not relative");
+        ASSERT(bRelBoxSize, "huge table width but not relative, suspicious");
         bRelBoxSize = true;
     }
 
     unsigned long nPageSize = nTblSz;
+    if (bRelBoxSize)
     {
         Point aPt;
         SwRect aRect(pFmt->FindLayoutRect(false, &aPt));
@@ -2052,16 +2088,19 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             if (!(nPageSize = aRect.Width()))
             {
                 const SvxLRSpaceItem& rLR = pParentFmt->GetLRSpace();
-                nPageSize = pParentFmt->GetFrmSize().GetWidth() - rLR.GetLeft() -
-                    rLR.GetRight();
+                nPageSize = pParentFmt->GetFrmSize().GetWidth() - rLR.GetLeft()
+                    - rLR.GetRight();
             }
         }
         else
             nPageSize = aRect.Width();
 
-        const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
-
-        nPageSize -= (rLR.GetLeft() + rLR.GetRight());
+        ASSERT(nWidthPercent, "Impossible");
+        if (nWidthPercent)
+        {
+            nPageSize *= nWidthPercent;
+            nPageSize /= 100;
+        }
     }
 
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
@@ -2135,7 +2174,10 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         }
 
         if (!bFixRowHeight)
-            bFixRowHeight = RowContainsProblematicGraphic(pBoxArr, nColCnt, rWW8Wrt);
+        {
+            bFixRowHeight = RowContainsProblematicGraphic(pBoxArr, nColCnt,
+                rWW8Wrt);
+        }
 
         //Winword column export limited to 31/64 cells
         sal_uInt8 nWWColMax = nRealColCnt > nMaxCols ?
