@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-24 13:10:58 $
+ *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,9 @@ module addin
     interface XAnalysis : com::sun::star::uno::XInterface
     {
         /// _test.
-        double get_Test(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long Mode, [in] double f1, [in] double f2, [in] double f3 );
+//      double get_Test(
+//                  [in] com::sun::star::beans::XPropertySet xOptions,
+//                  [in] long Mode, [in] double f1, [in] double f2, [in] double f3 );
 
 
         /// workday.
@@ -113,6 +113,7 @@ module addin
         long getNetworkdays(
                     [in] com::sun::star::beans::XPropertySet xOptions,
                     [in] long nStartDate, [in] long nEndDate, [in] sequence< sequence<long> > aHolidays );
+//                  [in] long nStartDate, [in] long nEndDate, [in] any aHolidays );
 
         /// iseven.
         long getIseven(
@@ -158,6 +159,7 @@ module addin
         double getGcd(
                     [in] com::sun::star::beans::XPropertySet xOptions,
                     [in] sequence< sequence<double> > ValList );
+//                  [in] sequence< any > ValList );
 
         /// lcm.
         double getLcm(
@@ -327,7 +329,8 @@ module addin
         /// improduct.
         string getImproduct(
                     [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num1, [in] string Num2 );
+//                  [in] string Num1, [in] string Num2 );
+                    [in] string Num1, [in] sequence<any> NumberList );
 
         /// imreal.
         double getImreal(
@@ -347,7 +350,8 @@ module addin
         /// imsum.
         string getImsum(
                     [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num1, [in] string Num2 );
+//                  [in] string Num1, [in] string Num2 );
+                    [in] string Num1, [in] sequence<any> OptNums );
 
         /// imsqrt.
         string getImsqrt(
@@ -363,6 +367,207 @@ module addin
         double getConvert(
                     [in] com::sun::star::beans::XPropertySet xOptions,
                     [in] double Value, [in] string FromUnit, [in] string ToUnit );
+
+
+        /// amordegrc.
+        double getAmordegrc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Cost, [in] long Date, [in] long FirstPer, [in] double RestVal,
+                    [in] double Periode, [in] double Rate, [in] any Base );
+
+        /// amorlinc.
+        double getAmorlinc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Cost, [in] long Date, [in] long FirstPer, [in] double RestVal,
+                    [in] double Periode, [in] double Rate, [in] any Base );
+
+        /// accrint.
+        double getAccrint(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Issue, [in] long FirstInterest, [in] long Settlement, [in] double Rate,
+                    [in] double Value, [in] long Frequency, [in] any Base );
+
+        /// accrintm.
+        double getAccrintm(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Issue, [in] long Settlement, [in] double Rate, [in] double Value, [in] any Base );
+
+        /// received.
+        double getReceived(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Investment, [in] double Discount,
+                    [in] any Base );
+
+        /// disc.
+        double getDisc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Price, [in] double Redemption,
+                    [in] any Base );
+
+        /// duration.
+        double getDuration(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Coupon, [in] double Yield,
+                    [in] long Frequncy, [in] any Base );
+
+        /// effect.
+        double getEffect( [in] double Nomial, [in] long NumOfPeriods );
+
+        /// cumprinc.
+        double getCumprinc(
+                    [in] double Rate, [in] long NumOfPeriods, [in] double Val, [in] long StartPeriode,
+                    [in] long EndPeriode, [in] long PayType );
+
+        /// cumipmt.
+        double getCumipmt(
+                    [in] double Rate, [in] long NumOfPeriods, [in] double Val, [in] long StartPeriode,
+                    [in] long EndPeriode, [in] long PayType );
+
+        /// price.
+        double getPrice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Rate, [in] double Yield,
+                    [in] double Redemption, [in] long Frequncy, [in] any Base );
+
+        /// pricedisc.
+        double getPricedisc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Discont, [in] double Redemption,
+                    [in] any Base );
+
+        /// pricemat.
+        double getPricemat(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] double Rate, [in] double Yield,
+                    [in] any Base );
+
+        /// mduration.
+        double getMduration(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Coupon, [in] double Yield,
+                    [in] long Frequency, [in] any Base );
+
+        /// nominal.
+        double getNominal( [in] double Rate, [in] long NumOfPeriods );
+
+        /// dollarfr.
+        double getDollarfr( [in] double DollarDecimal, [in] long Fraction );
+
+        /// dollarde.
+        double getDollarde( [in] double DollarFractional, [in] long Fraction );
+
+        /// yield.
+        double getYield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Coupon, [in] double Price,
+                    [in] double Redemption, [in] long Frequency, [in] any Base );
+
+        /// yielddisc.
+        double getYielddisc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Price,
+                    [in] double Redemption, [in] any Base );
+
+        /// yieldmat.
+        double getYieldmat(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] double Rate,
+                    [in] double Price, [in] any Base );
+
+        /// tbilleq.
+        double getTbilleq(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Discont );
+
+        /// tbillprice.
+        double getTbillprice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Discont );
+
+        /// tbillyield.
+        double getTbillyield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Price );
+
+        /// oddfprice.
+        double getOddfprice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] long FirstCouponDate,
+                    [in] double Rate, [in] double Yield, [in] double Redemption,
+                    [in] long Frequency, [in] any Base );
+
+        /// oddfyield.
+        double getOddfyield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] long FirstCouponDate,
+                    [in] double Rate, [in] double Price, [in] double Redemption,
+                    [in] long Frequency, [in] any Base );
+
+        /// oddlprice.
+        double getOddlprice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long LastInterest,
+                    [in] double Rate, [in] double Yield, [in] double Redemption,
+                    [in] long Frequency, [in] any Base );
+
+        /// oddlyield.
+        double getOddlyield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long LastInterest,
+                    [in] double Rate, [in] double Price, [in] double Redemption,
+                    [in] long Frequency, [in] any Base );
+
+        /// xirr.
+        double getXirr( [in] sequence<double> Values, [in] sequence<long> Dates, [in] any Guess );
+
+        /// xnpv.
+        double getXnpv( [in] double Rate, [in] sequence<double> Values, [in] sequence<long> Dates );
+
+        /// intrate.
+        double getIntrate(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] double Investment, [in] double Redemption, [in] any Base );
+
+        /// coupncd.
+        double getCoupncd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base );
+
+        /// coupdays.
+        double getCoupdays(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base );
+
+
+        /// coupdaysnc.
+        double getCoupdaysnc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base );
+
+        /// coupdaybs.
+        double getCoupdaybs(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base );
+
+        /// couppcd.
+        double getCouppcd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base );
+
+        /// coupnum.
+        double getCoupnum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base );
+
+        /// fvschedule.
+        double getFvschedule( [in] double Principal, [in] sequence<double> Schedule );
     };
 
     service Analysis

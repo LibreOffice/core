@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-02 11:57:17 $
+ *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,11 +154,11 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceMa
 
 const sal_Char* pFuncDatas[] =
 {
-    "iget_Test", "1_test", "2_test",
-        "d4 testing only",
-        "pMode", "pparameter 1", "pparameter 2", "pparameter 3",
-        "PMode", "Pparameter 1", "Pparameter 2", "Pparameter 3",
-        EOE,
+//  "iget_Test", "1_test", "2_test",
+//      "d4 testing only",
+//      "pMode", "pparameter 1", "pparameter 2", "pparameter 3",
+//      "PMode", "Pparameter 1", "Pparameter 2", "Pparameter 3",
+//      EOE,
     "igetWorkday", "1Arbeitstag", "2Workday",
         "dReturns the serial number of the date before or after a specified number of workdays",
         "pstart date", "pdays", "pholidays",
@@ -174,7 +174,7 @@ const sal_Char* pFuncDatas[] =
         "pstart date", "pmonths",
         "PThe start date for calculating the edate", "PThe number of months to be added or subtracted",
         EOE,
-    "igetWeeknum", "1_Kalenderwoche", "2_Weeknum",
+    "igetWeeknum", "1Kalenderwoche_aai", "2Weeknum_aai",
         "dReturns the week number in year",
         "pdate", "preturn type",
         "PDate as calculation base for weeknum", "PType of the return value: 1=week starts on sunday, 2=week starts on monday",
@@ -189,12 +189,12 @@ const sal_Char* pFuncDatas[] =
         "pstart date", "pend date", "pholidays",
         "Pstart date", "Pend date", "Pholidays",
         EOE,
-    "igetIseven", "1_Istgerade", "2_Iseven",
+    "igetIseven", "1Istgerade_aai", "2Iseven_aai",
         "dReturns true if the number is even",
         "pnumber",
         "Pnumber",
         EOE,
-    "igetIsodd", "1_Istungerade", "2_Isodd",
+    "igetIsodd", "1Istungerade_aai", "2Isodd_aai",
         "dReturns true if the number is odd",
         "pnumber",
         "Pnumber",
@@ -229,15 +229,15 @@ const sal_Char* pFuncDatas[] =
         "pbottom", "ptop",
         "Pbottom", "Ptop",
         EOE,
-    "igetGcd", "1_Ggt", "2_Gcd",
+    "igetGcd", "1Ggt_aai", "2Gcd_aai",
         "dReturns the greatest common divisor",
-        "pnumber",
-        "Pnumber",
+        "pnumbers",
+        "PList of numbers",
         EOE,
-    "igetLcm", "1_Kgv", "2_Lcm",
+    "igetLcm", "1Kgv_aai", "2Lcm_aai",
         "dReturns the least common multiple",
-        "pnumber",
-        "Pnumber",
+        "pnumbers",
+        "PList of numbers",
         EOE,
     "igetBesseli", "1Besseli", "2BesselI",
         "dReturns the modified Bessel function In(x)",
@@ -259,7 +259,7 @@ const sal_Char* pFuncDatas[] =
         "px", "pn",
         "Px", "Porder",
         EOE,
-    "igetBin2oct", "1Bininokt", "2Bin2Oct",             // bin2
+    "igetBin2oct", "1Bininokt", "2Bin2Oct",
         "dConverts a binary number to octal",
         "pnumber", "pplaces",
         "Pnumber", "Pplaces",
@@ -274,7 +274,7 @@ const sal_Char* pFuncDatas[] =
         "pnumber", "pplaces",
         "Pnumber", "Pplaces",
         EOE,
-    "igetOct2bin", "1Oktinbin", "2Oct2Bin",             // oct2
+    "igetOct2bin", "1Oktinbin", "2Oct2Bin",
         "dConverts a octal number to binary",
         "pnumber", "pplaces",
         "Pnumber", "Pplaces",
@@ -289,7 +289,7 @@ const sal_Char* pFuncDatas[] =
         "pnumber", "pplaces",
         "Pnumber", "Pplaces",
         EOE,
-    "igetDec2bin", "1Dezinbin", "2Dec2Bin",             // dec2
+    "igetDec2bin", "1Dezinbin", "2Dec2Bin",
         "dConverts a decimal number to binary",
         "pnumber", "pplaces",
         "Pnumber", "Pplaces",
@@ -304,7 +304,7 @@ const sal_Char* pFuncDatas[] =
         "pnumber", "pplaces",
         "Pnumber", "Pplaces",
         EOE,
-    "igetHex2bin", "1Hexinbin", "2Hex2Bin",             // hex2
+    "igetHex2bin", "1Hexinbin", "2Hex2Bin",
         "dConverts a hexadecimal number to binary",
         "pnumber", "pplaces",
         "Pnumber", "Pplaces",
@@ -401,8 +401,8 @@ const sal_Char* pFuncDatas[] =
         EOE,
     "igetImproduct", "1Improdukt", "2Improduct",
         "dReturns the product of complex numbers",
-        "pinumber1", "pinumber2",
-        "Pinumber1", "Pinumber2",
+        "pinumber 1", "pinumber 2", "pinumber 3", "pinumber 4", "pinumber 5",
+        "Pinumber 1", "Pinumber 2", "Pinumber 3", "Pinumber 4", "Pinumber 5",
         EOE,
     "igetImreal", "1Imrealteil", "2Imreal",
         "dReturns the real coefficient of a complex number",
@@ -416,23 +416,214 @@ const sal_Char* pFuncDatas[] =
         EOE,
     "igetImsub", "1Imsub", "2Imsub",
         "dReturns the difference of two complex numbers",
-        "pinumber1", "pinumber2",
-        "Pinumber1", "Pinumber2",
+        "pinumber 1", "pinumber 2",
+        "Pinumber 1", "Pinumber 2",
+        EOE,
+    "igetImsqrt", "1Imwurzel", "2Imsqrt",
+        "dReturns the square root of a complex number",
+        "pinumber",
+        "Pinumber",
         EOE,
     "igetImsum", "1Imsumme", "2Imsum",
         "dReturns the sum of complex numbers",
-        "pinumber1", "pinumber2",
-        "Pinumber1", "Pinumber2",
+        "pinumber 1", "pinumber 2", "pinumber 3", "pinumber 4", "pinumber 5",
+        "Pinumber 1", "Pinumber 2", "Pinumber 3", "Pinumber 4", "Pinumber 5",
         EOE,
     "igetComplex", "1Komplexe", "2Complex",
         "dConverts real and imaginary coefficients into a complex number",
         "preal_num", "pi_num", "psuffix",
         "Preal_num", "Pi_num", "Psuffix",
         EOE,
-    "igetConvert", "1_Umwandeln", "2_Convert",
+    "igetConvert", "1Umwandeln_aai", "2Convert_aai",
         "dConverts a number from one measurement system to another",
         "pnumber", "pfrom_unit", "pto_unit",
         "Pnumber", "Pfrom_unit", "Pto_unit",
+        EOE,
+// ----------------------------------------------------------------------------
+    "igetAmordegrc", "1Amordegrk", "2Amordegrc",
+        "dReturns the prorated linear depreciation of an asset for each accounting period",
+        "pCost", "pDate purchased", "pFirst period", "pSalvage", "pPeriod", "pRate", "pYear base",
+        "PCost", "PDate purchased", "PFirst period", "PSalvage", "PPeriod", "PRate", "PYear base",
+        EOE,
+    "igetAmorlinc", "1Amorlineark", "2Amorlinc",
+        "dReturns the prorated linear depreciation of an asset for each accounting period",
+        "pCost", "pDate purchased", "pFirst period", "pSalvage", "pPeriod", "pRate", "pYear base",
+        "PCost", "PDate purchased", "PFirst period", "PSalvage", "PPeriod", "PRate", "PYear base",
+        EOE,
+    "igetAccrint", "1Aufgeldzins", "2Accrint",
+        "dReturn the accrued interest for a security that pays periodic interest",
+        "pIssue", "pFirst interest", "pSettlement", "pRate", "pPar", "pFrequency", "pBase",
+        "PIssue", "PFirst interest", "PSettlement", "PRate", "PPar", "PFrequency", "PBase",
+        EOE,
+    "igetAccrintm", "1Aufgeldzinsf", "2Accrintm",
+        "dReturn the accrued interest for a security that pays interest at maturity",
+        "pIssue", "pSettlement", "pRate", "pPar", "pBase",
+        "PIssue", "PSettlement", "PRate", "PPar", "PBase",
+        EOE,
+    "igetReceived", "1Auszahlung", "2Received",
+        "dReturns the amount received at maturity for a fully invested security",
+        "pSettlement", "pMaturity", "pInvestment", "pDiscount", "pBase",
+        "PSettlement", "PMaturity", "PInvestment", "PDiscount", "PBase",
+        EOE,
+    "igetDisc", "1Disagio", "2Disc",
+        "dReturns the discount rate for a security",
+        "pSettlement", "pMaturity", "pPrice", "pRedemption", "pBase",
+        "PSettlement", "PMaturity", "PPrice", "PRedemption", "PBase",
+        EOE,
+    "igetDuration", "1Duration", "2Duration",
+        "dReturns the annual duration of a security with periodic interest payments",
+        "pSettlement", "pMaturity", "pCoupon", "pYield", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PCoupon", "PYield", "PFrequency", "PBase",
+        EOE,
+    "igetEffect", "1Effektiv_aai", "2Effect_aai",
+        "dReturns the effectiv annual interest rate",
+        "pNominal rate", "pNum periods",
+        "PNominal rate", "PNum periods",
+        EOE,
+    "igetCumprinc", "1Kumkapital_aai", "2Cumprinc_aai",
+        "dReturns the cumulative principal paid a loan between two periods",
+        "pRate", "pNum periods", "pValue", "pStart period", "pEnd period", "pType payment",
+        "PRate", "PNum periods", "PValue", "PStart period", "PEnd period", "PType payment",
+        EOE,
+    "igetCumipmt", "1Kumzins_aai", "2Cumipmt_aai",
+        "dReturns the cumulative interest paid between two periods",
+        "pRate", "pNum periods", "pValue", "pStart period", "pEnd period", "pType payment",
+        "PRate", "PNum periods", "PValue", "PStart period", "PEnd period", "PType payment",
+        EOE,
+    "igetPrice", "1Kurs", "2Price",
+        "dReturns the price per $100 face value of a security that pays periodic interest",
+        "pSettlement", "pMaturity", "pRate", "pYield", "pRedemption", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PRate", "PYield", "PRedemption", "PFrequency", "PBase",
+        EOE,
+    "igetPricedisc", "1Kursdisagio", "2Pricedisc",
+        "dReturns the price per $100 face value of a discounted security",
+        "pSettlement", "pMaturity", "pDiscount", "pRedemption", "pBase",
+        "PSettlement", "PMaturity", "PDiscount", "PRedemption", "PBase",
+        EOE,
+    "igetPricemat", "1Kursfällig", "2Pricemat",
+        "dReturns the price per $100 face value of a security that pays interest at maturity",
+        "pSettlement", "pMaturity", "pIssue", "pRate", "pYield", "pBase",
+        "PSettlement", "PMaturity", "PIssue", "PRate", "PYield", "PBase",
+        EOE,
+    "igetMduration", "1Mduration", "2Mduration",
+        "dReturns the Macauley modified duration for a security with an assumed par ",
+        "pSettlement", "pMaturity", "pCoupon", "pYield", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PCoupon", "PYield", "PFrequency", "PBase",
+        EOE,
+    "igetNomial", "1Nomial_aai", "2Nomial_aai",
+        "dReturns the annual nominal interest rate",
+        "pEffective rate", "pNum periods",
+        "PEffective rate", "PNum periods",
+        EOE,
+    "igetDollarfr", "1Notierungbru", "2Dollarfr",
+        "dConverts a dollar price, expressed as a decimal number, into a dollar price, expressed as a fraction",
+        "pDecimal dollar", "pFraction",
+        "PDecimal dollar", "PFraction",
+        EOE,
+    "igetDollarde", "1Notierungdez", "2Dollarde",
+        "dConverts a dollar price, expressed as a fraction, into a dollar price, expressed as a decimal number",
+        "pFractional dollar", "pFraction",
+        "PFractional dollar", "PFraction",
+        EOE,
+    "igetYield", "1Rendite", "2Yield",
+        "dReturns the yield on a security that pays periodic interest",
+        "pSettlement", "pMaturity", "pRate", "pPar", "pRedemption", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PRate", "PPar", "PRedemption", "PFrequency", "PBase",
+        EOE,
+    "igetYielddisc", "1Renditedis", "2Yielddisc",
+        "dReturns the annual yield for a discounted security (e.g. treasury bill)",
+        "pSettlement", "pMaturity", "pPrice", "pRedemption", "pBase",
+        "PSettlement", "PMaturity", "PPrice", "PRedemption", "PBase",
+        EOE,
+    "igetYieldmat", "1Renditefäll", "2Yieldmat",
+        "dReturns the annual yield of a security that pays interest at maturity",
+        "pSettlement", "pMaturity", "pIssue", "pRate", "pPrice", "pBase",
+        "PSettlement", "PMaturity", "PIssue", "PRate", "PPrice", "PBase",
+        EOE,
+    "igetTbilleq", "1Tbilläquiv", "2Tbilleq",
+        "dReturns the bond-equivalent yield for a treasury bill",
+        "pSettlement", "pMaturity", "pDiscount",
+        "PSettlement", "PMaturity", "PDiscount",
+        EOE,
+    "igetTbillprice", "1Tbillkurs", "2Tbillprice",
+        "dReturns the price of $100 face value for a treasury bill",
+        "pSettlement", "pMaturity", "pDiscount",
+        "PSettlement", "PMaturity", "PDiscount",
+        EOE,
+    "igetTbillyield", "1Tbillrendite", "2Tbillyield",
+        "dReturns the yield for a treasury bill",
+        "pSettlement", "pMaturity", "pPrice",
+        "PSettlement", "PMaturity", "PPrice",
+        EOE,
+    "igetOddfprice", "1Unreger_kurs", "2Oddfprice",
+        "dReturns the price of $100 face value of a security with an odd first period",
+        "pSettlement", "pMaturity", "pIssue", "pFirst coupon", "pRate", "pYield", "pRedemption", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PIssue", "PFirst coupon", "PRate", "PYield", "PRedemption", "PFrequency", "PBase",
+        EOE,
+    "igetOddfyield", "1Unreger_rend", "2Oddfyield",
+        "dReturns the yield of a security with an odd first period",
+        "pSettlement", "pMaturity", "pIssue", "pFirst coupon", "pRate", "pPrice", "pRedemption", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PIssue", "PFirst coupon", "PRate", "PPrice", "PRedemption", "PFrequency", "PBase",
+        EOE,
+    "igetOddlprice", "1Unregle_kurs", "2Oddlprice",
+        "dReturns the price of $100 face value of a security with an odd last period",
+        "pSettlement", "pMaturity", "pLast interst", "pRate", "pYield", "pRedemption", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PLast interst", "PRate", "PYield", "PRedemption", "PFrequency", "PBase",
+        EOE,
+    "igetOddlyield", "1Unregle_rend", "2Oddlyield",
+        "dReturns the yield of a security with an odd last period",
+        "pSettlement", "pMaturity", "pLast interest", "pRate", "pPrice", "pRedemption", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PLast interest", "PRate", "PPrice", "PRedemption", "PFrequency", "PBase",
+        EOE,
+    "igetXirr", "1Xintzinsfuss", "2Xirr",
+        "dReturns the internal rate of return for a schedule of cash flows",
+        "pValues", "pDates", "pGuess",
+        "PValues", "PDates", "PGuess",
+        EOE,
+    "igetXnpv", "1Xkapitalwert", "2Xnpv",
+        "dReturns the net present value for a schedule of cash flows",
+        "pRate", "pValues", "pDates",
+        "PRate", "PValues", "PDates",
+        EOE,
+    "igetIntrate", "1Zinssatz", "2Intrate",
+        "dReturns the interest rate for a fully invested security",
+        "pSettlement", "pMaturity", "pInvestment", "pRedemption", "pBase",
+        "PSettlement", "PMaturity", "PInvestment", "PRedemption", "PBase",
+        EOE,
+    "igetCoupncd", "1Zinstermnz", "2Coupncd",
+        "dReturns the next coupon date after the settlement date",
+        "pSettlement", "pMaturity", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PFrequency", "PBase",
+        EOE,
+    "igetCoupdays", "1Zinstermtage", "2Coupdays",
+        "dReturns the number of days in the coupon period that contains the settlement date",
+        "pSettlement", "pMaturity", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PFrequency", "PBase",
+        EOE,
+    "igetCoupdaysnc", "1Zinstermtagnz", "2Coupdaysnc",
+        "dReturns the number of days from the settlement date to the next coupon date",
+        "pSettlement", "pMaturity", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PFrequency", "PBase",
+        EOE,
+    "igetCoupdaybs", "1Zinstermtagva", "2Coupdaybs",
+        "dReturns the number of days from the beginning of the coupon period to the settlement date",
+        "pSettlement", "pMaturity", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PFrequency", "PBase",
+        EOE,
+    "igetCouppcd", "1Zinstermvz", "2Couppcd",
+        "dReturns the previous coupon date before the settlement date",
+        "pSettlement", "pMaturity", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PFrequency", "PBase",
+        EOE,
+    "igetCoupnum", "1Zinstermzahl", "2Coupnum",
+        "dReturns the number of coupons payable between the settlement date and maturity date",
+        "pSettlement", "pMaturity", "pFrequency", "pBase",
+        "PSettlement", "PMaturity", "PFrequency", "PBase",
+        EOE,
+    "igetFvschedule", "1Zw2", "2Fvschedule",
+        "dReturns the future value of an initial principal after applying a series of compound interest rates",
+        "pPrincipal", "pSchedule",
+        "PPrincipal", "PSchedule",
         EOE,
     EOL
 };
@@ -647,11 +838,11 @@ STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammat
 
 // XAnalysis
 
-double SAL_CALL AnalysisAddIn::get_Test( constREFXPS&,
+/*double SAL_CALL AnalysisAddIn::get_Test( constREFXPS&,
     sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE
 {
     return _Test( nMode, f1, f2, f3 );
-}
+}*/
 
 
 /**
@@ -712,65 +903,9 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
  */
 
 double SAL_CALL AnalysisAddIn::getYearfrac( constREFXPS& xOpt,
-    sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE
+    sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
 {
-    if( nStartDate == nEndDate )
-        return 0.0;     // nothing to do...
-    else if( nStartDate > nEndDate )
-    {
-        sal_Int32   n = nEndDate;
-        nEndDate = nStartDate;
-        nStartDate = n;
-    }
-
-    sal_Int32   nNullDate = GetNullDate( xOpt );
-
-    sal_Int32   nDate1 = nStartDate + nNullDate;
-    sal_Int32   nDate2 = nEndDate + nNullDate;
-
-    sal_uInt16  nDay1, nDay2;
-    sal_uInt16  nMonth1, nMonth2;
-    sal_uInt16  nYear1, nYear2;
-
-    DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
-    DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
-
-    sal_uInt16  nYears = nYear2 - nYear1;
-    sal_Int32   nDayDiff, nDaysInYear;
-
-    switch( nMode )
-    {
-        case 0:         // 0=USA (NASD) 30/360
-        case 4:         // 4=Europe 30/360
-            nDaysInYear = 360;
-            nDayDiff = GetDiffDate360( nDay1, nMonth1, nYear1, IsLeapYear( nYear1 ),
-                                        nDay2, nMonth2, nYear2, nMode == 0 ) - nYears * nDaysInYear;
-            break;
-        case 1:         // 1=exact/exact
-            nDaysInYear = IsLeapYear( nYear1 )? 366 : 365;
-            if( nYears )
-                nDayDiff = nDate2 - DateToDays( nDay1, nMonth1, nYear2 );
-            else
-                nDayDiff = nDate2 - nDate1;
-
-            break;
-        case 2:         // 2=exact/360
-            nDaysInYear = 360;
-            nDayDiff = nDate2 - nDate1;
-            nDayDiff %= nDaysInYear;
-            break;
-        case 3:         //3=exact/365
-            nDaysInYear = 365;
-            nDayDiff = nDate2 - nDate1;
-            nDayDiff %= nDaysInYear;
-            break;
-        default:
-            nDaysInYear = -1;
-            nDayDiff = 1;
-            nYears = 0;
-    }
-
-     return double( nYears ) + double( nDayDiff ) / double( nDaysInYear );
+    return GetYearFrac( xOpt, nStartDate, nEndDate, nMode );
 }
 
 
@@ -835,6 +970,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate
 
 sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( constREFXPS& xOpt,
         sal_Int32 nStartDate, sal_Int32 nEndDate, const SEQSEQ( sal_Int32 )& aHDay ) THROWDEF_RTE
+//      sal_Int32 nStartDate, sal_Int32 nEndDate, const uno::Any& aHDay ) THROWDEF_RTE
 {
     sal_Int32                   nNullDate = GetNullDate( xOpt );
 
@@ -970,14 +1106,14 @@ double SAL_CALL AnalysisAddIn::getSqrtpi( constREFXPS&, double fNum ) THROWDEF_R
 }
 
 
-double SAL_CALL AnalysisAddIn::getRandbetween( constREFXPS&, double fMin, double fMax ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getRandbetween( constREFXPS&, double fMin, double fMax ) THROWDEF_RTE_IAE
 {
     const SolarMathRoundingMode     eRM = SolarMathRoundUp;
     fMin = SolarMath::Round( fMin, 0, eRM );
     fMax = SolarMath::Round( fMax, 0, eRM );
 
     if( fMin > fMax )
-        return -1.0;
+        THROW_IAE;
 
     // fMax -> range
     fMax -= fMin;
@@ -987,12 +1123,15 @@ double SAL_CALL AnalysisAddIn::getRandbetween( constREFXPS&, double fMin, double
 }
 
 
-double SAL_CALL AnalysisAddIn::getGcd( constREFXPS&, const SEQSEQ( double )& aVLst ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getGcd( constREFXPS&, const SEQSEQ( double )& aVLst ) THROWDEF_RTE_IAE
+//double SAL_CALL AnalysisAddIn::getGcd( constREFXPS&, const SEQ( uno::Any )& aVLst ) THROWDEF_RTE_IAE
 {
     ChkDoubleList1  aValList;
 
     if( !aValList.Append( aVLst ) )
-        return -1.0;
+        THROW_IAE;
+
+//  aValList.Append( aVLst );
 
     if( aValList.Count() == 0 )
         return 0.0;
@@ -1012,12 +1151,12 @@ double SAL_CALL AnalysisAddIn::getGcd( constREFXPS&, const SEQSEQ( double )& aVL
 }
 
 
-double SAL_CALL AnalysisAddIn::getLcm( constREFXPS&, const SEQSEQ( double )& aVLst ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getLcm( constREFXPS&, const SEQSEQ( double )& aVLst ) THROWDEF_RTE_IAE
 {
     ChkDoubleList1  aValList;
 
     if( !aValList.Append( aVLst ) )
-        return -1.0;
+        THROW_IAE;
 
     if( aValList.Count() == 0 )
         return 0.0;
@@ -1038,45 +1177,35 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS&, const SEQSEQ( double )& aVL
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesseli( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getBesseli( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
     return Bessel( fNum, nOrder, sal_True );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselj( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getBesselj( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
     return Bessel( fNum, nOrder, sal_False );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselk( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getBesselk( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
+    THROW_IAE;
+
     if( nOrder < 0 )
-        return -1.0;
+        THROW_IAE;
 
-    double fOrd = nOrder;
-
-    double  f = PI_2;
-    double  f0 = fOrd * PI;
-    f0 = sin( f0 );
-    f /= f0;
-    double  f1 = BesselR( fNum, -fOrd );
-    double  f2 = Bessel( fNum, nOrder, sal_True );
-    f1 -= f2;
-
-    f *= f1;
-
-    return f;
-//  return PI_2 / sin( fOrd * PI ) * ( BesselR( fNum, -fOrd ) - Bessel( fNum, nOrder, sal_True ) );
-
+    return Besselk( fNum, nOrder );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBessely( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getBessely( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
-//  if( nOrder < 0 )
-        return -1.0;
+    THROW_IAE;
+
+    if( nOrder < 0 )
+        THROW_IAE;
 }
 
 
@@ -1196,23 +1325,6 @@ sal_Int32 SAL_CALL AnalysisAddIn::getGestep( constREFXPS&, double fNum, double f
 
 double SAL_CALL AnalysisAddIn::getFactdouble( constREFXPS&, sal_Int32 nNum ) THROWDEF_RTE_IAE
 {
-/*  if( nNum < 0 )
-        THROW_IAE;
-    else if( nNum == 0 )
-        return 1.0;
-
-    sal_Bool    bEven = ( nNum & 0x00000001 ) == 0;
-    double      f = bEven? 2.0 : 1.0;
-    double      fMult = bEven? 4.0 : 3.0;
-    double      fLast = nNum;
-
-    while( fMult <= fLast )
-    {
-        f *= fMult;
-        fMult += 2.0;
-    }
-
-    return f;*/
     return FactDouble( nNum );
 }
 
@@ -1315,11 +1427,20 @@ STRING SAL_CALL AnalysisAddIn::getImlog2( constREFXPS&, const STRING& aNum ) THR
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImproduct( constREFXPS&, const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
+//STRING SAL_CALL AnalysisAddIn::getImproduct( constREFXPS&, const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImproduct(
+    constREFXPS&, const STRING& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
 {
-    Complex     z( aNum1 );
+    Complex         z( aNum1 );
 
-    z.Mult( Complex( aNum2 ) );
+    ComplexList     aNumList;
+
+    aNumList.Append( aNL );
+
+    for( const Complex* p = aNumList.First(); p ; p = aNumList.Next() )
+        z.Mult( *p );
+
+//  z.Mult( Complex( aNum2 ) );
 
     return z.GetString();
 }
@@ -1351,34 +1472,21 @@ STRING SAL_CALL AnalysisAddIn::getImsub( constREFXPS&, const STRING& aNum1, cons
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
+//STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1,
+    const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
 {
-/*  ComplexList     z_list;
-
-    z_list.Append( aNumList );
-
-    const Complex*  p = z_list.First();
-
-    if( p )
-    {
-        Complex     z( *p );
-
-        p = z_list.Next();
-
-        while( p )
-        {
-            z.Add( *p );
-            p = z_list.Next();
-        }
-
-        return z.GetString();
-    }
-    else
-        THROW_IAE;*/
-
     Complex         z( aNum1 );
 
-    z.Add( Complex( aNum2 ) );
+    ComplexList     z_list;
+
+    z_list.Append( aFollowingPars );
+
+    for( const Complex* p = z_list.First() ; p ; p = z_list.Next() )
+        z.Add( *p );
+
+//  Complex         z( aNum1 );
+//  z.Add( Complex( aNum2 ) );
 
     return z.GetString();
 }

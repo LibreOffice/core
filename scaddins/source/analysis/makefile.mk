@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.2 2001-04-24 10:01:27 gt Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.3 2001-05-07 06:56:53 gt Exp $
 #
-#     $Date: 2001-04-24 10:01:27 $
+#     $Date: 2001-05-07 06:56:53 $
 #     $Author: gt $
-#     $Revision: 1.2 $
+#     $Revision: 1.3 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -106,6 +106,7 @@ UNOTYPES=\
 
 SLOFILES=\
     $(SLO)$/analysis.obj \
+    $(SLO)$/financial.obj \
     $(SLO)$/analysishelper.obj
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols

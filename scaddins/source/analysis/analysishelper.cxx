@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 13:59:16 $
+ *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@ static const double nKorrVal[] = {
     9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15
 };
 
+static const double f_Ret = 0.0;
+
 
 double Round( double fVal, short nDec )
 {
@@ -115,7 +117,7 @@ double Round( double fVal, short nDec )
 }
 
 
-double _Test( sal_Int32 nMode, double f1, double f2, double f3 )
+/*double _Test( sal_Int32 nMode, double f1, double f2, double f3 )
 {
     double      f = -1.0;
     switch( nMode )
@@ -125,7 +127,7 @@ double _Test( sal_Int32 nMode, double f1, double f2, double f3 )
     }
 
     return f;
-}
+}*/
 
 
 static sal_uInt16 aDaysInMonth[ 13 ] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -297,6 +299,20 @@ sal_Int32 GetDiffDate360(
 }
 
 
+sal_Int32 GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod )
+{
+    nDate1 += nNullDate;
+    nDate2 += nNullDate;
+
+    sal_uInt16 nDay1, nMonth1, nYear1, nDay2, nMonth2, nYear2;
+
+    DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
+    DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
+
+    return GetDiffDate360( nDay1, nMonth1, nYear1, IsLeapYear( nYear1 ), nDay2, nMonth2, nYear2, bUSAMethod );
+}
+
+
 sal_Int32 GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 )
 {
     sal_uInt16  nLeaps = 0;
@@ -313,6 +329,231 @@ sal_Int32 GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 )
     nSum += nLeaps;
 
     return nSum;
+}
+
+
+void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
+    sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) THROWDEF_RTE_IAE
+{
+    if( nStartDate > nEndDate )
+    {
+        sal_Int32   n = nEndDate;
+        nEndDate = nStartDate;
+        nStartDate = n;
+    }
+
+    sal_Int32   nDate1 = nStartDate + nNullDate;
+    sal_Int32   nDate2 = nEndDate + nNullDate;
+
+    sal_uInt16  nDay1, nDay2;
+    sal_uInt16  nMonth1, nMonth2;
+    sal_uInt16  nYear1, nYear2;
+
+    DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
+    DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
+
+    sal_uInt16  nYears = nYear2 - nYear1;
+    sal_Int32   nDayDiff, nDaysInYear;
+
+    switch( nMode )
+    {
+        case 0:         // 0=USA (NASD) 30/360
+        case 4:         // 4=Europe 30/360
+            nDaysInYear = 360;
+            nDayDiff = GetDiffDate360( nDay1, nMonth1, nYear1, IsLeapYear( nYear1 ),
+                                        nDay2, nMonth2, nYear2, nMode == 0 ) - nYears * nDaysInYear;
+            break;
+        case 1:         // 1=exact/exact
+            nDaysInYear = IsLeapYear( nYear1 )? 366 : 365;
+            if( nYears )
+                nDayDiff = nDate2 - DateToDays( nDay1, nMonth1, nYear2 );
+            else
+                nDayDiff = nDate2 - nDate1;
+
+            break;
+        case 2:         // 2=exact/360
+            nDaysInYear = 360;
+            nDayDiff = nDate2 - nDate1;
+            nDayDiff %= nDaysInYear;
+            break;
+        case 3:         //3=exact/365
+            nDaysInYear = 365;
+            nDayDiff = nDate2 - nDate1;
+            nDayDiff %= nDaysInYear;
+            break;
+        default:
+            THROW_IAE;
+    }
+
+    rYears = nYears;
+    rDayDiffPart = nDayDiff;
+    rDaysInYear = nDaysInYear;
+}
+
+
+sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
+    sal_Int32* pOptDaysIn1stYear ) THROWDEF_RTE_IAE
+{
+    sal_Bool    bNeg = nStartDate > nEndDate;
+
+    if( bNeg )
+    {
+        sal_Int32   n = nEndDate;
+        nEndDate = nStartDate;
+        nStartDate = n;
+    }
+
+    sal_Int32       nRet;
+
+    switch( nMode )
+    {
+        case 0:         // 0=USA (NASD) 30/360
+        case 4:         // 4=Europe 30/360
+            {
+            sal_uInt16      nD1, nM1, nY1, nD2, nM2, nY2;
+
+            nStartDate += nNullDate;
+            nEndDate += nNullDate;
+
+            DaysToDate( nStartDate, nD1, nM1, nY1 );
+            DaysToDate( nEndDate, nD2, nM2, nY2 );
+
+            sal_Bool        bLeap = IsLeapYear( nY1 );
+            sal_Int32       nDays, nMonths/*, nYears*/;
+
+            nMonths = nM2 - nM1;
+            nDays = nD2 - nD1;
+
+            nMonths += ( nY2 - nY1 ) * 12;
+
+            nRet = nMonths * 30 + nDays;
+            if( nMode == 0 && nM1 == 2 && nM2 != 2 && nY1 == nY2 )
+                nRet -= bLeap? 1 : 2;
+
+            if( pOptDaysIn1stYear )
+                *pOptDaysIn1stYear = 360;
+            }
+            break;
+        case 1:         // 1=exact/exact
+            if( pOptDaysIn1stYear )
+            {
+                sal_uInt16      nD, nM, nY;
+
+                DaysToDate( nStartDate + nNullDate, nD, nM, nY );
+
+                *pOptDaysIn1stYear = IsLeapYear( nY )? 366 : 365;
+            }
+            nRet = nEndDate - nStartDate;
+            break;
+        case 2:         // 2=exact/360
+            nRet = nEndDate - nStartDate;
+            if( pOptDaysIn1stYear )
+                *pOptDaysIn1stYear = 360;
+            break;
+        case 3:         //3=exact/365
+            nRet = nEndDate - nStartDate;
+            if( pOptDaysIn1stYear )
+                *pOptDaysIn1stYear = 365;
+            break;
+        default:
+            THROW_IAE;
+    }
+
+    return bNeg? -nRet : nRet;
+}
+
+
+double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+{
+    sal_Int32   nDays1stYear;
+    sal_Int32   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate, nMode, &nDays1stYear );
+
+    return double( nTotalDays ) / double( nDays1stYear );
+}
+
+
+sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+{
+    switch( nMode )
+    {
+        case 0:         // 0=USA (NASD) 30/360
+        case 2:         // 2=exact/360
+        case 4:         // 4=Europe 30/360
+            return 360;
+        case 1:         // 1=exact/exact
+            {
+            sal_uInt16  nD, nM, nY;
+            nDate += nNullDate;
+            DaysToDate( nDate, nD, nM, nY );
+            return IsLeapYear( nY )? 366 : 365;
+            }
+        case 3:         //3=exact/365
+            return 365;
+        default:
+            THROW_IAE;
+    }
+}
+
+
+double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+{
+    if( nStartDate == nEndDate )
+        return 0.0;     // nothing to do...
+
+    sal_uInt16  nYears;
+    sal_Int32   nDayDiff, nDaysInYear;
+
+    GetDiffParam( nNullDate, nStartDate, nEndDate, nMode, nYears, nDayDiff, nDaysInYear );
+
+    return double( nYears ) + double( nDayDiff ) / double( nDaysInYear );
+}
+
+
+void AddDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY, sal_Int32 nDD, sal_Int32 nDM, sal_Int32 nDY )
+{
+    sal_Int32   nD = rD;
+    sal_Int32   nM = rM;
+    sal_Int32   nY = rY;
+
+    sal_Bool    bMod = sal_False;
+
+    if( nDM )
+    {
+        bMod = sal_True;
+
+        nY += nDM / 12;
+        nM += nDM % 12;
+        if( nM <= 0 )
+        {
+            nY--;
+            nM = 12 - nM;
+        }
+        else if( nM > 12 )
+        {
+            nY++;
+            nM -= 12;
+        }
+    }
+
+    if( bMod )
+    {
+        rD = sal_uInt16( nD );
+        rM = sal_uInt16( nM );
+        rY = sal_uInt16( nY );
+
+        AlignDate( rD, sal_uInt16( nM ), sal_uInt16( nY ) );
+    }
+}
+
+
+void AddDate( sal_Int32 nND, sal_Int32& rD, sal_Int32 nDD, sal_Int32 nDM, sal_Int32 nDY )
+{
+    sal_uInt16  nD, nM, nY;
+    DaysToDate( rD + nND, nD, nM, nY );
+
+    AddDate( nD, nM, nY, nDD, nDM, nDY );
+
+    rD = DateToDays( nD, nM, nY ) - nND;
 }
 
 
@@ -411,10 +652,10 @@ double GammaN( double x, sal_uInt32 nIter )
 }
 
 
-double Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE
+double Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE_IAE
 {
     if( nOrder < 0 )
-        return -1.0;
+        THROW_IAE;
 
     double      fZ, fZm, fN1, fN2, fn1, fn2, fAct, fOld;
     sal_Int16   nIterMax = 100;
@@ -480,7 +721,7 @@ double Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE
 }
 
 
-double BesselR( double fNum, double fOrder ) THROWDEF_RTE
+/*double BesselR( double fNum, double fOrder ) THROWDEF_RTE
 {
     double      fZ, fZm, fN, fn, fAct, fOld;
     sal_Int16   nIterMax = 100;
@@ -513,13 +754,19 @@ double BesselR( double fNum, double fOrder ) THROWDEF_RTE
     }
 
     return fAct;
+}*/
+
+
+double Besselk( double fNum, double fOrder )
+{
+    return 0.0;
 }
 
 
 double ConvertToDec( const STRING& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE
 {
     if ( nBase < 2 || nBase > 36 )
-        return -1.0;
+        THROW_IAE;
 
     sal_uInt32      nStrLen = aStr.getLength();
     if( nStrLen > nCharLim )
@@ -865,9 +1112,215 @@ STRING GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
 }
 
 
-double Exp10( sal_Int16 n )
+inline double Exp10( sal_Int16 n )
 {
     return pow( 10.0, double( n ) );
+}
+
+
+sal_Int32 GetOpt( const CSS::uno::Any& rAny, sal_Int32 nDefault ) THROWDEF_RTE_IAE
+{
+    switch( rAny.getValueTypeClass() )
+    {
+        case uno::TypeClass_VOID:
+            return nDefault;
+            break;
+        case uno::TypeClass_DOUBLE:
+            double  fTmp = *( double* ) rAny.getValue();
+            if( fTmp >= -2147483648.0 && fTmp < 2147483648 )
+                return sal_Int32( fTmp );
+            break;
+    }
+
+    THROW_IAE;
+}
+
+
+double GetOpt( const CSS::uno::Any& rAny, double fDefault ) THROWDEF_RTE_IAE
+{
+    switch( rAny.getValueTypeClass() )
+    {
+        case uno::TypeClass_VOID:       return fDefault;                        break;
+        case uno::TypeClass_DOUBLE:     return *( double* ) rAny.getValue();    break;
+    }
+
+    THROW_IAE;
+}
+
+
+double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
+    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    return f_Ret;
+}
+
+
+double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
+    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    return f_Ret;
+}
+
+
+double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
+    double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    return f_Ret;
+}
+
+
+double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+    double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    return f_Ret;
+}
+
+
+double GetOddfyield( sal_Int32 nNullDate,  sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+    sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq,
+    sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    return f_Ret;
+}
+
+
+double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+    double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    return f_Ret;
+}
+
+
+double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+    double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    return f_Ret;
+}
+
+
+double GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF )
+{
+    double      fRmz;
+    if( fZins == 0.0 )
+        fRmz = ( fBw + fZw ) / fZzr;
+    else
+    {
+        double  fTerm = pow( 1.0 + fZins, fZzr );
+        if( nF > 0 )
+            fRmz = ( fZw * fZins / ( fTerm - 1.0 ) + fBw * fZins / ( 1.0 - 1.0 / fTerm ) ) / ( 1.0 + fZins );
+        else
+            fRmz = fZw * fZins / ( fTerm - 1.0 ) + fBw * fZins / ( 1.0 - 1.0 / fTerm );
+    }
+
+    return -fRmz;
+}
+
+
+double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
+{
+    double      fZw;
+    if( fZins == 0.0 )
+        fZw = fBw + fRmz * fZzr;
+    else
+    {
+        double  fTerm = pow( 1.0 + fZins, fZzr );
+        if( nF > 0 )
+            fZw = fBw * fTerm + fRmz * ( 1.0 + fZins ) * ( fTerm - 1.0 ) / fZins;
+        else
+            fZw = fBw * fTerm + fRmz * ( fTerm - 1.0 ) / fZins;
+    }
+
+    return -fZw;
+}
+
+
+/*double TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice ) THROWDEF_RTE_IAE
+{
+    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
+
+    if( fPrice <= 0.0 || nSettle >= nMat || nDiff > 360 )
+        THROW_IAE;
+
+    double      fRet = 100.0;
+    fRet /= fPrice;
+    fRet--;
+    fRet *= double( nDiff );
+    fRet /= 360.0;
+
+    return fRet;
+}*/
+
+
+/*double GetCoupnum( sal_Int32 nND, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    return ceil( GetYearFrac( nND, nSettle, nMat, nBase ) * nFreq );
+}*/
+
+
+double GetCoupnum( sal_Int32 nND, sal_Int32 nS, sal_Int32 nM, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+{
+    if( nS >= nM || CHK_Freq )
+        THROW_IAE;
+
+    return ceil( GetYearFrac( nND, nS, nM, nBase ) * nFreq );
+}
+
+
+double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    sal_Int32   nPeriodsDelta = sal_Int32( GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) );
+
+    AddDate( nNullDate, nMat, 0, -( nPeriodsDelta * 12 / nFreq ), 0 );
+
+    return nMat;
+}
+
+
+double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    sal_Int32   nStart = sal_Int32( GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase ) );
+    sal_Int32   nEnd = nStart;
+    AddDate( 0, nEnd, 0, 12 / nFreq, 0 );   // no Null-date, 'cause nStart contains it!
+
+    return nEnd - nStart;
+}
+
+
+double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    sal_Int32   nDate = sal_Int32( GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase ) );
+    AddDate( 0, nDate, 0, 12 / nFreq, 0 );  // no Null-date, 'cause nStart contains it!
+
+    return nDate - nSettle;
+}
+
+
+double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+    THROWDEF_RTE_IAE
+{
+    if( nSettle >= nMat || CHK_Freq )
+        THROW_IAE;
+
+    sal_Int32   nPeriodsDelta = sal_Int32( GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) );
+
+    AddDate( nNullDate, nMat, 0, -( ( nPeriodsDelta - 1 ) * 12 / nFreq ), 0 );
+
+    return nMat;
 }
 
 
@@ -1199,6 +1652,85 @@ void SortedIndividualInt32List::InsertHolidayList( const SEQSEQ( sal_Int32 )& aH
 }
 
 
+void SortedIndividualInt32List::InsertHolidayList( const SEQ( double )& aHD, sal_Int32 nND, sal_Bool bInsOnWE )
+    THROWDEF_RTE_IAE
+{
+//  sal_Int32   n1, n2;
+    sal_Int32   n1;
+//  sal_Int32   nE1 = aHD.getLength();
+//  sal_Int32   nE2;
+    sal_Int32   nE = aHD.getLength();
+
+//  for( n1 = 0 ; n1 < nE1 ; n1++ )
+//  {
+//      const SEQ( double )&    rList = aHD[ n1 ];
+//      nE2 = rList.getLength();
+        nE = aHD.getLength();
+//      const double*   pList = rList.getConstArray();
+        const double*   pList = aHD.getConstArray();
+
+//      for( n2 = 0 ; n2 < nE2 ; n2++ )
+        for( n1 = 0 ; n1 < nE ; n1++ )
+        {
+//          double      f = pList[ n2 ];
+            double      f = pList[ n1 ];
+            if( f < -2147483648.0 || f >= 2147483648.0 )
+                THROW_IAE;
+
+            sal_Int32   n = sal_Int32( f );
+
+            if( n )
+            {
+                n += nND;
+                if( bInsOnWE || GetDayOfWeek( n ) < 5 )
+                    Insert( n );
+            }
+        }
+//  }
+}
+
+
+void SortedIndividualInt32List::InsertHolidayList(
+    const uno::Any& aHDay, sal_Int32 nNullDate, sal_Bool bInsOnWE ) THROWDEF_RTE_IAE
+{
+    switch( aHDay.getValueTypeClass() )
+    {
+        case uno::TypeClass_VOID:       break;
+//      case uno::TypeClass_STRING:     Append( new Complex( *( STRING* ) r.getValue() ) );     break;
+        case uno::TypeClass_DOUBLE:
+            {
+            double                  f = *( double* ) aHDay.getValue();
+            if( f < -2147483648.0 || f >= 2147483648.0 )
+                THROW_IAE;
+
+            sal_Int32   n = sal_Int32( f );
+
+            if( n )
+            {
+                n += nNullDate;
+                if( bInsOnWE || GetDayOfWeek( n ) < 5 )
+                    Insert( n );
+            }
+            }
+            break;
+        case uno::TypeClass_SEQUENCE:
+            {
+/*          const uno::Sequence*    pSeq = ( const uno::Sequence* ) aHDay.getValue();
+            const uno::Type&        rType = pSeq->getElementType();
+            const uno::TypeClass    eType = rType.getTypeClass();
+            if( eType == uno::TypeClass_DOUBLE )
+                InsertHolidayList( *( ( const SEQ( double )* ) aHDay.getValue() ), nNullDate, bInsOnWE );
+            else
+                THROW_IAE;*/
+            }
+            break;
+        default:
+            THROW_IAE;
+    }
+
+}
+
+
 
 
 DoubleList::~DoubleList()
@@ -1232,6 +1764,39 @@ sal_Bool DoubleList::Append( const SEQSEQ( double )& aVLst )
     }
 
     return sal_True;
+}
+
+
+void DoubleList::Append( const SEQ( uno::Any )& aVList ) THROWDEF_RTE_IAE
+{
+    sal_Int32           nE = aVList.getLength();
+    sal_Int32           nZ = 0;
+    const uno::Any*     pList = aVList.getConstArray();
+
+    for( sal_Int32 n = 0 ; n < nE ; n++ )
+    {
+        const uno::Any& r = pList[ n ];
+
+        switch( r.getValueTypeClass() )
+        {
+            case uno::TypeClass_VOID:
+                break;
+            case uno::TypeClass_DOUBLE:
+                {
+                double  f = *( double* ) r.getValue();
+                if( IsFaulty( f ) )
+                    THROW_IAE;
+                if( IsProper( f ) )
+                    _Append( f );
+                }
+                break;
+            case uno::TypeClass_SEQUENCE:
+                Append( *( const SEQ( uno::Any )* ) r.getValue() );
+                break;
+            default:
+                THROW_IAE;
+        }
+    }
 }
 
 
@@ -1474,6 +2039,26 @@ void ComplexList::Append( const SEQSEQ( STRING )& r ) THROWDEF_RTE_IAE
 }
 
 
+void ComplexList::Append( const SEQ( uno::Any )& aMultPars ) THROWDEF_RTE_IAE
+{
+    sal_Int32       nE = aMultPars.getLength();
+
+    for( sal_Int32 n = 0 ; n < nE ; n++ )
+    {
+        const uno::Any& r = aMultPars[ n ];
+        switch( r.getValueTypeClass() )
+        {
+            case uno::TypeClass_VOID:       break;
+            case uno::TypeClass_STRING:     Append( new Complex( *( STRING* ) r.getValue() ) );     break;
+            case uno::TypeClass_DOUBLE:     Append( new Complex( *( double* ) r.getValue(), 0.0 ) );    break;
+//          case uno::TypeClass_SEQUENCE:   break;
+            default:
+                THROW_IAE;
+        }
+    }
+}
+
+
 
 
 ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e ) : aName( p, strlen( p ), RTL_TEXTENCODING_MS_1252 )
@@ -1627,6 +2212,8 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "ang",    1.0000000000000000E10,  CDC_Length      );      // Angstroem
     NEWD( "Pica",   2.8346456692913386E03,  CDC_Length      );      // Pica (1/72 Zoll)     2834,6456692913385826771653543307
     NEWD( "ell",    8.748906E-01,           CDC_Length      );      // Elle?                                    ***
+    NEWD( "parsec", 3.240779E-17,           CDC_Length      );      // parsec                                   ***
+    NEWD( "lightyear",1.0570234557732930E-16,CDC_Length     );      // Lichtjahr                                ***
 
                                                                 // Sekunde ->
     NEWD( "yr",     3.1688087814028950E-08, CDC_Time        );      // Jahr
@@ -1697,7 +2284,11 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "barrel", 6.289811E-03,           CDC_Volume      );      // Barrel (=42gal?)                         ***
     NEWD( "bushel", 2.837759E-02,           CDC_Volume      );      // Bushel                                   ***
     NEWD( "regton", 3.531467E-04,           CDC_Volume      );      // Register ton                             ***
-    NEWD( "Sixpack",2.0,                    CDC_Volume      );      // Sixpack                                  ***
+    NEWD( "Schooner",2.3529411764705882E00, CDC_Volume      );      // austr. Schooner                          ***
+    NEWD( "Middy",  3.5087719298245614E00,  CDC_Volume      );      // austr. Middy                             ***
+    NEWD( "Glass",  5.0000000000000000E00,  CDC_Volume      );      // austr. Glass                             ***
+    NEWD( "Sixpack",0.5,                    CDC_Volume      );      //                                          ***
+    NEWD( "Humpen", 2.0,                    CDC_Volume      );      //                                          ***
 
                                                                 // Meter^2 ->
     NEWD( "m2",     1.0000000000000000E00,  CDC_Area        );      // Meter^2                                  ***
@@ -1712,7 +2303,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "ar",     1.000000E02,            CDC_Area        );      // Ar                                       ***
     NEWD( "acre",   4.046856E03,            CDC_Area        );      // acre (oder auch Acker)                   ***
     NEWD( "ha",     1.000000E04,            CDC_Area        );      // Hektar                                   ***
-    NEWD( "Quadratlatschen",    0.1764,     CDC_Area        );      //                                          ***
+    NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area  );      //                                          ***
 
                                                                 // Meter/Sekunde ->
     NEWD( "m/s",    1.0000000000000000E00,  CDC_Speed       );      // Meter/Sekunde                            ***
@@ -1720,6 +2311,10 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "mph",    2.2369362920544023E00,  CDC_Speed       );      // (Britsche) Meilen/Stunde                 ***
     NEWD( "kn",     1.9438444924406048E00,  CDC_Speed       );      // Knoten = (Nautische) Meilen/Stunde       ***
     NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed       );      // Admiraltyknot                            ***
+    NEWD( "wahnsinnige Geschwindigkeit",2.0494886343432328E-14,CDC_Speed);//                                    ***
+    NEWD( "ludicrous speed",2.0494886343432328E-14,CDC_Speed);      //                                          ***
+    NEWD( "laecherliche Geschwindigkeit",4.0156958471424288E-06,CDC_Speed);//                                   ***
+    NEWD( "ridiculous speed",4.0156958471424288E-06,CDC_Speed);     //                                          ***
 
                                                                 //
 //  Append( new ConvertData( "",        ,   CDC_Length  ) );        //

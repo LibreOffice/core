@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 13:59:16 $
+ *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ class SortedIndividualInt32List;
 #define EOE         ( ( const sal_Char* ) 2 )
 
 
-double              _Test( sal_Int32 nMode, double f1, double f2, double f3 );
+//double                _Test( sal_Int32 nMode, double f1, double f2, double f3 );
 inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear, sal_Bool bLeapYear );
@@ -102,15 +102,39 @@ sal_Int32           GetDiffDate360(
                         sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
                         sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
                         sal_Bool bUSAMethod );
+inline sal_Int32    GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
+sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
+
 sal_Int32           GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
 inline sal_Int16    GetDayOfWeek( sal_Int32 nDate );
+void                GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
+                        sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) THROWDEF_RTE_IAE;
+                        // rYears = full num of years
+                        // rDayDiffPart = num of days for last year
+                        // rDaysInYear = num of days in first year
+sal_Int32           GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
+                                sal_Int32* pOptDaysIn1stYear = NULL ) THROWDEF_RTE_IAE;
+double              GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+                                THROWDEF_RTE_IAE;
+sal_Int32           GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
+double              GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+                        THROWDEF_RTE_IAE;
+inline double       GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+                        THROWDEF_RTE_IAE;
+void                AddDate( sal_uInt16& nDay, sal_uInt16& nMonth, sal_uInt16& nYear,
+                            sal_Int32 nDeltaDay, sal_Int32 nDeltaMonth, sal_Int32 nDeltaYear );
+void                AddDate( sal_Int32 nNullDate, sal_Int32& rDate,
+                            sal_Int32 nDeltaDay, sal_Int32 nDeltaMonth, sal_Int32 nDeltaYear );
+inline void         AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 nYear );
+
 double              Fak( sal_Int32 n );
 double              GetGcd( double f1, double f2 );
 double              GammaHelp( double& x, sal_Bool& bReflect );
 double              Gamma( double f );
 double              GammaN( double f, sal_uInt32 nIter );
-double              Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE;
-double              BesselR( double fNum, double fOrder ) THROWDEF_RTE;
+double              Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE_IAE;
+//double                BesselR( double fNum, double fOrder ) THROWDEF_RTE;
+double              Besselk( double fNum, double fOrder );
 double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
 STRING              ConvertFromDec(
                         sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt16 nBase,
@@ -119,6 +143,42 @@ double              Erf( double fX );
 sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
 STRING              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
 inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
+sal_Int32           GetOpt( const ANY& rAny, sal_Int32 nDefault ) THROWDEF_RTE_IAE;
+double              GetOpt( const ANY& rAny, double fDefault ) THROWDEF_RTE_IAE;
+inline sal_Int32    GetOptBase( const ANY& rAny );
+
+double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
+                                double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
+                                double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
+                                double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+                                double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+                                sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp,
+                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+                                double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+                                double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF );
+double              GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF );
+//double                TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )THROWDEF_RTE_IAE;
+double              GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat,
+                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat,
+                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+//double                GetCouppcd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+//                              sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+double              GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
 
 
 
@@ -234,6 +294,12 @@ public:
     void                InsertHolidayList(
                             const SEQSEQ( sal_Int32 )& aHDay,
                             sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends );
+    void                InsertHolidayList(
+                            const SEQ( double )& aHDay,
+                            sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends ) THROWDEF_RTE_IAE;
+    void                InsertHolidayList(
+                            const CSS::uno::Any& aHDay,
+                            sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends ) THROWDEF_RTE_IAE;
 };
 
 
@@ -257,6 +323,7 @@ public:
     sal_Bool                Append( const SEQSEQ( double )& aValList );
                             // return = FALSE if one or more values don't match IsValid()
                             //  but, even if an error occur, the list might be changed!
+    void                    Append( const SEQ( CSS::uno::Any )& aValList ) THROWDEF_RTE_IAE;
     virtual sal_Bool        IsProper( double fVal ) const;
     virtual sal_Bool        IsFaulty( double fVal ) const;
 };
@@ -326,6 +393,7 @@ public:
 
     inline void             Append( Complex* pNew );
     void                    Append( const SEQSEQ( STRING )& rComplexNumList ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQ( uno::Any )& aMultPars ) THROWDEF_RTE_IAE;
 };
 
 
@@ -423,9 +491,36 @@ inline sal_Bool IsLeapYear( sal_uInt16 n )
 }
 
 
+inline sal_Int32 GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod )
+{
+    return GetDiffDate360( GetNullDate( xOpt ), nDate1, nDate2, bUSAMethod );
+}
+
+
 inline sal_Int16 GetDayOfWeek( sal_Int32 n )
 {   // monday = 0, ..., sunday = 6
     return ( n - 1 ) % 7;
+}
+
+
+inline double GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+{
+    return GetYearFrac( GetNullDate( xOpt ), nStartDate, nEndDate, nMode );
+}
+
+
+inline void AlignDate( sal_uInt16& rD, sal_uInt16 nM, sal_uInt16 nY )
+{
+    sal_uInt16  nMax = DaysInMonth( nM, nY );
+
+    if( rD > nMax )
+        rD = nMax;
+}
+
+
+inline sal_Int32 GetOptBase( const ANY& r )
+{
+    return GetOpt( r, sal_Int32( 0 ) );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisdefs.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 13:59:16 $
+ *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,15 @@
 #define constREFXPS         const REF(XPROPSET)
 #define SEQ(c)              CSS::uno::Sequence< c >
 #define SEQSEQ(c)           CSS::uno::Sequence< CSS::uno::Sequence< c > >
+#define ANY                 CSS::uno::Any
+#define SEQ_ANY             SEQ(ANY)
 #define STRING              ::rtl::OUString
 #define STRFROMASCII(s)     STRING::createFromAscii( s )
 #define THROWDEF_RTE        throw(CSS::uno::RuntimeException)
 #define THROWDEF_RTE_IAE    throw(CSS::uno::RuntimeException,CSS::lang::IllegalArgumentException)
 #define THROW_IAE           throw CSS::lang::IllegalArgumentException()
+
+#define CHK_Freq        ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
 
 #endif
 
