@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-12 09:57:54 $
+ *  last change: $Author: dl $ $Date: 2001-04-26 15:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,12 @@
 #endif
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _MyEDITVIEW_HXX
+#include <svx/editview.hxx>
+#endif
+#ifndef _SV_CURSOR_HXX
+#include <vcl/cursor.hxx>
 #endif
 
 #pragma hdrstop
@@ -506,18 +512,10 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                 SdFieldPopup aFieldPopup( pFldItem->GetField() );
 
                 if ( rCEvt.IsMouseEvent() )
-#ifdef VCL
                     aMPos = rCEvt.GetMousePosPixel();
-#else
-                    aMPos = pWin->OutputToScreenPixel( rCEvt.GetMousePosPixel() );
-#endif
                 else
                     aMPos = Point( 20, 20 );
-#ifdef VCL
                 aFieldPopup.Execute( pWin, aMPos );
-#else
-                aFieldPopup.Execute( aMPos );
-#endif
 
                 SvxFieldData* pField = aFieldPopup.GetField();
                 if( pField )
@@ -564,11 +562,21 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                             OutlinerView* pOLV = pDrView->GetTextEditOutlinerView();
                             Point aPos(rCEvt.GetMousePosPixel());
 
-                            if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
+                            if ( pOLV )
                             {
-                                // Popup fuer Online-Spelling
-                                Link aLink = LINK(pDoc, SdDrawDocument, OnlineSpellCallback);
-                                pOLV->ExecuteSpellPopup(aPos, &aLink);
+                                BOOL bTest = pOLV->IsCursorAtWrongSpelledWord();
+
+                                if( (  rCEvt.IsMouseEvent() && pOLV->IsWrongSpelledWordAtPos(aPos) ) ||
+                                    ( !rCEvt.IsMouseEvent() && pOLV->IsCursorAtWrongSpelledWord() ) )
+                                {
+                                    // Popup fuer Online-Spelling
+                                    Link aLink = LINK(pDoc, SdDrawDocument, OnlineSpellCallback);
+                                    if( !rCEvt.IsMouseEvent() )
+                                    {
+                                        aPos = pWindow->LogicToPixel( pOLV->GetEditView().GetCursor()->GetPos() );
+                                    }
+                                    pOLV->ExecuteSpellPopup(aPos, &aLink);
+                                }
                             }
                             else
                             {
