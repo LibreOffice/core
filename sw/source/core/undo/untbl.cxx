@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:55:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,6 +1586,38 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 }
 
 
+SwTableLine* lcl_FindTableLine( const SwTable& rTable,
+                                const SwTableBox& rBox )
+{
+    SwTableLine* pRet = NULL;
+
+    if( rBox.GetUpper()->GetUpper() != NULL )
+    {
+        pRet = rBox.GetUpper()->GetUpper()->
+            GetTabLines()[ 0 ];
+    }
+    else
+    {
+        const SwTableLine* pLine = rBox.GetUpper();
+        USHORT nLineNo = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
+        pRet = rTable.GetTabLines()[nLineNo - 1];
+    }
+
+    return pRet;
+}
+
+const SwTableLines& lcl_FindParentLines( const SwTable& rTable,
+                                       const SwTableBox& rBox )
+{
+    const SwTableLines& rRet =
+        ( rBox.GetUpper()->GetUpper() != NULL ) ?
+            rBox.GetUpper()->GetUpper()->GetTabLines() :
+            rTable.GetTabLines();
+
+    return rRet;
+}
+
+
 void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
                                     const SwTableSortBoxes& rOld,
                                     const SwSelBoxes& rBoxes,
@@ -1597,63 +1629,72 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     ASSERT( UNDO_TABLE_DELBOX != GetId(), "falsche Action" );
     Ptrs.pNewSttNds = new SvULongs( (BYTE)(rTblBoxes.Count() - rOld.Count()), 5 );
 
-    for( USHORT n = 0, i = 0; n < rOld.Count(); ++i )
+    ASSERT( rOld.Count() + nCount * rBoxes.Count() == rTblBoxes.Count(),
+        "unexpected boxes" );
+    ASSERT( rOld.Count() <= rTblBoxes.Count(), "more unexpected boxes" );
+    for( USHORT n = 0, i = 0; i < rTblBoxes.Count(); ++i )
     {
-        if( rOld[ n ] == rTblBoxes[ i ] )
+        if( ( n < rOld.Count() ) &&
+            ( rOld[ n ] == rTblBoxes[ i ] ) )
+        {
+            // box already known? Then nothing to be done.
             ++n;
+        }
         else
         {
-            // neue Box: sortiert einfuegen!!
+            // new box found: insert (obey sort order)
             USHORT nInsPos;
             const SwTableBox* pBox = rTblBoxes[ i ];
             InsertSort( *Ptrs.pNewSttNds, pBox->GetSttIdx(), &nInsPos );
-            // feststellen, an welcher Position die Line in der Box steht
-            const SwTableLine* pLn = pBox->GetUpper();
-            USHORT nLinePos = pLn->GetUpper()->GetTabLines().GetPos( pLn );
-            // 1. Box der 1. Line besorgen, ist die selektierte Box!
-            pBox = pBox->GetUpper()->GetUpper()->GetTabLines()[ 0 ]
-                                                        ->GetTabBoxes()[0];
-            // stelle fest, wieviele Nodes die Box hatte und ob
-            // die aktuelle davon einen bekommen hat
+
+            // find the source box. It must be one in rBoxes.
+            // We found the right one if it's in the same column as pBox.
+            USHORT j = 0;
+            const SwTableBox* pSourceBox = NULL;
+            do
+            {
+                ASSERT( j < aBoxes.Count(), "box not found" );
+                pSourceBox = rBoxes[j];
+                j++;
+            }
+            while( pSourceBox->GetUpper()->GetUpper() !=
+                   pBox->GetUpper()->GetUpper() );
+
+            // find the line number difference
+            // (to help determine bNodesMoved flag below)
+            const SwTableLine* pBoxLine = pBox->GetUpper();
+            const SwTableLine* pSourceLine = pSourceBox->GetUpper();
+            USHORT nLineDiff =
+                lcl_FindParentLines( rTbl, *pBox ).
+                    C40_GETPOS( SwTableLine, pBoxLine ) -
+                lcl_FindParentLines( rTbl, *pSourceBox ).
+                    C40_GETPOS( SwTableLine, pSourceLine );
+
+            // find out how many nodes the source box used to have
+            // (to help determine bNodesMoved flag below)
             USHORT nNdsPos = 0;
-            while( rBoxes[ nNdsPos ] != pBox )
+            while( rBoxes[ nNdsPos ] != pSourceBox )
                 ++nNdsPos;
             ULONG nNodes = rNodeCnts[ nNdsPos ];
-            // wurden Nodes verschoben und hat die akt. Box davon einen
-            // bekommen. Wenn ja, setze das Flag -> beim Undo darf der Inhalt
-            // dann nicht geloscht sondern muss verschoben werden!
-            BOOL bFlag = nNodes != pBox->GetSttNd()->EndOfSectionIndex() -
-                                   pBox->GetSttIdx()
-                && nNodes - 1 > nLinePos;
-            aMvBoxes.Insert( bFlag, nInsPos );
-        }
-    }
 
-    for( ; i < rTblBoxes.Count(); ++i )
-    {
-        // neue Box: sortiert einfuegen!!
-        USHORT nInsPos;
-        const SwTableBox* pBox = rTblBoxes[ i ];
-        InsertSort( *Ptrs.pNewSttNds, pBox->GetSttIdx(), &nInsPos );
-        // feststellen, an welcher Position die Line in der Box steht
-        const SwTableLine* pLn = pBox->GetUpper();
-        USHORT nLinePos = pLn->GetUpper()->GetTabLines().GetPos( pLn );
-        // 1. Box der 1. Line besorgen, ist die selektierte Box!
-        pBox = pBox->GetUpper()->GetUpper()->GetTabLines()[ 0 ]
-                                                    ->GetTabBoxes()[0];
-        // stelle fest, wieviele Nodes die Box hatte und ob
-        // die aktuelle davon einen bekommen hat
-        USHORT nNdsPos = 0;
-        while( rBoxes[ nNdsPos ] != pBox )
-            ++nNdsPos;
-        ULONG nNodes = rNodeCnts[ nNdsPos ];
-        // wurden Nodes verschoben und hat die akt. Box davon einen
-        // bekommen. Wenn ja, setze das Flag -> beim Undo darf der Inhalt
-        // dann nicht geloscht sondern muss verschoben werden!
-        BOOL bFlag = nNodes != pBox->GetSttNd()->EndOfSectionIndex() -
-                                pBox->GetSttIdx()
-            && nNodes - 1 > nLinePos;
-        aMvBoxes.Insert( bFlag, nInsPos );
+            // When a new table cell is created, it either gets a new
+            // node, or it gets node(s) from elsewhere. The undo must
+            // know, of course, and thus we must determine here just
+            // where pBox's nodes are from:
+            // If 1) the source box has lost nodes, and
+            //    2) we're in the node range that got nodes
+            // then pBox received nodes from elsewhere.
+            // If bNodesMoved is set for pBox the undo must move the
+            // boxes back, otherwise it must delete them.
+            // The bNodesMoved flag is stored in a seperate array
+            // which mirrors Ptrs.pNewSttNds, i.e. Ptrs.pNewSttNds[i]
+            // and aMvBoxes[i] belong together.
+            BOOL bNodesMoved =
+                ( nNodes != ( pSourceBox->GetSttNd()->EndOfSectionIndex() -
+                              pSourceBox->GetSttIdx() ) )
+                && ( nNodes - 1 > nLineDiff );
+            aMvBoxes.Insert( bNodesMoved, nInsPos );
+        }
     }
 }
 
@@ -1730,8 +1771,9 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
             {
                 SwNodeRange aRg( *pBox->GetSttNd(), 1,
                             *pBox->GetSttNd()->EndOfSectionNode() );
-                SwNodeIndex aInsPos( *pBox->GetUpper()->GetUpper()->GetTabLines()[0]
-                                    ->GetTabBoxes()[ 0 ]->GetSttNd(), 2 );
+
+                SwTableLine* pLine = lcl_FindTableLine( pTblNd->GetTable(), *pBox );
+                SwNodeIndex aInsPos( *(pLine->GetTabBoxes()[0]->GetSttNd()), 2 );
 
                 // alle StartNode Indizies anpassen
                 USHORT i = n;
