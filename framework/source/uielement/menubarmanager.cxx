@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 09:51:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1821,12 +1821,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                         if ( !!aImage )
                             pMenu->SetItemImage( nItemId, aImage );
                     }
-                    else if ( !pMenu->GetItemImage( nItemId ))
-                    {
-                        Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
-                        if ( !!aImage )
-                               pMenu->SetItemImage( nItemId, aImage );
-                    }
+                    else
+                        m_bRetrieveImages = sal_True;
                 }
 
                 MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
