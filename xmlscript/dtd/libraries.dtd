@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: libraries.dtd,v 1.1 2001-05-22 13:41:03 ab Exp $
+	$Id: libraries.dtd,v 1.2 2001-06-08 10:42:31 ab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -56,13 +56,13 @@
 
 <!ENTITY % boolean "(true|false)">
 
-<!ELEMENT library:libraries library:library*>
+<!ELEMENT library:libraries (library:library)*>
 <!ATTLIST library:libraries 
-	xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/library" 
+	xmlns:library CDATA #FIXED "http://openoffice.org/2000/library" 
 	xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink"
 >
 
-<!ELEMENT library:library library:element*>
+<!ELEMENT library:library (library:element)*>
 <!ATTLIST library:library 
 	library:name CDATA #REQUIRED
 	xlink:href CDATA #IMPLIED
