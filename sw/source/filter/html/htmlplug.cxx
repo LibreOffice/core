@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 11:33:43 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 13:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,9 +1064,10 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         sOut += sHTML_embed;
 
         String aURL(
-            INetURLObject::AbsToRel(pPlugin->GetURL()->GetMainURL(),
-                                    INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_UNAMBIGUOUS) );
+            INetURLObject::AbsToRel(
+                    pPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE ),
+                    INetURLObject::WAS_ENCODED,
+                    INetURLObject::DECODE_UNAMBIGUOUS) );
 
         if( aURL.Len() )
         {
@@ -1314,11 +1315,14 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.7 2001-07-05 11:33:43 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.8 2001-08-31 13:50:00 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/07/05 11:33:43  jp
+      Changes for TFD636
+
       Revision 1.6  2001/07/03 07:49:47  mib
       #88156#: warning for unconvertable chars
 

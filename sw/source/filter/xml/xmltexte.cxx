@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:47:44 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 13:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     case SV_EMBEDDED_PLUGIN:
         {
             // It's a plugin!
-            lcl_addURL( rExport, xPlugin->GetURL()->GetMainURL() );
+            lcl_addURL( rExport, xPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE ) );
             const String &rType = xPlugin->GetMimeType();
             if (rType.Len())
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, rType );
@@ -642,7 +642,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             // It's a floating frame!
             const SfxFrameDescriptor *pDescriptor = xFrame->GetFrameDescriptor();
 
-            lcl_addURL( rExport, pDescriptor->GetURL().GetMainURL() );
+            lcl_addURL( rExport, pDescriptor->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
 
             const String &rName = pDescriptor->GetName();
             if (rName.Len())

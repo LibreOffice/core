@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 10:23:48 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 13:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,10 @@
 #include <hintids.hxx>
 #endif
 
+#include <tools/solar.h>
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-#include <tools/solar.h>
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
 #endif
@@ -204,11 +201,6 @@
 #define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
 #define MAX_FIELDLEN 64000
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace ::ucb;
-using namespace ::rtl;
 
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                                 USHORT& rSubType, ULONG &rFmt,
@@ -2014,18 +2006,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         }
     }
 
-    BOOL bExist = FALSE;
-    INetURLObject aGrURL(URIHelper::SmartRelToAbs(aGrfName));
-/*  try
-    {
-        ::ucb::Content aTestContent(
-            aGrURL.GetMainURL(),
-            uno::Reference< XCommandEnvironment >());
-        bExist = aTestContent.isDocument();
-    }
-    catch(...){}
-*/
-    if( bExist || !bEmbedded )
+    aGrfName = URIHelper::SmartRelToAbs( aGrfName );
+    if( !bEmbedded )
     {
         /*
             Besonderheit:
@@ -2048,7 +2030,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
                                                     &aFlySet,
                                                     0);         // SwFrmFmt*
         String aName;
-        if(MakeUniqueGraphName(aName, aGrURL.GetBase()))
+        if(MakeUniqueGraphName(aName, INetURLObject( aGrfName ).GetBase()))
             pFlyFmtOfJustInsertedGraphic->SetName( aName );
     }
     return F_READ_FSPA;
@@ -3217,12 +3199,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.26 2001-08-28 10:23:48 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.27 2001-08-31 13:54:13 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.26  2001/08/28 10:23:48  cmc
+      #91214# Illustration index has less pattern possibilities than toc
+
       Revision 1.25  2001/08/23 12:43:31  cmc
       #91214# Illustration toc limited to 1 level
 

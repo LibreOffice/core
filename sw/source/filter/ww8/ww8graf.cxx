@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
+ *  last change: $Author: jp $ $Date: 2001-08-31 13:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,11 @@
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
 #endif
 #ifndef _SDTAITM_HXX
 #include <svx/sdtaitm.hxx>
@@ -261,16 +261,13 @@
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
 #endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace ::ucb;
-using namespace ::rtl;
 
 // Hilfsroutinen
 
@@ -2393,22 +2390,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
                     if( ((SdrGrafObj*)pObject)->IsLinkedGraphic() )
                     {
-                        String aGrfName( INetURLObject::RelToAbs(
+                        String aGrfName( URIHelper::SmartRelToAbs(
                                 ((SdrGrafObj*)pObject)->GetFileName()) );
 
-                        BOOL bExist = FALSE;
-                        INetURLObject aGrURL(URIHelper::SmartRelToAbs(
-                            aGrfName));
-                        try
-                        {
-                            ::ucb::Content aTestContent(
-                                aGrURL.GetMainURL(),
-                                uno::Reference< XCommandEnvironment >());
-                            bExist = aTestContent.isDocument();
-                        }
-                        catch(...){}
-
-                        if( bExist || (GRAPHIC_NONE == rGraph.GetType()))
+                        if( GRAPHIC_NONE == rGraph.GetType() ||
+                            FStatHelper::IsDocument( aGrfName ) )
                         {
                             pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName,
                                 aEmptyStr, 0 /*Graphic*/, &aFlySet,
@@ -2664,12 +2650,12 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     //correct position information.
                     //
                     //cmc
-                    uno::Reference< drawing::XShape > xRef =
-                        ((SwMSDffManager*)pMSDffManager)->GetLastOCXShape();
-                    uno::Reference< beans::XPropertySet >
-                        xPropSet( xRef, uno::UNO_QUERY );
-                    uno::Reference< lang::XUnoTunnel> xTunnel(
-                        xPropSet, uno::UNO_QUERY);
+                    STAR_REFERENCE( drawing::XShape ) xRef(
+                        ((SwMSDffManager*)pMSDffManager)->GetLastOCXShape() );
+                    STAR_REFERENCE( beans::XPropertySet ) xPropSet(
+                                        xRef, STAR_NMSPC::uno::UNO_QUERY );
+                    STAR_REFERENCE( lang::XUnoTunnel ) xTunnel(
+                                        xPropSet, STAR_NMSPC::uno::UNO_QUERY);
                     SwXShape *pSwShape = 0;
                     if(xTunnel.is())
                     {
@@ -2963,11 +2949,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.32 2001-08-28 15:24:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.33 2001-08-31 13:54:13 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.32  2001/08/28 15:24:29  cmc
+      #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
+
       Revision 1.31  2001/08/16 09:27:08  fme
       Fix #90760#: Removed VCL defines
 
