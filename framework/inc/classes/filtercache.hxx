@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 13:49:12 $
+ *  last change: $Author: as $ $Date: 2001-02-02 15:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,8 +596,8 @@ class FilterCache
         static TPerformanceHash*    m_pFastLoaderCache      ;
         static TPreferredHash*      m_pPreferredTypesCache  ;
         static sal_Int32            m_nRefCount             ;
-        static OUSTRING             m_sDefaultDetector      ;
-        static OUSTRING             m_sGenericLoader        ;
+        static OUSTRING*            m_pDefaultDetectorName  ;
+        static OUSTRING*            m_pGenericLoaderName    ;
         static TDetector*           m_pDefaultDetector      ;
         static TLoader*             m_pGenericLoader        ;
 
