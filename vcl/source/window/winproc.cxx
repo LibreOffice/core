@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 13:29:12 $
+ *  last change: $Author: obr $ $Date: 2001-06-22 08:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,8 +724,13 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                             ULONG nCount = Application::ReleaseSolarMutex();
 
                             // FIXME: where do I get Action from ?
-                            static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
-                                relLoc.X(), relLoc.Y(), pMouseDownWin->GetDragSource(), ::com::sun::star::uno::makeAny( aMouseEvent ) );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
+
+                            if( xDragSource.is() )
+                            {
+                                static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
+                                    relLoc.X(), relLoc.Y(), xDragSource, ::com::sun::star::uno::makeAny( aMouseEvent ) );
+                            }
 
                             Application::AcquireSolarMutex( nCount );
                         }
