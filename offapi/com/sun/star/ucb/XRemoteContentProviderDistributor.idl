@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderDistributor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@ interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Offer the local content broker to a remote content provider acceptor.
 
-        @descr  The Uno Url is handed to the
+        <p> The Uno Url is handed to the
         <type>com.sun.star.bridge.UnoUrlResolver</type> service, which is
-        responsible for raising any of the advertised exceptions.
+        responsible for raising any of the advertised exceptions. </p>
 
         @param Url  A Uno Url to address the
         <type>com::sun::star::ucb::XRemoteContentProviderAcceptor</type>.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionCookieHandling.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@ module com { module sun { module star { module ucb {
 /** An interaction continuation handing back some cookie request handling
     policy.
 
-    @descr  This continuation is typically used in conjunction with
-    HandleCookiesRequest.
+    <p> This continuation is typically used in conjunction with
+    <type>HandleCookiesRequest</type>. </p>
 */
 [ uik(E2281A20-33D6-11D1-AABE00A0-249D5590), ident( "XInteractionCookieHandling", 1.0 ) ]
 interface XInteractionCookieHandling: com::sun::star::task::XInteractionContinuation
@@ -91,23 +91,26 @@ interface XInteractionCookieHandling: com::sun::star::task::XInteractionContinua
     //-------------------------------------------------------------------------
     /** Set a general policy to hand back.
 
-        @descr  This method should be called before select().
+        <p> This method should be called before select(). </p>
 
-        @param Policy  Some policy how to handle cookies.
+        @param Policy
+            Some policy how to handle cookies.
     */
     void setGeneralPolicy( [in] com::sun::star::ucb::CookiePolicy Policy );
 
     //-------------------------------------------------------------------------
     /** Set a policy to hand back for a specific cookie.
 
-        @descr  This method should be called before select().
+        <p> This method should be called before select(). </p>
 
-        @param ConfirmCookie  A cookie that sould come from the sequence of
-        cookies offered by the HandleCookiesRequest and that should have a
-        Policy of CONFIRM.
+        @param ConfirmCookie
+            A cookie that sould come from the sequence of
+            cookies offered by the HandleCookiesRequest and that should have a
+            Policy of CONFIRM.
 
-        @param Accept  If true, set the policy for the cookie to ACCEPT;
-        otherwise, set it to IGNORE.
+        @param Accept
+            If true, set the policy for the cookie to ACCEPT;
+            otherwise, set it to IGNORE.
     */
     void setSpecificPolicy( [in] com::sun::star::ucb::Cookie ConfirmCookie,
              [in] boolean Accept );

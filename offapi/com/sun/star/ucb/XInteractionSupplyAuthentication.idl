@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionSupplyAuthentication.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** An interaction continuation handing back some authentication data.
 
-    @descr  This continuation is typically used in conjunction with
-    AuthenticationRequest.
+    <p> This continuation is typically used in conjunction with
+    <type>AuthenticationRequest</type>. </p>
 */
 [ uik(E2281A25-33D6-11D1-AABE00A0-249D5590), ident( "XInteractionSupplyAuthentication", 1.0 ) ]
 interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionContinuation
@@ -91,8 +91,8 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'realm' value to hand back.
 
-        @descr  This method should be called before select(), and should only
-        be called if canSetRealm() returned true.
+        <p> This method should be called before select(), and should only
+        be called if canSetRealm() returned true. </p>
     */
     void setRealm( [in] string Realm );
 
@@ -104,8 +104,8 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'user name' value to hand back.
 
-        @descr  This method should be called before select(), and should only
-        be called if canSetUserName() returned true.
+        <p>This method should be called before select(), and should only
+        be called if canSetUserName() returned true. </p>
     */
     void setUserName( [in] string UserName );
 
@@ -117,8 +117,8 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'password' value to hand back.
 
-        @descr  This method should be called before select(), and should only
-        be called if canSetPassword() returned true.
+        <p>This method should be called before select(), and should only
+        be called if canSetPassword() returned true. </p>
     */
     void setPassword( [in] string Password );
 
@@ -137,8 +137,8 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the password.
 
-        @descr  This method should be called before select(), and should only
-        be called if setPassword() is also called.
+        <p> This method should be called before select(), and should only
+        be called if setPassword() is also called. </p>
 
         @param Remember  The mode to hand back, should be contained in the
         sequence returned by getRememberPasswordModes.
@@ -153,8 +153,8 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new 'account' value to hand back.
 
-        @descr  This method should be called before select(), and should only
-        be called if canSetAccount() returned true.
+        <p> This method should be called before select(), and should only
+        be called if canSetAccount() returned true. </p>
     */
     void setAccount( [in] string Account );
 
@@ -173,8 +173,8 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the account.
 
-        @descr  This method should be called before select(), and should only
-        be called if setAccount() is also called.
+        <p> This method should be called before select(), and should only
+        be called if setAccount() is also called. </p>
 
         @param Remember  The mode to hand back, should be contained in the
         sequence returned by getRememberAccountModes.
