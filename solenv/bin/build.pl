@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-21 10:45:43 $
+#   last change: $Author: vg $ $Date: 2001-08-27 09:30:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.33 $ ';
+$id_str = ' $Revision: 1.34 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -100,11 +100,9 @@ $deliver = 0;
 @dmake_args = ();
 %DeadParents = ();
 $CurrentPrj = "";
-$StandDir = GetStandDir();
+$StandDir = &get_stand_dir();
 $build_from = "";
 $is_from_built = 0;
-#$BuildAllParents = HowToBuild();
-#$QuantityToBuild = GetQuantityToBuild();
 &get_options;
 $ENV{mk_tmp} = "1";
 %prj_platform = ();
@@ -352,9 +350,6 @@ sub CorrectPath {
                 ($ENV{GUI} eq "MACOSX") ||
                 ($ENV{GUI} eq "OS2")) {
         s/\//\\/g;
-    } else {
-        $ENV{mk_tmp} = "";
-        die "\nNo environment set\n";
     };
     return $_;
 };
@@ -399,9 +394,12 @@ sub IsRootDir {
 #
 # Procedure retrieves list of projects to be built from build.lst
 #
-sub GetStandDir {
+sub get_stand_dir {
+    if (!(defined $ENV{GUI})) {
+        $ENV{mk_tmp} = "";
+        die "No environment set\n";
+    };
     my ($StandDir);
-DirLoop:
     do {
         $StandDir = cwd();
         if (open(PrjBuildFile, "prj/build.lst")) {
