@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:04:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,6 +847,23 @@ protected:
 
     /** sets the given value as new current value for the control
 
+        Besides some administrative work (such as caring for <member>m_eControlValueChangeInstigator</member>),
+        this method simply calls <member>doSetControlValue</member>.
+
+        @precond
+            Our own mutex is locked.
+        @param _rValue
+            The value to set. This value is guaranteed to be created by
+            <member>translateDbColumnToControlValue</member> or
+            <member>translateExternalValueToControlValue</member>
+        @param _eInstigator
+            the instigator of the value change
+    */
+            void            setControlValue(
+                                const ::com::sun::star::uno::Any& _rValue,
+                                ValueChangeInstigator _eInstigator
+                            );
+    /**
         <p>The default implementation will forward the given value to the aggregate, using
         m_nValuePropertyAggregateHandle and/or m_sValuePropertyName.</p>
 
@@ -857,9 +874,8 @@ protected:
             <member>translateDbColumnToControlValue</member> or
             <member>translateExternalValueToControlValue</member>
     */
-    virtual void            setControlValue(
-                                const ::com::sun::star::uno::Any& _rValue,
-                                ValueChangeInstigator _eInstigator
+    virtual void            doSetControlValue(
+                                const ::com::sun::star::uno::Any& _rValue
                             );
 
     /** retrieves the current value of the control
