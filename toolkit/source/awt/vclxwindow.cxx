@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 19:34:16 $
+ *  last change: $Author: mt $ $Date: 2001-12-06 16:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,7 +871,11 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             {
                 sal_Bool b;
                 if ( Value >>= b )
-                    pWindow->Enable( b );
+                {
+                    pWindow->Enable( b, FALSE ); // without children!
+                    if ( ( eWinType == WINDOW_DIALOG ) || ( eWinType == WINDOW_MODALDIALOG ) || ( eWinType == WINDOW_MODELESSDIALOG ) )
+                        pWindow->EnableInput( b );
+                }
             }
             break;
             case BASEPROPERTY_TEXT:
