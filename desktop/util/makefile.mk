@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: obo $ $Date: 2003-12-03 11:33:47 $
+#   last change: $Author: hr $ $Date: 2004-02-02 20:30:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,11 @@ RCFILES=verinfo.rc
 
 # --- Linken der Applikation ---------------------------------------
 
-.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
+.IF "$(OS)" == "MACOSX"
+LINKFLAGSAPPGUI!:=	$(LINKFLAGSAPPGUI:s/-bind_at_load//)
+.ENDIF # MACOSX
+
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "NETBSD"
 # #74158# linux needs sal/vos/tools at end of link list, solaris needs it first,
 # winXX is handled like solaris for now
 APP1_STDPRE=
