@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cp $ $Date: 2000-11-17 18:34:08 $
+#   last change: $Author: obo $ $Date: 2000-11-23 15:14:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,8 +189,8 @@ LIB1FILES=	$(SLB)$/app.lib 	\
 .IF "$(remote)" != ""
 LIB1FILES+= \
             $(SLB)$/remote.lib	\
-            $(SLB)$/glyphs.lib	\
-            $(SLB)$/freetype.lib
+            $(SLB)$/glyphs.lib
+
 .IF "$(COM)"=="GCC"
 LIB1OBJFILES=$(SLO)$/salmain.obj
 .ENDIF
@@ -222,7 +222,8 @@ SHL1STDLIBS+=\
 
 .IF "$(remote)" != ""
 SHL1STDLIBS+=\
-            $(UNOLIB)
+            $(UNOLIB)            \
+            $(FREETYPELIB)
 .ENDIF
 
 .IF "$(GUI)"!="MAC"
