@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-01 13:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,14 +670,14 @@ namespace configmgr
         }
     }
 
-    void Tree::updateTree( TreeChangeList& aTree, const vos::ORef<OOptions>& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException)
+    void Tree::updateTree( TreeChangeList& aTree) throw (lang::WrappedTargetException, uno::RuntimeException)
     {
         ConfigurationName aSubtreeName(aTree.pathToRoot, aTree.root.getNodeName());
         ISubtree *pSubtree = NULL;
         try
         {
             // request the subtree, atleast one level must exist!
-            pSubtree = requestSubtree(aSubtreeName.fullName(), _xOptions, 1);
+            pSubtree = requestSubtree(aSubtreeName.fullName(), aTree.m_xOptions, 1);
         }
         catch(container::NoSuchElementException&e)
         {
