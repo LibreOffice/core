@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:18:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,12 @@
 #include "xmlimp.hxx"
 #include "nmspmap.hxx"
 #include "XMLEventsImportContext.hxx"
+#include "xmlbasici.hxx"
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -77,50 +79,124 @@ using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 
-//-------------------------------------------------------------------------
+// =============================================================================
+// XMLScriptChildContext: context for <office:script> element
+// =============================================================================
 
+class XMLScriptChildContext : public SvXMLImportContext
+{
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
+    ::rtl::OUString m_aLanguage;
 
-//-------------------------------------------------------------------------
-//
-//  context for <office:script> element
-//
+public:
+    XMLScriptChildContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& rxModel,
+        const ::rtl::OUString& rLanguage );
+    virtual ~XMLScriptChildContext();
 
-XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-                                    const Reference<XModel>& )
-    : SvXMLImportContext( rImport, nPrfx, rLName )
+    virtual SvXMLImportContext* CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    virtual void EndElement();
+};
+
+// -----------------------------------------------------------------------------
+
+XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
+        const Reference< frame::XModel >& rxModel, const ::rtl::OUString& rLanguage )
+    :SvXMLImportContext( rImport, nPrfx, rLName )
+    ,m_xModel( rxModel )
+    ,m_aLanguage( rLanguage )
 {
 }
+
+// -----------------------------------------------------------------------------
+
+XMLScriptChildContext::~XMLScriptChildContext()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
+    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    const Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    SvXMLImportContext* pContext = NULL;
+
+    ::rtl::OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
+    aBasic += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":Basic" ) );
+
+    if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
+        pContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
+
+    if ( !pContext )
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+
+    return pContext;
+}
+
+// -----------------------------------------------------------------------------
+
+void XMLScriptChildContext::EndElement()
+{
+}
+
+// =============================================================================
+// XMLScriptContext: context for <office:scripts> element
+// =============================================================================
+
+XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+        const Reference<XModel>& rDocModel )
+    :SvXMLImportContext( rImport, nPrfx, rLName )
+    ,m_xModel( rDocModel )
+{
+}
+
+// -----------------------------------------------------------------------------
 
 XMLScriptContext::~XMLScriptContext()
 {
 }
 
-SvXMLImportContext* XMLScriptContext::CreateChildContext( sal_uInt16 nPrefix,
-                                    const OUString& rLName,
-                                    const Reference<XAttributeList>& xAttrList )
+// -----------------------------------------------------------------------------
+
+SvXMLImportContext* XMLScriptContext::CreateChildContext(
+    sal_uInt16 nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
 
-    if (XML_NAMESPACE_OFFICE == nPrefix)
+    if ( nPrefix == XML_NAMESPACE_OFFICE )
     {
         if ( IsXMLToken( rLName, XML_EVENT_LISTENERS ) )
         {
-            Reference<XEventsSupplier> xSupplier(GetImport().GetModel(),
-                                                 UNO_QUERY);
-            pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName,
-                                                  xSupplier);
+            Reference< XEventsSupplier> xSupplier( GetImport().GetModel(), UNO_QUERY );
+            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
+        }
+        else if ( IsXMLToken( rLName, XML_SCRIPT ) )
+        {
+            ::rtl::OUString aAttrName( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_SCRIPT ) );
+            aAttrName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":language" ) );
+            if ( xAttrList.is() )
+            {
+                ::rtl::OUString aLanguage = xAttrList->getValueByName( aAttrName );
+                pContext = new XMLScriptChildContext( GetImport(), nPrefix, rLName, m_xModel, aLanguage );
+            }
         }
     }
 
-    if (NULL == pContext)
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLName,
-                                                          xAttrList);
+    if ( !pContext )
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLName, xAttrList);
 
     return pContext;
 }
+
+// -----------------------------------------------------------------------------
 
 void XMLScriptContext::EndElement()
 {
 }
 
+// -----------------------------------------------------------------------------
