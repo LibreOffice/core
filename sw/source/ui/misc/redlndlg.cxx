@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-14 09:58:12 $
+ *  last change: $Author: os $ $Date: 2001-04-27 12:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -628,7 +631,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && aStrings.Count())
         pFilterPage->SelectAuthor(*aStrings[0]);
 
-    BOOL bEnable = pTable->GetEntryCount() != 0;
+    BOOL bEnable = pTable->GetEntryCount() != 0 && !pSh->GetDoc()->GetRedlinePasswd().getLength();
     BOOL bSel = pTable->FirstSelected() != 0;
 
     SvLBoxEntry* pSelEntry = pTable->FirstSelected();
@@ -1333,9 +1336,10 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
         pSh->EndAction();
         pSh->SetCareWin(NULL);
     }
-    pTPView->EnableAccept( bSel && !bReadonlySel );
-    pTPView->EnableReject( bSel && bIsNotFormated && !bReadonlySel );
-    pTPView->EnableRejectAll( !bOnlyFormatedRedlines && !bHasReadonlySel );
+    BOOL bEnable = !pSh->GetDoc()->GetRedlinePasswd().getLength();
+    pTPView->EnableAccept( bEnable && bSel && !bReadonlySel );
+    pTPView->EnableReject( bEnable && bSel && bIsNotFormated && !bReadonlySel );
+    pTPView->EnableRejectAll( bEnable && !bOnlyFormatedRedlines && !bHasReadonlySel );
 
     return 0;
 }
@@ -1556,6 +1560,9 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/14 09:58:12  jp
+    changes: international -> localdatawrapper
+
     Revision 1.4  2000/12/21 16:15:31  jp
     FillInfo: store TabDistance as string
 
