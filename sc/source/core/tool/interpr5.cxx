@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:48:47 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 12:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3190,7 +3190,8 @@ void ScInterpreter::ScTrend()
     USHORT nCX, nRX, nCY, nRY, M, N;
     pMatY->GetDimensions(nCY, nRY);
     ULONG nCountY = (ULONG) nCY * nRY;
-    for (ULONG i = 0; i < nCountY; i++)
+    ULONG i;
+    for (i = 0; i < nCountY; i++)
         if (!pMatY->IsValue(i))
         {
             SetIllegalArgument();
@@ -3288,7 +3289,8 @@ void ScInterpreter::ScTrend()
         double fSumSqrY = 0.0;
         double fSumXY   = 0.0;
         double fValX, fValY;
-        for (USHORT i = 0; i < nCY; i++)
+        USHORT i;
+        for (i = 0; i < nCY; i++)
             for (USHORT j = 0; j < nRY; j++)
             {
                 fValX = pMatX->GetDouble(i,j);
