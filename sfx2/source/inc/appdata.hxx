@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:33 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,12 @@
 #include <tools/link.hxx>
 #include <tools/list.hxx>
 #include <svtools/lstner.hxx>
-#include <bitset.hxx>
-#include <objsh.hxx>
+#include <vcl/timer.hxx>
+#include <tools/string.hxx>
 
-class SfxTaskManager;
+#include "bitset.hxx"
 
 class SfxApplication;
-class SvBindingTransportFactory;
-class SvLockBytesFactory;
-class SfxIniDefaultManager;
-class DataLockByteFactory_Impl;
 class SvStrings;
 class Config;
 class PopupMenu;
@@ -83,48 +79,31 @@ class SfxProgress;
 class SfxConfigManager;
 class SfxChildWinFactArr_Impl;
 class SfxToolBoxConfig;
-class SfxMacro;
 class SfxDdeDocTopics_Impl;
 class DdeService;
 class SfxEventConfiguration;
 class SfxMacroConfig;
-class SvFactory;
-class SotFactory;
 class SfxItemPool;
 class SfxInitLinkList;
 class SfxFilterMatcher;
-class DemoData_Impl;
-class SfxExplorer;
-class SfxMenuBarManager;
-class StopButtonTimer_Impl;
 class SvUShorts;
-class SfxNodeData_Impl;
-class SfxSIDList_Impl;
 struct SfxFrameObjectFactoryPtr;
 struct SfxPluginObjectFactoryPtr;
-struct SfxPluginObjectFactoryPtr;
 class ISfxTemplateCommon;
-class SfxAnchorJobList_Impl;
 class SfxFilterMatcher;
-class INetConnection;
-class SfxINetPlugInService;
-class SfxTrash;
-class SfxSimpleLockBytesFactoryMemberList;
-class CntUpdateResults_Impl;
-class SfxIniDefaultManager;
-class SfxFolderCfgList_Impl;
 class SfxCancelManager;
-class ISfxModule;
-struct SfxDownload_Impl;
-class SvBindStatusCallback;
 class SfxStatusDispatcher;
-class SfxDesktop;
 class SfxDdeTriggerTopic_Impl;
 class OfaMiscCfg;
-class SvLibrary;
 class SfxDocumentTemplates;
-
-DECLARE_LIST( ConnectionList_Impl, INetConnection * );
+class SfxFrameArr_Impl;
+class SvtSaveOptions;
+class SvtUndoOptions;
+class SvtHelpOptions;
+class SfxObjectFactory;
+class SfxObjectShell;
+class ResMgr;
+class Window;
 
 class StopButtonTimer_Impl : public Timer
 {
@@ -137,163 +116,95 @@ public:
     BOOL GetButtonState() const { return bState; }
 };
 
-
-//=========================================================================
-// SfxFolderState
-//=========================================================================
-
-/*
-  [Beschreibung]
-  Elemente dieser Aufzaehlung geben den Zustand eines Ordners an:
-  SFX_FOLDERSTATE_EMPTY   der Ordner hat keine Unterordner
-  SFX_FOLDERSTATE_CONTENT der Ordner hat Unterordner
-  SFX_FOLDERSTATE_UNKNOWN es ist nicht bekannt, ob Unterordner vorhanden sind
-  */
-
-enum SfxFolderState
-{
-    SFX_FOLDERSTATE_EMPTY   = 0,
-    SFX_FOLDERSTATE_CONTENT = 1,
-    SFX_FOLDERSTATE_UNKNOWN = 2
-};
-
-
 //=========================================================================
 // SfxAppData_Impl
 //=========================================================================
 
-class SfxFrameArr_Impl;
-
 class SfxAppData_Impl : public SfxListener
 {
 public:
-    SfxConfigManager*                   pAppCfg;
-    SfxProgress*                        pProgress;
-    SfxItemPool*                        pPool;
-    SfxChildWinFactArr_Impl*            pFactArr;
-    SfxMacro*                           pMacro;
-    SvLibrary*                          pODKLib;
-    String                              aLastDir;
-    String                              aLastFilter;
-    char                                nConfigManagerAvailable;
-    IndexBitSet                         aIndexBitSet;
-    DdeService*                         pDdeService; // wollen wir DDE machen?
+    IndexBitSet                         aIndexBitSet;           // for counting noname documents
+    List                                aPendingInitFactories;  // late filter init
+    Timer                               aLateInitTimer;
+    String                              aLastDir;               // for IO dialog
+    String                              aLastFilter;            // for IO dialog
+    String                              aLastNewURL;            // for AppControl
+    String                              aOpenList;              // command line arguments
+    String                              aPrintList;             // command line arguments
+    String                              aUcbUrl;                // command line arguments
+
+    // DDE stuff
+    DdeService*                         pDdeService;
     SfxDdeDocTopics_Impl*               pDocTopics;
-    SfxEventConfiguration*              pEventConfig;
-    SotFactory*                         pSfxApplicationObjectFactory;
-    USHORT                              nAsynchronCalls;
+    SfxDdeTriggerTopic_Impl*            pTriggerTopic;
+    DdeService*                         pDdeService2;
+
+    // single instance classes
+    SfxChildWinFactArr_Impl*            pFactArr;
+    SfxPluginObjectFactoryPtr*          pSfxPluginObjectFactoryPtr;
+    SfxObjectFactory*                   pSfxPlugInObjectShellFactory;
+    SfxFrameObjectFactoryPtr*           pSfxFrameObjectFactoryPtr;
+    SfxFrameArr_Impl*                   pTopFrames;
+
+    // special members
+    SfxInitLinkList*                    pInitLinkList;
+    StopButtonTimer_Impl*               pStopButtonTimer;
+
+    // application members
+    SfxFilterMatcher*                   pMatcher;
+    SfxCancelManager*                   pCancelMgr;
+    ResMgr*                             pLabelResMgr;
+    SfxStatusDispatcher*                pAppDispatch;
+    SfxConfigManager*                   pAppCfg;
+    SfxDocumentTemplates*               pTemplates;
+
+    // global pointers
     SvVerbList*                         pVerbs;
+    Config*                             pFilterIni;
+    SfxItemPool*                        pPool;
+    SfxEventConfiguration*              pEventConfig;
+    SvUShorts*                          pDisabledSlotList;
+    SvStrings*                          pSecureURLs;
+    SfxBmkMenu*                         pNewMenu;
+    SfxBmkMenu*                         pAutoPilotMenu;
+    OfaMiscCfg*                         pMiscConfig;
+    SvtSaveOptions*                     pSaveOptions;
+    SvtUndoOptions*                     pUndoOptions;
+    SvtHelpOptions*                     pHelpOptions;
+
+    // "current" functionality
+    SfxObjectShell*                     pThisDocument;
+    SfxProgress*                        pProgress;
+    Window*                             pDefFocusWin;
+    ISfxTemplateCommon*                 pTemplateCommon;
+
+    USHORT                              nDocModalMode;              // counts documents in modal mode
+    USHORT                              nAutoTabPageId;
+    USHORT                              nExecutingSID;
     USHORT                              nBasicCallLevel;
     USHORT                              nRescheduleLocks;
     USHORT                              nInReschedule;
-    DemoData_Impl*                      pDemoData;
-    SfxInitLinkList*                    pInitLinkList;
-    Timer                               aLateInitTimer;
-    SfxFilterMatcher*                   pMatcher;
-    SfxExplorer*                        pExplorer;
-    String                              aSaveAsTarget;
-    String                              aUserEMailAddr;
-    ConnectionList_Impl                 aConnectionList;
-    SfxObjectFactory*                   pSfxPlugInObjectShellFactory;
-    Window*                             pDefFocusWin;
-    SfxMenuBarManager*                  pAppManager;
-    SfxFrameObjectFactoryPtr*           pSfxFrameObjectFactoryPtr;
-    List                                aPendingInitFactories;
-    SfxIniDefaultManager*               pIniDefMgr;
-    String                              aLogicAppName;
-    SfxINetPlugInService*               pPlugService;
-    StopButtonTimer_Impl*               pStopButtonTimer;
-    SfxCancelManager*                   pCancelMgr;
-    USHORT                              nDocModalMode;
-    SvUShorts*                          pDisabledSlotList;
-    Config*                             pFilterIni;
-    ISfxModule*                         pISfxModule;
-    String                              aLastNewURL;
-    SfxPluginObjectFactoryPtr*          pSfxPluginObjectFactoryPtr;
-    SfxNodeData_Impl*                   pNodeData_Impl;
-    SfxSIDList_Impl*                    pSIDList_Impl;
-    ISfxTemplateCommon*                 pTemplateCommon;
-    Window*                             pActiveInplaceWindow;
-    SfxAnchorJobList_Impl*              pAnchorJobList;
-    ResMgr*                             pLabelResMgr;
-    USHORT                              nDemoKind;
-    SfxFrameArr_Impl*                   pTopFrames;
-    SfxTrash*                           pTrash;
-    SvStrings*                          pSecureURLs;
-    USHORT                              nAutoTabPageId;
-    DataLockByteFactory_Impl*           pDataLockBytesFactory;
-    USHORT                              nExecutingSID;
-    CntUpdateResults_Impl*              pNewMessages;
-    USHORT                              nNewMessages;
-    SvLockBytesFactory*                 pImageLockBytesFactory;
-    SvLockBytesFactory*                 pInfoLockBytesFactory;
-    SfxBmkMenu*                         pNewMenu;
-    SfxBmkMenu*                         pBookmarkMenu;
-    SfxBmkMenu*                         pAutoPilotMenu;
-    SfxBmkMenu*                         pStartMenu;
-    SfxStatusDispatcher*                pAppDispatch;
-    SfxDdeTriggerTopic_Impl*            pTriggerTopic;
-    DdeService*                         pDdeService2;
-    SvStrings*                          pExtBrwOnExceptionList;
-    SvStrings*                          pExtBrwOffExceptionList;
-    OfaMiscCfg*                         pMiscConfig;
-    SfxObjectShell*                     pThisDocument;
-    BYTE                                bMultiQuickSearch;
-    BYTE                                bShowFsysExtension;
-    BYTE                                bUseExternBrowser;
-    BOOL                                bAccelEnabled : 1;
-    BOOL                                bIBMTitle : 1;
-    BOOL                                bOLEResize : 1;
+    USHORT                              nAsynchronCalls;
+    USHORT                              nAppEvent;                  // command line interpretation
+
     BOOL                                bDirectAliveCount : 1;
     BOOL                                bInQuit : 1;
-    BOOL                                bStbWasVisible : 1;
-    BOOL                                bSessionFailed : 1;
-    BOOL                                bOLEAutomation : 1;
     BOOL                                bInvalidateOnUnlock : 1;
     BOOL                                bBean : 1;
     BOOL                                bMinimized : 1;
     BOOL                                bInvisible : 1;
-    BOOL                                bSmartBeamer : 1;
     BOOL                                bInException : 1;
-    BOOL                                bNewMessagesBlinker : 1;
-    BOOL                                bNewTaskForNewMessages : 1;
-    BOOL                                bBeamerSwitchedOn : 1;
-    BOOL                                bLateInit_BrowseRegistrationPage : 1;
-    USHORT                              nAppEvent;
-    SfxDocumentTemplates*               pTemplates;
-    String                              aOpenList;
-    String                              aPrintList;
-    String                              aUcbUrl;
+    BOOL                                bPlugged : 1;
+    BOOL                                bOLEResize : 1;
 
-    SfxAppData_Impl( SfxApplication* pApp );
-    ~SfxAppData_Impl();
+                                        SfxAppData_Impl( SfxApplication* );
+                                        ~SfxAppData_Impl();
 
     PopupMenu*                          GetPopupMenu( USHORT nSid, BOOL bBig=FALSE, BOOL bNew=FALSE );
     virtual void                        Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
-    DECL_STATIC_LINK(                   SfxAppData_Impl, CreateDataLockBytesFactory, void* );
-    void                                ResetNewMessages( const String &rFolderULR );
-    void                                LoadNewMessages();
-    void                                SaveNewMessages();
     void                                UpdateApplicationSettings( BOOL bDontHide );
     SfxDocumentTemplates*               GetDocumentTemplates();
-};
-
-extern void FATToVFat_Impl( String& );
-
-#include <svtools/poolitem.hxx>
-
-class SfxPtrItem : public SfxPoolItem
-{
-    void* pPtr;
-public:
-                             TYPEINFO();
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const
-    {   return new SfxPtrItem( *this ); }
-    virtual int              operator==( const SfxPoolItem& rL) const
-    {   return ((SfxPtrItem&)rL).pPtr == pPtr; }
-    SfxPtrItem( USHORT nWhich, void * pValue ) : SfxPoolItem( nWhich )
-    {   pPtr = pValue; }
-    void* GetValue() const { return pPtr; }
+    DECL_STATIC_LINK(                   SfxAppData_Impl, CreateDocumentTemplates, void* );
 };
 
 #endif // #ifndef _SFX_APPDATA_HXX
