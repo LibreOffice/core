@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:05:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2680,6 +2680,16 @@ Resource RID_SD_ERRHDL
         Text[ slovak ] = "Objavená chyba formátu v súbore v poddokumente $(ARG1) na pozícii $(ARG2)(riadok,stĺpec) ";
     };
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
