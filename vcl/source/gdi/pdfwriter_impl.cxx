@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-28 16:27:20 $
+ *  last change: $Author: pl $ $Date: 2002-10-28 17:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1868,7 +1868,7 @@ sal_Int32 PDFWriterImpl::emitFonts()
                 aLine.append( "\r\n"
                               "   /FirstChar 0\r\n"
                               "   /LastChar " );
-                aLine.append( (sal_Int32)nGlyphs-1 );
+                aLine.append( (sal_Int32)(nGlyphs-1) );
                 aLine.append( "\r\n"
                               "   /Widths [ " );
                 for( int i = 0; i < nGlyphs; i++ )
