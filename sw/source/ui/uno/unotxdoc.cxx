@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:09:17 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3306,5 +3306,13 @@ void SwXDocumentPropertyHelper::Invalidate()
     xDrawDefaults = 0;
     m_pDoc = 0;
     SvxUnoForbiddenCharsTable::mxForbiddenChars.unbind();
+}
+/* -----------------13.08.2003 12:43-----------------
+
+ --------------------------------------------------*/
+void SwXDocumentPropertyHelper::onChange()
+{
+    if(m_pDoc)
+       m_pDoc->SetModified();
 }
 
