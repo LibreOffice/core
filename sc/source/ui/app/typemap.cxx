@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:28:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,13 +145,15 @@
 #include <svx/brkitem.hxx>
 #include <svx/charreliefitem.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/drawitem.hxx>
 #include <svtools/ilstitem.hxx>
 #include <svtools/globalnameitem.hxx>
 #include <svx/chrtitem.hxx>
+#include <svtools/aeitem.hxx>
 #include "attrib.hxx"
 
-#define SvxDrawToolItem             SfxEnumItem
-#define SvxDrawAlignItem            SfxEnumItem
+#define SvxDrawToolItem             SfxAllEnumItem
+#define SvxDrawAlignItem            SfxAllEnumItem
 #define SvxChooseControlItem        SfxEnumItem
 
 #define SFX_TYPEMAP
