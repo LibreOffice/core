@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:04:57 $
+ *  last change: $Author: oj $ $Date: 2002-07-29 09:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,6 @@
 
 
 #define IL_TOOL \
-    MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
-    };\
 \
     IdList = {\
         ID_BROWSER_EXPLORER;\
@@ -141,6 +136,11 @@ ImageList RID_DEFAULTIMAGELIST_SC
     {
         File = "sc_qrtl.bmp";
     };
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
     IL_TOOL ;
 };
 
@@ -150,6 +150,11 @@ ImageList RID_DEFAULTIMAGELIST_LC
     {
         File = "lc_qrtl.bmp" ;
     };
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
     IL_TOOL ;
 };
 
@@ -159,6 +164,11 @@ ImageList RID_DEFAULTIMAGELIST_SCH
     {
         File = "sch_qrtl.bmp";
     };
+    MaskColor   = Color {\
+    Red   = 0xffff;\
+    Green = 0x0000;\
+    Blue  = 0xffff;\
+    };\
     IL_TOOL ;
 };
 
@@ -168,6 +178,11 @@ ImageList RID_DEFAULTIMAGELIST_LCH
     {
         File = "lch_qrtl.bmp" ;
     };
+    MaskColor   = Color {\
+    Red   = 0xffff;\
+    Green = 0x0000;\
+    Blue  = 0xffff;\
+    };\
     IL_TOOL ;
 };
 
