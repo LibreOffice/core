@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:30:57 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,11 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
+        {
         OUStringBuffer buf( 128 );
         buf.appendAscii(
             RTL_CONSTASCII_STRINGPARAM("exception occured java->uno: [") );
-        buf.append( *reinterpret_cast< OUString const * >(
-                        &uno_exc->pType->pTypeName ) );
+        buf.append( OUString::unacquired( &uno_exc->pType->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
         buf.append(
             reinterpret_cast< ::com::sun::star::uno::Exception const * >(
@@ -147,6 +147,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
             OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( cstr_msg.getStr() );
+        }
 #endif
         // signal exception
         jvalue java_exc;
@@ -184,8 +185,8 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
     {
         OUString message(
             OUSTR("thrown exception is no uno exception: ") +
-            *reinterpret_cast< OUString const * >(
-                &uno_exc->pType->pTypeName ) + jni.get_stack_trace() );
+            OUString::unacquired( &uno_exc->pType->pTypeName ) +
+            jni.get_stack_trace() );
         uno_any_destruct( uno_exc, 0 );
         throw BridgeRuntimeError( message );
     }
@@ -382,6 +383,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     {
         method_name = jstring_to_oustring( jni, jo_method );
 #if OSL_DEBUG_LEVEL > 1
+        {
         OUStringBuffer trace_buf( 64 );
         trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("java->uno call: ") );
         trace_buf.append( method_name );
@@ -394,6 +396,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             OUStringToOString(
                 trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( cstr_msg.getStr() );
+        }
 #endif
 
         // special IQueryInterface.queryInterface()
@@ -484,8 +487,8 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             reinterpret_cast< typelib_InterfaceTypeDescription * >( orig_td );
         OUString iface_name( jstring_to_oustring( jni, jo_decl_class ) );
         while ((0 != td) &&
-               !reinterpret_cast< OUString const * >(
-                   &((typelib_TypeDescription *) td)->pTypeName )->equals(
+               !OUString::unacquired(
+                   &((typelib_TypeDescription *) td)->pTypeName ).equals(
                        iface_name ))
         {
             td = td->pBaseTypeDescription;
@@ -494,8 +497,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         {
             OUStringBuffer buf( 64 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "proxy (type=") );
-            buf.append(
-                *reinterpret_cast< OUString const * >( &orig_td->pTypeName ) );
+            buf.append( OUString::unacquired( &orig_td->pTypeName ) );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
                                  ") does not fit with called interface: ") );
             buf.append( iface_name );
@@ -520,8 +522,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             // check method_name against fully qualified type_name
             // of member_type
             OUString const & type_name =
-                *reinterpret_cast< OUString const * >(
-                    &member_type->pTypeName );
+                OUString::unacquired( &member_type->pTypeName );
             if (typelib_TypeClass_INTERFACE_METHOD == member_type->eTypeClass)
             {
                 if ((method_name.getLength() < type_name.getLength()) &&
@@ -602,8 +603,8 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         OUStringBuffer buf( 64 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
             "calling undeclared function on interface ") );
-        buf.append( *reinterpret_cast< OUString const * >(
-            &((typelib_TypeDescription *)td)->pTypeName ) );
+        buf.append( OUString::unacquired(
+                        &((typelib_TypeDescription *)td)->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
         buf.append( method_name );
         buf.append( jni.get_stack_trace() );
@@ -663,6 +664,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
                 jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
 
 #if OSL_DEBUG_LEVEL > 1
+    {
     JLocalAutoRef jo_oid(
         jni, jni->GetObjectField(
             jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
@@ -672,6 +674,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
             OUSTR("freeing java uno proxy: ") + oid,
             RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( cstr_msg.getStr() );
+    }
 #endif
     // revoke from uno env; has already been revoked from java env
     (*bridge->m_uno_env->revokeInterface)( bridge->m_uno_env, pUnoI );
