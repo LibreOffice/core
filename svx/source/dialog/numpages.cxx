@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:28:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,7 +1069,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         // nur die Gliederungspage bekommt es aktuell
         pVDev = new VirtualDevice(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
-        pVDev->SetOutputSize( aRectSize );
+        pVDev->EnableRTL( IsRTLEnabled() );
+         pVDev->SetOutputSize( aRectSize );
         aOrgRect = aRect;
         pVDev->SetFillColor( aBackColor );
         pVDev->DrawRect(aOrgRect);
@@ -3077,6 +3078,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
     const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
     VirtualDevice* pVDev = new VirtualDevice(*this);
+    pVDev->EnableRTL( IsRTLEnabled() );
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 
