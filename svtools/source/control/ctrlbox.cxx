@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 12:43:35 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 12:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,9 +298,7 @@ DECLARE_LIST( ImpLineList, ImpLineListData* );
 // -----------------------------------------------------------------------
 inline const Color& LineListBox::GetPaintColor( void ) const
 {
-//  return GetDisplayBackground().GetColor().IsDark()?  GetTextColor() : aColor;
     return maPaintCol;
-//  return GetDisplayBackground().GetColor().IsDark()?  Application::GetSettings().GetStyleSettings() : aColor;
 }
 
 // -----------------------------------------------------------------------
@@ -356,12 +354,6 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
             aVirDev.SetOutputSizePixel( aVirSize );
         aVirDev.SetFillColor( GetSettings().GetStyleSettings().GetFieldColor() );
         aVirDev.DrawRect( Rectangle( Point(), aSize ) );
-
-/*      Color aCol( GetPaintColor() );
-        if( GetDisplayBackground().GetColor().IsDark() )
-            aCol = GetTextColor();
-        else
-            aCol = aColor;*/
 
         aVirDev.SetFillColor( GetPaintColor() );
         aVirDev.DrawRect( Rectangle( 0, 0, aSize.Width(), n1-nPix ) );
