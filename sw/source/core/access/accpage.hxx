@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,6 @@ protected:
     virtual ~SwAccessiblePage();
 
 public:
-
-    SwAccessiblePage( SwAccessibleMap* pMap, const SwPageFrm *pFrame );
-
     // convenience constructor to avoid typecast;
     // may only be called with SwPageFrm argument
     SwAccessiblePage( SwAccessibleMap* pMap, const SwFrm *pFrame );
