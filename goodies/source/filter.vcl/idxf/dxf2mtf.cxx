@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxf2mtf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:05:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,6 +786,8 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
             case DXF_DIMENSION:
                 DrawDimensionEntity((DXFDimensionEntity&)*pE,*pT);
                 break;
+            default:
+                break;  // four other values not handled -Wall
             }
         }
         pE=pE->pSucc;
@@ -850,21 +852,29 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
 
     pVPort=pDXF->aTables.SearchVPort("*ACTIVE");
     if (pVPort!=NULL) {
-        if (pVPort->aDirection.fx==0 && pVPort->aDirection.fy==0) pVPort=NULL;
+        if (pVPort->aDirection.fx==0 && pVPort->aDirection.fy==0)
+            pVPort=NULL;
     }
 
     if (pVPort==NULL) {
-        if (pDXF->aBoundingBox.bEmpty==TRUE) bStatus=FALSE;
+        if (pDXF->aBoundingBox.bEmpty==TRUE)
+            bStatus=FALSE;
         else {
             fWidth=pDXF->aBoundingBox.fMaxX-pDXF->aBoundingBox.fMinX;
             fHeight=pDXF->aBoundingBox.fMaxY-pDXF->aBoundingBox.fMinY;
-            if (fWidth<=0 || fHeight<=0) bStatus=FALSE;
+            if (fWidth<=0 || fHeight<=0) {
+                bStatus=FALSE;
+                fScale = 0;  // -Wall added this...
+            }
             else {
                 if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
-                    if (fWidth>fHeight) fScale=10000.0/fWidth;
-                    else fScale=10000.0/fHeight;
+                    if (fWidth>fHeight)
+                        fScale=10000.0/fWidth;
+                    else
+                        fScale=10000.0/fHeight;
                 }
-                else fScale=1.0;
+                else
+                    fScale=1.0;
                 aTransform=DXFTransform(fScale,-fScale,fScale,
                                         DXFVector(-pDXF->aBoundingBox.fMinX*fScale,
                                                    pDXF->aBoundingBox.fMaxY*fScale,
@@ -878,10 +888,13 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
         fHeight=pVPort->fHeight;
         fWidth=fHeight*pVPort->fAspectRatio;
         if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
-            if (fWidth>fHeight) fScale=10000.0/fWidth;
-            else fScale=10000.0/fHeight;
+            if (fWidth>fHeight)
+                fScale=10000.0/fWidth;
+            else
+                fScale=10000.0/fHeight;
         }
-        else fScale=1.0;
+        else
+            fScale=1.0;
         aTransform=DXFTransform(
             DXFTransform(pVPort->aDirection,pVPort->aTarget),
             DXFTransform(
@@ -893,7 +906,8 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
         aPrefSize.Height()=(long)(fHeight*fScale+1.5);
     }
 
-    if (bStatus==TRUE) DrawEntities(pDXF->aEntities,aTransform,TRUE);
+    if (bStatus==TRUE)
+        DrawEntities(pDXF->aEntities,aTransform,TRUE);
 
     rMTF.Stop();
 
