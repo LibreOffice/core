@@ -1,0 +1,328 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ConnectionPage.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:40:40 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): Ocke Janssen
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef DBAUI_CONNECTIONPAGE_HRC
+#include "ConnectionPage.hrc"
+#endif
+
+//.........................................................................
+TabPage PAGE_CONNECTION
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Hide = TRUE;
+
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Allgemein";
+        Text[ en-US ] = "General";
+    };
+
+    FixedText FT_CONNECTURL
+    {
+        Hide = TRUE;
+        HelpId = HID_DSADMIN_URL_GENERAL;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="D~atenquellen-URL" ;
+        Text[ en-US ] = "~Data source URL";
+    };
+
+    FixedText FT_DBASE_PATH_OR_FILE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Pfad zu den dBASE Dateien" ;
+        Text[ en-US ] = "Path to the dBASE files";
+    };
+
+    FixedText FT_FLAT_PATH_OR_FILE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Pfad zu den Textdateien" ;
+        Text[ en-US ] = "Path to the text files";
+    };
+
+    FixedText FT_CALC_PATH_OR_FILE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Pfad zum Tabellendokument" ;
+        Text[ en-US ] = "Path to the spreadsheet document";
+    };
+
+    FixedText FT_NAME_OF_ODBC_DATASOURCE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Name der ODBC Datenquelle auf Ihrem System" ;
+        Text[ en-US ] = "Name of the ODBC data source on your system";
+    };
+
+    FixedText FT_MYSQL_DATABASE_NAME
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Name der MySQL Datenbank" ;
+        Text[ en-US ] = "Name of the MySQL database";
+    };
+
+    FixedText FT_ORACLE_DATABASE_NAME
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Name der Oracle Datenbank" ;
+        Text[ en-US ] = "Name of the Oracle database";
+    };
+
+    FixedText FT_ADABAS_DATABASE_NAME
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Name der Adabas D Datenbank" ;
+        Text[ en-US ] = "Name of the Adabas D database";
+    };
+
+    FixedText FT_MSACCESS_MDB_FILE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Microsoft Access Datenbankdatei" ;
+        Text[ en-US ] = "Microsoft Access database file";
+    };
+
+    FixedText FT_NO_ADDITIONAL_SETTINGS
+    {
+        Hide = TRUE;
+        WordBreak = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Es werden keine weiteren Einstellungen benötigt. Um die Verbindung zu prüfen, klicken Sie auf die Schaltfläche '%test'." ;
+        Text[ en-US ] = "No more settings are necessary. To verify that the connection is working, click the '%test' button.";
+    };
+
+    FixedText FT_HOSTNAME
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="~Rechnername" ;
+        Text[ en-US ] = "~Host name";
+    };
+
+    Edit ET_CONNECTURL
+    {
+        Pos = MAP_APPFONT ( 6 , 2*FIXEDTEXT_HEIGHT + 2*UNRELATED_CONTROLS + RELATED_CONTROLS -1) ;
+        Size = MAP_APPFONT ( 189 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+    PushButton PB_BROWSECONNECTION
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 2*FIXEDTEXT_HEIGHT + 2*UNRELATED_CONTROLS + RELATED_CONTROLS -2 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        HelpId = HID_DSADMIN_BROWSECONN;
+        Text [ de ] ="Suchen..." ;
+        Text[ en-US ] = "Browse...";
+    };
+
+
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 3*FIXEDTEXT_HEIGHT + 3*UNRELATED_CONTROLS + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="Benutzer Authentifizierung";
+        Text[ en-US ] = "User authentication";
+    };
+
+    FixedText FT_USERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="~Benutzername" ;
+        Text [ en-US ] = "~User name" ;
+    };
+    Edit ET_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS -1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        Pos = MAP_APPFONT ( 90 , 4*UNRELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
+        Text [ de ] ="Kennwort erforderlich";
+        Text [ en-US ] = "Password required";
+    };
+
+    FixedLine FL_SEPARATOR3
+    {
+        Pos = MAP_APPFONT ( 4 , 5*UNRELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS + CHECKBOX_HEIGHT) ;
+
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="JDBC-Eigenschaften";
+        Text[ en-US ] = "JDBC properties";
+    };
+
+    FixedText FT_JDBCDRIVERCLASS
+    {
+        Pos = MAP_APPFONT ( 6 , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT) ;
+
+        Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] ="~JDBC-Treiberklasse" ;
+        Text [ en-US ] = "~JDBC driver class" ;
+    };
+    Edit ET_JDBCDRIVERCLASS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT -1) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_DRIVERCLASS;
+    };
+
+    PushButton PB_TESTDRIVERCLASS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT -2 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Text [ de ] ="Klasse testen" ;
+        Text [ en-US ] = "Test Class" ;
+    };
+
+    PushButton PB_TESTCONNECTION
+    {
+        Pos = MAP_APPFONT ( PAGE_X  - 75 - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS) ;
+        Size = MAP_APPFONT ( 75 , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ de ] ="Verbindung testen" ;
+        Text [ en-US ] = "Test Connection";
+    };
+
+    String STR_NO_ADABASE_DATASOURCES
+    {
+        Text [ de ] ="Auf Ihrem System wurden keine Adabas D Datenquellen gefunden.";
+        Text [ en-US ] = "No Adabas D data sources were found on your system.";
+    };
+};
+String STR_CONNECTION_TEST
+{
+    Text [ de ] ="Verbindungstest" ;
+    Text [ en-US ] = "Connection Test";
+};
+
+String STR_CONNECTION_SUCCESS
+{
+    Text [ de ] ="Die Verbindung wurde erfolgreich hergestellt." ;
+    Text [ en-US ] = "The connection was established successfully.";
+};
+
+String STR_CONNECTION_NO_SUCCESS
+{
+    Text [ de ] ="Die Verbindung konnte nicht erfolgreich hergestellt." ;
+    Text [ en-US ] = "The connection could not be established successfully.";
+};
+
+String STR_JDBCDRIVER_TEST
+{
+    Text [ de ] ="Test des JDBC-Treibers" ;
+    Text [ en-US ] = "JDBC Driver Test";
+};
+
+String STR_JDBCDRIVER_SUCCESS
+{
+    Text [ de ] ="Der JDBC-Treiber wurde erfolgreich geladen." ;
+    Text [ en-US ] = "The JDBC driver was loaded successfully.";
+};
+
+String STR_JDBCDRIVER_NO_SUCCESS
+{
+    Text [ de ] ="Der JDBC-Treiber konnte nicht geladen werden." ;
+    Text [ en-US ] = "The JDBC driver could not be loaded.";
+};
+String STR_MSACCESS_FILTERNAME
+{
+    Text [ de ] ="MS Access Datei" ;
+    Text [ en-US ] = "MS Access file";
+};
