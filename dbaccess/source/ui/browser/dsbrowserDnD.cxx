@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 08:30:06 $
+ *  last change: $Author: oj $ $Date: 2002-05-29 10:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ namespace dbaui
             if ( bNext )
             {
                 ++nRowCount;
-                ::std::vector<sal_Int32>::const_iterator aPosIter = _rvColumns.begin();
+                ODatabaseExport::TPositions::const_iterator aPosIter = _rvColumns.begin();
                 for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter,++i)
                 {
                     sal_Int32 nPos = aPosIter->second;
@@ -733,7 +733,7 @@ namespace dbaui
                                     ::rtl::OUString sDestName;
                                     ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
 
-                                    ::std::vector<sal_Int32> aColumnMapping = aWizard.GetColumnPositions();
+                                    :ODatabaseExport::TPositions aColumnMapping = aWizard.GetColumnPositions();
                                     // create the sql stmt
                                     if ( !xSrcRs.is() ) // if not already exists
                                         xSrcRs = createResultSet(this,
@@ -756,8 +756,8 @@ namespace dbaui
                                         const ::rtl::OUString* pBegin = aSeq.getConstArray();
                                         const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
 
-                                        ::std::vector<sal_Int32> aNewColMapping;
-                                        aNewColMapping.resize( aColumnMapping.size() ,CONTAINER_ENTRY_NOTFOUND);
+                                        ODatabaseExport::TPositions aNewColMapping;
+                                        aNewColMapping.resize( aColumnMapping.size() ,ODatabaseExport::TPositions::value_type(CONTAINER_ENTRY_NOTFOUND,CONTAINER_ENTRY_NOTFOUND) );
 
                                         for(sal_Int32 k = 0;pBegin != pEnd;++pBegin,++k)
                                         {
@@ -1345,6 +1345,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2002/05/28 08:30:06  oj
+ *  #96792# new methods for pasting tables
+ *
  *  Revision 1.42  2002/05/23 12:32:39  fs
  *  use the (member) view clipboard instead of an explicitly created one - during #99030#
  *
