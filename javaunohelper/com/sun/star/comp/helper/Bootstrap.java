@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:15:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,11 @@ import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Random;
@@ -253,82 +257,71 @@ public class Bootstrap {
     public static final XComponentContext bootstrap()
         throws BootstrapException {
 
-        final String SOFFICE =
-            System.getProperty( "os.name" ).startsWith( "Windows" ) ?
-            "soffice.exe" : "soffice";
-        final String NOLOGO = "-nologo";
-        final String NODEFAULT = "-nodefault";
-        final String PIPENAME =
-            "uno" + Integer.toString( (new Random()).nextInt() & 0xffff );
-        final String URL =
-            "uno:pipe,name=" + PIPENAME + ";urp;StarOffice.ServiceManager";
-        final String CONNECTION =
-            "-accept=pipe,name=" + PIPENAME + ";urp;StarOffice.ServiceManager";
-
-        final long SLEEPMILLIS = 500;
-
         XComponentContext xContext = null;
 
         try {
             // create default local component context
             XComponentContext xLocalContext =
                 createInitialComponentContext( null );
+            if ( xLocalContext == null )
+                throw new BootstrapException( "no local component context!" );
+
+            // find office executable relative to this class's class loader
+            String sOffice =
+                System.getProperty( "os.name" ).startsWith( "Windows" ) ?
+                "soffice.exe" : "soffice";
+            File fOffice = NativeLibraryLoader.getResource(
+                Bootstrap.class.getClassLoader(), sOffice );
+            if ( fOffice == null )
+                throw new BootstrapException( "no office executable found!" );
+
+            // create random pipe name
+            String sPipeName = "uno" +
+                Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
+
+            // create call with arguments
+            String[] cmdArray = new String[4];
+            cmdArray[0] = fOffice.getPath();
+            cmdArray[1] = "-nologo";
+            cmdArray[2] = "-nodefault";
+            cmdArray[3] = "-accept=pipe,name=" + sPipeName + ";urp;";
+
+            // start office process
+            Process p = Runtime.getRuntime().exec( cmdArray );
+            pipe( p.getInputStream(), System.out, "CO> " );
+            pipe( p.getErrorStream(), System.err, "CE> " );
 
             // initial service manager
             XMultiComponentFactory xLocalServiceManager =
                 xLocalContext.getServiceManager();
+            if ( xLocalServiceManager == null )
+                throw new BootstrapException( "no initial service manager!" );
 
             // create a URL resolver
             XUnoUrlResolver xUrlResolver =
                 UnoUrlResolver.create( xLocalContext );
 
-            // try to connect to office
-            Object remoteServiceManager = null;
-            try {
-                remoteServiceManager = xUrlResolver.resolve( URL );
-            }
-            catch ( com.sun.star.connection.NoConnectException e ) {
-                // find office executable relative to this class's class loader
-                File fOffice = NativeLibraryLoader.getResource(
-                    Bootstrap.class.getClassLoader(), SOFFICE );
+            // connection string
+            String sConnect = "uno:pipe,name=" + sPipeName +
+                ";urp;StarOffice.ComponentContext";
 
-                if ( fOffice != null ) {
-                    // create call with arguments
-                    String[] cmdArray = new String[4];
-                    cmdArray[0] = fOffice.getPath();
-                    cmdArray[1] = NOLOGO;
-                    cmdArray[2] = NODEFAULT;
-                    cmdArray[3] = CONNECTION;
-
-                    // start office process
-                    Runtime.getRuntime().exec( cmdArray );
-
-                    // wait until office is started
-                    while ( remoteServiceManager == null ) {
-                        try {
-                            // try to connect to office
-                            Thread.currentThread().sleep( SLEEPMILLIS );
-                            remoteServiceManager = xUrlResolver.resolve( URL );
-                        } catch ( com.sun.star.connection.NoConnectException ex ) {
-                            // try to connect again
-                        }
-                    }
-                } else {
-                    throw new BootstrapException(
-                        "no office executable found!" );
+            // wait until office is started
+            for ( ; ; ) {
+                try {
+                    // try to connect to office
+                    Object context = xUrlResolver.resolve( sConnect );
+                    xContext = (XComponentContext) UnoRuntime.queryInterface(
+                        XComponentContext.class, context);
+                    if ( xContext == null )
+                        throw new BootstrapException( "no component context!" );
+                    break;
+                } catch ( com.sun.star.connection.NoConnectException ex ) {
+                    // wait 500 ms, then try to connect again
+                    Thread.currentThread().sleep( 500 );
                 }
             }
-
-            // XComponentContext
-            if ( remoteServiceManager != null ) {
-                XPropertySet xPropertySet =
-                    (XPropertySet)UnoRuntime.queryInterface(
-                    XPropertySet.class, remoteServiceManager );
-                Object context =
-                    xPropertySet.getPropertyValue( "DefaultContext" );
-                xContext = (XComponentContext) UnoRuntime.queryInterface(
-                    XComponentContext.class, context);
-            }
+        } catch ( BootstrapException e ) {
+            throw e;
         } catch ( java.lang.RuntimeException e ) {
             throw e;
         } catch ( java.lang.Exception e ) {
@@ -336,5 +329,27 @@ public class Bootstrap {
         }
 
         return xContext;
+    }
+
+    private static void pipe(
+        final InputStream in, final PrintStream out, final String prefix ) {
+
+        new Thread( "Pipe: " + prefix) {
+            public void run() {
+                BufferedReader r = new BufferedReader(
+                    new InputStreamReader( in ) );
+                try {
+                    for ( ; ; ) {
+                        String s = r.readLine();
+                        if ( s == null ) {
+                            break;
+                        }
+                        out.println( prefix + s );
+                    }
+                } catch ( java.io.IOException e ) {
+                    e.printStackTrace( System.err );
+                }
+            }
+        }.start();
     }
 }
