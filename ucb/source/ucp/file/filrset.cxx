@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-14 07:40:00 $
+ *  last change: $Author: abi $ $Date: 2001-05-14 08:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,24 +641,26 @@ XResultSet_impl::getRow(
 sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
     throw( sdbc::SQLException, uno::RuntimeException)
 {
-    if( ! row )
+    if( !row )
         throw sdbc::SQLException();
 
     if( row >= 0 )
     {
-          m_nRow = -1;
-          while( row-- ) next();
+        m_nRow = row - 1;
+        if( row >= m_aItems.size() )
+            while( row-- && OneMore() )
+                ;
     }
     else
     {
         row = - row - 1;
         last();
-        while( row-- )
-            --m_nRow;
+        while( row-- ) --m_nRow;
     }
 
     return 0<= m_nRow && m_nRow < m_aItems.size();
 }
+
 
 
 
