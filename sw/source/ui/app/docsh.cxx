@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:41:26 $
+ *  last change: $Author: os $ $Date: 2001-02-12 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,9 @@
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
+
+using namespace rtl;
+using namespace ::com::sun::star::uno;
 
 extern BOOL bNotLoadLayout;
 
@@ -1450,7 +1453,21 @@ void SwDocShell::RemoveOLEObjects()
         }
     }
 }
+/* -----------------------------12.02.01 12:08--------------------------------
 
+ ---------------------------------------------------------------------------*/
+#if SUPD>620
+Sequence< OUString >    SwDocShell::GetEventNames()
+{
+    Sequence< OUString > aRet = SfxObjectShell::GetEventNames();
+    sal_Int32 nLen = aRet.getLength();
+    aRet.realloc(nLen + 2);
+    OUString* pNames = aRet.getArray();
+    pNames[nLen++] = OUString::createFromAscii("OnMailMerge");
+    pNames[nLen] = OUString::createFromAscii("OnPageCountChange");
+    return aRet;
+}
+#endif
 void SwTmpPersist::FillClass( SvGlobalName * pClassName,
                             ULONG * pClipFormat,
                             String * pAppName,
@@ -1477,248 +1494,4 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 }
 
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/02/01 14:30:12  mib
-    XML files now can be loaded/saved as own format
-
-    Revision 1.6  2001/01/19 09:40:12  jp
-    Method SvLinkManager::PrepareReload removed
-
-    Revision 1.5  2000/11/14 18:25:04  jp
-    use moduleoptions
-
-    Revision 1.4  2000/10/31 20:32:32  jp
-    change usage of filestream to medium
-
-    Revision 1.3  2000/10/30 20:30:08  jp
-    Bug #79779#: BrushGraphicCache removed
-
-    Revision 1.2  2000/10/30 14:32:03  jp
-    Bug #79589#: View must not exist
-
-    Revision 1.1.1.1  2000/09/18 17:14:31  hr
-    initial import
-
-    Revision 1.388  2000/09/18 16:05:10  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.387  2000/09/07 15:59:19  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.386  2000/08/14 17:20:30  jp
-    Task #77577#: new AddXMLAsZipToTheStorage
-
-    Revision 1.385  2000/06/19 17:17:03  jp
-    Must changes
-
-    Revision 1.384  2000/06/13 09:56:09  os
-    using UCB
-
-    Revision 1.383  2000/05/26 07:21:27  os
-    old SW Basic API Slots removed
-
-    Revision 1.382  2000/05/10 11:52:42  os
-    Basic API removed
-
-    Revision 1.381  2000/05/08 11:32:54  jp
-    Bug #75666#: SaveAs - remove templatename when a MS importet doc saved as SWG doc
-
-    Revision 1.380  2000/05/03 13:06:34  jp
-    Bug #75497#: warning for loosing the VBA Basic code
-
-    Revision 1.379  2000/04/11 08:01:30  os
-    UNICODE
-
-    Revision 1.378  2000/03/16 16:39:35  kz
-    remove include sbjsmod.hxx
-
-    Revision 1.377  2000/03/08 17:26:34  os
-    GetAppWindow() - misuse as parent window eliminated
-
-    Revision 1.376  2000/03/06 15:10:58  os
-    #73092# FN_API_CALL - prevent dialogs in inserting documents via API
-
-    Revision 1.375  2000/03/03 16:14:15  pl
-    #73771# workaround for c50 intel compiler
-
-    Revision 1.374  2000/03/03 12:27:49  mib
-    Removed JavaScript
-
-    Revision 1.373  2000/02/14 14:50:56  os
-    #70473# Unicode
-
-    Revision 1.372  2000/02/10 17:02:52  jp
-    Task #72781#: new filter options for MS-filters
-
-    Revision 1.371  2000/02/02 17:00:29  jp
-    Task #72579#: interface of SwReader is changed
-
-    Revision 1.370  2000/01/26 18:55:34  jp
-    Task #72268#: flag for stored M$-VBasic storage
-
-    Revision 1.369  2000/01/11 19:26:33  jp
-    Bug #71674#: IsLoadFinished - dont modifiy the modifyflag
-
-    Revision 1.368  1999/10/21 12:46:06  os
-    CHG: SfxPasswordDialog
-
-    Revision 1.367  1999/09/08 13:44:47  jp
-    ConvertTo: use set the filteroptions if it set and dont show the dialog
-
-    Revision 1.366  1999/08/30 08:01:02  JP
-    save Text with more options
-
-
-      Rev 1.365   30 Aug 1999 10:01:02   JP
-   save Text with more options
-
-      Rev 1.364   26 Aug 1999 20:35:52   JP
-   load and save Text with more options (charset/language/lineend/font)
-
-      Rev 1.363   25 Aug 1999 19:47:32   JP
-   StartConvertFrom: use new dialog for ASCII filter options
-
-      Rev 1.362   30 Jul 1999 12:55:32   JP
-   ConvertTo: call IsSw3Writer at Writer
-
-      Rev 1.361   09 Jul 1999 11:14:10   JP
-   StartLoadFinishedTimer - dont load file/mail/news - graphics
-
-      Rev 1.360   08 Jul 1999 15:59:38   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.359   25 Jun 1999 11:58:52   OS
-   #63132# Macros in HTML not saved: Warning code
-
-      Rev 1.358   22 Jun 1999 17:03:10   KZ
-   Anpass. fuer Linux
-
-      Rev 1.357   10 Jun 1999 10:52:10   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.356   04 May 1999 14:58:42   JP
-   FilterExportklasse Writer von SvRef abgeleitet, damit sie immer zerstoert wird
-
-      Rev 1.355   26 Apr 1999 11:19:54   KZ
-   #include <svtools/sbx.hxx> eingefuegt
-
-      Rev 1.354   11 Mar 1999 10:23:56   OS
-   #63130# Basic-Warnmeldung auch fuer JScript
-
-      Rev 1.353   05 Feb 1999 09:57:42   OS
-   #61208# Warnung fuer Basic-Export abschaltbar
-
-      Rev 1.352   02 Feb 1999 08:42:42   OS
-   #61027# zweistellige Jahreszahlen
-
-      Rev 1.351   26 Nov 1998 13:49:52   MA
-   #54599# OLE: Drucker synchronisieren
-
-      Rev 1.350   18 Nov 1998 15:17:44   JP
-   Task #59398#: ClipboardFormatId Umstellungen
-
-      Rev 1.349   18 Sep 1998 11:20:28   JP
-   Bug #56312# StartFinishLoading - Anforderreihenfolge der Links umgestellt
-
-      Rev 1.348   25 Aug 1998 14:19:50   JP
-   Bug #55502#: Save/SaveAs - WaitObject vorm SFX-Speichern anlegen
-
-      Rev 1.347   12 Aug 1998 18:02:32   HR
-   #54781#: GCC braucht Temporary
-
-      Rev 1.346   23 Jul 1998 17:03:46   OS
-   StartConvertFrom kann auch mit SwPaM* aufgerufen werden  #52654#
-
-      Rev 1.345   23 Jul 1998 11:14:36   JP
-   Task #52654#: Einfuegen Doc nicht mit einer CrsrShell sondern mit einen PaM
-
-      Rev 1.344   20 Jul 1998 10:43:42   MA
-   #53013# Nach Anweisung abgeklemmt
-
-      Rev 1.343   17 Jun 1998 16:57:34   OM
-   #51260# Kein Online-Layout in Seitenvorschau
-
-      Rev 1.342   29 Apr 1998 09:28:04   MA
-   OLE Transparent
-
-      Rev 1.341   24 Apr 1998 17:17:26   JP
-   Bug #49791#: nur auf OLE casten wenn auch OLE drin ist (und nicht Grafik)
-
-      Rev 1.340   23 Apr 1998 15:35:38   OM
-   #49689 Aenderung der Seitenanzahl per Basic konfigurierbar
-
-      Rev 1.339   21 Apr 1998 12:39:02   JP
-   StartFinishedLoading: if abfrage korrigiert
-
-      Rev 1.338   02 Apr 1998 10:07:44   MIB
-   ConvertTo kann jetzt auch eigene Formate anderer Sw.*DocShells speichern
-
-      Rev 1.337   26 Mar 1998 18:01:54   MA
-   Draw: keinen Default-Jobsetup uebernehmen
-
-      Rev 1.336   20 Mar 1998 13:23:28   MA
-   OleVis2Page durch BrowseMode ersetzt
-
-      Rev 1.335   17 Mar 1998 15:42:10   JP
-   neu: NewHTMLDoc - aequivalent zum NewGlobalDoc
-
-      Rev 1.334   12 Mar 1998 09:36:18   JP
-   GlobalDoc ohne OLE-Object: Objecte bis zum SavePersist temp. in TempPersist verschieben
-
-      Rev 1.333   09 Mar 1998 10:02:12   JP
-   Bug GlobalDoc(speichern ohne Inhalt) -> OLE-Objecte aus den Sections nicht speichern
-
-      Rev 1.332   02 Mar 1998 16:55:42   OS
-   Fehlermeldung Makro in HTML korrigiert #47694#
-
-      Rev 1.331   02 Mar 1998 12:51:32   OS
-   Hilfedateiname fuer Globaldoc hart setzen #47604#
-
-      Rev 1.330   25 Feb 1998 14:05:08   MIB
-   GetFilter entfernt, weil ueberfluessig
-
-      Rev 1.329   25 Feb 1998 11:31:10   MIB
-   fix: Fileformat-Version fuer eigenen Reader im StartConvertFrom setzen
-
-      Rev 1.328   17 Feb 1998 12:43:12   JP
-   StartConvert: Templatenamen nur setzen, wenn der gesetzt ist
-
-      Rev 1.327   02 Feb 1998 18:19:06   JP
-   StartConvertFrom: DefaultTemplate am Reader setzen
-
-      Rev 1.326   29 Jan 1998 21:33:48   JP
-   GetEndOfIcons ersetzt durch GetEndOfExtras, das auf GetEndOfRedlines mappt
-
-      Rev 1.325   23 Jan 1998 16:04:58   MA
-   includes
-
-      Rev 1.324   08 Jan 1998 08:48:32   OS
-   QueryBox fuer ungspeicherte Basic-Makros #44706#
-
-      Rev 1.323   07 Jan 1998 18:42:04   MIB
-   5.0 Fileformat
-
-      Rev 1.322   02 Dec 1997 13:56:10   MA
-   includes
-
-      Rev 1.321   28 Nov 1997 14:28:40   MA
-   includes
-
-      Rev 1.320   24 Nov 1997 14:22:40   MA
-   includes
-
-      Rev 1.319   03 Nov 1997 13:08:44   MA
-   precomp entfernt
-
-      Rev 1.318   09 Oct 1997 14:49:46   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.317   01 Sep 1997 13:06:34   OS
-   DLL-Umstellung
-
-      Rev 1.316   16 Aug 1997 12:51:22   OS
-   include
-
-------------------------------------------------------------------------*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 16:10:26 $
+ *  last change: $Author: os $ $Date: 2001-02-12 11:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,9 @@
 #ifndef _UNOATXT_HXX
 #include <unoatxt.hxx>
 #endif
+#ifndef _SFX_EVENTCONF_HXX
+#include <sfx2/evntconf.hxx>
+#endif
 #ifndef _SFX_APPUNO_HXX //autogen
 #include <sfx2/appuno.hxx>
 #endif
@@ -396,8 +399,11 @@ SwModule::SwModule( SvFactory* pFact,
                                      ERRCODE_AREA_SW,
                                      ERRCODE_AREA_SW_END,
                                      pSwResMgr );
-    OFF_APP()->RegisterEvent(SW_EVENT_MAIL_MERGE, SW_RES(STR_PRINT_MERGE_MACRO));
-    OFF_APP()->RegisterEvent(SW_EVENT_PAGE_COUNT, SW_RES(STR_PAGE_COUNT_MACRO));
+
+#if SUPD>620
+    SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMerge"));
+    SfxEventConfiguration::RegisterEvent(SW_EVENT_PAGE_COUNT, SW_RES(STR_PAGE_COUNT_MACRO), String::CreateFromAscii("OnPageCountChange"));
+#endif
     pModuleConfig = new SwModuleOptions;
 
     //Die brauchen wie sowieso
