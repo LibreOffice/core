@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 
 #include <vos/mutex.hxx>
 #include <svapp.hxx>
-
+#ifndef _SV_SVDATA_HXX
+#include <svdata.hxx>
+#endif
 using namespace ::osl;
 using namespace ::vos;
 using namespace ::cppu;
@@ -533,6 +535,10 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
 
+        // window may be destroyed in drop event handler
+        ImplDelData         aDelData;
+        pWindow->ImplAddDel( &aDelData );
+
         if( xDropTarget.is() )
         {
             // retrieve relative mouse position
@@ -543,8 +549,13 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
                 xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, xTransferable );
         }
 
-        // release UI lock
-        pWindow->DecrementLockCount();
+        if ( !aDelData.IsDelete() )
+        {
+            pWindow->ImplRemoveDel( &aDelData );
+            // release UI lock
+            pWindow->DecrementLockCount();
+        }
+
     }
 
     return n;
