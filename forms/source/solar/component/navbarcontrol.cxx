@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navbarcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:20:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 11:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@ namespace frm
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::frame;
 
 #define FORWARD_TO_PEER_1( unoInterface, method, param1 )   \
