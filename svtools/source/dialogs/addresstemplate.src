@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:11:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text[ portuguese ] = "Fonte do livro de endereηos";
         Text[ russian ] = "Θρςξχνθκ ΰδπερνξι κνθγθ";
-        Text[ greek ] = "Προέλευση ατζέντας διευθύνσεων";
+        Text[ greek ] = "Προέλευση βιβλίου διευθύνσεων";
         Text[ dutch ] = "Bron adresboek";
         Text[ french ] = "Source du carnet d'adresses";
         Text[ spanish ] = "Fuente de libreta de direcciones";
@@ -118,7 +118,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ danish ] = "Adressekartotekskilde";
         Text[ swedish ] = "Adressbokskδlla";
         Text[ polish ] = "rσd³o ksiΉΏki adresowej";
-        Text[ portuguese_brazilian ] = "Origem do Livro de Endereηos";
+        Text[ portuguese_brazilian ] = "Fonte de dados Livro de Endereηos";
         Text[ japanese ] = "γ‚Άγƒ‰γƒ¬γ‚ΉεΈ³γ‚½γƒΌγ‚Ή";
         Text[ korean ] = "μ£Όμ†λ΅ μ›λ³Έ";
         Text[ chinese_simplified ] = "ι€θ®―η°ΏζΊ";
@@ -265,7 +265,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text[ portuguese ] = "Atribuiηγo de campos";
         Text[ russian ] = "Νΰηνΰχενθε οξλει";
-        Text[ greek ] = "Αντιστοίχιση πεδίου";
+        Text[ greek ] = "Ανάθεση πεδίων";
         Text[ dutch ] = "Veldindeling";
         Text[ french ] = "Assignation des champs";
         Text[ spanish ] = "Asignaciσn de campo";
@@ -865,7 +865,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text [ english_us ] = "FAX";
         Text[ portuguese ] = "Fax";
     Text[ russian ] = "Τΰκρ";
-    Text[ greek ] = "FAX";
+    Text[ greek ] = "ΦΑΞ";
     Text[ dutch ] = "FAX";
     Text[ french ] = "Fax";
     Text[ spanish ] = "FAX";
@@ -1106,7 +1106,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text [ english_us ] = "ID";
         Text[ portuguese ] = "ID";
     Text[ russian ] = "ID";
-    Text[ greek ] = "Ταυτότητα (ID)";
+    Text[ greek ] = "Αναγνωριστικό (ID)";
     Text[ dutch ] = "ID";
     Text[ french ] = "ID";
     Text[ spanish ] = "ID";
@@ -1134,7 +1134,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Bund.land";
         Text [ english ] = "State";
         Text [ english_us ] = "State";
-        Text[ language_user1 ] = "der punkt in \"German (49) Bund.land \" ist wahrscheinlich ein \"es\" in punktgr?se -100 (j.). In Holland gibt es keine Bundeslδnder. Was machen wir mit der άbersetzung?";
+        Text[ language_user1 ] = "; der punkt in \"German (49) Bund.land \" ist wahrscheinlich ein \"es\" in punktgr?se -100 (j.). In Holland gibt es keine Bundeslδnder. Was machen wir mit der άbersetzung?";
     Text[ portuguese ] = "Estado";
     Text[ russian ] = "Ξαλΰρςό";
     Text[ greek ] = "Νομός";
@@ -1341,6 +1341,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ slovak ] = "PozvaΕ¥";
         };
 };
+
 
 
 
