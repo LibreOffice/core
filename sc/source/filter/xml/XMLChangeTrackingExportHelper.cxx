@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
+ *  last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,7 +843,7 @@ void ScChangeTrackingExportHelper::CollectAutoStyles()
 void ScChangeTrackingExportHelper::WriteChangeViewSettings()
 {
     ScChangeViewSettings* pViewSettings = rExport.GetDocument()->GetChangeViewSettings();
-    if (pViewSettings)
+    if (pViewSettings && pChangeTrack)
     {
         if (!pViewSettings->ShowChanges())
             rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_show_changes, sXML_false);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 15:36:15 $
+ *  last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@
 #ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 #include "XMLChangeTrackingExportHelper.hxx"
 #endif
-#ifndef SC_DOCUNO_HXX
-#include "docuno.hxx"
-#endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
@@ -155,9 +152,6 @@
 #ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
 #endif
-#ifndef _XMLOFF_VISAREAEXPORT_HXX
-#include <xmloff/VisAreaExport.hxx>
-#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -177,9 +171,6 @@
 #endif
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
-#endif
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -584,20 +575,6 @@ void ScXMLExport::_ExportMeta()
         AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
     }
     SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
-}
-
-void ScXMLExport::_ExportViewSettings()
-{
-    SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_TABLE, sXML_view_settings, sal_True, sal_True);
-    if (pChangeTrackingExportHelper)
-        pChangeTrackingExportHelper->WriteChangeViewSettings();
-    ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
-    if (pDocObj)
-    {
-        SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
-        if (pEmbeddedObj)
-            XMLVisAreaExport aVisAreaExport(*this, sXML_embedded_visible_area, pEmbeddedObj->GetVisArea(), pEmbeddedObj->GetMapUnit());
-    }
 }
 
 void ScXMLExport::_ExportFontDecls()
@@ -1240,7 +1217,6 @@ void ScXMLExport::_ExportContent()
                             AddAttribute( XML_NAMESPACE_TABLE, sXML_print_ranges, sPrintRanges );
                         SvXMLElementExport aElemT(*this, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True);
                         CheckAttrList();
-                        WriteViewSettings();
                         WriteTableSource();
                         WriteScenario();
                         if (aDrawPages[nTable].bHasForms && aDrawPages[nTable].xDrawPage.is())
@@ -2499,10 +2475,6 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
             }
         }
     }
-}
-
-void ScXMLExport::WriteViewSettings()
-{
 }
 
 void ScXMLExport::WriteTableSource()

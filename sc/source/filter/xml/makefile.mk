@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
+#   last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ CXXFILES = \
         XMLChangeTrackingImportHelper.cxx \
         XMLTrackedChangesContext.cxx \
         XMLChangeViewSettingsContext.cxx \
+        XMLViewSettingsExport.cxx \
         XMLViewSettingsContext.cxx
 
 SLOFILES =  \
@@ -178,6 +179,7 @@ SLOFILES =  \
         $(SLO)$/XMLChangeTrackingImportHelper.obj \
         $(SLO)$/XMLTrackedChangesContext.obj \
         $(SLO)$/XMLChangeViewSettingsContext.obj \
+        $(SLO)$/XMLViewSettingsExport.obj \
         $(SLO)$/XMLViewSettingsContext.obj
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
+ *  last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,8 @@ class ScXMLExport : public SvXMLExport
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
 
+    void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
+    void            WriteView(const com::sun::star::uno::Any& aView);
     virtual void _ExportViewSettings();
     virtual void _ExportFontDecls();
     virtual void _ExportStyles( sal_Bool bUsed );
@@ -219,7 +221,6 @@ class ScXMLExport : public SvXMLExport
     sal_Bool IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
 
     void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
-    void WriteViewSettings();
     void WriteTableSource();
     void WriteScenario();   // core implementation
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
