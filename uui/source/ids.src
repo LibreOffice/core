@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:40:39 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,7 +1772,7 @@ Resource RID_UUI_ERRHDL
         Text[ portuguese_brazilian ] = "N�o foi poss�vel criar o objeto no diret�rio $(ARG2).";
         Text[ japanese ] = "オブジェクトはディレクトリ $(ARG1) に格納できません。";
         Text[ korean ] = "개체는 디렉토리 $(ARG2)에서 만들 수 없습니다.";
-        Text[ chinese_simplified ] = "无法在目录 $(ARG1) 内建立此对象。";
+        Text[ chinese_simplified ] = "无法在目录 $(ARG2) 内创建对象";
         Text[ chinese_traditional ] = "無法在目錄 $(ARG1) 之内建立物件";
         Text[ turkish ] = "'$(ARG2)' dizini i�inde bu nesne olu�turulam�yor.";
         Text[ arabic ] = "The object could not be created in directory $(ARG2)";
