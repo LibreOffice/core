@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:47:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,7 @@ namespace basegfx
 
             This method creates a circle approximation consisting of
             four cubic bezier segments, which approximate the given
-            circle with an error of less than 0.5 percent. To create
-            ellipses, simply scale the resulting circle
-            anisotrophically.
+            circle with an error of less than 0.5 percent.
 
             @param rCenter
             Center point of the circle
@@ -255,6 +253,23 @@ namespace basegfx
             Radius of the circle
          */
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double nRadius );
+
+        /** Create an ellipse polygon with given radii.
+
+            This method creates an ellipse approximation consisting of
+            four cubic bezier segments, which approximate the given
+            ellipse with an error of less than 0.5 percent.
+
+            @param rCenter
+            Center point of the circle
+
+            @param nRadiusX
+            Radius of the ellipse in X direction
+
+            @param nRadiusY
+            Radius of the ellipse in Y direction
+         */
+        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double nRadiusX, double nRadiusY );
 
     } // end of namespace tools
 } // end of namespace basegfx
