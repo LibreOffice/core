@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:06:59 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,11 @@
 #include "dbustrings.hrc"
 #endif
 
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
@@ -93,6 +96,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
 
 #include <algorithm>
 
@@ -104,13 +110,14 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
 DBG_NAME(DlgOrderCrit);
 //------------------------------------------------------------------------------
 DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XConnection>& _rxConnection,
-                            const Reference< XSQLQueryComposer>& _rxQueryComposer,
+                            const Reference< XSingleSelectQueryAnalyzer>& _rxQueryAnalyzer,
                             const Reference< XNameAccess>& _rxCols)
              :ModalDialog( pParent, ModuleRes(DLG_ORDERCRIT) )
             ,aLB_ORDERFIELD1(   this, ResId( LB_ORDERFIELD1 ) )
@@ -129,7 +136,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
             ,aBT_HELP(          this, ResId( BT_HELP ) )
             ,aFL_ORDER(         this, ResId( FL_ORDER ) )
             ,aSTR_NOENTRY(      ResId( STR_NOENTRY ) )
-            ,m_xQueryComposer(_rxQueryComposer)
+            ,m_xQueryAnalyzer(_rxQueryAnalyzer)
             ,m_xColumns(_rxCols)
             ,m_xConnection(_rxConnection)
 {
@@ -160,30 +167,41 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
         arrLbFields[j]->SelectEntryPos(0);
         arrLbValues[j]->SelectEntryPos(0);
     }
-    // ... sowie auch die restlichen Felder
-    Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
-    const ::rtl::OUString* pBegin = aNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-    Reference<XPropertySet> xColumn;
-    for(;pBegin != pEnd;++pBegin)
+    try
     {
-        ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
-        OSL_ENSURE(xColumn.is(),"Column is null!");
-        sal_Int32 nDataType;
-        xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
-        sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
-        if(eColumnSearch != ColumnSearch::NONE)
+        m_xQueryComposer.set(m_xQueryAnalyzer,UNO_QUERY);
+        // ... sowie auch die restlichen Felder
+        Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+        Reference<XPropertySet> xColumn;
+        for(;pIter != pEnd;++pIter)
         {
-            for( j=0 ; j < DOG_ROWS ; j++ )
+            xColumn.set(m_xColumns->getByName(*pIter),UNO_QUERY);
+            OSL_ENSURE(xColumn.is(),"Column is null!");
+            if ( xColumn.is() )
             {
-                arrLbFields[j]->InsertEntry(*pBegin);
+                sal_Int32 nDataType;
+                xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
+                sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);
+                if(eColumnSearch != ColumnSearch::NONE)
+                {
+                    for( j=0 ; j < DOG_ROWS ; j++ )
+                    {
+                        arrLbFields[j]->InsertEntry(*pIter);
+                    }
+                }
             }
         }
+
+        m_sOrgOrder = m_xQueryAnalyzer->getOrder();
+
+        SetOrderList( m_sOrgOrder );
     }
-
-    m_sOrgOrder = m_xQueryComposer->getOrder();
-
-    SetOrderList( m_xQueryComposer->getOrder() );
+    catch(const Exception&)
+    {
+        OSL_ENSURE(0,"Exception catched while filling order lines!");
+    }
     EnableLines();
 
     aLB_ORDERFIELD1.SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
@@ -306,6 +324,8 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
     static const ::rtl::OUString sDESC = ::rtl::OUString::createFromAscii(" DESC ");
     static const ::rtl::OUString sASC  = ::rtl::OUString::createFromAscii(" ASC ");
 
+    Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryAnalyzer,UNO_QUERY)->getColumns();
+
     ::rtl::OUString sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )
     {
@@ -314,7 +334,32 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
             if(sOrder.getLength())
                 sOrder += ::rtl::OUString::createFromAscii(",");
 
-            sOrder += ::dbtools::quoteName(sQuote,arrLbFields[i]->GetSelectEntry());
+            String sName = arrLbFields[i]->GetSelectEntry();
+            try
+            {
+                sal_Bool bFunction = sal_False;
+                Reference< XPropertySet > xColumn;
+                if ( xColumns.is() && xColumns->hasByName( sName ) && (xColumns->getByName( sName ) >>= xColumn) && xColumn.is() )
+                {
+                    if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
+                    {
+                        ::rtl::OUString sRealName;
+                        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
+                        sName = sRealName;
+                        static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
+                        static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));
+                        if ( xColumn->getPropertySetInfo()->hasPropertyByName(sFunction) )
+                            xColumn->getPropertyValue(sFunction) >>= bFunction;
+                    }
+                }
+                if ( bFunction )
+                    sOrder += sName;
+                else
+                    sOrder += ::dbtools::quoteName(sQuote,sName);
+            }
+            catch(Exception)
+            {
+            }
             if(arrLbValues[i]->GetSelectEntryPos())
                 sOrder += sDESC;
             else
