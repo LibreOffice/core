@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:26:06 $
+ *  last change: $Author: os $ $Date: 2001-03-08 09:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ uno::Reference< text::XTextRange >  SwXFootnote::getAnchor(void) throw( uno::Run
     if(pFmt)
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        SwPosition aPos( *pTxtFtn->GetStartNode() );
+        SwPosition aPos( pTxtFtn->GetTxtNode() );
         aRef = SwXTextRange::CreateTextRangeFromPosition((SwDoc*)GetDoc(), aPos, 0);
     }
     else
@@ -619,6 +619,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/15 11:26:06  mib
+    #81708#: new frame size properties and XML attributes
+
     Revision 1.5  2001/01/12 16:12:45  os
     new: Redline container
 
