@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:54:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,13 @@ const SfxItemPropertyMap* lcl_GetDataPilotFieldMap()
 {
     static SfxItemPropertyMap aDataPilotFieldMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_AUTOSHOW),     0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SELPAGE),      0,  &getCppuType((rtl::OUString*)0),                    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FUNCTION),     0,  &getCppuType((sheet::GeneralFunction*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_LAYOUTINFO),   0,  &getCppuType((sheet::DataPilotFieldLayoutInfo*)0),  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ORIENT),       0,  &getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_REFERENCE),    0,  &getCppuType((sheet::DataPilotFieldReference*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SORTINFO),     0,  &getCppuType((sheet::DataPilotFieldSortInfo*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_USESELPAGE),   0,  &getBooleanCppuType(),                              0, 0 },
         {0,0,0,0}
     };
@@ -1544,6 +1548,30 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue(
     {
         setUseCurrentPage(cppu::any2bool(aValue));
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_AUTOSHOW ) )
+    {
+        sheet::DataPilotFieldAutoShowInfo aInfo;
+        if (aValue >>= aInfo)
+            setAutoShowInfo(aInfo);
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_LAYOUTINFO ) )
+    {
+        sheet::DataPilotFieldLayoutInfo aInfo;
+        if (aValue >>= aInfo)
+            setLayoutInfo(aInfo);
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFERENCE ) )
+    {
+        sheet::DataPilotFieldReference aRef;
+        if (aValue >>= aRef)
+            setReference(aRef);
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_SORTINFO ) )
+    {
+        sheet::DataPilotFieldSortInfo aInfo;
+        if (aValue >>= aInfo)
+            setSortInfo(aInfo);
+    }
 }
 
 uno::Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -1562,6 +1590,14 @@ uno::Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const rtl::OUString& aP
         aRet <<= getCurrentPage();
     else if ( aNameString.EqualsAscii( SC_UNONAME_USESELPAGE ) )
         aRet <<= getUseCurrentPage();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_AUTOSHOW ) )
+        aRet <<= getAutoShowInfo();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_LAYOUTINFO ) )
+        aRet <<= getLayoutInfo();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFERENCE ) )
+        aRet <<= getReference();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_SORTINFO ) )
+        aRet <<= getSortInfo();
 
     return aRet;
 }
@@ -1708,6 +1744,109 @@ void ScDataPilotFieldObj::setUseCurrentPage(sal_Bool bUse)
     }
 }
 
+sheet::DataPilotFieldAutoShowInfo ScDataPilotFieldObj::getAutoShowInfo()
+{
+    sheet::DataPilotFieldAutoShowInfo aInfo;
+
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            aInfo = *(pDim->GetAutoShowInfo());
+    }
+    return aInfo;
+}
+
+void ScDataPilotFieldObj::setAutoShowInfo(const sheet::DataPilotFieldAutoShowInfo& aInfo)
+{
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            pDim->SetAutoShowInfo(&aInfo);
+    }
+}
+
+sheet::DataPilotFieldLayoutInfo ScDataPilotFieldObj::getLayoutInfo()
+{
+    sheet::DataPilotFieldLayoutInfo aInfo;
+
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            aInfo = *(pDim->GetLayoutInfo());
+    }
+
+    return aInfo;
+}
+
+void ScDataPilotFieldObj::setLayoutInfo(const sheet::DataPilotFieldLayoutInfo& aInfo)
+{
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            pDim->SetLayoutInfo(&aInfo);
+    }
+}
+
+sheet::DataPilotFieldReference ScDataPilotFieldObj::getReference()
+{
+    sheet::DataPilotFieldReference aInfo;
+
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            aInfo = *(pDim->GetReferenceValue());
+    }
+
+    return aInfo;
+}
+
+void ScDataPilotFieldObj::setReference(const sheet::DataPilotFieldReference& aInfo)
+{
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            pDim->SetReferenceValue(&aInfo);
+    }
+}
+
+sheet::DataPilotFieldSortInfo ScDataPilotFieldObj::getSortInfo()
+{
+    sheet::DataPilotFieldSortInfo aInfo;
+
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            aInfo = *(pDim->GetSortInfo());
+    }
+
+    return aInfo;
+}
+
+void ScDataPilotFieldObj::setSortInfo(const sheet::DataPilotFieldSortInfo& aInfo)
+{
+    ScDPObject* pDPObj(pParent->GetDPObject());
+    if (pDPObj)
+    {
+        ScDPSaveDimension* pDim = NULL;
+        if (lcl_GetDim(pDPObj, nSourcePos, pDim))
+            pDim->SetSortInfo(&aInfo);
+    }
+}
+
 //------------------------------------------------------------------------
 
 ScDataPilotItemsObj::ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, SCSIZE nSP) :
@@ -1724,43 +1863,8 @@ ScDataPilotItemsObj::~ScDataPilotItemsObj()
 
 BOOL lcl_GetMembers( ScDataPilotDescriptorBase* pParent, SCSIZE nSP, uno::Reference<container::XNameAccess>& xMembers )
 {
-    BOOL bRet = FALSE;
     ScDPObject* pDPObj(pParent->GetDPObject());
-    if (pDPObj)
-    {
-        uno::Reference<container::XNameAccess> xDimsName(pDPObj->GetSource()->getDimensions());
-        uno::Reference<container::XIndexAccess> xIntDims(new ScNameToIndexAccess( xDimsName ));
-        uno::Reference<beans::XPropertySet> xDim(xIntDims->getByIndex(static_cast<sal_Int32>(nSP)), uno::UNO_QUERY);
-        if (xDim.is())
-        {
-            sal_Int32 nUsedHier;
-            xDim->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_USEDHIER))) >>= nUsedHier;
-            uno::Reference<sheet::XHierarchiesSupplier> xHierSup(xDim, uno::UNO_QUERY);
-            if (xHierSup.is())
-            {
-                uno::Reference<container::XIndexAccess> xHiers(new ScNameToIndexAccess(xHierSup->getHierarchies()));
-                uno::Reference<sheet::XLevelsSupplier> xLevSupp( xHiers->getByIndex(nUsedHier), uno::UNO_QUERY );
-                if ( xLevSupp.is() )
-                {
-                    uno::Reference<container::XIndexAccess> xLevels(new ScNameToIndexAccess( xLevSupp->getLevels()));
-                    if (xLevels.is())
-                    {
-                        sal_Int32 nLevCount = xLevels->getCount();
-                        if (nLevCount > 0)
-                        {
-                            uno::Reference<sheet::XMembersSupplier> xMembSupp( xLevels->getByIndex(0), uno::UNO_QUERY );
-                            if ( xMembSupp.is() )
-                            {
-                                xMembers.set(xMembSupp->getMembers());
-                                bRet = TRUE;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return bRet;
+    return pDPObj && pDPObj->GetMembersNA( nSP, xMembers );
 }
 
 SCSIZE lcl_GetItemCount( ScDataPilotDescriptorBase* pParent, SCSIZE nSP )
@@ -1826,27 +1930,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
     ScUnoGuard aGuard;
 // TODO
 
-    ScDPObject* pDPObj(pParent->GetDPObject());
-    if (pDPObj)
-    {
-        uno::Reference<container::XNameAccess> xMembers;
-        if (lcl_GetMembers(pParent, nSourcePos, xMembers))
-        {
-            uno::Reference<container::XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
-            sal_Int32 nCount = xMembersIndex->getCount();
-            uno::Sequence<rtl::OUString> aSeq(nCount);
-            rtl::OUString* pAry = aSeq.getArray();
-            sal_Bool bFound(sal_False);
-            for (sal_Int32 nItem = 0; nItem < nCount; nItem++)
-            {
-                uno::Reference<container::XNamed> xMember(xMembersIndex->getByIndex(nItem), uno::UNO_QUERY);
-                if (xMember.is())
-                    pAry[nItem] = xMember->getName();
-            }
-            return aSeq;
-        }
-   }
-    return uno::Sequence<rtl::OUString>();
+    uno::Sequence<rtl::OUString> aSeq;
+    if( ScDPObject* pDPObj = pParent->GetDPObject() )
+        pDPObj->GetMembers( nSourcePos, aSeq );
+    return aSeq;
 }
 
 sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const rtl::OUString& aName )
