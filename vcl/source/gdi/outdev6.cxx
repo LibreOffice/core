@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:19:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,6 +521,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                 aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
                 pVDev->SetMapMode( aMap );
+                const BOOL  bVDevOldMap = pVDev->IsMapModeEnabled();
 
                 // create paint bitmap
                 ( (GDIMetaFile&) rMtf ).WindStart();
@@ -528,7 +529,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 ( (GDIMetaFile&) rMtf ).WindStart();
                 pVDev->EnableMapMode( FALSE );
                 aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                pVDev->EnableMapMode( TRUE );
+                pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
 
                 // create mask bitmap
                 pVDev->SetLineColor( COL_BLACK );
@@ -541,7 +542,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 ( (GDIMetaFile&) rMtf ).WindStart();
                 pVDev->EnableMapMode( FALSE );
                 aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                pVDev->EnableMapMode( TRUE );
+                pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( TRUE ) here!
 
                 // create alpha mask from gradient
                 pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
