@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-06 11:50:07 $
+ *  last change: $Author: sj $ $Date: 2002-10-09 11:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,7 +1681,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             nDepth = 4;
 
         if ( ( pPara->meTextAdjust == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_Adjust, pPara->mnTextAdjust ) ) )
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_Adjust, pPara->mnTextAdjust ) ) )
             nPropertyFlags |= 0x00000800;
         nLineSpacing = pPara->mnLineSpacing;
 
@@ -1713,20 +1713,20 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
                     nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
             }
             if ( ( pPara->meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
                 nPropertyFlags |= 0x00001000;
         }
         if ( ( pPara->meLineSpacingTop == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_UpperDist, pPara->mnLineSpacingTop ) ) )
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mnLineSpacingTop ) ) )
             nPropertyFlags |= 0x00002000;
         if ( ( pPara->meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) ) )
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) ) )
             nPropertyFlags |= 0x00004000;
         if ( ( pPara->meForbiddenRules == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_UpperDist, pPara->mbForbiddenRules ) ) )
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbForbiddenRules ) ) )
             nPropertyFlags |= 0x00020000;
         if ( ( pPara->meParagraphPunctation == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ) ) )
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ) ) )
             nPropertyFlags |= 0x00080000;
         if ( ( pPara->meBiDi == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_BiDi, pPara->mnBiDi ) ) )
@@ -1923,19 +1923,19 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             else
             {
                 if ( ( pPortion->mnCharAttrHard & 1 ) ||
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Bold, nCharAttr ) ) )
+                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Bold, nCharAttr ) ) )
                     nPropertyFlags |= 1;
                 if ( ( pPortion->mnCharAttrHard & 2 ) ||
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Italic, nCharAttr ) ) )
+                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Italic, nCharAttr ) ) )
                     nPropertyFlags |= 2;
                 if ( ( pPortion->mnCharAttrHard & 4 ) ||
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Underline, nCharAttr ) ) )
+                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Underline, nCharAttr ) ) )
                     nPropertyFlags |= 4;
                 if ( ( pPortion->mnCharAttrHard & 0x10 ) ||
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Shadow, nCharAttr ) ) )
+                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Shadow, nCharAttr ) ) )
                     nPropertyFlags |= 0x10;
                 if ( ( pPortion->mnCharAttrHard & 0x200 ) ||
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Embossed, nCharAttr ) ) )
+                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Embossed, nCharAttr ) ) )
                     nPropertyFlags |= 512;
             }
             if ( rTextObj.HasExtendedBullets() )
@@ -1947,19 +1947,19 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 nCharAttr  |= i << 10;
             }
             if ( ( pPortion->meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Font, pPortion->mnFont ) ) )
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Font, pPortion->mnFont ) ) )
                 nPropertyFlags |= 0x00010000;
             if ( ( pPortion->meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_AsianOrComplexFont, pPortion->mnAsianOrComplexFont ) ) )
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_AsianOrComplexFont, pPortion->mnAsianOrComplexFont ) ) )
                 nPropertyFlags |= 0x00200000;
             if ( ( pPortion->meCharHeight == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_FontHeight, pPortion->mnCharHeight ) ) )
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontHeight, pPortion->mnCharHeight ) ) )
                 nPropertyFlags |= 0x00020000;
             if ( ( pPortion->meCharColor == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_FontColor, nCharColor & 0xffffff ) ) )
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontColor, nCharColor & 0xffffff ) ) )
                 nPropertyFlags |= 0x00040000;
             if ( ( pPortion->meCharEscapement == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_Escapement, pPortion->mnCharEscapement ) ) )
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Escapement, pPortion->mnCharEscapement ) ) )
                 nPropertyFlags |= 0x00080000;
 
             sal_uInt32 nCharCount = pPortion->Count();
