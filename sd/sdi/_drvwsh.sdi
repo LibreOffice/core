@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:42:15 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2213,6 +2213,12 @@ interface DrawView : Object
     SID_REDO // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_FORMATPAINTBRUSH //
+    [
+        ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
 
