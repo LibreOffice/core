@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:12:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #include <object.hxx>
 #include <sotdata.hxx>
 #include <clsids.hxx>
-#pragma hdrstop
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -96,10 +98,11 @@ SotData_Impl::SotData_Impl()
 |*
 |*    Beschreibung
 *************************************************************************/
-static SotData_Impl aData;
+namespace { struct ImplData : public rtl::Static<SotData_Impl, ImplData> {}; }
+
 SotData_Impl * SOTDATA()
 {
-    return &aData;
+    return &ImplData::get();
 }
 
 /*************************************************************************
