@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: ka $ $Date: 2002-05-22 12:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,3 +215,6 @@
 #define HID_SD_DRAW_GRAF_TOOLBOX            (HID_SD_START + 121)
 
 #define HID_SD_FW_GRAFFILTERS               (HID_SD_START + 122)
+
+#define HID_SD_TABBAR_PAGES                 (HID_SD_START + 123)
+#define HID_SD_TABBAR_LAYERS                (HID_SD_START + 124)

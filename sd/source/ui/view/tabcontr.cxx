@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-02 15:45:11 $
+ *  last change: $Author: ka $ $Date: 2002-05-22 12:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "res_bmp.hrc"
 #include "drviewsh.hxx"
 #include "grviewsh.hxx"
+#include "helpids.h"
 #include "sdview.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -135,6 +136,7 @@ SdTabControl::SdTabControl(SdDrawViewShell* pViewSh, Window* pParent) :
     EnableEditMode();
     SetSizePixel(Size(0, 0));
     SetMaxPageWidth( 150 );
+    SetHelpId( HID_SD_TABBAR_PAGES );
 }
 
 /*************************************************************************
