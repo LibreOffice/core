@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:50 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,16 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_DESKTOP_HXX_
-#include <services/desktop.hxx>
+#ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
+#include <loadenv/loadenv.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_COMPONENTLOADER_HXX_
-#include <helper/componentloader.hxx>
+#ifndef __FRAMEWORK_LOADENV_TARGETHELPER_HXX_
+#include <loadenv/targethelper.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DESKTOP_HXX_
+#include <services/desktop.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
@@ -81,10 +85,6 @@
 
 #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 #include <classes/taskcreator.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
-#include <classes/argumentanalyzer.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
@@ -151,10 +151,6 @@
 
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
@@ -840,218 +836,23 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                                                                                                                                                         css::lang::IllegalArgumentException ,
                                                                                                                                                                         css::uno::RuntimeException          )
 {
-/*    // SAFE {
-    ReadGuard aReadLock(m_aLock);
-    ComponentLoader aLoader(m_xFactory,this);
-    aReadLock.unlock();
-    // } SAFE
-
-    return aLoader.loadComponentFromURL(sURL,sTargetFrameName,nSearchFlags,lArguments);
-*/
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
     RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::Desktop::loadComponentFromURL" );
 
-    // CHeck incoming parameter and throw an exception for wrong values!
-    if(
-        ( &sURL                              == NULL ) ||
-        ( sURL.getLength()                   <  1    ) ||
-        ( sURL.compareToAscii( ".uno"  , 4 ) == 0    ) ||
-        ( sURL.compareToAscii( "slot:" , 5 ) == 0    )
-      )
-    {
-        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer, empty AND not loadable URL's are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 1 );
-    }
-    // Attention: An empty target name is equal to "_self"!
-    if(
-        ( &sTargetFrameName                               == NULL )   ||
-        ( sTargetFrameName.getLength()                    <  1    )   ||
-        (
-            // is it a special target && ( not _blank || _default ) ...
-            // These two ones are supported only!
-            ( sTargetFrameName.indexOf( (sal_Unicode)'_' ) == 0                     )    &&
-            ( sTargetFrameName                             != SPECIALTARGET_BLANK   )    &&
-            ( sTargetFrameName                             != SPECIALTARGET_DEFAULT )
-        )
-      )
-    {
-        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Unsupported target name found!"), static_cast< ::cppu::OWeakObject* >(this), 2 );
-    }
-    /* TODO: How can I test the search flags?! */
-    // Attention: Arguments are optional!
-    if( &lArguments == NULL )
-    {
-        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 4 );
-    }
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xFactory;
+    aReadLock.unlock();
 
-    // Set default return value, if method failed.
-    css::uno::Reference< css::lang::XComponent > xComponent;
-
-    // Attention: URL must be parsed full. Otherwise some detections on it will fail!
-    // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
-    css::util::URL aURL;
-    aURL.Complete = sURL;
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    css::uno::Reference< css::util::XURLTransformer > xParser( m_xFactory->createInstance( SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
-    aWriteLock.unlock();
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    if( xParser.is() == sal_True )
-    {
-        xParser->parseStrict( aURL );
-    }
-
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
-    css::uno::Reference< css::frame::XDispatchProvider > xSysTask;
-    sal_Bool bPlugin = impl_checkPlugInState();
-    // webtop mode
-    if( bPlugin )
-    {
-        // "_default" isn't allowed for webtop
-        // force using of "_blank"
-        ::rtl::OUString sTarget = sTargetFrameName;
-        if(sTarget==SPECIALTARGET_DEFAULT)
-            sTarget=SPECIALTARGET_BLANK;
-
-        // We can't guarantee synchronous functionality inside the webtop environment.
-        // We create a system task every time!
-        xSysTask = css::uno::Reference< css::frame::XDispatchProvider >( findFrame(sTarget,nSearchFlags), css::uno::UNO_QUERY );
-        if(xSysTask.is())
-            xDispatcher= xSysTask->queryDispatch(aURL,SPECIALTARGET_SELF,0);
-    }
-    // FATOffice
-    else
-        xDispatcher = queryDispatch(aURL,sTargetFrameName,nSearchFlags);
-
-    if( xDispatcher.is() == sal_True )
-    {
-        // We should set us as interaction handler for possible exceptions during load proccess ...
-        // But we shouldn't do that - if anyone already is set!
-        // Our interaction handler is called back in method "handle()". We set right condition there
-        // to break following loop and throw detected exception from here again!
-        css::uno::Sequence< css::beans::PropertyValue > lOwnArguments( lArguments    );
-        ArgumentAnalyzer                                aAnalyzer    ( lOwnArguments );
-        if( aAnalyzer.existArgument( E_INTERACTIONHANDLER ) == sal_False )
-        {
-            css::uno::Reference< css::task::XInteractionHandler > xHandler( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-            aAnalyzer.setArgument( E_INTERACTIONHANDLER, xHandler );
-        }
-
-        if( !aAnalyzer.existArgument( E_MACROEXECUTIONMODE ) )
-            aAnalyzer.setArgument( E_MACROEXECUTIONMODE, css::document::MacroExecMode::NEVER_EXECUTE );
-
-        if( !aAnalyzer.existArgument( E_UPDATEDOCMODE ) )
-            aAnalyzer.setArgument( E_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE );
-
-        // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
-        // And we must do it before we call dispatch!
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        aWriteLock.lock();
-        m_eLoadState = E_NOTSET;
-        aWriteLock.unlock();
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-
-        // ... dispatch URL at this dispatcher.
-        // Set us as listener for status events from this dispatcher.
-
-        css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyer( xDispatcher, css::uno::UNO_QUERY );
-        if ( xNotifyer.is() )
-            xNotifyer->dispatchWithNotification( aURL, aAnalyzer.getArgumentsConst(), this );
-        else
-        {
-            // We can't work without any notification!
-            // Don't forget to dispose possible new created system task.
-            // But do it for "_blank" created ones inside a webtop environment only. Otherwise we can't be shure
-            // that variable xSysTask doesn't mean any found task for other target names or flags!!!
-            // Case of "blubber" and CREATE flag can be detected here right and will produce ZOMBIE tasks
-            // ... but nothing is perfect here ... it's a hack currently and shouldn't occure in current
-            // implementation.
-            LOG_WARNING("Desktop::loadComponentFromURL()", "Missing interface XNotifyingDispatch. Return NULL!")
-            css::uno::Reference< css::util::XCloseable > xClosable( xSysTask, css::uno::UNO_QUERY );
-            if(
-                    bPlugin &&
-                    xClosable.is() &&
-                    (
-                        sTargetFrameName==SPECIALTARGET_BLANK ||
-                        sTargetFrameName==SPECIALTARGET_DEFAULT
-                    )
-              )
-            {
-                try
-                {
-                    xClosable->close(sal_True);
-                }
-                catch( css::util::CloseVetoException& )
-                {
-                }
-            }
-            return xComponent;
-        }
-
-        // ... we must wait for asynchron result of this dispatch()-operation!
-        // Attention: Don't use lock here ... dispatcher call us back!
-        while( m_eLoadState == E_NOTSET )
-        {
-            Application::Yield();
-        }
-
-        // Which reaction was detected ... interaction request or loading state?
-        // Test it ...
-
-        // But - first make snapshot of our asynchron status informations by using a lock.
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        ReadGuard aReadLock( m_aLock );
-        ELoadState                                eState                = m_eLoadState;
-                                                  m_eLoadState          = E_NOTSET;
-
-        css::uno::Reference< css::frame::XFrame > xLoadTarget           = m_xLastFrame;
-                                                  m_xLastFrame          = css::uno::Reference< css::frame::XFrame >(); // Don't hold last frame for ever - or he can't die!
-
-        css::uno::Any                             aRequest              = m_aInteractionRequest;
-                                                  m_aInteractionRequest = css::uno::Any();
-        aReadLock.unlock();
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-
-        switch( eState )
-        {
-            //case E_FAILED     :   ... nothing to do here ... we must return our default ... NULL!
-            case E_SUCCESSFUL   :   {
-                                        // Try to get new current component.
-                                        if( xLoadTarget.is() == sal_True )
-                                        {
-                                            xComponent = impl_getFrameComponent( xLoadTarget );
-                                        }
-                                    }
-                                    break;
-            case E_INTERACTION  :   {
-                                        // Interaction indicates throwed exception during load proccess.
-                                        // Forward io exceptions to user ...
-                                        css::ucb::InteractiveIOException           exIOInteractive ;
-                                        css::ucb::InteractiveAugmentedIOException  exIOAugmented   ;
-
-                                        if( m_aInteractionRequest >>= exIOInteractive )
-                                            throw css::io::IOException( exIOInteractive.Message, static_cast< ::cppu::OWeakObject* >(this) );
-                                        else
-                                        if( m_aInteractionRequest >>= exIOAugmented )
-                                            throw css::io::IOException( exIOAugmented.Message, static_cast< ::cppu::OWeakObject* >(this) );
-
-                                        // ... but unknown exceptions shouldnt be forwarded. Use default return value of NULL to
-                                        // tell user failed state of load operation!
-                                    }
-                                    break;
-        }
-    }
-    // Return result of this operation.
-    return xComponent;
+    return LoadEnv::loadComponentFromURL(xThis, xSMGR, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
 /*-************************************************************************************************************//**
     @interface  XTasksSupplier
     @short      get access to create enumerations of ouer taskchilds
-    @descr      Direct childs of desktop are tasks everytime (could be PlugInFrames too).
+    @descr      Direct childs of desktop are tasks everytime.
                 Call these method to could create enumerations of it.
 
 But; Don't forget - you will be the owner of returned object and must release it!
@@ -1085,7 +886,7 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 /*-************************************************************************************************************//**
     @interface  XTasksSupplier
     @short      return current active task of ouer direct childs
-    @descr      Desktop childs are tasks only (could be PlugInFrames too)! If we have an active path from desktop
+    @descr      Desktop childs are tasks only ! If we have an active path from desktop
                 as top to any frame on bottom, we must have an active direct child. His reference is returned here.
 
     @attention  a)  Do not confuse it with getCurrentFrame()! The current frame don't must one of ouer direct childs.
@@ -1809,7 +1610,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     else
     if( aRequest >>= aErrorCodeRequest )
     {
-        sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK == ERRCODE_WARNING_MASK);
+        sal_Bool bWarning = ((aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
         if (xApprove.is() && bWarning)
             xApprove->select();
         else
@@ -1967,7 +1768,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     {
         case DESKTOP_PROPHANDLE_ACTIVEFRAME           :   aValue <<= m_aChildTaskContainer.getActive();
                                                     break;
-        case DESKTOP_PROPHANDLE_ISPLUGGED           :   aValue <<= impl_checkPlugInState();
+        case DESKTOP_PROPHANDLE_ISPLUGGED           :   aValue <<= sal_False;
                                                     break;
         case DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO:    aValue <<= m_bSuspendQuickstartVeto;
                                                     break;
@@ -2237,49 +2038,6 @@ void Desktop::impl_sendNotifyTerminationEvent()
             }
         }
     }
-}
-
-/*-************************************************************************************************************//**
-    @short      search for any plugin frame to return current plugin state
-    @descr      For property "IsPlugged" we need information about this state.
-                We search for any plugin frame in our container (it can be tasks or plugin-frames only!).
-                If we found somewhere we return TRUE, FALSE otherwise.
-
-    @attention  We don't need any lock here - our container is threadsafe himself!
-
-    @seealso    property IsPlugged
-
-    @param      -
-    @return     sal_True, if a plugin frame exist, sal_False otherwise.
-
-    @onerror    We return sal_False.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-sal_Bool Desktop::impl_checkPlugInState() const
-{
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // set default return value if search failed or no plugin could be detected.
-    sal_Bool bPluginExist = sal_False;
-
-    // We must search at ouer childs. We make a flat search at our direct children only.
-    // Break loop, if something was found or all container items was compared.
-    css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks    = m_aChildTaskContainer.getAllElements();
-    sal_uInt32                                                      nCount    = lTasks.getLength();
-    sal_uInt32                                                      nPosition = 0;
-    while(
-            ( bPluginExist  ==  sal_False   )   &&
-            ( nPosition     <   nCount      )
-         )
-    {
-        css::uno::Reference< css::mozilla::XPluginInstance > xPlugInFrame( lTasks[nPosition], css::uno::UNO_QUERY );
-        bPluginExist = xPlugInFrame.is();
-        ++nPosition;
-    }
-
-    return bPluginExist;
 }
 
 //_________________________________________________________________________________________________________________
