@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
+#   last change: $Author: mt $ $Date: 2001-07-24 15:17:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,6 @@ SLOFILES =	\
             $(SLO)$/impedit3.obj \
             $(SLO)$/impedit4.obj \
             $(SLO)$/impedit5.obj \
-            $(SLO)$/textconv.obj \
             $(SLO)$/unolingu.obj
 
 SVXLIGHTOBJFILES= \
@@ -135,7 +134,6 @@ SVXLIGHTOBJFILES= \
             $(OBJ)$/impedit3.obj \
             $(OBJ)$/impedit4.obj \
             $(OBJ)$/impedit5.obj \
-            $(OBJ)$/textconv.obj \
             $(OBJ)$/forbiddencharacterstable.obj \
             $(OBJ)$/unolingu.obj
 .ENDIF
