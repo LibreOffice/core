@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldmappingimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:09:02 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 11:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace abp
     static const ::rtl::OUString& lcl_getDriverSettingsNodeName()
     {
         static const ::rtl::OUString s_sDriverSettingsNodeName =
-            ::rtl::OUString::createFromAscii( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.mozaddressbook.Driver" );
+            ::rtl::OUString::createFromAscii( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" );
         return s_sDriverSettingsNodeName;
     }
 
@@ -426,6 +426,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:09:02  fs
+ *  initial checkin - address book auto pilot - exception enabled code for dealing with the field mapping / configuration access
+ *
  *
  *  Revision 1.0 30.07.01 16:00:50  fs
  ************************************************************************/
