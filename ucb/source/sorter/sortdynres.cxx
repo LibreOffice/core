@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
+ *  last change: $Author: dv $ $Date: 2001-02-08 12:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,8 +370,15 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
         }
     }
 
+    Any  aRet;
+
+    try {
+        aRet = pCurSet->getPropertyValue( OUString::createFromAscii( "IsRowCountFinal" ) );
+    }
+    catch ( UnknownPropertyException ) {}
+    catch ( WrappedTargetException ) {}
+
     long nOldCount = pCurSet->GetCount();
-    Any  aRet = pCurSet->getPropertyValue( OUString::createFromAscii( "IsRowCountFinal" ) );
     BOOL bWasFinal;
 
     aRet >>= bWasFinal;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:39:27 $
+ *  last change: $Author: dv $ $Date: 2001-02-08 12:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,6 +1078,7 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                                    long nIndexOne, long nIndexTwo,
                                    SortInfo* pSortInfo )
 
+    throw( SQLException, RuntimeException )
 {
     Reference < XRow > xRowOne = Reference< XRow >::query( xResultOne );
     Reference < XRow > xRowTwo = Reference< XRow >::query( xResultTwo );
@@ -1286,6 +1287,7 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
 long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                                    Reference < XResultSet > xResultTwo,
                                    long nIndexOne, long nIndexTwo )
+    throw( SQLException, RuntimeException )
 {
     long        nCompare = 0;
     SortInfo*   pInfo = mpSortInfo;
@@ -1326,6 +1328,7 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
 //--------------------------------------------------------------------------
 long SortedResultSet::Compare( SortListData *pOne,
                                SortListData *pTwo )
+    throw( SQLException, RuntimeException )
 {
     long nIndexOne;
     long nIndexTwo;
@@ -1364,6 +1367,7 @@ long SortedResultSet::Compare( SortListData *pOne,
 //--------------------------------------------------------------------------
 long SortedResultSet::FindPos( SortListData *pEntry,
                                long _nStart, long _nEnd )
+    throw( SQLException, RuntimeException )
 {
     if ( _nStart > _nEnd )
         return _nStart + 1;
@@ -1486,15 +1490,18 @@ void SortedResultSet::Initialize(
     // now fetch all the elements from the original result set,
     // get there new position in the sorted result set and insert
     // an entry in the sorted to original mapping list
-    while ( mxOriginal->absolute( nIndex ) )
-    {
-        pData       = new SortListData( nIndex );
-        long nPos   = FindPos( pData, 1, nIndex-1 );
+    try {
+        while ( mxOriginal->absolute( nIndex ) )
+        {
+            pData       = new SortListData( nIndex );
+            long nPos   = FindPos( pData, 1, nIndex-1 );
 
-        maS2O.Insert( pData, nPos );
+            maS2O.Insert( pData, nPos );
 
-        nIndex++;
+            nIndex++;
+        }
     }
+    catch ( SQLException ) { OSL_ENSHURE( sal_False, "SortedResultSet::Initialize() : Got unexpected SQLException" ); }
 
     // when we have fetched all the elements, we can create the
     // original to sorted mapping list from the s2o list
@@ -1521,33 +1528,37 @@ void SortedResultSet::CheckProperties( long nOldCount, BOOL bWasFinal )
     if ( !mpPropChangeListeners )
         return;
 
-    // check for propertyChangeEvents
-    if ( nOldCount != GetCount() )
-    {
-        BOOL bIsFinal;
-        PropertyChangeEvent aEvt;
-
-        aEvt.PropertyName = OUString::createFromAscii( "RowCount" );
-        aEvt.Further = FALSE;
-        aEvt.PropertyHandle = -1;
-        aEvt.OldValue <<= nOldCount;
-        aEvt.NewValue <<= GetCount();
-
-        PropertyChanged( aEvt );
-
-        OUString aName = OUString::createFromAscii( "IsRowCountFinal" );
-        Any aRet = getPropertyValue( aName );
-        aRet >>= bIsFinal;
-        if ( bIsFinal != bWasFinal )
+    try {
+        // check for propertyChangeEvents
+        if ( nOldCount != GetCount() )
         {
-            aEvt.PropertyName = aName;
+            BOOL bIsFinal;
+            PropertyChangeEvent aEvt;
+
+            aEvt.PropertyName = OUString::createFromAscii( "RowCount" );
             aEvt.Further = FALSE;
             aEvt.PropertyHandle = -1;
-            aEvt.OldValue <<= (sal_Bool) bWasFinal;
-            aEvt.NewValue <<= (sal_Bool) bIsFinal;
+            aEvt.OldValue <<= nOldCount;
+            aEvt.NewValue <<= GetCount();
+
             PropertyChanged( aEvt );
+
+            OUString aName = OUString::createFromAscii( "IsRowCountFinal" );
+            Any aRet = getPropertyValue( aName );
+            aRet >>= bIsFinal;
+            if ( bIsFinal != bWasFinal )
+            {
+                aEvt.PropertyName = aName;
+                aEvt.Further = FALSE;
+                aEvt.PropertyHandle = -1;
+                aEvt.OldValue <<= (sal_Bool) bWasFinal;
+                aEvt.NewValue <<= (sal_Bool) bIsFinal;
+                PropertyChanged( aEvt );
+            }
         }
     }
+    catch ( UnknownPropertyException ) {}
+    catch ( WrappedTargetException ) {}
 }
 
 //-------------------------------------------------------------------------
@@ -1789,58 +1800,62 @@ void SortedResultSet::ResortModified( EventList* pList )
     SortListData *pData;
     ListAction *pAction;
 
-    for ( i=0; i<maModList.Count(); i++ )
-    {
-        pData = (SortListData*) maModList.GetObject( i );
-        nCompare = CompareImpl( mxOther, mxOriginal,
-                                pData->mnOldPos, pData->mnCurPos );
-        pData->mbModified = FALSE;
-        if ( nCompare != 0 )
+    try {
+        for ( i=0; i<maModList.Count(); i++ )
         {
-            nCurPos = (long) maO2S.GetObject( (ULONG) pData->mnCurPos );
-            if ( nCompare < 0 )
+            pData = (SortListData*) maModList.GetObject( i );
+            nCompare = CompareImpl( mxOther, mxOriginal,
+                                    pData->mnOldPos, pData->mnCurPos );
+            pData->mbModified = FALSE;
+            if ( nCompare != 0 )
             {
-                nNewPos = FindPos( pData, 1, nCurPos-1 );
-                nStart = nNewPos;
-                nEnd = nCurPos;
-                nOffset = 1;
-            }
-            else
-            {
-                nNewPos = FindPos( pData, nCurPos+1, mnLastSort );
-                nStart = nCurPos;
-                nEnd = mnLastSort;
-                nOffset = -1;
-            }
-
-            if ( nNewPos != nCurPos )
-            {
-                // correct the lists!
-                maS2O.Remove( (ULONG) nCurPos );
-                maS2O.Insert( pData, nNewPos );
-                for ( j=1; j<maO2S.Count(); j++ )
+                nCurPos = (long) maO2S.GetObject( (ULONG) pData->mnCurPos );
+                if ( nCompare < 0 )
                 {
-                    nVal = (long) maO2S.GetObject( (ULONG)( j ) );
-                    if ( ( nStart <= nVal ) && ( nVal <= nEnd ) )
-                    {
-                        nVal += nOffset;
-                        maO2S.Replace( (void*) (nVal), (ULONG)( j ) );
-                    }
+                    nNewPos = FindPos( pData, 1, nCurPos-1 );
+                    nStart = nNewPos;
+                    nEnd = nCurPos;
+                    nOffset = 1;
+                }
+                else
+                {
+                    nNewPos = FindPos( pData, nCurPos+1, mnLastSort );
+                    nStart = nCurPos;
+                    nEnd = mnLastSort;
+                    nOffset = -1;
                 }
 
-                maO2S.Replace( (void*) nNewPos, (ULONG) pData->mnCurPos );
+                if ( nNewPos != nCurPos )
+                {
+                    // correct the lists!
+                    maS2O.Remove( (ULONG) nCurPos );
+                    maS2O.Insert( pData, nNewPos );
+                    for ( j=1; j<maO2S.Count(); j++ )
+                    {
+                        nVal = (long) maO2S.GetObject( (ULONG)( j ) );
+                        if ( ( nStart <= nVal ) && ( nVal <= nEnd ) )
+                        {
+                            nVal += nOffset;
+                            maO2S.Replace( (void*) (nVal), (ULONG)( j ) );
+                        }
+                    }
 
-                pAction = new ListAction;
-                pAction->Position = nCurPos;
-                pAction->Count = 1;
-                pAction->ListActionType = ListActionType::MOVED;
-                pAction->ActionInfo <<= nNewPos-nCurPos;
-                pList->Insert( pAction );
+                    maO2S.Replace( (void*) nNewPos, (ULONG) pData->mnCurPos );
+
+                    pAction = new ListAction;
+                    pAction->Position = nCurPos;
+                    pAction->Count = 1;
+                    pAction->ListActionType = ListActionType::MOVED;
+                    pAction->ActionInfo <<= nNewPos-nCurPos;
+                    pList->Insert( pAction );
+                }
+                pList->AddEvent( ListActionType::PROPERTIES_CHANGED,
+                                 nNewPos, 1 );
             }
-            pList->AddEvent( ListActionType::PROPERTIES_CHANGED,
-                             nNewPos, 1 );
         }
     }
+    catch ( SQLException ) { OSL_ENSHURE( sal_False, "SortedResultSet::ResortModified() : Got unexpected SQLException" ); }
+
     maModList.Clear();
 }
 
@@ -1850,26 +1865,29 @@ void SortedResultSet::ResortNew( EventList* pList )
     long            i, j, nNewPos, nVal;
     SortListData    *pData;
 
-    for ( i = mnLastSort; i<maS2O.Count(); i++ )
-    {
-        pData = (SortListData*) maModList.GetObject( i );
-        nNewPos = FindPos( pData, 1, mnLastSort );
-        if ( nNewPos != i )
+    try {
+        for ( i = mnLastSort; i<maS2O.Count(); i++ )
         {
-            maS2O.Remove( (ULONG) i );
-            maS2O.Insert( pData, nNewPos );
-            // maO2S liste korigieren
-            for ( j=1; j<maO2S.Count(); j++ )
+            pData = (SortListData*) maModList.GetObject( i );
+            nNewPos = FindPos( pData, 1, mnLastSort );
+            if ( nNewPos != i )
             {
-                nVal = (long) maO2S.GetObject( (ULONG)( j ) );
-                if ( nVal >= nNewPos )
-                    maO2S.Replace( (void*) (nVal+1), (ULONG)( j ) );
+                maS2O.Remove( (ULONG) i );
+                maS2O.Insert( pData, nNewPos );
+                // maO2S liste korigieren
+                for ( j=1; j<maO2S.Count(); j++ )
+                {
+                    nVal = (long) maO2S.GetObject( (ULONG)( j ) );
+                    if ( nVal >= nNewPos )
+                        maO2S.Replace( (void*) (nVal+1), (ULONG)( j ) );
+                }
+                maO2S.Replace( (void*) nNewPos, (ULONG) pData->mnCurPos );
             }
-            maO2S.Replace( (void*) nNewPos, (ULONG) pData->mnCurPos );
+            mnLastSort++;
+            pList->AddEvent( ListActionType::INSERTED, nNewPos, 1 );
         }
-        mnLastSort++;
-        pList->AddEvent( ListActionType::INSERTED, nNewPos, 1 );
     }
+    catch ( SQLException ) { OSL_ENSHURE( sal_False, "SortedResultSet::ResortNew() : Got unexpected SQLException" ); }
 }
 
 //-------------------------------------------------------------------------
