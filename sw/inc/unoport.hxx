@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 09:44:33 $
+ *  last change: $Author: os $ $Date: 2000-12-19 15:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
@@ -95,6 +98,7 @@
 class SwFmtFld;
 class SwFrmFmt;
 class SwUnoCrsr;
+class SwRedline;
 /* -----------------29.05.98 14:42-------------------
  *
  * --------------------------------------------------*/
@@ -110,7 +114,9 @@ enum SwTextPortionType
     PORTION_TOXMARK_START,
     PORTION_TOXMARK_END,
     PORTION_BOOKMARK_START,
-    PORTION_BOOKMARK_END
+    PORTION_BOOKMARK_END,
+    PORTION_REDLINE_START,
+    PORTION_REDLINE_END
 };
 
 class SwXTextPortion : public cppu::WeakImplHelper6
@@ -140,6 +146,7 @@ class SwXTextPortion : public cppu::WeakImplHelper6
     BOOL                        bIsCollapsed;
 
     SwFmtFld*           GetFldFmt(BOOL bInit = sal_False);
+protected:
     SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwTextPortionType eType   );
@@ -206,7 +213,8 @@ public:
 
     void                SetControlChar(sal_Int16 nSet) {nControlChar = nSet;}
 
-    void                SetIsCollapsed(BOOL bSet) { bIsCollapsed = bSet;}
+    BOOL                IsCollapsed() const { return bIsCollapsed;}
+    void                SetCollapsed(BOOL bSet) { bIsCollapsed = bSet;}
 
     //falls es mal als service erzeugt werden kann
     //void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 09:46:26 $
+ *  last change: $Author: os $ $Date: 2000-12-19 15:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,8 @@ uno::Any SwXTextPortion::getPropertyValue(const OUString& rPropertyName) throw( 
                 case PORTION_TOXMARK_END:       sRet = C2U(UNO_NAME_DOCUMENT_INDEX_MARK);break;
                 case PORTION_BOOKMARK_START :
                 case PORTION_BOOKMARK_END :  sRet = C2U(UNO_NAME_BOOKMARK);break;
+                case PORTION_REDLINE_START:
+                case PORTION_REDLINE_END:   sRet = C2U("Redline");break;
             }
             aAny <<= sRet;
         }
@@ -362,7 +364,9 @@ uno::Any SwXTextPortion::getPropertyValue(const OUString& rPropertyName) throw( 
                 case PORTION_TOXMARK_START:
                 case PORTION_REFMARK_END:
                 case PORTION_TOXMARK_END:
-                case PORTION_BOOKMARK_END :  ;
+                case PORTION_BOOKMARK_END :
+                case PORTION_REDLINE_START :
+                case PORTION_REDLINE_END :
                     aAny.setValue(&bIsCollapsed, ::getBooleanCppuType());
                 break;
                 default:
@@ -540,6 +544,7 @@ void SwXTextPortion::dispose(void) throw( uno::RuntimeException )
   -----------------------------------------------------------------------*/
 void SwXTextPortion::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetRegisteredIn())
         throw uno::RuntimeException();
     aLstnrCntnr.AddListener(aListener);
@@ -549,6 +554,7 @@ void SwXTextPortion::addEventListener(const uno::Reference< lang::XEventListener
   -----------------------------------------------------------------------*/
 void SwXTextPortion::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
         throw uno::RuntimeException();
 }
@@ -558,6 +564,7 @@ void SwXTextPortion::removeEventListener(const uno::Reference< lang::XEventListe
 uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumeration(const OUString& aServiceName)
         throw( uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
@@ -570,6 +577,7 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
  * --------------------------------------------------*/
 uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames(void) throw( uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.TextContent");
@@ -587,6 +595,7 @@ OUString SwXTextPortion::getImplementationName(void) throw( uno::RuntimeExceptio
  * --------------------------------------------------*/
 sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
@@ -630,6 +639,7 @@ sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( un
 uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames(void)
                                                 throw( uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         throw uno::RuntimeException();

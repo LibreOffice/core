@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 09:44:57 $
+ *  last change: $Author: os $ $Date: 2000-12-19 15:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ enum CursorType
     CURSOR_FOOTNOTE,
     CURSOR_HEADER,
     CURSOR_FOOTER,
+    CURSOR_REDLINE,
     CURSOR_ALL          // fuer Search&Replace
 };
 

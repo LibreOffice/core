@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:32:58 $
+ *  last change: $Author: os $ $Date: 2000-12-19 15:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,3 +629,9 @@ const SwPropNameLen __FAR_DATA UNO_NAME_GAMMA                       (MAP_CHAR_LE
 const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_IS_INVERTED                  (MAP_CHAR_LEN("GraphicIsInverted"));
 const SwPropNameLen __FAR_DATA UNO_NAME_TRANSPARENCY                (MAP_CHAR_LEN("Transparency"));
 const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_COLOR_MODE                  (MAP_CHAR_LEN("GraphicColorMode"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_AUTHOR                      (MAP_CHAR_LEN("RedlineAuthor"));
+const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_DATE_TIME                   (MAP_CHAR_LEN("RedlineDateTime"));
+const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_COMMENT                     (MAP_CHAR_LEN("RedlineComment"));
+const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_TYPE                        (MAP_CHAR_LEN("RedlineType"));
+const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_SUCCESSOR_DATA              (MAP_CHAR_LEN("RedlineSuccessorData"));

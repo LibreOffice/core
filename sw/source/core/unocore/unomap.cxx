@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:32:58 $
+ *  last change: $Author: os $ $Date: 2000-12-19 15:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 #ifndef _SVX_PBINITEM_HXX //autogen
 #include <svx/pbinitem.hxx>
@@ -1888,11 +1891,16 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTextPortionExtensionMap_Impl[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_TEXT_PORTION_TYPE),  0, &::getCppuType((const OUString*)0),PropertyAttribute::READONLY,  0},
-                    {SW_PROP_NAME(UNO_NAME_CONTROL_CHARACTER ), 0, &::getCppuType((const sal_Int16*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
-                    {SW_PROP_NAME(UNO_NAME_BOOKMARK),           0, &::getCppuType((const uno::Reference<text::XTextContent>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
-                    {SW_PROP_NAME(UNO_NAME_IS_COLLAPSED),       0, &::getBooleanCppuType(),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-                    {SW_PROP_NAME(UNO_NAME_IS_START),           0, &::getBooleanCppuType(),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+                    {SW_PROP_NAME(UNO_NAME_BOOKMARK),           0, &::getCppuType((const Reference<XTextContent>*)0),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
+                    {SW_PROP_NAME(UNO_NAME_CONTROL_CHARACTER ), 0, &::getCppuType((const sal_Int16*)0),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
+                    {SW_PROP_NAME(UNO_NAME_IS_COLLAPSED),       0, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+                    {SW_PROP_NAME(UNO_NAME_IS_START),           0, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR),     0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME),  0, &::getCppuType((util::DateTime*)0),                  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT),    0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_TYPE),       0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA),  0, &::getCppuType((Sequence<PropertyValue>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {SW_PROP_NAME(UNO_NAME_TEXT_PORTION_TYPE),  0, &::getCppuType((OUString*)0),                        PropertyAttribute::READONLY,    0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextPortionExtensionMap_Impl;
