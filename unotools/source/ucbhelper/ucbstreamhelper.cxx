@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-25 10:12:25 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 15:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,19 +99,33 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( pBroker )
     {
-        try
+        UcbLockBytesRef xLockBytes;
+        if ( eOpenMode & STREAM_WRITE )
         {
-            UcbLockBytesRef xLockBytes;
-            if ( eOpenMode & STREAM_WRITE )
+            sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC );
+            if ( bTruncate )
             {
-                sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC );
-                if ( bTruncate )
+                try
                 {
                     // truncate is implemented with deleting the original file
                     ::ucb::Content aCnt( rFileName, Reference < XCommandEnvironment >() );
                     aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
                 }
 
+                catch ( CommandAbortedException& )
+                {
+                    // couldn't truncate/delete
+                }
+                catch ( ContentCreationException& )
+                {
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+
+            try
+            {
                 // make sure that the desired file exists before trying to open
                 ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
                 InsertCommandArgument aInsertArg;
@@ -122,6 +136,21 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
                 aContent.executeCommand( ::rtl::OUString::createFromAscii( "insert" ), aCmdArg );
             }
 
+            // it is NOT an error when the stream already exists and no truncation was desired
+            catch ( CommandAbortedException& )
+            {
+                // currently never an error is detected !
+            }
+            catch ( ContentCreationException& )
+            {
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+
+        try
+        {
             // create LockBytes using UCB
             ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
             xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(), eOpenMode, pHandler );
