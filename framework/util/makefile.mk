@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: pb $ $Date: 2001-06-15 09:44:31 $
+#   last change: $Author: cd $ $Date: 2001-06-18 10:01:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,16 +84,17 @@ LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 
 LIB1TARGET=		$(SLB)$/fweobj.lib
 
-LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj		\
-                $(SLO)$/attributelist.obj			\
-                $(SLO)$/imageproducer.obj			\
-                $(SLO)$/menudocumenthandler.obj		\
-                $(SLO)$/bmkmenu.obj					\
-                $(SLO)$/saxnamespacefilter.obj		\
-                $(SLO)$/xmlnamespaces.obj			\
-                $(SLO)$/toolboxconfiguration.obj	\
-                $(SLO)$/toolboxdocumenthandler.obj \
-                $(SLO)$/lockhelper.obj
+LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj				\
+                $(SLO)$/attributelist.obj					\
+                $(SLO)$/imageproducer.obj					\
+                $(SLO)$/menudocumenthandler.obj				\
+                $(SLO)$/bmkmenu.obj							\
+                $(SLO)$/saxnamespacefilter.obj				\
+                $(SLO)$/xmlnamespaces.obj					\
+                $(SLO)$/toolboxconfiguration.obj			\
+                $(SLO)$/toolboxdocumenthandler.obj			\
+                $(SLO)$/lockhelper.obj						\
+                $(SLO)$/toolboxlayoutdocumenthandler.obj
 
 # --- services library ----------------------------------------------------
 
