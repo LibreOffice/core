@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:09:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,22 +389,35 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
         m_aCurrentColumns[SelectColumns]->getByName(aName) >>= xColumn;
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function"))),"Property FUNCTION not available!");
 
         ::rtl::OUString sRealName,sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
         xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
-        if(sTableName.indexOf('.',0) != -1)
+        sal_Bool bFunction = sal_False;
+        xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function"))) >>= bFunction;
+        if ( sRealName == aName )
         {
-            ::rtl::OUString aCatlog,aSchema,aTable;
-            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
-            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
+            if ( bFunction )
+                aAppendOrder += aName;
+            else
+            {
+                if(sTableName.indexOf('.',0) != -1)
+                {
+                    ::rtl::OUString aCatlog,aSchema,aTable;
+                    ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
+                    ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
+                }
+                else
+                    sTableName = ::dbtools::quoteName(aQuote,sTableName);
+
+                aAppendOrder =  sTableName;
+                aAppendOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+                aAppendOrder += ::dbtools::quoteName(aQuote,sRealName);
+            }
         }
         else
-            sTableName = ::dbtools::quoteName(aQuote,sTableName);
-
-        aAppendOrder =  sTableName;
-        aAppendOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-        aAppendOrder += ::dbtools::quoteName(aQuote,sRealName);
+            aAppendOrder += ::dbtools::quoteName(aQuote,aName);
     }
     else
         aAppendOrder = getTableAlias(column) + ::dbtools::quoteName(aQuote,aName);
@@ -595,7 +608,10 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             {
                 ::rtl::OUString sSql = m_aWorkSql;
                 sSql += STR_WHERE;
-                sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" 0 = 1"));
+                sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" 0 = 1 "));
+                ::rtl::OUString sGroupBy = getSQLPart(Group);
+                if ( sGroupBy.getLength() )
+                    sSql += sGroupBy;
 
                 Reference<XResultSetMetaDataSupplier> xResMetaDataSup;
                 xResMetaDataSup = Reference<XResultSetMetaDataSupplier>(xStmt->executeQuery(sSql),UNO_QUERY);
