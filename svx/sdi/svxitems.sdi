@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:09:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,10 +442,11 @@ item String                 SvxColorTableItem;
 item String                 SvxGradientListItem;
 item String                 SvxHatchListItem;
 item String                 SvxBitmapListItem;
-item String SfxLockBytesItem;
-item String SvxFontListItem;
+item String                 SfxLockBytesItem;
+item String                 SvxFontListItem;
+item String                 avmedia_MediaItem;
 
-item BYTE           SfxGlobalNameItem;
+item BYTE                   SfxGlobalNameItem;
 
 //-------------------------------------------------------------------------
 
