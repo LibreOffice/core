@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dcommn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-18 10:03:48 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,14 +1046,17 @@ BOOL Base3DCommon::Clip3DPolygon(UINT32Bucket& rEdgeIndex)
 BOOL Base3DCommon::IsInside(UINT32 nInd, UINT32 nDim, BOOL bLow)
 {
     B3dEntity& aEntity = aBuffers[nInd];
+
+    // #110270#
+    // Add SMALL_DVALUE to this tests
     if(bLow)
     {
-        if(aEntity.Point()[nDim] < -1.0)
+        if(aEntity.Point()[nDim] < -(1.0 + SMALL_DVALUE))
             return FALSE;
     }
     else
     {
-        if(aEntity.Point()[nDim] > 1.0)
+        if(aEntity.Point()[nDim] > (1.0 + SMALL_DVALUE))
             return FALSE;
     }
     return TRUE;
@@ -1156,35 +1159,51 @@ void Base3DCommon::CalcNewPoint(UINT32 nNew, UINT32 nHigh, UINT32 nLow,
     B3dEntity& aNew = aBuffers[nNew];
     B3dEntity& aHigh = aBuffers[nHigh];
     B3dEntity& aLow = aBuffers[nLow];
+    double fFactor(1.0);
     aNew.Reset();
 
-    double fFactor = 1.0;
     if(aLow.Point()[nDim] != aHigh.Point()[nDim])
+    {
         fFactor = (fBound - aHigh.Point()[nDim])
             / (aLow.Point()[nDim] - aHigh.Point()[nDim]);
+    }
 
 #ifdef DBG_UTIL
-    if(fFactor > 1.0 || fFactor < 0.0)
-        DBG_ERROR("Wrong clipping factor (out of range)!");
-    if(fFactor == 1.0 || fFactor == 0.0)
-        DBG_ERROR("Wrong clipping factor (on boundary)!");
+        if(fFactor > 1.0 || fFactor < 0.0)
+            DBG_ERROR("Wrong clipping factor (out of range)!");
 #endif
 
-    // Neuen Punkt berechnen, aber Reihenfolge der
-    // Punkte aufrecht erhalten um die Sichtbarkeit
-    // der Kanten zu retten
-    aLow.ForceEqualBase(GetTransformationSet(), aHigh);
-    if(fBound < 0.0)
-        aNew.CalcInBetween(aLow, aHigh, 1.0 - fFactor);
+    if(fFactor == 0.0)
+    {
+        // #110270#
+        // If fFactor is 0.0, copy the point
+        aNew.Copy(aHigh);
+    }
+    else if(fFactor == 1.0)
+    {
+        // #110270#
+        // If fFactor is 1.0, copy the point
+        aNew.Copy(aLow);
+    }
     else
-        aNew.CalcInBetween(aHigh, aLow, fFactor);
+    {
+        // Neuen Punkt berechnen, aber Reihenfolge der
+        // Punkte aufrecht erhalten um die Sichtbarkeit
+        // der Kanten zu retten
+        aLow.ForceEqualBase(GetTransformationSet(), aHigh);
 
-    // WICHTIG fuer die Numerik beim Clippen: Die betroffene
-    // Koordinate wirklich auf fBound setzen, nicht berechnen.
-    // Beim Berechnen koennen nur wieder Ungenauigkeiten auftreten,
-    // die bei der Bestimmung der Clipping-Grenzen zu
-    // Endlosschleifen fuehren koennen.
-    aNew.Point()[nDim] = fBound;
+        if(fBound < 0.0)
+            aNew.CalcInBetween(aLow, aHigh, 1.0 - fFactor);
+        else
+            aNew.CalcInBetween(aHigh, aLow, fFactor);
+
+        // WICHTIG fuer die Numerik beim Clippen: Die betroffene
+        // Koordinate wirklich auf fBound setzen, nicht berechnen.
+        // Beim Berechnen koennen nur wieder Ungenauigkeiten auftreten,
+        // die bei der Bestimmung der Clipping-Grenzen zu
+        // Endlosschleifen fuehren koennen.
+        aNew.Point()[nDim] = fBound;
+    }
 }
 
 /*************************************************************************
