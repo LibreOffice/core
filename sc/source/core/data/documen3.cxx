@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:43:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // System - Includes -----------------------------------------------------
 
 #ifdef PCH
@@ -487,8 +486,8 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     rTab = 0;
     String  aFilterName;        // wird vom Loader gefuellt
     String  aOptions;       // Filter-Optionen
-    ScDocumentLoader aLoader( aFileName, aFilterName, aOptions,
-        pExtDocOptions ? pExtDocOptions->nLinkCnt + 1 : 1 );
+    sal_uInt32 nLinkCnt = pExtDocOptions ? pExtDocOptions->GetDocSettings().mnLinkCnt : 0;
+    ScDocumentLoader aLoader( aFileName, aFilterName, aOptions, nLinkCnt + 1 );
     if ( aLoader.IsError() )
         return FALSE;
     ScDocument* pSrcDoc = aLoader.GetDocument();
