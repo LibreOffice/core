@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,9 @@
  *
  ************************************************************************/
 
-#include <malloc.h>
 #include <hash_map>
 
+#include <sal/alloca.h>
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
 
