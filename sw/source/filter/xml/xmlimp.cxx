@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:21:51 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUseFormerTextWrapping = false;
     // --> OD 2004-07-08 #i28701#
     bool bConsiderWrapOnObjPos = false;
+    // --> PB 2004-08-23 #i33095#
+    bool bLoadReadonly = false;
 
     OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
 
@@ -1101,6 +1103,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // --> OD 2004-07-08 #i28701#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos")) )
                     bConsiderWrapOnObjPos = true;
+                // <--
+                // --> PB 2004-08-23 #i33095#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LoadReadonly")) )
+                    bLoadReadonly = true;
                 // <--
             }
             catch( Exception& )
@@ -1173,6 +1179,13 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("ConsiderTextWrapOnObjPos")), makeAny( false ) );
+    }
+    // <--
+    // --> PB 2004-08-23 #i33095#
+    if ( !bLoadReadonly )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("LoadReadonly") ), makeAny( false ) );
     }
     // <--
 
