@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:47 $
+ *  last change: $Author: jb $ $Date: 2002-11-08 17:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,10 +203,26 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
     {
     case ElementType::schema:
         bPackage = this->maybeGetAttribute(_xAttribs,ATTR_PACKAGE,aPackage);
+        OSL_ENSURE(bPackage, "configmgr::xml::ElementParser: Found schema without package.");
         break;
 
     case ElementType::layer:
-        bPackage = this->maybeGetAttribute(_xAttribs,ATTR_CONTEXT,aPackage);
+        bPackage =  this->maybeGetAttribute(_xAttribs,ATTR_PACKAGE,aPackage);
+
+        if (!bPackage) // for compatibility we still support 'oor:context'
+        {
+            bPackage =  this->maybeGetAttribute(_xAttribs,ATTR_CONTEXT,aPackage);
+
+            if (bPackage)
+            {
+                OSL_TRACE("configmgr::xml::ElementParser: Found obsolete layer attribute "
+                          "oor:context=\"%s\" in component \"%s\".\n",
+                          rtl::OUStringToOString(aPackage,RTL_TEXTENCODING_ASCII_US).getStr(),
+                          rtl::OUStringToOString(aName,RTL_TEXTENCODING_ASCII_US).getStr());
+            }
+        }
+
+        OSL_ENSURE(bPackage, "configmgr::xml::ElementParser: Found layer without package.");
         break;
 
     case ElementType::node:
@@ -230,9 +246,7 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
     case ElementType::unknown:
         if (!bNameFound) return _sElementName;
 
-        bPackage =
-            this->maybeGetAttribute(_xAttribs,ATTR_PACKAGE,aPackage) ||
-            this->maybeGetAttribute(_xAttribs,ATTR_CONTEXT,aPackage);
+        bPackage = this->maybeGetAttribute(_xAttribs,ATTR_PACKAGE,aPackage);
         break;
 
     default:
@@ -248,6 +262,12 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
 
         aName = aPackage.concat(OUString(&chPackageSep,1)).concat(aName);
     }
+    else
+    {
+        OSL_ENSURE(!this->maybeGetAttribute(_xAttribs,ATTR_PACKAGE,aPackage),
+                   "configmgr::xml::ElementParser: Found unexpected 'oor:package' on inner or unknown node." );
+    }
+
     return aName;
 }
 // -----------------------------------------------------------------------------

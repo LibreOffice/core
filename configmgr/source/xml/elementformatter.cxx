@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-21 13:57:53 $
+ *  last change: $Author: jb $ $Date: 2002-11-08 17:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,22 +175,28 @@ void ElementFormatter::addName(OUString const & _aName)
 {
     if (_aName.getLength())
     {
-        if ( m_aElementType == ElementType::layer )
+        switch( m_aElementType )
         {
-            sal_Int32 nIndex = _aName.lastIndexOf('.');
-
-            OUString aNodeName = _aName.copy(nIndex + 1);
-            addAttribute(ATTR_NAME, aNodeName);
-
-            if (nIndex > 0)
+        case ElementType::schema:
+        case ElementType::layer:
             {
-                OUString aContext = _aName.copy(0, nIndex);
-                addAttribute(ATTR_CONTEXT, aContext);
+                sal_Int32 nIndex = _aName.lastIndexOf('.');
+
+                OUString aNodeName = _aName.copy(nIndex + 1);
+                addAttribute(ATTR_NAME, aNodeName);
+
+                OSL_ENSURE(nIndex > 0,"Found component root element without a package part in its name");
+                if (nIndex > 0)
+                {
+                    OUString aPackage = _aName.copy(0, nIndex);
+                    addAttribute(ATTR_PACKAGE, aPackage);
+                }
             }
-        }
-        else
-        {
+            break;
+
+        default:
             addAttribute(ATTR_NAME, _aName);
+            break;
         }
     }
 }
