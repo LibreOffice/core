@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakeventlistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
+#endif
+
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
 #endif
 
 //.........................................................................
@@ -184,7 +188,7 @@ namespace comphelper
                                     >   OWeakEventListenerAdapter_Base;
     /** the most simple listener adapter: for XEventListeners at XComponents
     */
-    class OWeakEventListenerAdapter : public OWeakEventListenerAdapter_Base
+    class COMPHELPER_DLLPUBLIC OWeakEventListenerAdapter : public OWeakEventListenerAdapter_Base
     {
     public:
         OWeakEventListenerAdapter(
