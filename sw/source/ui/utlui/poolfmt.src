@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:06:13 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ String STR_POOLCHR_FOOTNOTE
     Text[ hebrew ] = "Fußnotenzeichen";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका की अक्षरें";
     Text[ slovak ] = "Znaky pre poznámku pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet-karakterek";
+    Text[ slovenian ] = "Znaki sprotnih opomb";
 };
 String STR_POOLCHR_PAGENO
 {
@@ -125,6 +127,8 @@ String STR_POOLCHR_PAGENO
     Text[ hebrew ] = "Seitenzahl";
     Text[ hindi ] = "पृष्ठ संख्या";
     Text[ slovak ] = "Číslo stránky";
+    Text[ hungarian ] = "Oldalszám";
+    Text[ slovenian ] = "Številka strani";
 };
 String STR_POOLCHR_LABEL
 {
@@ -156,6 +160,8 @@ String STR_POOLCHR_LABEL
     Text[ hebrew ] = "Beschriftungszeichen";
     Text[ hindi ] = "कॉप्शन अक्षरें";
     Text[ slovak ] = "Znaky pre popisok";
+    Text[ hungarian ] = "Feliratkarakterek";
+    Text[ slovenian ] = "Znaki napisa";
 };
 String STR_POOLCHR_DROPCAPS
 {
@@ -167,7 +173,7 @@ String STR_POOLCHR_DROPCAPS
     Text [ french ] = "Autre caract�re" ;
     Text [ dutch ] = "Initialen" ;
     Text [ swedish ] = "Anfangstecken" ;
-    Text [ danish ] = "Initialtegn" ;
+    Text [ danish ] = "Uncialer" ;
     Text [ portuguese ] = "Caracteres capitulares" ;
     Text [ portuguese_brazilian ] = "Capitular" ;
     Text[ chinese_simplified ] = "字首大写";
@@ -187,6 +193,8 @@ String STR_POOLCHR_DROPCAPS
     Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
     Text[ hindi ] = "बडे अक्षरों को हटाओ";
     Text[ slovak ] = "Stránkovanie veľkými písmenami";
+    Text[ hungarian ] = "Iniciálé";
+    Text[ slovenian ] = "Ozaljšana začetnica";
 };
 String STR_POOLCHR_NUM_LEVEL
 {
@@ -218,6 +226,8 @@ String STR_POOLCHR_NUM_LEVEL
     Text[ hebrew ] = "Nummerierungszeichen";
     Text[ hindi ] = "संख्या देने का संकेत ";
     Text[ slovak ] = "Symboly pre číslovanie";
+    Text[ hungarian ] = "Számozásjelek";
+    Text[ slovenian ] = "Simboli za oštevilčevanje";
 };
 String STR_POOLCHR_BUL_LEVEL
 {
@@ -250,6 +260,8 @@ String STR_POOLCHR_BUL_LEVEL
     Text[ hebrew ] = "Aufzählungszeichen";
     Text[ hindi ] = "बुल्लेट् संकेत";
     Text[ slovak ] = "Symboly pre odrážky";
+    Text[ hungarian ] = "Felsorolásjelek";
+    Text[ slovenian ] = "Oznake";
 };
 String STR_POOLCHR_INET_NORMAL
 {
@@ -281,6 +293,8 @@ String STR_POOLCHR_INET_NORMAL
     Text[ hebrew ] = "Internet Link";
     Text[ hindi ] = "इन्टरनेट् लिंक";
     Text[ slovak ] = "Internetový odkaz";
+    Text[ hungarian ] = "Internet-hivatkozás";
+    Text[ slovenian ] = "Internetna povezava";
 };
 String STR_POOLCHR_INET_VISIT
 {
@@ -314,6 +328,8 @@ String STR_POOLCHR_INET_VISIT
     Text[ hebrew ] = "Besuchter Internet Link";
     Text[ hindi ] = "भेंट किया हुआ इन्टरनेट् लिंक";
     Text[ slovak ] = "Navštívený internetový odkaz";
+    Text[ hungarian ] = "Meglátogatott internet-hivatkozás";
+    Text[ slovenian ] = "Obiskana internetna povezava";
 };
 String STR_POOLCHR_JUMPEDIT
 {
@@ -345,6 +361,8 @@ String STR_POOLCHR_JUMPEDIT
     Text[ hebrew ] = "Platzhalter";
     Text[ hindi ] = "स्थानधारक";
     Text[ slovak ] = "Zástupný znak";
+    Text[ hungarian ] = "Helykitöltő";
+    Text[ slovenian ] = "Ograda";
 };
 String STR_POOLCHR_TOXJUMP
 {
@@ -376,6 +394,8 @@ String STR_POOLCHR_TOXJUMP
     Text[ hebrew ] = "Verzeichnissprung";
     Text[ hindi ] = "अनुक्रमणिका लिंक";
     Text[ slovak ] = "Odkaz na obsah";
+    Text[ hungarian ] = "Jegyzékhivatkozás";
+    Text[ slovenian ] = "Povezava kazala";
 };
 String STR_POOLCHR_ENDNOTE
 {
@@ -407,6 +427,8 @@ String STR_POOLCHR_ENDNOTE
     Text[ hebrew ] = "Endnotenzeichen";
     Text[ hindi ] = "अंत की टीका की अक्षरें";
     Text[ slovak ] = "Znaky pre vysvetlivky";
+    Text[ hungarian ] = "Végjegyzet-karakterek";
+    Text[ slovenian ] = "Znaki končnih opomb";
 };
 String STR_POOLCHR_LINENUM
 {
@@ -438,6 +460,8 @@ String STR_POOLCHR_LINENUM
     Text[ hebrew ] = "‮מיספור שורות‬";
     Text[ hindi ] = "रेखा को संख्या देना";
     Text[ slovak ] = "Číslovanie riadkov";
+    Text[ hungarian ] = "Sorok számozása";
+    Text[ slovenian ] = "Oštevilčevanje vrstic";
 };
 String STR_POOLCHR_IDX_MAIN_ENTRY
 {
@@ -469,6 +493,8 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ hebrew ] = "Stichwortverzeichnis Haupteintrag";
     Text[ hindi ] = "मुख्य अनुक्रमणिका भरती";
     Text[ slovak ] = "Položka hlavného indexu";
+    Text[ hungarian ] = "Főtartalomjegyzék-bejegyzés";
+    Text[ slovenian ] = "Vnos v glavno kazalo";
 };
 String STR_POOLCHR_FOOTNOTE_ANCHOR
 {
@@ -499,6 +525,8 @@ String STR_POOLCHR_FOOTNOTE_ANCHOR
     Text[ hebrew ] = "Fußnotenanker";
     Text[ hindi ] = "पृष्ठ की नीचे की टीका ऐन्कर ";
     Text[ slovak ] = "Ukotvenie poznámky pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet-horgony";
+    Text[ slovenian ] = "Sidro sprotne opombe";
 };
 String STR_POOLCHR_ENDNOTE_ANCHOR
 {
@@ -529,6 +557,8 @@ String STR_POOLCHR_ENDNOTE_ANCHOR
     Text[ hebrew ] = "Endnotenanker";
     Text[ hindi ] = "अंत की टीका ऐन्कर";
     Text[ slovak ] = "Ukotvenie vysvetlivky";
+    Text[ hungarian ] = "Végjegyzet-horgony";
+    Text[ slovenian ] = "Sidro končne opombe";
 };
 
  // Zeichenvorlagen fuer HTML
@@ -562,6 +592,8 @@ String STR_POOLCHR_HTML_EMPHASIS
     Text[ hebrew ] = "Betont";
     Text[ hindi ] = "असर";
     Text[ slovak ] = "Zdôraznenie";
+    Text[ hungarian ] = "Hangsúlyozás";
+    Text[ slovenian ] = "Poudarek";
 };
 String STR_POOLCHR_HTML_CITIATION
 {
@@ -593,6 +625,8 @@ String STR_POOLCHR_HTML_CITIATION
     Text[ hebrew ] = "Zitat";
     Text[ hindi ] = "कहना";
     Text[ slovak ] = "Citácia";
+    Text[ hungarian ] = "Idézet";
+    Text[ slovenian ] = "Citat";
 };
 String STR_POOLCHR_HTML_STRONG
 {
@@ -624,6 +658,8 @@ String STR_POOLCHR_HTML_STRONG
     Text[ hebrew ] = "Stark betont";
     Text[ hindi ] = "अधिक असर";
     Text[ slovak ] = "Silné zvýraznenie";
+    Text[ hungarian ] = "Erős hangsúlyozás";
+    Text[ slovenian ] = "Močan poudarek";
 };
 String STR_POOLCHR_HTML_CODE
 {
@@ -655,6 +691,8 @@ String STR_POOLCHR_HTML_CODE
     Text[ hebrew ] = "Quelltext";
     Text[ hindi ] = "मूल टेक्स्ट्";
     Text[ slovak ] = "Zdrojový text";
+    Text[ hungarian ] = "Forrásszöveg";
+    Text[ slovenian ] = "Izvorno besedilo";
 };
 String STR_POOLCHR_HTML_SAMPLE
 {
@@ -686,6 +724,8 @@ String STR_POOLCHR_HTML_SAMPLE
     Text[ hebrew ] = "Beispiel";
     Text[ hindi ] = "उदाहरण";
     Text[ slovak ] = "Príklad";
+    Text[ hungarian ] = "Példa";
+    Text[ slovenian ] = "Primer";
 };
 String STR_POOLCHR_HTML_KEYBOARD
 {
@@ -717,6 +757,8 @@ String STR_POOLCHR_HTML_KEYBOARD
     Text[ hebrew ] = "Benutzereingabe";
     Text[ hindi ] = "उपभोक्ता प्रविष्टि";
     Text[ slovak ] = "Užívateľská položka";
+    Text[ hungarian ] = "Egyéni bejegyzés";
+    Text[ slovenian ] = "Uporabniški vnos";
 };
 String STR_POOLCHR_HTML_VARIABLE
 {
@@ -748,6 +790,8 @@ String STR_POOLCHR_HTML_VARIABLE
     Text[ hebrew ] = "Variable";
     Text[ hindi ] = "वेरिऐबल";
     Text[ slovak ] = "Premenný";
+    Text[ hungarian ] = "Változó";
+    Text[ slovenian ] = "Spremenljivka";
 };
 String STR_POOLCHR_HTML_DEFINSTANCE
 {
@@ -779,6 +823,8 @@ String STR_POOLCHR_HTML_DEFINSTANCE
     Text[ hebrew ] = "Definition";
     Text[ hindi ] = "परिभाषा";
     Text[ slovak ] = "Definícia";
+    Text[ hungarian ] = "Definíció";
+    Text[ slovenian ] = "Definicija";
 };
 String STR_POOLCHR_HTML_TELETYPE
 {
@@ -810,6 +856,8 @@ String STR_POOLCHR_HTML_TELETYPE
     Text[ hebrew ] = "Nicht-proportionaler Text";
     Text[ hindi ] = "टेलिटइप";
     Text[ slovak ] = "Telex";
+    Text[ hungarian ] = "Írógépbetű";
+    Text[ slovenian ] = "Telegrafski";
 };
 
 // Rahmenvorlagen
@@ -843,6 +891,8 @@ String STR_POOLFRM_FRAME
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keretek";
+    Text[ slovenian ] = "Okvir";
 };
 String STR_POOLFRM_GRAPHIC
 {
@@ -874,6 +924,8 @@ String STR_POOLFRM_GRAPHIC
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 String STR_POOLFRM_OLE
 {
@@ -905,6 +957,8 @@ String STR_POOLFRM_OLE
     Text[ hebrew ] = "OLE";
     Text[ hindi ] = "OLE";
     Text[ slovak ] = "OLE";
+    Text[ hungarian ] = "OLE-objektumok";
+    Text[ slovenian ] = "OLE";
 };
 String STR_POOLFRM_FORMEL
 {
@@ -936,6 +990,8 @@ String STR_POOLFRM_FORMEL
     Text[ hebrew ] = "‮נוסחה‬";
     Text[ hindi ] = "सूत्र";
     Text[ slovak ] = "Vzorec";
+    Text[ hungarian ] = "Képletek";
+    Text[ slovenian ] = "Formula";
 };
 String STR_POOLFRM_MARGINAL
 {
@@ -967,6 +1023,8 @@ String STR_POOLFRM_MARGINAL
     Text[ hebrew ] = "Marginalie";
     Text[ hindi ] = "मार्जिनालिया";
     Text[ slovak ] = "Poznámka na okraj";
+    Text[ hungarian ] = "Széljegyzetek";
+    Text[ slovenian ] = "Obrobne opombe";
 };
 String STR_POOLFRM_WATERSIGN
 {
@@ -998,6 +1056,8 @@ String STR_POOLFRM_WATERSIGN
     Text[ hebrew ] = "Wasserzeichen";
     Text[ hindi ] = "जलसंकेत";
     Text[ slovak ] = "Vodoznak";
+    Text[ hungarian ] = "Vízjelek";
+    Text[ slovenian ] = "Vodni žig";
 };
 String STR_POOLFRM_LABEL
 {
@@ -1030,6 +1090,8 @@ String STR_POOLFRM_LABEL
     Text[ hebrew ] = "‮מדבקות‬";
     Text[ hindi ] = "लेबिलें";
     Text[ slovak ] = "Štítky";
+    Text[ hungarian ] = "Címkék";
+    Text[ slovenian ] = "Oznake";
 };
  // -----------------
  // Vorlagen-Namen
@@ -1064,6 +1126,8 @@ String STR_POOLCOLL_STANDARD
     Text[ hebrew ] = "‮ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति";
     Text[ slovak ] = "Východzie";
+    Text[ hungarian ] = "Normál";
+    Text[ slovenian ] = "Privzeto";
 };
 String STR_POOLCOLL_TEXT
 {
@@ -1096,6 +1160,8 @@ String STR_POOLCOLL_TEXT
     Text[ hebrew ] = "Textkörper";
     Text[ hindi ] = "टेक्स्ट् का मुख्य भाग";
     Text[ slovak ] = "Telo textu";
+    Text[ hungarian ] = "Szövegtörzs";
+    Text[ slovenian ] = "Telo besedila";
 };
 String STR_POOLCOLL_TEXT_IDENT
 {
@@ -1128,6 +1194,8 @@ String STR_POOLCOLL_TEXT_IDENT
     Text[ hebrew ] = "Textkörper Einzug";
     Text[ hindi ] = "पहिला रेखा इन्डेन्ट";
     Text[ slovak ] = "Odsadenie prvého riadku";
+    Text[ hungarian ] = "Első sor behúzása";
+    Text[ slovenian ] = "Zamik prve vrstice";
 };
 String STR_POOLCOLL_TEXT_NEGIDENT
 {
@@ -1160,6 +1228,8 @@ String STR_POOLCOLL_TEXT_NEGIDENT
     Text[ hebrew ] = "Textkörper Einzug negativ";
     Text[ hindi ] = "हांगिंग इन्डेन्ट";
     Text[ slovak ] = "Predsadenie prvého riadku";
+    Text[ hungarian ] = "Függő behúzás";
+    Text[ slovenian ] = "Viseči zamik";
 };
 String STR_POOLCOLL_TEXT_MOVE
 {
@@ -1192,13 +1262,15 @@ String STR_POOLCOLL_TEXT_MOVE
     Text[ hebrew ] = "Textkörper Einrückung";
     Text[ hindi ] = "टेक्स्ट् का मुख्य भाग इन्डेन्ट ";
     Text[ slovak ] = "Odsadenie tela textu";
+    Text[ hungarian ] = "Szövegtörzs behúzása";
+    Text[ slovenian ] = "Zamik telesa besedila";
 };
 String STR_POOLCOLL_GREETING
 {
     /* ### ACHTUNG: Neuer Text in Resource? Gru�formel : Gru�formel */
     Text = "Gru�formel" ;
     Text [ English ] = "Greetings" ;
-    Text [ dutch ] = "Aanhef" ;
+    Text [ dutch ] = "Slotformule" ;
     Text [ english_us ] = "Complimentary close" ;
     Text [ italian ] = "Formula di saluto" ;
     Text [ spanish ] = "F�rmula de despedida" ;
@@ -1224,6 +1296,8 @@ String STR_POOLCOLL_GREETING
     Text[ hebrew ] = "Grußformel";
     Text[ hindi ] = "परिपूरक बंद";
     Text[ slovak ] = "Zdvorilostné zakončenie";
+    Text[ hungarian ] = "Udvarias befejezés";
+    Text[ slovenian ] = "Zaključni pozdrav";
 };
 String STR_POOLCOLL_SIGNATURE
 {
@@ -1255,6 +1329,8 @@ String STR_POOLCOLL_SIGNATURE
     Text[ hebrew ] = "Unterschrift";
     Text[ hindi ] = "हस्ताक्षर";
     Text[ slovak ] = "Podpis";
+    Text[ hungarian ] = "Aláírás";
+    Text[ slovenian ] = "Podpis";
 };
 String STR_POOLCOLL_HEADLINE_BASE
 {
@@ -1287,6 +1363,8 @@ String STR_POOLCOLL_HEADLINE_BASE
     Text[ hebrew ] = "Überschrift";
     Text[ hindi ] = "शीर्षक";
     Text[ slovak ] = "Nadpis";
+    Text[ hungarian ] = "Címsor";
+    Text[ slovenian ] = "Naslov";
 };
 String STR_POOLCOLL_NUMBUL_BASE
 {
@@ -1318,6 +1396,8 @@ String STR_POOLCOLL_NUMBUL_BASE
     Text[ hebrew ] = "Liste";
     Text[ hindi ] = "सूची";
     Text[ slovak ] = "Zoznam";
+    Text[ hungarian ] = "Lista";
+    Text[ slovenian ] = "Seznam";
 };
 String STR_POOLCOLL_REGISTER_BASE
 {
@@ -1349,6 +1429,8 @@ String STR_POOLCOLL_REGISTER_BASE
     Text[ hebrew ] = "Verzeichnis";
     Text[ hindi ] = "अनुक्रमणिका";
     Text[ slovak ] = "Obsah";
+    Text[ hungarian ] = "Tárgymutató";
+    Text[ slovenian ] = "Kazalo";
 };
 String STR_POOLCOLL_CONFRONTATION
 {
@@ -1381,6 +1463,8 @@ String STR_POOLCOLL_CONFRONTATION
     Text[ hebrew ] = "Gegenüberstellung";
     Text[ hindi ] = "सूची इन्डेन्ट";
     Text[ slovak ] = "Odsadenie zoznamu";
+    Text[ hungarian ] = "Listabehúzás";
+    Text[ slovenian ] = "Zamik seznama";
 };
 String STR_POOLCOLL_MARGINAL
 {
@@ -1412,6 +1496,8 @@ String STR_POOLCOLL_MARGINAL
     Text[ hebrew ] = "Marginalie";
     Text[ hindi ] = "मार्जिनालिया";
     Text[ slovak ] = "Poznámka na okraj";
+    Text[ hungarian ] = "Széljegyzetek";
+    Text[ slovenian ] = "Obrobne opombe";
 };
 String STR_POOLCOLL_HEADLINE1
 {
@@ -1444,6 +1530,8 @@ String STR_POOLCOLL_HEADLINE1
     Text[ hebrew ] = "Überschrift 1";
     Text[ hindi ] = "शीर्षक  1";
     Text[ slovak ] = "Nadpis 1";
+    Text[ hungarian ] = "Címsor 1";
+    Text[ slovenian ] = "Naslov 1";
 };
 String STR_POOLCOLL_HEADLINE2
 {
@@ -1476,6 +1564,8 @@ String STR_POOLCOLL_HEADLINE2
     Text[ hebrew ] = "Überschrift 2";
     Text[ hindi ] = "शीर्षक 2";
     Text[ slovak ] = "Nadpis 2";
+    Text[ hungarian ] = "Címsor 2";
+    Text[ slovenian ] = "Naslov 2";
 };
 String STR_POOLCOLL_HEADLINE3
 {
@@ -1508,6 +1598,8 @@ String STR_POOLCOLL_HEADLINE3
     Text[ hebrew ] = "Überschrift 3";
     Text[ hindi ] = "शीर्षक 3";
     Text[ slovak ] = "Nadpis 3";
+    Text[ hungarian ] = "Címsor 3";
+    Text[ slovenian ] = "Naslov 3";
 };
 String STR_POOLCOLL_HEADLINE4
 {
@@ -1540,6 +1632,8 @@ String STR_POOLCOLL_HEADLINE4
     Text[ hebrew ] = "Überschrift 4";
     Text[ hindi ] = "शीर्षक 4";
     Text[ slovak ] = "Nadpis 4";
+    Text[ hungarian ] = "Címsor 4";
+    Text[ slovenian ] = "Naslov 4";
 };
 String STR_POOLCOLL_HEADLINE5
 {
@@ -1572,6 +1666,8 @@ String STR_POOLCOLL_HEADLINE5
     Text[ hebrew ] = "Überschrift 5";
     Text[ hindi ] = "शीर्षक 5";
     Text[ slovak ] = "Nadpis 5";
+    Text[ hungarian ] = "Címsor 5";
+    Text[ slovenian ] = "Naslov 5";
 };
 String STR_POOLCOLL_HEADLINE6
 {
@@ -1604,6 +1700,8 @@ String STR_POOLCOLL_HEADLINE6
     Text[ hebrew ] = "Überschrift 6";
     Text[ hindi ] = "शीर्षक 6";
     Text[ slovak ] = "Nadpis 6";
+    Text[ hungarian ] = "Címsor 6";
+    Text[ slovenian ] = "Naslov 6";
 };
 String STR_POOLCOLL_HEADLINE7
 {
@@ -1636,6 +1734,8 @@ String STR_POOLCOLL_HEADLINE7
     Text[ hebrew ] = "Überschrift 7";
     Text[ hindi ] = "शीर्षक 7";
     Text[ slovak ] = "Nadpis 7";
+    Text[ hungarian ] = "Címsor 7";
+    Text[ slovenian ] = "Naslov 7";
 };
 String STR_POOLCOLL_HEADLINE8
 {
@@ -1668,6 +1768,8 @@ String STR_POOLCOLL_HEADLINE8
     Text[ hebrew ] = "Überschrift 8";
     Text[ hindi ] = "शीर्षक 8";
     Text[ slovak ] = "Nadpis 8";
+    Text[ hungarian ] = "Címsor 8";
+    Text[ slovenian ] = "Naslov 8";
 };
 String STR_POOLCOLL_HEADLINE9
 {
@@ -1700,6 +1802,8 @@ String STR_POOLCOLL_HEADLINE9
     Text[ hebrew ] = "Überschrift 9";
     Text[ hindi ] = "शीर्षक 9";
     Text[ slovak ] = "Nadpis 9";
+    Text[ hungarian ] = "Címsor 9";
+    Text[ slovenian ] = "Naslov 9";
 };
 String STR_POOLCOLL_HEADLINE10
 {
@@ -1732,6 +1836,8 @@ String STR_POOLCOLL_HEADLINE10
     Text[ hebrew ] = "Überschrift 10";
     Text[ hindi ] = "शीर्षक 10";
     Text[ slovak ] = "Nadpis 10";
+    Text[ hungarian ] = "Címsor 10";
+    Text[ slovenian ] = "Naslov 10";
 };
 String STR_POOLCOLL_NUM_LEVEL1S
 {
@@ -1763,6 +1869,8 @@ String STR_POOLCOLL_NUM_LEVEL1S
     Text[ hebrew ] = "Nummerierung 1 Anfang";
     Text[ hindi ] = "संख्या देना 1 प्रारंभ";
     Text[ slovak ] = "Začiatok číslovania 1";
+    Text[ hungarian ] = "Számozás 1 kezdete";
+    Text[ slovenian ] = "Začetek oštevilčevanja 1";
 };
 String STR_POOLCOLL_NUM_LEVEL1
 {
@@ -1794,6 +1902,8 @@ String STR_POOLCOLL_NUM_LEVEL1
     Text[ hebrew ] = "Nummerierung 1";
     Text[ hindi ] = "संख्या देना 1";
     Text[ slovak ] = "Číslovanie 1";
+    Text[ hungarian ] = "Számozás 1";
+    Text[ slovenian ] = "Oštevilčevanje 1";
 };
 String STR_POOLCOLL_NUM_LEVEL1E
 {
@@ -1825,6 +1935,8 @@ String STR_POOLCOLL_NUM_LEVEL1E
     Text[ hebrew ] = "Nummerierung 1 Ende";
     Text[ hindi ] = "संख्या देना 1 समाप्त";
     Text[ slovak ] = "Koniec číslovania 1";
+    Text[ hungarian ] = "Számozás 1 vége";
+    Text[ slovenian ] = "Konec oštevilčevanja 1";
 };
 String STR_POOLCOLL_NUM_NONUM1
 {
@@ -1836,7 +1948,7 @@ String STR_POOLCOLL_NUM_NONUM1
     Text [ french ] = "Num�rotation 1 suite" ;
     Text [ dutch ] = "Nummering 1 vervolg" ;
     Text [ swedish ] = "Numrering 1 forts�ttning" ;
-    Text [ danish ] = "Nummerering 1 forts�ttelse" ;
+    Text [ danish ] = "Nummerering 1 fortsat" ;
     Text [ portuguese ] = "Numera��o 1 Continua��o" ;
     Text [ portuguese_brazilian ] = "Numera��o 1 Cont." ;
     Text[ chinese_simplified ] = "编号 1 继续";
@@ -1856,6 +1968,8 @@ String STR_POOLCOLL_NUM_NONUM1
     Text[ hebrew ] = "Nummerierung 1 Fortsetzung";
     Text[ hindi ] = "संख्या देना 1 जारी रखो";
     Text[ slovak ] = "Pokračovanie číslovania 1";
+    Text[ hungarian ] = "Számozás 1 folytatása";
+    Text[ slovenian ] = "Nadalj. oštevilčevanja 1.";
 };
 String STR_POOLCOLL_NUM_LEVEL2S
 {
@@ -1887,6 +2001,8 @@ String STR_POOLCOLL_NUM_LEVEL2S
     Text[ hebrew ] = "Nummerierung 2 Anfang";
     Text[ hindi ] = "संख्या देना 2 प्रारंभ";
     Text[ slovak ] = "Začiatok číslovania 2";
+    Text[ hungarian ] = "Számozás 2 kezdete";
+    Text[ slovenian ] = "Začetek oštevilčevanja 2";
 };
 String STR_POOLCOLL_NUM_LEVEL2
 {
@@ -1918,6 +2034,8 @@ String STR_POOLCOLL_NUM_LEVEL2
     Text[ hebrew ] = "Nummerierung 2";
     Text[ hindi ] = "संख्या देना 2";
     Text[ slovak ] = "Číslovanie 2";
+    Text[ hungarian ] = "Számozás 2";
+    Text[ slovenian ] = "Oštevilčevanje 2";
 };
 String STR_POOLCOLL_NUM_LEVEL2E
 {
@@ -1949,6 +2067,8 @@ String STR_POOLCOLL_NUM_LEVEL2E
     Text[ hebrew ] = "Nummerierung 2 Ende";
     Text[ hindi ] = "संख्या देना 2 समाप्त";
     Text[ slovak ] = "Koniec číslovania 2";
+    Text[ hungarian ] = "Számozás 2 vége";
+    Text[ slovenian ] = "Konec oštevilčevanja 2";
 };
 String STR_POOLCOLL_NUM_NONUM2
 {
@@ -1960,7 +2080,7 @@ String STR_POOLCOLL_NUM_NONUM2
     Text [ french ] = "Num�rotation 2 suite" ;
     Text [ dutch ] = "Nummering 2 vervolg" ;
     Text [ swedish ] = "Numrering 2 forts�ttning" ;
-    Text [ danish ] = "Nummerering 2 forts�ttelse" ;
+    Text [ danish ] = "Nummerering 2 fortsat" ;
     Text [ portuguese ] = "Numera��o 2 Continua��o" ;
     Text [ portuguese_brazilian ] = "Numera��o 2 Cont." ;
     Text[ chinese_simplified ] = "编号 2 继续";
@@ -1980,6 +2100,8 @@ String STR_POOLCOLL_NUM_NONUM2
     Text[ hebrew ] = "Nummerierung 2 Fortsetzung";
     Text[ hindi ] = "संख्या देना 2 जारी रखो";
     Text[ slovak ] = "Pokračovanie číslovania 2";
+    Text[ hungarian ] = "Számozás 2 folytatása";
+    Text[ slovenian ] = "Nadalj. oštevilčevanja 2.";
 };
 String STR_POOLCOLL_NUM_LEVEL3S
 {
@@ -2011,6 +2133,8 @@ String STR_POOLCOLL_NUM_LEVEL3S
     Text[ hebrew ] = "Nummerierung 3 Anfang";
     Text[ hindi ] = "संख्या देना 3 प्रारंभ";
     Text[ slovak ] = "Začiatok číslovania 3";
+    Text[ hungarian ] = "Számozás 3 kezdete";
+    Text[ slovenian ] = "Začetek oštevilčevanja 3";
 };
 String STR_POOLCOLL_NUM_LEVEL3
 {
@@ -2042,6 +2166,8 @@ String STR_POOLCOLL_NUM_LEVEL3
     Text[ hebrew ] = "Nummerierung 3";
     Text[ hindi ] = "संख्या देना 3";
     Text[ slovak ] = "Číslovanie 3";
+    Text[ hungarian ] = "Számozás 3";
+    Text[ slovenian ] = "Oštevilčevanje 3";
 };
 String STR_POOLCOLL_NUM_LEVEL3E
 {
@@ -2073,6 +2199,8 @@ String STR_POOLCOLL_NUM_LEVEL3E
     Text[ hebrew ] = "Nummerierung 3 Ende";
     Text[ hindi ] = "संख्या देना 3 समाप्त";
     Text[ slovak ] = "Koniec číslovania 3";
+    Text[ hungarian ] = "Számozás 3 vége";
+    Text[ slovenian ] = "Konec oštevilčevanja 3";
 };
 String STR_POOLCOLL_NUM_NONUM3
 {
@@ -2084,7 +2212,7 @@ String STR_POOLCOLL_NUM_NONUM3
     Text [ french ] = "Num�rotation 3 suite" ;
     Text [ dutch ] = "Nummering 3 vervolg" ;
     Text [ swedish ] = "Numrering 3 forts�ttning" ;
-    Text [ danish ] = "Nummerering 3 forts�ttelse" ;
+    Text [ danish ] = "Nummerering 3 fortsat" ;
     Text [ portuguese ] = "Numera��o 3 Continua��o" ;
     Text [ portuguese_brazilian ] = "Numera��o 3 Cont." ;
     Text[ chinese_simplified ] = "编号 3 继续";
@@ -2104,6 +2232,8 @@ String STR_POOLCOLL_NUM_NONUM3
     Text[ hebrew ] = "Nummerierung 3 Fortsetzung";
     Text[ hindi ] = "संख्या देना 3 जारी रखो";
     Text[ slovak ] = "Pokračovanie číslovania 3";
+    Text[ hungarian ] = "Számozás 3 folytatása";
+    Text[ slovenian ] = "Nadalj. oštevilčevanja 3.";
 };
 String STR_POOLCOLL_NUM_LEVEL4S
 {
@@ -2135,6 +2265,8 @@ String STR_POOLCOLL_NUM_LEVEL4S
     Text[ hebrew ] = "Nummerierung 4 Anfang";
     Text[ hindi ] = "संख्या देना 4 प्रारंभ";
     Text[ slovak ] = "Začiatok číslovania 4";
+    Text[ hungarian ] = "Számozás 4 kezdete";
+    Text[ slovenian ] = "Začetek oštevilčevanja 4";
 };
 String STR_POOLCOLL_NUM_LEVEL4
 {
@@ -2166,6 +2298,8 @@ String STR_POOLCOLL_NUM_LEVEL4
     Text[ hebrew ] = "Nummerierung 4";
     Text[ hindi ] = "संख्या देना 4";
     Text[ slovak ] = "Číslovanie 4";
+    Text[ hungarian ] = "Számozás 4";
+    Text[ slovenian ] = "Oštevilčevanje 4";
 };
 String STR_POOLCOLL_NUM_LEVEL4E
 {
@@ -2197,6 +2331,8 @@ String STR_POOLCOLL_NUM_LEVEL4E
     Text[ hebrew ] = "Nummerierung 4 Ende";
     Text[ hindi ] = "संख्या देना 4 समाप्त";
     Text[ slovak ] = "Koniec číslovania 4";
+    Text[ hungarian ] = "Számozás 4 vége";
+    Text[ slovenian ] = "Konec oštevilčevanja 4";
 };
 String STR_POOLCOLL_NUM_NONUM4
 {
@@ -2208,7 +2344,7 @@ String STR_POOLCOLL_NUM_NONUM4
     Text [ french ] = "Num�rotation 4 suite" ;
     Text [ dutch ] = "Nummering 4 vervolg" ;
     Text [ swedish ] = "Numrering 4 forts�ttning" ;
-    Text [ danish ] = "Nummerering 4 forts�ttelse" ;
+    Text [ danish ] = "Nummerering 4 fortsat" ;
     Text [ portuguese ] = "Numera��o 4 Continua��o" ;
     Text [ portuguese_brazilian ] = "Numera��o 4 Cont." ;
     Text[ chinese_simplified ] = "编号 4 继续";
@@ -2228,6 +2364,8 @@ String STR_POOLCOLL_NUM_NONUM4
     Text[ hebrew ] = "Nummerierung 4 Fortsetzung";
     Text[ hindi ] = "संख्या देना 4 जारी रखो";
     Text[ slovak ] = "Pokračovanie číslovania 4";
+    Text[ hungarian ] = "Számozás 4 folytatása";
+    Text[ slovenian ] = "Nadalj. oštevilčevanja 4.";
 };
 String STR_POOLCOLL_NUM_LEVEL5S
 {
@@ -2259,6 +2397,8 @@ String STR_POOLCOLL_NUM_LEVEL5S
     Text[ hebrew ] = "Nummerierung 5 Anfang";
     Text[ hindi ] = "संख्या देना 5 प्रारंभ";
     Text[ slovak ] = "Začiatok číslovania 5";
+    Text[ hungarian ] = "Számozás 5 kezdete";
+    Text[ slovenian ] = "Začetek oštevilčevanja 5";
 };
 String STR_POOLCOLL_NUM_LEVEL5
 {
@@ -2290,6 +2430,8 @@ String STR_POOLCOLL_NUM_LEVEL5
     Text[ hebrew ] = "Nummerierung 5";
     Text[ hindi ] = "संख्या देना 5";
     Text[ slovak ] = "Číslovanie 5";
+    Text[ hungarian ] = "Számozás 5";
+    Text[ slovenian ] = "Oštevilčevanje 5";
 };
 String STR_POOLCOLL_NUM_LEVEL5E
 {
@@ -2321,6 +2463,8 @@ String STR_POOLCOLL_NUM_LEVEL5E
     Text[ hebrew ] = "Nummerierung 5 Ende";
     Text[ hindi ] = "संख्या देना 5 समाप्त";
     Text[ slovak ] = "Koniec číslovania 5";
+    Text[ hungarian ] = "Számozás 5 vége";
+    Text[ slovenian ] = "Konec oštevilčevanja 5";
 };
 String STR_POOLCOLL_NUM_NONUM5
 {
@@ -2332,7 +2476,7 @@ String STR_POOLCOLL_NUM_NONUM5
     Text [ french ] = "Num�rotation 5 suite" ;
     Text [ dutch ] = "Nummering 5 vervolg" ;
     Text [ swedish ] = "Numrering 5 forts�ttning" ;
-    Text [ danish ] = "Nummerering 5 forts�ttelse" ;
+    Text [ danish ] = "Nummerering 5 fortsat" ;
     Text [ portuguese ] = "Numera��o 5 Continua��o" ;
     Text [ portuguese_brazilian ] = "Numera��o 5 Cont." ;
     Text[ chinese_simplified ] = "编号 5 继续";
@@ -2352,6 +2496,8 @@ String STR_POOLCOLL_NUM_NONUM5
     Text[ hebrew ] = "Nummerierung 5 Fortsetzung";
     Text[ hindi ] = "संख्या देना 5 जारी रखो";
     Text[ slovak ] = "Pokračovanie číslovania 5";
+    Text[ hungarian ] = "Számozás 5 folytatása";
+    Text[ slovenian ] = "Nadalj. oštevilčevanja 5.";
 };
 String STR_POOLCOLL_BUL_LEVEL1S
 {
@@ -2384,6 +2530,8 @@ String STR_POOLCOLL_BUL_LEVEL1S
     Text[ hebrew ] = "Aufzählung 1 Anfang";
     Text[ hindi ] = "सूची 1 प्रारंभ";
     Text[ slovak ] = "Začiatok zoznamu 1";
+    Text[ hungarian ] = "Lista 1 kezdete";
+    Text[ slovenian ] = "Začetek seznama 1";
 };
 String STR_POOLCOLL_BUL_LEVEL1
 {
@@ -2416,6 +2564,8 @@ String STR_POOLCOLL_BUL_LEVEL1
     Text[ hebrew ] = "Aufzählung 1";
     Text[ hindi ] = "सूची 1";
     Text[ slovak ] = "Zoznam 1";
+    Text[ hungarian ] = "Lista 1";
+    Text[ slovenian ] = "Seznam 1";
 };
 String STR_POOLCOLL_BUL_LEVEL1E
 {
@@ -2448,6 +2598,8 @@ String STR_POOLCOLL_BUL_LEVEL1E
     Text[ hebrew ] = "Aufzählung 1 Ende";
     Text[ hindi ] = "सूची 1 समाप्त";
     Text[ slovak ] = "Koniec zoznamu 1";
+    Text[ hungarian ] = "Lista 1 vége";
+    Text[ slovenian ] = "Konec seznama 1";
 };
 String STR_POOLCOLL_BUL_NONUM1
 {
@@ -2460,7 +2612,7 @@ String STR_POOLCOLL_BUL_NONUM1
     Text [ french ] = "Puce 1 suivante" ;
     Text [ dutch ] = "Opsomming 1 vervolg" ;
     Text [ swedish ] = "Punktuppst�llning 1 forts�ttning" ;
-    Text [ danish ] = "Punktopstilling 1 forts�ttelse" ;
+    Text [ danish ] = "Punktopstilling 1 fortsat" ;
     Text [ portuguese ] = "Marca 1 Continua��o" ;
     Text [ portuguese_brazilian ] = "Lista 1 Cont." ;
     Text[ chinese_simplified ] = "项目符号 1 继续";
@@ -2480,6 +2632,8 @@ String STR_POOLCOLL_BUL_NONUM1
     Text[ hebrew ] = "Aufzählung 1 Fortsetzung";
     Text[ hindi ] = "सूची 1 जारी रखो";
     Text[ slovak ] = "Pokračovanie zoznamu 1";
+    Text[ hungarian ] = "Lista 1 folytatása";
+    Text[ slovenian ] = "Nadalj. seznama 1.";
 };
 String STR_POOLCOLL_BUL_LEVEL2S
 {
@@ -2512,6 +2666,8 @@ String STR_POOLCOLL_BUL_LEVEL2S
     Text[ hebrew ] = "Aufzählung 2 Anfang";
     Text[ hindi ] = "सूची 2 प्रारंभ";
     Text[ slovak ] = "Začiatok zoznamu 2";
+    Text[ hungarian ] = "Lista 2 kezdete";
+    Text[ slovenian ] = "Začetek seznama 2";
 };
 String STR_POOLCOLL_BUL_LEVEL2
 {
@@ -2544,6 +2700,8 @@ String STR_POOLCOLL_BUL_LEVEL2
     Text[ hebrew ] = "Aufzählung 2";
     Text[ hindi ] = "सूची 2";
     Text[ slovak ] = "Zoznam 2";
+    Text[ hungarian ] = "Lista 2";
+    Text[ slovenian ] = "Seznam 2";
 };
 String STR_POOLCOLL_BUL_LEVEL2E
 {
@@ -2576,6 +2734,8 @@ String STR_POOLCOLL_BUL_LEVEL2E
     Text[ hebrew ] = "Aufzählung 2 Ende";
     Text[ hindi ] = "सूची 2 समाप्त";
     Text[ slovak ] = "Koniec zoznamu 2";
+    Text[ hungarian ] = "Lista 2 vége";
+    Text[ slovenian ] = "Konec seznama 2";
 };
 String STR_POOLCOLL_BUL_NONUM2
 {
@@ -2588,7 +2748,7 @@ String STR_POOLCOLL_BUL_NONUM2
     Text [ french ] = "Puce 2 suivante" ;
     Text [ dutch ] = "Opsomming 2 vervolg" ;
     Text [ swedish ] = "Punktuppst�llning 2 forts�ttning" ;
-    Text [ danish ] = "Punktopstilling 2 forts�ttelse" ;
+    Text [ danish ] = "Punktopstilling 2 fortsat" ;
     Text [ portuguese ] = "Marca 2 Continua��o" ;
     Text [ portuguese_brazilian ] = "Lista 2 Cont." ;
     Text[ chinese_simplified ] = "项目符号 2 继续";
@@ -2608,6 +2768,8 @@ String STR_POOLCOLL_BUL_NONUM2
     Text[ hebrew ] = "Aufzählung 2 Fortsetzung";
     Text[ hindi ] = "सूची 2 जारी रखो";
     Text[ slovak ] = "Pokračovanie zoznamu 2";
+    Text[ hungarian ] = "Lista 2 folytatása";
+    Text[ slovenian ] = "Nadalj. seznama 2.";
 };
 String STR_POOLCOLL_BUL_LEVEL3S
 {
@@ -2640,6 +2802,8 @@ String STR_POOLCOLL_BUL_LEVEL3S
     Text[ hebrew ] = "Aufzählung 3 Anfang";
     Text[ hindi ] = "सूची 3 प्रारंभ";
     Text[ slovak ] = "Začiatok zoznamu 3";
+    Text[ hungarian ] = "Lista 3 kezdete";
+    Text[ slovenian ] = "Začetek seznama 3";
 };
 String STR_POOLCOLL_BUL_LEVEL3
 {
@@ -2672,6 +2836,8 @@ String STR_POOLCOLL_BUL_LEVEL3
     Text[ hebrew ] = "Aufzählung 3";
     Text[ hindi ] = "सूची 3";
     Text[ slovak ] = "Zoznam 3";
+    Text[ hungarian ] = "Lista 3";
+    Text[ slovenian ] = "Seznam 3";
 };
 String STR_POOLCOLL_BUL_LEVEL3E
 {
@@ -2704,6 +2870,8 @@ String STR_POOLCOLL_BUL_LEVEL3E
     Text[ hebrew ] = "Aufzählung 3 Ende";
     Text[ hindi ] = "सूची 3 समाप्त";
     Text[ slovak ] = "Koniec zoznamu 3";
+    Text[ hungarian ] = "Lista 3 vége";
+    Text[ slovenian ] = "Konec seznama 3";
 };
 String STR_POOLCOLL_BUL_NONUM3
 {
@@ -2716,7 +2884,7 @@ String STR_POOLCOLL_BUL_NONUM3
     Text [ french ] = "Puce 3 suivante" ;
     Text [ dutch ] = "Opsomming 3 vervolg" ;
     Text [ swedish ] = "Punktuppst�llning 3 forts�ttning" ;
-    Text [ danish ] = "Punktopstilling 3 forts�ttelse" ;
+    Text [ danish ] = "Punktopstilling 3 fortsat" ;
     Text [ portuguese ] = "Marca 3 Continua��o" ;
     Text [ portuguese_brazilian ] = "Lista 3 Cont." ;
     Text[ chinese_simplified ] = "项目符号 3 继续";
@@ -2736,6 +2904,8 @@ String STR_POOLCOLL_BUL_NONUM3
     Text[ hebrew ] = "Aufzählung 3 Fortsetzung";
     Text[ hindi ] = "सूची 3 जारी रखो";
     Text[ slovak ] = "Pokračovanie zoznamu 3";
+    Text[ hungarian ] = "Lista 3 folytatása";
+    Text[ slovenian ] = "Nadalj. seznama 3.";
 };
 String STR_POOLCOLL_BUL_LEVEL4S
 {
@@ -2768,6 +2938,8 @@ String STR_POOLCOLL_BUL_LEVEL4S
     Text[ hebrew ] = "Aufzählung 4 Anfang";
     Text[ hindi ] = "सूची 4 प्रारंभ";
     Text[ slovak ] = "Začiatok zoznamu 4";
+    Text[ hungarian ] = "Lista 4 kezdete";
+    Text[ slovenian ] = "Začetek seznama 4";
 };
 String STR_POOLCOLL_BUL_LEVEL4
 {
@@ -2800,6 +2972,8 @@ String STR_POOLCOLL_BUL_LEVEL4
     Text[ hebrew ] = "Aufzählung 4";
     Text[ hindi ] = "सूची 4";
     Text[ slovak ] = "Zoznam 4";
+    Text[ hungarian ] = "Lista 4";
+    Text[ slovenian ] = "Seznam 4";
 };
 String STR_POOLCOLL_BUL_LEVEL4E
 {
@@ -2832,6 +3006,8 @@ String STR_POOLCOLL_BUL_LEVEL4E
     Text[ hebrew ] = "Aufzählung 4 Ende";
     Text[ hindi ] = "सूची 4 समाप्त";
     Text[ slovak ] = "Koniec zoznamu 4";
+    Text[ hungarian ] = "Lista 4 vége";
+    Text[ slovenian ] = "Konec seznama 4";
 };
 String STR_POOLCOLL_BUL_NONUM4
 {
@@ -2844,7 +3020,7 @@ String STR_POOLCOLL_BUL_NONUM4
     Text [ french ] = "Puce 4 suivante" ;
     Text [ dutch ] = "Opsomming 4 vervolg" ;
     Text [ swedish ] = "Punktuppst�llning 4 forts�ttning" ;
-    Text [ danish ] = "Punktopstilling 4 forts�ttelse" ;
+    Text [ danish ] = "Punktopstilling 4 fortsat" ;
     Text [ portuguese ] = "Marca 4 Continua��o" ;
     Text [ portuguese_brazilian ] = "Lista 4 Cont." ;
     Text[ chinese_simplified ] = "项目符号 4 继续";
@@ -2864,6 +3040,8 @@ String STR_POOLCOLL_BUL_NONUM4
     Text[ hebrew ] = "Aufzählung 4 Fortsetzung";
     Text[ hindi ] = "सूची 4 जारी रखो";
     Text[ slovak ] = "Pokračovanie zoznamu 4";
+    Text[ hungarian ] = "Lista 4 folytatása";
+    Text[ slovenian ] = "Nadalj. seznama 4.";
 };
 String STR_POOLCOLL_BUL_LEVEL5S
 {
@@ -2896,6 +3074,8 @@ String STR_POOLCOLL_BUL_LEVEL5S
     Text[ hebrew ] = "Aufzählung 5 Anfang";
     Text[ hindi ] = "सूची 5 प्रारंभ";
     Text[ slovak ] = "Začiatok zoznamu 5";
+    Text[ hungarian ] = "Lista 5 kezdete";
+    Text[ slovenian ] = "Začetek seznama 5";
 };
 String STR_POOLCOLL_BUL_LEVEL5
 {
@@ -2928,6 +3108,8 @@ String STR_POOLCOLL_BUL_LEVEL5
     Text[ hebrew ] = "Aufzählung 5";
     Text[ hindi ] = "सूची 5";
     Text[ slovak ] = "Zoznam 5";
+    Text[ hungarian ] = "Lista 5";
+    Text[ slovenian ] = "Seznam 5";
 };
 String STR_POOLCOLL_BUL_LEVEL5E
 {
@@ -2960,6 +3142,8 @@ String STR_POOLCOLL_BUL_LEVEL5E
     Text[ hebrew ] = "Aufzählung 5 Ende";
     Text[ hindi ] = "सूची 5 समाप्त";
     Text[ slovak ] = "Koniec zoznamu 5";
+    Text[ hungarian ] = "Lista 5 vége";
+    Text[ slovenian ] = "Konec seznama 5";
 };
 String STR_POOLCOLL_BUL_NONUM5
 {
@@ -2972,7 +3156,7 @@ String STR_POOLCOLL_BUL_NONUM5
     Text [ french ] = "Puce 5 suivante" ;
     Text [ dutch ] = "Opsomming 5 vervolg" ;
     Text [ swedish ] = "Punktuppst�llning 5 forts�ttning" ;
-    Text [ danish ] = "Punktopstilling 5 forts�ttelse" ;
+    Text [ danish ] = "Punktopstilling 5 fortsat" ;
     Text [ portuguese ] = "Marca 5 Continua��o" ;
     Text [ portuguese_brazilian ] = "Lista 5 Cont." ;
     Text[ chinese_simplified ] = "项目符号 5 继续";
@@ -2992,6 +3176,8 @@ String STR_POOLCOLL_BUL_NONUM5
     Text[ hebrew ] = "Aufzählung 5 Fortsetzung";
     Text[ hindi ] = "सूची 5 जारी रखो";
     Text[ slovak ] = "Pokračovanie zoznamu 5";
+    Text[ hungarian ] = "Lista 5 folytatása";
+    Text[ slovenian ] = "Nadalj. seznama 5.";
 };
 String STR_POOLCOLL_HEADER
 {
@@ -3023,6 +3209,8 @@ String STR_POOLCOLL_HEADER
     Text[ hebrew ] = "‮כותרת עליונה‬";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
     Text[ slovak ] = "Záhlavie";
+    Text[ hungarian ] = "Élőfej";
+    Text[ slovenian ] = "Glava";
 };
 String STR_POOLCOLL_HEADERL
 {
@@ -3054,6 +3242,8 @@ String STR_POOLCOLL_HEADERL
     Text[ hebrew ] = "Kopfzeile links";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका बायाँ";
     Text[ slovak ] = "Záhlavie vľavo";
+    Text[ hungarian ] = "Páros élőfej";
+    Text[ slovenian ] = "Glava levo";
 };
 String STR_POOLCOLL_HEADERR
 {
@@ -3085,6 +3275,8 @@ String STR_POOLCOLL_HEADERR
     Text[ hebrew ] = "Kopfzeile rechts";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका दाहिना";
     Text[ slovak ] = "Záhlavie vpravo";
+    Text[ hungarian ] = "Páratlan élőfej";
+    Text[ slovenian ] = "Glava desno";
 };
 String STR_POOLCOLL_FOOTER
 {
@@ -3117,6 +3309,8 @@ String STR_POOLCOLL_FOOTER
     Text[ hebrew ] = "‮כותרת תחתונה‬";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
     Text[ slovak ] = "Zápätie";
+    Text[ hungarian ] = "Élőláb";
+    Text[ slovenian ] = "Noga";
 };
 String STR_POOLCOLL_FOOTERL
 {
@@ -3149,6 +3343,8 @@ String STR_POOLCOLL_FOOTERL
     Text[ hebrew ] = "Fußzeile links";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका बायाँ";
     Text[ slovak ] = "Zápätie vľavo";
+    Text[ hungarian ] = "Páros élőláb";
+    Text[ slovenian ] = "Noga levo";
 };
 String STR_POOLCOLL_FOOTERR
 {
@@ -3181,6 +3377,8 @@ String STR_POOLCOLL_FOOTERR
     Text[ hebrew ] = "Fußzeile rechts";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका दाहिना";
     Text[ slovak ] = "Zápätie vpravo";
+    Text[ hungarian ] = "Páratlan élőláb";
+    Text[ slovenian ] = "Noga desno";
 };
 String STR_POOLCOLL_TABLE
 {
@@ -3212,6 +3410,8 @@ String STR_POOLCOLL_TABLE
     Text[ hebrew ] = "Tabellen Inhalt";
     Text[ hindi ] = "सारणी विषय";
     Text[ slovak ] = "Obsah tabuľky";
+    Text[ hungarian ] = "Táblázattartalom";
+    Text[ slovenian ] = "Vsebina tabele";
 };
 String STR_POOLCOLL_TABLE_HDLN
 {
@@ -3244,6 +3444,8 @@ String STR_POOLCOLL_TABLE_HDLN
     Text[ hebrew ] = "Tabellen Überschrift";
     Text[ hindi ] = "सारणी शीर्षक";
     Text[ slovak ] = "Nadpis tabuľky";
+    Text[ hungarian ] = "Táblázatfejléc";
+    Text[ slovenian ] = "Naslov tabele";
 };
 String STR_POOLCOLL_FRAME
 {
@@ -3275,6 +3477,8 @@ String STR_POOLCOLL_FRAME
     Text[ hebrew ] = "Rahmeninhalt";
     Text[ hindi ] = "फ्रेम विषय";
     Text[ slovak ] = "Obsah rámca";
+    Text[ hungarian ] = "Kerettartalom";
+    Text[ slovenian ] = "Vsebina okvira";
 };
 String STR_POOLCOLL_FOOTNOTE
 {
@@ -3307,6 +3511,8 @@ String STR_POOLCOLL_FOOTNOTE
     Text[ hebrew ] = "‮הערת שוליים‬";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका";
     Text[ slovak ] = "Poznámka pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet";
+    Text[ slovenian ] = "Sprotna opomba";
 };
 String STR_POOLCOLL_ENDNOTE
 {
@@ -3338,6 +3544,8 @@ String STR_POOLCOLL_ENDNOTE
     Text[ hebrew ] = "Endnote";
     Text[ hindi ] = "अंतिम टीका ";
     Text[ slovak ] = "Vysvetlivka";
+    Text[ hungarian ] = "Végjegyzet";
+    Text[ slovenian ] = "Končna opomba";
 };
 String STR_POOLCOLL_LABEL
 {
@@ -3369,6 +3577,8 @@ String STR_POOLCOLL_LABEL
     Text[ hebrew ] = "Beschriftung";
     Text[ hindi ] = "कॉप्शन् ";
     Text[ slovak ] = "Popisok";
+    Text[ hungarian ] = "Felirat";
+    Text[ slovenian ] = "Napis";
 };
 String STR_POOLCOLL_LABEL_ABB
 {
@@ -3400,6 +3610,8 @@ String STR_POOLCOLL_LABEL_ABB
     Text[ hebrew ] = "Abbildung";
     Text[ hindi ] = "दृष्टान्त";
     Text[ slovak ] = "Ilustrácia";
+    Text[ hungarian ] = "Ábra";
+    Text[ slovenian ] = "Ilustracija";
 };
 String STR_POOLCOLL_LABEL_TABLE
 {
@@ -3431,6 +3643,8 @@ String STR_POOLCOLL_LABEL_TABLE
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
     Text[ slovak ] = "Tabuľka";
+    Text[ hungarian ] = "Táblázat";
+    Text[ slovenian ] = "Tabela";
 };
 String STR_POOLCOLL_LABEL_FRAME
 {
@@ -3462,6 +3676,8 @@ String STR_POOLCOLL_LABEL_FRAME
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 String STR_POOLCOLL_LABEL_DRAWING
 {
@@ -3493,6 +3709,8 @@ String STR_POOLCOLL_LABEL_DRAWING
     Text[ hebrew ] = "‮ציור‬";
     Text[ hindi ] = "रेखाचित्र";
     Text[ slovak ] = "Kresba";
+    Text[ hungarian ] = "Rajz";
+    Text[ slovenian ] = "Risba";
 };
 String STR_POOLCOLL_JAKETADRESS
 {
@@ -3525,6 +3743,8 @@ String STR_POOLCOLL_JAKETADRESS
     Text[ hebrew ] = "Empfänger";
     Text[ hindi ] = "लेनेवाला";
     Text[ slovak ] = "Príjemca";
+    Text[ hungarian ] = "Címzett";
+    Text[ slovenian ] = "Naslovnik";
 };
 String STR_POOLCOLL_SENDADRESS
 {
@@ -3556,6 +3776,8 @@ String STR_POOLCOLL_SENDADRESS
     Text[ hebrew ] = "Absender";
     Text[ hindi ] = "भेजनेवाला ";
     Text[ slovak ] = "Odosielateľ";
+    Text[ hungarian ] = "Küldő";
+    Text[ slovenian ] = "Pošiljatelj";
 };
 String STR_POOLCOLL_TOX_IDXH
 {
@@ -3568,7 +3790,7 @@ String STR_POOLCOLL_TOX_IDXH
     Text [ french ] = "Index lexical : titre" ;
     Text [ dutch ] = "Indexkop" ;
     Text [ swedish ] = "Sakregister�verskrift" ;
-    Text [ danish ] = "Stikordsregisteroverskrift" ;
+    Text [ danish ] = "Stikordsregister overskrift" ;
     Text [ portuguese ] = "T�tulo do �ndice remissivo" ;
     Text [ portuguese_brazilian ] = "T�tulo do �ndice" ;
     Text[ chinese_simplified ] = "索引目录 标题";
@@ -3588,6 +3810,8 @@ String STR_POOLCOLL_TOX_IDXH
     Text[ hebrew ] = "Stichwortverzeichnis Überschrift";
     Text[ hindi ] = "अनुक्रमणिका शीर्षक";
     Text[ slovak ] = "Nadpis obsahu";
+    Text[ hungarian ] = "Tárgymutató-címsor";
+    Text[ slovenian ] = "Naslov kazala";
 };
 String STR_POOLCOLL_TOX_IDX1
 {
@@ -3619,6 +3843,8 @@ String STR_POOLCOLL_TOX_IDX1
     Text[ hebrew ] = "Stichwortverzeichnis 1";
     Text[ hindi ] = "अनुक्रमणिका  1";
     Text[ slovak ] = "Obsah 1";
+    Text[ hungarian ] = "Tárgymutató 1";
+    Text[ slovenian ] = "Kazalo 1";
 };
 String STR_POOLCOLL_TOX_IDX2
 {
@@ -3650,6 +3876,8 @@ String STR_POOLCOLL_TOX_IDX2
     Text[ hebrew ] = "Stichwortverzeichnis 2";
     Text[ hindi ] = "अनुक्रमणिका  2";
     Text[ slovak ] = "Obsah 2";
+    Text[ hungarian ] = "Tárgymutató 2";
+    Text[ slovenian ] = "Kazalo 2";
 };
 String STR_POOLCOLL_TOX_IDX3
 {
@@ -3681,6 +3909,8 @@ String STR_POOLCOLL_TOX_IDX3
     Text[ hebrew ] = "Stichwortverzeichnis 3";
     Text[ hindi ] = "अनुक्रमणिका  3";
     Text[ slovak ] = "Obsah 3";
+    Text[ hungarian ] = "Tárgymutató 3";
+    Text[ slovenian ] = "Kazalo 3";
 };
 String STR_POOLCOLL_TOX_IDXBREAK
 {
@@ -3712,6 +3942,8 @@ String STR_POOLCOLL_TOX_IDXBREAK
     Text[ hebrew ] = "Stichwortverzeichnis Trenner";
     Text[ hindi ] = "अनुक्रमणिका अलगानेवाला";
     Text[ slovak ] = "Oddeľovač obsahu";
+    Text[ hungarian ] = "Tárgymutató-elválasztó";
+    Text[ slovenian ] = "Ločilo v kazalu";
 };
 String STR_POOLCOLL_TOX_CNTNTH
 {
@@ -3744,6 +3976,8 @@ String STR_POOLCOLL_TOX_CNTNTH
     Text[ hebrew ] = "Inhaltsverzeichnis Überschrift";
     Text[ hindi ] = "विषय शीर्षक";
     Text[ slovak ] = "Nadpis obsahu";
+    Text[ hungarian ] = "Tartalomjegyzék-fejléc";
+    Text[ slovenian ] = "Naslov vsebine";
 };
 String STR_POOLCOLL_TOX_CNTNT1
 {
@@ -3775,6 +4009,8 @@ String STR_POOLCOLL_TOX_CNTNT1
     Text[ hebrew ] = "Inhaltsverzeichnis 1";
     Text[ hindi ] = "विषयें 1";
     Text[ slovak ] = "Obsah 1";
+    Text[ hungarian ] = "Tartalomjegyzék 1";
+    Text[ slovenian ] = "Vsebina 1";
 };
 String STR_POOLCOLL_TOX_CNTNT2
 {
@@ -3806,6 +4042,8 @@ String STR_POOLCOLL_TOX_CNTNT2
     Text[ hebrew ] = "Inhaltsverzeichnis 2";
     Text[ hindi ] = "विषयें 2";
     Text[ slovak ] = "Obsah 2";
+    Text[ hungarian ] = "Tartalomjegyzék 2";
+    Text[ slovenian ] = "Vsebina 2";
 };
 String STR_POOLCOLL_TOX_CNTNT3
 {
@@ -3837,6 +4075,8 @@ String STR_POOLCOLL_TOX_CNTNT3
     Text[ hebrew ] = "Inhaltsverzeichnis 3";
     Text[ hindi ] = "विषयें 3";
     Text[ slovak ] = "Obsah 3";
+    Text[ hungarian ] = "Tartalomjegyzék 3";
+    Text[ slovenian ] = "Vsebina 3";
 };
 String STR_POOLCOLL_TOX_CNTNT4
 {
@@ -3868,6 +4108,8 @@ String STR_POOLCOLL_TOX_CNTNT4
     Text[ hebrew ] = "Inhaltsverzeichnis 4";
     Text[ hindi ] = "विषयें 4";
     Text[ slovak ] = "Obsah 4";
+    Text[ hungarian ] = "Tartalomjegyzék 4";
+    Text[ slovenian ] = "Vsebina 4";
 };
 String STR_POOLCOLL_TOX_CNTNT5
 {
@@ -3899,6 +4141,8 @@ String STR_POOLCOLL_TOX_CNTNT5
     Text[ hebrew ] = "Inhaltsverzeichnis 5";
     Text[ hindi ] = "विषयें 5";
     Text[ slovak ] = "Obsah 5";
+    Text[ hungarian ] = "Tartalomjegyzék 5";
+    Text[ slovenian ] = "Vsebina 5";
 };
 String STR_POOLCOLL_TOX_CNTNT6
 {
@@ -3930,6 +4174,8 @@ String STR_POOLCOLL_TOX_CNTNT6
     Text[ hebrew ] = "Inhaltsverzeichnis 6";
     Text[ hindi ] = "विषयें 6";
     Text[ slovak ] = "Obsah 6";
+    Text[ hungarian ] = "Tartalomjegyzék 6";
+    Text[ slovenian ] = "Vsebina 6";
 };
 String STR_POOLCOLL_TOX_CNTNT7
 {
@@ -3961,6 +4207,8 @@ String STR_POOLCOLL_TOX_CNTNT7
     Text[ hebrew ] = "Inhaltsverzeichnis 7";
     Text[ hindi ] = "विषयें 7";
     Text[ slovak ] = "Obsah 7";
+    Text[ hungarian ] = "Tartalomjegyzék 7";
+    Text[ slovenian ] = "Vsebina 7";
 };
 String STR_POOLCOLL_TOX_CNTNT8
 {
@@ -3992,6 +4240,8 @@ String STR_POOLCOLL_TOX_CNTNT8
     Text[ hebrew ] = "Inhaltsverzeichnis 8";
     Text[ hindi ] = "विषयें 8";
     Text[ slovak ] = "Obsah 8";
+    Text[ hungarian ] = "Tartalomjegyzék 8";
+    Text[ slovenian ] = "Vsebina 8";
 };
 String STR_POOLCOLL_TOX_CNTNT9
 {
@@ -4023,6 +4273,8 @@ String STR_POOLCOLL_TOX_CNTNT9
     Text[ hebrew ] = "Inhaltsverzeichnis 9";
     Text[ hindi ] = "विषयें 9";
     Text[ slovak ] = "Obsah 9";
+    Text[ hungarian ] = "Tartalomjegyzék 9";
+    Text[ slovenian ] = "Vsebina 9";
 };
 String STR_POOLCOLL_TOX_CNTNT10
 {
@@ -4054,6 +4306,8 @@ String STR_POOLCOLL_TOX_CNTNT10
     Text[ hebrew ] = "Inhaltsverzeichnis 10";
     Text[ hindi ] = "विषयें 10";
     Text[ slovak ] = "Obsah 10";
+    Text[ hungarian ] = "Tartalomjegyzék 10";
+    Text[ slovenian ] = "Vsebina 10";
 };
 String STR_POOLCOLL_TOX_USERH
 {
@@ -4086,6 +4340,8 @@ String STR_POOLCOLL_TOX_USERH
     Text[ hebrew ] = "Benutzerverzeichnis Überschrift";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका शीर्षक";
     Text[ slovak ] = "Nadpis registra užívateľa";
+    Text[ hungarian ] = "Egyéni jegyzék fejléce";
+    Text[ slovenian ] = "Naslov uporabniškega kazala";
 };
 String STR_POOLCOLL_TOX_USER1
 {
@@ -4117,6 +4373,8 @@ String STR_POOLCOLL_TOX_USER1
     Text[ hebrew ] = "Benutzerverzeichnis 1";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 1";
     Text[ slovak ] = "Vlastný register 1";
+    Text[ hungarian ] = "1. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 1";
 };
 String STR_POOLCOLL_TOX_USER2
 {
@@ -4148,6 +4406,8 @@ String STR_POOLCOLL_TOX_USER2
     Text[ hebrew ] = "Benutzerverzeichnis 2";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 2";
     Text[ slovak ] = "Vlastný register 2";
+    Text[ hungarian ] = "2. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 2";
 };
 String STR_POOLCOLL_TOX_USER3
 {
@@ -4179,6 +4439,8 @@ String STR_POOLCOLL_TOX_USER3
     Text[ hebrew ] = "Benutzerverzeichnis 3";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 3";
     Text[ slovak ] = "Vlastný register 3";
+    Text[ hungarian ] = "3. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 3";
 };
 String STR_POOLCOLL_TOX_USER4
 {
@@ -4210,6 +4472,8 @@ String STR_POOLCOLL_TOX_USER4
     Text[ hebrew ] = "Benutzerverzeichnis 4";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 4";
     Text[ slovak ] = "Vlastný register 4";
+    Text[ hungarian ] = "4. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 4";
 };
 String STR_POOLCOLL_TOX_USER5
 {
@@ -4241,6 +4505,8 @@ String STR_POOLCOLL_TOX_USER5
     Text[ hebrew ] = "Benutzerverzeichnis 5";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 5";
     Text[ slovak ] = "Vlastný register 5";
+    Text[ hungarian ] = "5. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 5";
 };
 String STR_POOLCOLL_TOX_USER6
 {
@@ -4272,6 +4538,8 @@ String STR_POOLCOLL_TOX_USER6
     Text[ hebrew ] = "Benutzerverzeichnis 6";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 6";
     Text[ slovak ] = "Vlastný register 6";
+    Text[ hungarian ] = "6. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 6";
 };
 String STR_POOLCOLL_TOX_USER7
 {
@@ -4303,6 +4571,8 @@ String STR_POOLCOLL_TOX_USER7
     Text[ hebrew ] = "Benutzerverzeichnis 7";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 7";
     Text[ slovak ] = "Vlastný register 7";
+    Text[ hungarian ] = "7. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 7";
 };
 String STR_POOLCOLL_TOX_USER8
 {
@@ -4334,6 +4604,8 @@ String STR_POOLCOLL_TOX_USER8
     Text[ hebrew ] = "Benutzerverzeichnis 8";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 8";
     Text[ slovak ] = "Vlastný register 8";
+    Text[ hungarian ] = "8. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 8";
 };
 String STR_POOLCOLL_TOX_USER9
 {
@@ -4365,6 +4637,8 @@ String STR_POOLCOLL_TOX_USER9
     Text[ hebrew ] = "Benutzerverzeichnis 9";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 9";
     Text[ slovak ] = "Vlastný register 9";
+    Text[ hungarian ] = "9. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 9";
 };
 String STR_POOLCOLL_TOX_USER10
 {
@@ -4396,6 +4670,8 @@ String STR_POOLCOLL_TOX_USER10
     Text[ hebrew ] = "Benutzerverzeichnis 10";
     Text[ hindi ] = "उपभोक्ता अनुक्रमणिका 10";
     Text[ slovak ] = "Vlastný register 10";
+    Text[ hungarian ] = "10. egyéni jegyzék";
+    Text[ slovenian ] = "Uporabniško kazalo 10";
 };
 String STR_POOLCOLL_TOX_ILLUSH
 {
@@ -4427,6 +4703,8 @@ String STR_POOLCOLL_TOX_ILLUSH
     Text[ hebrew ] = "Abbildungsverzeichnis Überschrift";
     Text[ hindi ] = "दृष्टान्त अनुक्रमणिका शीर्षक";
     Text[ slovak ] = "Nadpis zoznamu ilustrácií";
+    Text[ hungarian ] = "Ábrajegyzék fejléce";
+    Text[ slovenian ] = "Naslov kazala ilustracij";
 };
 String STR_POOLCOLL_TOX_ILLUS1
 {
@@ -4458,6 +4736,8 @@ String STR_POOLCOLL_TOX_ILLUS1
     Text[ hebrew ] = "Abbildungsverzeichnis 1";
     Text[ hindi ] = "दृष्टान्त अनुक्रमणिका  1";
     Text[ slovak ] = "Zoznam ilustrácií 1";
+    Text[ hungarian ] = "1. ábrajegyzék";
+    Text[ slovenian ] = "Kazalo ilustracij 1";
 };
 String STR_POOLCOLL_TOX_OBJECTH
 {
@@ -4489,6 +4769,8 @@ String STR_POOLCOLL_TOX_OBJECTH
     Text[ hebrew ] = "Objektverzeichnis Überschrift";
     Text[ hindi ] = "वस्तु अनुक्रमणिका शीर्षक";
     Text[ slovak ] = "Nadpis indexu objektov";
+    Text[ hungarian ] = "Objektumjegyzék fejléce";
+    Text[ slovenian ] = "Naslov kazala predmetov";
 };
 String STR_POOLCOLL_TOX_OBJECT1
 {
@@ -4520,6 +4802,8 @@ String STR_POOLCOLL_TOX_OBJECT1
     Text[ hebrew ] = "Objektverzeichnis 1";
     Text[ hindi ] = "वस्तु अनुक्रमणिका 1";
     Text[ slovak ] = "Index objektov 1";
+    Text[ hungarian ] = "Objektumjegyzék 1";
+    Text[ slovenian ] = "Kazalo predmetov 1";
 };
 String STR_POOLCOLL_TOX_TABLESH
 {
@@ -4551,6 +4835,8 @@ String STR_POOLCOLL_TOX_TABLESH
     Text[ hebrew ] = "Tabellenverzeichnis Überschrift";
     Text[ hindi ] = "सारणी अनुक्रमणिका शीर्षक";
     Text[ slovak ] = "Nadpis indexu tabuľky";
+    Text[ hungarian ] = "Táblázatjegyzék fejléce";
+    Text[ slovenian ] = "Naslov kazala tabel";
 };
 String STR_POOLCOLL_TOX_TABLES1
 {
@@ -4582,6 +4868,8 @@ String STR_POOLCOLL_TOX_TABLES1
     Text[ hebrew ] = "Tabellenverzeichnis 1";
     Text[ hindi ] = "सारणी अनुक्रमणिका 1";
     Text[ slovak ] = "Index tabuľky 1";
+    Text[ hungarian ] = "Táblázatjegyzék 1";
+    Text[ slovenian ] = "Kazalo tabel 1";
 };
 String STR_POOLCOLL_TOX_AUTHORITIESH
 {
@@ -4613,6 +4901,8 @@ String STR_POOLCOLL_TOX_AUTHORITIESH
     Text[ hebrew ] = "Literaturverzeichnis Überschrift";
     Text[ hindi ] = "ग्रन्थ-सूची शीर्षक";
     Text[ slovak ] = "Nadpis zoznamu použitej literatúry";
+    Text[ hungarian ] = "Irodalomjegyzék fejléce";
+    Text[ slovenian ] = "Naslov bibliografije";
 };
 String STR_POOLCOLL_TOX_AUTHORITIES1
 {
@@ -4644,6 +4934,8 @@ String STR_POOLCOLL_TOX_AUTHORITIES1
     Text[ hebrew ] = "Literaturverzeichnis 1";
     Text[ hindi ] = "ग्रन्थ-सूची 1";
     Text[ slovak ] = "Zoznam použitej literatúry 1";
+    Text[ hungarian ] = "Irodalomjegyzék 1";
+    Text[ slovenian ] = "Bibliografija 1";
 };
 
 String STR_POOLCOLL_DOC_TITEL
@@ -4676,6 +4968,8 @@ String STR_POOLCOLL_DOC_TITEL
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
     Text[ slovak ] = "Titul";
+    Text[ hungarian ] = "Cím";
+    Text[ slovenian ] = "Naslov";
 };
 String STR_POOLCOLL_DOC_SUBTITEL
 {
@@ -4707,6 +5001,8 @@ String STR_POOLCOLL_DOC_SUBTITEL
     Text[ hebrew ] = "Untertitel";
     Text[ hindi ] = "अधीन शीर्षक";
     Text[ slovak ] = "Podtitul";
+    Text[ hungarian ] = "Alcím";
+    Text[ slovenian ] = "Podnaslov";
 };
 String STR_POOLCOLL_HTML_BLOCKQUOTE
 {
@@ -4715,7 +5011,7 @@ String STR_POOLCOLL_HTML_BLOCKQUOTE
     Text [ dutch ] = "Citaat" ;
     Text [ english_us ] = "Quotations" ;
     Text [ swedish ] = "Citat" ;
-    Text [ danish ] = "Citat" ;
+    Text [ danish ] = "Citater" ;
     Text [ italian ] = "Citazione" ;
     Text [ spanish ] = "Cita" ;
     Text [ french ] = "Citation" ;
@@ -4738,6 +5034,8 @@ String STR_POOLCOLL_HTML_BLOCKQUOTE
     Text[ hebrew ] = "Zitat";
     Text[ hindi ] = "कहना";
     Text[ slovak ] = "Citácie";
+    Text[ hungarian ] = "Idézet";
+    Text[ slovenian ] = "Citati";
 };
 String STR_POOLCOLL_HTML_PRE
 {
@@ -4746,7 +5044,7 @@ String STR_POOLCOLL_HTML_PRE
     Text [ dutch ] = "Reeds opgemaakte tekst" ;
     Text [ english_us ] = "Preformatted Text" ;
     Text [ swedish ] = "F�rformaterad text" ;
-    Text [ danish ] = "Forudformateret tekst" ;
+    Text [ danish ] = "Pr�formateret tekst" ;
     Text [ italian ] = "Testo preformattato" ;
     Text [ spanish ] = "Texto preformateado" ;
     Text [ french ] = "Texte pr�format�" ;
@@ -4769,6 +5067,8 @@ String STR_POOLCOLL_HTML_PRE
     Text[ hebrew ] = "Vorformatierter Text";
     Text[ hindi ] = "पहिले से ही रचना किया हुआ टेक्स्ट्";
     Text[ slovak ] = "Predformátovaný text";
+    Text[ hungarian ] = "Előformázott szöveg";
+    Text[ slovenian ] = "Preoblikovano besedilo";
 };
 String STR_POOLCOLL_HTML_HR
 {
@@ -4800,6 +5100,8 @@ String STR_POOLCOLL_HTML_HR
     Text[ hebrew ] = "‮קו אופקי‬";
     Text[ hindi ] = "समतल रेखाएँ";
     Text[ slovak ] = "Vodorovná čiara";
+    Text[ hungarian ] = "Vízszintes vonal";
+    Text[ slovenian ] = "Vodoravna vrstica";
 };
 String STR_POOLCOLL_HTML_DD
 {
@@ -4831,6 +5133,8 @@ String STR_POOLCOLL_HTML_DD
     Text[ hebrew ] = "Listeninhalt";
     Text[ hindi ] = "सूची विषयें";
     Text[ slovak ] = "Obsah zoznamu";
+    Text[ hungarian ] = "Listatartalom";
+    Text[ slovenian ] = "Vsebina seznama";
 };
 String STR_POOLCOLL_HTML_DT
 {
@@ -4839,7 +5143,7 @@ String STR_POOLCOLL_HTML_DT
     Text [ dutch ] = "Lijsttitel" ;
     Text [ english_us ] = "List Heading" ;
     Text [ swedish ] = "Listhuvud" ;
-    Text [ danish ] = "Listehoved" ;
+    Text [ danish ] = "Listeoverskrift" ;
     Text [ italian ] = "Intestazione elenco" ;
     Text [ spanish ] = "Encabezamiento de lista" ;
     Text [ french ] = "En-t�te de liste" ;
@@ -4862,6 +5166,8 @@ String STR_POOLCOLL_HTML_DT
     Text[ hebrew ] = "Listenkopf";
     Text[ hindi ] = "सूची शीर्षक";
     Text[ slovak ] = "Zoznam nadpisov";
+    Text[ hungarian ] = "Listafejléc";
+    Text[ slovenian ] = "Naslov seznama";
 };
 //page style names
 String STR_POOLPAGE_STANDARD
@@ -4894,6 +5200,8 @@ String STR_POOLPAGE_STANDARD
     Text[ hebrew ] = "‮ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति ";
     Text[ slovak ] = "Východzie";
+    Text[ hungarian ] = "Normál";
+    Text[ slovenian ] = "Privzeto";
 };
 String STR_POOLPAGE_FIRST
 {
@@ -4925,6 +5233,8 @@ String STR_POOLPAGE_FIRST
     Text[ hebrew ] = "Erste Seite";
     Text[ hindi ] = "पहिला पृष्ठ";
     Text[ slovak ] = "Prvá stránka";
+    Text[ hungarian ] = "Első oldal";
+    Text[ slovenian ] = "Prva stran";
 };
 String STR_POOLPAGE_LEFT
 {
@@ -4956,6 +5266,8 @@ String STR_POOLPAGE_LEFT
     Text[ hebrew ] = "Linke Seite";
     Text[ hindi ] = "बायाँ पृष्ठ ";
     Text[ slovak ] = "Ľavá stránka";
+    Text[ hungarian ] = "Páros oldal";
+    Text[ slovenian ] = "Leva stran";
 };
 String STR_POOLPAGE_RIGHT
 {
@@ -4987,6 +5299,8 @@ String STR_POOLPAGE_RIGHT
     Text[ hebrew ] = "Rechte Seite";
     Text[ hindi ] = "दाहिना पृष्ठ";
     Text[ slovak ] = "Pravá strana";
+    Text[ hungarian ] = "Páratlan oldal";
+    Text[ slovenian ] = "Desna stran";
 };
 String STR_POOLPAGE_JAKET
 {
@@ -5018,6 +5332,8 @@ String STR_POOLPAGE_JAKET
     Text[ hebrew ] = "‮מעטפה‬";
     Text[ hindi ] = "लिफाफा ";
     Text[ slovak ] = "Obálka";
+    Text[ hungarian ] = "Boríték";
+    Text[ slovenian ] = "Ovojnica";
 };
 String STR_POOLPAGE_REGISTER
 {
@@ -5049,6 +5365,8 @@ String STR_POOLPAGE_REGISTER
     Text[ hebrew ] = "Verzeichnis";
     Text[ hindi ] = "अनुक्रमणिका";
     Text[ slovak ] = "Obsah";
+    Text[ hungarian ] = "Jegyzék";
+    Text[ slovenian ] = "Kazalo";
 };
 String STR_POOLPAGE_HTML
 {
@@ -5080,6 +5398,8 @@ String STR_POOLPAGE_HTML
     Text[ hebrew ] = "HTML";
     Text[ hindi ] = "HTML";
     Text[ slovak ] = "HTML";
+    Text[ hungarian ] = "HTML";
+    Text[ slovenian ] = "HTML";
 };
 String STR_POOLPAGE_FOOTNOTE
 {
@@ -5111,6 +5431,8 @@ String STR_POOLPAGE_FOOTNOTE
     Text[ hebrew ] = "‮הערת שוליים‬";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका";
     Text[ slovak ] = "Poznámka pod čiarou";
+    Text[ hungarian ] = "Lábjegyzet";
+    Text[ slovenian ] = "Sprotna opomba";
 };
 String STR_POOLPAGE_ENDNOTE
 {
@@ -5142,6 +5464,8 @@ String STR_POOLPAGE_ENDNOTE
     Text[ hebrew ] = "Endnote";
     Text[ hindi ] = "अंतिम टीका ";
     Text[ slovak ] = "Vysvetlivka";
+    Text[ hungarian ] = "Végjegyzet";
+    Text[ slovenian ] = "Končna opomba";
 };
 /*
  Numerierungs Regeln
@@ -5176,6 +5500,8 @@ String STR_POOLNUMRULE_NUM1
     Text[ hebrew ] = "Nummerierung 1";
     Text[ hindi ] = "संख्या देना 1";
     Text[ slovak ] = "Číslovanie 1";
+    Text[ hungarian ] = "Számozás 1";
+    Text[ slovenian ] = "Oštevilčevanje 1";
 };
 String STR_POOLNUMRULE_NUM2
 {
@@ -5207,6 +5533,8 @@ String STR_POOLNUMRULE_NUM2
     Text[ hebrew ] = "Nummerierung 2";
     Text[ hindi ] = "संख्या देना 2";
     Text[ slovak ] = "Číslovanie 2";
+    Text[ hungarian ] = "Számozás 2";
+    Text[ slovenian ] = "Oštevilčevanje 2";
 };
 String STR_POOLNUMRULE_NUM3
 {
@@ -5238,6 +5566,8 @@ String STR_POOLNUMRULE_NUM3
     Text[ hebrew ] = "Nummerierung 3";
     Text[ hindi ] = "संख्या देना 3";
     Text[ slovak ] = "Číslovanie 3";
+    Text[ hungarian ] = "Számozás 3";
+    Text[ slovenian ] = "Oštevilčevanje 3";
 };
 String STR_POOLNUMRULE_NUM4
 {
@@ -5269,6 +5599,8 @@ String STR_POOLNUMRULE_NUM4
     Text[ hebrew ] = "Nummerierung 4";
     Text[ hindi ] = "संख्या देना 4";
     Text[ slovak ] = "Číslovanie 4";
+    Text[ hungarian ] = "Számozás 4";
+    Text[ slovenian ] = "Oštevilčevanje 4";
 };
 String STR_POOLNUMRULE_NUM5
 {
@@ -5300,6 +5632,8 @@ String STR_POOLNUMRULE_NUM5
     Text[ hebrew ] = "Nummerierung 5";
     Text[ hindi ] = "संख्या देना 5";
     Text[ slovak ] = "Číslovanie 5";
+    Text[ hungarian ] = "Számozás 5";
+    Text[ slovenian ] = "Oštevilčevanje 5";
 };
 String STR_POOLNUMRULE_BUL1
 {
@@ -5332,6 +5666,8 @@ String STR_POOLNUMRULE_BUL1
     Text[ hebrew ] = "Aufzählung 1";
     Text[ hindi ] = "सूची  1";
     Text[ slovak ] = "Zoznam 1";
+    Text[ hungarian ] = "Lista 1";
+    Text[ slovenian ] = "Seznam 1";
 };
 String STR_POOLNUMRULE_BUL2
 {
@@ -5364,6 +5700,8 @@ String STR_POOLNUMRULE_BUL2
     Text[ hebrew ] = "Aufzählung 2";
     Text[ hindi ] = "सूची  2";
     Text[ slovak ] = "Zoznam 2";
+    Text[ hungarian ] = "Lista 2";
+    Text[ slovenian ] = "Seznam 2";
 };
 String STR_POOLNUMRULE_BUL3
 {
@@ -5396,6 +5734,8 @@ String STR_POOLNUMRULE_BUL3
     Text[ hebrew ] = "Aufzählung 3";
     Text[ hindi ] = "सूची  3";
     Text[ slovak ] = "Zoznam 3";
+    Text[ hungarian ] = "Lista 3";
+    Text[ slovenian ] = "Seznam 3";
 };
 String STR_POOLNUMRULE_BUL4
 {
@@ -5428,6 +5768,8 @@ String STR_POOLNUMRULE_BUL4
     Text[ hebrew ] = "Aufzählung 4";
     Text[ hindi ] = "सूची  4";
     Text[ slovak ] = "Zoznam 4";
+    Text[ hungarian ] = "Lista 4";
+    Text[ slovenian ] = "Seznam 4";
 };
 String STR_POOLNUMRULE_BUL5
 {
@@ -5460,6 +5802,8 @@ String STR_POOLNUMRULE_BUL5
     Text[ hebrew ] = "Aufzählung 5";
     Text[ hindi ] = "सूची  5";
     Text[ slovak ] = "Zoznam 5";
+    Text[ hungarian ] = "Lista 5";
+    Text[ slovenian ] = "Seznam 5";
 };
 
 String STR_POOLCHR_RUBYTEXT
@@ -5491,6 +5835,8 @@ String STR_POOLCHR_RUBYTEXT
     Text[ hebrew ] = "Rubys";
     Text[ hindi ] = "रूबीस";
     Text[ slovak ] = "Ruby";
+    Text[ hungarian ] = "Fonetikus átirat";
+    Text[ slovenian ] = "Fonetični zapisi";
 };
 
 String STR_POOLCHR_VERT_NUM
@@ -5500,7 +5846,7 @@ String STR_POOLCHR_VERT_NUM
     Text[ english_us ] = "Vertical Numbering Symbols";
     Text[ portuguese ] = "Vertical Numbering Symbols";
     Text[ russian ] = "Vertical Numbering Symbols";
-    Text[ greek ] = "Vertical Numbering Symbols";
+    Text[ greek ] = "������� ����������� ���������";
     Text[ dutch ] = "Vertical Numbering Symbols";
     Text[ french ] = "Caract�res de num�rotation verticaux";
     Text[ spanish ] = "Caracteres de numeraci�n vertical";
@@ -5522,55 +5868,6 @@ String STR_POOLCHR_VERT_NUM
     Text[ thai ] = "Vertical Numbering Symbols";
     Text[ hindi ] = "Vertical Numbering Symbols";
     Text[ slovak ] = "Zvislé číslovacie symboly";
+    Text[ hungarian ] = "Függőleges felsorolásjelek";
+    Text[ slovenian ] = "Simboli za navpično oštevilčevanje";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
