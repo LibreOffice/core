@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-09 15:05:39 $
+ *  last change: $Author: fs $ $Date: 2002-08-14 15:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #include <algorithm>
@@ -249,15 +252,56 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
         case PropertyDescription::ltDerivedClassAnyType:
         {
             sal_Bool bMayBeVoid = ((aPos->nAttributes & PropertyAttribute::MAYBEVOID) != 0);
+
+
+            // non modifiable version of the value-to-be-set
+            Any aNewRequestedValue( _rValue );
+
+            // normalization
+            // (102329 - 14.08.2002 - fs@openoffice.org)
+            if ( !aNewRequestedValue.getValueType().equals( aPos->aType ) )
+            {   // the actually given value is not of the same type as the one required
+                if  (   ( TypeClass_INTERFACE == aNewRequestedValue.getValueType().getTypeClass() )
+                    &&  ( TypeClass_INTERFACE == aPos->aType.getTypeClass() )
+                    )
+                {   // but both are XInterface-derivees
+                    Any aProperlyTyped( NULL, aPos->aType.getTypeLibType() );
+
+                    if (    uno_type_assignData(
+                                const_cast< void* >( aProperlyTyped.getValue() ), aProperlyTyped.getValueType().getTypeLibType(),
+                                const_cast< void* >( aNewRequestedValue.getValue() ), aNewRequestedValue.getValueType().getTypeLibType(),
+                                cpp_queryInterface, cpp_acquire, cpp_release
+                            )
+                        )
+                    {
+                        // we were able to query the given XInterface-derivee for the interface
+                        // which is required for this property
+                        aNewRequestedValue = aProperlyTyped;
+                    }
+                }
+            }
+
             // argument check
-            if  (   !   (   (bMayBeVoid && !_rValue.hasValue())             // void is allowed if the attribute says so
-                        ||  (_rValue.getValueType().equals(aPos->aType))    // else the types have to be equal
+            if  (   !   (   (bMayBeVoid && !aNewRequestedValue.hasValue())          // void is allowed if the attribute says so
+                        ||  (aNewRequestedValue.getValueType().equals(aPos->aType)) // else the types have to be equal
                         )
                 )
+            {
+                ::rtl::OUStringBuffer sMessage;
+                sMessage.appendAscii( "invalid value type for property \"" );
+                sMessage.append( aPos->sName );
+                sMessage.appendAscii( "\"\n" );
+                sMessage.appendAscii( "expected: " );
+                sMessage.append( aPos->aType.getTypeName() );
+                sMessage.appendAscii( "\nfound   : " );
+                sMessage.append( _rValue.getValueType().getTypeName() );
+                sMessage.appendAscii( "\n" );
+
                 throw IllegalArgumentException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value type")),
+                    sMessage.makeStringAndClear(),
                     static_cast< XPropertySet* >(this),
                     4);
+            }
 
             Any* pPropContainer = NULL;
                 // the pointer to the any which holds the property value, no matter if located in the derived clas
@@ -273,15 +317,19 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
                 pPropContainer = reinterpret_cast<Any*>(aPos->aLocation.pDerivedClassMember);
 
             // check if the new value differs from the current one
-            if (!pPropContainer->hasValue() || !_rValue.hasValue())
-                bModified = pPropContainer->hasValue() != _rValue.hasValue();
+            if (!pPropContainer->hasValue() || !aNewRequestedValue.hasValue())
+                bModified = pPropContainer->hasValue() != aNewRequestedValue.hasValue();
             else
-                bModified = !uno_type_equalData(const_cast<void*>(pPropContainer->getValue()), aPos->aType.getTypeLibType(), const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType(), cpp_queryInterface, cpp_release);
+                bModified = !uno_type_equalData(
+                                const_cast< void* >( pPropContainer->getValue() ), aPos->aType.getTypeLibType(),
+                                const_cast< void* >( aNewRequestedValue.getValue() ), aPos->aType.getTypeLibType(),
+                                cpp_queryInterface, cpp_release
+                            );
 
             if (bModified)
             {
                 _rOldValue = *pPropContainer;
-                _rConvertedValue = _rValue;
+                _rConvertedValue = aNewRequestedValue;
             }
         }
         break;
@@ -305,7 +353,7 @@ sal_Bool OPropertyContainer::convertFastPropertyValue(
                     )
                 {
                     // a temporary any of the correct (required) type
-                    aProperlyTyped.setValue( aPos->aLocation.pDerivedClassMember, aPos->aType );
+                    aProperlyTyped = Any( NULL, aPos->aType.getTypeLibType() );
                         // (need this as we do not want to overwrite the derived class member here)
 
                     if (    uno_type_assignData(
@@ -511,6 +559,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2002/01/09 15:05:39  fs
+ *  #96068# uno_type_assignData instead of uno_type_copyData
+ *
  *  Revision 1.9  2001/09/27 11:14:04  hr
  *  #65293#: includes
  *
