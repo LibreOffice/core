@@ -2,9 +2,9 @@
 #
 #   $RCSfile: javaunittest.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:32:54 $
+#   last change: $Author: obo $ $Date: 2004-06-04 02:41:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,22 +118,23 @@ $(TESTS): $(JAVACLASSFILES)
         -NoOffice yes -o $(subst,$/,. $(subst,.test, $(PACKAGE).$@))
 
 .IF "$(IDLTESTFILES)" != ""
-$(JAVAFILES): $(MISC)$/$(TARGET).javac.flag
-$(MISC)$/$(TARGET).javac.flag: $(MISC)$/$(TARGET).javamaker.flag
-    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) \
-        $(MISC)$/$(TARGET)$/java$/$(PACKAGE)$/*.java
-    $(TOUCH) $@
+
+# The following dependency (to execute javac whenever javamaker has run) does
+# not work reliably, see #i28827#:
+$(JAVAFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).javamaker.flag
+
 $(MISC)$/$(TARGET).javamaker.flag: $(MISC)$/$(TARGET).rdb
-    - $(MKDIRHIER) $(MISC)$/$(TARGET)$/java
-    $(JAVAMAKER) -O$(MISC)$/$(TARGET)$/java -BUCR -nD $< \
-        -X$(SOLARBINDIR)$/types.rdb
+    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD $< -X$(SOLARBINDIR)$/types.rdb
     $(TOUCH) $@
+
 $(MISC)$/$(TARGET).rdb: \
         $(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i))
     - rm $@
     $(REGMERGE) $@ /UCR $<
+
 $(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i)): \
         $(IDLTESTFILES)
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
+
 .ENDIF
