@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Views.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 				<desc xml:lang="th">Contains the persistent data for a general office dialog.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a general office dialog.</desc>
 				<desc xml:lang="x-comment">Contains the persistent data for a general office dialog.</desc>
+				<desc xml:lang="hu">Contains the persistent data for a general office dialog.</desc>
+				<desc xml:lang="sk">Contains the persistent data for a general office dialog.</desc>
+				<desc xml:lang="sl">Contains the persistent data for a general office dialog.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -120,6 +123,9 @@
 					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -149,6 +155,9 @@
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -179,6 +188,9 @@
 				<desc xml:lang="th">Contains the persistent data for a special tab dialog.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a special tab dialog.</desc>
 				<desc xml:lang="x-comment">Contains the persistent data for a special tab dialog.</desc>
+				<desc xml:lang="hu">Contains the persistent data for a special tab dialog.</desc>
+				<desc xml:lang="sk">Contains the persistent data for a special tab dialog.</desc>
+				<desc xml:lang="sl">Contains the persistent data for a special tab dialog.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -207,6 +219,9 @@
 					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<prop oor:name="PageID" oor:type="xs:int">
@@ -236,6 +251,9 @@
 					<desc xml:lang="th">Represents the number of an active tab page inside a dialog.</desc>
 					<desc xml:lang="hi-IN">Represents the number of an active tab page inside a dialog.</desc>
 					<desc xml:lang="x-comment">Represents the number of an active tab page inside a dialog.</desc>
+					<desc xml:lang="hu">Represents the number of an active tab page inside a dialog.</desc>
+					<desc xml:lang="sk">Represents the number of an active tab page inside a dialog.</desc>
+					<desc xml:lang="sl">Represents the number of an active tab page inside a dialog.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -265,6 +283,9 @@
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -295,6 +316,9 @@
 				<desc xml:lang="th">Contains the persistent data for a tab page.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a tab page.</desc>
 				<desc xml:lang="x-comment">Contains the persistent data for a tab page.</desc>
+				<desc xml:lang="hu">Contains the persistent data for a tab page.</desc>
+				<desc xml:lang="sk">Contains the persistent data for a tab page.</desc>
+				<desc xml:lang="sl">Contains the persistent data for a tab page.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -323,6 +347,9 @@
 					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -352,6 +379,9 @@
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -382,6 +412,9 @@
 				<desc xml:lang="th">Contains the persistent data for a general office window.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a general office window.</desc>
 				<desc xml:lang="x-comment">Contains the persistent data for a general office window.</desc>
+				<desc xml:lang="hu">Contains the persistent data for a general office window.</desc>
+				<desc xml:lang="sk">Contains the persistent data for a general office window.</desc>
+				<desc xml:lang="sl">Contains the persistent data for a general office window.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -410,6 +443,9 @@
 					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="hu">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sk">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="sl">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Visible" oor:type="xs:boolean">
@@ -439,6 +475,9 @@
 					<desc xml:lang="th">Makes window visible.</desc>
 					<desc xml:lang="hi-IN">Makes window visible.</desc>
 					<desc xml:lang="x-comment">Makes window visible.</desc>
+					<desc xml:lang="hu">Makes window visible.</desc>
+					<desc xml:lang="sk">Makes window visible.</desc>
+					<desc xml:lang="sl">Makes window visible.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -468,6 +507,9 @@
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="hu">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sk">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="sl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -500,6 +542,9 @@
 				<desc xml:lang="th">Lists persistent dialog states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent dialog states.</desc>
 				<desc xml:lang="x-comment">Lists persistent dialog states.</desc>
+				<desc xml:lang="hu">Lists persistent dialog states.</desc>
+				<desc xml:lang="sk">Lists persistent dialog states.</desc>
+				<desc xml:lang="sl">Lists persistent dialog states.</desc>
 			</info>
 		</set>
 		<set oor:name="TabDialogs" oor:node-type="TabDialogType">
@@ -529,6 +574,9 @@
 				<desc xml:lang="th">Lists persistent tab dialog states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent tab dialog states.</desc>
 				<desc xml:lang="x-comment">Lists persistent tab dialog states.</desc>
+				<desc xml:lang="hu">Lists persistent tab dialog states.</desc>
+				<desc xml:lang="sk">Lists persistent tab dialog states.</desc>
+				<desc xml:lang="sl">Lists persistent tab dialog states.</desc>
 			</info>
 		</set>
 		<set oor:name="TabPages" oor:node-type="TabPageType">
@@ -558,6 +606,9 @@
 				<desc xml:lang="th">Lists persistent tab page states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent tab page states.</desc>
 				<desc xml:lang="x-comment">Lists persistent tab page states.</desc>
+				<desc xml:lang="hu">Lists persistent tab page states.</desc>
+				<desc xml:lang="sk">Lists persistent tab page states.</desc>
+				<desc xml:lang="sl">Lists persistent tab page states.</desc>
 			</info>
 		</set>
 		<set oor:name="Windows" oor:node-type="WindowType">
@@ -587,10 +638,14 @@
 				<desc xml:lang="th">Lists persistent window states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent window states.</desc>
 				<desc xml:lang="x-comment">Lists persistent window states.</desc>
+				<desc xml:lang="hu">Lists persistent window states.</desc>
+				<desc xml:lang="sk">Lists persistent window states.</desc>
+				<desc xml:lang="sl">Lists persistent window states.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
