@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBLE_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -129,7 +129,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
 class SfxViewFrame;
@@ -368,7 +368,7 @@ Reference<XAccessible> SAL_CALL
     this is true.
 */
 uno::Reference<XAccessible > SAL_CALL
-    AccessibleDocumentViewBase::getAccessibleAt (
+    AccessibleDocumentViewBase::getAccessibleAtPoint (
         const awt::Point& aPoint)
     throw (uno::RuntimeException)
 {
@@ -875,7 +875,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
     if (mxAccessibleOLEObject != xOLEObject)
         if (mxAccessibleOLEObject.is())
             CommitChange (
-                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                AccessibleEventId::CHILD,
                 uno::Any(),
                 uno::makeAny (mxAccessibleOLEObject));
 
@@ -889,7 +889,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
     // Send child event about new accessible OLE object if necessary.
     if (mxAccessibleOLEObject.is())
         CommitChange (
-            AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+            AccessibleEventId::CHILD,
             uno::makeAny (mxAccessibleOLEObject),
             uno::Any());
 }
