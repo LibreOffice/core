@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvteas1.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *  last change: $Author: th $ $Date: 2001-07-16 11:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,9 @@ static ImplTextEncodingData const aImplMS874TextEncodingData =
     874,
     21,
     (const sal_Char*)"iso8859-1",       /* ??? */
-    (const sal_Char*)"iso-8859-1",      /* ??? */
+    (const sal_Char*)"windows-874",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_WIN |
     RTL_TEXTENCODING_INFO_DOS_OS2,
     SCRIPT_THAI
@@ -346,8 +347,9 @@ static ImplTextEncodingData const aImplMS1258TextEncodingData =
     0,
     30,
     (const sal_Char*)"iso8859-1",       /* ??? */
-    (const sal_Char*)"iso-8859-1",      /* ??? */
+    (const sal_Char*)"windows-1258",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_VIETNAMESE
 };

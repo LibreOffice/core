@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtest1.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *  last change: $Author: th $ $Date: 2001-07-16 11:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,8 +689,9 @@ static ImplTextEncodingData const aImplIBM852TextEncodingData =
     852,
     29,
     (const sal_Char*)"iso8859-2",
-    (const sal_Char*)"iso-8859-2",
+    (const sal_Char*)"ibm852",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_DOS_OS2,
     SCRIPT_EASTEUROPE
 };
@@ -1176,8 +1177,9 @@ static ImplTextEncodingData const aImplIBM866TextEncodingData =
     866,
     7,
     (const sal_Char*)"iso8859-5",
-    (const sal_Char*)"iso-8859-5",
+    (const sal_Char*)"cp866",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_DOS_OS2,
     SCRIPT_LATIN
 };
@@ -1563,8 +1565,9 @@ static ImplTextEncodingData const aImplMS1250TextEncodingData =
     852,
     29,
     (const sal_Char*)"iso8859-2",
-    (const sal_Char*)"iso-8859-2",
+    (const sal_Char*)"windows-1250",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_EASTEUROPE
 };
@@ -1718,8 +1721,9 @@ static ImplTextEncodingData const aImplMS1251TextEncodingData =
     866,                                /* ??? 855 */
     7,
     (const sal_Char*)"iso8859-5",
-    (const sal_Char*)"iso-8859-5",
+    (const sal_Char*)"windows-1251",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_CYRILLIC
 };
@@ -1876,8 +1880,9 @@ static ImplTextEncodingData const aImplMS1253TextEncodingData =
     869,
     6,
     (const sal_Char*)"iso8859-7",
-    (const sal_Char*)"iso-8859-7",
+    (const sal_Char*)"windows-1253",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_GREEK
 };
@@ -2027,8 +2032,9 @@ static ImplTextEncodingData const aImplMS1254TextEncodingData =
     857,
     35,
     (const sal_Char*)"iso8859-9",
-    (const sal_Char*)"iso-8859-9",
+    (const sal_Char*)"windows-1254",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_TURKISH
 };
@@ -2183,8 +2189,9 @@ static ImplTextEncodingData const aImplMS1257TextEncodingData =
     775,
     29,
     (const sal_Char*)"iso8859-4",
-    (const sal_Char*)"iso-8859-4",
+    (const sal_Char*)"windows-1257",
     RTL_TEXTENCODING_INFO_ASCII |
+    RTL_TEXTENCODING_INFO_MIME |
     RTL_TEXTENCODING_INFO_WIN,
     SCRIPT_BALTIC
 };
