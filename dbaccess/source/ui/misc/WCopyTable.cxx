@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:06:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,12 +812,23 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             return NULL;
 
         ::rtl::OUString sCatalog,sSchema,sTable;
-        ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),
+        Reference< XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
+        ::dbtools::qualifiedNameComponents(xMetaData,
                                             m_sName,
                                             sCatalog,
                                             sSchema,
                                             sTable,
                                             ::dbtools::eInDataManipulation);
+
+        if ( !sCatalog.getLength() && xMetaData->supportsCatalogsInTableDefinitions() )
+        {
+            sCatalog = m_xConnection->getCatalog();
+        }
+
+        if ( !sSchema.getLength() && xMetaData->supportsSchemasInTableDefinitions() )
+        {
+            sSchema = xMetaData->getUserName();
+        }
 
         m_xDestObject->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
         m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
