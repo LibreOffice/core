@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optiongrouplayouter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:04:19 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace dbp
 
 #define BUTTON_HEIGHT       300
 #define TOP_HEIGHT          300
-#define HEIGHT              400
+#define HEIGHT              450
 #define OFFSET              300
 #define MIN_WIDTH           600
 
