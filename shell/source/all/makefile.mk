@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:25:29 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:34:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,10 @@ CDEFS+=-D_WIN32_IE=0x501
 .ENDIF
 
 # --- Files --------------------------------------------------------
+
+.IF "$(SYSTEM_EXPAT)" == "YES"
+CFLAGS+=-DSYSTEM_EXPAT
+.ENDIF
 
 SLOFILES=$(SLO)$/xml_parser.obj
 
