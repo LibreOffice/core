@@ -1,12 +1,17 @@
 
 $(MISC)$/%.ins : %.xml
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/instance.xsl $@ path=$(PRJ)$/data
+    java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.Validator $< 
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/instance.xsl $@ path=$(PRJ)$/data	
 
 $(MISC)$/%.tpl : %.xml
     java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/instance.xsl $@ templates=true path=$(PRJ)$/data
 
 $(MISC)$/%.xsd : %.xml
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema.xsl $@
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt19991105.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema.xsl $@	
+
+$(MISC)$/%.xml : $(MISC)$/%.ins	
+    java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.PrettyPrinter $< $@ 
+
 
 
 
