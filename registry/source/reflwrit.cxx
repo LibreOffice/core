@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
+ *  last change: $Author: mh $ $Date: 2002-04-23 14:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@ static sal_Unicode NULL_WSTRING[1] = { 0 };
 
 #if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
 ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
+#endif
+
+#if defined(MACOSX)
+ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pStaticLoader = NULL;
 #endif
 
 #define BLOP_OFFSET_MAGIC       0

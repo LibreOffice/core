@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-05-30 15:08:16 $
+ *  last change: $Author: mh $ $Date: 2002-04-23 14:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@ const sal_uInt16 majorVersion = 0x0001;
 
 #if defined ( GCC ) && ( defined ( SCO ) )
 ORealDynamicLoader* ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
+#endif
+
+#if defined(MACOSX)
+ORealDynamicLoader* ODynamicLoader<RegistryTypeReader_Api>::m_pStaticLoader = NULL;
 #endif
 
 /**************************************************************************

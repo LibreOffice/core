@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 10:51:12 $
+ *  last change: $Author: mh $ $Date: 2002-04-23 14:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@ using namespace salhelper;
 
 #if defined ( GCC ) && ( defined ( SCO ) )
 ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
+#endif
+
+#if defined(MACOSX)
+ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pStaticLoader = NULL;
 #endif
 
 OString getTempName()
