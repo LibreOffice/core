@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:22 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ ENGLISH ] = "Row" ;
         Text [ norwegian ] = "Row" ;
         Text [ italian ] = "Riga" ;
-        Text [ portuguese_brazilian ] = "Fileira" ;
+        Text [ portuguese_brazilian ] = "Linha" ;
         Text [ portuguese ] = "Linha" ;
         Text [ finnish ] = "Rivi" ;
         Text [ danish ] = "Række" ;
@@ -137,6 +137,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "fila";
         Text[ thai ] = "à¹à¸–à¸§";
+        Text[ czech ] = "Å˜Ã¡dek";
+        Text[ hebrew ] = "Zeile";
+        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿";
     };
     NumericField ED_ROW
     {
@@ -158,7 +161,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ ENGLISH ] = "Row" ;
         QuickHelpText [ norwegian ] = "Row" ;
         QuickHelpText [ italian ] = "Riga" ;
-        QuickHelpText [ portuguese_brazilian ] = "Fileira" ;
+        QuickHelpText [ portuguese_brazilian ] = "Linha" ;
         QuickHelpText [ portuguese ] = "Linha" ;
         QuickHelpText [ finnish ] = "Rivi" ;
         QuickHelpText [ danish ] = "Række" ;
@@ -185,6 +188,9 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ turkish ] = "Zeile";
         QuickHelpText[ catalan ] = "Fila";
         QuickHelpText[ thai ] = "Row";
+        QuickHelpText[ czech ] = "Å˜Ã¡dek";
+        QuickHelpText[ hebrew ] = "Zeile";
+        QuickHelpText[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿";
     };
     FixedText FT_COL
     {
@@ -217,6 +223,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Columna";
         Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Sloupec";
+        Text[ hebrew ] = "Spalte";
+        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­";
     };
     SpinField ED_COL
     {
@@ -258,6 +267,9 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ turkish ] = "Spalte";
         QuickHelpText[ catalan ] = "Columna";
         QuickHelpText[ thai ] = "Column";
+        QuickHelpText[ czech ] = "Sloupec";
+        QuickHelpText[ hebrew ] = "Spalte";
+        QuickHelpText[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­";
     };
     Control LB_ENTRIES
     {
@@ -287,7 +299,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ french ] = "Document" ;
         QuickHelpText [ danish ] = "Dokument" ;
         QuickHelpText [ portuguese ] = "Documento" ;
-        QuickHelpText [ portuguese_brazilian ] = "Dokument" ;
+        QuickHelpText [ portuguese_brazilian ] = "Documento" ;
         QuickHelpText [ swedish ] = "Dokument" ;
     QuickHelpText[ russian ] = "Äîêóìåíò";
         QuickHelpText[ polish ] = "Dokument";
@@ -306,6 +318,9 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ catalan ] = "Document";
         QuickHelpText[ finnish ] = "Asiakirja";
         QuickHelpText[ thai ] = "Document";
+        QuickHelpText[ czech ] = "Dokument";
+        QuickHelpText[ hebrew ] = "Dokument";
+        QuickHelpText[ hindi ] = "Document";
     };
     ImageList IL_CMD
     {
@@ -336,7 +351,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ ENGLISH ] = "Data Area" ;
                 Text [ norwegian ] = "Data Area" ;
                 Text [ italian ] = "Area dati" ;
-                Text [ portuguese_brazilian ] = "Data Area" ;
+                Text [ portuguese_brazilian ] = "Intervalo de Dados" ;
                 Text [ portuguese ] = "Área de dados" ;
                 Text [ finnish ] = "Tietoalue" ;
                 Text [ danish ] = "Dataområde" ;
@@ -347,7 +362,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ english_us ] = "Data Range" ;
                 Text[ chinese_simplified ] = "æ•°æ®åŒºåŸŸ";
                 Text[ russian ] = "Äèàïàçîí äàííûõ";
-                Text[ polish ] = "Obszar danych";
+                Text[ polish ] = "Zakres danych";
                 Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç¯„å›²";
                 Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸ";
                 Text[ arabic ] = "ãäØŞÉ ÇáÈíÇäÇÊ";
@@ -359,6 +374,9 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Àrea de dades";
                 Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+                Text[ czech ] = "Oblast dat";
+                Text[ hebrew ] = "Datenbereich";
+                Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤«à¥ˆà¤²à¤¾à¤µ";
             };
             ToolBoxItem
             {
@@ -368,7 +386,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ ENGLISH ] = "Start" ;
                 Text [ norwegian ] = "Start" ;
                 Text [ italian ] = "Inizio" ;
-                Text [ portuguese_brazilian ] = "In?cio" ;
+                Text [ portuguese_brazilian ] = "Início" ;
                 Text [ portuguese ] = "Início" ;
                 Text [ finnish ] = "Aloita" ;
                 Text [ danish ] = "Begyndelse" ;
@@ -391,6 +409,9 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Inici";
                 Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+                Text[ czech ] = "ZaÄÃ¡tek";
+                Text[ hebrew ] = "Anfang";
+                Text[ hindi ] = "à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
             };
             ToolBoxItem
             {
@@ -400,7 +421,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ ENGLISH ] = "End" ;
                 Text [ norwegian ] = "End" ;
                 Text [ italian ] = "Fine" ;
-                Text [ portuguese_brazilian ] = "Final" ;
+                Text [ portuguese_brazilian ] = "Fim" ;
                 Text [ portuguese ] = "Fim" ;
                 Text [ finnish ] = "Loppu" ;
                 Text [ danish ] = "Slut" ;
@@ -423,6 +444,9 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Final";
                 Text[ thai ] = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”";
+                Text[ czech ] = "Konec";
+                Text[ hebrew ] = "Ende";
+                Text[ hindi ] = "à¤…à¤‚à¤¤";
             };
              //--------------------------------------------
              //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
@@ -444,10 +468,10 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ swedish ] = "Innehåll" ;
                 Text [ danish ] = "Indhold" ;
                 Text [ portuguese ] = "Conteúdos" ;
-                Text [ portuguese_brazilian ] = "Inhalte" ;
+                Text [ portuguese_brazilian ] = "Conteúdo" ;
                 Text[ chinese_simplified ] = "å†…å®¹";
                 Text[ russian ] = "Ñïèñîê";
-                Text[ polish ] = "Zawartoœci";
+                Text[ polish ] = "Zawartoœæ";
                 Text[ japanese ] = "å†…å®¹";
                 Text[ chinese_traditional ] = "å…§å®¹";
                 Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -455,11 +479,14 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ chinese_simplified ] = "å†…å®¹";
                 Text[ greek ] = "Ğåñéå÷üìåíá";
                 Text[ korean ] = "ë‚´ìš©";
-                Text[ turkish ] = "İçerikler";
+                Text[ turkish ] = "İçerik";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contingut";
                 Text[ finnish ] = "Sisältö";
                 Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+                Text[ czech ] = "Obsah";
+                Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
+                Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
             };
             ToolBoxItem
             {
@@ -475,7 +502,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ swedish ] = "Växla" ;
                 Text [ danish ] = "Skift" ;
                 Text [ portuguese ] = "Comutar" ;
-                Text [ portuguese_brazilian ] = "Umschalten" ;
+                Text [ portuguese_brazilian ] = "Alternar" ;
                 Text[ chinese_simplified ] = "åˆ‡æ¢";
                 Text[ russian ] = "Ïğåäñòàâëåíèå";
                 Text[ polish ] = "Prze³¹cz";
@@ -491,6 +518,9 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ catalan ] = "Commuta";
                 Text[ finnish ] = "Vaihda";
                 Text[ thai ] = "à¸ªà¸¥à¸±à¸š";
+                Text[ czech ] = "PÅ™epnout";
+                Text[ hebrew ] = "Umschalten";
+                Text[ hindi ] = "à¤Ÿà¥‰à¤—à¤²";
             };
             ToolBoxItem
             {
@@ -506,10 +536,10 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ swedish ] = "Scenarion" ;
                 Text [ danish ] = "Scenarier" ;
                 Text [ portuguese ] = "Cenários" ;
-                Text [ portuguese_brazilian ] = "Szenarien" ;
+                Text [ portuguese_brazilian ] = "Cenários" ;
                 Text[ chinese_simplified ] = "æ–¹æ¡ˆ";
                 Text[ russian ] = "Ñöåíàğèè";
-                Text[ polish ] = "Scenariusz";
+                Text[ polish ] = "Scenariusze";
                 Text[ japanese ] = "ã‚·ãƒŠãƒªã‚ª";
                 Text[ chinese_traditional ] = "åˆ†æè—æœ¬";
                 Text[ arabic ] = "æÍÏÇÊ ÇáÓíäÇÑíæ";
@@ -517,11 +547,14 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ chinese_simplified ] = "æ–¹æ¡ˆ";
                 Text[ greek ] = "ÓåíÜñéá";
                 Text[ korean ] = "ì‹œë‚˜ë¦¬ì˜¤";
-                Text[ turkish ] = "Senaryo";
+                Text[ turkish ] = "Senaryolar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Escenaris";
                 Text[ finnish ] = "Skenaariot";
                 Text[ thai ] = "à¸ªà¸–à¸²à¸™à¸à¸²à¸£à¸“à¹Œà¸ªà¸¡à¸¡à¸•à¸´";
+                Text[ czech ] = "ScÃ©nÃ¡Å™e";
+                Text[ hebrew ] = "Szenarien";
+                Text[ hindi ] = "à¤µà¤¿à¤µà¤°à¤£";
             };
             ToolBoxItem
             {
@@ -538,7 +571,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ swedish ] = "Draläge" ;
                 Text [ danish ] = "Trækmodus" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
-                Text [ portuguese_brazilian ] = "Dragmodus" ;
+                Text [ portuguese_brazilian ] = "Modo Arrastar" ;
                 Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
                 Text[ polish ] = "Tryb przeci¹gania";
@@ -554,6 +587,9 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ catalan ] = "Mode d'arrossegament";
                 Text[ finnish ] = "Vetotila";
                 Text[ thai ] = "à¸¥à¸²à¸à¹‚à¸«à¸¡à¸”";
+                Text[ czech ] = "ReÅ¾im pÅ™etÃ¡hnutÃ­";
+                Text[ hebrew ] = "Dragmodus";
+                Text[ hindi ] = "à¤–à¥€à¤‚à¤šà¤¨à¥‡ à¤•à¤¾ à¤ªà¥à¤°à¤•à¤¾à¤°";
             };
         };
     };
@@ -569,7 +605,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ swedish ] = "Draläge" ;
         Text [ danish ] = "Trækmodus" ;
         Text [ portuguese ] = "Modo Arrastar" ;
-        Text [ portuguese_brazilian ] = "Dragmodus" ;
+        Text [ portuguese_brazilian ] = "Modo Arrastar" ;
         Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
         Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
         Text[ polish ] = "Tryb przeci¹gania";
@@ -585,6 +621,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ catalan ] = "Mode d'arrossegament";
         Text[ finnish ] = "Vetotila";
         Text[ thai ] = "à¸¥à¸²à¸à¹‚à¸«à¸¡à¸”";
+        Text[ czech ] = "ReÅ¾im pÅ™etÃ¡hnutÃ­";
+        Text[ hebrew ] = "Dragmodus";
+        Text[ hindi ] = "à¤–à¥€à¤‚à¤šà¤¨à¥‡ à¤•à¤¾ à¤ªà¥à¤°à¤•à¤¾à¤°";
     };
     String STR_DISPLAY
     {
@@ -598,7 +637,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ swedish ] = "Visning" ;
         Text [ danish ] = "Visning" ;
         Text [ portuguese ] = "Mostrar" ;
-        Text [ portuguese_brazilian ] = "Anzeige" ;
+        Text [ portuguese_brazilian ] = "Exibir" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤º";
         Text[ russian ] = "Îòîáğàçèòü";
         Text[ polish ] = "Wyœwietl";
@@ -609,11 +648,14 @@ Window RID_SCDLG_NAVIGATOR
         Text[ chinese_simplified ] = "æ˜¾ç¤º";
         Text[ greek ] = "ÅìöÜíéóç";
         Text[ korean ] = "í‘œì‹œ";
-        Text[ turkish ] = "Görüntü";
+        Text[ turkish ] = "Görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Visualitza";
         Text[ finnish ] = "Näytä";
         Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸œà¸¥";
+        Text[ czech ] = "Zobrazit";
+        Text[ hebrew ] = "Anzeige";
+        Text[ hindi ] = "à¤¦à¤¿à¤–à¤¾à¤“";
     };
     String STR_ACTIVE
     {
@@ -627,7 +669,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ swedish ] = "aktiv" ;
         Text [ danish ] = "aktiv" ;
         Text [ portuguese ] = "activo" ;
-        Text [ portuguese_brazilian ] = "aktiv" ;
+        Text [ portuguese_brazilian ] = "ativo" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨ä¸­çš„";
         Text[ russian ] = "àêòèâíûé";
         Text[ polish ] = "aktywny";
@@ -643,6 +685,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ catalan ] = "actiu";
         Text[ finnish ] = "aktiivinen";
         Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "aktivnÃ­";
+        Text[ hebrew ] = "aktiv";
+        Text[ hindi ] = "à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤²";
     };
     String STR_NOTACTIVE
     {
@@ -656,7 +701,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ swedish ] = "inaktiv" ;
         Text [ danish ] = "inaktiv" ;
         Text [ portuguese ] = "inactivo" ;
-        Text [ portuguese_brazilian ] = "inaktiv" ;
+        Text [ portuguese_brazilian ] = "inativo" ;
         Text[ chinese_simplified ] = "ä¸ä½¿ç”¨";
         Text[ russian ] = "íåàêòèâíûé";
         Text[ polish ] = "nieaktywny";
@@ -672,6 +717,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ catalan ] = "inactiu";
         Text[ finnish ] = "ei käytössä";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "neaktivnÃ­";
+        Text[ hebrew ] = "inaktiv";
+        Text[ hindi ] = "à¤¨à¤¿à¤·à¥à¤•à¥à¤°à¤¿à¤¯";
     };
     String STR_HIDDEN
     {
@@ -685,7 +733,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ swedish ] = "gömd" ;
         Text [ danish ] = "skjult" ;
         Text [ portuguese ] = "oculto" ;
-        Text [ portuguese_brazilian ] = "versteckt" ;
+        Text [ portuguese_brazilian ] = "oculto" ;
         Text[ chinese_simplified ] = "éšå…¥";
         Text[ russian ] = "ñêğûòûé";
         Text[ polish ] = "ukryty";
@@ -701,6 +749,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ catalan ] = "ocult";
         Text[ finnish ] = "piilotettu";
         Text[ thai ] = "à¸‹à¹ˆà¸­à¸™";
+        Text[ czech ] = "skrytÃ½";
+        Text[ hebrew ] = "versteckt";
+        Text[ hindi ] = "à¤›à¤¿à¤ªà¤¾à¤¯à¤¾ à¤¹à¥à¤†";
     };
     String STR_ACTIVEWIN
     {
@@ -714,7 +765,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ swedish ] = "Aktivt fönster" ;
         Text [ danish ] = "aktivt vindue" ;
         Text [ portuguese ] = "Janela activa" ;
-        Text [ portuguese_brazilian ] = "Aktives Fenster" ;
+        Text [ portuguese_brazilian ] = "Janela Ativa" ;
         Text[ chinese_simplified ] = "å½“å‰çš„è§†çª—";
         Text[ russian ] = "Àêòèâíîå îêíî";
         Text[ polish ] = "Aktywne okno";
@@ -730,6 +781,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ catalan ] = "Finestra activa";
         Text[ finnish ] = "Aktiivinen ikkuna";
         Text[ thai ] = "à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "AktivnÃ­ okno";
+        Text[ hebrew ] = "Aktives Fenster";
+        Text[ hindi ] = "à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤² à¤µà¤¿à¤¨à¥à¤¡à¥‹";
     };
 
     String STR_QHLP_SCEN_LISTBOX
@@ -738,7 +792,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ ENGLISH ] = "Szenario Name" ;
         Text [ ENGLISH_US ] = "Scenario Name";
         Text[ italian ] = "Nome dello scenario";
-        Text[ portuguese_brazilian ] = "Name des Szenarios";
+        Text[ portuguese_brazilian ] = "Nome do Cenário";
         Text[ portuguese ] = "Nome do cenário";
         Text[ danish ] = "Scenariets navn";
         Text[ french ] = "Nom du scénario";
@@ -760,6 +814,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ catalan ] = "Nom de l'escenari";
         Text[ finnish ] = "Skenaarion nimi";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸ªà¸–à¸²à¸™à¸à¸²à¸£à¸“à¹Œà¸ªà¸¡à¸¡à¸•à¸´";
+        Text[ czech ] = "NÃ¡zev scÃ©nÃ¡Å™e";
+        Text[ hebrew ] = "Name des Szenarios";
+        Text[ hindi ] = "à¤µà¤¿à¤µà¤°à¤£ à¤•à¤¾ à¤¨à¤¾à¤®";
     };
 
     String STR_QHLP_SCEN_COMMENT
@@ -768,7 +825,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ ENGLISH ] = "Comment" ;
         Text [ ENGLISH_US ] = "Comment";
         Text[ italian ] = "Commento";
-        Text[ portuguese_brazilian ] = "Kommentar";
+        Text[ portuguese_brazilian ] = "Comentário";
         Text[ portuguese ] = "Comentário";
         Text[ danish ] = "Kommentar";
         Text[ french ] = "Commentaire";
@@ -790,6 +847,9 @@ Window RID_SCDLG_NAVIGATOR
         Text[ catalan ] = "Comentari";
         Text[ finnish ] = "Huomautus";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
+        Text[ czech ] = "PoznÃ¡mka";
+        Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
+        Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦";
     };
 
     Text[ chinese_simplified ] = "åŠ©æ‰‹";
@@ -802,10 +862,13 @@ Window RID_SCDLG_NAVIGATOR
     Text[ chinese_simplified ] = "åŠ©æ‰‹";
     Text[ greek ] = "Navigator";
     Text[ korean ] = "ë„¤ë¹„ê²Œì´í„°";
-    Text[ turkish ] = "Navigatör";
+    Text[ turkish ] = "Gezgin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navigator";
     Text[ thai ] = "à¸•à¸±à¸§à¸™à¸³";
+    Text[ czech ] = "NavigÃ¡tor";
+    Text[ hebrew ] = "â€®× ×•×•×˜â€¬";
+    Text[ hindi ] = "à¤¨à¤¾à¤µà¤¿à¤—à¥‡à¤Ÿà¤°";
 };
 
 // SC_CONTENT_...
@@ -881,10 +944,10 @@ String SCSTR_CONTENT_ROOT
     Text [ swedish ] = "Innehåll" ;
     Text [ danish ] = "Indhold" ;
     Text [ portuguese ] = "Conteúdos" ;
-    Text [ portuguese_brazilian ] = "Inhalte" ;
+    Text [ portuguese_brazilian ] = "Conteúdo" ;
     Text[ chinese_simplified ] = "å†…å®¹";
     Text[ russian ] = "Ñîäåğæèìîå";
-    Text[ polish ] = "Zawartoœci";
+    Text[ polish ] = "Zawartoœæ";
     Text[ japanese ] = "å†…å®¹";
     Text[ chinese_traditional ] = "å…§å®¹";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -892,11 +955,14 @@ String SCSTR_CONTENT_ROOT
     Text[ chinese_simplified ] = "å†…å®¹";
     Text[ greek ] = "Ğåñéå÷üìåíá";
     Text[ korean ] = "ë‚´ìš©";
-    Text[ turkish ] = "İçerikler";
+    Text[ turkish ] = "İçerik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contingut";
     Text[ finnish ] = "Sisältö";
     Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+    Text[ czech ] = "Obsah";
+    Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
+    Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
 };
 String SCSTR_CONTENT_TABLE
 {
@@ -910,7 +976,7 @@ String SCSTR_CONTENT_TABLE
     Text [ swedish ] = "Tabeller" ;
     Text [ danish ] = "Regneark" ;
     Text [ portuguese ] = "Folhas" ;
-    Text [ portuguese_brazilian ] = "Tabellen" ;
+    Text [ portuguese_brazilian ] = "Planilhas" ;
     Text[ chinese_simplified ] = "å·¥ä½œè¡¨";
     Text[ russian ] = "Ëèñòû";
     Text[ polish ] = "Arkusze";
@@ -926,6 +992,9 @@ String SCSTR_CONTENT_TABLE
     Text[ catalan ] = "Fulls";
     Text[ finnish ] = "Taulukot";
     Text[ thai ] = "à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
+    Text[ czech ] = "Listy";
+    Text[ hebrew ] = "Tabellen";
+    Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥";
 };
 String SCSTR_CONTENT_RANGENAME
 {
@@ -939,10 +1008,10 @@ String SCSTR_CONTENT_RANGENAME
     Text [ swedish ] = "Områdesnamn" ;
     Text [ danish ] = "Områdenavne" ;
     Text [ portuguese ] = "Nomes das áreas" ;
-    Text [ portuguese_brazilian ] = "Bereichsnamen" ;
+    Text [ portuguese_brazilian ] = "Nomes de intervalos" ;
     Text[ chinese_simplified ] = "åŒºåŸŸåç§°";
     Text[ russian ] = "Íàçâàíèÿ äèàïàçîíà";
-    Text[ polish ] = "Nazwy obszarów";
+    Text[ polish ] = "Nazwy zakresów";
     Text[ japanese ] = "ç¯„å›²å";
     Text[ chinese_traditional ] = "å€åŸŸåç¨±";
     Text[ arabic ] = "ÃÓãÇÁ ÇáãäØŞÉ";
@@ -950,11 +1019,14 @@ String SCSTR_CONTENT_RANGENAME
     Text[ chinese_simplified ] = "åŒºåŸŸåç§°";
     Text[ greek ] = "Ïíüìáôá ğåñéï÷şí";
     Text[ korean ] = "ë²”ìœ„ ì´ë¦„";
-    Text[ turkish ] = "Alan adları";
+    Text[ turkish ] = "Aralık adları";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Noms d'àrea";
     Text[ finnish ] = "Alueiden nimet";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸Šà¹ˆà¸§à¸‡";
+    Text[ czech ] = "NÃ¡zvy oblasti";
+    Text[ hebrew ] = "Bereichsnamen";
+    Text[ hindi ] = "à¤«à¥ˆà¤²à¤¾à¤µ à¤•à¤¾ à¤¨à¤¾à¤®";
 };
 String SCSTR_CONTENT_DBAREA
 {
@@ -968,10 +1040,10 @@ String SCSTR_CONTENT_DBAREA
     Text [ swedish ] = "Databasområden" ;
     Text [ danish ] = "Databaseområder" ;
     Text [ portuguese ] = "Áreas da base de dados" ;
-    Text [ portuguese_brazilian ] = "Datenbankbereiche" ;
+    Text [ portuguese_brazilian ] = "Intervalos do Banco de Dados" ;
     Text[ chinese_simplified ] = "æ•°æ®åº“åŒºåŸŸ";
     Text[ russian ] = "Îáëàñòè áàçû äàííûõ";
-    Text[ polish ] = "Obszary bazy danych";
+    Text[ polish ] = "Zakresy bazy danych";
     Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ç¯„å›²";
     Text[ chinese_traditional ] = "è³‡æ–™åº«å€åŸŸ";
     Text[ arabic ] = "ãäÇØŞ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
@@ -979,11 +1051,14 @@ String SCSTR_CONTENT_DBAREA
     Text[ chinese_simplified ] = "æ•°æ®åº“åŒºåŸŸ";
     Text[ greek ] = "Ğåäßá âÜóçò äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ë²”ìœ„";
-    Text[ turkish ] = "Veritabanı alanları";
+    Text[ turkish ] = "Veritabanı aralıkları";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Àrees de la base de dades";
     Text[ finnish ] = "Tietokanta-alueet";
     Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Oblast databÃ¡ze";
+    Text[ hebrew ] = "Datenbankbereiche";
+    Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤«à¥ˆà¤²à¤¾à¤µ";
 };
 String SCSTR_CONTENT_GRAPHIC
 {
@@ -997,10 +1072,10 @@ String SCSTR_CONTENT_GRAPHIC
     Text [ swedish ] = "Grafik" ;
     Text [ danish ] = "Grafik" ;
     Text [ portuguese ] = "Imagens" ;
-    Text [ portuguese_brazilian ] = "Grafiken" ;
+    Text [ portuguese_brazilian ] = "Figuras" ;
     Text[ chinese_simplified ] = "å›¾å½¢";
     Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-    Text[ polish ] = "Grafiki";
+    Text[ polish ] = "Grafika";
     Text[ japanese ] = "å›³";
     Text[ chinese_traditional ] = "åœ–å½¢";
     Text[ arabic ] = "ÕæÑ";
@@ -1013,6 +1088,9 @@ String SCSTR_CONTENT_GRAPHIC
     Text[ catalan ] = "Gràfics";
     Text[ finnish ] = "Grafiikka";
     Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
+    Text[ czech ] = "ObrÃ¡zky";
+    Text[ hebrew ] = "â€®×’×¨×¤×™×§×”â€¬";
+    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
 };
 String SCSTR_CONTENT_OLEOBJECT
 {
@@ -1026,7 +1104,7 @@ String SCSTR_CONTENT_OLEOBJECT
     Text [ swedish ] = "OLE-objekt" ;
     Text [ danish ] = "OLE-objekter" ;
     Text [ portuguese ] = "Objectos OLE" ;
-    Text [ portuguese_brazilian ] = "OLE-Objekte" ;
+    Text [ portuguese_brazilian ] = "Objetos OLE" ;
     Text[ chinese_simplified ] = "OLE-å¯¹è±¡";
     Text[ russian ] = "OLE îáúåêòû";
     Text[ polish ] = "Obiekty OLE";
@@ -1042,6 +1120,9 @@ String SCSTR_CONTENT_OLEOBJECT
     Text[ catalan ] = "Objectes OLE";
     Text[ finnish ] = "OLE-objektit";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸ OLE ";
+    Text[ czech ] = "Objekty OLE";
+    Text[ hebrew ] = "OLE-Objekte";
+    Text[ hindi ] = "OLE à¤µà¤¸à¥à¤¤à¥";
 };
 String SCSTR_CONTENT_NOTE
 {
@@ -1055,7 +1136,7 @@ String SCSTR_CONTENT_NOTE
     Text [ spanish ] = "Notas" ;
     Text [ french ] = "Notes" ;
     Text [ dutch ] = "Aantekeningen" ;
-    Text [ portuguese_brazilian ] = "Notizen" ;
+    Text [ portuguese_brazilian ] = "Anotações" ;
     Text[ chinese_simplified ] = "å¤‡æ³¨";
     Text[ russian ] = "Ïğèìå÷àíèÿ";
     Text[ polish ] = "Notatki";
@@ -1071,12 +1152,15 @@ String SCSTR_CONTENT_NOTE
     Text[ catalan ] = "Notes";
     Text[ finnish ] = "Huomautukset";
     Text[ thai ] = "à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸";
+    Text[ czech ] = "PoznÃ¡mky";
+    Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
+    Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€";
 };
 String SCSTR_CONTENT_AREALINK
 {
     TEXT = "Verknüpfte Bereiche" ;
     TEXT [ English ] = "Linked areas" ;
-    Text [ portuguese_brazilian ] = "Verkn?fte Bereiche" ;
+    Text [ portuguese_brazilian ] = "Áreas vinculadas" ;
     Text [ english_us ] = "Linked areas" ;
     Text [ portuguese ] = "Áreas ligadas" ;
     Text [ swedish ] = "Länkade områden" ;
@@ -1100,32 +1184,38 @@ String SCSTR_CONTENT_AREALINK
     Text[ catalan ] = "Àrees enllaçades";
     Text[ finnish ] = "Linkitetyt alueet";
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+    Text[ czech ] = "PropojenÃ© oblasti";
+    Text[ hebrew ] = "VerknÃ¼pfte Bereiche";
+    Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£ ";
 };
 String SCSTR_CONTENT_DRAWING
 {
     TEXT = "Zeichenobjekte" ;
     TEXT [ English ] = "Drawing objects" ;
     TEXT[ english_us ] = "Drawing objects";
-    TEXT[ portuguese ] = "Drawing objects";
-    TEXT[ russian ] = "Drawing objects";
-    TEXT[ greek ] = "Drawing objects";
-    TEXT[ dutch ] = "Drawing objects";
+    TEXT[ portuguese ] = "Objectos de desenho";
+    TEXT[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
+    TEXT[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
+    TEXT[ dutch ] = "Tekenobjecten";
     TEXT[ french ] = "Objets de dessin";
     TEXT[ spanish ] = "Objetos de dibujo";
-    TEXT[ finnish ] = "Drawing objects";
+    TEXT[ finnish ] = "Piirrosobjektit";
     TEXT[ italian ] = "Oggetti di disegno";
-    TEXT[ danish ] = "Drawing objects";
+    TEXT[ danish ] = "Tegneobjekter";
     TEXT[ swedish ] = "Ritobjekt";
-    TEXT[ polish ] = "Drawing objects";
+    TEXT[ polish ] = "Obiekty graficzne";
     TEXT[ portuguese_brazilian ] = "Desenhando Objetos";
     TEXT[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     TEXT[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´";
     TEXT[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
     TEXT[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶";
-    TEXT[ turkish ] = "Drawing objects";
-    TEXT[ arabic ] = "Drawing objects";
+    TEXT[ turkish ] = "Çizim nesneleri";
+    TEXT[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
     TEXT[ catalan ] = "Objectes de dibuix";
     TEXT[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
+    TEXT[ czech ] = "GrafickÃ© objekty";
+    TEXT[ hebrew ] = "Zeichenobjekte";
+    TEXT[ hindi ] = "Drawing objects";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
@@ -1145,7 +1235,7 @@ Menu RID_POPUP_DROPMODE
             Text [ italian ] = "Inserisci come hyperlink" ;
             Text [ spanish ] = "Insertar como hiperenlace" ;
             Text [ french ] = "Insérer comme hyperlien" ;
-            Text [ portuguese_brazilian ] = "Als Hyperlink einf?en" ;
+            Text [ portuguese_brazilian ] = "Inserir como Hiperlink" ;
             Text [ portuguese ] = "Inserir como hiperligação" ;
             Text[ chinese_simplified ] = "å½“ä½œè¶…é“¾æ¥æ’å…¥";
             Text[ russian ] = "Âñòàâèòü êàê ãèïåğññûëêó";
@@ -1162,6 +1252,9 @@ Menu RID_POPUP_DROPMODE
             Text[ catalan ] = "Insereix com a hiperenllaç";
             Text[ finnish ] = "Lisää hyperlinkkinä";
             Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
+            Text[ czech ] = "VloÅ¾it jako hypertextovÃ½ odkaz";
+            Text[ hebrew ] = "Als Hyperlink einfÃ¼gen";
+            Text[ hindi ] = "à¤¹à¤¾à¤‡à¤ªà¤°à¤²à¤¿à¤‚à¤• à¤œà¥ˆà¤¸à¥‡ à¤œà¥‹à¤¡à¤¼à¥‹";
         };
         MenuItem
         {
@@ -1176,7 +1269,7 @@ Menu RID_POPUP_DROPMODE
             Text [ italian ] = "Inserisci come collegamento" ;
             Text [ spanish ] = "Insertar como vínculo" ;
             Text [ french ] = "Insérer comme lien" ;
-            Text [ portuguese_brazilian ] = "Als Verkn?fung einf?en" ;
+            Text [ portuguese_brazilian ] = "Inserir como Vínculo" ;
             Text [ portuguese ] = "Inserir como ligação" ;
             Text[ chinese_simplified ] = "å½“ä½œé“¾æ¥æ’å…¥";
             Text[ russian ] = "Âñòàâèòü êàê ññûëêó";
@@ -1193,6 +1286,9 @@ Menu RID_POPUP_DROPMODE
             Text[ catalan ] = "Insereix com a enllaç";
             Text[ finnish ] = "Lisää linkkinä";
             Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+            Text[ czech ] = "VloÅ¾it jako odkaz";
+            Text[ hebrew ] = "Als VerknÃ¼pfung einfÃ¼gen";
+            Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤œà¥ˆà¤¸à¥‡ à¤œà¥‹à¤¡à¤¼à¥‹";
         };
         MenuItem
         {
@@ -1208,7 +1304,7 @@ Menu RID_POPUP_DROPMODE
             Text [ french ] = "Insérer comme copie" ;
             Text [ dutch ] = "Als kopie invoegen" ;
             Text [ portuguese ] = "Inserir como cópia" ;
-            Text [ portuguese_brazilian ] = "Als Kopie einf?en" ;
+            Text [ portuguese_brazilian ] = "Inserir como Cópia" ;
             Text[ chinese_simplified ] = "å½“ä½œå¤åˆ¶ä»¶æ’å…¥";
             Text[ russian ] = "Âñòàâèòü êàê êîïèş";
             Text[ polish ] = "Wstaw jako kopiê";
@@ -1224,6 +1320,9 @@ Menu RID_POPUP_DROPMODE
             Text[ catalan ] = "Insereix com a còpia";
             Text[ finnish ] = "Lisää kopiona";
             Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™à¸„à¸±à¸”à¸¥à¸­à¸";
+            Text[ czech ] = "VloÅ¾it jako kopii";
+            Text[ hebrew ] = "Als Kopie einfÃ¼gen";
+            Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤œà¥ˆà¤¸à¥‡ à¤œà¥‹à¤¡à¤¼à¥‹";
         };
     };
 };
@@ -1239,7 +1338,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text [ ENGLISH ] = "Delete" ;
             Text [ portuguese ] = "Eliminar" ;
             Text [ english_us ] = "Delete" ;
-            Text [ portuguese_brazilian ] = "L?chen" ;
+            Text [ portuguese_brazilian ] = "Excluir" ;
             Text [ swedish ] = "Radera" ;
             Text [ danish ] = "Slet" ;
             Text [ italian ] = "Elimina" ;
@@ -1261,6 +1360,9 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ catalan ] = "Suprimeix";
             Text[ finnish ] = "Poista";
             Text[ thai ] = "à¸¥à¸š";
+            Text[ czech ] = "Smazat";
+            Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+            Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
         };
         MenuItem
         {
@@ -1270,7 +1372,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text [ ENGLISH ] = "Properties..." ;
             Text [ portuguese ] = "Propriedades..." ;
             Text [ english_us ] = "Properties..." ;
-            Text [ portuguese_brazilian ] = "Eigenschaften..." ;
+            Text [ portuguese_brazilian ] = "Propriedades..." ;
             Text [ swedish ] = "Egenskaper..." ;
             Text [ danish ] = "Egenskaber..." ;
             Text [ italian ] = "Proprietà..." ;
@@ -1292,9 +1394,21 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text[ catalan ] = "Propietats...";
             Text[ finnish ] = "Ominaisuudet...";
             Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´...";
+            Text[ czech ] = "Vlastnosti...";
+            Text[ hebrew ] = "â€®×××¤×™× ×™×...â€¬";
+            Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚...";
         };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
