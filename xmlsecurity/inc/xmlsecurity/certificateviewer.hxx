@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 09:00:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,7 @@ private:
     FixedInfo           maIssuedToFI;
     FixedInfo           maIssuedByLabelFI;
     FixedInfo           maIssuedByFI;
-    FixedInfo           maValidFromLabelFI;
-    FixedInfo           maValidFromFI;
-    FixedInfo           maValidToLabelFI;
-    FixedInfo           maValidToFI;
+    FixedInfo           maValidDateFI;
     FixedImage          maKeyImg;
     FixedInfo           maHintCorrespPrivKeyFI;
 public:
