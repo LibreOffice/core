@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:47:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina.";
         Text[ danish ] = "Læg afsnits- og tabelafstande til ved sidebegyndelser";
         Text[ swedish ] = "Lägg till stycke- och ta~bellavstånd i början av sidor";
-        Text[ polish ] = "Dodaj odstêpy a~kapitów i tabel na pocz¹tku stron";
+        Text[ polish ] = "Dodaj odstêpy od a~kapitów i tabel na pocz¹tku stron";
         Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
         Text[ japanese ] = "Íß°¼Þ‚ÌŽn‚ß‚É’i—ŽŠÔŠu‚Æ•\\ŠÔŠu‚ð•t‚¯‚é";
         Text[ korean ] = "ÂÊ ½ÃÀÛºÎºÐÀÇ ´Ü¶ô °£°Ý°ú Ç¥ °£°Ý ÇÕ»ê";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
