@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:00:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/numinf.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
@@ -183,7 +184,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
     USHORT      nMyId       = 0;
 
     SfxViewFrame* pThisFrame = GetViewFrame();
-    BOOL bOle = pThisFrame->ISA(SfxInPlaceFrame);
+    BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
