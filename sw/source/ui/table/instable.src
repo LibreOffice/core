@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:15:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ ModalDialog DLG_INSERT_TABLE
     HelpID = FN_INSERT_TABLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 280 , 150 ) ;
+    Size = MAP_APPFONT ( 280 , 166 ) ;
     Text = "Tabelle einf¸gen" ;
     Text [ ENGLISH ] = "Insert table" ;
     Text [ norwegian ] = "Insert table" ;
@@ -268,9 +268,9 @@ ModalDialog DLG_INSERT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT (113 , 10 ) ;
-        Text = "‹be~rschrift" ;
-        Text [ ENGLISH ] = "Header" ;
         TabStop = TRUE ;
+        Text = "‹berschrift" ;
+        Text[ english_us ] = "Heading";
         Text[ italian ] = "Intestazione";
         Text[ portuguese_brazilian ] = "CabeÁalho";
         Text[ portuguese ] = "~TÌtulo";
@@ -279,7 +279,6 @@ ModalDialog DLG_INSERT_TABLE
         Text[ swedish ] = "~÷verskrift";
         Text[ dutch ] = "~Kop";
         Text[ spanish ] = "~Encabezado";
-        Text[ english_us ] = "Header";
         Text[ chinese_simplified ] = "Ê†áÈ¢ò";
         Text[ russian ] = "«‡„ÓÎÓ‚ÓÍ";
         Text[ polish ] = "~Nag≥Ûwek";
@@ -304,9 +303,9 @@ ModalDialog DLG_INSERT_TABLE
     {
         Pos = MAP_APPFONT ( 21 , 88 ) ;
         Size = MAP_APPFONT ( 104 , 10 ) ;
-        Text = "Auf jeder Seite ~wiederholen" ;
-        Text [ ENGLISH ] = "Repeat on every page" ;
         TabStop = TRUE ;
+        Text = "‹berschrift ~wiederholen" ;
+        Text[ english_us ] = "Repeat heading";
         Text[ italian ] = "Ripeti su ogni pagina";
         Text[ portuguese_brazilian ] = "Re~petir cabeÁalho";
         Text[ portuguese ] = "Repetir em to~das as p·ginas";
@@ -315,7 +314,6 @@ ModalDialog DLG_INSERT_TABLE
         Text[ swedish ] = "~Upprepa pÂ varje sida";
         Text[ dutch ] = "Op iedere pagina ~herhalen";
         Text[ spanish ] = "Repetir en cada p·gina";
-        Text[ english_us ] = "Re~peat header";
         Text[ chinese_simplified ] = "Âú®ÊØèÈ°µ‰∏äÈáçÂ§çÊòæÁ§∫(~P)";
         Text[ russian ] = "œÓ‚ÚÓˇÚ¸ Á‡„ÓÎÓ‚ÓÍ";
         Text[ polish ] = "P~owtÛrz na kaødej stronie";
@@ -336,13 +334,38 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hungarian ] = "√âl≈ëfej ~ism√©tl√©se";
         Text[ slovenian ] = "Po~novi glavo";
     };
+    FixedText FT_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 30 , 105 ) ;
+        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Text = "Die ~ersten%POSITION_OF_CONTROLZeilen" ;
+        Text [ english_us ] = "The first%POSITION_OF_CONTROLrows" ;
+    };
+    NumericField NF_REPEAT_HEADER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 104 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        First = 1 ;
+    };
+    Window WIN_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 30 , 102 ) ;
+        Size = MAP_APPFONT ( 2 , 1 ) ;
+    };
     CheckBox CB_DONT_SPLIT
     {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text = "Tabelle ~nicht trennen" ;
-        Text [ ENGLISH ] = "Don't split table" ;
         TabStop = TRUE ;
+        Text = "Tabelle ~nicht trennen" ;
+        Text[ english_us ] = "Do not split table";
         Text[ italian ] = "Non separare la tabella";
         Text[ portuguese_brazilian ] = "N„o dividir a tabela";
         Text[ portuguese ] = "N„o ~dividir tabela";
@@ -351,7 +374,6 @@ ModalDialog DLG_INSERT_TABLE
         Text[ swedish ] = "Dela i~nte tabell";
         Text[ dutch ] = "Tabel niet ~splitsen";
         Text[ spanish ] = "~No dividir tabla";
-        Text[ english_us ] = "Don't split table";
         Text[ chinese_simplified ] = "‰∏çÂàÜÈöîË°®Ê†º";
         Text[ russian ] = "ÕÂ ‡Á·Ë‚‡Ú¸ Ú‡·ÎËˆÛ";
         Text[ polish ] = "Nie ~dziel tabeli";
@@ -374,7 +396,7 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_BORDER
     {
-        Pos = MAP_APPFONT ( 12 , 116 ) ;
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text = "~Umrandung" ;
         Text [ ENGLISH ] = "Border" ;
@@ -410,7 +432,7 @@ ModalDialog DLG_INSERT_TABLE
     };
     PushButton BT_AUTOFORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 130 ) ;
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 66 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Autoformat..." ;
