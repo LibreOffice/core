@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-26 16:46:45 $
+ *  last change: $Author: mhu $ $Date: 2002-07-23 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,6 @@ namespace _STL
 #endif /* __STL_MEMBER_TEMPLATE_CLASSES */
 
 //----------------------------------------------------------------------------
-
 
 struct rtl_bootstrap_NameValue
 {
@@ -418,10 +417,32 @@ static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl
     return result;
 }
 
-typedef struct Bootstrap_Impl {
+struct Bootstrap_Impl
+{
     NameValueList _nameValueList;
     OUString      _iniName;
-} Bootstrap_Impl;
+
+    explicit Bootstrap_Impl (OUString const & rIniName);
+    ~Bootstrap_Impl();
+
+    static void * operator new (std::size_t n) SAL_THROW(())
+    {
+        return rtl_allocateMemory (sal_uInt32(n));
+    }
+    static void operator delete (void * p , std::size_t) SAL_THROW(())
+    {
+        rtl_freeMemory (p);
+    }
+};
+
+Bootstrap_Impl::Bootstrap_Impl (OUString const & rIniName)
+    : _iniName (rIniName)
+{
+}
+
+Bootstrap_Impl::~Bootstrap_Impl()
+{
+}
 
 static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl, const OUString & iniName)
 {
@@ -480,28 +501,26 @@ static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl, const OUString & i
 extern "C"
 {
 
-
 rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
 {
     OUString workDir;
-    OUString iniName = OUString(pIniName);
+    OUString iniName (pIniName);
 
     osl_getProcessWorkingDir(&workDir.pData);
     osl::FileBase::getAbsoluteFileURL(workDir, iniName, iniName);
 
-    Bootstrap_Impl * pBootstrap_Impl = new Bootstrap_Impl;
-
-    pBootstrap_Impl->_iniName = iniName;
-    fillFromIniFile(pBootstrap_Impl, getIniFileNameImpl());
-    fillFromIniFile(pBootstrap_Impl, iniName);
-
-    return pBootstrap_Impl;
+    Bootstrap_Impl * pImpl = new Bootstrap_Impl (iniName);
+    if (pImpl)
+    {
+        fillFromIniFile(pImpl, getIniFileNameImpl());
+        fillFromIniFile(pImpl, iniName);
+    }
+    return static_cast<rtlBootstrapHandle>(pImpl);
 }
-
 
 void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
 {
-    delete (Bootstrap_Impl *)handle;
+    delete static_cast<Bootstrap_Impl*>(handle);
 }
 
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault)
@@ -563,12 +582,11 @@ static rtlBootstrapHandle get_static_bootstrap_handle() SAL_THROW( () )
 
     if(!pBootstrap_Impl)
     {
-        static Bootstrap_Impl bootstrap_Impl;
+        static Bootstrap_Impl g_bootstrap_Impl (getIniFileNameImpl());
 
-        bootstrap_Impl._iniName = getIniFileNameImpl();
-        fillFromIniFile(&bootstrap_Impl, bootstrap_Impl._iniName);
+        fillFromIniFile(&g_bootstrap_Impl, g_bootstrap_Impl._iniName);
 
-        pBootstrap_Impl = &bootstrap_Impl;
+        pBootstrap_Impl = &g_bootstrap_Impl;
     }
 
     return pBootstrap_Impl;
