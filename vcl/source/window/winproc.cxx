@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-23 12:37:40 $
+ *  last change: $Author: ssa $ $Date: 2001-04-06 06:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,10 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                     "ImplHandleMouseEvent: MouseLeave is send and Mouse is captured" );
         DBG_ASSERT( pWindow == pChild->mpFrameWindow,
                     "ImplHandleMouseEvent: mouse event is not sent to capture window" );
+
+        // java client cannot capture mouse correctly
+        if ( pWindow != pChild->mpFrameWindow )
+            return 0;
 
         if ( bMouseLeave )
             return 0;
