@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:37:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,8 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::std::vector< ::rtl::OUString > tables;
-    if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables ) ) {
+    ::std::vector< ::rtl::OUString > types;
+    if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types) ) {
         ::dbtools::throwGenericSQLException( m_pDbMetaDataHelper->getErrorString(), NULL );
     }
 
@@ -913,10 +914,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     static ::rtl::OUString sTableTypes[] =
     {
         ::rtl::OUString::createFromAscii("TABLE"),
+        ::rtl::OUString::createFromAscii("VIEW")
+        // Currently we only support a 'TABLE' and 'VIEW' nothing more complex
         //
-        // Currently we only support a 'TABLE' nothing more complex
-        //
-        // ::rtl::OUString::createFromAscii("VIEW"),
         // ::rtl::OUString::createFromAscii("SYSTEM TABLE"),
         // ::rtl::OUString::createFromAscii("GLOBAL TEMPORARY"),
         // ::rtl::OUString::createFromAscii("LOCAL TEMPORARY"),
@@ -1049,7 +1049,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // aRows = m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern );
     // pResultSet->setRows( aRows );
     ODatabaseMetaDataResultSet::ORows _rRows;
-    if ( !m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern, _rRows ) ) {
+    if ( !m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern, types,_rRows ) ) {
         ::dbtools::throwGenericSQLException( m_pDbMetaDataHelper->getErrorString(), NULL );
     }
     pResultSet->setRows( _rRows );
