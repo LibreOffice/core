@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:12:32 $
+ *  last change: $Author: mib $ $Date: 2002-11-05 08:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,7 +1556,13 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
     if ( m_pData->m_pObjectShell )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        m_pData->m_pObjectShell->Save_Impl();
+        if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        {
+            if ( m_pData->m_pObjectShell->DoSave() )
+                m_pData->m_pObjectShell->DoSaveCompleted();
+        }
+        else
+            m_pData->m_pObjectShell->Save_Impl();
     }
 }
 
