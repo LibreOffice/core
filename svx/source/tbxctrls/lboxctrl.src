@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 12:42:44 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,51 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
 {
     Text = "Rückgängig $(ARG1) Aktion(en)" ;
     Text [ENGLISH] = "Undo $(ARG1) action(s)" ;
+    Text[ english_us ] = "Undo $(ARG1) action(s)";
+    Text[ portuguese ] = "Anular operação $(ARG1)";
+    Text[ russian ] = "Îòìåíèòü äåéñòâèå(ÿ) $(ARG1)";
+    Text[ greek ] = "Undo $(ARG1) action";
+    Text[ dutch ] = "Undo $(ARG1) action";
+    Text[ french ] = "Annuler les opérations $(ARG1)";
+    Text[ spanish ] = "Deshacer $(ARG1) acción(es)";
+    Text[ finnish ] = "Rückgängig $(ARG1) Aktion(en)";
+    Text[ italian ] = "Undo $(ARG1) action";
+    Text[ danish ] = "Undo $(ARG1) action";
+    Text[ swedish ] = "Ångra $(ARG1) åtgärd(er)";
+    Text[ polish ] = "Cofnij $(ARG1) akcjê(e)";
+    Text[ portuguese_brazilian ] = "Undo $(ARG1) action";
+    Text[ japanese ] = "$(ARG1) ±¸¼®Ý‚ðŒ³‚É–ß‚·";
+    Text[ korean ] = "Undo $(ARG1) action";
+    Text[ chinese_simplified ] = "³·ÏûÃüÁî $(ARG1) ²Ù×÷";
+    Text[ chinese_traditional ] = "´_­ì $(ARG1) «ü¥O";
+    Text[ turkish ] = "Undo $(ARG1) action";
+    Text[ arabic ] = "Undo $(ARG1) action";
+    Text[ catalan ] = "Undo $(ARG1) action";
 };
 
 String RID_SVXSTR_NUM_REDO_ACTIONS
 {
     Text = "Wiederherstellen $(ARG1) Aktion(en)" ;
     Text [ENGLISH] = "Redo $(ARG1) action(s)" ;
+    Text[ english_us ] = "Redo $(ARG1) action(s)";
+    Text[ portuguese ] = "Restaurar operação $(ARG1)";
+    Text[ russian ] = "Âîññòàíîâèòü äåéñòâèå(ÿ) $(ARG1)";
+    Text[ greek ] = "Redo $(ARG1) action";
+    Text[ dutch ] = "Redo $(ARG1) action";
+    Text[ french ] = "Restaurer les opérations $(ARG1)";
+    Text[ spanish ] = "Restaurar $(ARG1) acción(es)";
+    Text[ finnish ] = "Wiederherstellen $(ARG1) Aktion(en)";
+    Text[ italian ] = "Redo $(ARG1) action";
+    Text[ danish ] = "Redo $(ARG1) action";
+    Text[ swedish ] = "Återställ $(ARG1) åtgärd(er)";
+    Text[ polish ] = "Odtwórz $(ARG1) akcjê(e)";
+    Text[ portuguese_brazilian ] = "Redo $(ARG1) action";
+    Text[ japanese ] = "$(ARG1) ±¸¼®Ý‚Ì‚â‚è’¼‚µ";
+    Text[ korean ] = "Redo $(ARG1) action";
+    Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî $(ARG1) ²Ù×÷";
+    Text[ chinese_traditional ] = "«ì´_ºM®ø $(ARG1) «ü¥O";
+    Text[ turkish ] = "Redo $(ARG1) action";
+    Text[ arabic ] = "Redo $(ARG1) action";
+    Text[ catalan ] = "Redo $(ARG1) action";
 };
 
