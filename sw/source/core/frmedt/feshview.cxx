@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 07:57:51 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 10:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,6 +1318,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                 pBest = pFly->GetVirtDrawObj();
         }
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        SdrPageView* pPV = Imp()->GetDrawView()->GetPageViewPvNum( 0 );
 
         if( !pBest || rMrkList.GetMarkCount() == 1 )
         {
@@ -1341,7 +1342,6 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                 // If no object is selected, we check if we just entered a group.
                 // In this case we want to iterate over the group members.
                 aPos = GetCharRect().Center();
-                const SdrPageView* pPV = Imp()->GetDrawView()->GetPageViewPvNum( 0 );
                 const SdrObject* pStartObj = pPV ? pPV->GetAktGroup() : 0;
                 if ( pStartObj && pStartObj->ISA( SdrObjGroup ) )
                     pList = pStartObj->GetSubList();
@@ -1366,7 +1366,8 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                 if( ( bNoFly && bFlyFrm ) ||
                     ( bNoDraw && !bFlyFrm ) ||
                     ( eType == DRAW_SIMPLE && lcl_IsControlGroup( pObj ) ) ||
-                    ( eType == DRAW_CONTROL && !lcl_IsControlGroup( pObj ) ) )
+                    ( eType == DRAW_CONTROL && !lcl_IsControlGroup( pObj ) ) ||
+                    ( pPV && ! pPV->GetView().IsObjMarkable( pObj, pPV ) ) )
                     continue;
                 if( bFlyFrm )
                 {
