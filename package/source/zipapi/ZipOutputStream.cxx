@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 10:50:54 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 13:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
         closeEntry();
     if (pNonConstEntry->nTime == -1)
     {
-        time_t nTime =0;
+        time_t nTime = time (NULL);
         pNonConstEntry->nTime = tmDateToDosDate(*localtime(&nTime));
     }
     if (pNonConstEntry->nMethod == -1)
@@ -288,7 +288,7 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
     aChucker << rEntry.nVersion;
     aChucker << rEntry.nFlag;
     aChucker << rEntry.nMethod;
-    aChucker << rEntry.nTime;
+    aChucker << static_cast < sal_uInt32> (rEntry.nTime);
     aChucker << static_cast < sal_uInt32> (rEntry.nCrc);
     aChucker << rEntry.nCompressedSize;
     aChucker << rEntry.nSize;
@@ -344,7 +344,7 @@ void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
     aChucker << rEntry.nVersion;
     aChucker << rEntry.nFlag;
     aChucker << rEntry.nMethod;
-    aChucker << rEntry.nTime;
+    aChucker << static_cast < sal_uInt32 > (rEntry.nTime);
     if ((rEntry.nFlag & 8) == 8 )
     {
         aChucker << static_cast < sal_Int32 > (0);
