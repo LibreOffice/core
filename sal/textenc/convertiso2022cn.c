@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022cn.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:41:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ sal_Size ImplConvertIso2022CnToUnicode(ImplTextConverterData const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         sal_Bool bUndefined = sal_True;
-        sal_uInt32 nChar = *((sal_uChar const *) pSrcBuf)++;
+        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
         sal_uInt32 nPlane;
         switch (eState)
         {
