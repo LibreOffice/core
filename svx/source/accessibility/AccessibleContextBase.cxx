@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:11:54 $
+ *  last change: $Author: af $ $Date: 2002-04-11 12:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,19 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
 
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
+#endif
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -80,6 +92,8 @@
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+
+#include <utility>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -89,13 +103,38 @@ namespace accessibility {
 
 //=====  internal  ============================================================
 
+// Define a shortcut for the somewhot longish base class name.
+typedef ::cppu::WeakComponentImplHelper4<
+    ::drafts::com::sun::star::accessibility::XAccessible,
+    ::drafts::com::sun::star::accessibility::XAccessibleContext,
+    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+    ::com::sun::star::lang::XServiceInfo> BaseClass;
+
 AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
         const sal_Int16 aRole)
-    :
-    maRole(aRole),
-    mxParent(rxParent)
+    :   BaseClass (MutexOwner::maMutex),
+        maRole(aRole),
+        mxParent(rxParent),
+        mxStateSet (NULL),
+        mxRelationSet (NULL)
 {
+    // Create the state set.
+    ::utl::AccessibleStateSetHelper* pStateSet (new ::utl::AccessibleStateSetHelper ());
+    mxStateSet = pStateSet;
+
+    // Set some states.  Don't use the SetState method because no events
+    // shall be broadcastet (that is not yet initialized anyway).
+    if (pStateSet != NULL)
+    {
+        pStateSet->AddState (AccessibleStateType::ENABLED);
+        pStateSet->AddState (AccessibleStateType::SHOWING);
+        pStateSet->AddState (AccessibleStateType::VISIBLE);
+    }
+
+    // Create the relation set.
+    ::utl::AccessibleRelationSetHelper* pRelationSet (new ::utl::AccessibleRelationSetHelper ());
+    mxRelationSet = pRelationSet;
 }
 
 
@@ -108,12 +147,81 @@ AccessibleContextBase::~AccessibleContextBase(void)
 
 
 
+void AccessibleContextBase::SetState (sal_Int16 aState)
+{
+    ::utl::AccessibleStateSetHelper* pStateSet (
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get()));
+    if (pStateSet != NULL)
+    {
+        pStateSet->AddState (aState);
+
+        uno::Any aNewValue;
+        aNewValue <<= aState;
+        CommitChange(
+            AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+            aNewValue,
+            uno::Any());
+    }
+}
+
+
+
+
+void AccessibleContextBase::ResetState (sal_Int16 aState)
+{
+    ::utl::AccessibleStateSetHelper* pStateSet (
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get()));
+    if (pStateSet != NULL)
+    {
+        pStateSet->RemoveState (aState);
+
+        uno::Any aOldValue;
+        aOldValue <<= aState;
+        CommitChange(
+            AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+            uno::Any(),
+            aOldValue);
+    }
+}
+
+
+
+
+void AccessibleContextBase::SetRelationSet (
+    const uno::Reference<XAccessibleRelationSet>& rxNewRelationSet)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_TRACE ("setting relation set");
+
+    // Try to emit some meaningfull events indicating differing relations in
+    // both sets.
+    typedef std::pair<short int,short int> RD;
+    const RD aRelationDescriptors[] = {
+        RD(AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_PROPERTY),
+        RD(AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_PROPERTY),
+        RD(AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_PROPERTY),
+        RD(AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_PROPERTY),
+        RD(AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_PROPERTY),
+        RD(AccessibleRelationType::INVALID, -1),
+    };
+    for (int i=0; aRelationDescriptors[i].first!=AccessibleRelationType::INVALID; i++)
+        if (mxRelationSet->containsRelation(aRelationDescriptors[i].first)
+        != rxNewRelationSet->containsRelation(aRelationDescriptors[i].first))
+        CommitChange (aRelationDescriptors[i].second, uno::Any(), uno::Any());
+
+    mxRelationSet = rxNewRelationSet;
+}
+
+
+
+
 //=====  XAccessible  =========================================================
 
 uno::Reference< XAccessibleContext> SAL_CALL
     AccessibleContextBase::getAccessibleContext (void)
     throw (uno::RuntimeException)
 {
+    CheckDisposedState ();
     return this;
 }
 
@@ -128,6 +236,7 @@ sal_Int32 SAL_CALL
        AccessibleContextBase::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
+    CheckDisposedState ();
     return 0;
 }
 
@@ -141,6 +250,7 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleContextBase::getAccessibleChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     throw lang::IndexOutOfBoundsException (
         ::rtl::OUString::createFromAscii ("no child with index " + nIndex),
         NULL);
@@ -153,6 +263,7 @@ uno::Reference<XAccessible> SAL_CALL
        AccessibleContextBase::getAccessibleParent (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     return mxParent;
 }
 
@@ -163,6 +274,7 @@ sal_Int32 SAL_CALL
        AccessibleContextBase::getAccessibleIndexInParent (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     //  Use a simple but slow solution for now.  Optimize later.
 
     //  Iterate over all the parent's children and search for this object.
@@ -198,6 +310,7 @@ sal_Int16 SAL_CALL
     AccessibleContextBase::getAccessibleRole (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     return maRole;
 }
 
@@ -208,10 +321,14 @@ sal_Int16 SAL_CALL
        AccessibleContextBase::getAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( ! msDescription.getLength())
-        SetAccessibleDescription (CreateAccessibleDescription());
+    CheckDisposedState ();
+    if (msDescription.getLength() == 0)
+        // Do not send an event because this is the first time it has been
+        // requested.
+        msDescription = CreateAccessibleDescription();
     return msDescription;
 }
+
 
 
 
@@ -219,40 +336,64 @@ OUString SAL_CALL
        AccessibleContextBase::getAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( !msName.getLength())
-        SetAccessibleDescription (CreateAccessibleName());
+    CheckDisposedState ();
+    if (msName.getLength() == 0)
+        // Do not send an event because this is the first time it has been
+        // requested.
+        msName = CreateAccessibleName();
     return msName;
 }
 
 
 
 
-/** Return empty reference to indicate that the relation set is not
-    supported.
+/** Return a copy of the relation set.
 */
 uno::Reference<XAccessibleRelationSet> SAL_CALL
        AccessibleContextBase::getAccessibleRelationSet (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
+
+    // Create a copy of the relation set and return it.
+    ::utl::AccessibleRelationSetHelper* pRelationSet (
+        static_cast< ::utl::AccessibleRelationSetHelper*>(mxRelationSet.get()));
+    if (pRelationSet != NULL)
+    {
+        return uno::Reference<XAccessibleRelationSet> (
+            new ::utl::AccessibleRelationSetHelper (*pRelationSet));
+    }
+    else
+        return uno::Reference<XAccessibleRelationSet>(NULL);
     return uno::Reference<XAccessibleRelationSet>();
 }
 
 
 
 
-/** Create the set of states the object is in.  Possible states are:
+/** Return a copy of the state set.
+    Possible states are:
         EDITABLE
         ENABLED
         SHOWING
         VISIBLE
-    For now, return only an empty reference and wait for an implementation of
-    the XAccessibleStateSet interface.
 */
 uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleContextBase::getAccessibleStateSet (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return uno::Reference<XAccessibleStateSet>();
+    CheckDisposedState ();
+
+    // Create a copy of the state set and return it.
+    ::utl::AccessibleStateSetHelper* pStateSet (
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get()));
+    if (pStateSet != NULL)
+    {
+        return uno::Reference<XAccessibleStateSet> (
+            new ::utl::AccessibleStateSetHelper (*pStateSet));
+    }
+    else
+        return uno::Reference<XAccessibleStateSet>(NULL);
 }
 
 
@@ -263,6 +404,7 @@ lang::Locale SAL_CALL
     throw (IllegalAccessibleComponentStateException,
         ::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     // Delegate request to parent.
     if (mxParent.is())
     {
@@ -284,16 +426,17 @@ lang::Locale SAL_CALL
 
 void SAL_CALL
     AccessibleContextBase::addEventListener (
-        const uno::Reference<XAccessibleEventListener >& xListener)
+        const uno::Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException)
 {
-    if (xListener.is())
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        ::vos::OGuard aGuard (maMutex);
-           mxEventListeners.insert (
-            mxEventListeners.begin(),
-            xListener);
-        OSL_ASSERT (mxEventListeners.begin()!=mxEventListeners.end());
+        uno::Reference<uno::XInterface> x ((lang::XComponent *)this, uno::UNO_QUERY);
+        rxListener->disposing (lang::EventObject (x));
+    }
+    else
+    {
+        rBHelper.addListener (::getCppuType (&rxListener), rxListener);
     }
 }
 
@@ -302,43 +445,13 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleContextBase::removeEventListener (
-        const uno::Reference<XAccessibleEventListener >& xListener )
+        const uno::Reference<XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    if (xListener.is())
-    {
-        ::vos::OGuard aGuard (maMutex);
-        mxEventListeners.erase (xListener);
-    }
+    CheckDisposedState ();
+    rBHelper.removeListener (::getCppuType(&rxListener), rxListener);
 }
 
-
-
-
-//=====  XComponent  ==========================================================
-
-void SAL_CALL AccessibleContextBase::dispose (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-}
-
-
-void SAL_CALL AccessibleContextBase::addEventListener (
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::lang::XEventListener >& xListener)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-}
-
-
-
-
-void SAL_CALL AccessibleContextBase::removeEventListener (
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::lang::XEventListener >& aListener)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-}
 
 
 
@@ -348,7 +461,8 @@ void SAL_CALL AccessibleContextBase::removeEventListener (
        AccessibleContextBase::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM ("AccessibleContextBase"));
+    CheckDisposedState ();
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleContextBase"));
 }
 
 
@@ -358,6 +472,7 @@ sal_Bool SAL_CALL
      AccessibleContextBase::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
     uno::Sequence< ::rtl::OUString> aSupportedServices (
@@ -375,8 +490,9 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleContextBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     const OUString sServiceName (
-        RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+        RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.accessibility.AccessibleContext"));
     return uno::Sequence<OUString> (&sServiceName, 1);
 }
 
@@ -389,22 +505,23 @@ uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleContextBase::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const ::com::sun::star::uno::Type aTypeList[] = {
-        ::getCppuType((const uno::Reference<
-            XAccessible>*)0),
-        ::getCppuType((const uno::Reference<
-            XAccessibleContext>*)0),
-        ::getCppuType((const uno::Reference<
-            XAccessibleEventBroadcaster>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XServiceInfo>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XTypeProvider>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XServiceName>*)0)
-        };
+    CheckDisposedState ();
+    // Get list of types from parent class.
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
-        aTypeSequence (aTypeList, 6);
+        aTypeSequence (BaseClass::getTypes());
+    sal_Int32 nTypeCount = aTypeSequence.getLength();
+
+    // Add the interfaces supported by this class.
+    static const ::com::sun::star::uno::Type aTypeList[] = {
+        ::getCppuType((const uno::Reference<XAccessible>*)0),
+        ::getCppuType((const uno::Reference<XAccessibleContext>*)0),
+        ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0),
+        ::getCppuType((const uno::Reference<lang::XServiceInfo>*)0)
+        };
+    aTypeSequence.realloc (nTypeCount + 4);
+    for (int i=0; i<5; i++)
+        aTypeSequence[nTypeCount + i] = aTypeList[i];
+
     return aTypeSequence;
 }
 
@@ -415,10 +532,11 @@ uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    CheckDisposedState ();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
-        ::vos::OGuard aGuard (maMutex);
+        ::osl::MutexGuard aGuard (maMutex);
         aId.realloc (16);
         rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
     }
@@ -428,20 +546,16 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 
 
-//=====  XServiceName  ========================================================
+//=====  internal  ============================================================
 
-::rtl::OUString
-    AccessibleContextBase::getServiceName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AccessibleContextBase::disposing (void)
 {
-    return OUString(
-        RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+    CheckDisposedState ();
+    SetState (AccessibleStateType::DEFUNC);
 }
 
 
 
-
-//=====  internal  ============================================================
 
 void AccessibleContextBase::SetAccessibleDescription (const ::rtl::OUString& rDescription)
     throw (uno::RuntimeException)
@@ -522,40 +636,36 @@ void AccessibleContextBase::CommitChange (
 
 void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 {
-    uno::Reference<XAccessibleEventListener>* aListeners;
-    int nListenerCount;
-    EventListenerListType::iterator I;
-
+    // Iterate over all listeners that are registered as accessibility event
+    // listeners and notify them of the specified event.
+    OSL_TRACE ("FireEvent %d", aEvent.EventId);
+    ::cppu::OInterfaceContainerHelper *pContainer = rBHelper.getContainer(
+        ::getCppuType((const uno::Reference<XAccessibleEventListener>*)0));
+    if (pContainer != NULL)
     {
-        // Guarded by the mutex copy list of listeners into a local list.
-        // This is necessary to be able to call the listeners outside the
-        // scope of the mutex and to not to be disturbed by outside changes
-        // to the list of listeners.
-        ::vos::OGuard aGuard (maMutex);
-        nListenerCount = mxEventListeners.size();
-        aListeners = new uno::Reference<XAccessibleEventListener>[nListenerCount];
-        int i=0;
-        for (I=mxEventListeners.begin(); I!=mxEventListeners.end(); I++)
+        ::cppu::OInterfaceIteratorHelper I (*pContainer);
+        while (I.hasMoreElements())
         {
-            aListeners[i++] = *I;
+            XAccessibleEventListener* pxListener (
+                static_cast<XAccessibleEventListener*>(I.next()));
+            pxListener->notifyEvent (aEvent);
         }
     }
-
-    // Now call the listeners.
-    for (int i=0; i<nListenerCount; i++)
-    {
-        if (aListeners[i].is())
-        {
-            OSL_TRACE ("Fireing event %d.", aEvent.EventId);
-            aListeners[i]->notifyEvent (aEvent);
-        }
-        else
-            OSL_TRACE ("listener invalid.");
-    }
-
-    delete [] aListeners;
 }
 
+
+
+
+void AccessibleContextBase::CheckDisposedState (void)
+    throw (::com::sun::star::lang::DisposedException)
+{
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        throw lang::DisposedException (
+            OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")),
+            static_cast<uno::XWeak*>(this));
+    }
+}
 
 
 
