@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:24:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,7 +1939,10 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
     uno::Sequence < beans::PropertyValue > aProps;
     uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );
     if ( xFilters->hasByName( aFilterName ) )
+    {
         xFilters->getByName( aFilterName ) >>= aProps;
+        rMedium.GetItemSet()->Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
+    }
 
     ::rtl::OUString aFilterImplName;
     sal_Int32 nFilterProps = aProps.getLength();
@@ -2205,6 +2208,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     if ( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
         SetError( GetMedium()->Unpack_Impl( pMedium->GetPhysicalName() ) );
 */
+
     // an interaction handler here can aquire only in case of GUI Saving
     // and should be removed after the saving is done
     com::sun::star::uno::Reference< XInteractionHandler > xInteract;
@@ -2221,7 +2225,10 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         INetURLObject::SetBaseURL( aOldURL );
 
         if( pMediumTmp->GetItemSet() )
+        {
             pMediumTmp->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
+            pMediumTmp->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+        }
 
         SetError(pMediumTmp->GetErrorCode());
 
@@ -2248,6 +2255,12 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 //REMOVE            }
 //REMOVE            else
             DoSaveCompleted( uno::Reference< embed::XStorage >() );
+
+        if( pMedium->GetItemSet() )
+        {
+            pMedium->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
+            pMedium->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+        }
 
         delete pMediumTmp;
     }
@@ -2398,6 +2411,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         // Daten am Medium updaten
         SfxItemSet *pSet = GetMedium()->GetItemSet();
         pSet->ClearItem( SID_INTERACTIONHANDLER );
+        pSet->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
 
         if ( !bSaveTo )
         {
