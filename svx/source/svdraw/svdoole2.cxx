@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:11:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,8 +726,8 @@ sal_Bool SdrOle2Obj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec&
         {
             OutputDevice* pOutDev = rOut.GetOutDev();
 
-            pOutDev->SetFillInBrush(Brush(BRUSH_NULL));
-            pOutDev->SetPen(Color(COL_LIGHTGRAY));
+            pOutDev->SetFillColor();
+            pOutDev->SetLineColor(Color(COL_LIGHTGRAY));
             pOutDev->DrawRect(aOutRect);
 
             Bitmap aBitmap(ResId(BMP_OLEOBJ, ImpGetResMgr()));
