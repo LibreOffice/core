@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:51:05 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,9 +614,10 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
             sal_Int32       nDataType   = 0;
             sal_Int32       nPrecision  = 0;
             sal_Int32       nScale      = 0;
-            for(sal_Int32 i=0;i<xColumns->getCount();++i)
+            sal_Int32       nCount      = xColumns->getCount();
+            for(sal_Int32 i=0;i<nCount;++i)
             {
-                if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
+                if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
                 {
 
                     aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
@@ -678,8 +679,21 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                     if(::comphelper::getINT32(xColProp->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
                         aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
 
-                    if(bIsAutoIncrement)
-                        aSql += ::rtl::OUString::createFromAscii(" auto_increment");
+                    if ( bIsAutoIncrement )
+                    {
+                        // check if the user enter a specific string to create autoincrement values
+                        Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
+                        if ( xPropInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
+                        {
+                            ::rtl::OUString sAutoIncrementValue;
+                            xColProp->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION) >>= sAutoIncrementValue;
+                            if ( sAutoIncrementValue.getLength() )
+                            {
+                                aSql += ::rtl::OUString::createFromAscii(" ");
+                                aSql += sAutoIncrementValue;
+                            }
+                        }
+                    }
 
                     aSql += ::rtl::OUString::createFromAscii(",");
                 }
