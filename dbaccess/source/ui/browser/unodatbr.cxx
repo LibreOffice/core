@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:41:42 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,8 +260,20 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
 //------------------------------------------------------------------------------
 SbaTableQueryBrowser::~SbaTableQueryBrowser()
 {
-    delete m_pTreeModel;
 }
+
+//------------------------------------------------------------------------------
+void SAL_CALL SbaTableQueryBrowser::dispose()
+{
+    // reset the content's tree view: it holds a reference to our model which is to be deleted immediately,
+    // and it will live longer than we do.
+    if (getContent())
+        getContent()->setTreeView(NULL);
+    delete m_pTreeModel;
+    m_pTreeModel = NULL;
+    SbaXDataBrowserController::dispose();
+}
+
 //------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 {
@@ -282,6 +294,9 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
         m_pTreeView = new DBTreeView(getContent(), WB_TABSTOP);
         m_pTreeView->Show();
+
+        // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
+        m_pSplitter->SetSplitPosPixel( getContent()->LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width() );
 
         getContent()->setSplitter(m_pSplitter);
         getContent()->setTreeView(m_pTreeView);
@@ -376,7 +391,7 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
 //      Reference< XMultiPropertySet >  xFormMultiSet(_rxForm, UNO_QUERY);
 //      xFormMultiSet->setPropertyValues(aProperties, aValues);
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaTableQueryBrowser::InitializeForm : something went wrong !");
         return sal_False;
