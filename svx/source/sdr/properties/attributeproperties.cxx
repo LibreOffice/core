@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributeproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:08:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,10 +725,10 @@ namespace sdr
                         SdrModel* pModel = rObj.GetModel();
 
                         // #111111#
-                        // Do nothing if pModel is in destruction, else a StyleSheet may be found from
+                        // Do nothing if object is in destruction, else a StyleSheet may be found from
                         // a StyleSheetPool which is just being deleted itself. and thus it would be fatal
                         // to register as listener to that new StyleSheet.
-                        if(pModel && !pModel->IsInDestruction())
+                        if(pModel && !rObj.IsInDestruction())
                         {
                             if(HAS_BASE(SfxStyleSheet, GetStyleSheet()))
                             {
