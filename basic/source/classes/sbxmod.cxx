@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-03 10:46:50 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 10:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,8 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 DBG_ASSERT(pINST->nCallLvl==0,"BASIC-Call-Level > 0")
                 delete pINST, pINST = NULL, bDelInst = FALSE;
                 SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
+
+                GlobalRunDeInit();
             }
         }
     }
@@ -696,6 +698,7 @@ void SbModule::RunInit()
         // if( bDelInst )
             // delete pINST, pINST = NULL;
         pImage->bInit = TRUE;
+        pImage->bFirstInit = FALSE;
 
         // RunInit ist nicht mehr aktiv
         GetSbData()->bRunInit = FALSE;
@@ -794,6 +797,21 @@ void SbModule::GlobalRunInit( BOOL bBasicStart )
             pBasic = PTR_CAST(StarBASIC,pParent);
         if( pBasic )
             pBasic->InitAllModules();
+    }
+}
+
+void SbModule::GlobalRunDeInit( void )
+{
+    StarBASIC *pBasic = PTR_CAST(StarBASIC,GetParent());
+    if( pBasic )
+    {
+        pBasic->DeInitAllModules();
+
+        SbxObject* pParent = pBasic->GetParent();
+        if( pParent )
+            pBasic = PTR_CAST(StarBASIC,pParent);
+        if( pBasic )
+            pBasic->DeInitAllModules();
     }
 }
 
