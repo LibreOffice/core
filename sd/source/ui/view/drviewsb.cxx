@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:47:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,9 @@
 #include <svx/svxids.hrc>
 #endif
 #define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
-#ifndef _SVX_DLG_HYPERLINK_HXX
-#include <offmgr/hyprlink.hxx>
-#endif
+
+#include <svx/hyprlink.hxx>
+
 #ifndef _SVX_HLNKITEM_HXX
 #include <svx/hlnkitem.hxx>
 #endif
@@ -115,10 +115,11 @@
 #ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
 #endif
-#ifndef _SVX_DLG_NAME_HXX
-#include <svx/dlgname.hxx>
-#endif
-
+//CHINA001 #ifndef _SVX_DLG_NAME_HXX
+//CHINA001 #include <svx/dlgname.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #pragma hdrstop
 
 #include "app.hrc"
@@ -828,7 +829,7 @@ bool DrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
     return bSuccess;
 }
 
-IMPL_LINK( DrawViewShell, RenameSlideHdl, SvxNameDialog*, pDialog )
+IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 {
     if( ! pDialog )
         return 0;
