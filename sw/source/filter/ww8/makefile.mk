@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 15:21:24 $
+#   last change: $Author: obo $ $Date: 2003-09-01 12:38:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,9 @@ CXXFILES = \
         ww8par6.cxx \
         ww8glsy.cxx \
         tracer.cxx \
-        ww8scan.cxx
+        ww8scan.cxx \
+        writerhelper.cxx \
+        writerwordglue.cxx
 
 
 
@@ -117,14 +119,17 @@ SLOFILES =	\
         $(SLO)$/ww8par6.obj \
         $(SLO)$/ww8glsy.obj \
         $(SLO)$/tracer.obj \
-        $(SLO)$/ww8scan.obj
+        $(SLO)$/ww8scan.obj \
+        $(SLO)$/writerhelper.obj \
+        $(SLO)$/writerwordglue.obj
 
 EXCEPTIONSFILES = \
         $(SLO)$/ww8par3.obj \
         $(SLO)$/ww8par5.obj \
         $(SLO)$/tracer.obj \
-        $(SLO)$/ww8graf2.obj
-
+        $(SLO)$/ww8graf2.obj \
+        $(SLO)$/writerhelper.obj \
+        $(SLO)$/writerwordglue.obj
 
 # --- Tagets -------------------------------------------------------
 
