@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLSectionList.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:14:04 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::xmloff::token;
 
-sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
+sal_Char __READONLY_DATA sXML_np__office[] = "_ooffice";
+sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLSectionList::SwXMLSectionList(
@@ -90,9 +91,12 @@ SwXMLSectionList::SwXMLSectionList(
 :   SvXMLImport( xServiceFactory ),
     rSectionList ( rNewSectionList )
 {
-    GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
-                           GetXMLToken ( XML_N_BLOCK_LIST),
-                           XML_NAMESPACE_BLOCKLIST );
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
+                            GetXMLToken(XML_N_OFFICE_OOO),
+                            XML_NAMESPACE_OFFICE );
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text ) ),
+                            GetXMLToken(XML_N_TEXT_OOO),
+                            XML_NAMESPACE_TEXT );
 }
 
 SwXMLSectionList::~SwXMLSectionList ( void )
