@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:54:24 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1308,6 +1308,10 @@ void FmGridControl::DeleteSelectedRows()
 
     // how many rows are selected?
     sal_Int32 nSelectedRows = GetSelectRowCount();
+
+    // the current line should be deleted but it is currently in edit mode
+    if ( IsCurrentAppending() )
+        return;
     // is the insert row selected
     if (GetEmptyRow().Is() && IsRowSelected(GetRowCount() - 1))
         nSelectedRows -= 1;
