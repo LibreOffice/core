@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namepast.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#undef SC_DLLIMPLEMENTATION
 
 #ifdef PCH
 #include "ui_pch.hxx"
