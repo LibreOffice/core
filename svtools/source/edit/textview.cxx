@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:01:16 $
+ *  last change: $Author: mt $ $Date: 2001-06-05 16:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -220,6 +224,10 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
         uno::Sequence< sal_Int8 > aSeq( nLen );
         memcpy( aSeq.getArray(), GetHTMLStream().GetData(), nLen );
         aAny <<= aSeq;
+    }
+    else
+    {
+        throw datatransfer::UnsupportedFlavorException();
     }
     return aAny;
 }
@@ -1066,6 +1074,11 @@ void TextView::Copy()
 
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         xClipboard->setContents( pDataObj, NULL );
+
+        uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
+        if( xFlushableClipboard.is() )
+            xFlushableClipboard->flushClipboard();
+
         Application::AcquireSolarMutex( nRef );
     }
 }
