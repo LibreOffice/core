@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:47:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ const sal_uInt16 EXC_ID_FORMAT              = 0x041E;
 
 const sal_uInt16 EXC_FORMAT_OFFSET5         = 164;
 const sal_uInt16 EXC_FORMAT_OFFSET8         = 164;
+const sal_uInt16 EXC_FORMAT_NOTFOUND        = 0xFFFF;
 
 // (0x0031) FONT --------------------------------------------------------------
 
@@ -268,9 +269,9 @@ const sal_uInt16 EXC_COLOR_WINDOWBACK3      = 25;       /// System window backgr
 const sal_uInt16 EXC_COLOR_WINDOWTEXT       = 64;       /// System window text color (>=BIFF5).
 const sal_uInt16 EXC_COLOR_WINDOWBACK       = 65;       /// System window background color (>=BIFF5).
 const sal_uInt16 EXC_COLOR_BUTTONBACK       = 67;       /// System button background color (face color).
-const sal_uInt16 EXC_COLOR_WINDOWTEXT_CH    = 77;       /// System window text color (BIFF8 charts).
-const sal_uInt16 EXC_COLOR_WINDOWBACK_CH    = 78;       /// System window background color (BIFF8 charts).
-const sal_uInt16 EXC_COLOR_BORDERAUTO_CH    = 79;       /// Automatic frame border (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_CHWINDOWTEXT     = 77;       /// System window text color (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_CHWINDOWBACK     = 78;       /// System window background color (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_CHBORDERAUTO     = 79;       /// Automatic frame border (BIFF8 charts).
 const sal_uInt16 EXC_COLOR_NOTEBACK         = 80;       /// Note background color.
 const sal_uInt16 EXC_COLOR_NOTETEXT         = 81;       /// Note text color.
 const sal_uInt16 EXC_COLOR_FONTAUTO         = 0x7FFF;   /// Font auto color (system window text color).
