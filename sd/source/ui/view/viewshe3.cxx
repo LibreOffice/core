@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 12:40:28 $
+ *  last change: $Author: ka $ $Date: 2001-05-03 09:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,289 +712,319 @@ USHORT __EXPORT SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
 {
     SfxPrinter* pPrinter = GetPrinter(TRUE);
 
-    if ( !pPrinter )
-        return 0;
-
-    MapMode aMap( pPrinter->GetMapMode() );
-    MapMode aOldMap( aMap );
-    aMap.SetMapUnit(MAP_100TH_MM);
-    pPrinter->SetMapMode(aMap);
-
-    // Druckerschacht muss sich gemerkt werden, da dieser sonst von uns
-    // ueberschrieben wird
-    USHORT nOldPaperBin = pPrinter->GetPaperBin();
-
-    Outliner& rOutliner = pDoc->GetDrawOutliner();
-    ULONG nOldCntrl = rOutliner.GetControlWord();
-    ULONG nCntrl = nOldCntrl;
-    nCntrl |= EE_CNTRL_NOREDLINES;
-    nCntrl &= ~EE_CNTRL_MARKFIELDS;
-    nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-    rOutliner.SetControlWord(nCntrl);
-
-    // Pruefen des Seitenformates und ggfs. Dialog hochbringen
-    const SfxItemSet&   rOptions = pPrinter->GetOptions();
-    SdOptionsPrintItem* pPrintOpts = NULL;
-    BOOL bScalePage = TRUE;
-    BOOL bTilePage = FALSE;
-    BOOL bPrintBooklet = FALSE;
-
-    if( rOptions.GetItemState( ATTR_OPTIONS_PRINT, FALSE,
-                (const SfxPoolItem**) &pPrintOpts) == SFX_ITEM_SET )
+    if( pPrinter )
     {
-        bScalePage = pPrintOpts->IsPagesize();
-        bPrintBooklet = pPrintOpts->IsBooklet();
-        pPrintOpts->SetCutPage( FALSE );
-    }
-    else
-        pPrintOpts = NULL;
+        const PrinterOptions    aOldPrinterOptions( pPrinter->GetPrinterOptions() );
+        MapMode                 aMap( pPrinter->GetMapMode() );
+        const MapMode           aOldMap( aMap );
+        USHORT                  nOldPaperBin = pPrinter->GetPaperBin();
 
-    SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
-    Size aPageSize( pPage->GetSize() );
-    Size aPrintSize( pPrinter->GetOutputSize() );
-    long aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
-    long aPageHeight  = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
-    long aPrintWidth  = aPrintSize.Width();
-    long aPrintHeight = aPrintSize.Height();
+        aMap.SetMapUnit(MAP_100TH_MM);
+        pPrinter->SetMapMode(aMap);
 
-    // Hier wird noch nicht unterschieden zwischen Landscape/Portrait !
-    // Wie das genau auszusehen hat, sollte mal geklaert werden !
-    // Landscape / Portrait wird automatisch umgeschaltet
+        Outliner& rOutliner = pDoc->GetDrawOutliner();
+        ULONG nOldCntrl = rOutliner.GetControlWord();
+        ULONG nCntrl = nOldCntrl;
+        nCntrl |= EE_CNTRL_NOREDLINES;
+        nCntrl &= ~EE_CNTRL_MARKFIELDS;
+        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        rOutliner.SetControlWord( nCntrl );
 
-    // Dialog
-    USHORT nRet = RET_OK;
-    if( !bScalePage && !bTilePage && !bPrintBooklet &&
-        ( ( aPageWidth > aPrintWidth || aPageHeight > aPrintHeight ) &&
-          ( aPageWidth > aPrintHeight || aPageHeight > aPrintWidth ) ) )
-    {
-        SdPrintDlg aDlg( pWindow );
-        nRet = aDlg.Execute();
-        if( nRet == RET_OK )
+        // Pruefen des Seitenformates und ggfs. Dialog hochbringen
+        const SfxItemSet&   rOptions = pPrinter->GetOptions();
+        SdOptionsPrintItem* pPrintOpts = NULL;
+        BOOL                bScalePage = TRUE;
+        BOOL                bTilePage = FALSE;
+        BOOL                bPrintBooklet = FALSE;
+
+        if( rOptions.GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrintOpts ) == SFX_ITEM_SET )
         {
-            USHORT nOption = aDlg.GetAttr();
-
-            if( nOption == 1 )
-                pPrintOpts->SetPagesize();
-
-            // ( nOption == 2 ) ist der Default
-
-            if( nOption == 3 )
-                pPrintOpts->SetCutPage();
+            bScalePage = pPrintOpts->IsPagesize();
+            bPrintBooklet = pPrintOpts->IsBooklet();
+            pPrintOpts->SetCutPage( FALSE );
         }
-    }
-    if( nRet == RET_CANCEL )
-    {
-        pPrinter->SetMapMode(aOldMap);
-        return 0;
-    }
+        else
+            pPrintOpts = NULL;
 
-    // Wenn wir im Gliederungsmodus sind, muss das Model auf Stand gebracht werden
-    if( this->ISA( SdOutlineViewShell ) )
-        ( (SdOutlineViewShell*)this )->PrepareClose(FALSE, FALSE);
+        SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
+        Size    aPageSize( pPage->GetSize() );
+        Size    aPrintSize( pPrinter->GetOutputSize() );
+        long    nPageWidth = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
+        long    nPageHeight = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
+        long    nPrintWidth = aPrintSize.Width();
+        long    nPrintHeight = aPrintSize.Height();
+        USHORT  nRet = RET_OK;
 
-    // Basisklasse rufen, um Basic anzusprechen
-    SfxViewShell::Print( rProgress, pDlg );
-
-    // Setzen des Textes des Druckmonitors
-    rProgress.SetText( String( SdResId( STR_STATSTR_PRINT ) ) );
-
-    PrintDialogRange    eOption;
-    MultiSelection      aPrintSelection;
-    String      aTimeDateStr;
-    Font        aTimeDateFont(FAMILY_SWISS, Size(0, 423));
-    PageKind    ePageKind = PK_STANDARD;
-    USHORT      nPage, nPageMax;
-    USHORT      nTotal, nCopies;
-    USHORT      nPrintCount = 0;
-    USHORT      nProgressOffset = 0;
-    USHORT      nCollateCopies = 1;
-    BOOL        bPrintMarkedOnly = FALSE;
-    BOOL        bPrintOutline = FALSE;
-    BOOL        bPrintHandout = FALSE;
-    BOOL        bPrintDraw = FALSE;
-    BOOL        bPrintNotes = FALSE;
-
-    Orientation eOldOrientation = pPrinter->GetOrientation();
-
-    if( pPrintOpts )
-    {
-        if ( pPrintOpts->IsDate() )
+        if( !bScalePage && !bTilePage && !bPrintBooklet &&
+            ( ( nPageWidth > nPrintWidth || nPageHeight > nPrintHeight ) &&
+              ( nPageWidth > nPrintHeight || nPageHeight > nPrintWidth ) ) )
         {
-            aTimeDateStr += SdrGlobalData::pLocaleData->getDate( Date() );
-            aTimeDateStr += (sal_Unicode)' ';
-        }
-
-        if ( pPrintOpts->IsTime() )
-            aTimeDateStr += SdrGlobalData::pLocaleData->getTime( Time(), FALSE, FALSE );
-
-        if ( pPrintOpts->IsOutline() )
-            bPrintOutline = TRUE;
-        if ( pPrintOpts->IsHandout() )
-            bPrintHandout = TRUE;
-        if ( pPrintOpts->IsDraw() )
-            bPrintDraw = TRUE;
-        if ( pPrintOpts->IsNotes() )
-        {
-            bPrintNotes = TRUE;
-            ePageKind = PK_NOTES;
-        }
-
-#if SUPD >= 624
-        SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
-        pPrintOpts->SetWarningPrinter( pMisc->IsNotFoundWarning() );
-        pPrintOpts->SetWarningSize( pMisc->IsPaperSizeWarning() );
-        pPrintOpts->SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
-#endif
-
-/// Neu
-        // Ausgabequalitaet setzen
-        UINT16 nQuality = pPrintOpts->GetOutputQuality();
-
-        ULONG nMode = DRAWMODE_DEFAULT;
-        if( nQuality == 1 )
-            nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT |
-                    DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
-        else if( nQuality == 2 )
-            nMode = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL |
-                    DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
-
-        pPrinter->SetDrawMode( nMode );
-/// Neu
-
-    }
-    else
-        bPrintDraw = TRUE;
-
-    if ( pDlg )
-    {
-        eOption = pDlg->GetCheckedRange();
-        if ( eOption == PRINTDIALOG_SELECTION )
-            bPrintMarkedOnly = TRUE;
-    }
-    else
-        // Bei PrintDirect wird gesamtes Dokument gedruckt
-        eOption = PRINTDIALOG_ALL;
-
-    // #72527 If we are in PrintDirect and any objects
-    // are selected, then a dialog (see SdViewShell::DoPrint)
-    // ask whether the total document should be printed
-    // or only the selected objects. If only the selected
-    // object, then the flag bPrintDirectSelected is TRUE
-    if( bPrintDirectSelected )
-    {
-        eOption = PRINTDIALOG_SELECTION;
-        bPrintMarkedOnly = TRUE;
-    }
-
-    nPageMax = pDoc->GetSdPageCount(ePageKind);
-    aPrintSelection.SetTotalRange(Range(1, nPageMax));
-
-    switch ( eOption )
-    {
-        case PRINTDIALOG_ALL:
-            aPrintSelection.Select(Range(1, nPageMax));
-            break;
-
-        case PRINTDIALOG_RANGE:
-            aPrintSelection = MultiSelection(pDlg->GetRangeText());
-            break;
-
-        default:
-            if( this->ISA( SdDrawViewShell ) )
-                aPrintSelection.Select( ( (SdDrawViewShell*)this )->GetCurPageId() );
-            else
+            SdPrintDlg aDlg( pWindow );
+            nRet = aDlg.Execute();
+            if( nRet == RET_OK )
             {
-                if( sPageRange.Len() )
-                    aPrintSelection = MultiSelection( sPageRange );
+                USHORT nOption = aDlg.GetAttr();
+
+                if( nOption == 1 )
+                    pPrintOpts->SetPagesize();
+
+                // ( nOption == 2 ) ist der Default
+
+                if( nOption == 3 )
+                    pPrintOpts->SetCutPage();
+            }
+        }
+
+        if( nRet == RET_CANCEL )
+        {
+            pPrinter->SetPrinterOptions( aOldPrinterOptions );
+            pPrinter->SetMapMode( aOldMap );
+            return 0;
+        }
+
+        // Wenn wir im Gliederungsmodus sind, muss das Model auf Stand gebracht werden
+        if( this->ISA( SdOutlineViewShell ) )
+            ( (SdOutlineViewShell*)this )->PrepareClose(FALSE, FALSE);
+
+        // Basisklasse rufen, um Basic anzusprechen
+        SfxViewShell::Print( rProgress, pDlg );
+
+        // Setzen des Textes des Druckmonitors
+        rProgress.SetText( String( SdResId( STR_STATSTR_PRINT ) ) );
+
+        PrintDialogRange    eOption;
+        MultiSelection      aPrintSelection;
+        String              aTimeDateStr;
+        Font                aTimeDateFont(FAMILY_SWISS, Size(0, 423));
+        PageKind            ePageKind = PK_STANDARD;
+        USHORT              nPage, nPageMax;
+        USHORT              nTotal, nCopies;
+        USHORT              nPrintCount = 0;
+        USHORT              nProgressOffset = 0;
+        USHORT              nCollateCopies = 1;
+        BOOL                bPrintMarkedOnly = FALSE;
+        BOOL                bPrintOutline = FALSE;
+        BOOL                bPrintHandout = FALSE;
+        BOOL                bPrintDraw = FALSE;
+        BOOL                bPrintNotes = FALSE;
+
+        Orientation eOldOrientation = pPrinter->GetOrientation();
+
+        if( pPrintOpts )
+        {
+            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+
+            if( pPrintOpts->IsDate() )
+            {
+                aTimeDateStr += SdrGlobalData::pLocaleData->getDate( Date() );
+                aTimeDateStr += (sal_Unicode)' ';
+            }
+
+            if( pPrintOpts->IsTime() )
+                aTimeDateStr += SdrGlobalData::pLocaleData->getTime( Time(), FALSE, FALSE );
+
+            if( pPrintOpts->IsOutline() )
+                bPrintOutline = TRUE;
+
+            if( pPrintOpts->IsHandout() )
+                bPrintHandout = TRUE;
+
+            if( pPrintOpts->IsDraw() )
+                bPrintDraw = TRUE;
+
+            if( pPrintOpts->IsNotes() )
+            {
+                bPrintNotes = TRUE;
+                ePageKind = PK_NOTES;
+            }
+
+            pPrintOpts->SetWarningPrinter( pMisc->IsNotFoundWarning() );
+            pPrintOpts->SetWarningSize( pMisc->IsPaperSizeWarning() );
+            pPrintOpts->SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
+
+            UINT16 nQuality = pPrintOpts->GetOutputQuality();
+            ULONG nMode = DRAWMODE_DEFAULT;
+
+            if( nQuality == 1 )
+                nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
+            else if( nQuality == 2 )
+                nMode = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
+
+            pPrinter->SetDrawMode( nMode );
+        }
+        else
+            bPrintDraw = TRUE;
+
+        if( pDlg )
+        {
+            eOption = pDlg->GetCheckedRange();
+
+            if( eOption == PRINTDIALOG_SELECTION )
+                bPrintMarkedOnly = TRUE;
+        }
+        else
+            // Bei PrintDirect wird gesamtes Dokument gedruckt
+            eOption = PRINTDIALOG_ALL;
+
+        // #72527 If we are in PrintDirect and any objects
+        // are selected, then a dialog (see SdViewShell::DoPrint)
+        // ask whether the total document should be printed
+        // or only the selected objects. If only the selected
+        // object, then the flag bPrintDirectSelected is TRUE
+        if( bPrintDirectSelected )
+        {
+            eOption = PRINTDIALOG_SELECTION;
+            bPrintMarkedOnly = TRUE;
+        }
+
+        nPageMax = pDoc->GetSdPageCount( ePageKind );
+        aPrintSelection.SetTotalRange( Range( 1, nPageMax ) );
+
+        switch( eOption )
+        {
+            case PRINTDIALOG_ALL:
+                aPrintSelection.Select(Range(1, nPageMax));
+            break;
+
+            case PRINTDIALOG_RANGE:
+                aPrintSelection = MultiSelection(pDlg->GetRangeText());
+            break;
+
+            default:
+            {
+                if( this->ISA( SdDrawViewShell ) )
+                    aPrintSelection.Select( ( (SdDrawViewShell*)this )->GetCurPageId() );
                 else
-                    aPrintSelection.Select(Range(1, nPageMax));
+                {
+                    if( sPageRange.Len() )
+                        aPrintSelection = MultiSelection( sPageRange );
+                    else
+                        aPrintSelection.Select(Range(1, nPageMax));
+                }
             }
             break;
-    }
-    nPage = Min(nPageMax, (USHORT) aPrintSelection.FirstSelected());
-    if ( nPage > 0 )
-        nPage--;
-    nPageMax = Min(nPageMax, (USHORT) aPrintSelection.LastSelected());
-
-    if( bPrintOutline )
-        nPrintCount++;
-    if( bPrintHandout )
-        nPrintCount++;
-    if( bPrintDraw )
-        nPrintCount++;
-    if( bPrintNotes )
-        nPrintCount++;
-
-    nCopies = (pDlg ? pDlg->GetCopyCount() : 1);
-
-    USHORT nSelectCount = (USHORT) aPrintSelection.GetSelectCount();
-    nTotal = nSelectCount * nCopies * nPrintCount;
-
-    if( pDlg && pDlg->IsCollateEnabled() && pDlg->IsCollateChecked() )
-        nCollateCopies = nCopies;
-
-    for( USHORT n = 1; n <= nCollateCopies; n++ )
-    {
-        if ( bPrintOutline )
-        {
-            // siehe unten in PrintOutline()
-            pPrinter->SetPaperBin( nOldPaperBin );
-
-            PrintOutline(*pPrinter, rProgress, aPrintSelection,
-                          aTimeDateStr, aTimeDateFont, pPrintOpts,
-                          nPage, nPageMax,
-                          nCollateCopies > 1 ? 1 : nCopies,
-                          nProgressOffset, nTotal );
-            nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
         }
 
-        if ( bPrintHandout )
-        {
-            PrintHandout(*pPrinter, rProgress, aPrintSelection,
-                          aTimeDateStr, aTimeDateFont, pPrintOpts,
-                          nPage, nPageMax,
-                          nCollateCopies > 1 ? 1 : nCopies,
-                          nProgressOffset, nTotal );
-            nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
-        }
+        nPage = Min(nPageMax, (USHORT) aPrintSelection.FirstSelected());
+
+        if ( nPage > 0 )
+            nPage--;
+
+        nPageMax = Min(nPageMax, (USHORT) aPrintSelection.LastSelected());
+
+        if( bPrintOutline )
+            nPrintCount++;
+
+        if( bPrintHandout )
+            nPrintCount++;
+
         if( bPrintDraw )
-        {
-            PrintStdOrNotes(*pPrinter, rProgress, aPrintSelection,
-                             aTimeDateStr, aTimeDateFont, pPrintOpts,
-                             nPage, nPageMax,
-                             nCollateCopies > 1 ? 1 : nCopies,
-                             nProgressOffset, nTotal,
-                             PK_STANDARD, bPrintMarkedOnly);
-            nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
-        }
+            nPrintCount++;
+
         if( bPrintNotes )
+            nPrintCount++;
+
+        nCopies = (pDlg ? pDlg->GetCopyCount() : 1);
+
+        USHORT nSelectCount = (USHORT) aPrintSelection.GetSelectCount();
+        nTotal = nSelectCount * nCopies * nPrintCount;
+
+        if( pDlg && pDlg->IsCollateEnabled() && pDlg->IsCollateChecked() )
+            nCollateCopies = nCopies;
+
+        // check if selected range of pages contains transparent objects
+        BOOL bContainsTransparency = FALSE;
+        BOOL bPrintExcluded = TRUE;
+
+        if( bPrintNotes || bPrintDraw || bPrintHandout )
         {
-            PrintStdOrNotes(*pPrinter, rProgress, aPrintSelection,
-                             aTimeDateStr, aTimeDateFont, pPrintOpts,
-                             nPage, nPageMax,
-                             nCollateCopies > 1 ? 1 : nCopies,
-                             nProgressOffset, nTotal,
-                             PK_NOTES, FALSE);
-            nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
+            if( pPrintOpts )
+                bPrintExcluded = pPrintOpts->IsHiddenPages();
+
+            for( USHORT j = nPage; ( j < nPageMax && !bContainsTransparency ); j++ )
+            {
+                if( aPrintSelection.IsSelected( j + 1 ) )
+                {
+                    SdPage* pPage = pDoc->GetSdPage( j, PK_STANDARD );
+
+                    if( pPage && ( !pPage->IsExcluded() || bPrintExcluded ) )
+                    {
+                        if( !( bContainsTransparency = pPage->HasTransparentObjects() ) )
+                        {
+                            SdPage* pMaster = (SdPage*) pPage->GetMasterPage( 0 );
+
+                            if( pMaster )
+                                bContainsTransparency = pMaster->HasTransparentObjects();
+                        }
+                    }
+                }
+            }
         }
+
+        if( pPrinter->InitJob( pWindow, bContainsTransparency ) )
+        {
+            for( USHORT n = 1; n <= nCollateCopies; n++ )
+            {
+                if ( bPrintOutline )
+                {
+                    // siehe unten in PrintOutline()
+                    pPrinter->SetPaperBin( nOldPaperBin );
+
+                    PrintOutline(*pPrinter, rProgress, aPrintSelection,
+                                  aTimeDateStr, aTimeDateFont, pPrintOpts,
+                                  nPage, nPageMax,
+                                  nCollateCopies > 1 ? 1 : nCopies,
+                                  nProgressOffset, nTotal );
+                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
+                }
+
+                if ( bPrintHandout )
+                {
+                    PrintHandout(*pPrinter, rProgress, aPrintSelection,
+                                  aTimeDateStr, aTimeDateFont, pPrintOpts,
+                                  nPage, nPageMax,
+                                  nCollateCopies > 1 ? 1 : nCopies,
+                                  nProgressOffset, nTotal );
+                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
+                }
+                if( bPrintDraw )
+                {
+                    PrintStdOrNotes(*pPrinter, rProgress, aPrintSelection,
+                                     aTimeDateStr, aTimeDateFont, pPrintOpts,
+                                     nPage, nPageMax,
+                                     nCollateCopies > 1 ? 1 : nCopies,
+                                     nProgressOffset, nTotal,
+                                     PK_STANDARD, bPrintMarkedOnly);
+                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
+                }
+                if( bPrintNotes )
+                {
+                    PrintStdOrNotes(*pPrinter, rProgress, aPrintSelection,
+                                     aTimeDateStr, aTimeDateFont, pPrintOpts,
+                                     nPage, nPageMax,
+                                     nCollateCopies > 1 ? 1 : nCopies,
+                                     nProgressOffset, nTotal,
+                                     PK_NOTES, FALSE);
+                    nProgressOffset += ( nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies) );
+                }
+            }
+        }
+
+        pPrinter->SetOrientation( eOldOrientation );
+        pPrinter->SetPrinterOptions( aOldPrinterOptions );
+        pPrinter->SetMapMode( aOldMap );
+
+        rOutliner.SetControlWord(nOldCntrl);
+
+        // Druckerschach wieder zuruecksetzen
+        pPrinter->SetPaperBin( nOldPaperBin );
+
+        // 3D-Kontext wieder zerstoeren
+        Base3D *pBase3D = (Base3D*) pPrinter->Get3DContext();
+
+        if( pBase3D )
+            pBase3D->Destroy( pPrinter );
     }
-
-#ifndef OS2
-    // schlaegt unter OS/2 immer fehl
-    pPrinter->SetOrientation(eOldOrientation);
-#endif
-
-    pPrinter->SetMapMode(aOldMap);
-
-    rOutliner.SetControlWord(nOldCntrl);
-
-    // Druckerschach wieder zuruecksetzen
-    pPrinter->SetPaperBin( nOldPaperBin );
-
-    // 3D-Kontext wieder zerstoeren
-    Base3D *pBase3D = (Base3D*) pPrinter->Get3DContext();
-    if(pBase3D)
-        pBase3D->Destroy(pPrinter);
 
     return 0;
 }
@@ -1558,12 +1588,12 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                         rPrinter.SetMapMode(aMap);
 
                         //
-                        BOOL  bPrint = TRUE;
-                        Point aPageOrigin;
-                        long aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
-                        long aPageHeight  = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
-                        long  aPrintWidth  = aPrintSize.Width();
-                        long  aPrintHeight = aPrintSize.Height();
+                        BOOL    bPrint = TRUE;
+                        Point   aPageOrigin;
+                        long    aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
+                        long    aPageHeight  = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
+                        long    aPrintWidth  = aPrintSize.Width();
+                        long    aPrintHeight = aPrintSize.Height();
 
                         // Bugfix zu 44530:
                         // Falls implizit umgestellt wurde (Landscape/Portrait)
