@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-12 18:41:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _SVDLAYER_HXX
 #include <svx/svdlayer.hxx>
 #endif
@@ -697,6 +703,25 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                         }
                     }
                 }
+            }
+
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_OPEN_XML_FILTERSETTINGS:
+        {
+            try
+            {
+                com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), com::sun::star::uno::UNO_QUERY);
+                if( xDialog.is() )
+                {
+                    xDialog->execute();
+                }
+            }
+            catch( ::com::sun::star::uno::RuntimeException& )
+            {
             }
 
             Cancel();
