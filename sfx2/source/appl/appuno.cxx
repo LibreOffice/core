@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-07 08:40:57 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
 
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
@@ -220,6 +223,7 @@ using namespace ::rtl;
 #include "dlgcont.hxx"
 #include "objshimp.hxx"
 #include "fltoptint.hxx"
+#include "docfile.hxx"
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -252,6 +256,7 @@ static const String sViewData       = String::CreateFromAscii( "ViewData" );
 static const String sFilterData     = String::CreateFromAscii( "FilterData" );
 static const String sSelectionOnly  = String::CreateFromAscii( "SelectionOnly" );
 static const String sFilterFlags    = String::CreateFromAscii( "FilterFlags" );
+static const String sMacroExecMode  = String::CreateFromAscii( "MacroExecutionMode" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -554,6 +559,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     Point aPos;
                     DBG_ASSERT( sal_False, "TransformParameters()\nProperty \"PosSize\" isn't supported yet!\n" );
                 }
+                else if ( aName == sMacroExecMode && rProp.Value.getValueType() == ::getCppuType((const sal_Int16*)0) )
+                    rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, *((sal_Int16*)rProp.Value.getValue()) ) );
             }
         }
 #ifdef DB_UTIL
@@ -700,6 +707,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOCUMENT ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_MACROEXECMODE ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -788,6 +797,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                             break;
                         if ( nId == SID_CHARSET )
                             break;
+                        if ( nId == SID_MACROEXECMODE )
+                            break;
+
                     }
                 }
 
@@ -1042,7 +1054,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sCharacterSet;
                 pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
-
+            if ( rSet.GetItemState( SID_MACROEXECMODE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sMacroExecMode;
+                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            }
         }
     }
 
@@ -1229,7 +1245,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
             {
                 // security check for macros from document basic if an SFX context (pSh) is given
                 pDoc->AdjustMacroMode( String() );
-                if ( pDoc->Get_Impl()->nMacroMode == eNEVER_EXECUTE )
+                if( pDoc->Get_Impl()->nMacroMode == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
                     // check forbids execution
                     return ERRCODE_IO_ACCESSDENIED;;
             }
