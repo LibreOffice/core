@@ -2,10 +2,6 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
-#
-#   last change: $Author: kz $ $Date: 2005-01-21 12:16:10 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #
@@ -88,6 +84,7 @@ SCP1FILES  = installation_ooo.par          \
              file_resource_ooo.par         \
              shortcut_ooo.par              \
              module_ooo.par                \
+             module_hidden_ooo.par         \
              profile_ooo.par               \
              profileitem_ooo.par           \
              module_writer.par             \
