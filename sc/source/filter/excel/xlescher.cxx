@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:06:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,11 +171,11 @@ void lclMirrorRectangle( Rectangle& rRect )
 // ----------------------------------------------------------------------------
 
 XclEscherAnchor::XclEscherAnchor( SCTAB nScTab ) :
-    mnLCol( 0 ), mnLX( 0 ),
-    mnTRow( 0 ), mnTY( 0 ),
-    mnRCol( 0 ), mnRX( 0 ),
-    mnBRow( 0 ), mnBY( 0 ),
-    mnScTab( nScTab )
+    mnScTab( nScTab ),
+    mnLX( 0 ),
+    mnTY( 0 ),
+    mnRX( 0 ),
+    mnBY( 0 )
 {
 }
 
@@ -183,10 +183,10 @@ Rectangle XclEscherAnchor::GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const
 {
     double fScale = lclGetTwipsScale( eMapUnit );
     Rectangle aRect(
-        lclGetXFromCol( rDoc, mnScTab, mnLCol, mnLX, fScale ),
-        lclGetYFromRow( rDoc, mnScTab, mnTRow, mnTY, fScale ),
-        lclGetXFromCol( rDoc, mnScTab, mnRCol, mnRX + 1, fScale ),
-        lclGetYFromRow( rDoc, mnScTab, mnBRow, mnBY, fScale ) );
+        lclGetXFromCol( rDoc, mnScTab, maXclRange.maFirst.mnCol, mnLX, fScale ),
+        lclGetYFromRow( rDoc, mnScTab, maXclRange.maFirst.mnRow, mnTY, fScale ),
+        lclGetXFromCol( rDoc, mnScTab, maXclRange.maLast.mnCol,  mnRX + 1, fScale ),
+        lclGetYFromRow( rDoc, mnScTab, maXclRange.maLast.mnRow,  mnBY, fScale ) );
 
     // #106948# adjust coordinates in mirrored sheets
     if( rDoc.IsLayoutRTL( mnScTab ) )
@@ -203,47 +203,47 @@ void XclEscherAnchor::SetRect( ScDocument& rDoc, const Rectangle& rRect, MapUnit
 
     double fScale = lclGetTwipsScale( eMapUnit );
     long nDummy = 0;
-    lclGetColFromX( rDoc, mnScTab, mnLCol, mnLX, 0,      nDummy, aRect.Left(),   fScale );
-    lclGetColFromX( rDoc, mnScTab, mnRCol, mnRX, mnLCol, nDummy, aRect.Right(),  fScale );
+    lclGetColFromX( rDoc, mnScTab, maXclRange.maFirst.mnCol, mnLX, 0,                        nDummy, aRect.Left(),   fScale );
+    lclGetColFromX( rDoc, mnScTab, maXclRange.maLast.mnCol,  mnRX, maXclRange.maFirst.mnCol, nDummy, aRect.Right(),  fScale );
     nDummy = 0;
-    lclGetRowFromY( rDoc, mnScTab, mnTRow, mnTY, 0,      nDummy, aRect.Top(),    fScale );
-    lclGetRowFromY( rDoc, mnScTab, mnBRow, mnBY, mnTRow, nDummy, aRect.Bottom(), fScale );
+    lclGetRowFromY( rDoc, mnScTab, maXclRange.maFirst.mnRow, mnTY, 0,                        nDummy, aRect.Top(),    fScale );
+    lclGetRowFromY( rDoc, mnScTab, maXclRange.maLast.mnRow,  mnBY, maXclRange.maFirst.mnRow, nDummy, aRect.Bottom(), fScale );
 }
 
 SvStream& operator>>( SvStream& rStrm, XclEscherAnchor& rAnchor )
 {
     return rStrm
-        >> rAnchor.mnLCol >> rAnchor.mnLX
-        >> rAnchor.mnTRow >> rAnchor.mnTY
-        >> rAnchor.mnRCol >> rAnchor.mnRX
-        >> rAnchor.mnBRow >> rAnchor.mnBY;
+        >> rAnchor.maXclRange.maFirst.mnCol >> rAnchor.mnLX
+        >> rAnchor.maXclRange.maFirst.mnRow >> rAnchor.mnTY
+        >> rAnchor.maXclRange.maLast.mnCol  >> rAnchor.mnRX
+        >> rAnchor.maXclRange.maLast.mnRow  >> rAnchor.mnBY;
 }
 
 SvStream& operator<<( SvStream& rStrm, const XclEscherAnchor& rAnchor )
 {
     return rStrm
-        << rAnchor.mnLCol << rAnchor.mnLX
-        << rAnchor.mnTRow << rAnchor.mnTY
-        << rAnchor.mnRCol << rAnchor.mnRX
-        << rAnchor.mnBRow << rAnchor.mnBY;
+        << rAnchor.maXclRange.maFirst.mnCol << rAnchor.mnLX
+        << rAnchor.maXclRange.maFirst.mnRow << rAnchor.mnTY
+        << rAnchor.maXclRange.maLast.mnCol  << rAnchor.mnRX
+        << rAnchor.maXclRange.maLast.mnRow  << rAnchor.mnBY;
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclEscherAnchor& rAnchor )
 {
     return rStrm
-        >> rAnchor.mnLCol >> rAnchor.mnLX
-        >> rAnchor.mnTRow >> rAnchor.mnTY
-        >> rAnchor.mnRCol >> rAnchor.mnRX
-        >> rAnchor.mnBRow >> rAnchor.mnBY;
+        >> rAnchor.maXclRange.maFirst.mnCol >> rAnchor.mnLX
+        >> rAnchor.maXclRange.maFirst.mnRow >> rAnchor.mnTY
+        >> rAnchor.maXclRange.maLast.mnCol  >> rAnchor.mnRX
+        >> rAnchor.maXclRange.maLast.mnRow  >> rAnchor.mnBY;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclEscherAnchor& rAnchor )
 {
     return rStrm
-        << rAnchor.mnLCol << rAnchor.mnLX
-        << rAnchor.mnTRow << rAnchor.mnTY
-        << rAnchor.mnRCol << rAnchor.mnRX
-        << rAnchor.mnBRow << rAnchor.mnBY;
+        << rAnchor.maXclRange.maFirst.mnCol << rAnchor.mnLX
+        << rAnchor.maXclRange.maFirst.mnRow << rAnchor.mnTY
+        << rAnchor.maXclRange.maLast.mnCol  << rAnchor.mnRX
+        << rAnchor.maXclRange.maLast.mnRow  << rAnchor.mnBY;
 }
 
 // ============================================================================
