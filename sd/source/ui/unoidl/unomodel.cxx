@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 13:15:20 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 17:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ using namespace ::com::sun::star;
 
 #define WID_MODEL_LANGUAGE      1
 #define WID_MODEL_TABSTOP       2
+#define WID_MODEL_VISAREA       3
+#define WID_MODEL_MAPUNIT       4
 
 const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 {
@@ -154,6 +156,8 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
     {
         { MAP_CHAR_LEN(UNO_NAME_MODEL_LANGUAGE),    WID_MODEL_LANGUAGE,     &::getCppuType((const lang::Locale*)0), 0,  0},
         { MAP_CHAR_LEN(UNO_NAME_MODEL_TABSTOP),     WID_MODEL_TABSTOP,      &::getCppuType((const sal_Int32*)0),    0,  0},
+        { MAP_CHAR_LEN("VisibleArea"),              WID_MODEL_VISAREA,      &::getCppuType((const awt::Rectangle*)0),0, 0},
+        { MAP_CHAR_LEN("MapUnit"),                  WID_MODEL_MAPUNIT,      &::getCppuType((const sal_Int16*)0),    beans::PropertyAttribute::READONLY, 0},
         { 0,0,0,0,0 }
     };
 
@@ -773,7 +777,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
     OGuard aGuard( Application::GetSolarMutex() );
 
     if(pDoc==NULL)
-        throw uno::RuntimeException();
+        throw beans::UnknownPropertyException();
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
@@ -797,6 +801,20 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             pDoc->SetDefaultTabulator((sal_uInt16)nValue);
             break;
         }
+        case WID_MODEL_VISAREA:
+            {
+                SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+                if( !pEmbeddedObj )
+                    break;
+
+                awt::Rectangle aVisArea;
+                if( !(aValue >>= aVisArea) )
+                    throw lang::IllegalArgumentException();
+
+                pEmbeddedObj->SetVisArea( Rectangle( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width - 1, aVisArea.Y + aVisArea.Height - 1 ) );
+            }
+            break;
+        case WID_MODEL_MAPUNIT:
         default:
             throw beans::UnknownPropertyException();
             break;
@@ -812,7 +830,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
     uno::Any aAny;
     if( pDoc == NULL )
-        throw uno::RuntimeException();
+        throw beans::UnknownPropertyException();
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
@@ -828,6 +846,29 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
     }
     case WID_MODEL_TABSTOP:
         aAny <<= (sal_Int32)pDoc->GetDefaultTabulator();
+        break;
+    case WID_MODEL_VISAREA:
+        {
+            SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+            if( !pEmbeddedObj )
+                break;
+
+            const Rectangle& aRect = pEmbeddedObj->GetVisArea();
+            awt::Rectangle aVisArea( aRect.nLeft, aRect.nTop, aRect.getWidth(), aRect.getHeight() );
+
+            aAny <<= aVisArea;
+        }
+        break;
+    case WID_MODEL_MAPUNIT:
+        {
+            SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
+            if( !pEmbeddedObj )
+                break;
+
+            sal_Int16 nMeasureUnit = 0;
+            SvxMapUnitToMeasureUnit( pEmbeddedObj->GetMapUnit(), nMeasureUnit );
+            aAny <<= (sal_Int16)nMeasureUnit;
+        }
         break;
     default:
         throw beans::UnknownPropertyException();
