@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:34:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,157 +75,19 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text [ en-US ] = "~Remember password";
 };
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.23.26.3  2004/04/21 05:58:42  hjs
- *  RESYNC: (1.23-1.24); FILE MERGED
- *
- *  Revision 1.24  2003/12/17 15:22:29  vg
- *  INTEGRATION: CWS geordi2q11 (1.23.72); FILE MERGED
- *  2003/12/16 11:05:29 hr 1.23.72.1: #111934#: join CWS ooo111fix1
- *
- *  Revision 1.23.72.1  2003/12/16 11:05:29  hr
- *  #111934#: join CWS ooo111fix1
- *
- *  Revision 1.23.34.1  2003/11/24 13:10:54  ihi
- *  OOo 1.1.1 merge
- *
- *  Revision 1.23  2003/07/17 12:20:31  hr
- *  INTEGRATION: CWS mergerc3 (1.22.6); FILE MERGED
- *  2003/07/16 17:11:25 ihi 1.22.6.1: rc-3 merge all languages
- *
- *  Revision 1.22.6.1  2003/07/16 17:11:25  ihi
- *  rc-3 merge all languages
- *
- *  Revision 1.22  2003/07/03 18:03:58  hr
- *  INTEGRATION: CWS rc2merge (1.21.8); FILE MERGED
- *  2003/07/03 14:44:27 ihi 1.21.8.1: rc-2 merge all languages
- *
- *  Revision 1.21.8.1  2003/07/03 14:44:27  ihi
- *  rc-2 merge all languages
- *
- *  Revision 1.21  2003/06/13 12:56:46  hr
- *  INTEGRATION: CWS rcmerge (1.20.24); FILE MERGED
- *  2003/06/12 10:58:10 gh 1.20.24.1: final Merge RC
- *
- *  Revision 1.20.24.1  2003/06/12 10:58:10  gh
- *  final Merge RC
- *
- *  Revision 1.20  2003/04/29 17:26:25  hr
- *  INTEGRATION: CWS mergem8 (1.19.8); FILE MERGED
- *  2003/04/29 08:34:15 gh 1.19.8.2: final merge for Beta2
- *  2003/04/14 15:04:55 gh 1.19.8.1: merging all languages
- *
- *  Revision 1.19.8.2  2003/04/29 08:34:15  gh
- *  final merge for Beta2
- *
- *  Revision 1.19.8.1  2003/04/14 15:04:55  gh
- *  merging all languages
- *
- *  Revision 1.19  2003/03/19 17:53:08  hr
- *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
- *
- *  Revision 1.17.4.3.2.1  2003/02/22 15:51:55  hr
- *  INTEGRATION: CWS mergep (1.17.4.3.20); FILE MERGED
- *  2003/02/22 10:44:41 nf 1.17.4.3.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *  2003/01/31 12:51:32 hjs 1.17.4.3.20.1: #107113# merge on SRX644p
- *
- *  Revision 1.17.4.3.20.2  2003/02/22 10:44:41  nf
- *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *
- *  Revision 1.17.4.3.20.1  2003/01/31 12:51:32  hjs
- *  #107113# merge on SRX644p
- *
- *  Revision 1.17.4.3  2002/11/27 16:56:38  kz
- *  Merge SRX644: 27.11.02 - 17:53:26
- *
- *  Revision 1.17.4.2  2002/09/13 14:36:44  kz
- *  Merge SRX643: 13.09.02 - 16:33:06
- *
- *  Revision 1.17.4.1  2002/09/05 13:43:54  kz
- *  Merge SRX643: 05.09.02 - 15:40:32
- *
- *  Revision 1.17  2002/08/19 07:54:08  oj
- *  #99473# change string resource files
- *
- *  Revision 1.16  2001/11/16 22:33:27  vg
- *  Merge SRC638: 16.11.01 - 22:34:06
- *
- *  Revision 1.15  2001/09/25 20:18:57  kz
- *  Merge SRC638: 25.09.01 - 22:18:35
- *
- *  Revision 1.14  2001/08/29 09:16:15  kz
- *  Merge SRC638: 29.08.01 - 11:15:21
- *
- *  Revision 1.13  2001/08/25 20:16:48  vg
- *  Merge SRC638: 25.08.01 - 22:17:11
- *
- *  Revision 1.12  2001/08/21 22:00:55  kz
- *  Merge SRC638: 22.08.01 - 00:00:30
- *
- *  Revision 1.11  2001/08/14 16:38:24  kz
- *  Merge SRC638: 14.08.01 - 18:44:45
- *
- *  Revision 1.10  2001/08/07 14:52:36  kz
- *  Merge SRC638: 07.08.01 - 16:52:08
- *
- *  Revision 1.9  2001/07/13 20:49:11  kz
- *  Merge SRC638: 13.07.01 - 22:47:55
- *
- *  Revision 1.8  2001/05/10 05:46:50  kz
- *  Merge SRC631: 10.05.01 - 07:46:52 (NoBranch)
- *
- *  Revision 1.7  2001/05/04 19:54:27  rt
- *  Merge SRC630: 04.05.01 - 21:53:59 (NoBranch)
- *
- *  Revision 1.6  2001/03/31 05:50:58  kz
- *  Merge SRC627: 31.03.01 - 07:50:37 (NoBranch)
- *
- *  Revision 1.5  2001/02/09 20:15:27  obo
- *  Merge SWT614: 09.02.01 - 21:15:08
- *
- *  Revision 1.4  2000/11/29 09:48:05  kz
- *  Merge SRC614: 29.11.00 - 10:47:26 (NoBranch)
- *
- *  Revision 1.3  2000/11/27 07:44:56  rt
- *  Merge SRC614: 27.11.00 - 08:44:34 (NoBranch)
- *
- *  Revision 1.2  2000/11/09 12:30:25  kz
- *  Merge SRC612: 09.11.00 - 13:30:00 (NoBranch)
- *
- *  Revision 1.1  2000/10/25 13:00:01  fs
- *  initial checkin - InteractionHandler for common database related interaction requests
- *
- *
- *  Revision 1.0 25.10.00 14:10:52  fs
- ************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_QUERY_SAVE_DOCUMENT
+{
+    Text [ de ] = "Das Dokument \"$(DOC)\" wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Text [ en-US ] = "The document \"$(DOC)\" has been modified.\nDo you want to save your changes?" ;
+};
+String STR_NOSAVEANDCLOSE
+{
+    Text [ de ] = "~Verwerfen" ;
+    Text [ en-US ] = "~Discard" ;
+};
+String STR_SAVEDOC
+{
+    Text [ de ] = "~Speichern" ;
+    Text [ en-US ] = "~Save" ;
+};
 
