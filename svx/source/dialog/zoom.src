@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:39:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ korean ] = "ÃÖÀû(~O)";
         Text[ turkish ] = "~Optimum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ó~ptimo";
     };
     RadioButton BTN_PAGE_WIDTH
     {
@@ -174,6 +175,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ korean ] = "ÂÊ ³Êºñ(~P)";
         Text[ turkish ] = "~Sayfa geniþliði";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ancho de página";
     };
     RadioButton BTN_WHOLE_PAGE
     {
@@ -202,6 +204,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ korean ] = "ÀüÃ¼ ÂÊ(~E)";
         Text[ turkish ] = "~Tam sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Toda la página";
     };
     RadioButton BTN_USER
     {
@@ -230,6 +233,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ korean ] = "´Ü°è¾øÀ½(~V)";
         Text[ turkish ] = "~Deðiþken";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Variable";
     };
     MetricField ED_USER
     {
@@ -271,6 +275,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ greek ] = "Åóôßáóç";
         Text[ korean ] = "¹èÀ²";
         Text[ turkish ] = "Yakýnlaþtýr";
+        Text[ catalan ] = "Escala";
     };
     OKButton BTN_ZOOM_OK
     {
@@ -292,5 +297,6 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ korean ] = "È®´ë/Ãà¼Ò";
     Text[ turkish ] = "Ölçek";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Escala";
 };
  // ********************************************************************** EOF
