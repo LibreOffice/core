@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:52:32 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #pragma hdrstop
 
 #include "fusearch.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
