@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-28 17:40:25 $
+#   last change: $Author: hjs $ $Date: 2002-04-15 10:06:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,7 +238,7 @@ DEF1EXPORT1=SignalHandlerFunction
 $(SHL1TARGETN) : $(OUT)$/inc$/udkversion.h
 .ENDIF			# "$(SHL1TARGETN)" != ""
 
-.IF "$(GUI)"=="UNX" || "$(USE_SHALL)"!="4nt"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 
 $(OUT)$/inc$/udkversion.h: 
     echo '#ifndef _SAL_UDKVERSION_H_'           >  $@
