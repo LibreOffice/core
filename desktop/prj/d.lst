@@ -47,10 +47,6 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
 ..\%__SRC%\misc\soffice.sh %_DEST%\bin%_EXT%\soffice
 ..\%__SRC%\misc\sagenda.sh %_DEST%\bin%_EXT%\sagenda
 ..\%__SRC%\misc\scalc.sh %_DEST%\bin%_EXT%\scalc
@@ -69,4 +65,3 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
