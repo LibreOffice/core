@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 11:22:56 $
+ *  last change: $Author: os $ $Date: 2000-10-24 09:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,9 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_AUTO_HEIGHT                   
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SIZE_TYPE                        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HINT                         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_ORIENT                  ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED                ;
+//extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED                  ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_ORIENT_RELATION             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HORI_ORIENT_POSITION             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HYPER_LINK_U_R_L                 ;
@@ -544,7 +546,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_NUMBERING_RESTART;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_USER_DEFINED_ATTRIBUTES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES;
-
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT;
 #endif
 
 

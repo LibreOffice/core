@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 11:23:38 $
+ *  last change: $Author: os $ $Date: 2000-10-24 10:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,9 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_IS_AUTO_HEIGHT                         
 const SwPropNameLen __FAR_DATA  UNO_NAME_SIZE_TYPE                              (MAP_CHAR_LEN("SizeType"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HINT                                   (MAP_CHAR_LEN("Hint"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_ORIENT                            (MAP_CHAR_LEN("HoriOrient"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_MIRRORED                          (MAP_CHAR_LEN("HoriMirrored"));
+//const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_MIRRORED                        (MAP_CHAR_LEN("HoriMirrored"));
+const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES             (MAP_CHAR_LEN("HoriMirroredOnEvenPages"));
+const SwPropNameLen __FAR_DATA UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES              (MAP_CHAR_LEN("HoriMirroredOnOddPages"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_ORIENT_RELATION                   (MAP_CHAR_LEN("HoriOrientRelation"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_ORIENT_POSITION                   (MAP_CHAR_LEN("HoriOrientPosition"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HYPER_LINK_U_R_L                       (MAP_CHAR_LEN("HyperLinkURL"));
@@ -542,4 +544,5 @@ const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES          
 
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_NUMBERING_RESTART               (MAP_CHAR_LEN("ParaIsNumberingRestart"));
 const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS                         (MAP_CHAR_LEN("HideFieldTips"));
+const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT                      (MAP_CHAR_LEN("ParaShadowFormat"));
 
