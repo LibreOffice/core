@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smartid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:20:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
