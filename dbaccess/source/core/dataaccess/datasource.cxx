@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:09:24 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,6 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
             ,m_aModifyListeners(m_aMutex)
-            ,m_aEventListeners(m_aMutex)
             ,m_aCloseListener(m_aMutex)
             ,m_aFlushListeners(m_aMutex)
             ,m_pDBContext(_pDBContext)
@@ -561,7 +560,6 @@ ODatabaseSource::ODatabaseSource(
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
             ,m_aModifyListeners(m_aMutex)
-            ,m_aEventListeners(m_aMutex)
             ,m_aCloseListener(m_aMutex)
             ,m_aFlushListeners(m_aMutex)
             ,m_pDBContext(_pDBContext)
@@ -750,8 +748,8 @@ void ODatabaseSource::disposing()
 
     EventObject aDisposeEvent(static_cast<XWeak*>(this));
     m_aModifyListeners.disposeAndClear( aDisposeEvent );
-    m_aEventListeners.disposeAndClear( aDisposeEvent );
     m_aCloseListener.disposeAndClear( aDisposeEvent );
+    m_aFlushListeners.disposeAndClear( aDisposeEvent );
 
     ::std::vector<TContentPtr>::iterator aIter = m_aContainer.begin();
     ::std::vector<TContentPtr>::iterator aEnd = m_aContainer.end();
