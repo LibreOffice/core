@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:59:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,8 +334,8 @@ ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
         Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW0 );
         Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, (5*RSC_CD_FIXEDTEXT_HEIGHT) );
         WordBreak = TRUE;
-        Text[ de ] = "Der automatische Wiederherstellungsprozess wurde abgebrochen.\n\nKlicken Sie auf 'Speichern', um die unten aufgelisteten Dokumente in den unten angegebene Ordner zu speichern. 'Beenden' verlässt den Assistenten ohne zu speichern.";
-        Text[ en-US ] = "The automatic recovery process was interrupted.\n\nThe documents listed below will be saved in the folder noted below if you click 'Save'. Click 'Cancel' to close the wizard without saving these documents.";
+        Text[ de ] = "Der automatische Wiederherstellungsprozess wurde abgebrochen.\n\nKlicken Sie auf 'Speichern', um die unten aufgelisteten Dokumente in den unten angegebenen Ordner zu speichern. 'Abbrechen' verlässt den Assistenten ohne zu speichern.";
+        Text[ en-US ] = "The automatic recovery process was interrupted.\n\nThe documents listed below will be saved in the folder noted below if you click 'Save'. Click 'Cancel' to close the wizard without saving the documents.";
     };
     FixedText FT_BROKEN_FILELIST
     {
@@ -381,6 +381,8 @@ ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
         Pos = MAP_APPFONT( BROKEN_COL1, BROKEN_ROW7 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         DefButton = TRUE;
+        Text [ de ] =  "~Speichern";
+        Text [ en-US ] = "~Save";
     };
     CancelButton BTN_BROKEN_CANCEL
     {
