@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:55 $
+ *  last change: $Author: mba $ $Date: 2000-12-11 10:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,7 +812,7 @@ void SfxVirtualMenu::InvalidateKeyCodes()
     DBG_ASSERT( pSVMenu, "invalidating key of incomplete menu" );
 
     SfxApplication* pSfxApp = SFX_APP();
-    SfxViewFrame *pViewFrame = pSfxApp->GetViewFrame();
+    SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
     SfxAcceleratorManager* pAccMgr = pViewFrame->GetViewShell()->GetAccMgr_Impl();
     if ( !pAccMgr )
         return;
