@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-23 09:58:19 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 09:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ private:
     PushButton          maViewCertPB;
     FixedText           maCertStatusFT;
     MultiLineEdit       maCertStatusML;
+    Image               maCertImage;
 
     DECL_LINK(          ViewCertHdl, void* );
     DECL_LINK(          CertSelectHdl, void* );

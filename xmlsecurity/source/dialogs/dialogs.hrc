@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 07:57:10 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 09:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@
 #define FT_CERTPATH                     1
 #define FT_CERTSTATUS                   2
 #define ML_CERTSTATUS                   3
+#define IMG_CERT_SMAL                   4
 
 #define CV_ROW_0A                       (CV_ROW_0+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
 #define CV_ROW_2A                       (CV_ROW_2+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)

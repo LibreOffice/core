@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 07:57:37 $
+ *  last change: $Author: gt $ $Date: 2004-07-27 09:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,maViewCertPB           ( this, ResId( BTN_VIEWCERT ) )
     ,maCertStatusFT         ( this, ResId( FT_CERTSTATUS ) )
     ,maCertStatusML         ( this, ResId( ML_CERTSTATUS ) )
+    ,maCertImage            ( ResId( IMG_CERT_SMAL ) )
 {
     // fill list box
     maCertPathLB.SetNodeDefaultImages();
@@ -493,7 +494,7 @@ void CertificateViewerCertPathTP::Clear( void )
 
 SvLBoxEntry* CertificateViewerCertPathTP::InsertCert( SvLBoxEntry* _pParent, const String& _rName, cssu::Reference< dcss::security::XCertificate > rxCert )
 {
-    SvLBoxEntry* pEntry = maCertPathLB.InsertEntry( _rName, _pParent );
+    SvLBoxEntry* pEntry = maCertPathLB.InsertEntry( _rName, maCertImage, maCertImage, _pParent );
     pEntry->SetUserData( ( void* ) new CertPath_UserData( rxCert ) );
 
     return pEntry;
