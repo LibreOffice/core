@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocpres.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -137,6 +140,9 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( bDisposing )
+        throw lang::DisposedException();
+
     if( Index < 0 || Index > (sal_Int32)( mpSdCustomShow ? mpSdCustomShow->Count() : 0 ) )
         throw lang::IndexOutOfBoundsException();
 
@@ -167,6 +173,9 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( bDisposing )
+        throw lang::DisposedException();
 
     if(mpSdCustomShow)
     {
@@ -204,6 +213,10 @@ sal_Bool SAL_CALL SdXCustomPresentation::hasElements()
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( bDisposing )
+        throw lang::DisposedException();
+
     return getCount() > 0;
 }
 
@@ -212,6 +225,9 @@ sal_Int32 SAL_CALL SdXCustomPresentation::getCount()
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+    if( bDisposing )
+        throw lang::DisposedException();
+
     return mpSdCustomShow?mpSdCustomShow->Count():0;
 }
 
@@ -219,6 +235,9 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( bDisposing )
+        throw lang::DisposedException();
 
     if( Index < 0 || Index >= (sal_Int32)mpSdCustomShow->Count() )
         throw lang::IndexOutOfBoundsException();
@@ -244,6 +263,9 @@ OUString SAL_CALL SdXCustomPresentation::getName()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( bDisposing )
+        throw lang::DisposedException();
+
     if(mpSdCustomShow)
         return mpSdCustomShow->GetName();
 
@@ -254,6 +276,9 @@ void SAL_CALL SdXCustomPresentation::setName( const OUString& aName )
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( bDisposing )
+        throw lang::DisposedException();
 
     if(mpSdCustomShow)
         mpSdCustomShow->SetName( aName );
@@ -282,12 +307,18 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException)
 void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw(uno::RuntimeException)
 {
+    if( bDisposing )
+        throw lang::DisposedException();
+
     aDisposeListeners.addInterface(xListener);
 }
 
 //----------------------------------------------------------------------
 void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException)
 {
+    if( bDisposing )
+        throw lang::DisposedException();
+
    aDisposeListeners.removeInterface(aListener);
 }
 
