@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestReader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:24:12 $
+ *  last change: $Author: mtg $ $Date: 2001-11-21 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,9 @@ Reference < XInterface > SAL_CALL ManifestReader_createInstance( Reference< XMul
 {
     return *new ManifestReader( rServiceFactory );
 }
-#define SERVICE_NAME "com.sun.star.packages.manifest.comp.ManifestReader"
 OUString ManifestReader::static_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.comp.ManifestReader" ) );
 }
 
 sal_Bool SAL_CALL ManifestReader::static_supportsService(OUString const & rServiceName)
@@ -159,10 +158,9 @@ sal_Bool SAL_CALL ManifestReader::static_supportsService(OUString const & rServi
 Sequence < OUString > ManifestReader::static_getSupportedServiceNames()
 {
     Sequence < OUString > aNames(1);
-    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestReader" ) );
     return aNames;
 }
-#undef SERVICE_NAME
 
 OUString ManifestReader::getImplementationName()
     throw (RuntimeException)

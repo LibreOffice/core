@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestWriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:25:26 $
+ *  last change: $Author: mtg $ $Date: 2001-11-21 13:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,9 @@ Reference < XInterface > SAL_CALL ManifestWriter_createInstance( Reference< XMul
     return *new ManifestWriter( rServiceFactory );
 }
 
-#define SERVICE_NAME "com.sun.star.packages.manifest.comp.ManifestWriter"
 OUString ManifestWriter::static_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.comp.ManifestWriter" ) );
 }
 
 sal_Bool SAL_CALL ManifestWriter::static_supportsService(OUString const & rServiceName)
@@ -133,10 +132,9 @@ sal_Bool SAL_CALL ManifestWriter::static_supportsService(OUString const & rServi
 Sequence < OUString > ManifestWriter::static_getSupportedServiceNames()
 {
     Sequence < OUString > aNames(1);
-    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
     return aNames;
 }
-#undef SERVICE_NAME
 
 OUString ManifestWriter::getImplementationName()
     throw (RuntimeException)
