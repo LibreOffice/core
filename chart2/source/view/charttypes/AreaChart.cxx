@@ -543,7 +543,7 @@ void AreaChart::createShapes()
                         continue;
 
                     bPointForAreaBoundingOnly = true;
-                    fLogicX = nIndex;
+                    fLogicX = nIndex+1.0;
                     fLogicY=0;//@todo maybe there is another grounding ?? - for sum 0 is right
                     fLogicZ = nZ+0.5;
                 }
