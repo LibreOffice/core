@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-03 10:36:00 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2514,8 +2514,9 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
 
             if( aBackCol.IsDark() )
                 pImage = &maImageHC;
-            if( aBackCol.IsBright() )
-                nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+            // #99902 no col transform required
+            //if( aBackCol.IsBright() )
+            //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
         }
 
         if ( !IsZoom() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-08 16:11:07 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,8 +626,9 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
                     pImage = &maImageHC;
                     pBitmapEx = &mpBitmapExHC;
                 }
-                if( aBackCol.IsBright() )
-                    nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+                // #99902 no col transform required
+                //if( aBackCol.IsBright() )
+                //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
             }
 
             // center image...
@@ -1708,8 +1709,9 @@ void RadioButton::ImplDrawRadioButtonState()
         {
             if( aBackCol.IsDark() )
                 pImage = &maImageHC;
-            if( aBackCol.IsBright() )
-                nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+            // #99902 no col transform required
+            //if( aBackCol.IsBright() )
+            //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
         }
 
         Point aImagePos( aImageRect.TopLeft() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:17 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,9 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
     {
         if( aCol.IsDark() )
             pBitmap = &maBmpHC;
-        if( aCol.IsBright() )
-            nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+        // #99902 no col transform required
+        //if( aCol.IsBright() )
+        //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )

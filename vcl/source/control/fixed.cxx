@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,8 +784,9 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, ULONG /* nDrawFlags */,
     {
         if( aCol.IsDark() )
             pBitmap = &maBitmapHC;
-        if( aCol.IsBright() )
-            nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+        // #99902 no col transform required
+        //if( aCol.IsBright() )
+        //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
@@ -1037,8 +1038,9 @@ void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     {
         if( aCol.IsDark() )
             pImage = &maImageHC;
-        if( aCol.IsBright() )
-            nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+        // #99902 no col transform required
+        //if( aCol.IsBright() )
+        //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
     }
 
     // Haben wir ueberhaupt ein Image
