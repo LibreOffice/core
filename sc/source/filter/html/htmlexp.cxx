@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:49:09 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,10 +958,17 @@ void ScHTMLExport::WriteTables()
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
         bTableDataWidth = TRUE;     // widths in first row
+        bool bHasHiddenRows = pDoc->GetRowFlagsArray( nTab).HasCondition(
+                nStartRow, nEndRow, CR_HIDDEN, CR_HIDDEN);
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
-            if ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN )
+            if ( bHasHiddenRows && (pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN) )
+            {
+                nRow = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition(
+                        nRow+1, nEndRow, CR_HIDDEN, 0);
+                --nRow;
                 continue;   // for
+            }
 
             IncIndent(1); TAG_ON_LF( sHTML_tablerow );
             bTableDataHeight = TRUE;  // height at every first cell of each row
@@ -1075,9 +1082,9 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const ScMergeAttr& rMergeAttr = (const ScMergeAttr&) pAttr->GetItem( ATTR_MERGE, pCondItemSet );
     if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
-                SCCOL nC, jC;
-                SCROW nR, jR;
-        USHORT v;
+        SCCOL nC, jC;
+        SCROW nR, jR;
+        ULONG v;
         if ( pGraphEntry )
             nC = Max( SCCOL(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
                 SCCOL(rMergeAttr.GetColMerge()) );
@@ -1103,8 +1110,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         {
             (((aStrTD += ' ') += sHTML_O_rowspan) += '=') += ByteString::CreateFromInt32( nR );
             nR += nRow;
-            for ( jR=nRow, v=0; jR<nR; jR++ )
-                v += pDoc->GetRowHeight( jR, nTab );
+            v = pDoc->GetRowHeight( nRow, nR-1, nTab );
             nHeightPixel = ToPixel( v );
         }
         else
