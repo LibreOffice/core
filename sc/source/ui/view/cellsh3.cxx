@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:07:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 ScMarkData& rMark = GetViewData()->GetMarkData();
-                USHORT nTab = GetViewData()->GetTabNo();
+                SCTAB nTab = GetViewData()->GetTabNo();
 
                 if ( pDoc->IsScenario(nTab) )
                 {
@@ -466,7 +466,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     rMark.MarkToMulti();
                     if ( rMark.IsMultiMarked() )
                     {
-                        USHORT i=1;
+                        SCTAB i=1;
                         String aBaseName;
                         String aName;
                         String aComment;
@@ -487,7 +487,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             i++;
 
                         BOOL bValid;
-                        USHORT nDummy;
+                        SCTAB nDummy;
                         do
                         {
                             aName = aBaseName;
@@ -832,12 +832,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_AUTOFORMAT:
             {
                 Window* pDlgParent = pTabViewShell->GetDialogParent();
-                USHORT nStartCol;
-                USHORT nStartRow;
-                USHORT nStartTab;
-                USHORT nEndCol;
-                USHORT nEndRow;
-                USHORT nEndTab;
+                SCCOL nStartCol;
+                SCROW nStartRow;
+                SCTAB nStartTab;
+                SCCOL nEndCol;
+                SCROW nEndRow;
+                SCTAB nEndTab;
 
                 const ScMarkData& rMark = GetViewData()->GetMarkData();
                 if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
@@ -846,8 +846,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );
 
-                if (   ( Abs((short)nEndCol-(short)nStartCol) > 1 )
-                    && ( Abs((short)nEndRow-(short)nStartRow) > 1 ) )
+                if (   ( Abs((SCsCOL)nEndCol-(SCsCOL)nStartCol) > 1 )
+                    && ( Abs((SCsROW)nEndRow-(SCsROW)nStartRow) > 1 ) )
                 {
                     if ( pReqArgs )
                     {
