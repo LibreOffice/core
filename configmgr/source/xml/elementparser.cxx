@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:34:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,13 @@ ElementType::Enum ElementParser::getNodeType(OUString const& _sElementName, SaxA
 
     else if (_sElementName.equals(TAG_USES))
         eResult = ElementType::uses;
+
+    // #109668# maintain support for old tag on load
+    else if (_sElementName.equals(DEPRECATED_TAG_LAYER))
+    {
+        OSL_TRACE("Layer starts with invalid root tag \"oor:node\". Use \"oor:component-data\" instead.");
+        eResult = ElementType::layer;
+    }
 
     else
         eResult = ElementType::other;
