@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 09:50:38 $
+#   last change: $Author: vg $ $Date: 2003-10-06 16:07:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ OUT2BIN=java$/classes$/db.jar
 EXT_USE_STLPORT=TRUE
 
 BUILD_DIR=build_win32
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 CONFIGURE_DIR=build_win32
 CONFIGURE_ACTION=wdevenv Berkeley_DB Release
 .IF "$(USE_SHELL)"!="4nt"
