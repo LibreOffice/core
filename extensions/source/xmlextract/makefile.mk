@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 18:00:46 $
+#   last change: $Author: obo $ $Date: 2004-11-16 12:15:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,9 @@ USE_DEFFILE=TRUE
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
 # --- Types -------------------------------------
+
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
+INCPRE+=$(UNOUCROUT)
 
 UNOTYPES=\
     com.sun.star.uno.RuntimeException							\
