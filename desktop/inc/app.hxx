@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:50:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
+
+#define DESKTOP_SAVETASKS_MOD 0x1
+#define DESKTOP_SAVETASKS_UNMOD 0x2
+#define DESKTOP_SAVETASKS_ALL 0x3
 
 namespace desktop
 {
@@ -193,6 +197,8 @@ class Desktop : public Application
 
         /// does initializations which are necessary for the first run of the office
         void                    DoFirstRunInitializations();
+
+        static sal_Bool             SaveTasks(sal_Int32 options);
 
         // on-demand acceptors
         static AcceptorMap                  m_acceptorMap;
