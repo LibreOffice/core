@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-27 16:08:36 $
+#   last change: $Author: sus $ $Date: 2001-02-08 18:25:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ PACKAGE=org$/openoffice$/helper
 
 EXTRAJARFILES = jaxp.jar parser.jar
 
-JAVACLASSFILES=	\
+JAVACLASSFILES= \
+    $(CLASSDIR)$/$(PACKAGE)$/DefaultNamespaceRemover.class \
     $(CLASSDIR)$/$(PACKAGE)$/Validator.class \
     $(CLASSDIR)$/$(PACKAGE)$/PrettyPrinter.class
 
@@ -82,9 +83,9 @@ JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFI
 
 RC_SUBDIRSDEPS=$(JAVATARGET)
 
-JARCLASSDIRS	= $(PACKAGE)
-JARTARGET		= $(TARGET).jar
-JARCOMPRESS		= TRUE
+JARCLASSDIRS    = $(PACKAGE)
+JARTARGET       = $(TARGET).jar
+JARCOMPRESS     = TRUE
 
 
 # --- Targets ------------------------------------------------------
