@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:47:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,7 +1500,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
        eError = ERRCODE_IO_GENERAL;
     }
 
-    if( !eError )
+    if( !eError || (eError & ERRCODE_WARNING_MASK) )
     {
         Close();
         ::ucb::Content aTempCont;
@@ -1601,7 +1601,7 @@ void SfxMedium::Transfer_Impl()
             OSL_ENSURE( sal_False, "The medium name is not convertable!\n" );
     }
 
-    if ( aNameURL.Len() && ( !eError || eError & ERRCODE_WARNING_MASK ) )
+    if ( aNameURL.Len() && ( !eError || (eError & ERRCODE_WARNING_MASK) ) )
     {
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         Reference< XOutputStream > rOutStream;
@@ -1795,7 +1795,7 @@ void SfxMedium::Transfer_Impl()
                 eError = ERRCODE_IO_GENERAL;
             }
 
-            if (!eError)
+            if ( !eError || (eError & ERRCODE_WARNING_MASK) )
             {
                 // free resources, otherwise the transfer may fail
                 Close();
@@ -1852,7 +1852,7 @@ void SfxMedium::Transfer_Impl()
             }
         }
 
-        if ( !eError && !pImp->pTempFile )
+        if ( ( !eError || (eError & ERRCODE_WARNING_MASK) ) && !pImp->pTempFile )
         {
             // without a TempFile the physical and logical name should be the same after successful transfer
               ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
