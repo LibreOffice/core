@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:06:33 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,15 +184,15 @@ TabPage TP_NUM_POSITION
         Text [ spanish ] = "Relati~vo" ;
         Text [ french ] = "~Relatif" ;
         Text [ dutch ] = "Relati~ef" ;
-        Text[ chinese_simplified ] = "Ïà¶ÔµÄ(~R)";
+        Text[ chinese_simplified ] = "Ïà¶ÔµÄ(~V)";
         Text[ russian ] = "Îòíîñèò.";
         Text[ polish ] = "Wzglêd~ny";
-        Text[ japanese ] = "‘OÚÍŞÙ‚©‚ç(~R)";
-        Text[ chinese_traditional ] = "¬Û¹ïªº(~R)";
+        Text[ japanese ] = "‘OÚÍŞÙ‚©‚ç(~V)";
+        Text[ chinese_traditional ] = "¬Û¹ïªº(~V)";
         Text[ arabic ] = "äÓÈí";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "ºñ·Ê";
+        Text[ korean ] = "ºñ·Ê(~V)";
         Text[ turkish ] = "Orantılı";
     };
     MetricField MF_BORDERDIST
@@ -272,14 +272,14 @@ TabPage TP_NUM_POSITION
         Text [ dutch ] = "Min. afstand nummer <-> tekst" ;
         Text [ portuguese_brazilian ] = "Abstand Te~xt <-> Numerierung" ;
         Text [ portuguese ] = "Distância mínima número <-> texto" ;
-        Text[ chinese_simplified ] = "±àºÅÖÁÕıÎÄµÄ×îĞ¡¼ä¸ô";
+        Text[ chinese_simplified ] = "±àºÅÖÁÕıÎÄµÄ×îĞ¡¼ä¸ô(~M)";
         Text[ russian ] = "Ìèí. èíòåğâàë íîìåğ <-> òåêñò";
         Text[ polish ] = "Min. odstêp miêdzy numerem a tekstem";
-        Text[ japanese ] = "”Ô†‚ÆÃ·½Ä‚ÌÅ¬ŠÔŠu(~B)";
-        Text[ chinese_traditional ] = "½s¸¹©M¤º¤å¤§¶¡ªº³Ì¤Ö¶¡¹j";
+        Text[ japanese ] = "”Ô†‚ÆÃ·½Ä‚ÌÅ¬ŠÔŠu(~M)";
+        Text[ chinese_traditional ] = "½s¸¹©M¤º¤å¤§¶¡ªº³Ì¤Ö¶¡¹j(~M)";
         Text[ arabic ] = "ÃŞá ãÓÇİÉ Èíä ÇáÑŞã <-> ÇáäÕ";
         Text[ greek ] = "ÅëÜ÷éóôç áğüóôáóç Áñéè~ìüò <-> Êåßìåíï";
-        Text[ korean ] = "ÃÖ¼Ò°£°İ  ¹øÈ£ <-> ÅØ½ºÆ®(~B)";
+        Text[ korean ] = "ÃÖ¼Ò°£°İ  ¹øÈ£ <-> ÅØ½ºÆ®(~M)";
         Text[ turkish ] = "Asgari numara <-> metin aralığı";
         Text[ language_user1 ] = " ";
     };
@@ -483,7 +483,7 @@ TabPage TP_NUM_POSITION
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
         Text[ arabic ] = "ıŞíÇÓí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "±âº»°ª";
+        Text[ korean ] = "±âº»°ª(~D)";
         Text[ turkish ] = "Standart";
     };
     GroupBox GB_PREVIEW
@@ -724,7 +724,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text[ chinese_traditional ] = "§R°£(~R)";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦";
+        Text[ korean ] = "»èÁ¦(~R)";
         Text[ turkish ] = "Kaldır";
         Text[ language_user1 ] = " ";
     };
