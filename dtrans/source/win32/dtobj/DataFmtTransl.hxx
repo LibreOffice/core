@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ public:
 
     CFormatEtc getFormatEtcFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
     com::sun::star::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
-        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable, const FORMATETC& aFormatEtc ) const;
+        const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
 
     CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
     CFormatEtc SAL_CALL getFormatEtcForClipformatName( const rtl::OUString& aClipFmtName ) const;
@@ -115,9 +115,7 @@ public:
     sal_Bool SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
 
 private:
-    LCID          SAL_CALL getCurrentLocaleFromClipboard( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable ) const;
-    rtl::OUString SAL_CALL getTextCharsetFromClipboard(
-        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable, CLIPFORMAT aClipformat ) const;
+    rtl::OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const;
 
 private:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;

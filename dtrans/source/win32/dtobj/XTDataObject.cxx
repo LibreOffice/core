@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,8 +605,13 @@ CXTDataObject::operator IDataObject*( )
 inline
 DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const
 {
-    DataFlavor aFlavor =
-        m_DataFormatTranslator.getDataFlavorFromFormatEtc( m_XTransferable, aFormatEtc );
+    DataFlavor aFlavor;
+
+    if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
+        aFlavor =
+            m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, m_FormatRegistrar.getSynthesizedLocale( ) );
+    else
+        aFlavor = m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc );
 
     if ( !aFlavor.MimeType.getLength( ) )
         throw UnsupportedFlavorException( );

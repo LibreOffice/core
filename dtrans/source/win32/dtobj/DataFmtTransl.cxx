@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
 //
 //------------------------------------------------------------------------
 
-DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< XTransferable >& refXTransferable, const FORMATETC& aFormatEtc ) const
+DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& aFormatEtc, LCID lcid ) const
 {
     DataFlavor aFlavor;
 
@@ -201,7 +201,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< X
         if ( isOemOrAnsiTextFormat( aClipformat ) )
         {
             aFlavor.MimeType             = OUString::createFromAscii( "text/plain;charset=" );
-            aFlavor.MimeType            += getTextCharsetFromClipboard( refXTransferable, aClipformat );
+            aFlavor.MimeType            += getTextCharsetFromLCID( lcid, aClipformat );
 
             aFlavor.HumanPresentableName = OUString::createFromAscii( "OEM/ANSI Text" );
             aFlavor.DataType             = CPPUTYPE_SEQSALINT8;
@@ -340,58 +340,16 @@ sal_Bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf ) const
 }
 
 //------------------------------------------------------------------------
-// should be called only if there is realy text on the clipboard
-//------------------------------------------------------------------------
-
-LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
-    const Reference< XTransferable >& refXTransferable ) const
-{
-    Any        aAny;
-    CFormatEtc fetc    = getFormatEtcForClipformat( CF_LOCALE );
-    DataFlavor aFlavor = getDataFlavorFromFormatEtc( refXTransferable, fetc );
-
-    OSL_ASSERT( aFlavor.MimeType.getLength( ) );
-
-    LCID lcid = 0;
-
-    try
-    {
-        aAny = refXTransferable->getTransferData( aFlavor );
-        if ( aAny.hasValue( ) && (aAny.getValueType( ) == CPPUTYPE_SEQSALINT8) )
-        {
-            Sequence< sal_Int8 > byteStream;
-            aAny >>= byteStream;
-
-            lcid = *reinterpret_cast< LCID* >( byteStream.getArray( ) );
-        }
-    }
-    catch( UnsupportedFlavorException& )
-    {
-    }
-    catch( ... )
-    {
-        OSL_ENSURE( sal_False, "Unexpected error" );
-    }
-
-    if ( !IsValidLocale( lcid, LCID_SUPPORTED ) )
-        lcid = GetThreadLocale( );
-
-    return lcid;
-}
-
-//------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromClipboard(
-    const Reference< XTransferable >& refXTransferable, CLIPFORMAT aClipformat ) const
+OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const
 {
     OSL_ASSERT( isOemOrAnsiTextFormat( aClipformat ) );
 
     OUString charset;
     if ( CF_TEXT == aClipformat )
     {
-        LCID lcid = getCurrentLocaleFromClipboard( refXTransferable );
         charset = getMimeCharsetFromLocaleId(
                     lcid,
                     LOCALE_IDEFAULTANSICODEPAGE,
@@ -399,7 +357,6 @@ OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromClipboard(
     }
     else if ( CF_OEMTEXT == aClipformat )
     {
-        LCID lcid  = getCurrentLocaleFromClipboard( refXTransferable );
         charset = getMimeCharsetFromLocaleId(
                     lcid,
                     LOCALE_IDEFAULTCODEPAGE,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-15 10:12:55 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,32 @@ CFormatEtc SAL_CALL CDOTransferable::dataFlavorToFormatEtc( const DataFlavor& aF
 //inline
 DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
 {
-    return m_DataFormatTranslator.getDataFlavorFromFormatEtc( this, aFormatEtc );
+    DataFlavor aFlavor;
+    LCID lcid = GetThreadLocale( );
+
+    try
+    {
+        // for non-unicode text format we must provid a locale to get
+        // the character-set of the text, if there is no locale on the
+        // clipboard we assume the text is in a charset appropriate for
+        // the current thread locale
+        if ( (CF_TEXT == aFormatEtc.cfFormat) || (CF_OEMTEXT == aFormatEtc.cfFormat) )
+        {
+            CFormatEtc fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_LOCALE );
+            ByteSequence_t aLCIDSeq = getClipboardData( fetc );
+            lcid = *(reinterpret_cast<LCID*>( aLCIDSeq.getArray( ) ) );
+        }
+    }
+    catch( UnsupportedFlavorException& )
+    {
+        // no locale on clipboard, we take the default
+    }
+    catch(...)
+    {
+        OSL_ENSURE( sal_False, "Unexpected" );
+    }
+
+    return m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, lcid );
 }
 
 //------------------------------------------------------------------------

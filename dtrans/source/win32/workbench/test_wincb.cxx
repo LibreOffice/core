@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_wincb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 14:54:58 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 13:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,8 +232,11 @@ CTransferable::CTransferable( ) :
 {
     DataFlavor df;
 
-    df.MimeType = L"text/plain;charset=utf-16";
-    df.DataType = getCppuType( ( OUString* )0 );
+    //df.MimeType = L"text/plain;charset=utf-16";
+    //df.DataType = getCppuType( ( OUString* )0 );
+
+    df.MimeType = L"text/plain;charset=Windows1252";
+    df.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
 
     m_FlavorList[0] = df;
 }
@@ -247,8 +250,25 @@ Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
 {
     Any anyData;
 
+    /*
     if ( aFlavor.MimeType == m_FlavorList[0].MimeType )
         anyData = makeAny( m_Data );
+    */
+    if ( aFlavor.MimeType.equalsIgnoreCase( m_FlavorList[0].MimeType ) )
+    {
+        OString text(
+            m_Data.getStr( ),
+            m_Data.getLength( ),
+            RTL_TEXTENCODING_ASCII_US );
+
+        Sequence< sal_Int8 > textStream( text.getLength( ) + 1 );
+
+        rtl_copyMemory( textStream.getArray( ), text.getStr( ), textStream.getLength( ) );
+
+        anyData = makeAny( textStream );
+    }
+    else
+        throw UnsupportedFlavorException( );
 
     return anyData;
 }
@@ -303,6 +323,13 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     //HRESULT hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     HRESULT hr = CoInitialize( NULL );
 
+    char buff[6];
+
+    LCID lcid = MAKELCID( MAKELANGID( LANG_GERMAN, SUBLANG_GERMAN ), SORT_DEFAULT );
+
+    BOOL bValid = IsValidLocale( lcid, LCID_SUPPORTED );
+    GetLocaleInfoA( lcid, LOCALE_IDEFAULTANSICODEPAGE, buff, sizeof( buff ) );
+
     //-------------------------------------------------
     // get the global service-manager
     //-------------------------------------------------
@@ -335,10 +362,18 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     Reference< XClipboardListener > rXClipListener( static_cast< XClipboardListener* >( new CClipboardListener() ) );
     xClipNotifier->addClipboardListener( rXClipListener );
 
+    MessageBox( NULL, TEXT("Go"), TEXT("INFO"), MB_OK|MB_ICONINFORMATION);
 
     // set new clipboard content
     xClipboard->setContents( rXTransf, Reference< XClipboardOwner >( rXTransf, UNO_QUERY )  );
 
+    /*
+    MessageBox( NULL, TEXT("Clear content"), TEXT("INFO"), MB_OK|MB_ICONINFORMATION);
+
+    Reference< XClipboardOwner > rXClipOwner;
+    Reference< XTransferable >   rXEmptyTransf;
+    xClipboard->setContents( rXEmptyTransf, rXClipOwner );
+    */
 
     MessageBox( NULL, TEXT("Stop"), TEXT("INFO"), MB_OK|MB_ICONINFORMATION);
 

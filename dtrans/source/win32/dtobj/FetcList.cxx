@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ sal_Bool SAL_CALL CFormatRegistrar::hasUnicodeFlavor( const Reference< XTransfer
     CFormatEtc fetc( CF_UNICODETEXT );
 
     DataFlavor aFlavor =
-        m_DataFormatTranslator.getDataFlavorFromFormatEtc( aXTransferable, fetc );
+        m_DataFormatTranslator.getDataFlavorFromFormatEtc( fetc );
 
     return aXTransferable->isDataFlavorSupported( aFlavor );
 }
@@ -462,8 +462,8 @@ sal_Bool CFormatRegistrar::isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) 
 sal_Bool SAL_CALL CFormatRegistrar::findLocaleForTextCodePage( )
 {
     m_TxtLocale = 0;
-    EnumSystemLocalesA( CFormatRegistrar::EnumLocalesProc, LCID_SUPPORTED );
-    return ( IsValidLocale( m_TxtLocale, LCID_SUPPORTED ) );
+    EnumSystemLocalesA( CFormatRegistrar::EnumLocalesProc, LCID_INSTALLED );
+    return ( IsValidLocale( m_TxtLocale, LCID_INSTALLED ) );
 }
 
 //------------------------------------------------------------------------
@@ -475,9 +475,11 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleCodePage( LCID lcid, LCTYPE lctype, 
     char  buff[6];
     sal_uInt32 localeCodePage;
 
+    OSL_ASSERT( IsValidLocale( lcid, LCID_INSTALLED ) );
+
     // get the ansi codepage of the current locale
     GetLocaleInfoA( lcid, lctype, buff, sizeof( buff ) );
-    localeCodePage = atoi( buff );
+    localeCodePage = atol( buff );
 
     return ( localeCodePage == codepage );
 }
@@ -508,7 +510,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleAnsiCodePage( LCID lcid, sal_uInt32 
 
 BOOL CALLBACK CFormatRegistrar::EnumLocalesProc( LPSTR lpLocaleStr )
 {
-    LCID lcid = atoi( lpLocaleStr );
+    LCID lcid = strtol( lpLocaleStr, NULL, 16 );
 
     if ( isLocaleAnsiCodePage( lcid, CFormatRegistrar::m_TxtCodePage ) ||
          isLocaleOemCodePage( lcid, CFormatRegistrar::m_TxtCodePage ) )
