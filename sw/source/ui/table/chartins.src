@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:24:47 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ ModelessDialog DLG_INSERT_CHART
     Text [ spanish ] = "AutoFormato diagrama (1-4)" ;
     Text [ french ] = "AutoFormat de diagramme (1-4)" ;
     Text [ dutch ] = "AutoOpmaak diagram (1-4)" ;
-    Text [ swedish ] = "AutoFormat Diagram (1-4)" ;
+    Text [ swedish ] = "Autoformat Diagram (1-4)" ;
     Text [ danish ] = "AutoFormat diagram (1-4)" ;
     Text [ portuguese_brazilian ] = "Autoformat Diagramm (1-4)" ;
     Text [ portuguese ] = "AutoFormato gráfico (1-4)" ;
