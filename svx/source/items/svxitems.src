@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 19:34:30 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3952,7 +3952,7 @@ String RID_ATTR_PARA_HYPHENZONE
     Text [ portuguese ] = "Divisão silábica" ;
     Text [ finnish ] = "Tavutus" ;
     Text [ danish ] = "Orddeling" ;
-    Text [ french ] = "Coupure de mots" ;
+    Text [ french ] = "Coupure des mots" ;
     Text [ swedish ] = "Avstavning" ;
     Text [ dutch ] = "Woordafbreking" ;
     Text [ spanish ] = "Separación silábica" ;
@@ -6039,7 +6039,7 @@ String RID_SVXITEMS_HYPHEN_TRUE
     Text [ portuguese ] = "Divisão silábica" ;
     Text [ finnish ] = "Tavutus" ;
     Text [ danish ] = "Orddeling" ;
-    Text [ french ] = "Coupure de mots" ;
+    Text [ french ] = "Coupure des mots" ;
     Text [ swedish ] = "Avstavning" ;
     Text [ dutch ] = "Woordafbreking" ;
     Text [ spanish ] = "Separación silábica" ;
@@ -6066,7 +6066,7 @@ String RID_SVXITEMS_HYPHEN_FALSE
     Text [ portuguese ] = "Sem divisão silábica" ;
     Text [ finnish ] = "Ei tavutusta" ;
     Text [ danish ] = "Ingen orddeling" ;
-    Text [ french ] = "Pas de coupure de mots" ;
+    Text [ french ] = "Pas de coupure des mots" ;
     Text [ swedish ] = "Ingen avstavning" ;
     Text [ dutch ] = "Geen woordafbreking" ;
     Text [ spanish ] = "Sin separación silábica" ;
