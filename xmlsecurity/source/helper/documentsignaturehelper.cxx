@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentsignaturehelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:06:31 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 05:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ void ImplFillElementList( std::vector< rtl::OUString >& rList, const uno::Refere
             {
                 uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
                 rtl::OUString aFullRootName( rRootStorageName + pNames[n] + aSep );
-                ImplFillElementList( rList, rxStore, aFullRootName, bRecursive );
+                ImplFillElementList( rList, xSubStore, aFullRootName, bRecursive );
             }
         }
     }
