@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-18 14:53:39 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 16:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2114,6 +2114,11 @@ interface DrawView : View
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
     ]
+    SID_OUTPUT_QUALITY_CONTRAST // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
     SID_PREVIEW_QUALITY_COLOR // ole : no, status : play rec
     [
         ExecMethod = ExecCtrl ;
@@ -2125,6 +2130,11 @@ interface DrawView : View
         StateMethod = GetCtrlState ;
     ]
     SID_PREVIEW_QUALITY_BLACKWHITE // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_PREVIEW_QUALITY_CONTRAST // ole : no, status : play rec
     [
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
