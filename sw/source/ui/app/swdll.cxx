@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:34:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #include <svx/objfac3d.hxx>
 #endif
 
+#define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+
+
 /*************************************************************************
 |*
 |* Init
@@ -145,14 +148,23 @@ void SwDLL::Init()
     SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
     (*ppShlPtr) = pModule;
 
+    pWDocFact->SetDocumentServiceName(C2S("com.sun.star.text.WebDocument"));
+    pWDocFact->RegisterMenuBar(SW_RES(CFG_SWWEB_MENU));
+    pWDocFact->RegisterAccel(SW_RES(CFG_SWWEB_ACCEL));
+    pWDocFact->RegisterHelpFile(C2S("swriter.svh"));
+
     if ( aOpt.IsWriter() )
     {
-        SwDocShell::RegisterFactory(    SDT_SW_DOCFACTPRIO      );
-        SwGlobalDocShell::RegisterFactory(SDT_SW_DOCFACTPRIO + 2);
-    }
+        pGlobDocFact->SetDocumentServiceName(C2S("com.sun.star.text.GlobalDocument"));
+        pGlobDocFact->RegisterMenuBar(SW_RES(CFG_SWGLOBAL_MENU));
+        pGlobDocFact->RegisterAccel(SW_RES(CFG_SW_ACCEL));
+        pGlobDocFact->RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
 
-    // WebWriter alway needed because it is used for the help viewer
-    SwWebDocShell::RegisterFactory( SDT_SW_DOCFACTPRIO + 1  );
+        pDocFact->SetDocumentServiceName(C2S("com.sun.star.text.TextDocument"));
+        pDocFact->RegisterMenuBar(SW_RES(CFG_SW_MENU));
+        pDocFact->RegisterAccel(SW_RES(CFG_SW_ACCEL));
+        pDocFact->RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
+    }
 
     // SvDraw-Felder registrieren
     SdrRegisterFieldClasses();
