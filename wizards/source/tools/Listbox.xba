@@ -290,8 +290,10 @@ End Sub
 
 Sub	SelectListboxItem(oListbox as Object, iSelIndex as Integer)
 Dim LocSelList(0) as Integer
-	LocSelList(0) = iSelIndex
-	oListbox.SelectedItems() = LocSelList()
+	If iSelIndex &lt;&gt; -1 Then
+		LocSelList(0) = iSelIndex
+		oListbox.SelectedItems() = LocSelList()
+	End If
 End Sub
 
 

@@ -119,21 +119,29 @@ End Function
 
 
 &apos; Opens a Document, checks beforehand, wether it has to be loaded
-&apos; or wether it is already on the desktop
-Function OpenDocument(DocPath as String, Args())
+&apos; or wether it is already on the desktop.
+&apos; If the parameter bDisposable is set to False then then returned document
+&apos; should not be disposed afterwards, because it is already opened.
+Function OpenDocument(DocPath as String, Args(), Optional bDisposable as Boolean)
 Dim oComponents as Object
 Dim oComponent as Object
 	&apos; Search if one of the active Components ist the one that you search for
 	oComponents = StarDesktop.Components.CreateEnumeration
 	While oComponents.HasmoreElements
 		oComponent = oComponents.NextElement
-  	  	If hasUnoInterfaces(oComponent,&quot;com.sun.star.frame.XModel&quot;) then
+		If hasUnoInterfaces(oComponent,&quot;com.sun.star.frame.XModel&quot;) then
 			If UCase(oComponent.URL) = UCase(DocPath) then
 				OpenDocument() = oComponent
+				If Not IsMissing(bDisposable) Then
+					bDisposable = False
+				End If
 				Exit Function
 			End If
 		End If
 	Wend
+	If Not IsMissing(bDisposable) Then
+		bDisposable = True
+	End If
 	OpenDocument() = StarDesktop.LoadComponentFromURL(DocPath,&quot;_blank&quot;,0,Args())
 End Function
 
@@ -677,7 +685,6 @@ Dim oDisp as Object
 	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
 	oUrl.Complete = &quot;slot:&quot; &amp; CStr(SlotID)
 	oTrans.parsestrict(oUrl)
-
 	oDisp = StarDesktop.ActiveFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
 	oDisp.dispatch(oUrl, oArg())
 End Sub
