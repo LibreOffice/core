@@ -1,5 +1,6 @@
 package installer;
 
+import java.net.URLDecoder;
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
@@ -386,37 +387,35 @@ public class InstUtil {
         String [] parts = new String[2];
         parts[0] = officeName;
         parts[1] = instPath + File.separator;
-        //System.out.println( "officeName " + officeName );
-        //System.out.println( "instPath " + instPath );
+        //System.out.println( "InstUtil officeName " + officeName );
+        //System.out.println( "InstUtil instPath " + instPath );
         
         //String [] parts = s.split("=");
                 if (parts.length == 2) {
                     //ver.version = parts[0].trim();
-                    File f = new File(parts[1].trim());
-            results.put(parts[0].trim(), f.getPath());
-            /*
+                    //File f = new File(parts[1].trim());
+            //results.put(parts[0].trim(), f.getPath());
             try {
-                        URI uri = new URI(parts[1].trim());
-                        File f = new File(uri);
+                        URL url = new URL("file://" + parts[1].trim());
+            System.err.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
+                        //File f = new File(url);
             
             //.sversion: OpenOffice.org 643=file:///scriptdev/neil/ScriptFrameOpenoffice1.0.1
             // parts = Installation name. f.getPath = Installation path
-                        results.put(parts[0].trim(), f.getPath());
+                        //results.put(parts[0].trim(), f.getPath());
+                        results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
+            
                         //System.out.println("Putting " + parts[0] + " : " + f.getPath());
                     }
-                    catch (URISyntaxException eSyntax) {
+                    catch (MalformedURLException eSyntax) {
                         //throw new IOException("Error while reading version information");
-                        results.put(parts[0].trim(), parts[1].trim());
-                        //System.out.println(parts[0].trim() + " : " + parts[1].trim());
+            results.put(parts[0].trim(), parts[1].trim());
+            //System.out.println(parts[0].trim() + " : " + parts[1].trim());
+            System.err.println("GotHereException");
                     }
-                    catch (IllegalArgumentException eArg) {
-                        results.put(parts[0].trim(), parts[1].trim());
-                        //System.out.println(parts[0].trim() + ": " + parts[1].trim());
-            }
-            */
                 }
                 else {
-                    //System.out.println("not splitting on equals");
+                    System.out.println("not splitting on equals");
                 }
             }
         }
