@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-16 06:04:23 $
+ *  last change: $Author: tra $ $Date: 2001-10-04 11:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ CFileOpenDialog::CFileOpenDialog(
     m_helperBuffer( MAX_FILENAME_BUFF_SIZE ),
     m_hwndFileOpenDlg( 0 ),
     m_hwndFileOpenDlgChild( 0 ),
-    m_bFileOpenDialog( bFileOpenDialog )
+    m_bFileOpenDialog( bFileOpenDialog ),
+    m_GetFileNameWrapper( CGetFileNameWrapper::create( ) )
 {
     // initialize the OPENFILENAME struct
     if ( IsWin2000( ) )
@@ -376,20 +377,19 @@ sal_Int16 SAL_CALL CFileOpenDialog::doModal( )
     if ( preModal( ) )
     {
         sal_Bool bRet;
-        if ( m_bFileOpenDialog )
-            bRet = ::GetOpenFileNameW( reinterpret_cast< LPOPENFILENAMEW >( &m_ofn ) );
-        else
-            bRet = ::GetSaveFileNameW( reinterpret_cast< LPOPENFILENAMEW >( &m_ofn ) );
 
-        nRC = 1;
-        if ( !bRet )
+        OSL_ASSERT( m_GetFileNameWrapper.get( ) );
+
+        if ( m_GetFileNameWrapper.get( ) )
         {
-#ifdef _DEBUG
-            sal_uInt32 nError = CommDlgExtendedError( );
-            nRC = (0 == nError) ? 0 : -1;
-#else
-            nRC = (0 == CommDlgExtendedError( )) ? 0 : -1;
-#endif
+            if ( m_bFileOpenDialog )
+                bRet = m_GetFileNameWrapper->getOpenFileName( (LPOPENFILENAMEW)&m_ofn );
+            else
+                bRet = m_GetFileNameWrapper->getSaveFileName( (LPOPENFILENAMEW)&m_ofn );
+
+            nRC = 1;
+            if ( !bRet )
+                nRC = (0 == m_GetFileNameWrapper->commDlgExtendedError( )) ? 0 : -1;
         }
 
         // post-processing

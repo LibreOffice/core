@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-16 06:04:23 $
+ *  last change: $Author: tra $ $Date: 2001-10-04 11:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,13 @@
 #include "..\misc\AutoBuffer.hxx"
 #endif
 
+#include <memory>
+
 #include <windows.h>
+
+#ifndef _GETFILENAMEWRAPPER_HXX_
+#include "getfilenamewrapper.hxx"
+#endif
 
 // because we don't want to import the new W2k platform skd
 // into our build environment if have stolen the definition
@@ -328,6 +334,8 @@ private:
     CAutoUnicodeBuffer  m_fileNameBuffer;
     CAutoUnicodeBuffer  m_fileTitleBuffer;
     CAutoUnicodeBuffer  m_helperBuffer;
+
+    ::std::auto_ptr< CGetFileNameWrapper > m_GetFileNameWrapper;
 
     DLGPROC             m_pfnBaseDlgProc;
 
