@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 13:23:02 $
+ *  last change: $Author: sab $ $Date: 2001-10-16 12:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 #define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
 #define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
+#define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
 SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )
@@ -1077,16 +1078,18 @@ sal_Bool SAL_CALL ScModelObj::supportsService( const rtl::OUString& rServiceName
 {
     String aServiceStr = rServiceName;
     return aServiceStr.EqualsAscii( SCMODELOBJ_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCDOCSETTINGS_SERVICE );
+           aServiceStr.EqualsAscii( SCDOCSETTINGS_SERVICE ) ||
+           aServiceStr.EqualsAscii( SCDOC_SERVICE );
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(2);
+    uno::Sequence<rtl::OUString> aRet(3);
     rtl::OUString* pArray = aRet.getArray();
     pArray[0] = rtl::OUString::createFromAscii( SCMODELOBJ_SERVICE );
     pArray[1] = rtl::OUString::createFromAscii( SCDOCSETTINGS_SERVICE );
+    pArray[2] = rtl::OUString::createFromAscii( SCDOC_SERVICE );
     return aRet;
 }
 
