@@ -2,9 +2,9 @@
  *
  *  $RCSfile: String.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:22:38 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,11 @@ java_lang_String::java_lang_String( const ::rtl::OUString& _par0 ): java_lang_Ob
     args[0].l = convertwchar_tToJavaString(t.pEnv,_par0);
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(Ljava/lang/String;)V";
+    static char * cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID = NULL;
+    if ( !mID  )
+        mID  = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
