@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-24 12:21:10 $
+ *  last change: $Author: sj $ $Date: 2001-02-06 17:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,11 @@ class SvxMSDffAutoShape
         sal_Bool                    bFlipH          : 1;
         sal_Bool                    bFlipV          : 1;
 
-        sal_Int32                   GetAdjustValue( sal_Int32 nIndex ) const;
-        sal_Int32                   GetAdjustValue( sal_Int32 nIndex, sal_Int32 nDefault ) const;
+        sal_Int32                   GetAdjustValue( sal_uInt32 nIndex ) const;
+        sal_Int32                   GetAdjustValue( sal_uInt32 nIndex, sal_Int32 nDefault ) const;
         sal_Int32                   Fix16ToAngle( sal_Int32 nAngle ) const;
         Color                       ImplGetColorData( const Color& rFillColor, sal_uInt32 nIndex );
-        double                      ImplGetValue( sal_Int16 nIndex, sal_uInt32& nGeometryFlags ) const;
+        double                      ImplGetValue( sal_uInt16 nIndex, sal_uInt32& nGeometryFlags ) const;
         sal_Int32                   GetValue( sal_uInt32 nDat, sal_Bool bScale = TRUE, sal_Bool bScaleHeight = TRUE ) const;
 
     public :
