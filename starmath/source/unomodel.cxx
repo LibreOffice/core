@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 15:29:05 $
+ *  last change: $Author: mtg $ $Date: 2001-04-24 15:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,6 +971,7 @@ Any SAL_CALL SmModel::getPropertyDefault( const OUString& aPropertyName )
 }
 void SmModel::_getPropertyDefault(Any & rValue,  SfxObjectShell *pObjShell,
                                 const SmFormat &rFormat, const SfxItemPropertyMap *pMap)
+        throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     switch(pMap->nWID)
     {
