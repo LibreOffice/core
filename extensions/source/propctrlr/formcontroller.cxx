@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 15:22:16 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 12:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,6 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
@@ -879,7 +878,7 @@ namespace pcr
             0);     // ripped this somewhere ... don't understand it :(
 
         // get the number formats supplier
-        Reference< XNumberFormatsSupplier >  xSupplier;
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
         m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
 
         DBG_ASSERT(xSupplier.is(), "OPropertyBrowserController::ChangeFormatProperty : invalid call !");
@@ -2138,7 +2137,7 @@ namespace pcr
                     }
 
                     // and the supplier is really available
-                    Reference< XNumberFormatsSupplier >  xSupplier;
+                    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
                     m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
                     if (xSupplier.is())
                     {
@@ -2880,11 +2879,11 @@ namespace pcr
 
                 Any aSupplier = m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
                 DBG_ASSERT(aSupplier.getValueType().equals(::getCppuType(
-                    (const Reference< XNumberFormatsSupplier>*)0)),
+                    (const Reference< ::com::sun::star::util::XNumberFormatsSupplier>*)0)),
 
                     "OPropertyBrowserController::Commit : invalid property change !");
                     // we only allowed the FormatKey property to be displayed if the set had a valid FormatsSupplier
-                Reference< XNumberFormatsSupplier >  xSupplier;
+                Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
                 aSupplier >>= xSupplier;
                 DBG_ASSERT(xSupplier.is(), "OPropertyBrowserController::Commit : invalid property change !");
                     // same argument
