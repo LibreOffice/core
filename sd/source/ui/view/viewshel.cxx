@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:13:30 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,9 +429,6 @@ void ViewShell::Construct(void)
 
 void ViewShell::Init (void)
 {
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
-
     mpImpl->mbIsInitialized = true;
 }
 
