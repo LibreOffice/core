@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
 #define COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
 
 #ifndef _THREAD_HXX_
@@ -97,7 +97,7 @@ namespace comphelper
         typedef sal_uInt32  TClientId;
 
     private:
-        typedef ::std::pair< TClientId, ::drafts::com::sun::star::accessibility::AccessibleEventObject >
+        typedef ::std::pair< TClientId, ::com::sun::star::accessibility::AccessibleEventObject >
                                                                                     ClientEvent;
 
         typedef ::cppu::OInterfaceContainerHelper                                   EventListeners;
@@ -164,7 +164,7 @@ namespace comphelper
         */
         static sal_Int32 addEventListener(
                         const TClientId _nClient,
-                        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& _rxListener
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& _rxListener
                     ) SAL_THROW( ( ) );
 
         /** revokes a listener for the given client
@@ -176,7 +176,7 @@ namespace comphelper
         */
         static sal_Int32 removeEventListener(
                         const TClientId _nClient,
-                        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& _rxListener
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& _rxListener
                     ) SAL_THROW( ( ) );
 
         /** retrieves the set of listeners registered for a given client
@@ -191,7 +191,7 @@ namespace comphelper
         */
         static void addEvent(
                         const TClientId _nClient,
-                        const ::drafts::com::sun::star::accessibility::AccessibleEventObject& _rEvent
+                        const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent
                     ) SAL_THROW( ( ) );
 
     private:
