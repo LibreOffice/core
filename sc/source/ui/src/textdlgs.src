@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:36:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ TabDialog RID_SCDLG_CHAR
                 Text[ chinese_traditional ] = "¦r«¬";
                 Text[ turkish ] = "Character";
                 Text[ arabic ] = "ÇáÎØ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -138,6 +139,7 @@ TabDialog RID_SCDLG_CHAR
                 Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Character Extension";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text[ catalan ] = "Efecto de fuente";
             };
             PageItem
             {
@@ -162,6 +164,7 @@ TabDialog RID_SCDLG_CHAR
                 Text[ chinese_traditional ] = "¦r«¬¦ì¸m";
                 Text[ turkish ] = "Character Position";
                 Text[ arabic ] = "ãæÖÚ ÇáÎØ";
+                Text[ catalan ] = "Posición de fuente";
             };
         };
     };
@@ -212,6 +215,7 @@ TabDialog RID_SCDLG_CHAR
         Text[ korean ] = "µÚ·Î";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Regresar";
     };
     Text[ chinese_simplified ] = "×Ö·û";
     Text[ russian ] = "Çíàê";
@@ -223,6 +227,7 @@ TabDialog RID_SCDLG_CHAR
     Text[ korean ] = "¹®ÀÚ";
     Text[ turkish ] = "Karakter";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Carácter";
 };
 
 TabDialog RID_SCDLG_PARAGRAPH
@@ -280,6 +285,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ korean ] = "µé¿©¾²±â & °£°Ý";
                 Text[ turkish ] = "Girinti ve aralýklar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sangrías y espacios";
             };
             /*
             PageItem  {
@@ -325,6 +331,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ korean ] = "¸ÂÃã";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alineación";
             };
             PageItem
             {
@@ -349,6 +356,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografía asiática";
             };
             PageItem
             {
@@ -377,6 +385,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ korean ] = "ÅÇ";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tabulaciones";
             };
         };
     };
@@ -427,6 +436,7 @@ TabDialog RID_SCDLG_PARAGRAPH
         Text[ korean ] = "µÚ·Î";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Regresar";
     };
     Text[ chinese_simplified ] = "¶ÎÂä";
     Text[ russian ] = "Àáçàö";
@@ -438,6 +448,7 @@ TabDialog RID_SCDLG_PARAGRAPH
     Text[ korean ] = "´Ü¶ô";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Párrafo";
 };
 
 
