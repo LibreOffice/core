@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:20:34 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,13 @@ const sal_uInt16 EXC_OBJ_LBS_SEL_SIMPLE     = 0x0000;   /// Simple selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_MULTI      = 0x0010;   /// Multi selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_EXT        = 0x0020;   /// Extended selection.
 const sal_uInt16 EXC_OBJ_LBS_3D             = 0x0008;
+
+/** Value binding mode for cells linked to form controls. */
+enum XclCtrlBindMode
+{
+    xlBindContent,      /// Binds cell to content of control.
+    xlBindPosition      /// Binds cell to position in control (i.e. listbox selection index).
+};
 
 
 // (0x01B6) TXO ===============================================================
