@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-21 13:49:19 $
+ *  last change: $Author: sj $ $Date: 2002-11-29 12:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,46 +441,9 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Pos = MAP_APPFONT ( 6 , 91 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
-    FixedText FT_MS_CREATEDATE
-    {
-        Pos = MAP_APPFONT ( 6 , 98 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text = "Erstellt am:" ;
-        Text [ English ] = "Created:" ;
-        LeftLabel = TRUE ;
-        Text [ english_us ] = "Created:" ;
-        Text [ italian ] = "Creato il:" ;
-        Text [ spanish ] = "Creado el:" ;
-        Text [ french ] = "Créé le :" ;
-        Text [ dutch ] = "Gemaakt op:" ;
-        Text [ swedish ] = "Skapat den:" ;
-        Text [ danish ] = "Oprettet den:" ;
-        Text [ portuguese_brazilian ] = "Erstellt am:" ;
-        Text [ portuguese ] = "Criado em:" ;
-        Text[ chinese_simplified ] = "å»ºç«‹æ—¥æœŸ:";
-        Text[ russian ] = "Äàòà ñîçäàíèÿ:";
-        Text[ polish ] = "Utworzono:";
-        Text[ japanese ] = "ä½œæˆæ—¥æ™‚:";
-        Text[ chinese_traditional ] = "å»ºç«‹æ—¥æœŸï¼š";
-        Text[ arabic ] = ":ÊÇÑíÎ ÇáÅäÔÇÁ";
-        Text[ dutch ] = "Gemaakt op:";
-        Text[ chinese_simplified ] = "å»ºç«‹æ—¥æœŸ:";
-        Text[ greek ] = "ÄçìéïõñãŞèçêå ôç:";
-        Text[ korean ] = "ì‘ì„±ì¼ì:";
-        Text[ turkish ] = "Oluşturma tarihi:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Creat:";
-        Text[ finnish ] = "Luotu:";
-        Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡:";
-    };
-    FixedText FT_MS_SHOW_CREATEDATE
-    {
-        Pos = MAP_APPFONT ( 60 , 98  ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
-    };
     FixedText FT_MS_CHANGEDATE
     {
-        Pos = MAP_APPFONT ( 6 , 112 ) ;
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "Geändert am:" ;
         Text [ English ] = "Changed:" ;
@@ -512,7 +475,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     FixedText FT_MS_SHOW_CHANGEDATE
     {
-        Pos = MAP_APPFONT ( 60 , 112 ) ;
+        Pos = MAP_APPFONT ( 60 , 98 ) ;
         Size = MAP_APPFONT ( 194 , 10 ) ;
     };
 };

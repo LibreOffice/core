@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-09 15:26:09 $
+ *  last change: $Author: sj $ $Date: 2002-11-29 12:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,8 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     try
     {
         Content         aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
-        util::DateTime  aDateTimeCreated, aDateTimeModified;
+        util::DateTime  aDateTimeModified;
         DateTime        aDateTime;
-
-        aCnt.getPropertyValue( OUString::createFromAscii( "DateCreated" ) ) >>= aDateTimeCreated;
-        ::utl::typeConvert( aDateTimeCreated, aDateTime );
-        rData.aThemeCreateDate = aDateTime;
-        rData.aThemeCreateTime = aDateTime;
 
         aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDateTimeModified;
         ::utl::typeConvert( aDateTimeModified, aDateTime );
