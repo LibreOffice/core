@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 10:01:10 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 09:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ OThread::OThread()
 {
     m_hThread      = 0;
     m_bTerminating = sal_False;
+    m_aCondition   = osl_createCondition();
 }
 
 OThread::~OThread()
@@ -126,6 +127,8 @@ OThread::~OThread()
 
         osl_freeThreadHandle(m_hThread);
     }
+
+    osl_destroyCondition( m_aCondition );
 }
 
 sal_Bool OThread::create()
@@ -187,12 +190,24 @@ void OThread::join()
 
 OThread::TThreadSleep OThread::sleep(const TimeValue& Delay)
 {
-    if(m_hThread)
+    TThreadSleep eRet;
+
+    switch( osl_waitCondition( m_aCondition, &Delay ) )
     {
-        return (TThreadSleep)osl_sleepThread(m_hThread, &Delay);
+    case osl_cond_result_ok:
+        eRet = TSleep_Normal;
+        break;
+
+    case osl_cond_result_timeout:
+        eRet = TSleep_Cancel;
+        break;
+
+    default:
+        eRet = TSleep_Error;
+        break;
     }
 
-    return TSleep_Error;
+    return eRet;
 }
 
 void OThread::wait(const TimeValue& Delay) {
@@ -201,11 +216,8 @@ void OThread::wait(const TimeValue& Delay) {
 
 sal_Bool OThread::awake()
 {
-    if(m_hThread) {
-        return osl_awakeThread(m_hThread);
-    }
-
-    return sal_False;
+    osl_setCondition( m_aCondition );
+    return osl_resetCondition( m_aCondition );
 }
 
 void OThread::terminate()

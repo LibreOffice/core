@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 10:01:09 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 09:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _OSL_THREAD_H_
 #   include <osl/thread.h>
 #endif
+#ifndef _OSL_CONDITION_H_
+#   include <osl/conditn.h>
+#endif
 #ifndef _VOS_RUNNABLE_HXX_
 #   include <vos/runnable.hxx>
 #endif
@@ -107,6 +110,8 @@ class OThread : public NAMESPACE_VOS(IRunnable),
 
     VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OThread, vos));
 
+    oslCondition m_aCondition;
+
 public:
     /** priority of thread.
     */
@@ -124,12 +129,12 @@ public:
     */
     enum TThreadSleep
     {
-        TSleep_Normal  = osl_Thread_SleepNormal,
-        TSleep_Cancel  = osl_Thread_SleepCancel,
-        TSleep_Pending = osl_Thread_SleepPending,
-        TSleep_Active  = osl_Thread_SleepActive,
-        TSleep_Error   = osl_Thread_SleepError,
-        TSleep_Unknown = osl_Thread_SleepUnknown
+        TSleep_Normal,
+        TSleep_Cancel,
+        TSleep_Pending,
+        TSleep_Active,
+        TSleep_Error,
+        TSleep_Unknown
     };
 
     typedef oslThreadIdentifier TThreadIdentifier;
