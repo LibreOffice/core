@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-04 15:23:30 $
+ *  last change: $Author: sj $ $Date: 2002-07-19 10:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include "wmfwr.hxx"
 #ifndef _SV_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
+#endif
+#ifndef _RTL_CRC_H_
+#include <rtl/crc.h>
 #endif
 
 //====================== MS-Windows-defines ===============================
@@ -250,6 +253,10 @@
 #define W_HS_CROSS          4
 #define W_HS_DIAGCROSS      5
 
+#define W_MFCOMMENT         15
+
+#define PRIVATE_ESCAPE_UNICODE  1
+
 //========================== Methoden von WMFWriter ==========================
 
 void WMFWriter::MayCallback()
@@ -435,9 +442,11 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
 
     switch (rFont.GetCharSet())
     {
-        case RTL_TEXTENCODING_SYMBOL :  nCharSet = W_SYMBOL_CHARSET; break;
-        case RTL_TEXTENCODING_MS_932 :  nCharSet = 0x3c; break;
-        default:                        nCharSet = W_ANSI_CHARSET;
+        case RTL_TEXTENCODING_SYMBOL    :   nCharSet = W_SYMBOL_CHARSET; break;
+        case RTL_TEXTENCODING_SHIFT_JIS :   nCharSet = W_SHIFTJIS_CHARSET; break;
+        case RTL_TEXTENCODING_BIG5      :   nCharSet = W_CHINESEBIG5_CHARSET; break;
+        case RTL_TEXTENCODING_MS_932    :   nCharSet = 0x3c; break;
+        default:                            nCharSet = W_ANSI_CHARSET;
     }
     *pWMF << nCharSet;
 
@@ -533,6 +542,59 @@ bool IsStarSymbol(const String &rStr)
 {
     return rStr.EqualsIgnoreCaseAscii("starsymbol") ||
         rStr.EqualsIgnoreCaseAscii("opensymbol");
+}
+
+void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData )
+{
+#ifdef __BIGENDIAN
+    sal_uInt32 nTmp = SWAPLONG( nEsc );
+    sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
+#else
+    sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
+#endif
+    if ( nLen )
+        nCheckSum = rtl_crc32( nCheckSum, pData, nLen );
+
+    WriteRecordHeader( 3 + 9 + ( ( nLen + 1 ) >> 1 ), W_META_ESCAPE );
+    *pWMF << (sal_uInt16)W_MFCOMMENT
+          << (sal_uInt16)( nLen + 14 )  // we will always have a fourteen byte escape header:
+          << (sal_uInt16)0x4f4f         // OO
+          << (sal_uInt32)0xa2c2a        // evil magic number
+          << (sal_uInt32)nCheckSum      // crc32 checksum about nEsc & pData
+          << (sal_uInt32)nEsc;          // escape number
+    pWMF->Write( pData, nLen );
+    if ( nLen & 1 )
+        *pWMF << (sal_uInt8)0;          // pad byte
+}
+
+void WMFWriter::WMFRecord_Escape_Unicode( const String& rUniStr )
+{
+    sal_uInt32 i, nLen = rUniStr.Len();
+    if ( nLen )
+    {
+        // first we will check if a comment is necessary
+        if ( aSrcFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )     // symbol is always byte character, so there is no unicode loss
+        {
+            const sal_Unicode* pBuf = rUniStr.GetBuffer();
+
+            ByteString aByteStr( rUniStr, aSrcFont.GetCharSet() );
+            String     aUniStr2( aByteStr, aSrcFont.GetCharSet() );
+            const sal_Unicode* pConversion = aUniStr2.GetBuffer();  // this is the unicode array after bytestring <-> unistring conversion
+            for ( i = 0; i < nLen; i++ )
+            {
+                if ( *pBuf++ != *pConversion++ )
+                    break;
+            }
+            if ( i != nLen )    // after conversion the characters are not original, so we will store the unicode string
+            {
+                pBuf = rUniStr.GetBuffer();
+                SvMemoryStream aMemoryStream( nLen * 2 );
+                for ( i = 0; i < nLen; i++ )
+                    aMemoryStream << *pBuf++;
+                WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nLen * 2, (const sal_Int8*)aMemoryStream.GetData() );
+            }
+        }
+    }
 }
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
@@ -1249,6 +1311,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    WMFRecord_Escape_Unicode( aTemp );
                     WMFRecord_TextOut( pA->GetPoint(), aTemp );
                 }
                 break;
@@ -1258,6 +1321,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
 
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    WMFRecord_Escape_Unicode( aTemp );
                     WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
                 }
                 break;
@@ -1266,6 +1330,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction *) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    WMFRecord_Escape_Unicode( aTemp );
                     WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetWidth() );
                 }
                 break;

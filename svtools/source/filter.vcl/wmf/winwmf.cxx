@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 14:09:52 $
+ *  last change: $Author: sj $ $Date: 2002-07-19 10:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #include "winmtf.hxx"
+#ifndef _RTL_CRC_H_
+#include <rtl/crc.h>
+#endif
 
 //====================== MS-Windows-defines ===============================
 
@@ -425,6 +428,9 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 String aText( pChar, nLength, pOut->GetCharSet() );
                 delete[] pChar;
                 Point aPosition( ReadYX() );
+                if ( aText.Len() == aUnicodeEscapeString.Len() )
+                    aText = aUnicodeEscapeString;
+                aUnicodeEscapeString = String();
                 pOut->DrawText( aPosition, aText );
             }
         }
@@ -459,6 +465,10 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 String aText( pChar, (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
                 nNewTextLen = aText.Len();                                              // less character (japanese version), so the
                 delete[] pChar;                                                         // dxAry will not fit
+
+                if ( aText.Len() == aUnicodeEscapeString.Len() )
+                    aText = aUnicodeEscapeString;
+                aUnicodeEscapeString = String();
 
                 if ( nNewTextLen )
                 {
@@ -748,13 +758,73 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         }
         break;
 
+        case W_META_ESCAPE :
+        {
+            if ( nRecSize >= 12 )   // minimal escape lenght
+            {
+                sal_uInt16  nMode, nLen, OO;
+                sal_uInt32  Magic, nCheck,nEsc;
+                *pWMF >> nMode
+                      >> nLen
+                      >> OO
+                      >> Magic
+                      >> nCheck
+                      >> nEsc;
+                if ( ( nMode == W_MFCOMMENT ) && ( nLen >= 14 ) && ( OO == 0x4f4f ) && ( Magic == 0xa2c2a ) )
+                {
+                    sal_uInt32 nEscLen = nLen - 14;
+                    if ( nEscLen <= ( nRecSize * 2 ) )
+                    {
+#ifdef __BIGENDIAN
+                        sal_uInt32 i, nTmp = SWAPLONG( nEsc );
+                        sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
+#else
+                        sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
+#endif
+                        sal_Int8* pData = NULL;
+                        if ( nEscLen )
+                        {
+                            pData = new sal_Int8[ nEscLen ];
+                            pWMF->Read( pData, nEscLen );
+                            nCheckSum = rtl_crc32( nCheckSum, pData, nEscLen );
+                        }
+                        if ( nCheck == nCheckSum )
+                        {
+                            switch( nEsc )
+                            {
+                                case PRIVATE_ESCAPE_UNICODE :
+                                {
+                                    sal_uInt32 nStrLen = nEscLen >> 1;
+                                    if ( nStrLen )
+                                    {
+#ifdef __BIGENDIAN
+                                        String aUniString;
+                                        sal_Unicode* pUniString = aUniString.AllocBuffer( nStrLen );
+                                        for ( i = 0; i < nStrLen; i++ )
+                                            *pUniString++ = ( pData[ i ] << 8 ) | ( (sal_uInt16)pData[ i ] >> 8 );
+#else
+                                        String aUniString( (const sal_Unicode*)pData, nStrLen );
+#endif
+                                        aUnicodeEscapeString = aUniString;
+                                        nUnicodeEscapeAction = nCurrentAction;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        delete pData;
+                    }
+                }
+            }
+        }
+        break;
+
         case W_META_SETRELABS:
         case W_META_SETPOLYFILLMODE:
         case W_META_SETSTRETCHBLTMODE:
         case W_META_SETTEXTCHAREXTRA:
         case W_META_SETTEXTJUSTIFICATION:
         case W_META_FLOODFILL :
-        case W_META_ESCAPE:
         case W_META_FILLREGION:
         case W_META_FRAMEREGION:
         case W_META_INVERTREGION:
@@ -857,8 +927,10 @@ BOOL WMFReader::ReadHeader()
 void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
 {
     USHORT  nFunction;
-    ULONG   nRecSize;
     ULONG   nPos, nPercent, nLastPercent;
+
+    nCurrentAction = 0;
+    nUnicodeEscapeAction = 0;
 
     pOut->SetWinOrg( Point() );
     pOut->SetWinExt( Size( 1, 1 ) );
@@ -877,6 +949,7 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
         {
             while( TRUE )
             {
+                nCurrentAction++;
                 nPercent = ( nPos - nStartPos ) * 100 / ( nEndPos - nStartPos );
 
                 if( nLastPercent + 4 <= nPercent )
@@ -886,7 +959,6 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
 
                     nLastPercent = nPercent;
                 }
-
                 *pWMF >> nRecSize >> nFunction;
 
                 if( pWMF->GetError() || ( nRecSize < 3 ) || ( nRecSize==3 && nFunction==0 ) || pWMF->IsEof() )
@@ -897,7 +969,6 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
 
                     break;
                 }
-
                 if( aBmpSaveList.Count() &&
                     ( nFunction != W_META_STRETCHDIB ) &&
                     ( nFunction != W_META_DIBBITBLT ) &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-11 14:35:49 $
+ *  last change: $Author: sj $ $Date: 2002-07-19 10:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,10 @@ struct LOGFONTW
 #define W_HS_DIAGCROSS          5
 
 #define RDH_RECTANGLES  1
+
+#define W_MFCOMMENT             15
+
+#define PRIVATE_ESCAPE_UNICODE  1
 
 //============================ WMFReader ==================================
 
@@ -674,7 +678,7 @@ class WinMtf
 {
     protected:
 
-    WinMtfOutput*   pOut;                   //
+    WinMtfOutput*       pOut;                   //
     SvStream*           pWMF;                   // Die einzulesende WMF/EMF-Datei
 
     UINT32              nStartPos, nEndPos;
@@ -726,6 +730,11 @@ class WMFReader : public WinMtf
 private:
 
     UINT16          nUnitsPerInch;
+    sal_uInt32      nRecSize;
+
+    sal_uInt32      nCurrentAction;
+    sal_uInt32      nUnicodeEscapeAction;
+    String          aUnicodeEscapeString;
 
     // Liesst den Kopf der WMF-Datei
     BOOL            ReadHeader();
