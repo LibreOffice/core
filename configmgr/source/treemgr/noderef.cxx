@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:26:30 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 17:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,8 @@ NodeRef NodeRef::getChild(Name const& aName, Tree& rTree) const
             TreeDepth   nChildDepth  = pTree->getAvailableDepth();
 
             Node* pNode = pTree->node(nFoundOffset);
+            // all fine ? now adjust the tree
+            rTree = Tree(pTree);
 
             return NodeRef(pNode,nFoundOffset,nChildDepth);
         }
