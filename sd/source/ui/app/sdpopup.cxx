@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpopup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:44:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #include "sdresid.hxx"
 #include "sdmod.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 
 /*************************************************************************
 |*
@@ -328,8 +330,8 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pFileField->GetFormat() != eFormat ||
             pFileField->GetType() != eType )
         {
-            SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell,
-                                               SfxObjectShell::Current() );
+            ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell,
+                SfxObjectShell::Current() );
 
             if( pDocSh )
             {
