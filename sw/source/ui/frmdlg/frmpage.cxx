@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:39:29 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,13 @@ struct ResIdPair_Impl
 #define LB_REL_CHAR             0x00020000L // Zeichenausrichtung Zeichen
 #define LB_REL_ROW              0x00040000L // Zeichenausrichtung Zeile
 
+// OD 10.11.2003 #i22305#
+#define LB_FLY_VERT_FRAME       0x00100000L // vertical entire frame
+#define LB_FLY_VERT_PRTAREA     0x00200000L // vertical frame text area
+
+// OD 11.11.2003 #i22341#
+#define LB_VERT_LINE            0x00400000L // vertical text line
+
 static RelationMap __FAR_DATA aRelationMap[] =
 {
     {STR_FRAME,             STR_FRAME,                  LB_FRAME,               FRAME},
@@ -270,8 +277,15 @@ static RelationMap __FAR_DATA aRelationMap[] =
     {STR_FLY_REL_PG_FRAME,      STR_FLY_REL_PG_FRAME,       LB_FLY_REL_PG_FRAME,    REL_PG_FRAME},
     {STR_FLY_REL_PG_PRTAREA,    STR_FLY_REL_PG_PRTAREA,     LB_FLY_REL_PG_PRTAREA,  REL_PG_PRTAREA},
 
-    {STR_REL_BORDER,            STR_REL_BORDER,             LB_VERT_FRAME,          FRAME},
-    {STR_REL_PRTAREA,       STR_REL_PRTAREA,            LB_VERT_PRTAREA,        PRTAREA}
+    {STR_REL_BORDER,    STR_REL_BORDER,     LB_VERT_FRAME,      FRAME},
+    {STR_REL_PRTAREA,   STR_REL_PRTAREA,    LB_VERT_PRTAREA,    PRTAREA},
+
+    // OD 10.11.2003 #i22305#
+    {STR_FLY_REL_PG_FRAME,      STR_FLY_REL_PG_FRAME,   LB_FLY_VERT_FRAME,      FRAME},
+    {STR_FLY_REL_PG_PRTAREA,    STR_FLY_REL_PG_PRTAREA, LB_FLY_VERT_PRTAREA,    PRTAREA},
+
+    // OD 11.11.2003 #i22341#
+    {STR_REL_LINE,  STR_REL_LINE,   LB_VERT_LINE,   REL_VERT_LINE}
 };
 
 static RelationMap __FAR_DATA aAsCharRelationMap[] =
@@ -338,7 +352,8 @@ static FrmMap __FAR_DATA aHFlyHtmlMap[] =
 };
 
 // OD 19.09.2003 #i18732# - own vertical alignment map for to frame anchored objects
-#define VERT_FRAME_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA)
+// OD 10.11.2003 #i22305#
+#define VERT_FRAME_REL   (LB_FLY_VERT_FRAME|LB_FLY_VERT_PRTAREA)
 
 static FrmMap __FAR_DATA aVFrameMap[] =
 {
@@ -350,8 +365,9 @@ static FrmMap __FAR_DATA aVFrameMap[] =
 
 static FrmMap __FAR_DATA aVFlyHtmlMap[] =
 {
-    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       LB_VERT_FRAME},
-    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,      LB_VERT_FRAME}
+    // OD 10.11.2003 #i22305#
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       LB_FLY_VERT_FRAME},
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,      LB_FLY_VERT_FRAME}
 };
 
 /*--------------------------------------------------------------------
@@ -433,16 +449,28 @@ static FrmMap __FAR_DATA aHCharHtmlAbsMap[] =
 };
 
 // OD 19.09.2003 #i18732# - allow vertical alignment at page areas
-#define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA|LB_REL_CHAR| \
+// OD 12.11.2003 #i22341# - handle <LB_REL_CHAR> on its own
+#define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
                          LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
 static FrmMap __FAR_DATA aVCharMap[] =
 {
-    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,           VERT_CHAR_REL},
-    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_BOTTOM,        VERT_CHAR_REL},
-    {STR_BELOW,             STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR},
-    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,        VERT_CHAR_REL},
-    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,          VERT_CHAR_REL}
+    // OD 11.11.2003 #i22341#
+    // introduce mappings for new vertical alignment at top of line <LB_VERT_LINE>
+    // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
+    // Note: Because of these adjustments the map becomes ambigous in its values
+    //       <nStrId>/<nMirrorStrId> and <nAlign>. These ambiguities are considered
+    //       in the methods <SwFrmPage::FillRelLB(..)>, <SwFrmPage::GetAlignment(..)>
+    //       and <SwFrmPage::FillPosLB(..)>
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,           VERT_CHAR_REL|LB_REL_CHAR},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_BOTTOM,        VERT_CHAR_REL|LB_REL_CHAR},
+    {STR_BELOW,         STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,        VERT_CHAR_REL|LB_REL_CHAR},
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,          VERT_CHAR_REL},
+    {STR_FROMBOTTOM,    STR_FROMBOTTOM,     SVX_VERT_NONE,          LB_REL_CHAR|LB_VERT_LINE},
+    {STR_TOP,           STR_TOP,            SVX_VERT_LINE_TOP,      LB_VERT_LINE},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_LINE_BOTTOM,   LB_VERT_LINE},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_LINE_CENTER,   LB_VERT_LINE}
 };
 
 
@@ -454,7 +482,7 @@ static FrmMap __FAR_DATA aVCharHtmlMap[] =
 static FrmMap __FAR_DATA aVCharHtmlAbsMap[] =
 {
     {STR_TOP,           STR_TOP,            SVX_VERT_TOP,           LB_REL_CHAR},
-    {STR_BELOW,             STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR}
+    {STR_BELOW,         STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR}
 };
 /*--------------------------------------------------------------------
     Beschreibung: Als Zeichen verankert
@@ -517,7 +545,7 @@ static USHORT __FAR_DATA aAddPgRg[] = {
     Beschreibung:
  --------------------------------------------------------------------*/
 
-USHORT lcl_GetFrmMapCount(FrmMap* pMap)
+USHORT lcl_GetFrmMapCount( const FrmMap* pMap)
 {
     if ( pMap )
     {
@@ -675,6 +703,46 @@ USHORT lcl_ChangeResIdToVerticalOrRTL(USHORT nResId, BOOL bVertical, BOOL bRTL)
     }
     return nResId;
 }
+
+// OD 12.11.2003 #i22341# - helper method in order to determine all possible
+// listbox relations in a relation map for a given relation
+ULONG lcl_GetLBRelationsForRelations( const USHORT _nRel )
+{
+    ULONG nLBRelations = 0L;
+
+    sal_uInt16 nRelMapSize = sizeof(aRelationMap) / sizeof(RelationMap);
+    for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
+    {
+        if ( aRelationMap[nRelMapPos].nRelation == _nRel )
+        {
+            nLBRelations |= aRelationMap[nRelMapPos].nLBRelation;
+        }
+    }
+
+    return nLBRelations;
+}
+
+// OD 14.11.2003 #i22341# - helper method on order to determine all possible
+// listbox relations in a relation map for a given string ID
+ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
+                                  const USHORT _nStrId,
+                                  const bool _bUseMirrorStr )
+{
+    ULONG nLBRelations = 0L;
+
+    sal_uInt16 nRelMapSize = lcl_GetFrmMapCount( _pMap );
+    for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
+    {
+        if ( ( !_bUseMirrorStr && _pMap[nRelMapPos].nStrId == _nStrId ) ||
+             ( _bUseMirrorStr && _pMap[nRelMapPos].nMirrorStrId == _nStrId ) )
+        {
+            nLBRelations |= _pMap[nRelMapPos].nLBRelations;
+        }
+    }
+
+    return nLBRelations;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   StandardRahmenTabPage
  --------------------------------------------------------------------*/
@@ -734,7 +802,9 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     nHtmlMode(0),
     bHtmlMode(FALSE),
     bNoModifyHdl(TRUE),
-    fWidthHeightRatio(1.0)
+    fWidthHeightRatio(1.0),
+    // OD 12.11.2003 #i22341#
+    mpToCharCntntPos( NULL )
 {
     FreeResource();
     SetExchangeSupport();
@@ -873,7 +943,6 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     aHeightED.SetBaseValue( aHeightED.Normalize(aGrfSize.Height()), FUNIT_TWIP );
 
     // Allgemeiner Initialisierungteil
-    USHORT nPos = 0;
     switch(rAnchor.GetAnchorId())
     {
         case FLY_PAGE: aAnchorAtPageRB.Check(); break;
@@ -882,6 +951,10 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         case FLY_IN_CNTNT: aAnchorAsCharRB.Check(); break;
         case FLY_AT_FLY: aAnchorAtFrameRB.Check();break;
     }
+
+    // OD 12.11.2003 #i22341# - determine content position of character
+    // Note: content position can be NULL
+    mpToCharCntntPos = rAnchor.GetCntntAnchor();
 
     // OD 19.09.2003 #i18732# - init checkbox value
     {
@@ -920,8 +993,11 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         aMirrorPagesCB.Enable(!aAnchorAsCharRB.IsChecked());
 
         // OD 06.11.2003 #i18732# - enable/disable check box 'Follow text flow'.
+        // OD 10.11.2003 #i22305# - enable check box 'Follow text
+        // flow' also for anchor type to-frame.
         aFollowTextFlowCB.Enable( aAnchorAtParaRB.IsChecked() ||
-                                  aAnchorAtCharRB.IsChecked() );
+                                  aAnchorAtCharRB.IsChecked() ||
+                                  aAnchorAtFrameRB.IsChecked() );
     }
 
     Init( rSet, TRUE );
@@ -1229,7 +1305,8 @@ void SwFrmPage::InitPos(USHORT nId,
         nH    = nOldH;
         nHRel = nOldHRel;
     }
-    USHORT nMapPos = FillPosLB(pHMap, nH, aHorizontalDLB);
+    // OD 12.11.2003 #i22341# - pass <nHRel> as 3rd parameter to method <FillPosLB>
+    USHORT nMapPos = FillPosLB(pHMap, nH, nHRel, aHorizontalDLB);
     FillRelLB(pHMap, nMapPos, nH, nHRel, aHoriRelationLB, aHoriRelationFT);
 
     // Vertikal
@@ -1238,7 +1315,8 @@ void SwFrmPage::InitPos(USHORT nId,
         nV    = nOldV;
         nVRel = nOldVRel;
     }
-    nMapPos = FillPosLB(pVMap, nV, aVerticalDLB);
+    // OD 12.11.2003 #i22341# - pass <nVRel> as 3rd parameter to method <FillPosLB>
+    nMapPos = FillPosLB(pVMap, nV, nVRel, aVerticalDLB);
     FillRelLB(pVMap, nMapPos, nV, nVRel, aVertRelationLB, aVertRelationFT);
 
     // Edits init
@@ -1285,68 +1363,89 @@ void SwFrmPage::InitPos(USHORT nId,
     Beschreibung:
  --------------------------------------------------------------------*/
 
-USHORT SwFrmPage::FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB)
+USHORT SwFrmPage::FillPosLB(const FrmMap* _pMap,
+                            const USHORT _nAlign,
+                            const USHORT _nRel,
+                            ListBox& _rLB )
 {
     String sSelEntry, sOldEntry;
-    sOldEntry = rLB.GetSelectEntry();
+    sOldEntry = _rLB.GetSelectEntry();
 
-    rLB.Clear();
+    _rLB.Clear();
+
+    // OD 12.11.2003 #i22341# - determine all possible listbox relations for
+    // given relation for map <aVCharMap>
+    const ULONG nLBRelations = (_pMap != aVCharMap)
+                               ? 0L
+                               : ::lcl_GetLBRelationsForRelations( _nRel );
 
     // Listbox fuellen
-    USHORT nCount = ::lcl_GetFrmMapCount(pMap);
-    for (USHORT i = 0; pMap && i < nCount; ++i)
+    USHORT nCount = ::lcl_GetFrmMapCount(_pMap);
+    for (USHORT i = 0; _pMap && i < nCount; ++i)
     {
 //      #61359# Warum nicht von links/von innen bzw. von oben?
 //      if (!bFormat || (pMap[i].nStrId != STR_FROMLEFT && pMap[i].nStrId != STR_FROMTOP))
         {
-            USHORT nResId = aMirrorPagesCB.IsChecked() ? pMap[i].nMirrorStrId : pMap[i].nStrId;
+            USHORT nResId = aMirrorPagesCB.IsChecked() ? _pMap[i].nMirrorStrId : _pMap[i].nStrId;
             nResId = lcl_ChangeResIdToVerticalOrRTL(nResId, bIsVerticalFrame, bIsInRightToLeft);
             String sEntry(SW_RES(nResId));
             sEntry = MnemonicGenerator::EraseAllMnemonicChars( sEntry );
-            if (rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
+            if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
+            {
                 // bei zeichengebundenen Rahmen keine doppelten Eintraege einfuegen
-                rLB.InsertEntry(sEntry);
-            if (nAlign == pMap[i].nAlign)
+                _rLB.InsertEntry(sEntry);
+            }
+            // OD 12.11.2003 #i22341# - add condition to handle map <aVCharMap>
+            // that is ambigous in the alignment.
+            if ( _pMap[i].nAlign == _nAlign &&
+                 ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
+            {
                 sSelEntry = sEntry;
+            }
         }
     }
 
-    rLB.SelectEntry(sSelEntry);
-    if (!rLB.GetSelectEntryCount())
-        rLB.SelectEntry(sOldEntry);
+    _rLB.SelectEntry(sSelEntry);
+    if (!_rLB.GetSelectEntryCount())
+        _rLB.SelectEntry(sOldEntry);
 
-    if (!rLB.GetSelectEntryCount())
-        rLB.SelectEntryPos(0);
+    if (!_rLB.GetSelectEntryCount())
+        _rLB.SelectEntryPos(0);
 
-    PosHdl(&rLB);
+    PosHdl(&_rLB);
 
-    return GetMapPos(pMap, rLB);
+    return GetMapPos(_pMap, _rLB);
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT nRel, ListBox &rLB, FixedText &rFT)
+ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
+                            const USHORT _nLBSelPos,
+                            const USHORT _nAlign,
+                            USHORT _nRel,
+                            ListBox& _rLB,
+                            FixedText& _rFT )
 {
     String sSelEntry;
     ULONG  nLBRelations = 0;
-    USHORT nMapCount = ::lcl_GetFrmMapCount(pMap);
+    USHORT nMapCount = ::lcl_GetFrmMapCount(_pMap);
 
-    rLB.Clear();
+    _rLB.Clear();
 
-    if (nMapPos < nMapCount)
+    if (_nLBSelPos < nMapCount)
     {
-        if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
+        if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
-            String sOldEntry(rLB.GetSelectEntry());
+            String sOldEntry(_rLB.GetSelectEntry());
             USHORT nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
-            USHORT nStrId = pMap[nMapPos].nStrId;
+            USHORT nStrId = _pMap[_nLBSelPos].nStrId;
 
             for (USHORT nMapPos = 0; nMapPos < nMapCount; nMapPos++)
             {
-                if (pMap[nMapPos].nStrId == nStrId)
+                if (_pMap[nMapPos].nStrId == nStrId)
                 {
-                    nLBRelations = pMap[nMapPos].nLBRelations;
+                    nLBRelations = _pMap[nMapPos].nLBRelations;
                     for (USHORT nRelPos = 0; nRelPos < nRelCount; nRelPos++)
                     {
                         if (nLBRelations & aAsCharRelationMap[nRelPos].nLBRelation)
@@ -1355,9 +1454,9 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
 
                             nResId = lcl_ChangeResIdToVerticalOrRTL(nResId, bIsVerticalFrame, bIsInRightToLeft);
                             String sEntry(SW_RES(nResId));
-                            USHORT nPos = rLB.InsertEntry(sEntry);
-                            rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
-                            if (pMap[nMapPos].nAlign == nAlign)
+                            USHORT nPos = _rLB.InsertEntry(sEntry);
+                            _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
+                            if (_pMap[nMapPos].nAlign == _nAlign)
                                 sSelEntry = sEntry;
                             break;
                         }
@@ -1365,19 +1464,19 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
                 }
             }
             if (sSelEntry.Len())
-                rLB.SelectEntry(sSelEntry);
+                _rLB.SelectEntry(sSelEntry);
             else
             {
-                rLB.SelectEntry(sOldEntry);
+                _rLB.SelectEntry(sOldEntry);
 
-                if (!rLB.GetSelectEntryCount())
+                if (!_rLB.GetSelectEntryCount())
                 {
-                    for (USHORT i = 0; i < rLB.GetEntryCount(); i++)
+                    for (USHORT i = 0; i < _rLB.GetEntryCount(); i++)
                     {
-                        RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(i);
+                        RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
                         if (pEntry->nLBRelation == LB_REL_CHAR) // Default
                         {
-                            rLB.SelectEntryPos(i);
+                            _rLB.SelectEntryPos(i);
                             break;
                         }
                     }
@@ -1388,7 +1487,20 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
         {
             USHORT nRelCount = sizeof(aRelationMap) / sizeof(RelationMap);
 
-            nLBRelations = pMap[nMapPos].nLBRelations;
+            // OD 14.11.2003 #i22341# - special handling for map <aVCharMap>,
+            // because its ambigous in its <nStrId>/<nMirrorStrId>.
+            if ( _pMap == aVCharMap )
+            {
+                nLBRelations = ::lcl_GetLBRelationsForStrID( _pMap,
+                                             ( aMirrorPagesCB.IsChecked()
+                                               ? _pMap[_nLBSelPos].nMirrorStrId
+                                               : _pMap[_nLBSelPos].nStrId ),
+                                             aMirrorPagesCB.IsChecked() );
+            }
+            else
+            {
+                nLBRelations = _pMap[_nLBSelPos].nLBRelations;
+            }
 
             for (ULONG nBit = 1; nBit < 0x80000000; nBit <<= 1)
             {
@@ -1401,59 +1513,59 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
                             USHORT nResId = aMirrorPagesCB.IsChecked() ? aRelationMap[nRelPos].nMirrorStrId : aRelationMap[nRelPos].nStrId;
                             nResId = lcl_ChangeResIdToVerticalOrRTL(nResId, bIsVerticalFrame, bIsInRightToLeft);
                             String sEntry(SW_RES(nResId));
-                            USHORT nPos = rLB.InsertEntry(sEntry);
-                            rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
-                            if (!sSelEntry.Len() && aRelationMap[nRelPos].nRelation == nRel)
+                            USHORT nPos = _rLB.InsertEntry(sEntry);
+                            _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
+                            if (!sSelEntry.Len() && aRelationMap[nRelPos].nRelation == _nRel)
                                 sSelEntry = sEntry;
                         }
                     }
                 }
             }
             if (sSelEntry.Len())
-                rLB.SelectEntry(sSelEntry);
+                _rLB.SelectEntry(sSelEntry);
             else
             {
                 // Warscheinlich Ankerwechsel. Daher aehnliche Relation suchen
-                switch (nRel)
+                switch (_nRel)
                 {
-                    case FRAME:             nRel = REL_PG_FRAME;    break;
-                    case PRTAREA:           nRel = REL_PG_PRTAREA;  break;
-                    case REL_PG_LEFT:       nRel = REL_FRM_LEFT;    break;
-                    case REL_PG_RIGHT:      nRel = REL_FRM_RIGHT;   break;
-                    case REL_FRM_LEFT:      nRel = REL_PG_LEFT;     break;
-                    case REL_FRM_RIGHT:     nRel = REL_PG_RIGHT;    break;
-                    case REL_PG_FRAME:      nRel = FRAME;           break;
-                    case REL_PG_PRTAREA:    nRel = PRTAREA;         break;
+                    case FRAME:             _nRel = REL_PG_FRAME;   break;
+                    case PRTAREA:           _nRel = REL_PG_PRTAREA; break;
+                    case REL_PG_LEFT:       _nRel = REL_FRM_LEFT;   break;
+                    case REL_PG_RIGHT:      _nRel = REL_FRM_RIGHT;  break;
+                    case REL_FRM_LEFT:      _nRel = REL_PG_LEFT;    break;
+                    case REL_FRM_RIGHT:     _nRel = REL_PG_RIGHT;   break;
+                    case REL_PG_FRAME:      _nRel = FRAME;          break;
+                    case REL_PG_PRTAREA:    _nRel = PRTAREA;        break;
 
                     default:
-                        if (rLB.GetEntryCount())
+                        if (_rLB.GetEntryCount())
                         {
-                            RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(rLB.GetEntryCount() - 1);
-                            nRel = pEntry->nRelation;
+                            RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(_rLB.GetEntryCount() - 1);
+                            _nRel = pEntry->nRelation;
                         }
                         break;
                 }
 
-                for (USHORT i = 0; i < rLB.GetEntryCount(); i++)
+                for (USHORT i = 0; i < _rLB.GetEntryCount(); i++)
                 {
-                    RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(i);
-                    if (pEntry->nRelation == nRel)
+                    RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
+                    if (pEntry->nRelation == _nRel)
                     {
-                        rLB.SelectEntryPos(i);
+                        _rLB.SelectEntryPos(i);
                         break;
                     }
                 }
 
-                if (!rLB.GetSelectEntryCount())
-                    rLB.SelectEntryPos(0);
+                if (!_rLB.GetSelectEntryCount())
+                    _rLB.SelectEntryPos(0);
             }
         }
     }
 
-    rLB.Enable(rLB.GetEntryCount() != 0);
-    rFT.Enable(rLB.GetEntryCount() != 0);
+    _rLB.Enable(_rLB.GetEntryCount() != 0);
+    _rFT.Enable(_rLB.GetEntryCount() != 0);
 
-    RelHdl(&rLB);
+    RelHdl(&_rLB);
 
     return nLBRelations;
 }
@@ -1484,7 +1596,10 @@ USHORT SwFrmPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, 
 {
     USHORT nAlign = 0;
 
-    if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
+    // OD 14.11.2003 #i22341# - special handling also for map <aVCharMap>,
+    // because it contains ambigous items for alignment
+    if ( pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
+         pMap == aVCharMap )
     {
         if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
@@ -1516,7 +1631,7 @@ USHORT SwFrmPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, 
     Beschreibung:
  --------------------------------------------------------------------*/
 
-USHORT SwFrmPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
+USHORT SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
 {
     USHORT nMapPos = 0;
     USHORT nLBSelPos = rAlignLB.GetSelectEntryPos();
@@ -1665,6 +1780,8 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, pEdit )
     aVal.bMirror = aMirrorPagesCB.IsChecked();
     // OD 18.09.2003 #i18732#
     aVal.bFollowTextFlow = aFollowTextFlowCB.IsChecked();
+    // OD 12.11.2003 #i22341#
+    aVal.pToCharCntntPos = mpToCharCntntPos;
 
     if ( pHMap )
     {
@@ -1784,8 +1901,11 @@ IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, pButton )
 
     // OD 06.11.2003 #i18732# - enable check box 'Follow text flow' for anchor
     // type to-paragraph' and to-character
+    // OD 10.11.2003 #i22305# - enable check box 'Follow text
+    // flow' also for anchor type to-frame.
     aFollowTextFlowCB.Enable( aAnchorAtParaRB.IsChecked() ||
-                              aAnchorAtCharRB.IsChecked() );
+                              aAnchorAtCharRB.IsChecked() ||
+                              aAnchorAtFrameRB.IsChecked() );
 
     USHORT nId = GetAnchor();
 
@@ -1926,6 +2046,8 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     else
         bAtVertPosModified = TRUE;
 
+    // OD 12.11.2003 #i22341# - following special handling no longer needed
+    /*
     if (!bHori && pVMap == aVCharMap)
     {
         // Ausrichtung Vertikal
@@ -1949,6 +2071,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
             aVerticalDLB.SelectEntryPos(nOldPos);
         }
     }
+    */
     if(bHtmlMode  && FLY_AUTO_CNTNT == GetAnchor()) // wieder Sonderbehandlung
     {
         if(bHori)
