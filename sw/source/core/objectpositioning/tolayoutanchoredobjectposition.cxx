@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:02:28 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
         // ??? Why saving calculated relative position
         // keep the calculated relative vertical position
-        if ( aVert.GetVertOrient() == VERT_NONE &&
+        if ( aVert.GetVertOrient() != VERT_NONE &&
              aVert.GetPos() != nRelPosY )
         {
             aVert.SetPos( nRelPosY );
