@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treesegment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:50:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ namespace configmgr
 
             Name getName() const;
             void setName(Name const & _aNewName);
+            void markRemovable();
+
 
             memory::Segment * getSegment() const;
             memory::Accessor  getAccessor() const;
