@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-01 09:50:51 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 14:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ class DlgEdObj: public SdrUnoObj
 private:
     sal_Bool        bIsListening;
     sal_uInt32      nEvent;
-    //String            aName;
     DlgEdForm*      pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xListener;
 
@@ -98,14 +97,9 @@ public:
 
 protected:
     DlgEdObj();
-    DlgEdObj(DlgEdForm* pForm);
     DlgEdObj(const ::rtl::OUString& rModelName);
-    DlgEdObj(const ::rtl::OUString& rModelName, DlgEdForm* pForm);
     DlgEdObj(const ::rtl::OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
-    DlgEdObj(const ::rtl::OUString& rModelName,
-             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
-             DlgEdForm* pForm);
 
 public:
     virtual ~DlgEdObj();
