@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: af $ $Date: 2002-05-30 15:13:04 $
+ *  last change: $Author: af $ $Date: 2002-05-30 15:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,19 +291,17 @@ bool AccessibleShape::operator== (const AccessibleShape& rShape)
 
 sal_Bool AccessibleShape::SetState (sal_Int16 aState)
 {
-    bool bStateHasChanged = sal_False;
-#if 0
+    sal_Bool bStateHasChanged = sal_False;
+
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {
-        // Offer focused state to edit engine and set or reset the state
-        // according to whether it takes it or refuses it.
-        if (mpText->SetFocusedState (sal_True))
-            bStateHasChanged = AccessibleContextBase::SetState (aState);
-        else
-            bStateHasChanged = AccessibleContextBase::ResetState (aState);
+        // Offer FOCUSED state to edit engine and detect whether the state
+        // changes.
+        sal_Bool bIsFocused = mpText->HaveFocus ();
+        mpText->SetFocus (sal_True);
+        bStateHasChanged = (bIsFocused != mpText->HaveFocus ());
     }
     else
-#endif
         bStateHasChanged = AccessibleContextBase::SetState (aState);
 
     return bStateHasChanged;
@@ -314,19 +312,17 @@ sal_Bool AccessibleShape::SetState (sal_Int16 aState)
 
 sal_Bool AccessibleShape::ResetState (sal_Int16 aState)
 {
-    bool bStateHasChanged = sal_False;
-#if 0
+    sal_Bool bStateHasChanged = sal_False;
+
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {
-        // Offer focused state to edit engine and set or reset the state
-        // according to whether it takes it or refuses it.
-        if (mpText->SetFocusedState (sal_True))
-            bStateHasChanged = AccessibleContextBase::SetState (aState);
-        else
-            bStateHasChanged = AccessibleContextBase::ResetState (aState);
+        // Try to remove FOCUSED state from the edit engine and detect
+        // whether the state changes.
+        sal_Bool bIsFocused = mpText->HaveFocus ();
+        mpText->SetFocus (sal_False);
+        bStateHasChanged = (bIsFocused != mpText->HaveFocus ());
     }
     else
-#endif
         bStateHasChanged = AccessibleContextBase::ResetState (aState);
 
     return bStateHasChanged;
@@ -337,33 +333,13 @@ sal_Bool AccessibleShape::ResetState (sal_Int16 aState)
 
 sal_Bool AccessibleShape::GetState (sal_Int16 aState)
 {
-#if 0
     if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
     {
-        ::osl::MutexGuard aGuard (maMutex);
-        ::utl::AccessibleStateSetHelper* pStateSet =
-              static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-
-        // Merge current focused state from edit engine.
-        if (pStateSet != NULL)
-        {
-            if (mpText->GetFocusedState ())
-            {
-                pStateSet->AddState (aState);
-                return sal_True;
-            }
-            else
-            {
-                pStateSet->RemoveState (aState);
-                return sal_False;
-            }
-        }
-        else
-            // Return false as default when state set does not exist.
-            return sal_FALSE;
+        // Just delegate the call to the edit engine.  The state is not
+        // merged into the state set.
+        return mpText->HaveFocus();
     }
     else
-#endif
         return AccessibleContextBase::GetState (aState);
 }
 
@@ -442,27 +418,27 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     Reference<XAccessibleStateSet> xStateSet;
 
     if (rBHelper.bDisposed || mpText == NULL)
+        // Return a minimal state set that only contains the DEFUNC state.
         xStateSet = AccessibleContextBase::getAccessibleStateSet ();
     else
     {
         ::utl::AccessibleStateSetHelper* pStateSet =
               static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        // Merge current focused state from edit engine.
-
-#if 0
         if (pStateSet != NULL)
         {
-            if (mpText->GetFocusedState ())
-                pStateSet->AddState (aState);
-            else
-                pStateSet->RemoveState (aState);
+            // Merge current FOCUSED state from edit engine.
+            if (mpText != NULL)
+                if (mpText->HaveFocus())
+                    pStateSet->AddState (AccessibleStateType::FOCUSED);
+                else
+                    pStateSet->RemoveState (AccessibleStateType::FOCUSED);
+
+            // Create a copy of the state set that may be modified by the
+            // caller without affecting the current state set.
             xStateSet = Reference<XAccessibleStateSet>(
                 new ::utl::AccessibleStateSetHelper (*pStateSet));
         }
-#else
-        xStateSet = AccessibleContextBase::getAccessibleStateSet ();
-#endif
     }
 
     return xStateSet;
@@ -749,16 +725,15 @@ void SAL_CALL AccessibleShape::addEventListener (
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        uno::Reference<uno::XInterface> xThis ((lang::XComponent *)this, uno::UNO_QUERY);
+        uno::Reference<uno::XInterface> xThis (
+            (lang::XComponent *)this, uno::UNO_QUERY);
         rxListener->disposing (lang::EventObject (xThis));
     }
     else
     {
         AccessibleContextBase::addEventListener (rxListener);
-#if 0
         if (mpText != NULL)
-            mpText->addEventListener (rxListener);
-#endif
+            mpText->AddEventListener (rxListener);
     }
 }
 
@@ -770,10 +745,8 @@ void SAL_CALL AccessibleShape::removeEventListener (
     throw (uno::RuntimeException)
 {
     AccessibleContextBase::removeEventListener (rxListener);
-#if 0
     if (mpText != NULL)
-        mpText->removeEventListener (rxListener);
-#endif
+        mpText->RemoveEventListener (rxListener);
 }
 
 
@@ -915,13 +888,13 @@ void SAL_CALL
                 mpText = NULL;
             }
         }
-
         else if (aEvent.Source ==  maShapeTreeInfo.GetModelBroadcaster())
         {
             // Remove reference to model broadcaster to allow it to pass
             // away.
             maShapeTreeInfo.SetModelBroadcaster(NULL);
         }
+
     }
     catch (uno::RuntimeException e)
     {
@@ -939,16 +912,18 @@ void SAL_CALL
     throw (uno::RuntimeException)
 {
     OSL_TRACE ("AccessibleShape::notifyEvent");
-    const OUString sShapeModified (RTL_CONSTASCII_USTRINGPARAM("ShapeModified"));
-    if (rEventObject.EventName.equals (sShapeModified))
+    static const OUString sShapeModified (
+        RTL_CONSTASCII_USTRINGPARAM("ShapeModified"));
+
+    // First check if the event is for us.
+    uno::Reference<drawing::XShape> xShape (
+        rEventObject.Source, uno::UNO_QUERY);
+    if (xShape == mxShape)
     {
-        OSL_TRACE ("  Is ShapeNotified event");
-        // Some property of a shape has been modified.  Find the associated
-        // accessible object and send an event that indicates a change of the
-        // visible data to all listeners.
-        uno::Reference<drawing::XShape> xShape (rEventObject.Source, uno::UNO_QUERY);
-        if (xShape == mxShape)
+        if (rEventObject.EventName.equals (sShapeModified))
         {
+        // Some property of a shape has been modified.  Send an event that
+        // indicates a change of the visible data to all listeners.
             OSL_TRACE ("   Found accessible object for shape.");
             CommitChange (
                 AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
@@ -1127,7 +1102,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     if (nResourceId != -1)
     {
         ::vos::OGuard aGuard (::Application::GetSolarMutex());
-        sName = OUString (SVX_RESSTR(nResourceId));
+        sName = OUString (SVX_RESSTR((unsigned short)nResourceId));
     }
 
     return sName;
@@ -1273,6 +1248,7 @@ void AccessibleShape::disposing (void)
     if (xComponent.is())
         xComponent->removeEventListener (this);
 
+    // Register at model as document::XEventListener.
     if (maShapeTreeInfo.GetModelBroadcaster().is())
         maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
             static_cast<document::XEventListener*>(this));
@@ -1289,7 +1265,8 @@ void AccessibleShape::disposing (void)
         mpText = NULL;
     }
 
-    // Cleanup.  Remove references to objects to allow them to be destroyed.
+    // Cleanup.  Remove references to objects to allow them to be
+    // destroyed.
     mxShape = NULL;
     maShapeTreeInfo = AccessibleShapeTreeInfo();
 
