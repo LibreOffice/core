@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-01-16 15:40:54 $
+ *  last change: $Author: er $ $Date: 2001-01-31 19:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #endif
 
+class Date;
+class Time;
+
 namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
@@ -135,6 +138,10 @@ class LocaleDataWrapper
 
             void                getDateFormatsImpl();
             DateFormat          scanDateFormat( const String& rCode );
+
+
+            sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
+                                    long nNumber, USHORT nDecimals ) const;
 
 public:
                                 LocaleDataWrapper(
@@ -215,14 +222,22 @@ public:
     inline  const String&       getLongDateYearSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_YEAR_SEPARATOR ); }
 
+    // currency
             const String&       getCurrSymbol() const;
             const String&       getCurrBankSymbol() const;
             USHORT              getCurrPositiveFormat() const;
             USHORT              getCurrNegativeFormat() const;
             USHORT              getCurrDigits() const;
 
+    // date and time
             DateFormat          getDateFormat() const;
             DateFormat          getLongDateFormat() const;
+            String              getDate( const Date& rDate ) const;
+            String              getTime( const Time& rTime, BOOL bSec = TRUE,
+                                    BOOL b100Sec = FALSE ) const;
+
+    // simple number formatting
+            String              getNum( long nNumber, USHORT nDecimals ) const;
 
     // dummy returns
     inline  sal_Unicode         getCurrZeroChar() const

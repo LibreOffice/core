@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-01-19 11:01:55 $
+ *  last change: $Author: er $ $Date: 2001-01-31 19:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <string.h>     // memcpy()
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
@@ -972,6 +974,262 @@ void LocaleDataWrapper::getDateFormatsImpl()
         else
             nLongDateFormat = scanDateFormat( aFormatSeq[nLong].Code );
     }
+}
+
+
+String LocaleDataWrapper::getDate( const Date& rDate ) const
+{
+    String aStr;
+    USHORT nDay = rDate.GetDay();
+    USHORT nMonth = rDate.GetMonth();
+    USHORT nYear = rDate.GetYear();
+    const String& rSep = getDateSep();
+//!TODO: how about leading zeros et al?
+    switch ( getDateFormat() )
+    {
+        case DMY :
+            if ( nDay < 10 )
+                aStr += '0';
+            aStr += String::CreateFromInt32( nDay );
+            aStr += rSep;
+            if ( nMonth < 10 )
+                aStr += '0';
+            aStr += String::CreateFromInt32( nMonth );
+            aStr += rSep;
+            aStr += String::CreateFromInt32( nYear );
+        break;
+        case MDY :
+            if ( nMonth < 10 )
+                aStr += '0';
+            aStr += String::CreateFromInt32( nMonth );
+            aStr += rSep;
+            if ( nDay < 10 )
+                aStr += '0';
+            aStr += String::CreateFromInt32( nDay );
+            aStr += rSep;
+            aStr += String::CreateFromInt32( nYear );
+        break;
+        case YMD :
+        default:
+            aStr += String::CreateFromInt32( nYear );
+            aStr += rSep;
+            if ( nMonth < 10 )
+                aStr += '0';
+            aStr += String::CreateFromInt32( nMonth );
+            aStr += rSep;
+            if ( nDay < 10 )
+                aStr += '0';
+            aStr += String::CreateFromInt32( nDay );
+    }
+    return aStr;
+}
+
+
+String LocaleDataWrapper::getTime( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
+{
+    String aStr;
+    const String& rSep = getTimeSep();
+    USHORT nTmp;
+//!TODO: AM/PM if locale says so
+    nTmp = rTime.GetHour();
+    if ( nTmp < 10 )
+        aStr += '0';
+    aStr += String::CreateFromInt32( nTmp );
+    aStr += rSep;
+    nTmp = rTime.GetMin();
+    if ( nTmp < 10 )
+        aStr += '0';
+    aStr += String::CreateFromInt32( nTmp );
+    if ( bSec )
+    {
+        aStr += rSep;
+        nTmp = rTime.GetSec();
+        if ( nTmp < 10 )
+            aStr += '0';
+        aStr += String::CreateFromInt32( nTmp );
+        if ( b100Sec )
+        {
+            aStr += getTime100SecSep();
+            nTmp = rTime.Get100Sec();
+            aStr += String::CreateFromInt32( nTmp );
+        }
+    }
+    return aStr;
+}
+
+
+// --- simple number formatting ---------------------------------------
+
+// The ImplAdd... methods are taken from class International and modified to
+// suit the needs.
+
+static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, ULONG nNumber )
+{
+    // fill temp buffer with digits
+    sal_Unicode aTempBuf[30];
+    sal_Unicode* pTempBuf = aTempBuf;
+    do
+    {
+        *pTempBuf = (sal_Unicode)(nNumber % 10) + '0';
+        pTempBuf++;
+        nNumber /= 10;
+    }
+    while ( nNumber );
+
+    // copy temp buffer to buffer passed
+    do
+    {
+        pTempBuf--;
+        *pBuf = *pTempBuf;
+        pBuf++;
+    }
+    while ( pTempBuf != aTempBuf );
+
+    return pBuf;
+}
+
+
+inline sal_Unicode* ImplAddStringToBuffer( sal_Unicode* pBuf, const String& rStr )
+{
+    if ( rStr.Len() == 1 )
+        *pBuf++ = rStr.GetChar(0);
+    else if ( rStr.Len() == 0 )
+        ;
+    else
+    {
+        memcpy( pBuf, rStr.GetBuffer(), rStr.Len() * sizeof(sal_Unicode) );
+        pBuf += rStr.Len();
+    }
+    return pBuf;
+}
+
+
+sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
+                               long nNumber, USHORT nDecimals ) const
+{
+    sal_Unicode aNumBuf[32];
+    sal_Unicode* pNumBuf;
+    USHORT  nNumLen;
+    USHORT  i = 0;
+    BOOL    bNeg;
+
+    // negative number
+    if ( nNumber < 0 )
+    {
+        nNumber *= -1;
+        bNeg = TRUE;
+        *pBuf = '-';
+        pBuf++;
+    }
+    else
+        bNeg = FALSE;
+
+    // convert number
+    pNumBuf = ImplAddUNum( aNumBuf, (ULONG)nNumber );
+    nNumLen = (USHORT)(ULONG)(pNumBuf-aNumBuf);
+    pNumBuf = aNumBuf;
+
+    if ( nNumLen <= nDecimals )
+    {
+        // strip .0 in decimals?
+        if ( !nNumber /* && !rIntn.IsNumTrailingZeros() */ )
+        {
+            *pBuf = '0';
+            pBuf++;
+        }
+        else
+        {
+            // LeadingZero, insert 0
+            if ( TRUE /* rIntn.IsNumLeadingZero() */ )
+            {
+                *pBuf = '0';
+                pBuf++;
+            }
+
+            // append decimal separator
+            pBuf = ImplAddStringToBuffer( pBuf, getNumDecimalSep() );
+
+            // fill with zeros
+            while ( i < (nDecimals-nNumLen) )
+            {
+                *pBuf = '0';
+                pBuf++;
+                i++;
+            }
+
+            // append decimals
+            while ( nNumLen )
+            {
+                *pBuf = *pNumBuf;
+                pBuf++;
+                pNumBuf++;
+                nNumLen--;
+            }
+        }
+    }
+    else
+    {
+        const String& rThoSep = getNumThousandSep();
+
+        // copy number to buffer (excluding decimals)
+        USHORT nNumLen2 = nNumLen-nDecimals;
+        while ( i < nNumLen2 )
+        {
+            *pBuf = *pNumBuf;
+            pBuf++;
+            pNumBuf++;
+            i++;
+
+            // add thousand separator?
+            if ( !((nNumLen2-i)%3) /* && rIntn.IsNumThousandSep() */ && (i < nNumLen2) )
+                pBuf = ImplAddStringToBuffer( pBuf, rThoSep );
+        }
+
+        // append decimals
+        if ( nDecimals )
+        {
+            pBuf = ImplAddStringToBuffer( pBuf, getNumDecimalSep() );
+
+            BOOL bNullEnd = TRUE;
+            while ( i < nNumLen )
+            {
+                if ( *pNumBuf != '0' )
+                    bNullEnd = FALSE;
+
+                *pBuf = *pNumBuf;
+                pBuf++;
+                pNumBuf++;
+                i++;
+            }
+
+            // strip .0 in decimals?
+            if ( bNullEnd /* && !rIntn.IsNumTrailingZeros() */ )
+                pBuf -= nDecimals+1;
+        }
+    }
+
+    return pBuf;
+}
+
+
+String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals ) const
+{
+    sal_Unicode aBuf[48];       // big enough for 64-bit long
+    // approximately 3.2 bits per digit
+    const long nDig = ((sizeof(long) * 8) / 3) + 1;
+    // check if digits and separators will fit into fixed buffer or allocate
+    const long nGuess = ((nDecimals < nDig) ?
+        ((((nDig - nDecimals) / 3) * getNumThousandSep().Len()) + nDig) :
+        nDecimals) + getNumDecimalSep().Len() + 3;
+    sal_Unicode* const pBuffer = (nGuess < 42 ? aBuf :
+        new sal_Unicode[nGuess + 16]);
+
+    sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals );
+    String aStr( pBuffer, (xub_StrLen)(ULONG)(pBuf-pBuffer) );
+
+    if ( pBuffer != aBuf )
+        delete [] pBuffer;
+    return aStr;
 }
 
 
