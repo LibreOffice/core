@@ -10984,3 +10984,5 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ?ImpGetOrCreatePageMasterInfo@SdXMLExport@@AAEPAVImpXMLEXPPageMasterInfo@@V?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@Z
 ?SetPageMaster@SdXMLGenericPageContext@@IAEXAAVOUString@rtl@@@Z
 ?getRuntimeValuePropertyNames@OValuePropertiesMetaData@xmloff@@SAXW4ElementType@OControlElement@2@FAAPBD1@Z
+?AddCondition@SvXMLNumFormatContext@@QAEXJABVOUString@rtl@@ABVLocaleDataWrapper@@@Z
+?replaceAt@OUString@rtl@@QBE?AV12@JJABV12@@Z
