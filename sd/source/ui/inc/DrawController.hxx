@@ -1,11 +1,69 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DrawController.hxx,v $
+ *
+ *  $Revision: 1.5 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:53:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
 #ifndef SD_DRAW_CONTROLLER_HXX
 #define SD_DRAW_CONTROLLER_HXX
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-//#include <cppuhelper/interfacecontainer.h>
 #endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
@@ -57,11 +115,11 @@ class ViewShellBase;
 class ViewShell;
 class View;
 
-/** Main controller for all sub-shells that are stacked onto a single
+/** Main controller for all sub-shells that are stacked on a single
     view shell.
 
     <p>With the stacked sub-shells it is not possible to have one
-    controller for every sub-shell.  Instead there is this generic
+    controller for all sub-shell.  Instead there is this generic
     controller which handles general requests regarding dispatching
     and selection.  It concentrates on the currently active/focused
     sub-shell.  In order to offer more specific access to each of the
@@ -81,9 +139,9 @@ class DrawController
 public:
     enum properties
     {
-        PROPERTY_WORKAREA = 0,
-        PROPERTY_FIRST_FREE,
-        PROPERTY_COUNT = PROPERTY_FIRST_FREE
+        PROPERTY__BEGIN = 0,
+        PROPERTY_WORKAREA = PROPERTY__BEGIN,
+        PROPERTY__END
     };
 
     DrawController (
