@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:21:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-23 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 
 class SwTxtFormatInfo;
 class SwFldPortion;
+class SwTxtCursor;
+class SwLineLayout;
 
 /*-----------------16.10.00 12:45-------------------
  * The SwMultiPortion is line portion inside a line portion
@@ -93,6 +95,19 @@ public:
     void CalcSize( SwTxtFormatter& rLine );
 
     OUTPUT_OPERATOR
+};
+
+// For cursor travelling in multiportions
+
+class SwTxtCursorSave
+{
+    SwTxtCursor* pTxtCrsr;
+    SwLineLayout* pCurr;
+    xub_StrLen nStart;
+public:
+    SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
+        SwTwips nY, xub_StrLen nCurrStart );
+    ~SwTxtCursorSave();
 };
 
 /*************************************************************************

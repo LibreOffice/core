@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-23 10:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,10 @@ public:
 
 class SwTxtCursor : public SwTxtAdjuster
 {
+    // A small helper-class to save SwTxtCursor member, manipulate them
+    // and to restore them
+    friend class SwTxtCursorSave;
+
     // 1170: Mehrdeutigkeiten
     static sal_Bool bRightMargin;
 protected:

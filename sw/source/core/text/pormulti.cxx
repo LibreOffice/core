@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-17 10:36:46 $
+ *  last change: $Author: ama $ $Date: 2000-10-23 10:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,5 +335,30 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         rInf.SetRest( pTmp );
     }
     return bRet;
+}
+
+/*-----------------23.10.00 10:47-------------------
+ * SwTxtCursorSave notes the start and current line of a SwTxtCursor,
+ * sets them to the values for GetCrsrOfst inside a multiportion
+ * and restores them in the destructor.
+ * --------------------------------------------------*/
+
+SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
+    SwMultiPortion* pMulti, SwTwips nY, xub_StrLen nCurrStart )
+{
+    pTxtCrsr = pTxtCursor;
+    nStart = pTxtCursor->nStart;
+    pTxtCursor->nStart = nCurrStart;
+    pCurr = pTxtCursor->pCurr;
+    pTxtCursor->pCurr = &pMulti->GetRoot();
+    while( pTxtCursor->Y() + pTxtCursor->GetLineHeight() < nY &&
+        pTxtCursor->Next() )
+        ; // nothing
+}
+
+SwTxtCursorSave::~SwTxtCursorSave()
+{
+    pTxtCrsr->pCurr = pCurr;
+    pTxtCrsr->nStart = nStart;
 }
 

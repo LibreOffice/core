@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-20 14:51:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-23 10:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,6 +888,14 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     if( nWidth > nX )
     {
+        if( pPor->IsMultiPortion() )
+        {
+            // In a multi-portion we use GetCrsrOfst()-funtion rekursively
+            SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
+                rPoint.Y(), nCurrStart );
+            return GetCrsrOfst( pPos, Point( nLeftMargin + nX, rPoint.Y() ),
+                                nChgNode, pCMS );
+        }
         if( pPor->InTxtGrp() )
         {
             SwTxtSizeInfo aSizeInf( GetInfo(), rText, nCurrStart );
@@ -895,7 +903,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor) );
             SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
                     ((SwDropPortion*)pPor)->GetFnt() : NULL );
-//          nLength = aSizeInf.GetCrsrOfst( nX, nSpaceAdd );
             nLength = aSizeInf.GetFont()->_GetCrsrOfst( aSizeInf.GetVsh(),
                                     aSizeInf.GetOut(),
                                     aSizeInf.GetTxt(), nX, aSizeInf.GetIdx(),
