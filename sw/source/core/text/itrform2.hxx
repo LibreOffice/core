@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:34:54 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 13:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ class SwTxtFormatter : public SwTxtPainter
 {
     const SwFmtDrop *pDropFmt;
     SwMultiPortion* pMulti; // during formatting a multi-portion
-    xub_StrLen nNextChg;
     sal_uInt8 nCntEndHyph;  // zaehlt aufeinanderfolgende Hyphens am Zeilenende
     sal_uInt8 nCntMidHyph;  // zaehlt aufeinanderfolgende Hyphens vor Flies
     sal_Bool bOnceMore : 1; // noch 'ne Runde?

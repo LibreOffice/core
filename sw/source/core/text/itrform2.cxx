@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:37:59 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 13:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@ void SwTxtFormatter::CtorInit( SwTxtFrm *pFrm, SwTxtFormatInfo *pNewInf )
     bOnceMore = sal_False;
     bChanges = sal_False;
     bTruncLines = sal_False;
-    nNextChg = 0;
     nCntEndHyph = 0;
     nCntMidHyph = 0;
 
@@ -479,7 +478,6 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     // Wir formatieren rueckwaerts, d.h. dass Attributwechsel in der
     // naechsten Zeile durchaus noch einmal drankommen koennen.
     // Zu beobachten in 8081.sdw, wenn man in der ersten Zeile Text eingibt.
-    nNextChg = 0;
 
     const xub_StrLen nSoftHyphPos = rInf.GetSoftHyphPos();
 
@@ -961,64 +959,58 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     Seek( rInf.GetIdx() );
     SwTxtPortion *pPor = WhichTxtPor( rInf );
 
-    nNextChg = 0;
+    // maximal bis zum naechsten Attributwchsel.
+    xub_StrLen nNextAttr = GetNextAttr();
+    xub_StrLen nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
 
-//  if( nNextChg <= rInf.GetIdx() )
+    // At the end of a multi-line part we've to break.
+    if( GetMulti() && nNextChg > GetMulti()->GetLen() )
+        nNextChg = GetMulti()->GetLen();
+
+    nNextAttr = NextScriptChg( rInf.GetIdx() );
+    if( nNextChg > nNextAttr )
+        nNextChg = nNextAttr;
+    if ( nNextChg > 1 + rInf.GetIdx() && ' ' == rInf.GetChar( nNextChg-1 ) )
+        --nNextChg;
+
+    // 7515, 7516, 3470, 6441 : Turbo-Boost
+    // Es wird unterstellt, dass die Buchstaben eines Fonts nicht
+    // groesser als doppelt so breit wie hoch sind.
+    // 7659: Ganz verrueckt: man muss sich auf den Ascent beziehen.
+    // Falle: GetSize() enthaelt die Wunschhoehe, die reale Hoehe
+    // ergibt sich erst im CalcAscent!
+    // 7697: Das Verhaeltnis ist noch krasser: ein Blank im Times
+    // New Roman besitzt einen Ascent von 182, eine Hoehe von 200
+    // und eine Breite von 53! Daraus folgt, dass eine Zeile mit
+    // vielen Blanks falsch eingeschaetzt wird. Wir erhoehen von
+    // Faktor 2 auf 8 (wg. negativen Kernings).
+
+    pPor->SetLen(1);
+    CalcAscent( rInf, pPor );
+
+    const SwFont* pFnt = rInf.GetFont();
+    KSHORT nExpect = Min( KSHORT( ((Font *)pFnt)->GetSize().Height() ),
+                          KSHORT( pPor->GetAscent() ) ) / 8;
+    if ( !nExpect )
+        nExpect = 1;
+    nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
+    if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
+        nNextChg = Min( nExpect, rInf.GetTxt().Len() );
+
+    // 4294: Vorsicht vor STRING_LEN-Ueberrundungen !
+    if( MAX_TXTPORLEN < nNextChg && STRING_LEN - MAX_TXTPORLEN > rInf.GetIdx() )
     {
-        // maximal bis zum naechsten Attributwchsel.
-        xub_StrLen nNextAttr = GetNextAttr();
-        nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
-
-        // At the end of a multi-line part we've to break.
-        if( GetMulti() && nNextChg > GetMulti()->GetLen() )
-            nNextChg = GetMulti()->GetLen();
-
-        nNextAttr = NextScriptChg( rInf.GetIdx() );
-        if( nNextChg > nNextAttr )
-            nNextChg = nNextAttr;
-        if ( nNextChg > 1 + rInf.GetIdx() && ' ' == rInf.GetChar( nNextChg-1 ) )
-            --nNextChg;
-
-        // 7515, 7516, 3470, 6441 : Turbo-Boost
-        // Es wird unterstellt, dass die Buchstaben eines Fonts nicht
-        // groesser als doppelt so breit wie hoch sind.
-        // 7659: Ganz verrueckt: man muss sich auf den Ascent beziehen.
-        // Falle: GetSize() enthaelt die Wunschhoehe, die reale Hoehe
-        // ergibt sich erst im CalcAscent!
-        // 7697: Das Verhaeltnis ist noch krasser: ein Blank im Times
-        // New Roman besitzt einen Ascent von 182, eine Hoehe von 200
-        // und eine Breite von 53! Daraus folgt, dass eine Zeile mit
-        // vielen Blanks falsch eingeschaetzt wird. Wir erhoehen von
-        // Faktor 2 auf 8 (wg. negativen Kernings).
-
-//        if( !pPor->GetAscent() )
-        pPor->SetLen(1);
-        CalcAscent( rInf, pPor );
-
-        const SwFont* pFnt = rInf.GetFont();
-        KSHORT nExpect = Min( KSHORT( ((Font *)pFnt)->GetSize().Height() ),
-                              KSHORT( pPor->GetAscent() ) ) / 8;
-        if ( !nExpect )
-            nExpect = 1;
-        nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
-        if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
-            nNextChg = Min( nExpect, rInf.GetTxt().Len() );
-
-        // 4294: Vorsicht vor STRING_LEN-Ueberrundungen !
-        if( MAX_TXTPORLEN < nNextChg && STRING_LEN - MAX_TXTPORLEN > rInf.GetIdx() )
+        const xub_StrLen nMaxChg = rInf.GetIdx() + MAX_TXTPORLEN;
+        if( nMaxChg < nNextChg )
         {
-            const xub_StrLen nMaxChg = rInf.GetIdx() + MAX_TXTPORLEN;
-            if( nMaxChg < nNextChg )
-            {
-                // 6441: uebel ist, wenn die Portion passt...
-                const KSHORT nWidth =
-                      rInf.GetTxtSize(rInf.GetIdx(), MAX_TXTPORLEN ).Width();
-                if( nWidth > rInf.Width() )
-                    nNextChg = Min( nMaxChg, rInf.GetTxt().Len() );
-            }
+            // 6441: uebel ist, wenn die Portion passt...
+            const KSHORT nWidth =
+                  rInf.GetTxtSize(rInf.GetIdx(), MAX_TXTPORLEN ).Width();
+            if( nWidth > rInf.Width() )
+                nNextChg = Min( nMaxChg, rInf.GetTxt().Len() );
         }
-        nNextChg = rInf.ScanPortionEnd( nNextChg );
     }
+    nNextChg = rInf.ScanPortionEnd( nNextChg );
     pPor->SetLen( nNextChg - rInf.GetIdx() );
     rInf.SetLen( pPor->GetLen() );
     return pPor;
