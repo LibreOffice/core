@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:16 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:02:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,53 +65,79 @@
 ASM=
 AFLAGS=
 
-#
-# Compiler flags:
-#
-# -ptused :	Instantiate templates while they're in
-#		use. This switch was added because a static member function
-#		couldn't be instantiated.
-#		(ts&sdo/10.06.98)
-#
-#cc=			cc -KPIC -c -n32 -ansi
-CC=			gcc
-#CXX=			CC -KPIC -c -n32 -ptused -OPT:Olimit=20523 
-CXX=			g++ -c
-CFLAGS=		$(INCLUDE)
-CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-# CFLAGS+=	-D__STL_NATIVE_INCLUDE_PATH=/usr/include -D__STL_NATIVE_C_INCLUDE_PATH=/usr/include
-# CFLAGS+=	-D_STL_NATIVE_INCLUDE_PATH=/usr/include -D_STL_NATIVE_C_INCLUDE_PATH=/usr/include
-CFLAGSCC=	 -c
-CFLAGSCXX= 	-fno-for-scope -fpermissive
+SOLAR_JAVA=TRUE
+JAVADEF=-DSOLAR_JAVA
+#JAVAFLAGSDEBUG=-g
+
+.IF "$(debug)"==""
+JAVA_RUNTIME=-ljava
+.ELSE
+JAVA_RUNTIME=-ljava_g
+.ENDIF
+
+
+CC= gcc
+CXX= g++
+CFLAGS= -w -c $(INCLUDE)
+CDEFS+= -D_PTHREADS -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
+CFLAGSCC= 
+CFLAGSCXX= 	-fno-for-scope -fpermissive 
+
+# Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
+# Compiler flags for compiling static object in single threaded environment with character user interface
 CFLAGSOBJCUIST=
+# Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
+# Compiler flags for compiling static object in multi threaded environment with character user interface
 CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT= -fpic
-CFLAGSSLOCUIMT= -fpic
+# Compiler flags for compiling shared object in multi threaded environment with graphical user interface
+CFLAGSSLOGUIMT=-fpic
+# Compiler flags for compiling shared object in multi threaded environment with character user interface
+CFLAGSSLOCUIMT=-fpic
+# Compiler flags for profiling
 CFLAGSPROF=
-CFLAGSDEBUG=	-g
-CFLAGSDBGUTIL=
-CFLAGSOPT=		-O2
-CFLAGSNOOPT=		-O
-CFLAGSOUTOBJ=	-o
+# Compiler flags for debugging
+CFLAGSDEBUG=-g
+CFLAGSDBGUTIL= 
+# Compiler flags for enabling optimizations
+CFLAGSOPT=-O2
+# Compiler flags for disabling optimizations
+CFLAGSNOOPT=-O0
+# Compiler flags for describing the output path
+CFLAGSOUTOBJ=-o
+# Enable all warnings
+CFLAGSWALL=-Wall
+# Set the default warn level
+CFLAGSDFLTWARN=-w
+# exception flags
+CFLAGSEXCEPTIONS=-fexceptions
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 STATIC=			-Wl,-Bstatic
 DYNAMIC=		-Wl,-Bdynamic
 
 #
-# Link flags:
+# To use the map files, you need to have a gcc_specs file which contains:
+# *linker:
+# /path/to/bin/ld.sh
+# where ld.sh is a wrapper script that does some conversion of the
+# map files on the fly.
 #
-# -update_registry <file> :	Is needed to link several shared libraries
-#				**VALID MECHANISM SOMETIMES MISSING FOR LOCAL STANDS**
-#
-LINK=			g++
-LINKFLAGS=	-L/usr/lib32	
-LINKFLAGSAPPGUI= -Wl,-multigot
-LINKFLAGSAPPCUI= -Wl,-multigot
+LINK= g++
+LINKFLAGS=	-L/usr/lib32 -Wl,-no_unresolved
+LINKVERSIONMAPFLAG= -Wl,-exports_file
 
-LINKFLAGSSHLGUI= -shared
-LINKFLAGSSHLCUI= -shared
+.IF "$(TARGETTHREAD)"=="MT"
+LINKFLAGSAPPGUI= $(THREADLIB)
+LINKFLAGSAPPCUI= $(THREADLIB)
+LINKFLAGSSHLGUI= $(THREADLIB)
+LINKFLAGSSHLCUI= $(THREADLIB)
+.ENDIF
+LINKFLAGSAPPGUI+= -Wl,-multigot
+LINKFLAGSAPPCUI+= -Wl,-multigot
+LINKFLAGSSHLGUI+= -shared 
+LINKFLAGSSHLCUI+= -shared
 
 LINKFLAGSTACK=
 LINKFLAGSPROF=
@@ -124,25 +150,26 @@ LINKFLAGSSHLCUI += -Wl,-Bsymbolic
 APPLINKSTATIC=-Bstatic
 APPLINKSHARED=-Bsymbolic
 
+SONAME_SWITCH = -Wl,-soname -Wl,
+
 # Sequence of libraries DOES matter!
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-# STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
 STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
 STDLIBCUIST=	$(DYNAMIC) -lc -lm
-# STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lc -lm
-# STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDSHLCUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lc -lm
+STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
+STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lgcc -lc -lm
+STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
+STDSHLCUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lm -lgcc -lc
 THREADLIB=		-lpthread
+
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORTST= -lstlport_gcc
 
 LIBMGR=			ar
 LIBFLAGS=		-r
-# LIBEXT=		.so
 
 IMPLIB=
 IMPLIBFLAGS=
@@ -157,32 +184,8 @@ RCLINKFLAGS=
 RCSETVERSION=
 
 DLLPOSTFIX=		im
-.IF "$(WORK_STAMP)"=="MIX364"
-DLLPOSTFIX=
-.ENDIF
 DLLPRE=			lib
 DLLPOST=		.so
 
 
-LDUMP=
-
-STDLIBCPP = -lstdc++
-
-# --------------------------
-# FROM THE OLE ENVIRONMENT:
-# --------------------------
-#
-# Linking of a static library:
-#	ar -r ...
-#
-# Linking of a shared library:
-#	CC -B symbolic -soname <...> -B dynamic -shared -n32 -multigot
-#		-update_registry <...> ...
-#
-# Linking of an application with static libraries:
-#	CC -B static ...
-#
-# Linking of an application with shared libraries:
-#	CC -n32 -multigot ...
-#
-
+LDUMP=c++filt
