@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ void ZipOutputStream::doDeflate()
     }
 }
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
+    throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 i=0, nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
     const sal_Unicode *pChar = sComment.getStr();
@@ -270,6 +271,7 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
         aChucker.writeBytes(aSequence);
 }
 void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
+    throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( rEntry.sName.getLength() ) ,
               nCommentLength    = static_cast < sal_Int16 > ( rEntry.sComment.getLength() ) ,
@@ -323,6 +325,7 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
     }
 }
 void ZipOutputStream::writeEXT( const package::ZipEntry &rEntry )
+    throw(io::IOException, uno::RuntimeException)
 {
     aChucker << EXTSIG;
     aChucker << rEntry.nCrc;
@@ -331,6 +334,7 @@ void ZipOutputStream::writeEXT( const package::ZipEntry &rEntry )
 }
 
 void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
+    throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());
     sal_Int16 i=0;

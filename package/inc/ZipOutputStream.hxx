@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 11:02:31 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,14 @@ public:
     static void dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate);
 private:
     void doDeflate();
-    void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength);
-    void writeCEN( const com::sun::star::package::ZipEntry &rEntry );
-    void writeEXT( const com::sun::star::package::ZipEntry &rEntry );
-    void writeLOC( const com::sun::star::package::ZipEntry &rEntry );
+    void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void writeCEN( const com::sun::star::package::ZipEntry &rEntry )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void writeEXT( const com::sun::star::package::ZipEntry &rEntry )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void writeLOC( const com::sun::star::package::ZipEntry &rEntry )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 };
 

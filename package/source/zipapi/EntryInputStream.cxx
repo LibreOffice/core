@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ using namespace com::sun::star;
  * seek to it before performing any reads.
  */
 
-EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInput, sal_Int64 nNewBegin, sal_Int64 nNewEnd, sal_Int32 nNewBufferSize, sal_Int64 nUncompressedSize)
+EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInput, sal_Int64 nNewBegin, sal_Int64 nNewEnd, sal_Int32 nNewBufferSize, sal_Int64 nUncompressedSize, sal_Bool bIsDeflated)
 : xStream( xNewInput )
 , xSeek( xNewInput, uno::UNO_QUERY )
 , nCompBegin( nNewBegin )
@@ -89,11 +89,8 @@ EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInpu
 , bReachEOF ( sal_False )
 , aInflater( sal_True )
 , aBuffer( static_cast < sal_Int32 > (nUncompressedSize) )
+, bDeflated ( bIsDeflated )
 {
-    if (nCompEnd - nCompBegin < nUncompressedSize)
-        bDeflated = sal_True;
-    else
-        bDeflated = sal_False;
     if (bDeflated)
     {
         xSeek->seek(nNewBegin);

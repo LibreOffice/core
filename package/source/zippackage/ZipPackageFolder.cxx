@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-01 10:50:49 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,7 @@ using namespace com::sun::star::package::ZipConstants;
 using namespace com::sun::star;
 using namespace rtl;
 
-ZipPackageFolder::ZipPackageFolder (void) //ZipOutputStream &rStream)//ZipPackage &rInPackage)
-//: rZipOut(rStream)
+ZipPackageFolder::ZipPackageFolder (void)
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -138,7 +137,14 @@ void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, cons
         uno::Reference < uno::XInterface > xInterface (*this);
         xNamed->setName (sName);
         aContents[sName] = xRef;
-        xChild->setParent (xInterface);
+        try
+        {
+            xChild->setParent (xInterface);
+        }
+        catch ( lang::NoSupportException& )
+        {
+            VOS_DEBUG_ONLY("setParent threw an exception: attempted to set Parent to non-existing interface!");
+        }
     }
 }
 void SAL_CALL ZipPackageFolder::removeByName( const ::rtl::OUString& Name )
@@ -272,12 +278,13 @@ void SAL_CALL ZipPackageFolder::removeVetoableChangeListener( const ::rtl::OUStr
 {
 }
 void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < ManifestEntry *> &rManList, ZipOutputStream & rZipOut)
+    throw(uno::RuntimeException)
 {
     uno::Reference < lang::XUnoTunnel > xTunnel;
     package::ZipEntry *aEntry = NULL;
     ZipPackageFolder *pFolder = NULL;
     ZipPackageStream *pStream = NULL;
-    sal_Bool bIsFolder;
+    sal_Bool bIsFolder = sal_False;
     TunnelHash::const_iterator aCI = aContents.begin();
 
     //rPath = rPath + getName();
@@ -285,14 +292,23 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
     for (;aCI!=aContents.end();aCI++)
     {
         xTunnel = uno::Reference < lang::XUnoTunnel> ((*aCI).second, uno::UNO_QUERY);
-        try
+        sal_Int64 nTest=0;
+        if ((nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId())) != 0)
         {
-            pFolder = reinterpret_cast < ZipPackageFolder* > (xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
+            pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
             bIsFolder = sal_True;
         }
-        catch (uno::RuntimeException)
+        else
         {
-            pStream = reinterpret_cast < ZipPackageStream* > (xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
+            // If this getSomething call returns 0, it means that
+            // something evil has crept into the contents hash_map, which
+            // should mean that something has gone very wrong somewhere, and someone
+            // else should deal with it
+
+            nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId());
+            if (nTest == 0)
+                throw (uno::RuntimeException());
+            pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
             bIsFolder = sal_False;
         }
 
@@ -306,12 +322,18 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             pFolder->aEntry.nCrc = 0;
             pFolder->aEntry.nSize = 0;
             pFolder->aEntry.nCompressedSize = 0;
-            rZipOut.putNextEntry(pFolder->aEntry);
-            rZipOut.closeEntry();
+            try
+            {
+                rZipOut.putNextEntry(pFolder->aEntry);
+                rZipOut.closeEntry();
+            }
+            catch (::com::sun::star::io::IOException & )
+            {
+                VOS_DEBUG_ONLY ( "Error writing ZipOutputStream" );
+            }
             pMan->sMediaType = OUString::createFromAscii("");
             pMan->pEntry = &(pFolder->aEntry);
             pFolder->saveContents(pFolder->aEntry.sName, rManList, rZipOut);
-            //setEntry(pMan->aEntry, pFolder->aEntry);
             rManList.push_back (pMan);
         }
         else
@@ -337,28 +359,41 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 }
             }
 
-            rZipOut.putNextEntry(pStream->aEntry);
-            while (1)
+            try
             {
-                uno::Sequence < sal_Int8 > aSeq (65535);
-                sal_Int32 nLength;
-                nLength = xStream->readBytes(aSeq, 65535);
-                if (nLength < 65535)
-                    aSeq.realloc(nLength);
-                rZipOut.write(aSeq, 0, nLength);
-                if (bTrackLength)
-                    pStream->aEntry.nSize+=nLength;
-                if (nLength < 65535) // EOF
+                rZipOut.putNextEntry(pStream->aEntry);
+                while (1)
+                {
+                    uno::Sequence < sal_Int8 > aSeq (65535);
+                    sal_Int32 nLength;
+                    nLength = xStream->readBytes(aSeq, 65535);
+                    if (nLength < 65535)
+                        aSeq.realloc(nLength);
+                    rZipOut.write(aSeq, 0, nLength);
+                    if (bTrackLength)
+                        pStream->aEntry.nSize+=nLength;
+                    if (nLength < 65535) // EOF
                     break;
+                }
+                if (bTrackLength)
+                    pStream->aEntry.nCompressedSize = pStream->aEntry.nSize;
+                pStream->bPackageMember = sal_True;
+                rZipOut.closeEntry();
             }
-            if (bTrackLength)
-                pStream->aEntry.nCompressedSize = pStream->aEntry.nSize;
-            pStream->bPackageMember = sal_True;
-            rZipOut.closeEntry();
-            uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("MediaType"));
-            aAny >>= pMan->sMediaType;
+            catch (::com::sun::star::io::IOException & )
+            {
+                VOS_DEBUG_ONLY ( "Error writing ZipOutputStream" );
+            }
+            try
+            {
+                uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("MediaType"));
+                aAny >>= pMan->sMediaType;
+            }
+            catch (::com::sun::star::beans::UnknownPropertyException & )
+            {
+                VOS_DEBUG_ONLY ( "MediaType is an unknown property!!" );
+            }
             pMan->pEntry = &(pStream->aEntry);
-            //setEntry(pMan->aEntry, pStream->aEntry);
             rManList.push_back (pMan);
         }
     }
@@ -388,14 +423,23 @@ void ZipPackageFolder::updateReferences( ZipFile * pNewZipFile)
     for (;aCI!=aContents.end();aCI++)
     {
         xTunnel = uno::Reference < lang::XUnoTunnel> ((*aCI).second, uno::UNO_QUERY);
-        try
+        sal_Int64 nTest=0;
+        if ((nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId())) != 0)
         {
-            pFolder = reinterpret_cast < ZipPackageFolder* > (xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
+            pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
             bIsFolder = sal_True;
         }
-        catch (uno::RuntimeException)
+        else
         {
-            pStream = reinterpret_cast < ZipPackageStream* > (xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
+            // If this getSomething call returns 0, it means that
+            // something evil has crept into the contents hash_map, which
+            // should mean that something has gone very wrong somewhere, and someone
+            // else should deal with it
+
+            nTest = xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId());
+            if (nTest == 0)
+                throw (uno::RuntimeException());
+            pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
             bIsFolder = sal_False;
         }
 
@@ -426,7 +470,7 @@ sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8
     throw(uno::RuntimeException)
 {
     if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
-        return reinterpret_cast<sal_Int64>(this);
+        return reinterpret_cast < sal_Int64 > ( this );
 
-    throw uno::RuntimeException();
+    return 0;
 }

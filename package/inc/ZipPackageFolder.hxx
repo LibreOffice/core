@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 05:19:34 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,8 @@ private:
     void setEntry(com::sun::star::package::ZipEntry &rDest, com::sun::star::package::ZipEntry &rSrc);
 public:
     ZipPackageFolder ( void ) ;
-    void  saveContents(rtl::OUString &rPath, std::vector < ManifestEntry * > &rManList, ZipOutputStream & rZipOut);
+    void  saveContents(rtl::OUString &rPath, std::vector < ManifestEntry * > &rManList, ZipOutputStream & rZipOut)
+        throw(::com::sun::star::uno::RuntimeException);
     void  updateReferences( ZipFile * pNewZipFile);
     inline sal_Bool isFolder( void ) {return sal_True;}
     inline sal_Bool isStream( void ) {return sal_False;}

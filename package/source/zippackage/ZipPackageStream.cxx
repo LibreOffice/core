@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:21:56 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,17 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         throw(uno::RuntimeException)
 {
     if (bPackageMember)
-        return pZipFile->getInputStream(aEntry);
+    {
+        try
+        {
+            return pZipFile->getInputStream(aEntry);
+        }
+        catch (package::ZipException &rException)
+        {
+            VOS_DEBUG_ONLY(rException.Message);
+            return uno::Reference < io::XInputStream > ();
+        }
+    }
     else
         return xStream;
 }
@@ -217,7 +227,7 @@ sal_Int64 SAL_CALL ZipPackageStream::getSomething( const uno::Sequence< sal_Int8
     throw(uno::RuntimeException)
 {
     if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
-        return reinterpret_cast<sal_Int64>(this);
+        return reinterpret_cast < sal_Int64 > ( this );
 
-    throw uno::RuntimeException();
+    return 0;
 }

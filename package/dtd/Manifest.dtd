@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8">
+<!ELEMENT manifest (file-entry*) >
+<!ELEMENT file-entry>
+<!ATTLIST file-entry full-path CDATA #REQUIRED>
+<!ATTLIST file-entry media-type CDATA #REQUIRED>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:18:48 $
+ *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,10 @@ private:
     ByteGrabber     aGrabber;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
 public:
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput);
+    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput)
+        throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
+    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, sal_Bool bInitialise)
+        throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
     void updateFromManList(std::vector < ManifestEntry * > &rManList);
     virtual ~ZipFile();
 
@@ -148,10 +151,12 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL entries(  )
         throw(::com::sun::star::uno::RuntimeException);
 private:
-    sal_Bool        readLOC(const com::sun::star::package::ZipEntry &rEntry);
-    ZipEntryImpl*   getNthEntry(sal_Int32 nIndex);
-    sal_Int32       readCEN();
-    sal_Int32       findEND();
+    sal_Bool        readLOC(const com::sun::star::package::ZipEntry &rEntry)
+        throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
+    sal_Int32       readCEN()
+        throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
+    sal_Int32       findEND()
+        throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
 };
 
 #if 0
