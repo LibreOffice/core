@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configvaluecontainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-21 12:53:30 $
+ *  last change: $Author: avy $ $Date: 2001-08-23 15:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,10 @@ namespace utl
     //---------------------------------------------------------------------
     //--- 20.08.01 17:42:17 -----------------------------------------------
 
-    static void lcl_copyData( const NodeValueAccessor& _rAccessor, const Any& _rData, ::osl::Mutex& _rMutex )
+    #ifndef UNX
+    static
+    #endif
+    void lcl_copyData( const NodeValueAccessor& _rAccessor, const Any& _rData, ::osl::Mutex& _rMutex )
     {
         ::osl::MutexGuard aGuard( _rMutex );
 
@@ -206,7 +209,10 @@ namespace utl
     //---------------------------------------------------------------------
     //--- 21.08.01 12:06:43 -----------------------------------------------
 
-    static void lcl_copyData( Any& _rData, const NodeValueAccessor& _rAccessor, ::osl::Mutex& _rMutex )
+    #ifndef UNX
+    static
+    #endif
+    void lcl_copyData( Any& _rData, const NodeValueAccessor& _rAccessor, ::osl::Mutex& _rMutex )
     {
         ::osl::MutexGuard aGuard( _rMutex );
 
@@ -257,7 +263,7 @@ namespace utl
 
         void operator() ( NodeValueAccessor& _rAccessor )
         {
-            lcl_copyData( _rAccessor, m_rRootNode.getNodeValue( _rAccessor.getPath( ) ), m_rMutex );
+            ::utl::lcl_copyData( _rAccessor, m_rRootNode.getNodeValue( _rAccessor.getPath( ) ), m_rMutex );
         }
     };
 
@@ -482,6 +488,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/21 12:53:30  fs
+ *  initial checkin - helper class for accesing config data in fixed memmory locations (aka class members)
+ *
  *
  *  Revision 1.0 20.08.01 15:47:36  fs
  ************************************************************************/
