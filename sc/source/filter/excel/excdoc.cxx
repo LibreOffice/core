@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:55:22 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 14:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void ExcTable::AddWebQueries()
                     {
                         // get properties
 //                      aLinkAny = xLinkProp->getPropertyValue( aPropFilterOpt );
-//                      aLinkAny >>= aAreaLink.sFilterOptions;
+//                      aLinkAny >>= aFilterOpt;
                         aLinkAny = xLinkProp->getPropertyValue( aPropURL );
                         aLinkAny >>= aURL;
                         aLinkAny = xLinkProp->getPropertyValue( aPropRefresh );
@@ -314,8 +314,7 @@ void ExcTable::AddWebQueries()
                             aRangeName = pRangeData->GetName();
                         else
                         {
-                            aRangeName = aURLObj.getBase();
-                            ExcName* pExcName = new ExcName( pExcRoot, aScDestRange, aRangeName );
+                            ExcName* pExcName = new ExcName( pExcRoot, aScDestRange, aURLObj.getBase() );
                             pExcRoot->pNameList->Append( pExcName );
                             aRangeName = pExcName->GetName();
                         }
