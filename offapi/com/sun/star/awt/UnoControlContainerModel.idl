@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainerModel.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:32:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** specifies the standard model of an <type>UnoControlContainer</type>.
  */
-service UnoControlContainerModel
+published service UnoControlContainerModel
 {
     service com::sun::star::awt::UnoControlModel;
 
