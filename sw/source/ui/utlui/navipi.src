@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:58:20 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΥΒΙύΌ¶";
                 Text[ russian ] = "Γλΰβΰ ββεπυ";
                 Text[ polish ] = "Rozdzia³ do gσry";
-                Text[ japanese ] = "Ν‚π‘O‚ΙΪ“®";
+                Text[ japanese ] = "Ν‚πγ‚ΙΪ“®";
                 Text[ chinese_traditional ] = "³Ή¤Ι―Ε";
                 Text[ arabic ] = "έΥα αΓΪαμ";
                 Text[ greek ] = "Προβιβασμός κεφαλαίου";
@@ -355,7 +355,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΥΒ½µΌ¶";
                 Text[ russian ] = "Γλΰβΰ βνθη";
                 Text[ polish ] = "Rozdzia³ w dσ³";
-                Text[ japanese ] = "Ν‚πγ‚λ‚ΙΪ“®";
+                Text[ japanese ] = "Ν‚π‰Ί‚ΙΪ“®";
                 Text[ chinese_traditional ] = "³Ή­°―Ε";
                 Text[ arabic ] = "έΥα αΓΣέα";
                 Text[ greek ] = "Υποβιβασμός κεφαλαίου";
@@ -563,7 +563,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΟΤΚΎµΔ΄σΈΩΌ¶";
                 Text[ russian ] = "Οξκΰηΰννϋε σπξβνθ ρςπσκςσπϋ";
                 Text[ polish ] = "Wywietlone poziomy konspektu";
-                Text[ japanese ] = "±³ΔΧ²έ ΪΝήΩ";
+                Text[ japanese ] = "±³ΔΧ²έΪΝήΩ";
                 Text[ chinese_traditional ] = "Εγ¥άªΊ¤jΊυ―Ε";
                 Text[ arabic ] = "γΣΚζνΗΚ ΗαΪδΗζνδ ΗαΩΗεΡΙ";
                 Text[ greek ] = "Εμφανιζόμενα επίπεδα επικεφαλίδων";
@@ -892,7 +892,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "΄σΈΩΌ¶";
         Text[ russian ] = "Σπξβνθ ρςπσκςσπϋ";
         Text[ polish ] = "Poziomy konspektu";
-        Text[ japanese ] = "±³ΔΧ²έ ΪΝήΩ";
+        Text[ japanese ] = "±³ΔΧ²έΪΝήΩ";
         Text[ chinese_traditional ] = "¤jΊυ―Ε";
         Text[ arabic ] = "γΣΚζνΗΚ ΗαΚήΣνγ";
         Text[ greek ] = "Επίπεδα διάρθρωσης";
@@ -1103,7 +1103,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_simplified ] = "Κ§»ξµΔ";
         Text[ russian ] = "νεΰκςθβνϋι";
         Text[ polish ] = "nieaktywny";
-        Text[ japanese ] = "±ΈΓ¨Μή‚Ε‚Θ‚Ά";
+        Text[ japanese ] = "”ρ±ΈΓ¨Μή";
         Text[ chinese_traditional ] = "¥Ά¬΅ªΊ";
         Text[ arabic ] = "ΫνΡ δΤΨ";
         Text[ greek ] = "μη ενεργό";
