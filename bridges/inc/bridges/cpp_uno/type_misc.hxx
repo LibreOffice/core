@@ -2,9 +2,9 @@
  *
  *  $RCSfile: type_misc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:47 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
     @param pTypeDescr type description of type
     @return true if type might relate to an interface, false otherwise
 */
-inline sal_Bool SAL_CALL cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr )
+inline sal_Bool SAL_CALL cppu_relatesToInterface( typelib_TypeDescription * pTypeDescr ) throw ()
 {
     switch (pTypeDescr->eTypeClass)
     {
@@ -144,7 +144,7 @@ inline sal_Bool SAL_CALL cppu_relatesToInterface( typelib_TypeDescription * pTyp
     @param pTypeDescr type description of type
     @return true if type is a cpp simple type, false otherwise
 */
-inline sal_Bool SAL_CALL cppu_isSimpleType( typelib_TypeDescription * pTypeDescr )
+inline sal_Bool SAL_CALL cppu_isSimpleType( typelib_TypeDescription * pTypeDescr ) throw ()
 {
     return (pTypeDescr->eTypeClass <= typelib_TypeClass_ENUM &&
             pTypeDescr->eTypeClass != typelib_TypeClass_STRING &&

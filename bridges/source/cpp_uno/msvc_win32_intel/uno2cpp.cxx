@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:49 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,10 @@ namespace CPPU_CURRENT_NAMESPACE
 {
 
 //==================================================================================================
-inline static void callVirtualMethod( void * pThis, sal_Int32 nVtableIndex,
-                                      void * pRegisterReturn, typelib_TypeClass eReturnTypeClass,
-                                      sal_Int32 * pStackLongs, sal_Int32 nStackLongs )
+inline static void callVirtualMethod(
+    void * pThis, sal_Int32 nVtableIndex,
+    void * pRegisterReturn, typelib_TypeClass eReturnTypeClass,
+    sal_Int32 * pStackLongs, sal_Int32 nStackLongs )
 {
     // parameter list is mixed list of * and values
     // reference parameters are pointers
@@ -192,7 +193,7 @@ inline static void cpp_call(
     typelib_TypeDescriptionReference * pReturnTypeRef,
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     sal_Int32 nExceptions, typelib_TypeDescriptionReference ** ppExceptionRefs,
-    void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
+    void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc ) throw ()
 {
     // max space for: [complex ret ptr], values|ptr ...
     char * pCppStack        = (char *)alloca( sizeof(sal_Int32) + (nParams * sizeof(sal_Int64)) );
@@ -366,9 +367,9 @@ inline static void cpp_call(
 }
 
 //==================================================================================================
-void SAL_CALL cppu_unoInterfaceProxy_dispatch(
+extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-    void * pReturn, void * pArgs[], uno_Any ** ppException )
+    void * pReturn, void * pArgs[], uno_Any ** ppException ) throw ()
 {
     // is my surrogate
     cppu_unoInterfaceProxy * pThis = static_cast< cppu_unoInterfaceProxy * >( pUnoI );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-29 17:02:26 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,6 @@
 
 #define LEAK_STATIC_DATA
 
-#ifdef DEBUG
-#define TRACE(x) OSL_TRACE(x)
-#else
-#define TRACE(x)
-#endif
-
 #pragma warning( disable : 4237 )
 #include <stl/hash_map>
 #include <sal/config.h>
@@ -90,6 +84,12 @@
 
 #include "msci.hxx"
 
+#ifndef DEBUG
+#undef OSL_TRACE
+#define OSL_TRACE(x)
+#endif
+
+
 #pragma pack(push, 8)
 
 using namespace com::sun::star::uno;
@@ -101,7 +101,7 @@ namespace CPPU_CURRENT_NAMESPACE
 {
 
 //==================================================================================================
-static inline OString toUNOname( const OString & rRTTIname )
+static inline OString toUNOname( const OString & rRTTIname ) throw ()
 {
     OStringBuffer aRet( 64 );
     OString aStr( rRTTIname.copy( 4, rRTTIname.getLength()-4-2 ) ); // filter .?AUzzz@yyy@xxx@@
@@ -114,7 +114,7 @@ static inline OString toUNOname( const OString & rRTTIname )
     return aRet.makeStringAndClear();
 }
 //==================================================================================================
-static inline OString toRTTIname( const OString & rUNOname )
+static inline OString toRTTIname( const OString & rUNOname ) throw ()
 {
     OStringBuffer aRet( 64 );
     aRet.append( RTL_CONSTASCII_STRINGPARAM(".?AV") ); // class ".?AV"; struct ".?AU"
@@ -136,7 +136,7 @@ static inline OString toRTTIname( const OString & rUNOname )
 //==================================================================================================
 struct FctOStringHash : public unary_function< const OString &, size_t >
 {
-    size_t operator()( const OString & rStr ) const
+    size_t operator()( const OString & rStr ) const throw ()
         { return rStr.hashCode(); }
 };
 typedef hash_map< OString, void *, FctOStringHash, equal_to< OString > > t_string2PtrMap;
@@ -147,9 +147,9 @@ class RTTInfos
     Mutex               _aMutex;
     t_string2PtrMap     _allRTTI;
 
-    static OString toRawName( const OString & rUNOname );
+    static OString toRawName( const OString & rUNOname ) throw ();
 public:
-    type_info * getRTTI( const OString & rUNOname );
+    type_info * getRTTI( const OString & rUNOname ) throw ();
 
     RTTInfos();
     ~RTTInfos();
@@ -158,13 +158,13 @@ public:
 //==================================================================================================
 class __type_info
 {
-    friend type_info * RTTInfos::getRTTI( const OString & );
+    friend type_info * RTTInfos::getRTTI( const OString & ) throw ();
     friend sal_Int32 msci_filterCppException( LPEXCEPTION_POINTERS, uno_Any *, uno_Mapping * );
 
 public:
-    virtual ~__type_info();
+    virtual ~__type_info() throw ();
 
-    __type_info( void * m_data, const char * m_d_name )
+    __type_info( void * m_data, const char * m_d_name ) throw ()
         : _m_data( m_data )
     { ::strcpy( _m_d_name, m_d_name ); }
 
@@ -173,11 +173,11 @@ private:
     char _m_d_name[1];
 };
 //__________________________________________________________________________________________________
-__type_info::~__type_info()
+__type_info::~__type_info() throw ()
 {
 }
 //__________________________________________________________________________________________________
-type_info * RTTInfos::getRTTI( const OString & rUNOname )
+type_info * RTTInfos::getRTTI( const OString & rUNOname ) throw ()
 {
     // a must be
     OSL_ENSHURE( sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!" );
@@ -203,13 +203,13 @@ type_info * RTTInfos::getRTTI( const OString & rUNOname )
     }
 }
 //__________________________________________________________________________________________________
-RTTInfos::RTTInfos()
+RTTInfos::RTTInfos() throw ()
 {
 }
 //__________________________________________________________________________________________________
-RTTInfos::~RTTInfos()
+RTTInfos::~RTTInfos() throw ()
 {
-    TRACE( "> freeing generated RTTI infos... <\n" );
+    OSL_TRACE( "> freeing generated RTTI infos... <\n" );
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
@@ -233,11 +233,11 @@ struct ObjectFunction
     char somecode[12];
     typelib_TypeDescription * _pTypeDescr; // type of object
 
-    ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc );
-    ~ObjectFunction();
+    ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ();
+    ~ObjectFunction() throw ();
 };
 //__________________________________________________________________________________________________
-ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc )
+ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ()
     : _pTypeDescr( pTypeDescr )
 {
     typelib_typedescription_acquire( _pTypeDescr );
@@ -255,19 +255,21 @@ ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpF
     *(sal_Int32 *)pCode = ((unsigned char *)fpFunc) - pCode - sizeof(sal_Int32);
 }
 //__________________________________________________________________________________________________
-ObjectFunction::~ObjectFunction()
+ObjectFunction::~ObjectFunction() throw ()
 {
     typelib_typedescription_release( _pTypeDescr );
 }
 
 //==================================================================================================
 static void * __cdecl __copyConstruct( void * pExcThis, void * pSource, ObjectFunction * pThis )
+    throw ()
 {
     uno_copyData( pExcThis, pSource, pThis->_pTypeDescr, cpp_acquire );
     return pExcThis;
 }
 //==================================================================================================
 static void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
+    throw ()
 {
     uno_destructData( pExcThis, pThis->_pTypeDescr, cpp_release );
     return pExcThis;
@@ -276,7 +278,7 @@ static void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
 // these are non virtual object methods; there is no this ptr on stack => ecx supplies _this_ ptr
 
 //==================================================================================================
-static __declspec(naked) copyConstruct()
+static __declspec(naked) copyConstruct() throw ()
 {
     __asm
     {
@@ -289,7 +291,7 @@ static __declspec(naked) copyConstruct()
     }
 }
 //==================================================================================================
-static __declspec(naked) destruct()
+static __declspec(naked) destruct() throw ()
 {
     __asm
     {
@@ -310,7 +312,7 @@ struct ExceptionType
     ObjectFunction *    _pCopyCtor;
     sal_Int32           _n5;
 
-    ExceptionType( typelib_TypeDescription * pTypeDescr )
+    ExceptionType( typelib_TypeDescription * pTypeDescr ) throw ()
         : _n0( 0 )
         , _n1( 0 )
         , _n2( -1 )
@@ -319,7 +321,7 @@ struct ExceptionType
         , _pCopyCtor( new ObjectFunction( pTypeDescr, copyConstruct ) )
         , _n5( 0 )
         { _pTypeInfo = msci_getRTTI( OUStringToOString( pTypeDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) ); }
-    ~ExceptionType()
+    ~ExceptionType() throw ()
         { delete _pCopyCtor; }
 };
 //==================================================================================================
@@ -331,11 +333,11 @@ struct RaiseInfo
     void *              _types;
     sal_Int32           _n3, _n4;
 
-    RaiseInfo( typelib_TypeDescription * pTypeDescr );
-    ~RaiseInfo();
+    RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
+    ~RaiseInfo() throw ();
 };
 //__________________________________________________________________________________________________
-RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr )
+RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     : _n0( 0 )
     , _pDtor( new ObjectFunction( pTypeDescr, destruct ) )
     , _n2( 0 )
@@ -369,7 +371,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr )
     }
 }
 //__________________________________________________________________________________________________
-RaiseInfo::~RaiseInfo()
+RaiseInfo::~RaiseInfo() throw ()
 {
     ExceptionType ** ppTypes = (ExceptionType **)((sal_Int32 *)_types + 1);
     for ( sal_Int32 nTypes = *(sal_Int32 *)_types; nTypes--; )
@@ -385,19 +387,19 @@ class ExceptionInfos
     Mutex           _aMutex;
     t_string2PtrMap _allRaiseInfos;
 public:
-    void            raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
+    void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
-    ExceptionInfos();
-    ~ExceptionInfos();
+    ExceptionInfos() throw ();
+    ~ExceptionInfos() throw ();
 };
 //__________________________________________________________________________________________________
-ExceptionInfos::ExceptionInfos()
+ExceptionInfos::ExceptionInfos() throw ()
 {
 }
 //__________________________________________________________________________________________________
-ExceptionInfos::~ExceptionInfos()
+ExceptionInfos::~ExceptionInfos() throw ()
 {
-    TRACE( "> freeing exception infos... <\n" );
+    OSL_TRACE( "> freeing exception infos... <\n" );
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
@@ -458,7 +460,7 @@ void ExceptionInfos::raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 
 
 //##################################################################################################
-type_info * msci_getRTTI( const OString & rUNOname )
+type_info * msci_getRTTI( const OString & rUNOname ) throw ()
 {
     static RTTInfos * s_pRTTIs = 0;
     if (! s_pRTTIs)
@@ -541,7 +543,7 @@ sal_Int32 msci_filterCppException(
                         pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #ifdef _DEBUG
                     OString aStr( OUStringToOString( aUNOname, RTL_TEXTENCODING_ASCII_US ) );
-                    aStr += OString(" : unkonwn exception has been thrown: leaking!");
+                    aStr += OString(" : unkonwn exception has been thrown: don't know how to handle, thus leaking!");
                     OSL_ENSURE( 0, aStr.getStr() );
 #endif
                     // though this unknown exception leaks now, no user-defined exception

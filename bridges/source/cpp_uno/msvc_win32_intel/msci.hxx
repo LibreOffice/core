@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msci.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:49 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
 //==================================================================================================
 type_info * msci_getRTTI(
-    const ::rtl::OString & rUNOname );
+    const ::rtl::OString & rUNOname ) throw ();
 
 //==================================================================================================
 sal_Int32 msci_filterCppException(

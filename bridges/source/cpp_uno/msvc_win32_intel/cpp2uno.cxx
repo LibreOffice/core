@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:49 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ class MediateVtables
         sal_Int32   _n0, _n1, _n2;
         type_info * _pRTTI;
 
-        DefaultRTTIEntry()
+        DefaultRTTIEntry() throw ()
             : _n0( 0 )
             , _n1( 0 )
             , _n2( 0 )
@@ -413,14 +413,14 @@ class MediateVtables
 public:
     const void *            getMediateVtable( sal_Int32 nSize );
 
-    MediateVtables( sal_Int32 nSize = 256 )
+    MediateVtables( sal_Int32 nSize = 256 ) throw ()
         : _nCurrent( 0 )
         , _pCurrent( 0 )
         { getMediateVtable( nSize ); }
-    ~MediateVtables();
+    ~MediateVtables() throw ();
 };
 //__________________________________________________________________________________________________
-MediateVtables::~MediateVtables()
+MediateVtables::~MediateVtables() throw ()
 {
     TRACE( "> calling ~MediateVtables(): freeing mediate vtables... <\n" );
 
@@ -480,7 +480,7 @@ Ldouble:
 }
 
 //__________________________________________________________________________________________________
-const void * MediateVtables::getMediateVtable( sal_Int32 nSize )
+const void * MediateVtables::getMediateVtable( sal_Int32 nSize ) throw ()
 {
     if (_nCurrent < nSize)
     {
@@ -526,8 +526,8 @@ const void * MediateVtables::getMediateVtable( sal_Int32 nSize )
 }
 
 //==================================================================================================
-void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
-    XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr )
+extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
+    XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) throw ()
 {
     static MediateVtables * s_pMediateVtables = 0;
     if (! s_pMediateVtables)
@@ -550,13 +550,13 @@ void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pCppEnv )
+extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pCppEnv ) throw ()
 {
     CPPU_CURRENT_NAMESPACE::cppu_cppenv_initEnvironment( pCppEnv );
 }
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
-    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
+    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo ) throw ()
 {
     CPPU_CURRENT_NAMESPACE::cppu_ext_getMapping( ppMapping, pFrom, pTo );
 }
