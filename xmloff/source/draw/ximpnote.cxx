@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-18 07:48:51 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 13:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,25 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        OUString sValue = xAttrList->getValueByIndex( i );
+        const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetMasterPageAttrTokenMap();
+
+        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_MASTERPAGE_PAGE_MASTER_NAME:
+            {
+                msPageMasterName = sValue;
+                break;
+            }
+        }
+    }
+
     // now delete all up-to-now contained shapes from this notes page
     uno::Reference< drawing::XShape > xShape;
     while(rShapes->getCount())
@@ -87,6 +106,12 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
         rShapes->getByIndex(0L) >>= xShape;
         if(xShape.is())
             rShapes->remove(xShape);
+    }
+
+    // set page-master?
+    if(msPageMasterName.getLength())
+    {
+        SetPageMaster( msPageMasterName );
     }
 }
 

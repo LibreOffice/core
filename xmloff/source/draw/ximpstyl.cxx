@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 08:51:44 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 13:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,62 +833,9 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     }
 
     // set page-master?
-    if(!bHandoutMaster && msPageMasterName.getLength() && GetSdImport().GetShapeImport()->GetStylesContext())
+    if(msPageMasterName.getLength())
     {
-        // look for PageMaster with this name
-
-        // #80012# GetStylesContext() replaced with GetAutoStylesContext()
-        const SvXMLStylesContext* pAutoStyles = GetSdImport().GetShapeImport()->GetAutoStylesContext();
-
-        const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, msPageMasterName) : NULL;
-
-        if(pStyle && pStyle->ISA(SdXMLPageMasterContext))
-        {
-            const SdXMLPageMasterContext* pPageMaster = (SdXMLPageMasterContext*)pStyle;
-            const SdXMLPageMasterStyleContext* pPageMasterContext = pPageMaster->GetPageMasterStyle();
-
-            if(pPageMasterContext)
-            {
-                uno::Reference< drawing::XDrawPage > xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
-                if(xMasterPage.is())
-                {
-                    // set sizes for this masterpage
-                    uno::Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
-                    if(xPropSet.is())
-                    {
-                        uno::Any aAny;
-
-                        aAny <<= pPageMasterContext->GetBorderBottom();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom")), aAny);
-
-                        aAny <<= pPageMasterContext->GetBorderLeft();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderLeft")), aAny);
-
-                        aAny <<= pPageMasterContext->GetBorderRight();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderRight")), aAny);
-
-                        aAny <<= pPageMasterContext->GetBorderTop();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderTop")), aAny);
-
-                        aAny <<= pPageMasterContext->GetWidth();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), aAny);
-
-                        aAny <<= pPageMasterContext->GetHeight();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), aAny);
-
-                        aAny <<= pPageMasterContext->GetOrientation();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), aAny);
-                    }
-                }
-            }
-        }
+        SetPageMaster( msPageMasterName );
     }
 
     // set PageProperties?

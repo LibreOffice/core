@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.55 2002-08-30 17:30:42 dvo Exp $
+	$Id: style.mod,v 1.56 2002-09-04 14:02:51 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -429,6 +429,7 @@
 <!-- handout master -->
 <!ELEMENT style:handout-master (%shapes;)*>
 <!ATTLIST style:handout-master presentation:presentation-page-layout-name %styleName; #IMPLIED>
+<!ATTLIST style:handout-master style:page-master-name %styleName; #IMPLIED>
 
 
 <!ENTITY % headerText "(text:h|text:p|text:ordered-list|

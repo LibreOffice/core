@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-27 14:14:16 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 13:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,9 @@ class SdXMLExport : public SvXMLExport
 
     // temporary infos
     ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
-    ImpXMLEXPPageMasterList*    mpPageMaterUsageList;
+    ImpXMLEXPPageMasterList*    mpPageMasterUsageList;
+    ImpXMLEXPPageMasterList*    mpNotesPageMasterUsageList;
+    ImpXMLEXPPageMasterInfo*    mpHandoutPageMaster;
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
     com::sun::star::uno::Sequence< ::rtl::OUString > maDrawPagesAutoLayoutNames;
@@ -171,6 +173,7 @@ class SdXMLExport : public SvXMLExport
     // #82003#
     virtual void _ExportMeta();
 
+    ImpXMLEXPPageMasterInfo* ImpGetOrCreatePageMasterInfo( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage );
     void ImpPrepPageMasterInfos();
     void ImpPrepDrawMasterInfos();
     void ImpWritePageMasterInfos();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-17 14:14:39 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 13:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,26 +299,36 @@ ImpXMLEXPPageMasterInfo::ImpXMLEXPPageMasterInfo(
     {
         uno::Any aAny;
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom")));
-        aAny >>= mnBorderBottom;
+        uno::Reference< beans::XPropertySetInfo > xPropsInfo( xPropSet->getPropertySetInfo() );
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom") )))
+        {
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom")));
+            aAny >>= mnBorderBottom;
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
-        aAny >>= mnBorderLeft;
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
+            aAny >>= mnBorderLeft;
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderRight")));
-        aAny >>= mnBorderRight;
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderRight")));
+            aAny >>= mnBorderRight;
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
-        aAny >>= mnBorderTop;
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
+            aAny >>= mnBorderTop;
+        }
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width")));
-        aAny >>= mnWidth;
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("Width") )))
+        {
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width")));
+            aAny >>= mnWidth;
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height")));
-        aAny >>= mnHeight;
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height")));
+            aAny >>= mnHeight;
+        }
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")));
-        aAny >>= meOrientation;
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation") )))
+        {
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")));
+            aAny >>= meOrientation;
+        }
     }
 
     uno::Reference <container::XNamed> xMasterNamed(xPage, uno::UNO_QUERY);
@@ -545,7 +555,9 @@ DECLARE_LIST(ImpXMLAutoLayoutInfoList, ImpXMLAutoLayoutInfo*);
 SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
 :   SvXMLExport( MAP_CM, bIsDraw ? XML_DRAWING : XML_PRESENTATION, nExportFlags ),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
-    mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
+    mpPageMasterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
+    mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
+    mpHandoutPageMaster(NULL),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
     mpSdPropHdlFactory(0L),
     mpPropertySetMapper(0L),
@@ -816,10 +828,15 @@ __EXPORT SdXMLExport::~SdXMLExport()
         delete mpPageMasterInfoList;
         mpPageMasterInfoList = 0L;
     }
-    if(mpPageMaterUsageList)
+    if(mpPageMasterUsageList)
     {
-        delete mpPageMaterUsageList;
-        mpPageMaterUsageList = 0L;
+        delete mpPageMasterUsageList;
+        mpPageMasterUsageList = 0L;
+    }
+    if(mpNotesPageMasterUsageList)
+    {
+        delete mpNotesPageMasterUsageList;
+        mpNotesPageMasterUsageList = 0L;
     }
 
     // clear auto-layout infos
@@ -1406,39 +1423,71 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
 
 //////////////////////////////////////////////////////////////////////////////
 
+ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetOrCreatePageMasterInfo( uno::Reference< drawing::XDrawPage > xMasterPage )
+{
+    bool bDoesExist = false;
+
+    ImpXMLEXPPageMasterInfo* pNewInfo = new ImpXMLEXPPageMasterInfo(*this, xMasterPage);
+
+    // compare with prev page-master infos
+    for(sal_uInt32 a = 0; !bDoesExist && a < mpPageMasterInfoList->Count(); a++)
+    {
+        if(mpPageMasterInfoList->GetObject(a)
+            && *mpPageMasterInfoList->GetObject(a) == *pNewInfo)
+        {
+            delete pNewInfo;
+            pNewInfo = mpPageMasterInfoList->GetObject(a);
+            bDoesExist = true;
+        }
+    }
+    // add entry when not found same page-master infos
+    if(!bDoesExist)
+        mpPageMasterInfoList->Insert(pNewInfo, LIST_APPEND);
+
+    return pNewInfo;
+}
+
 void SdXMLExport::ImpPrepPageMasterInfos()
 {
+    // create page master info for handout master page
+    uno::Reference< drawing::XDrawPage > xMasterPage;
+
+    uno::Reference< XHandoutMasterSupplier > xHMS( GetModel(), uno::UNO_QUERY );
+    if( xHMS.is() )
+        xMasterPage = xHMS->getHandoutMasterPage();
+
+    if( xMasterPage.is() )
+        mpHandoutPageMaster = ImpGetOrCreatePageMasterInfo(xMasterPage);
+
+    // create page master infos for master pages
     if(mnDocMasterPageCount)
     {
         // look for needed page-masters, create these
         for(sal_Int32 nMPageId = 0L; nMPageId < mnDocMasterPageCount; nMPageId++)
         {
-            uno::Any aAny(mxDocMasterPages->getByIndex(nMPageId));
-            uno::Reference< drawing::XDrawPage > xMasterPage;
+            mxDocMasterPages->getByIndex(nMPageId) >>= xMasterPage;
             ImpXMLEXPPageMasterInfo* pNewInfo = 0L;
-            BOOL bDoesExist(FALSE);
 
-            if(aAny >>= xMasterPage)
+            if(xMasterPage.is())
+                pNewInfo = ImpGetOrCreatePageMasterInfo(xMasterPage);
+
+            mpPageMasterUsageList->Insert(pNewInfo, LIST_APPEND);
+
+            // look for page master of handout page
+            if(IsImpress())
             {
-                pNewInfo = new ImpXMLEXPPageMasterInfo(*this, xMasterPage);
-
-                // compare with prev page-master infos
-                for(sal_uInt32 a = 0; !bDoesExist && a < mpPageMasterInfoList->Count(); a++)
+                pNewInfo = NULL;
+                uno::Reference< presentation::XPresentationPage > xPresPage(xMasterPage, uno::UNO_QUERY);
+                if(xPresPage.is())
                 {
-                    if(mpPageMasterInfoList->GetObject(a)
-                        && *mpPageMasterInfoList->GetObject(a) == *pNewInfo)
+                    uno::Reference< drawing::XDrawPage > xNotesPage(xPresPage->getNotesPage());
+                    if(xNotesPage.is())
                     {
-                        delete pNewInfo;
-                        pNewInfo = mpPageMasterInfoList->GetObject(a);
-                        bDoesExist = TRUE;
+                        pNewInfo = ImpGetOrCreatePageMasterInfo(xNotesPage);
                     }
                 }
+                mpNotesPageMasterUsageList->Insert( pNewInfo, LIST_APPEND );
             }
-
-            // add entry when not found same page-master infos
-            if(!bDoesExist)
-                mpPageMasterInfoList->Insert(pNewInfo, LIST_APPEND);
-            mpPageMaterUsageList->Insert(pNewInfo, LIST_APPEND);
         }
     }
 }
@@ -2295,6 +2344,13 @@ void SdXMLExport::_ExportMasterStyles()
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[0]);
                 }
 
+                ImpXMLEXPPageMasterInfo* pInfo = mpHandoutPageMaster;
+                if(pInfo)
+                {
+                    OUString sString = pInfo->GetName();
+                    AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sString);
+                }
+
                 // write masterpage
                 SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, XML_HANDOUT_MASTER, sal_True, sal_True);
 
@@ -2323,7 +2379,7 @@ void SdXMLExport::_ExportMasterStyles()
                 AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, sMasterPageName);
             }
 
-            ImpXMLEXPPageMasterInfo* pInfo = mpPageMaterUsageList->GetObject(nMPageId);
+            ImpXMLEXPPageMasterInfo* pInfo = mpPageMasterUsageList->GetObject(nMPageId);
             if(pInfo)
             {
                 OUString sString = pInfo->GetName();
@@ -2357,6 +2413,13 @@ void SdXMLExport::_ExportMasterStyles()
                         uno::Reference< drawing::XShapes > xShapes(xNotesPage, uno::UNO_QUERY);
                         if(xShapes.is() && xShapes->getCount())
                         {
+                            ImpXMLEXPPageMasterInfo* pInfo = mpNotesPageMasterUsageList->GetObject(nMPageId);
+                            if(pInfo)
+                            {
+                                OUString sString = pInfo->GetName();
+                                AddAttribute(XML_NAMESPACE_STYLE, XML_PAGE_MASTER_NAME, sString);
+                            }
+
                             // write presentation notes
                             SvXMLElementExport aPSY(*this, XML_NAMESPACE_PRESENTATION, XML_NOTES, sal_True, sal_True);
 

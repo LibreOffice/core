@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 13:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@ protected:
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+
+    /** sets the properties from a page master style with the given name on this contexts page */
+    void SetPageMaster( rtl::OUString& rsPageMasterName );
 
 public:
     TYPEINFO();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 13:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 
 class SdXMLNotesContext : public SdXMLGenericPageContext
 {
+private:
+    rtl::OUString msPageMasterName;
+
 public:
     SdXMLNotesContext( SdXMLImport& rImport, USHORT nPrfx,
     const rtl::OUString& rLocalName,
