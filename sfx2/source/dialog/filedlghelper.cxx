@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-10 11:31:14 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 12:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,13 +599,14 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         nFilterFlags = SFX_FILTER_IMPORT;
 
     sal_Bool    bHasAll = sal_False;
-    OUString    aAllFilterName( String( SfxResId( STR_FILTERNAME_ALL ) ) );
+    OUString    aAllFilterName = OUString( String( SfxResId( STR_FILTERNAME_ALL ) ) );
+    OUString    aUIName;
     SfxFilterMatcherIter aIter( mpMatcher, nFilterFlags, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
     const SfxFilter* pDef = aIter.First();
 
     for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
     {
-        OUString aUIName( pFilter->GetUIName() );
+        aUIName = pFilter->GetUIName();
         xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
         if ( aUIName == aAllFilterName )
             bHasAll = sal_True;
