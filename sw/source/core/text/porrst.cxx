@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-08 15:22:58 $
+ *  last change: $Author: fme $ $Date: 2002-02-27 13:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>   // ASSERT
+#endif
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
 #endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
@@ -327,6 +330,12 @@ void SwKernPortion::FormatEOL( SwTxtFormatInfo &rInf )
     else
         Width( 0 );
     rInf.GetLast()->FormatEOL( rInf );
+}
+
+void SwKernPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    String aString;
+    rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
 SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
