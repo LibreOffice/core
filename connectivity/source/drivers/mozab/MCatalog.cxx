@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MCatalog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
-
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
 
 // -------------------------------------------------------------------------
 using namespace connectivity::mozab;
@@ -84,6 +86,8 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::cppu;
+
 // -------------------------------------------------------------------------
 OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
@@ -101,9 +105,9 @@ void OCatalog::refreshTables()
 {
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString::createFromAscii("%");
+    aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%")),::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%")),aTypes);
 
     if(xResult.is())
     {
@@ -139,8 +143,31 @@ void OCatalog::refreshUsers()
 // -------------------------------------------------------------------------
 const ::rtl::OUString& OCatalog::getDot()
 {
-    static const ::rtl::OUString sDot = ::rtl::OUString::createFromAscii(".");
+    static const ::rtl::OUString sDot = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("."));
     return sDot;
 }
 // -----------------------------------------------------------------------------
 
+// XTablesSupplier
+Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    checkDisposed(rBHelper.bDisposed);
+
+    try
+    {
+        if(!m_pTables || m_pConnection->getForceLoadTables())
+            refreshTables();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
+
+    return const_cast<OCatalog*>(this)->m_pTables;
+}
