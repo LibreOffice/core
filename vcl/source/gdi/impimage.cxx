@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-22 13:57:18 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,14 +466,14 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 
             Point   aOutPos = pOutDev->LogicToPixel( rPos );
             Size    aOutSize;
-            BOOL    bOldMap = pOutDev->mbMap;
+            BOOL    bOldMap = pOutDev->IsMapModeEnabled();
 
             if( pSize )
                 aOutSize = pOutDev->LogicToPixel( *pSize );
             else
                 aOutSize = aSize;
 
-            pOutDev->mbMap = FALSE;
+            pOutDev->EnableMapMode( FALSE );
 
             if ( nStyle & IMAGE_DRAW_DISABLE )
             {
@@ -621,7 +621,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                     pOutDev->DrawBitmapEx( aOutPos, aOutSize, aPos, aSize, aBmpEx );
             }
 
-            pOutDev->mbMap = bOldMap;
+            pOutDev->EnableMapMode( bOldMap );
 
 #ifdef FASTTRANSPARENT
             bFastTransparent = bTmp;
