@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSchema.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 14:18:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ module com { module sun { module star { module configuration { module backend {
 
     @since #107960#
 */
-interface XSchema : ::com::sun::star::uno::XInterface
+published interface XSchema : ::com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
