@@ -19542,3 +19542,13 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?MakeObject@SiImportFactory@@QAEJPAVSdrObjFactory@@@Z
 ?ReadData@SiImportRect@@UAEXABVSdrObjIOHeader@@AAVSvStream@@@Z
 ?Store@SvxNumberFormat@@QAEAAVSvStream@@AAV2@PAX@Z
+?setLock@SdrModel@@QAEXE@Z
+??0ODataAccessObjectTransferable@svx@@QAE@ABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@Z
+??0ODataAccessObjectTransferable@svx@@QAE@ABVOUString@rtl@@J0ABV?$Reference@VXConnection@sdbc@star@sun@com@@@uno@star@sun@com@@@Z
+??1ODataAccessObjectTransferable@svx@@UAE@XZ
+?AddSupportedFormats@ODataAccessObjectTransferable@svx@@MAEXXZ
+?GetData@ODataAccessObjectTransferable@svx@@MAEEABUDataFlavor@datatransfer@star@sun@com@@@Z
+?ObjectReleased@ODataAccessObjectTransferable@svx@@MAEXXZ
+?addCompatibleSelectionDescription@ODataAccessObjectTransferable@svx@@IAEXABV?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@@Z
+?canExtractObjectDescriptor@ODataAccessObjectTransferable@svx@@SAEABUDataFlavorExVector@@@Z
+?extractObjectDescriptor@ODataAccessObjectTransferable@svx@@SA?AVODataAccessDescriptor@2@ABVTransferableDataHelper@@@Z
