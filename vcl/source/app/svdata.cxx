@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:10:50 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,8 +345,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 {
     rCancelled = FALSE;
 
-    // no error messages during installation (i.e., when there is no configuration)
-    bool bErrorMessage = (FALSE != vcl::SettingsConfigItem::get()->IsValidConfigMgr());
+    bool bErrorMessage = true;
 
     // Note:
     // if bAllowCancel is TRUE we were called from application startup
