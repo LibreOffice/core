@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:37:33 $
+ *  last change: $Author: sab $ $Date: 2001-04-04 05:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
+#include <com/sun/star/document/XViewDataSupplier.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -399,7 +402,27 @@ void XMLDocumentSettingsContext::EndElement()
 {
     uno::Sequence<beans::PropertyValue> aSeqViewProps;
     if (aViewProps >>= aSeqViewProps)
+    {
         GetImport().SetViewSettings(aSeqViewProps);
+        sal_Int32 i(aSeqViewProps.getLength() - 1);
+        sal_Bool bFound(sal_False);
+        while((i >= 0) && !bFound)
+        {
+            if (aSeqViewProps[i].Name.compareToAscii("Views") == 0)
+            {
+                bFound = sal_True;
+                uno::Reference<container::XIndexAccess> xIndexAccess;
+                if (aSeqViewProps[i].Value >>= xIndexAccess)
+                {
+                    uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetImport().GetModel(), uno::UNO_QUERY);
+                    if (xViewDataSupplier.is())
+                        xViewDataSupplier->setViewData(xIndexAccess);
+                }
+            }
+            else
+                i--;
+        }
+    }
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if (aConfigProps >>= aSeqConfigProps)
         GetImport().SetConfigurationSettings(aSeqConfigProps);
