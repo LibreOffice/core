@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:32:08 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ String RID_SUBSETSTR_BASIC_ARABIC
         Text[ greek ] = "¡Ò·‚ÈÍ‹ ‚·ÛÈÍ‹";
         Text[ dutch ] = "Arabisch - basis";
         Text[ french ] = "Arabe de base";
-        Text[ spanish ] = "Arabe b·sico";
+        Text[ spanish ] = "¡rabe b·sico";
         Text[ italian ] = "Arabo di base";
         Text[ danish ] = "Basic Arabic";
         Text[ swedish ] = "Arabisk (standard)";
@@ -2694,6 +2694,7 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
 
