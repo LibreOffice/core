@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-08 15:21:39 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ public:
 class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 {
 private:
-    friend SvxHlmarkTreeLBox;
+    friend class SvxHlmarkTreeLBox;
 
     PushButton      maBtApply;
     PushButton      maBtClose;
