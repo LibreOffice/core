@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-16 05:15:44 $
+ *  last change: $Author: mmi $ $Date: 2004-07-16 05:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,8 +215,7 @@ int SAL_CALL main( int argc, char **argv )
     fprintf( stdout, "------------- Signature details -------------\n" );
     fprintf( stdout, "%s",
         rtl::OUStringToOString(
-            getSignatureInformations(aSignatureHelper.GetSignatureInformations(),
-                (cssu::Reference< cssxc::XSecurityEnvironment >&)aSignatureHelper.GetSecurityEnvironment()),
+            getSignatureInformations(aSignatureHelper.GetSignatureInformations(), aSignatureHelper.GetSecurityEnvironment()),
             RTL_TEXTENCODING_UTF8).getStr());
 
     return 0;

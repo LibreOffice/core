@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-14 11:05:47 $
+#   last change: $Author: mmi $ $Date: 2004-07-16 05:22:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,8 @@ APP1STDLIBS=	$(CPPULIB)			\
 #APP1STDLIBS+= "xmlsec.lib" "helper.lib" "dialogs.lib" "xsec_xmlsec.lib"
 APP1STDLIBS+= "xsec_xmlsec.lib"
 .ELSE
-APP1STDLIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec" "-lhelper" "-ldialogs" "-lxsec_xmlsec"
+#APP1STDLIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec" "-lhelper" "-ldialogs" "-lxsec_xmlsec"
+APP1STDLIBS+= "-lxsec_xmlsec"
 .ENDIF
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:10 $
+ *  last change: $Author: mmi $ $Date: 2004-07-16 05:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
 
 ::rtl::OUString getSignatureInformations(
     const SignatureInformations& SignatureInformations,
-    cssu::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& xSecurityEnvironment )
+    cssu::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment )
 {
     rtl::OUString result;
     int i;
