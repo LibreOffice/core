@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:20:09 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:34:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
+
+.IF "$(SYSTEM_EXPAT)" == "YES"
+CFLAGS+=-DSYSTEM_EXPAT
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
