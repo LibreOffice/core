@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:48:47 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,11 +948,11 @@ TabPage RID_SVXPAGE_AREA
         };
         StringList [ finnish ]  =
         {
-            < "Unsichtbar" ; AREADLG_INVISIBLE ; > ;
-            < "Farbe" ; AREADLG_COLOR ; > ;
-            < "Farbverlauf" ; AREADLG_GRADIENT ; > ;
-            < "Schraffur" ; AREADLG_HATCH ; > ;
-            < "Bitmap" ; AREADLG_BITMAP ; > ;
+            < "Näkymätön" ; AREADLG_INVISIBLE ; > ;
+            < "Väri" ; AREADLG_COLOR ; > ;
+            < "Sävytys" ; AREADLG_GRADIENT ; > ;
+            < "Viivoitus" ; AREADLG_HATCH ; > ;
+            < "Bittikartta" ; AREADLG_BITMAP ; > ;
         };
         StringList [ danish ]  =
         {
@@ -1076,10 +1076,10 @@ TabPage RID_SVXPAGE_AREA
     };
     StringList [ catalan ] =
     {
-            < "Invisible" ; AREADLG_BITMAP ; > ;
-        < "Color" ; AREADLG_BITMAP ; > ;
-        < "Gradiente" ; AREADLG_BITMAP ; > ;
-        < "Trama" ; AREADLG_BITMAP ; > ;
+            < "Invisible" ; AREADLG_INVISIBLE ; > ;
+        < "Color" ; AREADLG_COLOR ; > ;
+        < "Gradiente" ; AREADLG_GRADIENT ; > ;
+        < "Trama" ; AREADLG_HATCH ; > ;
         < "Bitmap" ; AREADLG_BITMAP ; > ;
     };
     };
@@ -3228,7 +3228,7 @@ TabPage RID_SVXPAGE_GRADIENT
     Text [ norwegian ] = "+++Gradients" ;
     Text [ italian ] = "Sfumature" ;
     Text [ portuguese_brazilian ] = "Dégradés" ;
-    Text [ portuguese ] = "Matizes" ;
+    Text [ portuguese ] = "Gradações" ;
     Text [ finnish ] = "Sävytykset" ;
     Text [ danish ] = "Farvegradueringer" ;
     Text [ french ] = "Dégradés" ;
