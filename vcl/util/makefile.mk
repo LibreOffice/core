@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 11:52:29 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:50:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -310,10 +310,15 @@ SHL2STDLIBS += $(XINERAMALIBS)
 
 .ENDIF # USE_XINERAMA != no
 
+.IF "$(ENABLE_PASF)" != ""
+.IF "$(OS)"=="MACOSX"
+SHL2STDLIBS += -framework CoreAudio -framework AudioToolbox
+.ENDIF
+SHL2STDLIBS += -lsndfile -lportaudio
+.ENDIF # ENABLE_PASF
+
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SHL2STDLIBS += -laudio
-# some nas versions need -lXt, too
-SHL2STDLIBS += -lXt
 .IF "$(OS)"=="SOLARIS"
 # needed by libaudio.a
 SHL2STDLIBS += -ldl -lnsl -lsocket
@@ -377,6 +382,19 @@ SHL4NOCHECK=TRUE
 SHL4STDLIBS+=-l$(SHL2TARGET)
 SHL4STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
 .ENDIF # "$(ENABLE_GTK)" != ""
+
+# KDE plugin
+.IF "$(ENABLE_KDE)" != ""
+LIB5TARGET=$(SLB)$/ikde_plug_
+LIB5FILES=$(SLB)$/kdeplug.lib
+SHL5TARGET=vclplug_kde$(UPD)$(DLLPOSTFIX)
+SHL5IMPLIB=ikde_plug_
+SHL5LIBS=$(LIB5TARGET)
+# libs for KDE plugin
+SHL5STDLIBS=$(WIDGETSET_KDE_LIBS)
+SHL5STDLIBS+=-l$(SHL2TARGET)
+SHL5STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
+.ENDIF # "$(ENABLE_KDE)" != ""
 
 .ENDIF # UNX
 
