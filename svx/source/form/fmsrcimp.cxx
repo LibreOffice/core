@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:09:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
-
-#ifndef _MULTIPRO_HXX
-#include "multipro.hxx"
 #endif
 
 #ifndef _SVX_FMTOOLS_HXX
