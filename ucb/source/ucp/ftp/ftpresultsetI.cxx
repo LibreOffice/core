@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpresultsetI.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:14 $
+ *  last change: $Author: abi $ $Date: 2002-08-29 09:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 
 using namespace std;
 using namespace ftp;
-using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -79,10 +78,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 
-ResultSetI::ResultSetI(const Reference< lang::XMultiServiceFactory >&  xMSF,
-                       const Reference< XContentProvider >&  xProvider,
+ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
+                       const Reference<XContentProvider>&  xProvider,
                        sal_Int32 nOpenMode,
-                       const Sequence< beans::Property >& seqProp,
+                       const Sequence<Property>& seqProp,
                        const Sequence< NumberedSortingInfo >& seqSort,
                        const std::vector<FTPDirentry>&  dirvec)
     : ResultSetBase(xMSF,xProvider,nOpenMode,seqProp,seqSort)
@@ -96,8 +95,8 @@ ResultSetI::ResultSetI(const Reference< lang::XMultiServiceFactory >&  xMSF,
     m_aIdents.resize( m_aPath.size() );
 
     for(unsigned n = 0; n < m_aItems.size(); ++n) {
-        vos::ORef<::ucb::PropertyValueSet> xRow =
-            new ::ucb::PropertyValueSet(xMSF);
+        vos::ORef<ucb::PropertyValueSet> xRow =
+            new ucb::PropertyValueSet(xMSF);
 
         for(i = 0; i < seqProp.getLength(); ++i) {
             const rtl::OUString& Name = seqProp[i].Name;

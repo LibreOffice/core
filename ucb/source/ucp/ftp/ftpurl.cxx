@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:16 $
+ *  last change: $Author: abi $ $Date: 2002-08-29 09:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,13 @@ rtl::OUString FTPURL::ident() const
 /** Listing of a directory.
  */
 
+namespace ftp {
+
+    enum OS {
+        FTP_DOS,FTP_UNIX,FTP_VMS,FTP_UNKNOWN
+    };
+
+}
 
 std::vector<FTPDirentry> FTPURL::list(
     sal_Int16 nMode
@@ -221,11 +228,7 @@ std::vector<FTPDirentry> FTPURL::list(
     char *p1, *p2;
     p1 = p2 = fwd;
 
-    enum OS {
-        DOS,UNIX,VMS,UNKNOWN
-    };
-
-    OS osKind(UNKNOWN);
+    OS osKind(FTP_UNKNOWN);
     std::vector<FTPDirentry> resvec;
     FTPDirentry aDirEntry;
 
@@ -239,25 +242,25 @@ std::vector<FTPDirentry> FTPURL::list(
             // which returns the operating system type,
             // this is not usable here: There are Windows-server
             // formatting the output like UNIX-ls command.
-            case DOS:
+            case FTP_DOS:
                 FTPDirectoryParser::parseDOS(aDirEntry,p1);
                 break;
-            case UNIX:
+            case FTP_UNIX:
                 FTPDirectoryParser::parseUNIX(aDirEntry,p1);
                 break;
-            case VMS:
+            case FTP_VMS:
                 FTPDirectoryParser::parseVMS(aDirEntry,p1);
                 break;
             default:
                 if(FTPDirectoryParser::parseUNIX(aDirEntry,p1))
-                    osKind = UNIX;
+                    osKind = FTP_UNIX;
                 else if(FTPDirectoryParser::parseDOS(aDirEntry,p1))
-                    osKind = DOS;
+                    osKind = FTP_DOS;
                 else if(FTPDirectoryParser::parseVMS(aDirEntry,p1))
-                    osKind = VMS;
+                    osKind = FTP_VMS;
         }
         aDirEntry.m_aName = aDirEntry.m_aName.trim();
-        if(osKind != int(UNKNOWN) &&
+        if(osKind != int(FTP_UNKNOWN) &&
            !aDirEntry.m_aName.equalsAscii("..") &&
            !aDirEntry.m_aName.equalsAscii(".")) {
             if(1 + url.lastIndexOf(sal_Unicode('/')) ==
@@ -294,7 +297,7 @@ std::vector<FTPDirentry> FTPURL::list(
         p1 = p2 + 1;
     }
 
-    if(osKind == int(UNKNOWN))
+    if(osKind == int(FTP_UNKNOWN))
         throw no_such_directory_exception(FTPCouldNotDetermineSystem);
 
     return resvec;

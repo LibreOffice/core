@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:11 $
+ *  last change: $Author: abi $ $Date: 2002-08-29 09:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,8 +434,8 @@ Reference< XRow > FTPContent::getPropertyValues(
     const Reference<XCommandEnvironment>& environment
 )
 {
-    vos::ORef<::ucb::PropertyValueSet> xRow =
-        new ::ucb::PropertyValueSet(m_xSMgr);
+    vos::ORef<ucb::PropertyValueSet> xRow =
+        new ucb::PropertyValueSet(m_xSMgr);
 
     FTPURL aFTPURL(m_xIdentifier->getContentIdentifier(),
                    m_pFCP);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpdirp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:12 $
+ *  last change: $Author: abi $ $Date: 2002-08-29 09:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,13 @@ namespace ftp {
                  const sal_uInt16& day,
                  const sal_uInt16& month,
                  const sal_uInt16& year) SAL_THROW( () )
-                     : DateTime(hundredthSeconds,
-                                seconds,
-                                minutes,
-                                hours,
-                                day,
-                                month,
-                                year) { }
+                     : com::sun::star::util::DateTime(hundredthSeconds,
+                                                      seconds,
+                                                      minutes,
+                                                      hours,
+                                                      day,
+                                                      month,
+                                                      year) { }
 
         void SetYear(sal_uInt16 year) { Year = year; }
         void SetMonth(sal_uInt16 month) { Month = month; }

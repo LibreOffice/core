@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: abi $ $Date: 2002-08-28 07:23:17 $
+#   last change: $Author: abi $ $Date: 2002-08-29 09:45:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,8 @@ NO_BSYMBOLIC=TRUE
 # Version
 UCPFTP_MAJOR=1
 
+CURLLIB = -lcurl
+
 # --- Settings ---------------------------------------------------------
 
 .INCLUDE: settings.mk
@@ -109,13 +111,12 @@ SHL1STDLIBS=\
     $(CPPULIB) \
     $(SALLIB)  \
     $(VOSLIB)  \
-    $(UCBHELPERLIB)
+    $(UCBHELPERLIB) \
+    $(CURLLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS= \
-    $(LIB1TARGET)  \
-    $(SOLARLIBDIR)$/libcurl.lib
-
+    $(LIB1TARGET)
 
 APP1TARGET=ftptest
 APP1OBJS=\
@@ -153,7 +154,7 @@ APP1STDLIBS=\
     $(VOSLIB) \
     $(COMPHELPERLIB) \
     $(UCBHELPERLIB) \
-    $(SOLARLIBDIR)$/libcurl.lib
+    $(CURLLIB)
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
