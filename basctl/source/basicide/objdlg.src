@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-04 13:35:07 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text[ korean ] = "표시";
                 Text[ turkish ] = "G�r�nt�le";
                 Text[ catalan ] = "Mostra";
+                Text[ thai ] = "แสดง";
             };
             /*
             ToolBoxItem
@@ -262,6 +263,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
     Text[ korean ] = "개체";
     Text[ turkish ] = "Nesneler";
     Text[ catalan ] = "Objectes";
+    Text[ thai ] = "วัตถุ";
 };
 
 
