@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:02:10 $
+#   last change: $Author: mt $ $Date: 2001-01-24 14:33:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,8 +63,10 @@
 PRJ=..
 
 PRJNAME=toolkit
-TARGET=controls
+TARGET=unodialog
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
+
 
 # --- Settings -----------------------------------------------------
 
@@ -74,32 +76,22 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	controls.cxx	\
-            smartvcl.cxx
+CXXFILES=	unodialog.cxx
 
-OBJFILES=	$(OBJ)$/controls.obj	\
-            $(OBJ)$/smartvcl.obj
+OBJFILES=	$(OBJ)$/unodialog.obj
 
 
-APP2TARGET= controls
-APP2OBJS=	$(OBJ)$/controls.obj
+APP2TARGET= unodialog
+APP2OBJS=	$(OBJ)$/unodialog.obj
 APP2STDLIBS=$(TOOLSLIB)			\
             $(SOTLIB)			\
             $(SVTOOLLIB)		\
-            $(USRLIB)			\
-            $(ONELIB)			\
-            $(SVLIB)
-APP2DEF=	$(MISC)$/controls.def
-
-APP3TARGET= smartvcl
-APP3OBJS=	$(OBJ)$/smartvcl.obj
-APP3STDLIBS=$(TOOLSLIB)			\
-            $(SOTLIB)			\
-            $(SVTOOLLIB)		\
-            $(USRLIB)			\
-            $(ONELIB)			\
-            $(SVLIB)
-APP3DEF=	$(MISC)$/smartvcl.def
+            $(COMPHELPERLIB)	\
+            $(CPPULIB)			\
+            $(CPPUHELPERLIB)	\
+            $(VCLLIB)			\
+            $(SALLIB)
+APP2DEF=	$(MISC)$/unodialog.def
 
 # --- Targets ------------------------------------------------------
 
@@ -112,8 +104,8 @@ APP3DEF=	$(MISC)$/smartvcl.def
 
 .IF "$(GUI)" == "WIN"
 
-$(MISC)$/controls.def: makefile
-    echo  NAME			controls							>$@
+$(MISC)$/unodialog.def: makefile.mk
+    echo  NAME			unodialog							>$@
     echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
     echo  EXETYPE		WINDOWS 						   >>$@
     echo  STUB			'winSTUB.EXE'                      >>$@
@@ -121,55 +113,6 @@ $(MISC)$/controls.def: makefile
     echo  CODE			PRELOAD MOVEABLE DISCARDABLE	   >>$@
     echo  DATA			PRELOAD MOVEABLE MULTIPLE		   >>$@
     echo  HEAPSIZE		8192							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-$(MISC)$/smartvcl.def: makefile
-    echo  NAME			smartvcl							>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-    echo  EXETYPE		WINDOWS 						   >>$@
-    echo  STUB			'winSTUB.EXE'                      >>$@
-    echo  PROTMODE										   >>$@
-    echo  CODE			PRELOAD MOVEABLE DISCARDABLE	   >>$@
-    echo  DATA			PRELOAD MOVEABLE MULTIPLE		   >>$@
-    echo  HEAPSIZE		8192							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-.ENDIF
-
-# ------------------------------------------------------------------
-# OS2
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/controls.def:	makefile
-    echo  NAME			controls WINDOWAPI 					>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB			'os2STUB.EXE'                      >>$@
-.ENDIF
-.IF "$(COM)"!="MTW"
-    echo  EXETYPE		OS2 							   >>$@
-.ENDIF
-    echo  PROTMODE										   >>$@
-    echo  CODE			LOADONCALL						   >>$@
-    echo  DATA			PRELOAD MULTIPLE				   >>$@
-    echo  HEAPSIZE		16384							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-$(MISC)$/smartvcl.def:	makefile
-    echo  NAME			smartvcl WINDOWAPI 					>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB			'os2STUB.EXE'                      >>$@
-.ENDIF
-.IF "$(COM)"!="MTW"
-    echo  EXETYPE		OS2 							   >>$@
-.ENDIF
-    echo  PROTMODE										   >>$@
-    echo  CODE			LOADONCALL						   >>$@
-    echo  DATA			PRELOAD MULTIPLE				   >>$@
-    echo  HEAPSIZE		16384							   >>$@
     echo  STACKSIZE 	32768							   >>$@
 
 .ENDIF
