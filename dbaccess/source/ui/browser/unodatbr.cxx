@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:50:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-06 08:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,18 +1372,22 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
 {
     PopupMenu aContextMenu(ModuleRes(MENU_BROWSERTREE_CONTEXT));
     Point aPosition;
+    SvLBoxEntry* pEntry = NULL;
     if (_pEvent->IsMouseEvent())
     {
         aPosition = _pEvent->GetMousePosPixel();
         // ensure that the entry which the user clicked at is selected
-        SvLBoxEntry* pClickedAt = m_pTreeView->getListBox()->GetEntry(aPosition);
-        if (pClickedAt && !m_pTreeView->getListBox()->IsSelected(pClickedAt))
-            m_pTreeView->getListBox()->SelectEntry(pClickedAt);
+        pEntry = m_pTreeView->getListBox()->GetEntry(aPosition);
+        OSL_ENSURE(pEntry,"No current entry!");
+//      if (pClickedAt && !m_pTreeView->getListBox()->IsSelected(pClickedAt))
+//          m_pTreeView->getListBox()->SelectEntry(pClickedAt);
     }
     else
     {
         // use the center of the current entry
-        aPosition = m_pTreeView->getListBox()->GetEntryPos(m_pTreeView->getListBox()->GetCurEntry());
+        pEntry = m_pTreeView->getListBox()->GetCurEntry();
+        OSL_ENSURE(pEntry,"No current entry!");
+        aPosition = m_pTreeView->getListBox()->GetEntryPos(pEntry);
         aPosition.X() += m_pTreeView->getListBox()->GetOutputSizePixel().Width() / 2;
         aPosition.Y() += m_pTreeView->getListBox()->GetEntryHeight() / 2;
     }
@@ -1391,7 +1395,6 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
     // disable entries according to the currently selected entry
 
     // does the datasource which the selected entry belongs to has an open connection ?
-    SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
     SvLBoxEntry* pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(pEntry);
     DBTreeListModel::DBTreeListUserData* pDSData =
                 pDSEntry
@@ -1488,6 +1491,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                     pDSData->xObject = xConnection; // share the conenction with the querydesign
                 }
 
+                if(!xConnection.is())
+                    break;
+
                 ::rtl::OUString sCurrentQuery;
                 if ((ID_TREE_QUERY_EDIT == nPos) && pEntry)
                 {
@@ -1512,7 +1518,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                         if (pTextItem)
                             sCurrentQuery = static_cast<SvLBoxString*>(pTextItem)->GetText();
 
-                        if(xNameAccess->hasByName(sCurrentQuery) && (xNameAccess->getByName(sCurrentQuery) >>= pData->xObject)) // remember the table or query object
+                        if(xNameAccess.is() && xNameAccess->hasByName(sCurrentQuery) && (xNameAccess->getByName(sCurrentQuery) >>= pData->xObject)) // remember the table or query object
                             pEntry->SetUserData(pData);
                         else
                         {
