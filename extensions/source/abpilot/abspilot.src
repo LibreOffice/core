@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:28:07 $
+ *  last change: $Author: fs $ $Date: 2001-09-28 15:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Hide = TRUE;
 
         Text = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\n"
-            "Bitte überprüfen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder wählen Sie (auf der vorhergehenden "
+            "Bitte überprüfen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder wählen Sie (auf der vorigen "
             "Seite) einen anderen Typ für Ihre  Adress-Datenquelle.";
         Text [ english ] = "The connection to the data source could not be established.\n"
             "Before you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
@@ -802,7 +802,7 @@ QueryBox RID_QRY_NOTABLES
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_NO;
 
-    Message = "Die Datenquelle enthält keinerlei Tabellen.\n"
+    Message = "Die Datenquelle enthält keine Tabelle.\n"
         "Wollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
     Message [ english ] = "The data source does not contain any tables.\n"
         "Do you want to install it as address data source, anyway?";
@@ -1028,6 +1028,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/09/27 20:28:07  kz
+ *  Merge SRC641: 09/27/01 - 22:27:34
+ *
  *  Revision 1.16  2001/09/24 12:51:14  fs
  *  #92121# corrected some german spellings
  *
