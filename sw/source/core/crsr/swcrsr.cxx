@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:15:17 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 16:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,11 +1240,14 @@ FASTBOOL SwCursor::SelectWord( const Point* pPt )
 
         if( aBndry.startPos != aBndry.endPos )
         {
-            SetMark();
-            GetMark()->nContent = aBndry.startPos;
             GetPoint()->nContent = aBndry.endPos;
             if( !IsSelOvr() )
-                bRet = TRUE;
+            {
+                SetMark();
+                GetMark()->nContent = aBndry.startPos;
+                if( !IsSelOvr() )
+                    bRet = TRUE;
+            }
         }
     }
 
