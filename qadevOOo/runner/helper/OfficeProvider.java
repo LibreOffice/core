@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2003-11-18 16:14:32 $
+ *  last change:$Date: 2004-03-19 14:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 import com.sun.star.util.XCloseable;
+
 import lib.TestParameters;
 
 
@@ -121,18 +122,20 @@ public class OfficeProvider implements AppProvider {
      * Method to get the ServiceManager of an Office
      */
     public Object getManager(lib.TestParameters param) {
-        String additionalArgs = (String) param.get("AdditionalConnectionArguments");
-        if ( additionalArgs == null) {
+        String additionalArgs = (String) param.get(
+                                        "AdditionalConnectionArguments");
+
+        if (additionalArgs == null) {
             additionalArgs = ";";
         } else {
-            additionalArgs = ","+additionalArgs+";";
+            additionalArgs = "," + additionalArgs + ";";
         }
 
-        String cncstr = "uno:" + param.get("ConnectionString") +
-                        ";urp"+additionalArgs+"StarOffice.ServiceManager";
+        String cncstr = "uno:" + param.get("ConnectionString") + ";urp" +
+                        additionalArgs + "StarOffice.ServiceManager";
 
         System.out.print("Connecting the Office");
-        System.out.println(" with "+cncstr);
+        System.out.println(" with " + cncstr);
 
         debug = param.getBool("DebugIsActive");
 
@@ -149,6 +152,14 @@ public class OfficeProvider implements AppProvider {
                 if (debug) {
                     System.out.println(
                             "Local Connection trying to start the Office");
+                }
+
+                //ensure that a pending officewatcher gets finished before a new
+                //office is started
+                OfficeWatcher ow_old = (OfficeWatcher) param.get("Watcher");
+
+                if (ow_old != null) {
+                    ow_old.finish = true;
                 }
 
                 String cmd = (String) param.get("AppExecutionCommand");
@@ -248,12 +259,10 @@ public class OfficeProvider implements AppProvider {
             ProcessHandler ph = (ProcessHandler) param.get("AppProvider");
 
             if (ph != null) {
-                disposeOffice(msf,param);
-
+                disposeOffice(msf, param);
 
                 // dispose watcher in case it's still running.
                 //System.out.println("INFO: disposing the office and terminate the watcher process.");
-
                 OfficeWatcher ow = (OfficeWatcher) param.get("Watcher");
 
                 if ((ow != null) && ow.isAlive()) {
@@ -298,8 +307,11 @@ public class OfficeProvider implements AppProvider {
         return msf;
     }
 
-    private boolean disposeOffice(XMultiServiceFactory msf, TestParameters param) {
+    private synchronized boolean disposeOffice(XMultiServiceFactory msf,
+                                               TestParameters param) {
         XDesktop desk = null;
+
+        boolean result = true;
 
         if (msf != null) {
             try {
@@ -310,37 +322,70 @@ public class OfficeProvider implements AppProvider {
 
                 if (desk != null) {
                     boolean allClosed = closeAllWindows(desk);
-                    if(!allClosed)
-                        if(debug) System.out.println("Couldn't close all office windows!");
-                    if(debug) System.out.println("Trying to terminate the desktop");
+
+                    if (!allClosed) {
+                        if (debug) {
+                            System.out.println(
+                                    "Couldn't close all office windows!");
+                        }
+                    }
+
+                    if (debug) {
+                        System.out.println("Trying to terminate the desktop");
+                    }
+
                     desk.terminate();
-                    if(debug) System.out.println("Desktop terminated");
-                    param.remove("AppProvider");
-                    param.remove("ServiceFactory");
+
+                    if (debug) {
+                        System.out.println("Desktop terminated");
+                    }
 
                     try {
                         Thread.sleep(5000);
-                    } catch (java.lang.InterruptedException ie) {
+                    } catch (java.lang.InterruptedException e) {
                     }
                 }
             } catch (com.sun.star.uno.Exception ue) {
-                return false;
+                result = false;
+            } catch (com.sun.star.lang.DisposedException ue) {
+                result = false;
             }
         }
 
-        return true;
+        ProcessHandler ph = (ProcessHandler) param.get("AppProvider");
+
+        if (ph != null) {
+            // dispose watcher in case it's still running.
+            OfficeWatcher ow = (OfficeWatcher) param.get("Watcher");
+
+            if ((ow != null) && ow.isAlive()) {
+                ow.finish = true;
+            }
+
+            ph.kill();
+        }
+
+        param.remove("AppProvider");
+        param.remove("ServiceFactory");
+
+        return result;
     }
 
     protected boolean closeAllWindows(XDesktop desk) {
         XEnumerationAccess compEnumAccess = desk.getComponents();
         XEnumeration compEnum = compEnumAccess.createEnumeration();
         boolean res = true;
+
         try {
-        while (compEnum.hasMoreElements()){
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, compEnum.nextElement());
-            if(closer != null)
-                closer.close(true);
-        }
+            while (compEnum.hasMoreElements()) {
+                XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                            XCloseable.class,
+                                            compEnum.nextElement());
+
+                if (closer != null) {
+                    closer.close(true);
+                }
+            }
         } catch (com.sun.star.util.CloseVetoException cve) {
             res = false;
         } catch (com.sun.star.container.NoSuchElementException nsee) {
@@ -348,6 +393,7 @@ public class OfficeProvider implements AppProvider {
         } catch (com.sun.star.lang.WrappedTargetException wte) {
             res = false;
         }
+
         return res;
     }
 }
