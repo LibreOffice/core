@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-18 22:29:26 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <data/indexdata_alphanumeric.h>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star;
 using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -87,15 +87,6 @@ OUString SAL_CALL IndexEntrySupplier_CJK::getIndexString( const sal_Unicode ch,
         // using alphanumeric index for non-define stirng
         OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1) :
         OUString(&idx2[ first + (ch & 0xff) ], 1);
-}
-
-// for CJK we only need to compare index entry, which contains key information in first characters implicitly.
-sal_Int16 SAL_CALL IndexEntrySupplier_CJK::compareIndexKey(
-    const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const Locale& rLocale1,
-    const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
-    throw (RuntimeException)
-{
-    return 0;
 }
 
 } } } }
