@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filprp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: sb $ $Date: 2000-10-24 13:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const rtl::OUStrin
       m_count( 0 ),
       m_seq( 0 )
 {
+    m_pMyShell->m_pProvider->acquire();
+
     shell::ContentMap::iterator it = m_pMyShell->m_aContent.find( aUnqPath );
 
     shell::PropertySet& properties = *(it->second.properties);
@@ -107,6 +109,7 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const uno::Sequenc
       m_count( seq.getLength() ),
       m_seq( seq )
 {
+    m_pMyShell->m_pProvider->acquire();
 }
 
 
