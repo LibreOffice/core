@@ -8433,3 +8433,4 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?CopyINetImage@TransferDataContainer@@QAEXABVINetImage@@@Z
 ?CopyImageMap@TransferDataContainer@@QAEXABVImageMap@@@Z
 ?CopyString@TransferDataContainer@@QAEXABVString@@@Z
+?realloc@?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@QAAXJ@Z
