@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 14:31:45 $
+ *  last change: $Author: jb $ $Date: 2001-05-18 16:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,8 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
+
+#include <map>
 
 namespace osl {
     class Profile;
@@ -94,6 +93,12 @@ namespace configmgr
 
     // ===================================================================================
 
+    namespace uno = ::com::sun::star::uno;
+    namespace lang = ::com::sun::star::lang;
+    using ::rtl::OUString;
+    using ::rtl::OString;
+
+    // ===================================================================================
     #define PORTAL_SESSION_IDENTIFIER           "portal"
     #define REMOTE_SESSION_IDENTIFIER           "remote"
     #define LOCAL_SESSION_IDENTIFIER            "local"
@@ -101,154 +106,253 @@ namespace configmgr
     #define PLUGIN_SESSION_IDENTIFIER           "plugin"
 
     // ===================================================================================
-    // = ConnectionSettings
+
+    enum BootstrapResult
+    {
+        BOOTSTRAP_DATA_OK = 0,
+        MISSING_BOOTSTRAP_FILE,
+        INVALID_BOOTSTRAP_DATA,
+        INVALID_INSTALLATION,
+        BOOTSTRAP_FAILURE
+    };
+
     // ===================================================================================
-    class ConnectionSettings
+
+    extern OUString getBootstrapErrorMessage( BootstrapResult rc );
+    extern void raiseBootstrapException( BootstrapResult rc, OUString const& sURL, uno::Reference< uno::XInterface > xContext );
+    extern void raiseBootstrapException( class BootstrapSettings const& rBootstrapData, uno::Reference< uno::XInterface > xContext );
+
+    // ===================================================================================
+    // = Settings
+    // ===================================================================================
+    class Settings
     {
     public:
-        enum SETTING_ORIGIN
+        enum Origin
         {
-            SO_SREGISTRY,
-            SO_OVERRIDE,
+            SO_UNKNOWN,
             SO_FALLBACK,
-            SO_UNKNOWN
+            SO_INIFILE,
+            SO_OVERRIDE,
+            SO_DEFAULT,
+            SO_ADJUSTMENT,
+            SO_MANUAL
         };
+        typedef OString Name;
 
-    protected:
-        // ine single setting
+        // a single setting
         struct Setting
         {
-            ::com::sun::star::uno::Any      aValue;
-            SETTING_ORIGIN                  eOrigin;
+            uno::Any        aValue;
+            Origin          eOrigin;
 
-            Setting() : eOrigin(SO_UNKNOWN) { }
-            Setting(const ::rtl::OUString& _rValue, SETTING_ORIGIN _eOrigin) : aValue(::com::sun::star::uno::makeAny(_rValue)), eOrigin(_eOrigin) { }
-            Setting(const sal_Int32 _nValue, SETTING_ORIGIN _eOrigin) : aValue(::com::sun::star::uno::makeAny(_nValue)), eOrigin(_eOrigin) { }
-            Setting(const ::com::sun::star::uno::Any& _rValue, SETTING_ORIGIN _eOrigin) : aValue(_rValue), eOrigin(_eOrigin) { }
+            Setting() : aValue(), eOrigin(SO_UNKNOWN) { }
+            Setting(const OUString& _rValue, Origin _eOrigin) : aValue(uno::makeAny(_rValue)), eOrigin(_eOrigin) { }
+            Setting(const sal_Int32 _nValue, Origin _eOrigin) : aValue(uno::makeAny(_nValue)), eOrigin(_eOrigin) { }
+            Setting(const uno::Any& _rValue, Origin _eOrigin) : aValue(_rValue), eOrigin(_eOrigin) { }
+
+
+            uno::Any    value()  const { return aValue; }
+            Origin      origin() const { return eOrigin; };
         };
-        DECLARE_STL_USTRINGACCESS_MAP( Setting, SettingsImpl );
+    protected:
+        typedef std::map< Name, Setting > SettingsImpl;
         SettingsImpl        m_aImpl;
 
-        ::osl::Profile*     m_pSRegistry;
-        sal_Bool            m_bFoundRegistry;
-
+    public:
+        typedef SettingsImpl::const_iterator Iterator;
     public:
         /// default ctor
-        ConnectionSettings();
+        Settings();
 
-        /// dtor
-        ~ConnectionSettings();
+        /** construct a settings object
+           containing the given overrides
 
-        /// copy ctor
-        ConnectionSettings(const ConnectionSettings& _rSource);
-
-        /** construct a settings object.
-
-            <p>The runtime overrides given will be merged with the settings found in a sversion.ini (sversionrc),
-            if any. The former overrule the latter</p>
         */
-        ConnectionSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rRuntimeOverrides );
-
-        /// merge the given overrides into a new ConnectionSettings object
-        ConnectionSettings& mergeOverrides(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides);
+        Settings(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin = SO_OVERRIDE);
 
         /// merge the given overrides into the object itself
-        ConnectionSettings createMergedSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides) const
-        {
-            return ConnectionSettings(*this).mergeOverrides(_rOverrides);
-        }
+        void mergeOverrides(const Settings& _rOverrides);
+
+        // add settings
+        void override(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin = SO_OVERRIDE);
 
         // check setting existence
-        sal_Bool            hasRegistry() const { return m_bFoundRegistry; }
-        sal_Bool            hasUser() const;
-        sal_Bool            hasPassword() const;
-        sal_Bool            hasLocale() const;
-        sal_Bool            hasAsyncSetting() const;
-        sal_Bool            hasServer() const;
-        sal_Bool            hasPort() const;
-        sal_Bool            hasTimeout() const;
-        sal_Bool            hasService() const;
+        sal_Bool        haveSetting(Name const& _pName) const;
+        void            putSetting(Name const&  _pName, const Setting& _rSetting);
+        void            clearSetting(Name const& _pName);
 
-        sal_Bool            isLocalSession() const;
-        sal_Bool            isRemoteSession() const;
+        OUString        getStringSetting(Name const& _pName) const;
+        sal_Int32       getIntSetting(Name const& _pName) const;
+        sal_Bool        getBoolSetting(Name const& _pName) const;
+        Setting         getSetting(Name const& _pName) const;
+        Setting         getMaybeSetting(Name const& _pName) const;
 
-        sal_Bool            isValidSourcePath() const;
-        sal_Bool            isValidUpdatePath() const;
+        Iterator begin()    const { return m_aImpl.begin(); }
+        Iterator end()      const { return m_aImpl.end(); }
+
+        void swap(Settings& _rOther) { m_aImpl.swap(_rOther.m_aImpl); }
+    private:
+
+        // transfer runtime overwrites into m_aImpl. Existent settings will be overwritten.
+        void implTranslate(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin)
+            throw (lang::IllegalArgumentException);
+
+    };
+
+    class ConnectionSettings
+    {
+        Settings m_aSettings;
+
+        ConnectionSettings() : m_aSettings() {};
+    public:
+        static BootstrapResult findInifile(OUString& _rsInifile);
+
+        static ConnectionSettings bootstrap(BootstrapResult& rc, OUString& _rsInifile);
+
+        ConnectionSettings(const uno::Sequence< uno::Any >& _rOverrides,
+                            Settings::Origin _eOrigin = Settings::SO_OVERRIDE);
+
+        /// merge the given overrides into the object itself
+        void mergeOverrides(const Settings& _rOverrides);
+        /// merge the given overrides into the object itself
+        void mergeOverrides(const ConnectionSettings& _rOverrides)
+        { mergeOverrides(_rOverrides.m_aSettings); }
+
+        void loadFromInifile(osl::Profile & rProfile,
+                             Settings::Origin _eOrigin = Settings::SO_INIFILE);
+
+        void fillFromInifile(osl::Profile & rProfile,
+                             Settings::Origin _eOrigin = Settings::SO_INIFILE);
+
+        bool validate();
+
+        bool isComplete() const;
+        bool isComplete(OUString const& aSessionType) const;
+
+        sal_Bool    isSessionTypeKnown() const;
+
+        sal_Bool    hasUser() const;
+        sal_Bool    hasPassword() const;
+
+        sal_Bool    hasLocale() const;
+        sal_Bool    hasAsyncSetting() const;
+
+        sal_Bool    hasServer() const;
+        sal_Bool    hasPort() const;
+        sal_Bool    hasTimeout() const;
+        sal_Bool    hasService() const;
+
+        sal_Bool    isPlugin() const;
+        sal_Bool    isLocalSession() const;
+        sal_Bool    isRemoteSession() const;
+
+        sal_Bool    isSourcePathValid() const;
+        sal_Bool    isUpdatePathValid() const;
+        sal_Bool    hasReinitializeFlag() const;
 
         // get a special setting
-        ::rtl::OUString     getSessionType() const;
-        ::rtl::OUString     getUser() const;
-        ::rtl::OUString     getPassword() const;
-        ::rtl::OUString     getLocale() const;
-        ::rtl::OUString     getSourcePath() const;
-        ::rtl::OUString     getUpdatePath() const;
-        ::rtl::OUString     getServer() const;
-        ::rtl::OUString     getService() const;
-        sal_Int32           getPort() const;
-        sal_Int32           getTimeout() const;
-        sal_Bool            getAsyncSetting() const;
+        OUString    getSessionType() const;
+
+        OUString    getUser() const;
+        OUString    getPassword() const;
+
+        OUString    getLocale() const;
+        sal_Bool    getAsyncSetting() const;
+
+        OUString    getSourcePath() const;
+        OUString    getUpdatePath() const;
+        sal_Bool    getReinitializeFlag() const;
+
+        OUString    getServer() const;
+        OUString    getService() const;
+        sal_Int32   getPort() const;
+        sal_Int32   getTimeout() const;
 
         // make sure this behaves as a user session
         void setUserSession();
-        void setUserSession(const ::rtl::OUString& _rRemoteServiceName);
+        void setUserSession(const OUString& _rRemoteServiceName);
 
         // make sure this behaves as an administrative session
         void setAdminSession();
-        void setAdminSession(const ::rtl::OUString& _rRemoteServiceName);
+        void setAdminSession(const OUString& _rRemoteServiceName);
 
         // set a new session type. Must be one of the *_SESSION_IDENTIFIER defines
-        void                setSessionType(const ::rtl::OUString& _rSessionIdentifier);
+        void setSessionType(const OUString& _rSessionIdentifier, Settings::Origin _eOrigin /*= SO_MANUAL*/);
+
         // set a desired service, only necessary in remote environments
-        sal_Bool            isServiceRequired() const;
-        void                setService(const ::rtl::OUString& _rService);
+        sal_Bool    isServiceRequired() const;
+        void        setService(const OUString& _rService, Settings::Origin _eOrigin /*= SO_MANUAL*/);
 
         // set this to a wildcard locale
-        void                setAnyLocale();
+        void        setAnyLocale(Settings::Origin _eOrigin /*= SO_MANUAL*/);
 
-        IConfigSession* ConnectionSettings::createConnection(
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const& _rxServiceMgr) const;
+        IConfigSession* createConnection(
+            uno::Reference< lang::XMultiServiceFactory > const& _rxServiceMgr) const;
 
+        void swap(ConnectionSettings& _rOther) { m_aSettings.swap(_rOther.m_aSettings); }
     protected:
-        void construct(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides);
 
-        // transfer runtime overwrites into m_aImpl. Existent settings will be overwritten.
-        void implTranslate(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides)
-            throw (::com::sun::star::lang::IllegalArgumentException);
+        bool checkSettings() const;
 
-        /** normalize a path setting, delete it if the value could not be normalized
-            @return <TRUE/> if the setting exists and is a valid path
+        /** @return <TRUE/> if the setting exists and is a valid path
         */
-        sal_Bool implNormalizePathSetting(const sal_Char* _pSetting);
+        sal_Bool isValidPathSetting(Settings::Name const& _pSetting) const;
+        sal_Bool implPutPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin);
 
         // translate old settings, which exist for compatiblity only, into new ones
         void implTranslateCompatibilitySettings();
 
         // if we do not already have the given config path setting, ensure that it exists (calculated relative to a given path)
-        void ensureConfigPath(const sal_Char* _pSetting, const ::rtl::OUString& _rBasePath, const sal_Char* _pRelative);
+        sal_Bool ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath, const sal_Char* _pRelative = NULL);
 
-        sal_Bool        haveSetting(const sal_Char* _pName) const;
-        void            putSetting(const sal_Char* _pName, const Setting& _rSetting);
-        void            clearSetting(const sal_Char* _pName);
-
-        ::rtl::OUString getStringSetting(const sal_Char* _pName) const;
-        sal_Int32       getIntSetting(const sal_Char* _pName) const;
-        sal_Bool        getBoolSetting(const sal_Char* _pName) const;
-        Setting         getSetting(const sal_Char* _pName) const;
-        Setting         getMaybeSetting(const sal_Char* _pName) const;
-
-        ::rtl::OUString getProfileStringItem(const sal_Char* _pSection, const sal_Char* _pKey);
-        sal_Int32       getProfileIntItem(const sal_Char* _pSection, const sal_Char* _pKey);
+        // if we do not already have path settings, ensure that they exists (in an office install)
+        void implAdjustToInstallation(const OUString& _rOfficeInstallPath, const OUString& _rUserInstallPath);
 
     private:
+
+        // collect settings from the sregistry, put them into m_aSettings
+        void implCollectSRegistrySetting(osl::Profile & rProfile, Settings::Origin _eOrigin);
+
+        static OUString     getProfileStringItem(osl::Profile & rProfile, OString const& _pSection, OString const& _pKey, rtl_TextEncoding _nEncoding);
+        static sal_Int32    getProfileIntItem(osl::Profile & rProfile, OString const& _pSection, OString const& _pKey);
+
         // ensures that m_aImpl contains a session type
-        // to be called from within construct only
         void implDetermineSessionType();
-
-        // collect settings from the sregistry, put them into m_aImpl, if not overruled by runtime settings
-        void implCollectSRegistrySetting();
-
         // clear items which are not relevant because of the session type origin
-        void clearIrrelevantItems();
+        void implClearIrrelevantItems();
+
+    // convenience wrappers for Settings members
+    public:
+        sal_Bool    haveSetting(Settings::Name const& _pName) const
+        { return m_aSettings.haveSetting(_pName); }
+
+        Settings::Setting   getSetting(Settings::Name const& _pName) const
+        { return m_aSettings.getSetting(_pName); }
+
+    // private convenience wrappers for Settings members
+    private:
+        void        putSetting(Settings::Name const&  _pName, const Settings::Setting& _rSetting)
+        { m_aSettings.putSetting(_pName,_rSetting); }
+
+        void        clearSetting(Settings::Name const& _pName)
+        { m_aSettings.clearSetting(_pName); }
+    };
+    /*  sal_Bool            hasRegistry() const { return m_bFoundRegistry; }
+        ::osl::Profile*     m_pSRegistry;
+        sal_Bool            m_bFoundRegistry;
+*/
+    class BootstrapSettings
+    {
+    public:
+        OUString            url;
+        BootstrapResult     status;
+        // order dependency - settings must be last
+        ConnectionSettings  settings;
+
+        BootstrapSettings();
+
+        bool hasBootstrapData() const;
     };
 }
 
