@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-09-04 12:02:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,9 @@ void  SwInputWindow::CancelFormula()
 }
 //==================================================================
 
+const xub_Unicode CH_LRE = 0x202a;
+const xub_Unicode CH_PDF = 0x202c;
+
 IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 {
     if(bIsTable)
@@ -452,7 +455,11 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 
         aEdit.UpdateRange( sBoxNms, sTblNm );
 
-        String sNew( aEdit.GetText() );
+        String sNew;
+        sNew += CH_LRE;
+        sNew += aEdit.GetText();
+        sNew += CH_PDF;
+
         if( sNew != sOldFml )
         {
             // Die WrtShell ist in der Tabellen Selektion
@@ -493,14 +500,16 @@ void SwInputWindow::SetFormula( const String& rFormula, BOOL bDelFlag )
     bDelSel = bDelFlag;
 }
 
-
 IMPL_LINK( SwInputWindow, ModifyHdl, InputEdit*, EMPTYARG )
 {
     if( bIsTable && bResetUndo )
     {
         pWrtShell->StartAllAction();
         DelBoxCntnt();
-        String sNew( aEdit.GetText() );
+        String sNew;
+        sNew += CH_LRE;
+        sNew += aEdit.GetText();
+        sNew += CH_PDF;
         pWrtShell->SwEditShell::Insert( sNew );
         pWrtShell->EndAllAction();
         sOldFml = sNew;
