@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-28 18:22:51 $
+#   last change: $Author: hjs $ $Date: 2002-04-08 17:05:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,7 +238,7 @@ CC=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
 .IF "$(USE_SHELL)"=="4nt"
 CC=cl
 .ELSE			# "$(USE_SHELL)"=="4nt"
-CC=cl_w
+CC=guw.pl cl
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF
@@ -402,7 +402,7 @@ COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(DESTINATION_MINOR)_$(FUNCORD)_$(__DATE
 .IF "$(USE_SHELL)"=="4nt"
 LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 .ELSE			# "$(USE_SHELL)"=="4nt"
-LINK=link_w $(NOLOGO) /MACHINE:IX86 
+LINK=guw.pl link $(NOLOGO) /MACHINE:IX86 
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 
 .IF "$(PRODUCT)"!="full"
@@ -507,8 +507,8 @@ LIBSTLPORTST=stlport_vc6_static.lib
 LIBMGR=lib $(NOLOGO)
 IMPLIB=lib
 .ELSE			# "$(USE_SHELL)"=="4nt"
-LIBMGR=lib_w $(NOLOGO)
-IMPLIB=lib_w
+LIBMGR=guw.pl lib $(NOLOGO)
+IMPLIB=guw.pl lib
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 LIBFLAGS=
 
@@ -520,7 +520,7 @@ MAPSYMFLAGS=
 .IF "$(USE_SHELL)"=="4nt"
 RC=rc
 .ELSE			# "$(USE_SHELL)"=="4nt"
-RC=rc_w
+RC=guw.pl rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
 RCLINK=rc
@@ -531,9 +531,13 @@ RCSETVERSION=
 DLLPOSTFIX=mi
 
 .IF "$(USE_SHELL)"!="4nt"
-IDLC=idlc_w
-REGMERGE=regmerge_w
-CPPUMAKER=cppumaker_w
+IDLC=guw.pl idlc
+REGMERGE=guw.pl regmerge
+CPPUMAKER=guw.pl cppumaker
+JAVAMAKER=guw.pl javamaker
+RDBMAKER=guw.pl rdbmaker
+STARDEP=guw.pl javadep
+JAVAC=guw.pl javac
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF              # "$(COM)"=="MSC"

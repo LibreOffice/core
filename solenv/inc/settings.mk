@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.105 $
+#   $Revision: 1.106 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-03 09:48:00 $
+#   last change: $Author: hjs $ $Date: 2002-04-08 17:05:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1083,8 +1083,8 @@ LDUMP=ldump -Gy
 .ENDIF
 .ELSE
 .IF "$(USE_SHELL)"!="4nt"
-LDUMP=ldump_w
-LDUMP2=ldump_w
+LDUMP=guw.pl ldump4
+LDUMP2=guw.pl ldump4
 .ELSE
 LDUMP=ldump4
 LDUMP2=ldump4
@@ -1123,14 +1123,14 @@ SCPLINKFLAGS=-i $(PAR),$(SOLARPARDIR)
 RSC=rscdep
 .IF "$(GUI)"=="WNT"
 .IF "$(USE_SHELL)"!="4nt"
-RSC=rscdep_w
+RSC=guw.pl rscdep
 .ENDIF
 .ENDIF
 .ELSE
 RSC=rsc
 .IF "$(GUI)"=="WNT"
 .IF "$(USE_SHELL)"!="4nt"
-RSC=rsc_w
+RSC=guw.pl rsc
 .ENDIF
 .ENDIF
 .ENDIF
@@ -1218,6 +1218,8 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 IDLC*=idlc
 REGMERGE*=regmerge
 CPPUMAKER*=cppumaker
+JAVAMAKER*=javamaker
+RDBMAKER*=rdbmaker
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk

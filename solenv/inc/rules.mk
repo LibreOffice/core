@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 16:16:38 $
+#   last change: $Author: hjs $ $Date: 2002-04-08 17:07:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -678,7 +678,7 @@ $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR)_description.cxx : $(MISC)$/%$($(WINVERSION
 
 #generate private rdb
 $(BIN)$/%.rdb: $(COMPRDB) $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
-    +rdbmaker -BUCR -O$(BIN)$/$*.rdb @$(mktmp $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB))
+    +$(RDBMAKER) -BUCR -O$(BIN)$/$*.rdb @$(mktmp $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB))
 
 #strip dos lineends
 $(MISC)$/%.sh : %.sh
