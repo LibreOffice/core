@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-22 13:30:33 $
+ *  last change: $Author: as $ $Date: 2001-11-19 16:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ SfxFactoryFilterContainer* SfxObjectFactory::GetFilterContainer(
 void SfxObjectFactory::RegisterInitFactory(SfxVoidFunc pFunc)
 {
     pImpl->pInitFactory = pFunc;
-//  DoInitFactory();
+    DoInitFactory();
 }
 
 void SfxObjectFactory::RegisterFilter
