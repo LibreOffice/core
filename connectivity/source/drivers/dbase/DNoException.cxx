@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 15:09:03 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 10:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <tools/debug.hxx>
 #endif
 
+#include <sal/types.h>
 #include <algorithm>
 
 using namespace connectivity;
@@ -451,7 +452,8 @@ sal_Int32 ODbaseTable::getCurrentLastPos() const
 //------------------------------------------------------------------
 void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
 {
-    rStream >> (sal_uInt32)aKey.nRecord; // schluessel
+    rStream >> aKey.nRecord; // schluessel
+
     if (rIndex.getHeader().db_keytype)
     {
         double aDbl;
