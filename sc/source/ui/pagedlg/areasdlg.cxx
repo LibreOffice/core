@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:50:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,15 +177,7 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
 ScPrintAreasDlg::~ScPrintAreasDlg()
 {
     // Extra-Data an ListBox-Entries abraeumen
-
-#ifdef SINIX
-    ListBox* pLb[3];
-    pLb[0] = &aLbPrintArea;
-    pLb[1] = &aLbRepeatRow;
-    pLb[2] = &aLbRepeatCol;
-#else
     ListBox* pLb[3] = { &aLbPrintArea, &aLbRepeatRow, &aLbRepeatCol };
-#endif
 
     for ( USHORT i=0; i<3; i++ )
     {
