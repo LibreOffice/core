@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #ifndef COMPHELPER_ACCIMPLACCESS_HXX
 #include <comphelper/accimplaccess.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -88,8 +88,8 @@ namespace comphelper
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::XUnoTunnel;
-    using ::drafts::com::sun::star::accessibility::XAccessible;
-    using ::drafts::com::sun::star::accessibility::XAccessibleContext;
+    using ::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::accessibility::XAccessibleContext;
 
     //=====================================================================
     //= OAccImpl_Impl
