@@ -10724,3 +10724,5 @@ _TI2?AVNoSupportException@lang@star@sun@com@@
 ??9rtl@@YAEABVOUString@0@0@Z
 ?ToggleEnableState@VCLXAccessibleToolBoxItem@@QAEXXZ
 ?IsMenuFloatingWindow@Window@@QBEEXZ
+?checkSelection_Impl@?A0xf95b5af1@@YAXJABVIComboListBoxHelper@toolkit@@E@Z
+?checkIndex_Impl@?A0xb1262fc7@@YAXJABVOUString@rtl@@@Z
