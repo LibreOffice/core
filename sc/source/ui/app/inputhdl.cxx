@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 12:58:29 $
+ *  last change: $Author: nn $ $Date: 2002-11-06 10:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,9 @@ ScInputHandler::ScInputHandler()
         bInEnterHandler( FALSE ),
         bCommandErrorShown( FALSE )
 {
-    pActiveViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    //  The InputHandler is constructed with the view, so SfxViewShell::Current
+    //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
+    pActiveViewSh = NULL;
 
     //  Bindings (nur noch fuer Invalidate benutzt) werden bei Bedarf aktuell geholt
 }
