@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ private:
     ScViewData&                 mrViewData;         /// View data containing the document.
     ScSplitPos                  meWhich;            /// Which area in split window.
     bool                        mbHoriz;            /// true = Horizontal orientation.
-    bool                        mbAppRTL;           /// true = Application in RTL display mode.
     bool                        mbMirrorHdr;        /// true = Header at end of the window (bottom or right).
 
     ImageList*                  mpSymbols;          /// Symbols for buttons.
