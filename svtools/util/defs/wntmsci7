@@ -8581,3 +8581,10 @@ lpfnInsertMenuItemW
 ?update@StorageItem@@QAEXABVOUString@rtl@@ABUNamePassRecord@@@Z
 ?valueOf@OString@rtl@@SA?AV12@D@Z
 ?valueOf@OString@rtl@@SA?AV12@JF@Z
+?SetAutoColor@FormattedField@@QAEXE@Z
+??0TextAttribFontWeight@@QAE@ABV0@@Z
+??0TextAttribFontWeight@@QAE@W4FontWeight@@@Z
+??1TextAttribFontWeight@@UAE@XZ
+??8TextAttribFontWeight@@UBEHABVTextAttrib@@@Z
+?Clone@TextAttribFontWeight@@UBEPAVTextAttrib@@XZ
+?SetFont@TextAttribFontWeight@@UBEXAAVFont@@@Z
