@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ namespace configmgr
                 none,
 
                 modify,
+                clear,
 
                 replace,
                 remove,
