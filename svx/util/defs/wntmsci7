@@ -23643,3 +23643,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?__query@?$Reference@VXFramesSupplier@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXFramesSupplier@frame@345@PAVXInterface@2345@@Z
 ?s_pType_com_sun_star_frame_XFramesSupplier@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFramesSupplier@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx61105372@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx1409520182@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
