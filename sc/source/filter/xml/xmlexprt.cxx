@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-05 08:25:46 $
+ *  last change: $Author: fs $ $Date: 2002-10-28 09:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1988,6 +1988,7 @@ void ScXMLExport::_ExportAutoStyles()
                     GetTextParagraphExport()->exportTextAutoStyles();
 
                     GetShapeExport()->exportAutoStyles();
+                    GetFormExport()->exportAutoStyles( );
                 }
                 if ((getExportFlags() & EXPORT_ALL) == EXPORT_ALL)
                     GetChartExport()->exportAutoStyles();
