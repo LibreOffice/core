@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:54:48 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,7 +1910,7 @@ String STR_GRAFOBJECTBARSHELL
     Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb grafiki";
     Text[ portuguese_brazilian ] = "Graphics mode";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ";
+    Text[ japanese ] = "}Ó°ÄŞ";
     Text[ korean ] = "±×·¡ÇÈ ¸ğµå";
     Text[ chinese_simplified ] = "Í¼ĞÎ·½Ê½";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
