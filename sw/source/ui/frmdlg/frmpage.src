@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:18:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Τύπος";
                 Text[ korean ] = "ΐ―Ηό";
                 Text[ turkish ] = "Tip";
+                Text[ catalan ] = "Tipo";
             };
             PageItem
             {
@@ -139,6 +140,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Πρόσθετα";
                 Text[ korean ] = "ΏΙΌΗ";
                 Text[ turkish ] = "Seηenekler";
+                Text[ catalan ] = "Opciones";
             };
             PageItem
             {
@@ -166,6 +168,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Αναδίπλωση";
                 Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅";
                 Text[ turkish ] = "Metin daπύlύmύ";
+                Text[ catalan ] = "Ajuste";
             };
             PageItem
             {
@@ -191,6 +194,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Υπερ-σύνδεση";
                 Text[ korean ] = "ΗΟΐΜΖΫΈµΕ©";
                 Text[ turkish ] = "Hyperlink";
+                Text[ catalan ] = "Hiperenlace";
             };
             PageItem
             {
@@ -218,6 +222,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Περίγραμμα";
                 Text[ korean ] = "ΕΧµΞΈ®";
                 Text[ turkish ] = "Kenarlύk";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -245,6 +250,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Φόντο";
                 Text[ korean ] = "Ήθ°ζ";
                 Text[ turkish ] = "Artalan";
+                Text[ catalan ] = "Fondo";
             };
             PageItem
             {
@@ -272,6 +278,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Στήλες";
                 Text[ korean ] = "Ώ­";
                 Text[ turkish ] = "Sόtun";
+                Text[ catalan ] = "Columnas";
             };
             PageItem
             {
@@ -296,6 +303,7 @@ TabDialog DLG_FRM_STD
                 Text[ greek ] = "Μακροεντολή";
                 Text[ korean ] = "ΈΕΕ©·Ξ";
                 Text[ turkish ] = "Makro";
+                Text[ catalan ] = "Macro";
             };
         };
     };
@@ -308,6 +316,7 @@ TabDialog DLG_FRM_STD
     Text[ greek ] = "Περίγραμμα";
     Text[ korean ] = "ΗΑ·ΉΐΣ";
     Text[ turkish ] = "Ηerηeve";
+    Text[ catalan ] = "Marco";
 };
 TabDialog DLG_FRM_GRF
 {
@@ -357,6 +366,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Τύπος";
                 Text[ korean ] = "ΐ―Ηό";
                 Text[ turkish ] = "Tip";
+                Text[ catalan ] = "Tipo";
             };
             PageItem
             {
@@ -382,6 +392,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Πρόσθετα";
                 Text[ korean ] = "ΏΙΌΗ";
                 Text[ turkish ] = "Seηenekler";
+                Text[ catalan ] = "Opciones";
             };
             PageItem
             {
@@ -409,6 +420,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Αναδίπλωση";
                 Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅";
                 Text[ turkish ] = "Metin daπύlύmύ";
+                Text[ catalan ] = "Ajuste";
             };
             PageItem
             {
@@ -434,6 +446,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Υπερ-σύνδεση";
                 Text[ korean ] = "ΗΟΐΜΖΫΈµΕ©";
                 Text[ turkish ] = "Hyperlink";
+                Text[ catalan ] = "Hiperenlace";
             };
             PageItem
             {
@@ -461,6 +474,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Γραφικό";
                 Text[ korean ] = "±Χ·΅ΗΘ";
                 Text[ turkish ] = "Grafik";
+                Text[ catalan ] = "Imagen";
             };
             PageItem
             {
@@ -486,6 +500,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Προσαρμογή";
                 Text[ korean ] = "΄Ωµλ±β";
                 Text[ turkish ] = "Kύrpma";
+                Text[ catalan ] = "Recortar";
             };
             PageItem
             {
@@ -513,6 +528,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Περίγραμμα";
                 Text[ korean ] = "ΕΧµΞΈ®";
                 Text[ turkish ] = "Kenarlύk";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -540,6 +556,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Φόντο";
                 Text[ korean ] = "Ήθ°ζ";
                 Text[ turkish ] = "Artalan";
+                Text[ catalan ] = "Fondo";
             };
             PageItem
             {
@@ -564,6 +581,7 @@ TabDialog DLG_FRM_GRF
                 Text[ greek ] = "Μακροεντολή";
                 Text[ korean ] = "ΈΕΕ©·Ξ";
                 Text[ turkish ] = "Makro";
+                Text[ catalan ] = "Macro";
             };
         };
     };
@@ -576,6 +594,7 @@ TabDialog DLG_FRM_GRF
     Text[ greek ] = "Γραφικό";
     Text[ korean ] = "±Χ·΅ΗΘ";
     Text[ turkish ] = "Grafik";
+    Text[ catalan ] = "Imagen";
 };
 TabDialog DLG_FRM_OLE
 {
@@ -626,6 +645,7 @@ TabDialog DLG_FRM_OLE
                 Text[ greek ] = "Τύπος";
                 Text[ korean ] = "ΐ―Ηό";
                 Text[ turkish ] = "Tip";
+                Text[ catalan ] = "Tipo";
             };
             PageItem
             {
@@ -651,6 +671,7 @@ TabDialog DLG_FRM_OLE
                 Text[ greek ] = "Πρόσθετα";
                 Text[ korean ] = "ΏΙΌΗ";
                 Text[ turkish ] = "Seηenekler";
+                Text[ catalan ] = "Opciones";
             };
             PageItem
             {
@@ -678,6 +699,7 @@ TabDialog DLG_FRM_OLE
                 Text[ greek ] = "Αναδίπλωση";
                 Text[ korean ] = "Ή®ΐΪΏ­΅΅ΉθΔ΅";
                 Text[ turkish ] = "Metin daπύlύmύ";
+                Text[ catalan ] = "Ajuste";
             };
             PageItem
             {
@@ -703,6 +725,7 @@ TabDialog DLG_FRM_OLE
                 Text[ greek ] = "Υπερ-σύνδεση";
                 Text[ korean ] = "ΗΟΐΜΖΫΈµΕ©";
                 Text[ turkish ] = "Hyperlink";
+                Text[ catalan ] = "Hiperenlace";
             };
             PageItem
             {
@@ -730,6 +753,7 @@ TabDialog DLG_FRM_OLE
                 Text[ greek ] = "Περίγραμμα";
                 Text[ korean ] = "ΕΧµΞΈ®";
                 Text[ turkish ] = "Kenarlύk";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -757,6 +781,7 @@ TabDialog DLG_FRM_OLE
                 Text[ greek ] = "Φόντο";
                 Text[ korean ] = "Ήθ°ζ";
                 Text[ turkish ] = "Artalan";
+                Text[ catalan ] = "Fondo";
             };
             /*
             PageItem  {
@@ -800,6 +825,7 @@ TabDialog DLG_FRM_OLE
                 Text[ greek ] = "Μακροεντολή";
                 Text[ korean ] = "ΈΕΕ©·Ξ";
                 Text[ turkish ] = "Makro";
+                Text[ catalan ] = "Macro";
             };
         };
     };
@@ -812,6 +838,7 @@ TabDialog DLG_FRM_OLE
     Text[ greek ] = "Αντικείμενο";
     Text[ korean ] = "°³ΓΌ";
     Text[ turkish ] = "Nesne";
+    Text[ catalan ] = "Objeto";
 };
 TabPage TP_FRM_STD
 {
@@ -847,6 +874,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Πλάτος";
         Text[ korean ] = "³ΚΊρ(~W)";
         Text[ turkish ] = "~Geniώlik";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField ED_WIDTH
     {
@@ -891,6 +919,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Σχετικά";
         Text[ korean ] = "»σ΄λ(~I)";
         Text[ turkish ] = "~Gφreceli";
+        Text[ catalan ] = "R~elativo";
     };
     FixedText FT_HEIGHT
     {
@@ -919,6 +948,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Ύψος";
         Text[ korean ] = "³τΐΜ(~H)";
         Text[ turkish ] = "~Yόks.";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField ED_HEIGHT
     {
@@ -962,6 +992,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Σχετικά";
         Text[ korean ] = "»σ΄λ(~L)";
         Text[ turkish ] = "G~φreceli";
+        Text[ catalan ] = "Rela~tivo";
     };
     CheckBox CB_FIXEDRATIO
     {
@@ -988,6 +1019,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Αναλογικά";
         Text[ korean ] = "Ίρΐ² ΐ―Αφ(~K)";
         Text[ turkish ] = "Orant~ύ";
+        Text[ catalan ] = "Prop~orcional";
     };
     CheckBox CB_AUTOHEIGHT
     {
@@ -1016,6 +1048,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Αυτόματο ύψος";
         Text[ korean ] = "ΐΪµΏ ³τΐΜ(~G)";
         Text[ turkish ] = "otom. ~yόksekl.";
+        Text[ catalan ] = "Altura auto~m.";
     };
     PushButton BT_REALSIZE
     {
@@ -1045,6 +1078,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Αρχικό μέγεθος";
         Text[ korean ] = "Ώψ·΅ Ε©±β";
         Text[ turkish ] = "έlk b~oyut";
+        Text[ catalan ] = "Ta~maρo original";
     };
     GroupBox GB_SIZE
     {
@@ -1072,6 +1106,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Μέγεθος";
         Text[ korean ] = "Ε©±β";
         Text[ turkish ] = "Boyut";
+        Text[ catalan ] = "Tamaρo";
     };
     RadioButton RB_ANCHOR_PAGE
     {
@@ -1080,7 +1115,7 @@ TabPage TP_FRM_STD
         Text = "An ~der Seite" ;
         Text [ ENGLISH ] = "At page" ;
         Text[ english_us ] = "To page";
-        Text[ portuguese ] = "At page";
+        Text[ portuguese ] = "Na ~pαgina";
         Text[ russian ] = "Κ ρςπΰνθφε";
         Text[ greek ] = "Στη σελίδα";
         Text[ dutch ] = "Aan ~pagina";
@@ -1097,6 +1132,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "¦b­¶­±¤W";
         Text[ turkish ] = "At page";
         Text[ arabic ] = "Ϊαμ ΗαΥέΝΙ";
+        Text[ catalan ] = "A la pα~gina";
     };
     RadioButton RB_ANCHOR_PARA
     {
@@ -1105,7 +1141,7 @@ TabPage TP_FRM_STD
         Text = "Am Ab~satz" ;
         Text [ ENGLISH ] = "At paragraph" ;
         Text[ english_us ] = "To paragraph";
-        Text[ portuguese ] = "At paragraph";
+        Text[ portuguese ] = "No pa~rαgrafo";
         Text[ russian ] = "Κ ΰαηΰφσ";
         Text[ greek ] = "~Στη παράγραφο";
         Text[ dutch ] = "Aan ~alinea";
@@ -1122,6 +1158,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "¦b¬qΈ¨¤W";
         Text[ turkish ] = "At paragraph";
         Text[ arabic ] = "Ϊαμ ΗαέήΡΙ";
+        Text[ catalan ] = "Al ~pαrrafo";
     };
     RadioButton RB_ANCHOR_AT_CHAR
     {
@@ -1130,7 +1167,7 @@ TabPage TP_FRM_STD
         Text = "Am Zeiche~n" ;
         Text [ ENGLISH ] = "At character" ;
         Text[ english_us ] = "To character";
-        Text[ portuguese ] = "At character";
+        Text[ portuguese ] = "No ~carαcter";
         Text[ russian ] = "Κ ηνΰκσ";
         Text[ greek ] = "Στο~ν χαρακτήρα";
         Text[ dutch ] = "Aan ~teken";
@@ -1147,6 +1184,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "¦b¦r¤Έ¤W";
         Text[ turkish ] = "At character";
         Text[ arabic ] = "Ϊαμ ΗαΝΡέ";
+        Text[ catalan ] = "Al carα~cter";
     };
     RadioButton RB_ANCHOR_AS_CHAR
     {
@@ -1162,7 +1200,7 @@ TabPage TP_FRM_STD
         Text [ spanish ] = "Como ~carαcter" ;
         Text [ french ] = "Comme c~aractθre" ;
         Text [ dutch ] = "Als te~ken" ;
-        Text [ portuguese ] = "como ~carαcter" ;
+        Text [ portuguese ] = "Co~mo carαcter" ;
         Text[ chinese_simplified ] = "µ±ΧχΧΦ·ϋ(~A)";
         Text[ russian ] = "Κΰκ ηνΰκ";
         Text[ polish ] = "Jako znak";
@@ -1173,6 +1211,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Ως χαρακτήρας";
         Text[ korean ] = "Ή®ΐΪ·Ξ(~A)";
         Text[ turkish ] = "karakter o~larak";
+        Text[ catalan ] = "Como ~carαcter";
     };
     RadioButton RB_ANCHOR_FRAME
     {
@@ -1181,7 +1220,7 @@ TabPage TP_FRM_STD
         Text = "~Am Rahmen" ;
         Text [ ENGLISH ] = "At frame" ;
         Text[ english_us ] = "To frame";
-        Text[ portuguese ] = "At frame";
+        Text[ portuguese ] = "Na m~oldura";
         Text[ russian ] = "Κ πΰμκε";
         Text[ greek ] = "Στο πλ~αίσιο";
         Text[ dutch ] = "Aan ~kader";
@@ -1198,6 +1237,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "¦b®ΨΓδ";
         Text[ turkish ] = "At frame";
         Text[ arabic ] = "Ϊαμ ΗαίΗΟΡ";
+        Text[ catalan ] = "~Al marco";
     };
     GroupBox GB_TYPE
     {
@@ -1225,6 +1265,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Αγκύρωση";
         Text[ korean ] = "°νΑ¤";
         Text[ turkish ] = "Sabitleme";
+        Text[ catalan ] = "Anclaje";
     };
     Window WN_BSP
     {
@@ -1258,6 +1299,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Οριζόντια";
         Text[ korean ] = "ΌφΖς(~Z)";
         Text[ turkish ] = "Ya~tay";
+        Text[ catalan ] = "Hori~zontal";
     };
     ListBox DLB_HORIZONTAL
     {
@@ -1293,6 +1335,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "α~νά";
         Text[ korean ] = "Α¤µµ";
         Text[ turkish ] = "g~rnt.";
+        Text[ catalan ] = "a";
     };
     MetricField ED_AT_HORZ_POS
     {
@@ -1337,6 +1380,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "ΈΒΓβ ΉζΗβ";
         Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
+        Text[ catalan ] = "a";
     };
     ListBox LB_HORI_RELATION
     {
@@ -1370,6 +1414,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Καθρε~πτισμός στις άρτιες σελίδες";
         Text[ korean ] = "Β¦Όφ ΒΚ Έ¶ΑΦΊΈ±β(~M)";
         Text[ turkish ] = "Ηift numaralύ sayfalarda ya~nsύt";
+        Text[ catalan ] = "Reflejar en ~pαginas pares";
     };
     FixedText FT_VERTICAL
     {
@@ -1398,6 +1443,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Κατακόρυφα";
         Text[ korean ] = "ΌφΑχ(~V)";
         Text[ turkish ] = "Di~key";
+        Text[ catalan ] = "~Vertical";
     };
     ListBox DLB_VERTICAL
     {
@@ -1433,6 +1479,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "ανά";
         Text[ korean ] = "Ώ΅ ΐΗΗΨ";
         Text[ turkish ] = "gr~nt.";
+        Text[ catalan ] = "a";
     };
     MetricField ED_AT_VERT_POS
     {
@@ -1477,6 +1524,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "ΈΒΓβ ΉζΗβ";
         Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
+        Text[ catalan ] = "a";
     };
     ListBox LB_VERT_RELATION
     {
@@ -1511,6 +1559,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Θέση";
         Text[ korean ] = "ΐ§Δ΅";
         Text[ turkish ] = "Konum";
+        Text[ catalan ] = "Posiciσn";
     };
 };
 TabPage TP_GRF_EXT
@@ -1533,7 +1582,7 @@ TabPage TP_GRF_EXT
         Text [ norwegian ] = "Kobling" ;
         Text [ italian ] = "Collegamento" ;
         Text [ portuguese_brazilian ] = "Ligar" ;
-        Text [ portuguese ] = "Ligar" ;
+        Text [ portuguese ] = "Ligaηγo" ;
         Text [ finnish ] = "Yhteys" ;
         Text [ danish ] = "Kζde" ;
         Text [ french ] = "Lien" ;
@@ -1550,6 +1599,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "Σύνδεση";
         Text[ korean ] = "Ώ¬°α";
         Text[ turkish ] = "Baπlantύ";
+        Text[ catalan ] = "Vνnculo";
     };
     FixedText FT_CONNECT
     {
@@ -1575,6 +1625,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "Όνομα αρχείου";
         Text[ korean ] = "ΖΔΐΟ ΐΜΈ§(~F)";
         Text[ turkish ] = "D~osya adύ";
+        Text[ catalan ] = "~Nombre de archivo";
     };
     Edit ED_CONNECT
     {
@@ -1606,6 +1657,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "[Κανένα]";
         Text[ korean ] = "[Ύψΐ½]";
         Text[ turkish ] = "[Boώ]";
+        Text[ catalan ] = "[Ninguno]";
     };
     PushButton PB_BROWSE
     {
@@ -1633,6 +1685,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "~...";
         Text[ korean ] = "(~.)...";
         Text[ turkish ] = "~...";
+        Text[ catalan ] = "~...";
     };
     CheckBox CB_VERT
     {
@@ -1662,6 +1715,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "κατακόρυφα";
         Text[ korean ] = "ΌφΑχ(~V)";
         Text[ turkish ] = "d~ikey";
+        Text[ catalan ] = "~vertical";
     };
     CheckBox CB_HOR
     {
@@ -1688,6 +1742,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "¤τ¥­¤θ¦V(~Z)";
         Text[ turkish ] = "yata~y";
         Text[ arabic ] = "Γέήν";
+        Text[ catalan ] = "~horizontal";
     };
     RadioButton RB_MIRROR_ALL_PAGES
     {
@@ -1714,6 +1769,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "¦b©Ò¦³­¶­±¤W";
         Text[ turkish ] = "on all pages";
         Text[ arabic ] = "Ϊαμ ία ΗαΥέΝΗΚ";
+        Text[ catalan ] = "en todas las pαginas";
     };
     RadioButton RB_MIRROR_LEFT_PAGES
     {
@@ -1740,6 +1796,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "¦b¥ª­¶¤W";
         Text[ turkish ] = "on even pages";
         Text[ arabic ] = "Ϊαμ ΗαΥέΝΗΚ ΗαÒζΜνΙ";
+        Text[ catalan ] = "en pαginas izquierdas";
     };
     RadioButton RB_MIRROR_RIGHT_PAGES
     {
@@ -1766,6 +1823,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "¦b¥k­¶¤W";
         Text[ turkish ] = "on odd pages";
         Text[ arabic ] = "Ϊαμ ΗαΥέΝΗΚ ΗαέΡΟνΙ";
+        Text[ catalan ] = "en pαginas derechas";
     };
     Window WN_BMP
     {
@@ -1798,6 +1856,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "Αναστροφή";
         Text[ korean ] = "΄λΔª";
         Text[ turkish ] = "Yansύt";
+        Text[ catalan ] = "Reflejar";
     };
 };
 String STR_EDIT_GRF
@@ -1824,6 +1883,7 @@ String STR_EDIT_GRF
     TEXT[ greek ] = "Σύνδεση";
     TEXT[ korean ] = "Ώ¬°α";
     TEXT[ turkish ] = "Baπla";
+    TEXT[ catalan ] = "Vincular";
 };
 
 TabPage TP_FRM_URL
@@ -1857,6 +1917,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "URL";
         Text[ korean ] = "~URL";
         Text[ turkish ] = "U~RL";
+        Text[ catalan ] = "~URL";
     };
     Edit ED_URL
     {
@@ -1889,6 +1950,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "Όνομα";
         Text[ korean ] = "ΐΜΈ§(~N)";
         Text[ turkish ] = "~Ad";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_NAME
     {
@@ -1921,6 +1983,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "Πλαίσιο";
         Text[ korean ] = "ΗΑ·ΉΐΣ";
         Text[ turkish ] = "~Frame";
+        Text[ catalan ] = "Frame";
     };
     ComboBox CB_FRAME
     {
@@ -1955,6 +2018,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "Επιλογή...";
         Text[ korean ] = "Ό±ΕΓ(~B)...";
         Text[ turkish ] = "~Seη...";
+        Text[ catalan ] = "Selecc~ionar...";
     };
     GroupBox GB_HYPERLINK
     {
@@ -1980,6 +2044,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "Υπερ-σύνδεση";
         Text[ korean ] = "ΗΟΐΜΖΫΈµΕ©";
         Text[ turkish ] = "Hyperlink";
+        Text[ catalan ] = "Hiperenlace";
     };
     CheckBox CB_SERVER
     {
@@ -2005,6 +2070,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "Διακομιστής";
         Text[ korean ] = "Ό­Ήφ(~S)";
         Text[ turkish ] = "~Sunucu";
+        Text[ catalan ] = "~Servidor";
     };
     CheckBox CB_CLIENT
     {
@@ -2030,6 +2096,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "Πελάτης";
         Text[ korean ] = "Ε¬¶σΐΜΎπΖ®(~C)";
         Text[ turkish ] = "~έstemci";
+        Text[ catalan ] = "~Cliente";
     };
     GroupBox GB_IMAGE
     {
@@ -2055,6 +2122,7 @@ TabPage TP_FRM_URL
         Text[ greek ] = "Image map";
         Text[ korean ] = "ΐΜΉΜΑφ ΈΚ";
         Text[ turkish ] = "Resim eώlem";
+        Text[ catalan ] = "Image Map";
     };
 };
 TabPage TP_FRM_ADD
@@ -2088,6 +2156,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Όνομα";
         Text[ korean ] = "ΐΜΈ§(~N)";
         Text[ turkish ] = "~Ad";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_NAME
     {
@@ -2120,6 +2189,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Εν~αλλακτικά (Μόνο κείμενο)";
         Text[ korean ] = "΄λΓΌ΅΅ΕΨ½ΊΖ®(~A)";
         Text[ turkish ] = "~Alternatif metin";
+        Text[ catalan ] = "Te~xto alternativo";
     };
     Edit ED_ALT_NAME
     {
@@ -2152,6 +2222,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Προηγούμενο";
         Text[ korean ] = "Ό±·Κ(~P)";
         Text[ turkish ] = "~Φnceki";
+        Text[ catalan ] = "~Anterior";
     };
     Edit ED_PREV
     {
@@ -2185,6 +2256,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Επόμενο";
         Text[ korean ] = "ΘΔΐΣ(~N)";
         Text[ turkish ] = "S~onraki";
+        Text[ catalan ] = "~Vνnculo siguiente";
     };
     Edit ED_NEXT
     {
@@ -2218,6 +2290,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Ονόματα";
         Text[ korean ] = "ΐΜΈ§";
         Text[ turkish ] = "Ad";
+        Text[ catalan ] = "Nombres";
     };
     CheckBox CB_PROTECT_CONTENT
     {
@@ -2244,6 +2317,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Περιεχόμενα";
         Text[ korean ] = "³»Ώλ(~C)";
         Text[ turkish ] = "~έηerik";
+        Text[ catalan ] = "~Contenido";
     };
     CheckBox CB_PROTECT_FRAME
     {
@@ -2270,6 +2344,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Θέση";
         Text[ korean ] = "ΐ§Δ΅(~O)";
         Text[ turkish ] = "K~onum";
+        Text[ catalan ] = "P~osiciσn";
     };
     CheckBox CB_PROTECT_SIZE
     {
@@ -2296,6 +2371,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Μέγεθος";
         Text[ korean ] = "Ε©±β(~S)";
         Text[ turkish ] = "~Boyut";
+        Text[ catalan ] = "~Tamaρo";
     };
     GroupBox GB_PROTECT
     {
@@ -2321,6 +2397,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Προστασία";
         Text[ korean ] = "ΊΈΘ£";
         Text[ turkish ] = "Koru";
+        Text[ catalan ] = "Proteger";
     };
     CheckBox CB_EDIT_IN_READONLY
     {
@@ -2346,6 +2423,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Δυνατότητα ~επεξεργασίας σε έγγραφο τύπου \"Μόνο για ανάγνωση\"";
         Text[ korean ] = "ΐΠ±βΐόΏλ Ή®Ό­Ώ΅Ό­ ΖνΑύ°΅΄Ι(~E)";
         Text[ turkish ] = "Salt okunur belge iηinde dόzenlenebilir";
+        Text[ catalan ] = "Se puede editar en documentos de solo lectura";
     };
     CheckBox CB_PRINT_FRAME
     {
@@ -2373,6 +2451,7 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Εκτύπωση";
         Text[ korean ] = "ΐΞΌβ(~T)";
         Text[ turkish ] = "~Yazdύr";
+        Text[ catalan ] = "Im~primir";
     };
     GroupBox GB_EXT
     {
@@ -2398,5 +2477,6 @@ TabPage TP_FRM_ADD
         Text[ greek ] = "Πρόσθετα";
         Text[ korean ] = "ΏΙΌΗ";
         Text[ turkish ] = "Seηenekler";
+        Text[ catalan ] = "Opciones";
     };
 };
