@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:30:23 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,7 +1072,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ danish ] = "Transparensfarve" ;
         Text [ portuguese ] = "Cor de transpar阯cia" ;
         Text [ portuguese_brazilian ] = "Transparenzfarbe" ;
-        Text[ chinese_simplified ] = "透明的颜色";
+        Text[ chinese_simplified ] = "透明色";
         Text[ russian ] = "橡铉疣黜";
         Text[ polish ] = "Kolor przezroczysty";
         Text[ japanese ] = "摟柧怓";
