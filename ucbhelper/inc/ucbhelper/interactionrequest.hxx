@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 12:34:47 $
+ *  last change: $Author: kso $ $Date: 2002-08-16 14:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,8 +652,8 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_eDefaultRememberPasswordMode( eDefaultRememberPasswordMode ),
   m_aRememberAccountModes( rRememberAccountModes ),
   m_eDefaultRememberAccountMode( eDefaultRememberAccountMode ),
-  m_eRememberPasswordMode( com::sun::star::ucb::RememberAuthentication_NO ),
-  m_eRememberAccountMode( com::sun::star::ucb::RememberAuthentication_NO ),
+  m_eRememberPasswordMode( eDefaultRememberPasswordMode ),
+  m_eRememberAccountMode( eDefaultRememberAccountMode ),
   m_bCanSetRealm( bCanSetRealm ),
   m_bCanSetUserName( bCanSetUserName ),
   m_bCanSetPassword( bCanSetPassword ),
