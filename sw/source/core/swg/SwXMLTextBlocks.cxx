@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 17:01:34 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,12 @@
 #include <svtools/macitem.hxx>
 #endif
 
+#ifndef _UNOEVENT_HXX
+#include <unoevent.hxx>
+#endif
+
+
+
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
 #define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
 
@@ -304,7 +310,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
 
 SwXMLTextBlocks::SwXMLTextBlocks( SvStorage& rStg )
     : SwImpBlocks( rStg.GetName() ),
-    bAutocorrBlock( TRUE ), nFlags ( 0 )
+      bAutocorrBlock( TRUE ), nFlags ( 0 )
 {
     // This is unused by Marty right now - dont forget...
     SwDocShell* pDocSh = new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
@@ -759,32 +765,122 @@ BOOL SwXMLTextBlocks::IsOnlyTextBlock( USHORT nIdx ) const
 
 ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl )
 {
-    ULONG nRes = OpenFile ( TRUE );
-    if ( 0 == nRes )
-    {
-        /*
-        OpenRec( SWG_MACROTBL );
-        while( BytesLeft() )
-        {
-            OpenRec( SWG_MACRO );
-            UINT16 nKey, nScriptType = STARBASIC;
-            String aLib, aMac;
-            *pStrm >> nKey;
-            InString( *pStrm, aLib );
-            InString( *pStrm, aMac );
+    // set current auto text
+    aShort = aNames[ nIdx ]->aShort;
+    aLong = aNames[ nIdx ]->aLong;
+    aPackageName = aNames[ nIdx ]->aPackageName;
 
-            if( SWG_SVXMACROS <= nVersion )
-                *pStrm >> nScriptType;
-            rMacroTbl.Insert( nKey, new SvxMacro( aMac, aLib,
-                                              (ScriptType)nScriptType ) );
-            CloseRec( SWG_MACRO );
+    ULONG sRet = 0;
+
+    // open stream in proper sub-storage
+    CloseFile();
+    if ( 0 == OpenFile ( TRUE ) )
+    {
+        xRoot = xBlkRoot->OpenUCBStorage( aPackageName, STREAM_STGREAD );
+
+        OUString sStreamName = OUString::createFromAscii("atevent.xml");
+        SvStorageStreamRef xDocStream = xRoot->OpenStream(
+            sStreamName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+        DBG_ASSERT(xDocStream.Is(), "Can't create output stream");
+        if ( xDocStream.Is() )
+        {
+            xDocStream->SetBufferSize( 16*1024 );
+            Reference<io::XInputStream> xInputStream =
+                new utl::OInputStreamWrapper( *xDocStream );
+
+            // prepare ParserInputSrouce
+            xml::sax::InputSource aParserInput;
+            aParserInput.sSystemId = aName;
+            aParserInput.aInputStream = xInputStream;
+
+            // get service factory
+            Reference< lang::XMultiServiceFactory > xServiceFactory =
+                comphelper::getProcessServiceFactory();
+            if ( xServiceFactory.is() )
+            {
+
+                // get parser
+                OUString sParserService( RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.xml.sax.Parser" ) );
+                Reference< xml::sax::XParser > xParser(
+                    xServiceFactory->createInstance(sParserService),
+                    UNO_QUERY );
+                DBG_ASSERT( xParser.is(), "Can't create parser" );
+                if( xParser.is() )
+                {
+                    // create descriptor and reference to it. Either
+                    // both or neither must be kept because of the
+                    // reference counting!
+                    SwMacroTableEventDescriptor* pDescriptor =
+                        new SwMacroTableEventDescriptor();
+                    Reference<XNameReplace> xReplace = pDescriptor;
+                    Sequence<Any> aFilterArguments( 1 );
+                    aFilterArguments[0] <<= xReplace;
+
+                    // get filter
+                    OUString sFilterComponent( RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
+                    Reference< xml::sax::XDocumentHandler > xFilter(
+                        xServiceFactory->createInstanceWithArguments(
+                            sFilterComponent, aFilterArguments),
+                        UNO_QUERY );
+                    DBG_ASSERT( xFilter.is(),
+                                "can't instantiate atevents filter");
+                    if ( xFilter.is() )
+                    {
+                        // connect parser and filter
+                        xParser->setDocumentHandler( xFilter );
+
+                        // connect model and filter
+                        Reference<document::XImporter> xImporter( xFilter,
+                                                                  UNO_QUERY );
+
+                        // we don't need a model
+                        // xImporter->setTargetDocument( xModelComponent );
+
+                        // parse the stream
+                        try
+                        {
+                            xParser->parseStream( aParserInput );
+                        }
+                        catch( xml::sax::SAXParseException& )
+                        {
+                            // workaround for #83452#: SetSize doesn't work
+                            // sRet = ERR_SWG_READ_ERROR;
+                        }
+                        catch( xml::sax::SAXException& )
+                        {
+                            sRet = ERR_SWG_READ_ERROR;
+                        }
+                        catch( io::IOException& )
+                        {
+                            sRet = ERR_SWG_READ_ERROR;
+                        }
+
+                        // and finally, copy macro into table
+                        if (0 == sRet)
+                            pDescriptor->copyMacrosIntoTable(rMacroTbl);
+                    }
+                    else
+                        sRet = ERR_SWG_READ_ERROR;
+                }
+                else
+                    sRet = ERR_SWG_READ_ERROR;
+
+            }
+            else
+                sRet = ERR_SWG_READ_ERROR;
         }
-        CloseRec( SWG_MACROTBL );
-        */
-        CloseFile();
+        else
+            sRet = ERR_SWG_READ_ERROR;
     }
-    return nRes;
+    else
+        sRet = ERR_SWG_READ_ERROR;
+
+    // success!
+    return sRet;
 }
+
 
 BOOL SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
 {
@@ -1074,31 +1170,122 @@ void SwXMLTextBlocks::AddTextNode ( const OUString & rText )
     SwIndex aIdx ( pTxtNode );
     pTxtNode->Insert ( rText, aIdx );
 }
+
 ULONG SwXMLTextBlocks::SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMacroTbl )
 {
-    ULONG nRes = OpenFile( FALSE );
-    if( 0 == nRes )
-    {
-        ClearDoc();
-        if( 0 == ( nRes = GetDoc( nIdx )) )
-        {
-            SvxMacroTableDtor& rMTbl = (SvxMacroTableDtor&) pDoc->GetMacroTable();
-            rMTbl = rMacroTbl;
+    // set current autotext
+    aShort = aNames[ nIdx ]->aShort;
+    aLong = aNames[ nIdx ]->aLong;
+    aPackageName = aNames[ nIdx ]->aPackageName;
 
-            aShort = aNames[ nIdx ]->aShort;
-            aLong = aNames[ nIdx ]->aLong;
-            aPackageName = aNames[ nIdx ]->aPackageName;
-            if( 0 == ( nRes = StartPutBlock( aShort, aPackageName )))
-            {
-                SwPaM* pPaM = MakePaM();
-                nRes = PutBlock( *pPaM, aLong );
-                delete pPaM;
-                nCur = nIdx;
-            }
+    // start XML autotext event export
+    ULONG nRes = 0;
+
+    Reference< lang::XMultiServiceFactory > xServiceFactory =
+        comphelper::getProcessServiceFactory();
+    ASSERT( xServiceFactory.is(),
+            "XML autotext event write:: got no service manager" );
+    if( !xServiceFactory.is() )
+        return ERR_SWG_WRITE_ERROR;
+
+    // Get model
+    Reference< lang::XComponent > xModelComp(
+        pDoc->GetDocShell()->GetModel(), UNO_QUERY );
+    ASSERT( xModelComp.is(), "XMLWriter::Write: got no model" );
+    if( !xModelComp.is() )
+        return ERR_SWG_WRITE_ERROR;
+
+    // open stream in proper sub-storage
+    CloseFile();    // close (it may be open in read-only-mode)
+    if ( 0 == OpenFile ( FALSE ) )
+    {
+        xRoot = xBlkRoot->OpenUCBStorage( aPackageName, STREAM_STGWRITE );
+        OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("atevent.xml") );
+
+        // workaround for bug: storages do not get overwritten
+        // (This workaround is SLOOOOWWW! Remove this ASAP.)
+        if( xRoot->IsContained( sStreamName ) )
+        {
+            xRoot->Remove( sStreamName );
+            xRoot->Commit();
+            xBlkRoot->Commit();
         }
 
+        SvStorageStreamRef xDocStream = xRoot->OpenStream(
+            sStreamName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+        DBG_ASSERT(xDocStream.Is(), "Can't create output stream");
+        if ( xDocStream.Is() )
+        {
+            xDocStream->SetSize( 0 );
+            xDocStream->SetBufferSize( 16*1024 );
+            Reference<io::XOutputStream> xOutputStream =
+                new utl::OOutputStreamWrapper( *xDocStream );
+
+            // get XML writer
+            Reference< io::XActiveDataSource > xSaxWriter(
+                xServiceFactory->createInstance(
+                    OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+                UNO_QUERY );
+            ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+            if( xSaxWriter.is() )
+            {
+
+                // connect XML writer to output stream
+                xSaxWriter->setOutputStream( xOutputStream );
+                Reference<xml::sax::XDocumentHandler> xDocHandler(
+                    xSaxWriter, UNO_QUERY);
+
+                // construct events object
+                Reference<XNameAccess> xEvents =
+                    new SwMacroTableEventDescriptor(rMacroTbl);
+
+                // prepare arguments (prepend doc handler to given arguments)
+                Sequence<Any> aParams(2);
+                aParams[0] <<= xDocHandler;
+                aParams[1] <<= xEvents;
+
+                // get filter component
+                Reference< document::XExporter > xExporter(
+                    xServiceFactory->createInstanceWithArguments(
+                        OUString::createFromAscii(
+                         "com.sun.star.comp.Writer.XMLAutotextEventsExporter"),
+                        aParams), UNO_QUERY);
+                ASSERT( xExporter.is(),
+                        "can't instantiate export filter component" );
+                if( xExporter.is() )
+                {
+                    // connect model and filter
+                    xExporter->setSourceDocument( xModelComp );
+
+                    // filter!
+                    Sequence<beans::PropertyValue> aFilterProps( 0 );
+                    Reference < document::XFilter > xFilter( xExporter,
+                                                             UNO_QUERY );
+                    xFilter->filter( aFilterProps );
+                }
+                else
+                    nRes = ERR_SWG_WRITE_ERROR;
+            }
+            else
+                nRes = ERR_SWG_WRITE_ERROR;
+
+            // finally, commit stream, sub-storage and storage
+            xDocStream->Commit();
+            xDocStream.Clear();
+
+            xRoot->Commit();
+            xRoot.Clear();
+            xBlkRoot->Commit();
+        }
+        else
+            nRes = ERR_SWG_WRITE_ERROR;
+
+        // close file (because it's in write-mode)
+        xRoot.Clear();
         CloseFile();
     }
+    else
+        nRes = ERR_SWG_WRITE_ERROR;
 
     return nRes;
 }
