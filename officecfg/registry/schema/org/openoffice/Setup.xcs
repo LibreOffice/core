@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:49:50 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,13 @@
 				<desc xml:lang="hu">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="sl">Describes an application module (a document factory, such as Writer).</desc>
 			</info>
+			<prop oor:name="ooSetupFactoryDefaultFilter" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc xml:lang="en-US">Specifies the default file format for saving documents inside this office module.</desc>
+					<desc xml:lang="de">Spezifiziert das Standard Dateiformat, in welchem Dokumente dieser Applikation gespeichert werden.</desc>
+                </info>
+            </prop>                
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
 				<!-- UIHints: setup -->
