@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 12:27:25 $
+ *  last change: $Author: os $ $Date: 2000-11-17 16:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,6 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_TABLE_NAME              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_COLUMN_NAME             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_DATA_BASE_FORMAT          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATE                         ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_DATETIME                         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_DATE                      ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_EDIT_IN_READONLY             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FALSE_CONTENT                    ;
@@ -602,6 +601,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEYS             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SORT_ASCENDING     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEY              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FIELDS;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_DATE_TIME_VALUE;
 #endif
 
 

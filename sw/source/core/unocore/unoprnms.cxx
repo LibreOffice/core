@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 12:29:49 $
+ *  last change: $Author: os $ $Date: 2000-11-17 16:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,6 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_TABLE_NAME                        
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATA_COLUMN_NAME                       (MAP_CHAR_LEN("DataColumnName"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_DATA_BASE_FORMAT                    (MAP_CHAR_LEN("DataBaseFormat"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DATE                                   (MAP_CHAR_LEN("Date"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_DATETIME                               (MAP_CHAR_LEN("DateTimeValue"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_DATE                                (MAP_CHAR_LEN("IsDate"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_EDIT_IN_READONLY                       (MAP_CHAR_LEN("EditInReadonly"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FALSE_CONTENT                          (MAP_CHAR_LEN("FalseContent"));
@@ -600,4 +599,4 @@ const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEYS                           (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_SORT_ASCENDING                   (MAP_CHAR_LEN("IsSortAscending"));
 const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEY                            (MAP_CHAR_LEN("SortKey"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FIELDS                              (MAP_CHAR_LEN("Fields"));
-
+const SwPropNameLen __FAR_DATA UNO_NAME_DATE_TIME_VALUE                     (MAP_CHAR_LEN("DateTimeValue"));
