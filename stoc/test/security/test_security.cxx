@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_security.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 16:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ permission com.sun.star.io.FilePermission "file:///usr/local/dbo/*", "read";
 
 permission com.sun.star.security.RuntimePermission "DBO";
 
-permission com.sun.star.connection.SocketPermission "dbo-1224:1024-", "listen";
+permission com.sun.star.connection.SocketPermission "dbo-1:1024-", "listen";
 permission com.sun.star.connection.SocketPermission "dbo-11081:-1023", "resolve";
 permission com.sun.star.connection.SocketPermission "dbo-11081:18", "listen";
 permission com.sun.star.connection.SocketPermission "dbo-11081:20-24", "listen";
@@ -296,9 +296,9 @@ static void check_dbo_pos( AccessControl & ac, bool invert = false )
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/*"), OUSTR("read") ), invert );
     CHECK( ac.checkFilePermission( OUSTR("file:///usr/local/dbo/bla"), OUSTR("read") ), invert );
     CHECK( ac.checkRuntimePermission( OUSTR("DBO") ), invert );
-    CHECK( ac.checkSocketPermission( OUSTR("dbo-1224:1024-"), OUSTR("listen") ), invert );
-    CHECK( ac.checkSocketPermission( OUSTR("dbo-1224:2048-3122"), OUSTR("listen") ), invert );
-    CHECK( ac.checkSocketPermission( OUSTR("dbo-1224:2048-"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-1:1024-"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-1:2048-3122"), OUSTR("listen") ), invert );
+    CHECK( ac.checkSocketPermission( OUSTR("dbo-1:2048-"), OUSTR("listen") ), invert );
     CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:-1023"), OUSTR("resolve") ), invert );
     CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:20-1023"), OUSTR("resolve") ), invert );
     CHECK( ac.checkSocketPermission( OUSTR("dbo-11081:18"), OUSTR("listen") ), invert );

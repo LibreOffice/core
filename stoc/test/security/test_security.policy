@@ -4,7 +4,7 @@
 grant user "dbo"{
       permission com.sun.star.io.FilePermission "file:///home/dbo/-", ",,read , write ";
       permission com.sun.star.io.FilePermission "-", "read ,write";
-      permission com.sun.star.connection.SocketPermission "dbo-1224:1024-", "listen";
+      permission com.sun.star.connection.SocketPermission "dbo-1:1024-", "listen";
 	permission com.sun.star.security.RuntimePermission "DBO";
       permission com.sun.star.connection.SocketPermission "dbo-11081:-1023", "resolve";
       permission com.sun.star.connection.SocketPermission "dbo-11081:18", "listen";
