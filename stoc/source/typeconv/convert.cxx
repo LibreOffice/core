@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-05 10:42:07 $
+ *  last change: $Author: dbo $ $Date: 2002-07-05 12:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,26 @@ static const sal_Int64 SAL_INT64_MAX =
     (sal_Int64)((((sal_uInt64)0x7fffffff) << 32) | (sal_uInt64)0xffffffff);
 static const sal_Int64 SAL_INT64_MIN =
     (sal_Int64)(((sal_uInt64)0x80000000) << 32);
+
+/* MS Visual C++ no conversion from unsigned __int64 to double */
+#ifdef _MSC_VER
+static const double DOUBLE_SAL_UINT64_MAX = ((((double)SAL_INT64_MAX) * 2) + 1);
+
+static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW( () )
+{
+    sal_uInt64 n2 = (n / 3);
+    n -= (2 * n2);
+    return (((double)(sal_Int64)n2) * 2.0) + ((double)(sal_Int64)n);
+}
+#else
+static const double DOUBLE_SAL_UINT64_MAX =
+    (double)((((sal_uInt64)0xffffffff) << 32) | (sal_uInt64)0xffffffff);
+
+static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW( () )
+{
+    return (double)n;
+}
+#endif
 
 
 static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
@@ -285,7 +305,7 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
     double fVal;
     if (getNumericValue( fVal, rStr ) &&
         fVal >= (double)SAL_INT64_MIN &&
-        fVal <= (double)SAL_UINT64_MAX)
+        fVal <= DOUBLE_SAL_UINT64_MAX)
     {
         rnVal = (sal_Int64)round( fVal );
         return sal_True;
@@ -415,14 +435,8 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_FLOAT:
     {
         double fVal = round( *(float *)rAny.getValue() );
-        // implementationsabh. cast von unsigned nach signed!
-#ifdef SAL_W32 // conversion from unsigned __int64 to double not impl
-        nRet = (fVal > SAL_INT64_MAX ? (__int64)fVal : (sal_Int64)fVal);
-        if (fVal >= min && fVal <= (__int64)(max & SAL_INT64_MAX))
-#else
         nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
-        if (fVal >= min && fVal <= max)
-#endif
+        if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
             return nRet;
         }
@@ -433,14 +447,8 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_DOUBLE:
     {
         double fVal = round( *(double *)rAny.getValue() );
-        // implementationsabh. cast von unsigned nach signed!
-#ifdef SAL_W32 // conversion from unsigned __int64 to double not impl
-        nRet = (fVal > SAL_INT64_MAX ? (__int64)fVal : (sal_Int64)fVal);
-        if (fVal >= min && fVal <= (__int64)(max & SAL_INT64_MAX))
-#else
         nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
-        if (fVal >= min && fVal <= max)
-#endif
+        if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
             return nRet;
         }
@@ -459,20 +467,12 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
                 OUString( RTL_CONSTASCII_USTRINGPARAM("invalid STRING value!") ),
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
-        else
-        {
-            // implementationsabh. cast von unsigned nach signed!
-            nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
-#ifdef SAL_W32 // conversion from unsigned __int64 to double not impl
-            if (fVal >= min && (fVal < 0 || fVal <= (__int64)(max & SAL_INT64_MAX)))
-#else
-            if (fVal >= min && (fVal < 0 || ((sal_uInt64)fVal) <= max))
-#endif
-                return nRet;
-            throw CannotConvertException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("STRING value out of range!") ),
-                Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
-        }
+        nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
+        if (fVal >= min && (fVal < 0 || ((sal_uInt64)fVal) <= max))
+            return nRet;
+        throw CannotConvertException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("STRING value out of range!") ),
+            Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
 
     default:
@@ -538,11 +538,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
         break;
     // UNSIGNED HYPER
     case TypeClass_UNSIGNED_HYPER:
-#ifdef SAL_W32
-        fRet = (double)*(__int64 *)rAny.getValue();
-#else
-        fRet = (double)*(sal_uInt64 *)rAny.getValue();
-#endif
+        fRet = unsigned_int64_to_double( *(sal_uInt64 const *)rAny.getValue() );
         break;
     // FLOAT, DOUBLE
     case TypeClass_FLOAT:
@@ -928,6 +924,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 //      case TypeClass_UNSIGNED_HYPER:
 //             aRet <<= OUString::valueOf( (sal_Int64)*(sal_uInt64 const *)rVal.getValue() );
 //          break;
+            // handle unsigned hyper like double
 
         default:
             aRet <<= OUString::valueOf( toDouble( rVal ) );
