@@ -41,7 +41,6 @@
 <Type>   com.sun.star.datatransfer.dnd.XDropTargetDropContext   </Type>
 <Type>   com.sun.star.datatransfer.dnd.XDragSourceContext   </Type>
 <Type>   com.sun.star.datatransfer.dnd.XDragSource              </Type>
-<Type>   com.sun.star.datatransfer.dnd.XDropTargetFactory       </Type>
 <Type>   com.sun.star.datatransfer.XTransferable                </Type>
 <Type>   com.sun.star.lang.XComponent                       </Type>
 <Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
