@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConfigAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #endif
 
 extern "C" const sal_Unicode* SAL_CALL getUserProfile( void );
+
+extern "C" const sal_Char* SAL_CALL getPabDescription( void );
+
+extern "C" const sal_Char* SAL_CALL getHisDescription( void );
 
 #endif  // CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 

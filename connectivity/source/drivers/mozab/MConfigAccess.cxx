@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConfigAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,39 @@ namespace connectivity
         }
 
         //-----------------------------------------------------------------
+        ::rtl::OUString getDescription(const sal_Char* sNode,const ::rtl::OUString & sDefault)
+        {
+            ::rtl::OUString sPreferredName;
+            ::rtl::OUString sDescription;
+
+            Reference< XMultiServiceFactory > xFactory = getMozabServiceFactory();
+            OSL_ENSURE( xFactory.is(), "getPreferredProfileName: invalid service factory!" );
+            if ( xFactory.is() )
+            {
+                try
+                {
+                    Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
+                    Reference< XPropertySet > xMozPrefsNode;
+                    if ( xDriverNode.is() )
+                        xDriverNode->getPropertyValue( ::rtl::OUString::createFromAscii( "MozillaPreferences" ) ) >>= xMozPrefsNode;
+                    OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
+                    if ( xMozPrefsNode.is() )
+                        xMozPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii( "ProfileName" ) ) >>= sPreferredName;
+                    if ( xMozPrefsNode.is() )
+                        xMozPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii(sNode) ) >>= sDescription;
+                    if (sDescription.getLength() == 0)
+                        sDescription = sDefault;
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "getDescription: caught an exception!" );
+                }
+            }
+            if (sDescription.getLength() == 0)
+                sDescription = sDefault;
+            return sDescription;
+        }
+        //-----------------------------------------------------------------
         ::rtl::OUString getPreferredProfileName( )
         {
             ::rtl::OUString sPreferredName;
@@ -202,6 +235,45 @@ extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
     }
 
     return sUserProfile.getStr();
+}
+//------------------------------------------------------------------------
+extern "C" const sal_Char* SAL_CALL getPabDescription( void )
+{
+    static sal_Bool         bReadConfig = sal_False;
+    static ::rtl::OUString  usPabDescription;
+    static ::rtl::OString   sPabDescription;
+
+    if ( !bReadConfig )
+    {
+        usPabDescription = ::connectivity::mozab::getDescription(
+                            "PabDescription" ,
+                            ::rtl::OUString::createFromAscii( "Personal Address Book" ));
+        sPabDescription = ::rtl::OUStringToOString( usPabDescription,
+                                                 RTL_TEXTENCODING_ASCII_US);
+        bReadConfig = sal_True;
+    }
+
+    return sPabDescription.getStr();
+}
+
+//-------------------------------------------------------------------------
+extern "C" const sal_Char* SAL_CALL getHisDescription( void )
+{
+    static sal_Bool         bReadConfig = sal_False;
+    static ::rtl::OUString  usHisDescription;
+    static ::rtl::OString   sHisDescription;
+
+    if ( !bReadConfig )
+    {
+        usHisDescription = ::connectivity::mozab::getDescription(
+                            "HisDescription" ,
+                            ::rtl::OUString::createFromAscii( "Collected Addresses" ));
+        sHisDescription = ::rtl::OUStringToOString( usHisDescription,
+                                                 RTL_TEXTENCODING_ASCII_US);
+        bReadConfig = sal_True;
+    }
+
+    return sHisDescription.getStr();
 }
 
 //-------------------------------------------------------------------------
