@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:33:29 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,22 +62,22 @@
 #define _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 
 #ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+#include "osl/diagnose.h"
 #endif
 #ifndef _OSL_INTERLCK_H_
-#include <osl/interlck.h>
+#include "osl/interlck.h"
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
-#include <com/sun/star/uno/Sequence.h>
+#include "com/sun/star/uno/Sequence.h"
 #endif
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
-#include <typelib/typedescription.h>
+#include "typelib/typedescription.h"
 #endif
 #ifndef _UNO_DATA_H_
-#include <uno/data.h>
+#include "uno/data.h"
 #endif
 #ifndef _COM_SUN_STAR_UNO_GENFUNC_HXX_
-#include <com/sun/star/uno/genfunc.hxx>
+#include "com/sun/star/uno/genfunc.hxx"
 #endif
 
 
@@ -89,11 +89,12 @@ namespace star
 {
 namespace uno
 {
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
 typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
 
-//__________________________________________________________________________________________________
+//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence() SAL_THROW( () )
 {
@@ -101,39 +102,54 @@ inline Sequence< E >::Sequence() SAL_THROW( () )
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         0, 0, (uno_AcquireFunc)cpp_acquire );
+    // no bad_alloc, because empty sequence is statically allocated in cppu
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::Sequence( const Sequence< E > & rSeq ) SAL_THROW( () )
 {
     ::osl_incrementInterlockedCount( &rSeq._pSequence->nRefCount );
     _pSequence = rSeq._pSequence;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
-inline Sequence< E >::Sequence( uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW( () )
-    : _pSequence( pSequence )
+inline Sequence< E >::Sequence(
+    uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW( () )
+        : _pSequence( pSequence )
 {
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
-inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len ) SAL_THROW( () )
+inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
     const Type & rType = ::getCppuType( this );
-    ::uno_type_sequence_construct(
+    sal_Bool success = ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         const_cast< E * >( pElements ), len, (uno_AcquireFunc)cpp_acquire );
+#if ! defined EXCEPTIONS_OFF
+    if (! success)
+        throw ::std::bad_alloc();
+#endif
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
-inline Sequence< E >::Sequence( sal_Int32 len ) SAL_THROW( () )
+inline Sequence< E >::Sequence( sal_Int32 len )
 {
     const Type & rType = ::getCppuType( this );
-    ::uno_type_sequence_construct(
+    sal_Bool success = ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
         0, len, (uno_AcquireFunc)cpp_acquire );
+#if ! defined EXCEPTIONS_OFF
+    if (! success)
+        throw ::std::bad_alloc();
+#endif
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
 inline Sequence< E >::~Sequence() SAL_THROW( () )
 {
@@ -141,7 +157,8 @@ inline Sequence< E >::~Sequence() SAL_THROW( () )
     ::uno_type_destructData(
         this, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
 inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) SAL_THROW( () )
 {
@@ -150,9 +167,11 @@ inline Sequence< E > & Sequence< E >::operator = ( const Sequence< E > & rSeq ) 
         &_pSequence, rSeq._pSequence, rType.getTypeLibType(), (uno_ReleaseFunc)cpp_release );
     return *this;
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
-inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const SAL_THROW( () )
+inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const
+    SAL_THROW( () )
 {
     if (_pSequence == rSeq._pSequence)
         return sal_True;
@@ -160,53 +179,69 @@ inline sal_Bool Sequence< E >::operator == ( const Sequence< E > & rSeq ) const 
     return ::uno_type_equalData(
         const_cast< Sequence< E > * >( this ), rType.getTypeLibType(),
         const_cast< Sequence< E > * >( &rSeq ), rType.getTypeLibType(),
-        (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_ReleaseFunc)cpp_release );
+        (uno_QueryInterfaceFunc)cpp_queryInterface,
+        (uno_ReleaseFunc)cpp_release );
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
-inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const SAL_THROW( () )
+inline sal_Bool Sequence< E >::operator != ( const Sequence< E > & rSeq ) const
+    SAL_THROW( () )
 {
     return (! operator == ( rSeq ));
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
-inline E * Sequence< E >::getArray() SAL_THROW( () )
+inline E * Sequence< E >::getArray()
 {
     const Type & rType = ::getCppuType( this );
-    ::uno_type_sequence_reference2One(
+    sal_Bool success = ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
+#if ! defined EXCEPTIONS_OFF
+    if (! success)
+        throw ::std::bad_alloc();
+#endif
     return reinterpret_cast< E * >( _pSequence->elements );
 }
-//__________________________________________________________________________________________________
+
+//______________________________________________________________________________
 template< class E >
-inline E & Sequence< E >::operator [] ( sal_Int32 nIndex ) SAL_THROW( () )
+inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 {
-    OSL_ENSURE( nIndex >= 0 && nIndex < getLength(), "### illegal index of sequence!" );
-    const Type & rType = ::getCppuType( this );
-    ::uno_type_sequence_reference2One(
-        &_pSequence, rType.getTypeLibType(),
-        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
-    return reinterpret_cast< E * >( _pSequence->elements )[ nIndex ];
-}
-//__________________________________________________________________________________________________
-template< class E >
-inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const SAL_THROW( () )
-{
-    OSL_ENSURE( nIndex >= 0 && nIndex < getLength(), "### illegal index of sequence!" );
-    return reinterpret_cast< const E * >( _pSequence->elements )[ nIndex ];
-}
-//__________________________________________________________________________________________________
-template< class E >
-inline void Sequence< E >::realloc( sal_Int32 nSize ) SAL_THROW( () )
-{
-    const Type & rType = ::getCppuType( this );
-    ::uno_type_sequence_realloc(
-        &_pSequence, rType.getTypeLibType(), nSize,
-        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
+    OSL_ENSURE(
+        nIndex >= 0 && nIndex < getLength(),
+        "### illegal index of sequence!" );
+    return getArray()[ nIndex ];
 }
 
-//--------------------------------------------------------------------------------------------------
+//______________________________________________________________________________
+template< class E >
+inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
+    SAL_THROW( () )
+{
+    OSL_ENSURE(
+        nIndex >= 0 && nIndex < getLength(),
+        "### illegal index of sequence!" );
+    return reinterpret_cast< const E * >( _pSequence->elements )[ nIndex ];
+}
+
+//______________________________________________________________________________
+template< class E >
+inline void Sequence< E >::realloc( sal_Int32 nSize )
+{
+    const Type & rType = ::getCppuType( this );
+    sal_Bool success = ::uno_type_sequence_realloc(
+        &_pSequence, rType.getTypeLibType(), nSize,
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
+#if ! defined EXCEPTIONS_OFF
+    if (! success)
+        throw ::std::bad_alloc();
+#endif
+}
+
+//------------------------------------------------------------------------------
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence ) SAL_THROW( () )
 {
@@ -222,7 +257,8 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 // generic sequence template
 template< class E >
 inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * ) SAL_THROW( () )
+SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * )
+    SAL_THROW( () )
 {
     if (! ::com::sun::star::uno::Sequence< E >::s_pType)
     {
@@ -239,7 +275,8 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * ) SAL_THROW( 
 // generic sequence template for given element type (e.g. C++ arrays)
 template< class E >
 inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType ) SAL_THROW( () )
+SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
+    SAL_THROW( () )
 {
     if (! ::com::sun::star::uno::Sequence< E >::s_pType)
     {
@@ -251,16 +288,20 @@ SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
         & ::com::sun::star::uno::Sequence< E >::s_pType );
 }
 
-#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))
-static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
+#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || \
+     (defined(__GNUC__) && defined(__APPLE__)))
+static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char
+= 0;
 #endif
 
 // char sequence
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType() SAL_THROW( () )
 {
-#if !( (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)) )
-    static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
+#if !( (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || \
+       (defined(__GNUC__) && defined(__APPLE__)) )
+    static typelib_TypeDescriptionReference *
+        s_pType_com_sun_star_uno_Sequence_Char = 0;
 #endif
     if (! s_pType_com_sun_star_uno_Sequence_Char)
     {
