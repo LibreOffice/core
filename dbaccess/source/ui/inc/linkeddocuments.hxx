@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:41 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,12 @@ namespace dbaui
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                         );
         sal_Bool        newReportWithPilot(
+                            const String& _rDataSourceName,
+                            const sal_Int32 _nCommandType,
+                            const String& _rObjectName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                        );
+        sal_Bool        newQueryWithPilot(
                             const String& _rDataSourceName,
                             const sal_Int32 _nCommandType,
                             const String& _rObjectName,
