@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:17:16 $
+ *  last change: $Author: af $ $Date: 2002-05-17 11:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include "DescriptionGenerator.hxx"
 
@@ -118,6 +117,7 @@
 #ifndef _SVX_ACCESSIBILITY_HRC
 #include "accessibility.hrc"
 #endif
+#include "svdstr.hrc"
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
 #endif
@@ -294,14 +294,14 @@ void DescriptionGenerator::AddLineProperties (void)
 {
     AddProperty (OUString::createFromAscii ("LineColor"),
         DescriptionGenerator::COLOR,
-        RID_SVXSTR_A11Y_LINE_COLOR);
+        SIP_XA_LINECOLOR);
     AddProperty (OUString::createFromAscii ("LineDashName"),
         DescriptionGenerator::STRING,
-        RID_SVXSTR_A11Y_LINE_DASH_NAME,
+        SIP_XA_LINEDASH,
         XATTR_LINEDASH);
     AddProperty (OUString::createFromAscii ("LineWidth"),
         DescriptionGenerator::INTEGER,
-        RID_SVXSTR_A11Y_LINE_WIDTH);
+        SIP_XA_LINEWIDTH);
 }
 
 
@@ -314,7 +314,7 @@ void DescriptionGenerator::AddFillProperties (void)
 {
     AddProperty (OUString::createFromAscii ("FillStyle"),
         DescriptionGenerator::FILL_STYLE,
-        RID_SVXSTR_A11Y_FILL_STYLE);
+        SIP_XA_FILLSTYLE);
 }
 
 
@@ -523,27 +523,27 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
                 case drawing::FillStyle_SOLID:
                     AddProperty (OUString::createFromAscii ("FillColor"),
                         COLOR,
-                        RID_SVXSTR_A11Y_FILL_COLOR);
+                        SIP_XA_FILLCOLOR);
                     break;
                 case drawing::FillStyle_GRADIENT:
                     AddProperty (OUString::createFromAscii ("FillGradientName"),
                         STRING,
-                        RID_SVXSTR_A11Y_FILL_GRADIENT_NAME,
+                        SIP_XA_FILLGRADIENT,
                         XATTR_FILLGRADIENT);
                     break;
                 case drawing::FillStyle_HATCH:
                     AddProperty (OUString::createFromAscii ("FillColor"),
                         COLOR,
-                        RID_SVXSTR_A11Y_FILL_COLOR);
+                        SIP_XA_FILLCOLOR);
                     AddProperty (OUString::createFromAscii ("FillHatchName"),
                         STRING,
-                        RID_SVXSTR_A11Y_FILL_HATCH_NAME,
+                        SIP_XA_FILLHATCH,
                         XATTR_FILLHATCH);
                     break;
                 case drawing::FillStyle_BITMAP:
                     AddProperty (OUString::createFromAscii ("FillBitmapName"),
                         STRING,
-                        RID_SVXSTR_A11Y_FILL_BITMAP_NAME,
+                        SIP_XA_FILLBITMAP,
                         XATTR_FILLBITMAP);
                     break;
             }
