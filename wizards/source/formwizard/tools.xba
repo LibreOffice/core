@@ -173,7 +173,7 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 			Case com.sun.star.sdbc.DataType.BIGINT
 				oLocObOject.EffectiveMax = 2147483647 * 2147483647
 				oLocbject.EffectiveMin = -(-2147483648 * -2147483648)
-				oLocObject.DecimalAccuracy = 0
+&apos;				oLocObject.DecimalAccuracy = 0
 			Case com.sun.star.sdbc.DataType.INTEGER
 				oLocObject.EffectiveMax = 2147483647
 				oLocObject.EffectiveMin = -2147483648
