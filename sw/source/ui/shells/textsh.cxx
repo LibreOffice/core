@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 11:39:35 $
+ *  last change: $Author: os $ $Date: 2002-08-08 14:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,9 @@
 #ifndef _COLUMN_HXX
 #include <column.hxx>
 #endif
-
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
 #endif
@@ -597,11 +599,28 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_FRAME_INTERACT_NOCOL:
     case FN_INSERT_FRAME_INTERACT:
     {
-        USHORT nCols = 1;
-        if(FN_INSERT_FRAME_INTERACT_NOCOL != nSlot &&
-            pArgs &&pArgs->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem) == SFX_ITEM_SET)
-            nCols = ((SfxUInt16Item *)pItem)->GetValue();
-        GetView().InsFrmMode(nCols);
+        if(rReq.GetModifier() == KEY_MOD1)
+        {
+            SwEditWin& rEdtWin = GetView().GetEditWin();
+            Size aWinSize = rEdtWin.GetSizePixel();
+            Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
+            aStartPos = rEdtWin.PixelToLogic(aStartPos);
+            aStartPos.X() -= 8 * MM50;
+            aStartPos.Y() -= 4 * MM50;
+            Size aSize(16 * MM50, 8 * MM50);
+            GetShell().StartAllAction();
+            SwFlyFrmAttrMgr aMgr( TRUE, GetShellPtr(), FRMMGR_TYPE_TEXT );
+            aMgr.InsertFlyFrm(FLY_AT_CNTNT, aStartPos, aSize);
+            GetShell().EndAllAction();
+        }
+        else
+        {
+            USHORT nCols = 1;
+            if(FN_INSERT_FRAME_INTERACT_NOCOL != nSlot &&
+                pArgs &&pArgs->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem) == SFX_ITEM_SET)
+                nCols = ((SfxUInt16Item *)pItem)->GetValue();
+            GetView().InsFrmMode(nCols);
+        }
         rReq.Ignore();
     }
     break;
@@ -1195,6 +1214,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.18  2002/08/07 11:39:35  os
+    #100781# insert/frame recordable
+
     Revision 1.17  2002/07/03 16:58:10  mba
     #100782#: recording for InsertTable
 
