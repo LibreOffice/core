@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:48:53 $
+#   last change: $Author: obo $ $Date: 2003-10-20 13:15:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,9 +106,9 @@ $(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
     +-chmod 755 $@
 .ENDIF
 
-$(DESTDIR)$/configureWindowsNT.bat : $(PRJ)$/configureWindowsNT.bat
+$(DESTDIR)$/configureWindows.bat : $(PRJ)$/configureWindows.bat
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configureWindowsNT.bat $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configureWindows.bat $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
     +-rm -f $@ >& $(NULLDEV)
