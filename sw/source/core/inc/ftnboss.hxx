@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnboss.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,23 @@ public:
     SwTwips GetVarSpace() const;
 
         //Layoutseitig benoetigte Methoden
-    static void _CollectFtns( const SwCntntFrm *pRef, SwFtnFrm *pFtn,
-                              SvPtrarr &rFtnArr );
-    void    CollectFtns( const SwCntntFrm *, SwFtnBossFrm *pOld, SvPtrarr &rFtnArr);
+    /// OD 03.04.2003 #108446# - add parameters <_bCollectOnlyPreviousFtns> and
+    /// <_pRefFtnBossFrm> in order to control, if only footnotes, which are positioned
+    /// before the given reference footnote boss frame have to be collected.
+    /// Note: if parameter <_bCollectOnlyPreviousFtns> is true, then parameter
+    /// <_pRefFtnBossFrm> have to be referenced to an object.
+    static void _CollectFtns( const SwCntntFrm*   _pRef,
+                              SwFtnFrm*           _pFtn,
+                              SvPtrarr&           _rFtnArr,
+                              const sal_Bool      _bCollectOnlyPreviousFtns = sal_False,
+                              const SwFtnBossFrm* _pRefFtnBossFrm = NULL);
+    /// OD 03.04.2003 #108446# - add parameter <_bCollectOnlyPreviousFtns> in
+    /// order to control, if only footnotes, which are positioned before the
+    /// footnote boss frame <this> have to be collected.
+    void    CollectFtns( const SwCntntFrm* _pRef,
+                         SwFtnBossFrm*     _pOld,
+                         SvPtrarr&         _rFtnArr,
+                         const sal_Bool    _bCollectOnlyPreviousFtns = sal_False );
     void    _MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc = FALSE );
     void    MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
                       SwTxtFtn *pAttr );
