@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 13:41:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,13 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+
 #ifndef _TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
@@ -120,6 +127,10 @@
 #include <svtools/style.hxx>
 #endif
 
+#include <svtools/embedhlp.hxx>
+
+class SfxObjectShell;
+class SfxObjectShellRef;
 class SvxForbiddenCharactersTable;
 class SwExtTextInput;
 class DateTime;
@@ -138,10 +149,8 @@ class SfxDocumentInfo;
 class VirtualDevice;
 class SfxPrinter;
 class SvData;
-class SvEmbeddedObjectRef;
 class SvNumberFormatter;
-class SvPersist;
-class SvStorage;
+class SotStorage;
 class SvStrings;
 class SvStringsSort;
 class SvUShorts;
@@ -267,7 +276,7 @@ namespace uno {
 namespace utl {
     class TransliterationWrapper;
 };
-namespace so3 {
+namespace sfx2 {
     class SvLinkSource;
 };
 
@@ -400,7 +409,7 @@ class SwDoc
     SvxMacroTableDtor *pMacroTable;     // Tabelle der dokumentglobalen Macros
 
     SwDocShell      *pDocShell;         // Ptr auf die SfxDocShell vom Doc
-    SvEmbeddedObjectRef* pDocShRef;     // fuers Kopieren von OLE-Nodes (wenn keine
+    SfxObjectShellRef* pDocShRef;     // fuers Kopieren von OLE-Nodes (wenn keine
                                         // DocShell gesetzt ist, muss dieser
                                         // Ref-Pointer gesetzt sein!!!!)
     SvxLinkManager  *pLinkMgr;          // Liste von Verknuepften (Grafiken/DDE/OLE)
@@ -1165,7 +1174,7 @@ public:
     String GetUniqueGrfName() const;
 
         //Einfuegen von OLE-Objecten.
-    SwFlyFrmFmt* Insert( const SwPaM &rRg, SvInPlaceObject *,
+    SwFlyFrmFmt* Insert( const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
                         const SfxItemSet* pFlyAttrSet = 0,
                         const SfxItemSet* pGrfAttrSet = 0,
                         SwFrmFmt* = 0 );
@@ -1826,16 +1835,16 @@ public:
 
     // falls beim Kopieren von OLE-Nodes eine DocShell angelegt werden muss,
     // dann MUSS der Ref-Pointer besetzt sein!!!!
-    SvEmbeddedObjectRef* GetRefForDocShell()            { return pDocShRef; }
-    void SetRefForDocShell( SvEmbeddedObjectRef* p )    { pDocShRef = p; }
+    SfxObjectShellRef* GetRefForDocShell()            { return pDocShRef; }
+    void SetRefForDocShell( SfxObjectShellRef* p )    { pDocShRef = p; }
 
-        // fuer die TextBausteine - diese habe nur ein SvPersist zur
-        // Verfuegung
-         SvPersist* GetPersist() const;
-    void SetPersist( SvPersist* );
+    // fuer die TextBausteine - diese habe nur ein SvPersist zur
+    // Verfuegung
+    SfxObjectShell* GetPersist() const;
+    void SetPersist( SfxObjectShell* );
 
     // Pointer auf den Storage des SfxDocShells, kann 0 sein !!!
-    SvStorage* GetDocStorage();
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetDocStorage();
 
         // abfrage/setze Flag, ob das Dokument im asynchronen Laden ist
     sal_Bool IsInLoadAsynchron() const              { return bInLoadAsynchron; }
@@ -1846,7 +1855,7 @@ public:
                       ::com::sun::star::uno::Any & rValue ) const;
     sal_Bool SetData( const String& rItem, const String& rMimeType,
                          const ::com::sun::star::uno::Any & rValue );
-    ::so3::SvLinkSource* CreateLinkSource( const String& rItem );
+    ::sfx2::SvLinkSource* CreateLinkSource( const String& rItem );
     // erzeuge um das zu Servende Object eine Selektion
     sal_Bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const;
