@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Paragraph.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-19 15:40:36 $
+ *  last change: $Author: mtg $ $Date: 2001-11-20 13:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+
+#ifndef __com_sun_star_text_TextTable_idl__
+#include <com/sun/star/text/TextTable.idl>
 #endif
 
 
