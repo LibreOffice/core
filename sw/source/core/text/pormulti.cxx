@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:29:02 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,6 +1038,8 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
 
     if ( CH_TXTATR_BREAKWORD == GetChar( rPos ) )
     {
+        bFldBidi = sal_True;
+/*
         // examining the script of the field text should be sufficient
         // for 99% of all cases
         XubString aTxt = GetTxtFrm()->GetTxtNode()->GetExpandTxt( rPos, 1 );
@@ -1052,7 +1054,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
                 nNextLevel = nCurrLevel + 1;
                 bFldBidi = sal_True;
             }
-        }
+        }*/
     }
     else
         nNextLevel = rSI.DirType( rPos );
