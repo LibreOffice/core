@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:24:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,18 +169,18 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     switch( ((ORelationTableConnectionData*)GetData())->GetCardinality() )
     {
     case CARDINAL_ONE_MANY:
-        aSourceText = '1';
-        aDestText = 'n';
+        aSourceText  ='1';
+        aDestText  ='n';
         break;
 
     case CARDINAL_MANY_ONE:
-        aSourceText = 'n';
-        aDestText = '1';
+        aSourceText  ='n';
+        aDestText  ='1';
         break;
 
     case CARDINAL_ONE_ONE:
-        aSourceText = '1';
-        aDestText = '1';
+        aSourceText  ='1';
+        aDestText  ='1';
         break;
     }
 
