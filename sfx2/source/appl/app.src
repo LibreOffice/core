@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 16:19:57 $
+ *  last change: $Author: hro $ $Date: 2002-11-29 12:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4212,9 +4212,9 @@ String STR_QUICKSTART_TIP
 };
 String STR_QUICKSTART_FILEOPEN
 {
-    Text = "Datei цffnen..." ;
-    Text [ English ] = "File open..." ;
-    Text[ english_us ] = "Open File...";
+    Text = "Dokument цffnen" ;
+    Text [ English ] = "Open File" ;
+    Text[ english_us ] = "Open File";
     Text[ portuguese ] = "Abrir ficheiro...";
     Text[ russian ] = "Открыть файл...";
     Text[ greek ] = "File open...";
@@ -4238,9 +4238,9 @@ String STR_QUICKSTART_FILEOPEN
 };
 String STR_QUICKSTART_FROMTEMPLATE
 {
-    Text = "Aus Vorlage..." ;
-    Text [ English ] = "From template..." ;
-    Text[ english_us ] = "From Template...";
+    Text = "Aus Vorlage" ;
+    Text [ English ] = "From template" ;
+    Text[ english_us ] = "From Template";
     Text[ portuguese ] = "A partir de modelo...";
     Text[ russian ] = "Из шаблона...";
     Text[ greek ] = "From template...";
