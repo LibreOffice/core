@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.212 $
+ *  $Revision: 1.213 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:53:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5763,6 +5763,8 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
     {
         DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );
+        // notify data change handler
+        ImplCallEventListeners( VCLEVENT_WINDOW_DATACHANGED, &aDCEvt);
     }
 
     if ( bChild || mpWindowImpl->mbChildNotify )
