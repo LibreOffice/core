@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2001-07-20 15:34:31 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:39:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ TARGET=fileacc
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
+COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
