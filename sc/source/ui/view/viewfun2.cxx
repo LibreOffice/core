@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:50:35 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, sal_Bool bSubTotal)
 
     String aFormula = '=';
     ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-    ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc* pDesc = NULL;
     if (!bSubTotal)
         pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
     else
