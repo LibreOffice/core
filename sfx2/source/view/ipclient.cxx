@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:48:43 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,20 @@ void SAL_CALL SfxInPlaceClient_Impl::stateChanged( const ::com::sun::star::lang:
         // deactivation of object
         SfxObjectShell::SetWorkingDocument( m_pClient->GetViewShell()->GetObjectShell() );
     }
+    else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
+    {
+        uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
+        uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+        sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
+        if ( nHandle )
+        {
+            // currently needs SFX code
+            SfxObjectShell* pDoc = (SfxObjectShell*) (sal_Int32*) nHandle;
+            SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
+            SfxWorkWindow *pWorkWin = pFrame->GetFrame()->GetWorkWindow_Impl();
+            pWorkWin->UpdateObjectBars_Impl();
+        }
+    }
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
@@ -394,6 +408,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
     SfxWorkWindow *pWorkWin = m_pClient->GetViewShell()->GetViewFrame()->GetFrame()->GetWorkWindow_Impl();
     pWorkWin->MakeVisible_Impl( TRUE );
     pWorkWin->Lock_Impl( FALSE );
+    pWorkWin->UpdateObjectBars_Impl();
 
     // make LayoutManager of object invisible
     SfxObjectShell* pDoc = 0;
