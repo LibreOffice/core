@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:22:08 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1073,21 +1073,21 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                     }
                     // OD 25.06.2003 #108784# - move object to visible layer,
                     // if necessary.
-                    if ( !pFmt->GetDoc()->IsVisibleLayerId( pSdrObj->GetLayer() ) )
-                    {
-                        SdrLayerID nVisibleLayerId =
-                            pFmt->GetDoc()->GetVisibleLayerIdByInvisibleOne( pSdrObj->GetLayer() );
-                        pSdrObj->SetLayer( nVisibleLayerId );
-                    }
+                    // OD 21.08.2003 #i18447# - in order to consider group object correct
+                    // use new method <SwDrawContact::MoveObjToVisibleLayer(..)>
+                    // OD 21.08.2003 NOTE: the contact object has to be set at
+                    //                     the drawing object.
+                    SwDrawContact* pNew =
+                        static_cast<SwDrawContact*>(GetUserCall( pSdrObj ));
+                    pNew->MoveObjToVisibleLayer( pSdrObj );
 
-                    SwDrawContact *pNew = (SwDrawContact*)GetUserCall(pSdrObj);
                     if( !pNew->GetAnchor() )
                     {
                         pFrm->AppendDrawObj( pNew );
                     }
                     // OD 19.06.2003 #108784# - add 'virtual' drawing object,
                     // if necessary. But control objects have to be excluded.
-                    else if ( !CheckControlLayer( pSdrObj ) &&
+                    else if ( !::CheckControlLayer( pSdrObj ) &&
                               pNew->GetAnchor() != pFrm &&
                               !pNew->GetDrawObjectByAnchorFrm( *pFrm ) )
                     {
