@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,18 +109,16 @@ protected:
                     USHORT nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, pFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
-        nOutlineLevel( NO_NUMBERING ),
-        pNextTxtFmtColl( this )
-    {}
+        nOutlineLevel( NO_NUMBERING )
+    { pNextTxtFmtColl = this; }
 
     SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
                     SwTxtFmtColl* pDerFrom = 0,
                     USHORT nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
-        nOutlineLevel( NO_NUMBERING ),
-        pNextTxtFmtColl( this )
-    {}
+        nOutlineLevel( NO_NUMBERING )
+    { pNextTxtFmtColl = this; }
 
 public:
 
