@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:55:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1532,261 +1532,243 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
     }
 }
 
-void SvXMLNumFormatContext::GetFormat(rtl::OUString& rFormatString, lang::Locale& rLocale)
+sal_Int32 SvXMLNumFormatContext::CreateAndInsert( com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xFormatsSupplier )
 {
-    //#95893#; remember the created FormatString and Locales
-    if (!sFormatString.getLength() &&
-        !aLocale.Language.getLength() &&
-        !aLocale.Country.getLength())
+    if (!nKey > -1)
     {
-        if (aMyConditions.size())
-        {
-            rtl::OUString sFormat;
-            lang::Locale aLoc;
-            for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
-            {
-                SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
-                if (pStyle)
-                {
-                    pStyle->GetFormat(sFormat, aLoc);
-                    AddCondition(i, sFormat, pStyle->GetLocaleData());
-                }
-            }
-        }
+        SvNumberFormatter* pFormatter = NULL;
+        SvNumberFormatsSupplierObj* pObj =
+                        SvNumberFormatsSupplierObj::getImplementation( xFormatsSupplier );
+        if (pObj)
+            pFormatter = pObj->GetNumberFormatter();
 
-        if ( !aFormatCode.getLength() )
-        {
-            //  insert empty format as empty string (with quotes)
-            //  #93901# this check has to be done before inserting the conditions
-            aFormatCode.appendAscii("\"\"");    // ""
-        }
-
-        aFormatCode.insert( 0, aConditions.makeStringAndClear() );
-        sFormatString = aFormatCode.makeStringAndClear();
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames(nFormatLang, aLanguage, aCountry);
-        aLocale.Language = rtl::OUString(aLanguage);
-        aLocale.Country = rtl::OUString(aCountry);
+        if ( pFormatter )
+            return CreateAndInsert( pFormatter );
+        else
+            return -1;
     }
-    rLocale = aLocale;
-    rFormatString = sFormatString;
+    else
+        return nKey;
 }
 
 void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
 {
     if (!(nKey > -1))
+        CreateAndInsert(pData->GetNumberFormatter());
+}
+
+sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
+{
+    if (!pFormatter)
     {
-        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
-        if (!pFormatter)
+        DBG_ERROR("no number formatter");
+        return -1;
+    }
+
+    sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
+
+    for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
+    {
+        SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+            XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
+        if (pStyle)
         {
-            DBG_ERROR("no number formatter");
-            return;
+            if ((pStyle->PrivateGetKey() > -1))     // don't reset pStyle's bRemoveAfterUse flag
+                AddCondition(i);
         }
+    }
 
-        sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
+    if ( !aFormatCode.getLength() )
+    {
+        //  insert empty format as empty string (with quotes)
+        //  #93901# this check has to be done before inserting the conditions
+        aFormatCode.appendAscii("\"\"");    // ""
+    }
 
-        for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
+    aFormatCode.insert( 0, aConditions.makeStringAndClear() );
+    OUString sFormat = aFormatCode.makeStringAndClear();
+
+    //  test special cases
+
+    if ( bAutoDec )         // automatic decimal places
+    {
+        //  #99391# adjust only if the format contains no text elements, no conditions
+        //  and no color definition (detected by the '[' at the start)
+
+        if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+                aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
+            nIndex = pFormatter->GetStandardIndex( nFormatLang );
+    }
+    if ( bAutoInt )         // automatic integer digits
+    {
+        //! only if two decimal places was set?
+
+        if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+                aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
+            nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
+    }
+
+    //  boolean is always the builtin boolean format
+    //  (no other boolean formats are implemented)
+    if ( nType == XML_TOK_STYLES_BOOLEAN_STYLE )
+        nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, nFormatLang );
+
+    //  check for default date formats
+    if ( nType == XML_TOK_STYLES_DATE_STYLE && bAutoOrder && !bDateNoDefault )
+    {
+        NfIndexTableOffset eFormat = (NfIndexTableOffset) SvXMLNumFmtDefaults::GetDefaultDateFormat(
+            eDateDOW, eDateDay, eDateMonth, eDateYear,
+            eDateHours, eDateMins, eDateSecs, bFromSystem );
+        if ( eFormat < NF_INDEX_TABLE_ENTRIES )
         {
-            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
-            if (pStyle)
+            //  #109651# if a date format has the automatic-order attribute and
+            //  contains exactly the elements of one of the default date formats,
+            //  use that default format, with the element order and separators
+            //  from the current locale settings
+
+            nIndex = pFormatter->GetFormatIndex( eFormat, nFormatLang );
+        }
+    }
+
+    if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND && sFormat.getLength() )
+    {
+        //  insert by format string
+
+        String aFormatStr( sFormat );
+        nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
+        if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
+        {
+            xub_StrLen  nErrPos = 0;
+            short       nType   = 0;
+            sal_Bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, nType, nIndex, nFormatLang );
+            if ( !bOk && nErrPos == 0 && aFormatStr != String(sFormat) )
             {
-                if ((pStyle->PrivateGetKey() > -1))     // don't reset pStyle's bRemoveAfterUse flag
-                    AddCondition(i);
+                //  if the string was modified by PutEntry, look for an existing format
+                //  with the modified string
+                nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
+                if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND )
+                    bOk = sal_True;
             }
+            if (!bOk)
+                nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
         }
-
-        if ( !aFormatCode.getLength() )
-        {
-            //  insert empty format as empty string (with quotes)
-            //  #93901# this check has to be done before inserting the conditions
-            aFormatCode.appendAscii("\"\"");    // ""
-        }
-
-        aFormatCode.insert( 0, aConditions.makeStringAndClear() );
-        OUString sFormat = aFormatCode.makeStringAndClear();
-
-        //  test special cases
-
-        if ( bAutoDec )         // automatic decimal places
-        {
-            //  #99391# adjust only if the format contains no text elements, no conditions
-            //  and no color definition (detected by the '[' at the start)
-
-            if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                    aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
-                nIndex = pFormatter->GetStandardIndex( nFormatLang );
-        }
-        if ( bAutoInt )         // automatic integer digits
-        {
-            //! only if two decimal places was set?
-
-            if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
-                    aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
-                nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
-        }
-
-        //  boolean is always the builtin boolean format
-        //  (no other boolean formats are implemented)
-        if ( nType == XML_TOK_STYLES_BOOLEAN_STYLE )
-            nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, nFormatLang );
-
-        //  check for default date formats
-        if ( nType == XML_TOK_STYLES_DATE_STYLE && bAutoOrder && !bDateNoDefault )
-        {
-            NfIndexTableOffset eFormat = (NfIndexTableOffset) SvXMLNumFmtDefaults::GetDefaultDateFormat(
-                eDateDOW, eDateDay, eDateMonth, eDateYear,
-                eDateHours, eDateMins, eDateSecs, bFromSystem );
-            if ( eFormat < NF_INDEX_TABLE_ENTRIES )
-            {
-                //  #109651# if a date format has the automatic-order attribute and
-                //  contains exactly the elements of one of the default date formats,
-                //  use that default format, with the element order and separators
-                //  from the current locale settings
-
-                nIndex = pFormatter->GetFormatIndex( eFormat, nFormatLang );
-            }
-        }
-
-        if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND && sFormat.getLength() )
-        {
-            //  insert by format string
-
-            String aFormatStr( sFormat );
-            nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
-            if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
-            {
-                xub_StrLen  nErrPos = 0;
-                short       nType   = 0;
-                sal_Bool bOk = pFormatter->PutEntry( aFormatStr, nErrPos, nType, nIndex, nFormatLang );
-                if ( !bOk && nErrPos == 0 && aFormatStr != String(sFormat) )
-                {
-                    //  if the string was modified by PutEntry, look for an existing format
-                    //  with the modified string
-                    nIndex = pFormatter->GetEntryKey( aFormatStr, nFormatLang );
-                    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND )
-                        bOk = sal_True;
-                }
-                if (!bOk)
-                    nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
-            }
-        }
+    }
 
 #if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-        if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bFromSystem )
+    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bFromSystem )
+    {
+        //  instead of automatic date format, use fixed formats if bFromSystem is not set
+        //! prevent use of automatic formats in other cases, force user-defined format?
+
+        sal_uInt32 nNewIndex = nIndex;
+
+        NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
+        if ( eOffset == NF_DATE_SYSTEM_SHORT )
         {
-            //  instead of automatic date format, use fixed formats if bFromSystem is not set
-            //! prevent use of automatic formats in other cases, force user-defined format?
-
-            sal_uInt32 nNewIndex = nIndex;
-
-            NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
-            if ( eOffset == NF_DATE_SYSTEM_SHORT )
+            const International& rInt = pData->GetInternational( nFormatLang );
+            if ( rInt.IsDateDayLeadingZero() && rInt.IsDateMonthLeadingZero() )
             {
-                const International& rInt = pData->GetInternational( nFormatLang );
-                if ( rInt.IsDateDayLeadingZero() && rInt.IsDateMonthLeadingZero() )
-                {
-                    if ( rInt.IsDateCentury() )
-                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, nFormatLang );
-                    else
-                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYY, nFormatLang );
-                }
-            }
-            else if ( eOffset == NF_DATE_SYSTEM_LONG )
-            {
-                const International& rInt = pData->GetInternational( nFormatLang );
-                if ( !rInt.IsLongDateDayLeadingZero() )
-                {
-                    sal_Bool bCentury = rInt.IsLongDateCentury();
-                    MonthFormat eMonth = rInt.GetLongDateMonthFormat();
-                    if ( eMonth == MONTH_LONG && bCentury )
-                    {
-                        if ( rInt.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG )
-                            nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, nFormatLang );
-                        else
-                            nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, nFormatLang );
-                    }
-                    else if ( eMonth == MONTH_SHORT && !bCentury )
-                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMYY, nFormatLang );
-                }
-            }
-
-            if ( nNewIndex != nIndex )
-            {
-                //  verify the fixed format really matches the format string
-                //  (not the case with some formats from locale data)
-
-                const SvNumberformat* pFixedFormat = pFormatter->GetEntry( nNewIndex );
-                if ( pFixedFormat && pFixedFormat->GetFormatstring() == String(sFormat) )
-                    nIndex = nNewIndex;
+                if ( rInt.IsDateCentury() )
+                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, nFormatLang );
+                else
+                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYY, nFormatLang );
             }
         }
+        else if ( eOffset == NF_DATE_SYSTEM_LONG )
+        {
+            const International& rInt = pData->GetInternational( nFormatLang );
+            if ( !rInt.IsLongDateDayLeadingZero() )
+            {
+                sal_Bool bCentury = rInt.IsLongDateCentury();
+                MonthFormat eMonth = rInt.GetLongDateMonthFormat();
+                if ( eMonth == MONTH_LONG && bCentury )
+                {
+                    if ( rInt.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG )
+                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, nFormatLang );
+                    else
+                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, nFormatLang );
+                }
+                else if ( eMonth == MONTH_SHORT && !bCentury )
+                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMYY, nFormatLang );
+            }
+        }
+
+        if ( nNewIndex != nIndex )
+        {
+            //  verify the fixed format really matches the format string
+            //  (not the case with some formats from locale data)
+
+            const SvNumberformat* pFixedFormat = pFormatter->GetEntry( nNewIndex );
+            if ( pFixedFormat && pFixedFormat->GetFormatstring() == String(sFormat) )
+                nIndex = nNewIndex;
+        }
+    }
 #endif
 
-        if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bAutoOrder )
+    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bAutoOrder )
+    {
+        //  use fixed-order formats instead of SYS... if bAutoOrder is false
+        //  (only if the format strings are equal for the locale)
+
+        NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
+        if ( eOffset == NF_DATE_SYS_DMMMYYYY )
         {
-            //  use fixed-order formats instead of SYS... if bAutoOrder is false
-            //  (only if the format strings are equal for the locale)
-
-            NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
-            if ( eOffset == NF_DATE_SYS_DMMMYYYY )
-            {
-                sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, nFormatLang );
-                const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
-                const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
-                if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
-                    nIndex = nNewIndex;
-            }
-            else if ( eOffset == NF_DATE_SYS_DMMMMYYYY )
-            {
-                sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMMYYYY, nFormatLang );
-                const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
-                const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
-                if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
-                    nIndex = nNewIndex;
-            }
+            sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMYYYY, nFormatLang );
+            const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
+            const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
+            if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
+                nIndex = nNewIndex;
         }
-
-        if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && sFormatTitle.getLength())
+        else if ( eOffset == NF_DATE_SYS_DMMMMYYYY )
         {
-            SvNumberformat* pFormat = const_cast<SvNumberformat*>(pFormatter->GetEntry( nIndex ));
-            if (pFormat)
-            {
-                String sTitle (sFormatTitle);
-                pFormat->SetComment(sTitle);
-            }
+            sal_uInt32 nNewIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_DMMMMYYYY, nFormatLang );
+            const SvNumberformat* pOldEntry = pFormatter->GetEntry( nIndex );
+            const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewIndex );
+            if ( pOldEntry && pNewEntry && pOldEntry->GetFormatstring() == pNewEntry->GetFormatstring() )
+                nIndex = nNewIndex;
         }
-
-        if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
-        {
-            DBG_ERROR("invalid number format");
-            nIndex = pFormatter->GetStandardIndex( nFormatLang );
-        }
-
-        pData->AddKey( nIndex, GetName(), bRemoveAfterUse );
-        nKey = nIndex;
-
-        //  Add to import's list of keys (shared between styles and content import)
-        //  only if not volatile - formats are removed from NumberFormatter at the
-        //  end of each import (in SvXMLNumFmtHelper dtor).
-        //  If bRemoveAfterUse is reset later in GetKey, AddNumberStyle is called there.
-
-        if (!bRemoveAfterUse)
-            GetImport().AddNumberStyle( nKey, GetName() );
-
-    #if 0
-        ByteString aByte( String(sFormatName), gsl_getSystemTextEncoding() );
-        aByte.Append( " | " );
-        aByte.Append(ByteString( String(sFormat), gsl_getSystemTextEncoding() ));
-        aByte.Append( " | " );
-        aByte.Append(ByteString::CreateFromInt32( nIndex ));
-
-    //  DBG_ERROR(aByte.GetBuffer());
-        int xxx=42;
-    #endif
     }
+
+    if ((nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND) && sFormatTitle.getLength())
+    {
+        SvNumberformat* pFormat = const_cast<SvNumberformat*>(pFormatter->GetEntry( nIndex ));
+        if (pFormat)
+        {
+            String sTitle (sFormatTitle);
+            pFormat->SetComment(sTitle);
+        }
+    }
+
+    if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    {
+        DBG_ERROR("invalid number format");
+        nIndex = pFormatter->GetStandardIndex( nFormatLang );
+    }
+
+    pData->AddKey( nIndex, GetName(), bRemoveAfterUse );
+    nKey = nIndex;
+
+    //  Add to import's list of keys (shared between styles and content import)
+    //  only if not volatile - formats are removed from NumberFormatter at the
+    //  end of each import (in SvXMLNumFmtHelper dtor).
+    //  If bRemoveAfterUse is reset later in GetKey, AddNumberStyle is called there.
+
+    if (!bRemoveAfterUse)
+        GetImport().AddNumberStyle( nKey, GetName() );
+
+#if 0
+    ByteString aByte( String(sFormatName), gsl_getSystemTextEncoding() );
+    aByte.Append( " | " );
+    aByte.Append(ByteString( String(sFormat), gsl_getSystemTextEncoding() ));
+    aByte.Append( " | " );
+    aByte.Append(ByteString::CreateFromInt32( nIndex ));
+
+//  DBG_ERROR(aByte.GetBuffer());
+    int xxx=42;
+#endif
+
+    return nKey;
 }
 
 void SvXMLNumFormatContext::Finish( sal_Bool bOverwrite )
