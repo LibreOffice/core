@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:35:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kohei Yoshida__________________________
  *
  *
  ************************************************************************/
@@ -223,6 +223,8 @@ private:
     BYTE                nFillMode;                  // Modus
     BOOL                bPagebreak;                 // Seitenumbruch-Vorschaumodus
 
+    BOOL                bSelCtrlMouseClick;         // special selection handling for ctrl-mouse-click
+
     SC_DLLPRIVATE DECL_LINK (EmptyEditHdl, EditStatus*);
     SC_DLLPRIVATE DECL_LINK (EditEngineHdl, EditStatus*);
 
@@ -311,6 +313,8 @@ public:
     void            SetPagebreakMode( BOOL bSet );
 
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY );
+
+    void            SetSelCtrlMouseClick( BOOL bTmp ) { bSelCtrlMouseClick = bTmp; }
 
     const Fraction& GetZoomX() const        { return bPagebreak ? aPageZoomX : aZoomX; }
     const Fraction& GetZoomY() const        { return bPagebreak ? aPageZoomY : aZoomY; }
@@ -470,6 +474,8 @@ public:
 
     const Size&     GetScenButSize() const              { return aScenButSize; }
     void            SetScenButSize(const Size& rNew)    { aScenButSize = rNew; }
+
+    BOOL            IsSelCtrlMouseClick() { return bSelCtrlMouseClick; }
 
     static inline long ToPixel( USHORT nTwips, double nFactor );
 };
