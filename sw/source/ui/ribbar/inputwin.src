@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:40:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,7 +981,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "arcustan~gens" ;
                         Text [ danish ] = "Arcus tangens" ;
                         Text [ italian ] = "Arcotan~gente" ;
-                        Text [ spanish ] = "~Tangente de arco" ;
+                        Text [ spanish ] = "~Arcotangente" ;
                         Text [ french ] = "Arc tan~gente" ;
                         Text [ dutch ] = "Boogtan~gens" ;
                         Text [ portuguese ] = "~Arco tangente" ;
@@ -1125,7 +1125,7 @@ String STR_FORMULA
         Text[ chinese_simplified ] = "Ó¦ÓÃ";\
         Text[ russian ] = "Ïðèìåíèòü";\
         Text[ polish ] = "Zastosuj";\
-        Text[ japanese ] = "“K—p‚·‚é";\
+        Text[ japanese ] = "“K—p";\
         Text[ chinese_traditional ] = "¨Ï¥Î";\
         Text[ arabic ] = "ÅÏÎÇá";\
         Text[ dutch ] = "Overnemen";\
