@@ -31,8 +31,6 @@ mkdir: %_DEST%\inc%_EXT%\testshl
 ..\%__SRC%\bin\testshl.exe %_DEST%\bin%_EXT%\testshl.exe
 
 
-hedabu: ..\win\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
-hedabu: ..\%__SRC%\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
 hedabu: ..\%__SRC%\inc\svconf.h %_DEST%\inc%_EXT%\tools\svconf.h
 hedabu: ..\%__SRC%\inc\toolerr.hxx %_DEST%\inc%_EXT%\tools\toolerr.hxx
 hedabu: ..\bootstrp\mkcreate.hxx %_DEST%\inc%_EXT%\bootstrp\mkcreate.hxx

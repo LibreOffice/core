@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 15:14:11 $
+#   last change: $Author: th $ $Date: 2001-07-06 13:59:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,46 +70,46 @@ USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
-.INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
+.INCLUDE :  svpre.mk
+.INCLUDE :  settings.mk
+.INCLUDE :  sv.mk
 
 # --- Allgemein ----------------------------------------------------
 
 # --- TOOLS.HXX ---
-HXX1FILES=	$(INC)$/debug.hxx		\
-            $(INC)$/new.hxx 		\
-            $(INC)$/shl.hxx 		\
-            $(INC)$/link.hxx		\
-            $(INC)$/fract.hxx		\
-            $(INC)$/string.hxx		\
-            $(INC)$/contnr.hxx		\
-            $(INC)$/list.hxx		\
-            $(INC)$/table.hxx		\
-            $(INC)$/unqidx.hxx		\
-            $(INC)$/unqid.hxx		\
-            $(INC)$/mempool.hxx 	\
-            $(INC)$/simplecm.hxx	\
-            $(INC)$/stream.hxx		\
-            $(INC)$/cachestr.hxx	\
-            $(INC)$/errcode.hxx 	\
-            $(INC)$/lang.hxx		\
-            $(INC)$/ref.hxx 		\
+HXX1FILES=  $(INC)$/debug.hxx       \
+            $(INC)$/new.hxx         \
+            $(INC)$/shl.hxx         \
+            $(INC)$/link.hxx        \
+            $(INC)$/fract.hxx       \
+            $(INC)$/string.hxx      \
+            $(INC)$/contnr.hxx      \
+            $(INC)$/list.hxx        \
+            $(INC)$/table.hxx       \
+            $(INC)$/unqidx.hxx      \
+            $(INC)$/unqid.hxx       \
+            $(INC)$/mempool.hxx     \
+            $(INC)$/simplecm.hxx    \
+            $(INC)$/stream.hxx      \
+            $(INC)$/cachestr.hxx    \
+            $(INC)$/errcode.hxx     \
+            $(INC)$/lang.hxx        \
+            $(INC)$/ref.hxx         \
             $(INC)$/tools.h
-HXX2FILES=	$(INC)$/solar.h
-#HXX4FILES=	$(INC)$/stdstrm.hxx
-HXX5FILES=	$(INC)$/ref.hxx
-HXX6FILES=	$(INC)$/pstm.hxx  \
+HXX2FILES=  $(INC)$/solar.h
+#HXX4FILES= $(INC)$/stdstrm.hxx
+HXX5FILES=  $(INC)$/ref.hxx
+HXX6FILES=  $(INC)$/pstm.hxx  \
             $(INC)$/globname.hxx
-HXX7FILES=	$(INC)$/rtti.hxx
-HXX8FILES=	$(INC)$/solver.h
+HXX7FILES=  $(INC)$/rtti.hxx
+HXX8FILES=  $(INC)$/solver.h
 .IF "$(GUIBASE)" == "WIN"
-HXX9FILES=	$(INCGUI)$/svwin.h		 \
+HXX9FILES=  $(INCGUI)$/svwin.h       \
             $(INCGUI)$/postwin.h \
             $(INCGUI)$/prewin.h
 .ENDIF
 .IF "$(GUI)" == "OS2"
-HXX9FILES=	$(INCGUI)$/svpm.h
+HXX9FILES=  $(INCGUI)$/svpm.h
 .ENDIF
 HXX10FILES= $(INC)$/errinf.hxx $(INC)$/errcode.hxx $(INC)$/string.hxx
 HXX11FILES= $(INC)$/urlobj.hxx
@@ -126,8 +126,8 @@ HXX19FILES= $(INC)$/zcodec.hxx
 # --- STDSTRM.LIB ---
 LIB3TARGET= $(LB)$/stdstrm.lib
 LIB3ARCHIV= $(LB)$/libstdstrm.a
-LIB3FILES=	$(LB)$/stream.lib
-.ENDIF					# "$(UPDATER)"!=""
+LIB3FILES=  $(LB)$/stream.lib
+.ENDIF                  # "$(UPDATER)"!=""
 
 .IF "$(GUI)"!="UNX"
 MEMMGRLIB=$(LB)$/memmgr.lib
@@ -141,43 +141,43 @@ MEMMGRSLB=
 
 LIB7TARGET= $(LB)$/a$(TARGET).lib
 LIB7ARCHIV= $(LB)$/liba$(TARGET).a
-LIB7FILES=	$(LB)$/gen.lib			\
-            $(LB)$/str.lib			\
-            $(LB)$/mtools.lib		\
-            $(MEMMGRLIB)			\
-            $(LB)$/datetime.lib 	\
-            $(LB)$/timestamp.lib	\
-            $(LB)$/intntl.lib		\
-            $(LB)$/fsys.lib 		\
-            $(LB)$/communi.lib		\
-            $(LB)$/stream.lib		\
-            $(LB)$/ref.lib			\
-            $(LB)$/rc.lib			\
-            $(LB)$/inet.lib			\
+LIB7FILES=  $(LB)$/gen.lib          \
+            $(LB)$/str.lib          \
+            $(LB)$/mtools.lib       \
+            $(MEMMGRLIB)            \
+            $(LB)$/datetime.lib     \
+            $(LB)$/timestamp.lib    \
+            $(LB)$/intntl.lib       \
+            $(LB)$/fsys.lib         \
+            $(LB)$/communi.lib      \
+            $(LB)$/stream.lib       \
+            $(LB)$/ref.lib          \
+            $(LB)$/rc.lib           \
+            $(LB)$/inet.lib         \
             $(LB)$/debug.lib
 
 
 LIB7FILES+= $(LB)$/dll.lib
 
-.ENDIF		# "$(UPDATER)"!=""
+.ENDIF      # "$(UPDATER)"!=""
 
 # --- TOOLS.LIB ---
 LIB1TARGET:= $(SLB)$/$(TARGET).lib
 LIB1FILES+=  \
-            $(MEMMGRSLB)			\
-            $(SLB)$/gen.lib 		\
-            $(SLB)$/str.lib 		\
-            $(SLB)$/mtools.lib		\
-            $(SLB)$/datetime.lib	\
-            $(SLB)$/timestamp.lib	\
-            $(SLB)$/intntl.lib		\
-            $(SLB)$/fsys.lib		\
-            $(SLB)$/communi.lib 	\
-            $(SLB)$/stream.lib		\
-            $(SLB)$/ref.lib 		\
-            $(SLB)$/rc.lib			\
-            $(SLB)$/debug.lib		\
-            $(SLB)$/zcodec.lib		\
+            $(MEMMGRSLB)            \
+            $(SLB)$/gen.lib         \
+            $(SLB)$/str.lib         \
+            $(SLB)$/mtools.lib      \
+            $(SLB)$/datetime.lib    \
+            $(SLB)$/timestamp.lib   \
+            $(SLB)$/intntl.lib      \
+            $(SLB)$/fsys.lib        \
+            $(SLB)$/communi.lib     \
+            $(SLB)$/stream.lib      \
+            $(SLB)$/ref.lib         \
+            $(SLB)$/rc.lib          \
+            $(SLB)$/debug.lib       \
+            $(SLB)$/zcodec.lib      \
             $(SLB)$/inet.lib
 
 SHL1STDLIBS += $(ZLIB3RDLIB)
@@ -193,66 +193,64 @@ LIB1FILES+=  $(SLB)$/dll.lib
 LIB1FILES+= $(SOLARLIBDIR)\xosl.lib \
             $(SOLARLIBDIR)\xrtl.lib \
             $(SOLARLIBDIR)\xvos.lib
-SHL1STDLIBS+=	wsock32.lib
+SHL1STDLIBS+=   wsock32.lib
 .ENDIF
-.ENDIF			# "$(BIG_TOOLS)"!=""
+.ENDIF          # "$(BIG_TOOLS)"!=""
 
 # --- TOOLS.DLL ---
-SHL1TARGET= 	tl$(VERSION)$(DLLPOSTFIX)
-#SHL1TARGET=	$(TOOLSDLLPREFIX)$(VERSION)$(DLLPOSTFIX)
-SHL1LIBS=		$(LIB1TARGET)
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1IMPLIB= 	itools
-SHL1STDLIBS+=	$(SALLIB) $(VOSLIB)
+SHL1TARGET=     tl$(VERSION)$(DLLPOSTFIX)
+#SHL1TARGET=    $(TOOLSDLLPREFIX)$(VERSION)$(DLLPOSTFIX)
+SHL1LIBS=       $(LIB1TARGET)
+SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=     itools
+SHL1STDLIBS+=   $(SALLIB) $(VOSLIB)
 
 .IF "$(GUI)" == "OS2"
-SHL1OBJS=		$(SLO)\memmgr.obj
+SHL1OBJS=       $(SLO)\memmgr.obj
 .ENDIF
 .IF "$(GUI)"=="WIN"
-SHL1OBJS=		$(SLO)\memmgr.obj
-.ENDIF			# "$(GUI)"=="WIN"
+SHL1OBJS=       $(SLO)\memmgr.obj
+.ENDIF          # "$(GUI)"=="WIN"
 
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+=	shell32.lib 	\
-                mpr.lib 		\
-                ole32.lib		\
-                uuid.lib		\
+SHL1STDLIBS+=   shell32.lib     \
+                mpr.lib         \
+                ole32.lib       \
+                uuid.lib        \
                 advapi32.lib
 .ENDIF
 
-DEF1NAME		=$(SHL1TARGET)
+DEF1NAME        =$(SHL1TARGET)
 DEF1DEPN = \
-        $(MISC)$/$(SHL1TARGET).flt		\
-        $(HXX1FILES)					\
-        $(HXX2FILES)					\
-        $(HXX3FILES)					\
-        $(HXX4FILES)					\
-        $(HXX5FILES)					\
-        $(HXX6FILES)					\
-        $(HXX7FILES)					\
-        $(HXX8FILES)					\
-        $(HXX9FILES)					\
-        $(HXX10FILES)					\
-        $(HXX11FILES)					\
-        $(HXX12FILES)					\
-        $(HXX13FILES)					\
-        $(HXX14FILES)					\
-        $(HXX15FILES)					\
-        $(HXX16FILES)					\
-        $(HXX17FILES)					\
-        $(HXX18FILES)					\
-        $(HXX19FILES)					\
-        $(HXX20FILES)					\
+        $(MISC)$/$(SHL1TARGET).flt      \
+        $(HXX1FILES)                    \
+        $(HXX2FILES)                    \
+        $(HXX3FILES)                    \
+        $(HXX4FILES)                    \
+        $(HXX5FILES)                    \
+        $(HXX6FILES)                    \
+        $(HXX7FILES)                    \
+        $(HXX8FILES)                    \
+        $(HXX9FILES)                    \
+        $(HXX10FILES)                   \
+        $(HXX11FILES)                   \
+        $(HXX12FILES)                   \
+        $(HXX13FILES)                   \
+        $(HXX14FILES)                   \
+        $(HXX15FILES)                   \
+        $(HXX16FILES)                   \
+        $(HXX17FILES)                   \
+        $(HXX18FILES)                   \
+        $(HXX19FILES)                   \
+        $(HXX20FILES)                   \
         makefile.mk
 
 DEFLIB1NAME =tools
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :		target.mk
-
-ALLTAR:	$(INCCOM)$/dll.hxx
+.INCLUDE :      target.mk
 
 # --- TOOLS.FLT ---
 $(MISC)$/$(SHL1TARGET).flt:  makefile.mk
@@ -278,18 +276,3 @@ $(MISC)$/$(SHL1TARGET).flt:  makefile.mk
 .IF "$(COM)"=="BLC"
     @echo WEP>>$@
 .ENDIF
-
-# --- DLL.HXX ---
-
-.IF "$(GUI)"=="UNX"
-$(INCCOM)$/dll.hxx:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo > $@
-.ELSE
-$(INCCOM)$/dll.hxx: 	 $(INCGUI)$/dll.hxx
-    @echo ------------------------------
-    @echo Making: $@
-    @+$(COPY) $(INCGUI)$/dll.hxx $@
-.ENDIF
-
