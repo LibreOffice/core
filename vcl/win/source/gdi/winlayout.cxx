@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-05 17:54:29 $
+ *  last change: $Author: hdu $ $Date: 2002-12-06 17:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,11 +194,12 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
         else
         {
             // #99019# don't use glyph indices for non-TT fonts
-            // also for printer, because the drivers often transparently replace TTs with PS fonts
+            // also for printer, because the drivers often transparently
+            // replace TTs with builtin fonts
             TEXTMETRICA aTextMetricA;
             if( !::GetTextMetricsA( mhDC, &aTextMetricA )
-            ||  (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE)
-            || !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE) )
+            ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
+            || (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
                     bDisableGlyphs = true;
         }
 
@@ -423,6 +424,23 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 0, &aGCPA, (nGcpOption & ~GCP_USEKERNING) );
         }
 #endif // GCP_KERN_HACK
+
+        if( aGCPA.lpOutString && (mnGlyphCount != mnCharCount) )
+        {
+            const char* pAnsiStr = aGCPA.lpOutString;
+
+            // adjust advance widths when DBCS present
+            int* pAnsiAdv = new int[ mnCharCount ];
+            for( int i = 0, j = 0; i < mnCharCount; ++j, ++i )
+            {
+                pAnsiAdv[i] = mpGlyphAdvances[j];
+                if( (pAnsiStr[i] & 0x80) && ::IsDBCSLeadByte( pAnsiStr[i] ) )
+                    pAnsiAdv[ ++i ] = 0;    // trailing byte advance width
+            }
+            DBG_ASSERT( (j==mnGlyphCount), "SimpleWinLayout::DrawTextA DBCS mismatch" );
+            delete[] mpGlyphAdvances;
+            mpGlyphAdvances = pAnsiAdv;
+        }
     }
 
     // cache essential layout properties
@@ -440,10 +458,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             continue;
 
         // request fallback
-        int nCharPos = i;
         bool bRTL = false;  // TODO: get from run
-        if( mpGlyphs2Chars )
-            nCharPos = mpGlyphs2Chars[ i ];
+        int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: rArgs.mnMinCharPos+i;
         rArgs.NeedFallback( nCharPos, bRTL );
 
         // insert a dummy in the meantime
@@ -593,23 +609,8 @@ void SimpleWinLayout::DrawText( SalGraphics& ) const
     else
     {
         const char* pAnsiStr = (char*)mpOutGlyphs;
-        int* pAnsiAdv = mpGlyphAdvances;
-
-        // adjust advance widths when DBCS present
-        if( mnGlyphCount != mnCharCount )
-        {
-            pAnsiAdv = (int*)alloca( mnCharCount * sizeof(int) );
-            for( int i = 0, j = 0; i < mnCharCount; ++j, ++i )
-            {
-                pAnsiAdv[i] = mpGlyphAdvances[j];
-                if( (pAnsiStr[i] & 0x80) && ::IsDBCSLeadByte( pAnsiStr[i] ) )
-                    pAnsiAdv[ ++i ] = 0;    // trailing byte advance width
-            }
-            DBG_ASSERT( (j==mnGlyphCount), "SimpleWinLayout::DrawTextA DBCS mismatch" );
-        }
-
         ::ExtTextOutA( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-            pAnsiStr, mnCharCount, pAnsiAdv );
+            pAnsiStr, mnCharCount, mpGlyphAdvances );
     }
 #else // DEBUG_GETNEXTGLYPHS
     #define MAXGLYPHCOUNT 8
