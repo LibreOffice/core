@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterpassworddlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:34 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ MasterPasswordDialog::MasterPasswordDialog
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         String aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, pResourceMgr ));
-        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
+        ErrorBox aErrorBox( pParent, WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
 
