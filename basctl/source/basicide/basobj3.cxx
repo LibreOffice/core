@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: mt $ $Date: 2000-10-19 09:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
             *pbDispatcherLocked = TRUE;
     }
     Window* pDefParent = Application::GetDefDialogParent();
-    if ( !pDefParent->IsEnabled() )
+    if ( pDefParent && !pDefParent->IsEnabled() )
     {
         // Aber nicht wenn sich noch ein Dialog im Testmodus befindet!
 //      if ( pDefParent == Application::GetAppWindow() )

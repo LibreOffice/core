@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-10 09:38:57 $
+ *  last change: $Author: mt $ $Date: 2000-10-19 09:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,152 +433,149 @@ void BasicIDEShell::ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy )
 void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                                         const SfxHint& rHint, const TypeId& )
 {
-    if ( rHint.IsA( TYPE( SfxEventHint ) ) )
+    if ( IDE_DLL()->GetShell() )
     {
-        if ( ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_CREATEDOC ) ||
-             ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC ) )
+        if ( rHint.IsA( TYPE( SfxEventHint ) ) )
         {
-            UpdateWindows();
-        }
-    }
-    if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
-    {
-        if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DOCCHANGED )
-        {
-            // Wird z.Z. nur gerufen bei "Letzte Version"
-            // Doc bleibt erhalten, BasicManager wird zerstoert.
-            // Die Fenster wurden durch das BasicManager-Dying zerstoert,
-            // muessen evtl. wieder angezeigt werden.
-            UpdateWindows();
-        }
-        else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_MODECHANGED )
-        {
-            // ReadOnly toggled...
-            if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
+            if ( ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_CREATEDOC ) ||
+                 ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC ) )
             {
-                SfxObjectShell* pShell = (SfxObjectShell*)&rBC;
-                BasicManager* pBasMgr = pShell->GetBasicManager();
-                for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
-                {
-                    IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
-                    BasicManager* pM = BasicIDE::FindBasicManager( pWin->GetBasic() );
-                    if ( pM == pBasMgr )
-                        pWin->SetReadOnly( pShell->IsReadOnly() );
-                }
+                UpdateWindows();
             }
-
         }
-        else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_TITLECHANGED )
+        if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
         {
-            BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
-            SetMDITitle();
-        }
-        else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        {
-            // Alle Fenster suchen, die auf einem Basic des Managers arbeiten,
-            // Daten sichern, Fenster zerstoeren
-            if ( rBC.IsA( TYPE( BasicManager ) ) )
+            if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DOCCHANGED )
             {
-                BOOL bSetCurWindow = FALSE;
-                BOOL bSetCurBasic = FALSE;
-                BasicManager* pBasMgr = (BasicManager* )&rBC;
-                USHORT nLibs = pBasMgr->GetLibCount();
-                // Alle Fenster, die ein Object dieser Lib anzeigen, schliessen
-                for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
+                // Wird z.Z. nur gerufen bei "Letzte Version"
+                // Doc bleibt erhalten, BasicManager wird zerstoert.
+                // Die Fenster wurden durch das BasicManager-Dying zerstoert,
+                // muessen evtl. wieder angezeigt werden.
+                UpdateWindows();
+            }
+            else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_MODECHANGED )
+            {
+                // ReadOnly toggled...
+                if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
                 {
-                    StarBASIC* pLib = pBasMgr->GetLib( nLib );
-                    if ( !pLib )
-                        continue;
-
-                    // Damit wird leider das ganze Basic angehalten, wenn
-                    // ein vom Basic unbeteiligtes Doc geschlossen wird.
-                    // Da das laufende Basic hoffentlich Referenzen auf die
-                    // benoetigten Libs haelt, sollte es auch nicht noetig sein
-//                  if ( pLib->IsRunning() )
-//                      pLib->Stop();
+                    SfxObjectShell* pShell = (SfxObjectShell*)&rBC;
+                    BasicManager* pBasMgr = pShell->GetBasicManager();
                     for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
                     {
                         IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
-                        if ( pWin->GetBasic() == pLib )
+                        BasicManager* pM = BasicIDE::FindBasicManager( pWin->GetBasic() );
+                        if ( pM == pBasMgr )
+                            pWin->SetReadOnly( pShell->IsReadOnly() );
+                    }
+                }
+
+            }
+            else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_TITLECHANGED )
+            {
+                BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
+                SetMDITitle();
+            }
+            else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+            {
+                // Alle Fenster suchen, die auf einem Basic des Managers arbeiten,
+                // Daten sichern, Fenster zerstoeren
+                if ( rBC.IsA( TYPE( BasicManager ) ) )
+                {
+                    BOOL bSetCurWindow = FALSE;
+                    BOOL bSetCurBasic = FALSE;
+                    BasicManager* pBasMgr = (BasicManager* )&rBC;
+                    USHORT nLibs = pBasMgr->GetLibCount();
+                    // Alle Fenster, die ein Object dieser Lib anzeigen, schliessen
+                    for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
+                    {
+                        StarBASIC* pLib = pBasMgr->GetLib( nLib );
+                        if ( !pLib )
+                            continue;
+
+                        for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
                         {
-                            if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
+                            IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
+                            if ( pWin->GetBasic() == pLib )
                             {
-                                pWin->AddStatus( BASWIN_TOBEKILLED );
-                                pWin->Hide();
-                                StarBASIC::Stop();
-                                // Es kommt kein Notify...
-                                pWin->BasicStopped();
-                            }
-                            else
-                            {
-                                pWin->StoreData();
-                                if ( pWin == pCurWin )
-                                    bSetCurWindow = TRUE;
-                                RemoveWindow( pWin, TRUE, FALSE );
+                                if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
+                                {
+                                    pWin->AddStatus( BASWIN_TOBEKILLED );
+                                    pWin->Hide();
+                                    StarBASIC::Stop();
+                                    // Es kommt kein Notify...
+                                    pWin->BasicStopped();
+                                }
+                                else
+                                {
+                                    pWin->StoreData();
+                                    if ( pWin == pCurWin )
+                                        bSetCurWindow = TRUE;
+                                    RemoveWindow( pWin, TRUE, FALSE );
+                                }
                             }
                         }
+                        if ( pLib == pCurBasic )
+                            bSetCurBasic = TRUE;
                     }
-                    if ( pLib == pCurBasic )
-                        bSetCurBasic = TRUE;
+                    if ( bSetCurBasic )
+                        SetCurBasic( SFX_APP()->GetBasic(), TRUE );
+                    else if ( bSetCurWindow )
+                    {
+                        IDEBaseWindow* pWin = FindWindow( 0 );
+                        SetCurWindow( pWin, TRUE );
+                    }
                 }
-                if ( bSetCurBasic )
-                    SetCurBasic( SFX_APP()->GetBasic(), TRUE );
-                else if ( bSetCurWindow )
+                else if ( rBC.IsA( TYPE( StarBASIC ) ) )
                 {
-                    IDEBaseWindow* pWin = FindWindow( 0 );
-                    SetCurWindow( pWin, TRUE );
+                    StarBASIC* pLib = (StarBASIC* )&rBC;
+                    IDE_DLL()->GetExtraData()->GetLibInfos().DestroyInfo( pLib );
                 }
+                EndListening( rBC, TRUE /* Alle abmelden */ );
             }
-            else if ( rBC.IsA( TYPE( StarBASIC ) ) )
+            if ( rHint.IsA( TYPE( SbxHint ) ) )
             {
-                StarBASIC* pLib = (StarBASIC* )&rBC;
-                IDE_DLL()->GetExtraData()->GetLibInfos().DestroyInfo( pLib );
-            }
-            EndListening( rBC, TRUE /* Alle abmelden */ );
-        }
-        if ( rHint.IsA( TYPE( SbxHint ) ) )
-        {
-            SbxHint& rSbxHint = (SbxHint&)rHint;
-            ULONG nHintId = rSbxHint.GetId();
-            if (    ( nHintId == SBX_HINT_BASICSTART ) ||
-                    ( nHintId == SBX_HINT_BASICSTOP ) )
-            {
-                SfxBindings& rBindings = BasicIDE::GetBindings();
-                rBindings.Invalidate( SID_BASICRUN );
-                rBindings.Update( SID_BASICRUN );
-                rBindings.Invalidate( SID_BASICCOMPILE );
-                rBindings.Update( SID_BASICCOMPILE );
-                rBindings.Invalidate( SID_BASICSTEPOVER );
-                rBindings.Update( SID_BASICSTEPOVER );
-                rBindings.Invalidate( SID_BASICSTEPINTO );
-                rBindings.Update( SID_BASICSTEPINTO );
-                rBindings.Invalidate( SID_BASICSTEPOUT );
-                rBindings.Update( SID_BASICSTEPOUT );
-                rBindings.Invalidate( SID_BASICSTOP );
-                rBindings.Update( SID_BASICSTOP );
-                rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-                rBindings.Update( SID_BASICIDE_TOGGLEBRKPNT );
-                rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
-                rBindings.Update( SID_BASICIDE_MODULEDLG );
-                rBindings.Invalidate( SID_BASICLOAD );
-                rBindings.Update( SID_BASICLOAD );
-
-                if ( nHintId == SBX_HINT_BASICSTOP )
+                SbxHint& rSbxHint = (SbxHint&)rHint;
+                ULONG nHintId = rSbxHint.GetId();
+                if (    ( nHintId == SBX_HINT_BASICSTART ) ||
+                        ( nHintId == SBX_HINT_BASICSTOP ) )
                 {
-                    // Nicht nur bei Error/Break oder explizitem anhalten,
-                    // falls durch einen Programmierfehler das Update abgeschaltet ist.
-                    BasicIDE::BasicStopped();
-                    UpdateModulWindowLayout();  // Leer machen...
-                }
+                    SfxBindings& rBindings = BasicIDE::GetBindings();
+                    rBindings.Invalidate( SID_BASICRUN );
+                    rBindings.Update( SID_BASICRUN );
+                    rBindings.Invalidate( SID_BASICCOMPILE );
+                    rBindings.Update( SID_BASICCOMPILE );
+                    rBindings.Invalidate( SID_BASICSTEPOVER );
+                    rBindings.Update( SID_BASICSTEPOVER );
+                    rBindings.Invalidate( SID_BASICSTEPINTO );
+                    rBindings.Update( SID_BASICSTEPINTO );
+                    rBindings.Invalidate( SID_BASICSTEPOUT );
+                    rBindings.Update( SID_BASICSTEPOUT );
+                    rBindings.Invalidate( SID_BASICSTOP );
+                    rBindings.Update( SID_BASICSTOP );
+                    rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+                    rBindings.Update( SID_BASICIDE_TOGGLEBRKPNT );
+                    rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
+                    rBindings.Update( SID_BASICIDE_MODULEDLG );
+                    rBindings.Invalidate( SID_BASICLOAD );
+                    rBindings.Update( SID_BASICLOAD );
 
-                IDEBaseWindow* pWin = aIDEWindowTable.First();
-                while ( pWin )
-                {
-                    if ( nHintId == SBX_HINT_BASICSTART )
-                        pWin->BasicStarted();
-                     else
-                        pWin->BasicStopped();
-                    pWin = aIDEWindowTable.Next();
+                    if ( nHintId == SBX_HINT_BASICSTOP )
+                    {
+                        // Nicht nur bei Error/Break oder explizitem anhalten,
+                        // falls durch einen Programmierfehler das Update abgeschaltet ist.
+                        BasicIDE::BasicStopped();
+                        UpdateModulWindowLayout();  // Leer machen...
+                    }
+
+                    IDEBaseWindow* pWin = aIDEWindowTable.First();
+                    while ( pWin )
+                    {
+                        if ( nHintId == SBX_HINT_BASICSTART )
+                            pWin->BasicStarted();
+                         else
+                            pWin->BasicStopped();
+                        pWin = aIDEWindowTable.Next();
+                    }
                 }
             }
         }
