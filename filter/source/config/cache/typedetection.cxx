@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:31:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,14 +263,47 @@ TypeDetection::~TypeDetection()
     //*******************************************
     // adapt media descriptor, so it contains the right values
     // for type/filter name/document service/ etcpp.
+    impl_validateAndSetTypeOnDescriptor(stlDescriptor, sType);
+    impl_addBestFilter(stlDescriptor, sType);
 
-    ::comphelper::MediaDescriptor::iterator pIt = stlDescriptor.find(::comphelper::MediaDescriptor::PROP_TYPENAME());
-    if (pIt != stlDescriptor.end())
-        stlDescriptor.erase(pIt);
-    if (sType.getLength())
-        stlDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
     stlDescriptor >> lDescriptor;
     return sType;
+}
+
+/*-----------------------------------------------
+    03.07.2003 10:36
+-----------------------------------------------*/
+void TypeDetection::impl_addBestFilter(      ::comphelper::MediaDescriptor& rDescriptor,
+                                       const ::rtl::OUString&               sType      )
+{
+    // Dont overwrite a might preselected filter!
+    ::rtl::OUString sFilter = rDescriptor.getUnpackedValueOrDefault(
+                                ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
+                                ::rtl::OUString());
+    if (sFilter.getLength())
+        return;
+
+    // We use the preferred filter for the specified type.
+    // Note: The configuration must maintain this value, so
+    // it points e.g. to the default filter of the preferred application.
+    try
+    {
+        // SAFE ->
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+
+        CacheItem aType = m_rCache->getItem(FilterCache::E_TYPE, sType);
+        aType[PROPNAME_PREFERREDFILTER] >>= sFilter;
+        CacheItem aFilter = m_rCache->getItem(FilterCache::E_FILTER, sFilter);
+
+        aLock.clear();
+        // <- SAFE
+
+        // found valid type and filter => set it on the given descriptor
+        rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
+        rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+    }
+    catch(const css::container::NoSuchElementException&)
+        {}
 }
 
 /*-----------------------------------------------
