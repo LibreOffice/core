@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-14 21:41:11 $
+ *  last change: $Author: nf $ $Date: 2001-06-18 13:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,127 +178,106 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
              < "Keine" ; > ;
         < "Manuell" ; > ;
-        < " " ; > ;
     };
     StringList [ english_us ] =
     {
              < "None" ; > ;
-        < "Manual" ; > ;
         < "Manual" ; > ;
     };
     StringList [ portuguese ] =
     {
              < "Nenhum" ; > ;
         < "Automático" ; > ;
-        < "Manual" ; > ;
     };
     StringList [ russian ] =
     {
              < "Áåç" ; > ;
-        < "Âðó÷íóþ" ; > ;
         < "Âðó÷íóþ" ; > ;
     };
     StringList [ greek ] =
     {
              < "ÊáíÝíá" ; > ;
         < "Áõôüìáôá" ; > ;
-        < "×åéñïêßíçôá" ; > ;
     };
     StringList [ dutch ] =
     {
              < "Geen" ; > ;
         < "Automatisch" ; > ;
-        < "Handmatig" ; > ;
     };
     StringList [ french ] =
     {
              < "Aucun(e)" ; > ;
-        < "Manuel" ; > ;
         < "Manuel" ; > ;
     };
     StringList [ spanish ] =
     {
              < "Ninguna" ; > ;
         < "Manual" ; > ;
-        < "Manual" ; > ;
     };
     StringList [ finnish ] =
     {
              < "Ei mitään" ; > ;
         < "Automaattinen" ; > ;
-        < "Manuaalinen" ; > ;
     };
     StringList [ italian ] =
     {
              < "Nessuno" ; > ;
         < "Automatico" ; > ;
-        < "Manuale" ; > ;
     };
     StringList [ danish ] =
     {
              < "Ingen" ; > ;
         < "Automatisk" ; > ;
-        < "Manuel" ; > ;
     };
     StringList [ swedish ] =
     {
              < "Ingen" ; > ;
         < "Manuellt" ; > ;
-        < "Manuell" ; > ;
     };
     StringList [ polish ] =
     {
              < "Brak" ; > ;
-        < "Rêcznie" ; > ;
         < "Rêcznie" ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
              < "Keine" ; > ;
         < "Automatisch" ; > ;
-        < "Manuell" ; > ;
     };
     StringList [ japanese ] =
     {
              < "‚È‚µ" ; > ;
-        < "Žè“®" ; > ;
         < "Žè“®" ; > ;
     };
     StringList [ korean ] =
     {
              < "¾øÀ½" ; > ;
         < "ÀÚµ¿" ; > ;
-        < "¼öµ¿" ; > ;
     };
     StringList [ chinese_simplified ] =
     {
              < "ÎÞ" ; > ;
         < "ÊÖ¶¯" ; > ;
-        < "ÊÖ¹¤" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
              < "µL" ; > ;
-        < "¤â°Ê" ; > ;
         < "¤â°Ê" ; > ;
     };
     StringList [ turkish ] =
     {
              < "Yok" ; > ;
         < "Otomatik" ; > ;
-        < "Manüel" ; > ;
     };
     StringList [ arabic ] =
     {
              < "ÈÏæä" ; > ;
         < "ÊáÞÇÆí" ; > ;
-        < "íÏæí" ; > ;
     };
     StringList [ catalan ] =
     {
              < "Ninguna" ; > ;
         < "Automática" ; > ;
-        < "Manual" ; > ;
     };
     };
     FixedText FT_HTTP_PROXY
