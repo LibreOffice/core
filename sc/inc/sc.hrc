@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-30 10:34:06 $
+ *  last change: $Author: dr $ $Date: 2002-08-05 11:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,6 +1276,16 @@
 #define SCSTR_ORIENTATION_TOPBOTTOM (STR_START + 110)
 #define SCSTR_ORIENTATION_BOTTOMTOP (STR_START + 111)
 #define SCSTR_ORIENTATION_STANDARD  (STR_START + 112)
+
+// Accessibility ------------------------------------
+
+// CSV import
+#define STR_ACC_CSVRULER_NAME       (STR_START + 150)
+#define STR_ACC_CSVRULER_DESCR      (STR_START + 151)
+#define STR_ACC_CSVGRID_NAME        (STR_START + 152)
+#define STR_ACC_CSVGRID_DESCR       (STR_START + 153)
+
+// --------------------------------------------------
 
 #define SCSTR_HUMAN_SCDOC_NAME      (STR_START + 210)
 #define SCSTR_SHORT_SCDOC_NAME      (STR_START + 211)

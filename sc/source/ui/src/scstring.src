@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:48:28 $
+ *  last change: $Author: dr $ $Date: 2002-08-05 11:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3239,4 +3239,26 @@ String STR_REPLCELLSWARN
     Text[ turkish ] = "Do you want to replace the contents of the destination cells?";
     Text[ arabic ] = "Do you want to replace the contents of the destination cells?";
 };
+
+
+String STR_ACC_CSVRULER_NAME
+{
+    Text = "Lineal";
+};
+
+String STR_ACC_CSVRULER_DESCR
+{
+    Text = "Dieses Lineal verwaltet Objekte an festen Positionen.";
+};
+
+String STR_ACC_CSVGRID_NAME
+{
+    Text = "Vorschautabelle";
+};
+
+String STR_ACC_CSVGRID_DESCR
+{
+    Text = "Diese Tabelle zeigt die Anordnung der Daten, wie sie im Dokument erscheinen.";
+};
+
 
