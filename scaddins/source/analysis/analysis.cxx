@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-08 15:35:52 $
+ *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,19 +1007,19 @@ sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( constREFXPS& xOpt,
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getIseven( constREFXPS&, sal_Int32 nVal ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getIseven( sal_Int32 nVal ) THROWDEF_RTE
 {
     return ( nVal & 0x00000001 )? 0 : 1;
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( constREFXPS&, sal_Int32 nVal ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( sal_Int32 nVal ) THROWDEF_RTE
 {
     return ( nVal & 0x00000001 )? 1 : 0;
 }
 
 
-double SAL_CALL AnalysisAddIn::getMultinomial( constREFXPS&, const SEQSEQ( sal_Int32 )& aV ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getMultinomial( const SEQSEQ( sal_Int32 )& aV ) THROWDEF_RTE_IAE
 {
     sal_Int32       n1, n2;
     sal_Int32       nE1 = aV.getLength();
@@ -1054,8 +1054,7 @@ double SAL_CALL AnalysisAddIn::getMultinomial( constREFXPS&, const SEQSEQ( sal_I
 }
 
 
-double SAL_CALL AnalysisAddIn::getSeriessum( constREFXPS&,
-        double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE
 {
     double                          fRet = 0.0;
 
@@ -1085,13 +1084,13 @@ double SAL_CALL AnalysisAddIn::getSeriessum( constREFXPS&,
 }
 
 
-double SAL_CALL AnalysisAddIn::getQuotient( constREFXPS&, double fNum, double fDenum ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenum ) THROWDEF_RTE
 {
     return SolarMath::ApproxFloor( fNum / fDenum );
 }
 
 
-double SAL_CALL AnalysisAddIn::getMround( constREFXPS&, double fNum, double fMult ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_RTE
 {
     if( fMult == 0.0 )
         return fMult;
@@ -1100,13 +1099,13 @@ double SAL_CALL AnalysisAddIn::getMround( constREFXPS&, double fNum, double fMul
 }
 
 
-double SAL_CALL AnalysisAddIn::getSqrtpi( constREFXPS&, double fNum ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE
 {
     return sqrt( fNum * PI );
 }
 
 
-double SAL_CALL AnalysisAddIn::getRandbetween( constREFXPS&, double fMin, double fMax ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE
 {
     const SolarMathRoundingMode     eRM = SolarMathRoundUp;
     fMin = SolarMath::Round( fMin, 0, eRM );
@@ -1123,15 +1122,12 @@ double SAL_CALL AnalysisAddIn::getRandbetween( constREFXPS&, double fMin, double
 }
 
 
-double SAL_CALL AnalysisAddIn::getGcd( constREFXPS&, const SEQSEQ( double )& aVLst ) THROWDEF_RTE_IAE
-//double SAL_CALL AnalysisAddIn::getGcd( constREFXPS&, const SEQ( uno::Any )& aVLst ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getGcd( const SEQSEQ( double )& aVLst, const SEQ( uno::Any )& aOptVLst ) THROWDEF_RTE_IAE
 {
     ChkDoubleList1  aValList;
 
-    if( !aValList.Append( aVLst ) )
-        THROW_IAE;
-
-//  aValList.Append( aVLst );
+    aValList.Append( aVLst );
+    aValList.Append( aOptVLst );
 
     if( aValList.Count() == 0 )
         return 0.0;
@@ -1151,12 +1147,12 @@ double SAL_CALL AnalysisAddIn::getGcd( constREFXPS&, const SEQSEQ( double )& aVL
 }
 
 
-double SAL_CALL AnalysisAddIn::getLcm( constREFXPS&, const SEQSEQ( double )& aVLst ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getLcm( const SEQSEQ( ANY )& aVLst, const SEQ( uno::Any )& aOptVLst ) THROWDEF_RTE_IAE
 {
-    ChkDoubleList1  aValList;
+    ChkDoubleList2  aValList;
 
-    if( !aValList.Append( aVLst ) )
-        THROW_IAE;
+    aValList.Append( aVLst );
+    aValList.Append( aOptVLst );
 
     if( aValList.Count() == 0 )
         return 0.0;
@@ -1164,12 +1160,18 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS&, const SEQSEQ( double )& aVL
     const double*   p = aValList.First();
     double          f = *p;
 
+    if( f == 0.0 )
+        return f;
+
     p = aValList.Next();
 
     while( p )
     {
         double      fTmp = *p;
-        f = fTmp * f / GetGcd( fTmp, f );
+        if( f == 0.0 )
+            return f;
+        else
+            f = fTmp * f / GetGcd( fTmp, f );
         p = aValList.Next();
     }
 
@@ -1177,19 +1179,19 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS&, const SEQSEQ( double )& aVL
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesseli( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
     return Bessel( fNum, nOrder, sal_True );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselj( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
     return Bessel( fNum, nOrder, sal_False );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselk( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
     THROW_IAE;
 
@@ -1200,7 +1202,7 @@ double SAL_CALL AnalysisAddIn::getBesselk( constREFXPS&, double fNum, sal_Int32 
 }
 
 
-double SAL_CALL AnalysisAddIn::getBessely( constREFXPS&, double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
     THROW_IAE;
 
@@ -1220,79 +1222,79 @@ double SAL_CALL AnalysisAddIn::getBessely( constREFXPS&, double fNum, sal_Int32 
 #define DOUBLECONV(from,to)         ConvertFromDec(sal_Int64(ConvertToDec(aNum,from,_P)),_MIN##to,_MAX##to,to,nPlaces,_P)
 
 
-STRING SAL_CALL AnalysisAddIn::getBin2oct( constREFXPS&, const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getBin2oct( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 2, 8 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBin2dec( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBin2dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return ConvertToDec( aNum, 2, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getBin2hex( constREFXPS&, const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getBin2hex( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 2, 16 );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getOct2bin( constREFXPS&, const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getOct2bin( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 8, 2 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getOct2dec( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getOct2dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return ConvertToDec( aNum, 8, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getOct2hex( constREFXPS&, const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getOct2hex( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 8, 16 );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getDec2bin( constREFXPS&, sal_Int32 nNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getDec2bin( sal_Int32 nNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return ConvertFromDec( nNum, _MIN2, _MAX2, 2, nPlaces, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getDec2oct( constREFXPS&, sal_Int32 nNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getDec2oct( sal_Int32 nNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return ConvertFromDec( nNum, _MIN8, _MAX8, 8, nPlaces, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getDec2hex( constREFXPS&, double fNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getDec2hex( double fNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return ConvertFromDec( sal_Int64( fNum ), _MIN16, _MAX16, 16, nPlaces, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getHex2bin( constREFXPS&, const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getHex2bin( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 16, 2 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getHex2dec( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getHex2dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return ConvertToDec( aNum, 16, _P );
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getHex2oct( constREFXPS&, const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getHex2oct( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE
 {
     return DOUBLECONV( 16, 8 );
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getDelta( constREFXPS&, double fNum1, double fNum2 ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getDelta( double fNum1, double fNum2 ) THROWDEF_RTE
 {
 #ifdef DEBUG
     return ( fNum1 == fNum2 )? 1 : 0;
@@ -1302,19 +1304,19 @@ sal_Int32 SAL_CALL AnalysisAddIn::getDelta( constREFXPS&, double fNum1, double f
 }
 
 
-double SAL_CALL AnalysisAddIn::getErf( constREFXPS&, double fLL, double fUL ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getErf( double fLL, double fUL ) THROWDEF_RTE
 {
     return Erf( fUL ) - Erf( fLL );
 }
 
 
-double SAL_CALL AnalysisAddIn::getErfc( constREFXPS&, double f ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getErfc( double f ) THROWDEF_RTE
 {
     return 1.0 - Erf( f );
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getGestep( constREFXPS&, double fNum, double fStep ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getGestep( double fNum, double fStep ) THROWDEF_RTE
 {
 #ifdef DEBUG
     return ( fNum >= fStep )? 1 : 0;
@@ -1324,25 +1326,25 @@ sal_Int32 SAL_CALL AnalysisAddIn::getGestep( constREFXPS&, double fNum, double f
 }
 
 
-double SAL_CALL AnalysisAddIn::getFactdouble( constREFXPS&, sal_Int32 nNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE
 {
     return FactDouble( nNum );
 }
 
 
-double SAL_CALL AnalysisAddIn::getImabs( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImabs( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return Complex( aNum ).Abs();
 }
 
 
-double SAL_CALL AnalysisAddIn::getImaginary( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImaginary( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return Complex( aNum ).Imag();
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImpower( constREFXPS&, const STRING& aNum, double f ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImpower( const STRING& aNum, double f ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1352,13 +1354,13 @@ STRING SAL_CALL AnalysisAddIn::getImpower( constREFXPS&, const STRING& aNum, dou
 }
 
 
-double SAL_CALL AnalysisAddIn::getImargument( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImargument( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return Complex( aNum ).Arg();
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImcos( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImcos( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1368,7 +1370,7 @@ STRING SAL_CALL AnalysisAddIn::getImcos( constREFXPS&, const STRING& aNum ) THRO
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImdiv( constREFXPS&, const STRING& aDivid, const STRING& aDivis ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImdiv( const STRING& aDivid, const STRING& aDivis ) THROWDEF_RTE_IAE
 {
     Complex     z( aDivid );
 
@@ -1378,7 +1380,7 @@ STRING SAL_CALL AnalysisAddIn::getImdiv( constREFXPS&, const STRING& aDivid, con
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImexp( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImexp( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1388,7 +1390,7 @@ STRING SAL_CALL AnalysisAddIn::getImexp( constREFXPS&, const STRING& aNum ) THRO
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImconjugate( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImconjugate( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1398,7 +1400,7 @@ STRING SAL_CALL AnalysisAddIn::getImconjugate( constREFXPS&, const STRING& aNum 
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImln( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImln( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1408,7 +1410,7 @@ STRING SAL_CALL AnalysisAddIn::getImln( constREFXPS&, const STRING& aNum ) THROW
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImlog10( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImlog10( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1418,7 +1420,7 @@ STRING SAL_CALL AnalysisAddIn::getImlog10( constREFXPS&, const STRING& aNum ) TH
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImlog2( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1428,8 +1430,7 @@ STRING SAL_CALL AnalysisAddIn::getImlog2( constREFXPS&, const STRING& aNum ) THR
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImproduct(
-    constREFXPS&, const STRING& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImproduct( const STRING& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
 {
     Complex         z( aNum1 );
 
@@ -1444,13 +1445,13 @@ STRING SAL_CALL AnalysisAddIn::getImproduct(
 }
 
 
-double SAL_CALL AnalysisAddIn::getImreal( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImreal( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     return Complex( aNum ).Real();
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsin( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsin( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1460,7 +1461,7 @@ STRING SAL_CALL AnalysisAddIn::getImsin( constREFXPS&, const STRING& aNum ) THRO
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsub( constREFXPS&, const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsub( const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum1 );
 
@@ -1470,8 +1471,7 @@ STRING SAL_CALL AnalysisAddIn::getImsub( constREFXPS&, const STRING& aNum1, cons
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1,
-    const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsum( const STRING& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
 {
     Complex         z( aNum1 );
 
@@ -1486,7 +1486,7 @@ STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1,
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsqrt( constREFXPS&, const STRING& aNum ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
@@ -1496,7 +1496,7 @@ STRING SAL_CALL AnalysisAddIn::getImsqrt( constREFXPS&, const STRING& aNum ) THR
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getComplex( constREFXPS&, double fR, double fI, const STRING& rSuff ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const STRING& rSuff ) THROWDEF_RTE_IAE
 {
     sal_Bool    bi = rSuff.compareToAscii( "i" ) == 0;
 
@@ -1507,7 +1507,7 @@ STRING SAL_CALL AnalysisAddIn::getComplex( constREFXPS&, double fR, double fI, c
 }
 
 
-double SAL_CALL AnalysisAddIn::getConvert( constREFXPS&, double f, const STRING& aFU, const STRING& aTU ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getConvert( double f, const STRING& aFU, const STRING& aTU ) THROWDEF_RTE_IAE
 {
     if( !pCDL )
         pCDL = new ConvertDataList();

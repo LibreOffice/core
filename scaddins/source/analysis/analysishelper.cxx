@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-08 15:27:45 $
+ *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ sal_Int32 GetNullDate( constREFXPS& xOpt ) THROWDEF_RTE
     {
         try
         {
-            uno::Any    aAny = xOpt->getPropertyValue( STRFROMASCII( "NullDate" ) );
+            ANY aAny = xOpt->getPropertyValue( STRFROMASCII( "NullDate" ) );
             util::Date  aDate;
             if( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );
@@ -1118,7 +1118,7 @@ inline double Exp10( sal_Int16 n )
 }
 
 
-sal_Int32 GetOpt( const CSS::uno::Any& rAny, sal_Int32 nDefault ) THROWDEF_RTE_IAE
+sal_Int32 GetOpt( const ANY& rAny, sal_Int32 nDefault ) THROWDEF_RTE_IAE
 {
     switch( rAny.getValueTypeClass() )
     {
@@ -1136,7 +1136,7 @@ sal_Int32 GetOpt( const CSS::uno::Any& rAny, sal_Int32 nDefault ) THROWDEF_RTE_I
 }
 
 
-double GetOpt( const CSS::uno::Any& rAny, double fDefault ) THROWDEF_RTE_IAE
+double GetOpt( const ANY& rAny, double fDefault ) THROWDEF_RTE_IAE
 {
     switch( rAny.getValueTypeClass() )
     {
@@ -1680,7 +1680,7 @@ void SortedIndividualInt32List::InsertHolidayList( const SEQ( double )& aHD, sal
 
 
 void SortedIndividualInt32List::InsertHolidayList(
-    const uno::Any& aHDay, sal_Int32 nNullDate, sal_Bool bInsOnWE ) THROWDEF_RTE_IAE
+    const ANY& aHDay, sal_Int32 nNullDate, sal_Bool bInsOnWE ) THROWDEF_RTE_IAE
 {
     switch( aHDay.getValueTypeClass() )
     {
@@ -1703,15 +1703,15 @@ void SortedIndividualInt32List::InsertHolidayList(
             break;
         case uno::TypeClass_SEQUENCE:
             {
-            SEQSEQ( uno::Any )          aValArr;
+            SEQSEQ( ANY )           aValArr;
             if( aHDay >>= aValArr )
             {
-                sal_Int32               nE = aValArr.getLength();
-                const SEQ( uno::Any )*  pArr = aValArr.getConstArray();
+                sal_Int32           nE = aValArr.getLength();
+                const SEQ( ANY )*   pArr = aValArr.getConstArray();
                 for( sal_Int32 n = 0 ; n < nE ; n++ )
                 {
-                    sal_Int32           nF = pArr[ n ].getLength();
-                    const uno::Any*     pAny = pArr[ n ].getConstArray();
+                    sal_Int32       nF = pArr[ n ].getLength();
+                    const ANY*      pAny = pArr[ n ].getConstArray();
 
                     for( sal_Int32 m = 0 ; m < nF ; m++ )
                         InsertHolidayList( pAny[ m ], nNullDate, bInsOnWE );
@@ -1730,6 +1730,47 @@ void SortedIndividualInt32List::InsertHolidayList(
 
 
 
+inline void DoubleList::AppendVoid( sal_Bool bErrOnEmpty ) THROWDEF_RTE_IAE
+{
+    if( bErrOnEmpty )
+        THROW_IAE;
+}
+
+
+inline void DoubleList::AppendDouble( double f ) THROWDEF_RTE_IAE
+{
+    if( IsFaulty( f ) )
+        THROW_IAE;
+    if( IsProper( f ) )
+        _Append( f );
+}
+
+
+void DoubleList::AppendString( const ANY& r, sal_Bool bEmptyAs0 ) THROWDEF_RTE_IAE
+{
+    if( bEmptyAs0 || ( ( const STRING* ) r.getValue() )->len() )
+        AppendDouble( 0.0 );
+    else
+        THROW_IAE;
+}
+
+
+void DoubleList::AppendDouble( const ANY& r ) THROWDEF_RTE_IAE
+{
+    double  f = *( double* ) r.getValue();
+    if( IsFaulty( f ) )
+        THROW_IAE;
+    if( IsProper( f ) )
+        _Append( f );
+}
+
+
+inline void DoubleList::AppendAnyArray2( const ANY& r ) THROWDEF_RTE_IAE
+{
+    Append( *( const SEQSEQ( ANY )* ) r.getValue() );
+}
+
+
 DoubleList::~DoubleList()
 {
     for( double* p = ( double* ) List::First(); p ; p = ( double* ) List::Next() )
@@ -1737,12 +1778,11 @@ DoubleList::~DoubleList()
 }
 
 
-sal_Bool DoubleList::Append( const SEQSEQ( double )& aVLst )
+void DoubleList::Append( const SEQSEQ( double )& aVLst ) THROWDEF_RTE_IAE
 {
     sal_Int32   n1, n2;
     sal_Int32   nE1 = aVLst.getLength();
     sal_Int32   nE2;
-    sal_Int32   nZ = 0;
 
     for( n1 = 0 ; n1 < nE1 ; n1++ )
     {
@@ -1751,64 +1791,55 @@ sal_Bool DoubleList::Append( const SEQSEQ( double )& aVLst )
         const double*           pList = rList.getConstArray();
 
         for( n2 = 0 ; n2 < nE2 ; n2++ )
-        {
-            double  f = pList[ n2 ];
-            if( IsFaulty( f ) )
-                return sal_False;
-            if( IsProper( f ) )
-                _Append( f );
-        }
+            AppendDouble( pList[ n2 ] );
     }
-
-    return sal_True;
 }
 
 
-void DoubleList::Append( const SEQ( uno::Any )& aVList, sal_Bool bEmptyAs0, sal_Bool bErrOnEmpty ) THROWDEF_RTE_IAE
+void DoubleList::Append( const SEQ( ANY )& aVList, sal_Bool bEmptyAs0, sal_Bool bErrOnEmpty ) THROWDEF_RTE_IAE
 {
     sal_Int32           nE = aVList.getLength();
-    sal_Int32           nZ = 0;
-    const uno::Any*     pList = aVList.getConstArray();
+    const ANY*      pList = aVList.getConstArray();
 
     for( sal_Int32 n = 0 ; n < nE ; n++ )
     {
-        const uno::Any& r = pList[ n ];
+        const ANY&  r = pList[ n ];
 
         switch( r.getValueTypeClass() )
         {
-            case uno::TypeClass_VOID:
-                if( bErrOnEmpty )
-                    THROW_IAE;
-                break;
-            case uno::TypeClass_STRING:
-                if( bEmptyAs0 )
-                {
-                    if( ( ( const STRING* ) r.getValue() )->len() )
-                        THROW_IAE;
-
-                    const double        f = 0.0;
-                    if( IsFaulty( f ) )
-                        THROW_IAE;
-                    if( IsProper( f ) )
-                        _Append( f );
-                }
-                else
-                    THROW_IAE;
-                break;
-            case uno::TypeClass_DOUBLE:
-                {
-                double  f = *( double* ) r.getValue();
-                if( IsFaulty( f ) )
-                    THROW_IAE;
-                if( IsProper( f ) )
-                    _Append( f );
-                }
-                break;
-            case uno::TypeClass_SEQUENCE:
-                Append( *( const SEQ( uno::Any )* ) r.getValue() );
-                break;
+            case uno::TypeClass_VOID:       AppendVoid( bErrOnEmpty );      break;
+            case uno::TypeClass_STRING:     AppendString( r, bEmptyAs0 );   break;
+            case uno::TypeClass_DOUBLE:     AppendDouble( r );              break;
+            case uno::TypeClass_SEQUENCE:   AppendAnyArray2( r );           break;
             default:
                 THROW_IAE;
+        }
+    }
+}
+
+
+void DoubleList::Append( const SEQSEQ( ANY )& aVArr, sal_Bool bEmptyAs0, sal_Bool bErrOnEmpty ) THROWDEF_RTE_IAE
+{
+    sal_Int32               nE1 = aVArr.getLength();
+
+    for( sal_Int32 n1 = 0 ; n1 < nE1 ; n1++ )
+    {
+        const SEQ( ANY )&   rVList = aVArr[ n1 ];
+        sal_Int32           nE = rVList.getLength();
+        const ANY*          pList = rVList.getConstArray();
+
+        for( sal_Int32 n = 0 ; n < nE ; n++ )
+        {
+            const ANY&  r = pList[ n ];
+
+            switch( r.getValueTypeClass() )
+            {
+                case uno::TypeClass_VOID:       AppendVoid( bErrOnEmpty );      break;
+                case uno::TypeClass_STRING:     AppendString( r, bEmptyAs0 );   break;
+                case uno::TypeClass_DOUBLE:     AppendDouble( r );              break;
+                default:
+                    THROW_IAE;
+            }
         }
     }
 }
@@ -1833,7 +1864,22 @@ sal_Bool ChkDoubleList1::IsProper( double f ) const
     return f > 0.0;
 }
 
+
 sal_Bool ChkDoubleList1::IsFaulty( double f ) const
+{
+    return f < 0.0;
+}
+
+
+
+
+sal_Bool ChkDoubleList2::IsProper( double f ) const
+{
+    return f >= 0.0;
+}
+
+
+sal_Bool ChkDoubleList2::IsFaulty( double f ) const
 {
     return f < 0.0;
 }
@@ -2062,13 +2108,13 @@ void ComplexList::Append( const SEQSEQ( STRING )& r, sal_Bool bEmpty0 ) THROWDEF
 }
 
 
-void ComplexList::Append( const SEQ( uno::Any )& aMultPars, sal_Bool bEmpty0 ) THROWDEF_RTE_IAE
+void ComplexList::Append( const SEQ( ANY )& aMultPars, sal_Bool bEmpty0 ) THROWDEF_RTE_IAE
 {
     sal_Int32       nE = aMultPars.getLength();
 
     for( sal_Int32 n = 0 ; n < nE ; n++ )
     {
-        const uno::Any& r = aMultPars[ n ];
+        const ANY&  r = aMultPars[ n ];
         switch( r.getValueTypeClass() )
         {
             case uno::TypeClass_VOID:       break;
@@ -2089,11 +2135,11 @@ void ComplexList::Append( const SEQ( uno::Any )& aMultPars, sal_Bool bEmpty0 ) T
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
-                SEQSEQ( uno::Any )  aValArr;
+                SEQSEQ( ANY )           aValArr;
                 if( r >>= aValArr )
                 {
-                    sal_Int32               nE = aValArr.getLength();
-                    const SEQ( uno::Any )*  pArr = aValArr.getConstArray();
+                    sal_Int32           nE = aValArr.getLength();
+                    const SEQ( ANY )*   pArr = aValArr.getConstArray();
                     for( sal_Int32 n = 0 ; n < nE ; n++ )
                         Append( pArr[ n ], bEmpty0 );
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
+ *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,260 +113,156 @@ module addin
         long getNetworkdays(
                     [in] com::sun::star::beans::XPropertySet xOptions,
                     [in] long nStartDate, [in] long nEndDate, [in] sequence< sequence<long> > aHolidays );
-//                  [in] long nStartDate, [in] long nEndDate, [in] any aHolidays );
 
         /// iseven.
-        long getIseven(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long nValue );
+        long getIseven( [in] long nValue );
 
         /// isodd.
-        long getIsodd(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long nValue );
+        long getIsodd( [in] long nValue );
 
         /// multinomial.
-        double getMultinomial(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] sequence< sequence<long> > aValList );
+        double getMultinomial( [in] sequence< sequence<long> > aValList );
 
         /// seriessum.
-        double getSeriessum(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double X, [in] double N, [in] double M, [in] sequence< sequence<double> > CoeffList );
+        double getSeriessum( [in] double X, [in] double N, [in] double M, [in] sequence< sequence<double> > CoeffList );
 
         // quotient.
-        double getQuotient(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Num, [in] double Denum );
+        double getQuotient( [in] double Num, [in] double Denum );
 
         // mround.
-        double getMround(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Number, [in] double Multiple );
+        double getMround( [in] double Number, [in] double Multiple );
 
         // sqrtpi.
-        double getSqrtpi(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Number );
+        double getSqrtpi( [in] double Number );
 
         // randbetween.
-        double getRandbetween(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Min, [in] double Max );
+        double getRandbetween( [in] double Min, [in] double Max );
 
         /// gcd.
-        double getGcd(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] sequence< sequence<double> > ValList );
-//                  [in] sequence< any > ValList );
+        double getGcd( [in] sequence< sequence<double> > FirstValList, [in] sequence< any > OptionalValList );
 
         /// lcm.
-        double getLcm(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] sequence< sequence<double> > ValList );
+        double getLcm( [in] sequence< sequence< any > > FirstValList, [in] sequence< any > OptionalValList );
 
         /// besseli.
-        double getBesseli(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Num, [in] long Order );
+        double getBesseli( [in] double Num, [in] long Order );
 
         /// besselj.
-        double getBesselj(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Num, [in] long Order );
+        double getBesselj( [in] double Num, [in] long Order );
 
         /// besselk.
-        double getBesselk(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Num, [in] long Order );
+        double getBesselk( [in] double Num, [in] long Order );
 
         /// bessely.
-        double getBessely(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Num, [in] long Order );
+        double getBessely( [in] double Num, [in] long Order );
 
         /// bin2oct.
-        string getBin2oct(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string BinaryNum, [in] long nPlaces );
+        string getBin2oct( [in] string BinaryNum, [in] long nPlaces );
 
         /// bin2dec.
-        double getBin2dec(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string BinaryNum );
+        double getBin2dec( [in] string BinaryNum );
 
         /// bin2hex.
-        string getBin2hex(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string BinaryNum, [in] long nPlaces );
+        string getBin2hex( [in] string BinaryNum, [in] long nPlaces );
 
         /// oct2bin.
-        string getOct2bin(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string OctalNum, [in] long nPlaces );
+        string getOct2bin( [in] string OctalNum, [in] long nPlaces );
 
         /// oct2dec.
-        double getOct2dec(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string OctalNum );
+        double getOct2dec( [in] string OctalNum );
 
         /// oct2hex.
-        string getOct2hex(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string OctalNum, [in] long nPlaces );
+        string getOct2hex( [in] string OctalNum, [in] long nPlaces );
 
         /// dec2bin.
-        string getDec2bin(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long Value, [in] long nPlaces );
+        string getDec2bin( [in] long Value, [in] long nPlaces );
 
         /// dec2oct.
-        string getDec2oct(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long Value, [in] long nPlaces );
+        string getDec2oct( [in] long Value, [in] long nPlaces );
 
         /// dec2hex.
-        string getDec2hex(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Value, [in] long nPlaces );
+        string getDec2hex( [in] double Value, [in] long nPlaces );
 
         /// hex2bin.
-        string getHex2bin(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string HexadecimalValue, [in] long nPlaces );
+        string getHex2bin( [in] string HexadecimalValue, [in] long nPlaces );
 
         /// hex2dec.
-        double getHex2dec(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string HexadecimalValue );
+        double getHex2dec( [in] string HexadecimalValue );
 
         /// hex2oct.
-        string getHex2oct(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string HexadecimalValue, [in] long nPlaces );
+        string getHex2oct( [in] string HexadecimalValue, [in] long nPlaces );
 
         /// delta.
-        long getDelta(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Num1, [in] double Num2 );
+        long getDelta( [in] double Num1, [in] double Num2 );
 
         /// erf.
-        double getErf(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double LowerLimit, [in] double UpperLimit );
+        double getErf( [in] double LowerLimit, [in] double UpperLimit );
 
         /// erfc.
-        double getErfc(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double LowerLimit );
+        double getErfc( [in] double LowerLimit );
 
         /// gestep.
-        long getGestep(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Num, [in] double Step );
+        long getGestep( [in] double Num, [in] double Step );
 
         /// factdouble.
-        double getFactdouble(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long Num );
+        double getFactdouble( [in] long Num );
 
         /// imabs.
-        double getImabs(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        double getImabs( [in] string Num );
 
         /// imaginary.
-        double getImaginary(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        double getImaginary( [in] string Num );
 
         /// impower.
-        string getImpower(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num, [in] double Power );
+        string getImpower( [in] string Num, [in] double Power );
 
         /// imargument.
-        double getImargument(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        double getImargument( [in] string Num );
 
         /// imcos.
-        string getImcos(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImcos( [in] string Num );
 
         /// imdiv.
-        string getImdiv(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num1, [in] string Num2 );
+        string getImdiv( [in] string Num1, [in] string Num2 );
 
         /// imexp.
-        string getImexp(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImexp( [in] string Num );
 
         /// imconjugate.
-        string getImconjugate(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImconjugate( [in] string Num );
 
         /// imln.
-        string getImln(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImln( [in] string Num );
 
         /// imlog10.
-        string getImlog10(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImlog10( [in] string Num );
 
         /// imlog2.
-        string getImlog2(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImlog2( [in] string Num );
 
         /// improduct.
-        string getImproduct(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-//                  [in] string Num1, [in] string Num2 );
-                    [in] string Num1, [in] sequence<any> NumberList );
+        string getImproduct( [in] string Num1, [in] sequence<any> NumberList );
 
         /// imreal.
-        double getImreal(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        double getImreal( [in] string Num );
 
         /// imsin.
-        string getImsin(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImsin( [in] string Num );
 
         /// imsub.
-        string getImsub(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num1, [in] string Num2 );
+        string getImsub( [in] string Num1, [in] string Num2 );
 
         /// imsum.
-        string getImsum(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-//                  [in] string Num1, [in] string Num2 );
-                    [in] string Num1, [in] sequence<any> OptNums );
+        string getImsum( [in] string Num1, [in] sequence<any> OptNums );
 
         /// imsqrt.
-        string getImsqrt(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] string Num );
+        string getImsqrt( [in] string Num );
 
         /// complex.
-        string getComplex(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Real, [in] double Imaginary, [in] string Suffix );
+        string getComplex( [in] double Real, [in] double Imaginary, [in] string Suffix );
 
         /// convert.
-        double getConvert(
-                    [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] double Value, [in] string FromUnit, [in] string ToUnit );
+        double getConvert( [in] double Value, [in] string FromUnit, [in] string ToUnit );
 
 
         /// amordegrc.

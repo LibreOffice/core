@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-08 12:20:21 $
+ *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ public:
                             const SEQ( double )& aHDay,
                             sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends ) THROWDEF_RTE_IAE;
     void                InsertHolidayList(
-                            const CSS::uno::Any& aHDay,
+                            const ANY& aHDay,
                             sal_Int32 nNullDate, sal_Bool bInsertAlsoOnWeekends ) THROWDEF_RTE_IAE;
 };
 
@@ -309,6 +309,11 @@ class DoubleList : protected List
 {
 protected:
     inline void             _Append( double fVal );
+    inline void             AppendVoid( sal_Bool bForceErrorOnEmpty ) THROWDEF_RTE_IAE;
+    inline void             AppendDouble( double fVal ) THROWDEF_RTE_IAE;
+    void                    AppendString( const ANY& r, sal_Bool bEmptyStringAs0 ) THROWDEF_RTE_IAE;
+    void                    AppendDouble( const ANY& r ) THROWDEF_RTE_IAE;
+    inline void             AppendAnyArray2( const ANY& r ) THROWDEF_RTE_IAE;
 public:
     virtual                 ~DoubleList();
 
@@ -319,17 +324,18 @@ public:
 
     List::Count;
 
-    inline sal_Bool         Append( double fVal );
-    sal_Bool                Append( const SEQSEQ( double )& aValList );
-                                // return = FALSE if one or more values don't match IsValid()
-                                //  but, even if an error occur, the list might be changed!
-    void                    Append( const SEQ( CSS::uno::Any )& aValList,
+    sal_Bool                Append( double fVal );
+    void                    Append( const SEQSEQ( double )& aValList ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQ( ANY )& aValList,
                                 sal_Bool bEmptyStringAs0 = sal_True,
                                 sal_Bool bForceErrorOnEmpty = sal_False ) THROWDEF_RTE_IAE;
                                 // when bEmptyStringAs0, no empty entry is possible as result ->
                                 //  bForceErrorOnEmpty has no effect, but an exception is thrown,
                                 //  when the string is _not_ empty
                                 // when bForceErrorOnEmpty, no voids and empty strings are allowed
+    void                    Append( const SEQSEQ( ANY )& aValList,
+                                sal_Bool bEmptyStringAs0 = sal_True,
+                                sal_Bool bForceErrorOnEmpty = sal_False ) THROWDEF_RTE_IAE;
     virtual sal_Bool        IsProper( double fVal ) const;
     virtual sal_Bool        IsFaulty( double fVal ) const;
 };
@@ -338,7 +344,17 @@ public:
 
 
 class ChkDoubleList1 : public DoubleList
-{
+{// proper values are > 0.0
+public:
+    virtual sal_Bool        IsProper( double fVal ) const;
+    virtual sal_Bool        IsFaulty( double fVal ) const;
+};
+
+
+
+
+class ChkDoubleList2 : public DoubleList
+{   // proper values are >= 0.0
 public:
     virtual sal_Bool        IsProper( double fVal ) const;
     virtual sal_Bool        IsFaulty( double fVal ) const;
@@ -400,7 +416,7 @@ public:
     inline void             Append( Complex* pNew );
     void                    Append( const SEQSEQ( STRING )& rComplexNumList,
                                     sal_Bool bEmptyStringAs0 = sal_True ) THROWDEF_RTE_IAE;
-    void                    Append( const SEQ( uno::Any )& aMultPars,
+    void                    Append( const SEQ( ANY )& aMultPars,
                                     sal_Bool bEmptyStringAs0 = sal_True ) THROWDEF_RTE_IAE;
 };
 
@@ -591,7 +607,6 @@ inline sal_uInt32 List::Count( void ) const
 
 inline void CStrList::Append( const sal_Char* p )
 {
-//  List::Insert( ( void* ) p, LIST_APPEND );
     List::Append( ( void* ) p );
 }
 
@@ -606,7 +621,6 @@ inline const sal_Char* CStrList::Get( sal_uInt32 n ) const
 
 inline void FuncDataList::Append( FuncData* p )
 {
-//  List::Insert( p, LIST_APPEND );
     List::Append( p );
 }
 
@@ -629,7 +643,6 @@ inline sal_Int32 SortedIndividualInt32List::Get( sal_uInt32 n ) const
 
 inline void DoubleList::_Append( double f )
 {
-//  List::Insert( new double( f ), LIST_APPEND );
     List::Append( new double( f ) );
 }
 
