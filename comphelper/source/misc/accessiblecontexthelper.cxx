@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 05:52:18 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 07:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,9 +234,8 @@ namespace comphelper
                 {
                     e;  // make compiler happy
                     // skip this listener and continue with the next one
+                    ++pLoop;
                 }
-
-                ++pLoop;
             }
         }
     }
@@ -349,6 +348,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/04/26 05:52:18  fs
+ *  #98750# use correct broadcasthelper (in the WeagAggComponentImpl* base)
+ *
  *  Revision 1.1  2002/04/23 11:10:30  fs
  *  initial checkin - helper for implementing an XAccessibleContext
  *
