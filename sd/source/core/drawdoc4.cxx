@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:43:09 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,20 +71,24 @@
 #ifndef _OSPLCFG_HXX
 #include <offmgr/osplcfg.hxx>
 #endif
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif#else
 #ifndef _OUTLINER_HXX //autogen wg. Outliner
 #include <svx/outliner.hxx>
 #endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
 #ifdef MAC
-#include "::ui:inc:docshell.hxx"
+#include "::ui:inc:DrawDocShell.hxx"
 #else
 #ifdef UNX
-#include "../ui/inc/docshell.hxx"
+#include "../ui/inc/DrawDocShell.hxx"
 #else
-#include "..\ui\inc\docshell.hxx"
+#include "..\ui\inc\DrawDocShell.hxx"
+#endif
 #endif
 #endif
 #endif // !SVX_LIGHT
@@ -761,7 +765,7 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
     {
         StopOnlineSpelling();
 
-        SdOutliner* pOutl = GetInternalOutliner(TRUE);
+        ::sd::Outliner* pOutl = GetInternalOutliner(TRUE);
 
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -930,7 +934,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
         bHasOnlineSpellErrors = FALSE;
-        SdOutliner* pOutl = GetInternalOutliner(TRUE);
+        ::sd::Outliner* pOutl = GetInternalOutliner(TRUE);
         pOutl->SetUpdateMode(TRUE);
         Link aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
