@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pointer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:47:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,13 @@ namespace configmgr
         public:
             typedef AddressType RawAddress;
 
-            Pointer() : m_value(NULL) {}
+            Pointer() : m_value(0) {}
             explicit Pointer(AddressType p) : m_value(p) {}
 
             RawAddress value() const { return m_value; }
 
-            bool isNull()   const { return m_value == NULL; }
-            bool is()       const { return m_value != NULL; }
+            bool isNull()   const { return m_value == 0; }
+            bool is()       const { return m_value != 0; }
 
             operator Opaque_ const * () const { return reinterpret_cast<Opaque_ const *>(m_value); }
 
