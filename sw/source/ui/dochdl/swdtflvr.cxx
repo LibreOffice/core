@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:23:42 $
+ *  last change: $Author: dvo $ $Date: 2002-09-16 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,6 +763,9 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             SwAsciiOptions aAOpt;
             aAOpt.SetCharSet( RTL_TEXTENCODING_UTF8 );
             xWrt->SetAsciiOptions( aAOpt );
+
+            // #102841# no start char for clipboard
+            xWrt->bUCS2_WithStartChar = FALSE;
         }
         break;
     }
