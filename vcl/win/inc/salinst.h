@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:48:59 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@ public:
     virtual void                AcquireYieldMutex( ULONG nCount );
     virtual void                Yield( BOOL bWait );
     virtual bool                AnyInput( USHORT nType );
+    virtual SalMenu*                CreateMenu( BOOL bMenuBar );
+    virtual void                DestroyMenu( SalMenu* );
+    virtual SalMenuItem*            CreateMenuItem( const SalItemParams* pItemData );
+    virtual void                DestroyMenuItem( SalMenuItem* );
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:58:07 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,25 +75,25 @@
 
 // =======================================================================
 
-// SalInst factory methods
+// X11SalInst factory methods
 
-SalMenu* SalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* X11SalInstance::CreateMenu( BOOL bMenuBar )
 {
     return NULL;  // no support for native menues
 }
 
-void SalInstance::DestroyMenu( SalMenu* pSalMenu )
+void X11SalInstance::DestroyMenu( SalMenu* pSalMenu )
 {
     delete pSalMenu;
 }
 
 
-SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* pItemData )
+SalMenuItem* X11SalInstance::CreateMenuItem( const SalItemParams* pItemData )
 {
     return NULL;  // no support for native menues
 }
 
-void SalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
+void X11SalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 {
     delete pSalMenuItem;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:37:43 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,8 @@ public:
 
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetMenu( SalMenu* pMenu );
+    virtual void                                DrawMenuBar();
 
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
     virtual void                Enable( BOOL bEnable );

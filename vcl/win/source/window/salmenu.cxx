@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:58:57 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,9 @@ static DWORD myerr=0;
 
 // =======================================================================
 
-// SalInst factory methods
+// WinSalInst factory methods
 
-SalMenu* SalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar )
 {
     SalMenu *pSalMenu = new SalMenu();
 
@@ -118,13 +118,13 @@ SalMenu* SalInstance::CreateMenu( BOOL bMenuBar )
     return pSalMenu;
 }
 
-void SalInstance::DestroyMenu( SalMenu* pSalMenu )
+void WinSalInstance::DestroyMenu( SalMenu* pSalMenu )
 {
     delete pSalMenu;
 }
 
 
-SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* pItemData )
+SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 {
     if( !pItemData )
         return NULL;
@@ -167,7 +167,7 @@ SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* pItemData )
     return pSalMenuItem;
 }
 
-void SalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
+void WinSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 {
     delete pSalMenuItem;
 }
