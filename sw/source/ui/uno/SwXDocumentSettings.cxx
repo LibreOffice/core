@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 21:45:07 $
+ *  last change: $Author: mtg $ $Date: 2001-08-14 14:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,15 +310,20 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_PRINTER_NAME:
         {
             //the printer must be created
-            SfxPrinter *pPrinter = mpDoc->GetPrt ( sal_True );
             OUString sPrinterName;
             if (rValue >>= sPrinterName )
             {
-                SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                if (pNewPrinter->IsKnown())
-                    mpDoc->SetPrt ( pNewPrinter );
-                else
-                    delete pNewPrinter;
+                SfxPrinter *pPrinter = mpDoc->GetPrt();
+                if ( !pPrinter )
+                    pPrinter = mpDoc->GetPrt ( sal_True );
+                if ( OUString ( pPrinter->GetName()) != sPrinterName )
+                {
+                    SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                    if (pNewPrinter->IsKnown())
+                        mpDoc->SetPrt ( pNewPrinter, sal_False );
+                    else
+                        delete pNewPrinter;
+                }
             }
             else
                 throw IllegalArgumentException();
@@ -343,7 +348,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
                 SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
-                mpDoc->SetPrt( pPrinter );
+                mpDoc->SetPrt( pPrinter, sal_False );
 
                 if ( !pPrinter->IsOriginal() )
                 {
