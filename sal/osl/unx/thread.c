@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-08 21:03:19 $
+ *  last change: $Author: obr $ $Date: 2001-04-11 11:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,13 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/signal.h>
+#include <osl/mutex.h>
+#include <osl/nlsupport.h>
 
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
 #endif
 
-
-/* MFE: just for the encoding stuff */
-
-#include <rtl/memory.h>
-#include <rtl/string.h>
-#include <rtl/tencinfo.h>
-#include <locale.h>
-#if !(defined(MACOSX) || defined(FREEBSD))
-#include <langinfo.h>
-#endif
 #ifdef FREEBSD
 #include<string.h>
 #endif
@@ -1110,647 +1102,60 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     return (pthread_setspecific((pthread_key_t)Key, pData) == 0);
 }
 
+/* the key to store the thread local text encoding in */
+static pthread_key_t gTextEncodingKey = -1;
 
-
-/*
- *   MFE :
- *   And now ... the beautyful textencoding functions
- *   absolutely in the right place (grrr ...)
- */
-
-/*
- *  FIXME: this has to be merged, better transfered, with/from the tools
- *         (but to the RIGHT place!!!
- */
-
-
-static rtl_TextEncoding eImplCharSet = RTL_TEXTENCODING_DONTKNOW;
-static rtl_TextEncoding eImplDefaultCharSet = RTL_TEXTENCODING_MS_1252;
-
-#if defined(SCO)
-static rtl_TextEncoding GetSystemCharSetFromSystemLanguage();
-static rtl_TextEncoding GetSystemCharSetFromLocale( const char* pLocaleString );
-static rtl_TextEncoding GetSystemCharSetFromEnvironment();
-#endif /* if def SCO */
-
-#ifdef UNX
-
-typedef struct {
-    const char              *key;
-    const rtl_TextEncoding   value;
-} _pair;
-
-rtl_TextEncoding GetSystemCharsetFromNLLanginfo();
-static int _pair_compare (const char *key, const _pair *pair);
-static const _pair* _pair_search (const char *key, const _pair *base, unsigned int member );
-#endif
-
-
-static void osl_setSystemTextEncoding( rtl_TextEncoding eEncoding );
-static rtl_TextEncoding osl_getSystemTextEncoding();
-static int _pair_compare (const char *key, const _pair *pair);
-static const _pair* _pair_search (const char *key, const _pair *base, unsigned int member );
+/* save the default text encoding here */
+static rtl_TextEncoding gDefaultEncoding = RTL_TEXTENCODING_DONTKNOW;
 
 /*****************************************************************************/
 /* osl_getThreadTextEncoding */
 /*****************************************************************************/
 rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
 {
-    rtl_TextEncoding Encoding;
-    Encoding =  osl_getSystemTextEncoding();
-/*    OSL_TRACE("osl_getThreadTextEncoding : returning  '%i",Encoding);*/
-    return Encoding;
+    rtl_TextEncoding threadEncoding;
+
+    /* check if thread key exists */
+    if( -1 == gTextEncodingKey )
+    {
+        rtl_TextEncoding defaultEncoding = osl_getTextEncodingFromLocale( NULL );
+        oslMutex         globalMutex = *osl_getGlobalMutex();
+
+        /* creation of thread key must be thread save */
+        osl_acquireMutex( globalMutex );
+
+        if( -1 == gTextEncodingKey )
+        {
+            /* create thread key */
+            if( 0 != pthread_key_create( &gTextEncodingKey, NULL ) )
+                gTextEncodingKey = -1;
+
+            /* initialize the default encoding here too */
+            gDefaultEncoding = defaultEncoding;
+        }
+
+        osl_releaseMutex( globalMutex );
+    }
+
+    /* check if thread specific encoding is set */
+    threadEncoding = (rtl_TextEncoding) pthread_getspecific( gTextEncodingKey );
+
+    if( 0 == threadEncoding )
+        threadEncoding = gDefaultEncoding;
+
+    return threadEncoding;
 }
 
 
 /*****************************************************************************/
 /* osl_setThreadTextEncoding */
-/***c**************************************************************************/
+/*****************************************************************************/
 rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
 {
-    rtl_TextEncoding aOldEncoding = eImplCharSet;
-    osl_setSystemTextEncoding(Encoding);
+    rtl_TextEncoding oldThreadEncoding = osl_getThreadTextEncoding();
 
-    return aOldEncoding;
-}
+    /* save encoding in thread local storage */
+    pthread_setspecific( gTextEncodingKey, (void *) Encoding );
 
-
-static void osl_setSystemTextEncoding( rtl_TextEncoding eEncoding )
-{
-    eImplCharSet = eEncoding;
-}
-
-static rtl_TextEncoding osl_getSystemTextEncoding()
-{
-    rtl_TextEncoding nTextEncoding;
-
-    if ( eImplCharSet == RTL_TEXTENCODING_DONTKNOW )
-    {
-        const char* pName = getenv("LC_CHARSET");
-        if ( pName )
-        {
-            eImplCharSet = rtl_getTextEncodingFromUnixCharset( pName );
-            OSL_TRACE("osl_getSystemTextEncoding : encoding is '%i'",eImplCharSet);
-            if ( eImplCharSet != RTL_TEXTENCODING_DONTKNOW )
-                return eImplCharSet;
-        }
-
-
-#if defined(SCO)
-        nTextEncoding = GetSystemCharSetFromEnvironment();
-        if (nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
-            nTextEncoding = GetSystemCharSetFromSystemLanguage();
-#elif defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD)
-        nTextEncoding = GetSystemCharsetFromNLLanginfo();
-#elif defined(MACOSX)
-        nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
-#endif
-        if ( nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
-            nTextEncoding = RTL_TEXTENCODING_ISO_8859_1;
-        eImplCharSet = nTextEncoding;
-
-        OSL_TRACE("osl_getSystemTextEncoding is now '%i'",eImplCharSet);
-
-#ifdef MAC
-#error "Now we need a implementation on the mac, because we support now more charsets"
-#endif
-    }
-
-    if ( eImplCharSet == RTL_TEXTENCODING_DONTKNOW )
-        return eImplDefaultCharSet;
-    else
-        return eImplCharSet;
-}
-
-
-#if defined(SCO)
-
-/*
- *  gather from system language to what charset may adequate,
- *  in general only simple languages are taken into concern.
- *  but chinese and chinese-traditional are distinguished
- */
-
-static rtl_TextEncoding GetSystemCharSetFromSystemLanguage()
-{
-    #define LANGUAGE_NULL LANGUAGE_NONE
-    struct LanguagePool
-    {
-        const CharSet       nCharSet;  /* charset which belongs to planguage */
-        const LanguageType *pLanguage; /* list of langs, */
-                                       /* terminate with language_null */
-    };
-
-    const LanguageType pLangISO_8859_1 [] = {
-        LANGUAGE_AFRIKAANS, LANGUAGE_BASQUE,    LANGUAGE_CATALAN,
-        LANGUAGE_DANISH,    LANGUAGE_DUTCH,     LANGUAGE_ENGLISH,
-        LANGUAGE_FINNISH,   LANGUAGE_FAEROESE,  LANGUAGE_FRENCH,
-        LANGUAGE_GERMAN,    LANGUAGE_ICELANDIC, LANGUAGE_ITALIAN,
-        LANGUAGE_NORWEGIAN, LANGUAGE_PORTUGUESE,LANGUAGE_SPANISH,
-        LANGUAGE_SWEDISH,   LANGUAGE_NULL
-    };
-    const LanguageType pLangISO_8859_2 [] = {
-        LANGUAGE_ALBANIAN,  LANGUAGE_CROATIAN,  LANGUAGE_CZECH,
-        LANGUAGE_HUNGARIAN, LANGUAGE_POLISH,    LANGUAGE_ROMANIAN,
-        LANGUAGE_SLOVAK,    LANGUAGE_SLOVENIAN, LANGUAGE_NULL
-    };
-    const LanguageType pLangISO_8859_4 [] = {
-        LANGUAGE_ESTONIAN,  LANGUAGE_LATVIAN,   LANGUAGE_LITHUANIAN,
-        LANGUAGE_NULL
-    };
-    const LanguageType pLangISO_8859_5 [] = {
-        LANGUAGE_BELARUSIAN,LANGUAGE_BULGARIAN, LANGUAGE_MACEDONIAN,
-        LANGUAGE_RUSSIAN,   LANGUAGE_UKRAINIAN, LANGUAGE_NULL
-    };
-    const LanguageType pLangISO_8859_6 [] = {
-        LANGUAGE_ARABIC,    LANGUAGE_FARSI,     LANGUAGE_NULL
-    };
-    const LanguageType pLangISO_8859_7 [] = {
-        LANGUAGE_GREEK,     LANGUAGE_NULL
-    };
-    const LanguageType pLangISO_8859_8 [] = {
-        LANGUAGE_HEBREW,    LANGUAGE_NULL
-    };
-    const LanguageType pLangISO_8859_9 [] = {
-        LANGUAGE_TURKISH,   LANGUAGE_NULL
-    };
-    const LanguageType pLangJapaneseEUC [] = {
-        LANGUAGE_JAPANESE,  LANGUAGE_NULL
-    };
-    const LanguageType pLangChineseEUC [] = {
-        LANGUAGE_CHINESE,   LANGUAGE_NULL
-    };
-    const LanguageType pLangTaiwanese [] = {
-        LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_NULL
-    };
-#if (0)
-    const LanguageType pTheseLangIDontKnow [] = {
-        LANGUAGE_INDONESIAN,LANGUAGE_KOREAN, LANGUAGE_KOREAN_JOHAB,
-        LANGUAGE_THAI,      LANGUAGE_VIETNAMESE,
-        LANGUAGE_MALAY,     LANGUAGE_RHAETO_ROMAN,
-        LANGUAGE_SORBIAN,   LANGUAGE_URDU
-    };
-#endif
-
-    const LanguagePool aLanguagePool [] = {
-        { RTL_TEXTENCODING_ISO_8859_1,  pLangISO_8859_1     },
-        { RTL_TEXTENCODING_ISO_8859_2,  pLangISO_8859_2     },
-        { RTL_TEXTENCODING_ISO_8859_4,  pLangISO_8859_4     },
-        { RTL_TEXTENCODING_ISO_8859_5,  pLangISO_8859_5     },
-        { RTL_TEXTENCODING_ISO_8859_6,  pLangISO_8859_6     },
-        { RTL_TEXTENCODING_ISO_8859_7,  pLangISO_8859_7     },
-        { RTL_TEXTENCODING_ISO_8859_8,  pLangISO_8859_8     },
-        { RTL_TEXTENCODING_ISO_8859_9,  pLangISO_8859_9     },
-        { RTL_TEXTENCODING_EUC_CN,      pLangChineseEUC     },
-        { RTL_TEXTENCODING_EUC_JP,      pLangJapaneseEUC    },
-        { RTL_TEXTENCODING_EUC_TW,      pLangTaiwanese      }
-    };
-
-    /* get the system language, be indefferent to cultural finenesses */
-    LanguageType nFullLanguage    = GetSystemLanguage(
-                                                INTERNATIONAL_SYSTEM_DEFAULT );
-    LanguageType nSimpleLanguage  = nFullLanguage;
-    if ( nSimpleLanguage != LANGUAGE_CHINESE_TRADITIONAL )
-        nSimpleLanguage = International::GetNeutralLanguage( nFullLanguage );
-
-    /* loop through the list of language lists */
-    /* and try to match the system language */
-    const int nPoolElements = sizeof(aLanguagePool) / sizeof(LanguagePool);
-    for ( int i = 0; i < nPoolElements; i++ )
-    {
-        for (int j = 0; aLanguagePool[ i ].pLanguage[ j ] != LANGUAGE_NULL; j++)
-        {
-            if ( aLanguagePool[ i ].pLanguage[ j ] == nSimpleLanguage )
-                return aLanguagePool[ i ].nCharSet;
-        }
-    }
-
-    return RTL_TEXTENCODING_DONTKNOW;
-}
-
-/*
- *  check if there is a charset qualifier at the end of the given locale string
- *  e.g. de.ISO8859-15 or de.ISO8859-15@euro which strongly indicates what
- *  charset to use
- */
-static rtl_TextEncoding GetSystemCharSetFromLocale( const char* pLocaleString )
-{
-    struct LocaleExtension {
-        const sal_Char*         pName;
-        const int               nNameLen;
-        const rtl_TextEncoding  nCharSet;
-    };
-
-    #define RTL_TEXTENCODING_EUC RTL_TEXTENCODING_EUC_JP
-    LocaleExtension const pLocaleExtension[] = {
-        { "iso8859-15", sizeof("iso8859-15")- 1, RTL_TEXTENCODING_ISO_8859_15 },
-        { "iso8859-1",  sizeof("iso8859-1") - 1, RTL_TEXTENCODING_ISO_8859_1  },
-        { "iso8859-2",  sizeof("iso8859-2") - 1, RTL_TEXTENCODING_ISO_8859_2  },
-        { "iso8859-3",  sizeof("iso8859-3") - 1, RTL_TEXTENCODING_ISO_8859_3  },
-        { "iso8859-4",  sizeof("iso8859-4") - 1, RTL_TEXTENCODING_ISO_8859_4  },
-        { "iso8859-5",  sizeof("iso8859-5") - 1, RTL_TEXTENCODING_ISO_8859_5  },
-        { "iso8859-6",  sizeof("iso8859-6") - 1, RTL_TEXTENCODING_ISO_8859_6  },
-        { "iso8859-7",  sizeof("iso8859-7") - 1, RTL_TEXTENCODING_ISO_8859_7  },
-        { "iso8859-8",  sizeof("iso8859-8") - 1, RTL_TEXTENCODING_ISO_8859_8  },
-        { "iso8859-9",  sizeof("iso8859-9") - 1, RTL_TEXTENCODING_ISO_8859_9  },
-        { "utf-7",      sizeof("utf-7")     - 1, RTL_TEXTENCODING_UTF7      },
-        { "utf-8",      sizeof("utf-8")     - 1, RTL_TEXTENCODING_UTF8      },
-        { "utf-16",     sizeof("utf-16")    - 1, RTL_TEXTENCODING_UNICODE   },
-        { "euc",        sizeof("euc")       - 1, RTL_TEXTENCODING_EUC       },
-        { "pck",        sizeof("pck")       - 1, RTL_TEXTENCODING_MS_932    },
-        { "koi8-r",     sizeof("koi8-r")    - 1, RTL_TEXTENCODING_KOI8_R    },
-        { "big5",       sizeof("big5")      - 1, RTL_TEXTENCODING_BIG5      },
-#if (0)
-        { "sun_eu_greek",sizeof("sun_eu_greek")-1, RTL_TEXTENCODING_DONTKNOW },
-#endif
-        { NULL,         0,                       RTL_TEXTENCODING_DONTKNOW  }
-    };
-
-    /* get the charset qualifier */
-    const char* pLocaleCharset;
-    pLocaleCharset = strchr( pLocaleString, '.' );
-    if ( pLocaleCharset == NULL || *(++pLocaleCharset) == '\0' )
-        return RTL_TEXTENCODING_DONTKNOW;
-
-    /* loop through the list, */
-    /* compare the charset qualifier with the pName list member */
-    for ( int i = 0; pLocaleExtension[ i ].pName != NULL; i++ )
-    {
-        if ( strncasecmp(pLocaleExtension[ i ].pName, pLocaleCharset,
-                         pLocaleExtension[ i ].nNameLen) == 0 )
-        {
-            if ( pLocaleExtension[ i ].nCharSet != RTL_TEXTENCODING_EUC )
-            {
-                /* direct match */
-                return pLocaleExtension[ i ].nCharSet;
-            }
-            else
-            {
-                /* special handling for japanese/chinese/thaiwanese euc */
-                LanguageType nSimpleLanguage;
-
-                nSimpleLanguage = GetSystemLanguage();
-                if ( nSimpleLanguage != LANGUAGE_CHINESE_TRADITIONAL )
-                    nSimpleLanguage = International::GetNeutralLanguage( nSimpleLanguage );
-                if ( nSimpleLanguage == LANGUAGE_CHINESE_TRADITIONAL )
-                    return RTL_TEXTENCODING_EUC_TW;
-                if ( nSimpleLanguage == LANGUAGE_CHINESE )
-                    return RTL_TEXTENCODING_EUC_CN;
-                if ( nSimpleLanguage == LANGUAGE_JAPANESE )
-                    return RTL_TEXTENCODING_EUC_JP;
-            }
-        }
-    }
-
-    /* nothing valid found */
-    return RTL_TEXTENCODING_DONTKNOW;
-}
-
-/* evaluate the environment to guess what charset to choose */
-
-static rtl_TextEncoding GetSystemCharSetFromEnvironment()
-{
-    const char* pEnvironmentPtr;
-
-    /*
-     *  check for encoding specification in public environment
-     *  variables lc_ctype or lang, this does not check language itself
-     *  but any charset extension
-     */
-    pEnvironmentPtr = getenv( "LANG" );
-    if ( pEnvironmentPtr == NULL )
-        pEnvironmentPtr = getenv( "LC_CTYPE" );
-    if ( pEnvironmentPtr == NULL )
-        return RTL_TEXTENCODING_DONTKNOW;
-    return GetSystemCharSetFromLocale( pEnvironmentPtr );
-}
-
-#endif /* ifdef NETBSD || SCO */
-
-
-
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD)
-
-/*
- * rtl_getTextEncodingFromLanguage maps from nl_langinfo(CODESET) to
- * rtl_textencoding defines. nl_langinfo() is supported only on Linux
- * and Solaris. This routine is SLOW because of the setlocale call, so
- * grab the result and cache it.
- * XXX this code has the usual mt problems aligned with setlocale() XXX
- */
-
-#ifdef LINUX
-#if !defined(CODESET)
-#define CODESET _NL_CTYPE_CODESET_NAME
-#endif
-#endif
-
-
-#if defined(SOLARIS)
-
-const _pair _nl_language_list[] = {
-    { "5601",           RTL_TEXTENCODING_EUC_KR         }, /* ko_KR.EUC */
-    { "646",            RTL_TEXTENCODING_ISO_8859_1     }, /* fake: ASCII_US */
-    { "ANSI-1251",      RTL_TEXTENCODING_MS_1251        }, /* ru_RU.ANSI1251 */
-    { "BIG5",           RTL_TEXTENCODING_BIG5           },
-    { "CNS11643",       RTL_TEXTENCODING_EUC_TW         }, /* zh_TW.EUC */
-    { "EUCJP",          RTL_TEXTENCODING_EUC_JP         },
-    { "GB2312",         RTL_TEXTENCODING_EUC_CN         }, /* zh_CN.EUC */
-    { "GBK",            RTL_TEXTENCODING_GBK            }, /* zh_CN.GBK */
-    { "ISO8859-1",      RTL_TEXTENCODING_ISO_8859_1     },
-    { "ISO8859-13",     RTL_TEXTENCODING_DONTKNOW       }, /* lt_LT lv_LV */
-    { "ISO8859-14",     RTL_TEXTENCODING_ISO_8859_14    },
-    { "ISO8859-15",     RTL_TEXTENCODING_ISO_8859_15    },
-    { "ISO8859-2",      RTL_TEXTENCODING_ISO_8859_2     },
-    { "ISO8859-3",      RTL_TEXTENCODING_ISO_8859_3     },
-    { "ISO8859-4",      RTL_TEXTENCODING_ISO_8859_4     },
-    { "ISO8859-5",      RTL_TEXTENCODING_ISO_8859_5     },
-    { "ISO8859-6",      RTL_TEXTENCODING_ISO_8859_6     },
-    { "ISO8859-7",      RTL_TEXTENCODING_ISO_8859_7     },
-    { "ISO8859-8",      RTL_TEXTENCODING_ISO_8859_8     },
-    { "ISO8859-9",      RTL_TEXTENCODING_ISO_8859_9     },
-    { "KOI8-R",         RTL_TEXTENCODING_KOI8_R         },
-    { "PCK",            RTL_TEXTENCODING_MS_932         },
-    { "SUN_EU_GREEK",   RTL_TEXTENCODING_ISO_8859_7     }, /* 8859-7 + Euro */
-    { "TIS620.2533",    RTL_TEXTENCODING_MS_874         }, /* th_TH.TIS620 */
-    { "UTF-8",          RTL_TEXTENCODING_UTF8           }
-};
-
-/* XXX MS-874 is an extension to tis620, so this is not
- * really equivalent */
-
-#elif defined(LINUX) || defined(NETBSD) || defined(FREEBSD)
-
-const _pair _nl_language_list[] = {
-    { "ANSI_X3.110-1983",   RTL_TEXTENCODING_DONTKNOW },/* ISO-IR-99 NAPLPS */
-    { "ANSI_X3.4-1968", RTL_TEXTENCODING_ISO_8859_1 },  /* fake: ASCII_US */
-    { "ASMO_449",       RTL_TEXTENCODING_DONTKNOW },    /* ISO_9036 ARABIC7 */
-    { "BALTIC",         RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 */
-    { "BS_4730",        RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-4 ISO646-GB */
-    { "BS_VIEWDATA",    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-47 */
-    { "CP1250",         RTL_TEXTENCODING_MS_1250 },     /* MS-EE */
-    { "CP1251",         RTL_TEXTENCODING_MS_1251 },     /* MS-CYRL */
-    { "CP1252",         RTL_TEXTENCODING_MS_1252 },     /* MS-ANSI */
-    { "CP1253",         RTL_TEXTENCODING_MS_1253 },     /* MS-GREEK */
-    { "CP1254",         RTL_TEXTENCODING_MS_1254 },     /* MS-TURK */
-    { "CP1255",         RTL_TEXTENCODING_MS_1255 },     /* MS-HEBR */
-    { "CP1256",         RTL_TEXTENCODING_MS_1256 },     /* MS-ARAB */
-    { "CP1257",         RTL_TEXTENCODING_MS_1257 },     /* WINBALTRIM */
-    { "CSA_Z243.4-1985-1",  RTL_TEXTENCODING_DONTKNOW },/* ISO-IR-121 */
-    { "CSA_Z243.4-1985-2",  RTL_TEXTENCODING_DONTKNOW },/* ISO-IR-122 CSA7-2 */
-    { "CSA_Z243.4-1985-GR", RTL_TEXTENCODING_DONTKNOW },/* ISO-IR-123 */
-    { "CSN_369103",     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-139 */
-    { "CWI",            RTL_TEXTENCODING_DONTKNOW },    /* CWI-2 CP-HU */
-    { "DEC-MCS",        RTL_TEXTENCODING_DONTKNOW },    /* DEC */
-    { "DIN_66003",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-21 */
-    { "DS_2089",        RTL_TEXTENCODING_DONTKNOW },    /* DS2089 ISO646-DK */
-    { "EBCDIC-AT-DE",   RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-AT-DE-A", RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-CA-FR",   RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-DK-NO",   RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-DK-NO-A", RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-ES",      RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-ES-A",    RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-ES-S",    RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-FI-SE",   RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-FI-SE-A", RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-FR",      RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-IS-FRISS",    RTL_TEXTENCODING_DONTKNOW },/*  FRISS */
-    { "EBCDIC-IT",      RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-PT",      RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-UK",      RTL_TEXTENCODING_DONTKNOW },
-    { "EBCDIC-US",      RTL_TEXTENCODING_DONTKNOW },
-    { "ECMA-CYRILLIC",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-111 */
-    { "ES",             RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-17 */
-    { "ES2",            RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-85 */
-    { "GB_1988-80",     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-57 */
-    { "GOST_19768-74",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-153 */
-    { "GREEK-CCITT",    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-150 */
-    { "GREEK7",         RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-88 */
-    { "GREEK7-OLD",     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-18 */
-    { "HP-ROMAN8",      RTL_TEXTENCODING_DONTKNOW },    /* ROMAN8 R8 */
-    { "IBM037",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-[US|CA|WT] */
-    { "IBM038",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-INT CP038 */
-    { "IBM1004",        RTL_TEXTENCODING_DONTKNOW },    /* CP1004 OS2LATIN1 */
-    { "IBM1026",        RTL_TEXTENCODING_DONTKNOW },    /* CP1026 1026 */
-    { "IBM1047",        RTL_TEXTENCODING_DONTKNOW },    /* CP1047 1047 */
-    { "IBM256",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-INT1 */
-    { "IBM273",         RTL_TEXTENCODING_DONTKNOW },    /* CP273 */
-    { "IBM274",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-BE CP274 */
-    { "IBM275",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-BR CP275 */
-    { "IBM277",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-CP-[DK|NO] */
-    { "IBM278",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-CP-[FISE]*/
-    { "IBM280",         RTL_TEXTENCODING_DONTKNOW },    /* CP280 EBCDIC-CP-IT*/
-    { "IBM281",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-JP-E CP281 */
-    { "IBM284",         RTL_TEXTENCODING_DONTKNOW },    /* CP284 EBCDIC-CP-ES */
-    { "IBM285",         RTL_TEXTENCODING_DONTKNOW },    /* CP285 EBCDIC-CP-GB */
-    { "IBM290",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-JP-KANA */
-    { "IBM297",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-CP-FR */
-    { "IBM420",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-CP-AR1 */
-    { "IBM423",         RTL_TEXTENCODING_DONTKNOW },    /* CP423 EBCDIC-CP-GR */
-    { "IBM424",         RTL_TEXTENCODING_DONTKNOW },    /* CP424 EBCDIC-CP-HE */
-    { "IBM437",         RTL_TEXTENCODING_IBM_437 },     /* CP437 437 */
-    { "IBM500",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-CP-[BE|CH] */
-    { "IBM850",         RTL_TEXTENCODING_IBM_850 },     /* CP850 850 */
-    { "IBM851",         RTL_TEXTENCODING_DONTKNOW },    /* CP851 851 */
-    { "IBM852",         RTL_TEXTENCODING_IBM_852 },     /* CP852 852 */
-    { "IBM855",         RTL_TEXTENCODING_IBM_855 },     /* CP855 855 */
-    { "IBM857",         RTL_TEXTENCODING_IBM_857 },     /* CP857 857 */
-    { "IBM860",         RTL_TEXTENCODING_IBM_860 },     /* CP860 860 */
-    { "IBM861",         RTL_TEXTENCODING_IBM_861 },     /* CP861 861 CP-IS */
-    { "IBM862",         RTL_TEXTENCODING_IBM_862 },     /* CP862 862 */
-    { "IBM863",         RTL_TEXTENCODING_IBM_863 },     /* CP863 863 */
-    { "IBM864",         RTL_TEXTENCODING_IBM_864 },     /* CP864 */
-    { "IBM865",         RTL_TEXTENCODING_IBM_865 },     /* CP865 865 */
-    { "IBM866",         RTL_TEXTENCODING_IBM_866 },     /* CP866 866 */
-    { "IBM868",         RTL_TEXTENCODING_DONTKNOW },    /* CP868 CP-AR */
-    { "IBM869",         RTL_TEXTENCODING_IBM_869 },     /* CP869 869 CP-GR */
-    { "IBM870",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-[ROECE|YU] */
-    { "IBM871",         RTL_TEXTENCODING_DONTKNOW },    /* CP871 EBCDIC-CP-IS */
-    { "IBM875",         RTL_TEXTENCODING_DONTKNOW },    /* CP875 EBCDIC-GREEK */
-    { "IBM880",         RTL_TEXTENCODING_DONTKNOW },    /* EBCDIC-CYRILLIC */
-    { "IBM891",         RTL_TEXTENCODING_DONTKNOW },    /* CP891 */
-    { "IBM903",         RTL_TEXTENCODING_DONTKNOW },    /* CP903 */
-    { "IBM904",         RTL_TEXTENCODING_DONTKNOW },    /* CP904 904 */
-    { "IBM905",         RTL_TEXTENCODING_DONTKNOW },    /* CP905 EBCDIC-CP-TR */
-    { "IBM918",         RTL_TEXTENCODING_DONTKNOW },    /* CP918 EBCDIC-AR2 */
-    { "IEC_P27-1",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-143 */
-    { "INIS",           RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-49 */
-    { "INIS-8",         RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-50 */
-    { "INIS-CYRILLIC",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-51 */
-    { "INVARIANT",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-170 */
-    { "ISO-8859-1",     RTL_TEXTENCODING_ISO_8859_1 },  /* ISO-IR-100 CP819 */
-    { "ISO-8859-10",    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-157 LATIN6 */
-    { "ISO-8859-13",    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 LATIN7 */
-    { "ISO-8859-14",    RTL_TEXTENCODING_ISO_8859_14 }, /* LATIN8 L8 */
-    { "ISO-8859-15",    RTL_TEXTENCODING_ISO_8859_15 },
-    { "ISO-8859-2",     RTL_TEXTENCODING_ISO_8859_2 },  /* LATIN2 L2 */
-    { "ISO-8859-3",     RTL_TEXTENCODING_ISO_8859_3 },  /* LATIN3 L3 */
-    { "ISO-8859-4",     RTL_TEXTENCODING_ISO_8859_4 },  /* LATIN4 L4 */
-    { "ISO-8859-5",     RTL_TEXTENCODING_ISO_8859_5 },  /* CYRILLIC */
-    { "ISO-8859-6",     RTL_TEXTENCODING_ISO_8859_6 },  /* ECMA-114 ARABIC */
-    { "ISO-8859-7",     RTL_TEXTENCODING_ISO_8859_7 },  /* ECMA-118 GREEK8 */
-    { "ISO-8859-8",     RTL_TEXTENCODING_ISO_8859_8 },  /* ISO_8859-8 HEBREW */
-    { "ISO-8859-9",     RTL_TEXTENCODING_ISO_8859_9 },  /* ISO_8859-9 LATIN5 */
-    { "ISO-IR-90",      RTL_TEXTENCODING_DONTKNOW },    /* ISO_6937-2:1983 */
-    { "ISO_10367-BOX",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-155 */
-    { "ISO_2033-1983",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-98 E13B */
-    { "ISO_5427",       RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-37 KOI-7 */
-    { "ISO_5427-EXT",   RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-54  */
-    { "ISO_5428",       RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-55 */
-    { "ISO_646.BASIC",  RTL_TEXTENCODING_ASCII_US },    /* REF */
-    { "ISO_646.IRV",    RTL_TEXTENCODING_ASCII_US },    /* ISO-IR-2 IRV */
-    { "ISO_646.IRV:1983",   RTL_TEXTENCODING_ISO_8859_1 },/* fake: ASCII_US,
-                                                           used for "C" locale*/
-    { "ISO_6937",       RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-156 ISO6937*/
-    { "ISO_6937-2-25",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-152 */
-    { "ISO_6937-2-ADD", RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-142 */
-    { "ISO_8859-SUPP",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-154 */
-    { "IT",             RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-15  */
-    { "JIS_C6220-1969-JP",  RTL_TEXTENCODING_DONTKNOW },/* KATAKANA X0201-7 */
-    { "JIS_C6220-1969-RO",  RTL_TEXTENCODING_DONTKNOW }, /* ISO-IR-14 */
-    { "JIS_C6229-1984-A",   RTL_TEXTENCODING_DONTKNOW }, /* ISO-IR-91 */
-    { "JIS_C6229-1984-B",   RTL_TEXTENCODING_DONTKNOW }, /* ISO-IR-92 */
-    { "JIS_C6229-1984-B-ADD",   RTL_TEXTENCODING_DONTKNOW }, /* ISO-IR-93 */
-    { "JIS_C6229-1984-HAND",    RTL_TEXTENCODING_DONTKNOW }, /* ISO-IR-94 */
-    { "JIS_C6229-1984-HAND-ADD",RTL_TEXTENCODING_DONTKNOW }, /* ISO-IR-95 */
-    { "JIS_C6229-1984-KANA",    RTL_TEXTENCODING_DONTKNOW }, /* ISO-IR-96 */
-    { "JIS_X0201",      RTL_TEXTENCODING_DONTKNOW },    /* X0201 */
-    { "JUS_I.B1.002",   RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-141 */
-    { "JUS_I.B1.003-MAC",   RTL_TEXTENCODING_DONTKNOW },/* MACEDONIAN */
-    { "JUS_I.B1.003-SERB",  RTL_TEXTENCODING_DONTKNOW },/* ISO-IR-146 SERBIAN */
-    { "KOI-8",          RTL_TEXTENCODING_DONTKNOW },
-    { "KOI8-R",         RTL_TEXTENCODING_KOI8_R },
-    { "KOI8-U",         RTL_TEXTENCODING_DONTKNOW },
-    { "KSC5636",        RTL_TEXTENCODING_DONTKNOW },    /* ISO646-KR */
-    { "LATIN-GREEK",    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-19 */
-    { "LATIN-GREEK-1",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-27 */
-    { "MAC-IS",         RTL_TEXTENCODING_APPLE_ROMAN },
-    { "MAC-UK",         RTL_TEXTENCODING_APPLE_ROMAN },
-    { "MACINTOSH",      RTL_TEXTENCODING_APPLE_ROMAN }, /* MAC */
-    { "MSZ_7795.3",     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-86 */
-    { "NATS-DANO",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-9-1 */
-    { "NATS-DANO-ADD",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-9-2 */
-    { "NATS-SEFI",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-8-1 */
-    { "NATS-SEFI-ADD",  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-8-2 */
-    { "NC_NC00-10",     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-151 */
-    { "NEXTSTEP",       RTL_TEXTENCODING_DONTKNOW },    /* NEXT */
-    { "NF_Z_62-010",    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-69 */
-    { "NF_Z_62-010_(1973)", RTL_TEXTENCODING_DONTKNOW },/* ISO-IR-25 */
-    { "NS_4551-1",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-60 */
-    { "NS_4551-2",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-61 */
-    { "PT",             RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-16 */
-    { "PT2",            RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-84 */
-    { "SAMI",           RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-158 */
-    { "SEN_850200_B",   RTL_TEXTENCODING_DONTKNOW },    /* ISO646-[FI|SE] */
-    { "SEN_850200_C",   RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-11 */
-    { "T.101-G2",       RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-128 */
-    { "T.61-7BIT",      RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-102 */
-    { "T.61-8BIT",      RTL_TEXTENCODING_DONTKNOW },    /* T.61 ISO-IR-103 */
-    { "UTF-8",          RTL_TEXTENCODING_UTF8 },        /* ISO-10646/UTF-8 */
-    { "VIDEOTEX-SUPPL", RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-70 */
-    { "WIN-SAMI-2",     RTL_TEXTENCODING_DONTKNOW }     /* WS2 */
-};
-#endif /* ifdef LINUX */
-
-static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
-
-rtl_TextEncoding
-GetSystemCharsetFromNLLanginfo()
-{
-    const _pair *language=0;
-    char  codeset_buf[64];
-
-    char *ctype_locale = 0;
-    char *codeset      = 0;
-
-    /*
-     *   basic thread safeness
-     */
-    pthread_mutex_lock(&aLocalMutex);
-
-    /* get the charset as indicated by the LC_CTYPE locale */
-    ctype_locale = setlocale( LC_CTYPE, "" );
-
-#if defined (NETBSD) || defined(FREEBSD)
-// poor man's way of getting the codeset,
-// but NetBSD doesn't understand CODESET (yet)
-    codeset    = getenv( "LANG" );
-    if (codeset == NULL)
-      codeset = getenv ( "LC_CTYPE" );
-#else
-    codeset    = nl_langinfo( CODESET );
-#endif
-
-    if ( codeset != NULL )
-    {
-        /* get codeset into mt save memory */
-        rtl_copyMemory( codeset_buf, codeset, sizeof(codeset_buf) );
-        codeset = codeset_buf;
-    }
-
-    /* restore the original value of locale */
-    if ( ctype_locale != NULL )
-        setlocale( LC_CTYPE, ctype_locale );
-
-    /* search the codeset in our language list */
-    if ( codeset != NULL )
-    {
-        const unsigned int members = sizeof(_nl_language_list) / sizeof(_pair);
-#if defined(FREEBSD)
-        language = _pair_search (strchr(codeset,'.')+1, _nl_language_list, members);
-#else
-        language = _pair_search (codeset, _nl_language_list, members);
-#endif
-    }
-
-    /* a matching item in our list provides a mapping from codeset to
-     * rtl-codeset */
-    if ( language != NULL )
-    {
-        pthread_mutex_unlock(&aLocalMutex);
-        return language->value;
-    }
-
-    pthread_mutex_unlock(&aLocalMutex);
-
-    return RTL_TEXTENCODING_DONTKNOW;
-}
-#endif /* ifdef LINUX || SOLARIS || NETBSD*/
-
-
-static int
-_pair_compare (const char *key, const _pair *pair)
-{
-    int result = rtl_str_compareIgnoreCase( key, pair->key );
-    return result;
-}
-
-static const _pair*
-_pair_search (const char *key, const _pair *base, unsigned int member )
-{
-    unsigned int lower = 0;
-    unsigned int upper = member;
-    unsigned int current;
-    int comparison;
-
-    /* check for validity of input */
-    if ( (key == NULL) || (base == NULL) || (member == 0) )
-        return NULL;
-
-    /* binary search */
-    while ( lower < upper )
-    {
-        current = (lower + upper) / 2;
-        comparison = _pair_compare( key, base + current );
-        if (comparison < 0)
-            upper = current;
-        else
-        if (comparison > 0)
-            lower = current + 1;
-        else
-            return base + current;
-    }
-
-    return NULL;
+    return oldThreadEncoding;
 }
