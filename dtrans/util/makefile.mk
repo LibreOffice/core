@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-26 13:58:54 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:06:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ SHL1IMPLIB=i$(SHL1TARGET)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
+SHL1VERSIONMAP=exports.map
 
 
 .IF "$(GUI)"=="WNT"
