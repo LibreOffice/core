@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-30 12:35:57 $
+ *  last change: $Author: pb $ $Date: 2002-05-30 13:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
+#include <toolkit/helper/externallock.hxx>
+#endif
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
 #endif
@@ -110,32 +113,9 @@
 #define MNEMONIC_CHAR               ((sal_Unicode)'~')
 #endif
 
-
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 using namespace ::comphelper;
-
-//  ----------------------------------------------------
-//  class VCLExternalSolarLock
-//  ----------------------------------------------------
-class VCLExternalSolarLock : public ::comphelper::IMutex
-{
-public:
-    virtual void acquire();
-    virtual void release();
-};
-
-//......................................................
-void VCLExternalSolarLock::acquire()
-{
-    Application::GetSolarMutex().acquire();
-}
-
-//......................................................
-void VCLExternalSolarLock::release()
-{
-    Application::GetSolarMutex().release();
-}
 
 //  ----------------------------------------------------
 //  class VCLXAccessibleComponent
