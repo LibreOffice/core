@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:28:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ TabPage TP_NUMPARA
         Text [ dutch ] = "~Bij deze alinea opnieuw beginnen" ;
         Text[ chinese_simplified ] = "´ÓÕâ¸ö¶ÎÂäÖØĞÂ¿ªÊ¼(~E)";
         Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà";
-        Text[ polish ] = "Zacznij ponownie przy tym akapicie";
+        Text[ polish ] = "Zacznij ponownie od tego akapitu";
         Text[ japanese ] = "‚±‚Ì’i—‚ÅV‚µ‚­n‚ß‚é(~E)";
         Text[ chinese_traditional ] = "±q³o­Ó¬q¸¨­«·s¶}©l(~E)";
         Text[ arabic ] = "ÇáÈÏÁ ãä ÌÏíÏ ÚäÏ åĞå ÇáİŞÑÉ";
@@ -352,7 +352,7 @@ TabPage TP_NUMPARA
         Text [ portuguese ] = "~Incluir as linhas deste parágrafo" ;
         Text[ chinese_simplified ] = "°üÀ¨Õâ¸ö¶ÎÂäµÄĞĞ(~I)";
         Text[ russian ] = "Ñ÷èòàòü, âêëş÷àÿ ñòğîêè ıòîãî àáçàöà";
-        Text[ polish ] = "W³¹cznie z wierszami tego akapitu";
+        Text[ polish ] = "£¹cznie z wierszami tego akapitu";
         Text[ japanese ] = "‚±‚Ì’i—‚Ìs”‚ğŠÜ‚ß‚é(~I)";
         Text[ chinese_traditional ] = "¥]¬A³o­Ó¬q¸¨ªº¦æ(~I)";
         Text[ arabic ] = "ÚÏ ÃÓØÑ åĞå ÇáİŞÑÉ ÃíÖÇğ";
