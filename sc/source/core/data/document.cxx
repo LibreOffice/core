@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:45 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4291,9 +4291,15 @@ BOOL ScDocument::HasPrintRange()
 
     for ( USHORT i=0; !bResult && i<nMaxTableNumber; i++ )
         if ( pTab[i] )
-            bResult = ( pTab[i]->GetPrintRangeCount() > 0 );
+            bResult = pTab[i]->IsPrintEntireSheet() || (pTab[i]->GetPrintRangeCount() > 0);
 
     return bResult;
+}
+
+
+BOOL ScDocument::IsPrintEntireSheet( USHORT nTab ) const
+{
+    return (nTab <= MAXTAB) && pTab[nTab] && pTab[nTab]->IsPrintEntireSheet();
 }
 
 
@@ -4333,24 +4339,31 @@ const ScRange* ScDocument::GetRepeatRowRange( USHORT nTab )
 }
 
 
-// #42845# zeroptimiert
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-void ScDocument::SetPrintRangeCount( USHORT nTab, USHORT nNew )
+void ScDocument::ClearPrintRanges( USHORT nTab )
 {
     if (nTab<=MAXTAB && pTab[nTab])
-        pTab[nTab]->SetPrintRangeCount( nNew );
+        pTab[nTab]->ClearPrintRanges();
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
 
 
-void ScDocument::SetPrintRange( USHORT nTab, USHORT nPos, const ScRange& rNew )
+void ScDocument::AddPrintRange( USHORT nTab, const ScRange& rNew )
 {
     if (nTab<=MAXTAB && pTab[nTab])
-        pTab[nTab]->SetPrintRange( nPos, rNew );
+        pTab[nTab]->AddPrintRange( rNew );
+}
+
+
+void ScDocument::SetPrintRange( USHORT nTab, const ScRange& rNew )
+{
+    if (nTab<=MAXTAB && pTab[nTab])
+        pTab[nTab]->SetPrintRange( rNew );
+}
+
+
+void ScDocument::SetPrintEntireSheet( USHORT nTab )
+{
+    if (nTab<=MAXTAB && pTab[nTab])
+        pTab[nTab]->SetPrintEntireSheet();
 }
 
 
