@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:48:07 $
+#   last change: $Author: hr $ $Date: 2003-11-07 14:52:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,9 +71,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(UPD)minor.mk
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
-
 
 # --- Files --------------------------------------------------------
 
@@ -97,7 +95,9 @@ OBJFILES = \
         $(OBJ)$/javainteractionhandler.obj	\
         $(OBJ)$/testtool.obj				\
         $(OBJ)$/checkinstall.obj			\
-        $(OBJ)$/cmdlinehelp.obj
+        $(OBJ)$/langselect.obj			    \
+        $(OBJ)$/cmdlinehelp.obj             \
+        $(OBJ)$/userinstall.obj
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "MACOSX"
@@ -109,6 +109,9 @@ OBJFILES+= $(OBJ)$/icon_resource_ooo.obj \
 SRS1NAME=	desktop
 SRC1FILES=	desktop.src	\
             ssodlg.src
+
+SRC2FILES=	langselect.src
+SRS2NAME=	langselect
 
 # --- Targets ------------------------------------------------------
 
