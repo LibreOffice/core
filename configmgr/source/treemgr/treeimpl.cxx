@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2000-11-20 03:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include "valuenode.hxx"
 #include "change.hxx"
 
+
+#include <algorithm> // for reverse
 #include <osl/diagnose.h>
 
 namespace configmgr
