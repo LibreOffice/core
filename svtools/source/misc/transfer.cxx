@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-22 13:35:54 $
+ *  last change: $Author: ka $ $Date: 2001-04-02 14:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,10 @@ void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
     while( aIter != aEnd )
     {
         if( nFormat == (*aIter).mnSotId )
+        {
             aIter = mpFormats->erase( aIter );
+            aEnd = mpFormats->end();
+        }
         else
             aIter++;
     }
@@ -516,8 +519,11 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
     while( aIter != aEnd )
     {
-        if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
+        if( TransferableDataHelper::IsEqual( rFlavor, *aIter ) )
+        {
             aIter = mpFormats->erase( aIter );
+            aEnd = mpFormats->end();
+        }
         else
             aIter++;
     }
@@ -1067,6 +1073,31 @@ DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) con
         aRet = (DataFlavor&) (*mpFormats)[ nFormat ];
 
     return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
+{
+    Reference< XTransferable > xRet;
+
+    if( mxTransfer.is() )
+    {
+        try
+        {
+            xRet = mxTransfer;
+
+            // do a dummy call to check, if this interface is valid (nasty)
+            Sequence< DataFlavor > aTestSeq( xRet->getTransferDataFlavors() );
+
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+            xRet = Reference< XTransferable >();
+        }
+    }
+
+    return xRet;
 }
 
 // -----------------------------------------------------------------------------
