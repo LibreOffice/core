@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 09:10:56 $
+#   last change: $Author: sb $ $Date: 2004-11-04 08:42:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
 
 .IF "$(GUI)" == "WNT"
-SHL1TARGET=	$(TARGET)$(COMID)
+SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COMID)
 .ELSE
 SHL1TARGET=	uno_$(TARGET)$(COMID)
 .ENDIF
