@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 11:45:35 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 17:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4481,4 +4481,108 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
     ((rComplex.GetFamilyName() += ';' ) += sFirst ) += sLast;
 }
 
+
+// returns for a language the scripttype
+USHORT GetScriptTypeOfLanguage( USHORT nLang )
+{
+    if( LANGUAGE_DONTKNOW == nLang )
+        nLang = LANGUAGE_ENGLISH_US;
+    else if( LANGUAGE_SYSTEM == nLang  )
+        nLang = International::GetRealLanguage( nLang );
+
+    USHORT nScript;
+    switch( nLang )
+    {
+    case LANGUAGE_CHINESE:
+    case LANGUAGE_CHINESE_TRADITIONAL:
+    case LANGUAGE_CHINESE_SIMPLIFIED:
+    case LANGUAGE_CHINESE_HONGKONG:
+    case LANGUAGE_CHINESE_SINGAPORE:
+    case LANGUAGE_CHINESE_MACAU:
+    case LANGUAGE_JAPANESE:
+    case LANGUAGE_KOREAN:
+    case LANGUAGE_KOREAN_JOHAB:
+        nScript = SCRIPTTYPE_ASIAN;
+        break;
+
+    case LANGUAGE_ARABIC:
+    case LANGUAGE_ARABIC_SAUDI_ARABIA:
+    case LANGUAGE_ARABIC_IRAQ:
+    case LANGUAGE_ARABIC_EGYPT:
+    case LANGUAGE_ARABIC_LIBYA:
+    case LANGUAGE_ARABIC_ALGERIA:
+    case LANGUAGE_ARABIC_MOROCCO:
+    case LANGUAGE_ARABIC_TUNISIA:
+    case LANGUAGE_ARABIC_OMAN:
+    case LANGUAGE_ARABIC_YEMEN:
+    case LANGUAGE_ARABIC_SYRIA:
+    case LANGUAGE_ARABIC_JORDAN:
+    case LANGUAGE_ARABIC_LEBANON:
+    case LANGUAGE_ARABIC_KUWAIT:
+    case LANGUAGE_ARABIC_UAE:
+    case LANGUAGE_ARABIC_BAHRAIN:
+    case LANGUAGE_ARABIC_QATAR:
+    case LANGUAGE_HEBREW:
+        nScript = SCRIPTTYPE_COMPLEX;
+        break;
+
+// currently not knowing scripttype - defaultet to LATIN:
+/*
+#define LANGUAGE_AFRIKAANS                  0x0436
+#define LANGUAGE_ARMENIAN                   0x042B
+#define LANGUAGE_ASSAMESE                   0x044D
+#define LANGUAGE_AZERI                      0x002C
+#define LANGUAGE_AZERI_LATIN                0x042C
+#define LANGUAGE_AZERI_CYRILLIC             0x082C
+#define LANGUAGE_BASQUE                     0x042D
+#define LANGUAGE_BELARUSIAN                 0x0423
+#define LANGUAGE_BENGALI                    0x0445
+#define LANGUAGE_GUJARATI                   0x0447
+#define LANGUAGE_HINDI                      0x0439
+#define LANGUAGE_INDONESIAN                 0x0421
+#define LANGUAGE_KASHMIRI                   0x0460
+#define LANGUAGE_KASHMIRI_INDIA             0x0860
+#define LANGUAGE_KAZAK                      0x043F
+#define LANGUAGE_KONKANI                    0x0457
+#define LANGUAGE_LATVIAN                    0x0426
+#define LANGUAGE_LITHUANIAN                 0x0427
+#define LANGUAGE_LITHUANIAN_CLASSIC         0x0827
+#define LANGUAGE_MACEDONIAN                 0x042F
+#define LANGUAGE_MALAY                      0x003E
+#define LANGUAGE_MALAY_MALAYSIA             0x043E
+#define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    0x083E
+#define LANGUAGE_MALAYALAM                  0x044C
+#define LANGUAGE_MANIPURI                   0x0458
+#define LANGUAGE_MARATHI                    0x044E
+#define LANGUAGE_NEPALI                     0x0461
+#define LANGUAGE_NEPALI_INDIA               0x0861
+#define LANGUAGE_ORIYA                      0x0448
+#define LANGUAGE_PUNJABI                    0x0446
+#define LANGUAGE_SANSKRIT                   0x044F
+#define LANGUAGE_SERBIAN                    0x041A
+#define LANGUAGE_SERBIAN_LATIN              0x081A
+#define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A
+#define LANGUAGE_SINDHI                     0x0459
+#define LANGUAGE_SWAHILI                    0x5041
+#define LANGUAGE_TAMIL                      0x0449
+#define LANGUAGE_TATAR                      0x0444
+#define LANGUAGE_TELUGU                     0x044A
+#define LANGUAGE_THAI                       0x041E
+#define LANGUAGE_TURKISH                    0x041F
+#define LANGUAGE_UKRAINIAN                  0x0422
+#define LANGUAGE_URDU                       0x0020
+#define LANGUAGE_URDU_PAKISTAN              0x0420
+#define LANGUAGE_URDU_INDIA                 0x0820
+#define LANGUAGE_UZBEK                      0x0043
+#define LANGUAGE_UZBEK_LATIN                0x0443
+#define LANGUAGE_UZBEK_CYRILLIC             0x0843
+#define LANGUAGE_VIETNAMESE                 0x042a
+*/
+
+    default:
+        nScript = SCRIPTTYPE_LATIN;
+        break;
+    }
+    return nScript;
+}
 
