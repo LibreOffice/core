@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 15:02:12 $
+ *  last change: $Author: sb $ $Date: 2002-07-16 16:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -174,6 +173,10 @@ void DlgEditor::ShowDialog()
 
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
     xD->execute();
+
+    uno::Reference< lang::XComponent > xComponent(xDlg, uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
 }
 
 //----------------------------------------------------------------------------
