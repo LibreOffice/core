@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-21 12:43:12 $
+ *  last change: $Author: sab $ $Date: 2002-02-22 14:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,20 @@
 
 
 #include "unotools/accessiblestatesethelper.hxx"
-
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#if 0
 #include <bitset>
+#endif
 
 // defines how many states the bitfield can contain
-#define BITFIELDSIZE 30
+// it has the size of 64 because I use a uInt64
+#define BITFIELDSIZE 64
 
 using namespace ::utl;
 using namespace ::rtl;
@@ -99,10 +102,14 @@ public:
         throw (uno::RuntimeException);
 
 private:
-    std::bitset<BITFIELDSIZE> maStates; //Bitfield
+#if 0
+    ::std::bitset<BITFIELDSIZE> maStates; //Bitfield
+#endif
+    sal_uInt64 maStates;
 };
 
 AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl()
+    : maStates(0)
 {
 }
 
@@ -118,28 +125,47 @@ AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
 sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
     throw (uno::RuntimeException)
 {
+#if 0
     return maStates.none();
+#endif
+    return maStates == 0;
 }
 
 sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
+#if 0
     return maStates.test(aState);
+#endif
+    sal_uInt64 aTempBitSet(1);
+    aTempBitSet <<= aState;
+    return ((aTempBitSet & maStates) != 0);
 }
 
 void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
+#if 0
     maStates.set(aState);
+#endif
+    sal_uInt64 aTempBitSet(1);
+    aTempBitSet <<= aState;
+    maStates |= aTempBitSet;
 }
 
 void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
+#if 0
     maStates.set(aState, 0);
+#endif
+    sal_uInt64 aTempBitSet(1);
+    aTempBitSet <<= aState;
+    aTempBitSet = ~aTempBitSet;
+    maStates &= aTempBitSet;
 }
 
 void AccessibleStateSetHelperImpl::Compare(
@@ -150,7 +176,10 @@ void AccessibleStateSetHelperImpl::Compare(
 {
     if (pComparativeValue && pOldStates && pNewStates)
     {
+#if 0
         std::bitset<BITFIELDSIZE> aTempBitSet(maStates);
+#endif
+        sal_uInt64 aTempBitSet(maStates);
         aTempBitSet ^= pComparativeValue->maStates;
         pOldStates->maStates = aTempBitSet;
         pOldStates->maStates &= maStates;
