@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@
 #include "drwtrans.hxx"
 #include "seltrans.hxx"
 #include "sizedev.hxx"
+#include "AccessibilityHints.hxx"
 
 using namespace com::sun::star;
 
@@ -3476,6 +3477,10 @@ void __EXPORT ScGridWindow::GetFocus()
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->GotFocus();
 
+    if (pViewShell->HasAccessibilityObjects())
+        pViewShell->BroadcastAccessibility(ScAccGridWinFocusGotHint(eWhich, GetAccessible()));
+
+
     if ( !SC_MOD()->IsFormulaMode() )
     {
         pViewShell->UpdateInputHandler();
@@ -3490,7 +3495,11 @@ void __EXPORT ScGridWindow::GetFocus()
 
 void __EXPORT ScGridWindow::LoseFocus()
 {
-    pViewData->GetViewShell()->LostFocus();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->LostFocus();
+
+    if (pViewShell->HasAccessibilityObjects())
+        pViewShell->BroadcastAccessibility(ScAccGridWinFocusLostHint(eWhich, GetAccessible()));
 
     Window::LoseFocus();
 }
