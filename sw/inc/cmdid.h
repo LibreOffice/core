@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-10 16:59:44 $
+ *  last change: $Author: mba $ $Date: 2002-06-26 07:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,7 +877,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_GRAPHIC_U_R_L                (FN_EXTRA2 + 86)
 #define FN_UNO_GRAPHIC_FILTER               (FN_EXTRA2 + 87)
 #define FN_UNO_CELL_NAME                    (FN_EXTRA2 + 88)
-
+#define FN_INSERT_GLOSSARY                  (FN_EXTRA2 + 89)
+#define FN_NEW_GLOSSARY                     (FN_EXTRA2 + 89)
+#define FN_SET_ACT_GLOSSARY                 (FN_EXTRA2 + 89)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
