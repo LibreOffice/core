@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AllMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:42:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ AllMasterPagesSelector::AllMasterPagesSelector (
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     DrawViewShell& rViewShell)
-    : MasterPagesSelector (pParent, rDocument, rBase),
+    : MasterPagesContainerSelector (pParent, rDocument, rBase),
       mrViewShell(rViewShell)
 {
     SetName (String(RTL_CONSTASCII_USTRINGPARAM("AllMasterPagesSelector")));
@@ -107,8 +107,7 @@ void AllMasterPagesSelector::Fill (void)
     for (int i=0; i<nTokenCount; i++)
     {
         MasterPageContainer::Token aToken (rContainer.GetTokenForIndex(i));
-        if (rContainer.GetURLForToken(aToken).Len() > 0)
-            AddItemForToken (aToken, true);
+        AddItemForToken (aToken, true);
     }
     mpPageSet->Rearrange ();
 }
