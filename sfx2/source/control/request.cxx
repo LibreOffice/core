@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-06-07 08:42:29 $ $Revision: 1.7 $
+// $Author: mba $ $Date: 2002-06-10 16:57:11 $ $Revision: 1.8 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -199,7 +199,7 @@ SfxRequest::SfxRequest
     else
     {
         ByteString aStr( "Recording slot unsupported by shell: ");
-        aStr += ByteString::CreateFromInt32( nSlotId );
+        aStr += ByteString::CreateFromInt32( rShell.GetPool().GetSlotId(nSlotId) );
         DBG_ERROR( aStr.GetBuffer() );
     }
 #endif
@@ -875,6 +875,9 @@ void SfxRequest::SetTarget( const String &rTarget )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2002/06/07 08:42:29  mba
+    #99966#: better error message
+
     Revision 1.6  2002/05/27 13:52:19  mba
     #98405#: more debugging code for macro recording
 
