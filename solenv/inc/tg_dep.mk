@@ -57,7 +57,7 @@ ALLDPC: \
     @+-if exist $(MISC)$/$(TARGET).dpj $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+-if exist $(MISC)$/genjava.mk $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
 .ENDIF
-    +touch $(MISC)$/$(TARGET).dpc
+    +$(TOUCH) $(MISC)$/$(TARGET).dpc
 #.IF "$(SVXLIGHTSLOFILES)"!=""
 #	@+$(TYPE) $(mktmp $(foreach,i,$(SVXLIGHTSLOFILES) $(i:d:^"\n")sxl_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
 #.ENDIF
