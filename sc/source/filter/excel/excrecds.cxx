@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:00 $
+ *  last change: $Author: jmarmion $ $Date: 2002-11-26 10:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3234,8 +3234,11 @@ ExcSetup::ExcSetup( RootData* pExcRoot ) :
         if( !( ( const SfxBoolItem& ) rSet.Get( ATTR_PAGE_TOPDOWN ) ).GetValue() )
             nGrbit |= 0x0001;   // ffLeftToRight
 
-        if( !( ( const SfxBoolItem& ) rSet.Get( ATTR_PAGE_NOTES ) ).GetValue() )
-            nGrbit |= 0x0020;   // fNotes
+        // set the Comments/Notes to "At end of sheet" if Print Notes is true.
+        // We don't currently support "as displayed on sheet". Thus this value
+        // will be re-interpreted to "At end of sheet".
+        if( ( ( const SfxBoolItem& ) rSet.Get( ATTR_PAGE_NOTES ) ).GetValue() )
+            nGrbit |= 0x0220;   // fNotes
 
         const SfxItemSet& rHeaderSet = ((const SvxSetItem&) rSet.Get( ATTR_PAGE_HEADERSET )).GetItemSet();
         nHeaderMargin = ((const SvxULSpaceItem&) rHeaderSet.Get( ATTR_ULSPACE )).GetLower();
