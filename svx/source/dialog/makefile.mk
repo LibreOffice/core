@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 17:47:09 $
+#   last change: $Author: rt $ $Date: 2004-08-20 10:02:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -495,6 +495,12 @@ LIB2OBJFILES= \
     $(SLO)$/page.obj \
     $(SLO)$/postdlg.obj \
     $(SLO)$/grfpage.obj
+    
+.IF "$(GUI)"=="WNT"	
+SLOFILES+=$(SLO)$/winpluginlib.obj
+LIB2OBJFILES+=$(SLO)$/winpluginlib.obj
+.ENDIF
+    
 
 
 # --- Targets -------------------------------------------------------
