@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.31 $
+*   $Revision: 1.32 $
 *
-*   last change: $Author: hr $ $Date: 2004-05-10 12:46:20 $
+*   last change: $Author: rt $ $Date: 2004-07-06 13:38:42 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -220,7 +220,7 @@ namespace frm
     //------------------------------------------------------------------
     OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
-        ,OEntryListHelper( m_aMutex )
+        ,OEntryListHelper( *_pOriginal, m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aRefreshListeners( m_aMutex )
         ,m_bBoundComponent(sal_False)
