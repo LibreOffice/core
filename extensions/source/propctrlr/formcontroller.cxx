@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:28:05 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 14:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,12 +300,6 @@ namespace pcr
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::container;
 
-    static const IPropertyInfoService* getFormPropertyInfo()
-    {
-        static const OFormPropertyInfoService s_aFormMetaDataInfo;
-        return &s_aFormMetaDataInfo;
-    };
-
     //========================================================================
     //= helper
     //========================================================================
@@ -352,9 +346,16 @@ namespace pcr
     //= OPropertyBrowserController
     //========================================================================
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::initializeSpecialStuff()
+    void OPropertyBrowserController::initFormStuff()
     {
-        m_pPropertyInfo = getFormPropertyInfo();
+        m_pPropertyInfo = new OFormPropertyInfoService();
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::deinitFormStuff()
+    {
+        delete static_cast<const OFormPropertyInfoService*>(m_pPropertyInfo);
+        m_pPropertyInfo = NULL;
     }
 
     //------------------------------------------------------------------------
@@ -2497,6 +2498,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:28:05  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 10.01.01 08:51:55  fs
  ************************************************************************/

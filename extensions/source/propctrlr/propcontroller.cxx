@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:31:03 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 14:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ namespace pcr
             // TODO: perhaps an exception
         }
 
-        initializeSpecialStuff();
+        initFormStuff();
 
         registerProperty(PROPERTY_INTROSPECTEDOBJECT, OWN_PROPERTY_ID_INTROSPECTEDOBJECT,
             PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT,
@@ -190,6 +190,7 @@ namespace pcr
     //------------------------------------------------------------------------
     OPropertyBrowserController::~OPropertyBrowserController()
     {
+        deinitFormStuff();
         // stop listening for property changes
         stopIntrospection();
         DBG_DTOR(OPropertyBrowserController,NULL);
@@ -875,6 +876,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:31:03  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 09:33:47  fs
  ************************************************************************/
