@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: hr $ $Date: 2001-08-16 14:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,9 @@ class OQuery_LINUX  :public OQueryDescriptor
                 ,public OConfigurationFlushable
 {
     friend struct TRelease;
-protected:
+public:
     typedef ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
+protected:
     TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xCommandDefinition;
