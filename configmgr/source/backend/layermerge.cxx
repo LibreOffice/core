@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:31:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 14:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue, OUString co
 
     else if (ValueNode * pValue = m_pProperty->asValueNode())
     {
-        OSL_ENSURE(false, "Layer merging: Got locale-dependent value for non localized node");
+        //OSL_ENSURE(false, "Layer merging: Got locale-dependent value for non localized node");
         setValueAndCheck(*pValue,_aValue);
     }
 
