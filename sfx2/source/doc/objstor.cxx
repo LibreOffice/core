@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:03:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,11 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+
+
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -285,6 +290,31 @@ sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd )
         return sal_True;
     }
     return sal_False;
+}
+
+//-------------------------------------------------------------------------
+sal_Bool SfxObjectShell::NoDependencyFromManifest_Impl( const uno::Reference< embed::XStorage >& xStorage )
+{
+    uno::Sequence< ::rtl::OUString > aElements = xStorage->getElementNames();
+    for ( sal_Int32 nInd = 0; nInd < aElements.getLength(); nInd++ )
+    {
+        if ( xStorage->isStorageElement( aElements[nInd] ) )
+        {
+            // if there are other standard elements that do not need manifest.xml the following
+            // list can be extended
+            if ( !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) )
+              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations" ) ) )
+              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ) ) )
+              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Thumbnails" ) ) )
+              && !aElements[nInd].equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ) ) )
+            {
+                // the substorage is not know as one that does not need manifest.xml
+                return sal_False;
+            }
+        }
+    }
+
+    return sal_True;
 }
 
 //-------------------------------------------------------------------------
@@ -794,13 +824,24 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
             try
             {
-                if ( xStorage->getElementNames().getLength() )
+                sal_Bool bWarnMediaTypeFallback = sal_False;
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairPackageItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False);
+
+                // treat the package as broken if the mediatype was retrieved as a fallback
+                uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
+                xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaTypeFallbackUsed" ) ) )
+                                                                    >>= bWarnMediaTypeFallback;
+
+                if ( bWarnMediaTypeFallback && pRepairPackageItem && pRepairPackageItem->GetValue() )
                 {
-                    BOOL bHasMacros =
-                            ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Basic") )
-                                && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Basic") ) )
-                            ||  ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Scripts") )
-                                && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Scripts") ) );
+                    // the mediatype was retrieved by using fallback solution but this is a repairing mode
+                    // so it is acceptable to open the document if there is no contents that required manifest.xml
+                    bWarnMediaTypeFallback = !NoDependencyFromManifest_Impl( xStorage );
+                }
+
+                if ( !bWarnMediaTypeFallback && xStorage->getElementNames().getLength() )
+                {
+                    BOOL bHasMacros = StorageHasMacros( xStorage );
 
                     if ( bHasMacros )
                     {
@@ -886,7 +927,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 bOk = ConvertFrom(*pMedium);
             }
 
-            if ( HasMacros_Impl() )
+            if ( HasMacrosLib_Impl() )
             {
                 // no signing in alien formats!
                 AdjustMacroMode( String() );
@@ -1177,6 +1218,51 @@ sal_Bool SfxObjectShell::DoSave()
             }
             else
                 bOk = sal_True;
+
+            try
+            {
+                // The basic and dialogs related contents are still not able to proceed with save operation ( saveTo only )
+                // so since the document storage is locked a workaround has to be used
+
+                uno::Reference< embed::XStorage > xTmpStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                DBG_ASSERT( xTmpStorage.is(), "If a storage can not be created an exception must be thrown!\n" );
+                if ( !xTmpStorage.is() )
+                    throw uno::RuntimeException();
+
+                ::rtl::OUString aBasicStorageName( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) );
+                ::rtl::OUString aDialogsStorageName( RTL_CONSTASCII_USTRINGPARAM( "Dialogs" ) );
+                if ( GetMedium()->GetStorage()->hasByName( aBasicStorageName ) )
+                    GetMedium()->GetStorage()->copyElementTo( aBasicStorageName, xTmpStorage, aBasicStorageName );
+                if ( GetMedium()->GetStorage()->hasByName( aDialogsStorageName ) )
+                    GetMedium()->GetStorage()->copyElementTo( aDialogsStorageName, xTmpStorage, aDialogsStorageName );
+
+                GetBasicManager();
+                SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+                SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+
+                // disconnect from the current storage
+                if( pDialogCont )
+                    pDialogCont->setStorage( xTmpStorage );
+                if( pBasicCont )
+                    pBasicCont->setStorage( xTmpStorage );
+
+                // store to the current storage
+                if( pDialogCont )
+                    pDialogCont->storeLibrariesToStorage( GetMedium()->GetStorage() );
+                if( pBasicCont )
+                    pBasicCont->storeLibrariesToStorage( GetMedium()->GetStorage() );
+
+                // connect to the current storage back
+                if( pDialogCont )
+                    pDialogCont->setStorage( GetMedium()->GetStorage() );
+                if( pBasicCont )
+                    pBasicCont->setStorage( GetMedium()->GetStorage() );
+            }
+            catch( uno::Exception& )
+            {
+                SetError( ERRCODE_IO_GENERAL );
+                bOk = sal_False;
+            }
         }
 
         if ( bOk )
@@ -1237,14 +1323,11 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     sal_Bool bOwnSource = IsOwnStorageFormat_Impl( *pMedium );
     sal_Bool bOwnTarget = IsOwnStorageFormat_Impl( rMedium );
 
-    //TODO/LATER: use UCB for case sensitive/insensitive file name comparison
-#ifdef WNT
-    if ( pMedium && ( rMedium.GetName().EqualsIgnoreCaseAscii( pMedium->GetName() ) )
-#else
-    // on UNIX the case must not be ignored
-    if ( pMedium && ( rMedium.GetName().Equals( pMedium->GetName() ) )
-#endif
-      && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL )
+    // use UCB for case sensitive/insensitive file name comparison
+    if ( pMedium
+      && pMedium->GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
+      && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
+      && SfxMedium::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
         // the target file is the same as original ( Save procedure )
 
@@ -3110,7 +3193,8 @@ sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
     return bResult;
 }
 
-sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XStorage >& xStorage )
+sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XStorage >& xStorage,
+                                                    sal_Bool bForceNonModified )
 {
     if ( !xStorage.is() )
     {
@@ -3148,6 +3232,20 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
                         break;
                     }
                 }
+
+                if ( bForceNonModified )
+                {
+                    // if this method is used as part of SaveCompleted the object must stay unmodified after execution
+                    try
+                    {
+                        uno::Reference< util::XModifiable > xModif( xObj->getComponent(), uno::UNO_QUERY_THROW );
+                        if ( xModif->isModified() )
+                            xModif->setModified( sal_False );
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
+                }
             }
         }
     }
@@ -3177,7 +3275,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
         if ( pImp->mpObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
 
-        bResult = SwitchChildrenPersistance( xStorage );
+        bResult = SwitchChildrenPersistance( xStorage, sal_True );
     }
 
     if ( bResult )
