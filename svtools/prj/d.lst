@@ -274,3 +274,4 @@ hedabu: ..\inc\historyoptions.hxx %_DEST%\inc%_EXT%\svtools\historyoptions.hxx
 hedabu: ..\inc\inetoptions.hxx %_DEST%\inc%_EXT%\svtools\inetoptions.hxx
 hedabu: ..\inc\menuoptions.hxx %_DEST%\inc%_EXT%\svtools\menuoptions.hxx
 hedabu: ..\inc\options3d.hxx %_DEST%\inc%_EXT%\svtools\options3d.hxx
+hedabu: ..\inc\fontoptions.hxx %_DEST%\inc%_EXT%\svtools\fontoptions.hxx
