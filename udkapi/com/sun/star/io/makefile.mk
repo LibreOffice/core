@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+#   last change: $Author: jbu $ $Date: 2000-11-24 08:59:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,8 @@ PACKAGE=com$/sun$/star$/io
 
 IDLFILES=\
     BufferSizeExceededException.idl\
+    MarkableInputStream.idl\
+    MarkableOutputStream.idl\
     DataInputStream.idl\
     DataOutputStream.idl\
     DataTransferEvent.idl\
