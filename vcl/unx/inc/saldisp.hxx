@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:26:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,9 +248,9 @@ struct YieldEntry;
 class SalXLib
 {
 protected:
-    timeval         Timeout_;
-    ULONG           nTimeoutMS_;
-    int             pTimeoutFDS_[2];
+    timeval         m_aTimeout;
+    ULONG           m_nTimeoutMS;
+    int             m_pTimeoutFDS[2];
 
     BOOL            bWasXError_;
     BOOL            bIgnoreXErrors_;
