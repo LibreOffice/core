@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:32:04 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "ÅØ½ºÆ®¿¡ ³Êºñ ¸ÂÃã(~D)";
         Text[ turkish ] = "~Geniþliði metne göre ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajus~tar ancho al texto";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -136,6 +137,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "ÅØ½ºÆ®¿¡ ³ôÀÌ ¸ÂÃã(~E)";
         Text[ turkish ] = "~Yüksekliði metne göre ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ajustar altura al texto";
     };
     TriStateBox TSB_FIT_TO_SIZE
     {
@@ -163,6 +165,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "ÇÁ·¹ÀÓ¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "Metni ~çerçeveye uydur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aju~star al marco";
     };
     TriStateBox TSB_CONTOUR
     {
@@ -192,6 +195,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "À±°û¡¡Èå¸§(~A)";
         Text[ turkish ] = "~Kontur akýþý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar al ~contorno";
     };
     GroupBox GRP_TEXT
     {
@@ -218,6 +222,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "ÅØ½ºÆ®";
         Text[ turkish ] = "Metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Texto";
     };
     FixedText FT_LEFT
     {
@@ -244,6 +249,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "¿ÞÂÊ(~L)";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Izquierda";
     };
     FixedText FT_RIGHT
     {
@@ -270,6 +276,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "¿À¸¥ÂÊ(~R)";
         Text[ turkish ] = "Sa~ð";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Derecha";
     };
     FixedText FT_TOP
     {
@@ -296,6 +303,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "À§(~T)";
         Text[ turkish ] = "~Üst";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Arri~ba";
     };
     FixedText FT_BOTTOM
     {
@@ -322,6 +330,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "¾Æ·¡(~B)";
         Text[ turkish ] = "~Alt";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~bajo";
     };
     MetricField MTR_FLD_LEFT
     {
@@ -416,6 +425,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "Å×µÎ¸®¿ÍÀÇ °£°Ý";
         Text[ turkish ] = "Çerçeveye uzaklýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia al marco";
     };
     Control CTL_POSITION
     {
@@ -451,6 +461,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "ÀüÃ¼ ³Êºñ(~W)";
         Text[ turkish ] = "Metni, ~nesne geniþliðine göre ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Todo el a~ncho";
     };
     GroupBox GRP_POSITION
     {
@@ -477,6 +488,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ korean ] = "ÅØ½ºÆ® À§Ä¡ °íÁ¤";
         Text[ turkish ] = "Metin sabitleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Anclaje del texto";
     };
     Text[ chinese_simplified ] = "ÎÄ×Ö";
     Text[ russian ] = "Òåêñò";
@@ -488,5 +500,6 @@ TabPage RID_SVXPAGE_TEXTATTR
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
  // ********************************************************************** EOF
