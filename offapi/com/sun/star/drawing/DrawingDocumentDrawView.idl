@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentDrawView.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 19:03:04 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ published service DrawingDocumentDrawView
 
     /** lets you access the window for this view
 
-        @since #106627#
+        @since OOo 1.1.2
     */
     [optional] interface com::sun::star::awt::XWindow;
 
@@ -188,7 +188,7 @@ published service DrawingDocumentDrawView
         to <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>
         afterwards.
 
-        @since #106627#
+        @since OOo 1.1.2
     */
        [optional, property] short ZoomType;
 
@@ -198,7 +198,7 @@ published service DrawingDocumentDrawView
         Valid only if the ZoomType is set to
         <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
 
-        @since #106627#
+        @since OOo 1.1.2
     */
        [optional, property] short ZoomValue;
 
@@ -207,7 +207,7 @@ published service DrawingDocumentDrawView
     /** defines the offset from the top left position of the displayed page
         to the top left position of the view area in 100th/mm.
 
-        @since #106627#
+        @since OOo 1.1.2
     */
     [optional, property] com::sun::star::awt::Point ViewOffset;
 
