@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namecontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-21 10:18:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,13 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 namespace comphelper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+    COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
         NameContainer_createInstance( ::com::sun::star::uno::Type aType );
 }
 
