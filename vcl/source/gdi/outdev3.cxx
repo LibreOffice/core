@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: th $ $Date: 2001-06-22 15:31:28 $
+ *  last change: $Author: th $ $Date: 2001-06-29 15:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,15 +356,39 @@ static sal_Unicode const aGulim[] = { 0xAD74, 0xB9BC, 0, 0 };
 static sal_Unicode const aGulimChe[] = { 0xAD74, 0xB9BC, 0xCCB4, 0, 0 };
 static sal_Unicode const aDotum[] = { 0xB3CB, 0xC6C0, 0, 0 };
 static sal_Unicode const aDotumChe[] = { 0xB3CB, 0xC6C0, 0xCCB4, 0, 0 };
+
 static sal_Unicode const aSimSun[] = { 0x5B8B, 0x4F53, 0, 0 };
-static sal_Unicode const aSimHei[] = { 0x9ED1, 0x4F53, 0, 0 };
 static sal_Unicode const aNSimSun[] = { 0x65B0, 0x5B8B, 0x4F53, 0, 0 };
+static sal_Unicode const aSimHei[] = { 0x9ED1, 0x4F53, 0, 0 };
+static sal_Unicode const aSimKai[] = { 0x6977, 0x4F53, 0, 0 };
+static sal_Unicode const azycjkSun[] = { 0x4E2D, 0x6613, 0x5B8B, 0x4F53, 0, 0 };
+static sal_Unicode const azycjkHei[] = { 0x4E2D, 0x6613, 0x9ED1, 0x4F53, 0, 0 };
+static sal_Unicode const azycjkKai[] = { 0x4E2D, 0x6613, 0x6977, 0x4F53, 0, 0 };
+static sal_Unicode const aFZHei[] = { 0x65B9, 0x6B63, 0x9ED1, 0x4F53, 0, 0 };
+static sal_Unicode const aFZKai[] = { 0x65B9, 0x6B63, 0x6977, 0x4F53, 0, 0 };
+static sal_Unicode const aFZSongYI[] = { 0x65B9, 0x6B63, 0x5B8B, 0x4E00, 0, 0 };
+static sal_Unicode const aFZShuSong[] = { 0x65B9, 0x6B63, 0x4E66, 0x5B8B, 0, 0 };
+static sal_Unicode const aFZFangSong[] = { 0x65B9, 0x6B63, 0x4EFF, 0x5B8B, 0, 0 };
+// Attention: this fonts includes the wrong encoding vector - so we double the names with correct and wrong encoding
+// First one is the GB-Encoding (we think the correct one), second is the big5 encoded name
+static sal_Unicode const aMHei[] = { 'm', 0x7B80, 0x9ED1, 0, 'm', 0x6F60, 0x7AAA, 0, 0 };
+static sal_Unicode const aMKai[] = { 'm', 0x7B80, 0x6977, 0x566C, 0, 'm', 0x6F60, 0x7FF1, 0x628E, 0, 0 };
+static sal_Unicode const aMSong[] = { 'm', 0x7B80, 0x5B8B, 0, 'm', 0x6F60, 0x51BC, 0, 0 };
+static sal_Unicode const aCFangSong[] = { 'm', 0x7B80, 0x592B, 0x5B8B, 0, 'm', 0x6F60, 0x6E98, 0x51BC, 0, 0 };
+
 static sal_Unicode const aMingLiU[] = { 0x7D30, 0x660E, 0x9AD4, 0, 0 };
 static sal_Unicode const aPMingLiU[] = { 0x65B0, 0x7D30, 0x660E, 0x9AD4, 0, 0 };
+static sal_Unicode const aHei[] = { 0x6865, 0, 0 };
+static sal_Unicode const aKai[] = { 0x6B61, 0, 0 };
+static sal_Unicode const aMing[] = { 0x6D69, 0x6E67, 0, 0 };
+
 static sal_Unicode const aMSGothic[] = { 'm', 's', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
 static sal_Unicode const aMSPGothic[] = { 'm', 's', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
 static sal_Unicode const aMSMincho[] = { 'm', 's', 0x660E, 0x671D, 0, 0 };
 static sal_Unicode const aMSPMincho[] = { 'm', 's', 'p', 0x660E, 0x671D, 0, 0 };
+static sal_Unicode const aHGMinchoL[] = { 'h', 'g', 0x660E, 0x671D, 'l', 0, 0 };
+static sal_Unicode const aHGGothicB[] = { 'h', 'g', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0, 0 };
+static sal_Unicode const aHGHeiseiMin[] = { 'h', 'g', 0x5E73, 0x6210, 0x660E, 0x671D, 0x4F53, 0, 'h', 'g', 0x5E73, 0x6210, 0x660E, 0x671D, 0x4F53, 'w', '3', 'x', '1', '2', 0, 0 };
 
 static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 {
@@ -379,12 +403,31 @@ static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 {   "simsun",               aSimSun },
 {   "nsimsun",              aNSimSun },
 {   "simhei",               aSimHei },
+{   "simkai",               aSimKai },
+{   "zycjksun",             azycjkSun },
+{   "zycjkhei",             azycjkHei },
+{   "zycjkkai",             azycjkKai },
+{   "fzhei",                aFZHei },
+{   "fzkai",                aFZKai },
+{   "fzsong",               aFZSongYI },
+{   "fzshusong",            aFZShuSong },
+{   "fzfangsong",           aFZFangSong },
+{   "mhei",                 aMHei },
+{   "mkai",                 aMKai },
+{   "msong",                aMSong },
+{   "cfangsong",            aCFangSong },
 {   "mingliu",              aMingLiU },
 {   "pmingliu",             aPMingLiU },
+{   "hei",                  aHei },
+{   "kai",                  aKai },
+{   "ming",                 aMing },
 {   "msgothic",             aMSGothic },
 {   "mspgothic",            aMSPGothic },
 {   "msmincho",             aMSMincho },
 {   "mspmincho",            aMSPMincho },
+{   "hgminchol",            aHGMinchoL },
+{   "hggothicb",            aHGGothicB },
+{   "hgheiseimin",          aHGHeiseiMin },
 {   NULL,                   NULL },
 };
 
@@ -551,17 +594,20 @@ String GetFontToken( const String& rStr, xub_StrLen nToken, xub_StrLen& rIndex )
 
 static const char* const aImplKillLeadingList[] =
 {
+    "microsoft",
+    "monotype",
+    "linotype",
+    "adobe",
+    "nimbus",
+    "zycjk",
+    "itc",
+    "sun",
     "amt",
     "ms",
-    "monotype",
     "mt",
-    "itc",
-    "adobe",
-    "sun",
     "cg",
     "hg",
     "fz",
-    "zycjk",
     NULL,
 };
 
@@ -569,13 +615,16 @@ static const char* const aImplKillLeadingList[] =
 
 static const char* const aImplKillTrailingList[] =
 {
+    "microsoft",
+    "monotype",
+    "linotype",
+    "adobe",
+    "nimbus",
+    "itc",
+    "sun",
     "amt",
     "ms",
-    "monotype",
     "mt",
-    "itc",
-    "adobe",
-    "sun",
     // Scripts, for compatibility with older versions
     "ce",
     "we",
@@ -585,12 +634,15 @@ static const char* const aImplKillTrailingList[] =
     "greek",
     "wl",
     // CJK extensions
+    "gb",
+    "big5",
     "pro",
     "z01",
     "z02",
     "z03",
     "z13",
     "b01",
+    "w3x12",
     // Old Printer Fontnames
     "5cpi",
     "6cpi",
@@ -609,6 +661,7 @@ static const char* const aImplKillTrailingList[] =
     "24cpi",
     "scale",
     "ps",
+    "pc",
     NULL,
 };
 
@@ -616,12 +669,13 @@ static const char* const aImplKillTrailingList[] =
 
 static const char* const aImplKillList[] =
 {
-    "ms",
     "monotype",
-    "mt",
-    "itc",
+    "nimbus",
     "adobe",
+    "itc",
     "sun",
+    "ms",
+    "mt",
     NULL,
 };
 
@@ -675,6 +729,7 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 
 // -----------------------------------------------------------------------
 
+// IMPL_FONT_ATTR_DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
 // IMPL_FONT_ATTR_STANDARD      - Standard-Font like Arial, Times, Courier, ...
 // IMPL_FONT_ATTR_NORMAL        - normal Font for writing text like Arial, Verdana, Arial Narrow, Trebuchet, Times, Courier, ...
 // IMPL_FONT_ATTR_SYMBOL        - Font with symbols
@@ -689,38 +744,42 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 // IMPL_FONT_ATTR_CHANCERY      - Like Zapf Chancery
 // IMPL_FONT_ATTR_COMIC         - Like Comic Sans MS
 // IMPL_FONT_ATTR_BRUSHSCRIPT   - More Script
-#define IMPL_FONT_ATTR_STANDARD      ((ULONG)0x00000001)
-#define IMPL_FONT_ATTR_NORMAL        ((ULONG)0x00000002)
-#define IMPL_FONT_ATTR_SYMBOL        ((ULONG)0x00000004)
-#define IMPL_FONT_ATTR_FIXED         ((ULONG)0x00000008)
-#define IMPL_FONT_ATTR_SANSSERIF     ((ULONG)0x00000010)
-#define IMPL_FONT_ATTR_SERIF         ((ULONG)0x00000020)
-#define IMPL_FONT_ATTR_DECORATIVE    ((ULONG)0x00000040)
-#define IMPL_FONT_ATTR_SPECIAL       ((ULONG)0x00000080)
-#define IMPL_FONT_ATTR_CJK           ((ULONG)0x00000100)
-#define IMPL_FONT_ATTR_CJK_JP        ((ULONG)0x00000200)
-#define IMPL_FONT_ATTR_CJK_SC        ((ULONG)0x00000400)
-#define IMPL_FONT_ATTR_CJK_TC        ((ULONG)0x00000800)
-#define IMPL_FONT_ATTR_CJK_KR        ((ULONG)0x00001000)
-#define IMPL_FONT_ATTR_ARABIC        ((ULONG)0x00002000)
-#define IMPL_FONT_ATTR_NONELATIN     ((ULONG)0x00004000)
-#define IMPL_FONT_ATTR_FULL          ((ULONG)0x00008000)
-#define IMPL_FONT_ATTR_ITALIC        ((ULONG)0x00010000)
-#define IMPL_FONT_ATTR_TITLING       ((ULONG)0x00020000)
-#define IMPL_FONT_ATTR_CAPITALS      ((ULONG)0x00040000)
-#define IMPL_FONT_ATTR_OUTLINE       ((ULONG)0x00080000)
-#define IMPL_FONT_ATTR_SHADOW        ((ULONG)0x00100000)
-#define IMPL_FONT_ATTR_ROUNDED       ((ULONG)0x00200000)
-#define IMPL_FONT_ATTR_TYPEWRITER    ((ULONG)0x00400000)
-#define IMPL_FONT_ATTR_SCRIPT        ((ULONG)0x00800000)
-#define IMPL_FONT_ATTR_HANDWRITING   ((ULONG)0x01000000)
-#define IMPL_FONT_ATTR_CHANCERY      ((ULONG)0x02000000)
-#define IMPL_FONT_ATTR_COMIC         ((ULONG)0x04000000)
-#define IMPL_FONT_ATTR_BRUSHSCRIPT   ((ULONG)0x08000000)
-#define IMPL_FONT_ATTR_OLDSTYLE      ((ULONG)0x10000000)
-#define IMPL_FONT_ATTR_NEWSTYLE      ((ULONG)0x20000000)
-#define IMPL_FONT_ATTR_GOTHIC        ((ULONG)0x40000000)
-#define IMPL_FONT_ATTR_SCHOOLBOOK    ((ULONG)0x80000000)
+// IMPL_FONT_ATTR_OTHERSTYLE    - OldStyle, ... so negativ points
+#define IMPL_FONT_ATTR_DEFAULT       ((ULONG)0x00000001)
+#define IMPL_FONT_ATTR_STANDARD      ((ULONG)0x00000002)
+#define IMPL_FONT_ATTR_NORMAL        ((ULONG)0x00000004)
+#define IMPL_FONT_ATTR_SYMBOL        ((ULONG)0x00000008)
+#define IMPL_FONT_ATTR_FIXED         ((ULONG)0x00000010)
+#define IMPL_FONT_ATTR_SANSSERIF     ((ULONG)0x00000020)
+#define IMPL_FONT_ATTR_SERIF         ((ULONG)0x00000040)
+#define IMPL_FONT_ATTR_DECORATIVE    ((ULONG)0x00000080)
+#define IMPL_FONT_ATTR_SPECIAL       ((ULONG)0x00000100)
+#define IMPL_FONT_ATTR_ITALIC        ((ULONG)0x00000200)
+#define IMPL_FONT_ATTR_TITLING       ((ULONG)0x00000400)
+#define IMPL_FONT_ATTR_CAPITALS      ((ULONG)0x00000800)
+#define IMPL_FONT_ATTR_CJK           ((ULONG)0x00001000)
+#define IMPL_FONT_ATTR_CJK_JP        ((ULONG)0x00002000)
+#define IMPL_FONT_ATTR_CJK_SC        ((ULONG)0x00004000)
+#define IMPL_FONT_ATTR_CJK_TC        ((ULONG)0x00008000)
+#define IMPL_FONT_ATTR_CJK_KR        ((ULONG)0x00010000)
+#define IMPL_FONT_ATTR_CTL           ((ULONG)0x00020000)
+#define IMPL_FONT_ATTR_NONELATIN     ((ULONG)0x00040000)
+#define IMPL_FONT_ATTR_FULL          ((ULONG)0x00080000)
+#define IMPL_FONT_ATTR_OUTLINE       ((ULONG)0x00100000)
+#define IMPL_FONT_ATTR_SHADOW        ((ULONG)0x00200000)
+#define IMPL_FONT_ATTR_ROUNDED       ((ULONG)0x00400000)
+#define IMPL_FONT_ATTR_TYPEWRITER    ((ULONG)0x00800000)
+#define IMPL_FONT_ATTR_SCRIPT        ((ULONG)0x01000000)
+#define IMPL_FONT_ATTR_HANDWRITING   ((ULONG)0x02000000)
+#define IMPL_FONT_ATTR_CHANCERY      ((ULONG)0x04000000)
+#define IMPL_FONT_ATTR_COMIC         ((ULONG)0x08000000)
+#define IMPL_FONT_ATTR_BRUSHSCRIPT   ((ULONG)0x10000000)
+#define IMPL_FONT_ATTR_GOTHIC        ((ULONG)0x20000000)
+#define IMPL_FONT_ATTR_SCHOOLBOOK    ((ULONG)0x40000000)
+#define IMPL_FONT_ATTR_OTHERSTYLE    ((ULONG)0x80000000)
+
+#define IMPL_FONT_ATTR_CJK_ALLLANG   (IMPL_FONT_ATTR_CJK_JP | IMPL_FONT_ATTR_CJK_SC | IMPL_FONT_ATTR_CJK_TC | IMPL_FONT_ATTR_CJK_KR)
+#define IMPL_FONT_ATTR_ALLLSCRIPT    (IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_BRUSHSCRIPT)
 
 struct ImplFontAttrTypeSearchData
 {
@@ -733,6 +792,7 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   "titling",              IMPL_FONT_ATTR_TITLING },
 {   "captitals",            IMPL_FONT_ATTR_CAPITALS },
 {   "captital",             IMPL_FONT_ATTR_CAPITALS },
+{   "caps",                 IMPL_FONT_ATTR_CAPITALS },
 {   "italic",               IMPL_FONT_ATTR_ITALIC },
 {   "oblique",              IMPL_FONT_ATTR_ITALIC },
 {   "rounded",              IMPL_FONT_ATTR_ROUNDED },
@@ -745,12 +805,8 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   "calligraphy",          IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
 {   "chancery",             IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
 {   "corsiva",              IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
-{   "oldstyle",             IMPL_FONT_ATTR_OLDSTYLE },
-{   "oldface",              IMPL_FONT_ATTR_OLDSTYLE },
-{   "old",                  IMPL_FONT_ATTR_OLDSTYLE },
-{   "new",                  IMPL_FONT_ATTR_NEWSTYLE },
-{   "gothic",               IMPL_FONT_ATTR_GOTHIC },
-{   "schoolbook",           IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "gothic",               IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_GOTHIC },
+{   "schoolbook",           IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
 {   "typewriter",           IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
 {   "lineprinter",          IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
 {   "monospaced",           IMPL_FONT_ATTR_FIXED },
@@ -760,13 +816,23 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   "sans",                 IMPL_FONT_ATTR_SANSSERIF },
 {   "swiss",                IMPL_FONT_ATTR_SANSSERIF },
 {   "serif",                IMPL_FONT_ATTR_SERIF },
-{   "roman",                IMPL_FONT_ATTR_SERIF },
 {   "bright",               IMPL_FONT_ATTR_SERIF },
 {   "symbols",              IMPL_FONT_ATTR_SYMBOL },
 {   "symbol",               IMPL_FONT_ATTR_SYMBOL },
 {   "dingbats",             IMPL_FONT_ATTR_SYMBOL },
+{   "dings",                IMPL_FONT_ATTR_SYMBOL },
+{   "ding",                 IMPL_FONT_ATTR_SYMBOL },
 {   "bats",                 IMPL_FONT_ATTR_SYMBOL },
 {   "math",                 IMPL_FONT_ATTR_SYMBOL },
+{   "oldstyle",             IMPL_FONT_ATTR_OTHERSTYLE },
+{   "oldface",              IMPL_FONT_ATTR_OTHERSTYLE },
+{   "old",                  IMPL_FONT_ATTR_OTHERSTYLE },
+{   "new",                  0 },
+{   "lucida",               0 },
+{   "regular",              0 },
+{   "extended",             0 },
+{   "extra",                IMPL_FONT_ATTR_OTHERSTYLE },
+{   "ext",                  0 },
 {   NULL,                   0 },
 };
 
@@ -906,45 +972,61 @@ static void ImplGetMapName( const String& rOrgName,
 // =======================================================================
 
 static char const aImplSubsSansUnicode[] = "andalesansui;arialunicodems;lucidaunicode";
-static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif";
-static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;bookman;garamond;garamondmt;palatino";
-static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced";
-static char const aImplSubsSymbol[] = "starsymbol;starbats;wingdings;zapfdingbats;monotypesorts;symbol;lucidadingbats;lucidasansdingbats";
+static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans";
+static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;garamond;garamondmt;palatino";
+static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol";
+static char const aImplSubsStarSymbol[] = "starsymbol;starbats;wingdings;zapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl";
+static char const aImplSubsDingBats[] = "starsymbol;zapfdingbats;monotypesorts";
+static char const aImplSubsSymbol[] = "starsymbol;symbol;standardsymbols;standardsymbolsl";
 
 static char const aImplSubsAndaleSans[] = "andalesans;verdana;trebuchetms";
-static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed";
+static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed";
 static char const aImplSubsBroadway[] = "broadway;mtbroadway;broadwaymt";
 static char const aImplSubsComic[] = "comicsansms;kidprint;";
 static char const aImplSubsPalaceScript[] = "palacescript;palacescriptmt;arioso";
 static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
 
-static char const aImplSubsJPGothic[] = "msgothic;mspgothic;hggothic;hggothicb;gothic";
-static char const aImplSubsJPMincho[] = "hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;heiseimin";
-static char const aImplSubsSCSun[] = "msunglightsc;simsun;nsimsun";
-static char const aImplSubsSCHei[] = "simhei;hei;fzhei";
-static char const aImplSubsSCKai[] = "simkai;kai;fzkai";
-static char const aImplSubsSCSong[] = "song;fzsongyi;shusong;fzshusong";
-static char const aImplSubsSCFangSong[] = "fangsong;fzfangsong";
-static char const aImplSubsTC[] = "msunglighttc;mingliu;pmingliu;ming;kai;hei";
+static char const aImplSubsJPGothic[] = "msgothic;mspgothic;hggothic;hggothicb;hggothice;gothic;andalesansui";
+static char const aImplSubsJPMincho[] = "hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin";
+static char const aImplSubsSCSun[] = "msunglightsc;simsun;nsimsun;zycjksun";
+static char const aImplSubsSCHei[] = "simhei;fzhei;zycjkhei;mhei;hei;andalesansui";
+static char const aImplSubsSCKai[] = "simkai;fzkai;zycjkkai;mkai;kai";
+static char const aImplSubsSCSong[] = "song;fzsongyi;fzsong;msong;shusong;fzshusong";
+static char const aImplSubsSCFangSong[] = "fangsong;fzfangsong;cfangsong";
+static char const aImplSubsTCMing[] = "msunglighttc;mingliu;pmingliu;ming";
+static char const aImplSubsTCHei[] = "hei;andalesansui";
+static char const aImplSubsTCKai[] = "kai";
+static char const aImplSubsSTCHei[] = "hei;andalesansui;simhei;fzhei;zycjkhei;mhei"; // SC and TC names, because the original name could be SC or TC
+static char const aImplSubsSTCKai[] = "kai;simkai;fzkai;zycjkkai;mkai"; // SC and TC names, because the original name could be SC or TC
 static char const aImplSubsKRBatang[] = "hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo";
-static char const aImplSubsKRGulim[] = "gulim;gulimche;dotum;dotumche;roundgothic;kodig";
+static char const aImplSubsKRGulim[] = "gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui";
 
 static char const aImplSubsCenturyGothic[] = "centurygothic;avantgarde;gothic;sheffield;conga";
-static char const aImplSubsNewCenturySchoolbook[] = "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook";
-static char const aImplSubsBookman[] = "bookman;bookmanoldstyle;";
-static char const aImplSubsPalatino[] = "palatino;bookantiqua";
-static char const aImplSubsZapfChancery[] = "zapfchancery;monotypecorsiva;corsiva;lucidacalligraphy;lucidahandwriting";
+static char const aImplSubsNewCenturySchoolbook[] = "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl";
+static char const aImplSubsBookman[] = "bookman;bookmanl;bookmanoldstyle;";
+static char const aImplSubsPalatino[] = "palatino;bookantiqua;palladio;palladiol";
 
 static char const aImplSubsImprintShadow[] = "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar";
 static char const aImplSubsOutline[] = "monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar";
 static char const aImplSubsShadow[] = "imprintmtshadow;imprintshadow;imprint;chevara;;gallia;algerian";
 static char const aImplSubsFalstaff[] = "falstaff;widelatin;latinwide;impact";
+static char const aImplSubsZapfChancery[] = "zapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting";
 
 
-static char const aImplMSSubsArial[] = "Arial;Helvetica;Sans";
-static char const aImplMSSubsTimesNewRoman[] = "Times New Roman;Times;Serif";
-static char const aImplMSSubsCourierNew[] = "Courier New;Courier;Monospaced";
+static char const aImplMSSubsArial[] = "Arial";
+static char const aImplMSSubsTimesNewRoman[] = "Times New Roman";
+static char const aImplMSSubsCourierNew[] = "Courier New";
 static char const aImplMSSubsArialUnicodeMS[] = "Arial Unicode MS;Andale Sans UI";
+
+static char const aImplPSSubsHelvetica[] = "Helvetica";
+static char const aImplPSSubsTimes[] = "Times";
+static char const aImplPSSubsCourier[] = "Courier";
+
+static char const aImplHTMLSubsSerif[] = "serif";
+static char const aImplHTMLSubsSansSerif[] = "sans-serif";
+static char const aImplHTMLSubsMonospace[] = "monospace";
+static char const aImplHTMLSubsCursive[] = "cursive";
+static char const aImplHTMLSubsFantasy[] = "fantasy";
 
 // -----------------------------------------------------------------------
 
@@ -954,7 +1036,10 @@ struct ImplFontNameAttr
     const char*             mpSubstitution1;
     const char*             mpSubstitution2;
     const char*             mpSubstitution3;
+    const char*             mpSubstitution4;
     const char*             mpMSSubstitution;
+    const char*             mpPSSubstitution;
+    const char*             mpHTMLSubstitution;
     FontWeight              meWeight;
     FontWidth               meWidth;
     ULONG                   mnType;
@@ -963,158 +1048,444 @@ struct ImplFontNameAttr
 // List is sorted alphabetic
 static ImplFontNameAttr const aImplFontNameList[] =
 {
-{   "albany",               aImplSubsSans, aImplSubsSansUnicode, NULL, aImplMSSubsArial, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "algerian",             aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
-{   "almanac",              aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "andalesans",           aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "andalesansui",         aImplSubsSansUnicode, aImplSubsSans, NULL, aImplMSSubsArialUnicodeMS, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "andalewtui",           aImplSubsSansUnicode, aImplSubsSans, NULL, aImplMSSubsArialUnicodeMS, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "andy",                 aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
-{   "arial",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "arialnarrow",          aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "arialunicode",         aImplSubsSansUnicode,aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_FULL },
-{   "arioso",               aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "avantgarde",           aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "batang",               aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "batangche",            aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "bookantiqua",          aImplSubsPalatino, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "bookman",              aImplSubsBookman, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OLDSTYLE },
-{   "bookmanoldstyle",      aImplSubsBookman, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OLDSTYLE },
-{   "broadway",             aImplSubsBroadway, aImplSubsFalstaff, NULL, NULL, WEIGHT_BLACK, WIDTH_EXPANDED, IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "castellar",            aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
-{   "century",              aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "centurygothic",        aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "centuryschoolbook",    aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
-{   "cgtimes",              aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "chevara",              aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_CAPITALS },
-{   "chevaraoutline",       aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_CAPITALS },
-{   "chicago",              aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "colonna",              aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "colonnamt",            aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "comicsans",            aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
-{   "comicsansms",          aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
-{   "conga",                aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
-{   "copperlategothic",     aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
-{   "corsiva",              aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
-{   "courier",              aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
-{   "couriernew",           aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
-{   "cumberland",           aImplSubsFixed, NULL, NULL, aImplMSSubsCourierNew, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
-{   "dotum",                aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "dotumche",             aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "edwardianscript",      aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "extra",                aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "falstaff",             aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "fangsong",             aImplSubsSCFangSong, aImplSubsSCKai, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "felixtitling",         aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
-{   "frutiger",             aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "gallia",               aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
-{   "garamond",             aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "geneva",               aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "gothic",               aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "gothicb",              aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "gulim",                aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "gulimche",             aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "gungsuh",              aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "gungsuhche",           aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "hei",                  aImplSubsSCHei, aImplSubsSansUnicode, aImplSubsSCSun, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "heiseimin",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "helmet",               aImplSubsSans, aImplSubsSansUnicode, NULL, aImplMSSubsArial, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "helmetcondensed",      aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "helvetica",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "helveticanarrow",      aImplSubsSansNarrow, aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "hggothic",             aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "hggothicb",            aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "hgminchoj",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "hgminchol",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "hgmincholightj",       aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "holidays",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "hymyeongjolightk",     aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "impact",               aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "imprint",              aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
-{   "imprintmtshadow",      aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
-{   "imprintshadow",        aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
-{   "informalroman",        aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "kai",                  aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "kidprint",             aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
-{   "kodig",                aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "kristen",              aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
-{   "kunstlerscript",       aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "latinwide",            aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "lucidacalligraphy",    aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
-{   "lucidahandwriting",    aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_ITALIC },
-{   "lucidasans",           aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "lucidasanstyp",        aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "lucidasanstypewriter", aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "lucidatypewriter",     aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "marlett",              aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "mincho",               aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "minchoj",              aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "minchol",              aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "ming",                 aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
-{   "mingli",               aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
-{   "mingliu",              aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
-{   "monaco",               aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "monospace",            aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "monospaced",           aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "msgothic",             aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "msmincho",             aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "mspmincho",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "msuigothic",           aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "msunglightsc",         aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "msunglighttc",         aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
-{   "mtbroadway",           aImplSubsBroadway, aImplSubsFalstaff, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "myeongjo",             aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "newcenturyschlbk",     aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
-{   "newcenturyschoolbook", aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
-{   "newyork",              aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "nsimsun",              aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "ocean",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "omega",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "outlook",              aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "palacescript",         aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "palatino",             aImplSubsPalatino, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "pgothic",              aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "pmincho",              aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "pmingliu",             aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
-{   "roundgothic",          aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "sansserif",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "segoe",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "serif",                aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "sheffield",            aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
-{   "shusong",              aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "simhei",               aImplSubsSCHei, aImplSubsSansUnicode, aImplSubsSCSun, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "simkai",               aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "simsun",               aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "song",                 aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
-{   "sorts",                aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "sorts2",               aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "sorts3",               aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "starbats",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "starmath",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "starsymbol",           aImplSubsSymbol, NULL, NULL, aImplMSSubsArialUnicodeMS, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "symbol",               aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "tahoma",               aImplSubsSansUnicode, aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "thorndale",            aImplSubsSerif, NULL, NULL, aImplMSSubsTimesNewRoman, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
-{   "times",                aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
-{   "timesnewroman",        aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
-{   "timmons",              aImplSubsSerif, NULL, NULL, aImplMSSubsTimesNewRoman, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "trebuchet",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "univers",              aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "utah",                 aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "vacation",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "verdana",              aImplSubsSans, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "vivaldi",              aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "vladimirscript",       aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "webdings",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "webdings2",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "webdings3",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "widelatin",            aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
-{   "wingdings",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "wingdings2",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "wingdings3",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "wingdings4",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "zapfchancery",         aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
-{   "zapfdingbats",         aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "albany",               aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, aImplMSSubsArial, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_DEFAULT },
+{   "algerian",             aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
+{   "almanac",              aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "andalesans",           aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "andalesansui",         aImplSubsSansUnicode, aImplSubsSans, NULL, NULL, aImplMSSubsArialUnicodeMS, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_FULL | IMPL_FONT_ATTR_DEFAULT },
+{   "andalewtui",           aImplSubsSansUnicode, aImplSubsSans, NULL, NULL, aImplMSSubsArialUnicodeMS, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_FULL | IMPL_FONT_ATTR_DEFAULT },
+{   "andy",                 aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
+{   "antiqueolive",         aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "arial",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "arialnarrow",          aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "arialunicode",         aImplSubsSansUnicode, aImplSubsSans, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_FULL },
+{   "arioso",               aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "avantgarde",           aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "baskervilleoldface",   aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OTHERSTYLE },
+{   "batang",               aImplSubsKRBatang, aImplSubsKRGulim, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "batangche",            aImplSubsKRBatang, aImplSubsKRGulim, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "bell",                 aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "blackadder",           aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "bookantiqua",          aImplSubsPalatino, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "bookman",              aImplSubsBookman, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "bookmanl",             aImplSubsBookman, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "bookmanoldstyle",      aImplSubsBookman, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OTHERSTYLE },
+{   "bradleyhand",          aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_ITALIC },
+{   "broadway",             aImplSubsBroadway, aImplSubsFalstaff, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_BLACK, WIDTH_EXPANDED, IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "calisto",              aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "castellar",            aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
+{   "century",              aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "centurygothic",        aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "centuryschoolbook",    aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "centuryschoolbookl",   aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "cgtimes",              aImplSubsSerif, NULL, NULL, NULL, NULL, aImplPSSubsTimes, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "chancery",             aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "chanceryl",            aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "chevara",              aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_CAPITALS },
+{   "chevaraoutline",       aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_CAPITALS },
+{   "chicago",              aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "chiller",              aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_SPECIAL },
+{   "colonna",              aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "comicsans",            aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_STANDARD },
+{   "comicsansms",          aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_STANDARD },
+{   "conga",                aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "copperlategothic",     aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "corsiva",              aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "courier",              aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "couriernew",           aImplSubsFixed, NULL, NULL, NULL, NULL, aImplPSSubsCourier, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "cumberland",           aImplSubsFixed, NULL, NULL, NULL, aImplMSSubsCourierNew, aImplPSSubsCourier, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_DEFAULT },
+{   "curlz",                aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_SPECIAL },
+{   "cursive",              aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "dingbats",             aImplSubsDingBats, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "dotum",                aImplSubsKRGulim, aImplSubsKRBatang, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "dotumche",             aImplSubsKRGulim, aImplSubsKRBatang, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "edwardianscript",      aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "elite",                aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "elited",               aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "engravers",            aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "extra",                aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "falstaff",             aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "fangsong",             aImplSubsSCFangSong, aImplSubsSCKai, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "fantasy",              aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
+{   "felixtitling",         aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "forte",                aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_DECORATIVE },
+{   "frenchscript",         aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_SPECIAL },
+{   "frutiger",             aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "fzhei",                aImplSubsSCHei, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "fzkai",                aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "gallia",               aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
+{   "garamond",             aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "geneva",               aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "gigi",                 aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_SPECIAL },
+{   "gothic",               aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsCenturyGothic, aImplSubsSansUnicode, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "gothicb",              aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "gothicl",              aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsCenturyGothic, aImplSubsSansUnicode, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "gulim",                aImplSubsKRGulim, aImplSubsKRBatang, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gulimche",             aImplSubsKRGulim, aImplSubsKRBatang, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gungsuh",              aImplSubsKRBatang, aImplSubsKRGulim, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gungsuhche",           aImplSubsKRBatang, aImplSubsKRGulim, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "hei",                  aImplSubsSTCHei, aImplSubsTCMing, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "heiseimin",            aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "helmet",               aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, aImplMSSubsArial, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "helmetcondensed",      aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "helv",                 aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "helvetica",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "helveticanarrow",      aImplSubsSansNarrow, aImplSubsSans, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "hggothic",             aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hggothicb",            aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hggothice",            aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hgminchoj",            aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hgminchol",            aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hgmincholightj",       aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "holidays",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "hymyeongjolightk",     aImplSubsKRBatang, aImplSubsKRGulim, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "impact",               aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "imprint",              aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
+{   "imprintmtshadow",      aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
+{   "imprintshadow",        aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
+{   "informalroman",        aImplSubsZapfChancery, aImplSubsComic, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "kai",                  aImplSubsSTCKai, aImplSubsTCMing, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "kidprint",             aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_STANDARD },
+{   "kodig",                aImplSubsKRGulim, aImplSubsKRBatang, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "kristen",              aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
+{   "kunstlerscript",       aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "latinwide",            aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "lettergothic",         aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "linedraw",             aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "lineprinter",          aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "losangeles",           "onyx", aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_SPECIAL },
+{   "lucidabright",         aImplSubsSerif, NULL, NULL, NULL, NULL, aImplPSSubsTimes, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "lucidacalligraphy",    aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "lucidaconsole",        aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "lucidadingbats",       aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "lucidahandwriting",    aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_ITALIC },
+{   "lucidasans",           aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "lucidasansdingbats",   aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "lucidasanstyp",        aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "lucidasanstypewriter", aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "lucidasansunicode",    aImplSubsSansUnicode, aImplSubsSans, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "lucidatypewriter",     aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "marlett",              aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "mincho",               aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "minchoj",              aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "minchol",              aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "ming",                 aImplSubsTCMing, aImplSubsTCHei, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "mingli",               aImplSubsTCMing, aImplSubsTCHei, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "mingliu",              aImplSubsTCMing, aImplSubsTCHei, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "monaco",               aImplSubsFixed, NULL, NULL, NULL, NULL, aImplPSSubsCourier, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "mono",                 aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "monol",                aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "monospace",            aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "monospaced",           aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "msgothic",             aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "msmincho",             aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "mspmincho",            aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "msuigothic",           aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "msunglightsc",         aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "msunglighttc",         aImplSubsTCMing, aImplSubsTCHei, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "mtbroadway",           aImplSubsBroadway, aImplSubsFalstaff, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "myeongjo",             aImplSubsKRBatang, aImplSubsKRGulim, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "newcenturyschlbk",     aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "newcenturyschoolbook", aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "newyork",              aImplSubsSerif, NULL, NULL, NULL, NULL, aImplPSSubsTimes, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "nlq",                  aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "nsimsun",              aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "ocean",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "omega",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "onyx",                 "losangeles", aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_SPECIAL },
+{   "outlook",              aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "palacescript",         aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC | IMPL_FONT_ATTR_DEFAULT },
+{   "palatino",             aImplSubsPalatino, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "palladio",             aImplSubsPalatino, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "palladiol",            aImplSubsPalatino, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "pepita",               aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "pgothic",              aImplSubsJPGothic, aImplSubsJPMincho, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "pica",                 aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "picad",                aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
+{   "pmincho",              aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "pmingliu",             aImplSubsTCMing, aImplSubsTCHei, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "pristina",             aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "ps",                   aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "psd",                  aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "psnlq",                aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "roman",                aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "romanno9",             aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "romanno9l",            aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "romanps",              aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "roundgothic",          aImplSubsKRGulim, aImplSubsKRBatang, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "sans",                 aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "sanscondensed",        aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "sansl",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "sanslcondensed",       aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "sansserif",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "schoolbook",           aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "script",               aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "segoe",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "serif",                aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "sheffield",            aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS | IMPL_FONT_ATTR_DEFAULT },
+{   "shusong",              aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "simhei",               aImplSubsSCHei, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "simkai",               aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "simsun",               aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "song",                 aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "sorts",                aImplSubsDingBats, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "sorts2",               aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "sorts3",               aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "spartan",              aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "standardsymbols",      aImplSubsSymbol, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "standardsymbolsl",     aImplSubsSymbol, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starbats",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starmath",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starsymbol",           aImplSubsSansUnicode, aImplSubsStarSymbol, NULL, NULL, aImplMSSubsArialUnicodeMS, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "symbol",               aImplSubsSymbol, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "tahoma",               aImplSubsSansUnicode, aImplSubsSans, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "thorndale",            aImplSubsSerif, NULL, NULL, NULL, aImplMSSubsTimesNewRoman, aImplPSSubsTimes, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_DEFAULT },
+{   "times",                aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "timesnewroman",        aImplSubsSerif, NULL, NULL, NULL, NULL, aImplPSSubsTimes, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "timesroman",           aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "timmons",              aImplSubsSerif, NULL, NULL, NULL, aImplMSSubsTimesNewRoman, aImplPSSubsTimes, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "tmsrmn",               aImplSubsSerif, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "trebuchet",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "univers",              aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "universcondensed",     aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "utah",                 aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "vacation",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "verdana",              aImplSubsSans, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsSansSerif,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "vinerhand",            aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_ITALIC },
+{   "vivaldi",              aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "vladimirscript",       aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "webdings",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "webdings2",            aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "webdings3",            aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "widelatin",            aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "wingdings",            aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings2",           aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings3",           aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings4",           aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "zapfchancery",         aImplSubsZapfChancery, aImplSubsPalaceScript, aImplSubsComic, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "zapfdingbats",         aImplSubsDingBats, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "zycjkhei",             aImplSubsSCHei, aImplSubsSCSun, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "zycjkkai",             aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "zycjksun",             aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC }
 };
 
 // -----------------------------------------------------------------------
@@ -1337,11 +1708,11 @@ static char const aImplDefSans[] = "Albany;Arial;Helvetica;Lucida;Geneva;Helmet;
 static char const aImplDefSerif[] = "Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif";
 static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced";
 static char const aImplDefSymbol[] = "StarSymbol;Andale Sans UI;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol";
-static char const aImplDef_CJK_JP_Mincho[] = "HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho";
-static char const aImplDef_CJK_JP_Gothic[] = "HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic";
-static char const aImplDef_CJK_JP_UIGothic[] = "Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic";
-static char const aImplDef_CJK_SC[] = "MSung Light SC;SimSun;Song";
-static char const aImplDef_CJK_TC[] = "MSung Light TC;MingLiU;Ming";
+static char const aImplDef_CJK_JP_Mincho[] = "HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho";
+static char const aImplDef_CJK_JP_Gothic[] = "HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic";
+static char const aImplDef_CJK_JP_UIGothic[] = "Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic";
+static char const aImplDef_CJK_SC[] = "MSung Light SC;SimSun;Song;FZSongYi;FZShuSong;NSimSun";
+static char const aImplDef_CJK_TC[] = "MSung Light TC;MingLiU;Ming;PMingLiU";
 static char const aImplDef_CJK_KR_Batang[] = "HY MyeongJo Light;Batang;Myeongjo";
 static char const aImplDef_CJK_KR_Gulim[] = "Andale Sans UI;Gulim;Roundgothic";
 
@@ -1368,18 +1739,36 @@ static BOOL ImplIsFontToken( const String& rName, const String& rToken )
 
 // -----------------------------------------------------------------------
 
+static void ImplAppendFontToken( String& rName, const String rNewToken )
+{
+    if ( rName.Len() )
+    {
+        rName.Append( ';' );
+        rName.Append( rNewToken );
+    }
+    else
+        rName = rNewToken;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplAppendFontToken( String& rName, const char* pNewToken )
+{
+    if ( rName.Len() )
+    {
+        rName.Append( ';' );
+        rName.AppendAscii( pNewToken );
+    }
+    else
+        rName.AssignAscii( pNewToken );
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplAddTokenFontName( String& rName, const String& rNewToken )
 {
     if ( !ImplIsFontToken( rName, rNewToken ) )
-    {
-        if ( rName.Len() )
-        {
-            rName.Append( ';' );
-            rName.Append( rNewToken );
-        }
-        else
-            rName = rNewToken;
-    }
+        ImplAppendFontToken( rName, rNewToken );
 }
 
 // -----------------------------------------------------------------------
@@ -1406,15 +1795,7 @@ static void ImplAddTokenFontNames( String& rName, const char* pFontNames )
             while ( nIndex != STRING_NOTFOUND );
 
             if ( aName.Len() )
-            {
-                if ( rName.Len() )
-                {
-                    rName.Append( ';' );
-                    rName.Append( aName );
-                }
-                else
-                    rName = aName;
-            }
+                ImplAppendFontToken( rName, aName );
 
             if ( !(*pStr) )
                 break;
@@ -1491,12 +1872,16 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                       (eLang == LANGUAGE_CHINESE_HONGKONG) ||
                       (eLang == LANGUAGE_CHINESE_MACAU) )
                 pSearch1 = aImplDef_CJK_TC;
-            else if ( eLang == LANGUAGE_KOREAN )
+            else if ( (eLang == LANGUAGE_KOREAN) ||
+                      (eLang == LANGUAGE_KOREAN_JOHAB) )
             {
                 if ( nType == DEFAULTFONT_CJK_DISPLAY )
                     pSearch1 = aImplDef_CJK_KR_Gulim;
                 else
+                {
                     pSearch1 = aImplDef_CJK_KR_Batang;
+                    pSearch2 = aImplDef_CJK_KR_Gulim;
+                }
             }
             else
             {
@@ -1506,9 +1891,12 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                 else if ( nType == DEFAULTFONT_CJK_PRESENTATION )
                     pSearch1 = aImplDef_CJK_JP_Gothic;
                 else
+                {
                     pSearch1 = aImplDef_CJK_JP_Mincho;
+                    pSearch2 = aImplDef_CJK_JP_Gothic;
+                }
             }
-            pSearch2 = aImplDefSansUnicode;
+            pSearch3 = aImplDefSansUnicode;
             break;
 
         case DEFAULTFONT_CTL_TEXT:
@@ -1538,11 +1926,11 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
             {
                 aNames += ';';
                 aNames.AppendAscii( pSearch2 );
-                if ( pSearch3 )
-                {
-                    aNames += ';';
-                    aNames.AppendAscii( pSearch2 );
-                }
+            }
+            if ( pSearch3 )
+            {
+                aNames += ';';
+                aNames.AppendAscii( pSearch2 );
             }
 
             // Search Font in the FontList
@@ -1599,16 +1987,18 @@ String GetSubsFontName( const String& rName, ULONG nFlags )
     String aOrgName = GetFontToken( rName, 0 );
     ImplGetEnglishSearchFontName( aOrgName );
 
+    // Search Font in FontList
     const ImplFontNameAttr* pFontAttr = ImplGetFontNameAttr( aOrgName );
-
-    // Currently we have only SUBSFONT_MS
-    if ( pFontAttr && pFontAttr->mpMSSubstitution )
+    if ( pFontAttr )
     {
         String aTempName;
-        aTempName.AssignAscii( pFontAttr->mpMSSubstitution );
 
-        if ( nFlags & SUBSFONT_ONLYONE )
-            aTempName = GetFontToken( aName, 0 );
+        if ( (nFlags & SUBSFONT_MS) && pFontAttr->mpMSSubstitution )
+            ImplAppendFontToken( aTempName, pFontAttr->mpMSSubstitution );
+        if ( (nFlags & SUBSFONT_PS) && pFontAttr->mpPSSubstitution )
+            ImplAppendFontToken( aTempName, pFontAttr->mpPSSubstitution );
+        if ( (nFlags & SUBSFONT_HTML) && pFontAttr->mpHTMLSubstitution )
+            ImplAppendFontToken( aTempName, pFontAttr->mpHTMLSubstitution );
 
         // Add all names which aren't in the original font name
         String      aTempToken;
@@ -1618,13 +2008,9 @@ String GetSubsFontName( const String& rName, ULONG nFlags )
             aTempToken = GetFontToken( aTempName, 0, nIndex );
             if ( !ImplIsFontToken( rName, aTempToken ) )
             {
-                if ( aName.Len() )
-                {
-                    aName.Append( ';' );
-                    aName.Append( aTempToken );
-                }
-                else
-                    aName = aTempToken;
+                ImplAppendFontToken( aName, aTempToken );
+                if ( nFlags & SUBSFONT_ONLYONE )
+                    break;
             }
         }
         while ( nIndex != STRING_NOTFOUND );
@@ -1746,24 +2132,31 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
         pFoundData->mpFirst         = pNewData;
         pFoundData->meFamily        = FAMILY_DONTKNOW;
         pFoundData->mePitch         = PITCH_DONTKNOW;
-        pFoundData->mbScalable      = FALSE;
-        pFoundData->mbSymbol        = FALSE;
+        pFoundData->mnTypeFaces     = 0;
         pNewData->mpNext            = NULL;
         Insert( pFoundData, nIndex );
         bInsert = FALSE;
     }
 
     // set Match data
-    if ( !pFoundData->mbScalable )
+    if ( (pNewData->meType == TYPE_SCALABLE) && (pNewData->mnHeight == 0) )
+        pFoundData->mnTypeFaces |= IMPL_DEVFONT_SCALABLE;
+    if ( pNewData->meCharSet == RTL_TEXTENCODING_SYMBOL )
+        pFoundData->mnTypeFaces |= IMPL_DEVFONT_SYMBOL;
+    if ( pNewData->meWeight != WEIGHT_DONTKNOW )
     {
-        if ( (pNewData->meType == TYPE_SCALABLE) && (pNewData->mnHeight == 0) )
-            pFoundData->mbScalable = TRUE;
+        if ( pNewData->meWeight >= WEIGHT_SEMIBOLD )
+            pFoundData->mnTypeFaces |= IMPL_DEVFONT_BOLD;
+        else if ( pNewData->meWeight <= WEIGHT_SEMILIGHT )
+            pFoundData->mnTypeFaces |= IMPL_DEVFONT_LIGHT;
+        else
+            pFoundData->mnTypeFaces |= IMPL_DEVFONT_NORMAL;
     }
-    if ( !pFoundData->mbSymbol )
-    {
-        if ( pNewData->meCharSet == RTL_TEXTENCODING_SYMBOL )
-            pFoundData->mbSymbol = TRUE;
-    }
+    if ( pNewData->meItalic == ITALIC_NONE )
+        pFoundData->mnTypeFaces |= IMPL_DEVFONT_NONEITALIC;
+    else if ( (pNewData->meItalic == ITALIC_NORMAL) ||
+              (pNewData->meItalic == ITALIC_OBLIQUE) )
+        pFoundData->mnTypeFaces |= IMPL_DEVFONT_ITALIC;
     if ( pFoundData->meFamily == FAMILY_DONTKNOW )
         pFoundData->meFamily = pNewData->meFamily;
     if ( pFoundData->mePitch == PITCH_DONTKNOW )
@@ -1779,28 +2172,7 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
             aName = GetFontToken( pNewData->maMapNames, 0, nIndex );
             ImplGetEnglishSearchFontName( aName );
             if ( aName != aSearchName )
-            {
-                // Test, if Alias exists already
-                String      aTempName;
-                xub_StrLen  nIndex2 = 0;
-                do
-                {
-                    aTempName = GetFontToken( pFoundData->maMapNames, 0, nIndex2 );
-                    if ( aName == aTempName )
-                    {
-                        aName.Erase();
-                        break;
-                    }
-                }
-                while ( nIndex2 != STRING_NOTFOUND );
-
-                if ( aName.Len() )
-                {
-                    if ( pFoundData->maMapNames.Len() )
-                        pFoundData->maMapNames += ';';
-                    pFoundData->maMapNames += aName;
-                }
-            }
+                ImplAddTokenFontName( pFoundData->maMapNames, aName );
         }
         while ( nIndex != STRING_NOTFOUND );
     }
@@ -1994,6 +2366,25 @@ ImplFontEntry::~ImplFontEntry()
 
 // =======================================================================
 
+static BOOL ImplIsCJKFont( const String& rFontName )
+{
+    // Test, if Fontname includes CJK characters --> In this case we
+    // mention that it is a CJK font
+    const sal_Unicode* pStr = rFontName.GetBuffer();
+    while ( *pStr )
+    {
+        if ( ((*pStr >= 0x3000) && (*pStr <= 0xD7AF)) ||
+             ((*pStr >= 0xFF00) && (*pStr <= 0xFFEE)) )
+            return TRUE;
+
+        pStr++;
+    }
+
+    return FALSE;
+}
+
+// =======================================================================
+
 ImplFontCache::ImplFontCache( BOOL bPrinter )
 {
     mpFirstEntry    = NULL;
@@ -2111,6 +2502,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         pEntry = pEntry->mpNext;
     }
 
+    const ImplCvtChar*      pConvertFontTab = NULL;
     ImplFontData*           pFontData = NULL;
     ImplDevFontListData*    pFoundData;
     String                  aSearchName;
@@ -2170,16 +2562,17 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         // finden - wir nehmen dazu das erste Token
         if ( nToken > 1 )
         {
+            nIndex = 0;
             aSearchName = GetFontToken( rName, 0, nIndex );
             ImplGetEnglishSearchFontName( aSearchName );
         }
 
-        const ImplFontNameAttr* pFontAttr;
+        const ImplFontNameAttr* pFontAttr = NULL;
         String                  aSearchShortName;
         String                  aSearchFamilyName;
         ULONG                   nSearchType = 0;
         FontWeight              eSearchWeight = eWeight;
-        FontWidth               eSearchWidth = WIDTH_DONTKNOW;
+        FontWidth               eSearchWidth = rFont.GetWidthType();
         ImplGetMapName( aSearchName, aSearchShortName, aSearchFamilyName,
                         eSearchWeight, eSearchWidth, nSearchType );
 
@@ -2206,128 +2599,426 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             }
         }
 
-        if ( !pFoundData )
+        // If we haven't found a font, we try this with the other Font Token names, if availble
+        if ( !pFoundData && (nToken > 1) )
         {
-            // wir versuchen zuerst einen Font zu finden, der ueber den Namen
-            // matched
-            ULONG nTestMatch;
-            ULONG nBestMatch = 0;
+            while ( nIndex != STRING_NOTFOUND )
+            {
+                const ImplFontNameAttr* pTempFontAttr;
+                String                  aTempName = GetFontToken( rName, 0, nIndex );
+                String                  aTempShortName;
+                String                  aTempFamilyName;
+                ULONG                   nTempType = 0;
+                FontWeight              eTempWeight = eWeight;
+                FontWidth               eTempWidth = WIDTH_DONTKNOW;
+                ImplGetEnglishSearchFontName( aTempName );
+                ImplGetMapName( aTempName, aTempShortName, aTempFamilyName,
+                                eTempWeight, eTempWidth, nTempType );
+
+                // Temp, if ShortName is available
+                if ( aTempShortName != aTempName )
+                    pFoundData = pFontList->ImplFind( aTempShortName );
+
+                if ( !pFoundData && aTempName.Len() )
+                {
+                    pTempFontAttr = ImplGetFontNameAttr( aTempName );
+                    if ( !pTempFontAttr && (aTempShortName != aTempName) )
+                        pTempFontAttr = ImplGetFontNameAttr( aTempShortName );
+
+                    // Try Substitution
+                    if ( pTempFontAttr && pTempFontAttr->mpSubstitution1 )
+                    {
+                        pFoundData = pFontList->ImplFindFontFromToken( pTempFontAttr->mpSubstitution1 );
+                        if ( !pFoundData && pTempFontAttr->mpSubstitution2 )
+                        {
+                            pFoundData = pFontList->ImplFindFontFromToken( pTempFontAttr->mpSubstitution2 );
+                            if ( !pFoundData && pTempFontAttr->mpSubstitution3 )
+                            {
+                                pFoundData = pFontList->ImplFindFontFromToken( pTempFontAttr->mpSubstitution3 );
+                                if ( !pFoundData && pTempFontAttr->mpSubstitution4 )
+                                    pFoundData = pFontList->ImplFindFontFromToken( pTempFontAttr->mpSubstitution4 );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // If we haven't found a font over the name, we try to find the best match over the attributes
+        if ( !pFoundData && aSearchName.Len() )
+        {
+            if ( ImplIsCJKFont( aSearchName ) )
+                nSearchType |= IMPL_FONT_ATTR_CJK;
+            if ( eFamily != FAMILY_DONTKNOW )
+            {
+                if ( eFamily == FAMILY_SWISS )
+                    nSearchType |= IMPL_FONT_ATTR_SANSSERIF;
+                else if ( eFamily == FAMILY_ROMAN )
+                    nSearchType |= IMPL_FONT_ATTR_SERIF;
+                else if ( eFamily == FAMILY_SCRIPT )
+                    nSearchType |= IMPL_FONT_ATTR_SCRIPT;
+                else if ( eFamily == FAMILY_MODERN )
+                    nSearchType |= IMPL_FONT_ATTR_FIXED;
+                else if ( eFamily == FAMILY_DECORATIVE )
+                    nSearchType |= IMPL_FONT_ATTR_DECORATIVE;
+            }
+            if ( (eItalic != ITALIC_NONE) && (eItalic != ITALIC_DONTKNOW) )
+                nSearchType |= IMPL_FONT_ATTR_ITALIC;
+            LanguageType eLang = rFont.GetLanguage();
+            if ( (eLang == LANGUAGE_CHINESE) ||
+                 (eLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
+                 (eLang == LANGUAGE_CHINESE_SINGAPORE) )
+                nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC;
+            else if ( (eLang == LANGUAGE_CHINESE_TRADITIONAL) ||
+                      (eLang == LANGUAGE_CHINESE_HONGKONG) ||
+                      (eLang == LANGUAGE_CHINESE_MACAU) )
+                nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC;
+            else if ( (eLang == LANGUAGE_KOREAN) ||
+                      (eLang == LANGUAGE_KOREAN_JOHAB) )
+                nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR;
+            else if ( eLang == LANGUAGE_JAPANESE )
+                nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP;
+            if ( pFontAttr )
+            {
+                nSearchType |= pFontAttr->mnType;
+
+                if ( (eSearchWeight == WEIGHT_DONTKNOW) || (eSearchWeight == WEIGHT_NORMAL) )
+                    eSearchWeight = pFontAttr->meWeight;
+                if ( (eSearchWidth == WIDTH_DONTKNOW) || (eSearchWidth == WIDTH_NORMAL) )
+                    eSearchWidth = pFontAttr->meWidth;
+            }
+
+            long nTestMatch;
+            long nBestMatch = 50000;
             for ( ULONG i = 0; i < nFontCount; i++ )
             {
                 ImplDevFontListData* pData = pFontList->Get( i );
 
+                // Test mapping names
+                // If match one matching name, than this is our font!
+                if ( pData->maMapNames.Len() )
+                {
+                    String      aTempName;
+                    xub_StrLen  nIndex = 0;
+                    do
+                    {
+                        aTempName = GetFontToken( pData->maMapNames, 0, nIndex );
+                        // Test, if the Font name match with one of the mapping names
+                        if ( (aTempName == aSearchName) || (aTempName == aSearchShortName) )
+                        {
+                            // Found - we use this font
+                            pFoundData = pData;
+                            break;
+                        }
+                    }
+                    while ( nIndex != STRING_NOTFOUND );
+                }
+
+                // We must only match, if we have something to match
+                if ( !(nSearchType ||
+                       ((eSearchWeight != WEIGHT_DONTKNOW) && (eSearchWeight != WEIGHT_NORMAL)) ||
+                       ((eSearchWidth != WIDTH_DONTKNOW) && (eSearchWidth != WIDTH_NORMAL))) )
+                    continue;
+
+                // Get all information about the matching font
+                const ImplFontNameAttr* pMatchFontAttr = NULL;
+                String                  aMatchShortName;
+                String                  aMatchFamilyName;
+                ULONG                   nMatchType = 0;
+                FontWeight              eMatchWeight = eWeight;
+                FontWidth               eMatchWidth = WIDTH_DONTKNOW;
+                ImplGetMapName( pData->maSearchName, aMatchShortName, aMatchFamilyName,
+                                eMatchWeight, eMatchWidth, nMatchType );
+                pMatchFontAttr = ImplGetFontNameAttr( pData->maSearchName );
+                if ( !pMatchFontAttr && (aMatchShortName != pData->maSearchName) )
+                    pMatchFontAttr = ImplGetFontNameAttr( aMatchShortName );
+                if ( pMatchFontAttr )
+                {
+                    nMatchType |= pMatchFontAttr->mnType;
+
+                    if ( (eMatchWeight == WEIGHT_DONTKNOW) || (eMatchWeight == WEIGHT_NORMAL) )
+                        eMatchWeight = pMatchFontAttr->meWeight;
+                    if ( (eMatchWidth == WIDTH_DONTKNOW) || (eMatchWidth == WIDTH_NORMAL) )
+                        eMatchWidth = pMatchFontAttr->meWidth;
+                }
+                if ( ImplIsCJKFont( pData->maName ) )
+                    nMatchType |= IMPL_FONT_ATTR_CJK;
+                if ( pData->mnTypeFaces & IMPL_DEVFONT_SYMBOL )
+                    nMatchType |= IMPL_FONT_ATTR_SYMBOL;
+
+                // Calculate Match Value
+                // 1000000000
+                //  100000000
+                //   10000000   CJK, CTL, None-Latin, Symbol
+                //    1000000   FamilyName, Script, Fixed, -Special, -Decorative,
+                //              Titling, Capitals, Outline, Shadow
+                //     100000   Match FamilyName, Serif, SansSerif, Italic,
+                //              Width, Weight
+                //      10000   Scalable, Standard, Default,
+                //              full, Normal, Knownfont,
+                //              Otherstyle, +Special, +Decorative,
+                //       1000   Typewriter, Rounded, Gothic, Schollbook
+                //        100
                 nTestMatch = 0;
 
-#if 0
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // Test, if the choosen font should be CJK, CTL, None-Latin
+                if ( nSearchType & IMPL_FONT_ATTR_CJK )
+                {
+                    // Matching language
+                    if ( (nSearchType & IMPL_FONT_ATTR_CJK_ALLLANG) ==
+                         (nMatchType & IMPL_FONT_ATTR_CJK_ALLLANG) )
+                        nTestMatch += 10000000*3;
+                    if ( nMatchType & IMPL_FONT_ATTR_CJK )
+                        nTestMatch += 10000000*2;
+                    if ( nMatchType & IMPL_FONT_ATTR_FULL )
+                        nTestMatch += 10000000;
+                }
+                else if ( nMatchType & IMPL_FONT_ATTR_CJK )
+                    nTestMatch -= 10000000;
+
+                if ( nSearchType & IMPL_FONT_ATTR_CTL )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_CTL )
+                        nTestMatch += 10000000*2;
+                    if ( nMatchType & IMPL_FONT_ATTR_FULL )
+                        nTestMatch += 10000000;
+                }
+                else if ( nMatchType & IMPL_FONT_ATTR_CTL )
+                    nTestMatch -= 10000000;
+
+                if ( nSearchType & IMPL_FONT_ATTR_NONELATIN )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_NONELATIN )
+                        nTestMatch += 10000000*2;
+                    if ( nMatchType & IMPL_FONT_ATTR_FULL )
+                        nTestMatch += 10000000;
+                }
+
+                if ( nSearchType & IMPL_FONT_ATTR_SYMBOL )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_SYMBOL )
+                        nTestMatch += 10000000*2;
+                    if ( nMatchType & IMPL_FONT_ATTR_FULL )
+                        nTestMatch += 10000000;
+                }
+                else if ( nMatchType & IMPL_FONT_ATTR_SYMBOL )
+                    nTestMatch -= 10000000;
+
+
+                if ( (aSearchFamilyName == aMatchFamilyName) &&
+                     aSearchFamilyName.Len() )
+                    nTestMatch += 1000000*3;
+
+                if ( nSearchType & IMPL_FONT_ATTR_ALLLSCRIPT )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_ALLLSCRIPT )
+                    {
+                        nTestMatch += 1000000*2;
+                        if ( (nSearchType & IMPL_FONT_ATTR_ALLLSCRIPT) ==
+                             (nMatchType & IMPL_FONT_ATTR_ALLLSCRIPT) )
+                            nTestMatch += 1000000*2;
+                        if ( (nSearchType & IMPL_FONT_ATTR_BRUSHSCRIPT) !=
+                             (nMatchType & IMPL_FONT_ATTR_BRUSHSCRIPT) )
+                            nTestMatch -= 1000000;
+                    }
+                }
+                else if ( nMatchType & IMPL_FONT_ATTR_ALLLSCRIPT )
+                    nTestMatch -= 1000000;
+
+                if ( nSearchType & IMPL_FONT_ATTR_FIXED )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_FIXED )
+                    {
+                        nTestMatch += 1000000*2;
+                        // Typewriter has now a higher prio
+                        if ( (nSearchType & IMPL_FONT_ATTR_TYPEWRITER) ==
+                             (nMatchType & IMPL_FONT_ATTR_TYPEWRITER) )
+                             nTestMatch += 100000;
+                    }
+                }
+                else if ( nMatchType & IMPL_FONT_ATTR_FIXED )
+                    nTestMatch -= 1000000;
+
+                if ( nSearchType & IMPL_FONT_ATTR_SPECIAL )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_SPECIAL )
+                        nTestMatch += 10000;
+                }
+                else if ( nMatchType & IMPL_FONT_ATTR_SPECIAL )
+                    nTestMatch -= 1000000;
+                if ( nSearchType & IMPL_FONT_ATTR_DECORATIVE )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_DECORATIVE )
+                        nTestMatch += 10000;
+                }
+                else if ( nMatchType & IMPL_FONT_ATTR_DECORATIVE )
+                    nTestMatch -= 1000000;
+
+                if ( nSearchType & (IMPL_FONT_ATTR_TITLING | IMPL_FONT_ATTR_CAPITALS) )
+                {
+                    if ( nMatchType & (IMPL_FONT_ATTR_TITLING | IMPL_FONT_ATTR_CAPITALS) )
+                        nTestMatch += 10000000*2;
+                    if ( (nSearchType & (IMPL_FONT_ATTR_TITLING | IMPL_FONT_ATTR_CAPITALS)) ==
+                         (nMatchType & (IMPL_FONT_ATTR_TITLING | IMPL_FONT_ATTR_CAPITALS)) )
+                        nTestMatch += 10000000*2;
+                }
+                else if ( nMatchType & (IMPL_FONT_ATTR_TITLING | IMPL_FONT_ATTR_CAPITALS) )
+                    nTestMatch -= 10000000;
+                if ( nSearchType & (IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW) )
+                {
+                    if ( nMatchType & (IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW) )
+                        nTestMatch += 10000000*2;
+                    if ( (nSearchType & (IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW)) ==
+                         (nMatchType & (IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW)) )
+                        nTestMatch += 10000000*2;
+                }
+                else if ( nMatchType & (IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW) )
+                    nTestMatch -= 10000000;
+
+
+                if ( (aSearchFamilyName.Len() && aMatchFamilyName.Len()) &&
+                     ((aSearchFamilyName.Search( aMatchFamilyName ) != STRING_NOTFOUND) ||
+                      (aMatchFamilyName.Search( aSearchFamilyName ) != STRING_NOTFOUND)) )
+                    nTestMatch += 100000*2;
+
+                if ( nSearchType & IMPL_FONT_ATTR_SERIF )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_SERIF )
+                        nTestMatch += 1000000*2;
+                    else if ( nMatchType & IMPL_FONT_ATTR_SANSSERIF )
+                        nTestMatch -= 1000000;
+                }
+
+                if ( nSearchType & IMPL_FONT_ATTR_SANSSERIF )
+                {
+                    if ( nMatchType & IMPL_FONT_ATTR_SANSSERIF )
+                        nTestMatch += 1000000;
+                    else if ( nMatchType & IMPL_FONT_ATTR_SERIF )
+                        nTestMatch -= 1000000;
+                }
+
+                if ( nSearchType & IMPL_FONT_ATTR_ITALIC )
+                {
+                    if ( pData->mnTypeFaces & IMPL_DEVFONT_ITALIC )
+                        nTestMatch += 1000000*3;
+                    if ( nMatchType & IMPL_FONT_ATTR_ITALIC )
+                        nTestMatch += 1000000;
+                }
+                else if ( (nMatchType & IMPL_FONT_ATTR_ITALIC) ||
+                          !(pData->mnTypeFaces & IMPL_DEVFONT_NONEITALIC) )
+                    nTestMatch -= 1000000*2;
+
+                if ( (eSearchWidth != WIDTH_DONTKNOW) && (eSearchWidth != WIDTH_NORMAL) )
+                {
+                    if ( eSearchWidth < WIDTH_NORMAL )
+                    {
+                        if ( eSearchWidth == eMatchWidth )
+                            nTestMatch += 1000000*3;
+                        else if ( (eMatchWidth < WIDTH_NORMAL) && (eMatchWidth != WIDTH_DONTKNOW) )
+                            nTestMatch += 1000000;
+                    }
+                    else
+                    {
+                        if ( eSearchWidth == eMatchWidth )
+                            nTestMatch += 1000000*3;
+                        else if ( eMatchWidth > WIDTH_NORMAL )
+                            nTestMatch += 1000000;
+                    }
+                }
+                else if ( (eMatchWidth != WIDTH_DONTKNOW) && (eMatchWidth != WIDTH_NORMAL) )
+                    nTestMatch -= 1000000;
+
+                if ( (eSearchWeight != WEIGHT_DONTKNOW) && (eSearchWeight != WEIGHT_NORMAL) && (eSearchWeight != WEIGHT_MEDIUM) )
+                {
+                    if ( eSearchWeight < WEIGHT_NORMAL )
+                    {
+                        if ( pData->mnTypeFaces & IMPL_DEVFONT_LIGHT )
+                            nTestMatch += 1000000;
+                        if ( (eMatchWeight < WEIGHT_NORMAL) && (eMatchWeight != WEIGHT_DONTKNOW) )
+                            nTestMatch += 1000000;
+                    }
+                    else
+                    {
+                        if ( pData->mnTypeFaces & IMPL_DEVFONT_BOLD )
+                            nTestMatch += 1000000;
+                        if ( eMatchWeight > WEIGHT_BOLD )
+                            nTestMatch += 1000000;
+                    }
+                }
+                else if ( ((eMatchWeight != WEIGHT_DONTKNOW) && (eMatchWeight != WEIGHT_NORMAL) && (eMatchWeight != WEIGHT_MEDIUM)) ||
+                          !(pData->mnTypeFaces & IMPL_DEVFONT_NORMAL) )
+                    nTestMatch -= 1000000;
 
                 // skalierbare Schriften haben schon einen echten Vorteil
                 // gegenueber nicht skalierbaren Schriften
-                if ( pData->mbScalable )
-                    nTestMatch += 500000000;
-
-                // Wir gehen davon aus, wenn der Name groesstenteils matcht,
-                // das er schon zur richtigen Familie gehoert
-
-                // Beim matchen ignorieren wir alle Sonderzeichen
-                ULONG nTestMatch = ImplStrMatch( aNoSymbolName, pData->maMatchName2 );
-                if ( nTestMatch >= nBestMatch )
+                if ( pData->mnTypeFaces & IMPL_DEVFONT_SCALABLE )
+                    nTestMatch += 10000*3;
+                else
+                    nTestMatch -= 10000*3;
+                if ( nMatchType & IMPL_FONT_ATTR_STANDARD )
+                    nTestMatch += 10000*2;
+                if ( nMatchType & IMPL_FONT_ATTR_DEFAULT )
+                    nTestMatch += 10000;
+                if ( nMatchType & IMPL_FONT_ATTR_FULL )
+                    nTestMatch += 10000;
+                if ( nMatchType & IMPL_FONT_ATTR_NORMAL )
+                    nTestMatch += 10000;
+                if ( pMatchFontAttr )
+                    nTestMatch += 10000;
+                if ( nMatchType & IMPL_FONT_ATTR_OTHERSTYLE )
                 {
-                    // Match nur erlaubt, wenn auch die Attribute uebereinstimmen
-                    BOOL    bTestFamily = pData->meMatchFamily != FAMILY_DONTKNOW;
-                    BOOL    bTestSymbol = pData->mbSymbol;
-                    BOOL    bTestFixed  = pData->meMatchPitch == PITCH_FIXED;
-                    if ( (bFixed == bTestFixed) && (bSymbol == bTestSymbol) &&
-                         (!bFamily || !bTestFamily || (eSearchFamily == pData->meMatchFamily)) )
-                    {
-                        xub_StrLen nAttrMatch = 0;
-                        // Die Anzahl der uebereinstimmenden Attribute zaehlen
-                        const char** pTypeList = aImplTypeList;
-                        while ( *pTypeList )
-                        {
-                            if ( (aNoSymbolName.Search( *pTypeList ) != STRING_NOTFOUND) &&
-                                 (pData->maMatchName2.Search( *pTypeList ) != STRING_NOTFOUND) )
-                                nAttrMatch++;
-                            pTypeList++;
-                        }
-
-                        // Wenn beide Matches gleich gut sind,
-                        // entscheiden die uebereinstimmenden Attribute
-                        if ( nBestMatch == nTestMatch )
-                        {
-                            if ( (nAttrMatch > nBestAttrMatch) ||
-                                 ((nAttrMatch == nBestAttrMatch) &&
-                                  (pData->maMatchName2.Len() < nBestStrLen)) )
-                            {
-                                pFoundData = pData;
-                                nBestMatch = nTestMatch;
-                                nBestAttrMatch = nAttrMatch;
-                                nBestStrLen = pData->maMatchName2.Len();
-                            }
-                        }
-                        else
-                        {
-                            pFoundData = pData;
-                            nBestMatch = nTestMatch;
-                            nBestAttrMatch = nAttrMatch;
-                            nBestStrLen = pData->maMatchName2.Len();
-                        }
-                    }
+                    if ( !(nMatchType & IMPL_FONT_ATTR_OTHERSTYLE) )
+                        nTestMatch -= 10000;
                 }
+                else if ( nMatchType & IMPL_FONT_ATTR_OTHERSTYLE )
+                    nTestMatch -= 10000;
 
-
-
-    // Test, if Fontname includes CJK characters --> In this case we
-    // mention that it is a CJK font
-    const sal_Unicode* pStr = rFamilyName;
-    while ( *pStr )
-    {
-        if ( ((*pStr >= 0x3000) && (*pStr <= 0xD7AF)) ||
-             ((*pStr >= 0xFF00) && (*pStr <= 0xFFEE)) )
-        {
-            rType |= IMPL_FONT_ATTR_CJK;
-            break;
-        }
-
-        pStr++;
-    }
-
-#endif
+                if ( (nSearchType & IMPL_FONT_ATTR_ROUNDED) ==
+                     (nMatchType & IMPL_FONT_ATTR_ROUNDED) )
+                     nTestMatch += 1000;
+                if ( (nSearchType & IMPL_FONT_ATTR_TYPEWRITER) ==
+                     (nMatchType & IMPL_FONT_ATTR_TYPEWRITER) )
+                     nTestMatch += 1000;
+                if ( (nSearchType & IMPL_FONT_ATTR_GOTHIC) ==
+                     (nMatchType & IMPL_FONT_ATTR_GOTHIC) )
+                     nTestMatch += 1000;
+                if ( (nSearchType & IMPL_FONT_ATTR_SCHOOLBOOK) ==
+                     (nMatchType & IMPL_FONT_ATTR_SCHOOLBOOK) )
+                     nTestMatch += 1000;
 
                 if ( nTestMatch > nBestMatch )
                 {
                     pFoundData = pData;
                     nBestMatch = nTestMatch;
                 }
+                else if ( nTestMatch == nBestMatch )
+                {
+                    // We have some fonts, where we think that they are more useful
+                    if ( nMatchType & IMPL_FONT_ATTR_STANDARD )
+                        pFoundData = pData;
+                }
             }
+        }
 
+        if ( !pFoundData )
+        {
+            // Try to use a Standard Unicode or a Standard Font to get
+            // as max as possible characters
+            pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSansUnicode );
             if ( !pFoundData )
             {
-                // Try to use a Standard Font depend from the
-                // attributes
-
-
-                // Try to use a Standard Unicode or a Standard Font to get
-                // as max as possible characters
+                pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSans );
                 if ( !pFoundData )
                 {
-                    pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSansUnicode );
+                    pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSerif );
                     if ( !pFoundData )
-                    {
-                        pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSerif );
-                        if ( !pFoundData )
-                        {
-                            pFoundData = pFontList->ImplFindFontFromToken( aImplSubsSans );
-                            if ( !pFoundData )
-                                pFoundData = pFontList->ImplFindFontFromToken( aImplSubsFixed );
-                        }
-                    }
+                        pFoundData = pFontList->ImplFindFontFromToken( aImplSubsFixed );
                 }
-
-                // If nothing helps, we use the first one
-                if ( !pFoundData )
-                    pFoundData = pFontList->Get( 0 );
             }
+
+            // If nothing helps, we use the first one
+            if ( !pFoundData )
+                pFoundData = pFontList->Get( 0 );
         }
     }
 
@@ -2482,12 +3173,16 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
             pCurFontData = pCurFontData->mpNext;
         }
+
+        // If we haven't the font, try to find a Font-TextConversion table
+        if ( aSearchName != pFoundData->maSearchName )
+            pConvertFontTab = ImplGetRecodeData( aSearchName, pFoundData->maSearchName );
     }
 
     // Daten initialisieren und in die Liste aufnehmen
     pEntry                          = new ImplFontEntry;
     pEntry->mpNext                  = mpFirstEntry;
-    pEntry->mpConversion            = NULL;
+    pEntry->mpConversion            = pConvertFontTab;
     pEntry->mnWidthInit             = 0;
     pEntry->mnWidthAryCount         = 0;
     pEntry->mnWidthArySize          = 0;
