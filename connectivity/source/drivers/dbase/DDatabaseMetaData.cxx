@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 11:56:33 $
+ *  last change: $Author: oj $ $Date: 2000-12-08 12:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
         {
             Reference< XColumnsSupplier> xTable;
             xNames->getByName(*pTabBegin) >>= xTable;
+            OSL_ENSHURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
             aRow[3] <<= *pTabBegin;
 
             Reference< XNameAccess> xColumns = xTable->getColumns();
