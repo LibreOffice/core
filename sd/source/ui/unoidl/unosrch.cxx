@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:19:18 $
+ *  last change: $Author: thb $ $Date: 2001-05-29 16:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,8 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
         // done with xShape -> get next shape
 
         // test if its a group
-        uno::Reference< drawing::XShapes >  xGroupShape;
-        uno::Any aAny( xShape->queryInterface( ITYPE( drawing::XShapes ) ) );
-        if( ( aAny >>= xGroupShape ) && ( xGroupShape->getCount() > 0 ) )
+        uno::Reference< drawing::XShapes > xGroupShape( xShape, uno::UNO_QUERY );
+        if( xGroupShape.is() && ( xGroupShape->getCount() > 0 ) )
         {
             pContext = new SearchContext_impl( xGroupShape, pContext );
             xShape = pContext->firstShape();
