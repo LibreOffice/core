@@ -1,0 +1,17 @@
+(still unfinished)
+
+OApplicationView
+|
++-OAppBorderWindow
+  |
+  +-OTitleWindow "Database"
+  | |
+  | +-OApplicationSwapWindow
+  |   |
+  |   +- OApplicationIconControl
+  |
+  +-OApplicationDetailView
+    |
+    +-OTitleWindow "Tasks"
+    |
+    +-OTitleWindow ""
