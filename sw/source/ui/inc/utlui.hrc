@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 07:19:24 $
+ *  last change: $Author: fs $ $Date: 2002-08-02 15:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@
 #define STR_AUTH_FIELD_ISBN             (STR_AUTH_FIELD_START + 30)
 #define STR_AUTH_FIELD_END              (STR_AUTH_FIELD_ISBN)
 
+
 #define RES_FRMEX_MENU                  (STR_AUTH_FIELD_END + 1)
 
 #define DLG_NAVIGATION_PI           (RC_UTLUI_BEGIN + 1)
@@ -191,6 +192,11 @@
 #define IMG_NAVI_ENTRYBMPH          (RC_UTLUI_BEGIN + 5)
 #define ILIST_DB_DLG                (RC_UTLUI_BEGIN + 6)
 #define ILIST_DB_DLG_HC             (RC_UTLUI_BEGIN + 7)
+
+#define IMG_ONE_LEFT_HC             (RC_UTLUI_BEGIN + 8)
+#define IMG_ONE_RIGHT_HC            (RC_UTLUI_BEGIN + 9)
+#define IMG_ALL_LEFT_HC             (RC_UTLUI_BEGIN + 10)
+#define IMG_ALL_RIGHT_HC            (RC_UTLUI_BEGIN + 11)
 
 //local ids of the Database ImageLists
 #define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 07:26:29 $
+ *  last change: $Author: fs $ $Date: 2002-08-02 15:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1837,3 +1837,58 @@ ImageList ILIST_DB_DLG_HC
     IMGLIST_IDS;
 };
 
+Image IMG_ONE_LEFT_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "one_left_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFF00;
+        Green = 0x0000;
+        Blue = 0xFF00;
+    };
+};
+
+Image IMG_ONE_RIGHT_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "one_right_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFF00;
+        Green = 0x0000;
+        Blue = 0xFF00;
+    };
+};
+
+Image IMG_ALL_LEFT_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "all_left_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFF00;
+        Green = 0x0000;
+        Blue = 0xFF00;
+    };
+};
+
+Image IMG_ALL_RIGHT_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "all_right_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFF00;
+        Green = 0x0000;
+        Blue = 0xFF00;
+    };
+};
