@@ -5,5 +5,6 @@ mkdir: %_DEST%\pck%_EXT%
 ..\source\truetype\standard_sans\*.ttf %_DEST%\pck%_EXT%\*.ttf
 ..\source\truetype\standard_serif\*.ttf %_DEST%\pck%_EXT%\*.ttf
 ..\source\truetype\symbol\*.ttf %_DEST%\pck%_EXT%\*.ttf
+..\unx\source\fonts\truetype\fonts.dir %_DEST%\pck%_EXT%\fonts.dir
 ..\source\shellnew\soffice.* %_DEST%\pck%_EXT%\soffice.*
 ..\unx\source\fonts\fonts\type1\fontunxtype1portal.zip %_DEST%\pck%_EXT%\fontunxtype1portal.zip
