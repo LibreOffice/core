@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:23:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ String DLG_STYLE_DESIGNER
     Text[ chinese_traditional ] = "¶U√˛ºÀ¶°";
     Text[ arabic ] = "«·„ı’„„";
     Text[ greek ] = "Stylist";
-    Text[ korean ] = "Ω∫≈∏¿œ";
+    Text[ korean ] = "Ω∫≈∏¿œ∏ÆΩ∫∆Æ";
     Text[ turkish ] = "Stylist";
     Text[ catalan ] = "Estilista";
     Text[ finnish ] = "Tyylityˆkalu";
@@ -444,5 +444,6 @@ DockingWindow DLG_STYLE_DESIGNER
     };
 };
  // ********************************************************************** EOF
+
 
 
