@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarGrid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 10:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,11 +290,14 @@ void SAL_CALL VPolarGrid::createShapes()
 
     //-----------------------------------------
     //create tick mark line shapes
-    sal_Int32 nDimensionIndex = m_xMeter->getRepresentedDimension();
-    if(nDimensionIndex==1)
-        this->create2DRadiusGrid( xTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
-    else
-        this->create2DAngleGrid( xTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+    if(2==m_nDimension)
+    {
+        sal_Int32 nDimensionIndex = m_xMeter->getRepresentedDimension();
+        if(nDimensionIndex==1)
+            this->create2DRadiusGrid( xTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+        else
+            this->create2DAngleGrid( xTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+    }
 }
 
 //.............................................................................
