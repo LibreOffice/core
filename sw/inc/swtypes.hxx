@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:14:10 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,5 +302,7 @@ enum SetAttrMode
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 CharClass& GetAppCharClass();
 LocaleDataWrapper& GetAppLocaleData();
+
+ULONG GetAppLanguage();
 
 #endif
