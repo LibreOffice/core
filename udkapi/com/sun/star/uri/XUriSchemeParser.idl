@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUriSchemeParser.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:18:04 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module uri {
    <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
    description of URIs and related terms.</p>
 
-   @since #i19971#
+   @since OOo2.0.0
  */
 interface XUriSchemeParser: com::sun::star::uno::XInterface {
     /**
