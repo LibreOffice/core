@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:17:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ public:
                     /// If bJustQueryIfProtected==TRUE protection is not
                     /// changed and <TRUE/> is returned if not protected or
                     /// password was entered correctly.
-    BOOL            ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected = FALSE );
+    BOOL            ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQueryIfProtected = FALSE );
 
     void            SetPrintZoom( SCTAB nTab, USHORT nScale, USHORT nPages );
     BOOL            AdjustPrintZoom( const ScRange& rRange );
