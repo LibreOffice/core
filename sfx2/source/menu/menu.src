@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-20 21:24:56 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,71 +64,14 @@
 
 String STR_MENU_CFGITEM
 {
-    TEXT = "Men�" ;
-    TEXT [ English ] = "Menu" ;
-    TEXT [ norwegian ] = "Konfigurasjonsmeny" ;
-    TEXT [ italian ] = "Menu" ;
-    TEXT [ portuguese_brazilian ] = "Menu de Configura��o" ;
-    TEXT [ portuguese ] = "Menu de configura��o" ;
-    TEXT [ finnish ] = "Kokoonpanovalikko" ;
-    TEXT [ danish ] = "Konfigurationsmenu" ;
-    TEXT [ french ] = "Menu" ;
-    TEXT [ swedish ] = "Meny" ;
-    TEXT [ dutch ] = "Menu" ;
-    TEXT [ spanish ] = "Men�" ;
-    TEXT [ english_us ] = "Configuration Menu" ;
-    TEXT[ chinese_simplified ] = "菜单";
-    TEXT[ russian ] = "���� ������������";
-    TEXT[ polish ] = "Menu konfiguracyjne";
-    TEXT[ japanese ] = "メニュー";
-    TEXT[ chinese_traditional ] = "功能表";
-    TEXT[ arabic ] = "�������";
-    TEXT[ dutch ] = "Menu";
-    TEXT[ chinese_simplified ] = "菜单";
-    TEXT[ greek ] = "�����";
-    TEXT[ korean ] = "메뉴";
-    TEXT[ turkish ] = "Yap�land�rma Men�s�";
-    TEXT[ catalan ] = "Men�";
-    TEXT[ thai ] = "เมนูโครงแบบ";
-    TEXT[ czech ] = "Konfigurační menu";
-    TEXT[ hebrew ] = "‮תפריט תצורה‬";
-    TEXT[ hindi ] = "रूप-रेखा मेनु";
-    TEXT[ slovak ] = "Konfiguračné menu";
-    TEXT[ hungarian ] = "Beállítások menü";
-    TEXT[ slovenian ] = "Meni Konfiguracija";
+    Text [ de ] = "Men�" ;
+    Text [ en-US ] = "Configuration Menu" ;
 };
 
 String STR_MENU_ADDONS
 {
-    TEXT = "~Add-Ons" ;
-    TEXT [ English ] = "~Add-Ons" ;
-    TEXT [ english_us ] = "~Add-Ons" ;
-    TEXT[ portuguese ] = "~Add-Ons";
-    TEXT[ russian ] = "~Add-Ons";
-    TEXT[ greek ] = "~Add-Ons";
-    TEXT[ dutch ] = "~Add-Ons";
-    TEXT[ french ] = "Add-ons";
-    TEXT[ spanish ] = "~Complementos (add-ons)";
-    TEXT[ finnish ] = "~Add-Ons";
-    TEXT[ italian ] = "~Complementari";
-    TEXT[ danish ] = "~Add-Ons";
-    TEXT[ swedish ] = "~Till�gg";
-    TEXT[ polish ] = "~Add-Ons";
-    TEXT[ portuguese_brazilian ] = "~Aditivos";
-    TEXT[ japanese ] = "アドオン(~A)";
-    TEXT[ korean ] = "~Add-Ons";
-    TEXT[ chinese_simplified ] = "~Add-Ons";
-    TEXT[ chinese_traditional ] = "附加元件(~A)";
-    TEXT[ turkish ] = "~Eklentiler";
-    TEXT[ arabic ] = "~Add-Ons";
-    TEXT[ catalan ] = "~Add-Ons";
-    TEXT[ thai ] = "~Add-Ons";
-    TEXT[ czech ] = "Přídavky";
-    TEXT[ hebrew ] = "~Add-Ons";
-    TEXT[ hindi ] = "~Add-Ons";
-    TEXT[ slovak ] = "~Add-Ons";
-    TEXT[ hungarian ] = "~Kiegészítők";
-    TEXT[ slovenian ] = "~Dodatki";
+    Text [ de ] = "~Add-Ons" ;
+    Text [ en-US ] = "~Add-Ons" ;
 };
 
 Menu MN_CLIPBOARDFUNCS
@@ -139,112 +82,22 @@ Menu MN_CLIPBOARDFUNCS
         {
             Identifier = SID_CUT ;
             HelpID = SID_CUT ;
-            Text = "~Ausschneiden" ;
-            Text [ English ] = "Cu~t" ;
-            Text [ norwegian ] = "Klipp~ut" ;
-            Text [ italian ] = "Ta~glia" ;
-            Text [ portuguese_brazilian ] = "Co~rtar" ;
-            Text [ portuguese ] = "Co~rtar" ;
-            Text [ finnish ] = "~Leikkaa" ;
-            Text [ danish ] = "~Klip" ;
-            Text [ french ] = "~Couper" ;
-            Text [ swedish ] = "~Klipp ut" ;
-            Text [ dutch ] = "Kn~ippen" ;
-            Text [ spanish ] = "C~ortar" ;
-            Text [ english_us ] = "Cu~t" ;
-            Text[ chinese_simplified ] = "剪切(~T)";
-            Text[ russian ] = "��������";
-            Text[ polish ] = "Wy~tnij";
-            Text[ japanese ] = "切り取り(~T)";
-            Text[ chinese_traditional ] = "剪下(~T)";
-            Text[ arabic ] = "��";
-            Text[ dutch ] = "Kn~ippen";
-            Text[ chinese_simplified ] = "剪切(~T)";
-            Text[ greek ] = "~�������";
-            Text[ korean ] = "잘라내기(~T)";
-            Text[ turkish ] = "Ke~s";
-            Text[ catalan ] = "Re~talla";
-            Text[ thai ] = "ตั~ด";
-            Text[ czech ] = "Vyjmout";
-            Text[ hebrew ] = "‮גזירה‬";
-            Text[ hindi ] = "काटो";
-            Text[ slovak ] = "Vys~trihnúť";
-            Text[ hungarian ] = "~Kivágás";
-            Text[ slovenian ] = "I~zreži";
+            Text [ de ] = "~Ausschneiden" ;
+            Text [ en-US ] = "Cu~t" ;
         };
         MenuItem
         {
             Identifier = SID_COPY ;
             HelpID = SID_COPY ;
-            Text = "~Kopieren" ;
-            Text [ English ] = "~Copy" ;
-            Text [ norwegian ] = "~Kopier" ;
-            Text [ italian ] = "~Copia" ;
-            Text [ portuguese_brazilian ] = "~Copiar" ;
-            Text [ portuguese ] = "~Copiar" ;
-            Text [ finnish ] = "K~opioi" ;
-            Text [ danish ] = "K~opier" ;
-            Text [ french ] = "Co~pier" ;
-            Text [ swedish ] = "K~opiera" ;
-            Text [ dutch ] = "~Kopi�ren" ;
-            Text [ spanish ] = "~Copiar" ;
-            Text [ english_us ] = "~Copy" ;
-            Text[ chinese_simplified ] = "复制(~C)";
-            Text[ russian ] = "����������";
-            Text[ polish ] = "~Kopiuj";
-            Text[ japanese ] = "コピー(~C)";
-            Text[ chinese_traditional ] = "複製(~C)";
-            Text[ arabic ] = "���";
-            Text[ dutch ] = "~Kopi�ren";
-            Text[ chinese_simplified ] = "复制(~C)";
-            Text[ greek ] = "����~�����";
-            Text[ korean ] = "복사(~C)";
-            Text[ turkish ] = "~Kopyala";
-            Text[ catalan ] = "~Copia";
-            Text[ thai ] = "~คัดลอก";
-            Text[ czech ] = "Kopírovat";
-            Text[ hebrew ] = "‮העתקה‬";
-            Text[ hindi ] = "~प्रतिलिपि";
-            Text[ slovak ] = "~Kopírovať";
-            Text[ hungarian ] = "~Másolás";
-            Text[ slovenian ] = "Kopir~aj";
+            Text [ de ] = "~Kopieren" ;
+            Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
             Identifier = SID_PASTE ;
             HelpID = SID_PASTE ;
-            Text = "E~inf�gen" ;
-            Text [ English ] = "~Paste" ;
-            Text [ norwegian ] = "~Paste" ;
-            Text [ italian ] = "~Incolla" ;
-            Text [ portuguese_brazilian ] = "~Colar" ;
-            Text [ portuguese ] = "Co~lar" ;
-            Text [ finnish ] = "Lii~t�" ;
-            Text [ danish ] = "S�t i~nd" ;
-            Text [ french ] = "C~oller" ;
-            Text [ swedish ] = "K~listra in" ;
-            Text [ dutch ] = "~Plakken" ;
-            Text [ spanish ] = "~Pegar" ;
-            Text [ english_us ] = "~Paste" ;
-            Text[ russian ] = "��������";
-            Text[ polish ] = "Wkle~j";
-            Text[ japanese ] = "貼り付け(~P)";
-            Text[ chinese_simplified ] = "粘贴(~P)";
-            Text[ chinese_traditional ] = "貼上(~P)";
-            Text[ arabic ] = "���";
-            Text[ dutch ] = "~Plakken";
-            Text[ chinese_simplified ] = "粘贴(~P)";
-            Text[ greek ] = "��~��������";
-            Text[ korean ] = "붙여넣기(~P)";
-            Text[ turkish ] = "~Yap��t�r";
-            Text[ catalan ] = "~Enganxa";
-            Text[ thai ] = "~วาง";
-            Text[ czech ] = "Vložit";
-            Text[ hebrew ] = "‮הדבקה‬";
-            Text[ hindi ] = "~छिपकाओ";
-            Text[ slovak ] = "~Vložiť";
-            Text[ hungarian ] = "~Beillesztés";
-            Text[ slovenian ] = "P~rilepi";
+            Text [ de ] = "E~inf�gen" ;
+            Text [ en-US ] = "~Paste" ;
         };
     };
 };
@@ -407,67 +260,14 @@ ImageList RID_IMGLST_BIG
 
 String SID_WIN_FULLSCREEN
 {
-    Text = "Vollbildschirm-Modus verlassen" ;
-    Text [ English ] = "Leave Full-Screen Mode" ;
-    Text[ english_us ] = "Leave Full-Screen Mode";
-    Text[ portuguese ] = "Leave Full-Screen Mode";
-    Text[ russian ] = "Leave Full-Screen Mode";
-    Text[ greek ] = "Leave Full-Screen Mode";
-    Text[ dutch ] = "Leave Full-Screen Mode";
-    Text[ french ] = "Quitter le mode Plein �cran";
-    Text[ spanish ] = "Abandonar el modo Pantalla completa";
-    Text[ finnish ] = "Leave Full-Screen Mode";
-    Text[ italian ] = "Leave Full-Screen Mode";
-    Text[ danish ] = "Forlad fuldsk�rm";
-    Text[ swedish ] = "L�mna helsk�rmsl�ge";
-    Text[ polish ] = "Leave Full-Screen Mode";
-    Text[ portuguese_brazilian ] = "Sair do modo de tela cheia";
-    Text[ japanese ] = "全画面表示モードを保持";
-    Text[ korean ] = "전체 화면 모드 마침";
-    Text[ chinese_simplified ] = "离开全屏幕模式";
-    Text[ chinese_traditional ] = "離開全螢幕模式";
-    Text[ turkish ] = "Tam Ekran Kipinden ��k";
-    Text[ arabic ] = "Leave Full-Screen Mode";
-    Text[ catalan ] = "Pantalla completa";
-    Text[ thai ] = "Leave Full-Screen Mode";
-    Text[ czech ] = "Opustit celoobrazovkový režim";
-    Text[ hebrew ] = "‮עזיבת מצב חלון מלא‬";
-    Text[ hindi ] = "Leave Full-Screen Mode";
-    Text[ slovak ] = "Opustiť Full-Screen mód";
-    Text[ hungarian ] = "Kilépés a teljes képernyős módból";
-    Text[ slovenian ] = "Zapusti celozaslonski način";
+    Text [ de ] = "Vollbildschirm-Modus verlassen" ;
+    Text [ en-US ] = "Leave Full-Screen Mode";
 };
 
 String STR_MENU_ADDONHELP
 {
-    TEXT = "Add-~On-Hilfe" ;
-    TEXT [ english_us ] = "Add-~On Help" ;
-    TEXT[ french ] = "Aide de l'add-on";
-    TEXT[ spanish ] = "~Complemento (add-on) - Ayuda";
-    TEXT[ italian ] = "Guida all'add-~on";
-    TEXT[ swedish ] = "Till�ggs~hj�lp";
-    TEXT[ japanese ] = "アドオンヘルプ(~O)";
-    TEXT[ korean ] = "추가 기능(Add-On) 도움말(~O)";
-    TEXT[ chinese_simplified ] = "Add-~On 帮助";
-    TEXT[ chinese_traditional ] = "Add-~On 說明";
-    TEXT[ slovak ] = "Add-~On Pomocník";
-    TEXT[ portuguese_brazilian ] = "Ajuda dos Add-On";
-    TEXT[ greek ] = "Add-~On Help";
-    TEXT[ dutch ] = "Add-~On Help";
-    TEXT[ finnish ] = "Add-~On Help";
-    TEXT[ czech ] = "Přídavná nápověda";
-    TEXT[ danish ] = "Add~On Hj�lp";
-    TEXT[ arabic ] = "Add-~On Help";
-    TEXT[ hebrew ] = "Add-~On Help";
-    TEXT[ catalan ] = "Add-~On Help";
-    TEXT[ hindi ] = "Add-~On Help";
-    TEXT[ portuguese ] = "Add-~On Help";
-    TEXT[ russian ] = "Add-~On Help";
-    TEXT[ polish ] = "Add-~On Help";
-    TEXT[ turkish ] = "Add-~On Help";
-    TEXT[ thai ] = "Add-~On Help";
-    TEXT[ hungarian ] = "~Súgó a kiegészítőkhöz";
-    TEXT[ slovenian ] = "Pomoč za ~Dodatke";
+    Text [ de ] = "Add-~On-Hilfe" ;
+    Text [ en-US ] = "Add-~On Help" ;
 };
 
 // ******************************************************************* EOF
