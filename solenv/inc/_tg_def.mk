@@ -2,6 +2,11 @@
 
 .IF "$(DEF1TARGETN)"!=""
 
+#to make intuitiv naming work
+.IF "$(DEF1LIBNAME)"!=""
+DEFLIB1NAME*=$(DEF1LIBNAME)
+.ENDIF			# "$(DEF1LIBNAME)"!=""
+
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(UPDATER)"!=""
 DEF1DEPN+=$(SLB)$/$(DEFLIB1NAME).lib
@@ -169,6 +174,11 @@ $(DEF1TARGETN): \
 # unroll begin
 
 .IF "$(DEF2TARGETN)"!=""
+
+#to make intuitiv naming work
+.IF "$(DEF2LIBNAME)"!=""
+DEFLIB2NAME*=$(DEF2LIBNAME)
+.ENDIF			# "$(DEF2LIBNAME)"!=""
 
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(UPDATER)"!=""
@@ -338,6 +348,11 @@ $(DEF2TARGETN): \
 
 .IF "$(DEF3TARGETN)"!=""
 
+#to make intuitiv naming work
+.IF "$(DEF3LIBNAME)"!=""
+DEFLIB3NAME*=$(DEF3LIBNAME)
+.ENDIF			# "$(DEF3LIBNAME)"!=""
+
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(UPDATER)"!=""
 DEF3DEPN+=$(SLB)$/$(DEFLIB3NAME).lib
@@ -505,6 +520,11 @@ $(DEF3TARGETN): \
 # unroll begin
 
 .IF "$(DEF4TARGETN)"!=""
+
+#to make intuitiv naming work
+.IF "$(DEF4LIBNAME)"!=""
+DEFLIB4NAME*=$(DEF4LIBNAME)
+.ENDIF			# "$(DEF4LIBNAME)"!=""
 
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(UPDATER)"!=""
@@ -674,6 +694,11 @@ $(DEF4TARGETN): \
 
 .IF "$(DEF5TARGETN)"!=""
 
+#to make intuitiv naming work
+.IF "$(DEF5LIBNAME)"!=""
+DEFLIB5NAME*=$(DEF5LIBNAME)
+.ENDIF			# "$(DEF5LIBNAME)"!=""
+
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(UPDATER)"!=""
 DEF5DEPN+=$(SLB)$/$(DEFLIB5NAME).lib
@@ -841,6 +866,11 @@ $(DEF5TARGETN): \
 # unroll begin
 
 .IF "$(DEF6TARGETN)"!=""
+
+#to make intuitiv naming work
+.IF "$(DEF6LIBNAME)"!=""
+DEFLIB6NAME*=$(DEF6LIBNAME)
+.ENDIF			# "$(DEF6LIBNAME)"!=""
 
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(UPDATER)"!=""
@@ -1010,6 +1040,11 @@ $(DEF6TARGETN): \
 
 .IF "$(DEF7TARGETN)"!=""
 
+#to make intuitiv naming work
+.IF "$(DEF7LIBNAME)"!=""
+DEFLIB7NAME*=$(DEF7LIBNAME)
+.ENDIF			# "$(DEF7LIBNAME)"!=""
+
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(UPDATER)"!=""
 DEF7DEPN+=$(SLB)$/$(DEFLIB7NAME).lib
@@ -1177,6 +1212,11 @@ $(DEF7TARGETN): \
 # unroll begin
 
 .IF "$(DEF8TARGETN)"!=""
+
+#to make intuitiv naming work
+.IF "$(DEF8LIBNAME)"!=""
+DEFLIB8NAME*=$(DEF8LIBNAME)
+.ENDIF			# "$(DEF8LIBNAME)"!=""
 
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(UPDATER)"!=""
@@ -1346,6 +1386,11 @@ $(DEF8TARGETN): \
 
 .IF "$(DEF9TARGETN)"!=""
 
+#to make intuitiv naming work
+.IF "$(DEF9LIBNAME)"!=""
+DEFLIB9NAME*=$(DEF9LIBNAME)
+.ENDIF			# "$(DEF9LIBNAME)"!=""
+
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(UPDATER)"!=""
 DEF9DEPN+=$(SLB)$/$(DEFLIB9NAME).lib
@@ -1513,6 +1558,11 @@ $(DEF9TARGETN): \
 # unroll begin
 
 .IF "$(DEF10TARGETN)"!=""
+
+#to make intuitiv naming work
+.IF "$(DEF10LIBNAME)"!=""
+DEFLIB10NAME*=$(DEF10LIBNAME)
+.ENDIF			# "$(DEF10LIBNAME)"!=""
 
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(UPDATER)"!=""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-27 12:30:04 $
+#   last change: $Author: hjs $ $Date: 2001-05-04 15:21:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,11 @@ DEF1 DEF2 DEF3 DEF4 DEF5 DEF6 DEF7 DEF8 DEF9:  \
 # unroll begin
 
 .IF "$(DEF$(TNR)TARGETN)"!=""
+
+#to make intuitiv naming work
+.IF "$(DEF$(TNR)LIBNAME)"!=""
+DEFLIB$(TNR)NAME*=$(DEF$(TNR)LIBNAME)
+.ENDIF			# "$(DEF$(TNR)LIBNAME)"!=""
 
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(UPDATER)"!=""
