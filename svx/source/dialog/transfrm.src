@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-23 23:35:45 $
+ *  last change: $Author: kz $ $Date: 2001-12-12 22:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,12 +255,12 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ chinese_traditional ] = "εΊι»";
         QuickHelpText[ arabic ] = "δήΨΙ ΗαΗδΨαΗή";
         QuickHelpText[ greek ] = "Σημείο βάσης";
-        QuickHelpText[ korean ] = "κΈ°μ¤€μ !";
+        QuickHelpText[ korean ] = "κΈ°μ¤€μ ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
         QuickHelpText[ catalan ] = "Punto base";
-        QuickHelpText[ finnish ] = "Peruspiste!";
+        QuickHelpText[ finnish ] = "Peruspiste";
     };
     TriStateBox TSB_PROTECT
     {
@@ -1053,12 +1053,12 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ chinese_traditional ] = "εΊι»";
         QuickHelpText[ arabic ] = "δήΨΙ ΗαΗδΨαΗή";
         QuickHelpText[ greek ] = "Σημείο βάσης";
-        QuickHelpText[ korean ] = "κΈ°μ¤€μ !";
+        QuickHelpText[ korean ] = "κΈ°μ¤€μ ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
         QuickHelpText[ catalan ] = "Punto base";
-        QuickHelpText[ finnish ] = "Peruspiste!";
+        QuickHelpText[ finnish ] = "Peruspiste";
     };
     CheckBox CBX_SCALE
     {
@@ -1406,12 +1406,12 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ chinese_traditional ] = "ζ—‹θ½‰ι»";
         QuickHelpText[ arabic ] = "δήΨΙ ΗαΗΣΚΟΗΡΙ";
         QuickHelpText[ greek ] = "Σημείο περιστροφής";
-        QuickHelpText[ korean ] = "νμ „μ !";
+        QuickHelpText[ korean ] = "νμ „μ ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rotationspunkt";
         QuickHelpText[ catalan ] = "Punto de rotaciσn";
-        QuickHelpText[ finnish ] = "Kiertopiste!";
+        QuickHelpText[ finnish ] = "Kiertopiste";
     };
     FixedLine FL_ANGLE
     {
@@ -1552,14 +1552,14 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ dutch ] = "Draaihoek";
         QuickHelpText[ french ] = "Angle de rotation";
         QuickHelpText[ spanish ] = "Αngulo de rotaciσn";
-        QuickHelpText[ finnish ] = "Kiertokulma!";
+        QuickHelpText[ finnish ] = "Kiertokulma";
         QuickHelpText[ italian ] = "Angolo di rotazione";
         QuickHelpText[ danish ] = "Angle";
         QuickHelpText[ swedish ] = "Rotationsvinkel";
         QuickHelpText[ polish ] = "KΉt obrotu";
         QuickHelpText[ portuguese_brazilian ] = "Angle";
         QuickHelpText[ japanese ] = "ε›θ»ΆεΊ¦";
-        QuickHelpText[ korean ] = "νμ „κ°!";
+        QuickHelpText[ korean ] = "νμ „κ°";
         QuickHelpText[ chinese_simplified ] = "ζ—‹θ½¬θ§’εΊ¦";
         QuickHelpText[ chinese_traditional ] = "ζ—‹θ½‰θ§’εΊ¦";
         QuickHelpText[ turkish ] = "Angle";
@@ -1932,6 +1932,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posiciσn y tamaρo";
 };
  // ********************************************************************** EOF
+
 
 
 
