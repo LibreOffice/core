@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-24 14:00:24 $
+ *  last change: $Author: kz $ $Date: 2000-10-24 14:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifdef SUPD > 610
+#if SUPD > 610
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
@@ -241,7 +241,7 @@ sal_Bool OQueryComposer::supportsService( const ::rtl::OUString& _rServiceName )
 Sequence< ::rtl::OUString > OQueryComposer::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< rtl::OUString > aSNS( 1 );
-    aSNS[0] = dbaccess::SERVICE_SDB_SQLQUERYCOMPOSER;
+    aSNS[0] = SERVICE_SDB_SQLQUERYCOMPOSER;
     return aSNS;
 }
 // -------------------------------------------------------------------------
@@ -401,27 +401,27 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     if (OSubComponent::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(dbaccess::PROPERTY_VALUE))
+    if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
         throw SQLException();
 
     sal_Int32 nSearchable = 0;
-    column->getPropertyValue(dbaccess::PROPERTY_ISSEARCHABLE) >>= nSearchable;
+    column->getPropertyValue(PROPERTY_ISSEARCHABLE) >>= nSearchable;
     if(nSearchable == ColumnSearch::NONE)
         throw SQLException();
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::rtl::OUString aName;
-    column->getPropertyValue(dbaccess::PROPERTY_NAME) >>= aName;
+    column->getPropertyValue(PROPERTY_NAME) >>= aName;
 
     Any aValue;
-    column->getPropertyValue(dbaccess::PROPERTY_VALUE) >>= aValue;
+    column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
 
     ::rtl::OUString aSql = aName;
 
     sal_Int32 nType = 0;
-    column->getPropertyValue(dbaccess::PROPERTY_NAME) >>= nType;
+    column->getPropertyValue(PROPERTY_NAME) >>= nType;
     switch(nType)
     {
         case DataType::VARCHAR:
@@ -495,13 +495,13 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     if (OSubComponent::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(dbaccess::PROPERTY_VALUE))
+    if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
         throw SQLException();
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::rtl::OUString aName;
-    column->getPropertyValue(dbaccess::PROPERTY_NAME) >>= aName;
+    column->getPropertyValue(PROPERTY_NAME) >>= aName;
     if(!m_xConnection->getMetaData()->supportsOrderByUnrelated() && !m_xColumns->hasByName(aName))
         throw SQLException();
 
