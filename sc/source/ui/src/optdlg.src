@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:46:09 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 16:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,13 +620,13 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_simplified ] = "30.12.1899 ±ê×¼(~S)";
         Text[ russian ] = "30.12.1899 ( ~ñòàíäàğò )";
         Text[ polish ] = "30.12.1899 ( Standard )";
-        Text[ japanese ] = "12.30.1899(Standard)(~S)";
+        Text[ japanese ] = "12/30/1899 (•W€)(~S)";
         Text[ chinese_traditional ] = "30.12.1899 ¼Ğ·Ç(~S)";
         Text[ arabic ] = "12/30/1899 (ŞíÇÓí)";
         QuickHelpText[ russian ] = "Çíà÷åíèå 0 ñîîòâåòñòâóåò 30.12.1899";
         QuickHelpText[ french ] = "La valeur zéro correspond au 30.12.1899";
         QuickHelpText[ polish ] = "Wartoœæ 0 odpowiada 30.12.1899";
-        QuickHelpText[ japanese ] = "0’l‚Í30.12.1899‚É‘Š“–";
+        QuickHelpText[ japanese ] = "0’l‚ğ12/30/1899 ‚Æ‚·‚é";
         QuickHelpText[ chinese_simplified ] = "0 ±íÊ¾ 12/30/1899";
         QuickHelpText[ chinese_traditional ] = "0 ±íÊ¾ 12/30/1899";
         QuickHelpText[ arabic ] = "0 corresponds to 12/30/1899";
@@ -895,7 +895,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "Spalten-/Zeilen~beschriftungen automagisch suchen" ;
         Text [ portuguese ] = "Localizar rótulos de colunas e linhas ~automaticamente" ;
         Text[ chinese_simplified ] = "×Ô¶¯ËÑÑ°ÁĞĞĞÊı¾İ±êÖ¾(~A)";
-        Text[ russian ] = "Àâòîìàòè÷åñêèé ïîèñê íàçâàíèé ñòîëáöîâ è ñòğîê";
+        Text[ russian ] = "Àâòîìàòè÷åñêèé ïîèñê ïîäïèñåé ñòîëáöîâ è ñòğîê";
         Text[ polish ] = "Szukaj automatycznie etykiet kolumn i wierszy";
         Text[ japanese ] = "s‚Æ—ñ‚Ì×ÍŞÙ‚ğ©“®“I‚ÉŒŸõ(~A)";
         Text[ chinese_traditional ] = "¦Û°Ê·j´M¦C/Äæ¼ĞÃD(~A)";
@@ -1511,7 +1511,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese ] = "~Objectos/Imagens" ;
         Text [ finnish ] = "Objects/Images" ;
         Text [ danish ] = "Objekter/grafik" ;
-        Text [ french ] = "~Objets/images" ;
+        Text [ french ] = "~Objets/Images" ;
         Text [ swedish ] = "~Objekt/grafik" ;
         Text [ dutch ] = "~Objecten/afbeeldingen" ;
         Text [ spanish ] = "Objetos/~Imágenes" ;
@@ -1851,7 +1851,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ portuguese ] = "~Cabeçalhos de linhas e colunas" ;
         Text [ finnish ] = "Sa~rake/riviotsikot" ;
         Text [ danish ] = "Kolonne- og rækkeoverskrifter" ;
-        Text [ french ] = "En-têtes de~lignes et colonnes" ;
+        Text [ french ] = "En-têtes de ~lignes et colonnes" ;
         Text [ swedish ] = "~Kolumn-/radhuvuden" ;
         Text [ dutch ] = "Kolo~m-/rijkoppen" ;
         Text [ spanish ] = "~Títulos de filas y columnas" ;
