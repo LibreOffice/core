@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,6 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     // We can select only one. So iterate over the children to find
     // the first we can select, and select it.
 
-    sal_Int32 nIndex = 0;
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
     {
