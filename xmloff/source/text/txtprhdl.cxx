@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,8 +251,9 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VertRel_Enum[] =
     { XML_PARAGRAPH,            RelOrientation::FRAME   },
     { XML_PARAGRAPH_CONTENT,    RelOrientation::PRINT_AREA  },
     { XML_CHAR,                 RelOrientation::CHAR    },
-    { XML_PAGE,                 RelOrientation::FRAME   },      // import only
-    { XML_PAGE_CONTENT,         RelOrientation::PRINT_AREA  },  // import only
+    // DVO, OD 17.09.2003 #i18732# - allow vertical alignment at page
+    { XML_PAGE,                 RelOrientation::PAGE_FRAME  },
+    { XML_PAGE_CONTENT,         RelOrientation::PAGE_PRINT_AREA },
     { XML_FRAME,                RelOrientation::FRAME   },      // import only
     { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },  // import only
     { XML_TOKEN_INVALID, 0 }
