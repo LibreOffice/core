@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 13:20:43 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,34 +135,13 @@ SwWebDocShell::SwWebDocShell(SfxObjectCreateMode eMode ) :
 
 --------------------------------------------------*/
 
-__EXPORT SwWebDocShell::~SwWebDocShell()
+SwWebDocShell::~SwWebDocShell()
 {
 }
 
 
-// Anforderung der pIo-Struktur fuer den Zugriff auf Substorages
-// und Streams
-/*-----------------22.01.97 09.29-------------------
 
---------------------------------------------------*/
-
-void __EXPORT SwWebDocShell::FillRegInfo( SvEmbeddedRegistryInfo * pInfo)
-{
-    SfxInPlaceObject::FillRegInfo( pInfo );
-    pInfo->aObjName = C2S("StarWriterWebDocument");
-    pInfo->nMajorVers = 6;
-    pInfo->nMinorVers = 0;
-    pInfo->aHumanShortTypeName = SW_RESSTR(STR_HUMAN_SWWEBDOC_NAME);
-    pInfo->nIconResId =
-#ifdef REG_ICON_RESID_WWWW
-    REG_ICON_RESID_WWWW;
-#else
-    7;
-#endif
-}
-
-
-void __EXPORT SwWebDocShell::FillClass( SvGlobalName * pClassName,
+void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    ULONG * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
@@ -196,6 +175,9 @@ void __EXPORT SwWebDocShell::FillClass( SvGlobalName * pClassName,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/02/09 13:20:43  mib
+    FILEFORMAT_NOW -> FILEFORMAT_50
+
     Revision 1.2  2001/02/06 15:42:27  mib
     real 6.0 file format
 

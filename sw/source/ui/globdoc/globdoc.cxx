@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 13:20:13 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,29 +97,11 @@ SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
 {
 }
 
-__EXPORT SwGlobalDocShell::~SwGlobalDocShell()
+SwGlobalDocShell::~SwGlobalDocShell()
 {
 }
 
-// Anforderung der pIo-Struktur fuer den Zugriff auf Substorages
-// und Streams
-
-void __EXPORT SwGlobalDocShell::FillRegInfo( SvEmbeddedRegistryInfo * pInfo)
-{
-    SfxInPlaceObject::FillRegInfo( pInfo );
-    pInfo->aObjName = String::CreateFromAscii("StarWriterGlobalDocument");
-    pInfo->nMajorVers = 6;
-    pInfo->nMinorVers = 0;
-    pInfo->aHumanShortTypeName = SW_RESSTR(STR_HUMAN_SWGLOBDOC_NAME);
-    pInfo->nIconResId =
-#ifdef REG_ICON_RESID_SW_GLOBDOC
-    REG_ICON_RESID_SW_GLOBDOC;
-#else
-    9;
-#endif
-}
-
-void __EXPORT SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
+void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    ULONG * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
@@ -154,6 +136,9 @@ void __EXPORT SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/02/09 13:20:13  mib
+    FILEFORMAT_NOW -> FILEFORMAT_50
+
     Revision 1.2  2001/02/06 15:43:16  mib
     real 6.0 file format
 
