@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:27:51 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:49:30 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,13 +48,18 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=ProfUnoCppBinding
-COMPONENT_RDB=$(OUT_BIN)/office_connect.rdb
-OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
-OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
-OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
+SAMPLE_NAME=ProfUnoCppBinding
+SAMPLE_INC_OUT = $(OUT_INC)/$(SAMPLE_NAME)
+SAMPLE_GEN_OUT = $(OUT_MISC)/$(SAMPLE_NAME)
+SAMPLE_OBJ_OUT=$(OUT_OBJ)/$(SAMPLE_NAME)
 
-COMPONENT_ENV_FLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_prepare_env.flag
+APP1_NAME=office_connect
+APP1_BINARY=$(OUT_BIN)/$(APP1_NAME)$(EXE_EXT)
+APP1_RDB=$(OUT_BIN)/office_connect.rdb
+APP1_ENV_FLAG = $(SAMPLE_GEN_OUT)/cpp_$(SAMPLE_NAME)_prepare_env.flag
+
+APP2_NAME=string_samples
+APP2_BINARY=$(OUT_BIN)/$(APP2_NAME)$(EXE_EXT)
 
 ifeq "$(OS)" "WIN"
 INI_EXTENSION=.ini
@@ -65,8 +70,6 @@ endif
 CXXFILES = \
 	 office_connect.cxx \
 	 string_samples.cxx
-
-OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
 
 TYPES := \
 	com.sun.star.uno.XNamingService \
@@ -85,8 +88,7 @@ TYPES := \
 	com.sun.star.container.XHierarchicalNameAccess
 
 TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-GENHPPFILES = $(foreach t,$(TYPES),$(OUT_COMP_INC)/$(subst .,/,$(t)).hpp)
-
+GENHPPFILES = $(foreach t,$(TYPES),$(SAMPLE_INC_OUT)/$(subst .,/,$(t)).hpp)
 
 # Targets
 .PHONY: ALL
@@ -101,50 +103,55 @@ $(OUT_BIN)/%$(INI_EXTENSION) : %$(INI_EXTENSION)
 
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ / $(DKREGISTRYNAME)
+	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY)
 
 $(GENHPPFILES) :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(SAMPLE_INC_OUT) $(TYPESLIST) $(OFFICE_TYPE_LIBRARY)
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(GENHPPFILES)
+$(SAMPLE_OBJ_OUT)/%.$(OBJ_EXT) : %.cxx $(GENHPPFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(SAMPLE_INC_OUT) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT)
+$(OUT_BIN)/%$(EXE_EXT) : $(SAMPLE_OBJ_OUT)/%.$(OBJ_EXT)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
+	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
 ifeq "$(OS)" "WIN"
-	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(EXE_EXT),.map,$(@F)) \
+	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(SAMPLE_GEN_OUT)/$(subst $(EXE_EXT),.map,$(@F)) \
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
 	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
 endif
 
-$(OUT_BIN)/office_connect$(EXE_EXT) : $(OUT_COMP_OBJ)/office_connect.$(OBJ_EXT) 
+$(OUT_BIN)/office_connect$(EXE_EXT) : $(APP1_ENV_FLAG) $(OUT_BIN)/office_connect$(INI_EXTENSION) $(SAMPLE_OBJ_OUT)/office_connect.$(OBJ_EXT) 
 
-$(OUT_BIN)/string_samples$(EXE_EXT) : $(OUT_COMP_OBJ)/string_samples.$(OBJ_EXT)
+$(OUT_BIN)/string_samples$(EXE_EXT) : $(SAMPLE_OBJ_OUT)/string_samples.$(OBJ_EXT)
 
-$(COMPONENT_ENV_FLAG) : $(COMPONENT_RDB)
+$(APP1_ENV_FLAG) : $(APP1_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $@
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	@echo --------------------------------------------------------------------------------
-	@echo   Register necessary runtime components in $(COMPONENT_RDB)
+	@echo   Register necessary runtime components in $(APP1_RDB)
 	@echo --------------------------------------------------------------------------------
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(APP1_RDB) -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(APP1_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(APP1_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(APP1_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
 
-ProUNOCppBindingExample : $(OUT_BIN)/office_connect$(EXE_EXT) $(OUT_BIN)/string_samples$(EXE_EXT) $(COMPONENT_ENV_FLAG) $(OUT_BIN)/office_connect$(INI_EXTENSION)
+ProUNOCppBindingExample : $(APP1_BINARY) $(APP2_BINARY)
 	@echo --------------------------------------------------------------------------------
+	@echo Note: For the "$(QM)$(APP1_NAME)$(QM)" example you need a running office listening
+	@echo $(SQM)      $(SQM)on port 2083. Before you run the example you have to start your office with
+	@echo -
+	@echo $(SQM)  $(SQM)soffice "$(QM)-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
+	@echo -----
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make office_connect.run
-	@echo make string_samples.run
+	@echo make $(APP1_NAME).run
+	@echo make $(APP2_NAME).run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/%$(EXE_EXT) 
@@ -152,8 +159,8 @@ ProUNOCppBindingExample : $(OUT_BIN)/office_connect$(EXE_EXT) $(OUT_BIN)/string_
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/office_connect*))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/string_samples.*))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_INC_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_OBJ_OUT))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/$(APP1_NAME)*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/$(APP2_NAME)*))
