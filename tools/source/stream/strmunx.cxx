@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:21:14 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@ DECLARE_LIST( InternalStreamLockList, InternalStreamLock* );
 
 class InternalStreamLock
 {
-    ULONG           m_nStartPos;
-    ULONG           m_nEndPos;
+    sal_Size            m_nStartPos;
+    sal_Size            m_nEndPos;
     SvFileStream*   m_pStream;
     struct stat     m_aStat;
 
@@ -102,11 +102,11 @@ class InternalStreamLock
     static NAMESPACE_VOS(OMutex) LockMutex;
 #endif
 
-    InternalStreamLock( ULONG, ULONG, SvFileStream* );
+    InternalStreamLock( sal_Size, sal_Size, SvFileStream* );
     ~InternalStreamLock();
 public:
-    static BOOL LockFile( ULONG nStart, ULONG nEnd, SvFileStream* );
-    static void UnlockFile( ULONG nStart, ULONG nEnd, SvFileStream* );
+    static sal_Bool LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
+    static void UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
 };
 
 InternalStreamLockList InternalStreamLock::LockList;
@@ -115,8 +115,8 @@ NAMESPACE_VOS(OMutex) InternalStreamLock::LockMutex;
 #endif
 
 InternalStreamLock::InternalStreamLock(
-    ULONG nStart,
-    ULONG nEnd,
+    sal_Size nStart,
+    sal_Size nEnd,
     SvFileStream* pStream ) :
         m_nStartPos( nStart ),
         m_nEndPos( nEnd ),
@@ -145,7 +145,7 @@ InternalStreamLock::~InternalStreamLock()
 #endif
 }
 
-BOOL InternalStreamLock::LockFile( ULONG nStart, ULONG nEnd, SvFileStream* pStream )
+sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
     NAMESPACE_VOS( OGuard ) aGuard( LockMutex );
@@ -153,10 +153,10 @@ BOOL InternalStreamLock::LockFile( ULONG nStart, ULONG nEnd, SvFileStream* pStre
     ByteString aFileName(pStream->GetFileName(), osl_getThreadTextEncoding());
     struct stat aStat;
     if( stat( aFileName.GetBuffer(), &aStat ) )
-        return FALSE;
+        return sal_False;
 
     if( S_ISDIR( aStat.st_mode ) )
-        return TRUE;
+        return sal_True;
 
     InternalStreamLock* pLock = NULL;
     for( int i = 0; i < LockList.Count(); i++ )
@@ -164,37 +164,37 @@ BOOL InternalStreamLock::LockFile( ULONG nStart, ULONG nEnd, SvFileStream* pStre
         pLock = LockList.GetObject( i );
         if( aStat.st_ino == pLock->m_aStat.st_ino )
         {
-            BOOL bDenyByOptions = FALSE;
+            sal_Bool bDenyByOptions = sal_False;
             StreamMode nLockMode = pLock->m_pStream->GetStreamMode();
             StreamMode nNewMode = pStream->GetStreamMode();
 
             if( nLockMode & STREAM_SHARE_DENYALL )
-                bDenyByOptions = TRUE;
+                bDenyByOptions = sal_True;
             else if( ( nLockMode & STREAM_SHARE_DENYWRITE ) &&
                      ( nNewMode & STREAM_WRITE ) )
-                bDenyByOptions = TRUE;
+                bDenyByOptions = sal_True;
             else if( ( nLockMode & STREAM_SHARE_DENYREAD ) &&
                      ( nNewMode & STREAM_READ ) )
-                bDenyByOptions = TRUE;
+                bDenyByOptions = sal_True;
 
             if( bDenyByOptions )
             {
                 if( pLock->m_nStartPos == 0 && pLock->m_nEndPos == 0 ) // whole file is already locked
-                    return FALSE;
+                    return sal_False;
                 if( nStart == 0 && nEnd == 0) // cannot lock whole file
-                    return FALSE;
+                    return sal_False;
 
                 if( ( nStart < pLock->m_nStartPos && nEnd > pLock->m_nStartPos ) ||
                     ( nStart < pLock->m_nEndPos && nEnd > pLock->m_nEndPos ) )
-                    return FALSE;
+                    return sal_False;
             }
         }
     }
     pLock  = new InternalStreamLock( nStart, nEnd, pStream );
-    return TRUE;
+    return sal_True;
 }
 
-void InternalStreamLock::UnlockFile( ULONG nStart, ULONG nEnd, SvFileStream* pStream )
+void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
 {
 #ifndef BOOTSTRAP
     NAMESPACE_VOS( OGuard ) aGuard( LockMutex );
@@ -237,9 +237,9 @@ public:
 
 // -----------------------------------------------------------------------
 
-static ULONG GetSvError( int nErrno )
+static sal_uInt32 GetSvError( int nErrno )
 {
-    static struct { int nErr; ULONG sv; } errArr[] =
+    static struct { int nErr; sal_uInt32 sv; } errArr[] =
     {
         { 0,            SVSTREAM_OK },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
@@ -269,7 +269,7 @@ static ULONG GetSvError( int nErrno )
         { (int)0xFFFF,  SVSTREAM_GENERALERROR }
     };
 
-    ULONG nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
+    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
     int i=0;
     do
     {
@@ -296,9 +296,9 @@ static ULONG GetSvError( int nErrno )
 
 SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 {
-    bIsOpen             = FALSE;
+    bIsOpen             = sal_False;
     nLockCounter        = 0;
-    bIsWritable         = FALSE;
+    bIsWritable         = sal_False;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 1024 );
@@ -323,9 +323,9 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 
 SvFileStream::SvFileStream()
 {
-    bIsOpen             = FALSE;
+    bIsOpen             = sal_False;
     nLockCounter        = 0;
-    bIsWritable         = FALSE;
+    bIsWritable         = sal_False;
     pInstanceData       = new StreamData;
     SetBufferSize( 1024 );
 }
@@ -360,9 +360,9 @@ SvFileStream::~SvFileStream()
 |*
 *************************************************************************/
 
-ULONG SvFileStream::GetFileHandle() const
+sal_uInt32 SvFileStream::GetFileHandle() const
 {
-    return (ULONG)pInstanceData->nHandle;
+    return (sal_uInt32)pInstanceData->nHandle;
 }
 
 /*************************************************************************
@@ -375,7 +375,7 @@ ULONG SvFileStream::GetFileHandle() const
 |*
 *************************************************************************/
 
-USHORT SvFileStream::IsA() const
+sal_uInt16 SvFileStream::IsA() const
 {
     return ID_FILESTREAM;
 }
@@ -390,7 +390,7 @@ USHORT SvFileStream::IsA() const
 |*
 *************************************************************************/
 
-ULONG SvFileStream::GetData( void* pData, ULONG nSize )
+sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStream::GetData(): " );
@@ -403,11 +403,11 @@ ULONG SvFileStream::GetData( void* pData, ULONG nSize )
     int nRead = 0;
     if ( IsOpen() )
     {
-        nRead= read(pInstanceData->nHandle,pData,(unsigned)nSize);
+        nRead = read(pInstanceData->nHandle,pData,(unsigned)nSize);
         if ( nRead == -1 )
             SetError( ::GetSvError( errno ));
     }
-    return (ULONG)nRead;
+    return (sal_Size)nRead;
 }
 
 /*************************************************************************
@@ -420,7 +420,7 @@ ULONG SvFileStream::GetData( void* pData, ULONG nSize )
 |*
 *************************************************************************/
 
-ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
+sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStrean::PutData: " );
@@ -433,13 +433,13 @@ ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
     int nWrite = 0;
     if ( IsOpen() )
     {
-        nWrite= write(pInstanceData->nHandle,pData,(unsigned)nSize);
+        nWrite = write(pInstanceData->nHandle,pData,(unsigned)nSize);
         if ( nWrite == -1 )
         SetError( ::GetSvError( errno ) );
         else if( !nWrite )
         SetError( SVSTREAM_DISK_FULL );
     }
-    return (ULONG)nWrite;
+    return (sal_Size)nWrite;
 }
 
 /*************************************************************************
@@ -452,7 +452,7 @@ ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
 |*
 *************************************************************************/
 
-ULONG SvFileStream::SeekPos( ULONG nPos )
+sal_Size SvFileStream::SeekPos( sal_Size nPos )
 {
     if ( IsOpen() )
     {
@@ -503,7 +503,7 @@ static char *pFileLockEnvVar = (char*)1;
 |*
 *************************************************************************/
 
-BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
+sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
     struct flock aflock;
     aflock.l_start = nByteOffset;
@@ -513,7 +513,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
     int nLockMode = 0;
 
     if ( ! IsOpen() )
-        return FALSE;
+        return sal_False;
 
     if ( eStreamMode & STREAM_SHARE_DENYALL )
         if (bIsWritable)
@@ -527,7 +527,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
         else
         {
             SetError(SVSTREAM_LOCKING_VIOLATION);
-            return FALSE;
+            return sal_False;
         }
 
     if ( eStreamMode & STREAM_SHARE_DENYWRITE )
@@ -537,7 +537,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
             nLockMode = F_RDLCK;
 
     if (!nLockMode)
-        return TRUE;
+        return sal_True;
 
     if( ! InternalStreamLock::LockFile( nByteOffset, nByteOffset+nBytes, this ) )
     {
@@ -545,7 +545,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
         fprintf( stderr, "InternalLock on %s [ %d ... %d ] failed\n",
                  ByteString(aFilename, osl_getThreadTextEncoding()).GetBuffer(), nByteOffset, nByteOffset+nBytes );
 #endif
-        return FALSE;
+        return sal_False;
     }
 
     // HACK: File-Locking nur via Environmentvariable einschalten
@@ -560,7 +560,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
     if ( pFileLockEnvVar == (char*)1 )
         pFileLockEnvVar = getenv("STAR_ENABLE_FILE_LOCKING");
     if ( ! pFileLockEnvVar )
-        return TRUE;
+        return sal_True;
 
     aflock.l_type = nLockMode;
     if (fcntl(pInstanceData->nHandle, F_GETLK, &aflock) == -1)
@@ -570,32 +570,32 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
         fprintf( stderr, "***** FCNTL(lock):errno = %d\n", errno );
     #endif
         if ( errno == EINVAL || errno == ENOSYS )
-            return TRUE;
+            return sal_True;
     #endif
     #if defined SINIX
         if (errno == EINVAL)
-            return TRUE;
+            return sal_True;
     #endif
     #if defined SOLARIS
         if (errno == ENOSYS)
-            return TRUE;
+            return sal_True;
     #endif
         SetError( ::GetSvError( errno ));
-        return FALSE;
+        return sal_False;
     }
     if (aflock.l_type != F_UNLCK)
     {
         SetError(SVSTREAM_LOCKING_VIOLATION);
-        return FALSE;
+        return sal_False;
     }
 
     aflock.l_type = nLockMode;
     if (fcntl(pInstanceData->nHandle, F_SETLK, &aflock) == -1)
     {
         SetError( ::GetSvError( errno ));
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -608,7 +608,7 @@ BOOL SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
 |*
 *************************************************************************/
 
-BOOL SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
+sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
 
     struct flock aflock;
@@ -618,35 +618,35 @@ BOOL SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
     aflock.l_len = nBytes;
 
     if ( ! IsOpen() )
-        return FALSE;
+        return sal_False;
 
     InternalStreamLock::UnlockFile( nByteOffset, nByteOffset+nBytes, this );
 
     if ( ! (eStreamMode &
         (STREAM_SHARE_DENYALL | STREAM_SHARE_DENYREAD | STREAM_SHARE_DENYWRITE)))
-        return TRUE;
+        return sal_True;
 
     // wenn File Locking ausgeschaltet, siehe SvFileStream::LockRange
     if ( ! pFileLockEnvVar )
-        return TRUE;
+        return sal_True;
 
     if (fcntl(pInstanceData->nHandle, F_SETLK, &aflock) != -1)
-        return TRUE;
+        return sal_True;
 
 #if ( defined HPUX && defined BAD_UNION )
 #ifdef DBG_UTIL
         fprintf( stderr, "***** FCNTL(unlock):errno = %d\n", errno );
 #endif
         if ( errno == EINVAL || errno == ENOSYS )
-            return TRUE;
+            return sal_True;
 #endif
 #if ( defined SINIX )
     if (errno == EINVAL)
-        return TRUE;
+        return sal_True;
 #endif
 
     SetError( ::GetSvError( errno ));
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -659,7 +659,7 @@ BOOL SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
 |*
 *************************************************************************/
 
-BOOL SvFileStream::LockFile()
+sal_Bool SvFileStream::LockFile()
 {
   return LockRange( 0UL, 0UL );
 }
@@ -674,7 +674,7 @@ BOOL SvFileStream::LockFile()
 |*
 *************************************************************************/
 
-BOOL SvFileStream::UnlockFile()
+sal_Bool SvFileStream::UnlockFile()
 {
     return UnlockRange( 0UL, 0UL );
 }
@@ -695,7 +695,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     int nMode;
     int nHandleTmp;
     struct stat buf;
-    BOOL bStatValid = FALSE;
+    sal_Bool bStatValid = sal_False;
 
     Close();
     errno = 0;
@@ -719,7 +719,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 
     if ( lstat( aLocalFilename.GetBuffer(), &buf ) == 0 )
       {
-        bStatValid = TRUE;
+        bStatValid = sal_True;
         // SvFileStream soll kein Directory oeffnen
         if( S_ISDIR( buf.st_mode ) )
           {
@@ -794,15 +794,15 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     if ( nHandleTmp != -1 )
     {
         pInstanceData->nHandle = nHandleTmp;
-        bIsOpen = TRUE;
+        bIsOpen = sal_True;
         if ( nAccessRW != O_RDONLY )
-            bIsWritable = TRUE;
+            bIsWritable = sal_True;
 
         if ( !LockFile() ) // ganze Datei
         {
             close( nHandleTmp );
-            bIsOpen = FALSE;
-            bIsWritable = FALSE;
+            bIsOpen = sal_False;
+            bIsWritable = sal_False;
             pInstanceData->nHandle = 0;
         }
     }
@@ -853,8 +853,8 @@ void SvFileStream::Close()
         pInstanceData->nHandle = 0;
     }
 
-    bIsOpen     = FALSE;
-    bIsWritable = FALSE;
+    bIsOpen     = sal_False;
+    bIsWritable = sal_False;
     SvStream::ClearBuffer();
     SvStream::ClearError();
 }
@@ -885,7 +885,7 @@ void SvFileStream::ResetError()
 |*
 *************************************************************************/
 
-void SvFileStream::SetSize (ULONG nSize)
+void SvFileStream::SetSize (sal_Size nSize)
 {
     if (IsOpen())
     {
@@ -893,7 +893,7 @@ void SvFileStream::SetSize (ULONG nSize)
         if (::ftruncate (fd, (off_t)nSize) < 0)
         {
             // Save original error.
-            ULONG nError = ::GetSvError (errno);
+            sal_uInt32 nError = ::GetSvError (errno);
 
             // Check against current size. Fail upon 'shrink'.
             struct stat aStat;
@@ -910,8 +910,8 @@ void SvFileStream::SetSize (ULONG nSize)
             }
 
             // Save current position.
-            ULONG nCurPos = (ULONG)::lseek (fd, (off_t)0, SEEK_CUR);
-            if (nCurPos == (ULONG)(-1))
+            sal_Size nCurPos = (sal_Size)::lseek (fd, (off_t)0, SEEK_CUR);
+            if (nCurPos == (sal_Size)(-1))
             {
                 SetError (nError);
                 return;
