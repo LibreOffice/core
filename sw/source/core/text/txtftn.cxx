@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-27 13:40:01 $
+ *  last change: $Author: od $ $Date: 2002-11-11 09:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,24 +459,6 @@ void SwTxtFrm::SetErgoSumNum( const MSHORT nErgo )
     }
 }
 
-sal_Bool lcl_Apres( SwLayoutFrm* pFirst, SwLayoutFrm* pSecond )
-{
-    SwPageFrm *pPg1 = pFirst->FindPageFrm();
-    SwPageFrm *pPg2 = pSecond->FindPageFrm();
-    if( pPg1 != pPg2 )
-        return pPg1->GetPhyPageNum() < pPg2->GetPhyPageNum();
-    SwLayoutFrm *pUp = pFirst;
-    while( pUp->GetUpper() && !pUp->GetUpper()->IsAnLower( pSecond ) )
-        pUp = pUp->GetUpper();
-    if( !pUp->GetUpper() )
-        return sal_False;
-    do
-    {
-        pUp = (SwLayoutFrm*)pUp->GetNext();
-    } while( pUp && !pUp->IsAnLower( pSecond ) );
-    return 0 != pUp;
-}
-
 /*************************************************************************
  *                      SwTxtFrm::RemoveFtn()
  *************************************************************************/
@@ -585,8 +567,10 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                             pDest,pFtn),"SwTxtFrm::RemoveFtn: footnote exists");
 
                         //Nicht ummelden sondern immer Moven.
-                        if( bEndDoc || !lcl_Apres( pFtnFrm->FindFtnBossFrm(),
-                                            pDest->FindFtnBossFrm( !bEndn ) ) )
+                        // OD 08.11.2002 #104840# - use <SwlayoutFrm::IsBefore(::)>
+                        if ( bEndDoc ||
+                             !pFtnFrm->FindFtnBossFrm()->IsBefore( pDest->FindFtnBossFrm( !bEndn ) )
+                           )
                         {
                             SwPageFrm* pTmp = pFtnFrm->FindPageFrm();
                             if( pUpdate && pUpdate != pTmp )
@@ -834,7 +818,10 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 // Methode
                 if( pSect && pSect->FindFtnBossFrm( !bEnd )->FindFtnCont() )
                     bBrutal = sal_True;
-                else if( !pFtnFrm->GetPrev() || lcl_Apres( pFtnBoss, pBoss ) )
+                // OD 08.11.2002 #104840# - use <SwLayoutFrm::IsBefore(..)>
+                else if ( !pFtnFrm->GetPrev() ||
+                          pFtnBoss->IsBefore( pBoss )
+                        )
                 {
                     SwFtnBossFrm *pSrcBoss = pSrcFrm->FindFtnBossFrm( !bEnd );
                     pSrcBoss->MoveFtns( pSrcFrm, this, pFtn );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: od $ $Date: 2002-11-01 11:07:00 $
+ *  last change: $Author: od $ $Date: 2002-11-11 09:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1062,8 +1062,6 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 |*
 |*************************************************************************/
 
-extern BOOL lcl_Apres( SwLayoutFrm* pFirst, SwLayoutFrm* pSecond );
-
 /// OD 18.09.2002 #100522#
 /// perform calculation of content, only if height has changed.
 void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
@@ -1100,7 +1098,10 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
         {
             pFtn = pFtn->FindFtnBossFrm();
             SwFrm* pTmp = FindLastCntnt( FINDMODE_LASTCNT );
-            if( pTmp && lcl_Apres( pFtn, pTmp->FindFtnBossFrm() ) )
+            // OD 08.11.2002 #104840# - use <SwLayoutFrm::IsBefore(..)>
+            if ( pTmp &&
+                 pFtn->IsBefore( pTmp->FindFtnBossFrm() )
+               )
                 bCalc = TRUE;
         }
         else if( GetFollow() && !GetFollow()->ContainsAny() )

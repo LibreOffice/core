@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: od $ $Date: 2002-11-01 11:43:00 $
+ *  last change: $Author: od $ $Date: 2002-11-11 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1647,8 +1647,6 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
 |*
 |*************************************************************************/
 
-extern BOOL lcl_Apres( SwLayoutFrm* pFirst, SwLayoutFrm* pSecond );
-
 BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
 {
     SwFlowFrm::SetMoveBwdJump( FALSE );
@@ -1674,8 +1672,11 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         if( !bEndnote )
             pOldBoss = pOldBoss->FindFtnBossFrm( TRUE );
         SwFtnBossFrm *pRefBoss = pRef->FindFtnBossFrm( !bEndnote );
-        if( pOldBoss != pRefBoss &&
-            ( !bEndnote || lcl_Apres( pRefBoss, pOldBoss ) ) )
+        if ( pOldBoss != pRefBoss &&
+             // OD 08.11.2002 #104840# - use <SwLayoutFrm::IsBefore(..)>
+             ( !bEndnote ||
+               pRefBoss->IsBefore( pOldBoss ) )
+           )
             pNewUpper = rThis.GetLeaf( MAKEPAGE_FTN, FALSE );
     }
     else if ( IsPageBreak( TRUE ) ) //PageBreak zu beachten?
