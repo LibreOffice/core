@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:47:24 $
+ *  last change: $Author: ab $ $Date: 2001-05-17 09:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3594,11 +3594,10 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No están permitidos strings o arrays";
     };
-#ifdef VBSCRIPT_TEST
-    String ERRCODE_BASIC_NOT_IN_VBSCRIPT & ERRCODE_RES_MASK
+    String ERRCODE_BASIC_EXCEPTION & ERRCODE_RES_MASK
     {
-        Text = "In VBScript nicht enthalten" ;
-        Text [ ENGLISH ] = "Not implemented in VBScript" ;
+        Text = "Es ist eine Exception aufgetreten $(ARG1)" ;
+        Text [ ENGLISH ] = "An exception occurred $(ARG1)" ;
         Text [ norwegian ] = "Not implemented in VBScript" ;
         Text [ italian ] = "Non contenuto nello script  VB" ;
         Text [ portuguese_brazilian ] = "Not implemented in VBScript" ;
@@ -3624,7 +3623,6 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No está contenido en el script VB";
     };
-#endif
 };
  // Hinweis: IDS_SBERR_TERMINATED = IDS_SBERR_START+2000.
 String IDS_SBERR_TERMINATED
