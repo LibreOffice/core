@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:04:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,8 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
     const sal_Unicode * src = inStr.getStr() + startPos;
 
     // Allocate nCount length to offset argument.
-    sal_Int32 *p, position;
+    sal_Int32 *p = 0;
+    sal_Int32 position = 0;
     if (useOffset) {
         offset.realloc( nCount );
         p = offset.getArray();
