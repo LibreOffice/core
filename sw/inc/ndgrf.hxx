@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:07:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,6 @@ public:
 
 // ----------------------------------------------------------------------
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
      return ND_GRFNODE == nNodeType ? (SwGrfNode*)this : 0;
@@ -227,7 +225,6 @@ inline const SwGrfNode   *SwNode::GetGrfNode() const
 {
      return ND_GRFNODE == nNodeType ? (const SwGrfNode*)this : 0;
 }
-#endif
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 inline BOOL SwGrfNode::IsLinkedFile() const
