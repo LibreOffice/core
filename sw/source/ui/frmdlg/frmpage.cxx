@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:35:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,10 @@
 #ifndef _UIITEMS_HXX
 #include <uiitems.hxx>
 #endif
+// OD 19.09.2003 #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
 
 #ifndef _FRMUI_HRC
 #include <frmui.hrc>
@@ -227,22 +231,23 @@ struct ResIdPair_Impl
 #define MAX_PERCENT_WIDTH   254L
 #define MAX_PERCENT_HEIGHT  254L
 
+// OD 19.09.2003 #i18732# - change order of alignments
 #define LB_FRAME                0x00000001L // Textbereich des Absatzes
 #define LB_PRTAREA              0x00000002L // Textbereich des Absatzes + Einzuege
-#define LB_REL_PG_LEFT          0x00000004L // Linker Seitenrand
-#define LB_REL_PG_RIGHT         0x00000008L // Rechter Seitenrand
+#define LB_VERT_FRAME           0x00000004L // Vertikaler Textbereich des Absatzes
+#define LB_VERT_PRTAREA         0x00000008L // Vertikaler Textbereich des Absatzes + Einzuege
 #define LB_REL_FRM_LEFT         0x00000010L // Linker Absatzrand
 #define LB_REL_FRM_RIGHT        0x00000020L // Rechter Absatzrand
-#define LB_REL_PG_FRAME         0x00000040L // Gesamte Seite
-#define LB_REL_PG_PRTAREA       0x00000080L // Textbereich der Seite
 
-#define LB_FLY_REL_PG_LEFT      0x00000100L // Linker Rahmenrand
-#define LB_FLY_REL_PG_RIGHT     0x00000200L // Rechter Rahmenrand
-#define LB_FLY_REL_PG_FRAME     0x00000400L // Gesamte Rahmen
-#define LB_FLY_REL_PG_PRTAREA   0x00000800L // Rahmeninneres
+#define LB_REL_PG_LEFT          0x00000040L // Linker Seitenrand
+#define LB_REL_PG_RIGHT         0x00000080L    // Rechter Seitenrand
+#define LB_REL_PG_FRAME         0x00000100L // Gesamte Seite
+#define LB_REL_PG_PRTAREA       0x00000200L    // Textbereich der Seite
 
-#define LB_VERT_FRAME           0x00001000L // Vertikaler Textbereich des Absatzes
-#define LB_VERT_PRTAREA         0x00002000L // Vertikaler Textbereich des Absatzes + Einzuege
+#define LB_FLY_REL_PG_LEFT      0x00000400L    // Linker Rahmenrand
+#define LB_FLY_REL_PG_RIGHT     0x00000800L    // Rechter Rahmenrand
+#define LB_FLY_REL_PG_FRAME     0x00001000L    // Gesamte Rahmen
+#define LB_FLY_REL_PG_PRTAREA   0x00002000L    // Rahmeninneres
 
 #define LB_REL_BASE             0x00010000L // Zeichenausrichtung Basis
 #define LB_REL_CHAR             0x00020000L // Zeichenausrichtung Zeichen
@@ -332,6 +337,17 @@ static FrmMap __FAR_DATA aHFlyHtmlMap[] =
     {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      LB_FLY_REL_PG_FRAME}
 };
 
+// OD 19.09.2003 #i18732# - own vertical alignment map for to frame anchored objects
+#define VERT_FRAME_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA)
+
+static FrmMap __FAR_DATA aVFrameMap[] =
+{
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       VERT_FRAME_REL},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_BOTTOM,    VERT_FRAME_REL},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,    VERT_FRAME_REL},
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,      VERT_FRAME_REL}
+};
+
 static FrmMap __FAR_DATA aVFlyHtmlMap[] =
 {
     {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       LB_VERT_FRAME},
@@ -368,7 +384,9 @@ static FrmMap __FAR_DATA aHParaHtmlAbsMap[] =
     {STR_RIGHT,         STR_MIR_RIGHT,      HORI_RIGHT,     HTML_HORI_PARA_REL}
 };
 
-#define VERT_PARA_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA)
+// OD 19.09.2003 #i18732# - allow vertical alignment at page areas
+#define VERT_PARA_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
+                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
 static FrmMap __FAR_DATA aVParaMap[] =
 {
@@ -414,7 +432,9 @@ static FrmMap __FAR_DATA aHCharHtmlAbsMap[] =
     {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      LB_REL_PG_FRAME}
 };
 
-#define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA|LB_REL_CHAR)
+// OD 19.09.2003 #i18732# - allow vertical alignment at page areas
+#define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA|LB_REL_CHAR| \
+                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
 static FrmMap __FAR_DATA aVCharMap[] =
 {
@@ -522,6 +542,9 @@ USHORT lcl_GetFrmMapCount(FrmMap* pMap)
             return sizeof(aHParaMap) / aSizeOf;
         if ( pMap == aHFrameMap )
             return sizeof(aHFrameMap) / aSizeOf;
+        // OD 19.09.2003 #i18732# - own vertical alignment map for to frame anchored objects
+        if ( pMap == aVFrameMap )
+            return sizeof(aVFrameMap) / aSizeOf;
         if ( pMap == aHCharMap )
             return sizeof(aHCharMap) / aSizeOf;
         if ( pMap == aHCharHtmlMap )
@@ -688,6 +711,8 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAtVertPosED    (this, SW_RES(ED_AT_VERT_POS)),
     aVertRelationFT (this, SW_RES(FT_VERT_RELATION)),
     aVertRelationLB (this, SW_RES(LB_VERT_RELATION)),
+    // OD 19.09.2003 #i18732# - new checkbox
+    aFollowTextFlowCB(this, SW_RES(CB_FOLLOWTEXTFLOW)),
     aPositionFL     (this, SW_RES(FL_POSITION)),
     aRealSizeBT     (this, SW_RES(BT_REALSIZE)),
     aExampleWN      (this, SW_RES(WN_BSP)),
@@ -719,6 +744,8 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aHeightED.   SetLoseFocusHdl( aLk );
     aAtHorzPosED.SetLoseFocusHdl( aLk );
     aAtVertPosED.SetLoseFocusHdl( aLk );
+    // OD 25.09.2003 #i18732# - click handler for new checkbox
+    aFollowTextFlowCB.SetClickHdl( aLk );
 
     aLk = LINK(this, SwFrmPage, ModifyHdl);
     aWidthED.    SetModifyHdl( aLk );
@@ -856,6 +883,13 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         case FLY_AT_FLY: aAnchorAtFrameRB.Check();break;
     }
 
+    // OD 19.09.2003 #i18732# - init checkbox value
+    {
+        const bool bFollowTextFlow =
+            static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+        aFollowTextFlowCB.Check( bFollowTextFlow );
+    }
+
     if(bHtmlMode)
     {
         if(nDlgType == DLG_FRM_STD &&
@@ -877,11 +911,24 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         aMirrorPagesCB.Show(FALSE);
         if(nDlgType == DLG_FRM_STD)
             aFixedRatioCB.Enable(FALSE);
+        // OD 19.09.2003 #i18732# - hide checkbox in HTML mode
+        aFollowTextFlowCB.Show(FALSE);
+    }
+    else
+    {
+        // OD 06.11.2003 #i18732# correct enable/disable of check box 'Mirror on..'
+        aMirrorPagesCB.Enable(!aAnchorAsCharRB.IsChecked());
+
+        // OD 06.11.2003 #i18732# - enable/disable check box 'Follow text flow'.
+        aFollowTextFlowCB.Enable( aAnchorAtParaRB.IsChecked() ||
+                                  aAnchorAtCharRB.IsChecked() );
     }
 
     Init( rSet, TRUE );
     aAtVertPosED.SaveValue();
     aAtHorzPosED.SaveValue();
+    // OD 19.09.2003 #i18732#
+    aFollowTextFlowCB.SaveValue();
 
     bNoModifyHdl = FALSE;
     //lock PercentFields
@@ -1087,7 +1134,11 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
         bRet |= 0 != rSet.Put( aSz );
     }
-
+    // OD 19.09.2003 #i18732#
+    if(aFollowTextFlowCB.IsChecked() != aFollowTextFlowCB.GetSavedValue())
+    {
+        bRet |= 0 != rSet.Put(SwFmtFollowTextFlow(aFollowTextFlowCB.IsChecked()));
+    }
     return bRet;
 }
 
@@ -1131,7 +1182,9 @@ void SwFrmPage::InitPos(USHORT nId,
     }
     else if ( nId == FLY_AT_FLY )
     {
-        pVMap = bHtmlMode ? aVFlyHtmlMap : aVParaMap;
+        // OD 19.09.2003 #i18732# - own vertical alignment map for to frame
+        // anchored objects.
+        pVMap = bHtmlMode ? aVFlyHtmlMap : aVFrameMap;
         pHMap = bHtmlMode ? aHFlyHtmlMap : aHFrameMap;
     }
     else if ( nId == FLY_AT_CNTNT )
@@ -1610,6 +1663,8 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, pEdit )
     aVal.eArea = (RndStdIds)GetAnchor();
     aVal.bAuto = aAutoHeightCB.IsChecked();
     aVal.bMirror = aMirrorPagesCB.IsChecked();
+    // OD 18.09.2003 #i18732#
+    aVal.bFollowTextFlow = aFollowTextFlowCB.IsChecked();
 
     if ( pHMap )
     {
@@ -1726,6 +1781,11 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, pEdit )
 IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, pButton )
 {
     aMirrorPagesCB.Enable(!aAnchorAsCharRB.IsChecked());
+
+    // OD 06.11.2003 #i18732# - enable check box 'Follow text flow' for anchor
+    // type to-paragraph' and to-character
+    aFollowTextFlowCB.Enable( aAnchorAtParaRB.IsChecked() ||
+                              aAnchorAtCharRB.IsChecked() );
 
     USHORT nId = GetAnchor();
 
