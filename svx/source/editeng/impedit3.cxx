@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:34:03 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,11 @@ void ImpEditEngine::CheckAutoPageSize()
     }
 }
 
+static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontHeight )
+{
+    return ( nFontHeight * 12 ) / 10;   // + 20%
+}
+
 sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 {
     ParaPortion* pParaPortion = GetParaPortions().GetObject( nPara );
@@ -841,7 +846,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             {
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
-                nTextLineHeight = aTmpFont.GetPhysTxtSize( GetRefDevice(), String() ).Height();
+                if ( IsFixedCellHeight() )
+                    nTextLineHeight = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
+                else
+                    nTextLineHeight = aTmpFont.GetPhysTxtSize( GetRefDevice(), String() ).Height();
                 // Metriken koennen groesser sein
                 FormatterFontMetric aTempFormatterMetrics;
                 RecalcFormatterFontMetrics( aTempFormatterMetrics, aTmpFont );
@@ -1051,8 +1059,11 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
+                {
                     pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, pPortion->GetLen(), pBuf );
-
+                    if ( IsFixedCellHeight() )
+                        pPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
+                }
                 if ( bCalcCharPositions )
                 {
                     sal_uInt16 nLen = pPortion->GetLen();
@@ -1255,7 +1266,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         {
             SeekCursor( pNode, pLine->GetStart()+1, aTmpFont );
             aTmpFont.SetPhysFont( pRefDev );
-            aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev, String() ).Height();
+            if ( IsFixedCellHeight() )
+                aTextSize.Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
+            else
+                aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev, String() ).Height();
             pLine->SetHeight( (sal_uInt16)aTextSize.Height() );
         }
 
@@ -1307,7 +1321,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             }
             else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
-                if ( nPara || ( pLine->GetStartPortion() != 0 ) ) // Nicht die aller erste Zeile
+                if ( nPara || IsFixedCellHeight() || pLine->GetStartPortion() ) // Nicht die aller erste Zeile
                 {
                     // #100508# There are documents with PropLineSpace 0, why?
                     if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
@@ -1602,6 +1616,8 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
 
     TextPortion* pDummyPortion = new TextPortion( 0 );
     pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev, String() );
+    if ( IsFixedCellHeight() )
+        pDummyPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
     pParaPortion->GetTextPortions().Insert( pDummyPortion, pParaPortion->GetTextPortions().Count() );
     FormatterFontMetric aFormatterMetrics;
     RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
@@ -1647,7 +1663,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
         else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
         {
             USHORT nPara = GetParaPortions().GetPos( pParaPortion );
-            if ( nPara || ( pTmpLine->GetStartPortion() != 0 ) ) // Nicht die aller erste Zeile
+            if ( nPara || IsFixedCellHeight() || pTmpLine->GetStartPortion() ) // Nicht die aller erste Zeile
             {
                 // #100508# There are documents with PropLineSpace 0, why?
                 if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
@@ -2478,6 +2494,19 @@ void ImpEditEngine::SetVertical( BOOL bVertical )
     }
 }
 
+void ImpEditEngine::SetFixedCellHeight( BOOL bUseFixedCellHeight )
+{
+    if ( IsFixedCellHeight() != bUseFixedCellHeight )
+    {
+        GetEditDoc().SetFixedCellHeight( bUseFixedCellHeight );
+        if ( IsFormatted() )
+        {
+            FormatFullDoc();
+            UpdateViews( GetActiveView() );
+        }
+    }
+}
+
 void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut, sal_uInt16 nIgnoreWhich )
 {
     // Es war mal geplant, SeekCursor( nStartPos, nEndPos, ... ), damit nur
@@ -2690,36 +2719,55 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
         rFont.SetPropr( 100 );
         rFont.SetPhysFont( pRefDev );
     }
+    sal_uInt16 nAscent, nDescent;
+
     FontMetric aMetric( pRefDev->GetFontMetric() );
+    nAscent = (sal_uInt16)aMetric.GetAscent();
+    nDescent = (sal_uInt16)aMetric.GetDescent();
 
-    sal_uInt16 nAscent = (sal_uInt16)aMetric.GetAscent();
-    sal_uInt16 nDescent = (sal_uInt16)aMetric.GetDescent();
-    sal_uInt16 nLeading = ( aMetric.GetLeading() > 0 ) ? (sal_uInt16)aMetric.GetLeading() : 0;
-    // Fonts ohne Leading bereiten Probleme
-    if ( ( nLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
+    if ( IsFixedCellHeight() )
     {
-        // Da schaun wir mal, was fuer eine Leading ich auf dem
-        // Bildschirm erhalte
-        VirtualDevice* pVDev = GetVirtualDevice( pRefDev->GetMapMode() );
-        rFont.SetPhysFont( pVDev );
-        aMetric = pVDev->GetFontMetric();
+/*  creating correct proportional ascent and descent values lead to problems if different fonts are used
+    in the same portion, it results in a bigger linespacing.
+        sal_Int32 f = nAscent + nDescent;
+        if ( f )
+        {
+            sal_Int32 nHeight = ImplCalculateFontIndependentLineSpacing( rFont.GetHeight() );
+            nAscent  = (sal_Int16)(( nHeight * nAscent ) / f );
+            nDescent = (sal_Int16)(nHeight - nAscent);
+        }
+*/
+        nAscent = rFont.GetHeight();
+        nDescent= ImplCalculateFontIndependentLineSpacing( rFont.GetHeight() ) - nAscent;
+    }
+    else
+    {
+        sal_uInt16 nLeading = ( aMetric.GetLeading() > 0 ) ? (sal_uInt16)aMetric.GetLeading() : 0;
+        // Fonts ohne Leading bereiten Probleme
+        if ( ( nLeading == 0 ) && ( pRefDev->GetOutDevType() == OUTDEV_PRINTER ) )
+        {
+            // Da schaun wir mal, was fuer eine Leading ich auf dem
+            // Bildschirm erhalte
+            VirtualDevice* pVDev = GetVirtualDevice( pRefDev->GetMapMode() );
+            rFont.SetPhysFont( pVDev );
+            aMetric = pVDev->GetFontMetric();
 
-        // Damit sich die Leading nicht wieder rausrechnet,
-        // wenn die ganze Zeile den Font hat, nTmpLeading.
+            // Damit sich die Leading nicht wieder rausrechnet,
+            // wenn die ganze Zeile den Font hat, nTmpLeading.
 
-        // 4/96: Kommt bei HP Laserjet 4V auch nicht hin
-        // => Werte komplett vom Bildschirm holen.
-//      sal_uInt16 nTmpLeading = (sal_uInt16)aMetric.GetLeading();
-//      nAscent += nTmpLeading;
-        nAscent = (sal_uInt16)aMetric.GetAscent();
-        nDescent = (sal_uInt16)aMetric.GetDescent();
-//      nLeading = (sal_uInt16)aMetric.GetLeading();
+            // 4/96: Kommt bei HP Laserjet 4V auch nicht hin
+            // => Werte komplett vom Bildschirm holen.
+    //      sal_uInt16 nTmpLeading = (sal_uInt16)aMetric.GetLeading();
+    //      nAscent += nTmpLeading;
+            nAscent = (sal_uInt16)aMetric.GetAscent();
+            nDescent = (sal_uInt16)aMetric.GetDescent();
+    //      nLeading = (sal_uInt16)aMetric.GetLeading();
+        }
     }
     if ( nAscent > rCurMetrics.nMaxAscent )
         rCurMetrics.nMaxAscent = nAscent;
     if ( nDescent > rCurMetrics.nMaxDescent )
         rCurMetrics.nMaxDescent= nDescent;
-
     // Sonderbehandlung Hoch/Tief:
     if ( rFont.GetEscapement() )
     {
