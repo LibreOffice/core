@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: vg $ $Date: 2002-02-25 17:43:51 $
+#   last change: $Author: vg $ $Date: 2002-02-26 15:47:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.47 $ ';
+$id_str = ' $Revision: 1.48 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -678,7 +678,7 @@ sub usage {
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
     print STDERR "Example:  build -from_opt sfx2\n";
-    print STDERR "              - the same as -from, but skip all projects that could have been built (no secure way, use ONLY when -all or -from is already been run and there no external dependensies\' changes occurred)\n";
+    print STDERR "              - the same as -from, but skip all projects that could have been built (no secure way, use ONLY when -all or -from is already been run and there no external dependencies\' changes occurred)\n";
     print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
     print STDERR "      -from       - build all projects beginning from the specified till current one\n";
     print STDERR "      -from_opt   - build all projects beginning from the specified till current one (optimized version)\n";
@@ -686,8 +686,8 @@ sub usage {
     print STDERR "      -show       - show what is going to be built\n";
     print STDERR "      -file       - generate command file file_name\n";
     print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
-    print STDERR "      -dlv_switch - use deliver with the switch specified\n";
-    print STDERR "      -help       - print help info\n";
+    print STDERR "      -dlv[_switch]   - use deliver with the switch specified\n";
+    print STDERR "      --help      - print help info\n";
     print STDERR "Default:          - build current project\n";
     print STDERR "Keys that are not listed above would be passed to dmake\n";
 };
