@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-20 09:56:16 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 11:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -87,8 +89,13 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
+#endif
+
 
 using namespace connectivity;
+using namespace ::dbtools;
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -301,9 +308,9 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
     if(parameterIndex >= m_aRow->size())
-        m_aRow->push_back(DateConversion::toDouble(aData));
+        m_aRow->push_back(DBTypeConversion::toDouble(aData));
     else
-        (*m_aRow)[parameterIndex] = DateConversion::toDouble(aData);
+        (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(aData);
 }
 // -------------------------------------------------------------------------
 
@@ -317,9 +324,9 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
     if(parameterIndex >= m_aRow->size())
-        m_aRow->push_back(DateConversion::toDouble(aVal));
+        m_aRow->push_back(DBTypeConversion::toDouble(aVal));
     else
-        (*m_aRow)[parameterIndex] = DateConversion::toDouble(aVal);
+        (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(aVal);
 }
 // -------------------------------------------------------------------------
 
@@ -332,9 +339,9 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
     if(parameterIndex >= m_aRow->size())
-        m_aRow->push_back(DateConversion::toDouble(aVal));
+        m_aRow->push_back(DBTypeConversion::toDouble(aVal));
     else
-        (*m_aRow)[parameterIndex] = DateConversion::toDouble(aVal);
+        (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(aVal);
 }
 // -------------------------------------------------------------------------
 
@@ -492,15 +499,15 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
             break;
 
         case DataType::DATE:
-            (*m_aRow)[parameterIndex] = DateConversion::toDouble(*(Date*) x.getValue());
+            (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(*(Date*) x.getValue());
             break;
 
         case DataType::TIME:
-            (*m_aRow)[parameterIndex] = DateConversion::toDouble(*(Time*)x.getValue());
+            (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(*(Time*)x.getValue());
             break;
 
         case DataType::TIMESTAMP:
-            (*m_aRow)[parameterIndex] = DateConversion::toDouble(*(DateTime*)x.getValue());
+            (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(*(DateTime*)x.getValue());
             break;
 
         default:
