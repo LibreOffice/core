@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:52:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3481,15 +3481,6 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:Spelling" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Prüfen...</value>
-                    <value xml:lang="en-US">~Check...</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
             <node oor:name=".uno:InsertDraw" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Zeichenfunktionen anzeigen</value>
@@ -4765,33 +4756,8 @@
             </node>
             <node oor:name=".uno:RubyDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Ruby</value>
-                    <value xml:lang="en-US">As~ian phonetic guide</value>
-                    <value xml:lang="ar">دليل صوتي</value>
-                    <value xml:lang="no">Ruby</value>
-                    <value xml:lang="ca">Ruby</value>
-                    <value xml:lang="zh-TW">注音</value>
-                    <value xml:lang="cs">Ruby</value>
-                    <value xml:lang="da">Fonetisk tekst</value>
-                    <value xml:lang="el">Κείμενο φωνητικής γραφής</value>
-                    <value xml:lang="es">Ruby</value>
-                    <value xml:lang="fi">Ruby-teksti</value>
-                    <value xml:lang="fr">Ruby</value>
-                    <value xml:lang="he">‮רובי‬</value>
-                    <value xml:lang="it">Testo Ruby</value>
-                    <value xml:lang="ja">ルビ</value>
-                    <value xml:lang="ko">덧말 넣기</value>
-                    <value xml:lang="nl">Ruby</value>
-                    <value xml:lang="pl">Dopisek fonetyczny</value>
-                    <value xml:lang="pt-BR">Ruby</value>
-                    <value xml:lang="ru">Транскрипция</value>
-                    <value xml:lang="sk">Hrubý</value>
-                    <value xml:lang="sv">Ruby</value>
-                    <value xml:lang="th">ทับทิม</value>
-                    <value xml:lang="tr">Ruby</value>
-                    <value xml:lang="hi">रूबी</value>
-                    <value xml:lang="zh-CN">拼音和注音符号</value>
-                    <value xml:lang="pt">Ruby</value>
+                    <value xml:lang="de">Ruby...</value>
+                    <value xml:lang="en-US">As~ian phonetic guide...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertSymbol" oor:op="replace">
