@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:31:32 $
+ *  last change: $Author: os $ $Date: 2002-11-05 09:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,29 +842,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_WRITERPAGEBREAKS
             {
                 FT_POS_SIZE( 16 );
-                Text = "Seitenumbr�che" ;
-                Text [ ENGLISH ] = "Page breaks" ;
-                Text[ english_us ] = "Page breaks";
-                Text[ portuguese ] = "Page breaks";
-                Text[ russian ] = "Page breaks";
-                Text[ greek ] = "Page breaks";
-                Text[ dutch ] = "Page breaks";
-                Text[ french ] = "Sauts de page";
-                Text[ spanish ] = "Saltos de p�gina";
-                Text[ finnish ] = "Page breaks";
-                Text[ italian ] = "Interruzioni di pagina";
-                Text[ danish ] = "Page breaks";
-                Text[ swedish ] = "Sidbrytningar";
-                Text[ polish ] = "Page breaks";
-                Text[ portuguese_brazilian ] = "Page breaks";
-                Text[ japanese ] = "改ページ";
-                Text[ korean ] = "페이지 나누기";
-                Text[ chinese_simplified ] = "换页";
-                Text[ chinese_traditional ] = "換頁";
-                Text[ turkish ] = "Page breaks";
-                Text[ arabic ] = "Page breaks";
-                Text[ catalan ] = "Page breaks";
-                Text[ thai ] = "Page breaks";
+                Text = "Seiten- und Spaltenumbr�che" ;
+                Text[ english_us ] = "Page and column breaks";
             };
             LB_WN( WRITERPAGEBREAKS, 16 )
 
