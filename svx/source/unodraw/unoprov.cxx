@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:56:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
 #include <com/sun/star/util/MeasureUnit.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#endif
 #ifndef _COM_SUN_STAR_MEDIA_ZOOMLEVEL_HDL_
 #include <com/sun/star/media/ZoomLevel.hpp>
 #endif
@@ -101,6 +104,8 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans::PropertyAttribute;
+using ::com::sun::star::drawing::TextVerticalAdjust;
 
 SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
 {
@@ -619,6 +624,7 @@ SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap()
         { MAP_CHAR_LEN("CharKerning"),                      0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
         { MAP_CHAR_LEN("CharWordMode"),                     0,  &::getBooleanCppuType(),                    0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_ADJUST),          0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN("TextVerticalAdjust"),               0,  &::getCppuType((const TextVerticalAdjust*)0), MAYBEVOID, 0 },
         { MAP_CHAR_LEN("ControlBackground"),                0,  &::getCppuType((const sal_Int32*)0),        0, 0 },
         { MAP_CHAR_LEN("ControlBorder"),                    0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
         { MAP_CHAR_LEN("ControlBorderColor"),               0,  &::getCppuType((const sal_Int32*)0),        0, 0 },
