@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
+ *  last change: $Author: os $ $Date: 2002-06-25 08:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1512,6 +1512,6 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
         aEntryImages = ImageList(SW_RES(nResId));
         Update(sal_True);
     }
-    Window::DataChanged( rDCEvt );
+    SvTreeListBox::DataChanged( rDCEvt );
 }
 

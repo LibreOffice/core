@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 14:14:00 $
+ *  last change: $Author: os $ $Date: 2002-06-25 08:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1550,11 +1550,16 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
  ---------------------------------------------------------------------------*/
 void SwNavigationPI::DataChanged( const DataChangedEvent& rDCEvt )
 {
+    Window::DataChanged( rDCEvt );
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            InitImageList();
-
-    Window::DataChanged( rDCEvt );
+    {
+        InitImageList();
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        Color aBgColor = rStyleSettings.GetFaceColor();
+        Wallpaper aBack( aBgColor );
+        SetBackground( aBack );
+    }
 }
 /* -----------------------------06.05.2002 10:07------------------------------
 

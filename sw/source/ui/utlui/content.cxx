@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 10:12:34 $
+ *  last change: $Author: os $ $Date: 2002-06-25 08:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3250,7 +3250,7 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
         FindActiveTypeAndRemoveUserData();
         Display(sal_True);
     }
-    Window::DataChanged( rDCEvt );
+    SvTreeListBox::DataChanged( rDCEvt );
 }
 
 
