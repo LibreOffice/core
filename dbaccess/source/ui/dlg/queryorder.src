@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 15:17:20 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ french ] = "puis" ;
         Text [ swedish ] = "d‰refter" ;
         Text [ dutch ] = "en vervolgens" ;
-        Text [ spanish ] = "detr·s" ;
+        Text [ spanish ] = "despuÈs" ;
         Text [ ENGLISH_US ] = "and then" ;
         Text[ chinese_simplified ] = "‰πãÂêé";
         Text[ russian ] = "Á‡ÚÂÏ";
@@ -575,7 +575,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ french ] = "puis" ;
         Text [ swedish ] = "d‰refter" ;
         Text [ dutch ] = "en vervolgens" ;
-        Text [ spanish ] = "detr·s" ;
+        Text [ spanish ] = "despuÈs" ;
         Text [ ENGLISH_US ] = "and then" ;
         Text[ chinese_simplified ] = "‰πãÂêé";
         Text[ russian ] = "Á‡ÚÂÏ";
@@ -736,6 +736,7 @@ ModalDialog DLG_ORDERCRIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Orden";
 };
+
 
 
 
