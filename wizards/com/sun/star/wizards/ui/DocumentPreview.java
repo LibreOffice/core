@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentPreview.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:04:28 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@ public class DocumentPreview  {
     }
 
     protected XComponent setDocument(String url, PropertyValue[] lArgs) throws com.sun.star.lang.IllegalArgumentException, IOException, CloseVetoException {
-
         loadArgs = lArgs;
         XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
         return xComponent = xCompLoader.loadComponentFromURL(url, "_self", 0, loadArgs);
