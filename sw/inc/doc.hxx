@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:39:33 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,9 +1597,12 @@ public:
     void UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos); // #115901#
     void UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdatePos);
     /* <- #111955# */
-    void ChgNumRuleFmts( const SwNumRule& rRule );
+    // #106897#
+    void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
+     // #106897#
+    sal_Bool RenameNumRule(const String & rOldName, const String & rNewName);
 
         // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
     sal_Bool GotoNextNum( SwPosition&, sal_Bool bOverUpper = sal_True,
