@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:54:29 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,7 +1224,10 @@ void ScGridWindow::DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                         if (pDBData)
                             pDBData->GetQueryParam( *pQueryParam );
                         else
-                            DBG_ERROR("Auto-Filter-Button ohne DBData");
+                        {
+                            // can also be part of DataPilot table
+                            // DBG_ERROR("Auto-Filter-Button ohne DBData");
+                        }
                     }
 
                     //  pQueryParam kann nur MAXQUERY Eintraege enthalten
