@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:58:22 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ String RID_SVXSTR_DIC_ERR_READONLY
 {
     Text = "Das Wцrterbuch ist schreibgeschьtzt." ;
     Text [ ENGLISH ] = "The dictionary is readonly." ;
-    Text[ english_us ] = "The dictionary is read only.";
+    Text[ english_us ] = "The dictionary is read-only.";
     Text[ portuguese ] = "O dicionбrio й sу de leitura.";
     Text[ russian ] = "Ётот словарь предназначен только дл€ чтени€.";
     Text[ greek ] = "‘п леойкь еянбй мьнп гйб бн№гнщуз.";
