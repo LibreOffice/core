@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-06 13:31:02 $
+ *  last change: $Author: sb $ $Date: 2002-09-06 14:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,7 +1140,8 @@ main()
                 { "file://xxx_yyy/abc", "file://xxx_yyy/abc" },
                 { "file://!%23$%&'()-.@^_{}~/abc",
                   "file://!%23$%25&'()-.@%5E_%7B%7D~/abc" },
-                { "file://d:\\dir1\\file1", 0 } };
+                { "file://d:\\dir1\\file1", 0 },
+                { "http://as@alaska:8000/test/test.sxw", 0 } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
@@ -1166,7 +1167,8 @@ main()
             char const * m_pOutput;
         };
         static Test const aTest[]
-            = { { "file://d:\\dir1\\file1", "file:///d:/dir1/file1" } };
+            = { { "file://d:\\dir1\\file1", "file:///d:/dir1/file1" },
+                { "http://as@alaska:8000/test/test.sxw", 0 } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(String(aTest[i].m_pInput, RTL_TEXTENCODING_UTF8),
