@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 18:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,15 +90,8 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
+BYTE ScDocument::GetStringScriptType( const String& rString )
 {
-    if ( !pCell )
-        return 0;       // empty
-
-    BYTE nStored = pCell->GetScriptType();
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
-        return nStored;                             // use stored value
-
     if ( !pScriptTypeData )
     {
         pScriptTypeData = new ScScriptTypeData;
@@ -109,17 +102,12 @@ BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
     }
 
     BYTE nRet = 0;
-
-    String aStr;
-    Color* pColor;
-    ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *xPoolHelper->GetFormTable() );
-
-    if (aStr.Len())
+    if (rString.Len())
     {
         uno::Reference<i18n::XBreakIterator> xBreakIter = pScriptTypeData->xBreakIter;
         if ( xBreakIter.is() )
         {
-            rtl::OUString aText = aStr;
+            rtl::OUString aText = rString;
             sal_Int32 nLen = aText.getLength();
 
             sal_Int32 nPos = 0;
@@ -144,6 +132,23 @@ BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
             while ( nPos >= 0 && nPos < nLen );
         }
     }
+    return nRet;
+}
+
+BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
+{
+    if ( !pCell )
+        return 0;       // empty
+
+    BYTE nStored = pCell->GetScriptType();
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
+        return nStored;                             // use stored value
+
+    String aStr;
+    Color* pColor;
+    ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *xPoolHelper->GetFormTable() );
+
+    BYTE nRet = GetStringScriptType( aStr );
 
     pCell->SetScriptType( nRet );       // store for later calls
 

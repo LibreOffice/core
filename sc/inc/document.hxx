@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:55:58 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 18:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,6 +990,7 @@ public:
     const SfxItemSet*   GetCondResult( USHORT nCol, USHORT nRow, USHORT nTab ) const;
     const SfxPoolItem*  GetEffItem( USHORT nCol, USHORT nRow, USHORT nTab, USHORT nWhich ) const;
 
+    BYTE            GetStringScriptType( const String& rString );
     BYTE            GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat );
     BYTE            GetScriptType( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCell* pCell = NULL );
 
