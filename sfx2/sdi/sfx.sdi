@@ -716,34 +716,6 @@ SfxVoidItem ArrangeHorizontal SID_HORIZONTALDOCKWINS
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ExportTo SID_EXPORTDOC
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* status: */
-    SlotType = SfxStringItem
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DOCUMENT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem ArrangeHorizontal SID_HORIZONTALWINS
 ()
 [
@@ -6951,7 +6923,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAs SID_SAVEASDOC
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_VERSION, SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
+(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_VERSION,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8798,7 +8770,36 @@ TbxImageItem ZoomToolBox SID_ZOOM_TOOLBOX
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ExportTo SID_EXPORTDOC
+(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+//--------------------------------------------------------------------------
 SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8813,15 +8814,13 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     RecordPerSet;
     Synchron;
 
-        Readonly = TRUE,
+    Readonly = TRUE,
 
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-        ToolBoxConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
-
-
 
