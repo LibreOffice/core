@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:55:22 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ Reference< XNamed > OViewContainer::createObject(const ::rtl::OUString& _rName)
 {
     Reference< XNamed > xProp;
     if ( m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName) )
-        m_xMasterContainer->getByName(_rName) >>= xProp;
+        xProp.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
     if ( !xProp.is() )
     {
@@ -221,7 +221,7 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
     {
         xAppend->appendByDescriptor(descriptor);
         if(m_xMasterContainer->hasByName(aName))
-            m_xMasterContainer->getByName(aName) >>= xProp;
+            xProp.set(m_xMasterContainer->getByName(aName),UNO_QUERY);
     }
     else
     {
@@ -236,11 +236,15 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
         aSql += sCommand;
 
 
-        OSL_ENSURE(m_xConnection.is(),"Connection is null!");
-        Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-        if ( xStmt.is() )
-            xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
+        Reference<XConnection> xCon = m_xConnection;
+        OSL_ENSURE(xCon.is(),"Connection is null!");
+        if ( xCon.is() )
+        {
+            Reference< XStatement > xStmt = xCon->createStatement(  );
+            if ( xStmt.is() )
+                xStmt->execute(aSql);
+            ::comphelper::disposeComponent(xStmt);
+        }
     }
 }
 // -------------------------------------------------------------------------
@@ -252,13 +256,10 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
         xDrop->dropByName(_sElementName);
     else
     {
-        ObjectIter aIter = m_aElements[_nPos];
-        if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-            aIter->second = createObject(_sElementName);
         ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
-        Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
-        if(xTable.is())
+        Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
+        if ( xTable.is() )
         {
             xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
             xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
@@ -272,10 +273,15 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
 
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW ");
         aSql += sComposedName;
-        Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-        if(xStmt.is())
-            xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
+        Reference<XConnection> xCon = m_xConnection;
+        OSL_ENSURE(xCon.is(),"Connection is null!");
+        if ( xCon.is() )
+        {
+            Reference< XStatement > xStmt = xCon->createStatement(  );
+            if(xStmt.is())
+                xStmt->execute(aSql);
+            ::comphelper::disposeComponent(xStmt);
+        }
     }
 }
 // -----------------------------------------------------------------------------
