@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangeData.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module sheet {
     the columns of the array.</p>
  */
 
-interface XCellRangeData: com::sun::star::uno::XInterface
+published interface XCellRangeData: com::sun::star::uno::XInterface
 {
     /** gets an array from the contents of the cell range.
 
