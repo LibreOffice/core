@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 09:01:30 $
+ *  last change: $Author: hjs $ $Date: 2001-07-18 18:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ FileStream::~FileStream()
 
 sal_Bool FileStream::isValid()
 {
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#ifndef __STL_NO_NEW_IOSTREAMS
 #if STLPORT_VERSION < 400
     if(rdbuf()->fd() < 0)
 #else
