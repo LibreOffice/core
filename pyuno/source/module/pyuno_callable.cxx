@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_callable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 23:27:40 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,10 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
             // initialize with defaults in case of exceptions
             int i;
             for( i = 1 ; i < 1+aOutParam.getLength() ; i ++ )
+            {
+                Py_INCREF( Py_None );
                 PyTuple_SetItem( return_list.get() , i , Py_None );
+            }
 
             for( i = 0 ; i < aOutParam.getLength() ; i ++ )
             {
