@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:48:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,12 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj )
         if ( bSuccess &&
              ( ( _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
                  _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
-                    GetWrapInfluenceOnObjPos() ==
-                    text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ) ||
+                        // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                        GetWrapInfluenceOnObjPos( true ) ==
+                        // <--
+                            // --> OD 2004-10-18 #i35017# - constant name has changed
+                            text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ) ||
+                            // <--
              _rAnchoredObj.IsTmpConsiderWrapInfluence() ) )
         // <--
         {
@@ -334,7 +338,9 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         if ( !mrAnchorTxtFrm.IsFollow() )
         {
             pObj = _GetFirstObjWithMovedFwdAnchor(
-                    text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED,
+                    // --> OD 2004-10-18 #i35017# - constant name has changed
+                    text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
+                    // <--
                     nToPageNum );
         }
         // --> OD 2004-10-25 #i35911#
@@ -392,8 +398,12 @@ void SwObjectFormatterTxtFrm::_InvalidatePrevObjs( SwAnchoredObject& _rAnchoredO
     // positioning is <NONE_CONCURRENT_POSIITIONED>.
     // Note: list of objects at anchor frame is sorted by this property.
     if ( _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
-                GetWrapInfluenceOnObjPos() ==
-                    text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED )
+                // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                GetWrapInfluenceOnObjPos( true ) ==
+                // <--
+                            // --> OD 2004-10-18 #i35017# - constant name has changed
+                            text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
+                            // <--
     {
         const SwSortedObjs* pObjs = GetAnchorFrm().GetDrawObjs();
         if ( pObjs )
@@ -404,8 +414,12 @@ void SwObjectFormatterTxtFrm::_InvalidatePrevObjs( SwAnchoredObject& _rAnchoredO
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 if ( pAnchoredObj->GetFrmFmt().GetWrapInfluenceOnObjPos().
-                     GetWrapInfluenceOnObjPos() ==
-                        text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED )
+                        // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                        GetWrapInfluenceOnObjPos( true ) ==
+                        // <--
+                            // --> OD 2004-10-18 #i35017# - constant name has changed
+                            text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
+                            // <--
                 {
                     pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
                 }
@@ -439,9 +453,11 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
                                     const sal_Int16 _nWrapInfluenceOnPosition,
                                     sal_uInt32& _noToPageNum )
 {
-    ASSERT( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ||
-            _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED,
+    // --> OD 2004-10-18 #i35017# - constant names have changed
+    ASSERT( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
+            _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
             "<SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(..)> - invalid value for parameter <_nWrapInfluenceOnPosition>" );
+    // <--
 
     SwAnchoredObject* pRetAnchoredObj = 0L;
 
@@ -451,7 +467,9 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
         SwAnchoredObject* pAnchoredObj = GetCollectedObj(i);
         if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() &&
              pAnchoredObj->GetFrmFmt().GetWrapInfluenceOnObjPos().
-                   GetWrapInfluenceOnObjPos() == _nWrapInfluenceOnPosition )
+                    // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                    GetWrapInfluenceOnObjPos( true ) == _nWrapInfluenceOnPosition )
+                    // <--
         {
             // --> OD 2004-10-11 #i26945# - use new method <_CheckMovedFwdCondition(..)>
             if ( _CheckMovedFwdCondition( i, _noToPageNum ) )
