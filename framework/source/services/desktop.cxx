@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2001-05-04 13:29:04 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,33 +241,33 @@ Desktop::Desktop( const Reference< XMultiServiceFactory >& xFactory )
         //  Init baseclasses first
         //  Attention:
         //      Don't change order of initialization!
-        //      OMutexMember is a struct with a mutex as member. We can't use a mutex as member, while
+        //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
         //      we must garant right initialization and a valid value of this! First initialize
         //      baseclasses and then members. And we need the mutex for other baseclasses !!!
-        :   OMutexMember            (                                                                                       )
-        ,   OBroadcastHelper        ( ((OMutexMember*)this)->m_aMutex                                                       )
+        :   ThreadHelpBase          ( &Application::GetSolarMutex()                 )
+        ,   OBroadcastHelper        ( m_aLock.getShareableOslMutex()                )
         ,   OPropertySetHelper      ( *SAL_STATIC_CAST( OBroadcastHelper *, this )  )
-        ,   OWeakObject             (                                                                                       )
+        ,   OWeakObject             (                                               )
         // Init member
-        ,   m_xFactory              ( xFactory                                                                              )
-        ,   m_aChildTaskContainer   (                                                                                       )
-        ,   m_aListenerContainer    ( m_aMutex                                                                              )
-        ,   m_sName                 ( DEFAULT_NAME                                                                          )
-        ,   m_eLoadState            ( DEFAULT_LOADSTATE                                                                     )
-        ,   m_aTaskCreator          ( xFactory                                                                              )
+        ,   m_xFactory              ( xFactory                                      )
+        ,   m_aChildTaskContainer   (                                               )
+        ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
+        ,   m_sName                 ( DEFAULT_NAME                                  )
+        ,   m_eLoadState            ( DEFAULT_LOADSTATE                             )
+        ,   m_aTaskCreator          ( xFactory                                      )
         // Init Properties
-        ,   m_bHasBeamer            ( sal_True                                                                              )
-        ,   m_bHasCommonTaskBar     ( sal_True                                                                              )
-        ,   m_bHasDesigner          ( sal_True                                                                              )
-        ,   m_bHasExplorer          ( sal_True                                                                              )
-        ,   m_bHasFunctionBar       ( sal_True                                                                              )
-        ,   m_bHasMacroBar          ( sal_True                                                                              )
-        ,   m_bHasNavigator         ( sal_True                                                                              )
-        ,   m_bHasObjectBar         ( sal_True                                                                              )
-        ,   m_bHasOptionBar         ( sal_True                                                                              )
-        ,   m_bHasStatusBar         ( sal_True                                                                              )
-        ,   m_bHasToolbar           ( sal_True                                                                              )
-        ,   m_bAlreadyDisposed      ( sal_False                                                                             )
+        ,   m_bHasBeamer            ( sal_True                                      )
+        ,   m_bHasCommonTaskBar     ( sal_True                                      )
+        ,   m_bHasDesigner          ( sal_True                                      )
+        ,   m_bHasExplorer          ( sal_True                                      )
+        ,   m_bHasFunctionBar       ( sal_True                                      )
+        ,   m_bHasMacroBar          ( sal_True                                      )
+        ,   m_bHasNavigator         ( sal_True                                      )
+        ,   m_bHasObjectBar         ( sal_True                                      )
+        ,   m_bHasOptionBar         ( sal_True                                      )
+        ,   m_bHasStatusBar         ( sal_True                                      )
+        ,   m_bHasToolbar           ( sal_True                                      )
+        ,   m_bAlreadyDisposed      ( sal_False                                     )
         #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False )   // see dispose() for further informations!
         #endif
@@ -285,7 +285,7 @@ Desktop::Desktop( const Reference< XMultiServiceFactory >& xFactory )
     // If you define an extra variable to do that (like: Reference< XFrame > xTHIS( ... )) and
     // forget to clear this reference BEFORE "--m_refCount" (!), your refcount will be less then 0
     // and the new Desktop-instance will be destroyed instantly!!!...
-    OFrames* pFramesHelper = new OFrames( m_xFactory, m_aMutex, this, &m_aChildTaskContainer );
+    OFrames* pFramesHelper = new OFrames( m_xFactory, this, &m_aChildTaskContainer );
     m_xFramesHelper = Reference< XFrames >( (OWeakObject*)pFramesHelper, UNO_QUERY );
 
     // Safe impossible cases
@@ -430,7 +430,7 @@ sal_Bool SAL_CALL Desktop::terminate() throw( RuntimeException )
 
     // block for locked mutex
     {
-        LOCK_MUTEX( aGuard, m_aMutex, "Desktop::terminate()" )
+        ResetableGuard aGuard( m_aLock );
 
         // We don't need the quit timer any more!
         // We stand in terminate ... and these timer call terminate at us ... WE MUST DISABLE IT!
@@ -511,7 +511,7 @@ sal_Bool SAL_CALL Desktop::terminate() throw( RuntimeException )
 void SAL_CALL Desktop::addTerminateListener( const Reference< XTerminateListener >& xListener ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::addTerminateListener()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_addTerminateListener( xListener ), "Desktop::addTerminateListener()\nInvalid parameter detected!\n" )
@@ -525,7 +525,7 @@ void SAL_CALL Desktop::addTerminateListener( const Reference< XTerminateListener
 void SAL_CALL Desktop::removeTerminateListener( const Reference< XTerminateListener >& xListener ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::removeTerminateListener()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_removeTerminateListener( xListener ), "Desktop::removeTerminateListener()\nInvalid parameter detected!\n" )
@@ -539,10 +539,10 @@ void SAL_CALL Desktop::removeTerminateListener( const Reference< XTerminateListe
 Reference< XEnumerationAccess > SAL_CALL Desktop::getComponents() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::getComponents()" )
+    ResetableGuard aGuard( m_aLock );
 
     // We use a helper class OComponentAccess to have access on all child components.
-    OComponentAccess* pAccessor = new OComponentAccess( this, m_aMutex );
+    OComponentAccess* pAccessor = new OComponentAccess( this );
     Reference< XEnumerationAccess > xAccessor( (OWeakObject*)pAccessor, UNO_QUERY );
     return xAccessor;
 }
@@ -553,7 +553,7 @@ Reference< XEnumerationAccess > SAL_CALL Desktop::getComponents() throw( Runtime
 Reference< XComponent > SAL_CALL Desktop::getCurrentComponent() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::getCurrentComponent()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set return value if method failed.
     Reference< XComponent > xComponent;
@@ -576,7 +576,7 @@ Reference< XComponent > SAL_CALL Desktop::getCurrentComponent() throw( RuntimeEx
 Reference< XFrame > SAL_CALL Desktop::getCurrentFrame() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::getCurrentFrame()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set default return value, if method failed.
     Reference< XFrame > xReturn = Reference< XFrame >();
@@ -617,7 +617,7 @@ Reference< XComponent > SAL_CALL Desktop::loadComponentFromURL( const   OUString
                                                                                                                                 RuntimeException        )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aBeforeGuard, m_aMutex, "Desktop::loadComponentFromURL() start" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_loadComponentFromURL( sURL, sTargetFrameName, nSearchFlags, seqArguments ), "Desktop::loadComponentFromURL()\nInvalid parameter detected!\n" )
@@ -641,7 +641,7 @@ Reference< XComponent > SAL_CALL Desktop::loadComponentFromURL( const   OUString
         // AND ...
         m_eLoadState = UNKNOWN; // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
                                 // And we must do it before we call dispatch AND before we unlock our mutex!
-        UNLOCK_MUTEX( aBeforeGuard, "Desktop::loadComponentFromURL() before dispatch" )
+        aGuard.unlock();
         xDispatcher->dispatch( aURL, seqArguments );
         // ... we must wait for asynchron result of this dispatch()-operation!
         while( m_eLoadState == UNKNOWN )
@@ -708,7 +708,7 @@ Reference< XComponent > SAL_CALL Desktop::loadComponentFromURL( const   OUString
         m_eLoadState = UNKNOWN; // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
                                 // And we must do it before we call dispatch AND before we unlock our mutex!
 
-        UNLOCK_MUTEX( aBeforeGuard, "Desktop::loadComponentFromURL() before dispatch" )
+        aGuard.unlock();
 
         xDispatcher->dispatch( aURL, seqArguments );
 
@@ -752,11 +752,11 @@ Reference< XComponent > SAL_CALL Desktop::loadComponentFromURL( const   OUString
 Reference< XEnumerationAccess > SAL_CALL Desktop::getTasks() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::getTasks()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Create a new EnumerationAccess and return it.
     // Caller will be the new owner of this and HE must destroy the returned instance!
-    OTasksAccess* pTasksAccess = new OTasksAccess( this, &m_aChildTaskContainer, m_aMutex );
+    OTasksAccess* pTasksAccess = new OTasksAccess( this, &m_aChildTaskContainer );
     Reference< XEnumerationAccess > xAccess( (OWeakObject*)pTasksAccess, UNO_QUERY );
 
     // Return result of operation.
@@ -769,7 +769,7 @@ Reference< XEnumerationAccess > SAL_CALL Desktop::getTasks() throw( RuntimeExcep
 Reference< XTask > SAL_CALL Desktop::getActiveTask() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::getActiveTask()" )
+    ResetableGuard aGuard( m_aLock );
 
     // The current active task can only be an active child of us.
     // And tasks allowed only as direct childs of desktop.
@@ -784,7 +784,7 @@ Reference< XDispatch > SAL_CALL Desktop::queryDispatch( const   URL&        aURL
                                                                 sal_Int32   nSearchFlags    ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::queryDispatch()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_queryDispatch( aURL, sTargetFrameName, nSearchFlags ), "Desktop::queryDispatch()\nInvalid parameter detected!\n" )
@@ -817,7 +817,7 @@ Reference< XDispatch > SAL_CALL Desktop::queryDispatch( const   URL&        aURL
 Sequence< Reference< XDispatch > > SAL_CALL Desktop::queryDispatches( const Sequence< DispatchDescriptor >& seqDescripts ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::queryDispatches()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set default return value if no dispatcher will be found.
     Sequence< Reference< XDispatch > > seqDispatcher;
@@ -883,7 +883,7 @@ Reference< XFrames > SAL_CALL Desktop::getFrames() throw( RuntimeException )
 void SAL_CALL Desktop::setActiveFrame( const Reference< XFrame >& xFrame ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::setActiveFrame()" )
+    ResetableGuard aGuard( m_aLock );
 
     // We don't must control incoming parameter! We use a helperclass to safe the current active frame.
     // And these implementation do this for us!
@@ -909,7 +909,7 @@ void SAL_CALL Desktop::setActiveFrame( const Reference< XFrame >& xFrame ) throw
 Reference< XFrame > SAL_CALL Desktop::getActiveFrame() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::getActiveFrame()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Return current active frame.
     // Ths information exist at the container!
@@ -958,7 +958,7 @@ Reference< XFramesSupplier > SAL_CALL Desktop::getCreator() throw( RuntimeExcept
 OUString SAL_CALL Desktop::getName() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::getName()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Return name of THIS frame.
     return m_sName;
@@ -970,7 +970,7 @@ OUString SAL_CALL Desktop::getName() throw( RuntimeException )
 void SAL_CALL Desktop::setName( const OUString& sName ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::setName()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe new name of THIS frame.
     m_sName = sName;
@@ -983,7 +983,7 @@ Reference< XFrame > SAL_CALL Desktop::findFrame(    const   OUString&   sTargetF
                                                                 sal_Int32   nSearchFlags        ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::findFrame()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_findFrame( sTargetFrameName, nSearchFlags ), "Desktop::findFrame()\nInvalid parameter detected.\n" )
     LOG_PARAMETER_FINDFRAME( "Desktop", m_sName, sTargetFrameName, nSearchFlags )
@@ -1111,7 +1111,7 @@ void SAL_CALL Desktop::contextChanged() throw( RuntimeException )
 void SAL_CALL Desktop::addFrameActionListener( const Reference< XFrameActionListener >& xListener ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::addFrameActionListener()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method not defined for all incoming parameter.
@@ -1127,7 +1127,7 @@ void SAL_CALL Desktop::addFrameActionListener( const Reference< XFrameActionList
 void SAL_CALL Desktop::removeFrameActionListener( const Reference< XFrameActionListener >& xListener ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::removeFrameActionListener()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method not defined for all incoming parameter.
@@ -1143,7 +1143,7 @@ void SAL_CALL Desktop::removeFrameActionListener( const Reference< XFrameActionL
 void SAL_CALL Desktop::dispose() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::dispose()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // It's an programming error if dispose is called before terminate!
@@ -1194,7 +1194,7 @@ void SAL_CALL Desktop::dispose() throw( RuntimeException )
 void SAL_CALL Desktop::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::addEventListener()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method not defined for all incoming parameter.
@@ -1210,7 +1210,7 @@ void SAL_CALL Desktop::addEventListener( const Reference< XEventListener >& xLis
 void SAL_CALL Desktop::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::removeEventListener()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_removeEventListener( xListener ), "Desktop::removeEventListener()\nInvalid parameter detected!\n" )
@@ -1233,7 +1233,7 @@ Reference< XStatusIndicator > SAL_CALL Desktop::createStatusIndicator() throw( R
 void SAL_CALL Desktop::statusChanged( const FeatureStateEvent& aEvent ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::statusChanged()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_statusChanged( aEvent ), "Desktop::statusChanged()\nInvalid parameter detected!\n" )
@@ -1279,7 +1279,7 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(            Any&        aCon
                                                         const   Any&        aValue          ) throw( IllegalArgumentException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::convertFastPropertyValue()" )
+    ResetableGuard aGuard( m_aLock );
 
     //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
     //  Return TRUE, if changed - else return FALSE.
@@ -1331,7 +1331,7 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(            sal_Int32   
                                                               const Any&        aValue  ) throw( Exception )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Desktop::setFastPropertyValue_NoBroadCast()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Search for right handle ... and try to set property value.
     switch ( nHandle )
@@ -1372,7 +1372,7 @@ void SAL_CALL Desktop::getFastPropertyValue(    Any&        aValue  ,
                                                   sal_Int32 nHandle ) const
 {
     // Ready for multithreading
-    LOCK_GLOBALMUTEX( aGuard, "Desktop::getFastPropertyValue()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Search for right handle ... and try to set property value.
     switch ( nHandle )
@@ -1426,7 +1426,7 @@ IPropertyArrayHelper& SAL_CALL Desktop::getInfoHelper()
     if ( pInfoHelper == NULL )
     {
         // Ready for multithreading
-        LOCK_GLOBALMUTEX( aGuard, "Desktop::getInfoHelper()" )
+        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
         // Control this pointer again, another instance can be faster then these!
         if ( pInfoHelper == NULL )
         {
@@ -1454,7 +1454,7 @@ Reference< XPropertySetInfo > SAL_CALL Desktop::getPropertySetInfo ()
     if ( pInfo == NULL )
     {
         // Ready for multithreading
-        LOCK_GLOBALMUTEX( aGuard, "Desktop::getPropertySetInfo()" )
+        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
         // Control this pointer again, another instance can be faster then these!
         if ( pInfo == NULL )
         {

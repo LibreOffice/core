@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <services/urltransformer.hxx>
 #endif
 
+#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
+#endif
+
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
@@ -85,6 +89,10 @@
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -119,13 +127,13 @@ URLTransformer::URLTransformer( const Reference< XMultiServiceFactory >& xFactor
         //  Init baseclasses first
         //  Attention:
         //      Don't change order of initialization!
-        //      OMutexMember is a struct with a mutex as member. We can't use a mutex as member, while
+        //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
         //      we must garant right initialization and a valid value of this! First initialize
         //      baseclasses and then members. And we need the mutex for other baseclasses !!!
-        :   OMutexMember    (           )
-        ,   OWeakObject     (           )
+        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
+        ,   OWeakObject     (                               )
         // Init member
-        ,   m_xFactory      ( xFactory  )
+        ,   m_xFactory      ( xFactory                      )
 {
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
@@ -181,7 +189,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE    (   URLTransformer                      ,
 sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "URLTransformer::parseStrict()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_parseStrict( aURL ), "URLTransformer::parseStrict()\nInvalid parameter detected!\n" )
@@ -216,7 +224,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
                                                 const   OUString&   sSmartProtocol  ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "URLTransformer::parseSmart()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_parseSmart( aURL, sSmartProtocol ), "URLTransformer::parseSmart()\nInvalid parameter detected!\n" )
@@ -253,7 +261,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
 sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "URLTransformer::assemble()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_assemble( aURL ), "URLTransformer::assemble()\nInvalid parameter detected!\n" )
@@ -286,7 +294,7 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
                                                             sal_Bool    bWithPassword   ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "URLTransformer::getPresentation()" )
+    ResetableGuard aGuard( m_aLock );
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
     LOG_ASSERT( impldbg_checkParameter_getPresentation( aURL, bWithPassword ), "URLTransformer::getPresentation()\nInvalid parameter detected!\n" )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timerhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 13:42:13 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,16 @@
  *
  ************************************************************************/
 
-#ifndef _FRAMEWORK_HELPER_TIMERHELPER_HXX_
+#ifndef __FRAMEWORK_HELPER_TIMERHELPER_HXX_
 #include <helper/timerhelper.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 //........................................................................
@@ -72,18 +80,20 @@ namespace framework
     //= OTimerHelper
     //====================================================================
     //--------------------------------------------------------------------
-    OTimerHelper::OTimerHelper( ::osl::Mutex& _rMutex, const ::vos::TTimeValue& _rExpireTime  )
-        :OTimer(_rExpireTime)
-        ,m_rMutex(_rMutex)
+    OTimerHelper::OTimerHelper( const ::vos::TTimeValue& _rExpireTime  )
+        : ThreadHelpBase ( &Application::GetSolarMutex()    )
+        , OTimer         ( _rExpireTime                     )
     {
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OTimerHelper::onShot()
     {
-        ::osl::MutexGuard aGuard(m_rMutex);
-        if (m_pListener)
+        ResetableGuard aGuard( m_aLock );
+        if( m_pListener != NULL )
+        {
             m_pListener->timerExpired();
+        }
     }
 
 //........................................................................
@@ -93,6 +103,9 @@ namespace framework
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/07 13:42:13  fs
+ *  initial checkin - a vos-based timer using a callback on expiration
+ *
  *
  *  Revision 1.0 03.05.01 16:14:12  fs
  ************************************************************************/

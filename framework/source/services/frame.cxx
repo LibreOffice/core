@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: as $ $Date: 2001-05-30 10:59:05 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,15 +284,14 @@ DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                   
 Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         //  init baseclasses first!
         //  Attention: Don't change order of initialization!
-        :   MutexBase                   (                                                   )
-        ,   FairRWLockBase              (                                                   )
+        :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
         ,   TransactionBase             (                                                   )
-        ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( static_cast< MutexBase* >(this)->m_aMutex         )
+        ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( m_aLock.getShareableOslMutex()         )
         ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
         ,   m_xFactory                  ( xFactory                                          )
-        ,   m_aListenerContainer        ( static_cast< MutexBase* >(this)->m_aMutex         )
+        ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
         ,   m_aChildFrameContainer      (                                                   )
         ,   m_xParent                   (                                                   )
         ,   m_xContainerWindow          (                                                   )
@@ -338,7 +337,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
     //-------------------------------------------------------------------------------------------------------------
     // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
     // We hold member as reference ... not as pointer!
-    OFrames* pFramesHelper = new OFrames( m_xFactory, m_aMutex, this, &m_aChildFrameContainer );
+    OFrames* pFramesHelper = new OFrames( m_xFactory, this, &m_aChildFrameContainer );
     m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
     // Safe impossible cases
@@ -1866,7 +1865,7 @@ void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
     if( pInfoHelper == NULL )
     {
         // Ready for multithreading
-        MutexBase::getGlobalMutex();
+        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfoHelper == NULL )
         {
@@ -1905,7 +1904,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertyS
     if( pInfo == NULL )
     {
         // Ready for multithreading
-        MutexBase::getGlobalMutex();
+        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfo == NULL )
         {
