@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:25:10 $
+#   last change: $Author: hr $ $Date: 2004-09-08 15:05:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,8 @@ use installer::ziplist;
 #################################################
 # Part 1a: The language independent part
 #################################################
+
+installer::logger::starttime();
 
 #########################################
 # Checking the environment and setting
@@ -1573,6 +1575,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
 # saving debug info at end
 if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
+
+installer::logger::stoptime();
 
 ####################################
 # Main program end
