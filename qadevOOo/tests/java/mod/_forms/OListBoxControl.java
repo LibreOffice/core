@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OListBoxControl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:04 $
+ *  last change:$Date: 2003-02-27 10:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,7 @@ public class OListBoxControl extends TestCase {
         xTextDoc.dispose();
     }
 
-    public TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object anotherCtrl = null ;
         XWindowPeer the_win = null;
@@ -170,8 +168,16 @@ public class OListBoxControl extends TestCase {
         XWindow forObjRel = (XWindow)
                             UnoRuntime.queryInterface(XWindow.class, anotherCtrl);
 
+        XWindow objWin = (XWindow)
+                            UnoRuntime.queryInterface(XWindow.class, oObj);
+
         tEnv.addObjRelation("XWindow.AnotherWindow",forObjRel);
         tEnv.addObjRelation("XWindow.ControlShape",aShape);
+
+        tEnv.addObjRelation("Win1",objWin);
+        tEnv.addObjRelation("Win2",forObjRel);
+
+        tEnv.addObjRelation("CONTROL",anotherCtrl);
 
         // adding relation for XChangeBroadcaster
         box.addItem("Item1", (short) 0);
