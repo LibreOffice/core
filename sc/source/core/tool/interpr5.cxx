@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 12:56:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ void ScInterpreter::ScGGT()
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     if (nC == 0 || nR == 0)
                         SetError(errIllegalArgument);
@@ -184,8 +184,8 @@ void ScInterpreter::ScGGT()
                             fy *= -1.0;
                             fSign *= -1.0;
                         }
-                        ULONG nCount = (ULONG) nC * nR;
-                        for ( ULONG j = 1; j < nCount; j++ )
+                        SCSIZE nCount = nC * nR;
+                        for ( SCSIZE j = 1; j < nCount; j++ )
                         {
                             if (!pMat->IsValue(j))
                             {
@@ -260,7 +260,7 @@ void ScInterpreter::ScGGT()
                     ScMatrixRef pMat = PopMatrix();
                     if (pMat)
                     {
-                        USHORT nC, nR;
+                        SCSIZE nC, nR;
                         pMat->GetDimensions(nC, nR);
                         if (nC == 0 || nR == 0)
                             SetError(errIllegalArgument);
@@ -278,8 +278,8 @@ void ScInterpreter::ScGGT()
                                 fSign *= -1.0;
                             }
                             fy = ScGetGGT(fx, fy);
-                            ULONG nCount = (ULONG) nC * nR;
-                            for ( ULONG j = 1; j < nCount; j++ )
+                            SCSIZE nCount = nC * nR;
+                            for ( SCSIZE j = 1; j < nCount; j++ )
                             {
                                 if (!pMat->IsValue(j))
                                 {
@@ -365,7 +365,7 @@ void ScInterpreter:: ScKGV()
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     if (nC == 0 || nR == 0)
                         SetError(errIllegalArgument);
@@ -382,8 +382,8 @@ void ScInterpreter:: ScKGV()
                             fy *= -1.0;
                             fSign *= -1.0;
                         }
-                        ULONG nCount = (ULONG) nC * nR;
-                        for ( ULONG j = 1; j < nCount; j++ )
+                        SCSIZE nCount = nC * nR;
+                        for ( SCSIZE j = 1; j < nCount; j++ )
                         {
                             if (!pMat->IsValue(j))
                             {
@@ -458,7 +458,7 @@ void ScInterpreter:: ScKGV()
                     ScMatrixRef pMat = PopMatrix();
                     if (pMat)
                     {
-                        USHORT nC, nR;
+                        SCSIZE nC, nR;
                         pMat->GetDimensions(nC, nR);
                         if (nC == 0 || nR == 0)
                             SetError(errIllegalArgument);
@@ -476,8 +476,8 @@ void ScInterpreter:: ScKGV()
                                 fSign *= -1.0;
                             }
                             fy = fx * fy / ScGetGGT(fx, fy);
-                            ULONG nCount = (ULONG) nC * nR;
-                            for ( ULONG j = 1; j < nCount; j++ )
+                            SCSIZE nCount = nC * nR;
+                            for ( SCSIZE j = 1; j < nCount; j++ )
                             {
                                 if (!pMat->IsValue(j))
                                 {
@@ -506,11 +506,11 @@ void ScInterpreter:: ScKGV()
     }
 }
 
-ScMatrixRef ScInterpreter::GetNewMat(USHORT nC, USHORT nR)
+ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
 {
     ScMatrix* pMat = new ScMatrix( nC, nR);
     pMat->SetErrorInterpreter( this);
-    USHORT nCols, nRows;
+    SCSIZE nCols, nRows;
     pMat->GetDimensions( nCols, nRows);
     if ( nCols != nC || nRows != nR )
     {   // arbitray limit of elements exceeded
@@ -522,26 +522,27 @@ ScMatrixRef ScInterpreter::GetNewMat(USHORT nC, USHORT nR)
 }
 
 ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef(
-        USHORT nCol1, USHORT nRow1, USHORT nTab1,
-        USHORT nCol2, USHORT nRow2, USHORT nTab2 )
+        SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+        SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
 {
     ScMatrixRef pMat = NULL;
     if (nTab1 == nTab2 && !nGlobalError)
     {
-        USHORT i, j;
-        if ( (ULONG) (nRow2 - nRow1 + 1) * (nCol2 - nCol1 + 1) >
+        if ( static_cast<SCSIZE>(nRow2 - nRow1 + 1) *
+                static_cast<SCSIZE>(nCol2 - nCol1 + 1) >
                 ScMatrix::GetElementsMax() )
             SetError(errStackOverflow);
         else
         {
-            pMat = GetNewMat(nCol2 - nCol1 + 1, nRow2 - nRow1 + 1);
+            pMat = GetNewMat(static_cast<SCSIZE>(nCol2 - nCol1 + 1),
+                    static_cast<SCSIZE>(nRow2 - nRow1 + 1));
             if (pMat && !nGlobalError)
             {
                 ScAddress aAdr( nCol1, nRow1, nTab1 );
-                for (i = nRow1; i <= nRow2; i++)
+                for (SCROW i = nRow1; i <= nRow2; i++)
                 {
                     aAdr.SetRow( i );
-                    for (j = nCol1; j <= nCol2; j++)
+                    for (SCCOL j = nCol1; j <= nCol2; j++)
                     {
                         aAdr.SetCol( j );
                         ScBaseCell* pCell = GetCell( aAdr );
@@ -558,8 +559,9 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef(
                                             nGlobalError);
                                     nGlobalError = 0;
                                 }
-                                pMat->PutDouble( fVal, j-nCol1,
-                                        i-nRow1);
+                                pMat->PutDouble( fVal,
+                                        static_cast<SCSIZE>(j-nCol1),
+                                        static_cast<SCSIZE>(i-nRow1));
                             }
                             else
                             {
@@ -570,16 +572,19 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef(
                                     double fVal = CreateDoubleError(
                                             nGlobalError);
                                     nGlobalError = 0;
-                                    pMat->PutDouble( fVal, j-nCol1,
-                                            i-nRow1);
+                                    pMat->PutDouble( fVal,
+                                            static_cast<SCSIZE>(j-nCol1),
+                                            static_cast<SCSIZE>(i-nRow1));
                                 }
                                 else
-                                    pMat->PutString( aStr, j-nCol1,
-                                            i-nRow1);
+                                    pMat->PutString( aStr,
+                                            static_cast<SCSIZE>(j-nCol1),
+                                            static_cast<SCSIZE>(i-nRow1));
                             }
                         }
                         else
-                            pMat->PutEmpty( j-nCol1, i-nRow1 );
+                            pMat->PutEmpty( static_cast<SCSIZE>(j-nCol1),
+                                    static_cast<SCSIZE>(i-nRow1));
                     }
                 }
             }
@@ -622,7 +627,12 @@ ScMatrixRef ScInterpreter::GetMatrix()
         break;
         case svDoubleRef:
         {
-            USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+            SCCOL nCol1;
+            SCROW nRow1;
+            SCTAB nTab1;
+            SCCOL nCol2;
+            SCROW nRow2;
+            SCTAB nTab2;
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             pMat = CreateMatrixFromDoubleRef( nCol1, nRow1, nTab1,
                     nCol2, nRow2, nTab2);
@@ -675,8 +685,9 @@ void ScInterpreter::ScMatValue()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        USHORT nR = (USHORT) ::rtl::math::approxFloor(GetDouble());     // 0 bis nAnz - 1
-        USHORT nC = (USHORT) ::rtl::math::approxFloor(GetDouble());     // 0 bis nAnz - 1
+        // 0 to count-1
+        SCSIZE nR = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
+        SCSIZE nC = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
         switch (GetStackType())
         {
             case svSingleRef :
@@ -697,7 +708,7 @@ void ScInterpreter::ScMatValue()
                         const ScMatrix* pMat = ((ScFormulaCell*)pCell)->GetMatrix();
                         if (pMat)
                         {
-                            USHORT nCl, nRw;
+                            SCSIZE nCl, nRw;
                             pMat->GetDimensions(nCl, nRw);
                             if (nC < nCl && nR < nRw)
                             {
@@ -722,7 +733,12 @@ void ScInterpreter::ScMatValue()
             break;
             case svDoubleRef :
             {
-                USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                SCCOL nCol1;
+                SCROW nRow1;
+                SCTAB nTab1;
+                SCCOL nCol2;
+                SCROW nRow2;
+                SCTAB nTab2;
                 PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                 if (nCol2 - nCol1 >= nR && nRow2 - nRow1 >= nC && nTab1 == nTab2)
                 {
@@ -746,7 +762,7 @@ void ScInterpreter::ScMatValue()
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nCl, nRw;
+                    SCSIZE nCl, nRw;
                     pMat->GetDimensions(nCl, nRw);
                     if (nC < nCl && nR < nRw)
                     {
@@ -777,15 +793,15 @@ void ScInterpreter::ScEMat()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        ULONG nDim = (ULONG) ::rtl::math::approxFloor(GetDouble());
+        SCSIZE nDim = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
         if ( nDim * nDim > ScMatrix::GetElementsMax() || nDim == 0)
             SetIllegalArgument();
         else
         {
-            ScMatrixRef pRMat = GetNewMat((USHORT)nDim, (USHORT)nDim);
+            ScMatrixRef pRMat = GetNewMat(nDim, nDim);
             if (pRMat)
             {
-                MEMat(pRMat, (USHORT) nDim);
+                MEMat(pRMat, nDim);
                 PushMatrix(pRMat);
             }
             else
@@ -794,24 +810,24 @@ void ScInterpreter::ScEMat()
     }
 }
 
-void ScInterpreter::MEMat(ScMatrix* mM, USHORT n)
+void ScInterpreter::MEMat(ScMatrix* mM, SCSIZE n)
 {
     mM->FillDouble(0.0, 0, 0, n-1, n-1);
-    for (USHORT i = 0; i < n; i++)
+    for (SCSIZE i = 0; i < n; i++)
         mM->PutDouble(1.0, i, i);
 }
 
 void ScInterpreter::MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR,
-                              USHORT n, USHORT m, USHORT l)
+                              SCSIZE n, SCSIZE m, SCSIZE l)
         // Multipliziert n x m Mat a mit m x l Mat b nach Mat r
 {
     double sum;
-    for (USHORT i = 0; i < n; i++)
+    for (SCSIZE i = 0; i < n; i++)
     {
-        for (USHORT j = 0; j < l; j++)
+        for (SCSIZE j = 0; j < l; j++)
         {
             sum = 0.0;
-            for (USHORT k = 0; k < m; k++)
+            for (SCSIZE k = 0; k < m; k++)
                 sum += pA->GetDouble(i,k)*pB->GetDouble(k,j);
             pR->PutDouble(sum, i, j);
         }
@@ -819,40 +835,44 @@ void ScInterpreter::MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR,
 }
 
 void ScInterpreter::MFastSub(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR,
-                              USHORT n, USHORT m)
+                              SCSIZE n, SCSIZE m)
         // Subtrahiert n x m Mat a - m x l Mat b nach Mat r
 {
-    for (USHORT i = 0; i < n; i++)
+    for (SCSIZE i = 0; i < n; i++)
     {
-        for (USHORT j = 0; j < m; j++)
+        for (SCSIZE j = 0; j < m; j++)
             pR->PutDouble(pA->GetDouble(i,j) - pB->GetDouble(i,j), i, j);
     }
 }
 
 void ScInterpreter::MFastTrans(ScMatrix* pA, ScMatrix* pR,
-                              USHORT n, USHORT m)
+                              SCSIZE n, SCSIZE m)
         // Transponiert n x m Mat a nach Mat r
 {
-    for (USHORT i = 0; i < n; i++)
-        for (USHORT j = 0; j < m; j++)
+    for (SCSIZE i = 0; i < n; i++)
+        for (SCSIZE j = 0; j < m; j++)
             pR->PutDouble(pA->GetDouble(i, j), j, i);
 }
 
-BOOL ScInterpreter::MFastBackSubst(ScMatrix* pA, ScMatrix* pR, USHORT n, BOOL bIsUpper)
+BOOL ScInterpreter::MFastBackSubst(ScMatrix* pA, ScMatrix* pR, SCSIZE n, BOOL bIsUpper)
         // Führt Rückwaertsersetzung der Dreickesmatrix Mat a nach Mat r durch
         // 2 Versionen fuer obere (U)  oder untere (L- Unit) Dreiecksmatrizen
 {
-    short i, j, k;
-    double fSum;
+    if (!n)
+        return TRUE;
+        // Strange? that's how it was implemented with short i,j,k until
+        // 2004-03-17 (r1.8.202.4), provided that GetDouble(-1,-1) and
+        // PutDouble(...,-1,-1) silently did nothing..
+
     if (!bIsUpper)                          // L-Matrix, immer invertierbar
     {
         MEMat(pR, n);
-        for (i = 1; i < (short) n; i++)
+        for (SCSIZE i = 1; i < n; i++)
         {
-            for (j = 0; j < i; j++)
+            for (SCSIZE j = 0; j < i; j++)
             {
-                fSum = 0.0;
-                for (k = 0; k < i; k++)
+                double fSum = 0.0;
+                for (SCSIZE k = 0; k < i; k++)
                     fSum += pA->GetDouble(i,k) * pR->GetDouble(k,j);
                 pR->PutDouble(-fSum, i, j);
             }
@@ -860,22 +880,23 @@ BOOL ScInterpreter::MFastBackSubst(ScMatrix* pA, ScMatrix* pR, USHORT n, BOOL bI
     }
     else                                    // U-Matrix
     {
-        for (i = 0; i < (short) n; i++)                         // Ist invertierbar?
+        SCSIZE i, j, k;
+        for (i = 0; i < n; i++)                         // Ist invertierbar?
             if (fabs(pA->GetDouble(i,i)) < SCdEpsilon)
                 return FALSE;
         pR->FillDoubleLowerLeft(0.0, n-1);                      // untere Haelfte
         pR->PutDouble(1.0/pA->GetDouble(n-1, n-1), n-1, n-1);   // n-1, n-1
-        for (i = (short) n-2; i >= 0; i--)
+        for (i = n-1; i-- > 0; )
         {
-            for (j = (short) n-1; j > i; j--)
+            for (j = n-1; j > i; j--)
             {
-                fSum = 0.0;
-                for (k = (short) n-1; k > i; k--)
+                double fSum = 0.0;
+                for (k = n-1; k > i; k--)
                     fSum += pA->GetDouble(i, k) * pR->GetDouble(k, j);
                 pR->PutDouble(-fSum/pA->GetDouble(i, i), i, j);
             }
-            fSum = 0.0;                                         // Hauptdiagonale:
-            for (k = (short) n-1; k > i; k--)
+            double fSum = 0.0;                                          // Hauptdiagonale:
+            for (k = n-1; k > i; k--)
                 fSum += pA->GetDouble(i, k) * pR->GetDouble(k, j);
             pR->PutDouble((1.0-fSum)/pA->GetDouble(i, i), i, i);
         }
@@ -883,13 +904,13 @@ BOOL ScInterpreter::MFastBackSubst(ScMatrix* pA, ScMatrix* pR, USHORT n, BOOL bI
     return TRUE;
 }
 
-BOOL ScInterpreter::ScMatLUP(ScMatrix* mA, USHORT m, USHORT p,
+BOOL ScInterpreter::ScMatLUP(ScMatrix* mA, SCSIZE m, SCSIZE p,
                              ScMatrix* mL, ScMatrix* mU, ScMatrix* mP,
                              ULONG& rPermutCounter, BOOL& bIsInvertable)
     // Returnwert = False <=> Matrixarray voll
     // BIsInvertable = False: <= mA hat nicht Rang m
 {
-    USHORT i, j;
+    SCSIZE i, j;
     if (m == 1)
     {
         mL->PutDouble(1.0,0,0);
@@ -914,7 +935,7 @@ BOOL ScInterpreter::ScMatLUP(ScMatrix* mA, USHORT m, USHORT p,
     }
     else
     {
-        USHORT md2 = m/2;
+        SCSIZE md2 = m/2;
         ScMatrixRef mB = GetNewMat(md2, p);
         ScMatrixRef mC = GetNewMat(md2, p);
         ScMatrixRef mL1 = GetNewMat(md2, md2);
@@ -1030,7 +1051,7 @@ void ScInterpreter::ScMatDet()
             SetNoValue();
             return;
         }
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         if ( nC != nR || nC == 0 || (ULONG) nC * nC > ScMatrix::GetElementsMax() )
             SetIllegalParameter();
@@ -1039,7 +1060,7 @@ void ScInterpreter::ScMatDet()
             double fVal = log((double)nC) / log(2.0);
             if (fVal - floor(fVal) != 0.0)
                 fVal = floor(fVal) + 1.0;
-            USHORT nDim = (USHORT) pow(2.0, fVal);
+            SCSIZE nDim = static_cast<SCSIZE>(pow(2.0, fVal));
             ScMatrixRef pU = GetNewMat(nDim, nDim);
             ScMatrixRef pL = GetNewMat(nDim, nDim);
             ScMatrixRef pP = GetNewMat(nDim, nDim);
@@ -1050,8 +1071,8 @@ void ScInterpreter::ScMatDet()
             {
                 pA = GetNewMat(nDim, nDim);
                 MEMat(pA, nDim);
-                for (USHORT i = 0; i < nC; i++)
-                    for (USHORT j = 0; j < nC; j++)
+                for (SCSIZE i = 0; i < nC; i++)
+                    for (SCSIZE j = 0; j < nC; j++)
                     {
                         pA->PutDouble(pMat->GetDouble(i, j), i, j);
                     }
@@ -1067,7 +1088,7 @@ void ScInterpreter::ScMatDet()
                 else
                 {
                     double fDet = 1.0;
-                    for (USHORT i = 0; i < nC; i++)
+                    for (SCSIZE i = 0; i < nC; i++)
                         fDet *= pU->GetDouble(i, i);
                     if (nPermutCounter % 2 != 0)
                         fDet *= -1.0;
@@ -1098,7 +1119,7 @@ void ScInterpreter::ScMatInv()
             SetNoValue();
             return;
         }
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         if ( nC != nR || nC == 0 || (ULONG) nC * nC > ScMatrix::GetElementsMax() )
             SetIllegalParameter();
@@ -1107,7 +1128,7 @@ void ScInterpreter::ScMatInv()
             double fVal = log((double)nC) / log(2.0);
             if (fVal - floor(fVal) != 0.0)
                 fVal = floor(fVal) + 1.0;
-            USHORT nDim = (USHORT) pow(2.0, fVal);
+            SCSIZE nDim = static_cast<SCSIZE>(pow(2.0, fVal));
             ScMatrixRef pU = GetNewMat(nDim, nDim);
             ScMatrixRef pL = GetNewMat(nDim, nDim);
             ScMatrixRef pP = GetNewMat(nDim, nDim);
@@ -1118,8 +1139,8 @@ void ScInterpreter::ScMatInv()
             {
                 pA = GetNewMat(nDim, nDim);
                 MEMat(pA, nDim);
-                for (USHORT i = 0; i < nC; i++)
-                    for (USHORT j = 0; j < nC; j++)
+                for (SCSIZE i = 0; i < nC; i++)
+                    for (SCSIZE j = 0; j < nC; j++)
                     {
                         pA->PutDouble(pMat->GetDouble(i, j), i, j);
                     }
@@ -1155,8 +1176,8 @@ void ScInterpreter::ScMatInv()
                             else
                             {
                                 MFastMult(pPInvUInv, pLInv, pL, nDim, nDim, nDim);
-                                for (USHORT i = 0; i < nC; i++)
-                                    for (USHORT j = 0; j < nC; j++)
+                                for (SCSIZE i = 0; i < nC; i++)
+                                    for (SCSIZE j = 0; j < nC; j++)
                                         pMat->PutDouble(pL->GetDouble(i, j), i, j);
                             }
                             PushMatrix(pMat);
@@ -1184,7 +1205,8 @@ void ScInterpreter::ScMatMult()
         {
             if ( pMat1->IsNumeric() && pMat2->IsNumeric() )
             {
-                USHORT nC1, nR1, nC2, nR2;
+                SCSIZE nC1, nC2;
+                SCSIZE nR1, nR2;
                 pMat1->GetDimensions(nC1, nR1);
                 pMat2->GetDimensions(nC2, nR2);
                 if (nC1 != nR2)
@@ -1195,12 +1217,12 @@ void ScInterpreter::ScMatMult()
                     if (pRMat)
                     {
                         double sum;
-                        for (USHORT i = 0; i < nR1; i++)
+                        for (SCSIZE i = 0; i < nR1; i++)
                         {
-                            for (USHORT j = 0; j < nC2; j++)
+                            for (SCSIZE j = 0; j < nC2; j++)
                             {
                                 sum = 0.0;
-                                for (USHORT k = 0; k < nC1; k++)
+                                for (SCSIZE k = 0; k < nC1; k++)
                                 {
                                     sum += pMat1->GetDouble(k,i)*pMat2->GetDouble(j,k);
                                 }
@@ -1229,7 +1251,7 @@ void ScInterpreter::ScMatTrans()
         ScMatrixRef pRMat;
         if (pMat)
         {
-            USHORT nC, nR;
+            SCSIZE nC, nR;
             pMat->GetDimensions(nC, nR);
             pRMat = GetNewMat(nR, nC);
             if ( pRMat )
@@ -1247,7 +1269,9 @@ void ScInterpreter::ScMatTrans()
 
 ScMatrixRef ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
 {
-    USHORT nC1, nR1, nC2, nR2, nMinC, nMinR, i, j;
+    SCSIZE nC1, nC2, nMinC;
+    SCSIZE nR1, nR2, nMinR;
+    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     if (nC1 < nC2)
@@ -1279,7 +1303,9 @@ ScMatrixRef ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
 
 ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
 {
-    USHORT nC1, nR1, nC2, nR2, nMinC, nMinR, i, j;
+    SCSIZE nC1, nC2, nMinC;
+    SCSIZE nR1, nR2, nMinR;
+    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     if (nC1 < nC2)
@@ -1311,7 +1337,9 @@ ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
 
 ScMatrixRef ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
 {
-    USHORT nC1, nR1, nC2, nR2, nMinC, nMinR, i, j;
+    SCSIZE nC1, nC2, nMinC;
+    SCSIZE nR1, nR2, nMinR;
+    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     if (nC1 < nC2)
@@ -1343,7 +1371,9 @@ ScMatrixRef ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
 
 ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
 {
-    USHORT nC1, nR1, nC2, nR2, nMinC, nMinR, i, j;
+    SCSIZE nC1, nC2, nMinC;
+    SCSIZE nR1, nR2, nMinR;
+    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     if (nC1 < nC2)
@@ -1375,7 +1405,9 @@ ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
 
 ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
 {
-    USHORT nC1, nR1, nC2, nR2, nMinC, nMinR, i, j;
+    SCSIZE nC1, nC2, nMinC;
+    SCSIZE nR1, nR2, nMinR;
+    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     if (nC1 < nC2)
@@ -1407,7 +1439,9 @@ ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
 
 ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
 {
-    USHORT nC1, nR1, nC2, nR2, nMinC, nMinR, i, j;
+    SCSIZE nC1, nC2, nMinC;
+    SCSIZE nR1, nR2, nMinR;
+    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     if (nC1 < nC2)
@@ -1541,13 +1575,13 @@ void ScInterpreter::ScAdd()
         }
         else
             fVal = fVal2;
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            ULONG nCount = (ULONG) nC * nR;
-            for ( ULONG i = 0; i < nCount; i++ )
+            SCSIZE nCount = nC * nR;
+            for ( SCSIZE i = 0; i < nCount; i++ )
             {
                 if (pMat->IsValue(i))
                     pResMat->PutDouble( ::rtl::math::approxAdd( pMat->GetDouble(i), fVal), i);
@@ -1611,15 +1645,15 @@ void ScInterpreter::ScAmpersand()
             sStr = sStr2;
             bFlag = FALSE;          // Matrix - double
         }
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            ULONG nCount = (ULONG) nC * nR;
+            SCSIZE nCount = nC * nR;
             if (bFlag)
             {
-                for ( ULONG i = 0; i < nCount; i++ )
+                for ( SCSIZE i = 0; i < nCount; i++ )
                     if (!pMat->IsValue(i))
                     {
                         String sS = sStr;
@@ -1631,7 +1665,7 @@ void ScInterpreter::ScAmpersand()
             }
             else
             {
-                for ( ULONG i = 0; i < nCount; i++ )
+                for ( SCSIZE i = 0; i < nCount; i++ )
                     if (!pMat->IsValue(i))
                     {
                         String sS = pMat->GetString(i);
@@ -1730,14 +1764,14 @@ void ScInterpreter::ScSub()
             fVal = fVal2;
             bFlag = FALSE;          // Matrix - double
         }
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {   // mehr klammern wg. compiler macke
-            ULONG nCount = (ULONG) nC * nR;
+            SCSIZE nCount = nC * nR;
             if (bFlag)
-            {   for ( ULONG i = 0; i < nCount; i++ )
+            {   for ( SCSIZE i = 0; i < nCount; i++ )
                 {   if (pMat->IsValue(i))
                         pResMat->PutDouble( ::rtl::math::approxSub( fVal, pMat->GetDouble(i)), i);
                     else
@@ -1745,7 +1779,7 @@ void ScInterpreter::ScSub()
                 }
             }
             else
-            {   for ( ULONG i = 0; i < nCount; i++ )
+            {   for ( SCSIZE i = 0; i < nCount; i++ )
                 {   if (pMat->IsValue(i))
                         pResMat->PutDouble( ::rtl::math::approxSub( pMat->GetDouble(i), fVal), i);
                     else
@@ -1824,13 +1858,13 @@ void ScInterpreter::ScMul()
         }
         else
             fVal = fVal2;
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            ULONG nCount = (ULONG) nC * nR;
-            for ( ULONG i = 0; i < nCount; i++ )
+            SCSIZE nCount = nC * nR;
+            for ( SCSIZE i = 0; i < nCount; i++ )
                 if (pMat->IsValue(i))
                     pResMat->PutDouble(pMat->GetDouble(i)*fVal, i);
                 else
@@ -1902,21 +1936,21 @@ void ScInterpreter::ScDiv()
             fVal = fVal2;
             bFlag = FALSE;          // Matrix - double
         }
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            ULONG nCount = (ULONG) nC * nR;
+            SCSIZE nCount = nC * nR;
             if (bFlag)
-            {   for ( ULONG i = 0; i < nCount; i++ )
+            {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(fVal / pMat->GetDouble(i), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
             }
             else
-            {   for ( ULONG i = 0; i < nCount; i++ )
+            {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(pMat->GetDouble(i) / fVal, i);
                     else
@@ -1979,21 +2013,21 @@ void ScInterpreter::ScPow()
             fVal = fVal2;
             bFlag = FALSE;          // Matrix - double
         }
-        USHORT nC, nR;
+        SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            ULONG nCount = (ULONG) nC * nR;
+            SCSIZE nCount = nC * nR;
             if (bFlag)
-            {   for ( ULONG i = 0; i < nCount; i++ )
+            {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(pow(fVal,pMat->GetDouble(i)), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
             }
             else
-            {   for ( ULONG i = 0; i < nCount; i++ )
+            {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(pow(pMat->GetDouble(i),fVal), i);
                     else
@@ -2023,7 +2057,8 @@ void ScInterpreter::ScSumProduct()
         SetIllegalParameter();
         return;
     }
-    USHORT nC, nR, nC1, nR1;
+    SCSIZE nC, nC1;
+    SCSIZE nR, nR1;
     pMat2->GetDimensions(nC, nR);
     pMat = pMat2;
     for (USHORT i = 1; i < nParamCount; i++)
@@ -2050,8 +2085,8 @@ void ScInterpreter::ScSumProduct()
             pMat = pResMat;
     }
     double fSum = 0.0;
-    ULONG nCount = pMat->GetElementCount();
-    for (ULONG j = 0; j < nCount; j++)
+    SCSIZE nCount = pMat->GetElementCount();
+    for (SCSIZE j = 0; j < nCount; j++)
     {
         if (!pMat->IsString(j))
             fSum += pMat->GetDouble(j);
@@ -2066,7 +2101,7 @@ void ScInterpreter::ScSumX2MY2()
 
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    USHORT i, j;
+    SCSIZE i, j;
     pMat2 = GetMatrix();
     pMat1 = GetMatrix();
     if (!pMat2 || !pMat1)
@@ -2074,7 +2109,8 @@ void ScInterpreter::ScSumX2MY2()
         SetIllegalParameter();
         return;
     }
-    USHORT nC2, nR2, nC1, nR1;
+    SCSIZE nC1, nC2;
+    SCSIZE nR1, nR2;
     pMat2->GetDimensions(nC2, nR2);
     pMat1->GetDimensions(nC1, nR1);
     if (nC1 != nC2 || nR1 != nR2)
@@ -2102,7 +2138,7 @@ void ScInterpreter::ScSumX2DY2()
 
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    USHORT i, j;
+    SCSIZE i, j;
     pMat2 = GetMatrix();
     pMat1 = GetMatrix();
     if (!pMat2 || !pMat1)
@@ -2110,7 +2146,8 @@ void ScInterpreter::ScSumX2DY2()
         SetIllegalParameter();
         return;
     }
-    USHORT nC2, nR2, nC1, nR1;
+    SCSIZE nC1, nC2;
+    SCSIZE nR1, nR2;
     pMat2->GetDimensions(nC2, nR2);
     pMat1->GetDimensions(nC1, nR1);
     if (nC1 != nC2 || nR1 != nR2)
@@ -2145,7 +2182,8 @@ void ScInterpreter::ScSumXMY2()
         SetIllegalParameter();
         return;
     }
-    USHORT nC2, nR2, nC1, nR1;
+    SCSIZE nC1, nC2;
+    SCSIZE nR1, nR2;
     pMat2->GetDimensions(nC2, nR2);
     pMat1->GetDimensions(nC1, nR1);
     if (nC1 != nC2 || nR1 != nR2)
@@ -2162,8 +2200,8 @@ void ScInterpreter::ScSumXMY2()
     else
     {
         double fVal, fSum = 0.0;
-        ULONG nCount = pResMat->GetElementCount();
-        for (ULONG i = 0; i < nCount; i++)
+        SCSIZE nCount = pResMat->GetElementCount();
+        for (SCSIZE i = 0; i < nCount; i++)
             if (!pResMat->IsString(i))
             {
                 fVal = pResMat->GetDouble(i);
@@ -2179,12 +2217,12 @@ void ScInterpreter::ScFrequency()
         return;
 
     double* pSortArray1 = NULL;
-    ULONG nSize1 = 0;
+    SCSIZE nSize1 = 0;
     GetSortArray(1, &pSortArray1, nSize1);
     if (nGlobalError)
         SetNoValue();
     double* pSortArray2 = NULL;
-    ULONG nSize2 = 0;
+    SCSIZE nSize2 = 0;
     GetSortArray(1, &pSortArray2, nSize2);
     if (!pSortArray2 || nSize2 == 0 || nGlobalError)
     {
@@ -2195,7 +2233,7 @@ void ScInterpreter::ScFrequency()
         SetNoValue();
         return;
     }
-    ScMatrixRef pResMat = GetNewMat( 1, (USHORT)nSize1+1);
+    ScMatrixRef pResMat = GetNewMat( 1, nSize1+1);
     if (!pResMat)
     {
         if (pSortArray1)
@@ -2206,12 +2244,11 @@ void ScInterpreter::ScFrequency()
         return;
     }
 
-    USHORT j;
-    ULONG i = 0;
-    ULONG nCount;
+    SCSIZE j;
+    SCSIZE i = 0;
     for (j = 0; j < nSize1; j++)
     {
-        nCount = 0;
+        SCSIZE nCount = 0;
         while (i < nSize2 && pSortArray2[i] <= pSortArray1[j])
         {
             nCount++;
@@ -2228,10 +2265,10 @@ void ScInterpreter::ScFrequency()
 }
 
 BOOL ScInterpreter::RGetVariances( ScMatrix* pV, ScMatrix* pX,
-        USHORT nC, USHORT nR, BOOL bSwapColRow, BOOL bZeroConstant )
+        SCSIZE nC, SCSIZE nR, BOOL bSwapColRow, BOOL bZeroConstant )
 {   // multiple Regression: Varianzen der Koeffizienten
     // bSwapColRow==TRUE : Koeffizienten in Zeilen statt Spalten angeordnet
-    USHORT i, j, k;
+    SCSIZE i, j, k;
     double sum;
     ScMatrixRef pC = GetNewMat(nC, nC);
     if ( !pC )
@@ -2355,10 +2392,12 @@ void ScInterpreter::ScRGP()
         return;
     }
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
-    USHORT nCX, nRX, nCY, nRY, M, N;
+    SCSIZE nCX, nCY;
+    SCSIZE nRX, nRY;
+    SCSIZE M, N;
     pMatY->GetDimensions(nCY, nRY);
-    ULONG nCountY = (ULONG) nCY * nRY;
-    for ( ULONG i = 0; i < nCountY; i++ )
+    SCSIZE nCountY = nCY * nRY;
+    for ( SCSIZE i = 0; i < nCountY; i++ )
         if (!pMatY->IsValue(i))
         {
             SetIllegalArgument();
@@ -2367,8 +2406,8 @@ void ScInterpreter::ScRGP()
     if (pMatX)
     {
         pMatX->GetDimensions(nCX, nRX);
-        ULONG nCountX = (ULONG) nCX * nRX;
-        for ( ULONG i = 0; i < nCountX; i++ )
+        SCSIZE nCountX = nCX * nRX;
+        for ( SCSIZE i = 0; i < nCountX; i++ )
             if (!pMatX->IsValue(i))
             {
                 SetIllegalArgument();
@@ -2415,7 +2454,7 @@ void ScInterpreter::ScRGP()
             PushError();
             return;
         }
-        for ( ULONG i = 1; i <= nCountY; i++ )
+        for ( SCSIZE i = 1; i <= nCountY; i++ )
             pMatX->PutDouble((double)i, i-1);
         nCase = 1;
     }
@@ -2438,8 +2477,8 @@ void ScInterpreter::ScRGP()
         double fSumSqrY = 0.0;
         double fSumXY   = 0.0;
         double fValX, fValY;
-        for (USHORT i = 0; i < nCY; i++)
-            for (USHORT j = 0; j < nRY; j++)
+        for (SCSIZE i = 0; i < nCY; i++)
+            for (SCSIZE j = 0; j < nRY; j++)
             {
                 fValX = pMatX->GetDouble(i,j);
                 fValY = pMatY->GetDouble(i,j);
@@ -2502,7 +2541,7 @@ void ScInterpreter::ScRGP()
     }
     else
     {
-        USHORT i, j, k;
+        SCSIZE i, j, k;
         if (!bStats)
             pResMat = GetNewMat(M+1,1);
         else
@@ -2579,7 +2618,7 @@ void ScInterpreter::ScRGP()
         pQ->PutDouble((double)N, 0, 0);
         if (bConstant)
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 0; S < M+1; S++)
             {
                 i = S;
@@ -2614,7 +2653,7 @@ void ScInterpreter::ScRGP()
         }
         else
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 1; S < M+1; S++)
             {
                 i = S;
@@ -2773,10 +2812,12 @@ void ScInterpreter::ScRKP()
         return;
     }
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
-    USHORT nCX, nRX, nCY, nRY, M, N;
+    SCSIZE nCX, nCY;
+    SCSIZE nRX, nRY;
+    SCSIZE M, N;
     pMatY->GetDimensions(nCY, nRY);
-    ULONG nCountY = (ULONG) nCY * nRY;
-    ULONG i;
+    SCSIZE nCountY = nCY * nRY;
+    SCSIZE i;
     for (i = 0; i < nCountY; i++)
         if (!pMatY->IsValue(i))
         {
@@ -2797,7 +2838,7 @@ void ScInterpreter::ScRKP()
     if (pMatX)
     {
         pMatX->GetDimensions(nCX, nRX);
-        ULONG nCountX = (ULONG) nCX * nRX;
+        SCSIZE nCountX = nCX * nRX;
         for (i = 0; i < nCountX; i++)
             if (!pMatX->IsValue(i))
             {
@@ -2845,7 +2886,7 @@ void ScInterpreter::ScRKP()
             PushError();
             return;
         }
-        for ( ULONG i = 1; i <= nCountY; i++ )
+        for ( SCSIZE i = 1; i <= nCountY; i++ )
             pMatX->PutDouble((double)i, i-1);
         nCase = 1;
     }
@@ -2868,8 +2909,8 @@ void ScInterpreter::ScRKP()
         double fSumSqrY = 0.0;
         double fSumXY   = 0.0;
         double fValX, fValY;
-        for (USHORT i = 0; i < nCY; i++)
-            for (USHORT j = 0; j < nRY; j++)
+        for (SCSIZE i = 0; i < nCY; i++)
+            for (SCSIZE j = 0; j < nRY; j++)
             {
                 fValX = pMatX->GetDouble(i,j);
                 fValY = pMatY->GetDouble(i,j);
@@ -2932,7 +2973,7 @@ void ScInterpreter::ScRKP()
     }
     else
     {
-        USHORT i, j, k;
+        SCSIZE i, j, k;
         if (!bStats)
             pResMat = GetNewMat(M+1,1);
         else
@@ -3006,7 +3047,7 @@ void ScInterpreter::ScRKP()
         pQ->PutDouble((double)N, 0, 0);
         if (bConstant)
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 0; S < M+1; S++)
             {
                 i = S;
@@ -3041,7 +3082,7 @@ void ScInterpreter::ScRKP()
         }
         else
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 1; S < M+1; S++)
             {
                 i = S;
@@ -3187,10 +3228,12 @@ void ScInterpreter::ScTrend()
         return;
     }
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
-    USHORT nCX, nRX, nCY, nRY, M, N;
+    SCSIZE nCX, nCY;
+    SCSIZE nRX, nRY;
+    SCSIZE M, N;
     pMatY->GetDimensions(nCY, nRY);
-    ULONG nCountY = (ULONG) nCY * nRY;
-    ULONG i;
+    SCSIZE nCountY = nCY * nRY;
+    SCSIZE i;
     for (i = 0; i < nCountY; i++)
         if (!pMatY->IsValue(i))
         {
@@ -3200,7 +3243,7 @@ void ScInterpreter::ScTrend()
     if (pMatX)
     {
         pMatX->GetDimensions(nCX, nRX);
-        ULONG nCountX = (ULONG) nCX * nRX;
+        SCSIZE nCountX = nCX * nRX;
         for (i = 0; i < nCountX; i++)
             if (!pMatX->IsValue(i))
             {
@@ -3254,13 +3297,13 @@ void ScInterpreter::ScTrend()
             pMatX->PutDouble((double)i, i-1);
         nCase = 1;
     }
-    USHORT nCXN, nRXN;
-    ULONG nCountXN;
+    SCSIZE nCXN, nRXN;
+    SCSIZE nCountXN;
     if (!pMatNewX)
     {
         nCXN = nCX;
         nRXN = nRX;
-        nCountXN = (ULONG) nCXN * nRXN;
+        nCountXN = nCXN * nRXN;
         pMatNewX = pMatX;
     }
     else
@@ -3271,8 +3314,8 @@ void ScInterpreter::ScTrend()
             SetIllegalArgument();
             return;
         }
-        nCountXN = (ULONG) nCXN * nRXN;
-        for ( ULONG i = 0; i < nCountXN; i++ )
+        nCountXN = nCXN * nRXN;
+        for ( SCSIZE i = 0; i < nCountXN; i++ )
             if (!pMatNewX->IsValue(i))
             {
                 SetIllegalArgument();
@@ -3289,9 +3332,9 @@ void ScInterpreter::ScTrend()
         double fSumSqrY = 0.0;
         double fSumXY   = 0.0;
         double fValX, fValY;
-        USHORT i;
+        SCSIZE i;
         for (i = 0; i < nCY; i++)
-            for (USHORT j = 0; j < nRY; j++)
+            for (SCSIZE j = 0; j < nRY; j++)
             {
                 fValX = pMatX->GetDouble(i,j);
                 fValY = pMatY->GetDouble(i,j);
@@ -3334,7 +3377,7 @@ void ScInterpreter::ScTrend()
     }
     else
     {
-        USHORT i, j, k;
+        SCSIZE i, j, k;
         ScMatrixRef pQ = GetNewMat(M+1, M+2);
         ScMatrixRef pE = GetNewMat(M+2, 1);
         pE->PutDouble(0.0, M+1);
@@ -3390,7 +3433,7 @@ void ScInterpreter::ScTrend()
         pQ->PutDouble((double)N, 0, 0);
         if (bConstant)
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 0; S < M+1; S++)
             {
                 i = S;
@@ -3425,7 +3468,7 @@ void ScInterpreter::ScTrend()
         }
         else
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 1; S < M+1; S++)
             {
                 i = S;
@@ -3525,10 +3568,12 @@ void ScInterpreter::ScGrowth()
         return;
     }
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
-    USHORT nCX, nRX, nCY, nRY, M, N;
+    SCSIZE nCX, nCY;
+    SCSIZE nRX, nRY;
+    SCSIZE M, N;
     pMatY->GetDimensions(nCY, nRY);
-    ULONG nCountY = (ULONG) nCY * nRY;
-    ULONG i;
+    SCSIZE nCountY = nCY * nRY;
+    SCSIZE i;
     for (i = 0; i < nCountY; i++)
     {
         if (!pMatY->IsValue(i))
@@ -3550,8 +3595,8 @@ void ScInterpreter::ScGrowth()
     if (pMatX)
     {
         pMatX->GetDimensions(nCX, nRX);
-        ULONG nCountX = (ULONG) nCX * nRX;
-        for ( ULONG i = 0; i < nCountX; i++ )
+        SCSIZE nCountX = nCX * nRX;
+        for ( SCSIZE i = 0; i < nCountX; i++ )
             if (!pMatX->IsValue(i))
             {
                 SetIllegalArgument();
@@ -3600,17 +3645,17 @@ void ScInterpreter::ScGrowth()
             PushError();
             return;
         }
-        for (ULONG i = 1; i <= nCountY; i++)
+        for (SCSIZE i = 1; i <= nCountY; i++)
             pMatX->PutDouble((double)i, i-1);
         nCase = 1;
     }
-    USHORT nCXN, nRXN;
-    ULONG nCountXN;
+    SCSIZE nCXN, nRXN;
+    SCSIZE nCountXN;
     if (!pMatNewX)
     {
         nCXN = nCX;
         nRXN = nRX;
-        nCountXN = (ULONG) nCXN * nRXN;
+        nCountXN = nCXN * nRXN;
         pMatNewX = pMatX;
     }
     else
@@ -3621,8 +3666,8 @@ void ScInterpreter::ScGrowth()
             SetIllegalArgument();
             return;
         }
-        nCountXN = (ULONG) nCXN * nRXN;
-        for ( ULONG i = 0; i < nCountXN; i++ )
+        nCountXN = nCXN * nRXN;
+        for ( SCSIZE i = 0; i < nCountXN; i++ )
             if (!pMatNewX->IsValue(i))
             {
                 SetIllegalArgument();
@@ -3639,8 +3684,8 @@ void ScInterpreter::ScGrowth()
         double fSumSqrY = 0.0;
         double fSumXY   = 0.0;
         double fValX, fValY;
-        for (USHORT i = 0; i < nCY; i++)
-            for (USHORT j = 0; j < nRY; j++)
+        for (SCSIZE i = 0; i < nCY; i++)
+            for (SCSIZE j = 0; j < nRY; j++)
             {
                 fValX = pMatX->GetDouble(i,j);
                 fValY = pMatY->GetDouble(i,j);
@@ -3677,13 +3722,13 @@ void ScInterpreter::ScGrowth()
                 PushError();
                 return;
             }
-            for (ULONG i = 0; i < nCountXN; i++)
+            for (SCSIZE i = 0; i < nCountXN; i++)
                 pResMat->PutDouble(exp(pMatNewX->GetDouble(i)*m+b), i);
         }
     }
     else
     {
-        USHORT i, j, k;
+        SCSIZE i, j, k;
         ScMatrixRef pQ = GetNewMat(M+1, M+2);
         ScMatrixRef pE = GetNewMat(M+2, 1);
         pE->PutDouble(0.0, M+1);
@@ -3739,7 +3784,7 @@ void ScInterpreter::ScGrowth()
         pQ->PutDouble((double)N, 0, 0);
         if (bConstant)
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 0; S < M+1; S++)
             {
                 i = S;
@@ -3774,7 +3819,7 @@ void ScInterpreter::ScGrowth()
         }
         else
         {
-            USHORT S, L;
+            SCSIZE S, L;
             for (S = 1; S < M+1; S++)
             {
                 i = S;
@@ -3858,10 +3903,10 @@ void ScInterpreter::ScMatRef()
         const ScMatrix* pMat = pCell->GetMatrix();
         if( pMat )
         {
-            USHORT nCl, nRw;
+            SCSIZE nCl, nRw;
             pMat->GetDimensions( nCl, nRw );
-            USHORT nC = aPos.Col() - aAdr.Col();
-            USHORT nR = aPos.Row() - aAdr.Row();
+            SCSIZE nC = static_cast<SCSIZE>(aPos.Col() - aAdr.Col());
+            SCSIZE nR = static_cast<SCSIZE>(aPos.Row() - aAdr.Row());
             if (nC < nCl && nR < nRw)
             {
                 BOOL bIsString;
