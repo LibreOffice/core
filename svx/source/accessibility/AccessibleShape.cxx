@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: af $ $Date: 2002-05-30 15:45:48 $
+ *  last change: $Author: af $ $Date: 2002-06-03 15:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ void AccessibleShape::Init (void)
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for makeing the edit engine
     // accessible.
+#if 0
     SdrView* pView = maShapeTreeInfo.GetSdrView ();
     const Window* pWindow = maShapeTreeInfo.GetWindow ();
     if (pView != NULL && pWindow != NULL && mxShape.is())
@@ -206,6 +207,7 @@ void AccessibleShape::Init (void)
             this,
             ::std::auto_ptr<SvxEditSource>(pEditSource));
     }
+#endif
 }
 
 
@@ -496,6 +498,11 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
+
+    static const OUString sBoundRectName (
+        RTL_CONSTASCII_USTRINGPARAM("BoundRect"));
+    static const OUString sAnchorPositionName (
+        RTL_CONSTASCII_USTRINGPARAM("AnchorPosition"));
     awt::Rectangle aBoundingBox;
 
     // Get the shape's bounding box in internal coordinates (in 100th of
@@ -509,13 +516,11 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         xSetInfo = xSet->getPropertySetInfo ();
         if (xSetInfo.is())
         {
-            if (xSetInfo->hasPropertyByName (
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect"))))
+            if (xSetInfo->hasPropertyByName (sBoundRectName))
             {
                 try
                 {
-                    uno::Any aValue = xSet->getPropertyValue (
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect")));
+                    uno::Any aValue = xSet->getPropertyValue (sBoundRectName);
                     aValue >>= aBoundingBox;
                     bFoundBoundRect = true;
                 }
@@ -543,11 +548,9 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         // (usually not (0,0) for Writer shapes).
         if (xSetInfo.is())
         {
-            if (xSetInfo->hasPropertyByName (
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition"))))
+            if (xSetInfo->hasPropertyByName (sAnchorPositionName))
             {
-                uno::Any aPos = xSet->getPropertyValue (
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorPosition")));
+                uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
                 awt::Point aAnchorPosition;
                 aPos >>= aAnchorPosition;
                 aBoundingBox.X += aAnchorPosition.X;
@@ -563,20 +566,20 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         ::Point (aBoundingBox.X, aBoundingBox.Y));
 
     // Clip the shape's bounding box with the bounding box of its parent.
-    Reference<XAccessibleComponent> xParentComponent (getAccessibleParent(), uno::UNO_QUERY);
+    Reference<XAccessibleComponent> xParentComponent (
+        getAccessibleParent(), uno::UNO_QUERY);
     if (xParentComponent.is())
     {
+        // Make the coordinates relative to the parent.
+        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
+        int x = aPixelPosition.getX() - aParentLocation.X;
+        int y = aPixelPosition.getY() - aParentLocation.Y;
+
+        // Clip with parent (with coordinates relative to itself).
         ::Rectangle aBBox (
-            aPixelPosition.getX(),
-            aPixelPosition.getY(),
-            aPixelPosition.getX() + aPixelSize.getWidth(),
-            aPixelPosition.getY() + aPixelSize.getHeight());
-        awt::Rectangle aParentBoundingBox (xParentComponent->getBounds());
-        ::Rectangle aParentBBox (
-            aParentBoundingBox.X,
-            aParentBoundingBox.Y,
-            aParentBoundingBox.X + aParentBoundingBox.Width,
-            aParentBoundingBox.Y + aParentBoundingBox.Height);
+            x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
+        awt::Size aParentSize (xParentComponent->getSize());
+        ::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
         aBBox = aBBox.GetIntersection (aParentBBox);
         aBoundingBox = awt::Rectangle (
             aBBox.getX(),
