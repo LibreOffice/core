@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-16 13:45:18 $
+ *  last change: $Author: cl $ $Date: 2001-05-22 13:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
             SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
             aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
         }
+        break;
     }
     case WID_PAGE_BACKOBJVIS:
     {
@@ -734,6 +735,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
             SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
             aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
         }
+        break;
     }
     default:
         throw beans::UnknownPropertyException();
