@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-29 14:20:10 $
+ *  last change: $Author: mba $ $Date: 2001-04-12 13:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,9 +408,9 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     String aPreselectedFilterName;      // a name describing the filter to use ( from MediaDescriptor )
     const SfxFilter* pFilter = NULL, *pExternalFilter = NULL;
 
-    sal_uInt32 nPropertyCount = lDescriptor.getLength();
+    sal_Int32 nPropertyCount = lDescriptor.getLength();
     sal_Int32 nIndexOfFilterName = nPropertyCount;
-    for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
         if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
@@ -511,7 +511,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         // in this case it is correct to use the result of the shallow detection ( if there is any )
         // if no shallow detection has been done or it gave no result ( aTypeName is empty ),
         // we must try a deep detection for all possible SFX filters ( see below )
-        return aTypeName;
+        pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, SFX_FILTER_NOTINSTALLED );
     }
     else
     {
@@ -622,30 +622,30 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                 ErrorHandler::HandleError( aMedium.GetError() );
             }
         }
+    }
 
-        if ( pFilter )
-        {
-            aTypeName = pFilter->GetTypeName();
-            if ( pExternalFilter && pExternalFilter->GetTypeName() == pFilter->GetTypeName() )
-                // internally detected type is OK, if external filter was preselected for this type, it's OK
-                aFilterName = pExternalFilter->GetName();
-            else
-                aFilterName = pFilter->GetName();
-            if ( nIndexOfFilterName < nPropertyCount )
-                // convert to format with factory ( makes load more easy to implement )
-                lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
-            else
-            {
-                lDescriptor.realloc( nPropertyCount + 1 );
-                lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
-                lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
-            }
-        }
+    if ( pFilter )
+    {
+        aTypeName = pFilter->GetTypeName();
+        if ( pExternalFilter && pExternalFilter->GetTypeName() == pFilter->GetTypeName() )
+            // internally detected type is OK, if external filter was preselected for this type, it's OK
+            aFilterName = pExternalFilter->GetName();
+        else
+            aFilterName = pFilter->GetName();
+        if ( nIndexOfFilterName < nPropertyCount )
+            // convert to format with factory ( makes load more easy to implement )
+            lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
         else
         {
-            aFilterName.Erase();
-            aTypeName = ::rtl::OUString();
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
+            lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
         }
+    }
+    else
+    {
+        aFilterName.Erase();
+        aTypeName = ::rtl::OUString();
     }
 
     return aTypeName;
