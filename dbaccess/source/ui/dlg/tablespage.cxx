@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:42:54 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #endif
@@ -161,6 +164,7 @@ namespace dbaui
     using namespace ::com::sun::star::i18n;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::util;
     using namespace ::dbtools;
 
     //========================================================================
@@ -404,9 +408,40 @@ namespace dbaui
 
                 Reference< XDriver > xDriver;
                 m_aTablesList.setORB(m_xORB);
-                m_xCurrentConnection = m_aTablesList.UpdateTableList( sURL, aConnectionParams, xDriver );
+                Reference<XPropertySet> xProp = m_pTablesDlg->getCurrentDataSource();
+                OSL_ENSURE(xProp.is(),"No data source set!");
+                if ( xProp.is() )
+                {
+                    Any aTableFilter = xProp->getPropertyValue(PROPERTY_TABLEFILTER);
+                    Any aTableTypeFilter = xProp->getPropertyValue(PROPERTY_TABLETYPEFILTER);
+
+                    Reference<XModifiable> xModi(xProp,UNO_QUERY);
+                    sal_Bool bModified = ( xModi.is() && xModi->isModified() );
+
+                    Sequence< ::rtl::OUString> aNewTableFilter(1),aEmpty(3);
+                    aNewTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
+                    xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
+
+                    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+                    static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+                    aEmpty[0] = s_sTableTypeView;
+                    aEmpty[1] = s_sTableTypeTable;
+                    aEmpty[2] = aNewTableFilter[0];
+                    xProp->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(aEmpty));
+                    Reference< ::com::sun::star::lang::XEventListener> xEvt;
+                    aErrorInfo = ::dbaui::createConnection(xProp,m_xORB,xEvt,m_xCurrentConnection);
+
+                    xProp->setPropertyValue(PROPERTY_TABLEFILTER,aTableFilter);
+                    xProp->setPropertyValue(PROPERTY_TABLETYPEFILTER,aTableTypeFilter);
+
+                    if ( xModi.is() && !bModified )
+                        xModi->setModified(sal_False);
+
+                }
+
                 if ( m_xCurrentConnection.is() )
                 {
+                    m_aTablesList.UpdateTableList( m_xCurrentConnection );
                     if (m_pTablesDlg)
                         m_pTablesDlg->successfullyConnected();
                 }
