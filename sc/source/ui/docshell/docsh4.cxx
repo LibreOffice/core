@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-25 09:59:29 $
+ *  last change: $Author: sab $ $Date: 2002-11-27 17:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,8 +557,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                     rReq.Ignore();
-
-                nCanUpdate = com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
             }
             break;
 
@@ -568,52 +566,57 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 //  weggelassenen Daten enthalten sind
 
                 BOOL bDone = FALSE;
-                ScRange aRange;
                 ScDBCollection* pDBColl = aDocument.GetDBCollection();
-                ScTabViewShell* pViewSh = GetBestViewShell();
-                DBG_ASSERT(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
-                if (pViewSh && pDBColl)
+
+                if ((nCanUpdate != com::sun::star::document::UpdateDocMode::NO_UPDATE) &&
+                   (nCanUpdate != com::sun::star::document::UpdateDocMode::QUIET_UPDATE))
                 {
-                    QueryBox aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                                             ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
-                    if (aBox.Execute() == RET_YES)
+                    ScRange aRange;
+                    ScTabViewShell* pViewSh = GetBestViewShell();
+                    DBG_ASSERT(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
+                    if (pViewSh && pDBColl)
                     {
-                        for (USHORT i=0; i<pDBColl->GetCount(); i++)
+                        QueryBox aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                                                ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
+                        if (aBox.Execute() == RET_YES)
                         {
-                            ScDBData* pDBData = (*pDBColl)[i];
-                            if ( pDBData->IsStripData() &&
-                                    pDBData->HasImportParam() && !pDBData->HasImportSelection() )
+                            for (USHORT i=0; i<pDBColl->GetCount(); i++)
                             {
-                                pDBData->GetArea(aRange);
-                                pViewSh->MarkRange(aRange);
-
-                                //  Import und interne Operationen wie SID_REFRESH_DBAREA
-                                //  (Abfrage auf Import hier nicht noetig)
-
-                                ScImportParam aImportParam;
-                                pDBData->GetImportParam( aImportParam );
-                                BOOL bContinue = pViewSh->ImportData( aImportParam );
-                                pDBData->SetImportParam( aImportParam );
-
-                                //  markieren (Groesse kann sich geaendert haben)
-                                pDBData->GetArea(aRange);
-                                pViewSh->MarkRange(aRange);
-
-                                if ( bContinue )    // #41905# Fehler beim Import -> Abbruch
+                                ScDBData* pDBData = (*pDBColl)[i];
+                                if ( pDBData->IsStripData() &&
+                                        pDBData->HasImportParam() && !pDBData->HasImportSelection() )
                                 {
-                                    //  interne Operationen, wenn welche gespeichert
+                                    pDBData->GetArea(aRange);
+                                    pViewSh->MarkRange(aRange);
 
-                                    if ( pDBData->HasQueryParam() || pDBData->HasSortParam() ||
-                                                                      pDBData->HasSubTotalParam() )
-                                        pViewSh->RepeatDB();
+                                    //  Import und interne Operationen wie SID_REFRESH_DBAREA
+                                    //  (Abfrage auf Import hier nicht noetig)
 
-                                    //  Pivottabellen die den Bereich als Quelldaten haben
+                                    ScImportParam aImportParam;
+                                    pDBData->GetImportParam( aImportParam );
+                                    BOOL bContinue = pViewSh->ImportData( aImportParam );
+                                    pDBData->SetImportParam( aImportParam );
 
-                                    RefreshPivotTables(aRange);
+                                    //  markieren (Groesse kann sich geaendert haben)
+                                    pDBData->GetArea(aRange);
+                                    pViewSh->MarkRange(aRange);
+
+                                    if ( bContinue )    // #41905# Fehler beim Import -> Abbruch
+                                    {
+                                        //  interne Operationen, wenn welche gespeichert
+
+                                        if ( pDBData->HasQueryParam() || pDBData->HasSortParam() ||
+                                                                        pDBData->HasSubTotalParam() )
+                                            pViewSh->RepeatDB();
+
+                                        //  Pivottabellen die den Bereich als Quelldaten haben
+
+                                        RefreshPivotTables(aRange);
+                                    }
                                 }
                             }
+                            bDone = TRUE;
                         }
-                        bDone = TRUE;
                     }
                 }
 
