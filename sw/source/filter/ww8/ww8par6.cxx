@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: khz $ $Date: 2000-10-17 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -701,10 +701,10 @@ void SwWW8ImplReader::SetPageULSpaceItems( SwFrmFmt &rFmt, WW8ULSpaceData& rData
 
 
 
-void SwWW8ImplReader::SetPageBorder( SwPageDesc* pPageDesc0,
-                                     SwPageDesc* pPageDesc1,
-                            const WW8PLCFx_SEPX* pSep,
-                                     USHORT      nLIdx )
+void SwWW8ImplReader::SetPageBorder( SwPageDesc*    pPageDesc0,
+                                     SwPageDesc*    pPageDesc1,
+                               const WW8PLCFx_SEPX* pSep,
+                                     USHORT         nLIdx )
 {
     WW8_BRC brc[4];
     if( !bVer67 && ::lcl_ReadBorders( bVer67, brc, 0, 0, pSep ) &&
@@ -2041,15 +2041,15 @@ void SwWW8ImplReader::GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist )
 
     // 'dptSpace' is stored in 3 bits of 'Border Code (BRC)'
     if( bVer67 )
-        rInnerDist = Rectangle(((pbrc[ 0 ].aBits1[1] >> 3) & 0x1f) * 20,
-                               ((pbrc[ 1 ].aBits1[1] >> 3) & 0x1f) * 20,
-                               ((pbrc[ 2 ].aBits1[1] >> 3) & 0x1f) * 20,
-                               ((pbrc[ 3 ].aBits1[1] >> 3) & 0x1f) * 20 );
+        rInnerDist = Rectangle(((pbrc[ 1 ].aBits1[1] >> 3) & 0x1f) * 20,
+                               ((pbrc[ 0 ].aBits1[1] >> 3) & 0x1f) * 20,
+                               ((pbrc[ 3 ].aBits1[1] >> 3) & 0x1f) * 20,
+                               ((pbrc[ 2 ].aBits1[1] >> 3) & 0x1f) * 20 );
     else
-        rInnerDist = Rectangle( (pbrc[ 0 ].aBits2[1]       & 0x1f) * 20,
-                                (pbrc[ 1 ].aBits2[1]       & 0x1f) * 20,
-                                (pbrc[ 2 ].aBits2[1]       & 0x1f) * 20,
-                                (pbrc[ 3 ].aBits2[1]       & 0x1f) * 20 );
+        rInnerDist = Rectangle( (pbrc[ 1 ].aBits2[1]       & 0x1f) * 20,
+                                (pbrc[ 0 ].aBits2[1]       & 0x1f) * 20,
+                                (pbrc[ 3 ].aBits2[1]       & 0x1f) * 20,
+                                (pbrc[ 2 ].aBits2[1]       & 0x1f) * 20 );
 
     /*
         for( int n = 0; n < 4; ++n )
@@ -3964,7 +3964,11 @@ void SwWW8ImplReader::Read_Border( USHORT nId, BYTE* pData, short nLen )
                 // auch wenn kein Rand gesetzt ist, muss das Attribut gesetzt
                 // werden, sonst ist kein hartes Ausschalten von Style-Attrs
                 // moeglich
+                SvxBoxItem* pBox
+                    = (SvxBoxItem*)GetFmtAttr( RES_BOX );
                 SvxBoxItem aBox;
+                if( pBox )
+                    aBox = *pBox;
                 SetBorder( aBox, aBrcs, TRUE );
 
                 Rectangle aInnerDist;
@@ -4746,12 +4750,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.2 2000-10-17 15:06:36 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.104  2000/09/18 16:05:01  willem.vandorp
       OpenOffice header added.
 
