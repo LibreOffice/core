@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdargs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mhu $ $Date: 2002-07-23 12:41:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,10 @@ rtl_CmdArgs_ArgHolder::~rtl_CmdArgs_ArgHolder()
     g_ppCommandArgs = 0;
 }
 
-static rtl_CmdArgs_ArgHolder MyHolder;
-
 static void impl_rtl_initCommandArgs()
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-
+    static rtl_CmdArgs_ArgHolder MyHolder;
     if (!g_ppCommandArgs)
     {
         sal_Int32 i, n = osl_getCommandArgCount();
