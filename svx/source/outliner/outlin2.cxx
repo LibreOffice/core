@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:35:34 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,18 @@ BOOL Outliner::IsKernAsianPunctuation() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsKernAsianPunctuation();
+}
+
+void Outliner::SetAddExtLeading( BOOL bExtLeading )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetAddExtLeading( bExtLeading );
+}
+
+BOOL Outliner::IsAddExtLeading() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->IsAddExtLeading();
 }
 
 void Outliner::UndoActionStart( USHORT nId )
