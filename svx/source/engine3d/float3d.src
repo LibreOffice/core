@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-29 14:34:42 $
+ *  last change: $Author: thb $ $Date: 2001-07-09 13:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,7 +1389,8 @@ DockingWindow RID_SVXFLOAT_3D
     FixedText FT_SLANT
     {
         Pos = MAP_APPFONT ( 31 , 56 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 62 , 8 ) ;
+        Right = TRUE;
         /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
         /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
         Text = "Papierneigung" ;
