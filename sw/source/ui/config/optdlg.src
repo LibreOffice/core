@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-17 21:21:40 $
+ *  last change: $Author: nf $ $Date: 2002-01-22 08:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2907,7 +2907,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ε—δΏζ¤η„η©Ίζ Όε­—η¬¦(~P)";
         Text[ russian ] = "Ηΰωθωεννϋε οπξαελϋ";
         Text[ polish ] = "Spacje bez podzia³u";
-        Text[ japanese ] = "δΏθ­·γ—γη©Ίη™½γ®γ‚ΉγƒγƒΌγ‚Ή(~P)";
+        Text[ japanese ] = "δΏθ­·γ•γ‚γγ‚ΉγƒγƒΌγ‚Ή(~P)";
         Text[ chinese_traditional ] = "ε—δΏθ­·η„η©Ίζ Όε­—ε…ƒ(~P)";
         Text[ arabic ] = "ΓΝΡέ γΣΗέΙ γΝγνΙ";
         Text[ greek ] = "Προ~στατευόμενοι χαρακτήρες κενών";
@@ -3172,7 +3172,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ζ®µθ½ε·¦ι—΄ι”(~L)";
         Text[ russian ] = "λεβϋι κπΰι ΰαηΰφΰ";
         Text[ polish ] = "Lewy margines akapitu";
-        Text[ japanese ] = "ζ®µθ½ε·¦δ½™η™½(~L)";
+        Text[ japanese ] = "ζ®µθ½ε·¦γ‚¤γƒ³γƒ‡γƒ³γƒ(~L)";
         Text[ chinese_traditional ] = "ζ®µθ½ε·¦ι–“ι”(~L)";
         Text[ arabic ] = "εΗγΤ ΗαέήΡΙ ΗαΓνΣΡ";
         Text[ greek ] = "αριστερό περιθώριο παραγράφου";
