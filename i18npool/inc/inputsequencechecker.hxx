@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputsequencechecker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <drafts/com/sun/star/i18n/XInputSequenceChecker.hpp>
+#include <com/sun/star/i18n/XInputSequenceChecker.hpp>
 
 #include <tools/list.hxx>
 
@@ -76,7 +76,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------
 class InputSequenceCheckerImpl : public cppu::WeakImplHelper2
 <
-    drafts::com::sun::star::i18n::XInputSequenceChecker,
+    com::sun::star::i18n::XInputSequenceChecker,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -101,17 +101,17 @@ protected:
 
 private :
     struct lookupTableItem {
-        lookupTableItem(const sal_Char* rLanguage, const com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XInputSequenceChecker >& rxISC) :
+        lookupTableItem(const sal_Char* rLanguage, const com::sun::star::uno::Reference < com::sun::star::i18n::XInputSequenceChecker >& rxISC) :
             aLanguage(rLanguage), xISC(rxISC) {}
         const sal_Char* aLanguage;
-        com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XInputSequenceChecker > xISC;
+        com::sun::star::uno::Reference < com::sun::star::i18n::XInputSequenceChecker > xISC;
     };
     List lookupTable;
     lookupTableItem *cachedItem;
 
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
 
-    com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XInputSequenceChecker >& SAL_CALL getInputSequenceChecker(sal_Char* rLanguage)
+    com::sun::star::uno::Reference< com::sun::star::i18n::XInputSequenceChecker >& SAL_CALL getInputSequenceChecker(sal_Char* rLanguage)
         throw (com::sun::star::uno::RuntimeException);
     sal_Char* SAL_CALL getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
