@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@ ModalDialog DLG_PASSWD
         Text[ italian ] = "Utente";
         Text[ danish ] = "Bruger";
         Text[ swedish ] = "Anv�ndare";
-        Text[ polish ] = "U�ytkownik";
-        Text[ portuguese_brazilian ] = "User";
+        Text[ polish ] = "~U�ytkownik";
+        Text[ portuguese_brazilian ] = "~Usu�rio";
         Text[ japanese ] = "ユーザー(~U)";
         Text[ korean ] = "사용자(~U)";
         Text[ chinese_simplified ] = "使用名(~U)";
@@ -121,6 +121,9 @@ ModalDialog DLG_PASSWD
         Text[ catalan ] = "~Usuari";
         Text[ finnish ] = "~K�ytt�j�";
         Text[ thai ] = "~ผู้ใช้";
+        Text[ czech ] = "Uživatel";
+        Text[ hebrew ] = "‮משתמש‬";
+        Text[ hindi ] = "~उपभोक्ता";
     };
     Edit ED_PASSWD_USER
     {
@@ -144,18 +147,21 @@ ModalDialog DLG_PASSWD
         Text[ italian ] = "~Password";
         Text[ danish ] = "~Adgangskode";
         Text[ swedish ] = "~L�senord";
-        Text[ polish ] = "Has�o";
-        Text[ portuguese_brazilian ] = "Password";
+        Text[ polish ] = "~Has�o";
+        Text[ portuguese_brazilian ] = "~Senha";
         Text[ japanese ] = "パスワード(~P)";
         Text[ korean ] = "암호(~P)";
         Text[ chinese_simplified ] = "密码(~P)";
         Text[ chinese_traditional ] = "密碼(~P)";
         Text[ arabic ] = "���� ����";
-        Text[ turkish ] = "~�ifre";
+        Text[ turkish ] = "~Parola";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~ontrasenya";
         Text[ finnish ] = "~Salasana";
         Text[ thai ] = "~รหัสผ่าน";
+        Text[ czech ] = "Heslo";
+        Text[ hebrew ] = "‮סיסמה‬";
+        Text[ hindi ] = "~कूटशब्द";
     };
     Edit ED_PASSWD_PASSWORD
     {
@@ -180,8 +186,8 @@ ModalDialog DLG_PASSWD
         Text[ italian ] = "Conferma";
         Text[ danish ] = "Bekr�ft";
         Text[ swedish ] = "Bekr�fta";
-        Text[ polish ] = "Potwierd�";
-        Text[ portuguese_brazilian ] = "Confirm";
+        Text[ polish ] = "~Potwierd�";
+        Text[ portuguese_brazilian ] = "~Confirmar";
         Text[ japanese ] = "確認(~C)";
         Text[ korean ] = "암호 확인(~C)";
         Text[ chinese_simplified ] = "确认(~C)";
@@ -191,6 +197,9 @@ ModalDialog DLG_PASSWD
         Text[ catalan ] = "~Confirma";
         Text[ finnish ] = "~Vahvista";
         Text[ thai ] = "~ยืนยัน";
+        Text[ czech ] = "Potvrdit";
+        Text[ hebrew ] = "‮אישור‬";
+        Text[ hindi ] = "~दृढ़ करो";
     };
     Edit ED_PASSWD_CONFIRM
     {
@@ -224,10 +233,13 @@ ModalDialog DLG_PASSWD
         Text[ arabic ] = "���� ����";
         Text[ greek ] = "������� ���������";
         Text[ korean ] = "암호";
-        Text[ turkish ] = "�ifre";
+        Text[ turkish ] = "Parola";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contrase�a";
         Text[ thai ] = "รหัสผ่าน";
+        Text[ czech ] = "Heslo";
+        Text[ hebrew ] = "‮סיסמה‬";
+        Text[ hindi ] = "कूटशब्द";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -269,18 +281,33 @@ ModalDialog DLG_PASSWD
         Text[ arabic ] = "����� ���� ����";
         Text[ greek ] = "����������� ������� ���������";
         Text[ korean ] = "암호 확인";
-        Text[ turkish ] = "�ifreyi onayla";
+        Text[ turkish ] = "Parolay� yeniden girin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Confirmeu la contrasenya";
         Text[ thai ] = "ยืนยันรหัสผ่าน";
+        Text[ czech ] = "Potvrdit heslo";
+        Text[ hebrew ] = "‮אישור סיסמה‬";
+        Text[ hindi ] = "कूटशब्द दृढ़ करो";
     };
-    Text[ turkish ] = "�ifreyi girin";
+    Text[ turkish ] = "Parolay� Girin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Introduzca la contrase�a";
     Text[ thai ] = "ใส่รหัสผ่าน";
+    Text[ czech ] = "Zadat heslo";
+    Text[ hebrew ] = "‮הקלדת סיסמה‬";
+    Text[ hindi ] = "कूटशब्द प्रविष्ट करो";
 };
 
 // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
