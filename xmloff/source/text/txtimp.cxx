@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
-#ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#ifndef _XMLOFF_TXTSTYLI_HXX_
+#include "txtstyli.hxx"
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
@@ -436,7 +436,8 @@ XMLTextImportHelper::XMLTextImportHelper(
     sHyperLinkTarget(RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget")),
     sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
     sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
-    sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame"))
+    sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame")),
+    sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName"))
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -646,13 +647,13 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         const OUString& rStyleName,
         sal_Bool bPara )
 {
-    XMLPropStyleContext *pStyle = 0;
+    XMLTextStyleContext *pStyle = 0;
     OUString sStyleName( rStyleName );
     if( sStyleName.getLength() && xAutoStyles.Is() )
     {
         sal_uInt32 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                    : XML_STYLE_FAMILY_TEXT_TEXT;
-        pStyle = PTR_CAST( XMLPropStyleContext,
+        pStyle = PTR_CAST( XMLTextStyleContext,
               ((SvXMLStylesContext *)&xAutoStyles)->
                     FindStyleChildContext( nFamily, sStyleName, sal_True ) );
     }
@@ -683,7 +684,22 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
     // hard paragraph properties
     if( pStyle )
+    {
         pStyle->FillPropertySet( xPropSet );
+        if( bPara && pStyle->HasMasterPageName() &&
+            xPropSetInfo->hasPropertyByName( sPageDescName ) )
+        {
+            const OUString& rMasterPageName = pStyle->GetMasterPageName();
+            if( !rMasterPageName.getLength() ||
+                (xPageStyles.is() &&
+                 xPageStyles->hasByName( rMasterPageName )) )
+            {
+                Any aAny;
+                aAny <<= rMasterPageName;
+                xPropSet->setPropertyValue( sPageDescName, aAny );
+            }
+        }
+    }
 
     if( bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
     {

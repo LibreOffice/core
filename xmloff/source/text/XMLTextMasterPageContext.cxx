@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 18:10:10 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_Bool bOverwrite ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
+    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
     sPageStyleLayout( RTL_CONSTASCII_USTRINGPARAM( "PageStyleLayout" ) ),
     bInsertHeader( sal_False ),
     bInsertFooter( sal_False ),
@@ -143,11 +144,17 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        if( XML_NAMESPACE_STYLE == nPrefix &&
-            aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name )-1 ) )
+        if( XML_NAMESPACE_STYLE == nPrefix )
         {
-            sName = xAttrList->getValueByIndex( i );
-            break;
+            if( aLocalName.equalsAsciiL( sXML_name, sizeof( sXML_name )-1 ) )
+            {
+                sName = xAttrList->getValueByIndex( i );
+            }
+            else if( aLocalName.equalsAsciiL( sXML_next_style_name,
+                        sizeof( sXML_next_style_name )-1 ) )
+            {
+                sFollow = xAttrList->getValueByIndex( i );
+            }
         }
     }
 
@@ -185,6 +192,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         aAny = xPropSet->getPropertyValue( sIsPhysical );
         bNew = !*(sal_Bool *)aAny.getValue();
     }
+    SetNew( bNew );
 
     if( bOverwrite || bNew )
     {
@@ -252,4 +260,33 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
     }
 
     return pContext;
+}
+
+void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
+{
+    if( xStyle.is() && (IsNew() || bOverwrite) )
+    {
+        Reference < XNameContainer > xPageStyles =
+            GetImport().GetTextImport()->GetPageStyles();
+        if( !xPageStyles.is() )
+            return;
+
+        if( !sFollow.getLength() || !xPageStyles->hasByName( sFollow ) )
+            sFollow = xStyle->getName();
+
+        Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+        Reference< XPropertySetInfo > xPropSetInfo =
+            xPropSet->getPropertySetInfo();
+        if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
+        {
+            Any aAny = xPropSet->getPropertyValue( sFollowStyle );
+            OUString sCurrFollow;
+            aAny >>= sCurrFollow;
+            if( sCurrFollow != sFollow )
+            {
+                aAny <<= sFollow;
+                xPropSet->setPropertyValue( sFollowStyle, aAny );
+            }
+        }
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "ParaBottomMargin",        FO, margin_bottom,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
     M_E( "ParaBottomMarginRelative",FO, margin_bottom,      XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL ),
     // RES_PAGEDESC
-    M_E( "PageDescName",            STYLE,  master_page_name,           XML_TYPE_STRING, 0 ),
+    M_E( "PageDescName",            STYLE,  master_page_name,           MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_PAGEDESCNAME ),
     M_E( "PageNumberOffset",        STYLE,  page_number,            XML_TYPE_NUMBER16, 0 ),
     // RES_BREAK : TODO: does this work?
     M_E( "BreakType",       FO, break_before,       XML_TYPE_TEXT_BREAKBEFORE|MID_FLAG_MULTI_PROPERTY, 0 ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterStylesContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 18:10:10 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace ::com::sun::star::xml::sax;
 
 // ------------------------------------------------------------------------
 
-TYPEINIT1( XMLTextMasterStylesContext, SvXMLImportContext );
+TYPEINIT1( XMLTextMasterStylesContext, SvXMLStylesContext );
 
 sal_Bool XMLTextMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
@@ -101,7 +101,7 @@ XMLTextMasterStylesContext::XMLTextMasterStylesContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
 {
 }
 
@@ -109,12 +109,12 @@ XMLTextMasterStylesContext::~XMLTextMasterStylesContext()
 {
 }
 
-SvXMLImportContext *XMLTextMasterStylesContext::CreateChildContext(
+SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLStyleContext *pContext = 0;
 
     if( XML_NAMESPACE_STYLE == nPrefix &&
         rLocalName.equalsAsciiL( sXML_master_page, sizeof(sXML_master_page)-1 ) &&
@@ -124,8 +124,16 @@ SvXMLImportContext *XMLTextMasterStylesContext::CreateChildContext(
                           xAttrList,
                         !GetImport().GetTextImport()->IsInsertMode() );
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    // any other style will be ignored here!
 
     return pContext;
+}
+
+SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleStyleChildContext(
+        sal_uInt16 nFamily,
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const Reference< XAttributeList > & xAttrList )
+{
+    return 0;
 }

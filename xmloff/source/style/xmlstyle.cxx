@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 13:14:25 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,7 +876,8 @@ void SvXMLStylesContext::AddStyle(SvXMLStyleContext& rNew)
     pImpl->AddStyle( &rNew );
 }
 
-void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite )
+void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
+                                          sal_Bool bFinish )
 {
     // pass 1: create text, paragraph and frame styles
     sal_uInt16 nCount = GetStyleCount();
@@ -902,7 +903,14 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite )
     }
 
     // pass3: finish creation of styles
-    for( i=0; i<nCount; i++ )
+    if( bFinish )
+        FinishStyles( bOverwrite );
+}
+
+void SvXMLStylesContext::FinishStyles( sal_Bool bOverwrite )
+{
+    sal_uInt16 nCount = GetStyleCount();
+    for( sal_uInt16 i=0; i<nCount; i++ )
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
         if( !pStyle || !pStyle->IsValid() )

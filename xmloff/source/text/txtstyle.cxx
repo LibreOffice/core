@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
 
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -115,12 +118,13 @@ void XMLTextParagraphExport::exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle )
 {
+    Any aAny;
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( sCategory ) )
     {
-        Any aAny = xPropSet->getPropertyValue( sCategory );
+        aAny = xPropSet->getPropertyValue( sCategory );
         sal_Int16 nCategory;
         aAny >>= nCategory;
         const sal_Char *pValue = 0;
@@ -151,6 +155,20 @@ void XMLTextParagraphExport::exportStyleAttributes(
         if( pValue )
             GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_class,
                                                 pValue );
+    }
+    if( xPropSetInfo->hasPropertyByName( sPageDescName ) )
+    {
+        Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+        if( PropertyState_DIRECT_VALUE ==
+                xPropState->getPropertyState( sPageDescName  ) )
+        {
+            aAny = xPropSet->getPropertyValue( sPageDescName );
+            OUString sName;
+            aAny >>= sName;
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                      sXML_master_page_name,
+                                      sName );
+        }
     }
 }
 

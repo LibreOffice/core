@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         Any aAny = xPropSet->getPropertyValue( sIsPhysical );
         bNew = !*(sal_Bool *)aAny.getValue();
     }
+    SetNew( bNew );
 
     if( bOverwrite || bNew )
     {
@@ -275,7 +276,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 
 void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
 {
-    if( xStyle.is() )
+    if( xStyle.is() && (IsNew() || bOverwrite) )
     {
         // The families cintaner must exist
         Reference < XNameContainer > xFamilies =

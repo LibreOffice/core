@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-17 14:26:25 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,6 +783,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId")),
     sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
     sPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName")),
+    sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName")),
     sPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix")),
     sStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt")),
     sSuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix")),

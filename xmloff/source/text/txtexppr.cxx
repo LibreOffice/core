@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
         rProperty.maValue >>= pThis->sDropCharStyle;
         break;
     case CTF_NUMBERINGSTYLENAME:
+    case CTF_PAGEDESCNAME:
     case CTF_OLDTEXTBACKGROUND:
         // There's nothing to do here!
         break;

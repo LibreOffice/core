@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@ sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno:
 
 sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
     style::BreakType eBreak;
 
     if( !( rValue >>= eBreak ) )
@@ -161,7 +160,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
     sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, psXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
-    return bRet;
+    return sal_True;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -193,7 +192,6 @@ sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::
 
 sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
     style::BreakType eBreak;
 
     if( !( rValue >>= eBreak ) )
@@ -225,5 +223,5 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
     sal_Bool bOk = rUnitConverter.convertEnum( aOut, nEnum, psXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
-    return bRet;
+    return sal_True;
 }

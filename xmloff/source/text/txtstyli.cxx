@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,11 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         {
             sListStyleName = rValue;
         }
+        else if( rLocalName.compareToAscii( sXML_master_page_name ) == 0 )
+        {
+            sMasterPageName = rValue;
+            bHasMasterPageName = sal_True;
+        }
         else if( rLocalName.compareToAscii( sXML_class ) == 0 )
         {
             sCategoryVal = rValue;
@@ -163,9 +168,11 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles ),
     bAutoUpdate( sal_False ),
+    bHasMasterPageName( sal_False ),
     sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) ),
     sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
+    sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) ),
     sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
 {
 }
@@ -214,7 +221,8 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
         Any aAny;
-        aAny.setValue( &bAutoUpdate, ::getBooleanCppuType() );
+        sal_Bool bTmp = bAutoUpdate;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( sIsAutoUpdate, aAny );
     }
 
@@ -235,7 +243,8 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     XMLPropStyleContext::Finish( bOverwrite );
 
     Reference < XStyle > xStyle = GetStyle();
-    if( !(sListStyleName.getLength() || sDropCapTextStyleName.getLength()) ||
+    if( !(sListStyleName.getLength() || sDropCapTextStyleName.getLength() ||
+        bHasMasterPageName) ||
         !xStyle.is() || !(bOverwrite || IsNew()) )
         return;
 
@@ -269,6 +278,22 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
             Any aAny;
             aAny <<= sDropCapTextStyleName;
             xPropSet->setPropertyValue( sDropCapCharStyleName, aAny );
+        }
+    }
+
+    if( bHasMasterPageName )
+    {
+        // The families cointaner must exist
+        const Reference < XNameContainer >& rPageStyles =
+            GetImport().GetTextImport()->GetPageStyles();
+        if( ( !sMasterPageName.getLength() ||
+              (rPageStyles.is() &&
+               rPageStyles->hasByName( sMasterPageName )) ) &&
+            xPropSetInfo->hasPropertyByName( sPageDescName ) )
+        {
+            Any aAny;
+            aAny <<= sMasterPageName;
+            xPropSet->setPropertyValue( sPageDescName, aAny );
         }
     }
 }
