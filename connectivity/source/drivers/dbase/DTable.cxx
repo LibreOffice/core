@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:28:55 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ void ODbaseTable::fillColumns()
                         nFlags = ColumnSearch::NONE;
 
         }
+
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aColumnName,aTypeName,::rtl::OUString(),
                                                 ColumnValue::NULLABLE,nPrecision,aDBFColumn.db_dez,eType,sal_False,sal_False,sal_False,
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());

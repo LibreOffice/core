@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:29:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,13 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CONNECTIVITY_DBASE_INDEX_HXX_
+#include "dbase/DIndex.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBASE_INDEXITER_HXX_
+#include "dbase/DIndexIter.hxx"
+#endif
+
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace cppu;
@@ -145,6 +152,8 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw(
     if (OResultSet::rBHelper.bDisposed)
         throw DisposedException();
 
+    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
+
     return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark),sal_True);
 }
 // -------------------------------------------------------------------------
@@ -153,6 +162,8 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet::rBHelper.bDisposed)
         throw DisposedException();
+
+    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
     return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark)+rows,sal_True);
 }
@@ -189,5 +200,38 @@ Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  An
         throw DisposedException();
 
     return Sequence< sal_Int32 >();
-
 }
+// -------------------------------------------------------------------------
+sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xIndex)
+{
+    Reference<XUnoTunnel> xTunnel(_xIndex,UNO_QUERY);
+    if(xTunnel.is())
+    {
+        dbase::ODbaseIndex* pIndex = (dbase::ODbaseIndex*)xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelImplementationId());
+        if(pIndex)
+        {
+            dbase::OIndexIterator* pIter = pIndex->createIterator(NULL,NULL);
+
+            if (pIter)
+            {
+                sal_uInt32 nRec = pIter->First();
+                while (nRec != SQL_COLUMN_NOTFOUND)
+                {
+                    if (bOrderbyAscending[0])
+                        m_pFileSet->push_back(nRec);
+                    else
+                        m_pFileSet->insert(m_pFileSet->begin(),nRec);
+                    nRec = pIter->Next();
+                }
+                m_pFileSet->setFrozen();
+                //  m_bFileSetFrozen = sal_True;
+                //  if(!bDistinct)
+                    //  SetRowCount(pFileSet->count());
+                return sal_True;
+            }
+            delete pIter;
+        }
+    }
+    return sal_False;
+}
+

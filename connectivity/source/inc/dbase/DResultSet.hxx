@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:02:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ namespace connectivity
             sal_Bool m_bBookmarkable;
         protected:
             DECLARE_CTY_PROPERTY(ODbaseResultSet_BASE3,ODbaseResultSet_BASE2);
+            virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
         public:
             DECLARE_CTY_DEFAULTS(ODbaseResultSet_BASE2);
             DECLARE_SERVICE_INFO();

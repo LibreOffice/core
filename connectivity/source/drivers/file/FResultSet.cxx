@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:38:52 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-
+#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#include "connectivity/sdbcx/VColumn.hxx"
+#endif
 #ifndef _CONNECTIVITY_FILE_ORESULTSET_HXX_
 #include "file/FResultSet.hxx"
 #endif
@@ -95,12 +97,6 @@
 #endif
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
 #include "connectivity/DateConversion.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBASE_INDEX_HXX_
-#include "dbase/DIndex.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBASE_INDEXITER_HXX_
-#include "dbase/DIndexIter.hxx"
 #endif
 #ifndef _ITERATOR_
 #include <iterator>
@@ -1348,6 +1344,7 @@ Error:
                 //  OCursor::SQL_MOD_INVALID : OCursor::SQL_MOD_NONE;
     return sal_False;
 }
+
 //------------------------------------------------------------------
 BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
 {
@@ -1971,35 +1968,8 @@ BOOL OResultSet::OpenImpl()
                             {
                                 m_pFileSet = new OKeySet();
 
-                                Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
-                                if(xTunnel.is())
-                                {
-                                    dbase::ODbaseIndex* pIndex = (dbase::ODbaseIndex*)xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelImplementationId());
-                                    if(pIndex)
-                                    {
-                                        dbase::OIndexIterator* pIter = pIndex->createIterator(NULL,NULL);
-
-                                        if (pIter)
-                                        {
-                                            sal_uInt32 nRec = pIter->First();
-                                            while (nRec != SQL_COLUMN_NOTFOUND)
-                                            {
-                                                if (bOrderbyAscending[0])
-                                                    m_pFileSet->push_back(nRec);
-                                                else
-                                                    m_pFileSet->insert(m_pFileSet->begin(),nRec);
-                                                nRec = pIter->Next();
-                                            }
-                                            m_pFileSet->setFrozen();
-                                            //  m_bFileSetFrozen = sal_True;
-                                            //  if(!bDistinct)
-                                                //  SetRowCount(pFileSet->count());
-                                            goto DISTINCT;
-                                        }
-
-                                        delete pIter;
-                                    }
-                                }
+                                if(fillIndexValues(xIndex))
+                                    goto DISTINCT;
                             }
                         }
                     }
@@ -2046,7 +2016,7 @@ BOOL OResultSet::OpenImpl()
                 // Aber Achtung: es wird davon ausgegangen, das die FilePositionen als Folge 1..n
                 // abgelegt werden!
                 {
-                    for (sal_uInt32 i = 0; i < m_pTable->getCurrentLastPos(); i++)
+                    for (sal_Int32 i = 0; i < m_pTable->getCurrentLastPos(); i++)
                        m_pFileSet->push_back(i + 1);
                 }
             }
@@ -2603,11 +2573,11 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XFas
     }
 
     Reference<XFastPropertySet> xParaColumn;
-    sdbcx::OColumn* pRet = new sdbcx::OColumn(aParameterName
+    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(aParameterName
                                                     ,::rtl::OUString()
                                                     ,::rtl::OUString()
                                                     ,nNullable
-                                                    , nPrecision
+                                                    ,nPrecision
                                                     ,nScale
                                                     ,eType
                                                     ,sal_False
