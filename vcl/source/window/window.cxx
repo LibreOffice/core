@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.210 $
+ *  $Revision: 1.211 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:18:24 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6350,6 +6350,13 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 
 Size Window::GetSizePixel() const
 {
+    // #i43257# trigger pending resize handler to assure correct window sizes
+    if( mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
+    {
+        mpWindowImpl->mpFrameData->maResizeTimer.Stop();
+        mpWindowImpl->mpFrameData->maResizeTimer.GetTimeoutHdl().Call( NULL );
+    }
+
     return Size( mnOutWidth+mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder,
                  mnOutHeight+mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder );
 }
