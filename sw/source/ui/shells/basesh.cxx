@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:11:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,15 @@
 #endif
 #ifndef _INSTABLE_HXX
 #include <instable.hxx>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
 #endif
 
 USHORT SwBaseShell::nFrameMode = FLY_DRAG_END;
@@ -2673,7 +2682,18 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
         }
 
         if( bCallEndUndo )
-            rSh.EndUndo(UNDO_INSTABLE); // wegen moegl. Shellwechsel
+        {
+            SwRewriter aRewriter;
+
+            if (rSh.GetTableFmt())
+            {
+                aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
+                aRewriter.AddRule(UNDO_ARG2, rSh.GetTableFmt()->GetName());
+                aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+
+            }
+            rSh.EndUndo(UNDO_INSTABLE, &aRewriter); // wegen moegl. Shellwechsel
+        }
     }
 }
 
