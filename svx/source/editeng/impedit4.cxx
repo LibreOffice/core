@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:45:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,9 @@
 #ifndef SVX_LIGHT
 #include <edtspell.hxx>
 #endif
-
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <scripttypeitem.hxx>
+#endif
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
@@ -1505,31 +1507,21 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
 
     aOnlineSpellTimer.Stop();
 
-    sal_Bool bForward = !EditSpellWrapper::IsSpellReverse();
-
     // Bei MultipleDoc immer von vorne/hinten...
     if ( bMultipleDoc )
     {
-        if ( bForward )
-            pEditView->pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
-        else
-            pEditView->pImpEditView->SetEditSelection( aEditDoc.GetEndPaM() );
+        pEditView->pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
     }
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     pSpellInfo = new SpellInfo;
     pSpellInfo->bMultipleDoc = bMultipleDoc;
-    if ( bForward )
-        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
-    else
-        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Max() );
+    pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
 
     sal_Bool bIsStart = sal_False;
     if ( bMultipleDoc )
         bIsStart = sal_True;    // Immer von Vorne bzw. von hinten...
-    else if ( bForward && ( CreateEPaM( aEditDoc.GetStartPaM() ) == pSpellInfo->aSpellStart ) )
-        bIsStart = sal_True;
-    else if ( !bForward && ( CreateEPaM( aEditDoc.GetEndPaM() ) == pSpellInfo->aSpellStart ) )
+    else if ( ( CreateEPaM( aEditDoc.GetStartPaM() ) == pSpellInfo->aSpellStart ) )
         bIsStart = sal_True;
 
     EditSpellWrapper* pWrp = new EditSpellWrapper( Application::GetDefDialogParent(),
@@ -1758,13 +1750,9 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 
     DBG_ASSERT( xSpeller.is(), "Kein Speller gesetzt!" );
 
-    sal_Bool bForward = !EditSpellWrapper::IsSpellReverse();
-    ContentNode* pLastNode = aEditDoc.SaveGetObject( bForward ? (aEditDoc.Count()-1) : 0 );
+    ContentNode* pLastNode = aEditDoc.SaveGetObject( (aEditDoc.Count()-1) );
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
-    if ( bForward )
-        aCurSel.Min() = aCurSel.Max();
-    else
-        aCurSel.Max() = aCurSel.Min();
+    aCurSel.Min() = aCurSel.Max();
 
     String aWord;
     Reference< XSpellAlternatives > xSpellAlt;
@@ -1779,24 +1767,16 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         {
             if ( aCurSel.Max().GetNode() == pLastNode )
             {
-                if ( bForward && ( aCurSel.Max().GetIndex() >= pLastNode->Len() ) )
-                    break;
-                else if ( !bForward && ( !aCurSel.Min().GetIndex() ) )
+                if ( ( aCurSel.Max().GetIndex() >= pLastNode->Len() ) )
                     break;
             }
         }
         else if ( !pSpellInfo->bSpellToEnd )
         {
             EPaM aEPaM( CreateEPaM( aCurSel.Max() ) );
-            if ( bForward && !( aEPaM < pSpellInfo->aSpellTo ) )
-                break;
-            else if ( !bForward && ( aEPaM < pSpellInfo->aSpellTo ) )
+            if ( !( aEPaM < pSpellInfo->aSpellTo ) )
                 break;
         }
-
-        // Bei Rueckwaerts-Suche erst zurueck, sonst wird das gleiche Wort wieder gespellt.
-        if ( !bForward )
-            aCurSel = WordLeft( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
         aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
@@ -1820,7 +1800,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
             xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
         }
 
-        if ( bForward && !xSpellAlt.is() )
+        if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         else
             pSpellInfo->eState = EE_SPELL_ERRORFOUND;
@@ -1833,6 +1813,342 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     return xSpellAlt;
 #endif
 }
+/*-- 13.10.2003 16:43:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ImpEditEngine::EndSpelling()
+{
+    DELETEZ(pSpellInfo);
+}
+/*-- 13.10.2003 16:43:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
+{
+    DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?")
+    pSpellInfo = new SpellInfo;
+    pSpellInfo->bMultipleDoc = bMultipleDoc;
+    rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
+    EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
+    pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
+}
+/*-- 13.10.2003 16:43:27---------------------------------------------------
+    Search for the next wrong word within the given selection
+  -----------------------------------------------------------------------*/
+Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& rSelection)
+{
+    ContentNode* pLastNode = aEditDoc.SaveGetObject( (aEditDoc.Count()-1) );
+    EditSelection aCurSel( rSelection.Min() );
+
+    String aWord;
+    Reference< XSpellAlternatives > xSpellAlt;
+    Sequence< PropertyValue > aEmptySeq;
+    while (!xSpellAlt.is())
+    {
+        //check if the end of the selection has been reached
+        {
+            EPaM aEPaM( CreateEPaM( aCurSel.Max() ) );
+            if ( !( aEPaM < CreateEPaM( rSelection.Max()) ) )
+                break;
+        }
+
+        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aWord = GetSelected( aCurSel );
+
+        // Wenn Punkt dahinter, muss dieser mit uebergeben werden !
+        // Falls Abkuerzung...
+        if ( aWord.Len() && ( aCurSel.Max().GetIndex() < aCurSel.Max().GetNode()->Len() ) )
+        {
+            sal_Unicode cNext = aCurSel.Max().GetNode()->GetChar( aCurSel.Max().GetIndex() );
+            if ( cNext == '.' )
+            {
+                aCurSel.Max().GetIndex()++;
+                aWord += cNext;
+            }
+        }
+
+        if ( aWord.Len() > 1 )
+            xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
+
+        if ( !xSpellAlt.is() )
+            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        else
+        {
+            pSpellInfo->eState = EE_SPELL_ERRORFOUND;
+            rSelection = aCurSel;
+        }
+    }
+    return xSpellAlt;
+}
+/*-- 13.10.2003 16:43:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool ImpEditEngine::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill)
+{
+#ifdef SVX_LIGHT
+#else
+    bool bRet = false;
+    //the pSpellInfo has to be created on demand
+    if(!pSpellInfo)
+    {
+        pSpellInfo = new SpellInfo;
+        pSpellInfo->bMultipleDoc = sal_True;
+        rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
+        EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
+        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
+    }
+    DBG_ASSERT( xSpeller.is(), "Kein Speller gesetzt!" );
+    pSpellInfo->aLastSpellPortions.clear();
+    pSpellInfo->aLastSpellContentSelections.clear();
+    rToFill.clear();
+    EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
+    //if no selection previously exists the range is extended to the end of the object
+    if(aCurSel.Min() == aCurSel.Max())
+    {
+        ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count()-1);
+        aCurSel.Max() = EditPaM(pLastNode, pLastNode->Len());
+    }
+    Reference< XSpellAlternatives > xAlt = ImpFindNextError(aCurSel);
+    if(xAlt.is())
+    {
+        bRet = true;
+        //find the sentence boundaries
+        EditSelection aSentencePaM = SelectSentence(aCurSel);
+        //add the portion preceeding the error
+        EditSelection aStartSelection(aSentencePaM.Min(), aCurSel.Min());
+        if(aStartSelection.HasRange())
+            AddPortionIterated(rEditView, aStartSelection, 0, rToFill);
+        //add the error portion
+        AddPortionIterated(rEditView, aCurSel, xAlt, rToFill);
+        //find the end of the sentence
+        //search for all errors in the rest of the sentence and add all the portions
+        do
+        {
+            EditSelection aNextSel = EditSelection(aCurSel.Max(), aSentencePaM.Max());
+            xAlt = ImpFindNextError(aNextSel);
+            if(xAlt.is())
+            {
+                //add the part between the previous and the current error
+                AddPortionIterated(rEditView, EditSelection(aCurSel.Max(), aNextSel.Min()), 0, rToFill);
+                //add the current error
+                AddPortionIterated(rEditView, aNextSel, xAlt, rToFill);
+            }
+            else
+                AddPortionIterated(rEditView, EditSelection(aCurSel.Max(), aSentencePaM.Max()), xAlt, rToFill);
+            aCurSel = aNextSel;
+        }
+        while( xAlt.is() );
+        //set the selection to the end of the current sentence
+        rEditView.pImpEditView->SetEditSelection(aSentencePaM.Max());
+    }
+#endif
+    return bRet;
+}
+
+/*-- 15.10.2003 16:09:12---------------------------------------------------
+    adds one portion to the SpellPortions
+  -----------------------------------------------------------------------*/
+void ImpEditEngine::AddPortion(
+                            const EditSelection rSel,
+                            uno::Reference< XSpellAlternatives > xAlt,
+                                ::svx::SpellPortions& rToFill,
+                                bool bIsField)
+{
+#ifdef SVX_LIGHT
+#else
+    if(rSel.HasRange())
+    {
+        svx::SpellPortion aPortion;
+        aPortion.sText = GetSelected( rSel );
+        aPortion.eLanguage = GetLanguage( rSel.Min() );
+        aPortion.xAlternatives = xAlt;
+        aPortion.bIsField = bIsField;
+        rToFill.push_back(aPortion);
+
+        //save the spelled portions for later use
+        pSpellInfo->aLastSpellPortions.push_back(aPortion);
+        pSpellInfo->aLastSpellContentSelections.push_back(rSel);
+
+    }
+#endif
+}
+
+/*-- 15.10.2003 16:07:47---------------------------------------------------
+    adds one or more portions of text to the SpellPortions depending on language changes
+  -----------------------------------------------------------------------*/
+void ImpEditEngine::AddPortionIterated(
+                            EditView& rEditView,
+                            const EditSelection rSel,
+                            Reference< XSpellAlternatives > xAlt,
+                                ::svx::SpellPortions& rToFill)
+{
+#ifdef SVX_LIGHT
+#else
+    if(rSel.Min() != rSel.Max())
+    {
+        if(xAlt.is())
+        {
+            AddPortion(rSel, xAlt, rToFill, false);
+        }
+        else
+        {
+            //iterate and search for language attribute changes
+            //save the start and end positions
+            EditPaM aStart(rSel.Min());
+            EditPaM aEnd(rSel.Max());
+            //iterate over the text to find changes in language
+            //set the mark equal to the point
+            EditPaM aCursor(aStart);
+            rEditView.pImpEditView->SetEditSelection( aCursor );
+            LanguageType eStartLanguage = GetLanguage( aCursor );
+            //search for a field attribute at the beginning - only the end position
+            //of this field is kept to end a portion at that position
+            const EditCharAttrib* pFieldAttr = aCursor.GetNode()->GetCharAttribs().
+                                                    FindFeature( aCursor.GetIndex() );
+            bool bIsField = pFieldAttr &&
+                    pFieldAttr->GetStart() == aCursor.GetIndex() &&
+                    pFieldAttr->GetStart() != pFieldAttr->GetEnd() &&
+                    pFieldAttr->Which() == EE_FEATURE_FIELD;
+            USHORT nEndField = bIsField ? pFieldAttr->GetEnd() : USHRT_MAX;
+            bool bIsEndField = false;
+            do
+            {
+                aCursor = CursorRight( aCursor);
+                //determine whether a field and has been reached
+                bIsEndField = nEndField == aCursor.GetIndex();
+                //search for a new field attribute
+                EditCharAttrib* pFieldAttr = aCursor.GetNode()->GetCharAttribs().
+                                                        FindFeature( aCursor.GetIndex() );
+                bIsField = pFieldAttr &&
+                        pFieldAttr->GetStart() == aCursor.GetIndex() &&
+                        pFieldAttr->GetStart() != pFieldAttr->GetEnd() &&
+                        pFieldAttr->Which() == EE_FEATURE_FIELD;
+                //on every new field move the end position
+                if(bIsField)
+                    nEndField = bIsField ? pFieldAttr->GetEnd() : USHRT_MAX;
+
+                LanguageType eCurLanguage = GetLanguage( aCursor );
+                if(eCurLanguage != eStartLanguage || bIsField || bIsEndField)
+                {
+                    eStartLanguage = eCurLanguage;
+                    //go one step back - the cursor currently selects the first character
+                    //with a different language
+                    //create a selection from start to the current Cursor
+                    EditSelection aSelection(aStart, aCursor);
+                    AddPortion(aSelection, xAlt, rToFill, bIsEndField);
+                    aStart = aCursor;
+                }
+            }
+            while(aCursor.GetIndex() < aEnd.GetIndex());
+            EditSelection aSelection(aStart, aCursor);
+            AddPortion(aSelection, xAlt, rToFill, bIsField);
+        }
+    }
+#endif
+}
+
+/*-- 13.10.2003 16:43:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions)
+{
+#ifdef SVX_LIGHT
+#else
+    DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized")
+    if(pSpellInfo)
+    {
+        UndoActionStart( EDITUNDO_INSERT );
+        if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
+        {
+            //the simple case: the same number of elements on both sides
+            //each changed element has to be applied to the corresponding source element
+            svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
+            svx::SpellPortions::const_iterator aCurrentOldPortion = pSpellInfo->aLastSpellPortions.end();
+            SpellContentSelections::const_iterator aCurrentOldPosition = pSpellInfo->aLastSpellContentSelections.end();
+            bool bSetToEnd = false;
+            do
+            {
+                --aCurrentNewPortion;
+                --aCurrentOldPortion;
+                --aCurrentOldPosition;
+                //set the cursor to the end of the sentence - necessary to
+                //resume there at the next step
+                if(!bSetToEnd)
+                {
+                    bSetToEnd = true;
+                    rEditView.pImpEditView->SetEditSelection( aCurrentOldPosition->Max() );
+                }
+
+                USHORT nScriptType = GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                LanguageType eTextLanguage = GetLanguage( aCurrentOldPosition->Min() );
+
+                USHORT nLangWhichId = EE_CHAR_LANGUAGE;
+                switch(nScriptType)
+                {
+                    case SCRIPTTYPE_ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+                    case SCRIPTTYPE_COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                }
+                if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
+                {
+                    //change text and apply language
+                    SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
+                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
+                    SetAttribs( *aCurrentOldPosition, aSet );
+                    ImpInsertText( *aCurrentOldPosition, aCurrentNewPortion->sText );
+                }
+                else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
+                {
+                    //apply language
+                    SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
+                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage));
+                    SetAttribs( *aCurrentOldPosition, aSet );
+                }
+                if(aCurrentNewPortion == rNewPortions.begin())
+                    break;
+            }
+            while(aCurrentNewPortion != rNewPortions.begin());
+        }
+        else
+        {
+            //select the complete sentence
+            SpellContentSelections::const_iterator aCurrentEndPosition = pSpellInfo->aLastSpellContentSelections.end();
+            --aCurrentEndPosition;
+            SpellContentSelections::const_iterator aCurrentStartPosition = pSpellInfo->aLastSpellContentSelections.begin();
+            EditSelection aAllSentence(aCurrentStartPosition->Min(), aCurrentEndPosition->Max());
+
+            //delete the sentence completely
+            ImpDeleteSelection( aAllSentence );
+            svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.begin();
+            EditPaM aCurrentPaM = aAllSentence.Min();
+            while(aCurrentNewPortion != rNewPortions.end())
+            {
+                //set the language attribute
+                LanguageType eCurLanguage = GetLanguage( aCurrentPaM );
+                if(eCurLanguage != aCurrentNewPortion->eLanguage)
+                {
+                    USHORT nScriptType = GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                    USHORT nLangWhichId = EE_CHAR_LANGUAGE;
+                    switch(nScriptType)
+                    {
+                        case SCRIPTTYPE_ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+                        case SCRIPTTYPE_COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                    }
+                    SfxItemSet aSet( aEditDoc.GetItemPool(), nLangWhichId, nLangWhichId);
+                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
+                    SetAttribs( aCurrentPaM, aSet );
+                }
+                //insert the new string and set the cursor to the end of the inserted string
+                aCurrentPaM = ImpInsertText( aCurrentPaM , aCurrentNewPortion->sText );
+                ++aCurrentNewPortion;
+            }
+        }
+        UndoActionEnd( EDITUNDO_INSERT );
+    }
+    FormatAndUpdate();
+    aEditDoc.SetModified(TRUE);
+#endif
+}
+
 
 void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpellAtCursorPos, sal_Bool bInteruptable )
 {
