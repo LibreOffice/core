@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="helpid:10128" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:helpid="helpid:10096" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:TextToolbox" toolbar:helpid="helpid:10398" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:RectangleToolbox" toolbar:helpid="helpid:10399" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:EllipseToolbox" toolbar:helpid="helpid:10400" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox" toolbar:helpid="helpid:27295" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:helpid="helpid:10401" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:helpid="helpid:27171" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox" toolbar:helpid="helpid:27028" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="helpid:10129" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:helpid="helpid:27022" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:helpid="helpid:27318" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593" toolbar:text="" toolbar:style="dropdown" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:EffectWindow" toolbar:helpid="helpid:27328" toolbar:text="" toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:helpid="helpid:27063" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AnimationObjects" toolbar:helpid="helpid:27062" toolbar:text="" toolbar:style="auto" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:helpid="helpid:10644" toolbar:text="" toolbar:style="auto" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="helpid:10157" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:helpid="helpid:10098" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPlus" toolbar:helpid="helpid:10097" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:helpid="helpid:10087" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:helpid="helpid:27085" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeBezier" toolbar:helpid="helpid:27036" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ChangePolygon" toolbar:helpid="helpid:27037" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ConvertInto3D" toolbar:helpid="helpid:10648" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ConvertInto3DLatheFast" toolbar:helpid="helpid:10649" toolbar:text="" toolbar:visible="false" />
+</toolbar:toolbar>
