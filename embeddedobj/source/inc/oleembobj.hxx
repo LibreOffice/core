@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:37:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_VERBDESCR_HPP_
-#include <com/sun/star/embed/VerbDescr.hpp>
+#include <com/sun/star/embed/VerbDescriptor.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
@@ -105,8 +105,8 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 namespace cppu {
@@ -114,15 +114,15 @@ namespace cppu {
 }
 
 class OleComponent;
-class OleEmbeddedObject : public ::cppu::WeakImplHelper8
+class OleEmbeddedObject : public ::cppu::WeakImplHelper3
                         < ::com::sun::star::embed::XEmbeddedObject
-                        , ::com::sun::star::embed::XVisualObject
+                        // , ::com::sun::star::embed::XVisualObject
                         , ::com::sun::star::embed::XEmbedPersist
-                        , ::com::sun::star::embed::XLinkageSupport
-                        , ::com::sun::star::embed::XClassifiedObject
-                        , ::com::sun::star::embed::XComponentSupplier
-                        , ::com::sun::star::util::XCloseable
-                        , ::com::sun::star::document::XEventBroadcaster >
+                        , ::com::sun::star::embed::XLinkageSupport >
+                        // , ::com::sun::star::embed::XClassifiedObject
+                        // , ::com::sun::star::embed::XComponentSupplier
+                        // , ::com::sun::star::util::XCloseable
+                        // , ::com::sun::star::document::XEventBroadcaster >
 {
     ::osl::Mutex    m_aMutex;
 
@@ -172,7 +172,7 @@ protected:
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState );
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
-                        const ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr >& aVerbList );
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor >& aVerbList );
 
     void CloseComponent();
     void Dispose();
@@ -232,7 +232,7 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr > SAL_CALL getSupportedVerbs()
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > SAL_CALL getSupportedVerbs()
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -258,27 +258,27 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
-
-// XVisualObject
-
     virtual void SAL_CALL setContainerName( const ::rtl::OUString& sName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setVisAreaSize( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize )
+
+// XVisualObject
+
+    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getVisAreaSize( sal_Int64 nAspect )
+    virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getVisualCache( sal_Int64 nAspect )
+    virtual sal_Int32 SAL_CALL getMapMode( sal_Int64 nAspect )
         throw ( ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+                ::com::sun::star::uno::RuntimeException);
 
 
 // XEmbedPersist
@@ -376,6 +376,10 @@ public:
                 const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName )
         throw ( ::com::sun::star::lang::NoSupportException,
                 ::com::sun::star::uno::RuntimeException );
+
+// XStateChangeBroadcaster
+    virtual void SAL_CALL addStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
 
 // XComponentSupplier
