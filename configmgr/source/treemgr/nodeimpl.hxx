@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,45 +62,28 @@
 #ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #define CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 
-#ifndef __SGI_STL_MEMORY
+/*
+#include "template.hxx"
+#include <osl/diagnose.h>
+
 #include <memory>
-#endif
+*/
 
 #include "apitypes.hxx"
-#include "template.hxx"
+#include "attributes.hxx"
 
 #include <vos/refernce.hxx>
 #include <vos/ref.hxx>
-#include <osl/diagnose.h>
-
 namespace configmgr
 {
-    class INode;
-    class ISubtree;
-    class ValueNode;
-
-    class SubtreeChange;
-    class ValueChange;
-
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-        typedef com::sun::star::uno::Any UnoAny;
-        typedef com::sun::star::uno::Type UnoType;
-
         typedef unsigned int NodeOffset;
-        typedef unsigned int TreeDepth;
 
-        class Name;
-        class Node;
         class TreeImpl;
-        class ElementTreeImpl;
 
-        struct Attributes;
-        struct NodeInfo;
-        class NodeChangeImpl;
         class NodeChange;
-        class NodeChangeInformation;
         class NodeChanges;
         class NodeChangesInformation;
 //-----------------------------------------------------------------------------
@@ -134,7 +117,7 @@ namespace configmgr
 
             bool hasChanges()               const   { return doHasChanges(); }
             void markChanged()                      { doMarkChanged(); }
-            void commitChanges()                    { doCommitChanges(); }
+            void directCommitChanges()              { doCommitChanges(); }
 
             static void makeIndirect(NodeImplHolder&    aThis, bool bIndirect);
 
@@ -151,6 +134,7 @@ namespace configmgr
             virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const = 0;
             virtual void doMarkChanged() = 0;
             virtual void doCommitChanges() = 0;
+
             virtual NodeImplHolder doCloneIndirect(bool bIndirect) = 0;
 
         protected:
@@ -160,243 +144,18 @@ namespace configmgr
         };
 
 //-----------------------------------------------------------------------------
-        class ValueNodeImpl;
+        class ValueElementNodeImpl;
         class GroupNodeImpl;
         class SetNodeImpl;
 //-----------------------------------------------------------------------------
 
-        class GroupNodeImpl : public NodeImpl
-        {
-            ISubtree& m_rOriginal;
-        public:
-            explicit GroupNodeImpl(ISubtree& rOriginal);
-            explicit GroupNodeImpl(GroupNodeImpl& rOriginal); // only for makeIndirect
-
-            /// retrieve the name of the underlying node
-            OUString getOriginalNodeName() const;
-
-            std::auto_ptr<SubtreeChange> preCommitChanges();
-            void finishCommit(SubtreeChange& rChanges) { doFinishCommit(rChanges); }
-            void revertCommit(SubtreeChange& rChanges) { doRevertCommit(rChanges); }
-            void failedCommit(SubtreeChange& rChanges) { doFailedCommit(rChanges); }
-
-        protected:
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
-            virtual void doFinishCommit(SubtreeChange& rChanges);
-            virtual void doRevertCommit(SubtreeChange& rChanges);
-            virtual void doFailedCommit(SubtreeChange& rChanges);
-
-        // MoreNodeImpl implementation - direct clients don't need it
-        protected:
-            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
-
-        // NodeImpl implementation
-            virtual Attributes      doGetAttributes() const;
-
-        private:
-            virtual NodeType::Enum  doGetType() const;
-            virtual void            doDispatch(INodeHandler& rHandler);
-
-        };
-
-//-----------------------------------------------------------------------------
-
-        struct SetEntry
-        {
-            explicit SetEntry(ElementTreeImpl* pTree_);
-
-            bool isValid()  const { return m_pTree != 0; }
-
-            ElementTreeImpl* tree() const { return m_pTree; };
-        private:
-            ElementTreeImpl* m_pTree;
-        };
-    //-------------------------------------------------------------------------
-
-        struct SetNodeVisitor
-        {
-            enum Result { DONE, CONTINUE };
-            virtual Result visit(SetEntry const& anEntry) = 0;
-        };
-    //-------------------------------------------------------------------------
-
-        class SetNodeImpl : public NodeImpl
-        {
-            ISubtree&       m_rOriginal;
-            TemplateHolder  m_aTemplate;
-            TemplateProvider m_aTemplateProvider;
-            TreeImpl*       m_pParentTree;
-            NodeOffset      m_nContextPos;
-
-            typedef NodeOffset InitHelper;
-            InitHelper      m_aInit;
-        public:
-            /// construct a set node referring to rOriginal as data node with the given element-template
-            explicit SetNodeImpl(ISubtree& rOriginal, Template* pTemplate);
-            /// 'Moving constructor': Constructs a set that takes the data from rOriginal, leaves rOriginal empty
-            explicit SetNodeImpl(SetNodeImpl& rOriginal); // only for makeIndirect
-
-            /// retrieve the name of the underlying node
-            OUString getOriginalNodeName() const;
-
-        // the following willmostly  be implemented by derived classes (using the virtual equivalents)
-            /// does this set contain any elements (loads elements if needed)
-            bool        isEmpty();
-            /// does this set contain an element named <var>aName</var> (loads elements if needed)
-            SetEntry    findElement(Name const& aName);
-            /// does this set contain an element named <var>aName</var> (and is that element loaded ?)
-            SetEntry    findAvailableElement(Name const& aName);
-
-            /// insert a new entry into this set
-            void        insertElement(Name const& aName, SetEntry const& aNewEntry);
-            /// remove an existing entry into this set
-            void        removeElement(Name const& aName);
-
-            /// Initialize the set data: Set context information, and build the view (actually loading the elements may be deferred)
-            void        initElements(TemplateProvider const& aTemplateProvider, TreeImpl& rParentTree, NodeOffset nPos, TreeDepth nDepth);
-
-            /// Call <code>aVisitor.visit(aElement)</code> for each element in this set until SetNodeVisitor::DONE is returned.
-            SetNodeVisitor::Result dispatchToElements(SetNodeVisitor& aVisitor);
-
-            /// Get the template that describes elements of this set
-            TemplateHolder getElementTemplate() const { return m_aTemplate; }
-
-            /// Get a template provider that can create new elements for this set
-            TemplateProvider getTemplateProvider() const { return m_aTemplateProvider; }
-
-            /// Prepare committing the changes in this set and its descendants, if any - builds a SubtreeChange describing pending changes.
-            std::auto_ptr<SubtreeChange> preCommitChanges();
-            /// Finalize committing the changes - patch the original state wrapper, reset the pending changes
-            void finishCommit(SubtreeChange& rChanges);
-            /// Back out precommited changes - restore original state wrapper, rebuild the pending changes
-            void revertCommit(SubtreeChange& rChanges);
-            /// Fix up precommited changes after failure - try to detect failures, patch the original state wrapper, reset the pending changes
-            void failedCommit(SubtreeChange& rChanges);
-
-        // does not load elements:
-            /// Adjust the internal representation after external changes to the original data - build NodeChangeInformation objects for notification
-            void adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeDepth nDepth);
-
-        // legacy commit - default is 'Not supported'
-        protected:
-            ~SetNodeImpl();
-            virtual std::auto_ptr<SubtreeChange>doPreCommitChanges();
-            virtual void doFinishCommit(SubtreeChange& rChanges);
-            virtual void doRevertCommit(SubtreeChange& rChanges);
-            virtual void doFailedCommit(SubtreeChange& rChanges);
-        protected:
-            TreeImpl*   getParentTree() const;
-            NodeOffset  getContextOffset() const;
-
-            ISubtree&   getOriginalSetNode() { return m_rOriginal; };
-
-        // New Overrideables
-        private:
-            virtual bool        doIsEmpty() const = 0;
-            virtual SetEntry    doFindElement(Name const& aName) = 0;
-            virtual void        doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
-            virtual void        doRemoveElement(Name const& aName) = 0;
-
-            virtual void        doInitElements(ISubtree& rTree, TreeDepth nDepth) = 0;
-            virtual void        doClearElements() = 0;
-
-            virtual void        doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeDepth nDepth) = 0;
-
-            virtual SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor) = 0;
-
-            virtual void        doCollectChanges(NodeChanges& rChanges) const = 0;
-
-        // NodeImpl implementation - direct clients don't need it
-        protected:
-            virtual Attributes      doGetAttributes() const;
-            virtual NodeType::Enum  doGetType() const;
-
-        private:
-            virtual void            doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
-            virtual void            doDispatch(INodeHandler& rHandler);
-
-        protected:
-            bool implHasLoadedElements() const;
-        private:
-            bool implLoadElements();
-            void implEnsureElementsLoaded();
-            bool implInitElements(InitHelper const& aInit);
-            void implCollectChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange, TreeDepth nDepth);
-        };
-
-//-----------------------------------------------------------------------------
-        class ValueNodeImpl : public NodeImpl
-        {
-            ValueNode& m_rOriginal;
-        public:
-            explicit ValueNodeImpl(ValueNode& rOriginal) ;
-            explicit ValueNodeImpl(ValueNodeImpl& rOriginal) ; // only for makeIndirect
-
-            /// retrieve the name of the underlying node
-            OUString getOriginalNodeName() const;
-
-        // the following are implemented, though pure
-        // they delegate directly to m_rOriginal
-
-            /// Does this node assume its default value
-            virtual bool    isDefault()     const = 0;
-            /// is the default value of this node available
-            virtual bool canGetDefaultValue() const = 0;
-            /// retrieve the current value of this node
-            virtual UnoAny  getValue()      const = 0;
-            /// retrieve the default value of this node
-            virtual UnoAny getDefaultValue() const = 0;
-
-            /// Does this node assume its default value
-            virtual UnoType getValueType()  const = 0;
-
-            virtual void    setValue(UnoAny const& aNewValue) = 0;
-            virtual void    setDefault() = 0;
-
-        // legacy commit - default is 'Not supported'
-            std::auto_ptr<ValueChange> preCommitChange();
-            void finishCommit(ValueChange& rChange) { doFinishCommit(rChange); }
-            void revertCommit(ValueChange& rChange) { doRevertCommit(rChange); }
-            void failedCommit(ValueChange& rChange) { doFailedCommit(rChange); }
-
-            void adjustToChange(NodeChangesInformation& rLocalChanges, ValueChange const& rExternalChange, TreeImpl& rParentTree, NodeOffset nPos);
-        protected:
-            virtual std::auto_ptr<ValueChange> doPreCommitChange();
-            virtual void doFinishCommit(ValueChange& rChange);
-            virtual void doRevertCommit(ValueChange& rChange);
-            virtual void doFailedCommit(ValueChange& rChange);
-
-
-        protected:
-            virtual Attributes      doGetAttributes() const;
-
-        // NodeImpl implementation - direct clients don't need it
-            virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);
-            virtual NodeChangeImpl* doCollectChange() const;
-
-            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
-        private:
-            virtual NodeType::Enum  doGetType() const;
-            virtual void            doDispatch(INodeHandler& rHandler);
-        };
-//-----------------------------------------------------------------------------
-
         struct INodeHandler
         {
-            virtual void handle( ValueNodeImpl& rNode) = 0;
+            virtual void handle( ValueElementNodeImpl& rNode) = 0;
             virtual void handle( GroupNodeImpl& rNode) = 0;
             virtual void handle( SetNodeImpl& rNode) = 0;
         };
 
-//-----------------------------------------------------------------------------
-        // domain-specific 'dynamic_cast' replacements
-        ValueNodeImpl&  AsValueNode(NodeImpl& rNode);
-        GroupNodeImpl&  AsGroupNode(NodeImpl& rNode);
-        SetNodeImpl&    AsSetNode  (NodeImpl& rNode);
-
-//      ValueNodeImpl const& AsValueNode(NodeImpl const& rNode);
-//      GroupNodeImpl const& AsGroupNode(NodeImpl const& rNode);
-//      SetNodeImpl   const& AsSetNode  (NodeImpl const& rNode);
 //-----------------------------------------------------------------------------
     }
 }
