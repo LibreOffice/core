@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:35:12 $
+ *  last change: $Author: dl $ $Date: 2001-04-11 09:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,6 @@ protected:
     BOOL                    bAutoSave;
     BOOL                    bWaterCan;
 
-    virtual BOOL            QueryUnload();
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 public:

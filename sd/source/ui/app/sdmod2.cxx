@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 07:00:36 $
+ *  last change: $Author: dl $ $Date: 2001-04-11 09:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,65 +359,6 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
 
 
-/*************************************************************************
-|*
-|* QueryUnload
-|*
-\************************************************************************/
-
-BOOL SdModule::QueryUnload()
-{
-    if( pTransferClip )
-    {
-        /**********************************************************************
-        * Sind viele Daten im Clipboard?
-        **********************************************************************/
-        BOOL            bQuery = FALSE;
-        SdDrawDocument* pDrDoc = (SdDrawDocument*) pTransferClip->GetWorkDocument();
-        USHORT          nPageCount = pDrDoc->GetPageCount();
-        SdrPage*        pPage = pDrDoc->GetPage(0);
-        SdrObject*      pObj = NULL;
-        SdrObjKind      eObjKind;
-        ULONG           nObjCount = pPage->GetObjCount();
-
-        if ( nObjCount < 10 )
-        {
-            // Objekte naeher betrachten
-            for (ULONG nObj = 0; nObj < nObjCount; nObj++)
-            {
-                pObj = pPage->GetObj(nObj);
-
-                if (pObj && pObj->GetObjInventor() == SdrInventor)
-                {
-                    eObjKind = (SdrObjKind) pObj->GetObjIdentifier();
-
-                    if (eObjKind == OBJ_GRAF || eObjKind == OBJ_OLE2)
-                    {
-                        // Ev. groessere Objekte: Query!
-                        bQuery = TRUE;
-                    }
-                }
-            }
-        }
-        else
-        {
-            // Mehr als 10 Objekte: Query!
-            bQuery = TRUE;
-        }
-
-        if( bQuery )
-        {
-            QueryBox aBox( NULL, WinBits( WB_YES_NO | WB_DEF_NO ), String(SdResId(STR_CLPBRD_CLEAR)) );
-
-            if( RET_YES != aBox.Execute() )
-            {
-                // !!!Clipboard loeschen
-            }
-        }
-    }
-
-    return(TRUE);
-}
 /*************************************************************************
 |*
 |* virt. Methoden fuer Optionendialog
