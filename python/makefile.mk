@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-28 16:06:39 $
+#   last change: $Author: hr $ $Date: 2005-02-16 13:33:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,8 +141,12 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install
 # WINDOWS
 # ----------------------------------
 BUILD_DIR=PCbuild
+# Build python executable and then runs a minimal script. Running the minimal script
+# ensures that certain *.pyc files are generated which would otherwise be created on
+# solver during registration in insetoo_native
 BUILD_ACTION= \
     $(foreach,i,$(PYPROJECTS) nmake -F $(i).mak CFG="$(i) - Win32 Release" OS="Windows_NT" && ) \
+    python.exe -c "import os" && \
     echo build done
 .ENDIF
 
