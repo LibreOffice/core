@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-08 14:46:39 $
+ *  last change: $Author: mba $ $Date: 2001-02-22 09:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,6 +484,7 @@ void impl_initFilterHashOld2New( TFilterNames& aHash )
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 4.0"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriter_40"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 3.0"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriter_30"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text (encoded)"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_Text_encoded"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarOffice XML (GlobalDocument)"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_60GlobalDocument"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0/GlobalDocument"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_50GlobalDocument"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 4.0/GlobalDocument"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_40GlobalDocument"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_50"));
@@ -564,6 +565,7 @@ void impl_initFilterHashOld2New( TFilterNames& aHash )
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: JPG - JPEG"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("draw_JPG_JPEG"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XBM - X-Consortium"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("draw_XBM_X_Consortium"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: MathML XML (Math)"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("math_MathML_XML_Math"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarOffice XML (Math)"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarOffice_XML_Math"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 5.0"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_50"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 4.0"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_40"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 3.0"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_30"));
@@ -725,6 +727,7 @@ void impl_initFilterHashNew2Old( TFilterNames& aHash )
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriter_40"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 4.0"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_StarWriter_30"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: StarWriter 3.0"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("writer_web_Text_encoded"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web: Text (encoded)"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_60GlobalDocument"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarOffice XML (GlobalDocument)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_50GlobalDocument"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0/GlobalDocument"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_40GlobalDocument"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 4.0/GlobalDocument"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("writer_globaldocument_StarWriter_50"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument: StarWriter 5.0"));
@@ -804,6 +807,7 @@ void impl_initFilterHashNew2Old( TFilterNames& aHash )
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_BMP_MS_Windows"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: BMP - MS Windows"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_JPG_JPEG"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: JPG - JPEG"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_XBM_X_Consortium"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XBM - X-Consortium"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarOffice_XML_Math"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarOffice XML (Math)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("math_MathML_XML_Math"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("smath: MathML XML (Math)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_50"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 5.0"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_40"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 4.0"));
@@ -1154,7 +1158,7 @@ void SfxFilterContainer::RealLoad_Impl()
         aWild = aLine.GetToken( i++, ',' );
         sal_uInt16 nDocIconId = aLine.GetToken( i++, ',' ).ToInt32();
         aUserData = aLine.GetToken( i++, ',' );
-        sal_uInt32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
+        sal_uInt32 nVersion = SOFFICE_FILEFORMAT_50;
         if( nTokCount >= 8 )
             nVersion = aLine.GetToken( i++, ',' ).ToInt32();
         aFlags = aLine.GetToken( i++, ',' );
@@ -1218,19 +1222,25 @@ void SfxFilterContainer::ForceFilterLoad_Impl() const
 
 #define IMPL_CONTAINER_LOOP( aMethod, aArgType, aTest )         \
 const SfxFilter* SfxFilterContainer::aMethod(                   \
-    aArgType aArg, SfxFilterFlags nMust, SfxFilterFlags nDont ) const           \
+    aArgType aArg, SfxFilterFlags nMust, SfxFilterFlags nDont ) const \
 {                                                               \
+    const SfxFilter* pFirstFilter=0;                            \
     ForceFilterLoad_Impl();                                     \
-    sal_uInt16 nCount = ( sal_uInt16 ) pImpl->aList.Count();            \
-    for( sal_uInt16 n = 0; n < nCount; n++ )                        \
+    sal_uInt16 nCount = ( sal_uInt16 ) pImpl->aList.Count();    \
+    for( sal_uInt16 n = 0; n < nCount; n++ )                    \
     {                                                           \
         const SfxFilter* pFilter = pImpl->aList.GetObject( n ); \
-        SfxFilterFlags nFlags = pFilter->GetFilterFlags();              \
+        SfxFilterFlags nFlags = pFilter->GetFilterFlags();      \
         if ( (nFlags & nMust) == nMust &&                       \
              !(nFlags & nDont ) && aTest )                      \
-            return pFilter;                                     \
+        {                                                       \
+            if ( pFilter->GetFilterFlags() & SFX_FILTER_PREFERED ) \
+                return pFilter;                                 \
+            else if ( !pFirstFilter )                           \
+                pFirstFilter = pFilter;                         \
+        }                                                       \
     }                                                           \
-    return 0;                                                   \
+    return pFirstFilter;                                        \
 }
 
 /*   [Beschreibung]
@@ -2101,24 +2111,47 @@ sal_uInt32 SfxFilterMatcher::GetFilter4Content(
 }
 
 //----------------------------------------------------------------
-
+/*
+const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( sal_uInt32 nFormat, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+{
+    const SfxFilter* pFirstFilter = 0;
+    SfxApplication* pApp = SFX_APP();
+    if( this == &pApp->GetFilterMatcher() )
+        pApp->ForcePendingInitFactories();
+    SfxFContainerList_Impl& rList = pImpl->aList;
+    sal_uInt16 nCount = (sal_uInt16)rList.Count();
+    for( sal_uInt16 n = 0; n<nCount; n++ )
+    {
+        const SfxFilter* pFilter =
+            rList.GetObject( n )->GetFilter4ClipBoardId(nFormat, nMust, nDont );
+        if( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PREFERED ) )
+            return pFilter;
+        else if ( !pFirstFilter )
+            pFirstFilter = pFilter;
+    }
+    return pFirstFilter;
+}
+*/
 #define IMPL_LOOP( Type, ArgType )                              \
 const SfxFilter* SfxFilterMatcher::Type(                        \
-    ArgType rStr, SfxFilterFlags nMust, SfxFilterFlags nDont ) const            \
+    ArgType rStr, SfxFilterFlags nMust, SfxFilterFlags nDont ) const \
 {                                                               \
+    const SfxFilter* pFirstFilter = 0;                          \
     SfxApplication* pApp = SFX_APP();                           \
     if( this == &pApp->GetFilterMatcher() )                     \
         pApp->ForcePendingInitFactories();                      \
     SfxFContainerList_Impl& rList = pImpl->aList;               \
-    sal_uInt16 nCount = (sal_uInt16)rList.Count();                      \
-    for( sal_uInt16 n = 0; n<nCount; n++ )                          \
+    sal_uInt16 nCount = (sal_uInt16)rList.Count();              \
+    for( sal_uInt16 n = 0; n<nCount; n++ )                      \
     {                                                           \
         const SfxFilter* pFilter =                              \
             rList.GetObject( n )->Type(rStr, nMust, nDont );    \
-        if( pFilter )                                           \
+        if( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PREFERED ) ) \
             return pFilter;                                     \
+        else if ( !pFirstFilter )                               \
+            pFirstFilter = pFilter;                             \
     }                                                           \
-    return 0;                                                   \
+    return pFirstFilter;                                        \
 }
 
 IMPL_LOOP( GetFilter4Mime, const String& )
