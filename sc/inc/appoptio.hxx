@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appoptio.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-02 19:10:56 $
+ *  last change: $Author: nn $ $Date: 2002-03-26 17:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,11 @@ public:
     ScLkUpdMode GetLinkMode() const             { return eLinkMode ;}
     void        SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
 
+    void        SetDefaultObjectSizeWidth(INT32 nNew)   { nDefaultObjectSizeWidth = nNew; }
+    INT32       GetDefaultObjectSizeWidth() const       { return nDefaultObjectSizeWidth; }
+    void        SetDefaultObjectSizeHeight(INT32 nNew)  { nDefaultObjectSizeHeight = nNew; }
+    INT32       GetDefaultObjectSizeHeight() const      { return nDefaultObjectSizeHeight; }
+
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
     friend SvStream&    operator>>  ( SvStream& rStream, ScAppOptions& rOpt );
@@ -141,6 +146,8 @@ private:
     ULONG       nTrackDeleteColor;
     ULONG       nTrackMoveColor;
     ScLkUpdMode eLinkMode;
+    INT32       nDefaultObjectSizeWidth;
+    INT32       nDefaultObjectSizeHeight;
 };
 
 
@@ -158,18 +165,21 @@ class ScAppCfg : public ScAppOptions
     ScLinkConfigItem    aRevisionItem;
     ScLinkConfigItem    aContentItem;
     ScLinkConfigItem    aSortListItem;
+    ScLinkConfigItem    aMiscItem;
 
     DECL_LINK( LayoutCommitHdl, void* );
     DECL_LINK( InputCommitHdl, void* );
     DECL_LINK( RevisionCommitHdl, void* );
     DECL_LINK( ContentCommitHdl, void* );
     DECL_LINK( SortListCommitHdl, void* );
+    DECL_LINK( MiscCommitHdl, void* );
 
     com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetInputPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetRevisionPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetContentPropertyNames();
     com::sun::star::uno::Sequence<rtl::OUString> GetSortListPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetMiscPropertyNames();
 
 public:
             ScAppCfg();
