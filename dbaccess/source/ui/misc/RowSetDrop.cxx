@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:05:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
                         aValue <<= m_xRow->getTimestamp(*aIter);
                         break;
                     case DataType::BIT:
+                    case DataType::BOOLEAN:
                         aValue <<= m_xRow->getBoolean(*aIter);
                         break;
                     case DataType::TINYINT:
