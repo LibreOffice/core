@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-06 17:00:03 $
+ *  last change: $Author: pl $ $Date: 2002-11-14 15:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,13 +168,15 @@ using namespace rtl;
  *  false: do nothing
  */
 
-bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int& rStart, int& rStop ) const
+String SalGraphicsData::FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop ) const
 {
+    rCutStop = rCutStart = STRING_NOTFOUND;
+
 #ifdef _USE_PRINT_EXTENSION_
-    return false;
+    return String( rOrig );
 #else
     if( ! m_pPhoneNr )
-        return false;
+        return String( rOrig );
 #endif
 
 #define FAX_PHONE_TOKEN          "@@#"
@@ -186,9 +188,9 @@ bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int
     bool bStarted = false;
     bool bStopped = false;
     USHORT nPos;
-    rStart = 0;
-    rStop = nLen-1;
-    String aPhone( pStr, nLen );
+    USHORT nStart = 0;
+    USHORT nStop = rLen;
+    String aPhone = rOrig.Copy( nIndex, rLen );
 
     static String aPhoneNumber;
     static bool bIsCollecting = false;
@@ -197,7 +199,7 @@ bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int
     {
         if( ( nPos = aPhone.SearchAscii( FAX_PHONE_TOKEN ) ) != STRING_NOTFOUND )
         {
-            rStart = nPos;
+            nStart = nPos;
             bIsCollecting = true;
             aPhoneNumber.Erase();
             bRet = true;
@@ -207,16 +209,16 @@ bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int
     if( bIsCollecting )
     {
         bRet = true;
-        nPos = bStarted ? rStart + FAX_PHONE_TOKEN_LENGTH : 0;
+        nPos = bStarted ? nStart + FAX_PHONE_TOKEN_LENGTH : 0;
         if( ( nPos = aPhone.SearchAscii( FAX_END_TOKEN, nPos ) ) != STRING_NOTFOUND )
         {
             bIsCollecting = false;
-            rStop = nPos + FAX_END_TOKEN_LENGTH;
+            nStop = nPos + FAX_END_TOKEN_LENGTH;
             bStopped = true;
         }
-        int nStart = rStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
-        int nStop = rStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
-        aPhoneNumber += aPhone.Copy( nStart, nStop - nStart );
+        int nTokenStart = nStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
+        int nTokenStop = nStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
+        aPhoneNumber += aPhone.Copy( nTokenStart, nTokenStop - nTokenStart );
         if( ! bIsCollecting )
         {
 #ifndef PRINTER_DUMMY
@@ -232,12 +234,24 @@ bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int
         bRet = false;
     }
 
-    // [ed] 6/15/02 m_bSwallowFaxNo isn't defined on OS X for some reason... +++ FIXME
-#ifdef MACOSX
-        return bRet;
-#else
-    return m_bSwallowFaxNo ? bRet : false;
+    String aRet;
+    if( bRet
+#ifndef MACOSX
+        && m_bSwallowFaxNo
 #endif
+        )
+    {
+        rLen -= nStop - nStart;
+        rCutStart = nStart+nIndex;
+        rCutStop = nStop+nIndex;
+        if( rCutStart )
+            aRet = rOrig.Copy( 0, rCutStart );
+        aRet += rOrig.Copy( rCutStop );
+    }
+    else
+        aRet = rOrig;
+
+    return aRet;
 }
 
 // ----------------------------------------------------------------------------

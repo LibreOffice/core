@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:14:43 $
+ *  last change: $Author: pl $ $Date: 2002-11-14 15:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ public:
                                           SalColormap *pMap ) const;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
-            bool            FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int& rStart, int& rStop ) const;
+            String            FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop ) const;
 };
 
 

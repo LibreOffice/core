@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-12 10:49:30 $
+ *  last change: $Author: pl $ $Date: 2002-11-14 15:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5301,8 +5301,20 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rOrigStr,
 
     if ( !IsDeviceOutputNecessary() || pVector )
         return;
-
+#ifdef UNX
+    String aStr( rOrigStr );
+    if( meOutDevType == OUTDEV_PRINTER )
+    {
+        if( !mpGraphics )
+            if( !ImplGetGraphics() )
+                return;
+        xub_StrLen nCutStart, nCutStop;
+        aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rOrigStr, nIndex, nLen, nCutStart, nCutStop );
+    }
+    SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt );
+#else
     SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, rStartPt );
+#endif
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5356,7 +5368,28 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rOrigStr,
     if ( !IsDeviceOutputNecessary() )
         return;
 
+#ifdef UNX
+    String aStr( rOrigStr );
+    if( meOutDevType == OUTDEV_PRINTER )
+    {
+        if( !mpGraphics )
+            if( !ImplGetGraphics() )
+                return;
+        xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
+        aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rOrigStr, nIndex, nLen, nCutStart, nCutStop );
+        if( nCutStop != nCutStart )
+        {
+            long* pAry = (long*)alloca(sizeof(long)*nLen );
+            if( nCutStart > nIndex )
+                memcpy( pAry, pDXAry, sizeof(long)*(nCutStart-nIndex) );
+            memcpy( pAry+nCutStart-nIndex, pDXAry + nOrgLen - (nCutStop-nIndex), nLen - (nCutStop-nIndex) );
+            pDXAry = pAry;
+        }
+    }
+    SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt, 0, pDXAry );
+#else
     SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, rStartPt, 0, pDXAry );
+#endif
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5475,7 +5508,20 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
     if ( !IsDeviceOutputNecessary() )
         return;
 
+#ifdef UNX
+    String aStr( rOrigStr );
+    if( meOutDevType == OUTDEV_PRINTER )
+    {
+        if( !mpGraphics )
+            if( !ImplGetGraphics() )
+                return;
+        xub_StrLen nCutStart, nCutStop;
+        aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rOrigStr, nIndex, nLen, nCutStart, nCutStop );
+    }
+    SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt, nWidth );
+#else
     SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, rStartPt, nWidth );
+#endif
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
