@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 13:33:49 $
+ *  last change: $Author: os $ $Date: 2000-10-24 15:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,8 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.TextField.InputUser",                    //SW_SERVICE_FIELDTYPE_INPUT_USER
         "com.sun.star.text.TextField.HiddenText", //SW_SERVICE_FIELDTYPE_HIDDEN_TEXT
         "com.sun.star.style.ConditionalParagraphStyle", //SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE
-        "com.sun.star.text.NumberingRules"              //SW_SERVICE_NUMBERING_RULES
+        "com.sun.star.text.NumberingRules",             //SW_SERVICE_NUMBERING_RULES
+        "com.sun.star.text.TextColumns"                 //SW_SERVICE_TEXT_COLUMNS
     };
 /******************************************************************
  * SwXServiceProvider
@@ -530,6 +531,9 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_NUMBERING_RULES :
             xRet = (cppu::OWeakObject*)new SwXNumberingRules(*pDoc);
+        break;
+        case SW_SERVICE_TEXT_COLUMNS :
+            xRet = (cppu::OWeakObject*)new SwXTextColumns(0);
         break;
 //      case SW_SERVICE_FIELDTYPE_TABLEFIELD:
         default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-24 15:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,9 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                95
 #define SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE    96
 #define SW_SERVICE_NUMBERING_RULES                      97
+#define SW_SERVICE_TEXT_COLUMNS                         98
 
-#define SW_SERVICE_LAST                 SW_SERVICE_NUMBERING_RULES
+#define SW_SERVICE_LAST                 SW_SERVICE_TEXT_COLUMNS
 
 
 #define SW_SERVICE_INVALID          USHRT_MAX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 09:18:49 $
+ *  last change: $Author: os $ $Date: 2000-10-24 15:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2321,7 +2321,7 @@ OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.XTextColumns") == rServiceName;
+    return C2U("com.sun.star.text.TextColumns") == rServiceName;
 }
 /* -----------------------------06.04.00 11:47--------------------------------
 
@@ -2330,8 +2330,17 @@ Sequence< OUString > SwXTextColumns::getSupportedServiceNames(void) throw( Runti
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.XTextColumns");
+    pArray[0] = C2U("com.sun.star.text.TextColumns");
     return aRet;
+}
+/* -----------------------------24.10.00 16:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
+    nReference(0)
+{
+    if(nColCount)
+        setColumnCount(nColCount);
 }
 /*-- 16.12.98 14:06:53---------------------------------------------------
 
@@ -2387,7 +2396,7 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeExcep
     if(nColumns <= 0)
         throw uno::RuntimeException();
     aTextColumns.realloc(nColumns);
- text::TextColumn* pCols = aTextColumns.getArray();
+     text::TextColumn* pCols = aTextColumns.getArray();
     nReference = USHRT_MAX;
     sal_uInt16 nWidth = nReference / nColumns;
     sal_uInt16 nDiff = nReference - nWidth * nColumns;
@@ -2430,6 +2439,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/10/23 09:18:49  mib
+    bug fixes for numbering rules
+
     Revision 1.6  2000/10/19 13:59:53  os
     check numbering type of footnotes
 
