@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-08 15:02:00 $
+ *  last change: $Author: vg $ $Date: 2001-03-08 17:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #include <stdio.h>
 #ifdef LINUX
 #define __USE_XOPEN
-#include <poll.h>
 #endif
+#include <poll.h>
 
 #include <prex.h>
 #include <X11/Xlocale.h>
