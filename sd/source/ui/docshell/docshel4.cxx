@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-01 15:53:24 $
+ *  last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,15 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
     else
         pStore->SetError( SVSTREAM_WRONGVERSION );
 
+    // tell SFX to change viewshell when in preview mode
+    if( IsPreview() )
+    {
+        SfxItemSet *pSet = GetMedium()->GetItemSet();
+
+        if( pSet )
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
+    }
+
     return bRet;
 }
 
@@ -485,6 +494,15 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
 
     }
 
+    // tell SFX to change viewshell when in preview mode
+    if( IsPreview() )
+    {
+        SfxItemSet *pSet = GetMedium()->GetItemSet();
+
+        if( pSet )
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
+    }
+
     delete pWait;
 
     return bRet;
@@ -532,6 +550,14 @@ BOOL SdDrawDocShell::ConvertFrom( SfxMedium& rMedium )
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
     delete pFilter;
 
+    // tell SFX to change viewshell when in preview mode
+    if( IsPreview() )
+    {
+        SfxItemSet *pSet = GetMedium()->GetItemSet();
+
+        if( pSet )
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
+    }
     SetWaitCursor( FALSE );
 
     return bRet;

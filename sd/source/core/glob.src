@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:32:18 $
+ *  last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,6 +1041,11 @@ String STR_PRESVIEWSHELL
     Text[ turkish ] = "Presentation mode";
     Text[ arabic ] = "Presentation mode";
     Text[ catalan ] = "Presentation mode";
+};
+String STR_PREVIEWVIEWSHELL
+{
+    Text = "Vorschaufenster" ;
+    Text [ ENGLISH ] = "Preview window" ;
 };
 String STR_TEXTOBJECTBARSHELL
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-03 14:38:25 $
+ *  last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1678,116 +1678,57 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 |*
 \************************************************************************/
 
-void SdDrawViewShell::PreparePresentation()
+void SdDrawViewShell::ShowUIControls( sal_Bool bVisible )
 {
     if( bHasRuler )
     {
         if( pHRulerArray[0] )
-            pHRulerArray[0]->Hide();
+            pHRulerArray[0]->Show( bVisible );
 
         if( pHRulerArray[1] )
-            pHRulerArray[1]->Hide();
+            pHRulerArray[1]->Show( bVisible );
 
         if( pVRulerArray[0] )
-            pVRulerArray[0]->Hide();
+            pVRulerArray[0]->Show( bVisible );
 
         if( pVRulerArray[1] )
-            pVRulerArray[1]->Hide();
+            pVRulerArray[1]->Show( bVisible );
     }
 
     if( pVScrlArray[0] )
-        pVScrlArray[0]->Hide();
+        pVScrlArray[0]->Show( bVisible );
 
     if( pVScrlArray[1] )
-        pVScrlArray[1]->Hide();
+        pVScrlArray[1]->Show( bVisible );
 
     if( pHScrlArray[0] )
-        pHScrlArray[0]->Hide();
+        pHScrlArray[0]->Show( bVisible );
 
     if( pHScrlArray[1] )
-        pHScrlArray[1]->Hide();
+        pHScrlArray[1]->Show( bVisible );
 
-    aVSplit.Hide();
-    aHSplit.Hide();
+    aVSplit.Show( bVisible );
+    aHSplit.Show( bVisible );
 
-    aDrawBtn.Hide();
-    aSlideBtn.Hide();
-    aOutlineBtn.Hide();
-    aNotesBtn.Hide();
-    aHandoutBtn.Hide();
-    aPresentationBtn.Hide();
-    aPageBtn.Hide();
-    aMasterPageBtn.Hide();
-    aLayerBtn.Hide();
+    aDrawBtn.Show( bVisible );
+    aSlideBtn.Show( bVisible );
+    aOutlineBtn.Show( bVisible );
+    aNotesBtn.Show( bVisible );
+    aHandoutBtn.Show( bVisible );
+    aPresentationBtn.Show( bVisible );
+    aPageBtn.Show( bVisible );
+    aMasterPageBtn.Show( bVisible );
+    aLayerBtn.Show( bVisible );
 
     if( bLayerMode )
-        aLayerTab.Hide();
+        aLayerTab.Show( bVisible );
     else
-        aTabControl.Hide();
+        aTabControl.Show( bVisible );
 
     for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
         for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
             if( pWinArray[nX][nY] )
-                pWinArray[nX][nY]->Hide();
-}
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void  SdDrawViewShell::EndPresentation()
-{
-    if( bHasRuler )
-    {
-        if( pHRulerArray[0] )
-            pHRulerArray[0]->Show();
-
-        if( pHRulerArray[1] )
-            pHRulerArray[1]->Show();
-
-        if( pVRulerArray[0] )
-            pVRulerArray[0]->Show();
-
-        if( pVRulerArray[1] )
-            pVRulerArray[1]->Show();
-    }
-
-    if( pVScrlArray[0] )
-        pVScrlArray[0]->Show();
-
-    if( pVScrlArray[1] )
-        pVScrlArray[1]->Show();
-
-    if( pHScrlArray[0] )
-        pHScrlArray[0]->Show();
-
-    if( pHScrlArray[1] )
-        pHScrlArray[1]->Show();
-
-    aVSplit.Show();
-    aHSplit.Show();
-
-    aDrawBtn.Show();
-    aSlideBtn.Show();
-    aOutlineBtn.Show();
-    aNotesBtn.Show();
-    aHandoutBtn.Show();
-    aPresentationBtn.Show();
-    aPageBtn.Show();
-    aMasterPageBtn.Show();
-    aLayerBtn.Show();
-
-    if( bLayerMode )
-        aLayerTab.Show();
-    else
-        aTabControl.Show();
-
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-            if( pWinArray[nX][nY] )
-                pWinArray[nX][nY]->Show();
+                pWinArray[nX][nY]->Show( bVisible );
 }
 
 #ifdef WNT

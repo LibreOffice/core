@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-29 14:07:08 $
+ *  last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "outlnvsh.hxx"
 #include "slidvish.hxx"
 #include "presvish.hxx"
+#include "prvwshll.hxx"
 #include "drviewsh.hxx"
 #include "grviewsh.hxx"
 #include "grdocsh.hxx"
@@ -97,6 +98,7 @@ void SdDLL::RegisterFactorys()
         SdSlideViewShell::RegisterFactory(2);
         SdOutlineViewShell::RegisterFactory(3);
         SdPresViewShell::RegisterFactory(4);
+        SdPreviewViewShell::RegisterFactory(5);
     }
 
     if (SvtModuleOptions().IsDraw()) {
@@ -129,6 +131,7 @@ void SdDLL::RegisterInterfaces()
     SdSlideViewShell::RegisterInterface(pMod);
     SdOutlineViewShell::RegisterInterface(pMod);
     SdPresViewShell::RegisterInterface(pMod);
+    SdPreviewViewShell::RegisterInterface(pMod);
 
     // Draw ViewShell
     SdGraphicViewShell::RegisterInterface(pMod);
@@ -143,8 +146,3 @@ void SdDLL::RegisterInterfaces()
     // Draw ObjectShell
     SdGraphicStdObjectBar::RegisterInterface(pMod);
 }
-
-
-
-
-
