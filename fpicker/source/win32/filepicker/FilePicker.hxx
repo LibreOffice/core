@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-21 14:46:49 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@
 
 #ifndef _ASYNCEVENTNOTIFIER_HXX_
 #include "asynceventnotifier.hxx"
+#endif
+
+#ifndef _EVENTNOTIFICATION_HXX_
+#include "eventnotification.hxx"
 #endif
 
 #include <memory>
@@ -294,9 +298,6 @@ public:
     rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
     void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
     void SAL_CALL dialogSizeChanged( );
-
-private:
-    void SAL_CALL notifyAllListener( CAsyncEventNotifier::EventListenerMethod_t pfncFPListener, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
 
 private:
     // prevent copy and assignment

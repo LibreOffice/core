@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-22 09:59:31 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+
+#ifndef _FILEPICKEREVENTNOTIFICATION_HXX_
+#include "filepickereventnotification.hxx"
 #endif
 
 //------------------------------------------------------------------------
@@ -205,8 +209,8 @@ void SAL_CALL CFilePicker::disposing( const EventObject& aEvent ) throw(RuntimeE
 {
     Reference< XFilePickerListener > xFilePickerListener( aEvent.Source, ::com::sun::star::uno::UNO_QUERY );
 
-    if ( xFilePickerListener.is( ) )
-        removeFilePickerListener( xFilePickerListener );
+    if (xFilePickerListener.is())
+        removeFilePickerListener(xFilePickerListener);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -215,9 +219,9 @@ void SAL_CALL CFilePicker::disposing( const EventObject& aEvent ) throw(RuntimeE
 
 void SAL_CALL CFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 {
-    CAsyncEventNotifier::EventListenerMethod_t pfncFPListener = &XFilePickerListener::fileSelectionChanged;
     aEvent.Source = Reference<XInterface>(static_cast<XFilePickerNotifier*>(this));
-    notifyAllListener( pfncFPListener, aEvent );
+    m_aAsyncEventNotifier.notifyEvent(
+        new CFilePickerParamEventNotification(&XFilePickerListener::fileSelectionChanged,aEvent));
 }
 
 //-----------------------------------------------------------------------------------------
@@ -226,9 +230,9 @@ void SAL_CALL CFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 
 void SAL_CALL CFilePicker::directoryChanged( FilePickerEvent aEvent )
 {
-    CAsyncEventNotifier::EventListenerMethod_t pfncFPListener = &XFilePickerListener::directoryChanged;
     aEvent.Source = Reference<XInterface>(static_cast<XFilePickerNotifier*>(this));
-    notifyAllListener( pfncFPListener, aEvent );
+    m_aAsyncEventNotifier.notifyEvent(
+        new CFilePickerParamEventNotification(&XFilePickerListener::directoryChanged,aEvent));
 }
 
 //-----------------------------------------------------------------------------------------
@@ -237,9 +241,9 @@ void SAL_CALL CFilePicker::directoryChanged( FilePickerEvent aEvent )
 
 void SAL_CALL CFilePicker::controlStateChanged( FilePickerEvent aEvent )
 {
-    CAsyncEventNotifier::EventListenerMethod_t pfncFPListener = &XFilePickerListener::controlStateChanged;
     aEvent.Source = Reference<XInterface>(static_cast<XFilePickerNotifier*>(this));
-    notifyAllListener( pfncFPListener, aEvent );
+    m_aAsyncEventNotifier.notifyEvent(
+        new CFilePickerParamEventNotification(&XFilePickerListener::controlStateChanged,aEvent));
 }
 
 //-----------------------------------------------------------------------------------------
@@ -248,17 +252,8 @@ void SAL_CALL CFilePicker::controlStateChanged( FilePickerEvent aEvent )
 
 void SAL_CALL CFilePicker::dialogSizeChanged( )
 {
-    // not yet implemented
-}
-
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
-
-void SAL_CALL CFilePicker::notifyAllListener( CAsyncEventNotifier::EventListenerMethod_t pfncFPListener, FilePickerEvent aEvent )
-{
-    OSL_ASSERT(pfncFPListener);
-    m_aAsyncEventNotifier.notifyEvent(pfncFPListener, aEvent);
+    m_aAsyncEventNotifier.notifyEvent(
+        new CFilePickerEventNotification(&XFilePickerListener::dialogSizeChanged));
 }
 
 //-----------------------------------------------------------------------------------------
@@ -643,7 +638,7 @@ void SAL_CALL CFilePicker::initialize( const Sequence< Any >& aArguments )
 
     sal_Bool   bFileOpenDialog  = sal_True;
     sal_uInt32 winResTemplateId = 0;
-    sal_Bool   bIsWin2000       = IsWin2000( );
+    sal_Bool   bIsWin2000       = IsWindows2000Platform();
 
     switch ( templateId )
     {
