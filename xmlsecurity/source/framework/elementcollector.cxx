@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementcollector.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ ElementCollector::ElementCollector(
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    m_type = cssxc::sax::ElementMarkType_TYPEOFELEMENTCOLLECTOR;
+    m_type = cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR;
 }
 
 /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxeventkeeperimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
 
         if (pElementMark != NULL)
         {
-            if (cssxc::sax::ElementMarkType_TYPEOFELEMENTCOLLECTOR
+            if (cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR
                 == pElementMark->getType())
             /*
              * it is a EC
@@ -809,7 +809,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                 BufferNode* pBufferNode = pElementCollector->getBufferNode();
                 pBufferNode->removeElementCollector(pElementCollector);
 
-                if ( nPriority == cssxc::sax::ElementMarkPriority_PRI_BEFOREMODIFY)
+                if ( nPriority == cssxc::sax::ElementMarkPriority_BEFOREMODIFY)
                 {
                     pBufferNode->notifyBranch();
                 }
@@ -1053,7 +1053,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::addElementCollector(  )
 {
     return createElementCollector(
         cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
-        cssxc::sax::ElementMarkPriority_PRI_AFTERMODIFY,
+        cssxc::sax::ElementMarkPriority_AFTERMODIFY,
         false,
         NULL);
 }
@@ -1246,14 +1246,14 @@ void SAL_CALL SAXEventKeeperImpl::removeReferenceResolvedListener(
 }
 
 /* XSAXEventKeeperStatusChangeBroadcaster */
-void SAL_CALL SAXEventKeeperImpl::addXSAXEventKeeperStatusChangeListener(
+void SAL_CALL SAXEventKeeperImpl::addSAXEventKeeperStatusChangeListener(
     const cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >& listener )
     throw (cssu::RuntimeException)
 {
     m_xSAXEventKeeperStatusChangeListener = listener;
 }
 
-void SAL_CALL SAXEventKeeperImpl::removeXSAXEventKeeperStatusChangeListener(
+void SAL_CALL SAXEventKeeperImpl::removeSAXEventKeeperStatusChangeListener(
     const cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >& listener )
     throw (cssu::RuntimeException)
 {

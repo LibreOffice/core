@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementmark.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ ElementMark::ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId)
     :m_nSecurityId(nSecurityId),
      m_nBufferId(nBufferId),
      m_pBufferNode(NULL),
-     m_type(cssxc::sax::ElementMarkType_TYPEOFELEMENTMARK)
+     m_type(cssxc::sax::ElementMarkType_ELEMENTMARK)
 /****** ElementMark/ElementMark ***********************************************
  *
  *   NAME
