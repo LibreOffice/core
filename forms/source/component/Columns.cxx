@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 13:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,15 @@ sal_Bool OGridColumn::convertFastPropertyValue( Any& rConvertedValue, Any& rOldV
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth, ::getCppuType((const sal_Int32*)NULL));
             break;
         case PROPERTY_ID_ALIGN:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlign, ::getCppuType((const sal_Int16*)NULL));
+            try
+            {
+                bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlign, ::getCppuType((const sal_Int16*)NULL));
+            }
+            catch(starlang::IllegalArgumentException&)
+            {
+                OSL_ENSHURE(0,"OGridColumn::convertFastPropertyValue: TextAlign must be casted to sal_Int16!");
+                throw;
+            }
             break;
         case PROPERTY_ID_HIDDEN:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, getBOOL(m_aHidden));
@@ -583,7 +591,7 @@ void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStr
     if (m_aWidth.getValueType().getTypeClass() == TypeClass_LONG)
         nAnyMask |= WIDTH;
 
-    if (m_aAlign.getValueType().getTypeClass() == TypeClass_SHORT)
+    if (m_aAlign.getValueTypeClass() == TypeClass_SHORT)
         nAnyMask |= ALIGN;
 
     nAnyMask |= COMPATIBLE_HIDDEN;
