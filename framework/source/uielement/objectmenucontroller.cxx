@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectmenucontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:24:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_VERBDATTRIBUTES_HPP_
+#include <com/sun/star/embed/VerbAttributes.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -151,9 +155,9 @@ ObjectMenuController::~ObjectMenuController()
 }
 
 // private function
-void ObjectMenuController::fillPopupMenu( const Sequence< drafts::com::sun::star::frame::status::Verb >& rVerbCommandSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
+void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    const drafts::com::sun::star::frame::status::Verb* pVerbCommandArray = rVerbCommandSeq.getConstArray();
+    const com::sun::star::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
@@ -168,14 +172,14 @@ void ObjectMenuController::fillPopupMenu( const Sequence< drafts::com::sun::star
         const rtl::OUString aVerbCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ObjectMenue?VerbID:short=" ));
         for ( USHORT i = 0; i < rVerbCommandSeq.getLength(); i++ )
         {
-            const drafts::com::sun::star::frame::status::Verb& rVerb = pVerbCommandArray[i];
-            if ( rVerb.VerbIsOnMenu )
+            const com::sun::star::embed::VerbDescriptor& rVerb = pVerbCommandArray[i];
+            if ( rVerb.VerbAttributes & com::sun::star::embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
             {
                 m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );
                 // use VCL popup menu pointer to set vital information that are not part of the awt implementation
 
                 rtl::OUString aCommand( aVerbCommand );
-                aCommand += rtl::OUString::valueOf( rVerb.VerbId );
+                aCommand += rtl::OUString::valueOf( rVerb.VerbID );
                 pVCLPopupMenu->SetItemCommand( i+1, aCommand ); // Store verb command
             }
         }
@@ -200,8 +204,7 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& Source ) throw
 // XStatusListener
 void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
-    Sequence< drafts::com::sun::star::frame::status::Verb >   aVerbCommandSeq;
-
+    Sequence < com::sun::star::embed::VerbDescriptor > aVerbCommandSeq;
     if ( Event.State >>= aVerbCommandSeq )
     {
         ResetableGuard aLock( m_aLock );
