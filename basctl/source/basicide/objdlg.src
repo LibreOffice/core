@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 22:07:43 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
     Text[ turkish ] = "Nesneler";
     Text[ catalan ] = "Objectes";
 };
+
 
 
 
