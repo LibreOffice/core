@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pattern.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,69 +99,4 @@ Dtor
 SwBackgroundDlg::~SwBackgroundDlg()
 {
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/frmdlg/pattern.cxx,v 1.1.1.1 2000-09-18 17:14:38 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.62  2000/09/18 16:05:34  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.61  1997/11/24 16:40:16  MA
-      include
-
-
-      Rev 1.60   24 Nov 1997 17:40:16   MA
-   include
-
-      Rev 1.59   03 Nov 1997 13:19:48   MA
-   precomp entfernt
-
-      Rev 1.58   14 Nov 1996 15:31:26   TRI
-   includes
-
-      Rev 1.57   11 Nov 1996 10:44:16   MA
-   ResMgr
-
-      Rev 1.56   28 Aug 1996 11:52:44   OS
-   includes
-
-      Rev 1.55   24 Nov 1995 16:58:10   OM
-   PCH->PRECOMPILED
-
-      Rev 1.54   16 Aug 1995 17:48:32   MA
-   Riesenheader dialogs entfernt.
-
-      Rev 1.53   31 Mar 1995 13:10:38   OM
-   SfxModalDialog -> SfxSingleTabDialog
-
-      Rev 1.52   29 Mar 1995 08:32:04   OS
-   SfxModalDialog - Parameter zusatzlich
-
-      Rev 1.51   07 Feb 1995 19:19:10   PK
-   caption fuer uiborder und pattern
-
-      Rev 1.50   24 Jan 1995 13:10:24   SWG
-   Map entfernt
-
-      Rev 1.49   21 Nov 1994 13:11:24   PK
-   sfxmodaldialog
-
-      Rev 1.48   17 Nov 1994 13:06:00   PK
-   swpatterndlg -> swbackgrounddlg
-
-      Rev 1.47   25 Oct 1994 18:14:40   ER
-   add: PCH
-
-      Rev 1.46   19 Oct 1994 12:09:48   MA
-   SV-ChangeXXX -> SetXXX.
-
-*************************************************************************/
-
-
 
