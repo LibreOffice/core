@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:52:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,12 @@
 #ifndef SD_GRAPHIC_DOC_SHELL_HXX
 #include "GraphicDocShell.hxx"
 #endif
+#ifndef SD_SLIDEBROWSER_SLIDE_SORTER_VIEW_SHELL_HXX
+#include "SlideSorterViewShell.hxx"
+#endif
+#ifndef SD_SLIDEBROWSER_TASK_PANE_VIEW_SHELL_HXX
+#include "TaskPaneViewShell.hxx"
+#endif
 #ifndef SD_FACTORY_IDS_HXX
 #include "FactoryIds.hxx"
 #endif
@@ -217,4 +223,11 @@ void SdDLL::RegisterInterfaces()
 
     // Draw ObjectShell
     ::sd::DrawObjectBar::RegisterInterface(pMod);
+
+    // View shells for the side panes.
+    ::sd::slidesorter::SlideSorterViewShell::RegisterInterface (pMod);
+    ::sd::toolpanel::TaskPaneViewShell::RegisterInterface(pMod);
+    // Tell the task pane view shell to register the interfaces of its
+    // controls.
+    ::sd::toolpanel::TaskPaneViewShell::RegisterControls();
 }
