@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.20 2001-03-13 08:24:04 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.21 2001-03-21 13:52:43 jl Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-03-13 08:24:04 $ $Revision: 1.20 $
+//	$Author: jl $ $Date: 2001-03-21 13:52:43 $ $Revision: 1.21 $
 //
 // Description:
 //
@@ -3110,7 +3110,7 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
 												   sal_Int32 nKey,
 												   const rtl::OUString& aPropertyName)
 {
-	OSL_ENSHURE(xSupplier.is(), "getNumberFormatProperty : the formatter doesn't implement a supplier !");
+	OSL_ENSURE(xSupplier.is(), "getNumberFormatProperty : the formatter doesn't implement a supplier !");
 	Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xSupplier->getNumberFormats();
 
 	if (xFormats.is())
@@ -3216,7 +3216,7 @@ OSQLParser::~OSQLParser()
 {
 	{
 		::osl::MutexGuard aGuard(s_aMutex);
-		OSL_ENSHURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : have a refcount of 0 !");
+		OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : have a refcount of 0 !");
 		if (!--s_nRefCount)
 		{
 			s_pScanner->setScanner(sal_True);
@@ -3283,14 +3283,14 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 
 		// Das Ergebnis liefern (den Root Parse Node):
 
-		//	OSL_ENSHURE(Sdbyyval.pParseNode != NULL,"OSQLParser: Parser hat keinen ParseNode geliefert");
+		//	OSL_ENSURE(Sdbyyval.pParseNode != NULL,"OSQLParser: Parser hat keinen ParseNode geliefert");
 		//	return Sdbyyval.pParseNode;
 		// geht nicht wegen Bug in MKS YACC-erzeugtem Code (es wird ein falscher ParseNode
 		// geliefert).
 
 		// Stattdessen setzt die Parse-Routine jetzt den Member pParseTree
 		// - einfach diesen zurueckliefern:
-		OSL_ENSHURE(m_pParseTree != NULL,"OSQLParser: Parser hat keinen ParseTree geliefert");
+		OSL_ENSURE(m_pParseTree != NULL,"OSQLParser: Parser hat keinen ParseTree geliefert");
 		return m_pParseTree;
 	}
 }
@@ -3353,7 +3353,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 		if (m_nFormatKey && m_xFormatter.is())
 		{
 			Any aValue = getNumberFormatProperty(m_xFormatter->getNumberFormatsSupplier(), m_nFormatKey, FIELD_STR_LOCALE);
-			OSL_ENSHURE(aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0), "OSQLParser::PredicateTree : invalid language property !");
+			OSL_ENSURE(aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0), "OSQLParser::PredicateTree : invalid language property !");
 
 			if (aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0))
 				aValue >>= *m_pLocale;
@@ -3429,7 +3429,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 
 		// Stattdessen setzt die Parse-Routine jetzt den Member pParseTree
 		// - einfach diesen zurueckliefern:
-		OSL_ENSHURE(m_pParseTree != NULL,"OSQLParser: Parser hat keinen ParseTree geliefert");
+		OSL_ENSURE(m_pParseTree != NULL,"OSQLParser: Parser hat keinen ParseTree geliefert");
 		return m_pParseTree;
 	}
 }
@@ -3477,7 +3477,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
-	OSL_ENSHURE(nRuleID >= (sizeof yytname/sizeof yytname[0]), "Invalid nRuleId!");
+	OSL_ENSURE(nRuleID >= (sizeof yytname/sizeof yytname[0]), "Invalid nRuleId!");
 	return ::rtl::OUString::createFromAscii(yytname[nRuleID]);
 }
 
@@ -4133,8 +4133,8 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 //-----------------------------------------------------------------------------
 void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 {
-	OSL_ENSHURE(pLiteral->isRule(), "This is no ::com::sun::star::chaos::Rule");
-	OSL_ENSHURE(pLiteral->count() == 2, "OSQLParser::ReduceLiteral() Invalid count");
+	OSL_ENSURE(pLiteral->isRule(), "This is no ::com::sun::star::chaos::Rule");
+	OSL_ENSURE(pLiteral->count() == 2, "OSQLParser::ReduceLiteral() Invalid count");
 	OSQLParseNode* pTemp = pLiteral;
 	::rtl::OUString aValue;
 	if (bAppendBlank)

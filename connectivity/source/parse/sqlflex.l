@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.8 2001-03-12 14:09:02 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.9 2001-03-21 13:52:43 jl Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-03-12 14:09:02 $ $Revision: 1.8 $
+//	$Author: jl $ $Date: 2001-03-21 13:52:43 $ $Revision: 1.9 $
 //
 // Description:
 //
@@ -426,7 +426,7 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
  */
 sal_Int32 gatherName(const sal_Char* text)
 {
-	OSL_ENSHURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
+	OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
 	sal_Int32 nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
 	switch (nToken)
 	{
@@ -458,7 +458,7 @@ sal_Int32 gatherName(const sal_Char* text)
 */
 sal_Int32 gatherNamePre(const sal_Char* text)
 { 
-	OSL_ENSHURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
+	OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
 	sal_Int32 nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
 	switch (nToken)
 	{
@@ -524,7 +524,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 		return;
 	IN_SQLyyerror = true;
 
-	OSL_ENSHURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
+	OSL_ENSURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
 	m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
 	if (m_nCurrentPos < m_sStatement.getLength())
 	{
@@ -596,7 +596,7 @@ sal_Int32 OSQLScanner::SQLyygetc(void)
 //------------------------------------------------------------------------------
 sal_Int32 OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
 {		
-	OSL_ENSHURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");			
+	OSL_ENSURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");			
 	return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken)) : 0;	
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-13 08:24:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 13:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ OSQLParseNode::OSQLParseNode(const sal_Char * pNewValue,
         , m_pParent(NULL)
 {
 
-    OSL_ENSHURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
@@ -238,7 +238,7 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
         , m_pParent(NULL)
 {
 
-    OSL_ENSHURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const sal_Unicode * pNewValue,
@@ -250,7 +250,7 @@ OSQLParseNode::OSQLParseNode(const sal_Unicode * pNewValue,
         , m_pParent(NULL)
 {
 
-    OSL_ENSHURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const ::rtl::OUString &_rNewValue,
@@ -262,7 +262,7 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OUString &_rNewValue,
         , m_pParent(NULL)
 {
 
-    OSL_ENSHURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
@@ -345,9 +345,9 @@ OSQLParseNode::~OSQLParseNode()
 void OSQLParseNode::append(OSQLParseNode* pNewNode)
 {
 
-    OSL_ENSHURE(pNewNode != NULL, "OSQLParseNode: ungueltiger NewSubTree");
-    OSL_ENSHURE(pNewNode->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
-    OSL_ENSHURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewNode) == m_aChilds.end(),
+    OSL_ENSURE(pNewNode != NULL, "OSQLParseNode: ungueltiger NewSubTree");
+    OSL_ENSURE(pNewNode->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewNode) == m_aChilds.end(),
             "OSQLParseNode::append() Node already element of parent");
 
     // stelle Verbindung zum getParent her:
@@ -377,7 +377,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               const OParseContext* pContext ) const
 {
 
-    OSL_ENSHURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
+    OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
         parseNodeToStr(rString, xMeta, xFormatter, Reference< XPropertySet >(), rIntl, pContext, sal_True, sal_True, _cDec, sal_True);
@@ -393,7 +393,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               const OParseContext* pContext ) const
 {
 
-    OSL_ENSHURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
+    OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
 
     if (xFormatter.is())
         parseNodeToStr(rString, xMeta, xFormatter, _xField, rIntl, pContext, sal_True, sal_True, _cDec, sal_True);
@@ -412,7 +412,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                       sal_Bool bPredicate) const
 {
 
-    OSL_ENSHURE(xMeta.is(), "OSQLParseNode::parseNodeToStr:: no meta data!");
+    OSL_ENSURE(xMeta.is(), "OSQLParseNode::parseNodeToStr:: no meta data!");
 
     if (xMeta.is())
     {
@@ -728,7 +728,7 @@ void OSQLParseNode::tableRangeNodeToStr(::rtl::OUString& rString, const SQLParse
 //-----------------------------------------------------------------------------
 void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
 {
-    OSL_ENSHURE(count() >= 4,"count != 5: Prepare for GPF");
+    OSL_ENSURE(count() >= 4,"count != 5: Prepare for GPF");
 
     const OSQLParseNode* pEscNode = NULL;
     const OSQLParseNode* pParaNode = NULL;
@@ -751,7 +751,7 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
         }
         catch ( Exception& )
         {
-            OSL_ENSHURE(0,"OSQLParseNode::likeNodeToStr Exception occured!");
+            OSL_ENSURE(0,"OSQLParseNode::likeNodeToStr Exception occured!");
         }
 
         const OSQLParseNode* pCol = m_aChilds[0]->getChild(m_aChilds[0]->count()-1);
@@ -1325,8 +1325,8 @@ void OSQLParseNode::showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel)
 //-----------------------------------------------------------------------------
 void OSQLParseNode::insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree)
 {
-    OSL_ENSHURE(pNewSubTree != NULL, "OSQLParseNode: ungueltiger NewSubTree");
-    OSL_ENSHURE(pNewSubTree->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
+    OSL_ENSURE(pNewSubTree != NULL, "OSQLParseNode: ungueltiger NewSubTree");
+    OSL_ENSURE(pNewSubTree->getParent() == NULL, "OSQLParseNode: Knoten ist kein Waise");
 
     // stelle Verbindung zum getParent her:
     pNewSubTree->setParent( this );
@@ -1349,7 +1349,7 @@ OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::remove(OSQLParseNode* pSubTree)
 {
-    OSL_ENSHURE(pSubTree != NULL, "OSQLParseNode: ungueltiger SubTree");
+    OSL_ENSURE(pSubTree != NULL, "OSQLParseNode: ungueltiger SubTree");
     ::std::vector<OSQLParseNode*>::iterator aPos = ::std::find(m_aChilds.begin(), m_aChilds.end(), pSubTree);
     if (aPos != m_aChilds.end())
     {
@@ -1366,10 +1366,10 @@ OSQLParseNode* OSQLParseNode::remove(OSQLParseNode* pSubTree)
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::replaceAt(sal_uInt32 nPos, OSQLParseNode* pNewSubNode)
 {
-    OSL_ENSHURE(pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
-    OSL_ENSHURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
-    OSL_ENSHURE(nPos < m_aChilds.size(), "OSQLParseNode: invalid position");
-    OSL_ENSHURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
+    OSL_ENSURE(pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
+    OSL_ENSURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
+    OSL_ENSURE(nPos < m_aChilds.size(), "OSQLParseNode: invalid position");
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
             "OSQLParseNode::Replace() Node already element of parent");
 
     OSQLParseNode* pOldSubNode = m_aChilds[nPos];
@@ -1385,11 +1385,11 @@ OSQLParseNode* OSQLParseNode::replaceAt(sal_uInt32 nPos, OSQLParseNode* pNewSubN
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::replace (OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
 {
-    OSL_ENSHURE(pOldSubNode != NULL && pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
-    OSL_ENSHURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
-    OSL_ENSHURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pOldSubNode) != m_aChilds.end(),
+    OSL_ENSURE(pOldSubNode != NULL && pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
+    OSL_ENSURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pOldSubNode) != m_aChilds.end(),
             "OSQLParseNode::Replace() Node not element of parent");
-    OSL_ENSHURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
+    OSL_ENSURE(::std::find(m_aChilds.begin(), m_aChilds.end(), pNewSubNode) == m_aChilds.end(),
             "OSQLParseNode::Replace() Node already element of parent");
 
     pOldSubNode->setParent( NULL );
