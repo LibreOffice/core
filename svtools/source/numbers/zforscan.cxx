@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-08-30 09:39:42 $
+ *  last change: $Author: er $ $Date: 2001-10-16 11:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,9 +1566,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         break;
                         case '-':
                         {
-                            if ( bDecSep && nDecPos < i &&
+                            if ( bDecSep && nDecPos+1 == i &&
                                     nTypeArray[nDecPos] == SYMBOLTYPE_DECSEP )
-                            {   // "0,--"
+                            {   // "0.--"
                                 nTypeArray[i] = SYMBOLTYPE_DIGIT;
                                 String& rStr = sStrArray[i];
                                 nPos += rStr.Len();
@@ -1577,6 +1577,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 while (i < nAnzStrings &&
                                         (sStrArray[i].GetChar(0) == '-') )
                                 {
+                                    // If more than two dashes are present in
+                                    // currency formats the last dash will be
+                                    // interpreted literally as a minus sign.
+                                    // Has to be this ugly. Period.
+                                    if ( eScannedType == NUMBERFORMAT_CURRENCY
+                                            && rStr.Len() >= 2 &&
+                                            (i == nAnzStrings-1 ||
+                                            sStrArray[i+1].GetChar(0) != '-') )
+                                        break;
                                     rStr += sStrArray[i];
                                     nPos += sStrArray[i].Len();
                                     nTypeArray[i] = SYMBOLTYPE_EMPTY;
