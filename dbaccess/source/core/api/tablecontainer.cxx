@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:35:40 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,15 @@
 #ifndef _DBA_CORE_TABLE_HXX_
 #include "table.hxx"
 #endif
-
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
 #endif
@@ -82,11 +86,14 @@
 #ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -130,6 +137,12 @@
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
 #endif
+#ifndef DBA_CONTAINERMEDIATOR_HXX
+#include "ContainerMediator.hxx"
+#endif
+#ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
+#include "definitioncolumn.hxx"
+#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -148,29 +161,65 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::connectivity::sdbcx;
-using namespace ::utl;
 
+namespace
+{
+    sal_Bool lcl_isPropertySetDefaulted(const Sequence< ::rtl::OUString>& _aNames,const Reference<XPropertySet>& _xProp)
+    {
+        Reference<XPropertyState> xState(_xProp,UNO_QUERY);
+        if ( xState.is() )
+        {
+            const ::rtl::OUString* pIter = _aNames.getConstArray();
+            const ::rtl::OUString* pEnd   = pIter + _aNames.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                try
+                {
+                    PropertyState aState = xState->getPropertyState(*pIter);
+                    if ( aState != PropertyState_DEFAULT_VALUE )
+                        break;
+                }
+                catch(Exception)
+                {
+                    OSL_ENSURE(0,"Exception catched!");
+                }
+            }
+            // the code below doesn't function -> I don't kow why
+//          Sequence<PropertyState> aStates = xState->getPropertyStates(_aNames);
+//          const PropertyState* pIter = aStates.getConstArray();
+//          const PropertyState* pEnd  = pIter + aStates.getLength();
+//          for( ; pIter != pEnd && *pIter == PropertyState_DEFAULT_VALUE; ++pIter)
+//              ;
+            return ( pIter == pEnd );
+        }
+        return sal_False;
+    }
+}
 //==========================================================================
 //= OTableContainer
 //==========================================================================
 DBG_NAME(OTableContainer)
 //------------------------------------------------------------------------------
-OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
-                                 const OConfigurationTreeRoot& _rCommitLocation,
-                                 ::cppu::OWeakObject& _rParent,
+OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
                                  sal_Bool _bCase,
+                                 const Reference< XNameContainer >& _xTableDefinitions,
                                  IRefreshListener*  _pRefreshListener,
                                  IWarningsContainer* _pWarningsContainer)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
-    ,m_aCommitLocation(_rCommitLocation)
-    ,m_aTablesConfig(_rTablesConfig)
+    ,m_xTableDefinitions(_xTableDefinitions)
     ,m_bInAppend(sal_False)
     ,m_bInDrop(sal_False)
+    ,m_pMediator(NULL)
 {
     DBG_CTOR(OTableContainer, NULL);
-    m_aTablesConfig.setEscape(m_aTablesConfig.isSetNode());
+    osl_incrementInterlockedCount(&m_refCount);
+    {
+        m_pMediator = new OContainerMediator(this,Reference<XNameAccess>(_xTableDefinitions,UNO_QUERY));
+        m_xTableMediator = m_pMediator;
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //------------------------------------------------------------------------------
@@ -188,19 +237,6 @@ void OTableContainer::removeMasterContainerListener()
         xCont->removeContainerListener(this);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTableContainer::flush(  ) throw(RuntimeException)
-{
-    for (ObjectIter i = m_aNameMap.begin(); i != m_aNameMap.end(); ++i)
-    {
-        if((*i).second.is())
-        {
-            Reference< ::com::sun::star::util::XFlushable > xFlush((*i).second, UNO_QUERY);
-            if(xFlush.is())
-                xFlush->flush();
-        }
-    }
-
-}
 // XServiceInfo
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
@@ -213,7 +249,11 @@ sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
     if ( OFilteredContainer::isNameValid(_rName,_rTableFilter,_rTableTypeFilter,_rWCSearch) )
     {// the table name is allowed (not filtered out)
         // no type filter
-        if(!_rTableTypeFilter.getLength())
+
+        sal_Int32   nTableTypeFilterLen = _rTableTypeFilter.getLength();
+        sal_Bool bNoTableFilters = ((nTableTypeFilterLen == 1) && _rTableTypeFilter[0].equalsAsciiL("%", 1));
+
+        if ( bNoTableFilters || !nTableTypeFilterLen )
             return sal_True;
 
         // this is expensive but there is no other way to get the type of the table
@@ -231,84 +271,133 @@ sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
     }
     return sal_False;
 }
+// -----------------------------------------------------------------------------
+namespace
+{
+void lcl_createDefintionObject(const ::rtl::OUString& _rName
+                           ,const Reference< XNameContainer >& _xTableDefinitions
+                           ,Reference<XPropertySet>& _xTableDefinition
+                           ,Reference<XNameAccess>& _xColumnDefinitions
+                           ,sal_Bool _bModified)
+{
+    if ( _xTableDefinitions.is() )
+    {
+        if ( _xTableDefinitions->hasByName(_rName) )
+            _xTableDefinition.set(_xTableDefinitions->getByName(_rName),UNO_QUERY);
+        else
+        {
+            Sequence< Any > aArguments(1);
+            PropertyValue aValue;
+            // set as folder
+            aValue.Name = PROPERTY_NAME;
+            aValue.Value <<= _rName;
+            aArguments[0] <<= aValue;
+            _xTableDefinition.set(::comphelper::getProcessServiceFactory()->createInstanceWithArguments(SERVICE_SDB_TABLEDEFINITION,aArguments),UNO_QUERY);
+            _xTableDefinitions->insertByName(_rName,makeAny(_xTableDefinition));
+            ::dbaccess::notifyDataSourceModified(_xTableDefinitions,_bModified);
+        }
+        Reference<XColumnsSupplier> xColumnsSupplier(_xTableDefinition,UNO_QUERY);
+        if ( xColumnsSupplier.is() )
+            _xColumnDefinitions = xColumnsSupplier->getColumns();
+    }
+}
+// -------------------------------------------------------------------------
+}
 // -------------------------------------------------------------------------
 Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
 {
-    Reference<XPropertySet> xProp;
+    Reference<XColumnsSupplier > xSup;
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
-        m_xMasterContainer->getByName(_rName) >>= xProp;
-    Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
+        xSup.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
-    OConfigurationNode aTableConfig;
-    if(m_aTablesConfig.isValid())
+    Reference< XNamed > xRet;
+    if ( m_xMetaData.is() )
     {
-        if(m_aTablesConfig.hasByName(_rName))
-            aTableConfig = m_aTablesConfig.openNode(_rName);
+        Reference<XPropertySet> xTableDefinition;
+        Reference<XNameAccess> xColumnDefinitions;
+        lcl_createDefintionObject(_rName,m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_False);
+
+        if ( xSup.is() )
+        {
+            ODBTableDecorator* pTable = new ODBTableDecorator( m_xMetaData, xSup, ::dbtools::getNumberFormats( m_xConnection ) ,xColumnDefinitions);
+            xRet = pTable;
+            pTable->construct();
+        }
         else
         {
-            aTableConfig = m_aTablesConfig.createNode(_rName);
-            m_aCommitLocation.commit();
-        }
-    }
+            ::rtl::OUString sCatalog,sSchema,sTable;
+            ::dbtools::qualifiedNameComponents(m_xMetaData,
+                                                _rName,
+                                                sCatalog,
+                                                sSchema,
+                                                sTable,
+                                                ::dbtools::eInDataManipulation);
+            Any aCatalog;
+            if(sCatalog.getLength())
+                aCatalog <<= sCatalog;
+            ::rtl::OUString sType,sDescription;
+            Sequence< ::rtl::OUString> aTypeFilter(3);
+            static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+            static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+            static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+            aTypeFilter[0] = s_sTableTypeView;
+            aTypeFilter[1] = s_sTableTypeTable;
+            aTypeFilter[2] = sAll;  // just to be sure to include anything else ....
 
-    if(xProp.is())
-        return new ODBTableDecorator( aTableConfig, m_xMetaData, xSup, getDataSourceNumberFormats( m_xConnection ) );
-    else
-    {
-        ::rtl::OUString sCatalog,sSchema,sTable;
-        ::dbtools::qualifiedNameComponents(m_xMetaData,
-                                            _rName,
-                                            sCatalog,
-                                            sSchema,
-                                            sTable,
-                                            ::dbtools::eInDataManipulation);
-        Any aCatalog;
-        if(sCatalog.getLength())
-            aCatalog <<= sCatalog;
-        ::rtl::OUString sType,sDescription;
-        Sequence< ::rtl::OUString> aTypeFilter(3);
-        static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-        static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-        static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-        aTypeFilter[0] = s_sTableTypeView;
-        aTypeFilter[1] = s_sTableTypeTable;
-        aTypeFilter[2] = sAll;  // just to be sure to include anything else ....
-
-        Reference< XResultSet > xRes = m_xMetaData.is() ? m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter) : Reference< XResultSet >();
-        if(xRes.is() && xRes->next())
-        {
-            Reference< XRow > xRow(xRes,UNO_QUERY);
-            if(xRow.is())
+            Reference< XResultSet > xRes =  m_xMetaData.is() ? m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter) : Reference< XResultSet >();
+            if(xRes.is() && xRes->next())
             {
-                sType           = xRow->getString(4);
-                sDescription    = xRow->getString(5);
+                Reference< XRow > xRow(xRes,UNO_QUERY);
+                if(xRow.is())
+                {
+                    sType           = xRow->getString(4);
+                    sDescription    = xRow->getString(5);
+                }
             }
+            ::comphelper::disposeComponent(xRes);
+            ODBTable* pTable = new ODBTable(this
+                                ,m_xConnection
+                                ,sCatalog
+                                ,sSchema
+                                ,sTable
+                                ,sType
+                                ,sDescription
+                                ,xColumnDefinitions);
+            xRet = pTable;
+            pTable->construct();
         }
-        ::comphelper::disposeComponent(xRes);
-        return new ODBTable(this,aTableConfig,
-                            m_xConnection,
-                            sCatalog,
-                            sSchema,
-                            sTable,
-                            sType,
-                            sDescription);
+        Reference<XPropertySet> xDest(xRet,UNO_QUERY);
+        if ( xTableDefinition.is() )
+            ::comphelper::copyProperties(xTableDefinition,xDest);
+
+        if ( m_pMediator )
+            m_pMediator->notifyElementCreated(_rName,xDest);
     }
+
+    return xRet;
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OTableContainer::createEmptyObject()
 {
     Reference< XPropertySet > xRet;
+
     // frist we have to look if the master tables does support this
     // and if then create a table object as well with the master tables
     Reference<XColumnsSupplier > xMasterColumnsSup;
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
-    if(xDataFactory.is())
+    if ( xDataFactory.is() && m_xMetaData.is() )
     {
         xMasterColumnsSup = Reference< XColumnsSupplier >( xDataFactory->createDataDescriptor(), UNO_QUERY );
-        xRet = new ODBTableDecorator( m_xMetaData, xMasterColumnsSup, getDataSourceNumberFormats( m_xConnection ) );
+        ODBTableDecorator* pTable = new ODBTableDecorator( m_xMetaData, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,NULL);
+        xRet = pTable;
+        pTable->construct();
     }
     else
-        xRet = new ODBTable(this, m_xConnection );
+    {
+        ODBTable* pTable = new ODBTable(this, m_xConnection);
+        xRet = pTable;
+        pTable->construct();
+    }
     return xRet;
 }
 // -----------------------------------------------------------------------------
@@ -336,49 +425,16 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
         {
             ::rtl::OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,m_xConnection);
 
-            OSL_ENSURE(m_xConnection.is(),"Connection is null!");
-            Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-            if ( xStmt.is() )
-                xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
-        }
-        // create a new config entry
-        if(m_aTablesConfig.isValid())
-        {
-            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-            descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-            descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-            descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False,::dbtools::eInDataManipulation);
-
-            OConfigurationNode aTableConfig;
-            if(m_aTablesConfig.hasByName(sComposedName))
-                aTableConfig = m_aTablesConfig.openNode(sComposedName);
-            else
+            Reference<XConnection> xCon = m_xConnection;
+            OSL_ENSURE(xCon.is(),"Connection is null!");
+            if ( xCon.is() )
             {
-                aTableConfig = m_aTablesConfig.createNode(sComposedName);
-                m_aCommitLocation.commit();
+                Reference< XStatement > xStmt = xCon->createStatement(  );
+                if ( xStmt.is() )
+                    xStmt->execute(aSql);
+                ::comphelper::disposeComponent(xStmt);
             }
-            Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-            if(xTunnel.is())
-            {
-                ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
-                if(pDecoTable)
-                {
-                    pDecoTable->setContext( aTableConfig.cloneAsRoot(), getDataSourceNumberFormats( m_xConnection ) );
-                }
-                else
-                {
-                    ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
-                    if ( pTable )
-                        pTable->setConfigurationNode( aTableConfig.cloneAsRoot() );
-                }
-            }
-            // we must the table here because otherwise the ui information are lost
-            Reference<XFlushable> xFlush(descriptor,UNO_QUERY);
-            if(xFlush.is())
-                xFlush->flush();
         }
     }
     catch(Exception&)
@@ -387,6 +443,56 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
         throw;
     }
     m_bInAppend = sal_False;
+    Reference<XPropertySet> xTableDefinition;
+    Reference<XNameAccess> xColumnDefinitions;
+    Reference< XNamed > xName(descriptor,UNO_QUERY);
+    if ( xName.is() )
+    {
+        lcl_createDefintionObject(xName->getName(),m_xTableDefinitions,xTableDefinition,xColumnDefinitions,sal_False);
+        Reference<XColumnsSupplier> xSup(descriptor,UNO_QUERY);
+        Reference<XDataDescriptorFactory> xFac(xColumnDefinitions,UNO_QUERY);
+        Reference<XAppend> xAppend(xColumnDefinitions,UNO_QUERY);
+        sal_Bool bModified = sal_False;
+        if ( xSup.is() && xColumnDefinitions.is() && xFac.is() && xAppend.is() )
+        {
+            Reference<XNameAccess> xNames = xSup->getColumns();
+            if ( xNames.is() )
+            {
+                Reference<XPropertySet> xProp = xFac->createDataDescriptor();
+                Sequence< ::rtl::OUString> aSeq = xNames->getElementNames();
+                const ::rtl::OUString* pIter = aSeq.getConstArray();
+                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+                for(;pIter != pEnd;++pIter)
+                {
+                    if ( !xColumnDefinitions->hasByName(*pIter) )
+                    {
+                        Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
+                        OTableColumnDescriptor* pColumn = NULL;
+                        OTableColumnDescriptorWrapper* pColumnWrapper = NULL;
+                        if ( comphelper::getImplementation(pColumn,xColumn)
+                            || comphelper::getImplementation(pColumnWrapper,xColumn) )
+                        {
+                            if ( (pColumn && !pColumn->isDefaulted())
+                                || (pColumnWrapper && !pColumnWrapper->isDefaulted()) )
+                            {
+                                ::comphelper::copyProperties(xColumn,xProp);
+                                xAppend->appendByDescriptor(xProp);
+                                bModified = sal_True;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        const static ::rtl::OUString s_pTableProps[] = {    ::rtl::OUString(PROPERTY_FILTER), ::rtl::OUString(PROPERTY_ORDER)
+                                                        , ::rtl::OUString(PROPERTY_APPLYFILTER), ::rtl::OUString(PROPERTY_FONT)
+                                                        , ::rtl::OUString(PROPERTY_ROW_HEIGHT), ::rtl::OUString(PROPERTY_TEXTCOLOR)
+                                                        , ::rtl::OUString(PROPERTY_TEXTLINECOLOR), ::rtl::OUString(PROPERTY_TEXTEMPHASIS)
+                                                        , ::rtl::OUString(PROPERTY_TEXTRELIEF) };
+        Sequence< ::rtl::OUString> aNames(s_pTableProps,sizeof(s_pTableProps)/sizeof(s_pTableProps[0]));
+        if ( bModified || !lcl_isPropertySetDefaulted(aNames,xTableDefinition) )
+            ::dbaccess::notifyDataSourceModified(m_xTableDefinitions,sal_True);
+    }
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -400,14 +506,11 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             xDrop->dropByName(_sElementName);
         else
         {
-            ObjectIter aIter = m_aElements[_nPos];
-            if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-                aIter->second = createObject(_sElementName);
             ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
             sal_Bool bIsView = sal_False;
-            Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
-            if(xTable.is())
+            Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
+            if ( xTable.is() && m_xMetaData.is() )
             {
                 if( m_xMetaData.is() && m_xMetaData->supportsCatalogsInTableDefinitions() )
                     xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
@@ -433,18 +536,20 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
             else
                 aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
             aSql += sComposedName;
-            Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-            if(xStmt.is())
-                xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
-
+            Reference<XConnection> xCon = m_xConnection;
+            OSL_ENSURE(xCon.is(),"Connection is null!");
+            if ( xCon.is() )
+            {
+                Reference< XStatement > xStmt = xCon->createStatement(  );
+                if(xStmt.is())
+                    xStmt->execute(aSql);
+                ::comphelper::disposeComponent(xStmt);
+            }
         }
-        // we don't need to call dropByName when we have xMasterTables
-        // now we have to delete the config entry
-        if ( m_aTablesConfig.isValid() )
+
+        if ( m_xTableDefinitions.is() && m_xTableDefinitions->hasByName(_sElementName) )
         {
-            if ( m_aTablesConfig.hasByName(_sElementName) )
-                m_aTablesConfig.removeNode(_sElementName);
+            m_xTableDefinitions->removeByName(_sElementName);
         }
     }
     catch(Exception&)
@@ -459,7 +564,8 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
-    if(!m_bInAppend && (Event.Accessor >>= sName) && !hasByName(sName))
+    Event.Accessor >>= sName;
+    if ( !m_bInAppend && !hasByName(sName) )
     {
         if(!m_xMasterContainer.is() || m_xMasterContainer->hasByName(sName))
         {
@@ -476,95 +582,31 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
 {
-    //  ::osl::MutexGuard aGuard(m_rMutex);
-    //  ::rtl::OUString sName;
-//  if( !m_bInDrop && m_xMasterContainer.is() && (Event.Accessor >>= sName) && hasByName(sName))
-//  {
-//      if( || !m_xMasterContainer->hasByName(sName))
-//          ;
-//  }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
 {
     // create a new config entry
-    if(m_aTablesConfig.isValid())
     {
         ::rtl::OUString sOldComposedName,sNewComposedName;
-        Reference<XPropertySet> xObject;
         Event.ReplacedElement   >>= sOldComposedName;
         Event.Accessor          >>= sNewComposedName;
-        Event.Element           >>= xObject;
 
-        if(m_aTablesConfig.hasByName(sOldComposedName))
-            m_aTablesConfig.removeNode(sOldComposedName);
-
-        OSL_ENSURE(!m_aTablesConfig.hasByName(sNewComposedName),"TableName already exists!");
-        OConfigurationNode aTableConfig;
-        if(m_aTablesConfig.hasByName(sNewComposedName))
-            aTableConfig = m_aTablesConfig.openNode(sNewComposedName);
-        else
-            aTableConfig = m_aTablesConfig.createNode(sNewComposedName);
-        m_aCommitLocation.commit();
         renameObject(sOldComposedName,sNewComposedName);
-        if(hasByName(sNewComposedName))
-        {
-            Reference<XUnoTunnel> xTunnel;
-            getByName(sNewComposedName) >>= xTunnel;
-            if(xTunnel.is())
-            {
-                ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
-                if(pDecoTable)
-                {
-                    pDecoTable->setContext( aTableConfig.cloneAsRoot(), getDataSourceNumberFormats( m_xConnection ) );
-                }
-                else
-                {
-                    ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
-                    if ( pTable )
-                        pTable->setConfigurationNode( aTableConfig.cloneAsRoot() );
-                }
-            }
-        }
     }
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableContainer::disposing()
+{
+    OFilteredContainer::disposing();
+    // say our listeners goobye
+    m_xTableDefinitions = NULL;
+    m_pMediator = NULL;
+    m_xTableMediator = NULL;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
 {
-}
-// -----------------------------------------------------------------------------
-void OTableContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode)
-{
-    m_aCommitLocation   = _aConfigTreeNode;
-    m_aTablesConfig     = _aConfigTreeNode.openNode(CONFIGKEY_DBLINK_TABLES);
-    m_aTablesConfig.setEscape(m_aTablesConfig.isSetNode());
-    // now set the new config node at our children
-    ::std::vector< ObjectIter >::iterator aIter = m_aElements.begin();
-    for(;aIter != m_aElements.end();++aIter)
-    {
-        if((*aIter)->second.is())
-        {
-            Reference< XUnoTunnel > xTunnel((*aIter)->second, UNO_QUERY);
-            ODBTableDecorator* pObjectImpl = NULL;
-            if (xTunnel.is())
-            {
-                static Sequence<sal_Int8> aTunnelId = ODBTableDecorator::getUnoTunnelImplementationId();
-                pObjectImpl = reinterpret_cast< ODBTableDecorator* >( xTunnel->getSomething( aTunnelId ) );
-            }
-            if(pObjectImpl)
-            {
-                OConfigurationNode aTableConfig;
-                if(m_aTablesConfig.hasByName((*aIter)->first))
-                    aTableConfig = m_aTablesConfig.openNode((*aIter)->first);
-                else
-                {
-                    aTableConfig = m_aTablesConfig.createNode((*aIter)->first);
-                    m_aCommitLocation.commit();
-                }
-                pObjectImpl->setContext( aTableConfig.cloneAsRoot(), getDataSourceNumberFormats( m_xConnection ) );
-            }
-        }
-    }
 }
 // -----------------------------------------------------------------------------
 
@@ -595,4 +637,3 @@ void OTableContainer::addMasterContainerListener()
     if(xCont.is())
         xCont->addContainerListener(this);
 }
-// -----------------------------------------------------------------------------
