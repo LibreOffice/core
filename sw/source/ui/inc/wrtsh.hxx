@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:42:39 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     // Gemaess den Regeln fuer intelligentes Cut / Paste
     // werden umgebende Spaces rausgeschnitten.
     // Liefert Art der Wortselektion zurueck (siehe enum)
-    enum {
+    enum word {
             NO_WORD = 0,
             WORD_SPACE_BEFORE = 1,
             WORD_SPACE_AFTER = 2,
