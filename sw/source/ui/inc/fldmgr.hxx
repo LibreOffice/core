@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:04:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,13 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+#ifndef _SWTYPES_HXX
 #include "swtypes.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -78,6 +84,7 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
+
 namespace com{namespace sun{namespace star{
     namespace container{
         class XNameAccess;
@@ -153,7 +160,8 @@ struct SwInsertFld_Data
         bIsAutomaticLanguage(TRUE){}
 
 };
-class SwFldMgr
+
+class SW_DLLPUBLIC SwFldMgr
 {
 private:
     SwField*            pCurFld;
@@ -170,11 +178,12 @@ private:
     ULONG           nCurFmt;
     BOOL            bEvalExp;
 
-    USHORT          GetCurrLanguage() const;
+    SW_DLLPRIVATE USHORT            GetCurrLanguage() const;
 
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> xNumberingInfo;
-    com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
+    SW_DLLPRIVATE com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
+
 public:
     SwFldMgr(SwWrtShell* pSh = 0);
     ~SwFldMgr();
@@ -254,10 +263,6 @@ public:
     //
     inline void     SetEvalExpFlds(BOOL bEval);
     void            EvalExpFlds(SwWrtShell* pSh = NULL);
-
-    // public, damit sie im fldini initialisiert werden koennen.
-    static String   *pDate, *pTime;
-
 };
 
 inline void SwFldMgr::SetEvalExpFlds(BOOL bEval)
