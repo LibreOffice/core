@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:05:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,15 +933,8 @@ void SwDoc::PrtOLENotify( BOOL bAll )
                     aName = SvGlobalName( xObj->getClassID() );
                 else  //Noch nicht geladen
                 {
-                    String sBaseURL( INetURLObject::GetBaseURL() );
-                    const SfxMedium *pMedium;
-                    if( 0 != (pMedium = GetDocShell()->GetMedium()) &&
-                        pMedium->GetName() != sBaseURL )
-                        INetURLObject::SetBaseURL( pMedium->GetName() );
-
-                    // TODO/LATER: retrieve ClassID of an unloaded object
-                    // aName = ????
-                    INetURLObject::SetBaseURL( sBaseURL );
+                        // TODO/LATER: retrieve ClassID of an unloaded object
+                        // aName = ????
                 }
 
                 BOOL bFound = FALSE;
