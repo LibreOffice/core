@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 09:27:42 $
+ *  last change: $Author: pw $ $Date: 2000-10-10 12:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,12 +111,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     InitStdControls();
     FreeResource();
 
-    //
-    // EA II - Only !!
-    maBtTarget.Hide();
-    maBtBrowse.Hide();
-    //
-
     // Init URL-Box (pos&size, Open-Handler)
     maCbbTarget.SetPosSizePixel ( LogicToPixel( Point( 54, 25 ), MAP_APPFONT ),
                                   LogicToPixel( Size ( 176, 60), MAP_APPFONT ) );
@@ -125,21 +119,20 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
     // Find Path to Std-Doc
     String aStrBasePaths( SvtPathOptions().GetTemplatePath() );
+    INetURLObject aURL;
+    aURL.SetSmartProtocol( INET_PROT_FILE );
     BOOL bFound = FALSE;
-    String aStrFilename;
-    DirEntry aFileEntry;
     for( xub_StrLen n = 0; n<aStrBasePaths.GetTokenCount() && !bFound; n++ )
     {
-        aStrFilename = aStrBasePaths.GetToken( n );
-        aFileEntry = DirEntry( aStrFilename );
-        DirEntry aPathEntry ( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_SUBPATH ) ) );
-        DirEntry aNameEntry ( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_NAME ) ) );
-        aFileEntry+=aPathEntry;
-        aFileEntry+=aNameEntry;
-        bFound = aFileEntry.Exists();
+        String aTmp( aStrBasePaths.GetToken( n ) );
+        aURL.SetSmartURL( aStrBasePaths.GetToken( n ) );
+
+        aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_SUBPATH ) ) );
+        aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_NAME ) ) );
+        bFound = FileExists( aURL );
     }
     if( bFound )
-        maStrStdDocURL = aFileEntry.GetFull();
+        maStrStdDocURL = aURL.GetFull();
 
 
     SetExchangeSupport ();
@@ -424,12 +417,6 @@ void SvxHyperlinkInternetTp::ActivatePage( const SfxItemSet& rItemSet )
     // show mark-window if it was open before
     if ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() )
         ShowMarkWnd ();
-
-    //
-    // EA II - Only !!
-    maBtTarget.Hide();
-    maBtBrowse.Hide();
-    //
 
     maBtBrowse.Enable( maStrStdDocURL==aEmptyStr?FALSE:TRUE);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: pw $ $Date: 2000-10-10 12:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,6 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
 {
     InitStdControls();
     FreeResource();
-
-    //
-    // EA II - Only
-    maBtBrowse.Hide();
-    //
 
     // Init URL-Box (pos&size, Open-Handler)
     maCbbPath.SetPosSizePixel ( LogicToPixel( Point( 54, 15 ), MAP_APPFONT ),
@@ -289,11 +284,6 @@ void SvxHyperlinkDocTp::ActivatePage( const SfxItemSet& rItemSet )
     // show mark-window if it was open before
     if ( mbMarkWndOpen )
         ShowMarkWnd ();
-
-    //
-    // EA II - Only
-    maBtBrowse.Hide();
-    //
 }
 
 int SvxHyperlinkDocTp::DeactivatePage( SfxItemSet* pSet )
@@ -566,23 +556,6 @@ SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( String& aStrPath )
     else
         return Type_ExistsFile;
 
-/*
-    DirEntry aEntry ( aStrPath );
-
-    if ( !aEntry.IsValid() )
-        return Type_Invalid;
-
-    if ( aEntry.Exists() )
-        bExists = TRUE;
-
-    FileStat aFileStat ( aEntry );
-
-    if ( aFileStat.GetKind() == FSYS_KIND_FILE )
-        return ( bExists ? Type_ExistsFile : Type_File );
-
-    if ( aFileStat.GetKind() == FSYS_KIND_DIR )
-        return ( bExists ? Type_ExistsDir : Type_Dir );
-*/
     return Type_Unknown;
 }
 

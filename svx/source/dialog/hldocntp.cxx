@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 09:29:01 $
+ *  last change: $Author: pw $ $Date: 2000-10-10 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,24 +712,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, DClickDocTypeHdl_Impl, void *, EMPTYARG )
 String SvxHyperlinkNewDocTp::GetPath ( String& aStrFull )
 {
     String aStrPath;
-
-    /*
-    if ( aStrFull != aEmptyStr )
-    {
-        DirEntry aDirEntry ( aStrFull );
-
-        if ( aDirEntry.GetExtension() != aEmptyStr )
-            aStrPath = aDirEntry.GetPath().GetFull();   // Pfad mit Filename (+Ext)
-        else
-            if ( aDirEntry.Exists() )
-                aStrPath = aDirEntry.GetFull();         // nur Pfad
-            else
-                aStrPath = aDirEntry.GetPath().GetFull();// Pfad mit Filename (ohne Ext)
-    }
-    */
-
     aStrPath = aStrFull;
-
     return aStrPath;
 }
 
@@ -742,25 +725,6 @@ String SvxHyperlinkNewDocTp::GetPath ( String& aStrFull )
 String SvxHyperlinkNewDocTp::GetName ( String& aStrFull )
 {
     String aStrName;
-/*
-    if ( aStrFull != aEmptyStr )
-    {
-        INetURLObject aURL( aStrFull, INET_PROT_FILE );
-
-        if ( aDirEntry.GetExtension() != aEmptyStr || !aDirEntry.Exists() )
-            aStrName = aDirEntry.GetName();
-        else if ( aDirEntry.Exists() )
-        {
-            FileStat aFileStatus ( aDirEntry );
-
-            if ( aFileStatus.GetKind() == FSYS_KIND_FILE )
-                aStrName = aDirEntry.GetName();
-        }
-
-        if( aURL.getExtension() != aEmptyStr )
-            aStrName = aURL.getName();
-    }
-    */
     INetURLObject aURL( aStrFull, INET_PROT_FILE );
     aStrName = aURL.getName();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: pw $ $Date: 2000-10-10 12:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <svtools/macitem.hxx>
 #endif
 
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+
 #include "hyperdlg.hrc"
 
 #ifndef _SVX_TAB_HYPERLINK_HXX
@@ -86,6 +90,8 @@
 #endif
 
 #include "hltpbase.hxx"
+
+using namespace ucb;
 
 //########################################################################
 //#                                                                      #
@@ -717,3 +723,31 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
     return ( (SvxMacroTableDtor*)pHyperlinkItem->GetMacroTbl() );
 }
 
+/*************************************************************************
+|*
+|* Does the given file exists ?
+|*
+|************************************************************************/
+
+BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
+{
+    BOOL bRet = FALSE;
+
+    if( rURL.GetFull().Len() > 0 )
+    {
+        try
+        {
+            Content     aCnt( rURL.GetMainURL(), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+            ::rtl::OUString aTitle;
+
+            aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
+            bRet = ( aTitle.getLength() > 0 );
+        }
+        catch( ... )
+        {
+            DBG_ERROR( "FileExists: ucb error" );
+        }
+    }
+
+    return bRet;
+}
