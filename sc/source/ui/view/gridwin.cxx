@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:15 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/sound.hxx>
-#include <vcl/system.hxx>
 #include <offmgr/app.hxx>
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
@@ -1029,7 +1028,6 @@ void ScGridWindow::ExecFilter( ULONG nSel,
 
         if (SC_AUTOFILTER_CUSTOM == nSel)
         {
-//          lcl_StartFilterDialog( pViewData, aParam, Application::GetAppWindow() );
             pViewData->GetView()->SetCursor(nCol,nRow);     //! auch ueber Slot ??
             pViewData->GetDispatcher().Execute( SID_FILTER, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
         }
