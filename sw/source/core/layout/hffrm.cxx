@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-12 11:41:26 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-10-08 12:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
         if( !IsColLocked() )
         {
             bValidSize = bValidPrtArea = TRUE;
+
             const SwTwips nBorder = nUL;
             SwTwips nMinHeight = lcl_GetFrmMinHeight(*this);
             nMinHeight -= pAttrs->CalcTop();
@@ -295,7 +296,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
             SwTwips nMaxHeight = LONG_MAX;
             SwTwips nRemaining, nOldHeight;
             Point aOldPos;
-            int nMaxLoop = 10;
+
             do
             {
                 nOldHeight = Prt().Height();
@@ -336,6 +337,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 if( nDiff < 0 )
                 {
                     nMaxHeight = nOldHeight;
+
                     if( nRemaining <= nMinHeight )
                         nRemaining = ( nMaxHeight + nMinHeight + 1 ) / 2;
                 }
@@ -394,12 +396,10 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     }
                 }
                 bValidSize = bValidPrtArea = TRUE;
-            } while( nRemaining<nMaxHeight && nOldHeight!=Prt().Height()
-                     && --nMaxLoop > 0
-                     );
+            } while( nRemaining<=nMaxHeight && nOldHeight!=Prt().Height() );
             ColUnlock();
         }
-        bValidSize = TRUE;
+        bValidSize = bValidPrtArea = TRUE;
     }
     else //if ( GetType() & 0x0018 )
     {
@@ -411,7 +411,6 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
             MakePos();
         } while ( !bValidSize );
     }
-
 }
 
 void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
