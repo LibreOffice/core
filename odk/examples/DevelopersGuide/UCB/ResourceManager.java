@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceManager.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:49:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,8 +37,10 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-// base classes
-import com.sun.star.ucb.*;
+
+import com.sun.star.ucb.NameClash;
+import com.sun.star.ucb.TransferCommandOperation;
+import com.sun.star.ucb.GlobalTransferCommandArgument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
@@ -52,7 +54,6 @@ public class ResourceManager {
      */
     private  Helper      m_helper;
     private  XInterface  m_ucb;
-    private  String      m_connectString = "";
     private  String      m_contenturl = "";
     private  String      m_srcURL = "";
     private  String      m_targetFolderURL = "";
@@ -63,12 +64,11 @@ public class ResourceManager {
      * Constructor.
      *
      *@param      String[]   This construtor requires the arguments:
-     *                          -connect=socket,host=..., port=...
-     *                          -url=..
-     *                          -srcURL=...          (optional).
-     *                          -targetFolderURL=... (optional).
-     *                          -newTitle=...        (optional).
-     *                          -transOper=...       (optional).
+     *                          -url=...             (optional)
+     *                          -targetFolderURL=... (optional)
+     *                          -newTitle=...        (optional)
+     *                          -transOper=...       (optional)
+     *                          -workdir=...         (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
@@ -78,11 +78,9 @@ public class ResourceManager {
 
         // Parse arguments
         parseArguments( args );
-        String connect = getConnect();
-        String url     = getContentURL();
 
         // Init
-        m_helper       = new Helper( connect, url );
+        m_helper       = new Helper( getContentURL() );
 
         // Get xUCB
         m_ucb          = m_helper.getUCB();
@@ -156,15 +154,6 @@ public class ResourceManager {
     }
 
     /**
-     * Get source data connection.
-     *
-     *@return String    That contains the source data connection
-     */
-    public String getConnect() {
-        return m_connectString;
-    }
-
-    /**
      *  Get connect URL.
      *
      *@return   String    That contains the connect URL
@@ -210,10 +199,10 @@ public class ResourceManager {
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
+        String workdir = "";
+
         for ( int i = 0; i < args.length; i++ ) {
-            if ( args[i].startsWith( "-connect=" )) {
-                m_connectString = args[i].substring( 9 );
-            } else if ( args[i].startsWith( "-url=" )) {
+            if ( args[i].startsWith( "-url=" )) {
                 m_contenturl    = args[i].substring( 5 );
             } else if ( args[i].startsWith( "-targetFolderURL=" )) {
                 m_targetFolderURL = args[i].substring( 17 );
@@ -221,6 +210,8 @@ public class ResourceManager {
                 m_newTitle = args[i].substring( 10 );
             } else if ( args[i].startsWith( "-transOper=" )) {
                 m_transOperation = args[i].substring( 11 );
+            } else if ( args[i].startsWith( "-workdir=" )) {
+                workdir = args[i].substring( 9 );
             } else if ( args[i].startsWith( "-help" ) ||
                         args[i].startsWith( "-?" )) {
                 printCmdLineUsage();
@@ -228,16 +219,12 @@ public class ResourceManager {
             }
         }
 
-        if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=2083";
-        }
-
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
-            m_contenturl = Helper.getAbsoluteFileURL( "data/data.txt" );;
+            m_contenturl = Helper.prependCurrentDirAsAbsoluteFileURL( "data/data.txt" );;
         }
 
         if ( m_targetFolderURL == null || m_targetFolderURL.equals( "" )) {
-            m_targetFolderURL = Helper.getCurrentDirAsAbsoluteFileURL();
+            m_targetFolderURL = Helper.getAbsoluteFileURLFromSystemPath( workdir );
         }
 
         if ( m_newTitle == null || m_newTitle.equals( "" )) {
@@ -254,9 +241,9 @@ public class ResourceManager {
      */
     public void printCmdLineUsage() {
         System.out.println(
-            "Usage: ResourceManager -connect=socket,host=...,port=... -url=... -targetFolderURL=... -newTitle=... -transOper=... " );
+            "Usage: ResourceManager -url=... -targetFolderURL=... -newTitle=... -transOper=... -workdir=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt> -targetFolderURL=<workdir> -newTitle=transfered-resource-<uniquepostfix> -transOper=copy");
+            "Defaults: -url=<currentdir>/data/data.txt> -targetFolderURL=<workdir> -newTitle=transfered-resource-<uniquepostfix> -transOper=copy -workdir=<currentdir>");
         System.out.println(
             "\nExample : -url=file:///temp/MyFile.txt -targetFolderURL=file:///test/ -newTitle=RenamedFile.txt -transOper=copy " );
     }
