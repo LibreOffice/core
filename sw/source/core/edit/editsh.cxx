@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:11:01 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,8 @@ const GraphicObject& SwEditShell::GetGraphicObj() const
 USHORT SwEditShell::GetGraphicType() const
 {
     SwGrfNode *pGrfNode = _GetGrfNode();
-    return pGrfNode->GetGrfObj().GetType();
+    ASSERT( pGrfNode, "SwEditShell::GetGraphicType() without graphic node" )
+    return pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE;
 }
 
 /******************************************************************************
