@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-06-21 12:15:01 $
+ *  last change: $Author: kso $ $Date: 2002-08-07 09:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,11 @@ void WizardDialog::ImplPosCtrls()
 void WizardDialog::ImplPosTabPage()
 {
     if ( !mpCurTabPage )
+        return;
+
+    // #100199# - On Unix initial size is equal to screen size, on Windows
+    // it's 0,0. One cannot calculate the size unless dialog is visible.
+    if ( !IsReallyVisible() )
         return;
 
     // ButtonBar-Hoehe berechnen
