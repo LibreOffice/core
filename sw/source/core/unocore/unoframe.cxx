@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:17:31 $
+ *  last change: $Author: mtg $ $Date: 2001-10-12 13:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,19 @@
 #ifndef _XMLOFF_XMLCNITM_HXX
 #include <xmloff/xmlcnitm.hxx>
 #endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -253,6 +266,10 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
+
+using com::sun::star::frame::XModel;
+using com::sun::star::container::XNameAccess;
+using com::sun::star::style::XStyleFamiliesSupplier;
 
 const sal_Char __FAR_DATA sPackageProtocol[] = "vnd.sun.star.Package:";
 const sal_Char __FAR_DATA sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
@@ -274,6 +291,7 @@ public:
 
     void            SetProperty(USHORT nWID, BYTE nMemberId, uno::Any aVal);
     sal_Bool        GetProperty(USHORT nWID, BYTE nMemberId, uno::Any*& pAny );
+    void            GetProperty(const OUString &rPropertyName, const Reference < XPropertySet > &rxPropertySet, uno::Any& rAny );
 
     const SfxItemPropertyMap*       GetMap() const {return _pMap;}
     sal_Bool                        FillBaseProperties(SfxItemSet& rSet, sal_Bool& rSizeFound);
@@ -310,12 +328,16 @@ void BaseFrameProperties_Impl::SetProperty(USHORT nWID, BYTE nMemberId, uno::Any
 /* -----------------------------12.06.01 15:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool BaseFrameProperties_Impl::GetProperty(USHORT nWID, BYTE nMemberId, uno::Any*& pAny )
+sal_Bool BaseFrameProperties_Impl::GetProperty(USHORT nWID, BYTE nMemberId, uno::Any*& pAny)
 {
     ULONG nKey = (nWID << 16) + nMemberId;
-    Any* pCurAny = aAnyTbl.Get(nKey);
+    Any *pCurAny = aAnyTbl.Get(nKey);
     pAny = pCurAny;
     return pCurAny != 0;
+}
+void BaseFrameProperties_Impl::GetProperty( const OUString &rPropertyName, const Reference < XPropertySet > &rxPropertySet, uno::Any & rAny )
+{
+    rAny = rxPropertySet->getPropertyValue( rPropertyName );
 }
 /* -----------------29.06.98 09:55-------------------
  *
@@ -802,7 +824,7 @@ Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( RuntimeExce
 /*-- 11.12.98 15:05:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXFrame::SwXFrame() :
+SwXFrame::SwXFrame(  ) :
     eType(FLYCNTTYPE_FRM),
     aLstnrCntnr( (container::XNamed*)this),
     aPropSet(0),
@@ -810,17 +832,17 @@ SwXFrame::SwXFrame() :
     bIsDescriptor(sal_False),
     pProps(0)
 {
-
 }
 /*-- 14.01.99 11:31:52---------------------------------------------------
     Dieser CTor legt den Frame als Descriptor an
   -----------------------------------------------------------------------*/
-SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap*   pMap) :
+SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc ) :
     aLstnrCntnr( (container::XNamed*)this),
     eType(eSet),
     aPropSet(pMap),
     _pMap(pMap),
-    bIsDescriptor(sal_True)
+    bIsDescriptor(sal_True),
+    mpDoc ( pDoc )
 {
     switch(eType)
     {
@@ -834,6 +856,19 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap*   pMap) :
             pProps = 0;
         break;
     }
+    // Register ourselves as a listener to the document (via the page descriptor)
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    // get the property set for the default style data
+    // First get the model
+    Reference < XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
+    // Ask the model for it's family supplier interface
+    Reference < XStyleFamiliesSupplier > xFamilySupplier ( xModel, UNO_QUERY );
+    // Get the style families
+    Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
+    // Get the Frame family (and keep it for later)
+    Any aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "FrameStyles" ) ) );
+    aAny >>= mxStyleFamily;
+    // In the derived class, we'll ask mxStyleFamily for the relevant default style
 }
 
 /*-- 11.12.98 15:05:01---------------------------------------------------
@@ -1071,6 +1106,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 //              pSh->SetFrmFmt( pStyle->GetFrmFmt() );
                 UnoActionContext aAction(pFmt->GetDoc());
                 pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt );
+                Any aAny = mxStyleFamily->getByName ( rPropertyName );
+                aAny >>= mxStyleData;
             }
             else
                 throw IllegalArgumentException();
@@ -1412,11 +1449,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     else if(IsDescriptor())
     {
         uno::Any* pAny = 0;
-        if(!pProps->GetProperty(pCur->nWID, pCur->nMemberId, pAny))
-        {
-            throw IllegalArgumentException();
-        }
-        else if(pAny)
+        if( !pProps->GetProperty( pCur->nWID, pCur->nMemberId, pAny ) )
+            pProps->GetProperty( rPropertyName, mxStyleData, aAny );
+        else if ( pAny )
             aAny = *pAny;
     }
     else
@@ -1993,10 +2028,13 @@ OUString SwXFrame::getShapeType(void) throw( RuntimeException )
 /*-- 14.01.99 11:27:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextFrame::SwXTextFrame() :
-    SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME)),
+SwXTextFrame::SwXTextFrame( SwDoc *pDoc ) :
+    SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME), pDoc ),
     SwXText(0, CURSOR_FRAME)
 {
+    // mxStyleFamily is initialised in the SwXFrame constructor
+    Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Frame" ) ) );
+    aAny >>= mxStyleData;
 }
 /*-- 11.12.98 15:23:01---------------------------------------------------
 
@@ -2308,9 +2346,12 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
 /*-- 14.01.99 11:27:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextGraphicObject::SwXTextGraphicObject() :
-    SwXFrame(FLYCNTTYPE_GRF, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC))
+SwXTextGraphicObject::SwXTextGraphicObject( SwDoc *pDoc ) :
+    SwXFrame(FLYCNTTYPE_GRF, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_GRAPHIC), pDoc)
 {
+    // mxStyleFamily is initialised in the SwXFrame constructor
+    Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Graphics" ) ) );
+    aAny >>= mxStyleData;
 }
 /*-- 11.12.98 16:02:25---------------------------------------------------
 
@@ -2481,10 +2522,12 @@ uno::Reference<container::XNameReplace> SAL_CALL
 /*-- 11.12.98 16:16:53---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextEmbeddedObject::SwXTextEmbeddedObject() :
-    SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT))
+SwXTextEmbeddedObject::SwXTextEmbeddedObject( SwDoc *pDoc ) :
+    SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
 {
-
+    // mxStyleFamily is initialised in the SwXFrame constructor
+    Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
+    aAny >>= mxStyleData;
 }
 /*-- 11.12.98 16:16:53---------------------------------------------------
 
