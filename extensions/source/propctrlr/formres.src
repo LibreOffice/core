@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:16:17 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3349,7 +3349,7 @@ String RID_STR_EVT_ACTIONPERFORMED
     Text[ chinese_simplified ] = "ε¨ζ‰§θ΅ζ“δ½ζ—¶";
     Text[ russian ] = "Βξ βπεμÿ βϋοξλνενθÿ";
     Text[ polish ] = "Podczas wykonywania";
-    Text[ japanese ] = "ε®θ΅ε¥‘ζ©";
+    Text[ japanese ] = "δ½ε‹•ζ™‚";
     Text[ chinese_traditional ] = "ε¨ε‹•δ½ζ™‚";
     Text[ greek ] = "Κατά την εκτέλεση";
     Text[ korean ] = "μ‹¤ν–‰ν•  λ•";
@@ -3581,7 +3581,7 @@ String RID_STR_EVT_ITEMSTATECHANGED
     Text[ chinese_simplified ] = "η¶ζ€ε·²η»ζ›΄ζ”Ή";
     Text[ russian ] = "Ρξρςξÿνθε θημενενξ";
     Text[ polish ] = "Zmieniony stan";
-    Text[ japanese ] = "γ‚Ήγƒ†γƒΌγ‚Ώγ‚Ήγ®ε¤‰ζ›΄";
+    Text[ japanese ] = "γ‚Ήγƒ†γƒΌγ‚Ώγ‚Ήγ‚’ε¤‰ζ›΄γ—γζ™‚";
     Text[ chinese_traditional ] = "η‹€ζ…‹ε·²η¶“θ®ζ›΄";
     Text[ greek ] = "Κατάσταση τροποποιήθηκε";
     Text[ korean ] = "μƒνƒ λ³€κ²½";
@@ -4860,6 +4860,9 @@ String RID_STR_TEXT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.41  2001/12/21 21:16:17  kz
+ *  Merge SRC641: 21.12.01 - 22:10:32
+ *
  *  Revision 1.40  2001/12/14 16:45:28  obo
  *  Merge SRC641: 14.12.01 - 17:43:10
  *
