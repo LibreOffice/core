@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-19 11:14:08 $
+ *  last change: $Author: dg $ $Date: 2000-12-19 13:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ namespace configmgr
 
         uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xConverter;}
 
-        bool canUseCache() const { return m_nCacheID != 0; }
+        bool canUseCache() const { return m_nCacheID == 0; }
 
         rtl::OUString getLocale() const {return m_sLocale.getLength() ? m_sLocale : m_sDefaultLocale;}
         const rtl::OUString& getDefaultLocale() const {return m_sDefaultLocale;}
