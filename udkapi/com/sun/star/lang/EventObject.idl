@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventObject.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** specifies the base for all event objects and identifies the
     source of the event.
  */
-struct EventObject
+published struct EventObject
 {
     // DocMerge from xml: field com::sun::star::lang::EventObject::Source
     /** refers to the object that fired the event.

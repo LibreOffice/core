@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IllegalAccessException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** This exception is thrown when an application tries to change
     a constant property.
  */
-exception IllegalAccessException: com::sun::star::uno::Exception
+published exception IllegalAccessException: com::sun::star::uno::Exception
 {
 };
 
