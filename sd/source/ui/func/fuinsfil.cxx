@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-29 09:05:14 $
+ *  last change: $Author: dl $ $Date: 2001-06-08 09:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         if( pFilter )
         {
             xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-            xFilterManager->setCurrentFilter( pFilter->GetUIName() ); // set default-filter
+            xFilterManager->setCurrentFilter( String() ); // set default-filter (<All>)
         }
 
         // Get Draw filter for Impress and Impress filter for Draw as secondary
