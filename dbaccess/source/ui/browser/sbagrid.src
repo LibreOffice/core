@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:10:19 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,34 +235,8 @@ Menu RID_SBA_GRID_ROWCTXMENU
 String RID_STR_UNDO_MODIFY_RECORD
 {
     Text = "Rückgängig: Dateneingabe" ;
-    Text [ ENGLISH ] = "Undo: input data";
-    Text [ english_us ] = "Undo: Data Input";
-    Text[ portuguese ] = "Anular: entrada de dados";
-    Text[ russian ] = "Îòìåíèòü: ââîä äàííûõ";
-    Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí";
-    Text[ dutch ] = "Ongedaan maken: gegevensinvoer";
-    Text[ french ] = "Annuler : saisie des données";
-    Text[ spanish ] = "Deshacer: Entrada de datos";
-    Text[ italian ] = "Annulla: Immissione dati";
-    Text[ danish ] = "Fortryd: Datainput";
-    Text[ swedish ] = "Ångra: datainmatning";
-    Text[ polish ] = "Cofnij: wpisywanie danych";
-    Text[ portuguese_brazilian ] = "Desfazer: entrada de dados";
-    Text[ japanese ] = "å…ƒã«æˆ»ã™: ãƒ‡ãƒ¼ã‚¿ã®å…¥åŠ›";
-    Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ: ë°ì´í„° ì…ë ¥";
-    Text[ chinese_simplified ] = "æ’¤é”€å‘½ä»¤ï¼šè¾“å…¥æ•°æ®";
-    Text[ chinese_traditional ] = "å¾©åŸï¼šè¼¸å…¥è³‡æ–™";
-    Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
-    Text[ turkish ] = "Gerial: Veri girişi";
-    Text[ catalan ] = "Desfés: entrada de dades";
-    Text[ finnish ] = "Kumoa: Tietojen syöttö";
-    Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³: à¸›à¹‰à¸­à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "ZpÄ›t: Vstup dat";
-    Text[ hebrew ] = "RÃ¼ckgÃ¤ngig: Dateneingabe";
-    Text[ hindi ] = "à¤…à¤¨à¤¾à¤µà¥ƒà¤¤à¥à¤¤à¤¿: à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤‡à¤¨à¤ªà¥à¤Ÿ";
-    Text[ slovak ] = "SpÃ¤Å¥: dÃ¡tovÃ½ vstup";
-    Text[ hungarian ] = "VisszavonÃ¡s: adatbevitel";
-    Text[ slovenian ] = "Razveljavi: Vnos podatkov";
+    Text [ english ] = "Undo: Data Entry";
+    Text [ english_us ] = "Undo: Data Entry";
 };
 
 String RID_STR_SAVE_CURRENT_RECORD
