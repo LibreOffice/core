@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-18 09:52:42 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 11:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,19 +108,11 @@ protected:
     virtual BOOL Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
     virtual void Command( const CommandEvent& rCEvt );
 
-#ifndef TF_SVDATA
-    // old d&d
-    virtual DragDropMode    NotifyBeginDrag(SvLBoxEntry *);
-    virtual BOOL            NotifyQueryDrop(SvLBoxEntry *);
-    virtual BOOL            QueryDrop( DropEvent& rEvt );
-    virtual BOOL            Drop( const DropEvent& rEvt );
-#else
     // new d&d
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
     virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* );
     virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
-#endif
 
 public:
     enum DataEnum {
