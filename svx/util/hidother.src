@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 10:09:07 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 09:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,12 @@ hidspecial HID_EVT_FOCUSLOST                { HelpID =HID_EVT_FOCUSLOST         
 hidspecial HID_EVT_ITEMSTATECHANGED         { HelpID =HID_EVT_ITEMSTATECHANGED  ;};
 hidspecial HID_EVT_KEYTYPED                 { HelpID =HID_EVT_KEYTYPED          ;};
 hidspecial HID_EVT_LOADED                   { HelpID =HID_EVT_LOADED            ;};
+hidspecial HID_EVT_APPROVEPARAMETER         { HelpID =HID_EVT_APPROVEPARAMETER  ;};
+hidspecial HID_EVT_POSITIONING              { HelpID =HID_EVT_POSITIONING       ;};
+hidspecial HID_EVT_APPROVEROWCHANGE         { HelpID =HID_EVT_APPROVEROWCHANGE  ;};
+hidspecial HID_EVT_ROWCHANGE                { HelpID =HID_EVT_ROWCHANGE         ;};
+hidspecial HID_EVT_RELOADING                { HelpID =HID_EVT_RELOADING         ;};
+hidspecial HID_EVT_UNLOADING                { HelpID =HID_EVT_UNLOADING         ;};
 hidspecial HID_EVT_RELOADED                 { HelpID =HID_EVT_RELOADED          ;};
 hidspecial HID_EVT_UNLOADED                 { HelpID =HID_EVT_UNLOADED          ;};
 hidspecial HID_EVT_MOUSEDRAGGED             { HelpID =HID_EVT_MOUSEDRAGGED      ;};
