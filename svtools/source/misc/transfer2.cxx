@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-22 13:35:54 $
+ *  last change: $Author: jp $ $Date: 2001-03-22 18:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,8 @@ void SAL_CALL DragSourceHelper::DragGestureListener::disposing( const EventObjec
 
 void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( const DragGestureEvent& rDGE ) throw( RuntimeException )
 {
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     const Point aPtPixel( rDGE.DragOriginX, rDGE.DragOriginY );
     mrParent.StartDrag( rDGE.DragAction, aPtPixel );
 }
