@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 12:15:16 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,7 @@ DockingWindow FLT_WIN_ANIMATION
         < "100" ; > ;
         < "500" ; > ;
         < "1000" ; > ;
-        < "Enint." ; > ;
+        < "Rajaton" ; > ;
     };
     };
     ImageButton BTN_GET_ONE_OBJECT
@@ -1015,7 +1015,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ italian ] = "Numero" ;
         Text [ portuguese_brazilian ] = "N?ero" ;
         Text [ portuguese ] = "Nъmero" ;
-        Text [ finnish ] = "Luku" ;
+        Text [ finnish ] = "Ruutuja" ;
         Text [ danish ] = "Antal" ;
         Text [ french ] = "Nombre" ;
         Text [ swedish ] = "Antal" ;
@@ -1023,7 +1023,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ spanish ] = "Cantidad" ;
         Text [ english_us ] = "Number" ;
         Text[ chinese_simplified ] = "ж•°з›®";
-        Text[ russian ] = "Количество";
+        Text[ russian ] = "Кол-во";
         Text[ polish ] = "Iloњж";
         Text[ japanese ] = "ж•°";
         Text[ chinese_traditional ] = "ж•ёз›®";
@@ -1059,7 +1059,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ portuguese ] = "Imagem" ;
         Text [ portuguese_brazilian ] = "Bild" ;
         Text[ chinese_simplified ] = "е›ѕеѓЏ";
-        Text[ russian ] = "Картина";
+        Text[ russian ] = "Изображение";
         Text[ polish ] = "Obraz";
         Text[ japanese ] = "г‚¤гѓЎгѓјг‚ёз”»еѓЏ";
         Text[ chinese_traditional ] = "еЅ±еѓЏ";
@@ -1069,7 +1069,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Resim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imatge";
-        Text[ finnish ] = "Kuva";
+        Text[ finnish ] = "Ruudut";
         Text[ thai ] = "аё аёІаёћ";
     };
     RadioButton RBT_GROUP
@@ -1098,7 +1098,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Grup nesnesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Agrupa l'objecte";
-        Text[ finnish ] = "Ryhmдobjekti";
+        Text[ finnish ] = "Objektiryhmд";
         Text[ thai ] = "аё€аё±аё”аёЃаёҐаёёа№€аёЎаё§аё±аё•аё–аёё";
     };
     RadioButton RBT_BITMAP
@@ -1117,7 +1117,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ portuguese_brazilian ] = "Bitmapobjekt" ;
         Text [ portuguese ] = "Objecto de bitmap" ;
         Text[ chinese_simplified ] = "дЅЌе›ѕеЇ№и±Ў";
-        Text[ russian ] = "Объект bitmap";
+        Text[ russian ] = "Растровый объект";
         Text[ polish ] = "Obiekt mapy bit.";
         Text[ japanese ] = "гѓ“гѓѓгѓ€гѓћгѓѓгѓ— г‚Єгѓ–г‚ёг‚§г‚Їгѓ€";
         Text[ chinese_traditional ] = "й»ћй™Јењ–з‰©д»¶";
@@ -1142,7 +1142,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ italian ] = "Adattamento" ;
         Text [ portuguese_brazilian ] = "Ajuste" ;
         Text [ portuguese ] = "Alinhamento" ;
-        Text [ finnish ] = "Tasaus" ;
+        Text [ finnish ] = "Kohdistus" ;
         Text [ danish ] = "Tilpasning" ;
         Text [ french ] = "Adaptation" ;
         Text [ swedish ] = "Anpassning" ;
@@ -1245,15 +1245,15 @@ DockingWindow FLT_WIN_ANIMATION
         };
         StringList [ finnish ] =
         {
-            < "Ylдvasen" ; Default ; > ;
-            < "Vasen" ; Default ; > ;
-            < "Alavasen" ; Default ; > ;
-            < "Ylдosa" ; Default ; > ;
-            < "Keskitetty" ; Default ; > ;
-            < "Alaosa" ; Default ; > ;
-            < "Ylдoikea" ; Default ; > ;
-            < "Oikea" ; Default ; > ;
-            < "Alaoikea" ; Default ; > ;
+            < "Ylцs vasemmalle" ; Default ; > ;
+            < "Vasemmalle" ; Default ; > ;
+            < "Alas vasemmalle" ; Default ; > ;
+            < "Ylцs" ; Default ; > ;
+            < "Keskelle" ; Default ; > ;
+            < "Alas" ; Default ; > ;
+            < "Ylцs oikealle" ; Default ; > ;
+            < "Oikealle" ; Default ; > ;
+            < "Alas oikealle" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -1341,15 +1341,15 @@ DockingWindow FLT_WIN_ANIMATION
     };
     StringList [ russian ] =
     {
-            < "Слева/Сверху" ; Default ; > ;
-        < "Слева" ; Default ; > ;
-        < "Слева/Снизу" ; Default ; > ;
-        < "Вверху" ; Default ; > ;
+            < "Слева сверху" ; Default ; > ;
+        < "По левому краю" ; Default ; > ;
+        < "Слева снизу" ; Default ; > ;
+        < "По верхнему краю" ; Default ; > ;
         < "По центру" ; Default ; > ;
-        < "Внизу" ; Default ; > ;
-        < "Справа/Сверху" ; Default ; > ;
-        < "Справа" ; Default ; > ;
-        < "Справа/Внизу" ; Default ; > ;
+        < "По нижнему краю" ; Default ; > ;
+        < "Справа сверху" ; Default ; > ;
+        < "По правому краю" ; Default ; > ;
+        < "Справа внизу" ; Default ; > ;
     };
     StringList [ polish ] =
     {
