@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backtrace.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:20:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,3 +77,28 @@ void backtrace_symbols_fd( void **buffer, int size, int fd );
 #endif
 
 #endif /* defined SOLARIS || FREEBSD */
+
+#if defined (LINUX) && defined (SPARC)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* backtrace function with same behaviour as defined in GNU libc */
+
+int backtrace( void **buffer, int max_frames );
+
+void backtrace_symbols_fd( void **buffer, int size, int fd );
+
+/* no frame.h on linux sparc */
+struct frame {
+    long    arg0[8];
+    long    arg1[6];
+    struct frame *fr_savfp;
+    long    fr_savpc;
+};
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+#endif /* defined LINUX && SPARC */
