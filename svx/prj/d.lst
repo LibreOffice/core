@@ -181,6 +181,7 @@ hedabu: ..\inc\obj3d.hxx %_DEST%\inc%_EXT%\svx\obj3d.hxx
 hedabu: ..\inc\objfac3d.hxx %_DEST%\inc%_EXT%\svx\objfac3d.hxx
 hedabu: ..\inc\opaqitem.hxx %_DEST%\inc%_EXT%\svx\opaqitem.hxx
 hedabu: ..\inc\optaccessibility.hxx %_DEST%\inc%_EXT%\svx\optaccessibility.hxx
+hedabu: ..\inc\optsso.hxx %_DEST%\inc%_EXT%\svx\optsso.hxx
 hedabu: ..\inc\optasian.hxx %_DEST%\inc%_EXT%\svx\optasian.hxx
 hedabu: ..\inc\optgenrl.hxx %_DEST%\inc%_EXT%\svx\optgenrl.hxx
 hedabu: ..\inc\optitems.hxx %_DEST%\inc%_EXT%\svx\optitems.hxx
