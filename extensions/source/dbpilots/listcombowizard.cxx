@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 15:45:51 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 16:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
 #include "extensio.hrc"
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 //.........................................................................
@@ -263,6 +266,9 @@ namespace dbp
 
             // the bound field
             getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
+
+            // by default, create a drop down control
+            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("Dropdown"), ::cppu::bool2any(sal_True));
         }
         catch(Exception&)
         {
@@ -605,6 +611,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/20 15:45:51  fs
+ *  #85200# added missing help ids
+ *
  *  Revision 1.3  2001/03/05 14:53:13  fs
  *  finished the grid control wizard
  *
