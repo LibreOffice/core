@@ -460,7 +460,7 @@ Dim oLocUcb as Object
 					iCreate = Msgbox (sQueryMessage, 36, sTitle)
 					If iCreate = 6 Then
 						On Local Error Goto NOVALIDPATH
-						oLocUcb.CreateFolder(sUrlPath)
+						CreateFolder(sUrlPath)
 						If Not oLocUcb.Exists(sUrlPath) Then
 							Goto NOVALIDPATH
 						End If

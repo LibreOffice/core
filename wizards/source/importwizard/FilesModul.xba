@@ -162,7 +162,7 @@ Dim iOverwrite as Integer
 			ApplIndex = FilesList(i,2)
 			sViewPath = CutPathView(sFullName, 60)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
+			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_default&quot;, 0, OpenProperties())
 			If Not IsNull(oDocument) Then
 				bIsPassWordProtected = CheckPassWordProtection(oDocument)
 			End If
@@ -359,7 +359,7 @@ Dim bLogIsThere as Boolean
 		i = 2
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
-		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, OpenProperties())
+		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_default&quot;, 4, OpenProperties())
 		oLogCursor = oLogDocument.Text.CreateTextCursor
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		oLogTable.RepeatHeadline = true
@@ -388,7 +388,8 @@ End Sub
 
 
 
-Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, sComment as String)		&apos;bContainsBasicMacro as Boolean
+Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, sComment as String)		&apos;
+Dim bContainsBasicMacro as Boolean
 Dim oCell as Object
 Dim oLogCursor as Object
 Dim UrlList(1) as String
