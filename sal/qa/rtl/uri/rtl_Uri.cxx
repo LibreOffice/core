@@ -58,7 +58,7 @@ namespace Stringtest
           rtl::OString toUTF8(rtl::OUString const& _suStr)
             {
                 rtl::OString sStrAsUTF8 = rtl::OUStringToOString(_suStr, RTL_TEXTENCODING_UTF8);
-                printf("# %s\n", escapeString(sStrAsUTF8).getStr());
+                t_print("%s\n", escapeString(sStrAsUTF8).getStr());
                 return sStrAsUTF8;
             }
         */
@@ -76,7 +76,7 @@ namespace Stringtest
         void showContent(rtl::OUString const& _suStr)
             {
                 rtl::OString sStr = convertToOString(_suStr);
-                printf("# %s\n", sStr.getStr());
+                t_print("%s\n", sStr.getStr());
             }
 
         void toUTF8_mech(rtl::OUString const& _suStr, rtl_UriEncodeMechanism _eMechanism)
@@ -102,13 +102,15 @@ namespace Stringtest
 
         void toUTF8(rtl::OUString const& _suStr)
             {
-                printf("# rtl_UriEncodeIgnoreEscapes \n");
+                t_print("rtl_UriEncodeIgnoreEscapes \n");
                 toUTF8_mech(_suStr, rtl_UriEncodeIgnoreEscapes);
-                printf("\n# rtl_UriEncodeKeepEscapes\n");
+                t_print("\n");
+                t_print("# rtl_UriEncodeKeepEscapes\n");
                 toUTF8_mech(_suStr, rtl_UriEncodeKeepEscapes);
-                printf("\n# rtl_UriEncodeCheckEscapes\n");
+                t_print("\n");
+                t_print("# rtl_UriEncodeCheckEscapes\n");
                 toUTF8_mech(_suStr, rtl_UriEncodeCheckEscapes);
-                printf("\n");
+                t_print("\n");
             }
 
         void test_FromUTF8_001()
@@ -208,7 +210,7 @@ namespace Stringtest
 
                             rtl::OUString suStrUTF8 = rtl::Uri::encode(suFilename, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
                             rtl::OString sStrUTF8 = convertToOString(suStrUTF8);
-                            printf("# Type: '%s' file name '%s'\n", sType.getStr(), sStrUTF8.getStr());
+                            t_print("Type: '%s' file name '%s'\n", sType.getStr(), sStrUTF8.getStr());
                         }
                     }
                     aDir.close();
@@ -217,7 +219,7 @@ namespace Stringtest
                 {
                     rtl::OString sStr;
                     sStr = rtl::OUStringToOString(suDirURL, osl_getThreadTextEncoding());
-                    printf("# can't open dir:'%s'\n", sStr.getStr());
+                    t_print("can't open dir:'%s'\n", sStr.getStr());
                 }
             }
 
@@ -257,13 +259,13 @@ namespace Stringtest
         void UTF8()
             {
                 rtl::OString sSysPath5_AsUTF8 = rtl::OUStringToOString(m_aStr, RTL_TEXTENCODING_UTF8);
-                printf("# aSysPath5 as UTF8 '%s'\n", sSysPath5_AsUTF8.getStr());
+                t_print("aSysPath5 as UTF8 '%s'\n", sSysPath5_AsUTF8.getStr());
 
             {
                 rtl::OUString suSysPath5Str = rtl::OStringToOUString(sSysPath5_AsUTF8, RTL_TEXTENCODING_UTF8);
                 if (suSysPath5Str.equals(m_aStr))
                 {
-                    printf("# 1. convert works.\n");
+                    t_print("1. convert works.\n");
                 }
             }
 
@@ -272,7 +274,7 @@ namespace Stringtest
             rtl::OUString suSysPath5Str = rtl::OStringToOUString(aSysPath5Str, RTL_TEXTENCODING_UTF8);
             if (suSysPath5Str.equals(m_aStr))
             {
-                printf("# 2. convert works.\n");
+                t_print("2. convert works.\n");
             }
             }
 */
