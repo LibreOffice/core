@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 14:56:35 $
+ *  last change: $Author: cl $ $Date: 2002-09-10 14:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,22 +126,12 @@
 #include <svtools/lstner.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #ifndef _SFX_SFXBASEMODEL_HXX_
 #include <sfx2/sfxbasemodel.hxx>
 #endif
 #ifndef _SVX_FMDMOD_HXX
 #include <svx/fmdmod.hxx>
 #endif
-#else
-#include "basemodel.hxx"
-#define SfxBaseModel SdBaseModel
-#ifndef SVX_UNOMOD_HXX
-#include <svx/unomod.hxx>
-#endif
-#define SvxFmMSFactory SvxUnoDrawMSFactory
-#endif
-
 
 #include <svx/unoipset.hxx>
 
