@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:55:34 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ public:
 private:
     /// Specifies whether to search and replace, to spell check or to do a
     /// text conversion.
-    enum {SEARCH, SPELL, TEXT_CONVERSION} meMode;
+    enum mode {SEARCH, SPELL, TEXT_CONVERSION} meMode;
 
     /// The view which displays the searched objects.
     ::sd::View* mpView;
