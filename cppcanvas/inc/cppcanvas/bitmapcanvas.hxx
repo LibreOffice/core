@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapcanvas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:56:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
@@ -95,7 +98,13 @@ namespace cppcanvas
     public:
         virtual ::basegfx::B2ISize      getSize() const = 0;
 
-        virtual BitmapCanvasSharedPtr   cloneBitmapCanvas() const = 0; // shared_ptr does not allow for covariant return types
+        // shared_ptr does not allow for covariant return types
+        BitmapCanvasSharedPtr           cloneBitmapCanvas() const
+        {
+            BitmapCanvasSharedPtr p( ::boost::dynamic_pointer_cast< BitmapCanvas >(this->clone()) );
+            OSL_ENSURE(p.get(), "BitmapCanvas::cloneBitmapCanvas(): dynamic cast failed");
+            return p;
+        }
     };
 
 }
