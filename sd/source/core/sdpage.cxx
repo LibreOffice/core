@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 11:04:59 $
+ *  last change: $Author: aw $ $Date: 2001-06-13 10:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2316,16 +2316,10 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                         else if ( nScriptType == SCRIPTTYPE_COMPLEX )
                             nWhich = EE_CHAR_FONTHEIGHT_CTL;
 
-                        SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool(), nWhich, nWhich, 0 );
-                        aSet.Put(pObj->GetItemSet());
-
-                        pObj->GetOutlinerParaObject()->RemoveCharAttribs( nWhich );
-                        SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aSet.Get( nWhich );
-                        ULONG nFontHeight = rOldHgt.GetHeight();
-                        nFontHeight = long(nFontHeight * (double) aFractY);
-                        aSet.Put(SvxFontHeightItem(nFontHeight, 100, nWhich ));
-
-                        pObj->SetItemSet(aSet);
+                        // #88084# use more modern method to scale the text height
+                        sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetItem(nWhich)).GetHeight();
+                        sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * (double)aFractY);
+                        pObj->SetItem(SvxFontHeightItem(nNewFontHeight, 100, nWhich));
                     }
                 }
             }
