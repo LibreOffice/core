@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:42:53 $
+ *  last change: $Author: cd $ $Date: 2002-07-05 14:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,8 +432,8 @@ void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
         String aEntry = PosToKeyCode_Config( i ).GetName();
         SfxMenuConfigEntry *pEntry = new SfxMenuConfigEntry( 0, aEntry, String(), FALSE );
         SvLBoxEntry *pLBEntry = aEntriesBox.InsertEntry( aEntry, 0L, LIST_APPEND, 0xFFFF );
-        aEntriesBox.EntryInserted( pLBEntry );
         pLBEntry->SetUserData( pEntry );
+        aEntriesBox.EntryInserted( pLBEntry );
     }
 
     SfxSlotPool* pSlotPool = &( pAct == pModule ? SFX_APP()->GetSlotPool( GetTabDialog()->GetViewFrame() ) : SFX_APP()->GetAppSlotPool_Impl() );
