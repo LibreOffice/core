@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:15:01 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,19 @@
  *
  ************************************************************************/
 
+#include <unistd.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/config.hxx>
 #include <psprint/printerinfomanager.hxx>
 #include <psprint/fontmanager.hxx>
+
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 
 // filename of configuration files
 #define PRINT_FILENAME  "psprint.conf"
@@ -74,6 +81,29 @@
 using namespace psp;
 using namespace rtl;
 using namespace osl;
+
+namespace psp
+{
+class SystemQueueInfo : public Thread
+{
+    mutable Mutex               m_aMutex;
+    bool                        m_bChanged;
+    std::list< OUString >       m_aQueues;
+    OUString                    m_aCommand;
+
+    virtual void run();
+
+    public:
+    SystemQueueInfo();
+    ~SystemQueueInfo();
+
+    bool hasChanged() const;
+    OUString getCommand() const;
+
+    // sets changed status to false; therefore not const
+    void getSystemQueues( std::list< OUString >& rQueues );
+};
+} // namespace
 
 /*
  *  class PrinterInfoManager
@@ -92,6 +122,7 @@ PrinterInfoManager& PrinterInfoManager::get()
 
 PrinterInfoManager::PrinterInfoManager()
 {
+    m_pQueueInfo = new SystemQueueInfo();
     initialize();
 }
 
@@ -99,6 +130,7 @@ PrinterInfoManager::PrinterInfoManager()
 
 PrinterInfoManager::~PrinterInfoManager()
 {
+    delete m_pQueueInfo;
 }
 
 // -----------------------------------------------------------------
@@ -130,6 +162,8 @@ bool PrinterInfoManager::checkPrintersChanged()
             }
         }
     }
+    if( ! bChanged )
+        bChanged = m_pQueueInfo->hasChanged();
     if( bChanged )
         initialize();
 
@@ -904,6 +938,70 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
 
 // -----------------------------------------------------------------
 
+void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommands )
+{
+    if( m_pQueueInfo->hasChanged() )
+    {
+        m_aSystemPrintCommand = m_pQueueInfo->getCommand();
+        m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
+    }
+
+    std::list< OUString >::const_iterator it;
+    rCommands.clear();
+    String aPrinterConst( RTL_CONSTASCII_USTRINGPARAM( "(PRINTER)" ) );
+    for( it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
+    {
+        String aCmd( m_aSystemPrintCommand );
+        aCmd.SearchAndReplace( aPrinterConst, *it );
+        rCommands.push_back( aCmd );
+    }
+}
+
+const std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
+{
+    if( m_pQueueInfo->hasChanged() )
+    {
+        m_aSystemPrintCommand = m_pQueueInfo->getCommand();
+        m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
+    }
+
+    return m_aSystemPrintQueues;
+}
+
+// -----------------------------------------------------------------
+
+SystemQueueInfo::SystemQueueInfo() :
+        m_bChanged( false )
+{
+    create();
+}
+
+SystemQueueInfo::~SystemQueueInfo()
+{
+    terminate();
+}
+
+bool SystemQueueInfo::hasChanged() const
+{
+    MutexGuard aGuard( m_aMutex );
+    bool bChanged = m_bChanged;
+    return bChanged;
+}
+
+void SystemQueueInfo::getSystemQueues( std::list< OUString >& rQueues )
+{
+    MutexGuard aGuard( m_aMutex );
+    rQueues = m_aQueues;
+    m_bChanged = false;
+}
+
+OUString SystemQueueInfo::getCommand() const
+{
+    MutexGuard aGuard( m_aMutex );
+    OUString aRet = m_aCommand;
+    return aRet;
+}
+
 struct SystemCommandParameters
 {
     const char*     pQueueCommand;
@@ -926,41 +1024,44 @@ static const struct SystemCommandParameters aParms[] =
 #endif
 };
 
-
-const ::std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
+void SystemQueueInfo::run()
 {
-    if( m_aSystemPrintQueues.begin() == m_aSystemPrintQueues.end() )
-    {
-        char pBuffer[1024];
-        ByteString aPrtQueueCmd, aForeToken, aAftToken, aString;
-        int nForeTokenCount, i;
-        FILE *pPipe;
-        bool bSuccess = false;
-        ::std::list< ByteString > aLines;
-        rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    char pBuffer[1024];
+    ByteString aPrtQueueCmd, aForeToken, aAftToken, aString;
+    int nForeTokenCount, i;
+    FILE *pPipe;
+    bool bSuccess = false;
+    std::list< ByteString > aLines;
+    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
 
-        for( i = 0; i < sizeof(aParms)/sizeof(aParms[0]) && ! bSuccess; i++ )
+    OUString aPrintCommand;
+
+    for( i = 0; i < sizeof(aParms)/sizeof(aParms[0]) && ! bSuccess; i++ )
+    {
+        aLines.clear();
+        aPrtQueueCmd            = aParms[i].pQueueCommand;
+        aPrintCommand           = OUString::createFromAscii( aParms[i].pPrintCommand );
+        aForeToken              = aParms[i].pForeToken;
+        aAftToken               = aParms[i].pAftToken;
+        nForeTokenCount         = aParms[i].nForeTokenCount;
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
+#endif
+        if( pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" ) )
         {
-            aLines.clear();
-            aPrtQueueCmd            = aParms[i].pQueueCommand;
-            m_aSystemPrintCommand   = OUString::createFromAscii( aParms[i].pPrintCommand );
-            aForeToken              = aParms[i].pForeToken;
-            aAftToken               = aParms[i].pAftToken;
-            nForeTokenCount         = aParms[i].nForeTokenCount;
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
-#endif
-            if( pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" ) )
-            {
-                while( fgets( pBuffer, 1024, pPipe ) )
-                    aLines.push_back( ByteString( pBuffer ) );
-                if( ! pclose( pPipe ) )
-                    bSuccess = TRUE;
-            }
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "%s\n", bSuccess ? "success" : "failed" );
-#endif
+            while( fgets( pBuffer, 1024, pPipe ) )
+                aLines.push_back( ByteString( pBuffer ) );
+            if( ! pclose( pPipe ) )
+                bSuccess = true;
         }
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "%s\n", bSuccess ? "success" : "failed" );
+#endif
+    }
+
+    if( bSuccess )
+    {
+        std::list< OUString > aSysPrintQueues;
 
         while( aLines.begin() != aLines.end() )
         {
@@ -981,29 +1082,19 @@ const ::std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
                 if( nAftPos != STRING_NOTFOUND )
                 {
                     OUString aSysQueue( String( aOutLine.Copy( nPos, nAftPos - nPos ), aEncoding ) );
-                    // do not insert doubles (e.g. lpstat tends to produce such lines)
-                    ::std::list< OUString >::const_iterator it;
-                    for( it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end() && *it != aSysQueue; ++it )
+                    // do not insert duplicates (e.g. lpstat tends to produce such lines)
+                    std::list< OUString >::const_iterator it;
+                    for( it = aSysPrintQueues.begin(); it != aSysPrintQueues.end() && *it != aSysQueue; ++it )
                         ;
-                    if( it == m_aSystemPrintQueues.end() )
-                        m_aSystemPrintQueues.push_back( aSysQueue );
+                    if( it == aSysPrintQueues.end() )
+                        aSysPrintQueues.push_back( aSysQueue );
                 }
             }
         }
-    }
-    return m_aSystemPrintQueues;
-}
 
-void PrinterInfoManager::getSystemPrintCommands( ::std::list< OUString >& rCommands )
-{
-    const ::std::list< OUString >& rQueues = getSystemPrintQueues();
-    ::std::list< OUString >::const_iterator it;
-    rCommands.clear();
-    static String aPrinterConst( RTL_CONSTASCII_USTRINGPARAM( "(PRINTER)" ) );
-    for( it = rQueues.begin(); it != rQueues.end(); ++it )
-    {
-        String aCmd( m_aSystemPrintCommand );
-        aCmd.SearchAndReplace( aPrinterConst, *it );
-        rCommands.push_back( aCmd );
+        MutexGuard aGuard( m_aMutex );
+        m_bChanged  = true;
+        m_aQueues   = aSysPrintQueues;
+        m_aCommand  = aPrintCommand;
     }
 }
