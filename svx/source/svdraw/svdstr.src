@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:28:30 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -14125,11 +14125,11 @@ String SIP_SA_MEASURESCALE
     Text[ polish ] = "Dodatkowy czynnik skali";
     Text[ portuguese_brazilian ] = "scale extra factor";
     Text[ japanese ] = "¡–@‚Ì’Ç‰Á—v‘f";
-    Text[ chinese_simplified ] = "¿Ì¶ÈµÄ¸½¼ÓÒòËØ";
+    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞµÄ¸½¼ÓÒòËØ";
     Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Òªºªş¥[¦]¯À";
     Text[ arabic ] = "ãÚíÇÑ ŞíÇÓí ÅÖÇİí";
     Text[ dutch ] = "schaal, extra factor";
-    Text[ chinese_simplified ] = "¿Ì¶ÈµÄ¸½¼ÓÒòËØ";
+    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞµÄ¸½¼ÓÒòËØ";
     Text[ greek ] = "Ğñüóèåôïò ğáñÜãïíôáò êëßìáêáò";
     Text[ korean ] = "¹èÀ² Ãß°¡ÀûÀÎ ¿äÀÎ";
     Text[ turkish ] = "Ek ölçek faktörü";
