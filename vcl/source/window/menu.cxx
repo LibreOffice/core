@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 09:56:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2073,8 +2073,7 @@ Size Menu::ImplCalcSize( Window* pWin )
 
     Size aSz;
     Size aMaxImgSz;
-    long nMaxTextWidth = 0;
-    long nMaxAccWidth = 0;
+    long nMaxWidth = 0;
     long nMinMenuItemHeight = nFontHeight;
 
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
@@ -2105,6 +2104,7 @@ Size Menu::ImplCalcSize( Window* pWin )
 
         if ( ImplIsVisible( n ) )
         {
+            long nWidth = 0;
 
             // Separator
             if ( !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
@@ -2129,8 +2129,6 @@ Size Menu::ImplCalcSize( Window* pWin )
             if ( (pData->eType == MENUITEM_STRING) || (pData->eType == MENUITEM_STRINGIMAGE) )
             {
                 long nTextWidth = pWin->GetCtrlTextWidth( pData->aText );
-                if ( nTextWidth > nMaxTextWidth )
-                    nMaxTextWidth = nTextWidth;
                 long nTextHeight = pWin->GetTextHeight();
 
 //                if ( nTextHeight > pData->aSz.Height() )
@@ -2146,6 +2144,8 @@ Size Menu::ImplCalcSize( Window* pWin )
                 }
                 else
                     pData->aSz.Height() = Max( Max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
+
+                nWidth += nTextWidth;
             }
 
             // Accel
@@ -2154,15 +2154,14 @@ Size Menu::ImplCalcSize( Window* pWin )
                 String aName = pData->aAccelKey.GetName();
                 long nAccWidth = pWin->GetTextWidth( aName );
                 nAccWidth += nExtra;
-                if ( nAccWidth > nMaxAccWidth )
-                    nMaxAccWidth = nAccWidth;
+                nWidth += nAccWidth;
             }
 
             // SubMenu?
             if ( !bIsMenuBar && pData->pSubMenu )
             {
-                if ( nFontHeight > nMaxAccWidth )
-                    nMaxAccWidth = nFontHeight;
+                    if ( nFontHeight > nWidth )
+                        nWidth += nFontHeight;
 
                 pData->aSz.Height() = Max( Max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
             }
@@ -2171,6 +2170,10 @@ Size Menu::ImplCalcSize( Window* pWin )
 
             if ( !bIsMenuBar )
                 aSz.Height() += (long)pData->aSz.Height();
+
+            if ( nWidth > nMaxWidth )
+                nMaxWidth = nWidth;
+
         }
     }
 
@@ -2183,8 +2186,9 @@ Size Menu::ImplCalcSize( Window* pWin )
         if ( aMaxImgSz.Width() )
             nTextPos += gfxExtra;
 
-        aSz.Width() = nTextPos + nMaxTextWidth + nExtra + nMaxAccWidth;
-        aSz.Width() += 10*nExtra;   // etwas mehr...
+        aSz.Width() = nTextPos + nMaxWidth + nExtra;
+        aSz.Width() += 8*nExtra;   // a _little_ more ...
+
         int nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
         aSz.Width() += 2*nOuterSpace;
         aSz.Height() += 2*nOuterSpace;
@@ -2335,7 +2339,8 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 {
                     XubString aAccText = pData->aAccelKey.GetName();
                     aTmpPos.X() = aOutSz.Width() - pWin->GetTextWidth( aAccText );
-                    aTmpPos.X() -= 3*nExtra;
+                    aTmpPos.X() -= 4*nExtra;
+
                     aTmpPos.X() -= nOuterSpace;
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
@@ -4409,6 +4414,7 @@ void MenuFloatingWindow::Paint( const Rectangle& rRect )
         ImplDrawScroller( TRUE );
         ImplDrawScroller( FALSE );
     }
+    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
     pMenu->ImplPaint( this, nScrollerHeight, ImplGetStartY() );
     if ( nHighlightedItem != ITEMPOS_INVALID )
         HighlightItem( nHighlightedItem, TRUE );
@@ -5089,6 +5095,7 @@ void MenuBarWindow::Paint( const Rectangle& rRect )
 
         DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
     }
+    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
     pMenu->ImplPaint( this, 0 );
     if ( nHighlightedItem != ITEMPOS_INVALID )
         HighlightItem( nHighlightedItem, TRUE );
