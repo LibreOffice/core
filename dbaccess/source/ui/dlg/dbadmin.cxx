@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 10:05:43 $
+ *  last change: $Author: fs $ $Date: 2001-02-20 13:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,11 +816,10 @@ sal_Bool ODbAdminDialog::isApplyable()
 }
 
 //-------------------------------------------------------------------------
-sal_Bool ODbAdminDialog::applyChanges()
+void ODbAdminDialog::applyChangesAsync()
 {
-    DBG_ASSERT(isApplyable(), "ODbAdminDialog::applyChanges: invalid call!");
-    short nResult = SfxTabDialog::Ok();
-    return (AR_KEEP != implApplyChanges());
+    DBG_ASSERT(isApplyable(), "ODbAdminDialog::applyChangesAsync: invalid call!");
+    PostUserEvent(LINK(this, ODbAdminDialog, OnAsyncApplyChanges));
 }
 
 //-------------------------------------------------------------------------
@@ -1918,6 +1917,18 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 }
 
 //-------------------------------------------------------------------------
+IMPL_LINK(ODbAdminDialog, OnAsyncApplyChanges, void*, EMPTYARG)
+{
+    SfxTabDialog::Ok();
+    if (AR_KEEP != implApplyChanges())
+    {
+        ShowPage(PAGE_QUERYADMINISTRATION);
+        return 1L;
+    }
+    return 0L;
+}
+
+//-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 {
     implApplyChanges();
@@ -2285,6 +2296,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2001/02/07 10:05:43  fs
+ *  introduce the connection option 'SystemDriverSettings'
+ *
  *  Revision 1.34  2001/02/07 09:32:15  fs
  *  renamed JDBCDRV to JavaDriverClass
  *
