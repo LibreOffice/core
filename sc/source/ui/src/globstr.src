@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:47:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Knippen" ;
         Text [ spanish ] = "Cortar" ;
         Text [ english_us ] = "Cut" ;
-        Text[ chinese_simplified ] = "¼ô³ı";
+        Text[ chinese_simplified ] = "¼ôÇĞ";
         Text[ russian ] = "Âûğåçàòü";
         Text[ polish ] = "Wytnij";
         Text[ japanese ] = "Ø‚èæ‚è";
@@ -181,7 +181,7 @@ Resource RID_GLOBSTR
         Text = "Drag&Drop" ;
         Text [ ENGLISH ] = "Drag&Drop" ;
         Text [ norwegian ] = "Dra&Slipp" ;
-        Text [ italian ] = "Trascina e rilascia" ;
+        Text [ italian ] = "Drag&Drop" ;
         Text [ portuguese_brazilian ] = "Arrastar&Soltar" ;
         Text [ portuguese ] = "Arrastar&Largar" ;
         Text [ french ] = "Glisser-Déposer" ;
@@ -526,7 +526,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨ú®ø¦X¨Ö";
         Text[ arabic ] = "ÅÒÇáÉ ÇáÖã";
         Text[ greek ] = "ÊáôÜñãçóç óõã÷şíåõóçò";
-        Text[ korean ] = "ÅëÇÕ¡¡ÇØÁ¦";
+        Text[ korean ] = "¿ä¾à ÇØÁ¦";
         Text[ turkish ] = "Böl";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dividir";
@@ -855,7 +855,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨ú®ø¸s²Õ";
         Text[ arabic ] = "ÅÒÇáÉ ÇáÊÌãíÚ";
         Text[ greek ] = "ÊáôÜñãçóç ïìáäïğïßçóçò";
-        Text[ korean ] = "±×·ìÈ­¡¡ÇØÁ¦";
+        Text[ korean ] = "±×·ìÈ­ ÇØÁ¦";
         Text[ turkish ] = "Grubu çöz";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desagrupar";
@@ -883,7 +883,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¿ï¾Ü¤jºõ¯Å";
         Text[ arabic ] = "ÊÍÏíÏ ãÓÊæì ÇáÊŞÓíã";
         Text[ greek ] = "ÅğéëïãŞ åğéğİäïõ äéÜñèñùóçò";
-        Text[ korean ] = "´Ù´Ü°è´Ü°è  ¼±ÅÃ";
+        Text[ korean ] = "´Ù´Ü°è ¼±ÅÃ";
         Text[ turkish ] = "Anahat düzeyini seç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Seleccionar nivel del esquema";
@@ -910,7 +910,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "Åã¥Ü²Ó¸`";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊİÇÕíá";
         Text[ greek ] = "ÅìöÜíéóç ëåğôïìåñåéşí";
-        Text[ korean ] = "»ó¼¼¡¡º¸ÀÌ±â";
+        Text[ korean ] = "»ó¼¼ º¸ÀÌ±â";
         Text[ turkish ] = "Ayrıntıları görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar detalles";
@@ -957,14 +957,14 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Overzicht verwijderen" ;
         Text [ spanish ] = "Eliminar el esquema" ;
         Text [ english_us ] = "Clear Outline" ;
-        Text[ chinese_simplified ] = "È¡Ïû´ó¸ÙÏÔÊ¾";
+        Text[ chinese_simplified ] = "É¾³ı´ó¸Ù";
         Text[ russian ] = "Óäàëèòü ñòğóêòóğó";
         Text[ polish ] = "Wyczyœæ konspekt";
         Text[ japanese ] = "±³Ä×²İ‚Ìíœ";
-        Text[ chinese_traditional ] = "¨ú®ø¤jºõÅã¥Ü";
+        Text[ chinese_traditional ] = "§R°£¤jºõ";
         Text[ arabic ] = "ÅÒÇáÉ ÇáÊŞÓíã";
         Text[ greek ] = "ÊáôÜñãçóç äéÜñèñùóçò";
-        Text[ korean ] = "´Ù´Ü°è¡¡Á¦°Å";
+        Text[ korean ] = "´Ù´Ü°è Á¦°Å";
         Text[ turkish ] = "Anahatı kaldır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar el esquema";
@@ -992,7 +992,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¦Û°ÊÅã¥Ü¤jºõ";
         Text[ arabic ] = "ÊŞÓíã ÊáŞÇÆí";
         Text[ greek ] = "ÁõôïÄéÜñèñùóç";
-        Text[ korean ] = "ÀÚµ¿´Ù´Ü°è";
+        Text[ korean ] = "ÀÚµ¿¿Ü°û¼±";
         Text[ turkish ] = "Otomatik anahat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esquema automático";
@@ -1218,7 +1218,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Create DataPilot Table" ;
         Text [ italian ] = "Crea tabella di DataPilot" ;
         Text [ spanish ] = "Crear tabla del Piloto de Datos" ;
-        Text [ french ] = "Créer une table DataPilote" ;
+        Text [ french ] = "Créer une table du pilote de données" ;
         Text [ dutch ] = "DataPiloot-tabel maken" ;
         Text [ swedish ] = "Skapa Datapilottabell" ;
         Text [ danish ] = "Opret DataPilot-tabel" ;
@@ -1231,7 +1231,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "«Ø¥ß¸ê®Æ§U²z¤u§@ªí";
         Text[ arabic ] = "ÅäÔÇÁ ÌÏæá ãÑÔÏ ÈíÇäÇÊ";
         Text[ greek ] = "Äçìéïõñãßá ğßíáêá ğéëüôïõ äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥ ¸¸µé±â";
+        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Å×ÀÌºí ¸¸µé±â";
         Text[ turkish ] = "Veri pilotu tablosu oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear tabla del Piloto de Datos";
@@ -1245,7 +1245,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Edit DataPilot Table" ;
         Text [ italian ] = "Modifica tabella di DataPilot" ;
         Text [ spanish ] = "Modificar tabla del Piloto de Datos" ;
-        Text [ french ] = "Éditer la table DataPilote" ;
+        Text [ french ] = "Éditer la table du pilote de données" ;
         Text [ swedish ] = "Redigera Datapilottabell" ;
         Text [ danish ] = "Rediger DataPilot-tabel" ;
         Text [ portuguese ] = "Editar tabela do Piloto de Dados" ;
@@ -1257,7 +1257,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "½s¿è¸ê®Æ§U²z¤u§@ªí";
         Text[ arabic ] = "ÊÍÑíÑ ÌÏæá ãÑÔÏ ÇáÈíÇäÇÊ";
         Text[ greek ] = "Åğåîåñãáóßá ğßíáêá ğéëüôïõ äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥ ÆíÁı";
+        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Å×ÀÌºí ÆíÁı";
         Text[ turkish ] = "Veri pilotu tablosunu düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificar tabla del Piloto de Datos";
@@ -1272,7 +1272,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Delete DataPilot Table" ;
         Text [ italian ] = "Elimina tabella di DataPilot" ;
         Text [ spanish ] = "Eliminar tabla del Piloto de Datos" ;
-        Text [ french ] = "Supprimer la table du DataPilote" ;
+        Text [ french ] = "Supprimer la table du pilote de données" ;
         Text [ swedish ] = "Radera Datapilottabell" ;
         Text [ danish ] = "Slet DataPilot-tabel" ;
         Text [ portuguese ] = "Eliminar tabela do Piloto de Dados" ;
@@ -1436,7 +1436,7 @@ Resource RID_GLOBSTR
         Text[ swedish ] = "Redigera cellformatmall";
         Text[ polish ] = "Edytuj styl komórki";
         Text[ portuguese_brazilian ] = "Edit cell style";
-        Text[ japanese ] = "¾Ù‚Ì½À²Ù‚Ì•ÒW";
+        Text[ japanese ] = "¾Ù½À²Ù‚Ì•ÒW";
         Text[ korean ] = "¼¿ À¯Çü ÆíÁı";
         Text[ chinese_simplified ] = "±à¼­µ¥Ôª¸ñÑùÊ½";
         Text[ chinese_traditional ] = "½s¿èÀx¦s®æ¼Ë¦¡";
@@ -1464,7 +1464,7 @@ Resource RID_GLOBSTR
         Text[ japanese ] = "Íß°¼Ş½À²Ù‚Ì“K—p";
         Text[ korean ] = "ÂÊ À¯Çü Àû¿ë";
         Text[ chinese_simplified ] = "Ì×ÓÃÒ³ÃæÑùÊ½";
-        Text[ chinese_traditional ] = "®M¥Î­¶­±¼Ë¦¡";
+        Text[ chinese_traditional ] = "±Ä¥Î­¶­±¼Ë¦¡";
         Text[ turkish ] = "Apply page style";
         Text[ arabic ] = "ÊÚííä äãØ ÇáÕİÍÉ";
         Text[ catalan ] = "Aplicar estilo de página";
@@ -1513,7 +1513,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Âëèÿşùèå ÿ÷åéêè";
         Text[ polish ] = "ŒledŸ poprzedniki";
         Text[ japanese ] = "QÆŒ³ÄÚ°½";
-        Text[ chinese_traditional ] = "¤W¤@­ÓÀx¦s®æ°lÂÜ½b¸¹";
+        Text[ chinese_traditional ] = "Àx¦s®æ«e¾É½b¸¹";
         Text[ arabic ] = "ÊÊÈÚ ÇáÓÇÈŞÇÊ";
         Text[ greek ] = "º÷íïò ğñïçãïıìåíïõ";
         Text[ korean ] = "¼±·Ê ÃßÀû";
@@ -1540,7 +1540,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Óáğàòü ñòğåëêè ê âëèÿşùèì ÿ÷åéêàì";
         Text[ polish ] = "Usuñ strza³ki poprzedników";
         Text[ japanese ] = "QÆæÄÚ°½‚Ìíœ";
-        Text[ chinese_traditional ] = "§R°£¤W¤@­ÓÀx¦s®æ°lÂÜ½b¸¹";
+        Text[ chinese_traditional ] = "§R°£Àx¦s®æ«e¾É½b¸¹";
         Text[ arabic ] = "ÅÒÇáÉ ÇáÓÇÈŞÇÊ";
         Text[ greek ] = "ÊáôÜñãçóç ß÷íïò ğñïçãïıìåíïõ";
         Text[ korean ] = "¼±·Ê ÃßÀû Á¦°Å";
@@ -1566,7 +1566,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Çàâèñèìûå ÿ÷åéêè";
         Text[ polish ] = "ŒledŸ zale¿noœci";
         Text[ japanese ] = "QÆæÄÚ°½";
-        Text[ chinese_traditional ] = "¤U¤@­ÓÀx¦s®æ°lÂÜ½b¸¹";
+        Text[ chinese_traditional ] = "¤U¤@­Ó¦V«áªº°lÂÜ½b¸¹";
         Text[ arabic ] = "ÊÊÈÚ ÇáÊæÇÈÚ";
         Text[ greek ] = "º÷íïò ğñïò ôï åğüìåíï";
         Text[ korean ] = "Á¾¼Ó ÃßÀû";
@@ -1592,7 +1592,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Óáğàòü ñòğåëêè ê çàâèñèìûì ÿ÷åéêàì";
         Text[ polish ] = "Usuñ zale¿noœci";
         Text[ japanese ] = "QÆŒ³ÄÚ°½‚Ìíœ";
-        Text[ chinese_traditional ] = "§R°£¤U¤@­ÓÀx¦s®æ°lÂÜ½b¸¹";
+        Text[ chinese_traditional ] = "§R°£¤U¤@­Ó¦V«áªº°lÂÜ½b¸¹";
         Text[ arabic ] = "ÅÒÇáÉ ÇáÊæÇÈÚ";
         Text[ greek ] = "ÊáôÜñãçóç ß÷íïõò ğñïò åğüìåíï";
         Text[ korean ] = "Á¾¼Ó ÃßÀû Á¦°Å";
@@ -1621,7 +1621,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°lÂÜ¿ù»~";
         Text[ arabic ] = "ÊÊÈÚ ÇáÎØÃ";
         Text[ greek ] = "º÷íïò ğñïò ôï óöÜëìá";
-        Text[ korean ] = "¿À·ù¡¡ÃßÀû";
+        Text[ korean ] = "¿À·ù ÃßÀû";
         Text[ turkish ] = "Hatayı izle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rastro al error";
@@ -1674,7 +1674,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¼Ğ°OµL®Äªº¸ê®Æ";
         Text[ arabic ] = "æÖÚ ÚáÇãÉ Úáì ÇáÈíÇäÇÊ ÇáÛíÑ ÕÇáÍÉ";
         Text[ greek ] = "ÓŞìáíóç (ìå êıêëï) ìç İãêõñùí äåäïìİíùí";
-        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº µ¥ÀÌÅÍ  Ç¥½Ã";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº µ¥ÀÌÅÍ Ç¥½Ã";
         Text[ turkish ] = "Geçersiz verileri işaretle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Marcar los datos no válidos";
@@ -1782,7 +1782,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "§ó·s±¶®|";
         Text[ arabic ] = "ÊÍÏíË ÇáÇÑÊÈÇØ";
         Text[ greek ] = "Åíçìİñùóç óıíäåóçò";
-        Text[ korean ] = "¿¬°á »õ·Î°íÄ§";
+        Text[ korean ] = "¸µÅ© »õ·Î °íÄ§";
         Text[ turkish ] = "Bağlantıyı güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Actualizar vínculo";
@@ -1967,7 +1967,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "´î¤ÖÁY±Æ";
         Text[ arabic ] = "ÊŞáíá ÇáÅÒÇÍÉ";
         Text[ greek ] = "Ìåßùóç åóï÷Şò";
-        Text[ korean ] = "µé¿©¾²±â£¬ÁÙÀÓ";
+        Text[ korean ] = "µé¿©¾²±â£¬°¨¼Ò";
         Text[ turkish ] = "Girintiyi küçült";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reducir sangría";
@@ -1994,7 +1994,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "ÂX¤jÁY±Æ";
         Text[ arabic ] = "ÒíÇÏÉ ÇáÅÒÇÍÉ";
         Text[ greek ] = "Áıîçóç åóï÷Şò";
-        Text[ korean ] = "µé¿©¾²±â ´ÃÀÓ";
+        Text[ korean ] = "µé¿©¾²±â";
         Text[ turkish ] = "Girintiyi büyüt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aumentar sangría";
@@ -2121,7 +2121,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Afdrukbereiken" ;
         Text[ chinese_simplified ] = "´òÓ¡ÇøÓò";
         Text[ russian ] = "Îáëàñòè ïå÷àòè";
-        Text[ polish ] = "Zakres wydruku";
+        Text[ polish ] = "Zakresy wydruku";
         Text[ japanese ] = "ˆóü”ÍˆÍ";
         Text[ chinese_traditional ] = "¦C¦L½d³ò";
         Text[ arabic ] = "äØÇŞÇÊ ÇáØÈÇÚÉ";
@@ -2232,7 +2232,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "½s¿è°Ï°ì¦WºÙ";
         Text[ arabic ] = "ÊÍÑíÑ ÃÓãÇÁ äØÇŞÇÊ";
         Text[ greek ] = "Åğåîåñãáóßá ïíïìÜôùí ğåñéï÷şí";
-        Text[ korean ] = "±¸¿ªÀÌ¸§  ÆíÁı";
+        Text[ korean ] = "±¸¿ªÀÌ¸§ ÆíÁı";
         Text[ turkish ] = "Aralık adlarını düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar nombres de área";
@@ -2255,7 +2255,7 @@ Resource RID_GLOBSTR
         Text[ polish ] = "Wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Change case";
         Text[ japanese ] = "•¶ší‚Ì•ÏŠ·";
-        Text[ korean ] = "´ë/¼Ò¹®ÀÚ";
+        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
         Text[ chinese_simplified ] = "±ä»¯×ÖÄ¸ºÍ×ÖÌå¸ñÊ½";
         Text[ chinese_traditional ] = "ÅÜ¤Æ¦r¥À©M¦r«¬®æ¦¡";
         Text[ turkish ] = "Change case";
@@ -2423,7 +2423,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤£°õ¦æ°Ê§@";
         Text[ arabic ] = "áÇ ÊæÌÏ ÚãáíÇÊ ááÊäİíĞ";
         Text[ greek ] = "Äåí õğÜñ÷ïõí åíôïëİò ãéá åêôİëåóç";
-        Text[ korean ] = "ÀÛ¾÷¡¡½ÇÇà¡¡¾ÊÀ½.";
+        Text[ korean ] = "ÀÛ¾÷ ½ÇÇà Ãë¼Ò.";
         Text[ turkish ] = "Yürütülecek işlem yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ninguna operación por hacer";
@@ -2639,7 +2639,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µLªk¨ú®ø";
         Text[ arabic ] = "ÇáÅÒÇáÉ ÛíÑ ããßäÉ";
         Text[ greek ] = "Äåí åßíáé äõíáôŞ ç êáôÜñãçóç ôçò ïìáäïğïßçóçò";
-        Text[ korean ] = "ÇØÃ¼ ºÒ°¡´É";
+        Text[ korean ] = "½ÇÇà Ãë¼Ò ºÒ°¡´É";
         Text[ turkish ] = "Grup çözülemiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No es posible deshacer la agrupación";
@@ -2694,7 +2694,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤£¤¹³\\½Æ¦X¦X¨Ö¡I";
         Text[ arabic ] = "ããäæÚ ÊÑÇßÈ ÇáÎáÇíÇ ÇáãÏãÌÉ!";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óõã÷şíåõóç êåëéşí ôá ïğïßá åßíáé Şäç óõã÷ùíåõìİíá!";
-        Text[ korean ] = "º´ÇÕ½Ã¿¡¡¡°ãÄ¡Áö¡¡¾Ê°Ô!";
+        Text[ korean ] = "º´ÇÕ½Ã¿¡ °ãÄ¡Áö ¾Ê°Ô!";
         Text[ turkish ] = "Özetlenmiş hücreler özetlenemez!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¡No es posible insertar celdas fusionadas en celdas fusionadas!";
@@ -2721,7 +2721,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤£¤¹³\\½Æ¦X¦X¨Ö¡I";
         Text[ arabic ] = "ããäæÚ ÊÑÇßÈ ÇáÎáÇíÇ ÇáãÏãÌÉ!";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óõã÷şíåõóç êåëéşí ôá ïğïßá åßíáé Şäç óõã÷ùíåõìİíá!";
-        Text[ korean ] = "º´ÇÕ½Ã¿¡¡¡°ãÄ¡Áö¡¡¾Ê°Ô!";
+        Text[ korean ] = "º´ÇÕ½Ã¿¡ °ãÄ¡Áö ¾Ê°Ô!";
         Text[ turkish ] = "Özetlenmiş hücreler özetlenemez!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¡No es posible insertar celdas fusionadas en celdas fusionadas!";
@@ -2831,7 +2831,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤£¤¹³\\½Æ¦X¦X¨Ö¡I";
         Text[ arabic ] = "ããäæÚ ÊÑÇßÈ ÇáÎáÇíÇ ÇáãÏãÌÉ !";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé óõã÷şíåõóç êåëéşí ôá ïğïßá åßíáé Şäç óõã÷ùíåõìİíá!";
-        Text[ korean ] = "º´ÇÕ½Ã¿¡¡¡°ãÄ¡Áö¡¡¾Ê°Ô!";
+        Text[ korean ] = "º´ÇÕ½Ã¿¡ °ãÄ¡Áö ¾Ê°Ô!";
         Text[ turkish ] = "Özetlenmiş hücreler özetlenemez!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¡No es posible insertar celdas fusionadas en celdas fusionadas!";
@@ -2857,7 +2857,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¥u¦³¦b¤£±a®æ¦¡ªº±ø¥ó¤U¤~¯à±Æ§Ç§t¦³¦X¨ÖªºÀx¦s®æ°Ï°ì¡C";
         Text[ arabic ] = "áÇ íãßä İÑÒ ÇáäØÇŞÇÊ ĞÇÊ ÇáÎáÇíÇ ÇáãÏãÌÉ ÅáÇ ÈÏæä ÊäÓíŞÇÊ.";
         Text[ greek ] = "Ç ôáîéíüìçóç ğåñéï÷şí, ïé ïğïßåò ğåñéİ÷ïõí óõã÷ùíåõìİíá êåëéÜ, åßíáé äõíáôüí íá ãßíåé ìüíï ÷ùñßò ôç ìïñöïğïßçóç.";
-        Text[ korean ] = "º´ÇÕµÈ ¼¿À» Æ÷ÇÔÇÏ°í ÀÖ´Â ¿µ¿ªÀº ¼­½Ä ¾øÀÌ¸¸ Á¤·ÄµÉ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ korean ] = "º´ÇÕµÈ ¼¿À» Æ÷ÇÔÇÏ°í ÀÖ´Â ¿µ¿ªÀº ¼­½ÄÀÌ ¾øÀ» ¶§¿¡¸¸ Á¤·ÄµÉ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Birleştirilmiş hücre içeren aralıklar yalnızca formatsız olarak sıralanabilir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Áreas con celdas fusionadas solo se pueden ordenar sin formato.";
@@ -2883,7 +2883,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì·j´M¶µ¥Ø¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÈíÇäÇÊ ÇáÊí ÊÈÍË ÚäåÇ.";
         Text[ greek ] = "Äåí âñİèçêå ï üñïò áíáæŞôçóçò.";
-        Text[ korean ] = "°Ë»ö¿ë¾î¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "°Ë»ö¿ë¾î¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Aranan terim bulunamadı.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se encontró la expresión buscada.";
@@ -3048,7 +3048,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­n¨Ï¥Î³o­Ó³Ìªñ¦üªº¼Æ­È(";
         Text[ arabic ] = "åá ÊÑíÏ ÅÏÑÇÌ ÃŞÑÈ ŞíãÉ (";
         Text[ greek ] = "Èİëåôå ç ğëçóéİóôåñç ôéìŞ (";
-        Text[ korean ] = "±Ù»ç °ªÀ» (";
+        Text[ korean ] = "±Ù»ç°ª(";
         Text[ turkish ] = "En yakın değer (";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Desea insertar el valor más cercano (";
@@ -3076,7 +3076,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = ")¡H";
         Text[ arabic ] = ")¿";
         Text[ greek ] = ") íá åöáñìïóôåß;";
-        Text[ korean ] = ")Àû¿ëÇÒ±î¿ä?";
+        Text[ korean ] = ")À»(¸¦) Àû¿ëÇÒ±î¿ä?";
         Text[ turkish ] = ") alınsın mı?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = ")?";
@@ -3103,7 +3103,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "Á`µ²ªG";
         Text[ arabic ] = "ÇáãÌãæÚ";
         Text[ greek ] = "Óõíïëéêü Üèñïéóìá";
-        Text[ korean ] = "ÃÑ ÇÕ°è";
+        Text[ korean ] = "ÀüÃ¼ ÇÕ°è";
         Text[ turkish ] = "Genel toplam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Total";
@@ -3362,7 +3362,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "O Piloto de Dados deve ter pelo menos uma entrada." ;
         Text [ finnish ] = "Tietojen ohjauksen taulukossa on oltava vähintään yksi merkintä." ;
         Text [ danish ] = "DataPilot-tabellen skal mindst indeholde et element." ;
-        Text [ french ] = "La table du DataPilote doit contenir au moins une entrée !" ;
+        Text [ french ] = "La table du pilote de données doit contenir au moins une entrée !" ;
         Text [ swedish ] = "Datapilot-tabellen måste innehålla minst en post." ;
         Text [ dutch ] = "De DataPiloot-tabel moet minstens één item bevatten." ;
         Text [ spanish ] = "La tabla del Piloto de Datos debe contener al menos una entrada." ;
@@ -3374,7 +3374,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¸ê®Æ§U²z¤u§@ªí¥²¶·¦Ü¤Ö§t¦³¤@­Ó±ø¥Ø¡C";
         Text[ arabic ] = "íÌÈ Ãä íÍÊæí ÌÏæá ãÑÔÏ ÇáÈíÇäÇÊ Úáì ÅÏÎÇá æÇÍÏ Úáì ÇáÃŞá.";
         Text[ greek ] = "Ï ğßíáêáò ôïõ ğéëüôïõ äåäïìİíùí ğñİğåé íá ğåñéİ÷åé ôïõëÜ÷éóôïí ìßá êáôá÷şñéóç.";
-        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µÀº ÃÖ¼ÒÇÑ ÇÏ³ªÀÇ Ç×¸ñÀ» Æ÷ÇÔÇÏ°í ÀÖ¾î¾ß ÇÕ´Ï´Ù.";
+        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Å×ÀÌºíÀº ÃÖ¼ÒÇÑ ÇÏ³ªÀÇ Ç×¸ñÀ» Æ÷ÇÔÇÏ°í ÀÖ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "Veri pilotu tablosu en az bir giriş içermelidir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La tabla del Piloto de Datos debe contener al menos una entrada.";
@@ -3415,7 +3415,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Error creating the Data Pilot Table." ;
         Text [ italian ] = "Erore nella creazione della tabella DataPilot" ;
         Text [ spanish ] = "Error al crear la tabla del Piloto de Datos." ;
-        Text [ french ] = "Erreur en créant le tableau du DataPilote" ;
+        Text [ french ] = "Erreur en créant la table du pilote de données" ;
         Text [ swedish ] = "Fel när Datapilot-tabell skapades." ;
         Text [ danish ] = "Fejl ved oprettelse af DataPilot-tabellen." ;
         Text [ portuguese ] = "Erro ao criar a tabela do Piloto de Dados." ;
@@ -3427,7 +3427,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¦b«Ø¥ß¸ê®Æ§U²z¤u§@ªí®Éµo¥Í¿ù»~¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅäÔÇÁ ÌÏæá ãÑÔÏ ÇáÈíÇäÇÊ.";
         Text[ greek ] = "ÓöÜëìá êáôÜ ôçí äçìéïõñãßá ôïõ ğßíáêá ôïõ ğéëüôïõ äåäïìİíùí.";
-        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µÇ¥ ¸¸µé±â ¿À·ù.";
+        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µÇ¥ ÀÛ¼º½Ã ¿À·ù.";
         Text[ turkish ] = "Veri pilotu tablosu oluşturma hatası";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error al crear la tabla del Piloto de Datos.";
@@ -3445,7 +3445,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "DataPilot-tabeller må ikke overlappe." ;
         Text [ italian ] = "Le tabelle del DataPilot non devono sovrapporsi." ;
         Text [ spanish ] = "Las tablas del Piloto de Datos no se deben superponer." ;
-        Text [ french ] = "Les tables de données du DataPilote ne doivent pas se recouper." ;
+        Text [ french ] = "Les tables du pilote de données ne peuvent pas se recouper." ;
         Text [ dutch ] = "Datapiloottabellen mogen elkaar niet overlappen" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí¹¤×÷±í²»¿ÉÒÔÏà»¥ÖØµş¡£";
         Text[ russian ] = "Ñâîäíûå òàáëèöû íå äîëæíû ïåğåêğûâàòüñÿ.";
@@ -3454,7 +3454,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¸ê®Æ§U²z¤u§@ªí¤£¥i¥H¬Û¤¬­«Å|¡C";
         Text[ arabic ] = "áÇ íãßä ÊÑÇßÈ ÌÏÇæá ãÑÔÏ ÇáÈíÇäÇÊ.";
         Text[ greek ] = "Äåí åğéôñİğåôáé ç åğéêÜëõøç ôùí ğéíÜêùí DataPilot.";
-        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Å×ÀÌºíÀÌ °ãÃÄÁ®¼­´Â¡¡¾ÈµË´Ï´Ù.";
+        Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Å×ÀÌºíÀÌ °ãÃÄÁ®¼­´Â ¾ÈµË´Ï´Ù.";
         Text[ turkish ] = "Veri pilotu tabloları basamaklanamaz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Las tablas del Piloto de Datos no se deben superponer.";
@@ -3519,7 +3519,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Create DataPilot Table" ;
         Text [ italian ] = "Crea tabella di DataPilot" ;
         Text [ spanish ] = "Crear tabla del Piloto de Datos" ;
-        Text [ french ] = "Créer une table DataPilote" ;
+        Text [ french ] = "Créer une table du pilote de données" ;
         Text [ dutch ] = "DataPiloot-tabel maken" ;
         Text [ swedish ] = "Skapa Datapilottabell" ;
         Text [ danish ] = "Opret DataPilot-tabel" ;
@@ -3557,7 +3557,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Âñåãî";
         Text[ polish ] = "Razem";
         Text[ japanese ] = "‡Œv";
-        Text[ chinese_traditional ] = "Á`¦@";
+        Text[ chinese_traditional ] = "Á`­p";
         Text[ arabic ] = "ÅÌãÇáí";
         Text[ greek ] = "Óıíïëï";
         Text[ korean ] = "ÀüÃ¼";
@@ -3611,7 +3611,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "ÑÓÌÌÀ";
         Text[ polish ] = "SUMA";
         Text[ japanese ] = "SUM";
-        Text[ chinese_traditional ] = "Á`­p";
+        Text[ chinese_traditional ] = "¤p­p";
         Text[ arabic ] = "ÇáãÌãæÚ";
         Text[ greek ] = "SUM";
         Text[ korean ] = "ÇÕ°è";
@@ -3992,7 +3992,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­¶";
         Text[ arabic ] = "ÕİÍÉ";
         Text[ greek ] = "Óåëßäá";
-        Text[ korean ] = "ÂÊ";
+        Text[ korean ] = "ÆäÀÌÁö";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Página";
@@ -4213,7 +4213,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­Ó¥\\¯àµLªkÀ³¥Î©ó¦h­«¿ï¨ú¡C";
         Text[ arabic ] = "áÇ íãßä ÊØÈíŞ åĞå ÇáÏÇáÉ Úáì ÊÍÏíÏÇÊ ãÊÚÏÏÉ.";
         Text[ greek ] = "Ç óõíÜñôçóç áõôŞ äåí åßíáé äõíáôüí íá åöáñìïóôåß ìå ğïëëáğëİò åğéëïãİò.";
-        Text[ korean ] = "ÀÌ¡¡±â´ÉÀº ´ÙÁß ¼±ÅÃÀ¸·Î »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ korean ] = "ÀÌ ±â´ÉÀº ´ÙÁß ¼±ÅÃÀ¸·Î »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Bu işlev, çoklu seçimler için kullanılamamaktadır.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esta función no se puede aplicar con selecciones múltiples.";
@@ -4268,7 +4268,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤£©úªº¿z¿ï¡G ";
         Text[ arabic ] = "İáÊÑ ÛíÑ ãÚÑæİ: ";
         Text[ greek ] = "¢ãíùóôï ößëôñï: ";
-        Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ÇÊÅÍ: ";
+        Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ÇÊÅÍ: ";
         Text[ turkish ] = "Bilinmeyen filtre: ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Filtro desconocido:  ";
@@ -4512,7 +4512,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³¼Ğ°O¥ô¦ó°Ï°ì¡C";
         Text[ arabic ] = "áã íÊã ÊÍÏíÏ äØÇŞ.";
         Text[ greek ] = "Äåí åğéëİ÷èçêå ğåñéï÷Ş.";
-        Text[ korean ] = "¹üÀ§°¡ ¼±ÅÃÇ¥½ÃµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ korean ] = "¹üÀ§°¡ ¸¶Å·Ç¥½ÃµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Aralık seçilmedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ninguna área seleccionada.";
@@ -4609,7 +4609,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "Piloto de Dados" ;
         Text [ finnish ] = "Tietojen ohjaus" ;
         Text [ danish ] = "DataPilot" ;
-        Text [ french ] = "DataPilote" ;
+        Text [ french ] = "Pilote de données" ;
         Text [ swedish ] = "Datapilot" ;
         Text [ dutch ] = "DataPiloot" ;
         Text [ spanish ] = "Piloto de datos" ;
@@ -4646,7 +4646,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ñóììà";
         Text[ polish ] = "Suma";
         Text[ japanese ] = "‡Œv";
-        Text[ chinese_traditional ] = "Á`¼Æ";
+        Text[ chinese_traditional ] = "¤p­p";
         Text[ arabic ] = "ãÌãæÚ";
         Text[ greek ] = "¢èñïéóìá";
         Text[ korean ] = "ÇÕ°è";
@@ -4908,7 +4908,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¦b³o­Ó¦ì¸m¨S¦³§ä¨ì¹Ïªí¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÑÓã ÈíÇäí İí åĞÇ ÇáãæÖÚ.";
         Text[ greek ] = "Äåí âñİèçêå äéÜãñáììá óå áõôŞ ôç èİóç.";
-        Text[ korean ] = "ÀÌ À§Ä¡¿¡¼­ Â÷Æ®¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "ÀÌ À§Ä¡¿¡¼­ Â÷Æ®¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Bu konumda şema bulunamadı.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se ha encontrado ningún diagrama en esta posición.";
@@ -4923,7 +4923,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "Não existe Piloto de Dados nesta posição." ;
         Text [ finnish ] = "Tästä sijainnista ei löytynyt tietojen ohjaustaulukkoa." ;
         Text [ danish ] = "Der blev ikke fundet en DataPilot-tabel på denne position." ;
-        Text [ french ] = "Aucun tableau du DataPilote n'a été trouvé à cet emplacement." ;
+        Text [ french ] = "Aucune table du pilote de données n'a été trouvée à cet emplacement." ;
         Text [ swedish ] = "Ingen Datapilot-tabell hittades vid denna position." ;
         Text [ dutch ] = "Geen DataPiloot-tabel op deze positie gevonden." ;
         Text [ spanish ] = "No se ha encontrado ninguna tabla del Piloto de Datos en esta posición." ;
@@ -4935,7 +4935,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¦b³o­Ó¦ì¸m¨S¦³§ä¨ì¸ê®Æ§U²z¤u§@ªí¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÌÏæá ãÑÔÏ ÇáÈíÇäÇÊ İí åĞÇ ÇáãæÖÚ.";
         Text[ greek ] = "Äåí âñİèçêå ğßíáêáò ğéëüôïõ äåäïìİíùí óå áõôŞ ôç èİóç.";
-        Text[ korean ] = "ÀÌ À§Ä¡¿¡¼­ µ¥ÀÌÅÍÆÄÀÏ·µ Å×ÀÌºíÀ»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "ÀÌ À§Ä¡¿¡¼­ µ¥ÀÌÅÍÆÄÀÏ·µ Å×ÀÌºíÀ» Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Bu konumda Veri pilotu tablosu bulunamadı.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se ha encontrado ninguna tabla del Piloto de Datos en esta posición.";
@@ -5100,7 +5100,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
         Text[ arabic ] = "äãØ ÕİÍÉ";
         Text[ greek ] = "Ğñüôõğï óåëßäáò";
-        Text[ korean ] = "ÂÊ À¯Çü";
+        Text[ korean ] = "ÆäÀÌÁö À¯Çü";
         Text[ turkish ] = "Sayfa biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilo de hoja";
@@ -5236,7 +5236,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­¶";
         Text[ arabic ] = "ÕİÍÉ";
         Text[ greek ] = "ÓÅËÉÄÁ";
-        Text[ korean ] = "ÂÊ";
+        Text[ korean ] = "ÆäÀÌÁö";
         Text[ turkish ] = "SAYFA";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PÁGINA";
@@ -5263,7 +5263,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­¶";
         Text[ arabic ] = "ÕİÍÇÊ";
         Text[ greek ] = "PAGES";
-        Text[ korean ] = "ÂÊµé";
+        Text[ korean ] = "ÆäÀÌÁöµé";
         Text[ turkish ] = "SAYFA";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PÁGINAS";
@@ -5600,7 +5600,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¿ù»~¡GµL®Äªº¯BÂI¹Bºâ";
         Text[ arabic ] = "ÎØÃ: ÚãáíÉ İÇÕáÉ ÚÇÆãÉ ÛíÑ ÕÇáÍÉ";
         Text[ greek ] = "ÓöÜëìá: Ìç İãêõñç ëåéôïõñãßá êéíçôŞò õğïäéáóôïëŞò";
-        Text[ korean ] = "¿À·ù: À¯È¿ÇÏÁö ¾ÊÀº ºÎµ¿¼Ò¼öÁ¡ ¿¬»ê";
+        Text[ korean ] = "¿À·ù: À¯È¿ÇÏÁö ¾ÊÀº ºÎµ¿¼Ò¼öÁ¡ ÀÛµ¿";
         Text[ turkish ] = "Hata: Geçersiz kayan nokta işlemi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error: Operación en punto flotante no válida";
@@ -5819,7 +5819,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¿ù»~¡G¤º³¡·¸­È";
         Text[ arabic ] = "ÎØÃ: İÇÆÖ ÏÇÎáí";
         Text[ greek ] = "ÓöÜëìá: Åóùôåñéêü ğñüâëçìá õğåñ÷åßëéóçò";
-        Text[ korean ] = "¿À·ù: ³»ºÎ ¿À¹öÇÃ·Î";
+        Text[ korean ] = "¿À·ù: ³»ºÎ ¿À¹öÇÃ·Î¿ì";
         Text[ turkish ] = "Hata: İç taşma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error: Desbordamiento interno";
@@ -5924,12 +5924,12 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Error: Add-in not found" ;
         Text[ chinese_simplified ] = "´íÎó£º›]ÓĞÕÒµ½ AddIn";
         Text[ russian ] = "Îøèáêà: AddIn íå íàéäåíû";
-        Text[ polish ] = "B³¹d: nie znaleziono dodatku Add-in";
+        Text[ polish ] = "B³¹d: nie znaleziono dodatku add-in";
         Text[ japanese ] = "´×°: ±ÄŞ²İ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¿ù»~¡G¨S¦³§ä¨ì Add-In";
         Text[ arabic ] = "Error: AddIn not found";
         Text[ greek ] = "ÓöÜëìá: Äåí âñİèçêå ôï AddIn";
-        Text[ korean ] = "Error: AddIn not found";
+        Text[ korean ] = "¿À·ù: ÇÃ·¯±×ÀÎÀ» Ã£Áö ¸øÇß½À´Ï´Ù";
         Text[ turkish ] = "Error: AddIn not found";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error: AddIn not found";
@@ -5956,7 +5956,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¿ù»~¡G¨S¦³§ä¨ì¥¨¶°";
         Text[ arabic ] = "Error: Macro not found";
         Text[ greek ] = "ÓöÜëìá: Äåí âñİèçêå ç ìáêñïåíôïëŞ";
-        Text[ korean ] = "Error: Macro not found";
+        Text[ korean ] = "¿À·ù: ¸ÅÅ©·Î¸¦ Ã£Áö ¸øÇß½À´Ï´Ù";
         Text[ turkish ] = "Error: Macro not found";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error: Macro not found";
@@ -6022,7 +6022,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¿ù»~¡G¹Bºâ¹Lµ{¤£¦¬ÀÄ";
         Text[ arabic ] = "ÎØÃ: ÇáÚãáíÉ ÇáÍÓÇÈíÉ áÇ ÊŞÑÈ";
         Text[ greek ] = "ÓöÜëìá: Ç äéáäéêáóßá õğïëïãéóìïı äåí óõãêëßíåé";
-        Text[ korean ] = "¿À·ù:°è»ê¹ıÀÌ ¼ö·ÅÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ korean ] = "¿À·ù:°è»ê¹ıÀ» ¼ö·ÅÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Hata: Hesaplama işlemi yakınsamıyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error: El proceso de cálculo no converge";
@@ -6240,7 +6240,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µL®Äªº»¼¼W";
         Text[ arabic ] = "ÒíÇÏÉ ÛíÑ ÕÇáÍÉ";
         Text[ greek ] = "Ìç İãêõñï âŞìá";
-        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº Áõ°¡Æø";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº Áõ°¡";
         Text[ turkish ] = "Geçersiz aşama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Incremento no válido";
@@ -6261,13 +6261,13 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "OPERACIÓN.MÚLTIPLE" ;
         Text [ english_us ] = "MULTIPLE.OPERATIONS" ;
         Text[ chinese_simplified ] = "¶àÖØ¼ÆËã";
-        Text[ russian ] = "ÒÀÁËÏÎÄÑÒÀÍÎÂÎÊ";
+        Text[ russian ] = "ÒÀÁËÏÎÄÑÒÀÍÎÂÊÈ";
         Text[ polish ] = "OPERACJE.WIELOKROTNE";
         Text[ japanese ] = "•¡”‰‰Z";
         Text[ chinese_traditional ] = "¦h­«­pºâ";
         Text[ arabic ] = "ÚãáíÇÊ ãÊÚÏÏÉ";
         Text[ greek ] = "ĞÏËËÁĞËÅÓ.ĞÑÁÎÅÉÓ";
-        Text[ korean ] = "´ÙÁß.¿¬»ê";
+        Text[ korean ] = "´ÙÁß ¿¬»ê";
         Text[ turkish ] = "ÇOKLU İŞLEM";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "OPERACIÓN.MÚLTIPLE";
@@ -6288,7 +6288,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Operación múltiple" ;
         Text [ english_us ] = "Multiple operations" ;
         Text[ chinese_simplified ] = "¶àÖØÔËËã";
-        Text[ russian ] = "Ìíîãîêğàòíûå îïåğàöèè";
+        Text[ russian ] = "Òàáëèöà ïîäñòàíîâêè";
         Text[ polish ] = "Operacje wielokrotne";
         Text[ japanese ] = "•¡”‰‰Z";
         Text[ chinese_traditional ] = "¦h­«¹Bºâ";
@@ -6543,7 +6543,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¬°¤F¨Ï¥Î¦Û°Ê®æ¦¡¡A\n±z¥²¶·¦Ü¤Ö¿ï¨ú¤F\n3x3 ¤u§@ªí°Ï°ì¡C";
         Text[ arabic ] = "áßí ÊÓÊÎÏã ÇáÊäÓíŞ ÇáÊáŞÇÆí¡\níÌÈ Ãä ÊÍÏÏ äØÇŞ İí ÇáÌÏæá áÇ íŞá Úä\n3x3 ÎáÇíÇ.";
         Text[ greek ] = "Ãéá íá åöáñìïóôåß ç ÁõôïÌïñöŞ,\nğñİğåé íá İ÷åé åğéëåãåß ìéá ğåñéï÷Ş åíüò ğßíáêá ìå êåëéÜ\näéáóôÜóåùí ôïõëÜ÷éóôïí 3÷3.";
-        Text[ korean ] = "ÀÚµ¿¼­½ÄÀ» Àû¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÏ±â À§ÇØ¼­´Â\nÃÖ¼ÒÇÑ\n3x3¼¿ÀÇ Ç¥ ¿µ¿ªÀÌ ¼±ÅÃ Ç¥½ÃµÇ¾î¾ß ÇÕ´Ï´Ù.";
+        Text[ korean ] = "ÀÚµ¿¼­½ÄÀ» Àû¿ëÇÏ±â À§ÇØ¼­´Â,\nÃÖ¼ÒÇÑ\n3x3¼¿ÀÇ Ç¥ ¿µ¿ªÀÌ ¸¶Å· Ç¥½ÃµÇ¾î ÀÖ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "otomatik formatlamayı kullanabilmek için\n en az 3x3 hücre büyüklüğünde bir tablo aralığı seçilmiş olmalıdır.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Para poder aplicar el AutoFormato\nes necesario marcar un área en la tabla\nde por lo menos 3x3 celdas.";
@@ -6570,7 +6570,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "(½Æ¦Xªº)";
         Text[ arabic ] = "(ÊÑÇßÈ)";
         Text[ greek ] = "(ÁëëåğÜëëçëç óıíäåóç)";
-        Text[ korean ] = " (°ãÄ¡°Ô)";
+        Text[ korean ] = " (³»Æ÷µÈ)";
         Text[ turkish ] = "(yuvalanmış)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "(en cascada)";
@@ -6861,7 +6861,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "İêñïîğòòåêñòà";
         Text[ polish ] = "Eksport tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ì´¸½Îß°Ä";
-        Text[ chinese_traditional ] = "¿é¥X¤å¦r";
+        Text[ chinese_traditional ] = "¶×¥X¤å¦r";
         Text[ arabic ] = "ÊÕÏíÑ äÕ";
         Text[ greek ] = "ÅîáãùãŞ êåéìİíïõ";
         Text[ korean ] = "ÅØ½ºÆ® ³»º¸³»±â";
@@ -6941,7 +6941,7 @@ Resource RID_GLOBSTR
         Text[ japanese ] = "DBase ‚Ì´¸½Îß°Ä";
         Text[ korean ] = "DBase º¸³»±â";
         Text[ chinese_simplified ] = "DBase Êä³ö";
-        Text[ chinese_traditional ] = "DBase ¿é¥X";
+        Text[ chinese_traditional ] = "DBase ¶×¥X";
         Text[ arabic ] = "ÊÕÏíÑDBase ";
         Text[ turkish ] = "Dışa aktar (DBase)";
         Text[ catalan ] = "Exportación DBase";
@@ -7230,7 +7230,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Èñïîëüçîâàíèå òåçàóğóñà âîçìîæíî òîëüêî â òåêñòîâûõ ÿ÷åéêàõ!";
         Text[ polish ] = "Tezaurus mo¿liwy tylko w komórkach tekstu!";
         Text[ japanese ] = "—Ş‹`Œê«“T‚ÍÃ·½Ä‚Ì¾Ù‚Å‚µ‚©g‚¦‚Ü‚¹‚ñB";
-        Text[ chinese_traditional ] = "µü¨å¥u¯àÓì¥Î©ó¤å¦rÀx¦s®æ¡I";
+        Text[ chinese_traditional ] = "µü¨å¥u¾A¥Î©ó¤å¦rÀx¦s®æ¡I";
         Text[ arabic ] = "áÇ íãßä ÇÓÊÎÏÇã ŞÇãæÓ ÇáãÑÇÏİÇÊ ÅáÇ İí ÎáÇíÇ äÕ!";
         Text[ greek ] = "Ï èçóáõñüò ëİîåùí åêôåëåßôáé ìüíï óå êåëéÜ êåéìİíïõ";
         Text[ korean ] = "µ¿ÀÇ¾î »çÀüÀº ÅØ½ºÆ® ¼¿ ¾È¿¡¼­¸¸ »ç¿ë °¡´ÉÇÕ´Ï´Ù!";
@@ -7708,7 +7708,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "·sªº¤u§@ªí§t¦³µ´¹ïªº«ü¦V¨ä¥¦¤u§@ªíªº°Ñ·Ó¡A³o¨Ç¨ä¥¦ªº¤u§@ªí¥i¯à¦³¿ù»~¡I";
         Text[ arabic ] = "íÍÊæí ÇáÌÏæá ÇáÌÏíÏ Úáì ÅÔÇÑÇÊ ãØáŞÉ Åáì ÌÏÇæá ÃÎÑì ŞÏ Êßæä ÛíÑ ÕÍíÍÉ!";
         Text[ greek ] = "Ï íİïò ğßíáêáò ğåñéİ÷åé áğüëõôåò áíáöïñİò ãéá Üëëïõò ğßíáêåò , ïé ïğïßåò äåí åßíáé ïğùóäŞğïôå İãêõñåò!";
-        Text[ korean ] = "»õ·Î¿î Å×ÀÌºíÀº ´Ù¸¥ Å×ÀÌºí¿¡ ´ëÇÑ, ¹İµå½Ã ÀÏÄ¡ÇÒ ÇÊ¿ä´Â ¾ø´Â Àı´ë ÂüÁ¶¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù!";
+        Text[ korean ] = "»õ·Î¿î ½ÃÆ®´Â ´Ù¸¥ Å×ÀÌºí¿¡ ´ëÇÑ, ´õ ÀÌ»ó ÀÏÄ¡ÇÒ ÇÊ¿ä´Â ¾ø´Â Àı´ë ÂüÁ¶¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù!";
         Text[ turkish ] = "Yeni tabloda bulunan diğer tablolar ile ilgili mutlak referanslar doğru olmayabilir!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La nueva tabla contiene referencias absolutas a otras tablas que posiblemente no son correctas.";
@@ -7947,7 +7947,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "°Ï°ì¦WºÙªº¿ù»~¿ï¾Ü";
         Text[ arabic ] = "ÊÍÏíÏ ÛíÑ ÕÇáÍ áÃÓãÇÁ äØÇŞ.";
         Text[ greek ] = "ËÜèïò åğéëïãŞ ãéá ïíüìáôá ğåñéï÷şí";
-        Text[ korean ] = "¹üÀ§ ÀÌ¸§¿¡ ´ëÇÑ À¯È¿ÇÏÁö ¾ÊÀº ¼±ÅÃ Ç¥½Ã";
+        Text[ korean ] = "¹üÀ§ ÀÌ¸§¿¡ ´ëÇÑ Àß¸øµÈ ¸¶Å· Ç¥½Ã";
         Text[ turkish ] = "Aralık adları için geçersiz seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección incorrecta para nombre de área";
@@ -7974,7 +7974,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µLªk¦b·½¸ê®Æ¤§¤W¥[¤J±¶®|¡C";
         Text[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÇáÇÊÕÇáÇÊ İæŞ ÈíÇäÇÊ ÇáãÕÏÑ.";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá åéóá÷èïıí óõíäİóåéò ğÜíù áğü ôá äåäïìİíá ğñïİëåõóçò.";
-        Text[ korean ] = "¿¬°áÀº ¼Ò½ºµ¥ÀÌÅÍ À§·Î »ğÀÔÇÒ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ korean ] = "¸µÅ©´Â ¼Ò½ºµ¥ÀÌÅÍ À§·Î »ğÀÔµÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Referanslar, kaynak verilerinin üstünde eklenemez.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Referencias no pueden ser insertadas encima de los datos fuente.";
@@ -8000,7 +8000,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì¤ÀªRÂÅ¥»";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÓíäÇÑíæ";
         Text[ greek ] = "Ôï óåíÜñéï äåí âñİèçêå";
-        Text[ korean ] = "½Ã³ª¸®¿À¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "½Ã³ª¸®¿À¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Senaryo bulunamadı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se ha encontrado el escenario";
@@ -8027,7 +8027,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó±ø¥Ø # ¡H";
         Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÅÏÎÇá #¿";
         Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ç êáôá÷şñéóç #;";
-        Text[ korean ] = "Ç×¸ñ #À»£¨¸¦£© »èÁ¦ ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ korean ] = "Ç×¸ñ #À»(¸¦) Á¤¸»·Î »èÁ¦ ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "# girişini gerçekten silmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Desea realmente eliminar la entrada #?";
@@ -8418,7 +8418,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "²Ä¤@­¶­¶½X";
         Text[ arabic ] = "Ãæá ÑŞã ÕİÍÉ";
         Text[ greek ] = "Ğñşôïò áñéèìüò óåëßäáò";
-        Text[ korean ] = "Ã¹ ÂÊ ¹øÈ£";
+        Text[ korean ] = "Ã¹ ÆäÀÌÁö ¹øÈ£";
         Text[ turkish ] = "İlk sayfa numarası";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Primer número de página";
@@ -8469,7 +8469,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³Ì¦h­¶¼Æ";
         Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
         Text[ greek ] = "Ìİã. áñéèìüò óåëéäşí";
-        Text[ korean ] = "ÃÖ´ë ÂÊ ¼ö";
+        Text[ korean ] = "ÃÖ´ë ÆäÀÌÁö ¼ö";
         Text[ turkish ] = "Azm. sayfa sayısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Núm. máx. de páginas";
@@ -8866,7 +8866,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­ÓÀÉ®×§t¦³«ü¦V¨ä¥LÀÉ®×ªº±¶®|¡C\n­n§ó·s³o­ÓÀÉ®×¡H";
         Text[ arabic ] = "íÍÊæí åĞÇ Çáãáİ Úáì ÇÑÊÈÇØÇÊ ãÚ ãáİÇÊ ÃÎÑì.\nåá ÊÑíÏ ÊÍÏíËåÇ¿";
         Text[ greek ] = "Ôï áñ÷åßï áõôü ğåñéİ÷åé óõíäİóåéò ğñïò Üëëá áñ÷åßá.\nÈİëåôå íá ãßíåé åíçìİñùóç áõôşí;";
-        Text[ korean ] = "ÀÌ ÆÄÀÏÀº ´Ù¸¥ ÆÄÀÏ¿¡ ¸µÅ©µÇ¾î ÀÖ½À´Ï´Ù.\nÀÌ°ÍµéÀ» ¾÷µ¥ÀÌÆ® ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ korean ] = "ÀÌ ÆÄÀÏÀº ´Ù¸¥ ÆÄÀÏ¿¡ ¸µÅ©µÇ¾î ÀÖ½À´Ï´Ù.\nÀÌ°ÍÀ» ¾÷µ¥ÀÌÆ® ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Bu dosyada başka dosyalara bağlantılar mevcut.\nBağlantılar güncellensin mi?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Este archivo está vinculado a otros archivos.\n¿Desea usted actualizarlos?";
@@ -8973,7 +8973,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µLªk¿é¤J³o­Ó¤u§@ªí¡C";
         Text[ arabic ] = "ÊÚĞÑ ÅÏÑÇÌ ÇáÌÏæá.";
         Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé åéóáãùãŞ ôïõ ğßíáêá.";
-        Text[ korean ] = "Å×ÀÌºíÀ» »ğÀÔÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "Å×ÀÌºíÀ» »ğÀÔÇÏÁö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Tablo eklenemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo insertar la tabla.";
@@ -9105,7 +9105,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì°Ñ·Ó¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÃíÉ ãÑÇÌÚ.";
         Text[ greek ] = "Äåí âñİèçêå áöïñÜ.";
-        Text[ korean ] = "ÂüÁ¶¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "ÂüÁ¶¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Referans bulunamadı.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se encontraron referencias.";
@@ -9132,7 +9132,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "·½°Ï°ì©M¥Ø¼Ğ°Ï°ì¤£¥i¥H¬Û¤¬­«Å|¡C";
         Text[ arabic ] = "íÌÈ ÃáÇ íÊÏÇÎá ÇáäØÇŞ ÇáãÕÏÑ æÇáäØÇŞ ÇáåÏİ.";
         Text[ greek ] = "Ïé ğåñéï÷İò ğñïİëåõóçò êáé ğñïïñéóìïı äåí åğéôñİğåôáé íá åğéêáëığôïğíôáé.";
-        Text[ korean ] = "¼Ò½º±¸¿ª°ú¡¡Å¸°Ù±¸¿ªÀÌ °ãÃÄÁ®¼­´Â ¾ÈµË´Ï´Ù.";
+        Text[ korean ] = "¼Ò½º±¸¿ª°ú Å¸°Ù±¸¿ªÀÌ °ãÃÄÁ®¼­´Â ¾ÈµË´Ï´Ù.";
         Text[ turkish ] = "Kaynak ve hedef aralığı örtüşmemelidir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área de origen y de destino no deben superponerse.";
@@ -9211,7 +9211,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì³o­Ó³]©wªº¥¨¶°¡C";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáãÇßÑæ ÇáãÍÏÏ.";
         Text[ greek ] = "Ç åğéëåãìİíç ìáêñïåíôïëŞ äåí âñİèçêå";
-        Text[ korean ] = "¼³Á¤µÈ ¸ÅÅ©·Î¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "¼³Á¤µÈ ¸ÅÅ©·Î¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Seçilen makro bulunamadı.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La macro seleccionada no se encontró.";
@@ -9238,7 +9238,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­Ó¿é¤Jªº¼Æ­ÈµL®Ä¡C";
         Text[ arabic ] = "ÇáŞíãÉ ÇáãÏÎáÉ ÛíÑ ÕÇáÍÉ.";
         Text[ greek ] = "Ìç İãêõñç ôéìŞ.";
-        Text[ korean ] = "ÀÔ·ÂµÈ°ªÀº¡¡À¯È¿ÇÏÁö ¾ÊÀ½.";
+        Text[ korean ] = "ÀÔ·ÂµÈ °ªÀº À¯È¿ÇÏÁö ¾ÊÀ½.";
         Text[ turkish ] = "Girilen değer geçerli değil.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor no válido.";
@@ -9257,11 +9257,11 @@ Resource RID_GLOBSTR
         Text [ italian ] = "calcola" ;
         Text [ french ] = "calculer" ;
         Text [ dutch ] = "berekenen" ;
-        Text[ chinese_simplified ] = "ÔËËã";
+        Text[ chinese_simplified ] = "¼ÆËã";
         Text[ russian ] = "âû÷èñëèòü";
         Text[ polish ] = "Obliczanie";
         Text[ japanese ] = "ŒvZ";
-        Text[ chinese_traditional ] = "¹Bºâ";
+        Text[ chinese_traditional ] = "­pºâ";
         Text[ arabic ] = "ÍÓÇÈ";
         Text[ greek ] = "õğïëïãéóìüò";
         Text[ korean ] = "°è»ê";
@@ -9494,7 +9494,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "DataPilot værdi" ;
         Text [ italian ] = "DataPilot Valore" ;
         Text [ spanish ] = "Piloto de Datos Valor" ;
-        Text [ french ] = "Valeur DataPilote" ;
+        Text [ french ] = "Pilote de données - Valeur" ;
         Text [ dutch ] = "DataPiloot Waarde" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí-¹¤×÷±í ÊıÖµ";
         Text[ russian ] = "Çíà÷åíèå ñâîäíîé òàáëèöû";
@@ -9520,7 +9520,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "DataPilot resultat" ;
         Text [ italian ] = "DataPilot Risultato" ;
         Text [ spanish ] = "Piloto de Datos Resultado" ;
-        Text [ french ] = "Résultat DataPilote" ;
+        Text [ french ] = "Pilote de données - Résultat" ;
         Text [ dutch ] = "DataPiloot Resultaat" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí¹¤×÷±í ½á¹û";
         Text[ russian ] = "Ğåçóëüòàò ñâîäíîé òàáëèöû";
@@ -9546,7 +9546,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "DataPilot kategori" ;
         Text [ italian ] = "DataPilot Categoria" ;
         Text [ spanish ] = "Categoría del Piloto de Datos" ;
-        Text [ french ] = "Catégorie DataPilote" ;
+        Text [ french ] = "Pilote de données - Catégorie" ;
         Text [ dutch ] = "DataPiloot Categorie" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí ·ÖÀà";
         Text[ russian ] = "Êàòåãîğèÿ ñâîäíîé òàáëèöû";
@@ -9572,7 +9572,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "DataPilot titel" ;
         Text [ italian ] = "DataPilot Titolo" ;
         Text [ spanish ] = "Piloto de Datos Título" ;
-        Text [ french ] = "Titre DataPilote" ;
+        Text [ french ] = "Pilote de données - Titre" ;
         Text [ dutch ] = "Titel DataPiloot" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí¹¤×÷±í ±êÌâ";
         Text[ russian ] = "Çàãîëîâîê ñâîäíîé òàáëèöû";
@@ -9598,7 +9598,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "DataPilot felt" ;
         Text [ italian ] = "DataPilot Campo" ;
         Text [ spanish ] = "Piloto de Datos Campo" ;
-        Text [ french ] = "Champ DataPilote" ;
+        Text [ french ] = "Pilote de données - Champ" ;
         Text [ dutch ] = "DataPiloot Veld" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí¹¤×÷±í ×Ö¶Î";
         Text[ russian ] = "Ïîëå ñâîäíîé òàáëèöû";
@@ -9624,7 +9624,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "DataPilot hjørne" ;
         Text [ italian ] = "DataPilot Angolo" ;
         Text [ spanish ] = "Piloto de Datos Ángulo" ;
-        Text [ french ] = "DataPilote Coin" ;
+        Text [ french ] = "Pilote de données - Coin" ;
         Text [ dutch ] = "DataPiloot Hoek" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí ½Ç";
         Text[ russian ] = "Óãîë ñâîäíîé òàáëèöû";
@@ -9920,7 +9920,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "Àx¦s®æ #1 ±q '#2' ÅÜ§ó¦¨ '#3'";
         Text[ arabic ] = "Êã ÊÛííÑ ÇáÎáíÉ  #1 ãä '#2' Åáì '#3'";
         Text[ greek ] = "Ôï êåëß #1 Üëëáîå áğü '#2' óå '#3'";
-        Text[ korean ] = "¼¿ #1 Àº£¨´Â£© '#2'¿¡¼­ '#3'·Î º¯°æµÊ";
+        Text[ korean ] = "¼¿ #1Àº(´Â) '#2'¿¡¼­ '#3'·Î º¯°æµÊ";
         Text[ turkish ] = "#1 hücresi, '#2' iken '#3' olarak değiştirildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Celda #1 cambiada de '#2' a '#3' ";
@@ -10018,13 +10018,13 @@ Resource RID_GLOBSTR
         Text [ french ] = "Quitter l'enregistrement" ;
         Text [ dutch ] = "Notering beëindigen" ;
         Text[ chinese_simplified ] = "½áÊø¼ÇÂ¼";
-        Text[ russian ] = "Çàêîí÷èòü çàïèñü";
+        Text[ russian ] = "Çàêîí÷èòü çàïèñü èñïğàâëåíèé";
         Text[ polish ] = "Zakoñcz nagrywanie";
         Text[ japanese ] = "‹L˜^‚ÌI—¹";
         Text[ chinese_traditional ] = "µ²§ô­×§ï";
         Text[ arabic ] = "ÅäåÇÁ ÇáÊÓÌíá";
         Text[ greek ] = "Ôİëïò êáôáãñáöŞò";
-        Text[ korean ] = "±â·Ï¡¡Á¾·á";
+        Text[ korean ] = "±â·Ï Á¾·á";
         Text[ turkish ] = "Kaydı durdur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Finalizar registro";
@@ -10050,7 +10050,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­Ó°Ê§@·|µ²§ô­×§ï¡C\n­×§ï¤º®e´N·|¬y¥¢¡C\n\n±zÁÙ¬O­nÄ~Äò¡H\n\n";
         Text[ arabic ] = "åĞÇ ÇáÅÌÑÇÁ Óæİ íÄÏí Åáì ÅäåÇÁ ÚãáíÉ ÊÓÌíá ÇáÊÛííÑÇÊ.\nÓæİ íÄÏí åĞÇ ÈÏæÑå Åáì ÖíÇÚ ÇáãÚáæãÇÊ ÇáÎÇÕÉ ÈÇáÊÛííÑÇÊ.\n\nåá ÊÑíÏ ÅäåÇÁ ÇáÊÓÌíá¿\n\n";
         Text[ greek ] = "Ìå áõôŞ ôçí åíİñãåéá ôåñìáôßæåôáé ç êáôáãñáöŞ ôùí áëëáãşí.\nÏé ğëçñïöïñßåò ó÷åôéêÜ ìå ôéò áëëáãİò ğñüêåéôáé íá ÷áèïıí.\n\nÍá ôåñìáôéóôåß ç åããñáöŞ;\n\n";
-        Text[ korean ] = "ÀÌ¡¡µ¿ÀÛ°ú¡¡´õºÒ¾î¡¡º¯°æ¡¡±â·ÏÀº¡¡Á¾·áµË´Ï´Ù.\nÀÌ¿Í¡¡´õºÒ¾î¡¡ÀÌÀü º¯°æ¿¡´ëÇÑ  Á¤º¸´Â »ó½Ç µÉ°ÍÀÔ´Ï´Ù .\n\n±â·ÏÀ»¡¡Á¾·áÇÏ½Ã°Ú½À´Ï±î?\n\n";
+        Text[ korean ] = "ÀÌ ½ÇÇàÀ¸·Î º¯°æ ±â·ÏÀÌ Á¾·áµË´Ï´Ù.\nµû¶ó¼­ º¯°æ¿¡ ´ëÇÑ Á¤º¸°¡ »ó½ÇµÉ °ÍÀÔ´Ï´Ù .\n\n±â·ÏÀ» Á¾·áÇÏ½Ã°Ú½À´Ï±î?\n\n";
         Text[ turkish ] = "Bu işlem ile değişikliklerin izlenmesi sona erdirilecek.\nDaha önceki değişiklikler ile ilgili tüm bilgiler kaybolacak.\n\nKayıt durdurulsun mu?\n\n";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esta acción finalizará la grabación de modificaciones.\nCualquier información sobre modificaciones se perderá.\n\n¿Desea finalizar la grabación?\n\n";
@@ -10076,7 +10076,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¦b§ó·s¤@­Ó±¶®|®ÉµLªkÃö³¬³o­Ó¤å¥ó¡C";
         Text[ arabic ] = "áÇ íãßä ÅÛáÇŞ ÇáãÓÊäÏ İí ÇáæŞÊ ÇáĞí íÊã İíå ÊÍÏíË ÇÑÊÈÇØ.";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá êëåßóåôå ôï İããñáöï êáèşò ãßíåôáé åíçìİñùóç ìéáò óıíäåóçò.";
-        Text[ korean ] = "¿¬°áÀÌ ¾÷µ¥ÀÌÆ® µÇ´Â µ¿¾È¿¡´Â ¹®¼­¸¦ ´İÀ» ¼ö ¾ø½À´Ï´Ù .";
+        Text[ korean ] = "¸µÅ©°¡ ¾÷µ¥ÀÌÆ® µÇ´Â µ¿¾È¿¡´Â ¹®¼­¸¦ ´İÀ» ¼ö ¾ø½À´Ï´Ù .";
         Text[ turkish ] = "Belge, bağlantı güncellemesi yapılırken kapatılamaz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento no se puede cerrar mientras se esté actualizando un vínculo.";
@@ -10128,7 +10128,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¯x°}®æ¦¡ %1 ¦C x %2 Äæ";
         Text[ arabic ] = "ÕíÛÉ ÇáãÕİæİÉ %1 R x %2 C";
         Text[ greek ] = "Ôığïò ìŞôñáò  %1 Ã x %2 Ó";
-        Text[ korean ] = "Çà·Ä¡¡¼ö½Ä  %1 R x %2 C";
+        Text[ korean ] = "Çà·Ä ¼ö½Ä %1 R x %2 C";
         Text[ turkish ] = "Matris formulü %1 Sa x %2 Sü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fórmula matriz %1 F x %2 C";
@@ -10169,6 +10169,7 @@ Resource RID_GLOBSTR
     };
 */
 };
+
 
 
 
