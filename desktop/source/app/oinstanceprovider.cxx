@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oinstanceprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 17:00:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ Reference< XInterface > SAL_CALL OInstanceProvider::getInstance( const OUString&
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 
 //*****************************************************************************************************************
 sal_Bool OInstanceProvider::impldbg_checkParameter_getInstance( const OUString& sInstanceName )
@@ -230,4 +230,4 @@ sal_Bool OInstanceProvider::impldbg_checkParameter_getInstance( const OUString& 
     return bOK ;
 }
 
-#endif  //  #ifdef ENABLE_ASSERTIONS
+#endif  //  #ifdef OSL_DEBUG_LEVEL

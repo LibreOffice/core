@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oinstanceprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 17:00:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,13 +236,13 @@ class OInstanceProvider :   public XINSTANCEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-    #ifdef _DEBUG
+    #if OSL_DEBUG_LEVEL > 0
 
     private:
 
         sal_Bool impldbg_checkParameter_getInstance( const OUSTRING& sInstanceName );
 
-    #endif  // #ifdef ENABLE_ASSERTIONS
+    #endif  // #ifdef OSL_DEBUG_LEVEL
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
