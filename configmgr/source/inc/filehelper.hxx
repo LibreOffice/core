@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:15:21 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,13 +128,13 @@ namespace configmgr
         /** creates a directory whose pathname is specified by a FileURL.
             @return true if directory could be created or does exist, otherwise false.
         */
-        bool mkdir(rtl::OUString const& _sDirURL);
+        osl::FileBase::RC mkdir(rtl::OUString const& _sDirURL);
 
         /** creates a directory whose pathname is specified by a FileURL,
             including any necessary parent directories.
             @return true if directory (or directories) could be created or do(es) exist, otherwise false.
         */
-        bool mkdirs(rtl::OUString const& _aDirectory);
+        osl::FileBase::RC mkdirs(rtl::OUString const& _aDirectory);
 
         /** replaces a file specified by _aToURL with a file specified by _aFromURL.
         */
