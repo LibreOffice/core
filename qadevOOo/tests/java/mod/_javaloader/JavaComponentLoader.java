@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaComponentLoader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:48 $
+ *  last change:$Date: 2003-05-27 12:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ public class JavaComponentLoader extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance(
                             "com.sun.star.comp.stoc.JavaComponentLoader" );
         }
