@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-19 12:13:45 $
+#   last change: $Author: dfoster $ $Date: 2002-09-20 13:20:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,11 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssdrawing.db\
     $(UCR)$/dcsssheet.db\
     $(UCR)$/dcsstable.db\
-    $(UCR)$/dcsstext.db
+    $(UCR)$/dcsstext.db \
+    $(UCR)$/dcssscriptframework.db \
+    $(UCR)$/dcsssfprovider.db \
+    $(UCR)$/dcsssfscripturi.db \
+    $(UCR)$/dcsssfstorage.db 
 
 
 REFERENCE_SO_60_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat.rdb

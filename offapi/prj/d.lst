@@ -3,6 +3,11 @@ mkdir: %_DEST%\idl%_EXT%\drafts\com
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\sync
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\script
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\provider
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\storage
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\scripturi
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\formula
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility
@@ -131,6 +136,10 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\drafts\com\sun\star\sheet\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\sheet\*.idl
 ..\drafts\com\sun\star\table\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\table\*.idl
 ..\drafts\com\sun\star\text\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\text\*.idl
+..\drafts\com\sun\star\script\framework\storage\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\storage\*.idl
+..\drafts\com\sun\star\script\framework\provider\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\provider\*.idl
+..\drafts\com\sun\star\script\framework\scripturi\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\provider\*.idl
+..\drafts\com\sun\star\script\framework\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\script\framework\*.idl
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
