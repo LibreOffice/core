@@ -2,9 +2,9 @@
  *
  *  $RCSfile: predicateinput.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:15 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ namespace dbtools
                 sTransformedText = ::rtl::OUString();
                 pParseNode->parseNodeToPredicateStr(
                     sTransformedText, m_xConnection->getMetaData(), m_xFormatter, _rxField,
-                    rParseContext.getPreferredLocale(), nDecSeparator
+                    rParseContext.getPreferredLocale(), (sal_Char)nDecSeparator, &rParseContext
                 );
                 _rPredicateValue = sTransformedText;
                 delete pParseNode;
