@@ -2,9 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.4 $
- *
- *  last change: $Author: hro $ $Date: 2000-10-19 12:32:46 $
+ *  $Revision: 1.5 $
+ *  last change: $Author: hro $ $Date: 2000-10-23 11:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
