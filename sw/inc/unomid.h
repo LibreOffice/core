@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:00:22 $
+ *  last change: $Author: os $ $Date: 2001-02-14 08:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,4 +135,12 @@
 #define MID_PREFIX                              5
 #define MID_SUFFIX                              6
 
+//page style footnote
+#define MID_FTN_HEIGHT                          0
+#define MID_LINE_WEIGHT                         1
+#define MID_LINE_COLOR                          2
+#define MID_LINE_RELWIDTH                       3
+#define MID_LINE_ADJUST                         4
+#define MID_LINE_TEXT_DIST                      5
+#define MID_LINE_FOOTNOTE_DIST                  6
 #endif
