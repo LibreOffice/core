@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 10:09:46 $
+ *  last change: $Author: as $ $Date: 2001-05-15 05:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 //_________________________________________________________________________________________________________________
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _SV_MENU_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtypeprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-31 11:29:34 $
+ *  last change: $Author: as $ $Date: 2001-05-15 05:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #endif
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generic.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:24:12 $
+ *  last change: $Author: as $ $Date: 2001-05-15 05:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 //_________________________________________________________________________________________________________________
 //  includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
-#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>

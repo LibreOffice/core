@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
+ *  last change: $Author: as $ $Date: 2001-05-15 05:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 //_________________________________________________________________________________________________________________
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________

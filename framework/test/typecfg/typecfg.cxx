@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typecfg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-04-24 07:51:56 $
+ *  last change: $Author: as $ $Date: 2001-05-15 05:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@
 #endif
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_

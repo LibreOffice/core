@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2001-05-04 13:02:45 $
+ *  last change: $Author: as $ $Date: 2001-05-15 05:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@
 //_________________________________________________________________________________________________________________
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifdef ENABLE_GENERATEFILTERCACHE
