@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-14 08:55:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public:
     void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti );
 #endif
     inline void SetPaintDrop( const sal_Bool bNew ) { bPaintDrop = bNew; }
-    inline IsPaintDrop() const { return bPaintDrop; }
+    inline sal_Bool IsPaintDrop() const { return bPaintDrop; }
     inline SwTxtPaintInfo &GetInfo()
         { return (SwTxtPaintInfo&)SwTxtIter::GetInfo(); }
     inline const SwTxtPaintInfo &GetInfo() const
