@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:45:38 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,23 +1148,6 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
     pShell->PrepareForPrint( rOptions );
 
-    // gibt es versteckte Absatzfelder, braucht nicht beruecksichtigt werden,
-    // wenn diese bereits ausgeblendet sind
-    BOOL bHiddenFlds = FALSE;
-    SwHiddenParaFieldType* pFldType = 0;
-    if ( GetViewOptions()->IsShowHiddenPara() )
-    {
-        pFldType    = (SwHiddenParaFieldType*)pPrtDoc->
-                                          GetSysFldType(RES_HIDDENPARAFLD);
-        bHiddenFlds = pFldType && pFldType->GetDepends();
-        if( bHiddenFlds )
-        {
-            SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-            pFldType->Modify( &aHnt, 0);
-        }
-    }
-
-
     XubString *pStr;
     ULONG nMergeAct = rOptions.nMergeAct, nMergeCnt = rOptions.nMergeCnt;
     if( nMergeAct )
@@ -1260,13 +1243,6 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
 
             if( !nFirstPageNo )
             {
-                if( bHiddenFlds )
-                {
-                    SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-                    pFldType->Modify( &aHnt, 0);
-                    CalcPagesForPrint( (USHORT)aPages.Max(), &rProgress, pStr,
-                                        nMergeAct, nMergeCnt );
-                }
                 bStop = TRUE;
                 break;
             }
@@ -1355,12 +1331,6 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                             || ( !pPrt->IsJobActive() &&
                                 ( !sJobName.Len() || bStartJob ) ) )
                         {
-                            if( bHiddenFlds )
-                            {
-                                SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-                                pFldType->Modify( &aHnt, 0);
-                                CalcPagesForPrint( (USHORT)aPages.Max() );
-                            }
                             bStop = TRUE;
                             break;
                         }
@@ -1627,12 +1597,6 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                 rOptions.bJobStartet = TRUE;
         }
 
-        if( bHiddenFlds && !bStop )
-        {
-            SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-            pFldType->Modify( &aHnt, 0);
-            CalcPagesForPrint( (USHORT)aPages.Max() );
-        }
     }
     delete pStr;
 
