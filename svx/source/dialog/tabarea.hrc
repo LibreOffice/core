@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: bm $ $Date: 2001-02-05 17:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,13 @@
 #define TSB_TILE 4
 #define TSB_STRETCH 5
 #define TSB_ORIGINAL 6
-#define RBT_COLOR 1
-#define RBT_GRADIENT 2
-#define RBT_HATCHING 3
-#define RBT_BITMAP 4
-#define RBT_INVISIBLE 5
+#define LB_DLG_TYPE 99
+#define AREADLG_INVISIBLE 0
+#define AREADLG_COLOR 1
+#define AREADLG_GRADIENT 2
+#define AREADLG_HATCH 3
+#define AREADLG_BITMAP 4
+
 #define LB_COLOR 1
 #define LB_GRADIENT 2
 #define LB_HATCHING 3
