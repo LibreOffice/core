@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdjustmentEvent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** adjustment event emitted by adjustable objects.
  */
-struct AdjustmentEvent: com::sun::star::lang::EventObject
+published struct AdjustmentEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
