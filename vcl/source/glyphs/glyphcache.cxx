@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-07 13:02:11 $
+ *  last change: $Author: hdu $ $Date: 2001-03-29 16:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,10 @@ inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectDat
 
 bool operator==( const ImplFontSelectData& rA, const ImplFontSelectData& rB )
 {
-    if( (rA.mpFontData->mpSysData   == rB.mpFontData->mpSysData )
-    &&  (rA.mnHeight        == rB.mnHeight)
+    if( (rA.mpFontData != NULL) && (rB.mpFontData != NULL)
+    &&  (rA.mpFontData->mpSysData == rB.mpFontData->mpSysData )
     &&  ((rA.mnWidth==rB.mnWidth) || (!rA.mnWidth && (rA.mnHeight==rB.mnWidth)))
+    &&  (rA.mnHeight        == rB.mnHeight)
     &&  (rA.mnOrientation   == rB.mnOrientation)
     &&  (rA.mbVertical      == rB.mbVertical) )
         return true;
@@ -202,6 +203,9 @@ long GlyphCache::FetchFontList( ImplDevFontList* pList ) const
 
 ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
 {
+    if( rFontSelData.mpFontData == NULL )
+        return NULL;
+
     FontList::iterator it = aFontList.find( rFontSelData );
     if( it != aFontList.end() )
     {
