@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-22 12:19:16 $
+ *  last change: $Author: pb $ $Date: 2001-06-05 06:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ public:
     sal_Int32       getAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
     void            decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
     void            resetAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
+    void            resetAgentIgnoreURLCounter();
 
     void            SetWelcomeScreen( sal_Bool b )          { bWelcomeScreen = b; SetModified(); }
     sal_Bool        IsWelcomeScreen() const                 { return bWelcomeScreen; }
@@ -606,6 +607,15 @@ void SvtHelpOptions_Impl::resetAgentIgnoreURLCounter( const ::rtl::OUString& _rU
 
 // -----------------------------------------------------------------------
 
+void SvtHelpOptions_Impl::resetAgentIgnoreURLCounter()
+{
+    ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
+    aURLIgnoreCounters.clear();
+    SetModified();
+}
+
+// -----------------------------------------------------------------------
+
 SvtHelpOptions::~SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
@@ -699,6 +709,13 @@ void SvtHelpOptions::decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
 void SvtHelpOptions::resetAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
 {
     pImp->resetAgentIgnoreURLCounter( _rURL );
+}
+
+// -----------------------------------------------------------------------
+
+void SvtHelpOptions::resetAgentIgnoreURLCounter()
+{
+    pImp->resetAgentIgnoreURLCounter();
 }
 
 // -----------------------------------------------------------------------
