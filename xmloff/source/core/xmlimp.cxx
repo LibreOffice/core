@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2002-06-11 08:07:05 $
+ *  last change: $Author: sab $ $Date: 2002-07-01 14:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 #ifdef CONV_STAR_FONTS
@@ -429,6 +432,7 @@ SvXMLImport::~SvXMLImport() throw ()
             {
                 OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
                 OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
                 if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent))
                 {
@@ -440,6 +444,8 @@ SvXMLImport::~SvXMLImport() throw ()
                     aAny <<= nProgressCurrent;
                     xImportInfo->setPropertyValue(sProgressCurrent, aAny);
                 }
+                if (xPropertySetInfo->hasPropertyByName(sRepeat))
+                    xImportInfo->setPropertyValue(sRepeat, cppu::bool2any(pProgressBarHelper->GetRepeat()));
                 delete pProgressBarHelper;
             }
             OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
@@ -1128,6 +1134,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
                 OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSRANGE));
                 OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
                 OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
                 if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
                     xPropertySetInfo->hasPropertyByName(sProgressRange))
@@ -1145,6 +1152,14 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
                     aAny = xImportInfo->getPropertyValue(sProgressCurrent);
                     if (aAny >>= nProgressCurrent)
                         pProgressBarHelper->SetValue(nProgressCurrent);
+                }
+                if (xPropertySetInfo->hasPropertyByName(sRepeat))
+                {
+                    uno::Any aAny = xImportInfo->getPropertyValue(sRepeat);
+                    if (aAny.getValueType() == getBooleanCppuType())
+                        pProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
+                    else
+                        DBG_ERRORFILE("why is it no boolean?");
                 }
             }
         }

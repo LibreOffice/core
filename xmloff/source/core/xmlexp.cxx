@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2002-06-11 08:07:05 $
+ *  last change: $Author: sab $ $Date: 2002-07-01 14:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,7 @@ SvXMLExport::~SvXMLExport()
                 {
                     OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
                     OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                    OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
                     if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                         xPropertySetInfo->hasPropertyByName(sProgressCurrent))
                     {
@@ -505,6 +506,8 @@ SvXMLExport::~SvXMLExport()
                         aAny <<= nProgressCurrent;
                         xExportInfo->setPropertyValue(sProgressCurrent, aAny);
                     }
+                    if (xPropertySetInfo->hasPropertyByName(sRepeat))
+                        xExportInfo->setPropertyValue(sRepeat, cppu::bool2any(pProgressBarHelper->GetRepeat()));
                 }
                 if (pNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
                 {
@@ -1517,6 +1520,7 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
                 OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSRANGE));
                 OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
                 OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
                 if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
                     xPropertySetInfo->hasPropertyByName(sProgressRange))
@@ -1534,6 +1538,14 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
                     aAny = xExportInfo->getPropertyValue(sProgressCurrent);
                     if (aAny >>= nProgressCurrent)
                         pProgressBarHelper->SetValue(nProgressCurrent);
+                }
+                if (xPropertySetInfo->hasPropertyByName(sRepeat))
+                {
+                    uno::Any aAny = xExportInfo->getPropertyValue(sRepeat);
+                    if (aAny.getValueType() == getBooleanCppuType())
+                        pProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
+                    else
+                        DBG_ERRORFILE("why is it no boolean?");
                 }
             }
         }
