@@ -8332,3 +8332,8 @@ _real@8@40098000000000000000
 ?s_pType_com_sun_star_frame_XFrame@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFrame@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_lang_XLocalizable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXLocalizable@lang@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_view_XPrintable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXPrintable@view@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+_real@8@3fe18000000000000000
+_real@8@3feb8000000000000000
+_real@8@3ff58000000000000000
+?OKHdl_Impl@SvtDocumentTemplateDialog@@AAEJPAVPushButton@@@Z
+?OpenFile@SvtTemplateWindow@@QAEXE@Z
