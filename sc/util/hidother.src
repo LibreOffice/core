@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 14:05:02 $
+ *  last change: $Author: gt $ $Date: 2001-06-12 13:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,4 +394,100 @@ hidspecial HID_FUNC_DEZIMAL      { HelpID = HID_FUNC_DEZIMAL; };
 hidspecial HID_FUNC_UMRECHNEN        { HelpID = HID_FUNC_UMRECHNEN; };
 hidspecial HID_FUNC_ROEMISCH         { HelpID = HID_FUNC_ROEMISCH; };
 hidspecial HID_FUNC_ARABISCH         { HelpID = HID_FUNC_ARABISCH; };
+
+// ... and from Analysis Addin
+
+hidspecial HID_AAI_FUNC_WORKDAY     { HelpID = HID_AAI_FUNC_WORKDAY; };
+hidspecial HID_AAI_FUNC_YEARFRAC    { HelpID = HID_AAI_FUNC_YEARFRAC; };
+hidspecial HID_AAI_FUNC_EDATE       { HelpID = HID_AAI_FUNC_EDATE; };
+hidspecial HID_AAI_FUNC_WEEKNUM     { HelpID = HID_AAI_FUNC_WEEKNUM; };
+hidspecial HID_AAI_FUNC_EOMONTH     { HelpID = HID_AAI_FUNC_EOMONTH; };
+hidspecial HID_AAI_FUNC_NETWORKDAYS { HelpID = HID_AAI_FUNC_NETWORKDAYS; };
+hidspecial HID_AAI_FUNC_AMORDEGRC   { HelpID = HID_AAI_FUNC_AMORDEGRC; };
+hidspecial HID_AAI_FUNC_AMORLINC    { HelpID = HID_AAI_FUNC_AMORLINC; };
+hidspecial HID_AAI_FUNC_ACCRINT     { HelpID = HID_AAI_FUNC_ACCRINT; };
+hidspecial HID_AAI_FUNC_ACCRINTM    { HelpID = HID_AAI_FUNC_ACCRINTM; };
+hidspecial HID_AAI_FUNC_RECEIVED    { HelpID = HID_AAI_FUNC_RECEIVED; };
+hidspecial HID_AAI_FUNC_DISC        { HelpID = HID_AAI_FUNC_DISC; };
+hidspecial HID_AAI_FUNC_DURATION    { HelpID = HID_AAI_FUNC_DURATION; };
+hidspecial HID_AAI_FUNC_EFFECT      { HelpID = HID_AAI_FUNC_EFFECT; };
+hidspecial HID_AAI_FUNC_CUMPRINC    { HelpID = HID_AAI_FUNC_CUMPRINC; };
+hidspecial HID_AAI_FUNC_CUMIPMT     { HelpID = HID_AAI_FUNC_CUMIPMT; };
+hidspecial HID_AAI_FUNC_PRICE       { HelpID = HID_AAI_FUNC_PRICE; };
+hidspecial HID_AAI_FUNC_PRICEDISC   { HelpID = HID_AAI_FUNC_PRICEDISC; };
+hidspecial HID_AAI_FUNC_PRICEMAT    { HelpID = HID_AAI_FUNC_PRICEMAT; };
+hidspecial HID_AAI_FUNC_MDURATION   { HelpID = HID_AAI_FUNC_MDURATION; };
+hidspecial HID_AAI_FUNC_NOMINAL     { HelpID = HID_AAI_FUNC_NOMINAL; };
+hidspecial HID_AAI_FUNC_DOLLARFR    { HelpID = HID_AAI_FUNC_DOLLARFR; };
+hidspecial HID_AAI_FUNC_DOLLARDE    { HelpID = HID_AAI_FUNC_DOLLARDE; };
+hidspecial HID_AAI_FUNC_YIELD       { HelpID = HID_AAI_FUNC_YIELD; };
+hidspecial HID_AAI_FUNC_YIELDDISC   { HelpID = HID_AAI_FUNC_YIELDDISC; };
+hidspecial HID_AAI_FUNC_YIELDMAT    { HelpID = HID_AAI_FUNC_YIELDMAT; };
+hidspecial HID_AAI_FUNC_TBILLEQ     { HelpID = HID_AAI_FUNC_TBILLEQ; };
+hidspecial HID_AAI_FUNC_TBILLPRICE  { HelpID = HID_AAI_FUNC_TBILLPRICE; };
+hidspecial HID_AAI_FUNC_TBILLYIELD  { HelpID = HID_AAI_FUNC_TBILLYIELD; };
+hidspecial HID_AAI_FUNC_ODDFPRICE   { HelpID = HID_AAI_FUNC_ODDFPRICE; };
+hidspecial HID_AAI_FUNC_ODDFYIELD   { HelpID = HID_AAI_FUNC_ODDFYIELD; };
+hidspecial HID_AAI_FUNC_ODDLPRICE   { HelpID = HID_AAI_FUNC_ODDLPRICE; };
+hidspecial HID_AAI_FUNC_ODDLYIELD   { HelpID = HID_AAI_FUNC_ODDLYIELD; };
+hidspecial HID_AAI_FUNC_XIRR        { HelpID = HID_AAI_FUNC_XIRR; };
+hidspecial HID_AAI_FUNC_XNPV        { HelpID = HID_AAI_FUNC_XNPV; };
+hidspecial HID_AAI_FUNC_INTRATE     { HelpID = HID_AAI_FUNC_INTRATE; };
+hidspecial HID_AAI_FUNC_COUPNCD     { HelpID = HID_AAI_FUNC_COUPNCD; };
+hidspecial HID_AAI_FUNC_COUPDAYS    { HelpID = HID_AAI_FUNC_COUPDAYS; };
+hidspecial HID_AAI_FUNC_COUPDAYSNC  { HelpID = HID_AAI_FUNC_COUPDAYSNC; };
+hidspecial HID_AAI_FUNC_COUPDAYBS   { HelpID = HID_AAI_FUNC_COUPDAYBS; };
+hidspecial HID_AAI_FUNC_COUPPCD     { HelpID = HID_AAI_FUNC_COUPPCD; };
+hidspecial HID_AAI_FUNC_COUPNUM     { HelpID = HID_AAI_FUNC_COUPNUM; };
+hidspecial HID_AAI_FUNC_FVSCHEDULE  { HelpID = HID_AAI_FUNC_FVSCHEDULE; };
+hidspecial HID_AAI_FUNC_ISEVEN      { HelpID = HID_AAI_FUNC_ISEVEN; };
+hidspecial HID_AAI_FUNC_ISODD       { HelpID = HID_AAI_FUNC_ISODD; };
+hidspecial HID_AAI_FUNC_GCD         { HelpID = HID_AAI_FUNC_GCD; };
+hidspecial HID_AAI_FUNC_LCM         { HelpID = HID_AAI_FUNC_LCM; };
+hidspecial HID_AAI_FUNC_MULTINOMIAL { HelpID = HID_AAI_FUNC_MULTINOMIAL; };
+hidspecial HID_AAI_FUNC_SERIESSUM   { HelpID = HID_AAI_FUNC_SERIESSUM; };
+hidspecial HID_AAI_FUNC_QUOTIENT    { HelpID = HID_AAI_FUNC_QUOTIENT; };
+hidspecial HID_AAI_FUNC_MROUND      { HelpID = HID_AAI_FUNC_MROUND; };
+hidspecial HID_AAI_FUNC_SQRTPI      { HelpID = HID_AAI_FUNC_SQRTPI; };
+hidspecial HID_AAI_FUNC_RANDBETWEEN { HelpID = HID_AAI_FUNC_RANDBETWEEN; };
+hidspecial HID_AAI_FUNC_BESSELI     { HelpID = HID_AAI_FUNC_BESSELI; };
+hidspecial HID_AAI_FUNC_BESSELJ     { HelpID = HID_AAI_FUNC_BESSELJ; };
+hidspecial HID_AAI_FUNC_BESSELK     { HelpID = HID_AAI_FUNC_BESSELK; };
+hidspecial HID_AAI_FUNC_BESSELY     { HelpID = HID_AAI_FUNC_BESSELY; };
+hidspecial HID_AAI_FUNC_BIN2DEC     { HelpID = HID_AAI_FUNC_BIN2DEC; };
+hidspecial HID_AAI_FUNC_BIN2HEX     { HelpID = HID_AAI_FUNC_BIN2HEX; };
+hidspecial HID_AAI_FUNC_BIN2OCT     { HelpID = HID_AAI_FUNC_BIN2OCT; };
+hidspecial HID_AAI_FUNC_DELTA       { HelpID = HID_AAI_FUNC_DELTA; };
+hidspecial HID_AAI_FUNC_DEC2BIN     { HelpID = HID_AAI_FUNC_DEC2BIN; };
+hidspecial HID_AAI_FUNC_DEC2HEX     { HelpID = HID_AAI_FUNC_DEC2HEX; };
+hidspecial HID_AAI_FUNC_DEC2OCT     { HelpID = HID_AAI_FUNC_DEC2OCT; };
+hidspecial HID_AAI_FUNC_ERF         { HelpID = HID_AAI_FUNC_ERF; };
+hidspecial HID_AAI_FUNC_ERFC        { HelpID = HID_AAI_FUNC_ERFC; };
+hidspecial HID_AAI_FUNC_GESTEP      { HelpID = HID_AAI_FUNC_GESTEP; };
+hidspecial HID_AAI_FUNC_HEX2BIN     { HelpID = HID_AAI_FUNC_HEX2BIN; };
+hidspecial HID_AAI_FUNC_HEX2DEC     { HelpID = HID_AAI_FUNC_HEX2DEC; };
+hidspecial HID_AAI_FUNC_HEX2OCT     { HelpID = HID_AAI_FUNC_HEX2OCT; };
+hidspecial HID_AAI_FUNC_IMABS       { HelpID = HID_AAI_FUNC_IMABS; };
+hidspecial HID_AAI_FUNC_IMAGINARY   { HelpID = HID_AAI_FUNC_IMAGINARY; };
+hidspecial HID_AAI_FUNC_IMPOWER     { HelpID = HID_AAI_FUNC_IMPOWER; };
+hidspecial HID_AAI_FUNC_IMARGUMENT  { HelpID = HID_AAI_FUNC_IMARGUMENT; };
+hidspecial HID_AAI_FUNC_IMCOS       { HelpID = HID_AAI_FUNC_IMCOS; };
+hidspecial HID_AAI_FUNC_IMDIV       { HelpID = HID_AAI_FUNC_IMDIV; };
+hidspecial HID_AAI_FUNC_IMEXP       { HelpID = HID_AAI_FUNC_IMEXP; };
+hidspecial HID_AAI_FUNC_IMCONJUGATE { HelpID = HID_AAI_FUNC_IMCONJUGATE; };
+hidspecial HID_AAI_FUNC_IMLN        { HelpID = HID_AAI_FUNC_IMLN; };
+hidspecial HID_AAI_FUNC_IMLOG10     { HelpID = HID_AAI_FUNC_IMLOG10; };
+hidspecial HID_AAI_FUNC_IMLOG2      { HelpID = HID_AAI_FUNC_IMLOG2; };
+hidspecial HID_AAI_FUNC_IMPRODUCT   { HelpID = HID_AAI_FUNC_IMPRODUCT; };
+hidspecial HID_AAI_FUNC_IMREAL      { HelpID = HID_AAI_FUNC_IMREAL; };
+hidspecial HID_AAI_FUNC_IMSIN       { HelpID = HID_AAI_FUNC_IMSIN; };
+hidspecial HID_AAI_FUNC_IMSUB       { HelpID = HID_AAI_FUNC_IMSUB; };
+hidspecial HID_AAI_FUNC_IMSUM       { HelpID = HID_AAI_FUNC_IMSUM; };
+hidspecial HID_AAI_FUNC_IMSQRT      { HelpID = HID_AAI_FUNC_IMSQRT; };
+hidspecial HID_AAI_FUNC_COMPLEX     { HelpID = HID_AAI_FUNC_COMPLEX; };
+hidspecial HID_AAI_FUNC_OCT2BIN     { HelpID = HID_AAI_FUNC_OCT2BIN; };
+hidspecial HID_AAI_FUNC_OCT2DEZ     { HelpID = HID_AAI_FUNC_OCT2DEZ; };
+hidspecial HID_AAI_FUNC_OCT2HEX     { HelpID = HID_AAI_FUNC_OCT2HEX; };
+hidspecial HID_AAI_FUNC_CONVERT     { HelpID = HID_AAI_FUNC_CONVERT; };
+hidspecial HID_AAI_FUNC_FACTDOUBLE  { HelpID = HID_AAI_FUNC_FACTDOUBLE; };
 
