@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 11:52:11 $
+ *  last change: $Author: thb $ $Date: 2001-06-27 08:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "dialogs.hrc"
 
 #include "dialmgr.hxx"
+#include <list>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -91,20 +92,30 @@ sal_Char __READONLY_DATA sVideo[] = "video";
 |*
 \************************************************************************/
 
-SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
-: SfxFileDialog ( pParent, SFXWB_INSERT | WB_3DLOOK | WB_STDMODAL )
+ErrCode SvxPluginFileDlg::Execute()
+{
+    return maFileDlg.Execute();
+}
+
+String SvxPluginFileDlg::GetPath() const
+{
+    return maFileDlg.GetPath();
+}
+
+SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind ) :
+    maFileDlg(SFXWB_INSERT)
 {
     // set title of the dialogwindow
     switch (nKind)
     {
         case SID_INSERT_SOUND :
         {
-            SetText (SVX_RESSTR(STR_INSERT_SOUND_TITLE));
+            maFileDlg.SetTitle(SVX_RESSTR(STR_INSERT_SOUND_TITLE));
         }
         break;
         case SID_INSERT_VIDEO :
         {
-            SetText (SVX_RESSTR(STR_INSERT_VIDEO_TITLE));
+            maFileDlg.SetTitle(SVX_RESSTR(STR_INSERT_VIDEO_TITLE));
         }
         break;
     }
@@ -122,6 +133,12 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
             const plugin::PluginDescription* pDescription = aSeq.getConstArray();
             sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
 
+            std::list< String > aPlugNames;
+            std::list< String > aPlugExtensions;
+            std::list< String >::iterator j;
+            std::list< String >::iterator k;
+            std::list< String >::const_iterator end;
+
             for ( int i = 0; i < nAnzahlPlugins; i++ )
             {
                 String aStrPlugMIMEType( pDescription[i].Mimetype );
@@ -136,24 +153,37 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
                 {
                     // extension already in the filterlist of the filedlg ?
                     sal_Bool bAlreadyExist = sal_False;
-                    for ( int j = 0; j < GetFilterCount() && !bAlreadyExist; j++ )
-                        bAlreadyExist = ( GetFilterType(j).Search( aStrPlugExtension ) != STRING_NOTFOUND );
+                    for ( j = aPlugExtensions.begin(), end = aPlugExtensions.end(); j != end && !bAlreadyExist; ++j )
+                    {
+                        bAlreadyExist = (j->Search( aStrPlugExtension ) != STRING_NOTFOUND );
+                    }
 
                     if ( !bAlreadyExist )
                     {
                         // filterdescription already there?
                         // (then append the new extension to the existing filter)
                         int nfound = -1;
-                        for ( int k = 0; k < GetFilterCount() && nfound != 0; k++ )
+                         for ( j = aPlugNames.begin(),
+                                  k = aPlugExtensions.begin(),
+                                  end = aPlugNames.end();
+                              j != end && nfound != 0;  )
                         {
-                            String aStrFilterName( GetFilterName(k) );
-                            if ( ( nfound = aStrFilterName.Search( aStrPlugName ) ) == 0 )
+                            if ( ( nfound = j->Search( aStrPlugName ) ) == 0 )
                             {
-                                String aStrFilterExt( GetFilterType(k) );
-                                RemoveFilter( aStrFilterName );
                                 if ( aStrPlugExtension.Len() > 0 )
                                     aStrPlugExtension.Insert( sal_Unicode( ';' ) );
-                                aStrPlugExtension.Insert( aStrFilterExt );
+                                aStrPlugExtension.Insert( *k );
+
+                                // remove old entry, increment (iterators are invalid thereafter, thus the postincrement)
+                                aPlugNames.erase(j++); aPlugExtensions.erase(k++);
+
+                                // update end iterator (which may be invalid, too!)
+                                end = aPlugNames.end();
+                            }
+                            else
+                            {
+                                // next element
+                                ++j; ++k;
                             }
                         }
 
@@ -179,19 +209,29 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
                                   aStrPlugExtension.SearchAscii( sMPEG ) != STRING_NOTFOUND )
                             aStrPlugName = SVX_RESSTR(STR_INSERT_VIDEO_EXTFILTER_MPEG);
 
-                        AddFilter( aStrPlugName, aStrPlugExtension );
+                        aPlugNames.push_back( aStrPlugName );
+                        aPlugExtensions.push_back( aStrPlugExtension );
                     }
                 }
+            }
+
+            // add filter to dialog
+            for ( j = aPlugNames.begin(),
+                      k = aPlugExtensions.begin(),
+                      end = aPlugNames.end();
+                  j != end; ++j, ++k )
+            {
+                maFileDlg.AddFilter( *j, *k );
             }
         }
     }
 
     // add the All-Filter
     String aAllFilter( ResId( STR_EXTFILTER_ALL, DIALOG_MGR() ) );
-    AddFilter( aAllFilter, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+    maFileDlg.AddFilter( aAllFilter, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
 
     // and activate him
-    SetCurFilter( aAllFilter );
+    maFileDlg.SetCurrentFilter( aAllFilter );
 }
 
 /*************************************************************************

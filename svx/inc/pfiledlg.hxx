@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:58 $
+ *  last change: $Author: thb $ $Date: 2001-06-27 08:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 
 // include ---------------------------------------------------------------
 
-#include <sfx2/iodlg.hxx>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -71,15 +73,19 @@
 |*
 \************************************************************************/
 
-class SvxPluginFileDlg : public SfxFileDialog
+class SvxPluginFileDlg
 {
 private:
+    sfx2::FileDialogHelper          maFileDlg;
 
 public:
     // with nKind = SID_INSERT_SOUND    or
     //      nKind = SID_INSERT_VIDEO
     SvxPluginFileDlg (Window *pParent, USHORT nKind );
     ~SvxPluginFileDlg ();
+
+    ErrCode                  Execute();
+    String                   GetPath() const;
 
     static BOOL IsAvailable (USHORT nKind);
 };

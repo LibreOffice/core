@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:46:49 $
+ *  last change: $Author: thb $ $Date: 2001-06-27 08:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,10 +194,6 @@
 
 #ifndef _SVX_SVXIDS_HRC
 #include "svxids.hrc"
-#endif
-
-#ifndef _SVX_ADTABDLG_HXX
-#include "adtabdlg.hxx"
 #endif
 
 #ifndef _SVX_TABORDER_HXX
