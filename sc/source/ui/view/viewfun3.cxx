@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,11 +226,13 @@
 #include "globstr.hrc"
 #include "global.hxx"
 #include "transobj.hxx"
+#include "drwtrans.hxx"
 #include "rangenam.hxx"
 #include "dbcolect.hxx"
 #include "impex.hxx"            // Sylk-ID fuer CB
 #include "chgtrack.hxx"
 #include "waitoff.hxx"
+#include "scmod.hxx"
 #include "sc.hrc"
 
 using namespace com::sun::star;
@@ -321,13 +323,6 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
 {
     UpdateInputLine();
 
-    BOOL bSysClip = FALSE;
-    if ( !pClipDoc )                            // kein eigenes Clipboard
-    {
-        pClipDoc = ScGlobal::GetClipDoc();      // ab ins System!
-        bSysClip = TRUE;
-    }
-
     ScRange aRange;
     if ( GetViewData()->GetSimpleArea( aRange ) )
     {
@@ -338,11 +333,11 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
                         aRange.aEnd.Col(),   aRange.aEnd.Row(),
                         rMark ) )
         {
-            if (bSysClip)
+            BOOL bSysClip = FALSE;
+            if ( !pClipDoc )                                    // no clip doc specified
             {
-                // release clipboard
-                SvDataObjectRef pDummyObj = new SvDataObject;
-                pDummyObj->CopyClipboard();
+                pClipDoc = new ScDocument( SCDOCMODE_CLIP );    // create one (deleted by ScTransferObj)
+                bSysClip = TRUE;                                // and copy into system
             }
 
             if ( !bCut )
@@ -355,7 +350,8 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
             pDoc->CopyToClip( aRange.aStart.Col(), aRange.aStart.Row(),
                               aRange.aEnd.Col(),   aRange.aEnd.Row(),
                               bCut, pClipDoc, FALSE, &rMark );
-            ScGlobal::SetClipDocName( pDoc->GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
+            if (bSysClip)
+                ScGlobal::SetClipDocName( pDoc->GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
             pClipDoc->ExtendMerge( aRange, TRUE );
 
             if (bSysClip)
@@ -369,7 +365,8 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
                 ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-                pTransferObj->CopyToClipboard();
+                pTransferObj->CopyToClipboard();                    // system clipboard
+                SC_MOD()->SetClipObject( pTransferObj, NULL );      // internal clipboard
             }
         }
         else
@@ -390,16 +387,21 @@ void ScViewFunc::PasteDraw()
     USHORT nPosY = pViewData->GetCurY();
     Point aPos = GetActiveWin()->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY,
                                                 pViewData->GetActivePart() ) );
-    PasteDraw( aPos, ScGlobal::GetClipModel() );
+    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard();
+    if (pDrawClip)
+        PasteDraw( aPos, pDrawClip->GetModel() );
 }
 
 void ScViewFunc::PasteFromSystem()
 {
     UpdateInputLine();
 
-    if (ScGlobal::IsClipCaptured())
-        PasteFromClip( IDF_ALL );
-    else if (ScGlobal::IsClipDraw())
+    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard();
+
+    if (pOwnClip)
+        PasteFromClip( IDF_ALL, pOwnClip->GetDocument() );
+    else if (pDrawClip)
         PasteDraw();
     else
     {
@@ -432,8 +434,7 @@ void ScViewFunc::PasteFromSystem()
             }
             else if (pClipObj->HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE );
-            else if (pClipObj->HasFormat(FORMAT_PRIVATE))
-                PasteFromClip( IDF_ALL );
+            // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
             else if (pClipObj->HasFormat(nBiff))        // before xxx_OLE formats
                 PasteFromSystem(nBiff);
             else if (pClipObj->HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
@@ -470,15 +471,16 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
     UpdateInputLine();
 
     BOOL bRet = TRUE;
-    if ( nFormatId == 0 && ScGlobal::IsClipCaptured() )
-        PasteFromClip( IDF_ALL );
+    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+    if ( nFormatId == 0 && pOwnClip )
+        PasteFromClip( IDF_ALL, pOwnClip->GetDocument() );
     else
     {
-        SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-        if (!pClipObj.Is())
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        if ( !aDataHelper.GetTransferable().is() )
             return FALSE;
 
-        bRet = PasteDataFormat( nFormatId, pClipObj,
+        bRet = PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
                                 GetViewData()->GetCurX(), GetViewData()->GetCurY() );
 
         if ( !bRet && !bApi )
@@ -683,7 +685,10 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     InsCellCmd eMoveMode, USHORT nUndoExtraFlags )
 {
     if (!pClipDoc)
-        pClipDoc = ScGlobal::GetClipDoc();
+    {
+        DBG_ERROR("PasteFromClip: pClipDoc=0 not allowed");
+        return FALSE;
+    }
 
     //  fuer Undo etc. immer alle oder keine Inhalte sichern
     USHORT nContFlags = IDF_NONE;
