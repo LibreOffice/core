@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: hr $ $Date: 2002-08-15 16:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <ctype.h>
 #ifdef MAC
 #include <cursorctl.h>
+#endif
+#ifdef MACOSX
+#include <unxmacxp_protos.h>
 #endif
 
 #include <tools/fsys.hxx>
@@ -158,9 +161,10 @@ int rsc_stricmp( const char *string1, const char *string2 ){
 *************************************************************************/
 ByteString GetTmpFileName()
 {
-#if defined MACOSX || defined FREEBSD
-    // Use tmpnam instead of tempnam as tempnam has some bugs in Mac OS X
+#ifdef FREEBSD
     return ByteString( tmpnam( NULL ) );
+#elif MACOSX
+    return ByteString( macxp_tempnam( NULL, NULL ) );
 #else
     return ByteString( tempnam( (const char *) P_tmpdir, NULL ) );
 #endif
