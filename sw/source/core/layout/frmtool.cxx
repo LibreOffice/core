@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: od $ $Date: 2002-11-14 11:10:27 $
+ *  last change: $Author: od $ $Date: 2002-11-15 10:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,15 +1236,17 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     }
                 }
                 pFrm->CheckDirChange();
-                if( pFrm->IsVertical() )
-                    ((SwSectionFrm*)pFrm)->Init();
+                static_cast<SwSectionFrm*>(pFrm)->Init();
 
                 pFrm->Frm().Pos() = pLay->Frm().Pos();
                 pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
-                /// OD 18.09.2002 #100522#
-                /// invalidate page in order to force format and paint of
-                /// inserted section frame
+                // OD 18.09.2002 #100522#
+                // invalidate page in order to force format and paint of
+                // inserted section frame
                 pFrm->InvalidatePage( pPage );
+                // OD 14.11.2002 #104684# - invalidate page content in order to
+                // force format and paint of section content.
+                pPage->InvalidateCntnt();
 
                 pLay = (SwLayoutFrm*)pFrm;
                 if ( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
@@ -1284,8 +1286,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 // new section frame
                 pFrm = pActualSection->GetSectionNode()->MakeFrm();
                 pFrm->InsertBehind( pLay, pPrv );
-                if( pFrm->IsVertical() )
-                   ((SwSectionFrm*)pFrm)->Init();
+                static_cast<SwSectionFrm*>(pFrm)->Init();
 
                 pFrm->Frm().Pos() = pLay->Frm().Pos();
                 pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
