@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-12 18:00:03 $
+ *  last change: $Author: sj $ $Date: 2002-11-13 16:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ private:
     const GDIMetaFile*  pMTF;
     GDIMetaFile*        pAMTF;              // only created if Graphics is not a Metafile
     MapMode             aMapMode;
-    VirtualDevice       aOutputDevice;
+    VirtualDevice       aVDev;
 
     double              nBoundingX1;        // this represents the bounding box
     double              nBoundingY1;
@@ -204,8 +204,6 @@ private:
     ChrSet*             pChrSetList;        // Liste der Character-Sets
     BYTE                nNextChrSetId;      // die erste unbenutzte ChrSet-Id
 
-    PolyPolygon         aGradientPath;
-
     PSLZWCTreeNode*     pTable;             // LZW compression data
     PSLZWCTreeNode*     pPrefix;            // the compression is as same as the TIFF compression
     USHORT              nDataSize;
@@ -220,7 +218,7 @@ private:
 
     void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
     void                ImplWriteEpilog();
-    void                ImplWriteActions( const GDIMetaFile& rMtf);
+    void                ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev );
 
                         // this method makes LF's, space inserting and word wrapping as used in all nMode
                         // parameters
@@ -261,7 +259,8 @@ private:
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
     void                ImplRect( const Rectangle & rRectangle );
     void                ImplRectFill ( const Rectangle & rRectangle );
-    void                ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev );
+    void                ImplIntersect( const PolyPolygon& rPolyPoly );
     void                ImplPolyPoly( const PolyPolygon & rPolyPolygon, sal_Bool bTextOutline = sal_False );
     void                ImplPolyLine( const Polygon & rPolygon );
 
@@ -269,10 +268,10 @@ private:
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
     void                ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nResolution, VirtualDevice& rVirDev,
                                             const Point& rPos, const Size& rSize, sal_Int32 nWidth );
-    void                ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth );
+    void                ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const ByteString&, const INT32* pDXArry = NULL, BOOL bStretch = FALSE );
+    void                ImplWriteString( const ByteString&, VirtualDevice& rVDev, const INT32* pDXArry = NULL, BOOL bStretch = FALSE );
     void                ImplDefineFont( char*, char* );
 
     void                ImplClosePathDraw( ULONG nMode = PS_RET );
@@ -432,6 +431,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
         pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
 
     ImplGetMapMode( pMTF->GetPrefMapMode() );
+    aVDev.SetMapMode( pMTF->GetPrefMapMode() );
 
     nBoundingX1 = nBoundingY1 = 0;
     nBoundingX2 = pMTF->GetPrefSize().Width() * fXScaling;
@@ -462,7 +462,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     {
         ImplWriteProlog( ( mnPreview & EPS_PREVIEW_EPSI ) ? &rGraphic : NULL );
         mnCursorPos = 0;
-        ImplWriteActions( *pMTF );
+        ImplWriteActions( *pMTF, aVDev );
         ImplWriteEpilog();
         if ( mnPreview & EPS_PREVIEW_TIFF )
         {
@@ -654,8 +654,10 @@ void PSWriter::ImplWriteEpilog()
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
+void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 {
+    PolyPolygon aFillPath;
+
     for( ULONG nCurAction = 0, nCount = rMtf.GetActionCount(); nCurAction < nCount; nCurAction++ )
     {
         MetaAction* pMA = rMtf.GetAction( nCurAction );
@@ -776,7 +778,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 Point   aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, NULL, 0 );
+                ImplText( aUniStr, aPoint, NULL, 0, rVDev );
             }
             break;
 
@@ -792,7 +794,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 Point   aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, NULL, pA->GetWidth() );
+                ImplText( aUniStr, aPoint, NULL, pA->GetWidth(), rVDev );
             }
             break;
 
@@ -802,7 +804,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 Point   aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, pA->GetDXArray(), 0 );
+                ImplText( aUniStr, aPoint, pA->GetDXArray(), 0, rVDev );
             }
             break;
 
@@ -812,7 +814,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 if ( mbGrayScale )
                     aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
                 Point aPoint = ( (const MetaBmpAction*) pMA )->GetPoint();
-                ImplBmp( &aBitmap, NULL, aPoint, nBoundingX2, nBoundingY2 );
+                Size aSize = aBitmap.GetSizePixel();
+                ImplBmp( &aBitmap, NULL, aPoint, aSize.Width(), aSize.Height() );
             }
             break;
 
@@ -893,14 +896,14 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             case META_GRADIENT_ACTION :
             {
                 PolyPolygon aPolyPoly( ( (const MetaGradientAction*)pMA)->GetRect() );
-                ImplWriteGradient( aPolyPoly, ( (const MetaGradientAction*) pMA )->GetGradient() );
+                ImplWriteGradient( aPolyPoly, ( (const MetaGradientAction*) pMA )->GetGradient(), rVDev );
             }
             break;
 
             case META_GRADIENTEX_ACTION :
             {
                 PolyPolygon aPolyPoly( ( (const MetaGradientExAction*)pMA)->GetPolyPolygon() );
-                ImplWriteGradient( aPolyPoly, ( (const MetaGradientExAction*) pMA )->GetGradient() );
+                ImplWriteGradient( aPolyPoly, ( (const MetaGradientExAction*) pMA )->GetGradient(), rVDev );
             }
             break;
 
@@ -912,7 +915,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 aVDev.SetMapMode( aMapMode );
                 aVDev.AddHatchActions( ( (const MetaHatchAction*)pMA)->GetPolyPolygon(),
                                        ( (const MetaHatchAction*)pMA )->GetHatch(), aTmpMtf );
-                ImplWriteActions( aTmpMtf );
+                ImplWriteActions( aTmpMtf, rVDev );
             }
             break;
 
@@ -1051,6 +1054,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
             case META_MAPMODE_ACTION :
             {
+                pMA->Execute( &rVDev );
                 aMapMode = ( (const MetaMapModeAction*) pMA )->GetMapMode();
 
                 if( aMapMode.GetMapUnit() == MAP_RELATIVE )
@@ -1070,13 +1074,14 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
             case META_FONT_ACTION :
             {
-                maFont = ( (const MetaFontAction*) pMA )->GetFont();
-                aOutputDevice.SetFont( maFont );
+                maFont = ((const MetaFontAction*)pMA)->GetFont();
+                rVDev.SetFont( maFont );
             }
             break;
 
             case META_PUSH_ACTION :
             {
+                rVDev.Push(((const MetaPushAction*)pMA)->GetFlags() );
                 StackMember* pGS = new StackMember;
                 pGS->pSucc = pGDIStack;
                 pGDIStack = pGS;
@@ -1109,6 +1114,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
             case META_POP_ACTION :
             {
+                rVDev.Pop();
                 StackMember* pGS;
                 if( pGDIStack )
                 {
@@ -1217,6 +1223,12 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
             }
             break;
 
+            case META_RASTEROP_ACTION:
+            {
+                pMA->Execute( &rVDev );
+            }
+            break;
+
             case META_FLOATTRANSPARENT_ACTION:
             {
                 const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
@@ -1241,7 +1253,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 if( nMoveX || nMoveY )
                     aTmpMtf.Move( nMoveX, nMoveY );
 
-                ImplWriteActions( aTmpMtf );
+                ImplWriteActions( aTmpMtf, rVDev );
             }
             break;
 
@@ -1263,7 +1275,15 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                         }
                     }
                     if( pGradAction )
-                        ImplWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
+                        ImplWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), rVDev );
+                }
+                else if ( pA->GetComment().Equals( "XPATHFILL_SEQ_END" ) )
+                {
+                    if ( aFillPath.Count() )
+                    {
+                        aFillPath = PolyPolygon();
+                        ImplWriteLine( "gr" );
+                    }
                 }
                 else
                 {
@@ -1301,7 +1321,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                                 bSkipSequence = sal_False;
                             if ( (sal_uInt32)eJT > 2 )
                                 bSkipSequence = sal_False;
-
+                            if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) )
+                                bSkipSequence = sal_False;
                             if ( bSkipSequence )
                             {
                                 fStrokeWidth *= fXScaling > fYScaling ? fXScaling : fYScaling;
@@ -1347,11 +1368,72 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                                 }
                                 break;
 
-                                case SvtGraphicFill::fillGradient :
+                                case SvtGraphicFill::fillTexture :
                                 {
-                                    aFill.getPath( aGradientPath );
+                                    aFill.getPath( aFillPath );
+
+                                    /* normally an object filling is consisting of three MetaActions:
+                                        MetaBitmapAction        using RasterOp xor,
+                                        MetaPolyPolygonAction   using RasterOp rop_0
+                                        MetaBitmapAction        using RasterOp xor
+
+                                        Because RasterOps cannot been used in Postscript, we have to
+                                        replace these actions. The MetaComment "XPATHFILL_SEQ_BEGIN" is
+                                        providing the clippath of the object. The following loop is
+                                        trying to find the bitmap that is matching the clippath, so that
+                                        only one bitmap is exported, otherwise if the bitmap is not
+                                        locatable, all metaactions are played normally.
+                                    */
+                                    sal_uInt32 nCommentStartAction = nCurAction;
+                                    sal_uInt32 nBitmapCount = 0;
+                                    sal_uInt32 nBitmapAction;
+
+                                    sal_Bool bOk = sal_True;
+                                    while( bOk && ( ++nCurAction < nCount ) )
+                                    {
+                                        MetaAction* pAction = rMtf.GetAction( nCurAction );
+                                        switch( pAction->GetType() )
+                                        {
+                                            case META_BMPSCALE_ACTION :
+                                            case META_BMPSCALEPART_ACTION :
+                                            case META_BMPEXSCALE_ACTION :
+                                            case META_BMPEXSCALEPART_ACTION :
+                                            {
+                                                nBitmapCount++;
+                                                nBitmapAction = nCurAction;
+                                            }
+                                            break;
+                                            case META_COMMENT_ACTION :
+                                            {
+                                                if (((const MetaCommentAction*)pAction)->GetComment().Equals( "XPATHFILL_SEQ_END" ))
+                                                    bOk = sal_False;
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    if( nBitmapCount == 2 )
+                                    {
+                                        ImplWriteLine( "gs" );
+                                        ImplIntersect( aFillPath );
+                                        GDIMetaFile aTempMtf;
+                                        aTempMtf.AddAction( rMtf.GetAction( nBitmapAction )->Clone() );
+                                        ImplWriteActions( aTempMtf, rVDev );
+                                        ImplWriteLine( "gr" );
+                                        aFillPath = PolyPolygon();
+                                    }
+                                    else
+                                        nCurAction = nCommentStartAction + 1;
                                 }
                                 break;
+
+                                case SvtGraphicFill::fillGradient :
+                                    aFill.getPath( aFillPath );
+                                break;
+                            }
+                            if ( aFillPath.Count() )
+                            {
+                                ImplWriteLine( "gs" );
+                                ImplIntersect( aFillPath );
                             }
                         }
                         if ( bSkipSequence )
@@ -1510,34 +1592,31 @@ void PSWriter::ImplAddPath( const Polygon & rPolygon )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
+void PSWriter::ImplIntersect( const PolyPolygon& rPolyPoly )
 {
-    sal_uInt16 i, nPolyCount = aGradientPath.Count();
-    if ( nPolyCount )
+    sal_uInt16 i, nPolyCount = rPolyPoly.Count();
+    for ( i = 0; i < nPolyCount; )
     {
-        ImplWriteLine( "gs" );
-        for ( i = 0; i < nPolyCount; )
+        ImplAddPath( rPolyPoly.GetObject( i ) );
+        if ( ++i < nPolyCount )
         {
-            ImplAddPath( aGradientPath.GetObject( i ) );
-            if ( ++i < nPolyCount )
-            {
-                *mpPS << "p";
-                mnCursorPos += 2;
-                ImplExecMode( PS_RET );
-            }
+            *mpPS << "p";
+            mnCursorPos += 2;
+            ImplExecMode( PS_RET );
         }
-        ImplWriteLine( "eoclip newpath" );
-        aGradientPath = PolyPolygon();
     }
+    ImplWriteLine( "eoclip newpath" );
+}
 
+//---------------------------------------------------------------------------------
+
+void PSWriter::ImplWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
+{
     VirtualDevice   aVDev;
     GDIMetaFile     aTmpMtf;
     aVDev.SetMapMode( aMapMode );
     aVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
-    ImplWriteActions( aTmpMtf );
-
-    if ( nPolyCount )
-        ImplWriteLine( "gr" );
+    ImplWriteActions( aTmpMtf, rVDev );
 }
 
 //---------------------------------------------------------------------------------
@@ -1972,7 +2051,7 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplWriteString( const ByteString& rString, const INT32* pDXArry, BOOL bStretch )
+void PSWriter::ImplWriteString( const ByteString& rString, VirtualDevice& rVDev, const INT32* pDXArry, BOOL bStretch )
 {
     USHORT nLen = rString.Len();
     if ( nLen )
@@ -1986,7 +2065,7 @@ void PSWriter::ImplWriteString( const ByteString& rString, const INT32* pDXArry,
             {
                 if ( i > 0 )
                     nx = pDXArry[ i - 1 ] * fXScaling;
-                ImplWriteDouble( ( bStretch ) ? nx : aOutputDevice.GetTextWidth( rString.GetChar( i ) ) * fXScaling );
+                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rString.GetChar( i ) ) * fXScaling );
                 ImplWriteDouble( nx );
                 ImplWriteLine( "(", PS_NONE );
                 ImplWriteCharacter( rString.GetChar( i ) );
@@ -2046,7 +2125,7 @@ void PSWriter::ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nTextResolution,
 }
 
 
-void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth )
+void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
 {
     sal_uInt16 nLen = rUniString.Len();
     if ( !nLen )
@@ -2100,7 +2179,7 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
     {
         ImplSetAttrForText( rPos );
         ByteString aStr( rUniString, maFont.GetCharSet() );
-        ImplWriteString( aStr, pDXArry, nWidth != 0 );
+        ImplWriteString( aStr, rVDev, pDXArry, nWidth != 0 );
         if ( maFont.GetOrientation() )
             ImplWriteLine( "gr" );
     }
@@ -2251,7 +2330,6 @@ void PSWriter::ImplWriteColor( ULONG nMode )
 
 void PSWriter::ImplGetMapMode( const MapMode& aMapMode )
 {
-    aOutputDevice.SetMapMode( aMapMode );
     double  nMul;
     switch ( aMapMode.GetMapUnit() )
     {
