@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,19 +244,25 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     Color aYellow( 65535,65535,49152 );     // hellgelb
 #endif
     aCaptionSet.Put( XFillColorItem( String(), aYellow ) );
-    //  Schatten
-    aCaptionSet.Put( SdrShadowItem( TRUE ) );
+
+    //  shadow
+    //  SdrShadowItem has FALSE, instead the shadow is set for the rectangle
+    //  only with SetSpecialTextBoxShadow when the object is created
+    //  (item must be set to adjust objects from older files)
+    aCaptionSet.Put( SdrShadowItem( FALSE ) );
     aCaptionSet.Put( SdrShadowXDistItem( 100 ) );
     aCaptionSet.Put( SdrShadowYDistItem( 100 ) );
-    //  Text
+
+    //  text attributes
     aCaptionSet.Put( SdrTextLeftDistItem( 100 ) );
     aCaptionSet.Put( SdrTextRightDistItem( 100 ) );
     aCaptionSet.Put( SdrTextUpperDistItem( 100 ) );
     aCaptionSet.Put( SdrTextLowerDistItem( 100 ) );
-    //  Font etc. aus Pattern ohne Parent - nicht GetDefaultItem( ATTR_PATTERN )
-    //  (nicht die Schrift aus der Standard-Vorlage nehmen, immer harte Defaults)
-    ScPatternAttr aEmptyPat( pDoc->GetPool() );
-    aEmptyPat.FillEditItemSet( &aCaptionSet );
+
+    //  #78943# do use the default cell style, so the user has a chance to
+    //  modify the font for the annotations
+    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+        FillEditItemSet( &aCaptionSet );
 }
 
 //------------------------------------------------------------------------
@@ -684,13 +690,17 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
         rAttrSet.Put(SdrTextMaxFrameWidthItem(nMaxWidth));
     }
 
-    pCaption->SetAttributes( rAttrSet, FALSE );
     ScDrawLayer::SetAnchor( pCaption, SCA_CELL );
     pCaption->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pCaption );
 
     // #78611# for SetText, the object must already be inserted
     pCaption->SetText( rText );
+
+    //  SetAttributes must be after SetText, because the font attributes
+    //  are applied to the text.
+    pCaption->SetAttributes( rAttrSet, FALSE );
+    pCaption->SetSpecialTextBoxShadow();
 
     Rectangle aLogic = pCaption->GetLogicRect();
     Rectangle aOld = aLogic;
@@ -1549,5 +1559,44 @@ BOOL ScDetectiveFunc::HideComment( USHORT nCol, USHORT nRow )
     return bDone;
 }
 
+void ScDetectiveFunc::UpdateAllComments()
+{
+    //  for all caption objects, update attributes and SpecialTextBoxShadow flag
+    //  (on all tables - nTab is ignored!)
+
+    //  no undo actions, this is refreshed after undo
+
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    if (!pModel)
+        return;
+
+    ScCommentData aData( pDoc, pModel );
+
+    USHORT nTabCount = pDoc->GetTableCount();
+    for (USHORT nObjTab=0; nObjTab<nTabCount; nObjTab++)
+    {
+        SdrPage* pPage = pModel->GetPage(nObjTab);
+        DBG_ASSERT(pPage,"Page ?");
+        if (pPage)
+        {
+            SdrObjListIter aIter( *pPage, IM_FLAT );
+            SdrObject* pObject = aIter.Next();
+            while (pObject)
+            {
+                if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
+                {
+                    SdrCaptionObj* pCaption = (SdrCaptionObj*)pObject;
+
+                    SfxItemSet& rAttrSet = aData.GetCaptionSet();
+
+                    pCaption->SetAttributes( rAttrSet, FALSE );
+                    pCaption->SetSpecialTextBoxShadow();
+                }
+
+                pObject = aIter.Next();
+            }
+        }
+    }
+}
 
 
