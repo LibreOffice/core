@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:44:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #include <sfx2/srchdefs.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 // forward ---------------------------------------------------------------
 
@@ -130,9 +134,9 @@ struct SearchAttrItem
 
 // class SearchAttrItemList ----------------------------------------------
 
-SV_DECL_VARARR(SrchAttrItemList, SearchAttrItem, 8, 8);
+SV_DECL_VARARR_VISIBILITY(SrchAttrItemList, SearchAttrItem, 8, 8, SVX_DLLPUBLIC);
 
-class SearchAttrItemList : private SrchAttrItemList
+class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrItemList
 {
 public:
     SearchAttrItemList() {}
@@ -159,7 +163,7 @@ public:
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
-class SvxSearchDialogWrapper : public SfxChildWindow
+class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
 {
 public:
     SvxSearchDialogWrapper( Window*pParent, USHORT nId,
