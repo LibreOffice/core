@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-06 13:01:12 $
+#   last change: $Author: jsc $ $Date: 2001-08-16 13:27:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,24 +60,9 @@
 #
 #*************************************************************************
 
-#PROJECTPCH4DLL=TRUE
-#PROJECTPCH=sjpch
-#PROJECTPCHSOURCE=$(PRJ)$/util\sjpch
-#PDBTARGET=sj
-PRJPCH=
-ENABLE_EXCEPTIONS=TRUE
-
-JAVAPREPRO=
-.IF "$(JDK_VERSION)" == "110"
-JAVAPREPRO=-jdk11
-.ENDIF
-.IF "$(PRODUCT)" != ""
-JAVAPREPRO=$(JAVAPREPRO) + " -product"
-.ENDIF
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 NOUNODOC=
 BUILD_URD_ONLY=TRUE
@@ -85,9 +70,4 @@ LOCALIDLFILES=TRUE
 
 URDDOC=TRUE
 
-.IF "$(OS)"=="SOLARIS"
-.IF "$(CPU)"=="I"
-UNOIDL=unoidl
-.ENDIF
-.ENDIF
 
