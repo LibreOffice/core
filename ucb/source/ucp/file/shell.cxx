@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: abi $ $Date: 2001-03-02 12:08:24 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 12:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #ifndef __SGI_STL_STACK
-#include <stl/stack>
+#include <stack>
 #endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
