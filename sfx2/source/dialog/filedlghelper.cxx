@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:06:00 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
 
     Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-    xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( mbSelection ) );
+    xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( (sal_Bool)mbSelection ) );
 }
 
 // ------------------------------------------------------------------------
