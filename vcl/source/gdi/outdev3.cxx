@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.197 $
+ *  $Revision: 1.198 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:56:41 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 12:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3057,7 +3057,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
         {
             // advance to next sub-list when end-of-sublist marker
-            if( !*ppNames )
+            if( !**ppNames )    // #i46456# check for empty string, i.e., deref string itself not only ptr to it
             {
                 if( nBestQuality > 0 )
                     if( ++nMaxLevel >= MAX_FALLBACK )
