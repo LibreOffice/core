@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 16:09:05 $
+ *  last change: $Author: fme $ $Date: 2001-04-03 11:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,7 +1055,14 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 nX = nTmpY;
             }
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
-                nX -= ((SwDoubleLinePortion*)pPor)->PreWidth();
+            {
+                USHORT nPreWidth = ((SwDoubleLinePortion*)pPor)->PreWidth();
+                if ( nX > nPreWidth )
+                    nX -= nPreWidth;
+                else
+                    nX = 0;
+            }
+
             return GetCrsrOfst( pPos, Point( nLeftMargin + nX, rPoint.Y() ),
                                 nChgNode, pCMS );
         }
