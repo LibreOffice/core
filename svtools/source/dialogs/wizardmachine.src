@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:40:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 14:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,13 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27.12.1  2003/07/16 16:59:22  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.27  2003/07/03 17:40:44  hr
+ *  INTEGRATION: CWS rc2merge (1.26.14); FILE MERGED
+ *  2003/07/03 14:31:35 ihi 1.26.14.1: rc-2 merge all languages
+ *
  *  Revision 1.26.14.1  2003/07/03 14:31:35  ihi
  *  rc-2 merge all languages
  *
@@ -291,6 +298,8 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
+
 
 
 
