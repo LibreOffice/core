@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2000-10-12 10:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,8 +1595,9 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
 
         if ( aWord.Len() > 1 )
             xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage );
+
         if ( bForward && !xSpellAlt.is() )
-            aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
+            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
         else
             pSpellInfo->eState = EE_SPELL_ERRORFOUND;
     }
