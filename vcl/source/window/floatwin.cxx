@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:05:12 $
+ *  last change: $Author: th $ $Date: 2001-08-23 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 
 void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
-    mbFloatWin      = TRUE;
+    mbFloatWin = TRUE;
 
     if ( !pParent )
         pParent = Application::GetAppWindow();
@@ -107,6 +107,8 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     // no Border, then we dont need a border window
     if ( !nStyle )
     {
+        if ( nStyle & WB_SYSTEMWINDOW )
+            mbFrame = TRUE;
         mbOverlapWin = TRUE;
         if ( !(nStyle & WB_NODIALOGCONTROL) )
             nStyle |= WB_DIALOGCONTROL;
@@ -114,7 +116,11 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     }
     else
     {
-        ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT );
+        ImplBorderWindow*   pBorderWin;
+        USHORT              nBorderStyle = BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
+        if ( (nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
+            nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
+        pBorderWin  = new ImplBorderWindow( pParent, nStyle, nBorderStyle );
         if ( !(nStyle & WB_NODIALOGCONTROL) )
             nStyle |= WB_DIALOGCONTROL;
         SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
@@ -211,7 +217,6 @@ void FloatingWindow::ImplLoadRes( const ResId& rResId )
             RollUp();
     }
 }
-
 
 // -----------------------------------------------------------------------
 
