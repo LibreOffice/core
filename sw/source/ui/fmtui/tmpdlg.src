@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:44:33 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1429,7 +1429,7 @@ TabDialog DLG_TEMPLATE_5
                 Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Opzioni" ;
                 Text [ spanish ] = "~Opciones" ;
-                Text [ french ] = "~Options" ;
+                Text [ french ] = "Options" ;
                 Text [ dutch ] = "~Opties" ;
                 Text[ chinese_simplified ] = "Ñ¡Ïî";
                 Text[ russian ] = "Ïàðàìåòðû";
@@ -1468,6 +1468,7 @@ TabDialog DLG_TEMPLATE_5
     Text[ catalan ] = "Estilo de numeración";
     Text[ finnish ] = "Numerointityyli";
 };
+
 
 
 
