@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nidd $ $Date: 2002-02-28 15:44:10 $
+ *  last change: $Author: nidd $ $Date: 2002-05-09 17:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,10 +185,12 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
     if (!aSuppLocales.getLength())
     {
 
-        aSuppLocales.realloc( 2 );
+        aSuppLocales.realloc( 4 );
         Locale *pLocale = aSuppLocales.getArray();
         pLocale[0] = Locale( A2OU("en"), A2OU("US"), OUString() );
         pLocale[1] = Locale( A2OU("ru"), A2OU("RU"), OUString() );
+        pLocale[2] = Locale( A2OU("de"), A2OU("DE"), OUString() );
+        pLocale[3] = Locale( A2OU("da"), A2OU("DK"), OUString() );
 
     }
 
@@ -272,7 +274,6 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
 
     rtl_TextEncoding DictionaryEnc = L2TE( LocaleToLanguage( aLocale ) );
 
-
 //  chclass.toLower(aWord);
     encWord = OUStringToOString (aWord, DictionaryEnc);
 
@@ -304,7 +305,7 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
     else
       {
         xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nHyphenationPos,
-                       hyphenatedWord.makeStringAndClear(), nHyphenationPos );
+                       aWord, nHyphenationPos );
       }
 
     delete hyphens;
@@ -380,13 +381,19 @@ Reference< XPossibleHyphens > SAL_CALL
       return NULL;
     }
 
-  Sequence< INT16 > aHyphPos( encWord.getLength());
-  INT16 *pPos = aHyphPos.getArray();
-  OUStringBuffer hyphenatedWordBuffer;
-  OUString hyphenatedWord;
   INT16 nHyphCount = 0;
 
   for (INT16 i = 0; i < encWord.getLength(); i++)
+    if (hyphens[i]&1)
+      nHyphCount++;
+
+  Sequence< INT16 > aHyphPos(nHyphCount);
+  INT16 *pPos = aHyphPos.getArray();
+  OUStringBuffer hyphenatedWordBuffer;
+  OUString hyphenatedWord;
+  nHyphCount = 0;
+
+  for (i = 0; i < encWord.getLength(); i++)
     {
       hyphenatedWordBuffer.append(aWord[i]);
       if (hyphens[i]&1)

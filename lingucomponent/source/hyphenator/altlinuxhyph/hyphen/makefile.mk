@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nidd $ $Date: 2001-12-25 08:48:43 $
+#   last change: $Author: nidd $ $Date: 2002-05-09 17:36:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,9 +109,9 @@ UNOTYPES=\
     com.sun.star.linguistic2.XSupportedLocales\
     com.sun.star.linguistic2.XThesaurus
 
-CXXFLAGS += -I../libhnj -Wall
-CFLAGSCXX += -I../libhnj -Wall
-CFLAGSCC += -I../libhnj -Wall
+CXXFLAGS += -I../libhnj 
+CFLAGSCXX += -I../libhnj
+CFLAGSCC += -I../libhnj
 
 .IF "$(header)" == ""
 
