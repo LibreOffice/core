@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Hidden.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:17 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
 #endif
 
 //.........................................................................
@@ -184,12 +187,12 @@ void OHiddenModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(4, m_xAggregateSet)
+    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(4, m_xAggregateSet)
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(HIDDEN_VALUE,    ::rtl::OUString,    BOUND);
         DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
         DECL_PROP1(TAG,             ::rtl::OUString,    BOUND);
-    END_AGGREGATION_PROPERTY_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 // XServiceInfo
@@ -209,8 +212,8 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OHiddenModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, RuntimeException)
+void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+    throw(IOException, RuntimeException)
 {
     // Version
     _rxOutStream->writeShort(0x0002);
@@ -222,7 +225,7 @@ void SAL_CALL OHiddenModel::write(const Reference<stario::XObjectOutputStream>& 
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OHiddenModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
+void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     // Version
     UINT16 nVersion = _rxInStream->readShort();
