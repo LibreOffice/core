@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:26:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,23 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text [ en-US ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
 
+String RID_STR_FORM
+{
+    Text[ de ] = "Formular";
+    Text [ en-US ] = "Form";
+};
+
+String RID_STR_REPORT
+{
+    Text [ de ]= "Bericht";
+    Text [ en-US ] = "Report";
+};
+
+String RID_STR_DATASOURCE_NOT_STORED
+{
+    Text [ de ]= "Die Datenquelle wurde nicht gespeichert. Bitte verwenden Sie die Schnittstelle XStorable, um die Datenquelle zu speichern.";
+    Text [ en-US ] = "The data source was not saved. Please use the interface XStorable to save the data source.";
+};
 String RID_STR_ONLY_QUERY
 {
     Text [ de ] = "Der gesetzte Befehl ist kein SELECT-Befehl.\nEs sind nur Abfragen erlaubt.";
@@ -228,3 +245,4 @@ String RID_STR_COLUMN_ALTER_BY_INDEX
     Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Indexes, nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the  index.";
 };
+
