@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:30:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
 
     DBG_ASSERT(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!")
     sal_Bool bEnableEdit = sal_False;
+    sal_Bool bEnableOK = sal_True;
     if(m_xDBContext.is())
     {
         uno::Sequence< ::rtl::OUString> aNames = m_xDBContext->getElementNames();
@@ -345,15 +346,23 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
                 pUserData->sFilter = rConfigItem.GetFilter();
                 //is the data source editable (csv, Unicode, single table)
                 uno::Reference<beans::XPropertySet> xSourceProperties;
-                m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
-                pUserData->sURL = lcl_getFlatURL( xSourceProperties );
-                bEnableEdit = pUserData->sURL.getLength() > 0 &&
-                    !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
+                try
+                {
+                    m_xDBContext->getByName(pNames[nName]) >>= xSourceProperties;
+                    pUserData->sURL = lcl_getFlatURL( xSourceProperties );
+                    bEnableEdit = pUserData->sURL.getLength() > 0 &&
+                        !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
+                }
+                catch(const uno::Exception& rEx)
+                {
+                    rEx;
+                    bEnableOK = sal_False;
+                }
                 m_aDBData = rCurrentData;
             }
         }
     }
-    m_aOK.Enable(m_aListLB.GetEntryCount()>0);
+    m_aOK.Enable(m_aListLB.GetEntryCount()>0 && bEnableOK);
     m_aEditPB.Enable(bEnableEdit);
     m_aListLB.SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
 }
@@ -709,6 +718,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     catch(Exception& rEx)
     {
         DBG_ERROR("exception caught in SwAddressListDialog::DetectTablesAndQueries")
+        m_aOK.Enable( sal_False );
         rEx;
     }
 }
