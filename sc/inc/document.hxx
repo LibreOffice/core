@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-14 09:26:29 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 13:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,6 +868,7 @@ public:
     BOOL            IsClipOrUndo() const                        { return bIsClip || bIsUndo; }
     BOOL            IsUndo() const                              { return bIsUndo; }
     BOOL            IsClipboard() const                         { return bIsClip; }
+    BOOL            IsUndoEnabled() const                       { return !bImportingXML; }
     void            ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );
     void            ResetClip( ScDocument* pSourceDoc, USHORT nTab );
     void            SetCutMode( BOOL bCut );
