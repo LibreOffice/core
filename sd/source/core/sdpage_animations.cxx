@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:47:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,13 @@
 #include <svx/outliner.hxx>
 #endif
 
+#ifndef _DRAWDOC_HXX
+#include "drawdoc.hxx"
+#endif
+
+#ifndef _SDPAGE_HXX
 #include "sdpage.hxx"
+#endif
 
 #ifndef _SD_CUSTOMANIMATIONPRESET_HXX
 #include <CustomAnimationPreset.hxx>
@@ -91,6 +97,9 @@
 #include <TransitionPreset.hxx>
 #endif
 
+#ifndef _SD_UNDO_ANIM_HXX
+#include "undoanim.hxx"
+#endif
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -134,7 +143,34 @@ void SdPage::removeAnimations( const SdrObject* pObj )
     if( mpMainSequence.get() )
     {
         Reference< XShape > xShape( const_cast<SdrObject*>(pObj)->getUnoShape(), UNO_QUERY );
-        mpMainSequence->disposeShape( xShape );
+
+        if( mpMainSequence->hasEffect( xShape ) )
+        {
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetModel());
+
+            // since this is also called from a redo action, make sure we
+            // are recording undo actions anyway
+            SdrUndoGroup* pGroup = pDoc ? const_cast< SdrUndoGroup*  >( pDoc->GetAktUndoGroup() ) : 0;
+
+            if( pGroup )
+            {
+                bool bAdd = true;
+                if( pGroup->GetActionCount() == 0 )
+                {
+                    bAdd = true;
+                }
+                else
+                {
+                    UndoAnimation* pAnim = dynamic_cast< UndoAnimation* >( pGroup->GetAction( 0 ) );
+                    bAdd = pAnim == 0;
+                }
+
+                if( bAdd )
+                    pGroup->push_front( new UndoAnimation( pDoc, this ) );
+            }
+
+            mpMainSequence->disposeShape( xShape );
+        }
     }
 }
 
