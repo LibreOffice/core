@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:15:58 $
+ *  last change: $Author: jp $ $Date: 2001-09-21 16:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,11 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     const SwNode* pSttNd = &rNdIdx.GetNode();
     xub_StrLen nSttCnt = rCntntIdx.GetIndex();
 
+    BOOL bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
+    BOOL bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
+                        ( !rSearchOpt.searchString.compareToAscii( "^$" ) ||
+                          !rSearchOpt.searchString.compareToAscii( "$^" ) );
+
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
         if( pNode->IsTxtNode() )
@@ -294,35 +299,28 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                     if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
                 }
                 GetMark()->nContent = nStart;       // Startposition setzen
-
-                // kein Bereich selektiert und am Anfng/Ende ? ueber den
-                // Absatz selektieren
-/*              if( (!nStart && !((USHORT)(nEnde+1))) ||    // fuer 0 und -1 !
-                    ( nStart > nEnde ))
-                {
-                    // nicht von der Start Position entfernt
-                    if( pSttNd == &rNdIdx.GetNode() && nSttCnt == nStart
-                        && ( !bSrchForward || nStart || nTxtLen ))
-                        continue;
-
-                    GetPoint()->nContent = nStart;
-                    if( ( !nStart || nStart == nTxtLen ) &&
-                         !Move( fnMoveForward, fnGoCntnt ) )
-                        continue;
-                }
-                else
-*/                  GetPoint()->nContent = nEnde;
-
-                BOOL bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
-                if( bRegSearch &&
-                    1 < Abs( (int)(GetPoint()->nNode.GetIndex() - GetMark()->nNode.GetIndex())))
-                    // Fehler: es koennen maximal 2 Nodes selektiert werden !!
-                    continue;
+                GetPoint()->nContent = nEnde;
 
                 if( !bSrchForward )         // rueckwaerts Suche?
                     Exchange();             // Point und Mark tauschen
                 bFound = TRUE;
                 break;
+            }
+            else if( bChkEmptyPara && !nStart && !nTxtLen )
+            {
+                *GetPoint() = *pPam->GetPoint();
+                GetPoint()->nContent = 0;
+                SetMark();
+                if( pSttNd != &rNdIdx.GetNode() &&
+                    Move( fnMoveForward, fnGoCntnt ) &&
+                    1 == Abs( (int)( GetPoint()->nNode.GetIndex() -
+                                    GetMark()->nNode.GetIndex()) ) )
+                {
+                    if( !bSrchForward )         // rueckwaerts Suche?
+                        Exchange();             // Point und Mark tauschen
+                    bFound = TRUE;
+                    break;
+                }
             }
         }
     }
