@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 08:29:15 $
+ *  last change: $Author: vg $ $Date: 2002-07-05 07:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,7 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
 
         if ( m_pImpl->m_pAccessible )
         {
+            /*
             m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
                                         com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
                                                                                                     0,
@@ -578,6 +579,7 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
                                                                                                     nPos,
                                                                                                     nPos) ),
                                         com::sun::star::uno::Any());
+            */
         }
     }
 
@@ -648,10 +650,12 @@ void BrowseBox::SetColumnTitle( USHORT nItemId, const String& rTitle )
                 Invalidate( Rectangle( Point(0,0),
                     Size( GetOutputSizePixel().Width(), GetTitleHeight() ) ) );
         }
+        /*
         if ( m_pImpl->m_pAccessible )
             m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_CHANGED,
                                     com::sun::star::uno::makeAny( sNew ),
                                     com::sun::star::uno::makeAny( sOld ));
+                                    */
     }
 }
 
@@ -853,6 +857,7 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
 
     if ( m_pImpl->m_pAccessible )
     {
+        /*
         m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
                                     com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
                                                                                                 0,
@@ -860,6 +865,7 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
                                                                                                 nItemId,
                                                                                                 nItemId) ),
                                     com::sun::star::uno::Any());
+        */
 
         m_pImpl->m_pAccessible->commitHeaderBarEvent(ACCESSIBLE_CHILD_EVENT,
                                                      com::sun::star::uno::Any(),
@@ -1379,6 +1385,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeep
     // notify accessible that rows were inserted
     if ( m_pImpl->m_pAccessible )
     {
+        /*
         m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
                                     com::sun::star::uno::makeAny( AccessibleTableModelChange(   INSERT,
                                                                                                 nRow,
@@ -1386,6 +1393,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeep
                                                                                                 0,
                                                                                                 0) ),
                                     com::sun::star::uno::Any());
+        */
         for (sal_Int32 i = nRow+1 ; i <= nRowCount ; ++i)
         {
             m_pImpl->m_pAccessible->commitHeaderBarEvent(ACCESSIBLE_CHILD_EVENT,
@@ -1533,6 +1541,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
         }
         else
         {
+            /*
             m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
                             com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
                                                                                         nRow,
@@ -1540,7 +1549,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
                                                                                         0,
                                                                                         0) ),
                             com::sun::star::uno::Any());
-
+*/
             for (sal_Int32 i = nRow+1 ; i <= (nRow+nNumRows) ; ++i)
             {
                 m_pImpl->m_pAccessible->commitHeaderBarEvent(ACCESSIBLE_CHILD_EVENT,
