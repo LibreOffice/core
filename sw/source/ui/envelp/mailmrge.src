@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:16:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ ModalDialog DLG_MAILMERGE
     Text [ ENGLISH ] = "Print merge" ;
     Text [ norwegian ] = "Print merge" ;
     Text [ italian ] = "Stampa in serie" ;
-    Text [ portuguese_brazilian ] = "Imprimir IntercalaÁ„o" ;
+    Text [ portuguese_brazilian ] = "Imprimir Intercala??o" ;
     Text [ portuguese ] = "Carta em sÈrie" ;
     Text [ finnish ] = "Lomakekirje" ;
     Text [ danish ] = "Brevfletning" ;
@@ -363,7 +363,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "Atalho" ;
         Text[ chinese_simplified ] = "¬∑æ∂";
         Text[ russian ] = "œÛÚ¸";
-        Text[ polish ] = "åcieøka";
+        Text[ polish ] = "?cieøka";
         Text[ japanese ] = " ﬂΩ";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "∏ÙÆ|";
@@ -612,7 +612,7 @@ ModalDialog DLG_MAILMERGE
         Text = "Anh‰nge" ;
         Text [ ENGLISH ] = "Attachments" ;
         Text [ english_us ] = "Attachments" ;
-        Text [ portuguese_brazilian ] = "Anh‰nge" ;
+        Text [ portuguese_brazilian ] = "Anh?nge" ;
         Text [ swedish ] = "Bilagor" ;
         Text [ danish ] = "VedhÊftede filer" ;
         Text [ italian ] = "Allegati" ;
@@ -669,7 +669,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "Formato da mensagem" ;
         Text[ chinese_simplified ] = "” º˛∏Ò Ω";
         Text[ russian ] = "‘ÓÏ‡Ú Mail";
-        Text[ polish ] = "Format wiadomoúci";
+        Text[ polish ] = "Format wiadomo?ci";
         Text[ japanese ] = "“∞ŸèëéÆ";
         Text[ chinese_traditional ] = "∂l•ÛÆÊ¶°";
         Text[ arabic ] = " ‰”Ìﬁ «·»—Ìœ";
@@ -785,7 +785,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese ] = "Destino" ;
         Text[ chinese_simplified ] = " ‰≥ˆ";
         Text[ russian ] = "¬˚‚Ó‰";
-        Text[ polish ] = "Wyjúcie";
+        Text[ polish ] = "Wyj?cie";
         Text[ japanese ] = "±≥ƒÃﬂØƒ";
         Text[ chinese_traditional ] = "øÈ•X";
         Text[ arabic ] = "«·≈Œ—«Ã";
