@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-05 11:32:30 $
+ *  last change: $Author: dr $ $Date: 2001-02-07 09:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                 aTrip.SetCol(nCol1);
                 aTrip.SetRow(j);
                 aTrip.SetTab(nTab1);
-                aTrip.SetRelCol(TRUE);
+                aTrip.SetRelCol(FALSE);
                 aTrip.SetRelRow(TRUE);
                 aTrip.SetRelTab(TRUE);
                 String aFormula = aFString;
@@ -371,7 +371,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                 aTrip.SetRow(nRow1);
                 aTrip.SetTab(nTab1);
                 aTrip.SetRelCol(TRUE);
-                aTrip.SetRelRow(TRUE);
+                aTrip.SetRelRow(FALSE);
                 aTrip.SetRelTab(TRUE);
                 aFormula += aTrip.GetRefString(this, nTab1);
                 aFormula += ')';
