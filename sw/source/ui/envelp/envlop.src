@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:23:56 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 21:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ TabDialog DLG_ENV
         Text [ french ] = "Insérer" ;
         Text [ swedish ] = "~Infoga" ;
         Text [ dutch ] = "~Invoegen" ;
-        Text [ spanish ] = "I~nsertar" ;
+        Text [ spanish ] = "Insertar" ;
         Text [ english_us ] = "~Insert" ;
         Text[ chinese_simplified ] = "æ’å…¥(~I)";
         Text[ russian ] = "Âñòàâêà";
