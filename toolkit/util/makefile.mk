@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: sb $ $Date: 2002-07-12 08:18:42 $
+#   last change: $Author: hr $ $Date: 2002-08-15 13:56:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,10 +106,19 @@ DEFLIB1NAME	=tk
 DEF1EXPORTFILE=	tk.dxp 
 
 .IF "$(OS)"=="MACOSX" 
-SHL1STDLIBS +=          
-.ELIF "$(GUI)"=="UNX"
+
+# [ed] 6/16/02 Add in X libraries if we're building X
+
+.IF "$(GUIBASE)"=="unx"
+SHL1STDLIBS +=\
+    -lX11 -lXt -lXmu
+.ENDIF
+
+.ELSE
+.IF "$(GUI)"=="UNX"
 SHL1STDLIBS +=\
     -lX11
+.ENDIF
 .ENDIF
 
 RES1FILELIST=$(SRS)$/awt.srs
