@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-29 07:38:54 $
+ *  last change: $Author: hdu $ $Date: 2001-06-11 15:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1126,7 +1126,11 @@ bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
 
     XRectangle aXRect;
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+    {
         XClipBox( pClipRegion_, &aXRect );
+        if( aXRect.x < 0 ) aXRect.x = 0;
+        if( aXRect.y < 0 ) aXRect.y = 0;
+    }
     else
     {
         XLIB_Window aDummyWin;
