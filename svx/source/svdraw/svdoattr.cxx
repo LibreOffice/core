@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-10 16:11:01 $
+ *  last change: $Author: dl $ $Date: 2001-05-29 14:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,6 +1324,17 @@ void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
                 aSet.Put( *pItem->Clone() );
 
             nWhich = aIter.NextWhich();
+        }
+
+        SfxWhichIter aHardAttrIter( GetItemSet() );
+        nWhich = aHardAttrIter.FirstWhich();
+
+        while( nWhich )
+        {
+            if( SFX_ITEM_SET == GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+                aSet.Put( *pItem->Clone() );
+
+            nWhich = aHardAttrIter.NextWhich();
         }
 
         // Set StyleSheet attributes as hard attributes
