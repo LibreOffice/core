@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epictstr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 11:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,15 +63,10 @@
 
 String KEY_MODE
 {
-    Text = "PCT-EXPORT-MODE";
+    Text = "ExportMode";
 };
 
-String KEY_SIZEX
+String KEY_SIZE
 {
-    Text = "PCT-EXPORT-SIZEX";
-};
-
-String KEY_SIZEY
-{
-    Text = "PCT-EXPORT-SIZEY";
+    Text = "Size";
 };

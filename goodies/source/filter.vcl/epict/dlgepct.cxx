@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 11:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,10 @@
 #pragma hdrstop
 
 #include <vcl/msgbox.hxx>
-#include <vcl/config.hxx>
+#include <svtools/FilterConfigItem.hxx>
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 #include "dlgepct.hxx"
 #include "dlgepct.hrc"
 #include "strings.hrc"
@@ -86,37 +89,28 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr )
 
 {
     FreeResource();
+
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PCT" ) );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEPCT, OK ) );
     aRbOriginal.SetClickHdl( LINK( this, DlgExportEPCT, ClickRbOriginal ) );
     aRbSize.SetClickHdl( LINK( this, DlgExportEPCT, ClickRbSize ) );
 
     // Config-Parameter lesen
-    String aMStr( ResId( KEY_MODE, pMgr ) );
-    String aSXStr( ResId( KEY_SIZEX, pMgr ) );
-    String aSYStr( ResId( KEY_SIZEY, pMgr ) );
-
-    sal_Int32 nStrMode( pConfig->ReadKey( ByteString( aMStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32() );
-    ByteString aStrSizeX( pConfig->ReadKey( ByteString( aSXStr, RTL_TEXTENCODING_UTF8 ) ) );
-    ByteString aStrSizeY( pConfig->ReadKey( ByteString( aSYStr, RTL_TEXTENCODING_UTF8 ) ) );
+    sal_Int32 nStrMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, pMgr ) ), 0 );
+    ::com::sun::star::awt::Size aDefault( 10000, 10000 );
+    ::com::sun::star::awt::Size aSize;
+    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, pMgr ) ), aDefault );
 
     aMtfSizeX.SetDefaultUnit( FUNIT_MM );
     aMtfSizeY.SetDefaultUnit( FUNIT_MM );
-
-    if ( !aStrSizeX.Len() )
-        aMtfSizeX.SetValue( 10000 );
-    else
-        aMtfSizeX.SetValue( aStrSizeX.ToInt32() );
-
-    if ( !aStrSizeY.Len() )
-        aMtfSizeY.SetValue( 10000 );
-    else
-        aMtfSizeY.SetValue( aStrSizeY.ToInt32() );
+    aMtfSizeX.SetValue( aSize.Width );
+    aMtfSizeY.SetValue( aSize.Height );
 
     switch ( rPara.eFieldUnit )
     {
@@ -140,7 +134,6 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
         }
         break;
     }
-
     if ( nStrMode == 1 )
     {
         aRbSize.Check( TRUE );
@@ -153,6 +146,11 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
     }
 }
 
+DlgExportEPCT::~DlgExportEPCT()
+{
+    delete pConfigItem;
+}
+
 /*************************************************************************
 |*
 |* Speichert eingestellte Werte in ini-Datei
@@ -162,22 +160,16 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
 IMPL_LINK( DlgExportEPCT, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
-    sal_Int32 nSizeX = (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM );
-    sal_Int32 nSizeY = (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM );
-    sal_Int32 nStrMode;
+    ::com::sun::star::awt::Size aSize(
+        (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM ),
+            (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
 
+    sal_Int32 nStrMode = 0;
     if ( aRbSize.IsChecked() )
-        nStrMode = 1;
-    else
-        nStrMode = 0;
+        nStrMode++;
 
-    String aMStr( ResId( KEY_MODE, pMgr ) );
-    String aSXStr( ResId( KEY_SIZEX, pMgr ) );
-    String aSYStr( ResId( KEY_SIZEY, pMgr ) );
-    pConfig->WriteKey( ByteString( aMStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nStrMode ) );
-    pConfig->WriteKey( ByteString( aSXStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nSizeX ) );
-    pConfig->WriteKey( ByteString( aSYStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nSizeY ) );
-
+    pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nStrMode );
+    pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
     EndDialog( RET_OK );
 
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-31 10:39:39 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 11:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,8 +782,8 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
     if (bDstFontNameValid==FALSE || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
     {
         ByteString aByteString( rFont.GetName(), gsl_getSystemTextEncoding() );
-        sal_Int32 nFontNameLen = aByteString.Len();
-        if ( nFontNameLen > 0 )
+        sal_uInt16 nFontNameLen = aByteString.Len();
+        if ( nFontNameLen )
         {
             nDataLen = 3 + nFontNameLen;
             *pPict << (USHORT)0x002c << nDataLen << nFontId;
@@ -2224,11 +2224,11 @@ BOOL PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, P
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicExport(SvStream & rStream, Graphic & rGraphic,
                               PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                              FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
                               PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                              FilterConfigItem, BOOL)
 #endif
 {
     PictWriter      aPictWriter;
@@ -2277,7 +2277,7 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 {
     BOOL    bRet = FALSE;
 
-    if ( rPara.pWindow && rPara.pCfg )
+    if ( rPara.pWindow )
     {
         ByteString  aResMgrName( "ept" );
         ResMgr* pResMgr;
