@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2001-08-15 09:19:04 $
+#   last change: $Author: rt $ $Date: 2001-10-02 12:48:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,9 @@ USE_LDUMP2=TRUE
 LINKFLAGS+=/SEGMENTS:1024
 .ENDIF
 
+.IF "$(OS)"=="IRIX"
+LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
+.ENDIF
 RSCLOCINC+=-I$(PRJ)$/source$/svdraw
 
 .IF "$(GUI)"=="WNT"
