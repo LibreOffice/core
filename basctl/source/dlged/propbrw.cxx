@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:44:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,7 @@ void PropBrw::Update( SdrView* pNewView )
             m_bInitialStateChange = sal_False;
         }
 
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
 
         if ( nMarkCount == 1 )
