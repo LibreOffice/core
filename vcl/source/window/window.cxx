@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-10 10:10:42 $
+ *  last change: $Author: tbe $ $Date: 2002-09-11 13:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7805,6 +7805,9 @@ Window* Window::GetAccessibleParentWindow() const
 
 Window* Window::GetAccessibleParentWindow() const
 {
+    if ( ImplIsAccessibleNativeFrame() )
+        return NULL;
+
     Window* pParent = mpParent;
     if( GetType() == WINDOW_MENUBARWINDOW )
     {
