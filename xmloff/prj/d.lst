@@ -73,3 +73,7 @@ hedabu: ..\inc\shapeimport.hxx %_DEST%\inc%_EXT%\xmloff\shapeimport.hxx
 hedabu: ..\inc\SchXMLExportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLExportHelper.hxx
 hedabu: ..\inc\SchXMLImportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLImportHelper.hxx
 hedabu: ..\inc\functional.hxx %_DEST%\inc%_EXT%\xmloff\functional.hxx
+hedabu: ..\inc\XMLPageExport.hxx %_DEST%\inc%_EXT%\xmloff\XMLPageExport.hxx
+hedabu: ..\inc\XMLTextMasterPageExport.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterPageExport.hxx
+hedabu: ..\inc\XMLTextMasterStylesContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterStylesContext.hxx
+hedabu: ..\inc\XMLTextMasterPageContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterPageContext.hxx

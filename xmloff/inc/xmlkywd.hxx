@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-11 07:47:56 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ XML_CONSTASCII_ACTION( sXML_footnotes_position, "footnotes-position" );
 XML_CONSTASCII_ACTION( sXML_foreground, "foreground" );
 XML_CONSTASCII_ACTION( sXML_format_source, "format-source" );
 XML_CONSTASCII_ACTION( sXML_formula, "formula");
-XML_CONSTASCII_ACTION( sXML_formula_hidden, "formula_hidden");
+XML_CONSTASCII_ACTION( sXML_formula_hidden, "formula-hidden");
 XML_CONSTASCII_ACTION( sXML_fraction, "fraction" );
 XML_CONSTASCII_ACTION( sXML_frame, "frame" );
 XML_CONSTASCII_ACTION( sXML_frame_content, "frame-content" );
@@ -666,7 +666,7 @@ XML_CONSTASCII_ACTION( sXML_number_wrapped_paragraphs, "number-wrapped-paragraph
 XML_CONSTASCII_ACTION( sXML_object, "object" );
 XML_CONSTASCII_ACTION( sXML_object_count, "object-count" );
 XML_CONSTASCII_ACTION( sXML_object_name, "object-name");
-XML_CONSTASCII_ACTION( sXML_odd_page, "odd_page" );
+XML_CONSTASCII_ACTION( sXML_odd_page, "odd-page" );
 XML_CONSTASCII_ACTION( sXML_offset, "offset" );
 XML_CONSTASCII_ACTION( sXML_onLoad, "onLoad" );
 XML_CONSTASCII_ACTION( sXML_onRequest, "onRequest" );
