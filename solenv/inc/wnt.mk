@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:12:04 $
+#   last change: $Author: vg $ $Date: 2003-12-18 10:58:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -176,8 +176,6 @@ CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE)
 .IF "$(VC_STANDARD)"==""
 CFLAGS+= -Ob1
 .ENDIF	# "$(VC_STANDARD)"==""
-.ENDIF
-.ENDIF
 .ENDIF
 .ELSE	# ist keine product...
 CDEFS+= -D_X86_=1 $(OLE2DEF)
