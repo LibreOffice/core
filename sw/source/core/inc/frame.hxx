@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:16:25 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class SwDrawContact;
 class SwFtnFrm;
 class SwFtnBossFrm;
 class SwTabFrm;
+class SwRowFrm;
 class SwFlowFrm;
 class SwCntntFrm;
 class SfxPoolItem;
@@ -348,7 +349,7 @@ class SwFrm: public SwClient
 
         //Hebt die Lower waehrend eines Spaltenumbaus auf.
     friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart = NULL );
-    friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling );
+    friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
     //Checkt ob sich beim MakePos die Pos des Frm aendert oder nicht
     //layact.cxx
@@ -394,8 +395,7 @@ class SwFrm: public SwClient
 
     SwFrm( SwFrm & );       //Kopieren ist nicht erlaubt.
 
-    SwCntntFrm* ImplGetNextCntntFrm() const;
-    SwCntntFrm* ImplGetPrevCntntFrm() const;
+    const SwLayoutFrm* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
 protected:
     SwDrawObjs *pDrawObjs;  //Hier haengen die DrawObjs, kann 0 sein
@@ -500,11 +500,14 @@ public:
     SwLayoutFrm *GetNextLeaf   ( MakePageType eMakePage );
     SwLayoutFrm *GetNextFtnLeaf( MakePageType eMakePage );
     SwLayoutFrm *GetNextSctLeaf( MakePageType eMakePage );
+    SwLayoutFrm *GetNextCellLeaf( MakePageType eMakePage );
     SwLayoutFrm *GetPrevLeaf   ( MakePageType eMakeFtn = MAKEPAGE_FTN );
     SwLayoutFrm *GetPrevFtnLeaf( MakePageType eMakeFtn = MAKEPAGE_FTN );
     SwLayoutFrm *GetPrevSctLeaf( MakePageType eMakeFtn = MAKEPAGE_FTN );
+    SwLayoutFrm *GetPrevCellLeaf( MakePageType eMakeFtn = MAKEPAGE_FTN );
     const SwLayoutFrm *GetLeaf ( MakePageType eMakePage, BOOL bFwd,
                                  const SwFrm *pAnch ) const;
+
     BOOL WrongPageDesc( SwPageFrm* pNew );
 
     void AppendDrawObj( SwDrawContact *pObj );
@@ -556,6 +559,15 @@ public:
     inline BOOL IsInTab() const;
     inline BOOL IsInFly() const;
     inline BOOL IsInSct() const;
+
+    // If frame is inside a split table row, this function returns
+    // the corresponding row frame in the follow table.
+   const SwRowFrm* IsInSplitTableRow() const;
+
+    // If frame is inside a follow flow row, this function returns
+    // the corresponding row frame master table
+   const SwRowFrm* IsInFollowFlowRow() const;
+
     inline BOOL IsReverse() const { return bReverse; }
     inline void SetReverse( BOOL bNew ){ bReverse = bNew ? 1 : 0; }
     inline BOOL IsVertical() const;
@@ -590,6 +602,7 @@ public:
     void             GetAttrSet( SwAttrSet* );
 
     inline BOOL HasFixSize() const { return bFixSize; }
+    inline void SetFixSize( BOOL bNew ) { bFixSize = bNew; }
 
     //Kann 0 liefern, pruefen auch ob die Shell zum richtigen Dokument
     //gehoert. Impl in frmsh.hxx
@@ -651,8 +664,9 @@ public:
     BOOL OnRightPage() const { return 0 != GetPhyPageNum() % 2; };
     BOOL WannaRightPage() const;
 
-    const  SwLayoutFrm *GetPrevLayoutLeaf() const;
-    const  SwLayoutFrm *GetNextLayoutLeaf() const;
+
+    inline const  SwLayoutFrm *GetPrevLayoutLeaf() const;
+    inline const  SwLayoutFrm *GetNextLayoutLeaf() const;
     inline SwLayoutFrm *GetPrevLayoutLeaf();
     inline SwLayoutFrm *GetNextLayoutLeaf();
 
@@ -793,9 +807,6 @@ public:
     inline BOOL SwFrm::IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
 
-    inline  SwCntntFrm* GetNextCntntFrm() const;
-    inline  SwCntntFrm* GetPrevCntntFrm() const;
-
 #ifndef PRODUCT
     inline USHORT GetFrmId() const { return nFrmId; }
     inline USHORT GetLastFrmId() const { return nLastFrmId; }
@@ -871,13 +882,24 @@ inline void SwFrm::ResetRetouche() const
     ((SwFrm*)this)->bRetouche = FALSE;
 }
 
+inline SwLayoutFrm *SwFrm::GetNextLayoutLeaf()
+{
+    return (SwLayoutFrm*)((const SwFrm*)this)->GetNextLayoutLeaf();
+}
+
 inline SwLayoutFrm *SwFrm::GetPrevLayoutLeaf()
 {
     return (SwLayoutFrm*)((const SwFrm*)this)->GetPrevLayoutLeaf();
 }
-inline SwLayoutFrm *SwFrm::GetNextLayoutLeaf()
+
+inline const SwLayoutFrm *SwFrm::GetNextLayoutLeaf() const
 {
-    return (SwLayoutFrm*)((const SwFrm*)this)->GetNextLayoutLeaf();
+    return ImplGetNextLayoutLeaf( true );
+}
+
+inline const SwLayoutFrm *SwFrm::GetPrevLayoutLeaf() const
+{
+    return ImplGetNextLayoutLeaf( false );
 }
 
 inline void SwFrm::InvalidateSize()
@@ -1045,22 +1067,6 @@ inline const SwFrm *SwFrm::FindPrev() const
         return pPrev;
     else
         return ((SwFrm*)this)->_FindPrev();
-}
-
-
-inline SwCntntFrm *SwFrm::GetNextCntntFrm() const
-{
-    if ( GetNext() && GetNext()->IsCntntFrm() )
-        return (SwCntntFrm*)GetNext();
-    else
-        return ImplGetNextCntntFrm();
-}
-inline SwCntntFrm *SwFrm::GetPrevCntntFrm() const
-{
-    if ( GetPrev() && GetPrev()->IsCntntFrm() )
-        return (SwCntntFrm*)GetPrev();
-    else
-        return ImplGetPrevCntntFrm();
 }
 
 
