@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:08:04 $
+ *  last change: $Author: bm $ $Date: 2001-05-10 08:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1610,6 +1610,7 @@ XML_CONSTASCII_ACTION( sXML_suffix, "suffix" );
 XML_CONSTASCII_ACTION( sXML_sum, "sum" );
 XML_CONSTASCII_ACTION( sXML_swiss, "swiss" );
 XML_CONSTASCII_ACTION( sXML_symbol, "symbol" );
+XML_CONSTASCII_ACTION( sXML_symbol_size, "symbol-size" );
 XML_CONSTASCII_ACTION( sXML_system, "system" );
 XML_CONSTASCII_ACTION( sXML_tab_stop, "tab-stop" );
 XML_CONSTASCII_ACTION( sXML_tab_stops, "tab-stops" );
@@ -1629,6 +1630,7 @@ XML_CONSTASCII_ACTION( sXML_table_index, "table-index" );
 XML_CONSTASCII_ACTION( sXML_table_index_entry_template, "table-index-entry-template" );
 XML_CONSTASCII_ACTION( sXML_table_index_source, "table-index-source" );
 XML_CONSTASCII_ACTION( sXML_table_name, "table-name");
+XML_CONSTASCII_ACTION( sXML_table_number_list, "table-number-list");
 XML_CONSTASCII_ACTION( sXML_table_of_content, "table-of-content" );
 XML_CONSTASCII_ACTION( sXML_table_of_content_entry_template, "table-of-content-entry-template" );
 XML_CONSTASCII_ACTION( sXML_table_of_content_source, "table-of-content-source" );
