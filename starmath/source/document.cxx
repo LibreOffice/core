@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:52:18 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2154,6 +2154,8 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
+        *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
+        *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_60));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }
