@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:55:48 $
+ *  last change: $Author: oj $ $Date: 2001-06-21 11:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1137,9 +1137,6 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 // -----------------------------------------------------------------------------
 ::rtl::OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const ::rtl::OUString& _rBaseName)
 {
-    if (!_rxContainer->hasByName(_rBaseName))
-        return _rBaseName;
-
     ::rtl::OUString sName(_rBaseName);
     sal_Int32 nPos = 1;
     sName += ::rtl::OUString::valueOf(nPos);
@@ -1169,6 +1166,10 @@ void showError(const SQLExceptionInfo& _rInfo,
                 _xFactory->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
             if (xErrorDialog.is())
                 xErrorDialog->execute();
+            else
+            {
+                OSL_ENSURE(0,"dbtools::showError: no XExecutableDialog found!");
+            }
         }
         catch(Exception&)
         {
@@ -1265,6 +1266,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2001/06/15 09:55:48  fs
+ *  #86986# moved css/ui/* to css/ui/dialogs/*
+ *
  *  Revision 1.31  2001/06/05 16:08:20  fs
  *  #87688# getConnection_withFeedback
  *
