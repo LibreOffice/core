@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:42:39 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1717,7 +1717,7 @@ ORowSetMatrix::iterator ORowSetCache::calcPosition() const
 {
     sal_Int32 nValue = (m_nPosition - m_nStartPos) - 1;
     OSL_ENSURE(nValue >= 0 && nValue < static_cast<sal_Int32>(m_pMatrix->size()),"Position is invalid!");
-    return ( nValue < 0 || nValue >= m_pMatrix->size() ) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
+    return ( nValue < 0 || nValue >= static_cast<sal_Int32>(m_pMatrix->size()) ) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
 }
 // -----------------------------------------------------------------------------
 
