@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:41:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,7 +1070,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
             m_pCache->updateRow(m_aCurrentRow.operator ->());
             m_aBookmark     = m_pCache->getBookmark();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_aOldRow->setRow(*m_aCurrentRow);
+            m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
 
             // notification order
             // - column values
@@ -2127,7 +2127,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                     }
                 }
                 else
-                    throw SQLException(::rtl::OUString::createFromAscii("The interface XQueriesSupplier is not available!"),*this,::rtl::OUString(),0,Any());
+                    throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XQUERIESSUPPLIER),*this,::rtl::OUString(),0,Any());
             }   break;
             default:
                 aQuery = m_aCommand;
