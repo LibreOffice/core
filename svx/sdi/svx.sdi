@@ -2665,6 +2665,7 @@ SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* status: */
     SlotType = SfxBoolItem
 
@@ -5659,6 +5660,7 @@ SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* status: */
     SlotType = SfxBoolItem
 
@@ -6205,6 +6207,7 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -6899,6 +6902,7 @@ SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -9431,6 +9435,7 @@ SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -9459,6 +9464,7 @@ SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -9487,6 +9493,7 @@ SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -11473,6 +11480,7 @@ SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -11499,6 +11507,7 @@ SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
