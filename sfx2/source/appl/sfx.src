@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:54:27 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 21:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ String STR_STYLE_FILTER_USED
     TEXT[ chinese_traditional ] = "¨Ï¥Îªº¼Ë¦¡";
     TEXT[ arabic ] = "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã";
     TEXT[ greek ] = "Åöáñìïóìİíá ğñüôõğá";
-    TEXT[ korean ] = "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù.";
+    TEXT[ korean ] = "»ç¿ëµÈ¡¡À¯Çü.";
     TEXT[ turkish ] = "Kullanılan biçimler";
 };
 
@@ -468,7 +468,7 @@ String STR_REPEAT
     Text[ chinese_traditional ] = "¤W¤@­Ó«ü¥O(~R)";
     Text[ arabic ] = "ÇáÃãÑ ÇáÃÎíÑ: ";
     Text[ greek ] = "ÅğáíÜëçøç: ";
-    Text[ korean ] = "¹İº¹: (~R)";
+    Text[ korean ] = "¸¶Áö¸·¡¡¸í·É: (~R)";
     Text[ turkish ] = "Son ~komutu yinele: ";
 };
 
