@@ -131,6 +131,7 @@
 "SwXTextPortion";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "SwXTextPortion";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "SwXTextPortion";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
+"SwXTextPortion";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
 "SwXTextPortion";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextPortion";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXTextPortion";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
