@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:12:17 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ portuguese ] = "Marca substituída";
         Text[ danish ] = "Erstat punkttegn";
         Text[ french ] = "Remplacer les puces";
-        Text[ swedish ] = "Ersätt uppräkningstecken";
+        Text[ swedish ] = "Ersätt punkttecken";
         Text[ dutch ] = "Opsommingstekens vervangen";
         Text[ spanish ] = "Viñeta reemplazada";
         Text[ english_us ] = "Bullets replaced";
@@ -551,7 +551,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¶µ¥Ø²Å¸¹¡¨©M¡§½s¸¹¡¨";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÊÚÏÇÏ\" Ãæ \"ÊÑŞíã\"";
         Text[ greek ] = "Ïñéóìüò óôõë \"Êïõêßäá\" Ş \"Áñßèìçóç\"";
-        Text[ korean ] = "À¯Çü \"±Û¸Ó¸®Ç¥\"³ª \"¹øÈ£ ¸Å±â±â\" ¼³Á¤";
+        Text[ korean ] = "À¯Çü \"±Û¸Ó¸®Ç¥\" ¶Ç´Â \"¹øÈ£ ¸Å±â±â\" ¼³Á¤";
         Text[ turkish ] = "\"Madde\" ya da \"numaralama\" biçimini uygula";
         Text[ language_user1 ] = " ";
     };
