@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 16:51:10 $
+ *  last change: $Author: nn $ $Date: 2002-06-28 11:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,16 +785,60 @@ sal_Bool lcl_ValidChar( sal_Unicode cChar, sal_uInt16 nFormatType )
 
 void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, sal_uInt16 nFormatType )
 {
-    if ( ( rContent.getLength() == 1 &&
+    sal_Bool bQuote = sal_True;
+    sal_Int32 nLength = rContent.getLength();
+
+    if ( ( nLength == 1 &&
             lcl_ValidChar( rContent.charAt(0), nFormatType ) ) ||
-         ( rContent.getLength() == 2 &&
+         ( nLength == 2 &&
              lcl_ValidChar( rContent.charAt(0), nFormatType ) &&
              rContent.charAt(1) == ' ' ) )
     {
         //  don't quote single separator characters like space or percent,
         //  or separator characters followed by space (used in date formats)
+        bQuote = sal_False;
     }
-    else
+    else if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
+    {
+        //  the percent character in percentage styles must be left out of quoting
+        //  (one occurence is enough even if there are several percent characters in the string)
+
+        rtl::OUString aString( rContent.getStr() );
+        sal_Int32 nPos = aString.indexOf( (sal_Unicode) '%' );
+        if ( nPos >= 0 )
+        {
+            if ( nPos + 1 < nLength )
+            {
+                if ( nPos + 2 == nLength && lcl_ValidChar( rContent.charAt(nPos + 1), nFormatType ) )
+                {
+                    //  single character that doesn't need quoting
+                }
+                else
+                {
+                    //  quote text behind percent character
+                    rContent.insert( nPos + 1, (sal_Unicode) '"' );
+                    rContent.append( (sal_Unicode) '"' );
+                }
+            }
+            if ( nPos > 0 )
+            {
+                if ( nPos == 1 && lcl_ValidChar( rContent.charAt(0), nFormatType ) )
+                {
+                    //  single character that doesn't need quoting
+                }
+                else
+                {
+                    //  quote text before percent character
+                    rContent.insert( nPos, (sal_Unicode) '"' );
+                    rContent.insert( 0, (sal_Unicode) '"' );
+                }
+            }
+            bQuote = sal_False;
+        }
+        // else: normal quoting (below)
+    }
+
+    if ( bQuote )
     {
         //  quote string literals
         //! escape quotes in string
