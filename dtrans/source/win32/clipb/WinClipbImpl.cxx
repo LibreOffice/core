@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 12:27:02 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 13:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void SAL_CALL CWinClipbImpl::setContents( const Reference< XTransferable >& xTra
     IDataObjectPtr pIDataObj( objFactory.createDataObjFromTransferable(
         m_pWinClipboard->m_SrvMgr , m_rCurrentClipbContent ) );
 
-    // used to differentiate in ClipboardContent changed handler
+    // used to differentiate in ClipboardContentChanged handler
     m_bSelfTriggered = sal_True;
 
     MTASetClipboard( pIDataObj );
