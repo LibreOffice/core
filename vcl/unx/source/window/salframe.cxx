@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-28 17:20:27 $
+ *  last change: $Author: rt $ $Date: 2000-11-30 14:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,8 +641,8 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
     {
         Arg args[10];
         int n = 0;
-        XtSetArg( args[n++], XtNminWidth, nWidth );
-        XtSetArg( args[n++], XtNminHeight, nHeight );
+        XtSetArg( args[n], XtNminWidth, nWidth );   n++;
+        XtSetArg( args[n], XtNminHeight, nHeight ); n++;
         XtSetValues( maFrameData.hShell_, args, n );
     }
 }
