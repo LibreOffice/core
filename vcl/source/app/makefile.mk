@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mt $ $Date: 2001-05-11 07:21:41 $
+#   last change: $Author: pl $ $Date: 2001-06-28 13:33:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ SLOFILES=	$(SLO)$/access.obj		\
             $(SLO)$/help.obj		\
             $(SLO)$/idlemgr.obj 	\
             $(SLO)$/oldsv.obj		\
-            $(SLO)$/resary.obj		\
             $(SLO)$/resmgr.obj		\
             $(SLO)$/settings.obj	\
             $(SLO)$/sound.obj		\
