@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-07 15:09:17 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 14:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text [ english ]    = "Autopilot Address Book Data Source" ;
     Text [ english_us ] = "Autopilot Address Book Data Source" ;
 
+    HelpId = HID_ABSPILOT;
+
     OutputSize      = TRUE ;
     SVLook          = TRUE ;
     Moveable        = TRUE ;
@@ -112,9 +114,9 @@ TabPage RID_PAGE_SELECTABTYPE
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem Systemvorhandene Adress-Daten zuzugreifen.\n"
+        Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adress-Daten zuzugreifen.\n"
             "Dazu wird eine %PRODUCTNAME Datenquelle angelegt, unter der Ihre Adressbücher als Tabellen zugänglich sind.\n\n"
-            "Dieser Auto-Pilot unterstützt sie bei der Einrichtung dieser Datenquelle.";
+            "Dieser Auto-Pilot unterstützt Sie bei der Einrichtung dieser Datenquelle.";
         Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\n"
             "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
             "This auto pilot will assist you in the creation of this data source.";
@@ -145,7 +147,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 7, 56 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 8 ) ;
 
-        Text = "Bitte wählen sie den Typ Ihres externen Adressbuches:";
+        Text = "Bitte wählen Sie den Typ Ihres externen Adressbuches:";
         Text [ english ] = "Please choose the type of your external address book:";
         Text [ english_us ] = "Please choose the type of your external address book:";
         Text[ portuguese ] = "Please choose the type of your external address book:";
@@ -172,7 +174,7 @@ TabPage RID_PAGE_SELECTABTYPE
     RadioButton RB_MORK
     {
         Pos     = MAP_APPFONT ( 15, 68 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "Mozilla / Netscape 6.x";
         Text [ english ] = "Mozilla / Netscape 6.x";
@@ -201,7 +203,7 @@ TabPage RID_PAGE_SELECTABTYPE
     RadioButton RB_LDAP
     {
         Pos     = MAP_APPFONT ( 15, 79 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "LDAP Adress-Bestand";
         Text [ english ] = "LDAP address data";
@@ -229,7 +231,7 @@ TabPage RID_PAGE_SELECTABTYPE
     RadioButton RB_OUTLOOK
     {
         Pos     = MAP_APPFONT ( 15, 90 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "Outlook Adressbuch";
         Text [ english ] = "Outlook address book";
@@ -257,7 +259,7 @@ TabPage RID_PAGE_SELECTABTYPE
     RadioButton RB_OUTLOOKEXPRESS
     {
         Pos     = MAP_APPFONT ( 15,101 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "Windows System-Adressbuch";
         Text [ english ] = "Windows system address book";
@@ -285,7 +287,7 @@ TabPage RID_PAGE_SELECTABTYPE
     RadioButton RB_OTHER
     {
         Pos     = MAP_APPFONT ( 15, 112 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text = "andere externe Datenquelle";
         Text [ english ] = "other external data source";
@@ -474,30 +476,11 @@ TabPage RID_PAGE_TABLESELECTION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24 ) ;
         WordBreak = TRUE;
 
-        Text = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände (respektive Tabellen).\n"
+        Text = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände.\n"
             "Bitte wählen Sie denjenigen aus, mit dem Sie hauptsächlich arbeiten wollen:";
-        Text [ english ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\n"
+        Text [ english ] = "The external data source chosen by you contains more than one address stock.\n"
             "Please choose the one you primarily want to work with:";
-        Text [ english_us ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ portuguese ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ russian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ greek ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ dutch ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ french ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ spanish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ finnish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ italian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ danish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ swedish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ polish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ portuguese_brazilian ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ japanese ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ korean ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ chinese_simplified ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ chinese_traditional ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ turkish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ arabic ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ catalan ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text [ english_us ] = "The external data source chosen by you contains more than one address stock.\nPlease choose the one you primarily want to work with:";
     };
 
     ListBox LB_TABLELIST
@@ -647,10 +630,10 @@ TabPage RID_PAGE_FINAL
     FixedText FT_FINISH_EXPL
     {
         Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 32 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text = "Das waren alle Angaben, die zu Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\n"
+        Text = "Das waren alle Angaben, die zur Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\n"
             "Geben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
         Text [ english ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\n"
             "Now, just enter the name which should be used to register the data source in %PRODUCTNAME.";
@@ -678,7 +661,7 @@ TabPage RID_PAGE_FINAL
 
     FixedText FT_NAME_EXPL
     {
-        Pos     = MAP_APPFONT ( BORDER_X, 45 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 53 ) ;
         Size    = MAP_APPFONT ( 50, 8 ) ;
 
         Text = "Titel";
@@ -708,8 +691,8 @@ TabPage RID_PAGE_FINAL
 
     Edit ET_DATASOURCENAME
     {
-        Pos     = MAP_APPFONT ( BORDER_X + 50 + 3, 45 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 60 - BORDER_X, 12) ;
+        Pos     = MAP_APPFONT ( BORDER_X + 50 + 3, 53 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 53 - BORDER_X - BORDER_X, 12) ;
         SVLook = TRUE;
         Border = TRUE;
         Group = FALSE;
@@ -989,15 +972,29 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ catalan ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
 };
 
+String RID_STR_ABP_SUCCESS
+{
+    Text = "Ihr externes Adreßbuch wurde erfolgreich in %PRODUCTNAME registriert.\n"
+        "Sie können jetzt Ihre Adreßdaten wie jede beliebige andere Datenquelle benutzen.";
+    Text [ english ] = "Your external address book was successully registered in %PRODUCTNAME.\n"
+        "You now can access your address data like any other data source.";
+    Text [ english_us ] = "Your external address book was successully registered in %PRODUCTNAME.\n"
+        "You now can access your address data like any other data source.";
+};
+
 //........................................................................
 Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
 };
 
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/07 15:09:17  rt
+ *  Merge SRC638: 07.08.01 - 17:08:29
+ *
  *  Revision 1.2  2001/08/02 10:46:00  fs
  *  #88530# layout changes
  *

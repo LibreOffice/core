@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 14:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ namespace abp
     //=====================================================================
     //---------------------------------------------------------------------
     OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB)
-        :OAddessBookSourcePilot_Base(_pParent, ModuleRes(RID_DLG_ADDRESSBOOKSOURCEPILOT), WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS)
+        :OAddessBookSourcePilot_Base(_pParent, ModuleRes(RID_DLG_ADDRESSBOOKSOURCEPILOT), WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS)
         ,m_xORB(_rxORB)
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )
@@ -209,6 +209,9 @@ namespace abp
         implCommitAll();
 
         addressconfig::markPilotSuccess( getORB() );
+
+        MessBox aSuccessMessage( GetParent(), WB_OK, GetText(), String( ModuleRes( RID_STR_ABP_SUCCESS ) ) );
+        aSuccessMessage.Execute();
 
         return sal_True;
     }
@@ -437,6 +440,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/02 10:45:28  fs
+ *  #88530# layout changes
+ *
  *  Revision 1.1  2001/08/01 11:06:28  fs
  *  initial checkin - address book auto pilot - the dialog itself
  *
