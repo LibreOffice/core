@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
+ *  last change: $Author: cmc $ $Date: 2002-05-15 13:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,6 +910,10 @@ friend class WW8FormulaControl;
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
         MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist );
+    void AdjustLRWrapForWordMargins(SvxMSDffImportRec* pRecord,
+        SvxLRSpaceItem *pLR);
+    void AdjustULWrapForWordMargins(SvxMSDffImportRec* pRecord,
+        SvxULSpaceItem *pUL);
     void MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
                                        SwFrmFmt*          pFlyFmt );
 

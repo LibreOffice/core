@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-13 11:22:09 $
+ *  last change: $Author: cmc $ $Date: 2002-05-15 13:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1889,15 +1889,82 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     }
 }
 
+void SwWW8ImplReader::AdjustLRWrapForWordMargins(SvxMSDffImportRec* pRecord,
+    SvxLRSpaceItem* pLR)
+{
+    // Left adjustments - if horizontally aligned to left of
+    // margin or column then remove the left wrapping
+    if (pRecord->nXAlign == 1)
+    {
+        if ((pRecord->nXRelTo == 0) || (pRecord->nXRelTo == 2))
+            pLR->SetLeft((USHORT)0);
+    }
 
-void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
-                                                    SwFrmFmt*          pFlyFmt )
+    // Right adjustments - if horizontally aligned to right of
+    // margin or column then remove the right wrapping
+    if (pRecord->nXAlign == 3)
+    {
+        if ((pRecord->nXRelTo == 0) || (pRecord->nXRelTo == 2))
+            pLR->SetRight((USHORT)0);
+    }
+
+    //Inside margin, remove left wrapping
+    if ((pRecord->nXAlign == 4) && (pRecord->nXRelTo == 0))
+    {
+        pLR->SetLeft((USHORT)0);
+    }
+
+    //Outside margin, remove left wrapping
+    if ((pRecord->nXAlign == 5) && (pRecord->nXRelTo == 0))
+    {
+        pLR->SetRight((USHORT)0);
+    }
+}
+
+
+void SwWW8ImplReader::AdjustULWrapForWordMargins(SvxMSDffImportRec* pRecord,
+    SvxULSpaceItem* pUL)
+{
+    // Top adjustment - remove upper wrapping if aligned to page
+    // printable area or to page
+    if (pRecord->nYAlign == 1)
+    {
+        if ((pRecord->nYRelTo == 0) || (pRecord->nYRelTo == 1))
+            pUL->SetUpper((USHORT)0);
+    }
+
+    // Bottom adjustment - remove bottom wrapping if aligned to page or
+    // printable area or to page
+    if (pRecord->nYAlign == 3)
+    {
+        if ((pRecord->nYRelTo == 0) || (pRecord->nYRelTo == 1))
+            pUL->SetLower((USHORT)0);
+    }
+
+    //Remove top margin if aligned vertically inside margin
+    if ((pRecord->nYAlign == 4) && (pRecord->nYRelTo == 0))
+        pUL->SetUpper((USHORT)0);
+
+    /*
+    // Something like this needs to be done once inside and outside are
+    // fixed
+    if (pRecord->nYAlign == 4)
+    {
+        if (pRecord->nYRelTo == 0)
+            pUL->SetUpper((USHORT)0);
+    }
+    */
+}
+
+void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt(SvxMSDffImportRec* pRecord,
+    SwFrmFmt* pFlyFmt )
 {
     if( pRecord->nDxWrapDistLeft || pRecord->nDxWrapDistRight )
     {
         SvxLRSpaceItem aLR;
         aLR.SetLeft(pRecord->nDxWrapDistLeft);
         aLR.SetRight(pRecord->nDxWrapDistRight);
+        AdjustLRWrapForWordMargins(pRecord, &aLR);
         pFlyFmt->SetAttr( aLR );
     }
     if( pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom )
@@ -1905,6 +1972,7 @@ void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
         SvxULSpaceItem aUL;
         aUL.SetUpper(   (USHORT)pRecord->nDyWrapDistTop );
         aUL.SetLower(   (USHORT)pRecord->nDyWrapDistBottom );
+        AdjustULWrapForWordMargins( pRecord, &aUL);
         pFlyFmt->SetAttr( aUL );
     }
 }
@@ -2099,6 +2167,23 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
             :  2 <= nYRelTo  ?  FLY_AT_CNTNT :  FLY_PAGE;
 
+        // Make adjustments for absolute positoning
+        // When anchored vertically to line and horizontally to either
+        // page, margin or column with absolute positioning in Word, we
+        // should anchor to Character in Writer
+        if ((nXAlign == 0) && (nYAlign == 0))
+        {
+            if ((nXRelTo <= 2) && (nYRelTo == 3))
+            {
+                eAnchor = FLY_AUTO_CNTNT;
+            }
+            else if ((nXRelTo == 3) && (nYRelTo == 3))
+            {
+                eAnchor = FLY_AUTO_CNTNT;
+                //nYAlign = 3;
+            }
+        }
+
 
         //No drawing layer stuff in the header, so if
         //this is going to be in the headerfooter and
@@ -2167,6 +2252,13 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             SwRelationOrient eVertRel;
             eVertRel = FLY_AUTO_CNTNT == eAnchor ? REL_CHAR :
                 aRelOriTab[  nYRelTo ];
+            // Make an adjustment for the special case where we want to align
+            // vertically to page when horizontally aligned centre to character
+            if (((pRecord->nXAlign == 1) || (pRecord->nXAlign == 2)) && (pRecord->nXRelTo == 3)
+                && (pRecord->nYAlign == 2) && (pRecord->nYRelTo ==1))
+            {
+                eVertRel = REL_PG_PRTAREA;
+            }
 
             rFlySet.Put(SwFmtVertOrient( pFSPA->nYaTop,  eVertOri, eVertRel ));
         }
