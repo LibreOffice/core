@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assclass.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ Assistent::~Assistent()
         delete pPages[i];
     }
 
-    delete pPageStatus;
+    delete [] pPageStatus;
 }
 
 BOOL Assistent::IsEnabled( UINT8 nPage )
