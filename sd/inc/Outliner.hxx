@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 12:55:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef SD_OUTLINER_ITERATOR_HXX
 #include "OutlinerIterator.hxx"
 #endif
+#include <svx/SpellPortions.hxx>
 
 class Dialog;
 class SdPage;
@@ -167,7 +168,8 @@ public:
     */
     void PrepareSpelling (void);
 
-    /** Initiate a spell check.
+    /** Initialize a spell check but do not start it yet.  This method
+        is a better candiate for the name PrepareSpelling.
     */
     void StartSpelling (void);
 
@@ -177,15 +179,13 @@ public:
             indicated by user input to the search dialog).  A </FALSE> value
             indicates that another call to this method is required.
     */
-    BOOL StartSearchAndReplace (const SvxSearchItem* pSearchItem);
+    bool StartSearchAndReplace (const SvxSearchItem* pSearchItem);
 
-    /** Initiate the spell check of the next relevant text object.
-        @return
-            Returns <TRUE/> to indicate that another call to this method is
-            required.  When all text objects have been processed then
-            <FALSE/> is returned.
+    /** Iterate over the sentences in all text shapes and stop at the
+        next sentence with spelling errors. While doing so the view
+        mode may be changed and text shapes are set into edit mode.
     */
-    virtual BOOL SpellNextDocument (void);
+    ::svx::SpellPortions GetNextSpellSentence (void);
 
     /** Release all resources that have been created during the find&replace
         or spell check.
@@ -253,7 +253,7 @@ private:
     OutlinerView* mpOutlineView;
 
     /// Specifies whether the search string has been found so far.
-    BOOL mbStringFound;
+    bool mbStringFound;
 
     /** This flag indicates whether there may exist a match of the search
         string before/after the current position in the document.  It can be
@@ -272,19 +272,19 @@ private:
     /** A <TRUE/> value indicates that the end of the find&replace or spell
         check has been reached.
     */
-    BOOL mbEndOfSearch;
+    bool mbEndOfSearch;
 
     /** Set to <TRUE/> when an object has been prepared successfully for
         searching/spell checking.  This flag directs the internal iteration
         which stops when set to </TRUE>.
     */
-    BOOL mbFoundObject;
+    bool mbFoundObject;
 
     /** When set to <TRUE/> this flag indicates that an error has occured
         that should terminate the iteration over the objects to search/spell
         check.
     */
-    BOOL mbError;
+    bool mbError;
 
     /** This flag indicates whether to search forward or backwards.
     */
@@ -295,10 +295,10 @@ private:
     */
     bool mbRestrictSearchToSelection;
 
-    /** When the search is restricted to the current selection then this
-        list contains pointers to all the selection's objects.  This copy is
-        necessary because during the search process the mark list is
-        modified.
+    /** When the search is restricted to the current selection then
+        this list contains pointers to all the objects of the
+        selection.  This copy is necessary because during the search
+        process the mark list is modified.
     */
     ::std::vector<SdrObject*> maMarkListCopy;
 
@@ -380,6 +380,12 @@ private:
     */
     bool mbExpectingSelectionChangeEvent;
 
+    /** This flag is set to true when the whole document has been
+        processed once 'officially', i.e. a message box has been shown
+        that tells the user so.
+    */
+    bool mbWholeDocumentProcessed;
+
     /** When this flag is true then a PrepareSpelling() is executed when
         StartSearchAndReplace() is called the next time.
     */
@@ -404,14 +410,14 @@ private:
 
     /** Do search and replace for whole document.
     */
-    BOOL SearchAndReplaceAll (void);
+    bool SearchAndReplaceAll (void);
 
     /** Do search and replace for next match.
         @return
             The return value specifies whether the search ended (</TRUE>) or
             another call to this method is required (</FALSE>).
     */
-    BOOL SearchAndReplaceOnce (void);
+    bool SearchAndReplaceOnce (void);
 
     /** Detect changes of the document or view and react accordingly.  Such
         changes may occur because different calls to
@@ -581,6 +587,16 @@ private:
         the current() iterator.
     */
     void HandleChangedSelection (void);
+
+    /** Initiate the spell check of the next relevant text object.
+        When the outline view is active then this method is called
+        after a wrap arround to continue at the beginning of the document.
+        @return
+            Returns <TRUE/> to indicate that another call to this method is
+            required.  When all text objects have been processed then
+            <FALSE/> is returned.
+    */
+    virtual BOOL SpellNextDocument (void);
 
     /** Show the given message box and make it modal.  It is assumed that
         the parent of the given dialog is NULL, i.e. the application
