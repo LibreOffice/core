@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:43:33 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     FixedText FT_PROXYMODE
     {
@@ -155,7 +156,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ japanese ] = "プロキシサーバー(~E)";
         Text[ chinese_traditional ] = "代理伺服器(~E)";
         Text[ arabic ] = "����� Proxy";
-        Text[ greek ] = "����������� Proxy";
+        Text[ greek ] = "����������� �����������";
         Text[ korean ] = "프록시 서버";
         Text[ turkish ] = "Vekil s~unucu";
         Text[ language_user1 ] = " ";
@@ -165,6 +166,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "Proxy server";
         Text[ hebrew ] = "‮שרת פרוקסי‬";
         Text[ hindi ] = "प्रॉक्सि ~सर्वर";
+        Text[ slovak ] = "Proxy s~erver";
     };
     ListBox LB_PROXYMODE
     {
@@ -307,6 +309,11 @@ TabPage RID_SVXPAGE_INET_PROXY
          < "कोई नहीं" ; > ;
         < "मान्युवल" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Žiadne" ; > ;
+        < "Ručný" ; > ;
+    };
     };
     String ST_PROXY_FROM_BROWSER
     {
@@ -336,6 +343,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ hebrew ] = "‮יש להשתמש בקביעות הדפדפן‬";
         Text[ thai ] = "Use browser settings";
         Text[ hindi ] = "Use browser settings";
+        Text[ slovak ] = "Použiť nastavenia prehliadača";
     };
     FixedText FT_HTTP_PROXY
     {
@@ -345,8 +353,8 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ English ] = "Http Pro~xy" ;
         Text [ english_us ] = "HT~TP proxy" ;
         Text [ italian ] = "Pro~xy Http" ;
-        Text [ spanish ] = "Proxy Http" ;
-        Text [ french ] = "Proxy Http" ;
+        Text [ spanish ] = "Proxy ~Http" ;
+        Text [ french ] = "Proxy HTTP" ;
         Text [ dutch ] = "H~TTP-proxy" ;
         Text [ swedish ] = "Http-pro~xy" ;
         Text [ danish ] = "Http-prox~y" ;
@@ -368,6 +376,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ hebrew ] = "‮פרוקסי HTTP‬";
         Text[ thai ] = "HT~TP proxy";
         Text[ hindi ] = "Ht~tp प्रॉक्सि";
+        Text[ slovak ] = "HT~TP proxy";
     };
     Edit ED_HTTP_PROXY
     {
@@ -406,6 +415,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "Port";
         Text[ hebrew ] = "‮פורט‬";
         Text[ hindi ] = "~पोर्ट";
+        Text[ slovak ] = "~Port";
     };
     Edit ED_HTTP_PORT
     {
@@ -421,8 +431,8 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ English ] = "~Ftp Proxy" ;
         Text [ english_us ] = "~FTP proxy" ;
         Text [ italian ] = "Proxy ~Ftp" ;
-        Text [ spanish ] = "Proxy Ftp" ;
-        Text [ french ] = "Proxy ~Ftp" ;
+        Text [ spanish ] = "Proxy ~Ftp" ;
+        Text [ french ] = "Proxy FTP" ;
         Text [ dutch ] = "~FTP-proxy" ;
         Text [ swedish ] = "~Ftp-proxy" ;
         Text [ danish ] = "~Ftp-proxy" ;
@@ -444,6 +454,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ hebrew ] = "‮פרוקסי FTP‬";
         Text[ thai ] = "~FTP proxy";
         Text[ hindi ] = "~Ftp प्रॉक्सि";
+        Text[ slovak ] = "~FTP proxy";
     };
     Edit ED_FTP_PROXY
     {
@@ -482,6 +493,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "Port";
         Text[ hebrew ] = "‮פורט‬";
         Text[ hindi ] = "~पोर्ट";
+        Text[ slovak ] = "P~ort";
     };
     Edit ED_FTP_PORT
     {
@@ -496,9 +508,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text = "~Socks-Proxy" ;
         Text [ English ] = "~Socks Proxy" ;
         Text [ english_us ] = "~SOCKS proxy" ;
-        Text [ italian ] = "Socks Prox~y" ;
-        Text [ spanish ] = "Socks Prox~y" ;
-        Text [ french ] = "Proxy Soc~ks" ;
+        Text [ italian ] = "Proxy SOCKS" ;
+        Text [ spanish ] = "Proxy ~Socks" ;
+        Text [ french ] = "Proxy SOCKS" ;
         Text [ dutch ] = "~Socks-proxy" ;
         Text [ swedish ] = "~Socks-proxy" ;
         Text [ danish ] = "~Socks-proxy" ;
@@ -520,6 +532,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ hebrew ] = "‮פרוקסי SOCKS‬";
         Text[ thai ] = "~SOCKS proxy";
         Text[ hindi ] = "~सोक्स प्रॉक्सि";
+        Text[ slovak ] = "~SOCKS proxy";
     };
     Edit ED_SOCKS_PROXY
     {
@@ -558,6 +571,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "Port";
         Text[ hebrew ] = "‮פורט‬";
         Text[ hindi ] = "पो~र्ट";
+        Text[ slovak ] = "Po~rt";
     };
     Edit ED_SOCKS_PORT
     {
@@ -596,6 +610,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "Žádné proxy pro:";
         Text[ hebrew ] = "‮פורטים ללא פרוקסי:‬";
         Text[ hindi ] = "केलिए प्रॉक्सि ~नहीं:";
+        Text[ slovak ] = "~Bez proxy pre:";
     };
     Edit ED_NOPROXYFOR
     {
@@ -634,6 +649,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "Oddělovač ;";
         Text[ hebrew ] = "‮תו מפריד;‬";
         Text[ hindi ] = "अलगानेवाला ;";
+        Text[ slovak ] = "Oddeľovač";
     };
     FixedLine GB_DNS
     {
@@ -666,6 +682,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "DNS server";
         Text[ hebrew ] = "‮שרת DNS‬";
         Text[ hindi ] = "DNS सर्वर";
+        Text[ slovak ] = "DNS server";
     };
     RadioButton RB_DNS_AUTO
     {
@@ -698,6 +715,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्व~चालित";
+        Text[ slovak ] = "~Automaticky";
     };
     RadioButton RB_DNS_MANUAL
     {
@@ -730,6 +748,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "ručně";
         Text[ hebrew ] = "‮ידני‬";
         Text[ hindi ] = "~मान्युवल";
+        Text[ slovak ] = "~Ručne";
     };
     PatternField ED_DNS
     {
@@ -769,6 +788,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "není platnou položkou pro toto pole. Prosím zadejte hodnotu mezi 0 až 255.";
         Text[ hebrew ] = "‮ אינו ערך חוקי לשדה זה. נא לציין ערך מ 0 עד 255.‬";
         Text[ hindi ] = "इस क्षेत्र केलिए मान्य मूल्य नहीं है । कृपया 0 और 255 के बीच में एक मूल्य को निर्दिष्ट कीजिए ।";
+        Text[ slovak ] = "nie je platnou položkou pre toto pole. Prosím zadajte hodnotu medzi 0 až 255.";
     };
     String ST_MSG_255_1
     {
@@ -799,11 +819,13 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ czech ] = "není platnou položkou pro toto pole. Prosím zadejte hodnotu mezi 1 až 255.";
         Text[ hebrew ] = "‮ אינו ערך חוקי לשדה זה. נא לציין ערך מ 1 עד 255.‬";
         Text[ hindi ] = "इस क्षेत्र केलिए मान्य मूल्य नहीं है । कृपया 0 और 255 के बीच में एक मूल्य को निर्दिष्ट कीजिए ।";
+        Text[ slovak ] = "nieje platnou položkou pre toto pole. Prosím zadajte hodnotu medzi 1 až 255.";
     };
     Text[ czech ] = "Proxy";
     Text[ hebrew ] = "‮פרוקסי‬";
     Text[ thai ] = "Proxy";
     Text[ hindi ] = "प्रॉक्सि";
+    Text[ slovak ] = "Proxy";
 };
 /************************************************************************/
 /*                                                                      */
@@ -870,6 +892,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Hledat v";
         Text[ hebrew ] = "‮חיפוש ב‬";
         Text[ hindi ] = "में खोज";
+        Text[ slovak ] = "Hľadať v";
     };
     ListBox LB_SEARCH
     {
@@ -912,6 +935,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮שם‬";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_SEARCH_NAME
     {
@@ -950,6 +974,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     RadioButton RB_AND
     {
@@ -983,6 +1008,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "A";
         Text[ hebrew ] = "‮ו ‬";
         Text[ hindi ] = "और";
+        Text[ slovak ] = "A";
     };
     RadioButton RB_OR
     {
@@ -1015,6 +1041,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Nebo";
         Text[ hebrew ] = "‮או ‬";
         Text[ hindi ] = "~अथवा";
+        Text[ slovak ] = "Aleb~o";
     };
     RadioButton RB_EXACT
     {
@@ -1047,6 +1074,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Přesně";
         Text[ hebrew ] = "‮מדויק‬";
         Text[ hindi ] = "य~थार्थ";
+        Text[ slovak ] = "~Presne";
     };
     FixedText FT_URL
     {
@@ -1079,6 +1107,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Předpona";
         Text[ hebrew ] = "‮תחילית‬";
         Text[ hindi ] = "~प्रिफिक्स";
+        Text[ slovak ] = "~Predpona";
     };
     Edit ED_URL
     {
@@ -1117,6 +1146,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Přípona";
         Text[ hebrew ] = "‮סיומת‬";
         Text[ hindi ] = "~सफिक्स";
+        Text[ slovak ] = "P~rípona";
     };
     Edit ED_POSTFIX
     {
@@ -1155,6 +1185,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Oddělovač";
         Text[ hebrew ] = "‮מפריד‬";
         Text[ hindi ] = "~अलगानेवाला";
+        Text[ slovak ] = "~Oddeľovač";
     };
     Edit ED_SEPARATOR
     {
@@ -1193,6 +1224,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Porovnání velikosti";
         Text[ hebrew ] = "‮חיפוש לפי אותיות קטנות\\גדולות‬";
         Text[ hindi ] = "~केस् तुलना";
+        Text[ slovak ] = "~Rozlišovať veľké/malé";
     };
     ListBox ED_CASE
     {
@@ -1362,6 +1394,12 @@ TabPage RID_SVXPAGE_INET_SEARCH
         < "अप्पर" ; > ;
         < "लोवर" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Žiadne" ; > ;
+        < "Horný" ; > ;
+        < "Spodný" ; > ;
+    };
     };
      // nicht �bersetzen !
     PushButton PB_NEW
@@ -1394,6 +1432,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Nový";
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "न~या";
+        Text[ slovak ] = "N~ový";
     };
     PushButton PB_ADD
     {
@@ -1426,6 +1465,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton PB_CHANGE
     {
@@ -1458,6 +1498,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Změnit";
         Text[ hebrew ] = "‮שינוי‬";
         Text[ hindi ] = "सु~धारो";
+        Text[ slovak ] = "Z~meniť";
     };
     PushButton PB_DELETE
     {
@@ -1490,6 +1531,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मि~टाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     String MSG_MODIFY
     {
@@ -1519,6 +1561,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ czech ] = "Přejete si přijmout aktuální změnu?";
         Text[ hebrew ] = "‮האם לקבל את השינוי הנוכחי?‬";
         Text[ hindi ] = "आप प्रचलित सुधार को स्वीकार करना चाहते है?";
+        Text[ slovak ] = "Chcete potvrdiť aktuálnu zmenu?";
     };
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
@@ -1528,6 +1571,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     Text[ czech ] = "Hledat";
     Text[ hebrew ] = "‮חיפוש‬";
     Text[ hindi ] = "खोज";
+    Text[ slovak ] = "Hľadať";
 };
 
 
@@ -1602,6 +1646,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "BASIC skript %PRODUCTNAME";
         Text[ hebrew ] = "‮סקריפט בייסיק %PRODUCTNAME‬";
         Text[ hindi ] = "%PRODUCTNAME बेसिक स्क्रिप्ट्";
+        Text[ slovak ] = "BASIC skript %PRODUCTNAME";
     };
     FixedText FT_EXEC_MACRO
     {
@@ -1633,6 +1678,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hebrew ] = "‮הפעלת מקרו‬";
         Text[ thai ] = "~Run macro";
         Text[ hindi ] = "~Run macro";
+        Text[ slovak ] = "~Spustiť makro";
     };
     ListBox LB_EXEC_MACRO
     {
@@ -1679,7 +1725,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         StringList [ greek ] =
         {
              < "����" ; > ;
-            < "Gem�� Pfadliste" ; > ;
+            < "������� �� �� ����� ���������" ; > ;
             < "�����" ; > ;
         };
         StringList [ dutch ] =
@@ -1802,6 +1848,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         < "According to path list" ; > ;
         < "Always" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Nikdy" ; > ;
+        < "Podľa zoznamu ciest" ; > ;
+        < "Vždy" ; > ;
+    };
     };
     CheckBox CB_CONFIRM
     {
@@ -1833,6 +1885,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hebrew ] = "‮לאשר במקרה של מקורות ממסמכים אחרים‬";
         Text[ thai ] = "C~onfirm in case of other document sources";
         Text[ hindi ] = "C~onfirm in case of other document sources";
+        Text[ slovak ] = "P~otvrdiť v prípade zdroja z iného dokumentu";
     };
     CheckBox CB_WARNING
     {
@@ -1864,6 +1917,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hebrew ] = "‮הצגת אזהרה לפני ביצוע‬";
         Text[ thai ] = "Show ~warning before running";
         Text[ hindi ] = "Show ~warning before running";
+        Text[ slovak ] = "Zobraziť ~varovanie pred spustením";
     };
     FixedText FT_PATH_LIST
     {
@@ -1895,6 +1949,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hebrew ] = "‮רשימת מסלולים‬";
         Text[ thai ] = "~Path list";
         Text[ hindi ] = "~Path list";
+        Text[ slovak ] = "Zoznam ~ciest";
     };
     ListBox LB_SCRIPT_EXEC
     {
@@ -1937,6 +1992,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मि~टाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     PushButton PB_SCRIPT_DEFAULT
     {
@@ -1969,6 +2025,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अ~नुपस्थिति";
+        Text[ slovak ] = "Výcho~dzí";
     };
     FixedText FT_NEW_PATH
     {
@@ -2000,6 +2057,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ hebrew ] = "‮מסלול חדש‬";
         Text[ thai ] = "New pa~th";
         Text[ hindi ] = "New pa~th";
+        Text[ slovak ] = "Nová ces~ta";
     };
     Edit ED_SCRIPT_EXEC
     {
@@ -2038,6 +2096,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     FixedLine FL_HYPERLINKS
     {
@@ -2068,6 +2127,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Hypertextové odkazy";
         Text[ hebrew ] = "‮היפר קישורים‬";
         Text[ hindi ] = "हाइपरलिंक";
+        Text[ slovak ] = "Hyperlinky";
     };
     FixedText FT_HYPERLINKS
     {
@@ -2098,6 +2158,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Otevřít hypertextové odkazy";
         Text[ hebrew ] = "‮פתיחת היפר קישורים‬";
         Text[ hindi ] = "Open h~yperlinks";
+        Text[ slovak ] = "Otvorené h~yperlinky";
     };
     ListBox LB_HYPERLINKS
     {
@@ -2137,8 +2198,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     StringList [ greek ] =
     {
-         < "Niemals" ; > ;
-        < "Mit Sicherheits�berpr�fung" ; > ;
+         < "����" ; > ;
+        < "�� ������ ���������" ; > ;
         < "�����" ; > ;
     };
     StringList [ dutch ] =
@@ -2261,6 +2322,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         < "With security check" ; > ;
         < "हमेशा" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Nikdy" ; > ;
+        < "S preverením bezpečnosti" ; > ;
+        < "Vždy" ; > ;
+    };
     };
     FixedLine FL_JAVA
     {
@@ -2292,6 +2359,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Java";
         Text[ hebrew ] = "‮ג'אווה‬";
         Text[ hindi ] = "Java";
+        Text[ slovak ] = "Java";
     };
     CheckBox CB_J_ENABLE
     {
@@ -2324,6 +2392,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Povolit";
         Text[ hebrew ] = "‮איפשור‬";
         Text[ hindi ] = "~सक्षम करो";
+        Text[ slovak ] = "~Povoliť";
     };
     CheckBox CB_J_SECURITY
     {
@@ -2356,6 +2425,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Bezpečnostní kontroly";
         Text[ hebrew ] = "‮בדיקות בטחון‬";
         Text[ hindi ] = "~रक्षा जाँच को सक्षम करो";
+        Text[ slovak ] = "Bezpečno~stné kontroly";
     };
     FixedText FT_NETACCESS
     {
@@ -2388,6 +2458,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Síťový přístup";
         Text[ hebrew ] = "‮גישה לרשת‬";
         Text[ hindi ] = "नेट ~प्रवेश";
+        Text[ slovak ] = "Sieťový ~prístup";
     };
     ListBox LB_NETACCESS
     {
@@ -2557,6 +2628,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         < "कोई नहीं" ; > ;
         < "होस्ट्" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Bez obmedzenia" ; > ;
+        < "Žiadne" ; > ;
+        < "Hostiteľ" ; > ;
+    };
     };
     FixedText FT_CLASSPATH
     {
@@ -2589,6 +2666,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "ClassPath";
         Text[ hebrew ] = "‮ClassPath‬";
         Text[ hindi ] = "~क्लासपाथ";
+        Text[ slovak ] = "~ClassPath";
     };
     Edit ED_CLASSPATH
     {
@@ -2625,6 +2703,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Listovat...";
         Text[ hebrew ] = "‮דפדוף...‬";
         Text[ hindi ] = "~ब्रउज़...";
+        Text[ slovak ] = "~Prehľadávať...";
     };
     FixedLine FL_SEPARATOR
     {
@@ -2663,6 +2742,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Povolit";
         Text[ hebrew ] = "‮איפשור‬";
         Text[ hindi ] = "स~क्षम करो";
+        Text[ slovak ] = "~Povoliť";
     };
     CheckBox CB_EXECUTE_PLUGINS
     {
@@ -2695,6 +2775,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Zásuvné moduly";
         Text[ hebrew ] = "‮תוספים‬";
         Text[ hindi ] = "प्लग-इन्स";
+        Text[ slovak ] = "Zásuvné moduly";
     };
     CheckBox CB_EXECUTE_APPLETS
     {
@@ -2726,11 +2807,13 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ czech ] = "Applety";
         Text[ hebrew ] = "‮יישומונות (אפלטיים)‬";
         Text[ hindi ] = "ऐप्लेट्स";
+        Text[ slovak ] = "Applety";
     };
     Text[ thai ] = "บทคำสั่ง";
     Text[ czech ] = "Skriptování";
     Text[ hebrew ] = "‮סקריפט‬";
     Text[ hindi ] = "स्क्रिप्टिंग";
+    Text[ slovak ] = "Skriptovanie";
 };
 
 ErrorBox RID_SVXERR_OPT_PROXYPORTS
@@ -2763,6 +2846,7 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message[ czech ] = "Neplatná hodnota!\n\nMaximální hodnota portu je 65535.";
     Message[ hebrew ] = "‮ערך לא חוקי!\n\nהערך המירבי לפורט הוא 65535.‬";
     Message[ hindi ] = "अमन्य मूल्य!\n\nपोर्ट संख्या केलिए अधिकतम् मूल्य 65535 है ।";
+    Message[ slovak ] = "Neplatná hodnota!\n\nMaximálna hodnota portu je 65535.";
 };
 
 // RID_SVXDLG_OPT_JAVASCRIPT_DISABLE -----------------------------------------
@@ -2810,6 +2894,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ czech ] = "Prosím všimněte si, že spolu s Javou\nzakážete i JavaScript.\n\nStále chcete vypnout Javu?";
         Text[ hebrew ] = "‮נא לשים לב שיחד עם ג'אווה\nגם ג'אוואסכריפט יכובה.\n\nהאם אכן לכבות את ג'אווה?‬";
         Text[ hindi ] = "कृपया ध्यान दीजिए कि Java के साथ\nआप Javascript को भी निष्क्रिय कीजिए ।\n\nआप सचमुच में Java को निष्क्रिय करना चाहते है?";
+        Text[ slovak ] = "Prosím všimnite si, že spolu s Javou\nzakážete aj JavaScript.\n\nNaozaj chcete vypnúť Javu?";
     };
     CheckBox CB_JSCPT_DISABLE
     {
@@ -2843,6 +2928,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ czech ] = "Upozornění znovu nezobrazovat";
         Text[ hebrew ] = "‮לא להציג שוב את האזהרה הזו‬";
         Text[ hindi ] = "फ़िर से चेतावनी को मत ~दिखाओ";
+        Text[ slovak ] = "Upozornenie znovu ~nezobrazovať";
     };
     OKButton BTN_JSCPT_YES
     {
@@ -2858,6 +2944,8 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
+
 
 
 
