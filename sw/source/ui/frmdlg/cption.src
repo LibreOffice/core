@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 11:52:37 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ ModalDialog DLG_CAPTION
         Text[ chinese_traditional ] = "¤ÀÃþ(~A)";
         Text[ arabic ] = "ÇáÝÆÉ";
         Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "ºÐ·ù Ç×¸ñ(~A)";
+        Text[ korean ] = "¹üÁÖ";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
     };
