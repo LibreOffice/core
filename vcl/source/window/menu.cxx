@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-23 10:54:00 $
+ *  last change: $Author: ssa $ $Date: 2002-08-26 08:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3724,6 +3724,10 @@ void MenuFloatingWindow::RequestHelp( const HelpEvent& rHEvt )
     USHORT nId = nHighlightedItem;
     Menu* pM = pMenu;
     Window* pW = this;
+
+    // #102618# Get item rect before destroying the window in EndExecute() call
+    Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );
+
     if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
     {
         nHighlightedItem = ITEMPOS_INVALID;
@@ -3731,7 +3735,6 @@ void MenuFloatingWindow::RequestHelp( const HelpEvent& rHEvt )
         pW = NULL;
     }
 
-    Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );
     if( !ImplHandleHelpEvent( pW, pM, nId, rHEvt, aHighlightRect ) )
         Window::RequestHelp( rHEvt );
 }
