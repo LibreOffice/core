@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-14 15:46:36 $
+ *  last change: $Author: mi $ $Date: 2002-11-21 11:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,26 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_text_XBookmarksSupplier_idl__
+#include <com::sun::star::text::XBookmarksSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XDocumentIndexesSupplier_idl__
+#include <com::sun::star::text::XDocumentIndexesSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextFieldsSupplier_idl__
+#include <com::sun::star::text::XTextFieldsSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextFramesSupplier_idl__
+#include <com::sun::star::text::XTextFramesSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextSectionsSupplier_idl__
+#include <com::sun::star::text::XTextSectionsSupplier.idl>
+#endif
+
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
@@ -145,54 +165,48 @@
  */
 service TextDocument
 {
-    // DocMerge: empty anyway
     service com::sun::star::document::OfficeDocument;
 
-    // DocMerge: empty anyway
     interface com::sun::star::text::XTextDocument;
 
-    // DocMerge: empty anyway
     interface com::sun::star::util::XSearchable;
 
-    // DocMerge: empty anyway
     interface com::sun::star::util::XRefreshable;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XFootnotesSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XEndnotesSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::util::XReplaceable;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XPagePrintable;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XReferenceMarksSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XLineNumberingSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XChapterNumberingSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::beans::XPropertySet;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XTextGraphicObjectsSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XTextEmbeddedObjectsSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XTextTablesSupplier;
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    //
+    [optional] interface com::sun::star::text::XBookmarksSupplier.idl;
+
+    [optional] interface com::sun::star::text::XDocumentIndexesSupplier.idl;
+
+    [optional] interface com::sun::star::text::XTextFieldsSupplier.idl;
+
+    [optional] interface com::sun::star::text::XTextFramesSupplier.idl;
+
+    [optional] interface com::sun::star::text::XTextSectionsSupplier.idl;
+
     interface com::sun::star::util::XNumberFormatsSupplier;
     //-------------------------------------------------------------------------
 
