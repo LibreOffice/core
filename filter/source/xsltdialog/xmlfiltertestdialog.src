@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:28:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,75 +85,23 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     SVLook                  = TRUE ;
     Moveable                = TRUE ;
     Closeable               = TRUE ;
-    Text                    = "XML-Filter testen: %s" ;
-    Text [english_us]       = "Test XML Filter: %s" ;
+    Text [ de ] = "XML-Filter testen: %s" ;
+    Text [ en-US ]      = "Test XML Filter: %s" ;
 
     FixedLine FL_EXPORT
     {
         Pos                 = MAP_APPFONT( 4, FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET);
         Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
-        Text                = "Exportieren";
-        Text [english_us]   = "Export";
-        Text[ french ] = "Export";
-        Text[ spanish ] = "Exportar";
-        Text[ italian ] = "Esporta";
-        Text[ swedish ] = "Exportera";
-        Text[ japanese ] = "エクスポートする";
-        Text[ korean ] = "내보내기";
-        Text[ chinese_simplified ] = "输出";
-        Text[ chinese_traditional ] = "匯出";
-        Text[ russian ] = "�������";
-        Text[ greek ] = "�������";
-        Text[ finnish ] = "Vie";
-        Text[ danish ] = "Eksporter";
-        Text[ polish ] = "Eksportuj";
-        Text[ turkish ] = "D��a aktar";
-        Text[ arabic ] = "�����";
-        Text[ hebrew ] = "‮יצוא‬";
-        Text[ thai ] = "ส่งออก";
-        Text[ slovak ] = "Exportovať";
-        Text[ portuguese_brazilian ] = "Exportar";
-        Text[ dutch ] = "Exporteren";
-        Text[ czech ] = "Export";
-        Text[ catalan ] = "Export";
-        Text[ hindi ] = "निर्यात";
-        Text[ portuguese ] = "Export";
-        Text[ hungarian ] = "Exportálás";
-        Text[ slovenian ] = "Izvoz";
+        Text [ de ] = "Exportieren";
+        Text [ en-US ]  = "Export";
     };
 
     FixedText FT_EXPORT_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text                = "Export-XSLT";
-        Text [english_us]   = "XSLT for export";
-        Text[ french ] = "XSLT pour export";
-        Text[ spanish ] = "XSLT para exportaci�n";
-        Text[ italian ] = "XSLT per esportazione";
-        Text[ swedish ] = "XSLT f�r export";
-        Text[ japanese ] = "エクスポート用 XSLT";
-        Text[ korean ] = "내보내기용 XSLT";
-        Text[ chinese_simplified ] = "用于输出的 XSLT";
-        Text[ chinese_traditional ] = "用於匯出的 XSLT";
-        Text[ slovak ] = "XSLT pre export";
-        Text[ portuguese_brazilian ] = "XSLT para exportar";
-        Text[ greek ] = "XSLT for export";
-        Text[ dutch ] = "XSLT voor exporteren";
-        Text[ finnish ] = "XSLT for export";
-        Text[ czech ] = "XSLT pro export";
-        Text[ danish ] = "XSLT til eksportering";
-        Text[ arabic ] = "XSLT for export";
-        Text[ hebrew ] = "XSLT for export";
-        Text[ catalan ] = "XSLT for export";
-        Text[ hindi ] = "XSLT for export";
-        Text[ portuguese ] = "XSLT for export";
-        Text[ russian ] = "XSLT for export";
-        Text[ polish ] = "XSLT for export";
-        Text[ turkish ] = "XSLT for export";
-        Text[ thai ] = "XSLT for export";
-        Text[ hungarian ] = "Exportáló XSLT";
-        Text[ slovenian ] = "XSLT za izvoz";
+        Text [ de ] = "Export-XSLT";
+        Text [ en-US ]  = "XSLT for export";
     };
 
     FixedText FT_EXPORT_XSLT_FILE
@@ -167,34 +115,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text                = "Dokument transformieren";
-        Text [english_us]   = "Transform document";
-        Text[ french ] = "Transformer le document";
-        Text[ spanish ] = "Transformar documento";
-        Text[ italian ] = "Trasforma il documento";
-        Text[ swedish ] = "Transformera dokument";
-        Text[ japanese ] = "ドキュメントの変換";
-        Text[ korean ] = "문서 변환";
-        Text[ chinese_simplified ] = "转换文档";
-        Text[ chinese_traditional ] = "轉換文件";
-        Text[ slovak ] = "Transformovať dokument";
-        Text[ portuguese_brazilian ] = "Transformar o documento";
-        Text[ greek ] = "Transform document";
-        Text[ dutch ] = "Document Transformeren";
-        Text[ finnish ] = "Transform document";
-        Text[ czech ] = "Transformovat dokument";
-        Text[ danish ] = "Transform�r dokument";
-        Text[ arabic ] = "Transform document";
-        Text[ hebrew ] = "Transform document";
-        Text[ catalan ] = "Transform document";
-        Text[ hindi ] = "Transform document";
-        Text[ portuguese ] = "Transform document";
-        Text[ russian ] = "Transform document";
-        Text[ polish ] = "Transform document";
-        Text[ turkish ] = "Transform document";
-        Text[ thai ] = "Transform document";
-        Text[ hungarian ] = "Dokumentum átalakítása";
-        Text[ slovenian ] = "Pretvori dokument";
+        Text [ de ] = "Dokument transformieren";
+        Text [ en-US ]  = "Transform document";
     };
 
     PushButton PB_EXPORT_BROWSE
@@ -203,34 +125,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         TabStop             = TRUE ;
         HelpId              = HID_XML_FILTER_TEST_EXPORT_BROWSE;
-        Text                = "~Ausw�hlen...";
-        Text [english_us]   = "~Browse...";
-        Text[ french ] = "Parcourir...";
-        Text[ spanish ] = "~Buscar...";
-        Text[ italian ] = "~Sfoglia...";
-        Text[ swedish ] = "~Genoms�k...";
-        Text[ japanese ] = "検索(~B)...";
-        Text[ korean ] = "찾아보기(~B)...";
-        Text[ chinese_simplified ] = "浏览(~B)...";
-        Text[ chinese_traditional ] = "瀏覽(~B)...";
-        Text[ portuguese ] = "~Pesquisar...";
-        Text[ russian ] = "�����...";
-        Text[ greek ] = "���������";
-        Text[ dutch ] = "~Doorzoeken...";
-        Text[ finnish ] = "~Selaa";
-        Text[ czech ] = "Procházet...";
-        Text[ danish ] = "~Gennemse...";
-        Text[ polish ] = "Przegl�daj";
-        Text[ portuguese_brazilian ] = "Navegar...";
-        Text[ turkish ] = "Tara...";
-        Text[ arabic ] = "�������...";
-        Text[ hebrew ] = "‮דפדוף...‬";
-        Text[ catalan ] = "~Navega...";
-        Text[ thai ] = "เ~รียกดู...";
-        Text[ slovak ] = "~Prehliadať...";
-        Text[ hindi ] = "~ब्रउज़...";
-        Text[ hungarian ] = "~Tallózás...";
-        Text[ slovenian ] = "Pre~brskaj...";
+        Text [ de ] = "~Ausw�hlen...";
+        Text [ en-US ]  = "~Browse...";
     };
 
     PushButton PB_CURRENT_DOCUMENT
@@ -239,34 +135,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_EXPORT_CURRENT;
         TabStop             = TRUE ;
-        Text                = "A~ktuelles Dokument";
-        Text [english_us]   = "~Current Document";
-        Text[ french ] = "Document actif";
-        Text[ spanish ] = "~Documento actual";
-        Text[ italian ] = "Documento attuale";
-        Text[ swedish ] = "~Aktuellt dokument";
-        Text[ japanese ] = "現在のドキュメント(~C)";
-        Text[ korean ] = "현재 문서(~C)";
-        Text[ chinese_simplified ] = "当前的文档(~C)";
-        Text[ chinese_traditional ] = "目前的文件(~C)";
-        Text[ slovak ] = "~Súčasný dokument";
-        Text[ portuguese_brazilian ] = "Documento atual";
-        Text[ greek ] = "~Current Document";
-        Text[ dutch ] = "A~ctueel Document";
-        Text[ finnish ] = "~Current Document";
-        Text[ czech ] = "Stávající dokument";
-        Text[ danish ] = "~Nuv�rende dokument";
-        Text[ arabic ] = "~Current Document";
-        Text[ hebrew ] = "~Current Document";
-        Text[ catalan ] = "~Current Document";
-        Text[ hindi ] = "~Current Document";
-        Text[ portuguese ] = "~Current Document";
-        Text[ russian ] = "~Current Document";
-        Text[ polish ] = "~Current Document";
-        Text[ turkish ] = "~Current Document";
-        Text[ thai ] = "~Current Document";
-        Text[ hungarian ] = "~Aktuális dokumentum";
-        Text[ slovenian ] = "~Trenutni dokument";
+        Text [ de ] = "A~ktuelles Dokument";
+        Text [ en-US ]  = "~Current Document";
     };
 
     FixedText FT_NAME_OF_CURRENT_FILE
@@ -283,68 +153,16 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT( 4, FIRST_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET );
         Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
-        Text                = "Importieren";
-        Text [english_us]   = "Import";
-        Text[ french ] = "Import";
-        Text[ spanish ] = "Importar";
-        Text[ italian ] = "~Importa";
-        Text[ swedish ] = "Importera";
-        Text[ japanese ] = "インポートする";
-        Text[ korean ] = "가져오기";
-        Text[ chinese_simplified ] = "输入";
-        Text[ chinese_traditional ] = "匯入";
-        Text[ portuguese ] = "~Importar";
-        Text[ russian ] = "������";
-        Text[ greek ] = "��������";
-        Text[ dutch ] = "~Importeren";
-        Text[ finnish ] = "Tuo";
-        Text[ turkish ] = "��e aktar";
-        Text[ arabic ] = "�������";
-        Text[ hebrew ] = "‮יבוא‬";
-        Text[ thai ] = "นำเข้า";
-        Text[ slovak ] = "Importovať";
-        Text[ portuguese_brazilian ] = "Importar";
-        Text[ czech ] = "Import";
-        Text[ danish ] = "Importer";
-        Text[ catalan ] = "Import";
-        Text[ hindi ] = "आयात";
-        Text[ polish ] = "Import";
-        Text[ hungarian ] = "Importálás";
-        Text[ slovenian ] = "Uvoz";
+        Text [ de ] = "Importieren";
+        Text [ en-US ]  = "Import";
     };
 
     FixedText FT_IMPORT_XSLT
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 6 * ROW_HEIGHT + 6 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text                = "Import-XSLT";
-        Text [english_us]   = "XSLT for import";
-        Text[ french ] = "XSLT pour import";
-        Text[ spanish ] = "XSLT para importaci�n";
-        Text[ italian ] = "XSLT per importazione";
-        Text[ swedish ] = "XSLT f�r import";
-        Text[ japanese ] = "インポート用 XSLT";
-        Text[ korean ] = "가져오기용 XSLT";
-        Text[ chinese_simplified ] = "用于输入的 XSLT";
-        Text[ chinese_traditional ] = "用於匯入的 XSLT";
-        Text[ slovak ] = "XSLT pre import";
-        Text[ portuguese_brazilian ] = "XSLT para importar";
-        Text[ greek ] = "XSLT for import";
-        Text[ dutch ] = "XSLT voor importeren";
-        Text[ finnish ] = "XSLT for import";
-        Text[ czech ] = "XSLT pro import";
-        Text[ danish ] = "XSLT til importering";
-        Text[ arabic ] = "XSLT for import";
-        Text[ hebrew ] = "XSLT for import";
-        Text[ catalan ] = "XSLT for import";
-        Text[ hindi ] = "XSLT for import";
-        Text[ portuguese ] = "XSLT for import";
-        Text[ russian ] = "XSLT for import";
-        Text[ polish ] = "XSLT for import";
-        Text[ turkish ] = "XSLT for import";
-        Text[ thai ] = "XSLT for import";
-        Text[ hungarian ] = "Importáló XSLT";
-        Text[ slovenian ] = "XSLT za uvoz";
+        Text [ de ] = "Import-XSLT";
+        Text [ en-US ]  = "XSLT for import";
     };
 
     FixedText FT_IMPORT_XSLT_FILE
@@ -358,34 +176,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 7 * ROW_HEIGHT + 7 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text                = "Import-Dokumentvorlage";
-        Text [english_us]   = "Template for import";
-        Text[ french ] = "Mod�le pour import";
-        Text[ spanish ] = "Plantilla para importaci�n";
-        Text[ italian ] = "Modello per importazione";
-        Text[ swedish ] = "Dokumentmall f�r import";
-        Text[ japanese ] = "インポート用テンプレート";
-        Text[ korean ] = "가져오기용 서식 파일";
-        Text[ chinese_simplified ] = "用于输入的文档样式";
-        Text[ chinese_traditional ] = "用於匯入的文件樣式";
-        Text[ slovak ] = "Šablóna pre import";
-        Text[ portuguese_brazilian ] = "Modelo para importar";
-        Text[ greek ] = "Template for import";
-        Text[ dutch ] = "Sjabloon voor importeren";
-        Text[ finnish ] = "Template for import";
-        Text[ czech ] = "Šablona pro import";
-        Text[ danish ] = "Skabelon til import";
-        Text[ arabic ] = "Template for import";
-        Text[ hebrew ] = "Template for import";
-        Text[ catalan ] = "Template for import";
-        Text[ hindi ] = "Template for import";
-        Text[ portuguese ] = "Template for import";
-        Text[ russian ] = "Template for import";
-        Text[ polish ] = "Template for import";
-        Text[ turkish ] = "Template for import";
-        Text[ thai ] = "Template for import";
-        Text[ hungarian ] = "Importáló sablon";
-        Text[ slovenian ] = "Predloga za uvoz";
+        Text [ de ] = "Import-Dokumentvorlage";
+        Text [ en-US ]  = "Template for import";
     };
 
     FixedText FT_IMPORT_TEMPLATE_FILE
@@ -399,34 +191,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 8 * ROW_HEIGHT + 8 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text                = "Datei transformieren";
-        Text [english_us]   = "Transform file";
-        Text[ french ] = "Transformer le fichier";
-        Text[ spanish ] = "Transformar archivo";
-        Text[ italian ] = "Trasforma il file";
-        Text[ swedish ] = "Transformera fil";
-        Text[ japanese ] = "ファイルの変換";
-        Text[ korean ] = "파일 변환";
-        Text[ chinese_simplified ] = "转换文件";
-        Text[ chinese_traditional ] = "轉換檔案";
-        Text[ slovak ] = "Transformovať súbor";
-        Text[ portuguese_brazilian ] = "Transformar o arquivo";
-        Text[ greek ] = "Transform file";
-        Text[ dutch ] = "Bestand Transformeren";
-        Text[ finnish ] = "Transform file";
-        Text[ czech ] = "Transformuj soubor";
-        Text[ danish ] = "Transform�r fil";
-        Text[ arabic ] = "Transform file";
-        Text[ hebrew ] = "Transform file";
-        Text[ catalan ] = "Transform file";
-        Text[ hindi ] = "Transform file";
-        Text[ portuguese ] = "Transform file";
-        Text[ russian ] = "Transform file";
-        Text[ polish ] = "Transform file";
-        Text[ turkish ] = "Transform file";
-        Text[ thai ] = "Transform file";
-        Text[ hungarian ] = "Fájl átalakítása";
-        Text[ slovenian ] = "Pretvori datoteko";
+        Text [ de ] = "Datei transformieren";
+        Text [ en-US ]  = "Transform file";
     };
 
     CheckBox CBX_DISPLAY_SOURCE
@@ -434,34 +200,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 8 * ROW_HEIGHT + 8 * SPACING + 1 ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 10 ) ;
         HelpId              = HID_XML_FILTER_TEST_IMPORT_DISPLAY_SOURCE;
-        Text                = "Quelltext anzeigen";
-        Text [english_us]   = "~Display source";
-        Text[ french ] = "Affichage de la source";
-        Text[ spanish ] = "~Visualizar fuente";
-        Text[ italian ] = "~Visualizza sorgente";
-        Text[ swedish ] = "~Visa k�lltext";
-        Text[ japanese ] = "ソーステキストの表示(~D)";
-        Text[ korean ] = "원본 텍스트 표시(~D)";
-        Text[ chinese_simplified ] = "显示源文本(~D)";
-        Text[ chinese_traditional ] = "顯示原始檔(~D)";
-        Text[ slovak ] = "Zobraziť z~droj";
-        Text[ portuguese_brazilian ] = "Exibir c�digo fonte";
-        Text[ greek ] = "~Display source";
-        Text[ dutch ] = "Bron Tonen";
-        Text[ finnish ] = "~Display source";
-        Text[ czech ] = "Zobrazit zdroj";
-        Text[ danish ] = "~Vis kilde";
-        Text[ arabic ] = "~Display source";
-        Text[ hebrew ] = "~Display source";
-        Text[ catalan ] = "~Display source";
-        Text[ hindi ] = "~Display source";
-        Text[ portuguese ] = "~Display source";
-        Text[ russian ] = "~Display source";
-        Text[ polish ] = "~Display source";
-        Text[ turkish ] = "~Display source";
-        Text[ thai ] = "~Display source";
-        Text[ hungarian ] = "~Forrás megjelenítése";
-        Text[ slovenian ] = "~Prikaži izvorno kodo";
+        Text [ de ] = "Quelltext anzeigen";
+        Text [ en-US ]  = "~Display source";
     };
 
     PushButton PB_IMPORT_BROWSE
@@ -470,34 +210,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_IMPORT_BROWSE;
         TabStop             = TRUE ;
-        Text                = "A~usw�hlen...";
-        Text [english_us]   = "B~rowse...";
-        Text[ french ] = "Parcourir...";
-        Text[ spanish ] = "~Buscar...";
-        Text[ italian ] = "~Sfoglia...";
-        Text[ swedish ] = "Gen~oms�k...";
-        Text[ japanese ] = "検索(~R)...";
-        Text[ korean ] = "찾아보기(~R)...";
-        Text[ chinese_simplified ] = "浏览(~R)...";
-        Text[ chinese_traditional ] = "瀏覽(~R)...";
-        Text[ portuguese ] = "~Pesquisar...";
-        Text[ russian ] = "�����...";
-        Text[ greek ] = "���~������...";
-        Text[ dutch ] = "D~oorzoeken...";
-        Text[ finnish ] = "S~elaa";
-        Text[ czech ] = "Procházet...";
-        Text[ danish ] = "~Gennemse...";
-        Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "Navegar...";
-        Text[ turkish ] = "Tara...";
-        Text[ arabic ] = "�������...";
-        Text[ hebrew ] = "‮דפדוף...‬";
-        Text[ catalan ] = "N~avega...";
-        Text[ thai ] = "เรี~ยกดู...";
-        Text[ slovak ] = "P~rehliadať...";
-        Text[ hindi ] = "ब्रउ~ज़...";
-        Text[ hungarian ] = "~Tallózás...";
-        Text[ slovenian ] = "Preb~rskaj...";
+        Text [ de ] = "A~usw�hlen...";
+        Text [ en-US ]  = "B~rowse...";
     };
 
     PushButton PB_RECENT_DOCUMENT
@@ -506,34 +220,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_IMPORT_RECENT;
         TabStop             = TRUE ;
-        Text                = "~Letzte Datei";
-        Text [english_us]   = "~Recent File";
-        Text[ french ] = "Dernier fichier";
-        Text[ spanish ] = "~Archivo reciente";
-        Text[ italian ] = "File recenti";
-        Text[ swedish ] = "S~enaste fil";
-        Text[ japanese ] = "前回のファイル(~R)";
-        Text[ korean ] = "최근에 사용한 파일(~R)";
-        Text[ chinese_simplified ] = "上一个文件(~R)";
-        Text[ chinese_traditional ] = "上一個檔案(~R)";
-        Text[ slovak ] = "Posledný súbo~r";
-        Text[ portuguese_brazilian ] = "Arquivos recentes";
-        Text[ greek ] = "~Recent File";
-        Text[ dutch ] = "~Recent Bestand";
-        Text[ finnish ] = "~Recent File";
-        Text[ czech ] = "Předchozí soubor";
-        Text[ danish ] = "~Seneste fil";
-        Text[ arabic ] = "~Recent File";
-        Text[ hebrew ] = "~Recent File";
-        Text[ catalan ] = "~Recent File";
-        Text[ hindi ] = "~Recent File";
-        Text[ portuguese ] = "~Recent File";
-        Text[ russian ] = "~Recent File";
-        Text[ polish ] = "~Recent File";
-        Text[ turkish ] = "~Recent File";
-        Text[ thai ] = "~Recent File";
-        Text[ hungarian ] = "~Legutóbbi fájl";
-        Text[ slovenian ] = "~Nedavna datoteka";
+        Text [ de ] = "~Letzte Datei";
+        Text [ en-US ]  = "~Recent File";
     };
 
     FixedText FT_NAME_OF_RECENT_FILE
@@ -550,34 +238,8 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( 50 , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_CLOSE;
         TabStop             = TRUE ;
-        Text                = "~Schlie�en";
-        Text[ english_us ]  = "~Close";
-        Text[ french ] = "Fermer";
-        Text[ spanish ] = "~Cerrar";
-        Text[ italian ] = "~Chiudi";
-        Text[ swedish ] = "S~t�ng";
-        Text[ japanese ] = "閉じる(~C)";
-        Text[ korean ] = "닫기(~C)";
-        Text[ chinese_simplified ] = "关闭(~C)";
-        Text[ chinese_traditional ] = "關閉(~C)";
-        Text[ portuguese ] = "~Fechar";
-        Text[ russian ] = "~�������";
-        Text[ greek ] = "����~����";
-        Text[ dutch ] = "~Sluiten";
-        Text[ finnish ] = "~Sulje";
-        Text[ czech ] = "Zavřít";
-        Text[ danish ] = "~Luk";
-        Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "Fechar";
-        Text[ turkish ] = "~Kapat";
-        Text[ arabic ] = "�����";
-        Text[ hebrew ] = "‮סגירה‬";
-        Text[ catalan ] = "~Tanca";
-        Text[ thai ] = "~ปิด";
-        Text[ slovak ] = "~Zavrieť";
-        Text[ hindi ] = "~बन्द करो";
-        Text[ hungarian ] = "~Bezárás";
-        Text[ slovenian ] = "~Zapri";
+        Text [ de ] = "~Schlie�en";
+        Text [ en-US ]  = "~Close";
     };
 
     HelpButton PB_HELP
@@ -585,32 +247,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Pos                 = MAP_APPFONT ( DIALOG_WIDTH - 1*50 - 1*6 , DIALOG_HEIGHT - 6 - 14 );
         Size                = MAP_APPFONT ( 50, 14 );
     };
-    Text[ french ] = "Test du filtre XML : %s";
-    Text[ spanish ] = "Prueba del filtro XML: %s";
-    Text[ italian ] = "Test filtro XML: %s";
-    Text[ swedish ] = "Testa XML-filter: %s";
-    Text[ japanese ] = "XML フィルタを試す: %s";
-    Text[ korean ] = "XML 필터 검사: %s";
-    Text[ chinese_simplified ] = "测试 XML 筛选器：%s";
-    Text[ chinese_traditional ] = "測試 XML 篩選器：%s";
-    Text[ slovak ] = "Testovací XML filter: %s";
-    Text[ portuguese_brazilian ] = "Testar filtro XML: %s";
-    Text[ greek ] = "Test XML Filter: %s";
-    Text[ dutch ] = "XML-filter Testen: %s";
-    Text[ finnish ] = "Test XML Filter: %s";
-    Text[ czech ] = "Test XML filtru: %s";
-    Text[ danish ] = "Test XML-filter: %s";
-    Text[ arabic ] = "Test XML Filter: %s";
-    Text[ hebrew ] = "Test XML Filter: %s";
-    Text[ catalan ] = "Test XML Filter: %s";
-    Text[ hindi ] = "Test XML Filter: %s";
-    Text[ portuguese ] = "Test XML Filter: %s";
-    Text[ russian ] = "Test XML Filter: %s";
-    Text[ polish ] = "Test XML Filter: %s";
-    Text[ turkish ] = "Test XML Filter: %s";
-    Text[ thai ] = "Test XML Filter: %s";
-    Text[ hungarian ] = "XML-szűrő ellenőrzése: %s";
-    Text[ slovenian ] = "Preizkusi XML filter: %s";
 };
 
 
