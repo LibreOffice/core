@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NoSuchFieldException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module lang {
 // DocMerge from xml: exception com::sun::star::lang::NoSuchFieldException
 /** signals that the class does not have a field of a specified name.
  */
-exception NoSuchFieldException: com::sun::star::uno::Exception
+published exception NoSuchFieldException: com::sun::star::uno::Exception
 {
 };
 
