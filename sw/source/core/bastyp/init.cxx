@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:53:58 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -660,6 +659,12 @@ SvPtrarr *pGlobalOLEExcludeList = 0;
 SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
 SwBreakIt* pBreakIt = 0;
+//CHINA001 add for swui to access sw global variable.
+SwBreakIt* GetBreakIt()
+{
+    return pBreakIt;
+}
+//CHINA001 end of add
 SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
 SwCalendarWrapper* pCalendarWrapper = 0;
