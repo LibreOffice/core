@@ -387,6 +387,17 @@ Dim CellValue
 	oCell.Value = CellValue
 End Sub
 
+Sub Main
+&apos;	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	oComponents = StarDesktop.Components.CreateEnumeration
+	Do 
+		oComponent = oComponents.NextElement
+		ShowSupportedServicenames(oComponent)	
+	Loop Until Not oComponents.HasMoreElements
+	For i = 0 To Ubound(StarDesktop.Components())
+		PrintdbgInfo StarDesktop.Components(i)
+	Next i
+End Sub
 
 Function GetDocumentType(oDocument)
 	If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then
@@ -395,7 +406,8 @@ Function GetDocumentType(oDocument)
 		GetDocumentType() = &quot;swriter&quot;
 	ElseIf oDocument.SupportsService(&quot;com.sun.star.drawing.DrawingDocument&quot;) Then
 		GetDocumentType() = &quot;sdraw&quot;
-&apos; Todo: Formel services einbinden		
+	ElseIf oDocument.SupportsService(&quot;com.sun.star.formula.FormulaProperties&quot;) Then
+		GetDocumentType() = &quot;smath&quot;
 	End If
 End Function
 

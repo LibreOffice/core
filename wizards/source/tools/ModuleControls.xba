@@ -252,6 +252,7 @@ Dim MaxIndex as Integer
 		oDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
 	Next i
 	oDialog.SetCurrentFilter(FilterNames(0,0)
-End Sub	
+End Sub
+
 
 </script:module>
