@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlxthdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:31:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 07:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 // Module global
 //---------------------------
 long g_DllRefCnt = 0;
+HINSTANCE g_hModule = NULL;
 
 namespace /* private */
 {
@@ -460,4 +461,10 @@ extern "C" STDAPI DllCanUnloadNow(void)
         return S_FALSE;
 
     return S_OK;
+}
+
+BOOL WINAPI DllMain(HINSTANCE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
+{
+    g_hModule = hInst;
+    return TRUE;
 }
