@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:20:04 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,11 +808,11 @@ TabPage RID_SVXPAGE_CHAR_EXT
     };
     StringList [ russian ] =
     {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapitälchen" ; Default ; > ;
+            < "Áåç" ; Default ; > ;
+        < "Ïğîïèñíûå" ; Default ; > ;
+        < "Ñòğî÷íûå" ; Default ; > ;
+        < "Çàãëàâíûé øğèôò" ; Default ; > ;
+        < "Êàïèòåëü" ; Default ; > ;
     };
     StringList [ greek ] =
     {
@@ -864,19 +864,19 @@ TabPage RID_SVXPAGE_CHAR_EXT
     };
     StringList [ swedish ] =
     {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapitälchen" ; Default ; > ;
+            < "Inga" ; Default ; > ;
+        < "Versaler" ; Default ; > ;
+        < "Gemener" ; Default ; > ;
+        < "Titelteckensnitt" ; Default ; > ;
+        < "Kapitäler" ; Default ; > ;
     };
     StringList [ polish ] =
     {
-            < "Keine" ; Default ; > ;
-        < "Versalien" ; Default ; > ;
-        < "Gemeine" ; Default ; > ;
-        < "Titelschrift" ; Default ; > ;
-        < "Kapitälchen" ; Default ; > ;
+            < "Brak" ; Default ; > ;
+        < "Wersaliki" ; Default ; > ;
+        < "Ma³e litery" ; Default ; > ;
+        < "Czcionka tytu³owa" ; Default ; > ;
+        < "Kapitaliki" ; Default ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
@@ -1034,12 +1034,12 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ finnish ] = "~Kapiteelein" ;
         Text [ danish ] = "Kapitæler" ;
         Text [ french ] = "Petites ~majusc." ;
-        Text [ swedish ] = "Små k~apitäler" ;
+        Text [ swedish ] = "K~apitäler" ;
         Text [ dutch ] = "Kle~in kapitaal" ;
         Text [ spanish ] = "~Versalitas" ;
         Text [ english_us ] = "S~mall caps" ;
         Text[ chinese_simplified ] = "Ğ¡ĞÍ´óĞ´×ÖÄ¸(~M)";
-        Text[ russian ] = "Ìàëûå ïğîïèñíûå";
+        Text[ russian ] = "Êàïèòåëü";
         Text[ polish ] = "Kapita~liki";
         Text[ japanese ] = "¬Œ^‘å•¶š(~M)";
         Text[ chinese_traditional ] = "¤p«¬¤j¼g¦r¥À(~M)";
@@ -1645,7 +1645,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ finnish ] = "~Alleviivaustapa" ;
         Text [ danish ] = "Understregning" ;
         Text [ french ] = "Soulignage" ;
-        Text [ swedish ] = "Un~derstrykning" ;
+        Text [ swedish ] = "Und~erstrykning" ;
         Text [ dutch ] = "Onde~rstrepen" ;
         Text [ spanish ] = "Su~brayado" ;
         Text [ english_us ] = "Underlining" ;
