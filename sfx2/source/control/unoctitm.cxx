@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 15:55:51 $
+ *  last change: $Author: mba $ $Date: 2001-04-02 13:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl( SfxOfficeDispatch* pDisp
     , pLastState( 0 )
     , nSlot( nSlotId )
 {
+    SetId( nSlot );
 }
 
 SfxDispatchController_Impl::~SfxDispatchController_Impl()
