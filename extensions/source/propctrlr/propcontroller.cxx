@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 08:50:31 $
+ *  last change: $Author: tbe $ $Date: 2001-02-23 15:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ namespace pcr
         if (aProp.Name.getLength())
         {
             DBG_ASSERT(aProp.Name == _rEvent.PropertyName, "OPropertyBrowserController::_propertyChanged: getIntrospecteeProperty returned nonsense!");
-            ::rtl::OUString sNewValue = AnyToString(_rEvent.NewValue, aProp, aProp.Handle);
+            ::rtl::OUString sNewValue = AnyToString(_rEvent.NewValue, aProp, m_pPropertyInfo->getPropertyId(_rEvent.PropertyName));
             getPropertyBox()->SetPropertyValue(_rEvent.PropertyName, sNewValue);
         }
     }
@@ -969,6 +969,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/02/20 08:50:31  fs
+ *  do a syncViewToProperty when selecting a page
+ *
  *  Revision 1.7  2001/02/19 16:56:58  fs
  *  UpdateUI: do default page selection
  *
