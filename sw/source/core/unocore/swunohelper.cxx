@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swunohelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 16:13:36 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,12 +213,12 @@ BOOL UCB_IsCaseSensitiveFileName( const String& rURL )
                                     comphelper::getProcessServiceFactory();
 
         INetURLObject aTempObj( rURL );
-        aTempObj.SetBase( aTempObj.GetBase().ToLowerAscii() );
+        aTempObj.SetBase( aTempObj.GetBase().toAsciiLowerCase() );
         STAR_REFERENCE( ucb::XContentIdentifier ) xRef1 = new
                 ucb::ContentIdentifier( xMSF,
                             aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
-        aTempObj.SetBase(aTempObj.GetBase().ToUpperAscii());
+        aTempObj.SetBase(aTempObj.GetBase().toAsciiUpperCase());
         STAR_REFERENCE( ucb::XContentIdentifier ) xRef2 = new
                 ucb::ContentIdentifier( xMSF,
                             aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
