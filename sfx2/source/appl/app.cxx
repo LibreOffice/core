@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-08 16:04:09 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 15:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@
 #include <svtools/workingsetoptions.hxx>
 #include <svtools/syslocaleoptions.hxx>
 #include <svtools/syslocale.hxx>
+#include <framework/addonsoptions.hxx>
 #ifndef _SVTOOLS_TTPROPS_HXX // handmade
 #include <svtools/ttprops.hxx>
 #endif
@@ -264,6 +265,7 @@ static SvtInternalOptions *pInternalOptions = NULL;
 static SvtSysLocaleOptions *pSysLocaleOptions = NULL;
 static SvtSysLocale *pSysLocale = NULL;
 static SvtExtendedSecurityOptions* pExtendedSecurityOptions = NULL;
+static framework::AddonsOptions* pAddonsOptions = NULL;
 
 
 class SfxPropertyHandler : public PropertyHandler
@@ -486,6 +488,7 @@ SfxApplication::SfxApplication()
     pInternalOptions = new SvtInternalOptions;
     pSysLocaleOptions = new SvtSysLocaleOptions;
     pExtendedSecurityOptions = new SvtExtendedSecurityOptions;
+    pAddonsOptions = new framework::AddonsOptions;
     SvtViewOptions::AcquireOptions();
 #if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} precreate svtools options objects" );
@@ -593,6 +596,7 @@ SfxApplication::~SfxApplication()
     delete pSysLocaleOptions;
     delete pSysLocale;
     delete pExtendedSecurityOptions;
+    delete pAddonsOptions;
 
     if ( !bDowning )
         Deinitialize();
