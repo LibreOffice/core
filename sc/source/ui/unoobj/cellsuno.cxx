@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-07 19:06:48 $
+ *  last change: $Author: sab $ $Date: 2001-06-12 12:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5238,7 +5238,8 @@ ScCellObj::ScCellObj(ScDocShell* pDocSh, const ScAddress& rP) :
     ScCellRangeObj( pDocSh, ScRange(rP,rP) ),
     aCellPropSet( lcl_GetCellPropertyMap() ),
     aCellPos( rP ),
-    pUnoText( NULL )
+    pUnoText( NULL ),
+    nActionLockCount( 0 )
 {
     //  pUnoText is allocated on demand (GetUnoText)
     //  can't be aggregated because getString/setString is handled here
@@ -5250,6 +5251,13 @@ SvxUnoText& ScCellObj::GetUnoText()
     {
         pUnoText = new ScCellTextObj( GetDocShell(), aCellPos );
         pUnoText->acquire();
+        if (nActionLockCount)
+        {
+            ScSharedCellEditSource* pEditSource =
+                static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+            if (pEditSource)
+                pEditSource->SetDoUpdateData(sal_False);
+        }
     }
     return *pUnoText;
 }
@@ -5282,6 +5290,7 @@ uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType ) throw(uno:
     SC_QUERYINTERFACE( container::XElementAccess )
     SC_QUERYINTERFACE( sheet::XSheetAnnotationAnchor )
     SC_QUERYINTERFACE( text::XTextFieldsSupplier )
+    SC_QUERYINTERFACE( document::XActionLockable )
 
     return ScCellRangeObj::queryInterface( rType );
 }
@@ -5305,7 +5314,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 6 );
+        aTypes.realloc( nParentLen + 7 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<table::XCell>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XCellAddressable>*)0);
@@ -5313,6 +5322,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
         pPtr[nParentLen + 3] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
         pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XSheetAnnotationAnchor>*)0);
         pPtr[nParentLen + 5] = getCppuType((const uno::Reference<text::XTextFieldsSupplier>*)0);
+        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<document::XActionLockable>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -5884,6 +5894,89 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
     pArray[5] = rtl::OUString::createFromAscii( SCSHEETCELLRANGE_SERVICE );
     pArray[6] = rtl::OUString::createFromAscii( SCCELLRANGE_SERVICE );
     return aRet;
+}
+
+// XActionLockable
+
+sal_Bool SAL_CALL ScCellObj::isActionLocked() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return nActionLockCount != 0;
+}
+
+void SAL_CALL ScCellObj::addActionLock() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!nActionLockCount)
+    {
+        if (pUnoText)
+        {
+            ScSharedCellEditSource* pEditSource =
+                static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+            if (pEditSource)
+                pEditSource->SetDoUpdateData(sal_False);
+        }
+    }
+    nActionLockCount++;
+}
+
+void SAL_CALL ScCellObj::removeActionLock() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (nActionLockCount > 0)
+    {
+        nActionLockCount--;
+        if (!nActionLockCount)
+        {
+            if (pUnoText)
+            {
+                ScSharedCellEditSource* pEditSource =
+                    static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+                if (pEditSource)
+                {
+                    pEditSource->SetDoUpdateData(sal_True);
+                    if (pEditSource->IsDirty())
+                        pEditSource->UpdateData();
+                }
+            }
+        }
+    }
+}
+
+void SAL_CALL ScCellObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (pUnoText)
+    {
+        ScSharedCellEditSource* pEditSource =
+            static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+        if (pEditSource)
+        {
+            pEditSource->SetDoUpdateData(nLock == 0);
+            if ((nActionLockCount > 0) && (nLock == 0) && pEditSource->IsDirty())
+                pEditSource->UpdateData();
+        }
+    }
+    nActionLockCount = nLock;
+}
+
+sal_Int16 SAL_CALL ScCellObj::resetActionLocks() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    USHORT nRet(nActionLockCount);
+    if (pUnoText)
+    {
+        ScSharedCellEditSource* pEditSource =
+            static_cast<ScSharedCellEditSource*> (pUnoText->GetEditSource());
+        if (pEditSource)
+        {
+            pEditSource->SetDoUpdateData(sal_True);
+            if (pEditSource->IsDirty())
+                pEditSource->UpdateData();
+        }
+    }
+    nActionLockCount = 0;
+    return nRet;
 }
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-07 19:05:35 $
+ *  last change: $Author: sab $ $Date: 2001-06-12 12:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ class ScSharedCellEditSource : public SvxEditSource
 {
 private:
     ScCellTextData*         pCellTextData;
+    sal_Bool                bDoUpdateData : 1;
+    sal_Bool                bDirty : 1;
 
 protected:
     ScCellTextData*         GetCellTextData() const { return pCellTextData; }   // for ScCellEditSource
@@ -141,6 +143,9 @@ public:
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual void                UpdateData();
+
+    void                        SetDoUpdateData(sal_Bool bValue);
+    sal_Bool                    IsDirty() { return bDirty; }
 };
 
 //  ScCellEditSource with local copy of ScCellTextData is used by ScCellFieldsObj, ScCellFieldObj

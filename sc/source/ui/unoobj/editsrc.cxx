@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-07 19:06:48 $
+ *  last change: $Author: sab $ $Date: 2001-06-12 12:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,9 @@ void ScHeaderFooterEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
 //------------------------------------------------------------------------
 
 ScSharedCellEditSource::ScSharedCellEditSource( ScCellTextData* pData ) :
-    pCellTextData( pData )
+    pCellTextData( pData ),
+    bDoUpdateData(sal_True),
+    bDirty(sal_False)
 {
     //  pCellTextData is part of the ScCellTextObj.
     //  Text range and cursor keep a reference to their parent text, so the text object is
@@ -222,7 +224,10 @@ ScSharedCellEditSource::~ScSharedCellEditSource()
 
 SvxEditSource* ScSharedCellEditSource::Clone() const
 {
-    return new ScSharedCellEditSource( pCellTextData );
+    ScSharedCellEditSource* pTemp = new ScSharedCellEditSource( pCellTextData );
+    pTemp->bDoUpdateData = bDoUpdateData;
+    pTemp->bDirty = bDirty;
+    return pTemp;
 }
 
 SvxTextForwarder* ScSharedCellEditSource::GetTextForwarder()
@@ -232,7 +237,18 @@ SvxTextForwarder* ScSharedCellEditSource::GetTextForwarder()
 
 void ScSharedCellEditSource::UpdateData()
 {
-    pCellTextData->UpdateData();
+    if (bDoUpdateData)
+    {
+        pCellTextData->UpdateData();
+        bDirty = sal_False;
+    }
+    else
+        bDirty = sal_True;
+}
+
+void ScSharedCellEditSource::SetDoUpdateData(sal_Bool bValue)
+{
+    bDoUpdateData = bValue;
 }
 
 ScEditEngineDefaulter* ScSharedCellEditSource::GetEditEngine()

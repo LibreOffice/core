@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:05:28 $
+ *  last change: $Author: sab $ $Date: 2001-06-12 12:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,10 +343,13 @@ void ScXMLTableRowCellContext::SetCursorOnTextImport()
             aCellPos.Column = MAXCOL;
         if (aCellPos.Row > MAXROW)
             aCellPos.Row = MAXROW;
-        uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-        if (xCell.is())
+        xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+        if (xBaseCell.is())
         {
-            uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
+            xLockable = uno::Reference<document::XActionLockable>(xBaseCell, uno::UNO_QUERY);
+            if (xLockable.is())
+                xLockable->addActionLock();
+            uno::Reference<text::XText> xText(xBaseCell, uno::UNO_QUERY);
             if (xText.is())
             {
                 uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
@@ -700,23 +703,23 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
 
 void ScXMLTableRowCellContext::EndElement()
 {
-    if (bHasTextImport && GetScImport().GetRemoveLastChar())
-    {
-        if (GetImport().GetTextImport()->GetCursor().is())
-        {
-            //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
-            if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
-            {
-                OUString sEmpty;
-                GetImport().GetTextImport()->GetText()->insertString(
-                    GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
-                    sal_True );
-            }
-        }
-    }
-    GetScImport().GetTextImport()->ResetCursor();
     if (!bHasSubTable)
     {
+        if (bHasTextImport && GetScImport().GetRemoveLastChar())
+        {
+            if (GetImport().GetTextImport()->GetCursor().is())
+            {
+                //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+                if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
+                {
+                    OUString sEmpty;
+                    GetImport().GetTextImport()->GetText()->insertString(
+                        GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
+                        sal_True );
+                }
+            }
+        }
+        GetScImport().GetTextImport()->ResetCursor();
         ScXMLImport& rXMLImport = GetScImport();
         table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
         if (aCellPos.Column > 0 && nRepeatedRows > 1)
@@ -732,27 +735,36 @@ void ScXMLTableRowCellContext::EndElement()
                 DoMerge(aCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !bIsFormula )
             {
-                if((nCellType == util::NumberFormat::TEXT) && (nCellsRepeated > 1) &&
-                    (nRepeatedRows > 1))
+                if(nCellType == util::NumberFormat::TEXT)
                 {
-                    uno::Reference <table::XCell> xTempCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-                    uno::Reference <text::XText> xTempText (xTempCell, uno::UNO_QUERY);
-                    if (xTempText.is())
-                        sOUText=xTempText->getString();
+                    if (xLockable.is())
+                        xLockable->removeActionLock();
+                    if ((nCellsRepeated > 1) || (nRepeatedRows > 1))
+                    {
+                        if (!xBaseCell.is())
+                            xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+                        uno::Reference <text::XText> xTempText (xBaseCell, uno::UNO_QUERY);
+                        if (xTempText.is())
+                            sOUText=xTempText->getString();
+                    }
                 }
                 uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
+                if (sContentValidationName.getLength())
+                    bIsEmpty = sal_False;
                 for (sal_Int32 i = 0; i < nCellsRepeated; i++)
                 {
                     aCurrentPos.Column = aCellPos.Column + i;
                     if (i > 0)
                         rXMLImport.GetTables().AddColumn(sal_False);
-                    if (!bIsEmpty || sContentValidationName.getLength())
-                            xCell = xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row);
                     if (!bIsEmpty)
                     {
                         for (sal_Int32 j = 0; j < nRepeatedRows; j++)
                         {
+                            if (xBaseCell.is() && (aCurrentPos == aCellPos))
+                                xCell = xBaseCell;
+                            else
+                                xCell = xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row);
                             aCurrentPos.Row = aCellPos.Row + j;
                             if ((aCurrentPos.Column == 0) && (j > 0))
                                 rXMLImport.GetTables().AddRow();

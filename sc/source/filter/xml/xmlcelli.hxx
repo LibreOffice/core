@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
+ *  last change: $Author: sab $ $Date: 2001-06-12 12:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
+#include <com/sun/star/document/XActionLockable.hpp>
+#endif
 
 class ScXMLImport;
 
@@ -108,6 +111,8 @@ struct ScMyAnnotation
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
 {
+    com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell;
+    com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable;
     rtl::OUString sEmpty;
     rtl::OUString sOUText;
     rtl::OUString sOUDateValue;

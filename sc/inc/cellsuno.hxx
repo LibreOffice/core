@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-07 09:39:41 $
+ *  last change: $Author: sab $ $Date: 2001-06-12 12:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
+#include <com/sun/star/document/XActionLockable.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
@@ -817,12 +820,14 @@ class ScCellObj : public ScCellRangeObj,
                   public com::sun::star::table::XCell,
                   public com::sun::star::sheet::XCellAddressable,
                   public com::sun::star::sheet::XSheetAnnotationAnchor,
-                  public com::sun::star::text::XTextFieldsSupplier
+                  public com::sun::star::text::XTextFieldsSupplier,
+                    public com::sun::star::document::XActionLockable
 {
 private:
     SvxUnoText*             pUnoText;
     SfxItemPropertySet      aCellPropSet;
     ScAddress               aCellPos;
+    sal_Int16               nActionLockCount;
 
 private:
     String      GetInputString_Impl(BOOL bEnglish) const;
@@ -956,6 +961,15 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XActionLockable
+    virtual sal_Bool SAL_CALL isActionLocked() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addActionLock() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeActionLock() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setActionLocks( sal_Int16 nLock )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
+
 };
 
 
