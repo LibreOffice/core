@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2000-09-22 13:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,8 @@ enum ScXMLDataPilotTableAttrTokens
     XML_TOK_DATA_PILOT_TABLE_ATTR_GRAND_TOTAL,
     XML_TOK_DATA_PILOT_TABLE_ATTR_IGNORE_EMPTY_ROWS,
     XML_TOK_DATA_PILOT_TABLE_ATTR_IDENTIFY_CATEGORIES,
-    XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS
+    XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS,
+    XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS
 };
 
 enum ScXMLDataPilotTableElemTokens

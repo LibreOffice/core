@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-09-22 13:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     rtl::OUString   sServiceSourceObject;
     rtl::OUString   sServiceUsername;
     rtl::OUString   sServicePassword;
+    rtl::OUString   sButtons;
     ScRange         aSourceCellRangeAddress;
     ScRange         aTargetRangeAddress;
     ScRange         aFilterSourceRange;
@@ -172,6 +173,7 @@ public:
     void SetFilterIsCaseSensitive(const sal_Bool bValue) { bIsCaseSensitive = bValue; }
     void SetFilterSkipDuplicates(const sal_Bool bValue) { bSkipDuplicates = bValue; }
     void AddDimension(ScDPSaveDimension* pDim) { if (pDPSave) pDPSave->AddDimension(pDim); }
+    void SetButtons();
 };
 
 class ScXMLDPSourceSQLContext : public SvXMLImportContext

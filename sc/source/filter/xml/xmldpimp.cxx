@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-09-22 13:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "docuno.hxx"
 #include "dpshttab.hxx"
 #include "dpsdbtab.hxx"
+#include "attrib.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -201,6 +202,10 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                     aTargetRangeAddress = ScRange(aStartCellAddress, aEndCellAddress);
                 }
             }
+            case XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS :
+            {
+                sButtons = sValue;
+            }
         }
     }
     ScModelObj* pDocObj = ScModelObj::getImplementation( GetScImport().GetModel() );
@@ -268,6 +273,32 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( USHORT nPref
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
+}
+
+void ScXMLDataPilotTableContext::SetButtons()
+{
+    sal_Int32 nCount = sButtons.getLength();
+    if (nCount)
+    {
+        sal_Bool bIn(sal_False);
+        sal_Int32 nPos = 0;
+        sal_Int32 nOldPos = 0;
+        while(nPos < nCount)
+        {
+            if ((!bIn && sButtons[nPos] == ' ') || (nPos == nCount - 1 && nPos > nOldPos))
+            {
+                if (nPos == nCount - 1)
+                    nPos++;
+                rtl::OUString sCellAddress = sButtons.copy(nOldPos, nPos - nOldPos);
+                ScAddress aCellAddress;
+                aCellAddress.Parse(sCellAddress, pDoc);
+                ScMergeFlagAttr aAttr(SC_MF_BUTTON);
+                pDoc->ApplyAttr(aCellAddress.Col(), aCellAddress.Row(), aCellAddress.Tab(), aAttr);
+                nOldPos = nPos + 1;
+            }
+            nPos++;
+        }
+    }
 }
 
 void ScXMLDataPilotTableContext::EndElement()
@@ -347,6 +378,7 @@ void ScXMLDataPilotTableContext::EndElement()
     ScDPCollection* pDPCollection = pDoc->GetDPCollection();
     pDPObject->SetAlive(sal_True);
     pDPCollection->Insert(pDPObject);
+    SetButtons();
 }
 
 ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
