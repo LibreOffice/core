@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 18:21:41 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 14:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ void ZipPackage::getZipFileContents()
                 const OUString sPropInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
                 const OUString sPropSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
                 const OUString sPropIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+                const OUString sPropSize ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
 
                 Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                 sal_Int32 nLength = aManifestSequence.getLength();
@@ -252,17 +253,25 @@ void ZipPackage::getZipFileContents()
                 ZipPackageStream *pStream = NULL;
                 ZipPackageFolder *pFolder = NULL;
 
-
                 for (sal_Int32 i = 0; i < nLength ; i++, pSequence++)
                 {
                     OUString sPath, sMediaType;
                     const PropertyValue *pValue = pSequence->getConstArray();
+                    const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL;
                     for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                     {
                         if (pValue[j].Name.equals( sPropFullPath ) )
                             pValue[j].Value >>= sPath;
                         else if (pValue[j].Name.equals( sPropMediaType ) )
                             pValue[j].Value >>= sMediaType;
+                        else if (pValue[j].Name.equals( sPropSalt ) )
+                            pSalt = &(pValue[j].Value);
+                        else if (pValue[j].Name.equals( sPropInitialisationVector ) )
+                            pVector = &(pValue[j].Value);
+                        else if (pValue[j].Name.equals( sPropIterationCount ) )
+                            pCount = &(pValue[j].Value);
+                        else if (pValue[j].Name.equals( sPropSize ) )
+                            pSize = &(pValue[j].Value);
                     }
                     if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
                     {
@@ -279,33 +288,26 @@ void ZipPackage::getZipFileContents()
                         {
                             pStream = reinterpret_cast < ZipPackageStream* > ( xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
                             pStream->SetMediaType ( sMediaType );
-                            pValue = pSequence->getConstArray();
-                            sal_Bool bSetEncrypted = sal_False;
-                            for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
+
+                            if (pSalt && pVector && pCount && pSize)
                             {
-                                Sequence < sal_Int8 > aSequence;
-                                if (pValue[j].Name.equals( sPropSalt ) )
-                                {
-                                    pValue[j].Value >>= aSequence;
-                                    pStream->setSalt ( aSequence );
-                                    bSetEncrypted = sal_True;
-                                }
-                                else if (pValue[j].Name.equals( sPropInitialisationVector ) )
-                                {
-                                    pValue[j].Value >>= aSequence;
-                                    pStream->setInitialisationVector ( aSequence );
-                                    bSetEncrypted = sal_True;
-                                }
-                                else if (pValue[j].Name.equals( sPropIterationCount ) )
-                                {
-                                    sal_Int64 nCount;
-                                    pValue[j].Value >>= nCount;
-                                    pStream->setIterationCount ( nCount );
-                                    bSetEncrypted = sal_True;
-                                }
-                            }
-                            if (bSetEncrypted)
+                                Sequence < sal_uInt8 > aSequence;
+                                sal_Int32 nCount, nSize;
+
+                                *pSalt >>= aSequence;
+                                pStream->setSalt ( aSequence );
+
+                                *pVector >>= aSequence;
+                                pStream->setInitialisationVector ( aSequence );
+
+                                *pCount >>= nCount;
+                                pStream->setIterationCount ( nCount );
+
+                                *pSize >>= nSize;
+                                pStream->setSize ( nSize );
+
                                 pStream->SetToBeEncrypted ( sal_True );
+                            }
                         }
                     }
                 }
@@ -573,7 +575,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
     aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
     aManList.push_back( aPropSeq );
-    pRootFolder->saveContents(OUString(), aManList, aZipOut);
+    pRootFolder->saveContents(OUString(), aManList, aZipOut, aEncryptionKey );
 
     OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
     Reference < XManifestWriter > xWriter (xFactory->createInstance( sManifestWriter ), UNO_QUERY );
