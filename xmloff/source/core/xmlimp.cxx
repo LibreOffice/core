@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:06:17 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,8 @@
 #endif
 #endif
 
+#define LOGFILE_AUTHOR "unknown"
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -217,8 +219,6 @@ sal_Char __READONLY_DATA sXML_np__text_old[] = "__text";
 sal_Char __READONLY_DATA sXML_np__table_old[] = "__table";
 sal_Char __READONLY_DATA sXML_np__meta_old[] = "__meta";
 
-
-#define LOGFILE_AUTHOR "mb93740"
 
 
 class SvXMLImportEventListener : public cppu::WeakImplHelper1<
@@ -1319,23 +1319,36 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
     return sRet;
 }
 
-Reference < XOutputStream > SvXMLImport::ResolveEmbeddedObjectURLFromBase64(
-                                    const ::rtl::OUString& rURL )
+Reference < XOutputStream >
+        SvXMLImport::GetStreamForEmbeddedObjectURLFromBase64()
 {
     Reference < XOutputStream > xOLEStream;
 
-    if( 0 == rURL.compareTo( ::rtl::OUString( '#' ), 1 ) &&
-         xEmbeddedResolver.is() )
+    if( xEmbeddedResolver.is() )
     {
         Reference< XNameAccess > xNA( xEmbeddedResolver, UNO_QUERY );
         if( xNA.is() )
         {
-            Any aAny = xNA->getByName( rURL );
+            OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "Obj12345678" ) );
+            Any aAny = xNA->getByName( aURL );
             aAny >>= xOLEStream;
         }
     }
 
     return xOLEStream;
+}
+
+::rtl::OUString SvXMLImport::ResolveEmbeddedObjectURLFromBase64()
+{
+    ::rtl::OUString sRet;
+
+    if( xEmbeddedResolver.is() )
+    {
+        OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "Obj12345678" ) );
+        sRet = xEmbeddedResolver->resolveEmbeddedObjectURL( aURL );
+    }
+
+    return sRet;
 }
 
 void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
