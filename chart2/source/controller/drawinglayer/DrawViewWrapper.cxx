@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 16:56:36 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,22 +133,24 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
 {
     ReInit();
-    /*
-    m_pWrappedDLPageView->GetPage()->SetBorder(0, 0, 0, 0);
-    m_pWrappedDLPageView->GetPage()->SetSize(Size(1000,1000));
-    this->SetBordVisible(false);
-    this->SetPageBorderVisible(false);
-    */
 }
 
 void DrawViewWrapper::ReInit()
 {
     m_pWrappedDLPageView = this->ShowPagePgNum( 0, Point(0,0) );
+    m_pWrappedDLPageView->GetPage()->SetSize(
+        this->GetWin(0)->GetOutputSize() );
+    this->SetPageBorderVisible(false);
+    this->SetBordVisible(false);
+    this->SetGridVisible(false);
+    this->SetGridFront(false);
+    this->SetHlplVisible(false);
 }
 
 DrawViewWrapper::~DrawViewWrapper()
 {
     m_pWrappedDLPageView = NULL;//@ todo: sufficient? or remove necessary
+    aComeBackTimer.Stop();//@todo this should be done in destructor of base class
 }
 
 //virtual
@@ -200,20 +202,30 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
 
 void DrawViewWrapper::InitRedraw( OutputDevice* pOut, const Region& rReg )
 {
+    svtools::ColorConfig aColorConfig;
+    Color aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
+    this->SetApplicationBackgroundColor(aFillColor);
     this->E3dView::InitRedraw( pOut, rReg );
 }
 
-SdrObject* DrawViewWrapper::getTextEditObject() const
+SdrObject* DrawViewWrapper::getSelectedObject() const
 {
-    SdrObject* pTextObj = NULL;
+    SdrObject* pObj(NULL);
     const SdrMarkList& rMarkList = this->GetMarkList();
     if(rMarkList.GetMarkCount() == 1)
     {
         SdrMark* pMark = rMarkList.GetMark(0);
-        SdrObject* pObj = pMark->GetObj();
-        if (pObj->HasTextEdit())
-            pTextObj = (SdrTextObj*)pObj;
+        pObj = pMark->GetObj();
     }
+    return pObj;
+}
+
+SdrObject* DrawViewWrapper::getTextEditObject() const
+{
+    SdrObject* pObj = this->getSelectedObject();
+    SdrObject* pTextObj = NULL;
+    if( pObj && pObj->HasTextEdit())
+        pTextObj = (SdrTextObj*)pObj;
     return pTextObj;
 }
 
