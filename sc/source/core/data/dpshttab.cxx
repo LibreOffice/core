@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpshttab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 08:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ public:
 // -----------------------------------------------------------------------
 
 ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc )
+    : pSpecial(NULL)
 {
     long nCount = rDesc.aSourceRange.aEnd.Col() - rDesc.aSourceRange.aStart.Col() + 1;
     pImpl = new ScSheetDPData_Impl;
@@ -112,6 +113,30 @@ ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc )
         pImpl->ppStrings[i] = NULL;
 
     pImpl->nNextRow = pImpl->aRange.aStart.Row() + 1;
+
+    long nEntryCount(pImpl->aQuery.GetEntryCount());
+    pSpecial = new BOOL[nEntryCount];
+    for (long j = 0; j < nEntryCount; ++j )
+    {
+        ScQueryEntry& rEntry = pImpl->aQuery.GetEntry(j);
+        if (rEntry.bDoQuery)
+        {
+            pSpecial[j] = false;
+            if (!rEntry.bQueryByString)
+            {
+                if (*rEntry.pStr == EMPTY_STRING &&
+                   ((rEntry.nVal == SC_EMPTYFIELDS) || (rEntry.nVal == SC_NONEMPTYFIELDS)))
+                    pSpecial[j] = true;
+            }
+            else
+            {
+                ULONG nIndex = 0;
+                rEntry.bQueryByString =
+                            !(pD->GetFormatTable()->
+                                IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
+            }
+        }
+    }
 }
 
 ScSheetDPData::~ScSheetDPData()
@@ -121,6 +146,7 @@ ScSheetDPData::~ScSheetDPData()
     delete[] pImpl->ppStrings;
     delete[] pImpl->pDateDim;
     delete pImpl;
+    delete[] pSpecial;
 }
 
 void ScSheetDPData::DisposeData()
@@ -349,7 +375,7 @@ BOOL ScSheetDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
         }
 
         bFilteredOut = ( lcl_HasQuery(pImpl->aQuery) &&
-                !pImpl->pDoc->ValidQuery( pImpl->nNextRow, nDocTab, pImpl->aQuery ) );
+                !pImpl->pDoc->ValidQuery( pImpl->nNextRow, nDocTab, pImpl->aQuery, pSpecial ) );
         if ( bFilteredOut )
         {
             ++pImpl->nNextRow;
