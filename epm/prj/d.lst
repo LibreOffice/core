@@ -1,0 +1,3 @@
+..\%__SRC%\bin\epm %_DEST%\bin%_EXT%\epm
+..\%__SRC%\bin\epminstall %_DEST%\bin%_EXT%\epminstall
+..\%__SRC%\bin\mkepmlist %_DEST%\bin%_EXT%\mkepmlist

@@ -1,0 +1,2 @@
+ep	epm	:	solenv NULL
+ep	epm				nmake	-	u		ep_mkout NULL
