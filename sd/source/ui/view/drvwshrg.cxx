@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:13:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,8 @@
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
 #include "PreviewChildWindow.hxx"
 #endif
-#ifndef SD_EFFECT_CHILD_WINDOW_HXX
-#include "EffectChildWindow.hxx"
-#endif
 #ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
-#endif
-#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
-#include "SlideChangeChildWindow.hxx"
 #endif
 
 using namespace sd;
@@ -164,9 +158,7 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( AnimationChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( EffectChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( Svx3DChildWindow::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( SlideChangeChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( GalleryChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
@@ -204,8 +196,6 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
     SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( SdAnimationChildWindow::GetChildWindowId() );
     /* ? */SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
-    //SFX_CHILDWINDOW_REGISTRATION( SdEffectChildWindow::GetChildWindowId() );
-    //SFX_CHILDWINDOW_REGISTRATION( SdSlideChangeChildWindow::GetChildWindowId() );
     //SFX_CHILDWINDOW_REGISTRATION( Sd3DChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( Svx3DChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxBmpMaskChildWindow::GetChildWindowId() );
