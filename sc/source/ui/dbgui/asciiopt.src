@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:15:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,6 +698,10 @@ ModalDialog RID_SCDLG_ASCII
     Text[ hindi ] = "टेक्स्ट् आयात";
     Text[ slovak ] = "Import textu";
 };
+
+
+
+
 
 
 
