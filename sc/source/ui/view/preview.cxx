@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #include "globstr.hrc"
 #include "sc.hrc"           // fuer ShellInvalidate
 #include "AccessibleDocumentPagePreview.hxx"
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 #ifndef SC_ACCESSIBILITYHINTS_HXX
 #include "AccessibilityHints.hxx"
@@ -838,11 +838,11 @@ void ScPreview::LoseFocus()
         pViewShell->BroadcastAccessibility( ScAccWinFocusLostHint(GetAccessible()) );
 }
 
-com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
+com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
 {
     ScAccessibleDocumentPagePreview* pAccessible =
         new ScAccessibleDocumentPagePreview( GetAccessibleParentWindow()->GetAccessible(), pViewShell );
-    com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xAccessible = pAccessible;
+    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xAccessible = pAccessible;
     pAccessible->Init();
     return xAccessible;
 }
