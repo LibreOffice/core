@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_image_unx.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:41:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #include <fcntl.h>
 
 #if defined(LINUX)
-#define __USE_BSD /* madvise, MADV_WILLNEED */
+#  ifndef __USE_BSD
+#    define __USE_BSD /* madvise, MADV_WILLNEED */
+#  endif
 #endif /* Linux */
 
 #include <sys/mman.h>
