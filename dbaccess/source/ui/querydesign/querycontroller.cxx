@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-04 13:46:56 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef DBAUI_QUERYTABLEVIEW_HXX
+#include "QueryTableView.hxx"
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {
@@ -322,7 +325,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
     {
         case ID_BROWSER_ESACPEPROCESSING:
             aReturn.aState = ::cppu::bool2any(!m_bEsacpeProcessing);
-            aReturn.bEnabled = m_pSqlIterator != NULL;
+            aReturn.bEnabled = m_pSqlIterator != NULL && !m_bDesign;
+            break;
+        case ID_REALTION_ADD_RELATION:
+            aReturn.bEnabled = m_bEditable && m_bDesign && m_vTableData.size() > 1;
             break;
         case ID_BROWSER_SAVEASDOC:
             aReturn.bEnabled = !m_bCreateView && (!m_bDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
@@ -382,6 +388,13 @@ void OQueryController::Execute(sal_uInt16 _nId)
             // check we have a view and if we could saved it correctly
             if(m_bCreateView && !isModified())
                 closeTask();
+            break;
+        case ID_REALTION_ADD_RELATION:
+            {
+                OJoinDesignView* pView = getJoinView();
+                if( pView )
+                    static_cast<OQueryTableView*>(pView->getTableView())->createNewConnection();
+            }
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -681,10 +694,19 @@ OJoinDesignView* OQueryController::getJoinView()
 void OQueryController::AddSupportedFeatures()
 {
     OJoinController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]        = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]         = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]       = ID_BROWSER_PASTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]   = SID_SAVEASDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]                = ID_BROWSER_COPY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]                 = ID_BROWSER_CUT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]               = ID_BROWSER_PASTE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]           = SID_SAVEASDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/EsacpeProcessing")] = ID_BROWSER_ESACPEPROCESSING;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewFunctions")]    = ID_BROWSER_QUERY_VIEW_FUNCTIONS;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewTables")]       = ID_BROWSER_QUERY_VIEW_TABLES;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewAliases")]      = ID_BROWSER_QUERY_VIEW_ALIASES;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/DistinctValues")]   = ID_BROWSER_QUERY_DISTINCT_VALUES;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ChangeDesignMode")] = ID_BROWSER_SQL;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ClearQuery")]       = ID_BROWSER_CLEAR_QUERY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ExecuteQuery")]     = ID_BROWSER_QUERY_EXECUTE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]      = ID_REALTION_ADD_RELATION;
 }
 // -----------------------------------------------------------------------------
 ToolBox* OQueryController::CreateToolBox(Window* _pParent)
@@ -1163,8 +1185,8 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         try
         {
             ::rtl::OUString aErrorMsg;
+
             ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree( aErrorMsg, m_sStatement, m_bDesign );
-            //  m_pParseNode = pNode;
             if(pNode)
             {
                 pNode->parseNodeToStr(  sTranslatedStmt,
