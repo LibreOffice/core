@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 14:15:06 $
+#   last change: $Author: kz $ $Date: 2004-10-04 17:47:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ RSCDEFS += -Dause_hack
 
 SRS1NAME=dialogs
 SRC1FILES =  \
+                svuidlg.src \
         autocdlg.src \
         connect.src \
         contdlg.src \
@@ -185,6 +186,9 @@ SRC2FILES =  \
 
 
 EXCEPTIONSFILES=\
+        $(SLO)$/linkdlg.obj \
+        $(SLO)$/pastedlg.obj \
+        $(SLO)$/insdlg.obj \
     $(SLO)$/connpoolconfig.obj \
     $(SLO)$/connpoolsettings.obj \
     $(SLO)$/sdbcdriverenum.obj	\
@@ -423,6 +427,10 @@ LIB1OBJFILES= \
 LIB2TARGET= $(SLB)$/cui.lib
 
 LIB2OBJFILES= \
+        $(SLO)$/linkdlg.obj \
+        $(SLO)$/pastedlg.obj \
+        $(SLO)$/plfilter.obj \
+        $(SLO)$/insdlg.obj \
     $(SLO)$/optHeaderTabListbox.obj		\
     $(SLO)$/sdbcdriverenum.obj	\
     $(SLO)$/connpoolsettings.obj \
