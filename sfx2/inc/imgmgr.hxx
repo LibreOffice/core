@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 14:33:35 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,10 @@
 
 #include "cfgitem.hxx"
 
-#include <imgdef.hxx>
+#include "imgdef.hxx"
 
+#include <sal/types.h>
+#include <tools/link.hxx>
 
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
@@ -74,66 +76,52 @@
 #endif
 
 class ToolBox;
-
+class SfxObjectShell;
 class SfxModule;
 class SfxToolBoxManager;
-class SfxBitmapList_Impl;
-class SfxToolBoxArr_Impl;
-
-class SfxImageManager: public SfxConfigItem
+class SfxImageManager_Impl;
+struct SfxImageManagerData_Impl;
+class SfxImageManager
 {
-    SfxBitmapList_Impl* pUserDefList;
-    ImageList*      pImageList;
-    ImageList*      pUserImageList;
-    ImageList*      pOffImageList;
-    SfxSymbolSet    eSymbolSet;
-    BOOL            bImageDefault;
-    SfxToolBoxArr_Impl* pToolBoxList;
-    USHORT          nOutStyle;
+    SfxImageManager_Impl* pImp;
+    SfxImageManagerData_Impl* pData;
 
-protected:
-
-    virtual int     Load(SvStream&);
-    virtual BOOL    Store(SvStream&);
-    virtual void    UseDefault();
-    virtual String  GetName() const;
-
-#if _SOLAR__PRIVATE
-    void            MakeDefaultImageList_Impl();
-    void            MakeLists_Impl( SfxSymbolSet );
-#endif
+    void            SetSymbolSet_Impl( sal_Int16 );
+    void            SetOutStyle_Impl( sal_Int16 );
+    void            ExchangeItemImage_Impl( USHORT nId, const Image& rImage );
+    DECL_LINK(      OptionsChanged_Impl, void* );
+    DECL_LINK(      ConfigChanged_Impl, void* );
 
 public:
-                    SfxImageManager();
+    static BOOL     Import( SvStream& rInStream, SotStorage& rOutStorage );
+    static BOOL     Export( SotStorage& rInStorage, SvStream& rOutStream );
+    static BOOL     Copy( SotStorage& rIn, SotStorage& rOut );
+    static Image    GetGlobalImage( USHORT nId, BOOL bBig );
+
+                    // each document may have its own imagemanager, but all documents without an own
+                    // image configuration share the same instance
+                    SfxImageManager( SfxObjectShell* pDoc );
                     ~SfxImageManager();
 
-                    // Allgemeine Properties
-    void            SetSymbolSet(SfxSymbolSet);
-    void            SetOutStyle(USHORT);
-
-    SfxSymbolSet    GetSymbolSet() const
-                            { return eSymbolSet; }
-    USHORT          GetOutStyle() const
-                            { return nOutStyle; }
-    Size            GetImageSize() const
-                            {return pImageList->GetImageSize(); }
+    Size            GetImageSize() const;
     Color           GetMaskColor() const;
 
-                    // Image(s) aus einem Modul oder der OFA-Liste
+                    // get images from resources
     Image           GetImage(USHORT nId, SfxModule* pMod = 0) const;
     void            SetImages( ToolBox& rToolBox, SfxModule* );
     void            LockImage(USHORT nNewId, ToolBox *pBox);
+    Image           GetImage(USHORT nId, SfxModule* pMod, BOOL bBig ) const;
 
-                    // Zugriff auf die Userdef-Liste
+                    // add images to configurable user list
     void            ReplaceImage(USHORT nId, Bitmap* pBmp=0);
     void            AddImage(USHORT nId, const Image& rImage);
 
-                    // Umkonfigurieren
+                    // reconfigure user list
     void            StartCustomize();
     void            EndCustomize();
     Image           SeekImage(USHORT nId, SfxModule* pModule = 0) const;
 
-                    // Toolbox-Registrierung/Abmeldung
+                    // register/release toolboxes
     void            RegisterToolBox(ToolBox*, USHORT nFlags=0xFFFF );
     void            RegisterToolBox(ToolBox*, SfxModule*, USHORT nFlags=0xFFFF );
     void            ReleaseToolBox(ToolBox*);
@@ -141,15 +129,11 @@ public:
     void            ReleaseToolBoxManager(SfxToolBoxManager*);
 
 #if _SOLAR__PRIVATE
-    void            ExchangeItemImage_Impl(USHORT nId, const Image& rImage);
     BOOL            IsUserDef_Impl(USHORT nId) const;
     const Bitmap&   GetUserDefBitmap_Impl(USHORT nId) const;
     Image           GetAndLockImage_Impl(USHORT nId, SfxModule* pMod = 0);
     Image           GetImageFromModule_Impl( USHORT nId, SfxModule *pMod );
 #endif
-
 };
-
-#define SFX_IMAGEMANAGER() SfxGetpApp()->GetImageManager()
 
 #endif
