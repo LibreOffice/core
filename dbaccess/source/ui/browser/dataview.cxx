@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:08:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,11 @@ namespace dbaui
     // -------------------------------------------------------------------------
     ODataView::~ODataView()
     {
+        DBG_DTOR(ODataView,NULL);
         setToolBox(NULL);
 
         enableSeparator( sal_False );
         m_pController->release();
-
-        DBG_DTOR(ODataView,NULL);
     }
 
     // -------------------------------------------------------------------------
@@ -170,7 +169,7 @@ namespace dbaui
         }
         else
         {
-            delete m_pSeparator;
+            ::std::auto_ptr<FixedLine> aTemp(m_pSeparator);
             m_pSeparator = NULL;
         }
         Resize();
