@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-20 11:08:40 $
+ *  last change: $Author: obo $ $Date: 2000-10-23 14:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 
 namespace com { namespace sun { namespace star { namespace awt {
     struct FontDescriptor;
