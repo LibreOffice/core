@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binaryreadhandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:04:18 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@
 #ifndef INCLUDED_MEMORY
 #include <memory>
 #define INCLUDED_MEMORY
-#endif  INCLUDED_MEMORY
+#endif // INCLUDED_MEMORY
 
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
-#endif  INCLUDED_VECTOR
+#endif // INCLUDED_VECTOR
 
 
 namespace configmgr
