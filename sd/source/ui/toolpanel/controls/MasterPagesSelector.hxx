@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:55:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <sfx2/shell.hxx>
 #include <vcl/image.hxx>
 #include "glob.hxx"
+
+#include <queue>
 
 class MouseEvent;
 class SdDrawDocument;
@@ -141,21 +143,59 @@ public:
         this method at the CurrentMasterPagesSelector to select the
         previews of the master pages that are assigned to the new
         current page.
+
+        The default implementation of this method ignores the call. This is
+        used by e.g. the RecentMasterPagesSelector because it does not show
+        the currently used master pages by default and thus is not
+        influenced by its changes.
     */
     virtual void UpdateSelection (void);
 
-    virtual void Fill (void);
+    virtual void Fill (void) = 0;
+
+    /** Make the selector empty.  This method clear the value set from any
+        entries. Overload this method to add functionality, especially to
+        destroy objects set as data items at the value set.
+    */
     virtual void Clear (void);
 
     void    SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
+
+    /** Call this method to tell a selector object that the preview that
+        belongs to the given page does not reflect the pages content
+        anymore.  This method forwards the call to the variant that takes a
+        value set index as argument so call that variant directly when the
+        index is already present.
+        @param pPage
+            When NULL or a pointer to page is given that does not belong to
+            the selector then the call is ignored.
+    */
+    virtual void InvalidatePreview (const SdPage* pPage) = 0;
+    /** Invalidate the preview that is specified via an index into the value
+        set.
+    */
+    void InvalidatePreview (USHORT nIndex);
+    void InvalidateAllPreviews (void);
 
 protected:
     SdDrawDocument& mrDocument;
     ::std::auto_ptr<PreviewValueSet> mpPageSet;
     int mnPreviewWidth;
     ViewShellBase& mrBase;
+    /** Slot that is executed as default action when the left mouse button is
+        clicked over a master page.
+    */
+    sal_uInt16 mnDefaultClickAction;
+    /** Timer for scheduling updates of master page previews.
+    */
+    Timer maPreviewUpdateTimer;
+    /** Pages with pointers in this queue have their previews updated
+        eventually.  Filled by InvalidatePreview() and operated upon by
+        UpdatePreviews().
+    */
+    ::std::queue<USHORT> maPreviewUpdateQueue;
 
-    SdPage* GetSelectedMasterPage (void);
+    virtual SdPage* GetSelectedMasterPage (void);
 
     /** Assign the given master page to all slides of the document.
         @param pMasterPage
@@ -184,9 +224,10 @@ protected:
         them to the value set.  Call this function when the size of the
         previews has changed.
     */
-    void FillPreviews (void);
+    virtual void UpdateAllPreviews (void) = 0;
+    virtual void UpdatePreview (USHORT nIndex) = 0;
 
-    DECL_LINK(PreviewAvailableCallback, void*);
+    DECL_LINK(ProcessPreviewUpdateRequest, Timer*);
 
 private:
     DECL_LINK(ClickHandler, PreviewValueSet*);
@@ -227,6 +268,10 @@ private:
         SdPage* pMasterPage,
         const String& rsBaseLayoutName,
         SdPage* pPage);
+
+    SdPage* ProvideMasterPage (
+        SdPage* pMasterPage,
+        const ::std::vector<SdPage*>& rPageList);
 };
 
 } } } // end of namespace ::sd::toolpanel::controls
