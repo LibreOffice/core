@@ -1613,3 +1613,5 @@ _TI2?AVRuntimeException@uno@star@sun@com@@
 ?iquery@?$Reference@VXManifestReader@manifest@packages@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXManifestWriter@manifest@packages@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXRow@sdbc@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+??ASvStorageInfoList@@QBEAAVSvStorageInfo@@K@Z
+??YString@@QAEAAV0@D@Z
