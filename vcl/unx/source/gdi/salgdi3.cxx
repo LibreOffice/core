@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:42:38 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 16:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2435,7 +2435,7 @@ SalLayout* SalGraphicsData::LayoutText( const ImplLayoutArgs& rArgs )
 //--------------------------------------------------------------------------
 
 #ifdef ENABLE_CTL
-SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
+SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs, const OutputDevice* )
 {
     SalLayout* pSalLayout = maGraphicsData.LayoutText( rArgs );
     return pSalLayout;

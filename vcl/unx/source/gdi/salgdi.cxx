@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:42:35 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 16:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,7 +1040,7 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry, const Out
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice* )
+void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
 {
 #ifndef _USE_PRINT_EXTENSION_
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
@@ -1061,10 +1061,10 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const Outp
             else if( !_IsXORMode() )
             {
                 if( 1 == nPoints  )
-                    DrawPixel( pPtAry[0].mnX, pPtAry[0].mnY );
+                    DrawPixel( pPtAry[0].mnX, pPtAry[0].mnY, pOutDev );
                 else
                     DrawLine( pPtAry[0].mnX, pPtAry[0].mnY,
-                              pPtAry[1].mnX, pPtAry[1].mnY );
+                              pPtAry[1].mnX, pPtAry[1].mnY, pOutDev );
             }
             return;
         }
@@ -1092,7 +1092,7 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const Outp
 void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
                                    const ULONG     *pPoints,
                                    PCONSTSALPOINT  *pPtAry,
-                                   const OutputDevice* )
+                                   const OutputDevice *pOutDev )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1160,7 +1160,7 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
 
         if( _GetPenColor() != 0xFFFFFFFF )
             for( ULONG i = 0; i < nPoly; i++ )
-                DrawPolyLine( pPoints[i], pPtAry[i] );
+                DrawPolyLine( pPoints[i], pPtAry[i], pOutDev );
 
 #ifndef _USE_PRINT_EXTENSION_
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:42:36 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 16:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,7 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
                                   SalGraphics      *pSrcGraphics,
-                                  const OutputDevice*, const OutputDevice*)
+                                  const OutputDevice *pOutDev, const OutputDevice *pSrcOutDev)
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -686,7 +686,7 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
             SalBitmap *pDDB = pSrcGraphics->GetBitmap( pPosAry->mnSrcX,
                                                        pPosAry->mnSrcY,
                                                        pPosAry->mnSrcWidth,
-                                                       pPosAry->mnSrcHeight );
+                                                       pPosAry->mnSrcHeight, pSrcOutDev );
 
             if( !pDDB )
             {
@@ -697,7 +697,7 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
             SalTwoRect aPosAry( *pPosAry );
 
             aPosAry.mnSrcX = 0, aPosAry.mnSrcY = 0;
-            DrawBitmap( &aPosAry, *pDDB );
+            DrawBitmap( &aPosAry, *pDDB, pOutDev );
 
             delete pDDB;
         }
@@ -714,7 +714,7 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
 void SalGraphics::CopyArea ( long nDestX,    long nDestY,
                                    long nSrcX,     long nSrcY,
                                    long nSrcWidth, long nSrcHeight,
-                                   USHORT nFlags, const OutputDevice* )
+                                   USHORT nFlags, const OutputDevice *pOutDev )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -737,7 +737,7 @@ void SalGraphics::CopyArea ( long nDestX,    long nDestY,
         aPosAry.mnSrcWidth  = nSrcWidth;
         aPosAry.mnSrcHeight = nSrcHeight;
 
-        CopyBits ( &aPosAry, 0 );
+        CopyBits ( &aPosAry, 0, pOutDev, pOutDev );
 
 #ifndef _USE_PRINT_EXTENSION_
     }
@@ -797,7 +797,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransBitmap, const OutputDevice* )
+                                    const SalBitmap& rTransBitmap, const OutputDevice *pOutDev )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -887,7 +887,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
             XFlush( pXDisp );
         }
         else
-            DrawBitmap( pPosAry, rSalBitmap );
+            DrawBitmap( pPosAry, rSalBitmap, pOutDev );
 
         if( aFG )
             XFreePixmap( pXDisp, aFG );
@@ -922,7 +922,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitmap,
-                                  SalColor nMaskColor, const OutputDevice* )
+                                  SalColor nMaskColor, const OutputDevice *pOutDev )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -972,7 +972,7 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitm
             XFlush( pXDisp );
         }
         else
-            DrawBitmap( pPosAry, rSalBitmap );
+            DrawBitmap( pPosAry, rSalBitmap, pOutDev );
 
 #ifndef _USE_PRINT_EXTENSION_
     }
