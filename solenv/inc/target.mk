@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-24 14:08:35 $
+#   last change: $Author: hjs $ $Date: 2001-09-26 12:24:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,8 +147,8 @@ DEPFILESx+=$(uniq $(DEPFILES_TEST))
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
 DEPFILESx+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(OBJFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SLOFILES:s/.obj/.dpcc/))
-DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
 .ENDIF			# "$(L10N_framework)"==""
+DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
 .IF "$(RCFILES)"!=""
 .IF "$(RESNAME)"!=""
 #RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
