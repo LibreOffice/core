@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:48:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,7 +803,7 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
 
             if( pAppletImpl )
             {
-                if( pAppletImpl->GetApplet() )
+                if( pAppletImpl->GetApplet().is() )
                     EndApplet();
                 else
                     EndObject();
