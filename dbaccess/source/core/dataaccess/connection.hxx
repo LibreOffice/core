@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 13:15:06 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ protected:
         ::osl::Mutex        m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                             m_xMasterConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
+                            m_xMasterTables; // just to avoid the recreation of the catalog
     OWeakRefArray           m_aStatements;
 
 

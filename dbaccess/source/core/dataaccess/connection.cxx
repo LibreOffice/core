@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:01:11 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,7 @@ void OConnectionRerouter::disposing()
             xComp->dispose();
     }
     m_aStatements.clear();
+    m_xMasterTables = NULL;
 }
 
 //==========================================================================
@@ -430,7 +431,8 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
             Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
             Reference< XViewsSupplier > xMaster;
             if(xSupp.is())
-                xMaster = Reference< XViewsSupplier >(xSupp->getDataDefinitionByConnection(m_xMasterConnection),UNO_QUERY);
+                m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+            xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
 
             if (xMaster.is() && xMaster->getViews().is())
                 m_bSupportsViews = sal_True;
@@ -647,18 +649,20 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
     if (!m_pTables->isInitialized())
     {
         // check if out "master connection" can supply tables
-        Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-        Reference< XDriver > xDriver = xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL());
-        OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
-        Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
-        Reference< XTablesSupplier > xMasterTables;
-        if(xSupp.is())
-            xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+        if(!m_xMasterTables.is())
+        {
+            Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+            Reference< XDriver > xDriver = xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL());
+            OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
+            Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
+            if(xSupp.is())
+                m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+        }
 
 
-        if (xMasterTables.is() && xMasterTables->getTables().is())
+        if (m_xMasterTables.is() && m_xMasterTables->getTables().is())
         {   // yes -> wrap them
-            m_pTables->construct(xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
+            m_pTables->construct(m_xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
         }
         else
         {   // no -> use an own container
@@ -677,11 +681,16 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
     if (!m_pViews->isInitialized())
     {
         // check if out "master connection" can supply tables
-        Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-        Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
-        Reference< XViewsSupplier > xMaster;
-        if(xSupp.is())
-            xMaster = Reference< XViewsSupplier >(xSupp->getDataDefinitionByConnection(m_xMasterConnection),UNO_QUERY);
+        Reference< XViewsSupplier > xMaster(m_xMasterTables,UNO_QUERY);
+        if(!m_xMasterTables.is())
+        {
+            Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+            Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
+
+            if(xSupp.is())
+                m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+            xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
+        }
 
         if (xMaster.is() && xMaster->getViews().is())
         {   // yes -> wrap them
