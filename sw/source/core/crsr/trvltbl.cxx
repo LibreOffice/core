@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:47:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,9 +617,13 @@ FASTBOOL SwCrsrShell::IsTblComplex() const
 }
 
 
-FASTBOOL SwCrsrShell::IsTblComplexForChart() const
+FASTBOOL SwCrsrShell::IsTblComplexForChart()
 {
     FASTBOOL bRet = FALSE;
+
+    StartAction();  // IsTblComplexForChart() may trigger table formatting
+                    // we better do that inside an action
+
     const SwTableNode* pTNd = pCurCrsr->GetPoint()->nNode.GetNode().FindTableNode();
     if( pTNd )
     {
@@ -630,6 +634,9 @@ FASTBOOL SwCrsrShell::IsTblComplexForChart() const
             sSel = GetBoxNms();
         bRet = pTNd->GetTable().IsTblComplexForChart( sSel );
     }
+
+    EndAction();
+
     return bRet;
 }
 
