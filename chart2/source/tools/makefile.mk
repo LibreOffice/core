@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: bm $ $Date: 2003-12-09 16:31:19 $
+#   last change: $Author: bm $ $Date: 2003-12-11 09:37:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,35 +81,39 @@ ENABLE_EXCEPTIONS=	TRUE
 
 #Specifies object files to bind into linked libraries.
 SLOFILES=	\
-                $(SLO)$/LifeTime.obj \
-                $(SLO)$/MediaDescriptorHelper.obj \
-                $(SLO)$/CommonConverters.obj \
-                $(SLO)$/ContextHelper.obj \
-                $(SLO)$/DataSeriesTreeHelper.obj \
-                $(SLO)$/DiagramHelper.obj \
-                $(SLO)$/ExponentialRegressionCurve.obj \
-                $(SLO)$/ImplOPropertySet.obj \
-                $(SLO)$/LayoutHelper.obj \
-                $(SLO)$/LinearRegressionCurve.obj \
-                $(SLO)$/LogarithmicRegressionCurve.obj \
-                $(SLO)$/MeanValueRegressionCurve.obj \
-                $(SLO)$/OChartElementContainerHelper.obj \
-                $(SLO)$/OEnumeration.obj \
-                $(SLO)$/OIndexContainer.obj \
-                $(SLO)$/OPropertySet.obj \
-                $(SLO)$/OStyle.obj \
-                $(SLO)$/PotentialRegressionCurve.obj \
-                $(SLO)$/RegressionCurveHelper.obj \
-                $(SLO)$/Rotation.obj \
-                $(SLO)$/RelativeSizeHelper.obj \
-                $(SLO)$/Scaling.obj \
-                $(SLO)$/ChartModelHelper.obj \
-                $(SLO)$/ChartTypeHelper.obj \
-                $(SLO)$/MeterHelper.obj \
-                $(SLO)$/MutexContainer.obj \
-                $(SLO)$/PropertyHelper.obj \
-                $(SLO)$/TitleHelper.obj \
-                $(SLO)$/LegendHelper.obj
+    $(SLO)$/LifeTime.obj \
+    $(SLO)$/MediaDescriptorHelper.obj \
+    $(SLO)$/CommonConverters.obj \
+    $(SLO)$/ContextHelper.obj \
+    $(SLO)$/DataSeriesTreeHelper.obj \
+    $(SLO)$/DiagramHelper.obj \
+    $(SLO)$/ExponentialRegressionCurve.obj \
+    $(SLO)$/ImplOPropertySet.obj \
+    $(SLO)$/LayoutHelper.obj \
+    $(SLO)$/LinearRegressionCurve.obj \
+    $(SLO)$/LogarithmicRegressionCurve.obj \
+    $(SLO)$/MeanValueRegressionCurve.obj \
+    $(SLO)$/OChartElementContainerHelper.obj \
+    $(SLO)$/OEnumeration.obj \
+    $(SLO)$/OIndexContainer.obj \
+    $(SLO)$/OPropertySet.obj \
+    $(SLO)$/OStyle.obj \
+    $(SLO)$/PotentialRegressionCurve.obj \
+    $(SLO)$/RegressionCurveHelper.obj \
+    $(SLO)$/Rotation.obj \
+    $(SLO)$/RelativeSizeHelper.obj \
+    $(SLO)$/Scaling.obj \
+    $(SLO)$/ChartModelHelper.obj \
+    $(SLO)$/ChartTypeHelper.obj \
+    $(SLO)$/MeterHelper.obj \
+    $(SLO)$/MutexContainer.obj \
+    $(SLO)$/PropertyHelper.obj \
+    $(SLO)$/TitleHelper.obj \
+    $(SLO)$/LegendHelper.obj \
+    $(SLO)$/CharacterProperties.obj \
+    $(SLO)$/LineProperties.obj \
+    $(SLO)$/FillProperties.obj \
+    $(SLO)$/UserDefinedProperties.obj
 
 LIB1OBJFILES = $(SLOFILES)
 

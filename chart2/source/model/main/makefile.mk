@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: bm $ $Date: 2003-11-21 16:58:33 $
+#   last change: $Author: bm $ $Date: 2003-12-11 09:36:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ SLOFILES=	\
     $(SLO)$/DataSeriesProperties.obj \
     $(SLO)$/FileDataProvider.obj \
     $(SLO)$/FileDataSource.obj \
-    $(SLO)$/FillProperties.obj \
     $(SLO)$/FormattedString.obj \
     $(SLO)$/Grid.obj \
     $(SLO)$/IdentityTransformation.obj \
@@ -99,7 +98,6 @@ SLOFILES=	\
     $(SLO)$/Increment.obj \
     $(SLO)$/LayoutContainer.obj \
     $(SLO)$/Legend.obj \
-    $(SLO)$/LineProperties.obj \
     $(SLO)$/PageBackground.obj \
     $(SLO)$/PolarCoordinateSystem.obj \
     $(SLO)$/PolarTransformation.obj \
@@ -108,10 +106,8 @@ SLOFILES=	\
     $(SLO)$/StyleFamily.obj \
     $(SLO)$/SubGrid.obj \
     $(SLO)$/Title.obj \
-    $(SLO)$/UserDefinedProperties.obj \
     $(SLO)$/XYDataInterpreter.obj \
     $(SLO)$/Wall.obj \
-    $(SLO)$/CharacterProperties.obj \
     $(SLO)$/_serviceregistration_model.obj
 
 # --- Targets -----------------------------------------------------------------
