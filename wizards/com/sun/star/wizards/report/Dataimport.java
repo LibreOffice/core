@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Dataimport.java,v $
 *
-*  $Revision: 1.27 $
+*  $Revision: 1.28 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:46:48 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:20:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -135,8 +135,8 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
             xMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
             if (xMSF != null)
                 System.out.println("Connected to " + ConnectStr);
-            Dataimport CurDataimport = new Dataimport(xMSF);
-            CurDataimport.createReport(xMSF);
+//          Dataimport CurDataimport = new Dataimport(xMSF);
+//          CurDataimport.createReport(xMSF);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } catch (java.lang.Exception javaexception) {
@@ -190,6 +190,21 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
             {
                 dialog = x;
             }*/
+
+        // TODO: the dialog has to be in a thread again, but before the deadlock has to be fixed which otherwise appears
+        try {
+            if (reconnectToDatabase(xMSF)) {
+                modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
+                modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
+                insertDatabaseDatatoReportDocument(xMSF);
+            }
+            xComponent.dispose();
+            CurReportDocument.CurDBMetaData.disposeDBMetaData();
+        } catch (ThreadDeath td) {
+            System.out.println("could not stop thread");
+            xComponent.dispose();
+        }
+/*
         Thread ProgressThread = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -208,17 +223,13 @@ public class Dataimport extends UnoDialog2 { // extends ReportWizard
         });
 
         ProgressThread.start();
-        //        try {
-        //      ProgressThread.join();
-        //       }
-        //  catch(InterruptedException e){
-        //      System.out.println("could not join Threads");
-        //  }
+        */
     }
 
-    public void createReport(final XMultiServiceFactory xMSF) {
+
+    public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument) {
         try {
-            CurReportDocument = new ReportDocument(xMSF, false, true, oResource);
+            CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
             int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
             showProgressDisplay(xMSF, true);
             importReportData(xMSF, this, CurReportDocument);
