@@ -5,9 +5,9 @@
 '*
 '*  $RCSfile: sheet_XCellSeries.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-02-27 16:10:09 $ 
+'*  last change:$Date: 2003-08-07 15:05:25 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -90,7 +90,7 @@ On Error Goto ErrHndl
     Dim shouldValue as Integer
     Dim filledValue as Integer
     Dim endCell(2) as Integer
-    Dim n as Integer
+    Dim n as Integer, m as Integer
     
 	startValue = 5
     nStep = 2
@@ -104,16 +104,21 @@ On Error Goto ErrHndl
             endCell(n) = aCellSeries(n)
         end if
     next n
-    
+    'make clean cells
+    for n = 0 to endCell(0)
+        for m = 0 to endCell(1)
+            oObj.getCellByPosition(n,m).setString("")
+        next
+    next
     'set defined start value
     oObj.getCellByPosition(0,0).setValue(startValue)
-
     Test.StartMethod("fillAuto()")
     bOK = TRUE
     oObj.fillAuto(com.sun.star.sheet.FillDirection.TO_BOTTOM, nStep)
     shouldValue = endCell(0) / nStep + startValue
     filledValue = oObj.getCellByPosition(0,endCell(0)).getValue()
  	bOK = bOK AND ( shouldValue = filledValue ) 
+    out.log("" + shouldValue + ":" + filledValue)
     Test.MethodTested("fillAuto()", bOK)
 
 
