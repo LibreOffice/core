@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 17:57:52 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:37:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=svgfilter
 TARGET=svgfilter
 
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 
@@ -110,29 +109,26 @@ SLOFILES=	$(SLO)$/svguno.obj			\
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
-    $(SVTOOLLIB) \
-    $(CPPULIB)			\
-    $(CPPUHELPERLIB)	\
-    $(COMPHELPERLIB)	\
-    $(VOSLIB)			\
-    $(SALLIB)			\
-    $(TOOLSLIB)			\
-    $(VCLLIB)			\
-    $(GOODIESLIB)		\
-    $(UNOTOOLSLIB)		\
-    $(ONELIB)			\
-    $(SJLIB)			\
     $(SVXLIB)			\
-    $(XMLOFFLIB)		
+    $(XMLOFFLIB)		\
+    $(GOODIESLIB)		\
+    $(SJLIB)			\
+    $(VCLLIB)			\
+    $(UNOTOOLSLIB)		\
+    $(TOOLSLIB)			\
+    $(COMPHELPERLIB)	\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
 
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
+SHL1VERSIONMAP=exports.map
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
 
 # --- Targets ----------------------------------
 
