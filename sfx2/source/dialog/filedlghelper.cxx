@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:50:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1789,7 +1789,7 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter, *this, rFactory );
 
     // set our initial selected filter (if we do not already have one)
-    if ( maSelectFilter.getLength() )
+    if ( !maSelectFilter.getLength() )
         maSelectFilter = sFirstFilter;
 }
 
