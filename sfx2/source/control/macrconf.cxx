@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:49:06 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ String SfxMacroInfo::GetFullQualifiedName() const
     return aRet;
 }
 
-String SfxMacroInfo::GetURL()
+String SfxMacroInfo::GetURL() const
 {
     // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
     // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
@@ -650,19 +650,6 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
                         aIdArray.Remove(n);
                         break;
                     }
-                }
-
-                // Falls ein Image belegt wwurde, kann das jetzt wieder frei
-                // gegeben werden (wenn nicht aus dtor gerufen, da ist der
-                // ImageManager schon weg)
-                DBG_ERROR("Image removal incomplete!");
-//!MBA          ToDo!
-                SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                if ( pViewFrame )
-                {
-                    SfxImageManager* pImgMgr = pViewFrame->GetBindings().GetImageManager();
-                    if ( pImgMgr )
-                        pImgMgr->ReplaceImage(nId, 0);
                 }
 
                 // Sofern nicht die Applikation heruntergefahren wird, mu\s
