@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: ab $ $Date: 2000-12-02 16:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     // So wird natuerlich auch das erste Dir genommen, wenn der BasicManager
     // vorher im zweiten gefunden wurde...
     String aBasicPath( SvtPathOptions().GetBasicPath() );
-    INetURLObject aAppBasicObj( aBasicPath.GetToken(0) );
+    INetURLObject aAppBasicObj( aBasicPath.GetToken(1) );
     aAppBasicObj.insertName( Application::GetAppName() );
     aAppBasicObj.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
     String aAppBasicPath( aAppBasicObj.PathToFileName() );
@@ -627,7 +627,7 @@ BasicManager* SfxApplication::GetBasicManager()
             aPathCFG.SetBasicPath( String::CreateFromAscii("$(prog)") );
 
         // #58293# soffice.new nur im ::com::sun::star::sdbcx::User-Dir suchen => erstes Verzeichnis
-        String aAppFirstBasicDir = aAppBasicDir.GetToken(0);
+        String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
         sal_Bool bBasicUpdated = sal_False;
 
         // Basic erzeugen und laden
@@ -636,20 +636,28 @@ BasicManager* SfxApplication::GetBasicManager()
         aAppBasic.insertName( Application::GetAppName() );
         aAppBasic.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
         String aAppBasicFile, aNewBasicFile;
+
         // Direkt nach der Installation gibt es ggf. _nur_ eine SOFFICE.NEW
-        if ( !SfxContentHelper::Find( aAppBasicDir, aAppBasic.getName(), aAppBasicFile ) )
+        aAppBasicFile = aAppBasic.getName();
+        if ( !aPathCFG.SearchFile( aAppBasicFile, SvtPathOptions::PATH_BASIC ) )
         {
             INetURLObject aNewBasic = aAppBasic;
             aNewBasic.setExtension( DEFINE_CONST_UNICODE( "new" ) );
-            if ( SfxContentHelper::Find( aAppFirstBasicDir, aNewBasic.getName(), aNewBasicFile ) )
+
+            aNewBasicFile = aNewBasic.getName();
+            if( aPathCFG.SearchFile( aNewBasicFile, SvtPathOptions::PATH_BASIC ) )
             {
                 aAppBasic = INetURLObject( aNewBasicFile );
                 aAppBasic.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
                 SfxContentHelper::MoveTo( aNewBasicFile, aAppBasic.GetMainURL() );
+                bBasicUpdated = sal_True;
             }
         }
         else
+        {
             aAppBasic = INetURLObject( aAppBasicFile );
+        }
+
         SvStorageRef aStor = new SvStorage( aAppBasic.GetMainURL(), STREAM_READ | STREAM_SHARE_DENYWRITE );
         if ( aStor.Is() && 0 == aStor->GetError() )
         {
@@ -662,7 +670,9 @@ BasicManager* SfxApplication::GetBasicManager()
             // ggf. nach einem Channel-Update den BasicManager aktualisieren
             INetURLObject aNewBasic = aAppBasic;
             aNewBasic.setExtension( DEFINE_CONST_UNICODE( "new" ) );
-            if ( SfxContentHelper::Find( aAppFirstBasicDir, aNewBasic.getName(), aNewBasicFile ) )
+
+            aNewBasicFile = aNewBasic.getName();
+            if( aPathCFG.SearchFile( aNewBasicFile, SvtPathOptions::PATH_BASIC ) )
             {
                 aNewBasic = INetURLObject( aNewBasicFile );
                 SvStorageRef xTmpStor = new SvStorage( aNewBasic.PathToFileName(), STREAM_READ | STREAM_SHARE_DENYWRITE );
@@ -697,7 +707,7 @@ BasicManager* SfxApplication::GetBasicManager()
 
             // Als Destination das erste Dir im Pfad:
             String aFileName( aAppBasic.getName() );
-            aAppBasic = INetURLObject( aAppBasicDir.GetToken(0) );
+            aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
             DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
             aAppBasic.insertName( aFileName );
             pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
