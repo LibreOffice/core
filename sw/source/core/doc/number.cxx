@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:09 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,8 +428,10 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     if( !nRefCount++ )          // zum erstmal, also initialisiern
     {
         SwNumFmt* pFmt;
+        int n;
+
         // Nummerierung:
-        for( int n = 0; n < MAXLEVEL; ++n )
+        for( n = 0; n < MAXLEVEL; ++n )
         {
             pFmt = new SwNumFmt;
             pFmt->SetIncludeUpperLevels( 1 );
@@ -485,7 +487,9 @@ SwNumRule::~SwNumRule()
     {
             // Nummerierung:
             SwNumFmt** ppFmts = (SwNumFmt**)SwNumRule::aBaseFmts;
-            for( int n = 0; n < MAXLEVEL; ++n, ++ppFmts )
+            int n;
+
+            for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
             // Gliederung:
