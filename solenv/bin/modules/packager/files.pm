@@ -2,9 +2,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:21:19 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:41:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,115 @@ sub save_file
     print OUT @{$savecontent};
     close( OUT);
     if (! -f $savefile) { packager::exiter::exit_program("ERROR: Cannot write file: $savefile", "save_file"); }
+}
+
+######################################################
+# Creating a new direcotory
+######################################################
+
+sub create_directory
+{
+    my ($directory) = @_;
+
+    my $returnvalue = 1;
+
+    if (!(-d $directory))
+    {
+        $returnvalue = mkdir($directory, 0775);
+
+        if ($returnvalue)
+        {
+            $infoline = "\nCreated directory: $directory\n";
+            push(@packager::globals::logfileinfo, $infoline);
+
+            if ($packager::globals::isunix)
+            {
+                my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+                system($localcall);
+            }
+        }
+        else
+        {
+            packager::exiter::exit_program("ERROR: Could not create directory: $directory", "create_directory");
+        }
+    }
+}
+
+######################################################
+# Creating a unique directory with number extension
+######################################################
+
+sub create_unique_directory
+{
+    my ($directory) = @_;
+
+    $directory =~ s/\Q$packager::globals::separator\E\s*$//;
+    $directory = $directory . "_INCREASINGNUMBER";
+
+    my $counter = 1;
+    my $created = 0;
+    my $localdirectory = "";
+
+    do
+    {
+        $localdirectory = $directory;
+        $localdirectory =~ s/INCREASINGNUMBER/$counter/;
+        $counter++;
+
+        if ( ! -d $localdirectory )
+        {
+            create_directory($localdirectory);
+            $created = 1;
+        }
+    }
+    while ( ! $created );
+
+    return $localdirectory;
+}
+
+######################################################
+# Removing a complete directory with subdirectories
+######################################################
+
+sub remove_complete_directory
+{
+    my ($directory) = @_;
+
+    my @content = ();
+
+    $directory =~ s/\Q$packager::globals::separator\E\s*$//;
+
+    if ( -d $directory )
+    {
+        opendir(DIR, $directory);
+        @content = readdir(DIR);
+        closedir(DIR);
+
+        my $oneitem;
+
+        foreach $oneitem (@content)
+        {
+            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
+            {
+                my $item = $directory . $packager::globals::separator . $oneitem;
+
+                if ( -f $item )     # deleting files
+                {
+                    unlink($item);
+                }
+
+                if ( -d $item )     # recursive
+                {
+                    remove_complete_directory($item, 0);
+                }
+            }
+        }
+
+        # try to remove empty directory
+
+        rmdir $directory;
+
+    }
 }
 
 1;
