@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:05:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ public:
 
     // --- public Methoden ------------------------------------------------
 
-    SwRTFWriter( const String& rFilterName );
+    SwRTFWriter( const String& rFilterName, const String& rBaseURL );
     virtual ~SwRTFWriter();
     virtual ULONG WriteStream();
 
