@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:14:19 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 15:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,7 @@ public:
 
     String          GetEntryText(ToxAuthorityField eField) const;
 
-    void            SetCheckNameHdl(Link& rLink) {aShortNameCheckLink = rLink;}
+    void            SetCheckNameHdl(const Link& rLink) {aShortNameCheckLink = rLink;}
 
 };
 /*-- 15.09.99 08:43:24---------------------------------------------------
