@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-19 07:09:27 $
+ *  last change: $Author: dr $ $Date: 2002-08-09 12:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@
 #endif
 
 #include "xcl97rec.hxx"
-
 
 
 
@@ -2216,17 +2215,23 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
     ScDocument&         rDoc = *rRootData.pDoc;
     XclExpTabNumBuffer& rTabBuffer = *rRootData.pTabBuffer;
     USHORT              nCount, nIndex;
-    UINT16              nScTab, nExpIx;
+    UINT16              nScTab, nTab, nExpIx;
 
-    // print ranges and print titles
+    // print ranges and print titles, insert in table name sort order
     UINT16 nScTabCount = rTabBuffer.GetScTabCount();
-    for( nScTab = 0; nScTab < nScTabCount; nScTab++ )
+    for( nTab = 0; nTab < nScTabCount; ++nTab )
+    {
+        nScTab = rTabBuffer.GetRealSheetIndex( nTab ); // sorted -> real
         if( rTabBuffer.IsExportTable( nScTab ) )
             Append( new XclPrintRange( rRootData, nScTab ) );
+    }
     nFirstPrintTitleIx = List::Count();
-    for( nScTab = 0; nScTab < nScTabCount; nScTab++ )
+    for( nTab = 0; nTab < nScTabCount; ++nTab )
+    {
+        nScTab = rTabBuffer.GetRealSheetIndex( nTab ); // sorted -> real
         if( rTabBuffer.IsExportTable( nScTab ) )
             Append( new XclPrintTitles( rRootData, nScTab ) );
+    }
     nFirstOtherNameIx = List::Count();
 
     // named ranges
@@ -2265,6 +2270,8 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
         nExpIx = Append( pExcName );
         pData->SetExportIndex( nExpIx );
     }
+
+    maNextInsVec.resize( nScTabCount, Count() );
 }
 
 
@@ -2287,6 +2294,15 @@ UINT16 ExcNameList::Append( ExcNameListEntry* pName )
     return bDelete ? 0xFFFF : (UINT16) List::Count();
 }
 
+
+void ExcNameList::InsertSorted( RootData& rRootData, ExcNameListEntry* pName, sal_uInt16 nScTab )
+{
+    // real -> sorted
+    sal_uInt32 nSortIx = rRootData.pTabBuffer->GetSortedSheetIndex( nScTab );
+    List::Insert( pName, maNextInsVec[ nSortIx ] );
+    for( sal_uInt32 nCount = maNextInsVec.size(); nSortIx < nCount; ++nSortIx )
+        ++maNextInsVec[ nSortIx ];
+}
 
 UINT16 ExcNameList::GetBuiltInIx( const ExcNameListEntry* pName )
 {
@@ -4463,15 +4479,15 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
                         aParam.nCol2, aParam.nRow2, aParam.nTab );
         UINT16  nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
 
-        rRoot.pNameList->Append( new ExcName( rRoot, aRange, EXC_BUILTIN_AUTOFILTER, TRUE ) );
+        rRoot.pNameList->InsertSorted( rRoot, new ExcName( rRoot, aRange, EXC_BUILTIN_AUTOFILTER, TRUE ), nTab );
 
         // advanced filter
         if( bAdvanced )
         {
             // filter criteria, excel allows only same table
             if( aAdvRange.aStart.Tab() == nTab )
-                rRoot.pNameList->Append(
-                    new ExcName( rRoot, aAdvRange, EXC_BUILTIN_CRITERIA ) );
+                rRoot.pNameList->InsertSorted( rRoot,
+                    new ExcName( rRoot, aAdvRange, EXC_BUILTIN_CRITERIA ), nTab );
 
             // filter destination range, excel allows only same table
             if( !aParam.bInplace )
@@ -4479,8 +4495,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
                 ScRange aDestRange( aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
                 aDestRange.aEnd.IncCol( nColCnt - 1 );
                 if( aDestRange.aStart.Tab() == nTab )
-                    rRoot.pNameList->Append(
-                        new ExcName( rRoot, aDestRange, EXC_BUILTIN_EXTRACT ) );
+                    rRoot.pNameList->InsertSorted( rRoot,
+                        new ExcName( rRoot, aDestRange, EXC_BUILTIN_EXTRACT ), nTab );
             }
 
             pFilterMode = new ExcFilterMode;

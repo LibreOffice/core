@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-18 10:00:59 $
+ *  last change: $Author: dr $ $Date: 2002-08-09 12:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ void ExcTable::AddWebQueries()
                         {
                             ExcName* pExcName = new ExcName( *pExcRoot, aScDestRange, aURLObj.getBase() );
                             aRangeName = pExcName->GetName();
-                            pExcRoot->pNameList->Append( pExcName );
+                            pExcRoot->pNameList->InsertSorted( *pExcRoot, pExcName, nScTab );
                         }
 
                         // create the web query record
