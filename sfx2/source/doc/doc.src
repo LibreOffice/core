@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-30 15:40:26 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 07:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2397,6 +2397,27 @@ String FT_OK
     Text[ arabic ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
     Text[ catalan ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
     Text[ thai ] = "Do you want to allow these macros to be run?";
+};
+
+String STR_EXPORTASPDF_TITLE
+{
+    Text = "Exportieren als PDF";
+    Text [english] = "Export as PDF";
+    Text [english_us] = "Export as PDF";
+};
+
+String STR_EXPORTWITHCFGBUTTON
+{
+    Text = "Exportieren..." ;
+    Text [english] = "Export..." ;
+    Text [english_us] = "Export...";
+};
+
+String STR_EXPORTBUTTON
+{
+    Text = "Exportieren" ;
+    Text [english] = "Export" ;
+    Text [english_us] = "Export" ;
 };
 
 // ******************************************************************* EOF
