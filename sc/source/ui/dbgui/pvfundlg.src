@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:25:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "~Nessuna" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei ole" ;
+        Text [ finnish ] = "~Ei mitään" ;
         Text [ danish ] = "Ingen" ;
         Text [ french ] = "~Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
@@ -146,7 +146,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "Definito dall'utente" ;
         Text [ portuguese_brazilian ] = "~Definido pelo usuário" ;
         Text [ portuguese ] = "Definido pelo ~utilizador" ;
-        Text [ finnish ] = "~Käyttäjän" ;
+        Text [ finnish ] = "~Käyttäjän määrittämät" ;
         Text [ danish ] = "Brugerdefineret" ;
         Text [ french ] = "Défini par l'~utilisateur" ;
         Text [ swedish ] = "~Användardefinierade" ;
@@ -262,17 +262,17 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         };
         StringList [ finnish ] =
         {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+            < "Summa" ; Default ; > ;
+            < "Laske" ; Default ; > ;
+            < "Keskiarvo" ; Default ; > ;
+            < "Enint" ; Default ; > ;
+            < "Väh" ; Default ; > ;
+            < "Tuote" ; Default ; > ;
+            < "Määrä (vain numerot)" ; Default ; > ;
+            < "StDev (otos)" ; Default ; > ;
+            < "StDevP (populaatio)" ; Default ; > ;
+            < "Var (otos)" ; Default ; > ;
+            < "VarP (Populaatio)" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -546,6 +546,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ turkish ] = "~Ögeleri veriler olmadan görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar elementos sin datos";
+        Text[ finnish ] = "Näytä ~elementit ilman tietoja";
     };
     FixedText FT_NAMELABEL
     {
@@ -635,7 +636,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "Funzione" ;
         Text [ portuguese_brazilian ] = "Função" ;
         Text [ portuguese ] = "Função" ;
-        Text [ finnish ] = "Funktio" ;
+        Text [ finnish ] = "Toiminto" ;
         Text [ danish ] = "Funktion" ;
         Text [ french ] = "Fonction" ;
         Text [ swedish ] = "Funktion" ;
@@ -670,4 +671,5 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ turkish ] = "Veri alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de datos";
+    Text[ finnish ] = "Tietokenttä";
 };
