@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-05 14:39:16 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,8 +682,12 @@ BOOL SdrDragView::BegInsObjPoint(BOOL bIdxZwang, USHORT nIdx, const Point& rPnt,
             FASTBOOL bTmpInsAfter = IsInsertAfter();
             nInsPointNum=pMarkedObj->NbcInsPoint(aPt,bNewObj,TRUE,bTmpInsAfter);
         }
-        if (bClosed0!=pMarkedObj->IsClosedObj()) { // Obj wurde implizit geschlossen
-            pMarkedObj->SendRepaintBroadcast();
+        if (bClosed0!=pMarkedObj->IsClosedObj())
+        {
+            // Obj was closed implicit
+            // object changed
+            pMarkedObj->SetChanged();
+            pMarkedObj->BroadcastObjectChange();
         }
         if (nInsPointNum!=0xFFFF) {
             BOOL bVis=IsMarkHdlShown();
