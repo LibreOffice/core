@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-14 11:00:05 $
+ *  last change: $Author: jl $ $Date: 2004-05-14 12:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,8 +372,11 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
      }
 
 #ifdef UNX
+    //Setting the JAVA_HOME is needed for awt
     rtl::OUString javaHome(RTL_CONSTASCII_USTRINGPARAM("JAVA_HOME="));
-    javaHome += pInfo->sLocation;
+    rtl::OUString sPathLocation;
+    osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
+    javaHome += sPathLocation;
     rtl::OString osJavaHome = rtl::OUStringToOString(
         javaHome, osl_getThreadTextEncoding());
     putenv(strdup(osJavaHome.getStr()));
