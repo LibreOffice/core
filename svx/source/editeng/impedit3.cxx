@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-13 12:56:11 $
+ *  last change: $Author: mt $ $Date: 2001-01-29 16:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,6 @@ void ImpEditEngine::FormatDoc()
     Font aOldFont( GetRefDevice()->GetFont() );
 
     // Hier schon, damit nicht jedesmal in CreateLines...
-    MapMode aOldMapMode( GetRefDevice()->GetMapMode() );
     sal_Bool bMapChanged = ImpCheckRefMapMode();
 
     aInvalidRec = Rectangle();  // leermachen
@@ -448,7 +447,7 @@ void ImpEditEngine::FormatDoc()
     bFormatted = sal_True;
 
     if ( bMapChanged )
-        GetRefDevice()->SetMapMode( aOldMapMode );
+        GetRefDevice()->Pop();
 
     CallStatusHdl();    // Falls Modified...
 }
@@ -470,6 +469,7 @@ sal_Bool ImpEditEngine::ImpCheckRefMapMode()
             Fraction Scale1( 1, 1 );
             aMapMode.SetScaleX( Scale1 );
             aMapMode.SetScaleY( Scale1 );
+            GetRefDevice()->Push();
             GetRefDevice()->SetMapMode( aMapMode );
         }
     }
@@ -564,7 +564,6 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     // ---------------------------------------------------------------
 
     // Immer fuer 100% formatieren:
-    MapMode aOldMapMode( GetRefDevice()->GetMapMode() );
     sal_Bool bMapChanged = ImpCheckRefMapMode();
 
     if ( pParaPortion->GetLines().Count() == 0 )
@@ -1343,7 +1342,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     sal_Bool bHeightChanged = FinishCreateLines( pParaPortion );
 
     if ( bMapChanged )
-        GetRefDevice()->SetMapMode( aOldMapMode );
+        GetRefDevice()->Pop();
 
     return bHeightChanged;
 }
