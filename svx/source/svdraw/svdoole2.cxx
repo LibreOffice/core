@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
+ *  last change: $Author: dl $ $Date: 2001-03-12 14:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,8 +589,7 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
         OutputDevice* pOutDev=rOut.GetOutDev();
         if( IsEmptyPresObj() )
         {
-            Size aSizePix(pOutDev->LogicToPixel(pGraphic->GetPrefSize(),pGraphic->GetPrefMapMode()));
-            Size aSize(pOutDev->PixelToLogic(aSizePix));
+            Size aSize( pOutDev->PixelToLogic( pGraphic->GetPrefSize() ) );
             Point aPos(aRect.Center());
             aPos.X()-=aSize.Width() /2;
             aPos.Y()-=aSize.Height()/2;
