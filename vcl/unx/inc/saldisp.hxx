@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:24:12 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,15 +63,10 @@
 #define _SV_SALDISP_HXX
 
 // -=-= exports =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct  SalAppXResource;
 class   SalDisplay;
 class   SalColormap;
-class   SalColormapRef;
-class   SalTrueColorConverter;
 class   SalVisual;
 class   SalXLib;
-class   SalImageList;
-class   SalBitmapList;
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifndef _SALUNX_H
@@ -86,31 +81,24 @@ class   SalBitmapList;
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-
+#ifndef _OSL_MUTEX_H
+#include <osl/mutex.h>
+#endif
 #include <vector>
+#include <list>
 #ifndef _GEN_HXX
 #include <tools/gen.hxx>
+#endif
+#ifndef _SV_SALWTYPE_HXX
+#include <salwtype.hxx>
 #endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   BitmapPalette;
-class   SalImage;
-class   SalBitmap;
 class   SalFrame;
 class   ColorMask;
-class   SalSystemData;
 
 namespace vcl_sal { class WMAdaptor; }
-
-#ifndef _XSHM_H_
-struct XShmSegmentInfo;
-#endif
-
-// -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-typedef struct _oslMutexImpl *oslThreadMutex;
-
-DECLARE_LIST( SalImageList, SalImage* )
-DECLARE_LIST( SalBitmapList,SalBitmap*)
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PROPERTY_SUPPORT_WM_SetPos              0x00000001
@@ -208,8 +196,8 @@ public:
              BOOL           Convert( int &n0, int &n1, int &n2 ); // 24bit
 };
 
-// -=-= SalColormap/SalColormapRef=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class SalColormap : public SvRefBase
+// -=-= SalColormap =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class SalColormap
 {
     SalDisplay     *pDisplay_;
     Colormap        hColormap_;
@@ -228,7 +216,7 @@ public:
     SalColormap( const BitmapPalette &rpPalette );
     SalColormap( USHORT               nDepth );
     SalColormap();
-    virtual                 ~SalColormap();
+    ~SalColormap();
 
     inline  Colormap        GetXColormap() const { return hColormap_; }
     inline  SalDisplay     *GetDisplay() const { return pDisplay_; }
@@ -253,19 +241,17 @@ public:
     void            SetPalette( const BitmapPalette &rPalette );
 };
 
-SV_DECL_IMPL_REF( SalColormap )
-
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef int(*YieldFunc)(int fd, void* data);
 struct YieldEntry;
 
 class SalXLib
 {
+protected:
     timeval         Timeout_;
     ULONG           nTimeoutMS_;
     int             pTimeoutFDS_[2];
 
-    int             nStateOfYield_;
     BOOL            bWasXError_;
     BOOL            bIgnoreXErrors_;
     int                         nIgnoreErrorLevel;
@@ -277,17 +263,17 @@ class SalXLib
 
 public:
     SalXLib();
-    ~SalXLib();
-    void            Init();
+    virtual         ~SalXLib();
+    virtual void        Init();
 
-    void            Yield( BOOL bWait );
-    void            Wakeup();
+    virtual void        Yield( BOOL bWait );
+    virtual void        Wakeup();
 
-    void            Insert( int fd, void* data,
+    virtual void    Insert( int fd, void* data,
                             YieldFunc   pending,
                             YieldFunc   queued,
                             YieldFunc   handle );
-    void            Remove( int fd );
+    virtual void    Remove( int fd );
 
     void            XError( Display *pDisp, XErrorEvent *pEvent );
     inline  void                    PushErrorTrap() { nIgnoreErrorLevel++; }
@@ -301,13 +287,6 @@ public:
     inline  void            StopTimer();
 
     bool            CheckTimeout( bool bExecuteTimers = true );
-};
-
-// -=-= SalXEvent =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct SalXEvent
-{
-             SalXEvent      *pNext_;                // Stack
-            XEvent          event_;
 };
 
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -330,6 +309,21 @@ extern "C" {
 
 class SalDisplay
 {
+// -=-= UserEvent =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct SalUserEvent
+    {
+        SalFrame*       m_pFrame;
+        void*           m_pData;
+        USHORT          m_nEvent;
+
+        SalUserEvent( SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT )
+                : m_pFrame( pFrame ),
+                  m_pData( pData ),
+                  m_nEvent( nEvent )
+        {}
+    };
+
+protected:
     SalXLib        *pXLib_;
     SalI18N_InputMethod         *mpInputMethod;
     SalI18N_KeyboardExtension   *mpKbdExtension;
@@ -337,9 +331,6 @@ class SalDisplay
     AttributeProvider           *mpFactory;
     XlfdStorage                 *mpFontList;
     const ExtendedXlfd          *mpFallbackFactory;
-
-    SalSystemData  *mpSalSystemData;
-    // the one to get create and destroy notify events
 
     Display        *pDisp_;             // X Display
     Screen         *pScreen_;           // XDefaultScreenOfDisplay
@@ -357,18 +348,13 @@ class SalDisplay
     BOOL            bLocal_;            // Server==Client? Init
     // in SalDisplay::IsLocal()
     BOOL            mbLocalIsValid;     // bLocal_ is valid ?
-    ULONG           nImageDepths_;      // Supported Image Depths
-    ULONG           nSharedImages_;     // Supports MIT-SHM Extension
     // until x bytes
 
-    int             nStateOfYield_;
-    int             nStateOfSendEvent_;
-    oslThreadMutex  hEventGuard_;
-    SalXEvent      *pEventQueue_;       // threaded user event queue
-    SalXEvent      *pDispatchStack_;    // Dispatch/Yield
+    oslMutex        hEventGuard_;
+    std::list< SalUserEvent > m_aUserEvents;
 
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
-    SalFrame       *pCapture_;
+    SalFrame*       m_pCapture;
 
     // GDI
     SalVisual      *pVisual_;           // Visual
@@ -380,11 +366,9 @@ class SalDisplay
     GC              pOrGC_;
     GC              pStippleGC_;
     Pixmap          hInvert50_;
-    SalColormapRef  xColor_;
+    SalColormap    *m_pColormap;
 
     SalFontCache   *pFontCache_;
-
-    int             nBeepVolume_;       // Sound
 
     // Keyboard
     BOOL            bNumLockFromXS_;    // Num Lock handled by X Server
@@ -395,11 +379,7 @@ class SalDisplay
     KeySym          nMod1KeySym_;       // first mod1 modifier
     ByteString      m_aKeyboardName;
 
-    SalBitmapList   Bitmaps_;           // to destroy bitmap resources;
-
-    SalImageList    SharedImages_;
-
-    ::vcl_sal::WMAdaptor*   m_pWMAdaptor;
+    vcl_sal::WMAdaptor* m_pWMAdaptor;
 
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
@@ -410,6 +390,8 @@ class SalDisplay
     void            DestroyFontCache();
     long            Dispatch( XEvent *pEvent );
     void            InitXinerama();
+
+    void            doDestruct();
 public:
     static  SalDisplay     *GetSalDisplay( Display* display );
     static  BOOL            BestVisual( Display     *pDisp,
@@ -417,21 +399,14 @@ public:
                                         XVisualInfo &rVI );
 
                             SalDisplay( Display* pDisp,
-                                        Visual* pVisual = NULL,
-                                        Colormap aColMap = None);
+                                        Colormap aColMap = None );
 
-    ~SalDisplay();
+    virtual ~SalDisplay();
 
-    void            Init( Colormap hXColmap, const XVisualInfo* pXVI );
+    void            Init( Colormap hXColmap, Visual *pVisual );
 
-    BOOL            IsEvent();
-    void            SendEvent( Atom         aEvent,
-                               void        *pData,
-                               XLIB_Window  hReceiver = 0 ) const;
-    void            SendEvent( Atom         aEvent,
-                               UINT32      *pData = 0,
-                               XLIB_Window  hReceiver = 0 ) const;
-    void            Yield( BOOL bWait );
+    void            SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT );
+    bool            DispatchInternalEvent();
     void            PrintInfo() const;
 
     void            PrintEvent( const ByteString &rComment,
@@ -459,15 +434,10 @@ public:
                                XIC = NULL ) const;
 
     XLIB_Cursor     GetPointer( int ePointerStyle );
-    int             CaptureMouse( SalFrame *pCapture );
+    virtual int CaptureMouse( SalFrame *pCapture );
 
     BOOL            IsLocal();
-    inline  void            Insert( SalBitmap *pBitmap );
-    inline  void            Remove( SalBitmap *pBitmap );
 
-    inline  SalImage       *Seek( SalImage *pImage );
-    inline  void            Insert( SalImage *pImage );
-    inline  void            Remove( SalImage *pImage );
     void            Remove( XEvent   *pEvent );
 
     XLIB_Window     GetRootWindow() const { return hRootWindow_; }
@@ -485,7 +455,7 @@ public:
     GC              GetStippleGC() const { return pStippleGC_; }
     GC              GetGC( USHORT nDepth ) const;
     Pixmap          GetInvert50() const { return hInvert50_; }
-    SalColormap    &GetColormap() const { return *xColor_; }
+    SalColormap    &GetColormap() const { return *m_pColormap; }
     SalVisual      *GetVisual() const { return pVisual_; }
     SalVisual      *GetRootVisual() const { return pRootVisual_; }
     const Size     &GetScreenSize() const { return aSize_; }
@@ -493,15 +463,12 @@ public:
     bool            GetExactResolution() const { return mbExactResolution; }
     ULONG           GetProperties() const { return nProperties_; }
     ULONG           GetMaxRequestSize() const { return nMaxRequestSize_; }
-    ULONG           GetImageDepths() const { return nImageDepths_; }
-    ULONG           SupportsShm() const { return nSharedImages_; }
-    void            DisableShm() { nSharedImages_ /= 2; } // = 0
     void            GetScreenFontResolution( long& rDPIX, long& rDPIY ) const;
 
     BOOL            MouseCaptured( const SalFrame *pFrameData ) const
-    { return pCapture_ == pFrameData; }
+    { return m_pCapture == pFrameData; }
     SalFrame*   GetCaptureFrame() const
-    { return pCapture_; }
+    { return m_pCapture; }
     SalXLib*         GetXLib() { return pXLib_; }
 
     SalI18N_InputMethod*            GetInputMethod()  { return mpInputMethod;  }
@@ -517,21 +484,6 @@ public:
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-inline void SalDisplay::Remove( SalBitmap *pBitmap )
-{ Bitmaps_.Remove( pBitmap ); }
-
-inline void SalDisplay::Insert( SalBitmap *pBitmap )
-{ Bitmaps_.Insert( pBitmap ); }
-
-inline SalImage *SalDisplay::Seek( SalImage *pImage )
-{ return SharedImages_.Seek( pImage ); }
-
-inline void SalDisplay::Remove( SalImage *pImage )
-{ SharedImages_.Remove( pImage ); }
-
-inline void SalDisplay::Insert( SalImage *pImage )
-{ SharedImages_.Insert( pImage ); }
 
 inline GC SalDisplay::GetGC( USHORT nDepth ) const
 { return 1 == nDepth
@@ -551,6 +503,17 @@ inline Visual *SalColormap::GetXVisual() const
 
 inline int SalColormap::GetClass() const
 { return pVisual_ ? pVisual_->GetClass() : PseudoColor; }
+
+class SalX11Display : public SalDisplay
+{
+public:
+             SalX11Display( Display* pDisp,
+                         Visual* pVisual = NULL,
+                         Colormap aColMap = None );
+    virtual ~SalX11Display();
+    BOOL     IsEvent();
+    void     Yield( BOOL bWait );
+};
 
 /*----------------------------------------------------------
  keep track of correct size of the initial window
