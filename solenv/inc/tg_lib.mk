@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_lib.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 18:20:32 $
+#   last change: $Author: obo $ $Date: 2004-04-29 16:43:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,16 +143,11 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @+nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
 .ELSE			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="MAC"
-    @+$(RM) $@
-    @+echo $(LIB$(TNR)OBJFILES) | sed s\#$(PRJ:s/./\./)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
-    @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n 1 >> $@
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))
     @+-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB$(TNR)OBJFILES)"!=""    
-    @-+echo $(LIB$(TNR)OBJFILES) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+    @+$(TYPE) $(mktmp $(LIB$(TNR)OBJFILES)) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
 .ENDIF          # "$(LIB$(TNR)OBJFILES)"!=""    
 .IF "$(LIB$(TNR)FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB$(TNR)FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
@@ -163,7 +158,6 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     +echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
     $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
 .ENDIF          # "$(GUI)"=="WNT"
-.ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB$(TNR)TARGET)" != ""
 
