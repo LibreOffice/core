@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 14:47:31 $
+ *  last change: $Author: fs $ $Date: 2001-09-05 06:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 
 FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
 FORWARD_DECLARE_INTERFACE( script, XNameContainer )
@@ -158,6 +161,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire(  ) throw();
         virtual void SAL_CALL release(  ) throw();
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // OPropertySetHelper overridables
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
@@ -236,6 +242,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         // OGeometryControlModel_Base
         virtual OGeometryControlModel_Base* createClone_Impl(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
     };
 
 #include "toolkit/controls/geometrycontrolmodel_impl.hxx"
@@ -249,6 +258,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/03/23 14:47:31  tbe
+ *  removed HelpText property from geometry model
+ *
  *  Revision 1.8  2001/03/22 15:34:01  tbe
  *  added HelpText property
  *

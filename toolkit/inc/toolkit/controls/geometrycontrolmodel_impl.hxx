@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 12:34:13 $
+ *  last change: $Author: fs $ $Date: 2001-09-05 06:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,23 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::
 
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    static ::cppu::OImplementationId * pId = NULL;
+    if ( !pId )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !pId )
+        {
+            static ::cppu::OImplementationId s_aId;
+            pId = &s_aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+//--------------------------------------------------------------------
+template <class CONTROLMODEL>
 OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Impl(
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)
 {
@@ -108,6 +125,9 @@ OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Imp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/02 12:34:13  tbe
+ *  clone geometry control model
+ *
  *  Revision 1.1  2001/01/24 14:57:30  mt
  *  model for dialog controls (weith pos/size)
  *

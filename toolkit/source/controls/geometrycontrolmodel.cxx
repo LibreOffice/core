@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-15 10:38:19 $
+ *  last change: $Author: fs $ $Date: 2001-09-05 06:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,18 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
-#include "toolkit/controls/eventcontainer.hxx"
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_XNAMECONTAINER_HPP_
+#include <toolkit/controls/eventcontainer.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
 
 
 #define GCM_PROPERTY_ID_POS_X       1
@@ -173,6 +182,39 @@
         decrement(m_refCount);
 
         registerProperties();
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< Type > SAL_CALL OGeometryControlModel_Base::getTypes(  ) throw (RuntimeException)
+    {
+        // our own types
+        Sequence< Type > aTypes = ::comphelper::concatSequences(
+            OPropertySetAggregationHelper::getTypes(),
+            OPropertyContainer::getTypes(),
+            OGCM_Base::getTypes()
+        );
+
+        if ( m_xAggregate.is() )
+        {
+            // retrieve the types of the aggregate
+            Reference< XTypeProvider > xAggregateTypeProv;
+            m_xAggregate->queryAggregation( ::getCppuType( &xAggregateTypeProv ) ) >>= xAggregateTypeProv;
+            OSL_ENSURE( xAggregateTypeProv.is(), "OGeometryControlModel_Base::getTypes: aggregate should be a type provider!" );
+            Sequence< Type > aAggTypes;
+            if ( xAggregateTypeProv.is() )
+                aAggTypes = xAggregateTypeProv->getTypes();
+
+            // concat the sequences
+            sal_Int32 nOldSize = aTypes.getLength();
+            aTypes.realloc( nOldSize + aAggTypes.getLength() );
+            ::std::copy(
+                aAggTypes.getConstArray(),
+                aAggTypes.getConstArray() + aAggTypes.getLength(),
+                aTypes.getArray() + nOldSize
+            );
+        }
+
+        return aTypes;
     }
 
     //--------------------------------------------------------------------
@@ -436,6 +478,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/15 10:38:19  ab
+ *  #85996# Clone ScriptEventsSupplier
+ *
  *  Revision 1.11  2001/04/12 11:30:28  tbe
  *  changed tabindex default from 0 to -1
  *
