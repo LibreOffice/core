@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 10:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,6 +1487,14 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             GDIMetaFile*    pOldMetaFile = mpMetaFile; mpMetaFile = NULL;
             const BOOL      bOldMap = mbMap; mbMap = FALSE;
             Bitmap          aBmp( GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
+
+            // #109044# The generated bitmap need not necessarily be
+            // of aDstRect dimensions, it's internally clipped to
+            // window bounds. Thus, we correct the dest size here,
+            // since we later use it (in nDstWidth/Height) for pixel
+            // access)
+            aDstRect.SetSize( aBmp.GetSizePixel() );
+
             BitmapColor     aDstCol;
             const long      nSrcWidth = aBmpRect.GetWidth(), nSrcHeight = aBmpRect.GetHeight();
             const long      nDstWidth = aDstRect.GetWidth(), nDstHeight = aDstRect.GetHeight();
