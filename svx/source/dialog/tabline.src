@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:39:54 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2396,6 +2396,12 @@ TabDialog RID_SVXDLG_LINE
     Text[ hindi ] = "रेखा";
     Text[ slovak ] = "Čiara";
 };
+
+
+
+
+
+
 
 
 
