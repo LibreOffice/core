@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:39:30 $
+ *  last change: $Author: obo $ $Date: 2001-03-02 15:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ namespace {
         return true;
     }
 }
+// temporary helper
+inline static void checkNullable() {}
 
 //==========================================================================
 //= OConfigurationRegistryKey
@@ -1023,7 +1025,10 @@ Sequence< sal_Int32 > SAL_CALL OConfigurationRegistryKey::getLongListValue(  ) t
     Any aValue = implGetValue();
 
     Sequence< sal_Int32 > aReturn;
-    if (!(aValue >>= aReturn))
+    if (!aValue.hasValue())
+        checkNullable();// let NULL values pass
+
+    else if (!(aValue >>= aReturn))
     {
         // TODO : maybe it's a sequence of sal_Int8 or anything like that which we're able to convert ....
 
@@ -1087,7 +1092,10 @@ void SAL_CALL OConfigurationRegistryKey::setAsciiListValue( const Sequence< ::rt
     Any aValue = implGetValue();
 
     OUString sReturn;
-    if (!(aValue >>= sReturn))
+    if (!aValue.hasValue())
+        checkNullable();// let NULL values pass
+
+    else if (!(aValue >>= sReturn))
         throw InvalidValueException(UNISTRING("This node does not contain a string value."), THISREF());
 
     return sReturn;
@@ -1109,7 +1117,10 @@ Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getStringListVal
     Any aValue = implGetValue();
 
     Sequence< OUString > aReturn;
-    if (!(aValue >>= aReturn))
+    if (!aValue.hasValue())
+        checkNullable();// let NULL values pass
+
+    else if (!(aValue >>= aReturn))
         throw InvalidValueException(UNISTRING("This configuration node does not contain a list of strings !"), THISREF());
 
     return aReturn;
@@ -1131,7 +1142,10 @@ Sequence< sal_Int8 > SAL_CALL OConfigurationRegistryKey::getBinaryValue(  ) thro
     Any aValue = implGetValue();
 
     Sequence< sal_Int8 > aReturn;
-    if (!(aValue >>= aReturn))
+    if (!aValue.hasValue())
+        checkNullable();// let NULL values pass
+
+    else if (!(aValue >>= aReturn))
         return aReturn;
 
     throw InvalidValueException(UNISTRING("This configuration node does not contain a list of strings !"), THISREF());
