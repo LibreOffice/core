@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-08 13:45:30 $
+ *  last change: $Author: dr $ $Date: 2002-07-10 13:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;     /// Column is selected.
 
 /** Modifies the specified bits (rMask) in the bitfield rValue. */
 template< typename Type >
-inline set_bits( Type& rValue, const Type& rMask, bool bSet )
+inline void set_bits( Type& rValue, const Type& rMask, bool bSet )
 {
     if( bSet ) rValue |= rMask; else rValue &= ~rMask;
 }
