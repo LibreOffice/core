@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 16:42:16 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 08:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,13 @@ namespace xmloff
             OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
             FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
             &::getCppuType( static_cast<FormSubmitEncoding*>(NULL) ));
+#if SUPD<628
+        // for compatibility:
+        m_aAttributeMetaData.addEnumProperty(
+            "enc-type", PROPERTY_SUBMIT_ENCODING,
+            FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
+            &::getCppuType( static_cast<FormSubmitEncoding*>(NULL) ));
+#endif
         m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
             FormSubmitMethod_GET, OEnumMapper::getEnumMap(OEnumMapper::epSubmitMethod),
@@ -485,6 +492,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/02/28 16:42:16  fs
+ *  State/DefaultState are int16-properties
+ *
  *  Revision 1.8  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *
