@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-02 13:59:08 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ Reference< XInputStream > SAL_CALL TestDataSink::getInputStream()
 StringInputDialog::StringInputDialog( const String& rTitle,
                                       const String& rDefaultText,
                                       String* pGroupName )
-: ModalDialog( GetpApp()->GetDefModalDialogParent(), ResId( DLG_STRINGINPUT ) ),
+: ModalDialog( 0, ResId( DLG_STRINGINPUT ) ),
   m_aNameText ( this, ResId( FT_STRINGINPUT_DLG_NAME ) ),
   m_aNameEdit ( this, ResId( ED_STRINGINPUT_DLG_NAME ) ),
   m_aNameGroup( this, ResId( GB_STRINGINPUT_DLG_NAME ) ),
