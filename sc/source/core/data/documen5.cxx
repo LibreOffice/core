@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:23:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,11 @@ void ScDocument::UpdateAllCharts(BOOL bDoUpdate)
 
     USHORT nPos;
 
-    for (USHORT nTab=0; nTab<=MAXTAB; nTab++)
+    for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
     {
         if (pTab[nTab])
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage,"Page ?");
 
             ScRange aRange;
@@ -169,11 +169,11 @@ void ScDocument::UpdateAllCharts(BOOL bDoUpdate)
     pChartCollection->FreeAll();
 }
 
-BOOL ScDocument::HasChartAtPoint( USHORT nTab, const Point& rPos, String* pName )
+BOOL ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 {
     if (pDrawLayer && pTab[nTab])
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -217,9 +217,9 @@ void ScDocument::UpdateChartArea( const String& rChartName,
     if (!pDrawLayer)
         return;
 
-    for (USHORT nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -279,9 +279,9 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
     if (!pDrawLayer || bInDtorClear)
         return;
 
-    for (USHORT nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -339,9 +339,9 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
 }
 
 void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
-                                    USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                    USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                    short nDx, short nDy, short nDz )
+                                    SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     if (!pDrawLayer)
         return;
@@ -357,12 +357,12 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         BOOL bDataChanged = FALSE;
         for ( ScRangePtr pR = aRLR->First(); pR; pR = aRLR->Next() )
         {
-            USHORT theCol1 = pR->aStart.Col();
-            USHORT theRow1 = pR->aStart.Row();
-            USHORT theTab1 = pR->aStart.Tab();
-            USHORT theCol2 = pR->aEnd.Col();
-            USHORT theRow2 = pR->aEnd.Row();
-            USHORT theTab2 = pR->aEnd.Tab();
+            SCCOL theCol1 = pR->aStart.Col();
+            SCROW theRow1 = pR->aStart.Row();
+            SCTAB theTab1 = pR->aStart.Tab();
+            SCCOL theCol2 = pR->aEnd.Col();
+            SCROW theRow2 = pR->aEnd.Row();
+            SCTAB theTab2 = pR->aEnd.Tab();
             ScRefUpdateRes eRes = ScRefUpdate::Update(
                 this, eUpdateRefMode,
                 nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
@@ -422,7 +422,7 @@ void ScDocument::SetChartRangeList( const String& rChartName,
 }
 
 
-BOOL ScDocument::HasData( USHORT nCol, USHORT nRow, USHORT nTab )
+BOOL ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     if (pTab[nTab])
         return pTab[nTab]->HasData( nCol, nRow );
@@ -439,8 +439,8 @@ SchMemChart* ScDocument::FindChartData(const String& rName, BOOL bForModify)
     //  weil sie evtl. nicht mit den Tabellen uebereinstimmen
     //  (z.B. Redo von Tabelle loeschen, Draw-Redo passiert vor DeleteTab).
 
-    USHORT nCount = pDrawLayer->GetPageCount();
-    for (USHORT nTab=0; nTab<nCount; nTab++)
+    sal_uInt16 nCount = pDrawLayer->GetPageCount();
+    for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(nTab);
         DBG_ASSERT(pPage,"Page ?");
@@ -488,11 +488,11 @@ void ScDocument::UpdateChartListenerCollection()
         ScRange aRange;
         // Range fuer Suche unwichtig
         ScChartListener aCLSearcher( EMPTY_STRING, this, aRange );
-        for (USHORT nTab=0; nTab<=MAXTAB; nTab++)
+        for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
         {
             if (pTab[nTab])
             {
-                SdrPage* pPage = pDrawLayer->GetPage(nTab);
+                SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
                 DBG_ASSERT(pPage,"Page ?");
 
                 SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
