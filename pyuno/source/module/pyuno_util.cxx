@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_util.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,24 +97,20 @@ namespace pyuno
 PyRef ustring2PyUnicode( const OUString & str )
 {
     PyRef ret;
-    if( sizeof( Py_UNICODE ) == 2 )
-    {
-        ret = PyRef( PyUnicode_FromUnicode( str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
-    }
-    else if( sizeof( Py_UNICODE ) == 4 )
-    {
-        // MUST BE TESTED !!!
-        printf( "not tested string conversion underway\n" );
-        OString o = OUStringToOString( str, RTL_TEXTENCODING_UCS4 );
-        ret = PyRef( PyUnicode_FromUnicode( (Py_UNICODE*)o.getStr(), o.getLength() ), SAL_NO_ACQUIRE );
-    }
-    else
-    {
-        OUStringBuffer buf;
-        buf.appendAscii( "pyuno string conversion routines can't deal with sizeof(Py_UNICODE) ==" );
-        buf.append( (sal_Int32) sizeof( Py_UNICODE ) );
-        throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > ( ) );
-    }
+#if Py_UNICODE_SIZE == 2
+    ret = PyRef( PyUnicode_FromUnicode( str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
+#else
+#if Py_UNICODE_SIZE == 4
+    OString o = OUStringToOString( str, RTL_TEXTENCODING_UCS4 );
+    ret = PyRef( PyUnicode_FromUnicode( (Py_UNICODE*)o.getStr(), o.getLength() ), SAL_NO_ACQUIRE );
+#else
+#error Py_UNICODE_SIZE
+    OUStringBuffer buf;
+    buf.appendAscii( "pyuno string conversion routines can't deal with sizeof(Py_UNICODE) ==" );
+    buf.append( (sal_Int32) sizeof( Py_UNICODE ) );
+    throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > ( ) );
+#endif
+#endif
     return ret;
 }
 
