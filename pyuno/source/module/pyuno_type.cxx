@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_type.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:58 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 11:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ const char *typeClassToString( TypeClass t )
     case com::sun::star::uno::TypeClass_EXCEPTION:
         ret = "EXCEPTION"; break;
     case com::sun::star::uno::TypeClass_SEQUENCE:
-        ret = "SEQUENCE";
+        ret = "SEQUENCE"; break;
     case com::sun::star::uno::TypeClass_INTERFACE:
         ret = "INTERFACE"; break;
     case com::sun::star::uno::TypeClass_TYPEDEF:
