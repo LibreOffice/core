@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:52:13 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,5 +187,15 @@
 #define HID_PROP_LIST_CELL_RANGE                (HID_FORMS_START +  133)
 #define HID_PROP_CELL_EXCHANGE_TYPE             (HID_FORMS_START +  134)
 #define HID_PROP_SELECTEDITEMS                  (HID_FORMS_START +  135)
+#define HID_PROP_SCROLLVALUE_MIN                (HID_FORMS_START +  136)
+#define HID_PROP_DEFAULT_SCROLLVALUE            (HID_FORMS_START +  137)
+#define HID_PROP_REPEAT_DELAY                   (HID_FORMS_START +  138)
+#define HID_PROP_SYMBOLCOLOR                    (HID_FORMS_START +  139)
+#define HID_PROP_SPINVALUE                      (HID_FORMS_START +  140)
+#define HID_PROP_SPINVALUE_MIN                  (HID_FORMS_START +  141)
+#define HID_PROP_SPINVALUE_MAX                  (HID_FORMS_START +  142)
+#define HID_PROP_DEFAULT_SPINVALUE              (HID_FORMS_START +  143)
+#define HID_PROP_SPININCREMENT                  (HID_FORMS_START +  144)
+#define HID_PROP_REPEAT                         (HID_FORMS_START +  145)
 
 #endif
