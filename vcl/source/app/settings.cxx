@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hdu $ $Date: 2001-08-13 10:24:53 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 18:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1963,8 +1963,10 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 
 const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
-    if ( !mpData->mpI18nHelper )
-        ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+    if ( !mpData->mpI18nHelper ) {
+        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(vcl::unohelper::GetMultiServiceFactory());
+        ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper( aFactory, GetLocale() );
+    }
     return *mpData->mpI18nHelper;
 }
 
@@ -1972,8 +1974,10 @@ const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 
 const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {
-    if ( !mpData->mpUII18nHelper )
-        ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper( vcl::unohelper::GetMultiServiceFactory(), GetUILocale() );
+    if ( !mpData->mpUII18nHelper ) {
+        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(vcl::unohelper::GetMultiServiceFactory());
+        ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper( aFactory, GetUILocale() );
+    }
     return *mpData->mpUII18nHelper;
 }
 
