@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-31 11:49:10 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 07:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,14 @@
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -169,6 +177,43 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
+
+//====================================================================
+// Helper class to initialize an export dialog for PDF
+
+class PDFExportFileDialog : public sfx2::FileDialogHelper
+{
+    public:
+        PDFExportFileDialog( const short nDialogType, sal_uInt32 nFlags ) :
+            sfx2::FileDialogHelper( nDialogType, nFlags ), m_bInitialized( sal_False ) {}
+
+        virtual void SAL_CALL DirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
+
+    private:
+        sal_Bool    m_bInitialized;
+};
+
+void SAL_CALL PDFExportFileDialog::DirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( !m_bInitialized )
+    {
+        m_bInitialized = sal_True;
+
+        Reference< ::com::sun::star::ui::dialogs::XFilePicker > xFilePicker = GetFilePicker();
+        Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess > xControlAccess =
+            Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess >( xFilePicker, UNO_QUERY );
+        if ( xControlAccess.is() )
+        {
+            String aExportButtonStr = String( SfxResId( STR_EXPORTWITHCFGBUTTON ));
+            ::rtl::OUString aStrExport = aExportButtonStr;
+            xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aStrExport );
+        }
+    }
+
+    FileDialogHelper::DirectoryChanged( aEvent );
+}
 
 //====================================================================
 
@@ -318,21 +363,39 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     INetURLObject aURL;
 
     SFX_REQUEST_ARG( (*pRequest), pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-    sal_Bool bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
-    sal_Bool bIsExport = ( pRequest->GetSlot() == SID_EXPORTDOC );
 
+    sal_Bool bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
+    sal_Bool bIsPDFExport = (( pRequest->GetSlot() == SID_EXPORTDOCASPDF ) ||
+                            ( pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF ));
+    sal_Bool bIsExport = ( pRequest->GetSlot() == SID_EXPORTDOC ) || bIsPDFExport;
+    sal_Bool bSuppressFilterOptionsDialog = sal_False;
+
+    // Parameter to return if user cancelled a optional configuration dialog and
+    // there for cancelled the whole save procedure.
     DBG_ASSERT( !bIsExport || bSaveTo, "Export mode should use SaveTo mechanics!\n" );
 
-    sal_uInt16 nActFilt = 0;
-    const SfxFilter* pFilt;
-    for( pFilt = GetFactory().GetFilter( 0 );
-         pFilt && ( !pFilt->CanExport()
-                 || bIsExport && pFilt->CanImport() // Export case ( only for GUI )
-                 || !bSaveTo && !pFilt->CanImport() // SaveAs case
-                 || pFilt->IsInternal() );
-         pFilt = GetFactory().GetFilter( ++nActFilt ) );
+    const SfxFilter* pFilt = NULL;
+    if ( pRequest->GetSlot() == SID_EXPORTDOCASPDF ||
+         pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF )
+    {
+        // Preselect PDF-Filter for EXPORT
+        pFilt = GetFactory().GetFilterContainer()->GetFilter4Extension( String::CreateFromAscii( ".pdf" ), SFX_FILTER_EXPORT );
+        DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
+        if ( !pFilt )
+            return sal_False;
+    }
+    else
+    {
+        sal_uInt16 nActFilt = 0;
+        for( pFilt = GetFactory().GetFilter( 0 );
+            pFilt && ( !pFilt->CanExport()
+                    || bIsExport && pFilt->CanImport() // Export case ( only for GUI )
+                    || !bSaveTo && !pFilt->CanImport() // SaveAs case
+                    || pFilt->IsInternal() );
+            pFilt = GetFactory().GetFilter( ++nActFilt ) );
 
-    DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
+        DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
+    }
 
     String aFilterName;
     if( pFilt )
@@ -423,8 +486,40 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 aDialogFlags = SFXWB_EXPORT;
             }
 
-            sfx2::FileDialogHelper aFileDlg( aDialogMode, aDialogFlags, GetFactory(), nMust, nDont );
-            aFileDlg.CreateMatcher( GetFactory() );
+            sfx2::FileDialogHelper* pFileDlg = NULL;
+
+            if ( bIsPDFExport )
+            {
+                // Create file dialog for PDF export
+                pFileDlg = new PDFExportFileDialog( aDialogMode, aDialogFlags );
+                String aFilterExtension = pFilt->GetWildcard()();
+                String aFilterUIName = pFilt->GetUIName();
+                pFileDlg->AddFilter( aFilterUIName, aFilterExtension );
+                pFileDlg->SetTitle( String( SfxResId( STR_EXPORTASPDF_TITLE )) );
+                pFileDlg->SetDialogHelpId( HID_FILEDLG_EXPORTASPDF );
+                pFileDlg->CreateMatcher( GetFactory() );
+            }
+            else if ( bIsExport )
+            {
+                // This is the normal dialog
+                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, GetFactory(), nMust, nDont );
+                pFileDlg->CreateMatcher( GetFactory() );
+                Reference< ::com::sun::star::ui::dialogs::XFilePicker > xFilePicker = pFileDlg->GetFilePicker();
+                Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess > xControlAccess =
+                    Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess >( xFilePicker, UNO_QUERY );
+                if ( xControlAccess.is() )
+                {
+                    String aExportButtonStr = String( SfxResId( STR_EXPORTBUTTON ));
+                    ::rtl::OUString aStrExport = aExportButtonStr;
+                    xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aStrExport );
+                }
+            }
+            else
+            {
+                // This is the normal dialog
+                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, GetFactory(), nMust, nDont );
+                pFileDlg->CreateMatcher( GetFactory() );
+            }
 
             if ( HasName() )
             {
@@ -445,30 +540,31 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                         aObj.setFinalSlash();
                         aObj = INetURLObject( aObj.RelToAbs( aPath, bWasAbsolute ) );
                         aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
-                        aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                        pFileDlg->SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                     }
 
-                    aFileDlg.SetCurrentFilter( pFilt->GetUIName() );
+                    pFileDlg->SetCurrentFilter( pFilt->GetUIName() );
                 }
                 else
                 {
                     if( aLastName.Len() )
-                        aFileDlg.SetDisplayDirectory( aLastName );
-                    aFileDlg.SetCurrentFilter( pMedFilter->GetUIName() );
+                        pFileDlg->SetDisplayDirectory( aLastName );
+                    pFileDlg->SetCurrentFilter( pMedFilter->GetUIName() );
                 }
             }
             else
             {
-                aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+                pFileDlg->SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
             }
 
             SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
             sal_Bool bHadPass = ( pPassItem != NULL );
 
             SfxItemSet* pTempSet = NULL;
-            if ( aFileDlg.Execute( pTempSet, aFilterName, bHadPass ) != ERRCODE_NONE )
+            if ( pFileDlg->Execute( pTempSet, aFilterName, bHadPass ) != ERRCODE_NONE )
             {
                 SetError(ERRCODE_IO_ABORT);
+                delete pFileDlg;
                 return sal_False;
             }
 
@@ -479,7 +575,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 pParams->Put( *pTempSet );
 
             // get the path from the dialog
-            aURL.SetURL( aFileDlg.GetPath() );
+            aURL.SetURL( pFileDlg->GetPath() );
 
             // gibt es schon ein Doc mit dem Namen?
             if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
@@ -500,6 +596,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 {
                     // dann Fehlermeldeung: "schon offen"
                     SetError(ERRCODE_SFX_ALREADYOPEN);
+                    delete pFileDlg;
                     return sal_False;
                 }
             }
@@ -513,7 +610,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
 
             // --**-- pParams->Put( *pDlg->GetItemSet() );
-            Reference< XFilePickerControlAccess > xExtFileDlg( aFileDlg.GetFilePicker(), UNO_QUERY );
+            Reference< XFilePickerControlAccess > xExtFileDlg( pFileDlg->GetFilePicker(), UNO_QUERY );
             if ( xExtFileDlg.is() )
             {
                 try
@@ -557,6 +654,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 }
                 catch( IllegalArgumentException ){}
             }
+
+            delete pFileDlg;
         }
         else
         {
@@ -656,7 +755,12 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
 
-    if( bSaveTo || bUseFilterOptions )
+    // Don't show filter options dialog
+    if ( pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF )
+        bSuppressFilterOptionsDialog = sal_True;
+
+    if( !bSuppressFilterOptionsDialog &&
+        ( bSaveTo || bUseFilterOptions ))
     {
         // call filter dialog
         if( xFilterCFG.is() )
@@ -699,7 +803,11 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                                                              NULL );
                                         pParams->Put( aNewParams );
                                     }
-                                    else return sal_True;   // cancel
+                                    else
+                                    {
+                                        SetError(ERRCODE_IO_ABORT);
+                                        return sal_False; // cancel
+                                    }
                                 }
                             }
 
@@ -710,7 +818,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             catch( NoSuchElementException& )
             {
                 // the filter name is unknown
-               SetError( ERRCODE_IO_INVALIDPARAMETER );
+                   SetError( ERRCODE_IO_INVALIDPARAMETER );
                 return sal_False;
             }
             catch( Exception& )
@@ -1063,6 +1171,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         case SID_EXPORTDOC:
+        case SID_EXPORTDOCASPDF:
+        case SID_DIRECTEXPORTDOCASPDF:
             rReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
             // another part is pretty the same as for SID_SAVEASDOC
         case SID_SAVEASURL:
@@ -1083,7 +1193,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SetError( ERRCODE_IO_INVALIDPARAMETER );
             }
 
-            BOOL bOk = GUISaveAs_Impl(nId == SID_SAVEASURL,  &rReq);
+            BOOL bOk = GUISaveAs_Impl(nId == SID_SAVEASURL, &rReq);
             ULONG lErr=GetErrorCode();
             if ( !lErr && !bOk )
                 lErr=ERRCODE_IO_GENERAL;
@@ -1098,8 +1208,17 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( lErr!=ERRCODE_IO_ABORT )
                 ErrorHandler::HandleError(lErr);
 
-            ResetError();
+            if ( nId == SID_EXPORTDOCASPDF )
+            {
+                // This function is used by the SendMail function that needs information if a export
+                // file was written or not. This could be due to cancellation of the export
+                // or due to an error. So IO abort must be handled like an error!
+                bOk = ( lErr != ERRCODE_IO_ABORT ) & bOk;
+            }
+
             rReq.SetReturnValue( SfxBoolItem(0, bOk) );
+
+            ResetError();
 
             Invalidate();
             break;
@@ -1520,6 +1639,22 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVECOPYDOC ) ) ) );
                 else
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVEASDOC ) ) ) );
+                break;
+            }
+
+            case SID_EXPORTDOCASPDF:
+            case SID_DIRECTEXPORTDOCASPDF:
+            {
+                SfxFactoryFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
+                if ( pFilterContainer )
+                {
+                    String aPDFExtension = String::CreateFromAscii( ".pdf" );
+                    const SfxFilter* pFilter = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
+                    if ( pFilter != NULL )
+                        break;
+                }
+
+                rSet.DisableItem( nWhich );
                 break;
             }
 
