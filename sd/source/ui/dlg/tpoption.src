@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:23:03 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
         Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";        \
         Text[ russian ] = "Ìàñøòàá";                    \
         Text[ polish ] = "Skala";                       \
-        Text[ japanese ] = "kÚ";                      \
+        Text[ japanese ] = "”{—¦";                      \
         Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";       \
         Text[ arabic ] = "ÊßÈíÑ/ÊÕÛíÑ";                 \
         Text[ greek ] = "Êëßìáêá";                      \
@@ -166,7 +166,7 @@ TabPage TP_OPTIONS_CONTENTS
         TabStop = TRUE ;
         Text = "~Umrissmodus" ;
         Text [ ENGLISH ] = "Umrißmodus" ;
-        Text [ english_us ] = "~Contour mode" ;
+        Text [ english_us ] = "C~ontour mode" ;
         Text [ italian ] = "Modo profilo" ;
         Text [ spanish ] = "Modo ~contorno" ;
         Text [ french ] = "Mode ~Contour" ;
@@ -255,7 +255,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ dutch ] = "Weergeven" ;
         Text [ swedish ] = "Visa" ;
         Text [ danish ] = "Vis" ;
-        Text [ portuguese ] = "Ver" ;
+        Text [ portuguese ] = "Mostrar" ;
         Text [ portuguese_brazilian ] = "Anzeigen" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾";
         Text[ russian ] = "Ïîêàçàòü";
@@ -311,7 +311,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ french ] = "~Repères lors du déplacement" ;
         Text [ swedish ] = "Hjälplinjer vid ~förflyttning" ;
         Text [ danish ] = "Hjælpelinjer ved flytning" ;
-        Text [ portuguese ] = "Guias ao ~mover objectos" ;
+        Text [ portuguese ] = "Guias ao ~mover" ;
         Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
         Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß";
         Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
@@ -339,7 +339,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ swedish ] = "~Alla kontrollpunkter i Bézier-editorn" ;
         Text [ danish ] = "Alle kontrolpunkter i bezier-redigeringen" ;
         Text [ portuguese_brazilian ] = "~Alle Handles im Bezier-Editor" ;
-        Text [ portuguese ] = "~Todas as guias do editor Bézier" ;
+        Text [ portuguese ] = "~Todos os pontos de controlo do editor Bézier" ;
         Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷Ö®ÄÚµÄÈ«²¿¿Øµã";
         Text[ russian ] = "~Âñå òî÷êè â ğåäàêòîğå Áåçüå";
         Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
@@ -365,7 +365,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ dutch ] = "~Contour om ieder object" ;
         Text [ swedish ] = "Kont~ur för varje enskilt objekt" ;
         Text [ danish ] = "Hvert enkelt objekts kontur" ;
-        Text [ portuguese ] = "~Contorno de cada um dos objectos" ;
+        Text [ portuguese ] = "~Contorno de cada objecto" ;
         Text [ portuguese_brazilian ] = "~Umriß jedes einzelnen Objektes" ;
         Text[ chinese_simplified ] = "µ¥¸ö¶ÔÏóµÄÂÖÀª";
         Text[ russian ] = "Êîíòóğ êàæäîãî îáúåêòà îòäåëüíî";
@@ -546,13 +546,13 @@ TabPage TP_OPTIONS_MISC
         Text = "Einstellungen" ;
         Text [ ENGLISH ] = "Settings" ;
         Text[ english_us ] = "Settings";
-        Text[ portuguese ] = "Settings";
+        Text[ portuguese ] = "Definições";
         Text[ russian ] = "Íàñòğîéêè";
         Text[ greek ] = "Ñõèìßóåéò";
-        Text[ dutch ] = "Settings";
+        Text[ dutch ] = "Instellingen";
         Text[ french ] = "Paramètres";
-        Text[ spanish ] = "Settings";
-        Text[ italian ] = "Settings";
+        Text[ spanish ] = "Configuración";
+        Text[ italian ] = "Impostazioni";
         Text[ danish ] = "Settings";
         Text[ swedish ] = "Inställningar";
         Text[ polish ] = "Ustawienia";
@@ -686,7 +686,7 @@ TabPage TP_OPTIONS_MISC
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ italian ] = "Unità di misura" ;
         Text [ portuguese_brazilian ] = "Unidades métricas" ;
-        Text [ portuguese ] = "Unidades métricas" ;
+        Text [ portuguese ] = "Unidade de medida" ;
         Text [ finnish ] = "Metriset yksiköt" ;
         Text [ danish ] = "Måleenhed" ;
         Text [ french ] = "Unité de mesure" ;
@@ -769,7 +769,7 @@ TabPage TP_OPTIONS_MISC
         Text [ spanish ] = "Iniciar la presentación" ;
         Text [ french ] = "Lancement de la présentation" ;
         Text [ dutch ] = "Presentatie starten" ;
-        Text [ portuguese ] = "Começar apresentação" ;
+        Text [ portuguese ] = "Iniciar apresentação" ;
         Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
         Text[ russian ] = "Çàïóñê ïğåçåíòàöèè";
         Text[ polish ] = "Pocz¹tek prezentacji";
@@ -814,6 +814,24 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Kompatibilität" ;
         Text [ English ] = "Compatibility" ;
+        Text[ english_us ] = "Compatibility";
+        Text[ portuguese ] = "Compatibilidade";
+        Text[ russian ] = "Ñîâìåñòèìîñòü";
+        Text[ greek ] = "Compatibility";
+        Text[ dutch ] = "Compatibiliteit";
+        Text[ french ] = "Compatibilité";
+        Text[ spanish ] = "Compatibilidad";
+        Text[ italian ] = "Compatibilità";
+        Text[ danish ] = "Compatibility";
+        Text[ swedish ] = "Kompatibilitet";
+        Text[ polish ] = "Zgodnoœæ";
+        Text[ portuguese_brazilian ] = "Compatibility";
+        Text[ japanese ] = "ŒİŠ·«";
+        Text[ korean ] = "Compatibility";
+        Text[ chinese_simplified ] = "ºÍ MS Office ÎÄµµ¼æÈİ";
+        Text[ chinese_traditional ] = "©M MS Office ¤å¥ó¬Û®e";
+        Text[ turkish ] = "Compatibility";
+        Text[ arabic ] = "Compatibility";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -821,6 +839,24 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 242, 10 ) ;
         Text = "Im aktuellen Dokument alle ~Absatzabstände addieren";
         Text [ English ] = "Add ~distances between paragraphs" ;
+        Text[ english_us ] = "Add ~spacing between paragraphs in the current document";
+        Text[ portuguese ] = "A~dicionar espaçamento entre os parágrafos no documento activo";
+        Text[ russian ] = "Ñëîæèòü âñå èíòåğâàëû ìåæäó àáçàöàìè â òåêóùåì äîêóìåíòå";
+        Text[ greek ] = "Add ~distances between paragraphs";
+        Text[ dutch ] = "Alle afstanden tussen ~alinea's optellen";
+        Text[ french ] = "~Additionner les espacements entre les paragraphes dans le document actif";
+        Text[ spanish ] = "Su~mar espacios de párrafo en documento actual";
+        Text[ italian ] = "Aggiungi tutti gli spazi tra ~paragrafi nel documento attuale";
+        Text[ danish ] = "Add ~distances between paragraphs";
+        Text[ swedish ] = "Addera alla stycke~avstånd i det aktuella dokumentet";
+        Text[ polish ] = "Dodaj w bie¿¹cym dokumencie wszystkie odstêpy miêdzy akapitami";
+        Text[ portuguese_brazilian ] = "Add ~distances between paragraphs";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Å‚·‚×‚Ä‚Ì’i—‚ÌŠÔŠu‚ğ‰ÁZ‚·‚é";
+        Text[ korean ] = "Add ~distances between paragraphs";
+        Text[ chinese_simplified ] = "ÔÚµ±Ç°ÎÄµµÄÚËùÓĞ¶ÎÂä¼ä¸ñÏà¼Ó";
+        Text[ chinese_traditional ] = "¦b·í«eªº¤å¥ó¤§¤¤¬Û¥[©Ò¦³ªº¬q¸¨¶¡¹j";
+        Text[ turkish ] = "Add ~distances between paragraphs";
+        Text[ arabic ] = "Add ~distances between paragraphs";
     };
     FixedLine GRP_SCALE
     {
@@ -836,6 +872,24 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Original" ;
         Text [ ENGLISH ] = "Original" ;
+        Text[ english_us ] = "Original";
+        Text[ portuguese ] = "Original";
+        Text[ russian ] = "Îğèãèíàë";
+        Text[ greek ] = "Original";
+        Text[ dutch ] = "Origineel";
+        Text[ french ] = "Original";
+        Text[ spanish ] = "Original";
+        Text[ italian ] = "Originale";
+        Text[ danish ] = "Original";
+        Text[ swedish ] = "Original";
+        Text[ polish ] = "Orygina³";
+        Text[ portuguese_brazilian ] = "Original";
+        Text[ japanese ] = "µØ¼ŞÅÙ";
+        Text[ korean ] = "Original";
+        Text[ chinese_simplified ] = "Ô­¼ş";
+        Text[ chinese_traditional ] = "­ì¥ó";
+        Text[ turkish ] = "Original";
+        Text[ arabic ] = "Original";
     };
     FixedText FT_EQUIVALENT
     {
@@ -844,6 +898,24 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Entspricht" ;
         Text [ ENGLISH ] = "Equivalent to" ;
+        Text[ english_us ] = "Equivalent to";
+        Text[ portuguese ] = "Corresponde a";
+        Text[ russian ] = "Ñîîòâåòñòâóåò";
+        Text[ greek ] = "Equivalent to";
+        Text[ dutch ] = "Komt overeen met";
+        Text[ french ] = "Correspond à";
+        Text[ spanish ] = "Corresponde a";
+        Text[ italian ] = "Corrisponde a";
+        Text[ danish ] = "Equivalent to";
+        Text[ swedish ] = "Motsvarar";
+        Text[ polish ] = "Odpowiada";
+        Text[ portuguese_brazilian ] = "Equivalent to";
+        Text[ japanese ] = "’Ş‚è‡‚¢";
+        Text[ korean ] = "Equivalent to";
+        Text[ chinese_simplified ] = "Ïàµ±ÓÚ";
+        Text[ chinese_traditional ] = "¬Ûµ¥©ó";
+        Text[ turkish ] = "Equivalent to";
+        Text[ arabic ] = "Equivalent to";
     };
     FixedText FT_SCALE
     {
@@ -871,16 +943,16 @@ TabPage TP_OPTIONS_MISC
         Text [ italian ] = "Larghezza pagina" ;
         Text [ spanish ] = "Ancho de página" ;
         Text [ french ] = "Largeur de page" ;
-        Text [ dutch ] = "Pagina-breedte" ;
+        Text [ dutch ] = "Paginabreedte" ;
         Text [ swedish ] = "Sidbredd" ;
         Text [ danish ] = "Sidebredde" ;
-        Text [ portuguese ] = "Largura da página" ;
+        Text [ portuguese ] = "Largura de página" ;
         Text [ portuguese_brazilian ] = "Seitenbreite" ;
-        Text[ chinese_simplified ] = "Ò³¿í";
+        Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È";
         Text[ russian ] = "Øèğèíà ñòğàíèöû";
         Text[ polish ] = "Szer. strony";
         Text[ japanese ] = "Íß°¼Ş•";
-        Text[ chinese_traditional ] = "­¶¼e";
+        Text[ chinese_traditional ] = "­¶­±¼e«×";
         Text[ arabic ] = "ÚÑÖ ÇáÕİÍÉ";
         Text[ greek ] = "ĞëÜôïò óåëßäáò";
         Text[ korean ] = "ÂÊ ³Êºñ";
@@ -918,7 +990,7 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 49 , 8 ) ;
         Text = "Seitenhöhe" ;
         Text [ ENGLISH ] = "Page height" ;
-        Text [ dutch ] = "Pagina-hoogte" ;
+        Text [ dutch ] = "Paginahoogte" ;
         Text [ english_us ] = "Page height" ;
         Text [ italian ] = "Altezza pagina" ;
         Text [ spanish ] = "Altura de página" ;
@@ -927,11 +999,11 @@ TabPage TP_OPTIONS_MISC
         Text [ danish ] = "Sidehøjde" ;
         Text [ portuguese ] = "Altura da página" ;
         Text [ portuguese_brazilian ] = "Seitenhöhe" ;
-        Text[ chinese_simplified ] = "Ò³¸ß";
+        Text[ chinese_simplified ] = "Ò³Ãæ¸ß¶È";
         Text[ russian ] = "Âûñîòà ñòğàíèöû";
         Text[ polish ] = "Wys. strony";
         Text[ japanese ] = "Íß°¼Ş‚Ì‚‚³";
-        Text[ chinese_traditional ] = "­¶°ª";
+        Text[ chinese_traditional ] = "­¶­±°ª«×";
         Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİÍÉ";
         Text[ greek ] = "¾øïò óåëßäáò";
         Text[ korean ] = "ÂÊ ³ôÀÌ";
