@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 18:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,14 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
 
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::container;
 using namespace com::sun::star::packages::ZipConstants;
 using namespace rtl;
 
@@ -82,17 +88,17 @@ ZipPackageEntry::~ZipPackageEntry( void )
 /* I made these pure virtual to bypass a couple of virtual calls...
  * acquire/release/queryInterface are called several thousand times in a single
  * ZipPackage instance
-uno::Any SAL_CALL ZipPackageEntry::queryInterface( const uno::Type& rType )
-    throw(uno::RuntimeException)
+Any SAL_CALL ZipPackageEntry::queryInterface( const Type& rType )
+    throw(RuntimeException)
 {
     return ( ::cppu::queryInterface (   rType                                       ,
                                                 // OWeakObject interfaces
-                                                static_cast< uno::XWeak*            > ( this )  ,
-                                                static_cast< uno::XInterface*       > ( this )  ,
+                                                static_cast< XWeak*         > ( this )  ,
+                                                static_cast< XInterface*        > ( this )  ,
                                                 // my own interfaces
-                                                static_cast< container::XNamed*     > ( this )  ,
-                                                static_cast< lang::XUnoTunnel*      > ( this )  ,
-                                                static_cast< container::XChild*     > ( this )  ) );
+                                                static_cast< XNamed*        > ( this )  ,
+                                                static_cast< XUnoTunnel*        > ( this )  ,
+                                                static_cast< XChild*        > ( this )  ) );
 }
 void SAL_CALL ZipPackageEntry::acquire(  )
     throw()
@@ -106,58 +112,71 @@ void SAL_CALL ZipPackageEntry::release(  )
 }
 */
     // XChild
-::rtl::OUString SAL_CALL ZipPackageEntry::getName(  )
-    throw(uno::RuntimeException)
+OUString SAL_CALL ZipPackageEntry::getName(  )
+    throw(RuntimeException)
 {
     return aEntry.sName;
 }
-void SAL_CALL ZipPackageEntry::setName( const ::rtl::OUString& aName )
-    throw(uno::RuntimeException)
+void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
+    throw(RuntimeException)
 {
+    Reference < XNameContainer > xCont (xParent, UNO_QUERY);
+    if (xCont.is() && xCont->hasByName ( aEntry.sName ) )
+        xCont->removeByName ( aEntry.sName );
+
     aEntry.sName = aName;
+
+    if (xCont.is())
+    {
+        Any aAny;
+        Reference < XUnoTunnel > xTunnel  = this;
+        aAny <<= xTunnel;
+        xCont->insertByName ( aEntry.sName, aAny );
+    }
 }
-uno::Reference< uno::XInterface > SAL_CALL ZipPackageEntry::getParent(  )
-        throw(uno::RuntimeException)
+Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
+        throw(RuntimeException)
 {
     return xParent;
 }
-void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< uno::XInterface >& Parent )
-        throw(lang::NoSupportException, uno::RuntimeException)
+void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& Parent )
+        throw(NoSupportException, RuntimeException)
 {
-    uno::Reference < container::XNameContainer > xOldParent (xParent, uno::UNO_QUERY);
-    uno::Reference < container::XNameContainer > xNewParent (Parent, uno::UNO_QUERY);
+    Reference < XNameContainer > xOldParent (xParent, UNO_QUERY), xNewParent (Parent, UNO_QUERY);
 
     if ( !xNewParent.is())
-        throw lang::NoSupportException();
-
-    if ( xOldParent.is() && xOldParent->hasByName(getName()))
-        xOldParent->removeByName(getName());
-    uno::Any aAny;
-    uno::Reference < lang::XUnoTunnel > xTunnel  = this;
-    aAny <<= xTunnel;
-    if (!xNewParent->hasByName(getName()))
-        xNewParent->insertByName(getName(), aAny);
-    xParent = Parent;
+        throw NoSupportException();
+    if ( xOldParent != xNewParent )
+    {
+        if ( xOldParent.is() && xOldParent->hasByName(getName()))
+            xOldParent->removeByName(getName());
+        Any aAny;
+        Reference < XUnoTunnel > xTunnel  = this;
+        aAny <<= xTunnel;
+        if (!xNewParent->hasByName(getName()))
+            xNewParent->insertByName(getName(), aAny);
+        xParent = Parent;
+    }
 }
     //XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
-        throw(uno::RuntimeException)
+Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
+        throw(RuntimeException)
 {
-    return uno::Reference < beans::XPropertySetInfo > (NULL);
+    return Reference < beans::XPropertySetInfo > (NULL);
 }
-void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+        throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ZipPackageEntry::removePropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ZipPackageEntry::addVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+}
+void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
+        throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 19:42:15 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 18:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,9 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& 
         Reference < XNamed > xNamed (xRef, UNO_QUERY);
         Reference < XChild > xChild (xRef, UNO_QUERY);
         Reference < XInterface > xInterface (*this);
-        xNamed->setName (sName);
+
+        if (xNamed->getName() != sName )
+            xNamed->setName (sName);
         aContents[sName] = xRef;
         try
         {
