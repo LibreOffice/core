@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: abi $ $Date: 2002-12-11 10:55:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,8 +293,8 @@ SvtInetOptions::Impl::notifyListeners(
         for (Map::const_iterator aIt(m_aListeners.begin()); aIt != aMapEnd;
              ++aIt)
         {
-            Map::data_type const & rSet = aIt->second;
-            Map::data_type::const_iterator aSetEnd(rSet.end());
+            const Map::mapped_type &rSet = aIt->second;
+            Map::mapped_type::const_iterator aSetEnd(rSet.end());
             star::uno::Sequence< star::beans::PropertyChangeEvent >
                 aEvents(rKeys.getLength());
             sal_Int32 nCount = 0;
@@ -438,7 +438,7 @@ SvtInetOptions::Impl::addPropertiesChangeListener(
         rListener)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    Map::data_type & rEntry = m_aListeners[rListener];
+    Map::mapped_type & rEntry = m_aListeners[rListener];
     for (sal_Int32 i = 0; i < rPropertyNames.getLength(); ++i)
         rEntry.insert(rPropertyNames[i]);
 }
