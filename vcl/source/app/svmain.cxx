@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-13 09:41:58 $
+ *  last change: $Author: cd $ $Date: 2000-11-17 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,17 @@ BOOL SVMain()
         }
         pSVData->mpRemotePrinterList = NULL;
     }
+    if ( pSVData->mpClientPrintersInfo )
+    {
+        try
+        {
+            delete pSVData->mpClientPrintersInfo;
+        }
+        catch (...)
+        {
+        }
+        pSVData->mpClientPrintersInfo;
+    }
     if( pSVData->mxClientFactory.is() )
     {
         try
@@ -502,13 +513,17 @@ BOOL SVMain()
         try
         {
              CHECK_FOR_RVPSYNC_NORMAL()
+
+            delete pSVData->mpRVPNormalSync;
+            delete pSVData->mpRVPSoundSync;
+            delete pSVData->mpAtoms;
+
             pSVData->mxStatus->Quit();
             pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus >();
         }
         catch(...)
         {
         }
-
     }
 
     // call deinit to deinitialize application class
@@ -516,8 +531,6 @@ BOOL SVMain()
     // Warning: After this call you can't call uno services
     pSVData->mpApp->DeInit();
 
-    delete pSVData->mpRVPNormalSync;
-    delete pSVData->mpRVPSoundSync;
     pSVData->maAppData.mpSolarMutex->release();
     delete pSVData->maAppData.mpSolarMutex;
     pSVData->maAppData.mpSolarMutex = NULL;
@@ -534,7 +547,6 @@ BOOL SVMain()
             delete pObj;
         delete pSVData->mpKeyNames;
     }
-    delete pSVData->mpAtoms;
 #endif
 
     if ( pSVData->maAppData.mpSettings )
