@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-09 10:37:01 $
+ *  last change: $Author: os $ $Date: 2000-10-25 14:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,13 +566,14 @@ void SwXTextSection::setPropertyValue(
             }
             if(pFmt)
             {
-                const SwSectionFmts& rFmts = pFmt->GetDoc()->GetSections();
-                UnoActionContext aContext(pFmt->GetDoc());
+                SwDoc* pDoc = pFmt->GetDoc();
+                const SwSectionFmts& rFmts = pDoc->GetSections();
+                UnoActionContext aContext(pDoc);
                 for( sal_uInt16 i = 0; i < rFmts.Count(); i++ )
                 {
                     if(rFmts[i]->GetSection()->GetName() == pSect->GetName())
                     {
-                        pFmt->GetDoc()->ChgSection( i, aSection, pNewAttrSet);
+                        pDoc->ChgSection( i, aSection, pNewAttrSet, pDoc->IsInReading());
                         break;
                     }
                 }
