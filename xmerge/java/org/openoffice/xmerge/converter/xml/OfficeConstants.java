@@ -212,11 +212,38 @@ public interface OfficeConstants {
     /** Element tag for <i>table:table</i>. */
     public final static String TAG_TABLE = "table:table";
 
+    /** Element tag for <i>table:named-expression</i>. */
+    public final static String TAG_NAMED_EXPRESSIONS = "table:named-expressions";
+
+    /** Element tag for <i>table:named-range</i>. */
+    public final static String TAG_TABLE_NAMED_RANGE= "table:named-range";
+
+    /** Element tag for <i>table:named-expression</i>. */
+    public final static String TAG_TABLE_NAMED_EXPRESSION= "table:named-expression";
+
     /**
      *  Attribute tag for <i>table:name</i> of element
      *  <i>table:table</i>.
      */
     public final static String ATTRIBUTE_TABLE_NAME = "table:name";
+
+    /**
+     *  Attribute tag for <i>table:expression</i> of element
+     *  <i>table:named-range</i>.
+     */
+    public final static String ATTRIBUTE_TABLE_EXPRESSION = "table:expression";
+
+    /**
+     *  Attribute tag for <i>table:base-cell-address</i> of element
+     *  <i>table:named-range</i>.
+     */
+    public final static String ATTRIBUTE_TABLE_BASE_CELL_ADDRESS = "table:base-cell-address";
+
+    /**
+     *  Attribute tag for <i>table:cell-range-address</i> of element
+     *  <i>table:named-range</i>.
+     */
+    public final static String ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS = "table:cell-range-address";
 
     /** Element tag for <i>table:table-row</i>. */
     public final static String TAG_TABLE_ROW = "table:table-row";
