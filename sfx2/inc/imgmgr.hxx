@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 10:04:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,19 @@
  *
  *
  ************************************************************************/
-#ifndef _SFX_IMGMGR_HXX
-#define _SFX_IMGMGR_HXX
+
+#ifndef _SFXIMGMGR_HXX
+#define _SFXIMGMGR_HXX
+
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
 
 #include <sal/types.h>
-#include <tools/link.hxx>
 
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
@@ -74,7 +82,7 @@
 class ToolBox;
 class SfxModule;
 class SfxImageManager_Impl;
-class SfxImageManager
+class SFX2_DLLPUBLIC SfxImageManager
 {
     SfxImageManager_Impl* pImp;
 
