@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-12 10:37:33 $
+ *  last change: $Author: mav $ $Date: 2002-05-03 13:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1525,7 +1525,6 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
     if( !sURL.getLength() )
         throw ILLEGALARGUMENTIOEXCEPTION();
 
-    OUSTRING aFilterName;
     //sal_Bool aSaveAsTemplate = sal_False;
 
     SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -1534,7 +1533,7 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
         aParams->Put( SfxBoolItem( SID_SAVETO, sal_True ) );
 
     TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
-    sal_Bool aRet = pObjectShell->APISaveAs_Impl( sURL, aFilterName, aParams );
+    sal_Bool aRet = pObjectShell->APISaveAs_Impl( sURL, aParams );
 
     sal_uInt32 nErrCode = pObjectShell->GetError() ? pObjectShell->GetError() : ERRCODE_IO_CANTWRITE;
     pObjectShell->ResetError();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-30 13:35:40 $
+ *  last change: $Author: mav $ $Date: 2002-05-03 13:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,6 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 sal_Bool SfxObjectShell::APISaveAs_Impl
 (
     const String& aFileName,
-    String aFilterName,
     SfxItemSet*   aParams
 )
 {
@@ -260,6 +259,11 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
     {
         SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
         sal_Bool bSaveTo = pSaveToItem && pSaveToItem->GetValue();
+
+        String aFilterName;
+        SFX_ITEMSET_ARG( aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        if( pFilterNameItem )
+            aFilterName = pFilterNameItem->GetValue();
 
         // in case no filter defined use default one
         if( !aFilterName.Len() )
