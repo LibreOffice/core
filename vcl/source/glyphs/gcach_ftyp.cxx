@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.29 $
- *  last change: $Author: hdu $ $Date: 2001-04-24 17:43:18 $
+ *  $Revision: 1.30 $
+ *  last change: $Author: hdu $ $Date: 2001-04-25 18:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <osl/file.hxx>
 #include <poly.hxx>
 
+#define FT20b8 true /* VERSION_MINOR in freetype.h is too coarse */
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
 #include "freetype/ftoutln.h"
@@ -215,10 +216,14 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
             {
                 const FT_CharMap aCM = aFaceFT->charmaps[i];
+#ifdef FT20b8
                 if( aCM->encoding == ft_encoding_none )
-                    // TODO for FT>=2.0: "(aCM->platform_id == TT_PLATFORM_MICROSOFT) &&"
-                    // TODO for FT>=2.0: (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
                     rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
+#else // FT20b8
+                if( (aCM->platform_id == TT_PLATFORM_MICROSOFT)
+                &&  (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
+                    rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
+#endif // FT20b8
             }
 
             rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
@@ -292,9 +297,11 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     FT_Encoding eEncoding = ft_encoding_unicode;
     if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
     {
-        // TODO for FT>200b8 use "ft_encoding_symbol"
-        //### TODO: some PS symbol fonts don't map their symbols correctly
+#ifdef FT20b8
         eEncoding = ft_encoding_none;
+#else // FT20b8
+        eEncoding = ft_encoding_symbol;
+#endif FT20b8
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
@@ -338,8 +345,11 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
-    // TODO: change +desc to -desc for FT>20b8
+#ifdef FT20b8
     rTo.mnDescent           = (+rMetrics.descender + 32) >> 6;
+#else // FT20b8
+    rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
+#endif // FT20b8
     rTo.mnLeading           = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
     rTo.mnSlant             = 0;
 
@@ -391,26 +401,6 @@ static int SetVerticalFlags( sal_Unicode nChar )
         || (nChar >= 0x3008 && nChar <= 0x3017)
         ||  nChar >= 0xFF00 )
             return 0;   // not rotated
-/*
-        else if( nChar == 0x3001 || nChar == 0x3002 )
-        {
-            return VCLASS_TRANSFORM1;
-        }
-        else if( nChar == 0x3041 || nChar == 0x3043
-        ||  nChar == 0x3045 || nChar == 0x3047
-        ||  nChar == 0x3049 || nChar == 0x3063
-        ||  nChar == 0x3083 || nChar == 0x3085
-        ||  nChar == 0x3087 || nChar == 0x308e
-        ||  nChar == 0x30a1 || nChar == 0x30a3
-        ||  nChar == 0x30a5 || nChar == 0x30a7
-        ||  nChar == 0x30a9 || nChar == 0x30c3
-        ||  nChar == 0x30e3 || nChar == 0x30e5
-        ||  nChar == 0x30e7 || nChar == 0x30ee
-        ||  nChar == 0x30f5 || nChar == 0x30f6 )
-        {
-            return VCLASS_TRANSFORM2;
-        }
-*/
         else if ( nChar == 0x30fc )
             return +2;  // right
         return +1;      // left
@@ -470,7 +460,10 @@ static void SetTransform( int nSin, int nCos, int nHeight, int nGlyphFlags, FT_G
 int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 {
     if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
-        aChar |= 0xF000;    // emulate W2K hig/low mapping of symbols
+        if( FT_IS_SFNT( maFaceFT ) )
+            aChar |= 0xF000;    // emulate W2K high/low mapping of symbols
+        else
+            aChar &= 0x00FF;    // PS font symbol mapping
 
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
 
