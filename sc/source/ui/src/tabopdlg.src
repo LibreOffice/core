@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:41:23 $
+ *  last change: $Author: obo $ $Date: 2001-06-29 02:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   tabopdlg.src  $
- //   $Author: kz $
- //     $Date: 2001-06-13 23:41:23 $
- // $Revision: 1.13 $
+ //   $Author: obo $
+ //     $Date: 2001-06-29 02:41:31 $
+ // $Revision: 1.14 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -145,18 +145,18 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "èkè¨!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
         QuickHelpText[ chinese_simplified ] = "Àı–°/∑≈¥Û";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "√‡º“!";
+        QuickHelpText[ korean ] = "√‡º“";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ finnish ] = "Kutista";
     };
     FixedText FT_ROWCELL
     {
@@ -210,18 +210,18 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "èkè¨!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "√‡º“!";
+        QuickHelpText[ korean ] = "√‡º“";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ finnish ] = "Kutista";
     };
     FixedText FT_COLCELL
     {
@@ -275,18 +275,18 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "èkè¨!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "√‡º“!";
+        QuickHelpText[ korean ] = "√‡º“";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ finnish ] = "Kutista";
     };
     FixedLine FL_VARIABLES
     {
@@ -304,7 +304,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ swedish ] = "Fˆrinst‰llningar" ;
         Text [ dutch ] = "Standaard" ;
         Text [ spanish ] = "Predeterminaciones" ;
-        Text [ english_us ] = "Settings" ;
+        Text [ english_us ] = "Default settings" ;
         Text[ chinese_simplified ] = "‘§÷√";
         Text[ russian ] = "«‡‰‡ÌÌ˚Â ÁÌ‡˜ÂÌËˇ";
         Text[ polish ] = "Ustawienia domyúlne";
@@ -507,5 +507,6 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Operaciones m˙ltiples";
 };
+
 
 
