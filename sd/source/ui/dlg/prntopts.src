@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:05:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ japanese ] = "ζ—Άε®";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–";
         Text[ arabic ] = "ήνΗΣν";
-        Text[ greek ] = "Προεπιλογή";
+        Text[ greek ] = "Προ~επιλογή";
         Text[ korean ] = "κΈ°λ³Έκ°’";
         Text[ turkish ] = "Φntanύmlύ";
         Text[ language_user1 ] = " ";
@@ -663,7 +663,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ japanese ] = "γƒγƒΌγ‚Έγ‚µγ‚¤γ‚Ίγ«εγ‚γ›γ‚‹(~F)";
         Text[ chinese_traditional ] = "θªΏζ•΄ζι ιΆε¤§ε°(~F)";
         Text[ arabic ] = "γαΗΑγΙ αΝΜγ ΗαΥέΝΙ";
-        Text[ greek ] = "Προσαρμογή σε σελίδα";
+        Text[ greek ] = "Προς~αρμογή στη σελίδα";
         Text[ korean ] = "νμ΄μ§€ ν¬κΈ°μ— λ§μ¶¤(~F)";
         Text[ turkish ] = "Sayfaya sύπdύr";
         Text[ language_user1 ] = " ";
@@ -764,7 +764,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ japanese ] = "γγ‚‚γ¦(~O)";
         Text[ chinese_traditional ] = "ζ­£ιΆ(~O)";
         Text[ arabic ] = "ΗαΥέΝΙ ΗαΓγΗγνΙ";
-        Text[ greek ] = "Μπροστ. πλε~υρά";
+        Text[ greek ] = "Πρ~όσοψη";
         Text[ korean ] = "μ •λ©΄(~O)";
         Text[ turkish ] = "Φn sayfa";
         Text[ language_user1 ] = " ";
@@ -798,7 +798,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ japanese ] = "γ†γ‚‰(~C)";
         Text[ chinese_traditional ] = "ειΆ(~C)";
         Text[ arabic ] = "ΗαΥέΝΙ ΗαΞαένΙ";
-        Text[ greek ] = "Πίσω πλ~ευρά";
+        Text[ greek ] = "Πί~σω";
         Text[ korean ] = "λ’·λ©΄(~C)";
         Text[ turkish ] = "~Geri";
         Text[ language_user1 ] = " ";
@@ -860,6 +860,7 @@ TabPage TP_PRINT_OPTIONS
     Text[ hindi ] = "ΰ¤µΰ¤Ώΰ¤•ΰ¤²ΰ¥ΰ¤ª";
     Text[ slovak ] = "Nastavenia";
 };
+
 
 
 
