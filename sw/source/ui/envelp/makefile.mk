@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2001-01-15 14:05:11 $
+#   last change: $Author: os $ $Date: 2001-03-07 13:40:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,7 +116,8 @@ SLOFILES =  \
         $(SLO)$/syncbtn.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/label1.obj
+        $(SLO)$/label1.obj      \
+        $(SLO)$/mailmrge.obj
 
 # --- Targets -------------------------------------------------------
 

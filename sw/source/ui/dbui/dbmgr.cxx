@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-03-01 12:18:58 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1890,7 +1890,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
     {
         DBG_ERROR("exception caught")
     }
-    return TRUE;
+    return !pMergeData->bEndOfDB;
 }
 /* -----------------------------13.07.00 17:23--------------------------------
     synchronized labels contain a next record field at their end
@@ -1972,7 +1972,7 @@ BOOL    SwNewDBMgr::ShowInBeamer(const String& rDBName, const String& rTableName
         pProperties[1].Name = C2U("Command");
         pProperties[1].Value <<= OUString(rTableName);
         pProperties[2].Name = C2U("CommandType");
-        pProperties[2].Value <<= (sal_Int32)SW_DB_SELECT_QUERY == nType ? CommandType::QUERY : CommandType::TABLE;
+        pProperties[2].Value <<= (sal_Int16)SW_DB_SELECT_QUERY == nType ? CommandType::QUERY : CommandType::TABLE;
         xD->dispatch(aURL, aProperties);
     }
     else
@@ -2225,7 +2225,6 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     if(pMergeDialog)
         return ;
     OUString sDataSource, sDataTableOrQuery;
-    Reference<XResultSet>  xResSet;
     Sequence<sal_Int32> aSelection;
     BOOL bHasSelectionProperty = FALSE;
     sal_Int32 nSelectionPos = 0;
@@ -2237,8 +2236,6 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             pValues[nPos].Value >>= sDataSource;
         else if(!pValues[nPos].Name.compareToAscii("Command"))
             pValues[nPos].Value >>= sDataTableOrQuery;
-        else if(!pValues[nPos].Name.compareToAscii("Cursor"))
-            pValues[nPos].Value >>= xResSet;
         else if(!pValues[nPos].Name.compareToAscii("Selection"))
         {
             bHasSelectionProperty = TRUE;
@@ -2248,7 +2245,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         else if(!pValues[nPos].Name.compareToAscii("CommandType"))
             pValues[nPos].Value >>= nCmdType;
     }
-    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
+    if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
     {
         DBG_ERROR("PropertyValues missing or unset")
         return;
@@ -2257,7 +2254,8 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                     sDataSource,
                     sDataTableOrQuery,
-                    nCmdType, aSelection );
+                    nCmdType,
+                    bHasSelectionProperty ? &aSelection : 0 );
 
     if(pMergeDialog->Execute() == RET_OK)
     {

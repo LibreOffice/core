@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,10 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+#define C2U(char) rtl::OUString::createFromAscii(char)
+
 /* -----------------------------05.01.00 15:14--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -617,36 +621,22 @@ void SwModule::ExecDB(SfxRequest &rReq)
                                     // das Mischen von DB-Feldern notwendig.
                 GetView()->AttrChangedNotify( &rSh );
                 pNewDBMgr->SetMergeType( DBMGR_MERGE );
-                ShowDBObj(rSh, aData, sal_True);
+                if(nSlot != FN_QRY_MERGE)
+                    ShowDBObj(rSh, aData, sal_True);
             }
 
             if (pNewDBMgr && nSlot == FN_QRY_MERGE)
             {
-                SfxViewFrame* pVFrame = GetView()->GetViewFrame();
-                uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
-
-                uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
-                    OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
-
-                if(xBeamerFrame.is())
-                {
-                    uno::Reference< frame::XController >  xCtrl = xBeamerFrame->getController();
-                    uno::Reference< frame::XDispatchProvider >  xDispProv(xCtrl, uno::UNO_QUERY);
-                    if(xDispProv.is())
-                    {
-                        OUString uEmpty;
-                         util::URL aURL;
-                        aURL.Complete = OUString::createFromAscii(".uno:DataSourceBrowser/FormLetter");
-                        uno::Reference< frame::XDispatch >  xDisp = xDispProv->queryDispatch(
-                                                    aURL, uEmpty, frame::FrameSearchFlag::AUTO);
-                        if(xDisp.is())
-                        {
-                            uno::Reference< frame::XStatusListener >  xDispatchListener =
-                                        new SwXDispatchStatusListener(xDisp, aURL);
-                            xDisp->addStatusListener(xDispatchListener, aURL);
-                        }
-                    }
-                }
+                Sequence<PropertyValue> aProperties(3);
+                PropertyValue* pValues = aProperties.getArray();
+                pValues[0].Name = C2U("DataSourceName");
+                pValues[1].Name = C2U("Command");
+                pValues[2].Name = C2U("CommandType");
+                pValues[0].Value <<= aData.sDataSource;
+                pValues[1].Value <<= aData.sCommand;
+                pValues[2].Value <<= aData.nCommandType;
+                pNewDBMgr->ExecuteFormLetter(GetView()->GetWrtShell(),
+                                            aProperties);
             }
         }
         break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:41:36 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,19 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
 
 class SwWrtShell;
 class SwModuleOptions;
-
+namespace com{namespace sun{namespace star{namespace frame{
+        class XFrame;
+    }}}}
 class SwMailMergeDlg : public SvxStandardDialog
 {
+    Window*          pBeamerWin;
+
     RadioButton     aAllRB;
     RadioButton     aMarkedRB;
     RadioButton     aFromRB;
@@ -144,6 +151,8 @@ class SwMailMergeDlg : public SvxStandardDialog
 
     USHORT          nMergeType;
     ::com::sun::star::uno::Sequence< sal_Int32 >  aSelection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
+
 
     DECL_LINK( ButtonHdl, Button* pBtn );
     DECL_LINK( InsertPathHdl, PushButton * );
@@ -161,7 +170,7 @@ public:
          const String& rSourceName,
         const String& rTblName,
         sal_Int32 nCommandType,
-        ::com::sun::star::uno::Sequence< sal_Int32 >& rSelection);
+        ::com::sun::star::uno::Sequence< sal_Int32 >* pSelection = 0);
     ~SwMailMergeDlg();
 
     inline USHORT   GetMergeType() { return nMergeType; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:30:18 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog DLG_MAILMERGE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 242 , 179 ) ;
+    Size = MAP_APPFONT ( 374 , 201 ) ;
     Text = "Serienbrief" ;
     Text [ ENGLISH ] = "Print merge" ;
     Text [ norwegian ] = "Print merge" ;
@@ -83,10 +83,15 @@ ModalDialog DLG_MAILMERGE
     Text [ english_us ] = "Form Letter" ;
     Moveable = TRUE ;
     HelpID = FN_QRY_MERGE ;
+    Window WIN_BEAMER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 306 , 80 ) ;
+    };
     RadioButton RB_ALL
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Alle" ;
         Text [ ENGLISH ] = "~All" ;
         Text [ norwegian ] = "~All" ;
@@ -114,8 +119,8 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_MARKED
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Markierte ~Datensätze" ;
         Text [ ENGLISH ] = "S~elected records" ;
         Text [ norwegian ] = "Selected records" ;
@@ -143,7 +148,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_FROM
     {
-        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
         Text = "~Von:" ;
         Text [ ENGLISH ] = "~From:" ;
@@ -173,7 +178,7 @@ ModalDialog DLG_MAILMERGE
     NumericField NF_FROM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 48 , 40 ) ;
+        Pos = MAP_APPFONT ( 48 , 122 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         TabStop = TRUE ;
         StrictFormat = TRUE ;
@@ -182,7 +187,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_BIS
     {
-        Pos = MAP_APPFONT ( 75 , 41 ) ;
+        Pos = MAP_APPFONT ( 75 , 123 ) ;
         Size = MAP_APPFONT ( 27 , 10 ) ;
         Text = "~Bis:" ;
         Text [ ENGLISH ] = "~To:" ;
@@ -212,7 +217,7 @@ ModalDialog DLG_MAILMERGE
     NumericField NF_TO
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 105 , 40 ) ;
+        Pos = MAP_APPFONT ( 105 , 122 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         TabStop = TRUE ;
         StrictFormat = TRUE ;
@@ -221,8 +226,8 @@ ModalDialog DLG_MAILMERGE
     };
     GroupBox GB_RECORD
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 174 , 55 ) ;
+        Pos = MAP_APPFONT ( 6 , 86 ) ;
+        Size = MAP_APPFONT ( 130 , 109 ) ;
         Text = "Datensätze" ;
         Text [ ENGLISH ] = "Records" ;
         Text [ norwegian ] = "Records" ;
@@ -249,9 +254,8 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_PRINTER
     {
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Dr~ucker : ~Drucker */
+        Pos = MAP_APPFONT ( 148 , 97 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Dr~ucker" ;
         Text [ ENGLISH ] = "~Printer" ;
         Check = TRUE ;
@@ -278,8 +282,8 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_MAILING
     {
-        Pos = MAP_APPFONT ( 66 , 75 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Pos = MAP_APPFONT ( 203 , 97 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Mailing" ;
         Text [ ENGLISH ] = "~Mailing" ;
         TabStop = TRUE ;
@@ -305,8 +309,8 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_FILE
     {
-        Pos = MAP_APPFONT ( 120 , 75 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Pos = MAP_APPFONT ( 258 , 97 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Datei" ;
         Text [ ENGLISH ] = "File" ;
         TabStop = TRUE ;
@@ -332,7 +336,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_PATH
     {
-        Pos = MAP_APPFONT ( 12 , 94 ) ;
+        Pos = MAP_APPFONT ( 148 , 124 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
         Hide = TRUE ;
         Text = "Pfad" ;
@@ -359,15 +363,15 @@ ModalDialog DLG_MAILMERGE
     };
     Edit ED_PATH
     {
-        Pos = MAP_APPFONT ( 53 , 93 ) ;
-        Size = MAP_APPFONT ( 101 , 12 ) ;
+        Pos = MAP_APPFONT ( 220 , 123 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
         Hide = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_PATH
     {
-        Pos = MAP_APPFONT ( 160 , 93 ) ;
+        Pos = MAP_APPFONT ( 294 , 123 ) ;
         Size = MAP_APPFONT ( 14 , 12 ) ;
          // Soll Groesse des Edits haben (12)!
         Text = "~..." ;
@@ -376,7 +380,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_FILENAME
     {
-        Pos = MAP_APPFONT ( 12 , 116 ) ;
+        Pos = MAP_APPFONT ( 148 , 142 ) ;
         Size = MAP_APPFONT ( 102 , 10 ) ;
         Hide = TRUE ;
         Text = "Dateiname generiert aus" ;
@@ -403,7 +407,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_COLUMN
     {
-        Pos = MAP_APPFONT ( 18 , 131 ) ;
+        Pos = MAP_APPFONT ( 154 , 155 ) ;
         Size = MAP_APPFONT ( 81 , 10 ) ;
         Text = "Datenbankfeld" ;
         Text [ ENGLISH ] = "Database field" ;
@@ -431,7 +435,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_FILENAME
     {
-        Pos = MAP_APPFONT ( 18 , 147 ) ;
+        Pos = MAP_APPFONT ( 154 , 170 ) ;
         Size = MAP_APPFONT ( 81 , 10 ) ;
         Text = "Manueller Vorgabe" ;
         Text [ ENGLISH ] = "Custom" ;
@@ -461,7 +465,7 @@ ModalDialog DLG_MAILMERGE
     ListBox LB_COLUMN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 100 , 130 ) ;
+        Pos = MAP_APPFONT ( 232 , 153 ) ;
         Size = MAP_APPFONT ( 74 , 84 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -470,15 +474,15 @@ ModalDialog DLG_MAILMERGE
     Edit ED_FILENAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 100 , 146 ) ;
+        Pos = MAP_APPFONT ( 232 , 168 ) ;
         Size = MAP_APPFONT ( 74 , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
     CheckBox CB_SINGLE_JOBS
     {
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
-        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Pos = MAP_APPFONT ( 148 , 112 ) ;
+        Size = MAP_APPFONT ( 142 , 10 ) ;
         Text = "~Einzelne Druckjobs erzeugen" ;
         Text [ ENGLISH ] = "Si~ngle print jobs" ;
         TabStop = TRUE ;
@@ -504,7 +508,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_ADDRESS
     {
-        Pos = MAP_APPFONT ( 12 , 89 ) ;
+        Pos = MAP_APPFONT ( 148 , 112 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
         Hide = TRUE ;
@@ -533,8 +537,8 @@ ModalDialog DLG_MAILMERGE
     ListBox LB_ADDRESSFLD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 88 ) ;
-        Size = MAP_APPFONT ( 108 , 84 ) ;
+        Pos = MAP_APPFONT ( 220 , 110 ) ;
+        Size = MAP_APPFONT ( 74 , 84 ) ;
         Disable = TRUE ;
         Hide = TRUE ;
         TabStop = TRUE ;
@@ -542,10 +546,9 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_SUBJECT
     {
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Pos = MAP_APPFONT ( 148 , 125 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? Be~treff : Betreff */
         Text = "Be~treff" ;
         Text [ ENGLISH ] = "S~ubject" ;
         Text [ english_us ] = "~Subject" ;
@@ -571,14 +574,14 @@ ModalDialog DLG_MAILMERGE
     Edit ED_SUBJECT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 103 ) ;
-        Size = MAP_APPFONT ( 108 , 12 ) ;
+        Pos = MAP_APPFONT ( 220 , 127 ) ;
+        Size = MAP_APPFONT ( 88 , 12 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
     };
     FixedText FT_ATTACH
     {
-        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Pos = MAP_APPFONT ( 148 , 140 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
         Text = "Anhänge" ;
@@ -606,15 +609,15 @@ ModalDialog DLG_MAILMERGE
     Edit ED_ATTACH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 117 ) ;
-        Size = MAP_APPFONT ( 88 , 12 ) ;
+        Pos = MAP_APPFONT ( 220 , 140 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
         ReadOnly = TRUE ;
     };
     PushButton PB_ATTACH
     {
-        Pos = MAP_APPFONT ( 160 , 117 ) ;
+        Pos = MAP_APPFONT ( 294 , 140 ) ;
         Size = MAP_APPFONT ( 14 , 12 ) ;
          // Soll Groesse des Edits haben (12)!
         Text = "~..." ;
@@ -623,7 +626,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_FORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Pos = MAP_APPFONT ( 148 , 155 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
         Text = "Mail-Format" ;
@@ -650,8 +653,8 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_HTML
     {
-        Pos = MAP_APPFONT ( 66 , 133 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Pos = MAP_APPFONT ( 220 , 155 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? HTM~L : HTML */
         Text = "HTM~L" ;
@@ -678,8 +681,8 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_RTF
     {
-        Pos = MAP_APPFONT ( 66 , 145 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Pos = MAP_APPFONT ( 220 , 168 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
         Text = "~RTF" ;
         TabStop = TRUE ;
@@ -705,8 +708,8 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_SW
     {
-        Pos = MAP_APPFONT ( 66 , 157 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Pos = MAP_APPFONT ( 220, 181 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
         Text = "%PRODUCTNAME Writer" ;
         TabStop = TRUE ;
@@ -732,8 +735,8 @@ ModalDialog DLG_MAILMERGE
     };
     GroupBox GB_DEST
     {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
-        Size = MAP_APPFONT ( 174 , 109 ) ;
+        Pos = MAP_APPFONT ( 142 , 86 ) ;
+        Size = MAP_APPFONT ( 170 , 109 ) ;
         Text = "Ausgabe" ;
         Text [ ENGLISH ] = "Destination" ;
         Text [ english_us ] = "Output" ;
@@ -758,18 +761,18 @@ ModalDialog DLG_MAILMERGE
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 186 , 6 ) ;
+        Pos = MAP_APPFONT ( 318 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 186 , 23 ) ;
+        Pos = MAP_APPFONT ( 318 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 186 , 43 ) ;
+        Pos = MAP_APPFONT ( 318 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     Text[ chinese_simplified ] = "ÓÊ¼þºÏ²¢";

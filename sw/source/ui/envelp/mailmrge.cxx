@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-01-19 15:14:21 $
+ *  last change: $Author: os $ $Date: 2001-03-07 13:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,11 +119,23 @@
 #endif
 
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 using namespace rtl;
@@ -134,21 +146,30 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::frame;
 
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
+void  lcl_MoveWin(Window& rWin, long nDiff)
+{
+    Point aPos(rWin.GetPosPixel());
+    aPos.Y() -= nDiff;
+    rWin.SetPosPixel(aPos);
+}
+
 SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
          const String& rSourceName,
         const String& rTblName,
         sal_Int32 nCommandType,
-        Sequence< sal_Int32 >& rSelection) :
+        Sequence< sal_Int32 >* pSelection) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_MAILMERGE)),
-
+    pBeamerWin      (new Window(this, ResId(WIN_BEAMER))),
     aAllRB          (this, SW_RES(RB_ALL)),
     aMarkedRB       (this, SW_RES(RB_MARKED)),
     aFromRB         (this, SW_RES(RB_FROM)),
@@ -192,17 +213,97 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     rSh             (rShell),
     rDBName         (rSourceName),
     rTableName      (rTblName),
-    aSelection      (rSelection),
     nMergeType      (DBMGR_MERGE_MAILING)
 
 {
     FreeResource();
+    if(pSelection)
+    {
+        aSelection = *pSelection;
+        //move all controls
+        long nDiff = aRecordGB.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
+        pBeamerWin->Show(FALSE);
+        Size aSize = GetSizePixel();
+        aSize.Height() -= nDiff;
+        SetSizePixel(aSize);
+        lcl_MoveWin(aAllRB       , nDiff);
+        lcl_MoveWin(aMarkedRB    , nDiff);
+        lcl_MoveWin(aFromRB      , nDiff);
+        lcl_MoveWin(aFromNF      , nDiff);
+        lcl_MoveWin(aBisFT       , nDiff);
+        lcl_MoveWin(aToNF        , nDiff);
+        lcl_MoveWin(aRecordGB    , nDiff);
+        lcl_MoveWin(aPrinterRB   , nDiff);
+        lcl_MoveWin(aMailingRB   , nDiff);
+        lcl_MoveWin(aFileRB      , nDiff);
+        lcl_MoveWin(aSingleJobsCB, nDiff);
+        lcl_MoveWin(aPathFT      , nDiff);
+        lcl_MoveWin(aPathED      , nDiff);
+        lcl_MoveWin(aPathPB      , nDiff);
+        lcl_MoveWin(aFilenameFT  , nDiff);
+        lcl_MoveWin(aColumnRB    , nDiff);
+        lcl_MoveWin(aFilenameRB  , nDiff);
+        lcl_MoveWin(aColumnLB    , nDiff);
+        lcl_MoveWin(aFilenameED  , nDiff);
+        lcl_MoveWin(aAddressFT   , nDiff);
+        lcl_MoveWin(aAddressFldLB, nDiff);
+        lcl_MoveWin(aSubjectFT   , nDiff);
+        lcl_MoveWin(aSubjectED   , nDiff);
+        lcl_MoveWin(aFormatFT    , nDiff);
+        lcl_MoveWin(aAttachFT    , nDiff);
+        lcl_MoveWin(aAttachED    , nDiff);
+        lcl_MoveWin(aAttachPB    , nDiff);
+        lcl_MoveWin(aFormatHtmlCB, nDiff);
+        lcl_MoveWin(aFormatRtfCB , nDiff);
+        lcl_MoveWin(aFormatSwCB  , nDiff);
+        lcl_MoveWin(aDestGB      , nDiff);
+    }
+    else
+    {
+        try
+        {
+            // create a frame wrapper for myself
+            Reference< XMultiServiceFactory >
+                                        xMgr = comphelper::getProcessServiceFactory();
+            xFrame = Reference< XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), UNO_QUERY);
+            if(xFrame.is())
+            {
+                xFrame->initialize( VCLUnoHelper::GetInterface ( pBeamerWin ) );
+            }
+        }
+        catch (Exception&)
+        {
+            xFrame.clear();
+        }
+        if(xFrame.is())
+        {
+            Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
+            URL aURL;
+            aURL.Complete = C2U(".component:DB/DataSourceBrowser");
+            Reference<XDispatch> xD = xDP->queryDispatch(aURL,
+                        C2U(""),
+                        0x0C);
+            if(xD.is())
+            {
+                Sequence<PropertyValue> aProperties(3);
+                PropertyValue* pProperties = aProperties.getArray();
+                pProperties[0].Name = C2U("DataSourceName");
+                pProperties[0].Value <<= OUString(rSourceName);
+                pProperties[1].Name = C2U("Command");
+                pProperties[1].Value <<= OUString(rTableName);
+                pProperties[2].Name = C2U("CommandType");
+                pProperties[2].Value <<= nCommandType;
+                xD->dispatch(aURL, aProperties);
+                pBeamerWin->Show();
+            }
+        }
+    }
 
     pModOpt = SW_MOD()->GetModuleConfig();
 
     aSingleJobsCB.Check(pModOpt->IsSinglePrintJob());
 
-    BYTE nMailingMode(pModOpt->GetMailingFormats());
+    sal_Int16 nMailingMode(pModOpt->GetMailingFormats());
     aFormatSwCB.Check((nMailingMode & TXTFORMAT_OFFICE) != 0);
     aFormatHtmlCB.Check((nMailingMode & TXTFORMAT_HTML) != 0);
     aFormatRtfCB.Check((nMailingMode & TXTFORMAT_RTF) != 0);
@@ -279,6 +380,13 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
 SwMailMergeDlg::~SwMailMergeDlg()
 {
+    if(xFrame.is())
+    {
+        xFrame->setComponent(NULL, NULL);
+        xFrame->dispose();
+    }
+    else
+        delete pBeamerWin;
 }
 
 /*------------------------------------------------------------------------
