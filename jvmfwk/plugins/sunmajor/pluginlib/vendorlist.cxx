@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorlist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:53:22 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,19 @@
 #include "vendorlist.hxx"
 #include "sunjre.hxx"
 #include "otherjre.hxx"
+#include "osl/thread.h"
+#include <stdio.h>
 
+using namespace com::sun::star::uno;
+using namespace rtl;
 
 namespace jfw_plugin
 {
 
+/* Note: The vendor strings must be UTF-8. For example, if
+   the string contains an a umlaut then it must be expressed
+   by "\xXX\xXX"
+ */
 BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("Sun Microsystems Inc.", SunInfo)
     VENDOR_MAP_ENTRY("IBM Corporation", OtherInfo)
@@ -74,5 +82,36 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("Apple Computer, Inc.", OtherInfo)
 END_VENDOR_MAP()
 
+
+Sequence<OUString> getVendorNames()
+{
+    const size_t count = sizeof(gVendorMap) / sizeof (VendorSupportMapEntry) - 1;
+    OUString arNames[count];
+    for ( sal_Int32 pos = 0; pos < count; ++pos )
+    {
+        OString sVendor(gVendorMap[pos].sVendorName);
+        arNames[pos] = OStringToOUString(sVendor, RTL_TEXTENCODING_UTF8);
+    }
+    return Sequence<OUString>(arNames, count);
+}
+
+bool isVendorSupported(const rtl::OUString& sVendor)
+{
+    Sequence<OUString> seqNames = getVendorNames();
+    const OUString * arNames = seqNames.getConstArray();
+    sal_Int32 count = seqNames.getLength();
+
+    for (int i = 0; i < count; i++)
+    {
+        if (sVendor.equals(arNames[i]))
+            return true;
+    }
+#if OSL_DEBUG_LEVEL >= 2
+    OString sVendorName = OUStringToOString(sVendor, osl_getThreadTextEncoding());
+    fprintf(stderr, "[Java frameworksunjavaplugin.so]sunjavaplugin does not support vendor: %s.\n",
+            sVendorName.getStr());
+#endif
+    return false;
+}
 
 }
