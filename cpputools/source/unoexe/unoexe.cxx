@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-01 12:42:49 $
+ *  last change: $Author: dbo $ $Date: 2001-02-07 13:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,38 +125,60 @@ static inline void out( const OUString & rText )
 static const char arUsingText[] =
 "\nusing:\n\n"
 "uno (-c ComponentImplementationName -l LocationUrl | -s ServiceName)\n"
-"    [-r Registry1] [-r Registry2] ...\n"
+"    [-ro ReadOnlyRegistry1] [-ro ReadOnlyRegistry2] ... [-rw ReadWriteRegistry]\n"
 "    [-u uno:(socket[,host=HostName][,port=nnn]|pipe[,name=PipeName]);iiop;Name\n"
 "        [--singleaccept] [--singleinstance]]\n"
 "    [-- Argument1 Argument2 ...]\n";
 
 //--------------------------------------------------------------------------------------------------
-static sal_Bool readOption( OUString * pValue, sal_Char cOpt,
+static sal_Bool readOption( OUString * pValue, sal_Char const * pOpt,
                             sal_Int32 * pnIndex, const sal_Char * argv[], sal_Int32 argc )
     throw (RuntimeException)
 {
     const sal_Char * pArg = argv[ *pnIndex ];
+    if (pArg[ 0 ] != '-')
+        return sal_False;
 
-    cOpt |= 0x20; // ascii lower case
-    if (pArg[0] && pArg[0] == '-' && (pArg[1] | 0x20) == cOpt) // right option
+    OString aArg( pArg +1 );
+    OString aOpt( pOpt );
+
+    if (aArg.getLength() < aOpt.getLength())
+        return sal_False;
+
+    if (aArg.getLength() == aOpt.getLength() && aOpt.equalsIgnoreCase( aArg ))
     {
-        if (pArg[2])
+        // take next argument
+        ++(*pnIndex);
+        if (*pnIndex >= argc || argv[ *pnIndex ][0] == '-')
         {
-            *pValue = OUString::createFromAscii( pArg+2 );
+            OUStringBuffer buf( 32 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
+            buf.appendAscii( pOpt );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" given!") );
+            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
         }
-        else // take next argument
+        else
         {
-            ++(*pnIndex);
-            if (*pnIndex >= argc || argv[ *pnIndex ][0] == '-')
-            {
-                OUStringBuffer buf( 32 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
-                buf.appendAscii( &cOpt, 1 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" given!") );
-                throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
-            }
             *pValue = OUString::createFromAscii( argv[ *pnIndex ] );
+#ifdef DEBUG
+            out( "\n> identified option -" );
+            out( pOpt );
+            out( " = " );
+            out( argv[ *pnIndex ] );
+#endif
+            ++(*pnIndex);
+            return sal_True;
         }
+    }
+    else if (aOpt.equalsIgnoreCase( aArg.copy( 0, aOpt.getLength() ) ))
+    {
+        *pValue = OUString::createFromAscii( pArg + 1 + aOpt.getLength() );
+#ifdef DEBUG
+        out( "\n> identified option -" );
+        out( pOpt );
+        out( " = " );
+        out( pArg + 1 + aOpt.getLength() );
+#endif
         ++(*pnIndex);
         return sal_True;
     }
@@ -171,6 +193,10 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     {
         ++(*pnIndex);
         *pbOpt = sal_True;
+#ifdef DEBUG
+        out( "\n> identified option --" );
+        out( pOpt );
+#endif
         return sal_True;
     }
     return sal_False;
@@ -685,12 +711,16 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
     try
     {
         OUString aImplName, aLocation, aServiceName, aUnoUrl;
-        vector< OUString > aRegistries;
+        vector< OUString > aReadOnlyRegistries;
         Sequence< OUString > aParams;
         sal_Bool bSingleAccept = sal_False;
         sal_Bool bSingleInstance = sal_False;
 
         //#### read command line arguments #########################################################
+
+        bool bOldRegistryMimic = false;
+        bool bNewRegistryMimic = false;
+        OUString aReadWriteRegistry;
 
         sal_Int32 nPos = 1;
         // read up to arguments
@@ -702,19 +732,33 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
                 break;
             }
 
-            if (readOption( &aImplName, 'c', &nPos, argv, argc )                ||
-                readOption( &aLocation, 'l', &nPos, argv, argc )                ||
-                readOption( &aServiceName, 's', &nPos, argv, argc )             ||
-                readOption( &aUnoUrl, 'u', &nPos, argv, argc )                  ||
+            if (readOption( &aImplName, "c", &nPos, argv, argc )                ||
+                readOption( &aLocation, "l", &nPos, argv, argc )                ||
+                readOption( &aServiceName, "s", &nPos, argv, argc )             ||
+                readOption( &aUnoUrl, "u", &nPos, argv, argc )                  ||
                 readOption( &bSingleAccept, "singleaccept", &nPos, argv, argc ) ||
                 readOption( &bSingleInstance, "singleinstance", &nPos, argv, argc ))
             {
                 continue;
             }
             OUString aRegistry;
-            if (readOption( &aRegistry, 'r', &nPos, argv, argc ))
+            if (readOption( &aRegistry, "ro", &nPos, argv, argc ))
             {
-                aRegistries.push_back( aRegistry );
+                aReadOnlyRegistries.push_back( aRegistry );
+                bNewRegistryMimic = true;
+                continue;
+            }
+            if (readOption( &aReadWriteRegistry, "rw", &nPos, argv, argc ))
+            {
+                bNewRegistryMimic = true;
+                continue;
+            }
+            if (readOption( &aRegistry, "r", &nPos, argv, argc ))
+            {
+                aReadOnlyRegistries.push_back( aRegistry );
+                aReadWriteRegistry = aRegistry;
+                out( "\n> warning: DEPRECATED use of option -r, use -ro or -rw!" );
+                bOldRegistryMimic = true;
                 continue;
             }
 
@@ -724,6 +768,17 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
             buf.appendAscii( argv[nPos] );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
+        }
+
+        if (bOldRegistryMimic) // last one was set to be read-write
+        {
+            aReadOnlyRegistries.pop_back();
+            if (bOldRegistryMimic && bNewRegistryMimic)
+            {
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("mixing with DEPRECATED registry options!") ),
+                    Reference< XInterface >() );
+            }
         }
 
         if ((aImplName.getLength() != 0) == (aServiceName.getLength() != 0))
@@ -749,23 +804,27 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
         if (! xMgr.is())
             throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("cannot boot strap service manager!" ) ), Reference< XInterface >() );
 
-        // registries to be used
-        if (aRegistries.size())
+        // ReadOnly registries
+        for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
         {
-            // ReadOnly registries
-            sal_Int32 nPos = 0;
-            sal_Int32 nReadOnly = aRegistries.size() -1;
-
-            for ( ; nPos < nReadOnly; ++nPos )
-            {
-                Reference< XSimpleRegistry > xNewReg(
-                    openRegistry( xMgr, aRegistries[nPos], sal_True, sal_False ) );
-                if (xNewReg.is())
-                    xRegistry = (xRegistry.is() ? nestRegistries( xMgr, xNewReg, xRegistry ) : xNewReg);
-            }
+#ifdef DEBUG
+            out( "\n> trying to open ro registry: " );
+            out( OUStringToOString( aReadOnlyRegistries[ nReg ], RTL_TEXTENCODING_ASCII_US ).getStr() );
+#endif
+            Reference< XSimpleRegistry > xNewReg(
+                openRegistry( xMgr, aReadOnlyRegistries[ nReg ], sal_True, sal_False ) );
+            if (xNewReg.is())
+                xRegistry = (xRegistry.is() ? nestRegistries( xMgr, xNewReg, xRegistry ) : xNewReg);
+        }
+        if (aReadWriteRegistry.getLength())
+        {
+#ifdef DEBUG
+            out( "\n> trying to open rw registry: " );
+            out( OUStringToOString( aReadWriteRegistry, RTL_TEXTENCODING_ASCII_US ).getStr() );
+#endif
             // ReadWrite registry
             Reference< XSimpleRegistry > xNewReg(
-                openRegistry( xMgr, aRegistries[nPos], sal_False, sal_True ) );
+                openRegistry( xMgr, aReadWriteRegistry, sal_False, sal_True ) );
             if (xNewReg.is())
                 xRegistry = (xRegistry.is() ? nestRegistries( xMgr, xNewReg, xRegistry ) : xNewReg);
         }
