@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:51:27 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,10 @@
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
 #endif
-
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 #include "txtcfg.hxx"
 #include "swfont.hxx"   // new SwFont
@@ -323,14 +326,14 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         ASSERT( pStartFrm, "Frame chain is broken" )
         if ( pStartFrm->GetDrawObjs() )
         {
-            const SwDrawObjs &rObjs = *pStartFrm->GetDrawObjs();
+            const SwSortedObjs &rObjs = *pStartFrm->GetDrawObjs();
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
-                SdrObject *pO = rObjs[i];
-                SwRect aRect( pO->GetCurrentBoundRect() );
+                SwAnchoredObject* pAnchoredObj = rObjs[i];
+                SwRect aRect( pAnchoredObj->GetObjRect() );
 
-                if ( ! pO->ISA(SwVirtFlyDrawObj) ||
-                     ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->IsValid() )
+                if ( !pAnchoredObj->ISA(SwFlyFrm) ||
+                     static_cast<SwFlyFrm*>(pAnchoredObj)->IsValid() )
                 {
                     const SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
                     if ( (*fnRect->fnYDiff)( nBottom, nFlyLower ) > 0 )
