@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscarray.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:52:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,16 +134,12 @@ USHORT RscInstNode::GetId() const
 |*    Letzte Aenderung  MM 25.05.91
 |*
 *************************************************************************/
-RscArray::RscArray( HASHID nId, USHORT nTypeId, RscTop * pSuper,
-                    RscEnum * pTypeCl,
-                    USHORT * pTypeValue, USHORT * pFallBackType )
-    : RscTop( nId, nTypeId, pSuper )
+RscArray::RscArray( HASHID nId, USHORT nTypeId, RscTop * pSuper, RscEnum * pTypeCl )
+        : RscTop( nId, nTypeId, pSuper )
 {
     pTypeClass = pTypeCl;
     nOffInstData = RscTop::Size();
     nSize = nOffInstData + ALIGNED_SIZE( sizeof( RscArrayInst ) );
-    pWriteTypeValue = pTypeValue;
-    pWriteDfltTypeValue = pFallBackType;
 }
 
 /*************************************************************************
@@ -525,9 +521,9 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
         RscInstNode *   pNode = NULL;
         if( pClassData->pNode )
         {
-            pNode = pClassData->pNode->Search( *pWriteTypeValue );
-            if( !pNode && *pWriteTypeValue != *pWriteDfltTypeValue )
-                pNode = pClassData->pNode->Search( *pWriteDfltTypeValue );
+            std::vector< USHORT >::const_iterator it;
+            for( it = pTC->GetFallbacks().begin(); !pNode && it != pTC->GetFallbacks().end(); ++it )
+                pNode = pClassData->pNode->Search( *it );
         }
 
         if( pNode )
@@ -619,9 +615,20 @@ ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( pClassData->pNode )
     {
-        pNode = pClassData->pNode->Search( *pWriteTypeValue );
-        if( !pNode && *pWriteTypeValue != *pWriteDfltTypeValue )
-            pNode = pClassData->pNode->Search( *pWriteDfltTypeValue );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "RscArray::WriteRc: Fallback " );
+#endif
+        std::vector< USHORT >::const_iterator it;
+        for( it = pTC->GetFallbacks().begin(); !pNode && it != pTC->GetFallbacks().end(); ++it )
+        {
+            pNode = pClassData->pNode->Search( *it );
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, " 0x%hx", *it );
+#endif
+        }
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "\n" );
+#endif
     }
 
     if( pNode )
@@ -654,9 +661,8 @@ void RscArray::WriteRcAccess
 |*
 *************************************************************************/
 RscClassArray::RscClassArray( HASHID nId, USHORT nTypeId, RscTop * pSuper,
-                    RscEnum * pTypeCl,
-                    USHORT * pTypeValue, USHORT * pFallBackType )
-    : RscArray( nId, nTypeId, pSuper, pTypeCl, pTypeValue, pFallBackType )
+                              RscEnum * pTypeCl )
+    : RscArray( nId, nTypeId, pSuper, pTypeCl )
 {
 }
 
@@ -733,9 +739,8 @@ ERRTYPE RscClassArray::WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
 |*
 *************************************************************************/
 RscLangArray::RscLangArray( HASHID nId, USHORT nTypeId, RscTop * pSuper,
-                          RscEnum * pTypeCl,
-                          USHORT * pTypeValue, USHORT * pFallBackType )
-    : RscArray( nId, nTypeId, pSuper, pTypeCl, pTypeValue, pFallBackType )
+                          RscEnum * pTypeCl )
+    : RscArray( nId, nTypeId, pSuper, pTypeCl )
 {
 }
 
