@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:48:49 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ String RID_STR_BOOL
     Text[ polish ] = "Nie;Tak";
     Text[ japanese ] = "„ÅÑ„ÅÑ„Åà;„ÅØ„ÅÑ";
     Text[ chinese_traditional ] = "Âê¶;ÊòØ";
-    Text[ greek ] = "º˜È-Õ·È";
+    Text[ greek ] = "º˜È;Õ·È";
     Text[ korean ] = "ÏïÑÎãàÏò§;Ïòà";
     Text[ arabic ] = "·«;‰⁄„";
     Text[ turkish ] = "Hay˝r;Evet";
@@ -191,6 +191,13 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21.8.1  2003/07/03 14:40:49  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.21  2003/06/13 12:48:49  hr
+ *  INTEGRATION: CWS rcmerge (1.20.26); FILE MERGED
+ *  2003/06/12 11:10:06 gh 1.20.26.1: final Merge RC
+ *
  *  Revision 1.20.26.1  2003/06/12 11:10:06  gh
  *  final Merge RC
  *
@@ -280,6 +287,7 @@ String RID_STR_BOOL
  *
  *  Revision 1.0 08.01.01 13:04:05  fs
  ************************************************************************/
+
 
 
 
