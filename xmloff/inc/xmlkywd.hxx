@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:24:56 $
+ *  last change: $Author: sab $ $Date: 2000-10-18 17:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ XML_CONSTASCII_ACTION( sXML_counterclockwise, "counterclockwise" );
 XML_CONSTASCII_ACTION( sXML_country, "country" );
 XML_CONSTASCII_ACTION( sXML_covered_table_cell, "covered-table-cell" );
 XML_CONSTASCII_ACTION( sXML_create_date, "create-date" );
+XML_CONSTASCII_ACTION( sXML_create_date_string, "create-date-string" );
 XML_CONSTASCII_ACTION( sXML_creation_date, "creation-date" );
 XML_CONSTASCII_ACTION( sXML_creation_time, "creation-time" );
 XML_CONSTASCII_ACTION( sXML_creator, "creator" );
