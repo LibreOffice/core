@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lla $ $Date: 2003-01-09 11:06:15 $
+#   last change: $Author: vg $ $Date: 2003-05-19 13:15:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,15 @@ APP3STDLIBS=$(SALLIB)
 
 APP3DEPN= $(APP1OBJS)
 APP3LIBS= 
+#-------------------------------------------------------------------------------
+
+APP4TARGET= test_member
+APP4OBJS=$(OBJ)$/test_member.obj
+
+APP4STDLIBS=$(SALLIB)
+
+APP4DEPN=
+APP4LIBS= 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
