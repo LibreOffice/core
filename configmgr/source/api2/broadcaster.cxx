@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:15:37 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 09:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,10 +632,8 @@ namespace configmgr
                                 "ERROR: Tree Mismatch creating Multi Change Broadcaster");
 
                     NodeID aChangedNodeID = it->location.getChangedNodeID();
-                    OSL_ENSURE(aChangedNodeID.isValidNode(),"Cannot broadcast without changing node");
 
-                    if (!aChangedNodeID.isEmpty())
-                        aChangedNodes.insert(aChangedNodeID);
+                    aChangedNodes.insert(aChangedNodeID);
                 }
                 OSL_ENSURE(!aChangedNodes.empty(), "Changes don't affect any nodes");
 
