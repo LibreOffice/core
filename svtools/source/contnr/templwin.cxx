@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-18 12:29:36 $
+ *  last change: $Author: gt $ $Date: 2001-09-28 11:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,17 +281,17 @@ void SvtDummyHeaderBar_Impl::DataChanged( const DataChangedEvent& r )
 
 SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
-    Window( pParent, WB_DIALOGCONTROL ),
+    Window( pParent, WB_DIALOGCONTROL | WB_BORDER | WB_3DLOOK ),
 
     aDummyHeaderBar( this ),
-    aIconCtrl( this, WB_3DLOOK | WB_ICON | WB_NOCOLUMNHEADER |
+    aIconCtrl( this, /*WB_3DLOOK | */WB_ICON | WB_NOCOLUMNHEADER |
                      WB_HIGHLIGHTFRAME | WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP ),
     nMaxTextLength( 0 )
 
 {
     aDummyHeaderBar.Show();
 
-    aIconCtrl.SetStyle( WB_3DLOOK | WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+    aIconCtrl.SetStyle( /*WB_3DLOOK | */WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
                         WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
       aIconCtrl.SetHelpId( HID_TEMPLATEDLG_ICONCTRL );
     aIconCtrl.SetChoiceWithCursor( TRUE );
@@ -395,12 +395,9 @@ SvxIconChoiceCtrlEntry* SvtIconWindow_Impl::GetEntry( const String& rURL ) const
 void SvtIconWindow_Impl::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
-//  Size aHeaderSize = aHeaderBar.GetSizePixel();
     Size aHeaderSize = aDummyHeaderBar.GetSizePixel();
     aHeaderSize.Width() = aWinSize.Width();
-//  aHeaderBar.SetSizePixel( aHeaderSize );
     aDummyHeaderBar.SetSizePixel( aHeaderSize );
-//  aHeaderBar.SetItemSize( HBI_CATEGORY, aWinSize.Width() );
     long nHeaderHeight = aHeaderSize.Height();
     aWinSize.Height() -= nHeaderHeight;
     aIconCtrl.SetPosSizePixel( Point( 0, nHeaderHeight ), aWinSize );
@@ -474,7 +471,7 @@ void SvtIconWindow_Impl::SetFocus()
 
 SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( Window* pParent ) :
 
-    Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP ),
+    Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
     aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
     bIsTemplateFolder   ( sal_False )
@@ -576,7 +573,13 @@ void GetMenuEntry_Impl
 
 void SvtFileViewWindow_Impl::Resize()
 {
-    Size aWinSize = GetSizePixel();
+    Size aWinSize = GetOutputSizePixel();
+
+    static int  x = 0;
+    static int  y = 0;
+
+    aWinSize.nA += x;
+    aWinSize.nB += y;
     aFileView.SetSizePixel( aWinSize );
 }
 
@@ -640,7 +643,7 @@ const String& SvtDocInfoTable_Impl::GetString( long nId ) const
 
 SvtExtendedMultiLineEdit_Impl::SvtExtendedMultiLineEdit_Impl( Window* pParent ) :
 
-    ExtMultiLineEdit( pParent, WB_LEFT | WB_VSCROLL | WB_READONLY )
+    ExtMultiLineEdit( pParent, WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK )
 
 {
     SetLeftMargin( 10 );
@@ -693,14 +696,48 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
     xDocInfo = ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist > (
                ::comphelper::getProcessServiceFactory()->createInstance(
                String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties") ) ), ::com::sun::star::uno::UNO_QUERY );
+
+    pEmptyWin = new Window( this, WB_BORDER | WB_3DLOOK );
 }
 
 SvtFrameWindow_Impl::~SvtFrameWindow_Impl()
 {
     delete pEditWin;
+    delete pEmptyWin;
     xFrame->dispose();
 }
 
+void SvtFrameWindow_Impl::ViewEditWin()
+{
+    pEmptyWin->Hide();
+    xWindow->setVisible( sal_False );
+    pTextWin->Hide();
+    pEditWin->Show();
+}
+
+void SvtFrameWindow_Impl::ViewTextWin()
+{
+    pEmptyWin->Hide();
+    pEditWin->Hide();
+    xWindow->setVisible( sal_True );
+    pTextWin->Show();
+}
+
+void SvtFrameWindow_Impl::ViewEmptyWin()
+{
+    xWindow->setVisible( sal_False );
+    pTextWin->Hide();
+    pEditWin->Hide();
+    pEmptyWin->Show();
+}
+
+void SvtFrameWindow_Impl::ViewNonEmptyWin()
+{
+    if( bDocInfo )
+        ViewEditWin();
+    else
+        ViewTextWin();
+}
 
 void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
 {
@@ -824,6 +861,7 @@ void SvtFrameWindow_Impl::Resize()
     Size aWinSize = GetOutputSizePixel();
     pEditWin->SetSizePixel( aWinSize );
     pTextWin->SetSizePixel( aWinSize );
+    pEmptyWin->SetSizePixel( aWinSize );
 }
 
 void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
@@ -831,6 +869,8 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
 {
     if ( bPreview )
         aCurrentURL = rURL;
+
+    ViewNonEmptyWin();
 
     pEditWin->Clear();
 
@@ -840,6 +880,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
     if ( rURL.Len() == 0 )
     {
         xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+        ViewEmptyWin();
     }
     else if ( !::utl::UCBContentHelper::IsFolder( rURL ) )
     {
@@ -874,11 +915,12 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
                 pTextWin->EnableInput( FALSE, TRUE );
                 if ( pTextWin->IsReallyVisible() )
                 {
+                    sal_Bool    b = sal_True;
                     Sequence < PropertyValue > aArgs( 2 );
                     aArgs[0].Name = String( RTL_CONSTASCII_USTRINGPARAM("Preview") );
-                    aArgs[0].Value <<= sal_True;
+                    aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
                     aArgs[1].Name = String( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
-                    aArgs[1].Value <<= sal_True;
+                    aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
                     xDisp->dispatch( aURL, aArgs );
                 }
             }
@@ -895,20 +937,11 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
     }
 }
 
-void SvtFrameWindow_Impl::ToggleView( sal_Bool bDocInfo )
+void SvtFrameWindow_Impl::ToggleView( sal_Bool bDI )
 {
-    if ( bDocInfo )
-    {
-        xWindow->setVisible( sal_False );
-        pTextWin->Hide();
-        pEditWin->Show();
-    }
-    else
-    {
-        pEditWin->Hide();
-        xWindow->setVisible( sal_True );
-        pTextWin->Show();
-    }
+    bDocInfo = bDI;
+
+    // view is set properly in OpenFile()
 
     OpenFile( aCurrentURL, sal_True, sal_False, sal_False );
 }
@@ -917,11 +950,11 @@ void SvtFrameWindow_Impl::ToggleView( sal_Bool bDocInfo )
 
 SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
-    Window( pParent, WB_3DLOOK | WB_DIALOGCONTROL ),
+    Window( pParent, /*WB_3DLOOK | */WB_DIALOGCONTROL ),
 
     aFileViewTB             ( this, SvtResId( TB_SVT_FILEVIEW ) ),
     aFrameWinTB             ( this, SvtResId( TB_SVT_FRAMEWIN ) ),
-    aSplitWin               ( this, WB_DOCKBORDER | WB_FLATSPLITDRAW | WB_DIALOGCONTROL ),
+    aSplitWin               ( this, /*WB_DOCKBORDER | WB_FLATSPLITDRAW | */WB_DIALOGCONTROL | WB_NOSPLITDRAW ),
     pHistoryList            ( NULL )
 
 {
@@ -938,11 +971,11 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
     // create the split items
     aSplitWin.SetAlign( WINDOWALIGN_LEFT );
-    long nWidth = pIconWin->GetMaxTextLength() * 8 / 7;
+    long nWidth = pIconWin->GetMaxTextLength() * 8 / 7 + 1; // extra space for border
     aSplitWin.InsertItem( ICONWIN_ID, pIconWin, nWidth, SPLITWINDOW_APPEND, 0, SWIB_FIXED );
     aSplitWin.InsertItem( FILEWIN_ID, pFileWin, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
     aSplitWin.InsertItem( FRAMEWIN_ID, pFrameWin, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
-    aSplitWin.SetSplitHdl( LINK( this, SvtTemplateWindow, SplitHdl_Impl ) );
+    aSplitWin.SetSplitHdl( LINK( this, SvtTemplateWindow, ResizeHdl_Impl ) );
 
     // show the windows
     pIconWin->Show();
@@ -963,7 +996,7 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     aFileViewTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aSize = aFrameWinTB.CalcWindowSizePixel();
     aSize.Height() += 4;
-    aFrameWinTB.SetPosSizePixel( Point( 0, 2 ), aSize );
+    aFrameWinTB.SetPosSizePixel( Point( pFrameWin->GetPosPixel().X() + 2, 2 ), aSize );
     aFrameWinTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
     Link aLink = LINK( this, SvtTemplateWindow, ClickHdl_Impl );
 
@@ -978,6 +1011,8 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     aFrameWinTB.Show();
 
     ReadViewSettings( );
+
+    Application::PostUserEvent( LINK( this, SvtTemplateWindow, ResizeHdl_Impl ) );
 }
 
 SvtTemplateWindow::~SvtTemplateWindow()
@@ -1065,7 +1100,7 @@ IMPL_LINK ( SvtTemplateWindow , ClickHdl_Impl, ToolBox *, pToolBox )
     return 0;
 }
 
-IMPL_LINK ( SvtTemplateWindow , SplitHdl_Impl, SplitWindow *, EMPTYARG )
+IMPL_LINK ( SvtTemplateWindow , ResizeHdl_Impl, SplitWindow *, EMPTYARG )
 {
     Resize();
     return 0;
@@ -1179,7 +1214,7 @@ void SvtTemplateWindow::Resize()
     long nWidth = aWinSize.Width() - aPos.X();
 
     nItemSize = nWidth * aSplitWin.GetItemSize( FILEWIN_ID ) / 100;
-    aPos.X() += nItemSize;
+    aPos.X() = pFrameWin->GetPosPixel().X() + 2;
     aFrameWinTB.SetPosPixel( aPos );
 
     Size aSize = aFileViewTB.GetSizePixel();
@@ -1190,7 +1225,7 @@ void SvtTemplateWindow::Resize()
     aSize.Width() = nWidth - nItemSize;
     aFrameWinTB.SetSizePixel( aSize );
 
-    long nToolBoxHeight = aSize.Height();
+    long nToolBoxHeight = aSize.Height() + aFrameWinTB.GetPosPixel().Y();
     aSize = aWinSize;
     aSize.Height() -= nToolBoxHeight;
     aSplitWin.SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );

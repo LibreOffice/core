@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-12 13:13:49 $
+ *  last change: $Author: gt $ $Date: 2001-09-28 11:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,11 +197,17 @@ private:
 
     SvtExtendedMultiLineEdit_Impl*  pEditWin;
     Window*                         pTextWin;
+    Window*                         pEmptyWin;
     LanguageType                    eLangType;
     SvtDocInfoTable_Impl            aInfoTable;
     String                          aCurrentURL;
+    sal_Bool                        bDocInfo;
 
     void                    ShowDocInfo( const String& rURL );
+    void                    ViewEditWin();
+    void                    ViewTextWin();
+    void                    ViewEmptyWin();
+    void                    ViewNonEmptyWin();  // views depending on bDocInfo
 
 public:
     SvtFrameWindow_Impl( Window* pParent );
@@ -248,7 +254,7 @@ private:
     DECL_LINK(          ResetHdl_Impl, Timer* );
     DECL_LINK(          TimeoutHdl_Impl, Timer* );
     DECL_LINK(          ClickHdl_Impl, ToolBox* );
-    DECL_LINK(          SplitHdl_Impl, SplitWindow* );
+    DECL_LINK(          ResizeHdl_Impl, SplitWindow* );     // used for split and initial setting of toolbar pos
 
     void                PrintFile( const String& rURL );
     void                AppendHistoryURL( const String& rURL );
