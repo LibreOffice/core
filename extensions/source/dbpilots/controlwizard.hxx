@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 12:42:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,18 @@ namespace dbp
     //= OControlWizardPage
     //=====================================================================
     class OControlWizard;
-    class OControlWizardPage : public ::svt::OWizardPage
+    typedef ::svt::OWizardPage OControlWizardPage_Base;
+    class OControlWizardPage : public OControlWizardPage_Base
     {
+    protected:
+        FixedLine*      m_pFormSettingsSeparator;
+        FixedText*      m_pFormDatasourceLabel;
+        FixedText*      m_pFormDatasource;
+        FixedText*      m_pFormContentTypeLabel;
+        FixedText*      m_pFormContentType;
+        FixedText*      m_pFormTableLabel;
+        FixedText*      m_pFormTable;
+
     protected:
         OControlWizard*                 getDialog();
         const OControlWizard*           getDialog() const;
@@ -135,6 +145,7 @@ namespace dbp
 
     public:
         OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId );
+        ~OControlWizardPage();
 
     protected:
         void fillListBox(
@@ -145,6 +156,14 @@ namespace dbp
             ComboBox& _rList,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rItems,
             sal_Bool _bClear = sal_True);
+
+    protected:
+        void enableFormDatasourceDisplay();
+        void adjustControlForNoDSDisplay(Control* _pControl, sal_Bool bConstLowerDistance = sal_False);
+
+    protected:
+        // OWizardPage overridables
+        virtual void        initializePage();
     };
 
     struct OAccessRegulator;
@@ -218,6 +237,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/04/03 12:42:48  fs
+ *  #85223# get-/setFormConnection
+ *
  *  Revision 1.4  2001/03/05 14:53:13  fs
  *  finished the grid control wizard
  *

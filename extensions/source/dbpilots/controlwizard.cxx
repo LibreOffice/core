@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 12:42:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
+#endif
 
 //.........................................................................
 namespace dbp
@@ -160,8 +163,27 @@ namespace dbp
     //=====================================================================
     //---------------------------------------------------------------------
     OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId )
-        :OWizardPage( _pParent, _rResId )
+        :OControlWizardPage_Base( _pParent, _rResId )
+        ,m_pFormSettingsSeparator(NULL)
+        ,m_pFormDatasourceLabel(NULL)
+        ,m_pFormDatasource(NULL)
+        ,m_pFormContentTypeLabel(NULL)
+        ,m_pFormContentType(NULL)
+        ,m_pFormTableLabel(NULL)
+        ,m_pFormTable(NULL)
     {
+    }
+
+    //---------------------------------------------------------------------
+    OControlWizardPage::~OControlWizardPage()
+    {
+        delete m_pFormSettingsSeparator;
+        delete m_pFormDatasourceLabel;
+        delete m_pFormDatasource;
+        delete m_pFormContentTypeLabel;
+        delete m_pFormContentType;
+        delete m_pFormTableLabel;
+        delete m_pFormTable;
     }
 
     //---------------------------------------------------------------------
@@ -236,6 +258,85 @@ namespace dbp
             nPos = _rList.InsertEntry(*pItems);
             _rList.SetEntryData(nPos, reinterpret_cast<void*>(nIndex));
         }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizardPage::enableFormDatasourceDisplay()
+    {
+        if (m_pFormSettingsSeparator)
+            // nothing to do
+            return;
+
+        OLocalResourceAccess aLocalControls(ModuleRes(RID_PAGE_FORM_DATASOURCE_STATUS), RSC_TABPAGE);
+
+        m_pFormSettingsSeparator    = new FixedLine(this,  ResId(FL_FORMSETINGS));
+        m_pFormDatasourceLabel      = new FixedText(this,  ResId(FT_FORMDATASOURCELABEL));
+        m_pFormDatasource           = new FixedText(this,  ResId(FT_FORMDATASOURCE));
+        m_pFormContentTypeLabel     = new FixedText(this,  ResId(FT_FORMCONTENTTYPELABEL));
+        m_pFormContentType          = new FixedText(this,  ResId(FT_FORMCONTENTTYPE));
+        m_pFormTableLabel           = new FixedText(this,  ResId(FT_FORMTABLELABEL));
+        m_pFormTable                = new FixedText(this,  ResId(FT_FORMTABLE));
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizardPage::adjustControlForNoDSDisplay(Control* _pControl, sal_Bool _bConstLowerDistance)
+    {
+        ::Size aDistanceToMove = LogicToPixel( ::Size( 0, 37 ), MAP_APPFONT );
+
+        ::Point aPos = _pControl->GetPosPixel();
+        aPos.Y() -= aDistanceToMove.Height();
+        _pControl->SetPosPixel(aPos);
+
+        if (_bConstLowerDistance)
+        {
+            ::Size aSize = _pControl->GetSizePixel();
+            aSize.Height() += aDistanceToMove.Height();
+            _pControl->SetSizePixel(aSize);
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizardPage::initializePage()
+    {
+        if (m_pFormDatasource && m_pFormContentTypeLabel && m_pFormTable)
+        {
+            const OControlWizardContext& rContext = getContext();
+            ::rtl::OUString sDataSource;
+            ::rtl::OUString sCommand;
+            sal_Int32 nCommandType = CommandType::COMMAND;
+            try
+            {
+                rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSource;
+                rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sCommand;
+                rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")) >>= nCommandType;
+            }
+            catch(const Exception&)
+            {
+                DBG_ERROR("OControlWizardPage::initializePage: caught an exception!");
+            }
+
+            m_pFormDatasource->SetText(sDataSource);
+            m_pFormTable->SetText(sCommand);
+
+            sal_uInt16 nCommandTypeResourceId = 0;
+            switch (nCommandType)
+            {
+                case CommandType::TABLE:
+                    nCommandTypeResourceId = RID_STR_TYPE_TABLE;
+                    break;
+
+                case CommandType::QUERY:
+                    nCommandTypeResourceId = RID_STR_TYPE_QUERY;
+                    break;
+
+                default:
+                    nCommandTypeResourceId = RID_STR_TYPE_COMMAND;
+                    break;
+            }
+            m_pFormContentType->SetText(String(ModuleRes(nCommandTypeResourceId)));
+        }
+
+        OControlWizardPage_Base::initializePage();
     }
 
     //=====================================================================
@@ -699,6 +800,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/04/03 12:42:48  fs
+ *  #85223# get-/setFormConnection
+ *
  *  Revision 1.4  2001/03/05 14:53:13  fs
  *  finished the grid control wizard
  *
