@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nf $ $Date: 2000-11-22 14:22:47 $
+#   last change: $Author: nf $ $Date: 2000-12-05 12:37:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,12 @@ APP7STACK=  16000
 APP7OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP7STDLIBS=$(STATIC_LIBS)
 
-DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS)
+APP8TARGET= xgfconv
+APP8STACK=  16000
+APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
+APP8STDLIBS=$(STATIC_LIBS)
+
+DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS)
 
 .IF "$(depend)" == ""
 ALL : 	$(MISC)$/src_yy.c 	\
