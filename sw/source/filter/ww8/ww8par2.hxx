@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:43 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,10 @@ public:
     const String& GetOrgWWName() const
     {
         return sWWStyleName;
+    }
+    bool IsOutline() const
+    {
+        return ((MAXLEVEL > nOutlineLevel) && pOutlineNumrule && pFmt);
     }
     CharSet GetCharSet() const;
 };
