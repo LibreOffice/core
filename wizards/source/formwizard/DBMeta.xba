@@ -3,40 +3,67 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DBMeta" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
-Public sDatabaseList()
+
 Public iCommandTypes() as Integer
 Public CurCommandType as Integer
 Public oDataSource as Object
 Public bEnableBinaryOptionGroup as Boolean
 
 
-Sub GetDatabaseNames()
+Function GetDatabaseNames(baddFirstListItem as Boolean)
+Dim sDatabaseList()
 	If oDBContext.HasElements Then
-		sDatabaseList() = oDBContext.ElementNames()
+		Dim LocDBList() as String
+		Dim MaxIndex as Integer
+		Dim i as Integer
+		LocDBList = oDBContext.ElementNames()
+		MaxIndex = Ubound(LocDBList())
+		If baddfirstListItem Then
+			ReDim Preserve sDatabaseList(MaxIndex + 1)
+			sDatabaseList(0) = sSelectDatasource
+			a = 1
+		Else
+			ReDim Preserve sDatabaseList(MaxIndex)
+			a = 0
+		End If
+		For i = 0 To MaxIndex
+			sDatabaseList(a) = oDBContext.ElementNames(i)
+			a = a + 1
+		Next i
 	End If
-End Sub
+	GetDatabaseNames() = sDatabaseList()
+End Function
 
 
 Sub GetSelectedDBMetaData()
 Dim OldsDBname as String
 Dim DBIndex as Integer
+Dim LocList() as String
 	If Ubound(DialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
+		DeleteFirstListBoxEntry(&quot;lstDatabases&quot;, sSelectDatasource)
 		ToggleDatabasePage(False)
 		DBIndex = DialogModel.lstDatabases.SelectedItems(0)
-		sDBName = sDatabaseList(DBIndex)
-		If GetConnection(sDBName) Then
-			If GetDBMetaData() Then
-				With DialogModel
-					.lstTables.Enabled = True
-					.lblTables.Enabled = True
-					.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
-					iCommandTypes() = CreateCommandTypeList()
-					EmptyFieldsListboxes()
-				End With
+		With DialogModel
+			If DBIndex &gt; -1 Then
+				sDBName = DlgFormDB.getControl(&quot;lstDatabases&quot;).getSelectedItem()
+				If GetConnection(sDBName) Then
+					If GetDBMetaData() Then
+						LocList() = AddListToList(Array(sSelectDBTable), TableNames())
+						.lstTables.StringItemList() = AddListToList(LocList(), QueryNames())
+						.lstTables.SelectedItems() = Array(0)
+						iCommandTypes() = CreateCommandTypeList()
+						EmptyFieldsListboxes()
+					End If
+				End If
+				bEnableBinaryOptionGroup = False
+				.lstTables.Enabled = True
+				.lblTables.Enabled = True
+			Else
+				DialogModel.lstTables.StringItemList = Array(sSelectDBTable)
+				EmptyFieldsListboxes()
 			End If
-		End If
-		bEnableBinaryOptionGroup = False
-		ToggleDatabasePage(True)
+			ToggleDatabasePage(True)
+		End With
 	End If
 End Sub
 
@@ -51,6 +78,10 @@ Dim Nulllist()
 		oDBConnection.Dispose()
 	End If
 	oDataSource = oDBContext.GetByName(sDBName)
+	If Not oDBContext.hasbyName(sDBName) Then
+		GetConnection() = False
+		Exit Function
+	End If
 	If Not oDataSource.IsPasswordRequired Then
 		oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
 		GetConnection() = True
@@ -78,8 +109,8 @@ Dim Nulllist()
 		Loop Until bExitLoop
 		On Local Error Goto 0
 		If Not bGetConnection Then
-			DialogModel.lstDatabases.SelectedItems() = Nulllist()
-			DialogModel.lstTables.StringItemList() = NullList()
+			DialogModel.lstDatabases.SelectedItems() = Array(sSelectDatasource)
+			DialogModel.lstTables.StringItemList() = Array(sSelectDBTable)
 			DialogModel.lstFields.StringItemList() = NullList()
 			DialogModel.lstSelFields.StringItemList() = NullList()
 		End If
@@ -110,7 +141,7 @@ Dim n as Integer
 Dim WidthIndex as Integer
 Dim oField as Object
 	MaxIndex = Ubound(DialogModel.lstSelFields.StringItemList())
-	Dim ColumnMap(MaxIndex)as Integer	
+	Dim ColumnMap(MaxIndex)as Integer
 	FieldNames() = DialogModel.lstSelFields.StringItemList()
 	&apos; Build a structure which maps the position of a selected field (within the selection) to the the column position within
 	&apos; the table. So we ensure that the controls are placed in the same order the according fields are selected.
@@ -131,7 +162,7 @@ Dim oField as Object
 		oField = oColumns.GetByName(sFieldName)
 		iType = oField.Type
 		FieldMetaValues(n,0) = oField.Type
-		FieldMetaValues(n,1) = oField.Precision
+		FieldMetaValues(n,1) = AssignFieldLength(oField.Precision)
 		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),1, WidthIndex)
 		FieldMetaValues(n,3) = WidthList(WidthIndex,3)
 		FieldMetaValues(n,4) = oField.FormatKey
@@ -192,7 +223,7 @@ Dim EmptyList()
 		End If
 		GetSpecificFieldNames = MaxIndex
 	Else
-		GetSpecificFieldNames = -1	
+		GetSpecificFieldNames = -1
 	End If
 End Function
 
@@ -241,10 +272,10 @@ Dim m as Integer
 	End If
 	DialogModel.lstSelFields.Tag = True
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
+	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:		
+		LOCERROR:
 	End If
 End Sub
 
@@ -266,6 +297,7 @@ Dim a as Integer
 		a = i
 		For i = 0 To MaxQueryIndex
 			LocCommandTypes(a) = com.sun.star.sdb.CommandType.QUERY
+			a = a + 1
 		Next i
 	End If
 	CreateCommandTypeList() = LocCommandTypes()
@@ -283,4 +315,13 @@ Sub GetCurrentMetaValues(Index as Integer)
 	CurScale = FieldMetaValues(Index,7)
 	CurHelpText = FieldMetaValues(Index,8)
     CurFieldName = FieldNames(Index)
-End Sub</script:module>
+End Sub
+
+
+Function AssignFieldLength(FieldLength as Long) as Integer
+	If FieldLength &gt;= 65535 Then
+		AssignFieldLength() = -1
+	Else
+		AssignFieldLength() = FieldLength
+	End If
+End Function</script:module>

@@ -113,7 +113,7 @@ Dim sProdName as String
 	oProdNameAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
 	sProdName = oProdNameAccess.getByName(&quot;ooName&quot;)
 	sVersion = oProdNameAccess.getByName(&quot;ooSetupVersion&quot;)
-	GetProductName = sProdName &amp; &quot; &quot; &amp; sVersion
+	GetProductName = sProdName &amp; sVersion
 End Function
 
 

@@ -171,13 +171,13 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 		oLocObject.TreatAsNumber = True
 		Select Case iLocFieldType
 			Case com.sun.star.sdbc.DataType.BIGINT
-				oLocObOject.EffectiveMax = 2147483647 * 2147483647
-				oLocbject.EffectiveMin = -(-2147483648 * -2147483648)
+				oLocObject.EffectiveMax = 2147483647 * 2147483647
+				oLocObject.EffectiveMin = -(-2147483648 * -2147483648)
 &apos;				oLocObject.DecimalAccuracy = 0
 			Case com.sun.star.sdbc.DataType.INTEGER
 				oLocObject.EffectiveMax = 2147483647
 				oLocObject.EffectiveMin = -2147483648
-			Case  com.sun.star.sdbc.DataType.SMALLINT
+			Case com.sun.star.sdbc.DataType.SMALLINT
 				oLocObject.EffectiveMax = 32767
 				oLocObject.EffectiveMin = -32768
 			Case com.sun.star.sdbc.DataType.TINYINT
@@ -323,4 +323,21 @@ Function GetFormWizardPaths() as Boolean
 	GetFormWizardPaths() = False
 End Function
 
-</script:module>
+
+Function GetFilterName(sApplicationKey as String) as String
+Dim oArgs()
+Dim oFactory
+Dim i as Integer
+Dim Maxindex as Integer
+Dim UIName as String
+	oFactory  = createUnoService(&quot;com.sun.star.document.FilterFactory&quot;)
+	oArgs() = oFactory.getByName(sApplicationKey)
+	MaxIndex = Ubound(oArgs())
+	For i = 0 to MaxIndex
+		If (oArgs(i).Name=&quot;UIName&quot;) Then
+		    UIName = oArgs(i).Value
+		    Exit For
+	  	End If
+	next i
+	GetFilterName() = UIName
+End Function</script:module>

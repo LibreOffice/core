@@ -11,7 +11,7 @@ Public oFactoryKey as Object
 
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
-Public bConversionIsRunnig as Boolean
+Public bConversionIsRunning as Boolean
 Public RetValue as Integer
 
 Sub Main()
@@ -20,13 +20,13 @@ Sub Main()
 	End If
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	RetValue = 10
-	bConversionIsRunnig = False
+	bConversionIsRunning = False
 	sCRLF = CHR(13) &amp; CHR(10)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oFactoryKey = GetRegistryKeyContent(&quot;org.openoffice.Setup/Office/Factories&quot;)
-	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
-	SOWorkPath = GetPathSettings(&quot;Work&quot;, False)
-	SOTemplatePath = GetPathSettings(&quot;Template&quot;,False,1)
+	If GetImportWizardPaths() = False Then
+		Exit Sub
+	End If
   	bCancelTask = False
   	bDoKeepApplValues = False
 	CurOffice = 0
@@ -37,6 +37,7 @@ Sub Main()
 	MaxApplCount = 4
 	FillStep_Welcome()
 	RepaintHeaderPreview()
+	ImportDialog.ImportPreview.BackGroundColor = RGB(0,60,126)	
 	ImportDialog.cmdGoOn.DefaultButton = True
 	ImportDialogArea.GetControl(&quot;optSODocuments&quot;).SetFocus()
 	RetValue = ImportDialogArea.Execute()
@@ -57,7 +58,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
-	bConversionIsRunnig = False
+	bConversionIsRunning = False
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 1
@@ -102,7 +103,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
-	bConversionIsRunnig = False
+	bConversionIsRunning = False
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 4
@@ -130,9 +131,10 @@ End Sub
 
 
 Sub CancelTask()
-	If bConversionIsRunnig Then
+	If bConversionIsRunning Then
 		If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
 			bCancelTask = True
+			bInterruptSearch = True
 		Else
 			bCancelTask = False
 			ImportDialog.cmdCancel.Enabled = True
@@ -255,4 +257,21 @@ Sub TakeOverPathSettings()
 			Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)					
 		End If
 	End If
-End Sub</script:module>
+End Sub
+
+
+Function GetImportWizardPaths() as Boolean
+	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+	If SOBitmapPath &lt;&gt; &quot;&quot; Then
+		SOWorkPath = GetPathSettings(&quot;Work&quot;, False)
+		If SOWorkPath &lt;&gt; &quot;&quot; Then
+			SOTemplatePath = GetPathSettings(&quot;Template&quot;,False,1)
+			If SOTemplatePath &lt;&gt; &quot;&quot; Then
+				GetImportWizardPaths() = True
+				Exit Function
+			End If
+		End If
+	End  If
+	GetImportWizardPaths() = False
+End Function
+</script:module>

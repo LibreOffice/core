@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:35:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ String sCancelButton
     Text[ polish ] = "~Anuluj";
     Text[ portuguese_brazilian ] = "~Cancel";
     Text[ japanese ] = "キャンセル(~C)";
-    Text[ korean ] = "중단(~C)";
+    Text[ korean ] = "취소(~C)";
     Text[ chinese_simplified ] = "取消(~C)";
     Text[ chinese_traditional ] = "取消(~C)";
     Text[ arabic ] = "~����� �����";
@@ -285,12 +285,12 @@ String sBeginButton
     Text[ greek ] = "���������";
     Text[ dutch ] = "~Converteren";
     Text[ swedish ] = "~Konvertera";
-    Text[ russian ] = "~�������������";
+    Text[ russian ] = "~��������������";
     Text[ danish ] = "~Konverter";
     Text[ polish ] = "~Konwertuj";
     Text[ portuguese_brazilian ] = "~Import";
     Text[ japanese ] = "変換(~C)";
-    Text[ korean ] = "변경(~C)";
+    Text[ korean ] = "변환(~C)";
     Text[ chinese_simplified ] = "转换(~C)";
     Text[ chinese_traditional ] = "轉換(~C)";
     Text[ arabic ] = "~�����";
@@ -334,7 +334,7 @@ String sWelcometextLabel1
     Text[ English_us ] = "This AutoPilot converts documents in the old StarOffice format and Microsoft Office documents to the new %PRODUCTNAME XML format.";
     Text[ french ] = "Cet AutoPilote convertit les documents de l'ancien format StarOffice et les documents Microsoft Office au nouveau format %PRODUCTNAME XML.";
     Text[ italian ] = "Questo pilota automatico converte i vecchi documenti del formato StarOffice e Microsoft Office nel nuovo formato  %PRODUCTNAME XML.";
-    Text[ spanish ] = "Este AutoPiloto convierte documentos del antiguo StarOffice y de Microsoft Office al nuevo formato %PRODUCTNAME XML.";
+    Text[ spanish ] = "Este Piloto autom�tico convierte documentos del antiguo StarOffice y de Microsoft Office al nuevo formato %PRODUCTNAME XML.";
     Text[ portuguese ] = "Este AutoPiloto converte documentos em formato StarOffice antigo e Microsoft Office para o novo formato XML do %PRODUCTNAME.";
     Text[ dutch ] = "Deze AutoPiloot converteert oude StarOffice-indelingen en Microsoft Office-documenten naar de nieuwe %PRODUCTNAME XML-indeling.";
     Text[ swedish ] = "Den h�r AutoPiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
@@ -375,7 +375,7 @@ String sWelcometextLabel2
     Text[ polish ] = "Nale�y uwzgl�dni�, �e podczas konwersji dokument�w Microsoft za��czone makra VBA strac� swoj� funkcjonalno��.";
     Text[ portuguese_brazilian ] = "On the following pages, you can choose if you want to import Winword texts, Excel spreadsheets or Powerpoint presentations. Select the Microsoft file folder and the target folder for the newly rendered %PRODUCTNAME file.";
     Text[ japanese ] = "Microsoft ドキュメントの変換時に、添付された VBA マクロの機能が失われないよう注意してください。";
-    Text[ korean ] = "Microsoft Office 문서를 변환할 때,첨부된 VBA매크로는 그 기능을 상실한다는 사실을 유의하십시오.";
+    Text[ korean ] = "Microsoft Office 문서를 변환할 때, 첨부된 VBA 매크로는 그 기능을 상실한다는 점에 유의하십시오.";
     Text[ chinese_simplified ] = "请您注意在转换 Microsoft 文档时源文档内含 VBA 宏的功能就会流失。";
     Text[ chinese_traditional ] = "請注意在文件轉換格式時 Microsoft 文件內含的 VBA 巨集功能就會流失。";
     Text[ arabic ] = "������ ������ ��� ��� ����� ������� Microsoft ��� ���� ����� ������� VBA ���� �� ���� ����� �������.";
@@ -422,7 +422,7 @@ String sMSTemplateCheckbox_1_
     Text[ English_us ] = "Word templates";
     Text[ french ] = "Mod�les Word";
     Text[ italian ] = "Modelli di Word";
-    Text[ spanish ] = "Word - Plantillas";
+    Text[ spanish ] = "Plantillas de Word";
     Text[ portuguese ] = "Modelos Word";
     Text[ dutch ] = "Word-sjablonen";
     Text[ swedish ] = "Word-mallar";
@@ -434,7 +434,7 @@ String sMSTemplateCheckbox_1_
     Text[ polish ] = "Word - Szablony";
     Text[ portuguese_brazilian ] = "Word templates";
     Text[ japanese ] = "Word テンプレート";
-    Text[ korean ] = "Word 템플릿";
+    Text[ korean ] = "Word 서식 파일";
     Text[ chinese_simplified ] = "Word 模板";
     Text[ chinese_traditional ] = "Word 範本";
     Text[ arabic ] = "����� Word";
@@ -451,7 +451,7 @@ String sMSTemplateCheckbox_2_
     Text[ English_us ] = "Excel templates";
     Text[ french ] = "Mod�les Excel";
     Text[ italian ] = "Modelli di Excel";
-    Text[ spanish ] = "Excel - Plantillas";
+    Text[ spanish ] = "Plantillas de Excel";
     Text[ portuguese ] = "Modelos Excel";
     Text[ dutch ] = "Excel-sjablonen";
     Text[ swedish ] = "Excel-mallar";
@@ -463,7 +463,7 @@ String sMSTemplateCheckbox_2_
     Text[ polish ] = "Excel - Szablony";
     Text[ portuguese_brazilian ] = "Excel templates";
     Text[ japanese ] = "Excel テンプレート";
-    Text[ korean ] = "Excel 템플릿";
+    Text[ korean ] = "Excel 서식 파일";
     Text[ chinese_simplified ] = "Excel 模板";
     Text[ chinese_traditional ] = "Excel 範本";
     Text[ arabic ] = "����� Excel";
@@ -480,7 +480,7 @@ String sMSTemplateCheckbox_3_
     Text[ English_us ] = "PowerPoint templates";
     Text[ french ] = "Mod�les PowerPoint";
     Text[ italian ] = "Modelli di PowerPoint";
-    Text[ spanish ] = "PowerPoint - Plantillas";
+    Text[ spanish ] = "Plantillas de PowerPoint";
     Text[ portuguese ] = "Modelos PowerPoint";
     Text[ dutch ] = "PowerPoint-sjablonen";
     Text[ swedish ] = "PowerPoint-mallar";
@@ -492,7 +492,7 @@ String sMSTemplateCheckbox_3_
     Text[ polish ] = "PowerPoint - Szablony";
     Text[ portuguese_brazilian ] = "PowerPoint templates";
     Text[ japanese ] = "PowerPoint テンプレート";
-    Text[ korean ] = "PowerPoint-템플릿";
+    Text[ korean ] = "PowerPoint 서식 파일";
     Text[ chinese_simplified ] = "PowerPoint 模板";
     Text[ chinese_traditional ] = "PowerPoint 範本";
     Text[ arabic ] = "����� PowerPoint";
@@ -509,7 +509,7 @@ String sMSDocumentCheckbox_1_
     Text[ English_us ] = "Word documents";
     Text[ french ] = "Documents Word";
     Text[ italian ] = "Documenti di Word";
-    Text[ spanish ] = "Documentos Word";
+    Text[ spanish ] = "Documentos de Word";
     Text[ portuguese ] = "Documentos Word";
     Text[ dutch ] = "Word-documenten";
     Text[ swedish ] = "Word-dokument";
@@ -538,7 +538,7 @@ String sMSDocumentCheckbox_2_
     Text[ English_us ] = "Excel documents";
     Text[ french ] = "Documents Excel";
     Text[ italian ] = "Documenti di Excel";
-    Text[ spanish ] = "Documentos Excel";
+    Text[ spanish ] = "Documentos de Excel";
     Text[ portuguese ] = "Documentos Excel";
     Text[ dutch ] = "Excel-documenten";
     Text[ swedish ] = "Excel-dokument";
@@ -579,7 +579,7 @@ String sMSDocumentCheckbox_3_
     Text[ polish ] = "PowerPoint - Dokumenty";
     Text[ portuguese_brazilian ] = "PowerPoint documents";
     Text[ japanese ] = "PowerPoint ドキュメント";
-    Text[ korean ] = "PowerPoint-문서";
+    Text[ korean ] = "PowerPoint 문서";
     Text[ chinese_simplified ] = "PowerPoint 文档";
     Text[ chinese_traditional ] = "PowerPoint 文件";
     Text[ arabic ] = "�������PowerPoint ";
@@ -609,7 +609,7 @@ String sSearchInSubDir
     Text[ polish ] = "��cznie z katalogami podrz�dnymi";
     Text[ portuguese_brazilian ] = "including subdirectories";
     Text[ japanese ] = "下位ディレクトリも含む";
-    Text[ korean ] = "하위 색인 포함";
+    Text[ korean ] = "하위 디렉토리 포함";
     Text[ chinese_simplified ] = "包括子目录";
     Text[ chinese_traditional ] = "包含子目錄";
     Text[ arabic ] = "��� �� ��� ������� �������";
@@ -669,7 +669,7 @@ String sSummaryHeader
     Text[ polish ] = "Podsumowanie:";
     Text[ portuguese_brazilian ] = "Summary:";
     Text[ japanese ] = "概要:";
-    Text[ korean ] = "간추림:";
+    Text[ korean ] = "요약:";
     Text[ chinese_simplified ] = "概要：";
     Text[ chinese_traditional ] = "概要：";
     Text[ arabic ] = "�������:";
@@ -756,7 +756,7 @@ String sGroupnameDefault
     Text[ polish ] = "Importowane_szablony";
     Text[ portuguese_brazilian ] = "Imported text templates";
     Text[ japanese ] = "インポートしたテンプレート";
-    Text[ korean ] = "가져오기 템플릿";
+    Text[ korean ] = "가져온_서식 파일";
     Text[ chinese_simplified ] = "输入的样式";
     Text[ chinese_traditional ] = "匯入的樣式";
     Text[ arabic ] = "�����_��_�������";
@@ -775,7 +775,7 @@ String sProgressDesc1
     Text[ English_us ] = "Progress: ";
     Text[ french ] = "Progression : ";
     Text[ italian ] = "Progresso: ";
-    Text[ spanish ] = "Progreso: ";
+    Text[ spanish ] = "Progresi�n:";
     Text[ portuguese ] = "Progress�o: ";
     Text[ dutch ] = "Voortgang:";
     Text[ swedish ] = "Framsteg: ";
@@ -787,7 +787,7 @@ String sProgressDesc1
     Text[ polish ] = "Post�p: ";
     Text[ portuguese_brazilian ] = "Progress: ";
     Text[ japanese ] = "進捗状況: ";
-    Text[ korean ] = "진보:";
+    Text[ korean ] = "진행 과정:";
     Text[ chinese_simplified ] = "已经完成： ";
     Text[ chinese_traditional ] = "已經完成： ";
     Text[ arabic ] = "������: ";
@@ -845,7 +845,7 @@ String sProgressMoreDocs
     Text[ polish ] = "Dokumenty";
     Text[ portuguese_brazilian ] = "Documents";
     Text[ japanese ] = "ドキュメント";
-    Text[ korean ] = "문서들";
+    Text[ korean ] = "문서";
     Text[ chinese_simplified ] = "文档";
     Text[ chinese_traditional ] = "文件";
     Text[ arabic ] = "�������";
@@ -873,7 +873,7 @@ String sProgressMoreTemplates
     Text[ polish ] = "Szablony";
     Text[ portuguese_brazilian ] = "Templates";
     Text[ japanese ] = "テンプレート";
-    Text[ korean ] = "템플릿";
+    Text[ korean ] = "서식 파일";
     Text[ chinese_simplified ] = "样式";
     Text[ chinese_traditional ] = "樣式";
     Text[ turkish ] = "Templates";
@@ -933,7 +933,7 @@ String sMsgDirNotThere
     Text[ polish ] = "Katalog '%1' nie istnieje!";
     Text[ portuguese_brazilian ] = "The following directories are not available:";
     Text[ japanese ] = "ディレクトリ '%1' はありません。";
-    Text[ korean ] = "'%1' 색인이 없습니다!";
+    Text[ korean ] = "'%1' 색인이 없습니다.";
     Text[ chinese_simplified ] = "目录 '%1' 不存在。";
     Text[ chinese_traditional ] = "目錄 %1 不存在。";
     Text[ arabic ] = "������ '%1' ��� �����.";
@@ -992,7 +992,7 @@ String sFileExists
     Text[ polish ] = "Plik '<1>' ju� istnieje.<CR>Skasowa� go przez zapisanie?";
     Text[ portuguese_brazilian ] = "Please alter these.";
     Text[ japanese ] = "ファイル '<1>' はすでにあります。<CR>上書きしますか。";
-    Text[ korean ] = "'<1>' 파일이 이미 있습니다.  <CR> 덮어씌울까요?";
+    Text[ korean ] = "'<1>' 파일이 이미 있습니다.<CR>덮어쓰시겠습니까?";
     Text[ chinese_simplified ] = "文件 '<1>' 已经存在。<CR>要改写这个文件？";
     Text[ chinese_traditional ] = "檔案<1>已經存在。<CR>要覆寫這個檔案？";
     Text[ arabic ] = "����� '<1>' ����� ������. <CR>�� ���� ������� ����";
@@ -1050,7 +1050,7 @@ String sOverwriteallFiles
     Text[ polish ] = "Do you want to overwrite documents without query";
     Text[ portuguese_brazilian ] = "Do you want to overwrite documents without query";
     Text[ japanese ] = "確認なしでドキュメントに上書きしますか。";
-    Text[ korean ] = "문서를 의문없이 겹쳐쓰시겠습니까?";
+    Text[ korean ] = "문서를 확인하지 않고 겹쳐쓰시겠습니까?";
     Text[ chinese_simplified ] = "您要省去询问而直接改写文档？";
     Text[ chinese_traditional ] = "您要省略詢問而直接復寫文件？";
     Text[ turkish ] = "Do you want to overwrite documents without query";
@@ -1105,7 +1105,7 @@ String scouldNotsaveDocument
     Text[ polish ] = "Document '<1>' could not be saved";
     Text[ portuguese_brazilian ] = "Document '<1>' could not be saved";
     Text[ japanese ] = "ドキュメント '<1>' は保存できませんでした。";
-    Text[ korean ] = "문서 '<1>' 을 저장하지 못했습니다.";
+    Text[ korean ] = "문서 '<1>'을(를) 저장하지 못했습니다.";
     Text[ chinese_simplified ] = "无法存盘文档 '<1>' ";
     Text[ chinese_traditional ] = "無法儲存文件 '<1>'";
     Text[ turkish ] = "Document '<1>' could not be saved";
@@ -1133,7 +1133,7 @@ String scouldNotopenDocument
     Text[ polish ] = "Document '<1>' could not be opened";
     Text[ portuguese_brazilian ] = "Document '<1>' could not be opened";
     Text[ japanese ] = "ドキュメント '<1>' を開くことができません。";
-    Text[ korean ] = "문서'<1>'을 열 수 없었습니다.";
+    Text[ korean ] = "문서 '<1>'을(를) 열지 못했습니다.";
     Text[ chinese_simplified ] = "无法打开文档 '<1>' ";
     Text[ chinese_traditional ] = "無法開啟文件 '<1>'";
     Text[ turkish ] = "Document '<1>' could not be opened";
@@ -1163,7 +1163,7 @@ String sConvertError1
     Text[ polish ] = "Czy na pewno przerwa� konwersj� w tym miejscu?";
     Text[ portuguese_brazilian ] = "Do you really want to cancel the conversion at this point?";
     Text[ japanese ] = "変換をここで中断しますか。";
-    Text[ korean ] = "여기에서 변환을 정말 취소하겠습니까?";
+    Text[ korean ] = "이 시점에서 변환을 정말로 취소하시겠습니까?";
     Text[ chinese_simplified ] = "您真要现在中断这个转换过程？";
     Text[ chinese_traditional ] = "真要立刻中斷這個轉換？";
     Text[ arabic ] = "�� ���� ������ ��� ����� ������� �� ��� ������ɿ";
@@ -1180,19 +1180,19 @@ String sConvertError2
     Text[ English_us ] = "Cancel AutoPilot";
     Text[ french ] = "Annuler l'AutoPilote";
     Text[ italian ] = "Interrompi Pilota automatico";
-    Text[ spanish ] = "Cancelar el AutoPiloto";
+    Text[ spanish ] = "Cancelar el Piloto autom�tico";
     Text[ portuguese ] = "Cancelar AutoPiloto";
     Text[ dutch ] = "AutoPiloot annuleren";
     Text[ swedish ] = "Avbryt Autopiloten";
     Text[ greek ] = "������� ��� �����������";
     Text[ dutch ] = "AutoPiloot annuleren";
     Text[ swedish ] = "Avbryt Autopiloten";
-    Text[ russian ] = "�������� �������";
+    Text[ russian ] = "�������� ������";
     Text[ danish ] = "Annuller Autopilot";
     Text[ polish ] = "Anuluj AutoPilota";
     Text[ portuguese_brazilian ] = "Cancel Autopilot";
     Text[ japanese ] = "オートパイロットを中止";
-    Text[ korean ] = "자동 파일럿 중단";
+    Text[ korean ] = "자동 파일럿 취소";
     Text[ chinese_simplified ] = "取消自动文档助理";
     Text[ chinese_traditional ] = "取消自動檔案助理";
     Text[ arabic ] = "��� ����� ������ �����";
@@ -1209,7 +1209,7 @@ String sRTErrorDesc
     Text[ English_us ] = "An unexpected error has occurred in the AutoPilot.";
     Text[ french ] = "Une erreur impr�vue s'est produite dans l'AutoPilote.";
     Text[ italian ] = "Si � verificato un errore nel Pilota automatico.";
-    Text[ spanish ] = "Ha ocurrido un error inesperado en el AutoPiloto";
+    Text[ spanish ] = "Ha ocurrido un error inesperado en el Piloto autom�tico";
     Text[ portuguese ] = "Surgiu um erro imprevisto no AutoPiloto.";
     Text[ dutch ] = "Er is een onverwachte fout opgetreden in de AutoPiloot.";
     Text[ swedish ] = "Ett ov�ntat fel har uppst�tt i Autopiloten.";
@@ -1221,7 +1221,7 @@ String sRTErrorDesc
     Text[ polish ] = "Wyst�pi� niespodziewanie b��d w AutoPilocie";
     Text[ portuguese_brazilian ] = "An unexpected Autopilot error has occured.";
     Text[ japanese ] = "オートパイロットに予期されないエラーが発生しました。";
-    Text[ korean ] = "자동 파일럿에서 예상치 않은 오류 발생.";
+    Text[ korean ] = "자동 파일럿에서 예상치 않은 오류가 발생했습니다.";
     Text[ chinese_simplified ] = "自动文件助理程序出现了一个意外的错误。";
     Text[ chinese_traditional ] = "自動檔案助理發生了一個意外的錯誤。";
     Text[ arabic ] = "��� ��� ��� ����� �� ������ �����.";
@@ -1250,7 +1250,7 @@ String sRTErrorHeader
     Text[ polish ] = "B��d";
     Text[ portuguese_brazilian ] = "Error";
     Text[ japanese ] = "エラー";
-    Text[ korean ] = "에러";
+    Text[ korean ] = "오류";
     Text[ chinese_simplified ] = "错误";
     Text[ chinese_traditional ] = "錯誤";
     Text[ arabic ] = "���";
@@ -1327,14 +1327,14 @@ String sProgressPage1
     Text[ greek ] = "������� ��������";
     Text[ dutch ] = "Voortgang";
     Text[ french ] = "Progression";
-    Text[ spanish ] = "Progreso";
+    Text[ spanish ] = "Progresi�n";
     Text[ italian ] = "Progressione";
     Text[ danish ] = "Arbejdsfremgang";
     Text[ swedish ] = "Arbetsframsteg";
     Text[ polish ] = "Post�p";
     Text[ portuguese_brazilian ] = "Current Progress";
     Text[ japanese ] = "進捗状況";
-    Text[ korean ] = "진행";
+    Text[ korean ] = "진행 상태";
     Text[ chinese_simplified ] = "已经完成";
     Text[ chinese_traditional ] = "已經完成";
     Text[ turkish ] = "Current Progress";
@@ -1361,7 +1361,7 @@ String sProgressPage2
     Text[ polish ] = "Przywracanie wa�nych dokument�w:";
     Text[ portuguese_brazilian ] = "Retrieval of the relevant documents";
     Text[ japanese ] = "関連するドキュメントをまとめています:";
-    Text[ korean ] = "관련 문서 파악:";
+    Text[ korean ] = "주요 관련 문서를 검색:";
     Text[ chinese_simplified ] = "汇编相关的文档：";
     Text[ chinese_traditional ] = "正在匯編相關的文件：";
     Text[ turkish ] = "Retrieval of the relevant documents";
@@ -1472,7 +1472,7 @@ String sReady
     Text[ polish ] = "Gotowe!";
     Text[ portuguese_brazilian ] = "Ready!";
     Text[ japanese ] = "完了";
-    Text[ korean ] = "완성!";
+    Text[ korean ] = "완료";
     Text[ chinese_simplified ] = "完成";
     Text[ chinese_traditional ] = "完成";
     Text[ turkish ] = "Ready!";
@@ -1502,7 +1502,7 @@ String sXMLTemplateCheckbox_1_
     Text[ polish ] = "Szablony tekstowe";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Writer templates";
     Text[ japanese ] = "文書テンプレート";
-    Text[ korean ] = "텍스트 템플릿";
+    Text[ korean ] = "텍스트 서식 파일";
     Text[ chinese_simplified ] = "文本样式";
     Text[ chinese_traditional ] = "文字樣式";
     Text[ arabic ] = "����� ��";
@@ -1531,7 +1531,7 @@ String sXMLTemplateCheckbox_2_
     Text[ polish ] = "Szablony arkuszy kalkulacyjnych";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Calc templates";
     Text[ japanese ] = "表計算テンプレート";
-    Text[ korean ] = "표 템플릿";
+    Text[ korean ] = "스프레드시트 서식 파일";
     Text[ chinese_simplified ] = "工作表样式";
     Text[ chinese_traditional ] = "工作表樣式";
     Text[ arabic ] = "����� ����";
@@ -1548,7 +1548,7 @@ String sXMLTemplateCheckbox_3_
     Text[ English_us ] = "Drawing/presentation templates";
     Text[ french ] = "Mod�les de dessin / pr�sentation";
     Text[ italian ] = "Modelli di disegni/presentazioni";
-    Text[ spanish ] = "Plantillas de dibujo/presentaci�n";
+    Text[ spanish ] = "Plantillas de dibujo y presentaci�n";
     Text[ portuguese ] = "Modelos de desenho/apresenta��o";
     Text[ dutch ] = "Tekening-/presentatiesjablonen";
     Text[ swedish ] = "Tecknings-/presentationsmallar";
@@ -1560,7 +1560,7 @@ String sXMLTemplateCheckbox_3_
     Text[ polish ] = "Szablony rysunk�w/prezentacji";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Impress/%PRODUCTNAME Draw templates";
     Text[ japanese ] = "図形描画/プレゼンテーションテンプレート";
-    Text[ korean ] = "그리기/프레젠테이션 템플릿";
+    Text[ korean ] = "그리기/프레젠테이션 서식 파일";
     Text[ chinese_simplified ] = "绘图/演示文稿样式";
     Text[ chinese_traditional ] = "繪圖/簡報樣式";
     Text[ arabic ] = "����� ����/��� ������";
@@ -1646,7 +1646,7 @@ String sXMLDocumentCheckbox_2_
     Text[ polish ] = "Arkusze kalkulacyjne";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Calc documents";
     Text[ japanese ] = "表計算ドキュメント";
-    Text[ korean ] = "스프레드시트 문서";
+    Text[ korean ] = "스프레드시트";
     Text[ chinese_simplified ] = "工作表文档";
     Text[ chinese_traditional ] = "工作表文件";
     Text[ arabic ] = "������� ����";
@@ -1663,7 +1663,7 @@ String sXMLDocumentCheckbox_3_
     Text[ English_us ] = "Drawing/presentation documents";
     Text[ french ] = "Dessins / pr�sentations";
     Text[ italian ] = "Disegni/presentazioni";
-    Text[ spanish ] = "Documentos de dibujo/presentaci�n";
+    Text[ spanish ] = "Documentos de dibujo y presentaci�n";
     Text[ portuguese ] = "Desenhos/Apresenta��es";
     Text[ dutch ] = "Tekening-/presentatiedocumenten";
     Text[ swedish ] = "Tecknings-/presentationsdokument";
@@ -1731,7 +1731,7 @@ String sXMLHelperApplications_1
     Text[ polish ] = "dokumenty g��wne";
     Text[ portuguese_brazilian ] = "Master Documents";
     Text[ japanese ] = "マスタードキュメント";
-    Text[ korean ] = "마스터 문서들";
+    Text[ korean ] = "마스터 문서";
     Text[ chinese_simplified ] = "主控文档";
     Text[ chinese_traditional ] = "主控文件";
     Text[ turkish ] = "Master Documents";
@@ -1787,7 +1787,7 @@ String sSourceDocuments
     Text[ polish ] = "Dokumenty �r�d�owe";
     Text[ portuguese_brazilian ] = "Sourcedocuments";
     Text[ japanese ] = "ソースドキュメント";
-    Text[ korean ] = "소스 문서";
+    Text[ korean ] = "원본 문서";
     Text[ chinese_simplified ] = "源文档";
     Text[ chinese_traditional ] = "源文件";
     Text[ turkish ] = "Sourcedocuments";
@@ -1862,14 +1862,14 @@ String sLogfileSummary
     Text[ greek ] = "<COUNT> Documents converted";
     Text[ dutch ] = "<COUNT> Documents converted";
     Text[ french ] = "<COUNT> Documents convertis";
-    Text[ spanish ] = "<COUNT> documentos convertidos";
+    Text[ spanish ] = "<COUNT> Documentos convertidos";
     Text[ finnish ] = "<COUNT> Documents converted";
     Text[ italian ] = "<COUNT> documenti convertiti";
     Text[ danish ] = "<COUNT> Documents converted";
     Text[ swedish ] = "<COUNT> dokument konverterade";
     Text[ polish ] = "<COUNT> Documents converted";
     Text[ japanese ] = "<COUNT> のドキュメントを変換しました";
-    Text[ korean ] = "<COUNT> 문서가 호환됨";
+    Text[ korean ] = "<COUNT> 문서가 변환됨";
     Text[ chinese_simplified ] = "<COUNT> 文件已经转换";
     Text[ chinese_traditional ] = "<COUNT> 文件已轉換";
     Text[ turkish ] = "<COUNT> Documents converted";
@@ -1884,7 +1884,7 @@ String sLogfileHelpText
     Text[English] = "A Logfile will be created within your Working Directory";
     Text[ English_us ] = "A log file will be created in your work directory";
     Text[ portuguese ] = "O ficheiro de registo ser� criado na sua pasta de trabalho.";
-    Text[ russian ] = "� ����� ������� �������� ����� ������ ������.";
+    Text[ russian ] = "� ����� ������� �������� ����� ������ ������";
     Text[ greek ] = "A Logfile will be created within your Working Directory";
     Text[ dutch ] = "In uw werkdirectory wordt een logbestand gemaakt.";
     Text[ french ] = "Un fichier journal va �tre cr�� dans votre dossier de travail.";
@@ -1896,7 +1896,7 @@ String sLogfileHelpText
     Text[ polish ] = "W Twoim katalogu roboczym utworzony zostanie plik rejestracyjny.";
     Text[ portuguese_brazilian ] = "A Logfile will be created within your Working Directory";
     Text[ japanese ] = "ワーキングディレクトリにログファイルが格納されます。";
-    Text[ korean ] = "작업 디렉토리 안에 로그파일이 만들어집니다";
+    Text[ korean ] = "작업 디렉토리에서 로그 파일이 만들어집니다.";
     Text[ chinese_simplified ] = "在您的工作目录内新建一个日志文件。";
     Text[ chinese_traditional ] = "在您的工作目錄內新增一個日誌檔案。";
     Text[ turkish ] = "A Logfile will be created within your Working Directory";
@@ -1953,7 +1953,7 @@ String sSumInclusiveSubDir
     Text[ polish ] = "Uwzgl�dnione zostan� wszystkie katalogi podrz�dne";
     Text[ portuguese_brazilian ] = "All directories will be considered";
     Text[ japanese ] = "すべての下位ディレクトリが対象になります。";
-    Text[ korean ] = "모든 하위 디렉토리가 참작됩니다.";
+    Text[ korean ] = "모든 하위 디렉토리가 고려됩니다.";
     Text[ chinese_simplified ] = "包括所有子目录";
     Text[ chinese_traditional ] = "包含所有子目錄";
     Text[ arabic ] = "���� ������ �� ������� �������";
@@ -1982,7 +1982,7 @@ String sSumSaveDokumente
     Text[ polish ] = "Eksportowane zostan� do nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "These will be exported in the following directory:";
     Text[ japanese ] = "次のディレクトリにエクスポートされます｡";
-    Text[ korean ] = "이 파일 및 문서들은 다음의 디렉토리로 내보내집니다:";
+    Text[ korean ] = "이 파일 및 문서는 다음의 디렉토리로 내보내집니다:";
     Text[ chinese_simplified ] = "输出至下列目录：";
     Text[ chinese_traditional ] = "匯入到以下目錄：";
     Text[ arabic ] = "��� ��� ������� ��� ������ ������:";
@@ -2012,7 +2012,7 @@ String sSumSOTextDocuments
     Text[ polish ] = "Importowane b�d� wszystkie dokumenty tekstowe programu %PRODUCTNAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME 文書ドキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에서 모든 %PRODUCTNAME을(를) 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入全部的 %PRODUCTNAME 文本文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 文字文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2042,7 +2042,7 @@ String sSumSOTableDocuments
     Text[ polish ] = "Importowane b�d� wszystkie arkusze kalkulacyjne programu %PRODUCTNAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME 表計算ドキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에 수록된 모든 %PRODUCTNAME 스프레드시트를 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 %PRODUCTNAME 工作表文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 工作表文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2072,7 +2072,7 @@ String sSumSODrawDocuments
     Text[ polish ] = "Importowane b�d� wszystkie dokumenty rysunkowe i prezenacyjne programu %PRODUCTNAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME 図形描画ドキュメントとプレゼンテーションドキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에 수록된 모든 %PRODUCTNAME의 그리기 및 프레젠테이션 문서를 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 %PRODUCTNAME 绘图文档和演示文稿文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 繪圖及簡報文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2102,7 +2102,7 @@ String sSumSOMathDocuments
     Text[ polish ] = "Importowane b�d� wszystkie dokumenty formu� programu %PRODUCTNAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME 数式ドキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에서 모든 %PRODUCTNAME을(를) 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 %PRODUCTNAME 公式文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 公式文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2132,7 +2132,7 @@ String sSumSOTextTemplates
     Text[ polish ] = "Importowane b�d� wszystkie szablony tekst�w programu %PRODUCTNAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME 文書テンプレートは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음의 디렉토리에 수록된 모든 %PRODUCTNAME 텍스트 문서 서식 파일을 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 %PRODUCTNAME 文本文档的样式：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 文字文件樣式：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2162,7 +2162,7 @@ String sSumSOTableTemplates
     Text[ polish ] = "Importowane b�d� wszystkie szablony arkuszy kalkulacyjnych programu %PRODUCTNAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME 表計算テンプレートは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음의 디렉토리에 수록된 모든 %PRODUCTNAME 스프레드시트 서식 파일을 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 %PRODUCTNAME 工作表样式文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 工作表樣式文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2192,7 +2192,7 @@ String sSumSODrawTemplates
     Text[ polish ] = "Importowane b�d� wszystkie szablony rysunkowe i prezentacyjne programu %PRODUCTNAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME 図形描画テンプレートとプレゼンテーションテンプレートは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음의 디렉토리에 수록된 모든 %PRODUCTNAME 그리기 및 프레젠테이션 서식 파일을 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 %PRODUCTNAME 绘图样式文档和工作表样式文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 繪圖及簡報樣式文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2221,7 +2221,7 @@ String sSumSOGlobalDocuments
     Text[ polish ] = "Importowane b�d� wszystkie dokumenty g��wne programu %PRODUCTAME z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての %PRODUCTNAME マスタードキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에서 모든 %PRODUCTNAME 마스터 문서를 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 %PRODUCTNAME 主控文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 %PRODUCTNAME 主控文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2252,7 +2252,7 @@ String sSumMSTextDocuments
     Text[ polish ] = "Importowane b�d� wszystkie dokumenty programu Word z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての Word ドキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에서 모든 Word 문서를 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有 Word 文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 Word 文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2282,7 +2282,7 @@ String sSumMSTableDocuments
     Text[ polish ] = "Importowane b�d� wszystkie dokumenty programu Excel z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての Excel ドキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에서 모든 Excel 문서를 가져옵니다:";
     Text[ chinese_simplified ] = "从下一个目录输入所有的 Excel 文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 Excel 文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2312,7 +2312,7 @@ String sSumMSDrawDocuments
     Text[ polish ] = "Importowane b�d� wszystkie dokumenty programu PowerPoint z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての PowerPoint ドキュメントは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음 디렉토리에서 모든 PowerPoint 문서를 가져옵니다:";
     Text[ chinese_simplified ] = "从下一个目录输入所有的 PowerPoint 文档：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 PowerPiont 文件：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2342,7 +2342,7 @@ String sSumMSTextTemplates
     Text[ polish ] = "Importowane b�d� wszystkie szablony programu Word z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての Word テンプレートは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음의 디렉토리에서 모든 Word 서식 파일을 가져옵니다:";
     Text[ chinese_simplified ] = "从以下的目录中输入所有的 Word 范本：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 Word 範本：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2372,7 +2372,7 @@ String sSumMSTableTemplates
     Text[ polish ] = "Importowane b�d� wszystkie szablony programu Excel z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての Excel テンプレートは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음의 디렉토리에서 모든 Excel 서식 파일을 가져옵니다:";
     Text[ chinese_simplified ] = "从以下一个目录输入所有的 Excel 范本：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 Excel 範本：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2402,7 +2402,7 @@ String sSumMSDrawTemplates
     Text[ polish ] = "Importowane b�d� wszystkie szablony programu PowerPoint z nast�puj�cego katalogu:";
     Text[ portuguese_brazilian ] = "All Word templates will be imported in the following directory:";
     Text[ japanese ] = "すべての PowerPoint テンプレートは次のディレクトリからインポートされます。";
-    Text[ korean ] = "다음 디렉토리에서 모든 %1을(를) 가져옵니다:";
+    Text[ korean ] = "다음의 디렉토리에서 모든 PowerPoint 서식 파일을 가져옵니다:";
     Text[ chinese_simplified ] = "从以下一个目录输入所有的 PowerPoint 范本：";
     Text[ chinese_traditional ] = "從下列目錄匯入全部的 PowerPoint 範本：";
     Text[ arabic ] = "��� ��� ������� �� %1 �� ������ ������:";
@@ -2411,6 +2411,11 @@ String sSumMSDrawTemplates
     Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat PowerPoint-mallit tuodaan:";
     Text[ thai ] = "แม่แบบเพาเวอร์พ้อยท์ทั้งหมดที่บรรจุในไดเร็กทอรี่ต่อไปนี้จะถูกนำเข้า:";
 };
+
+
+
+
+
 
 
 

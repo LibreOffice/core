@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-04 14:15:50 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:59:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..
 PRJNAME=wizards
 TARGET=NOTARGET
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -73,18 +74,4 @@ GEN_HID=TRUE
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-.IF "$(GUI)"=="WNT"
-.IF "$(BUILD_SOSL)"==""
-
-ALLTAR : $(SRS)$/hidother.hid
-
-.ENDIF
-.ENDIF
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-    +mhids hidother.src ..$/$(INPATH)$/srs wizards hidother
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:35:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String SAMPLES
     Text[ polish ] = "Aby dany przyk�ad mo�na by�o w pe�ni wykorzysta�, nale�y na podstawie danego szablonu utworzy� nowy dokument.";
     Text[ portuguese_brazilian ] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
     Text[ japanese ] = "このサンプルの機能をうまく応用するには、このテンプレートをベースとした新しいドキュメントを作成する必要があります。";
-    Text[ korean ] = "이 예의 기능성을 완벽하게 이용할 수 있도록 하기 위해서는 이 템플릿을 기초로 새 문서를 작성해야 합니다.";
+    Text[ korean ] = "이 샘플 문서의 모든 기능을 사용하려면 이 서식 파일을 기준으로 새 문서를 만드십시오.";
     Text[ chinese_simplified ] = "只有首先借助这个样式新建一个文档，才能充分使用示例功能。";
     Text[ chinese_traditional ] = "要想充分利用這個樣式的各種優秀功能，您必須採用這個樣式來新建一個文件。";
     Text[ arabic ] = "��� ������ ������� ��� ������ ��� ����� ������ ���� ����� ����� ���� �������� ��� ������.";
@@ -173,7 +173,7 @@ String STYLES + 1
     Text[ polish ] = "B��d podczas tymczasowego zapisywania aktualnych dokument�w! Nast�puj�cej akcji nie mo�na cofn��.";
     Text[ portuguese_brazilian ] = "Error while temporarily saving the document! The following action cannot be undone.";
     Text[ japanese ] = "現在のドキュメントをクリップボードに保存するときにエラーが発生しました。次のアクションは元に戻せません。";
-    Text[ korean ] = "현재 문서를 중간 저장하는 동안 오류가 발생했습니다!  연속되는 작업을 실행취소할 수 없습니다.";
+    Text[ korean ] = "문서를 클립보드로 저장하던 중 오류가 발생했습니다. 계속되는 작동을 실행 취소할 수 없습니다.";
     Text[ chinese_simplified ] = "在存盘当前文档时发生错误！无法取消下列操作。";
     Text[ chinese_traditional ] = "暫存文件發生錯誤！無法恢復以下的動作。";
     Text[ arabic ] = "��� ��� ����� ��� ������� ������ �� �������! �� ���� ������� �� ������� ������.";
@@ -393,7 +393,7 @@ String CorrespondenceNoTextmark
     Text[ polish ] = "Brak zak�adki 'Recipient'.";
     Text[ portuguese_brazilian ] = "The Bookmark 'Recipient' is lacking.";
     Text[ japanese ] = "テキストマーク 'Recipient' がありません。";
-    Text[ korean ] = "책갈피'Recipient'가 없습니다.";
+    Text[ korean ] = "책갈피 'Recipient'가 없습니다.";
     Text[ chinese_simplified ] = "书签 'Recipient' 不存在。";
     Text[ chinese_traditional ] = "標記<Recipient>不存在。";
     Text[ arabic ] = "������� �������� 'Recipient' �����.";
@@ -410,7 +410,7 @@ String CorrespondenceNoTextmark+1
     Text[ english_us ] = "Form letter fields can not be included.";
     Text[ portuguese ] = "Imposs�vel inserir campos para cartas em s�rie.";
     Text[ dutch ] = "Er kunnen geen standaardbriefvelden worden ingevoegd.";
-    Text[ french ] = "Impossible d'ins�rer des champs de lettre pour mailing.";
+    Text[ french ] = "Impossible d'ins�rer des champs de lettre type !";
     Text[ spanish ] = "No se pueden insertar campos de cartas en serie.";
     Text[ italian ] = "Impossibile inserire i campi della stampa in serie.";
     Text[ swedish ] = "Om�jligt att infoga f�lt f�r standardbrev.";
@@ -420,7 +420,7 @@ String CorrespondenceNoTextmark+1
     Text[ polish ] = "Nie mo�na by�o wstawi� p�l listu seryjnego.";
     Text[ portuguese_brazilian ] = "Mail Merge fields can not be included.";
     Text[ japanese ] = "差し込み印刷のフィールドを挿入できません。";
-    Text[ korean ] = "편지지 양식 필드를 삽입하지 못했습니다.";
+    Text[ korean ] = "편지 양식 필드를 삽입하지 못했습니다.";
     Text[ chinese_simplified ] = "无法插入邮件合并字段。";
     Text[ chinese_traditional ] = "無法插入郵件合併的欄位。";
     Text[ arabic ] = "�� ���� ����� ���� ���� �����.";
@@ -529,7 +529,7 @@ String CorrespondenceDialog+2
     Text[ polish ] = "Kilku odbiorc�w (adresowa baza danych)";
     Text[ portuguese_brazilian ] = "Multiple letter";
     Text[ japanese ] = "複数(アドレス帳データベース)";
-    Text[ korean ] = "여러 수신인 (주소 데이터 베이스)";
+    Text[ korean ] = "여러 수신인 (주소 데이터베이스)";
     Text[ chinese_simplified ] = "多个收件人(通讯簿数据库)";
     Text[ chinese_traditional ] = "多個收件者(地址資料庫)";
     Text[ arabic ] = "���� �����";
@@ -557,7 +557,7 @@ String CorrespondenceDialog+3
     Text[ polish ] = "Zastosowanie szablonu";
     Text[ portuguese_brazilian ] = "Use of this template";
     Text[ japanese ] = "テンプレートを使用";
-    Text[ korean ] = "이 템플릿의 사용";
+    Text[ korean ] = "서식 파일 사용";
     Text[ chinese_simplified ] = "使用样式";
     Text[ chinese_traditional ] = "使用樣式";
     Text[ turkish ] = "Use of this template";
@@ -811,7 +811,7 @@ String CorrespondenceFields+8
     Text[ polish ] = "Miejscowo��";
     Text[ portuguese_brazilian ] = "City";
     Text[ japanese ] = "都道府県名";
-    Text[ korean ] = "도시";
+    Text[ korean ] = "구/군/시";
     Text[ chinese_simplified ] = "城市";
     Text[ chinese_traditional ] = "城市";
     Text[ turkish ] = "City";
@@ -897,7 +897,7 @@ String CorrespondenceFields+11
     Text[ polish ] = "Zwrot grzeczno�ciowy";
     Text[ portuguese_brazilian ] = "Form of Address";
     Text[ japanese ] = "敬称";
-    Text[ korean ] = "주소 양식";
+    Text[ korean ] = "경칭";
     Text[ chinese_simplified ] = "收件人称呼";
     Text[ chinese_traditional ] = "收件者的稱呼";
     Text[ turkish ] = "Form of Address";
@@ -926,7 +926,7 @@ String CorrespondenceFields+12
     Text[ polish ] = "Inicja�y";
     Text[ portuguese_brazilian ] = "Initials";
     Text[ japanese ] = "イニシャル";
-    Text[ korean ] = "머리글자";
+    Text[ korean ] = "이니셜";
     Text[ chinese_simplified ] = "缩写";
     Text[ chinese_traditional ] = "縮寫";
     Text[ turkish ] = "Initials";
@@ -972,11 +972,11 @@ String CorrespondenceFields+14
     Text[ english_us ] = "Home Phone";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Tel. particular";
-    Text[ russian ] = "�������, ���.";
+    Text[ russian ] = "���. �������";
     Text[ greek ] = "Home Phone";
     Text[ dutch ] = "Tel. priv�";
     Text[ french ] = "T�l. domicile";
-    Text[ spanish ] = "Tel. privado";
+    Text[ spanish ] = "Tfno. particular";
     Text[ finnish ] = "Kotipuhelin";
     Text[ italian ] = "Tel. privato";
     Text[ danish ] = "Tlf. privat";
@@ -1001,11 +1001,11 @@ String CorrespondenceFields+15
     Text[ english_us ] = "Work Phone";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Tel. emprego";
-    Text[ russian ] = "�������, ���.";
+    Text[ russian ] = "���. �������";
     Text[ greek ] = "Work Phone";
     Text[ dutch ] = "Tel. werk";
     Text[ french ] = "T�l. bureau 2";
-    Text[ spanish ] = "Tel. trabajo";
+    Text[ spanish ] = "Tfno. trabajo";
     Text[ finnish ] = "Ty�puhelin";
     Text[ italian ] = "Tel. lavoro";
     Text[ danish ] = "Tlf. arbejde";
@@ -1059,11 +1059,11 @@ String CorrespondenceFields+17
     Text[ english_us ] = "E-Mail";
     Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "E-mail";
-    Text[ russian ] = "��. �����";
+    Text[ russian ] = "��. �����";
     Text[ greek ] = "E-Mail";
     Text[ dutch ] = "E-mail";
     Text[ french ] = "E-mail";
-    Text[ spanish ] = "E-mail";
+    Text[ spanish ] = "Correo-e";
     Text[ finnish ] = "S�hk�posti";
     Text[ italian ] = "E-Mail";
     Text[ danish ] = "E-mail";
@@ -1071,7 +1071,7 @@ String CorrespondenceFields+17
     Text[ polish ] = "e-mail";
     Text[ portuguese_brazilian ] = "E-Mail";
     Text[ japanese ] = "E-mail";
-    Text[ korean ] = "e-Ｍail";
+    Text[ korean ] = "전자 메일";
     Text[ chinese_simplified ] = "电子邮件";
     Text[ chinese_traditional ] = "電子郵件";
     Text[ turkish ] = "E-posta";
@@ -1128,7 +1128,7 @@ String CorrespondenceFields+19
     Text[ polish ] = "Notatka";
     Text[ portuguese_brazilian ] = "Notes";
     Text[ japanese ] = "メモ";
-    Text[ korean ] = "참고";
+    Text[ korean ] = "메모";
     Text[ chinese_simplified ] = "备注";
     Text[ chinese_traditional ] = "備註";
     Text[ turkish ] = "Notes";
@@ -1301,7 +1301,7 @@ String CorrespondenceFields+25
     Text[ polish ] = "Wojew�dztwo";
     Text[ portuguese_brazilian ] = "State";
     Text[ japanese ] = "州名";
-    Text[ korean ] = "상태";
+    Text[ korean ] = "도/주";
     Text[ chinese_simplified ] = "省或直辖市";
     Text[ chinese_traditional ] = "省";
     Text[ turkish ] = "State";
@@ -1322,7 +1322,7 @@ String CorrespondenceFields+26
     Text[ greek ] = "Office Phone";
     Text[ dutch ] = "Tel. kantoor";
     Text[ french ] = "T�l. bureau 2";
-    Text[ spanish ] = "Tel. oficina";
+    Text[ spanish ] = "Tfno. oficina";
     Text[ finnish ] = "Toimistopuhelin";
     Text[ italian ] = "Tel. ufficio";
     Text[ danish ] = "Tlf. kontor";
@@ -1351,7 +1351,7 @@ String CorrespondenceFields+27
     Text[ greek ] = "���������������";
     Text[ dutch ] = "Pager";
     Text[ french ] = "Pager";
-    Text[ spanish ] = "Pager";
+    Text[ spanish ] = "Busca";
     Text[ finnish ] = "Hakulaite";
     Text[ italian ] = "Teledrin";
     Text[ danish ] = "Persons�ger";
@@ -1380,7 +1380,7 @@ String CorrespondenceFields+28
     Text[ greek ] = "Mobile Phone";
     Text[ dutch ] = "Tel. mobiel";
     Text[ french ] = "T�l. portable";
-    Text[ spanish ] = "Tel. m�vil";
+    Text[ spanish ] = "Tfno. m�vil";
     Text[ finnish ] = "Matkapuhelin";
     Text[ italian ] = "Cellulare";
     Text[ danish ] = "Tlf. mobil";
@@ -1388,7 +1388,7 @@ String CorrespondenceFields+28
     Text[ polish ] = "Tel. kom�rkowy";
     Text[ portuguese_brazilian ] = "Mobile Phone";
     Text[ japanese ] = "携帯電話";
-    Text[ korean ] = "이동 전화";
+    Text[ korean ] = "휴대폰";
     Text[ chinese_simplified ] = "手机";
     Text[ chinese_traditional ] = "手機";
     Text[ turkish ] = "Mobile Phone";
@@ -1473,7 +1473,7 @@ String CorrespondenceFields+31
     Text[ polish ] = "Zaprosi�";
     Text[ portuguese_brazilian ] = "Invite";
     Text[ japanese ] = "出席依頼";
-    Text[ korean ] = "초청";
+    Text[ korean ] = "초대";
     Text[ chinese_simplified ] = "邀请";
     Text[ chinese_traditional ] = "邀請";
     Text[ turkish ] = "Invite";
@@ -1494,7 +1494,7 @@ String TextField
     Text[ russian ] = "�� ������ ���� ������������.";
     Text[ greek ] = "��� �������� �� ����� ��� ��������� ��� ������!";
     Text[ dutch ] = "Geen veld voor gebruikersgegevens gedefinieerd!";
-    Text[ french ] = "Ce champ de donn�es d'identit� n'est pas d�fini !";
+    Text[ french ] = "Ce champ de donn�es d'utilisateur n'est pas d�fini !";
     Text[ spanish ] = "�El campo de datos de usuario no est� definido!";
     Text[ italian ] = "Il campo dati utente non � stato definito!";
     Text[ danish ] = "Brugerdatafeltet er ikke defineret!";
@@ -1502,7 +1502,7 @@ String TextField
     Text[ polish ] = "Nie zdefiniowano pola danych u�ytkownika!";
     Text[ portuguese_brazilian ] = "Textfield is not defined!";
     Text[ japanese ] = "ユーザーデータのフィールドが定義されていません。";
-    Text[ korean ] = "사용자데이터필드가 정의되지 않았습니다!";
+    Text[ korean ] = "사용자 데이터필드가 정의되지 않았습니다.";
     Text[ chinese_simplified ] = "还没有定义使用者字段！";
     Text[ chinese_traditional ] = "還沒有定義使用者資料欄位!";
     Text[ turkish ] = "Textfield is not defined!";
@@ -1560,7 +1560,7 @@ String Newsletter + 1
     Text[ polish ] = "Uk�ad domy�lny";
     Text[ portuguese_brazilian ] = "Standard Layout";
     Text[ japanese ] = "標準レイアウト";
-    Text[ korean ] = "표준 레이아웃";
+    Text[ korean ] = "기본 레이아웃";
     Text[ chinese_simplified ] = "标准的版式";
     Text[ chinese_traditional ] = "標準的版式";
     Text[ turkish ] = "Standard Layout";
@@ -1588,7 +1588,7 @@ String Newsletter + 2
     Text[ polish ] = "Wydanie jubileuszowe";
     Text[ portuguese_brazilian ] = "Party Layout";
     Text[ japanese ] = "記念刊行物レイアウト";
-    Text[ korean ] = "모임 레이아웃";
+    Text[ korean ] = "기념 발행물";
     Text[ chinese_simplified ] = "纪念文";
     Text[ chinese_traditional ] = "紀念文";
     Text[ turkish ] = "Party Layout";
@@ -1616,7 +1616,7 @@ String Newsletter + 3
     Text[ polish ] = "Broszura";
     Text[ portuguese_brazilian ] = "Brochure Layout";
     Text[ japanese ] = "チラシ広告レイアウト";
-    Text[ korean ] = "브로셔 레이아웃";
+    Text[ korean ] = "브로슈어 레이아웃";
     Text[ chinese_simplified ] = "小手册的版式";
     Text[ chinese_traditional ] = "小手冊的版式";
     Text[ turkish ] = "Brochure Layout";
@@ -1708,6 +1708,11 @@ String Newsletter + 12
     Text[ catalan ] = "Dues cares";
     Text[ thai ] = "สองข้าง";
 };
+
+
+
+
+
 
 
 

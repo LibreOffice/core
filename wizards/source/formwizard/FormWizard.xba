@@ -14,7 +14,7 @@ Public bWithBackGraphic as Boolean
 Public bNeedFieldRefresh as Boolean
 Public oDBForm as Object
 Public oColumns() as Object
-Public sDatabaseList()
+Public sDatabaseList() as String
 Public TableNames() as String
 Public QueryNames() as String
 Public FieldNames() as String
@@ -85,12 +85,10 @@ Dim SelList(0) as Integer
 		Exit Sub
 	End If
 	oDocument.GetCurrentController().Frame.ComponentWindow.Enable = False
-	oProgressBar.Value = 5
-	GetDatabaseNames()
 	oProgressBar.Value = 10
-	InitializeWidthList()
-	oProgressBar.Value = 20
 	LoadLanguage()
+	oProgressBar.Value = 20
+	InitializeWidthList()
 	oProgressBar.Value = 30
 	Styles() = getListBoxArrays(oUcb, &quot;/stl&quot;)
 	CurIndex = GetCurIndex(DialogModel, Styles(), 2)
@@ -106,7 +104,8 @@ Dim SelList(0) as Integer
 		.lblTables.Enabled = False
 		.lstSelFields.Tag = False
 		.Step = 1
-		.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
+		.lstDatabases.StringItemList()= GetDatabaseNames(IsMissing(DataSourceName))
+		.lstDatabases.SelectedItems() = Array(0)
 	End With
 	oProgressBar.Value = 60
 	If Not IsMissing(DataSourceName) Then
@@ -133,7 +132,7 @@ Dim SelList(0) as Integer
 							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(SelIndex, True)
 						ElseIf CommandType = com.sun.star.sdb.CommandType.TABLE Then
 							SelIndex = IndexInArray(sContent, TableNames()
-							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)		
+							DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItemPos(Ubound(QueryNames()+1 + SelIndex, True)
 						End If
 					End If
 					CurCommandType = CommandType
@@ -154,10 +153,10 @@ Dim SelList(0) as Integer
 	DialogModel.lstStyles.StringItemList() = ArrayfromMultiArray(Styles, 1)
 	DialogModel.lstStyles.SelectedItems() = SelList()
 	ControlCaptionsToStandardLayout()
-	
 	oDocument.GetCurrentController().Frame.ComponentWindow.Enable = True
 	oProgressBar.Value = 90
 	DialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
+	DialogModel.imgTheme.BackGroundColor = RGB(0,60,126)
 	ToggleDatabasePage(True)
 	oProgressBar.Value = 100
 	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
@@ -173,16 +172,17 @@ Dim SelList(0) as Integer
 		RemoveNirwanaShapes()
 	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
+	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:		
+		LOCERROR:
 	End If
 End Sub
 
 
 Sub FormGetFields()
 Dim i as Integer
+	DeleteFirstListBoxEntry(&quot;lstTables&quot;, sSelectDBTable)
 	ToggleDatabasePage(False)
 	FillUpFieldsListbox(True)
 	ToggleDatabasePage(True)
@@ -190,20 +190,18 @@ End Sub
 
 
 Sub FillUpFieldsListbox(bGetCommandType as Boolean)
-Dim n as Integer
 Dim SelIndex as Integer
 Dim QueryIndex as Integer
 	If Not bDebug Then
 		On Local Error GoTo NOFIELDS
 	End If
-	n = Ubound(DialogModel.lstTables.SelectedItems())
-	If n &gt; -1 Then
-		SelIndex = DialogModel.lstTables.SelectedItems(0)
+	SelIndex = DlgFormDB.GetControl(&quot;lstTables&quot;).getSelectedItemPos() &apos;.SelectedItems())
+	If SelIndex &gt; -1 Then
 		If bGetCommandType Then
 			CurCommandType = iCommandTypes(SelIndex)
 		End If
 		If CurCommandType = com.sun.star.sdb.CommandType.QUERY Then
-			QueryIndex = SelIndex - Ubound(Tablenames()) - 1
+			QueryIndex = SelIndex  - Ubound(Tablenames()) - 1
 			Tablename = QueryNames(QueryIndex)
 			oColumns = oDBConnection.Queries.GetByName(TableName).Columns
 		Else
@@ -211,13 +209,11 @@ Dim QueryIndex as Integer
 			oColumns = oDBConnection.Tables.GetByName(Tablename).Columns
 		End If
 		If GetSpecificFieldNames() &lt;&gt; -1 Then
-			ToggleListboxControls(DialogModel, True)			
-		Else
-			EmptyFieldsListboxes()
+			ToggleListboxControls(DialogModel, True)
+			Exit Sub
 		End If
-	Else
-		EmptyFieldsListboxes()
 	End If
+	EmptyFieldsListboxes()
 NOFIELDS:
 	If Err &lt;&gt; 0 Then
 		MsgBox sMsgErrCouldNotOpenObject, 16, sMsgWizardName
@@ -239,10 +235,10 @@ Sub PreviousStep()
 	End With
 	FormSetMoveRights()
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
+	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:		
+		LOCERROR:
 	End If
 End Sub
 
@@ -274,7 +270,7 @@ WIZARDERROR:
 	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
-		LOCERROR:		
+		LOCERROR:
 	End If
 End Sub
 
@@ -306,9 +302,9 @@ End Sub
 
 &apos; This Sub is called from the Procedure &quot;StoreDocument&quot; in the &quot;Tools&quot; Library
 Sub CommitLastDocumentChanges(sTargetPath as String)
-Dim i as Integer	
+Dim i as Integer
 Dim sBookmarkName as String
-Dim oDBBookmarks as Object		
+Dim oDBBookmarks as Object
 Dim bLinkExists as Boolean
 Dim sBaseBookmarkName as String
 	sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
@@ -337,8 +333,8 @@ Dim TypeNames(0,2) as String
 Dim oMasterKey as Object
 Dim oTypes() as Object
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-	oTypes() = oMasterKey.Types
-	TypeNames(0,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+	oTypes() = oMasterKey.Filters
+	TypeNames(0,0) = GetFilterName(&quot;StarOffice XML (Writer)&quot;)
 	TypeNames(0,1) = &quot;*.sxw&quot;
 	TypeNames(0,2) = &quot;&quot;
 	sTargetPath = StoreDocument(oDocument, TypeNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath, 1)
@@ -354,5 +350,30 @@ Dim NullList() as String
 	DialogModel.lstFields.StringItemList() = NullList()
 	DialogModel.lstSelFields.StringItemList() = NullList()
 	bEnableBinaryOptionGroup = False
+End Sub
+
+
+Sub DeleteFirstDBListBoxEntry()
+	DeleteFirstListBoxEntry(&quot;lstDatabases&quot;, sSelectDatasource)	
+End Sub
+
+
+Sub DeleteFirstTableListBoxEntry()
+	DeleteFirstListBoxEntry(&quot;lstTables&quot;, sSelectDBTable)
+End Sub
+
+Sub DeleteFirstListboxEntry(ListBoxName as String, DelEntryName as String)
+Dim oListbox as Object
+Dim sFirstItem as String
+dim iSelPos as Integer
+	oListBox = DlgFormDB.getControl(ListBoxName)
+	sFirstItem = oListBox.getItem(0)
+	If sFirstItem = DelEntryName Then
+		iSelPos = oListBox.getSelectedItemPos()
+	    oListBox.removeItems(0, 1)
+		If iSelPos &gt; 0 Then
+		    oListBox.selectItemPos(iSelPos-1, True)
+		End If
+	End If
 End Sub
 </script:module>

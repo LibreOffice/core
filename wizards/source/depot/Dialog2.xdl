@@ -12,17 +12,17 @@
   <dlg:text dlg:id="lblStockID" dlg:tab-index="3" dlg:left="150" dlg:top="6" dlg:width="66" dlg:height="8" dlg:value="lblStockID"/>
   <dlg:textfield dlg:id="txtStockID" dlg:tab-index="4" dlg:left="150" dlg:top="17" dlg:width="40" dlg:height="12" dlg:help-url="HID:34521"/>
   <dlg:text dlg:id="lblQuantity" dlg:tab-index="5" dlg:left="6" dlg:top="36" dlg:width="57" dlg:height="8" dlg:value="lblQuantity"/>
-  <dlg:numericfield dlg:id="txtQuantity" dlg:tab-index="6" dlg:left="6" dlg:top="47" dlg:width="46" dlg:height="12" dlg:help-url="HID:34522" dlg:decimal-accuracy="0" dlg:value-min="1.0"/>
-  <dlg:currencyfield dlg:id="txtRate" dlg:tab-index="7" dlg:left="68" dlg:top="47" dlg:width="40" dlg:height="12" dlg:help-url="HID:34523" dlg:value-min="0.0"/>
+  <dlg:numericfield dlg:id="txtQuantity" dlg:tab-index="6" dlg:left="6" dlg:top="47" dlg:width="46" dlg:height="12" dlg:help-url="HID:34522" dlg:decimal-accuracy="0" dlg:value-min="1"/>
+  <dlg:currencyfield dlg:id="txtRate" dlg:tab-index="7" dlg:left="68" dlg:top="47" dlg:width="40" dlg:height="12" dlg:help-url="HID:34523" dlg:value-min="0"/>
   <dlg:datefield dlg:id="txtDate" dlg:tab-index="8" dlg:left="150" dlg:top="47" dlg:width="50" dlg:height="12" dlg:tag="Dialog2" dlg:help-url="HID:34524" dlg:strict-format="true" dlg:spin="true">
    <script:event script:event-name="on-textchange" script:location="document" script:macro-name="Standard.tools.CheckInputDate" script:language="StarBasic"/>
   </dlg:datefield>
   <dlg:text dlg:id="lblRate" dlg:tab-index="9" dlg:left="68" dlg:top="36" dlg:width="77" dlg:height="8" dlg:value="lblRate"/>
   <dlg:text dlg:id="lblDate" dlg:tab-index="10" dlg:left="150" dlg:top="37" dlg:width="66" dlg:height="8" dlg:value="lblDate"/>
-  <dlg:formattedfield dlg:id="txtCommission" dlg:tab-index="11" dlg:left="6" dlg:top="90" dlg:width="46" dlg:height="12" dlg:help-url="HID:34525" dlg:spin="true" dlg:format-code="0,00%" dlg:format-locale="de;DE"/>
+  <dlg:formattedfield dlg:id="txtCommission" dlg:tab-index="11" dlg:left="6" dlg:top="90" dlg:width="40" dlg:height="12" dlg:help-url="HID:34525" dlg:format-code="0,00%" dlg:format-locale="de;DE"/>
   <dlg:text dlg:id="lblCommission" dlg:tab-index="12" dlg:left="6" dlg:top="79" dlg:width="60" dlg:height="8" dlg:value="lblCommission"/>
-  <dlg:currencyfield dlg:id="txtFix" dlg:tab-index="13" dlg:left="68" dlg:top="90" dlg:width="40" dlg:height="12" dlg:help-url="HID:34526" dlg:value-min="0.0"/>
-  <dlg:currencyfield dlg:id="txtMinimum" dlg:tab-index="14" dlg:left="150" dlg:top="90" dlg:width="40" dlg:height="12" dlg:help-url="HID:34527" dlg:value-min="0.0"/>
+  <dlg:currencyfield dlg:id="txtFix" dlg:tab-index="13" dlg:left="68" dlg:top="90" dlg:width="40" dlg:height="12" dlg:help-url="HID:34526" dlg:value-min="0"/>
+  <dlg:currencyfield dlg:id="txtMinimum" dlg:tab-index="14" dlg:left="150" dlg:top="90" dlg:width="40" dlg:height="12" dlg:help-url="HID:34527" dlg:value-min="0"/>
   <dlg:text dlg:id="lblFix" dlg:tab-index="15" dlg:left="68" dlg:top="79" dlg:width="71" dlg:height="8" dlg:value="lblFix"/>
   <dlg:text dlg:id="lblMinimum" dlg:tab-index="16" dlg:left="150" dlg:top="79" dlg:width="66" dlg:height="8" dlg:value="lblMinimum"/>
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="17" dlg:left="58" dlg:top="109" dlg:width="50" dlg:height="14" dlg:help-url="HID:34528" dlg:value="cmdCancel">

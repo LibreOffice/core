@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bc $ $Date: 2002-12-11 17:40:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-    public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport){
+    public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport, final ReportDocument CurReportDocument){
 /*    Thread ProgressThread = new Thread(new Runnable(CurUNOProgressDialog) {
         private UNODialogs dialog;
     public Runnable( UNODialogs x )
@@ -252,7 +252,6 @@ public class Dataimport extends ReportWizard{
     public void run(){
     try{
         if (reconnectToDatabase(xMSF)){
-        CurReportDocument.getallDBColumns(CurReportDocument.CurDBMetaData);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
         insertDatabaseDatatoReportDocument(xMSF);
@@ -283,7 +282,7 @@ public class Dataimport extends ReportWizard{
         CurReportDocument = new ReportDocument(xMSF, false, true, ReportMessages);
         int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
         showProgressDisplay(xMSF, true);
-        importReportData(xMSF, this);
+        importReportData(xMSF, this, CurReportDocument);
     }
     }
     catch(java.lang.Exception jexception ){
@@ -314,6 +313,11 @@ public class Dataimport extends ReportWizard{
         bgetConnection = CurReportDocument.CurDBMetaData.getConnection(sMsgNoConnection, sMsgConnectionImpossible);
         if (bgetConnection){
         boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
+        if (bexecute == true){
+            CurReportDocument.CurDBMetaData.initializeFields(CurReportDocument.CurDBMetaData.FieldNames, false);
+            CurReportDocument.getallDBColumns();
+        }
+
         return bexecute;
         }
         else
@@ -340,6 +344,7 @@ public class Dataimport extends ReportWizard{
         int ColIndex;
         int i;
     boolean breset;
+    Object oTable;
     XCellRange xCellRange;
     XTextCursor xTextCursor;
     XTextDocument xTextDocument;
@@ -371,14 +376,11 @@ public class Dataimport extends ReportWizard{
         Tools.setUNOPropertyValue(xTextCursor, "PageDescName", "First Page");
         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++){
             CurGroupTableName = "Tbl_GroupField" + Integer.toString(ColIndex+1);
-            xGroupBaseTables[ColIndex] = (XTextTable) CurReportDocument.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
+            oTable = CurReportDocument.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
+        xGroupBaseTables[ColIndex] = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
         if (ColIndex == 0){
-            BreakType BreakValue = (BreakType) Tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType");
-            if (BreakValue.equals(BreakType.NONE) == false) {
-            CorrBreakValue = BreakValue;
-            Tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType", BreakType.NONE);
-            }
-            String PageDescName = (String) Tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName");
+            CorrBreakValue = CurReportDocument.resetBreakTypeofTextTable(xGroupBaseTables[ColIndex]);
+            String PageDescName = AnyConverter.toString(Tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName"));
             if (PageDescName.equals("") == false){
             CorrPageDescName = PageDescName;
             Tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName", "");

@@ -99,7 +99,9 @@ Dim oSize as New com.sun.star.awt.Size
 			bDoReplace = True
 			BulletName = FileNameoutofPath(oLevel(i).Value)
 			If bIsFirstRun Then
-				FileCopy(oLevel(i).Value, SavePath &amp; BulletName)
+				If oUcb.exists(SavePath &amp; Bulletname) Then
+					FileCopy(oLevel(i).Value, SavePath &amp; BulletName)
+				End If
 			End If
 			oNewBuffer(i).Value = BulletName
 &apos;		ElseIf oLevel(i).Name = &quot;GraphicSize&quot; Then

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 10:00:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,10 @@ Text[ English ] = "StarOffice Calendar";
 Text[ English_us ] = "%PRODUCTNAME Calendar";
 Text[ french ] = "Calendrier %PRODUCTNAME";
 Text[ italian ] = "Calendario %PRODUCTNAME";
-Text[ spanish ] = "%PRODUCTNAME Calendario";
+Text[ spanish ] = "%PRODUCTNAME - Calendario";
 Text[ portuguese ] = "Calendário %PRODUCTNAME";
 Text[ dutch ] = "%PRODUCTNAME Kalender";
-Text[ swedish ] = "%PRODUCTNAME kalender";
+Text[ swedish ] = "%PRODUCTNAME-kalender";
     Text[ russian ] = "Êàëåíäàğü %PRODUCTNAME";
     Text[ greek ] = "Çìåñïëüãéï %PRODUCTNAME";
     Text[ danish ] = "%PRODUCTNAME kalender";
@@ -170,7 +170,7 @@ String  dlgCalTitleOwnData
 Text = "Eigene Daten";
 Text[ English ] = "Personal Data";
 Text[ English_us ] = "Personal Data";
-Text[ french ] = "Mes données";
+Text[ french ] = "Données personnelles";
 Text[ italian ] = "Dati dell'utente";
 Text[ spanish ] = "Mis datos";
 Text[ portuguese ] = "Dados pessoais";
@@ -182,7 +182,7 @@ Text[ swedish ] = "Egna data";
     Text[ polish ] = "Dane osobiste";
     Text[ portuguese_brazilian ] = "Personal Data";
     Text[ japanese ] = "ç‹¬è‡ªã®ãƒ‡ãƒ¼ã‚¿";
-    Text[ korean ] = "ê°œì¸ì ì¸ ë°ì´í„°";
+    Text[ korean ] = "ê³ ìœ  ë°ì´í„°";
     Text[ chinese_simplified ] = "ä¸ªäººæ•°æ®";
     Text[ chinese_traditional ] = "å€‹äººæ•¸æ“š";
     Text[ arabic ] = "ÇáÈíÇäÇÊ ÇáÎÇÕÉ";
@@ -318,7 +318,7 @@ Text[ swedish ] = "~Årsöversikt";
     Text[ polish ] = "~Przegl¹d roku";
     Text[ portuguese_brazilian ] = "~Year Overview";
     Text[ japanese ] = "å¹´é–“(~Y)";
-    Text[ korean ] = "ë…„ê°„ ì¼ì • ê°œìš”(~Y)";
+    Text[ korean ] = "ì—°ë„ ê°œìš”(~Y)";
     Text[ chinese_simplified ] = "å¹´æ£€è§†å›¾(~Y)";
     Text[ chinese_traditional ] = "å¹´æª¢è¦–åœ–(~Y)";
     Text[ arabic ] = "ãáÎÕ ÓäÉ~";
@@ -372,7 +372,7 @@ Text[ swedish ] = "Beräkna helgdagar för";
     Text[ polish ] = "Obliczenie dni œwi¹tecznych dla";
     Text[ portuguese_brazilian ] = "Add holidays for";
     Text[ japanese ] = "ç¥æ—¥ã‚’æ•°ãˆã‚‹å¯¾è±¡";
-    Text[ korean ] = "ê³µíœ´ì¼ã€€ê³„ì‚°";
+    Text[ korean ] = "ê³µíœ´ì¼ ê³„ì‚°";
     Text[ chinese_simplified ] = "è®¡ç®—èŠ‚å‡æ—¥ä¸º";
     Text[ chinese_traditional ] = "è¨ˆç®—ç¯€å‡æ—¥çš„æ‰€åœ¨åœ°";
     Text[ arabic ] = "ÍÓÇÈ ÇáÚØáÇÊ ÇáÑÓãíÉ áÜ";
@@ -400,7 +400,7 @@ Text[ swedish ] = "Sverige";
     Text[ polish ] = "Polska";
     Text[ portuguese_brazilian ] = "USA";
     Text[ japanese ] = "æ—¥æœ¬";
-    Text[ korean ] = "ë…ì¼";
+    Text[ korean ] = "í•œêµ­";
     Text[ chinese_simplified ] = "ä¸­å›½";
     Text[ chinese_traditional ] = "å°ç£";
     Text[ arabic ] = "ãÕÑ";
@@ -509,7 +509,7 @@ Text[ swedish ] = "-";
     Text[ arabic ] = "ÇáÚØáÇÊ ÇáÑÓãíÉ ÇáãÍáíÉ";
     Text[ greek ] = "Ôïğéêİò áñãßåò";
     Text[ turkish ] = "-";
-    Text[ korean ] = "ë…ì¼ ê³µíœ´ì¼";
+    Text[ korean ] = "-";
     Text[ catalan ] = "-";
 };
 
@@ -518,7 +518,7 @@ String  dlgCalOwnData
 Text = "Eigene Daten";
 Text[ English ] = "Personal Data";
 Text[ English_us ] = "Personal Data";
-Text[ french ] = "Mes données";
+Text[ french ] = "Données personnelles";
 Text[ italian ] = "Dati dell'utente";
 Text[ spanish ] = "Mis datos";
 Text[ portuguese ] = "Dados pessoais";
@@ -574,7 +574,7 @@ Text[ English ] = "~Delete";
 Text[ English_us ] = "~Delete";
 Text[ french ] = "Supprimer";
 Text[ italian ] = "~Elimina";
-Text[ spanish ] = "~Eliminar";
+Text[ spanish ] = "~Borrar";
 Text[ portuguese ] = "Rem~over";
 Text[ dutch ] = "Ver~wijderen";
 Text[ swedish ] = "Ta ~bort";
@@ -601,7 +601,7 @@ Text[ English ] = "New Event";
 Text[ English_us ] = "New Event";
 Text[ french ] = "Nouvel événement";
 Text[ italian ] = "Nuovo evento";
-Text[ spanish ] = "Nuevo acontecimiento";
+Text[ spanish ] = "Acontecimiento nuevo";
 Text[ portuguese ] = "Novo evento";
 Text[ dutch ] = "Nieuwe gebeurtenis";
 Text[ swedish ] = "Ny händelse";
@@ -665,7 +665,7 @@ Text[ swedish ] = "Engångsföreteelse";
     Text[ polish ] = "Jednorazowo";
     Text[ portuguese_brazilian ] = "One-Time";
     Text[ japanese ] = "1å›ã®ã¿";
-    Text[ korean ] = "í•œë²ˆ";
+    Text[ korean ] = "ì¼íšŒ";
     Text[ chinese_simplified ] = "ä¸€æ¬¡æ€§";
     Text[ chinese_traditional ] = "ä¸€æ¬¡";
     Text[ arabic ] = "ãÑÉ æÇÍÏÉ";
@@ -779,7 +779,7 @@ Text[ swedish ] = "sweden.bmp";
     Text[ polish ] = "polska.bmp";
     Text[ portuguese_brazilian ] = "usa.bmp";
     Text[ japanese ] = "japan.bmp";
-    Text[ korean ] = "germany.wmf";
+    Text[ korean ] = "korea.bmp";
     Text[ chinese_simplified ] = "china.gif";
     Text[ chinese_traditional ] = "taiwan.bmp";
     Text[ arabic ] = "egypt.bmp";
@@ -1163,7 +1163,7 @@ Text[ swedish ] = "Års-/månadskalender";
     Text[ polish ] = "Kalendarz roczny / miesiêczny";
     Text[ portuguese_brazilian ] = "Yearly- / Monthly Calendar";
     Text[ japanese ] = "å¹´é–“/æœˆé–“ ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼";
-    Text[ korean ] = "ì—° ì¹¼ë Œë” / ì›”ë³„ ì¹¼ë Œë”";
+    Text[ korean ] = "ì—°ê°„/ì›”ê°„ ì¹¼ë Œë”";
     Text[ chinese_simplified ] = "å¹´å†å’Œæœˆå†";
     Text[ chinese_traditional ] = "å¹´æœˆè¡Œäº‹æ›†";
     Text[ arabic ] = "ÊŞæíã Óäæí / ÊŞæíã ÔåÑí";
@@ -1190,7 +1190,7 @@ Text[ swedish ] = "Ett fel uppstod när kalendern skapades.";
     Text[ polish ] = "Podczas tworzenia kalendarza zaszed³ b³¹d.";
     Text[ portuguese_brazilian ] = "An error occurred during the creation of the calendar.";
     Text[ japanese ] = "ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã®ä½œæˆã®éš›ã«ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿã€‚";
-    Text[ korean ] = "ì¹¼ë Œë” ì‘ì„±ì‹œ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "ì¹¼ë Œë” ë§Œë“œëŠ” ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "åœ¨åˆ¶ä½œæ—¥å†æ—¶å‡ºç°äº†ä¸€ä¸ªé”™è¯¯ã€‚";
     Text[ chinese_traditional ] = "åœ¨å»ºç«‹ä¸€å€‹è¡Œäº‹æ›†æ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅäÔÇÁ ÇáÊŞæíã.";
@@ -1207,7 +1207,7 @@ Text[ English ] = "Delete Event Entries";
 Text[ English_us ] = "Delete event entries";
 Text[ french ] = "Supprimer les événements ?";
 Text[ italian ] = "Elimina gli eventi";
-Text[ spanish ] = "Eliminar acontecimientos";
+Text[ spanish ] = "Borrar acontecimientos";
 Text[ portuguese ] = "Eliminar eventos";
 Text[ dutch ] = "Gebeurtenisgegevens wissen";
 Text[ swedish ] = "Ta bort händelseposter";
@@ -1234,7 +1234,7 @@ Text[ English ] = "Delete the selected entries?";
 Text[ English_us ] = "Delete the selected entries?";
 Text[ french ] = "Supprimer les entrées sélectionnées ?";
 Text[ italian ] = "Volete eliminare le voci selezionate?";
-Text[ spanish ] = "¿Desea eliminar los registros seleccionados?";
+Text[ spanish ] = "¿Desea borrar los registros seleccionados?";
 Text[ portuguese ] = "Eliminar as entradas seleccionadas?";
 Text[ dutch ] = "Wilt u de geselecteerde gegevens wissen?";
 Text[ swedish ] = "Skall de markerade posterna tas bort?";
@@ -1244,7 +1244,7 @@ Text[ swedish ] = "Skall de markerade posterna tas bort?";
     Text[ polish ] = "Czy usun¹æ zaznaczone wpisy?";
     Text[ portuguese_brazilian ] = "Delete the selected entries?";
     Text[ japanese ] = "é¸æŠã—ãŸé …ç›®ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì„ íƒëœ í•­ëª©ì„ ì œê±°í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "ì„ íƒëœ í•­ëª©ì„ ì œê±°í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ chinese_simplified ] = "è¦åˆ é™¤é€‰ä¸­çš„æ¡ç›®å—ï¼Ÿ";
     Text[ chinese_traditional ] = "è¦åˆªé™¤é¸ä¸­çš„è¨˜éŒ„ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÅÏÎÇáÇÊ ÇáãÍÏÏÉı¿";
@@ -1280,7 +1280,7 @@ Text[ swedish ] = "";
     Text[ polish ] = "Tydzieñ roboczy";
     Text[ portuguese_brazilian ] = "Workday";
     Text[ japanese ] = "åŠ´åƒé€±æ—¥";
-    Text[ korean ] = "ê·¼ë¬´ ì‹œê°„, ì£¼";
+    Text[ korean ] = "ê·¼ë¬´ ì£¼";
     Text[ chinese_simplified ] = "å·¥ä½œå‘¨";
     Text[ chinese_traditional ] = "å·¥ä½œé€±";
     Text[ arabic ] = "ÃÓÈæÚ Úãá";
@@ -1402,7 +1402,7 @@ Text[ English_us ] = "Progress:";
     Text[ polish ] = "Postêp:";
     Text[ portuguese_brazilian ] = "Progress";
     Text[ japanese ] = "é€²æ—çŠ¶æ³:";
-    Text[ korean ] = "ì§„í–‰";
+    Text[ korean ] = "ì§„í–‰ ìƒíƒœ:";
     Text[ chinese_simplified ] = "å·²ç»å®Œæˆï¼š";
     Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆï¼š";
     Text[ turkish ] = "Progress";
@@ -1411,6 +1411,11 @@ Text[ English_us ] = "Progress:";
     Text[ finnish ] = "Tilanne:";
     Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸„à¸·à¸šà¸«à¸™à¹‰à¸²:";
 };
+
+
+
+
+
 
 
 

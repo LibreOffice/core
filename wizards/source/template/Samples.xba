@@ -32,7 +32,7 @@ Dim MMessage as String
 Dim MTitle as String
 Dim RValue as Integer
 Dim oNewDocument as Object
-Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
+Dim mFileProperties(1) as New com.sun.star.beans.PropertyValue
 	PrepareForEditing = NULL
         BasicLibraries.LoadLibrary( &quot;Tools&quot; )
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
@@ -47,6 +47,9 @@ Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
 				DocPath = oDocument.URL
 				mFileProperties(0).Name = &quot;AsTemplate&quot;
 				mFileProperties(0).Value = True
+				mFileProperties(1).Name = &quot;MacroExecutionMode&quot;
+				mFileProperties(1).Value = com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE	
+				
 				oNewDocument = StarDesktop.LoadComponentFromURL(DocPath,&quot;_default&quot;,0, mFileProperties())
 				PrepareForEditing() = oNewDocument
 				DisposeDocument(oDocument)

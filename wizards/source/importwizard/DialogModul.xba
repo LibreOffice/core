@@ -30,7 +30,7 @@ Public sKeyName(SBMAXAPPLCOUNT-1) as String
 Public sValueName(SBMAXAPPLCOUNT-1) as String
 Public sCRLF as String
 Public MSFilterName(5,2) as String
-Public XMLFilterName(7,2)
+Public XMLFilterName(7,2) as String
 
 &apos; e.g.:
 &apos; XMLFilterName(x,0) = &quot;sdw&quot; 						&apos; in documents we take the extensions; in SO-templates the appropriate Filtername
@@ -62,6 +62,8 @@ Public Const SBAPPLKEY = 9
 &apos; Applications(X,7) = &quot;File:///...&quot;		(SourceUrl of the templates)
 &apos; Applications(X,8) = &quot;File:///...&quot; 	(TargetUrl of the templates)
 &apos; Applications(X,9) = 0				    (Key to the original Index of the Applications)
+
+Public Const SBMAXEXTENSIONLENGTH = 7
 
 
 Sub FillStep_Welcome()
@@ -367,7 +369,6 @@ Sub	SetupMSConfiguration()
 End Sub
 
 
-
 Sub SetupXMLConfiguration()
 	iApplSection = 1000
 	Wizardmode = SBXMLMODE
@@ -381,6 +382,7 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(1,0) = &quot;sdc&quot;
 	XMLFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
 	XMLFilterName(1,2) = &quot;sxc&quot;
+
 	XMLFilterName(2,0) = &quot;sdd|sda&quot;
 	XMLFilterName(2,1) = &quot;StarOffice XML (Impress)|sdraw: StarOffice XML (Draw)&quot;
 	XMLFilterName(2,2) = &quot;sxi|sxd&quot;
@@ -495,6 +497,12 @@ Sub InitializeProgressPage(oDialog as Object)
   oDialog.LabelCurProgress.FontWeight = com.sun.star.awt.FontWeight.BOLD
 End Sub
 
+
+Sub	SetProgressDisplay(AbsFound as Integer)
+	ImportDialog.LabelRetrieval.Label = sProgressPage_2 &amp;  &quot;  &quot; &amp; ReplaceString(sProgressPage_5, Str(AbsFound) &amp; &quot; &quot;, &quot;%1&quot;)
+	ImportDialog.LabelCurDocumentRetrieval.Label =  sProgressFound &amp; &quot; &quot; &amp; CStr(AbsDocuFound) &amp;  &quot; &quot; &amp; sProgressMoreDocs
+	ImportDialog.LabelCurTemplateRetrieval.Label = sProgressFound &amp; &quot; &quot; &amp; CStr(AbsTemplateFound) &amp; &quot; &quot; &amp; sProgressMoreTemplates
+End Sub
 
 Sub TakoverFolderName(aEvent as Object)
 Dim RefControlName as String

@@ -261,6 +261,24 @@ Dim CurFieldValue
 End Function
 
 
+&apos; Searches for a Value in multidimensial Array by querying all Searchindices of the passed dimension 
+&apos; and delivers the Index where the Searchvalue is found as a part string
+Function GetIndexForPartStringinMultiArray(SearchList(), SearchValue, SearchIndex as Integer) as Integer
+Dim i as integer
+Dim MaxIndex as Integer
+Dim CurFieldValue
+	MaxIndex = Ubound(SearchList(),1)
+	For i = Lbound(SearchList()) to MaxIndex
+		CurFieldValue = SearchList(i,SearchIndex)
+		If Instr(CurFieldValue, SearchValue) &gt; 0 Then
+			GetIndexForPartStringinMultiArray() = i
+			Exit Function
+		End if
+	Next
+	GetIndexForPartStringinMultiArray = -1
+End Function
+
+
 Function ArrayfromMultiArray(MultiArray as String, iDim as Integer)
 Dim MaxIndex as Integer	
 Dim i as Integer

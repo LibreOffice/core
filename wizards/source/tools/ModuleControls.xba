@@ -339,8 +339,9 @@ Dim OverwriteModel as Object
 		OverwriteModel.lblQueryforSave.Label = QueryString
 		OverwriteModel.cmdNo.DefaultButton = True
 		DlgOverwrite.GetControl(&quot;cmdNo&quot;).SetFocus()
+		iGeneralOverwrite = 999
 		LocRetValue = DlgOverwrite.execute()
-		If LocRetValue = 0 Then
+		If iGeneralOverwrite = 999 Then
 			iGeneralOverwrite = SBOVERWRITECANCEL
 		End If
 		DlgOverwrite.dispose()

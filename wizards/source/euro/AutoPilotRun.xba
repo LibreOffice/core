@@ -23,6 +23,7 @@ Public TotDocCount as Integer
 Public sTotDocCount as String
 Public OpenProperties(1) as New com.sun.star.beans.PropertyValue
 
+
 Sub StartAutoPilot()
 Dim i As Integer
 Dim oFactoryKey as Object
@@ -37,6 +38,7 @@ Dim oFactoryKey as Object
 		oFactoryKey = GetRegistryKeyContent(&quot;org.openoffice.Setup/Office/Factories&quot;)
 		DialogModel.chkTextDocuments.Enabled =  oFactoryKey.hasbyName(&quot;com.sun.star.text.TextDocument&quot;)
 		DialogModel.cmdGoOn.DefaultButton = True
+		DialogModel.lstCurrencies.TabIndex = 12
 		DialogConvert.GetControl(&quot;optWholeDir&quot;).SetFocus()
 		DialogConvert.Execute()
 		DialogConvert.Dispose()
@@ -182,7 +184,7 @@ End Function
 Sub SwapExtent()
 	DialogModel.chkRecursive.Enabled = DialogModel.optWholeDir.State = 1
 	If DialogModel.optWholeDir.State = 1 Then
-		DialogModel.lblSource.Label = sSOURCEDIR     
+		DialogModel.lblSource.Label = sSOURCEDIR
 		If Not IsNull(SubstFile) Then
 			SubstFile = DialogModel.txtSource.Text
 			DialogModel.txtSource.Text = SubstDir

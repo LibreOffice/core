@@ -24,7 +24,7 @@
    <dlg:radio dlg:id="optPerShare" dlg:tab-index="8" dlg:left="6" dlg:top="37" dlg:width="69" dlg:height="10" dlg:page="1" dlg:help-url="HID:34537" dlg:value="optPerShare"/>
    <dlg:radio dlg:id="optTotal" dlg:tab-index="9" dlg:left="6" dlg:top="51" dlg:width="69" dlg:height="10" dlg:page="1" dlg:help-url="HID:34538" dlg:value="optTotal"/>
   </dlg:radiogroup>
-  <dlg:currencyfield dlg:id="txtDividend" dlg:tab-index="10" dlg:left="6" dlg:top="80" dlg:width="50" dlg:height="12" dlg:page="1" dlg:help-url="HID:34539" dlg:value-min="0.0" dlg:spin="true"/>
+  <dlg:currencyfield dlg:id="txtDividend" dlg:tab-index="10" dlg:left="6" dlg:top="80" dlg:width="50" dlg:height="12" dlg:page="1" dlg:help-url="HID:34539" dlg:value-min="0" dlg:spin="true"/>
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="11" dlg:left="41" dlg:top="98" dlg:width="50" dlg:height="14" dlg:help-url="HID:34535" dlg:value="cmdCancel">
    <script:event script:event-name="on-performaction" script:location="document" script:macro-name="Standard.Depot.CancelStockRate" script:language="StarBasic"/>
   </dlg:button>
@@ -39,7 +39,7 @@
   <dlg:fixedline dlg:id="hlnInterval" dlg:tab-index="18" dlg:left="6" dlg:top="72" dlg:width="164" dlg:height="8" dlg:page="3" dlg:value="hlnInterval"/>
   <dlg:text dlg:id="lblStartDate" dlg:tab-index="19" dlg:left="6" dlg:top="39" dlg:width="53" dlg:height="8" dlg:page="3" dlg:value="lblStartDate"/>
   <dlg:text dlg:id="lblEndDate" dlg:tab-index="20" dlg:left="6" dlg:top="55" dlg:width="53" dlg:height="8" dlg:page="3" dlg:value="lblEndDate"/>
-  <dlg:numericfield dlg:id="txtOldRate" dlg:tab-index="21" dlg:left="6" dlg:top="53" dlg:width="30" dlg:height="12" dlg:page="2" dlg:help-url="HID:34540" dlg:decimal-accuracy="0" dlg:value-min="1.0" dlg:spin="true"/>
-  <dlg:numericfield dlg:id="txtNewRate" dlg:tab-index="22" dlg:left="50" dlg:top="53" dlg:width="30" dlg:height="12" dlg:page="2" dlg:help-url="HID:34541" dlg:decimal-accuracy="0" dlg:value-min="1.0" dlg:spin="true"/>
+  <dlg:numericfield dlg:id="txtOldRate" dlg:tab-index="21" dlg:left="6" dlg:top="53" dlg:width="30" dlg:height="12" dlg:page="2" dlg:help-url="HID:34540" dlg:decimal-accuracy="0" dlg:value-min="1" dlg:spin="true"/>
+  <dlg:numericfield dlg:id="txtNewRate" dlg:tab-index="22" dlg:left="50" dlg:top="53" dlg:width="30" dlg:height="12" dlg:page="2" dlg:help-url="HID:34541" dlg:decimal-accuracy="0" dlg:value-min="1" dlg:spin="true"/>
  </dlg:bulletinboard>
 </dlg:window>

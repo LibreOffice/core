@@ -4,7 +4,6 @@
 
 Public oPreSelRange as Object
 
-
 Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
@@ -15,7 +14,8 @@ Sub Main()
 		InitializeConverter(oDocument.CharLocale, 1)
 		GetPreSelectedRange()
 		If GoOn Then
-			DialogConvert.GetControl(&quot;chkComplete&quot;).SetFocus()	
+			DialogModel.lstCurrencies.TabIndex = 2
+			DialogConvert.GetControl(&quot;chkComplete&quot;).SetFocus()
 			DialogConvert.Execute
 		End If
 		DialogConvert.Dispose

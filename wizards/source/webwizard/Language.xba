@@ -80,4 +80,5 @@ Sub OpenWebDialog()
 	ToggleOptionButtons(DialogModel, bWithBackGraphic)
 	MainDialog.GetControl(&quot;lbTemplate&quot;).SetFocus()
 	DialogModel.cbGoOn.DefaultButton = True
+	DialogModel.ImagePreview.BackGroundColor = RGB(0,60,126)
 End Sub</script:module>

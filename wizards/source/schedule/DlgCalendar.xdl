@@ -48,21 +48,17 @@
   <dlg:menulist dlg:id="lstOwnEventMonth" dlg:tab-index="18" dlg:left="60" dlg:top="55" dlg:width="30" dlg:height="12" dlg:page="2" dlg:help-url="HID:34716" dlg:spin="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Schedule.OwnEvents.GetOwnMonth" script:language="StarBasic"/>
   </dlg:menulist>
-  <dlg:numericfield dlg:id="txtOwnEventYear" dlg:tab-index="19" dlg:left="110" dlg:top="55" dlg:width="40" dlg:height="12" dlg:page="2" dlg:help-url="HID:34718" dlg:decimal-accuracy="0" dlg:value-min="1582" dlg:value-max="9957" dlg:spin="true">
-   <script:event script:event-name="on-textchange" script:location="application" script:macro-name="Schedule.OwnEvents.CheckInsertedDates" script:language="StarBasic"/>
-  </dlg:numericfield>
-  <dlg:button dlg:id="cmdInsert" dlg:tab-index="20" dlg:left="99" dlg:top="70" dlg:width="50" dlg:height="14" dlg:page="2" dlg:help-url="HID:34710" dlg:value="cmdInsert">
+  <dlg:button dlg:id="cmdInsert" dlg:tab-index="19" dlg:left="99" dlg:top="70" dlg:width="50" dlg:height="14" dlg:page="2" dlg:help-url="HID:34710" dlg:value="cmdInsert">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Schedule.OwnEvents.CalcmdInsertData" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdDelete" dlg:tab-index="21" dlg:left="152" dlg:top="70" dlg:width="50" dlg:height="14" dlg:page="2" dlg:help-url="HID:34711" dlg:value="cmdDelete">
+  <dlg:button dlg:id="cmdDelete" dlg:tab-index="20" dlg:left="152" dlg:top="70" dlg:width="50" dlg:height="14" dlg:page="2" dlg:help-url="HID:34711" dlg:value="cmdDelete">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Schedule.DlgControl.CalcmdDeleteSelect" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:menulist dlg:style-id="2" dlg:id="lstOwnData" dlg:tab-index="22" dlg:left="12" dlg:top="86" dlg:width="190" dlg:height="34" dlg:page="2" dlg:help-url="HID:34709">
+  <dlg:menulist dlg:style-id="2" dlg:id="lstOwnData" dlg:tab-index="21" dlg:left="12" dlg:top="86" dlg:width="190" dlg:height="34" dlg:page="2" dlg:help-url="HID:34709">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Schedule.DlgControl.CalUpdateNewEventFrame" script:language="StarBasic"/>
   </dlg:menulist>
-  <dlg:text dlg:id="lblEventDay" dlg:tab-index="23" dlg:left="12" dlg:top="44" dlg:width="44" dlg:height="8" dlg:page="2" dlg:value="lblEventDay"/>
-  <dlg:text dlg:id="lblEventMonth" dlg:tab-index="24" dlg:left="60" dlg:top="44" dlg:width="44" dlg:height="8" dlg:page="2" dlg:value="lblEventMonth"/>
-  <dlg:text dlg:id="lblEventYear" dlg:tab-index="25" dlg:left="110" dlg:top="44" dlg:width="59" dlg:height="8" dlg:page="2" dlg:value="lblEventYear"/>
-  <dlg:numericfield dlg:id="txtYear" dlg:tab-index="26" dlg:left="62" dlg:top="89" dlg:width="38" dlg:height="12" dlg:page="1" dlg:help-url="HID:34704" dlg:decimal-accuracy="0" dlg:value-min="1582" dlg:value-max="9957" dlg:spin="true"/>
+  <dlg:text dlg:id="lblEventDay" dlg:tab-index="22" dlg:left="12" dlg:top="44" dlg:width="44" dlg:height="8" dlg:page="2" dlg:value="lblEventDay"/>
+  <dlg:text dlg:id="lblEventMonth" dlg:tab-index="23" dlg:left="60" dlg:top="44" dlg:width="44" dlg:height="8" dlg:page="2" dlg:value="lblEventMonth"/>
+  <dlg:numericfield dlg:id="txtYear" dlg:tab-index="24" dlg:left="62" dlg:top="89" dlg:width="38" dlg:height="12" dlg:page="1" dlg:help-url="HID:34704" dlg:decimal-accuracy="0" dlg:value-min="1582" dlg:value-max="9957" dlg:spin="true"/>
  </dlg:bulletinboard>
 </dlg:window>

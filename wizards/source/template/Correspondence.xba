@@ -63,7 +63,9 @@ Dim oAddressDialog as Object
 Dim oAddressPilot as Object
 Dim oFields as Object
 Dim oDocSettings as Object
-	On Local Error Goto GENERALERROR
+Dim oContext as Object
+Dim bDBvalid as Boolean
+	&apos;On Local Error Goto GENERALERROR
 	bDBFields = DialogModel.Optmerge.State              &apos;database or placeholder
 	
 	TemplateDialog.EndExecute()
@@ -73,14 +75,18 @@ Dim oDocSettings as Object
 		oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
 		sAddressbook = oDBAccess.DataSourceName
 
-		If sAddressbook = &quot;&quot; Then                       &apos;If there is no field mapping
-			If Not odBAccess.AutoPilotCompleted Then                 &apos;If the Mapping Pilot never ran
-				oAddressPilot = createUnoService(&quot;com.sun.star.ui.dialogs.AddressBookSourcePilot&quot;)
-				oAddressPilot.execute
-			Else
-				oAddressDialog = CreateUnoService(&quot;com.sun.star.ui.AddressBookSourceDialog&quot;)
-				oAddressDialog.execute
-			End If
+		bDBvalid = false
+		oContext = createUnoService( &quot;com.sun.star.sdb.DatabaseContext&quot; )		
+
+		If (not isNull(oContext)) Then 
+			&apos;Is the previously assigned address data source still valid?
+			bDBvalid = oContext.hasByName(sAddressbook)
+		end if
+				
+		If (bDBvalid = false) Then			
+			oAddressPilot = createUnoService(&quot;com.sun.star.ui.dialogs.AddressBookSourcePilot&quot;)
+			oAddressPilot.execute
+			
 			oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
 			sAddressbook = oDBAccess.DataSourceName
 			If sAddressbook = &quot;&quot; Then

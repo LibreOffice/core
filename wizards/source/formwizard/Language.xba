@@ -35,6 +35,9 @@ Public sMsgNoConnection as String
 Public sWriterFilterName as String		
 Public XPixelFactor as Long		
 Public YPixelFactor as Long
+Public sSelectDatasource as String
+Public sSelectDBTable as String
+
 
 
 Sub LoadLanguage ()
@@ -61,11 +64,17 @@ End Sub
 
 
 Sub SetDialogLanguage ()
+Dim i as Integer
+Dim ButtonHelpText as String
+Dim CmdButton as Object
+Dim IDArray as Variant
+Dim FNameAddOn as String
+Dim slblSelFields as String
+Dim slblFields as String
+
 	DlgFormDB = LoadDialog(&quot;FormWizard&quot;, &quot;DlgFormDB&quot;)
 	DialogModel = DlgFormDB.Model
 	
-	Dim FNameAddOn as String
-
 	With DialogModel
 		.cmdCancel.Label = GetResText(RID_COMMON + 1)
 		.cmdBack.Label = GetResText(RID_COMMON + 2)
@@ -75,8 +84,10 @@ Sub SetDialogLanguage ()
 		.lblDatabases.Label = GetResText(RID_FORM + 11)
 		.lblTables.Label = GetResText(RID_FORM + 6)
 
-		.lblFields.Label = GetResText(RID_FORM + 12)
-		.lblSelFields.Label = GetResText(RID_FORM + 13)
+		slblFields = GetResText(RID_FORM + 12)
+		slblSelFields = GetResText(RID_FORM + 13)
+		.lblFields.Label = slblFields
+		.lblSelFields.Label = slblSelFields
 
 		.lblStyles.Label = GetResText(RID_FORM + 21)
 		.hlnBorderLayout.Label = GetResText(RID_FORM + 28)
@@ -105,25 +116,41 @@ Sub SetDialogLanguage ()
 		.optAlign0.State = 1
 		
 		FNameAddOn = &quot;&quot;
-		If isHighContrast(DlgFormDB.getPeer) Then FNameAddOn = &quot;_hc&quot;		
-		
-		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
-		.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
-	
-		.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
-		.cmdArrange2.HelpText = GetResText(RID_FORM + 37)
+		If isHighContrast(DlgFormDB.getPeer) Then FNameAddOn = &quot;_hc&quot;
 
-		.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
-		.cmdArrange3.HelpText = GetResText(RID_FORM + 40)
-
-		.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
-		.cmdArrange4.HelpText = GetResText(RID_FORM + 38)
-
-		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
-		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
-
+		IDArray = Array(36, 37, 40, 38, 39)
+		For i = 1 To 5
+			ButtonHelpText = GetResText(RID_FORM + IDArray(i-1)
+			cmdButton = DlgFormDB.getControl(&quot;cmdArrange&quot; &amp; i)
+			cmdButton.Model.ImageURL = FormPath &amp; &quot;Arrange_&quot; &amp; i &amp; FNameAddOn &amp; &quot;.gif&quot;
+			cmdButton.Model.HelpText = ButtonHelpText
+			cmdButton.getPeer().setProperty(&quot;AccessibleName&quot;, ButtonHelpText)
+		Next i		
+&apos;		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
+&apos;		.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
+&apos;
+&apos;		.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
+&apos;		.cmdArrange2.HelpText = GetResText(RID_FORM + 37)
+&apos;
+&apos;		.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
+&apos;		.cmdArrange3.HelpText = GetResText(RID_FORM + 40)
+&apos;
+&apos;		.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
+&apos;		.cmdArrange4.HelpText = GetResText(RID_FORM + 38)
+&apos;
+&apos;		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
+&apos;		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
 		sWriterFilterName = GetResText(RID_FORM + 70)
 	End With
+	DlgFormDB.GetControl(&quot;cmdMoveSelected&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, GetResText(RID_COMMON + 39)
+	DlgFormDB.GetControl(&quot;cmdRemoveSelected&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, GetResText(RID_COMMON + 40)
+	DlgFormDB.GetControl(&quot;cmdMoveAll&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, GetResText(RID_COMMON + 41)
+	DlgFormDB.GetControl(&quot;cmdRemoveAll&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, GetResText(RID_COMMON + 42)
+	DlgFormDB.getControl(&quot;lstFields&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, DeleteStr(slblFields, &quot;~&quot;))
+	DlgFormDB.getControl(&quot;lstSelFields&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, DeleteStr(slblSelFields, &quot;~&quot;))
+	
+	sSelectDatasource = GetResText(RID_COMMON + 37)
+	sSelectDBTable = GetResText(RID_COMMON + 38)	
 End Sub
 
 

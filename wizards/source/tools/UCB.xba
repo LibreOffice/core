@@ -8,6 +8,7 @@ Dim CurDirMaxCount as Integer
 Dim sDirArray(SBMAXDIRCOUNT-1) as String
 Dim DirIndex As Integer
 Dim iDirCount as Integer
+Dim bInterruptSearch as Boolean
 
 Sub Main()
 Dim LocsfileContent(0) as String
@@ -15,6 +16,7 @@ Dim LocsfileContent(0) as String
 	ReadDirectories(&quot;file:///space&quot;, LocsfileContent(), True, False, false)
 End Sub
 
+&apos;        ReadDirectories(      sSourceDir,          bRecursive,          bCheckRealType, False, sFileContent(), sLocExtension)
 
 Function ReadDirectories(ByVal AnchorDir As String, bRecursive as Boolean,  bcheckFileType as Boolean, bGetByTitle as Boolean, Optional sFileContent(), Optional sExtension as String)
 Dim i as integer
@@ -47,6 +49,10 @@ Dim sFileArray(StartUbound,1) as String
 			If Ubound(DirContent()) &lt;&gt; -1 Then
 				FileCountinDir = Ubound(DirContent())+ 1
 				For i = 0 to FilecountinDir -1
+					If bInterruptSearch = True Then
+						Exit Do
+					End If
+					
 					Filename = DirContent(i)
 					If oUcbObject.IsFolder(FileName) Then
 						If brecursive Then

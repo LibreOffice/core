@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="ImportDialog" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34570" dlg:closeable="true" dlg:moveable="true" dlg:title="ImportDialog">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="ImportDialog" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="4" dlg:help-url="HID:34570" dlg:closeable="true" dlg:moveable="true" dlg:title="ImportDialog">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblTemplateExport" dlg:tab-index="0" dlg:left="12" dlg:top="94" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="lblTemplateExport"/>
   <dlg:textfield dlg:id="txtTemplateImportPath" dlg:tab-index="1" dlg:left="73" dlg:top="76" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34583">
@@ -19,12 +19,12 @@
   <dlg:textfield dlg:id="txtDocumentExportPath" dlg:tab-index="8" dlg:left="73" dlg:top="165" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34589"/>
   <dlg:text dlg:id="SummaryHeaderLabel" dlg:tab-index="9" dlg:left="6" dlg:top="37" dlg:width="258" dlg:height="8" dlg:page="3" dlg:value="SummaryHeaderLabel"/>
   <dlg:textfield dlg:id="SummaryTextbox" dlg:tab-index="10" dlg:left="5" dlg:top="48" dlg:width="259" dlg:height="125" dlg:page="3" dlg:help-url="HID:34595" dlg:vscroll="true" dlg:multiline="true" dlg:readonly="true"/>
-  <dlg:text dlg:id="LabelRetrieval" dlg:tab-index="11" dlg:left="10" dlg:top="67" dlg:width="240" dlg:height="8" dlg:page="4" dlg:value="LabelRetrieval"/>
-  <dlg:text dlg:id="LabelCurTemplateRetrieval" dlg:tab-index="12" dlg:left="15" dlg:top="79" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurTemplateRetrieval"/>
-  <dlg:text dlg:id="LabelCurDocumentRetrieval" dlg:tab-index="13" dlg:left="15" dlg:top="91" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocumentRetrieval"/>
-  <dlg:text dlg:id="LabelCurProgress" dlg:tab-index="14" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="8" dlg:page="4" dlg:value="LabelCurProgress"/>
-  <dlg:text dlg:id="LabelCurDocument" dlg:tab-index="15" dlg:left="15" dlg:top="118" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocument"/>
-  <dlg:img dlg:id="ImportPreview" dlg:tab-index="16" dlg:left="5" dlg:top="6" dlg:width="258" dlg:height="26"/>
+  <dlg:text dlg:id="LabelRetrieval" dlg:tab-index="11" dlg:left="10" dlg:top="67" dlg:width="255" dlg:height="8" dlg:page="4" dlg:value="LabelRetrieval"/>
+  <dlg:text dlg:id="LabelCurTemplateRetrieval" dlg:tab-index="12" dlg:left="15" dlg:top="79" dlg:width="249" dlg:height="8" dlg:page="4" dlg:value="LabelCurTemplateRetrieval"/>
+  <dlg:text dlg:id="LabelCurDocumentRetrieval" dlg:tab-index="13" dlg:left="15" dlg:top="91" dlg:width="249" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocumentRetrieval"/>
+  <dlg:text dlg:id="LabelCurProgress" dlg:tab-index="14" dlg:left="10" dlg:top="106" dlg:width="255" dlg:height="8" dlg:page="4" dlg:value="LabelCurProgress"/>
+  <dlg:text dlg:id="LabelCurDocument" dlg:tab-index="15" dlg:left="15" dlg:top="118" dlg:width="249" dlg:height="20" dlg:page="4" dlg:value="LabelCurDocument" dlg:multiline="true"/>
+  <dlg:img dlg:id="ImportPreview" dlg:tab-index="16" dlg:left="5" dlg:top="6" dlg:width="258" dlg:height="26" dlg:scale-image="false"/>
   <dlg:button dlg:id="cmdBack" dlg:tab-index="17" dlg:left="155" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34573" dlg:value="cmdBack">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.Main.PrevStep" script:language="StarBasic"/>
   </dlg:button>
@@ -89,7 +89,7 @@
   <dlg:fixedline dlg:id="hlnDocuments" dlg:tab-index="42" dlg:left="6" dlg:top="110" dlg:width="258" dlg:height="8" dlg:page="2" dlg:value="hlnDocuments"/>
   <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="43" dlg:left="6" dlg:top="181" dlg:width="258" dlg:height="6"/>
   <dlg:fixedline dlg:id="hlnProgress" dlg:tab-index="44" dlg:left="6" dlg:top="55" dlg:width="258" dlg:height="8" dlg:page="4" dlg:value="hlnProgress"/>
-  <dlg:button dlg:id="cmdShowLogFile" dlg:tab-index="45" dlg:disabled="true" dlg:left="105" dlg:top="140" dlg:width="60" dlg:height="14" dlg:page="4" dlg:value="cmdShowLogFile">
+  <dlg:button dlg:id="cmdShowLogFile" dlg:tab-index="45" dlg:disabled="true" dlg:left="105" dlg:top="142" dlg:width="60" dlg:height="14" dlg:page="4" dlg:value="cmdShowLogFile">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.FilesModul.OpenLogDocument" script:language="StarBasic"/>
   </dlg:button>
  </dlg:bulletinboard>

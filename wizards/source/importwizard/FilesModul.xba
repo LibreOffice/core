@@ -2,81 +2,210 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FilesModul" script:language="StarBasic">Option Explicit
 
-
 Public AbsTemplateFound as Integer
 Public AbsDocuFound as Integer
 Public oLogDocument as Object
 Public oLogTable as Object
 Public bLogExists as Boolean
 Public sComment as String
-
+Public MaxCollectIndex as Integer
 Public bInsertRow as Boolean
 Public sLogUrl as String
 Public sCurPassWord as String
 Public FileCount as Integer
+Public XMLTemplateCount as Integer
+Public PathCollection(7,3) as String
 
 
 
-Function ReadApplicationDirectories(ApplIndex as Integer, FilesList(),bIsDocument as Boolean, sFiltername()) as Integer
-Dim bCheckDocuType as Boolean
+Function ReadCollectionPaths(FilesList() as String, sFilterName() as String)
 Dim FilterIndex as Integer
 Dim bRecursive as Boolean
-Dim sSourceDir as String
-Dim bCheckRealType as Boolean
+Dim SearchDir as String
+Dim i as Integer
+Dim n as Integer
 Dim a as Integer
+Dim s as Integer
 Dim sFileContent() as String
-Dim NewList() as String
+Dim NewList(0,1) as String
 Dim Index as Integer
-Dim sLocExtension as String
-	Index = Applications(ApplIndex,SBAPPLKEY)
-	sLocExtension = &quot;&quot;
-	If bIsDocument Then
-		bCheckDocuType = Applications(ApplIndex,SBDOCCONVERT)
-		bCheckRealType = False
-		bRecursive = Applications(ApplIndex,SBDOCRECURSIVE)
-		FilterIndex = Index
-		sSourceDir = Applications(ApplIndex,SBDOCSOURCE)
-	Else
-		&apos; Templates
-		bCheckDocuType = Applications(ApplIndex,SBTEMPLCONVERT)
-		&apos; In SO the documenttype cannot be derived from the extension name
-		bCheckRealType = WizardMode = SBXMLMODE
-		If bCheckRealType Then
-			&apos; Note: StarOffice-Math-Documents cannot be treated like templates
-			bCheckRealType = Index &lt;&gt; 3
-			If bCheckRealType Then
-				sLocExtension = &quot;vor&quot;
-			End If
-			bIsDocument = Not bCheckRealType
+Dim CurFileName as String
+Dim CurExtension as String
+Dim CurFileContent as String
+Dim XMLTemplateContentList() as String
+Dim bIsTemplatePath as Boolean
+Dim MaxIndex as Integer
+Dim NewContentList() as String
+Dim XMLTemplateContentString as String
+Dim ApplIndex as Integer
+Dim bAssignFileName as Boolean
+	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
+	bInterruptSearch = False
+	For i = 0 To MaxCollectIndex
+		SearchDir = PathCollection(i,0)
+		bRecursive = PathCollection(i,1)
+		sFileContent() = ArrayoutofString(PathCollection(i,2), &quot;|&quot;)
+		NewList() = ReadDirectories(SearchDir, bRecursive, False, False, sFileContent(), &quot;&quot;)
+		If InterruptProcess Then
+			ReadCollectionPaths() = False
+			Exit Function
 		End If
-		bRecursive = Applications(ApplIndex,SBTEMPLRECURSIVE)
-    	FilterIndex = Index + MaxApplCount
-		sSourceDir = Applications(ApplIndex,SBTEMPLSOURCE)
-	End If
-	If bCheckDocuType Then
-		sFileContent() = GetMimeTypeList(sFilterName(FilterIndex))
-		NewList() = ReadDirectories(sSourceDir, bRecursive, bCheckRealType, False, sFileContent(), sLocExtension)
 		If Ubound(NewList()) &gt; -1 Then
-			AddListtoFilesList(FilesList(), NewList(), ApplIndex)
-			ImportDialog.LabelRetrieval.Label = sProgressPage_2 &amp;  &quot;  &quot; &amp; ReplaceString(sProgressPage_5, Str(Ubound(FilesList()) + 1) &amp; &quot; &quot;, &quot;%1&quot;)
+			bIsTemplatePath = FieldInList(&quot;vor&quot;, sFileContent)
+			If bIsTemplatePath Then
+				XMLTemplateContentString = PathCollection(i,3)
+				XMLTemplateContentList() = ArrayoutofString(XMLTemplateContentString, &quot;|&quot;)
+				If Ubound(XMLTemplateContentList()) &gt; -1 Then
+					MaxIndex = Ubound(NewList())
+					ReDim Preserve NewList(MaxIndex, 1) as String
+					ReDim Preserve NewContentList(MaxIndex) as String
+					a = -1
+					For n = 0 To MaxIndex
+						bAssignFileName = True
+						If InterruptProcess() Then
+							ReadCollectionPaths() = False
+							Exit Function
+						End If
+						CurFileName = NewList(n,0)													
+						If NewList(n,1) = &quot;vor&quot; Then
+							CurFileContent = GetRealFileContent(oDocInfo, CurFileName)
+							NewList(n,1) = CurFileContent
+							bAssignFileName = FieldInList(CurFileContent, XMLTemplateContentList()) 
+						End If
+						CurExtension = NewList(n,1)
+						If bAssignFileName Then
+							If a &lt; n Then
+								a = a + 1
+								NewList(a,0) = CurFileName
+								NewList(a,1) = CurExtension
+								ApplIndex = GetApplicationIndex(CurFileContent, sFiltername())
+								NewContentList(a) = ApplIndex
+							End If
+						End If
+					Next n
+					If a &lt; MaxIndex Then
+						ReDim Preserve NewList(a, 1) as String
+					End If
+					AddListtoFilesList(FilesList(), NewList(), NewContentList())
+				End If
+			Else
+				MaxIndex = Ubound(NewList())
+				ReDim Preserve NewContentList(MaxIndex) as String
+				For s = 0 To MaxIndex
+					CurExtension = NewList(s,1)
+					NewContentList(s) = GetApplicationIndex(CurExtension, sFiltername())
+				Next s
+				AddListtoFilesList(FilesList(), NewList(), NewContentList())
+			End If
 		End If
-	End If
-	ReadApplicationDirectories() = Ubound(NewList(),1) + 1
+	Next i
 End Function
 
 
-Sub	ShowCurrentProgress(bIsDocument as Boolean, CurFound as Integer)
-	If bIsDocument Then
-		AbsDocuFound = AbsDocuFound + CurFound
-		ImportDialog.LabelCurDocumentRetrieval.Label =  sProgressFound &amp; &quot; &quot; &amp; CStr(AbsDocuFound) &amp;  &quot; &quot; &amp; sProgressMoreDocs
-	Else
-		AbsTemplateFound = AbsTemplateFound + CurFound
-		ImportDialog.LabelCurTemplateRetrieval.Label = sProgressFound &amp; &quot; &quot; &amp; CStr(AbsTemplateFound) &amp; &quot; &quot; &amp; sProgressMoreTemplates
-  End If
+Function GetApplicationIndex(CurFileContent as String, sFilterName() as String) as Integer
+Dim Index as Integer
+Dim i as Integer
+	Index = GetIndexForPartStringinMultiArray(sFilterName(), CurFileContent, 0)
+	If Index &gt;= MaxApplCount Then
+		Index = Index - MaxApplCount
+	End If
+	For i = 0 To MaxApplCount - 1
+		If Applications(i, SBAPPLKEY) = Index Then
+			GetApplicationIndex() = i
+			Exit Function
+		End If
+	Next i
+	GetApplicationIndex() = - 1
+End Function
+
+
+Function InterruptProcess() as Boolean
+	If bCancelTask Or RetValue = 0 Then
+		bConversionIsRunning = False
+		InterruptProcess() = True
+		Exit Function
+	End if		
+	InterruptProcess() = False
+End Function
+
+
+Sub AddCollectionPath(ApplIndex as Integer, DocIndex as Integer, RecursiveIndex as Integer, sFiltername() as String, DistIndex as Integer)
+	MaxCollectIndex = MaxCollectIndex + 1
+	PathCollection(MaxCollectIndex, 0) = Applications(ApplIndex, DocIndex)
+	PathCollection(MaxCollectIndex, 1) = Applications(ApplIndex, RecursiveIndex)
+	AddFilterNameToPathItem(ApplIndex, MaxCollectIndex, sFiltername(), DistIndex)
 End Sub
 
 
-Sub ConvertAllDocuments(sFilterName())
+Sub AddFilterNameToPathItem(ApplIndex as Integer, CollectIndex as Integer, sFiltername() as String, DistIndex as Integer)
+Dim iKey as Integer
+Dim CurListString as String
+Dim LocExtension as String
+Dim LocContentString as String
+Dim LocXMLTemplateContent as String
+	iKey = Applications(ApplIndex, SBAPPLKEY)
+	CurListString = PathCollection(CollectIndex, 2)
+	LocExtension = sFilterName(iKey +DistIndex, 0)
+	If Len(LocExtension) &gt; SBMAXEXTENSIONLENGTH Then 			&apos; 7 == Length of two extensions like &apos;sda|sdd
+		LocExtension = &quot;vor&quot;
+		LocContentString = sFilterName(iKey +DistIndex, 0)
+		LocContentString = ReplaceString(LocContentString, &quot;|&quot;, &quot;;&quot;)
+		LocXMLTemplateContent = PathCollection(CollectIndex, 3)
+		If LocXMLTemplateContent = &quot;&quot; Then
+			LocXMLTemplateContent = LocContentString
+		Else
+			LocXMLTemplateContent = LocXMLTemplateContent &amp; &quot;|&quot; &amp; LocContentString
+		End If
+		PathCollection(CollectIndex, 3) = LocXMLTemplateContent
+	End If
+	If CurListString = &quot;&quot; Then
+		PathCollection(CollectIndex, 2) = LocExtension
+	Else
+		If Instr(CurListString, LocExtension) = 0 Then
+			PathCollection(CollectIndex, 2) = CurListString &amp; &quot;|&quot; &amp; LocExtension
+		End If
+	End If
+End Sub
+
+
+Sub CheckIfToAddPathToCollection(ApplIndex as Integer, bDoConvertIndex as Integer, DocIndex as Integer, RecursiveIndex as Integer, sFiltername() as String, DistIndex as Integer)
+Dim CollectIndex as Integer
+Dim bCheckDocuType as Boolean
+	bCheckDocuType = Applications(ApplIndex, bDoConvertIndex)
+	If bCheckDocuType Then
+		CollectIndex = GetIndexInMultiArray(PathCollection(), Applications(ApplIndex,DocIndex), 0)
+		If (CollectIndex &gt;-1) Then
+			If Applications(ApplIndex, RecursiveIndex) &lt;&gt; PathCollection(CollectIndex, 1) Then
+				AddCollectionPath(ApplIndex, DocIndex, RecursiveIndex, sFilterName(), DistIndex)
+			Else
+				AddFilterNameToPathItem(ApplIndex, CollectIndex, sFilterName(), DistIndex)
+			End If
+		Else
+			AddCollectionPath(ApplIndex, DocIndex, RecursiveIndex, sFilterName(), DistIndex)
+		End If
+	End If
+End Sub
+
+
+Sub CollectPaths(sFiltername() as String)
+Dim i as Integer
+Dim	XMLTemplateContentString as String
+	MaxCollectIndex = -1
+	For i = 0 To ApplCount-1
+		CheckIfToAddPathToCollection(i, SBDOCCONVERT, SBDOCSOURCE, SBDOCRECURSIVE, sFilterName(), 0)
+	Next i
+	XMLTemplateCount = 0
+	XMLTemplateContentString = &quot;&quot;
+	For i = 0 To ApplCount-1
+		If WizardMode = SBXMLMODE Then
+			XMLTemplateCount = XMLTemplateCount + 1
+		End If
+		CheckIfToAddPathToCollection(i, SBTEMPLCONVERT, SBTEMPLSOURCE, SBTEMPLRECURSIVE, sFilterName(), MaxApplCount)
+	Next i
+End Sub
+
+
+Sub ConvertAllDocuments(sFilterName() as String)
 Dim FileProperties(1) as new com.sun.star.beans.PropertyValue
 Dim PWFileProperties(2) as New com.sun.star.beans.PropertyValue
 Dim WriterWebProperties(0) as new com.sun.star.beans.PropertyValue
@@ -108,35 +237,28 @@ Dim MaxFileIndex as Integer
 Dim bContainsBasicMacro as Boolean
 Dim bIsPassWordProtected as Boolean
 Dim iOverwrite as Integer
+	bConversionisrunning = True
 	InteractionTypes(0) = com.sun.star.task.PasswordRequestMode.PASSWORD_REENTER
 	oInteractionHandler = createUnoService(&quot;com.sun.star.task.InteractionHandler&quot;)
 	oInteractionHandler.initialize(InteractionTypes())
 	iGeneralOverwrite = SBOVERWRITEUNDEFINED
-	bConversionIsRunnig = True
+	bConversionIsRunning = True
 	bLogExists = false
 	AbsTemplateFound = 0
 	AbsDocuFound = 0
-	For i = 0 To ApplCount-1
-		&apos;templates
-		If bCancelTask Or RetValue = 0 Then
-			bConversionIsRunnig = False
-			Exit Sub
-		End if		
-		bIsDocument = False
-		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
-		ShowCurrentProgress(bIsDocument, CurFound)
-	Next i
-	For i = 0 To ApplCount-1
-		&apos;documents
-		If bCancelTask Or RetValue = 0 Then
-			bConversionIsRunnig = False
-			Exit Sub
-		End if		
-		bIsDocument = True
-		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
-		ShowCurrentProgress(bIsDocument, CurFound)
-	Next i
-	TotFound = AbsTemplateFound + AbsDocuFound
+	CollectPaths(sFiltername())
+	If Not ReadCollectionPaths(FilesList(), sFilterName()) Then
+		TotFound = 0
+		SetProgressDisplay(0)
+		bConversionisrunning = false
+		FinalizeDialogButtons()	
+		Exit Sub
+	End If
+	TotFound = Ubound(FilesList()) + 1 			
+	If FilesList(0,0) = &quot;&quot; Then					&apos; Querying the number of fields in a multidimensionl Array is unsecure
+		TotFound = 0							&apos; because it will return the value 0 (and not -1) even when the Array is empty
+		SetProgressDisplay(0)
+	End If
 	If TotFound &gt; 0 Then
 		CreateLogDocument(OpenProperties())
 		InitializeProgressPage(ImportDialog)
@@ -154,17 +276,19 @@ Dim iOverwrite as Integer
 		FileCount = 0
 		For i = 0 To MaxFileIndex
 			sComment = &quot;&quot;
-			If bCancelTask Or RetValue = 0 Then
-				bConversionIsRunnig = False
+			If InterruptProcess() Then
 				Exit For
-			End if
+			End If
 			bDoSave = True
 			sSourceUrl = FilesList(i,0)
 			CurFiltername =	GetFilterName(FilesList(i,1), sFilterName(), sExtension, FilterIndex)
 			ApplIndex = FilesList(i,2)
-			sViewPath = CutPathView(sSourceUrl, 60)
+			If ApplIndex &gt; Ubound(Applications) or (ApplIndex &lt; 0) Then
+				Msgbox &quot;Applicationindex out of bounds:&quot; &amp; sSourcUrl
+			End If
+			sViewPath = ConvertFromUrl(sSourceUrl) 	&apos; CutPathView(sSourceUrl, 70)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-			Select Case sExtension
+			Select Case lcase(sExtension)
 				Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;sxm&quot;
 					SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
 					TargetStemDir = RTrimStr(Applications(ApplIndex,SBDOCTARGET), &quot;/&quot;)
@@ -206,53 +330,55 @@ Dim iOverwrite as Integer
 			End If
 			If bDoSave Then
 				If Not oUcb.Exists(TargetDir) Then
-					CreateFolder(TargetDir)
+					bDoSave = CreateFolder(TargetDir)
 				End If
-				oDocument = StarDesktop.LoadComponentFromURL(sSourceUrl, &quot;_default&quot;, 0, OpenProperties())
-				If Not IsNull(oDocument) Then
-					InsertSourceUrlToLogDocument(sSourceUrl, &quot;&quot;)
-					bIsPassWordProtected = CheckPassWordProtection(oDocument)
-					CheckIfMacroExists(oDocument.BasicLibraries, sComment)
-					On Local Error Goto NOSAVING
-					&apos; Todo: Due to bug #93651 the handling of the fileProperties has to be handled without Redimensioning
-					If bIsPassWordProtected Then
-						PWFileProperties(0).Name = &quot;FilterName&quot;
-						PWFileProperties(0).Value = CurFilterName
-						PWFileProperties(1).Name = &quot;Overwrite&quot;
-						PWFileProperties(1).Value = True
-						PWFileProperties(2).Name = &quot;Password&quot;
-						PWFileProperties(2).Value = sCurPassWord
-						oDocument.StoreAsUrl(sTargetUrl, PWFileProperties())
+				If bDoSave Then
+					oDocument = StarDesktop.LoadComponentFromURL(sSourceUrl, &quot;_default&quot;, 0, OpenProperties())
+					If Not IsNull(oDocument) Then
+						InsertSourceUrlToLogDocument(sSourceUrl, &quot;&quot;)
+						bIsPassWordProtected = CheckPassWordProtection(oDocument)
+						CheckIfMacroExists(oDocument.BasicLibraries, sComment)
+						On Local Error Goto NOSAVING
+						&apos; Todo: Due to bug #93651 the handling of the fileProperties has to be handled without Redimensioning
+						If bIsPassWordProtected Then
+							PWFileProperties(0).Name = &quot;FilterName&quot;
+							PWFileProperties(0).Value = CurFilterName
+							PWFileProperties(1).Name = &quot;Overwrite&quot;
+							PWFileProperties(1).Value = True
+							PWFileProperties(2).Name = &quot;Password&quot;
+							PWFileProperties(2).Value = sCurPassWord
+							oDocument.StoreAsUrl(sTargetUrl, PWFileProperties())
+						Else
+							FileProperties(0).Name = &quot;FilterName&quot;
+							FileProperties(0).Value = CurFilterName
+							FileProperties(1).Name = &quot;Overwrite&quot;
+							FileProperties(1).Value = True
+							oDocument.StoreAsUrl(sTargetUrl,FileProperties())
+						End If
+						&apos; Todo: Make sure that an errorbox pops up when saving fails
+						NOSAVING:
+						If Err &lt;&gt; 0 Then
+							sCurcouldnotsaveDocument = ReplaceString(scouldnotsaveDocument, ConvertFromUrl(sTargetUrl), &quot;&lt;1&gt;&quot;)
+							sComment = ConcatComment(sComment, sCurCouldnotsaveDocument)
+							Resume LETSGO
+							LETSGO:
+						Else
+							FileCount = FileCount + 1
+						End If
+						oDocument.Dispose()
+						InsertTargetUrlToLogDocument(sTargetUrl, sComment)
 					Else
-						FileProperties(0).Name = &quot;FilterName&quot;
-						FileProperties(0).Value = CurFilterName
-						FileProperties(1).Name = &quot;Overwrite&quot;
-						FileProperties(1).Value = True
-						oDocument.StoreAsUrl(sTargetUrl,FileProperties())
+						sCurcouldnotopenDocument = ReplaceString(scouldnotopenDocument, ConvertFromUrl(sSourceUrl), &quot;&lt;1&gt;&quot;)
+						sComment = ConcatComment(sComment, sCurCouldnotopenDocument)
+						InsertSourceUrlToLogDocument(sSourceUrl, sComment)				
 					End If
-					&apos; Todo: Make sure that an errorbox pops up when saving fails
-					NOSAVING:
-					If Err &lt;&gt; 0 Then
-						sCurcouldnotsaveDocument = ReplaceString(scouldnotsaveDocument, ConvertFromUrl(sTargetUrl), &quot;&lt;1&gt;&quot;)
-						sComment = ConcatComment(sComment, sCurCouldnotsaveDocument)
-						Resume LETSGO
-						LETSGO:
-					Else
-						FileCount = FileCount + 1
-					End If
-					oDocument.Dispose()
-					InsertTargetUrlToLogDocument(sTargetUrl, sComment)
-				Else
-					sCurcouldnotopenDocument = ReplaceString(scouldnotopenDocument, ConvertFromUrl(sSourceUrl), &quot;&lt;1&gt;&quot;)
-					sComment = ConcatComment(sComment, sCurCouldnotopenDocument)
-					InsertSourceUrlToLogDocument(sSourceUrl, sComment)				
 				End If
 			End If
 		Next i
 	End If
 	AddLogStatistics()
 	FinalizeDialogButtons()
-	bConversionIsRunnig = False
+	bConversionIsRunning = False
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
@@ -260,8 +386,12 @@ End Sub
 
 
 
-Sub AddListtoFilesList(FirstList(), SecList(), ApplIndex as Integer)
-Dim FirstStart as Integer, FirstEnd as Integer, i as Integer, s as Integer
+Sub AddListtoFilesList(FirstList(), SecList(), NewContentList() as String)
+Dim sLocExtension as String
+Dim FirstStart as Integer
+Dim FirstEnd as Integer
+Dim i as Integer
+Dim s as Integer
 	If FirstList(0,0) = &quot;&quot; Then
 		FirstStart = Ubound(FirstList(),1)
 	Else
@@ -273,10 +403,19 @@ Dim FirstStart as Integer, FirstEnd as Integer, i as Integer, s as Integer
 	For i = FirstStart To FirstEnd
 		FirstList(i,0) = SecList(s,0)
 		FirstList(i,1) = SecList(s,1)
-		FirstList(i,2) = CStr(ApplIndex)
+		sLocExtension = lcase(FirstList(i,1))
+		Select Case sLocExtension
+			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;xls&quot;, &quot;ppt&quot;
+				AbsDocuFound = AbsDocuFound + 1
+			Case else
+				AbsTemplateFound = AbsTemplateFound + 1
+		End Select
+		FirstList(i,2) = CStr(NewContentList(s))
 		s = s + 1
 	Next i
+	SetProgressDisplay(Ubound(FirstList()) + 1)
 End Sub
+
 
 
 Function GetTargetTemplatePath(Index as Integer)
@@ -307,13 +446,13 @@ Dim sLocFilterlist() as String
 				sExtension = sFiltername(i,2)
 				GetFilterName = sFilterName(i,1)
 			Else
-				Dim a as Integer
+				Dim b as Integer
 				Dim sLocExtensionList() as String
-				a =	SearchArrayForPartString(sMimetypeOrExtension, sLocFilterList())
+				b =	SearchArrayForPartString(sMimetypeOrExtension, sLocFilterList())
 				sLocFilterList() = ArrayoutofString(sFiltername(i,1),&quot;|&quot;, MaxIndex)
-				GetFilterName = sLocFilterList(a)
+				GetFilterName = sLocFilterList(b)
 				sLocExtensionList() = ArrayoutofString(sFilterName(i,2), &quot;|&quot;, MaxIndex)
-				sExtension = sLocExtensionList(a)
+				sExtension = sLocExtensionList(b)
 			End If
 			Exit For
 		End If
@@ -543,33 +682,4 @@ Function ConcatComment(sComment as String, AdditionalComment as String)
 	End If				
 	ConcatComment = sComment
 End Function
-
-
-&apos;Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, sComment as String)		&apos;
-&apos;Dim bContainsBasicMacro as Boolean
-&apos;Dim oCell as Object
-&apos;Dim UrlList(1) as String
-&apos;Dim LocUrl as String
-&apos;Dim i as Integer
-&apos;	If bLogExists Then
-&apos;		If bInsertRow Then
-&apos;			oLogTable.Rows.InsertByIndex(oLogTable.Rows.Count,1)
-&apos;		Else
-&apos;			bInsertRow = True
-&apos;		End If
-&apos;		UrlList(0) = SourceUrl
-&apos;		UrlList(1) = TargetUrl
-&apos;		For i = 0 To 1
-&apos;			oCell = oLogTable.GetCellbyPosition(i,oLogTable.Rows.Count-1)
-&apos;			If sComment &lt;&gt; &quot;&quot; Then
-&apos;				If ((TargetUrl &lt;&gt;&quot;&quot;) AND (i = 1)) Or ((TargetUrl = &quot;&quot;) AND (i = 0)) Then
-&apos;					InsertCommentToLogCell(sComment, oCell)
-&apos;				End If
-&apos;			End  If
-&apos;			LocUrl = UrlList(i)
-&apos;			InsertHyperLinkToLogCell(LocUrl, oCell)
-&apos;		Next i 
-&apos;		oLogDocument.Store()
-&apos;	End If
-&apos;End Sub
 </script:module>

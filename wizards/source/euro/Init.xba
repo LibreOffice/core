@@ -133,6 +133,7 @@ Public sCANCEL as String
 Dim sEnd as String
 
 Sub InitializeResources()
+Dim LocWorkPath as String
 	With DialogModel
 		&apos; Strings that are also needed by the Password Dialog
 		sGoOn = GetResText(1003)
@@ -219,7 +220,15 @@ Sub InitializeResources()
  			.chkRecursive.Label = sInclusiveSubDir
 			sTARGETDIR = GetResText(1206)
  			.lblTarget.Label = STARGETDIR 
-			.txtSource.Text = ConvertfromUrl(GetPathSettings(&quot;Work&quot;))
+			
+			LocWorkPath = GetPathSettings(&quot;Work&quot;)
+			If Not oUcb.Exists(LocWorkPath) Then
+				ShowNoOfficePathError()
+				Stop
+			End If
+
+			.txtSource.Text = ConvertfromUrl(LocWorkPath)
+			
 			SubstDir = .txtSource.Text
 			.txtTarget.Text = .txtSource.Text
 			.hlnProgress.Label = GetResText(1600)
@@ -230,7 +239,6 @@ Sub InitializeResources()
 		End If
 	End With
 End Sub
-
 
 Sub InitializeLanguages()
 	sEuroSign = chr(8364)
@@ -448,6 +456,7 @@ Sub InitializeControls()
 	End If
 End Sub	
 
+
 Sub InitializeConverter(oLocale, iDialogPage as Integer)
 Dim Isthere as Boolean
 	bCancelProtection = False
@@ -472,6 +481,9 @@ Dim Isthere as Boolean
 	InitializeCurrencies()
 	InitializeControls()
 	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+	If BitmapDir = &quot;&quot; Then
+		Stop
+	End If
 	FillUpCurrencyListbox()
 	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	
 	DialogConvert.Title = sMsgDLGTITLE

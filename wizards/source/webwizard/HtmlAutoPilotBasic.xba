@@ -75,10 +75,11 @@ On Local Error Goto GlobalErrorHandler
 	SetProgressValue(70)
 	LoadWebPageStyles(oBaseDocument)
 	SetProgressValue(90)
-	oBaseDocument.UnlockControllers	
+	oBaseDocument.UnlockControllers
 	OpenWebDialog()
 	SetProgressValue(98)
 	SetProgressValue(0)
+	MainDialog.Model.ImagePreview.BackGroundColor = RGB(0, 60,126)
 	RetValue = MainDialog.Execute
 	Select Case RetValue
 		Case 0
@@ -223,7 +224,7 @@ Dim oDocument as Object
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oDocument = ThisComponent
 	AttachBasicMacroToEvent(oDocument,&quot;OnSaveDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
-	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)	
+	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
 End Sub
 
 
@@ -237,7 +238,7 @@ Dim i as Integer
 Dim SavePath as String
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	GetPaths()
+	GetWebWizardPaths()
 	oBaseDocument = ThisComponent
 &apos;	oBaseDocument.LockControllers()
 
@@ -251,7 +252,7 @@ Dim SavePath as String
 	Next i
 
 	ChangeBackGraphicUrl(SavePath)
-	
+
 	BulletUrlsToSavePath(SavePath)
 
 	With oBaseDocument.DocumentInfo
@@ -271,10 +272,14 @@ End Sub
 Function CopyFile(ByVal SourceUrl as String, TargetDir as String)
 Dim sFileName as String
 Dim sNewFileUrl as String
-	sFileName = FileNameoutofPath(SourceUrl)
-	sNewFileUrl = TargetDir &amp; sFileName
-	oUcb.Copy(SourceUrl, sNewFileUrl)
-	CopyFile() = sNewFileUrl
+	If oUcb.Exists(TargetDir) Then
+		If Len(TargetDir) &gt; 2 Then
+			sFileName = FileNameoutofPath(SourceUrl)
+			sNewFileUrl = TargetDir &amp; sFileName
+			oUcb.Copy(SourceUrl, sNewFileUrl)
+			CopyFile() = sNewFileUrl
+		End If
+	End If
 End Function
 
 
@@ -316,7 +321,7 @@ Dim sExtension as String
 		DimCount = 8
 	End If
 	LocMaxIndex = Ubound(DirContent())
-	Dim List(LocMaxIndex, DimCount) as String    
+	Dim List(LocMaxIndex, DimCount) as String
 	Dim SortList(LocMaxIndex,1)
 	For i = 0 to LocMaxIndex
 		SortList(i,0) = DirContent(i)
@@ -354,7 +359,7 @@ Dim sExtension as String
 				Next n
 				List(a,8) = FileName
 			End If
-			a = a + 1			
+			a = a + 1
 		End If
 	Next i
 	If sFileFilter = &quot;/cnt&quot; Then
