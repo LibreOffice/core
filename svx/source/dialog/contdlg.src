@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:22:57 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 22:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ portuguese_brazilian ] = "Auswahl" ;
                 /* ### ACHTUNG: Neuer Text in Resource? Objekte auswδhlen : Objekte auswυhlen */
                 Text[ chinese_simplified ] = "Ρ΅Τρ";
-                Text[ russian ] = "Βϋαξπ";
-                Text[ polish ] = "Wybσr";
+                Text[ russian ] = "Βϋδελενθε";
+                Text[ polish ] = "Zaznacz";
                 Text[ japanese ] = "‘I‘π";
                 Text[ chinese_traditional ] = "ΏοΎά";
                 Text[ arabic ] = "ΗΞΚνΗΡ";
@@ -339,7 +339,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ chinese_traditional ] = "­Χ§οΒI";
                 Text[ arabic ] = "ΚΝΡνΡ ΗαδήΗΨ";
                 Text[ greek ] = "Επεξεργασία σημείων";
-                Text[ korean ] = "ΗΧΈρ ΖνΑύ";
+                Text[ korean ] = "Α΅ ΖνΑύ";
                 Text[ turkish ] = "Nokta dόzenle";
                 Text[ language_user1 ] = " ";
             };
@@ -634,8 +634,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
         CustomUnitText[ japanese ] = "%";
         CustomUnitText[ chinese_traditional ] = "%";
         CustomUnitText[ arabic ] = "%";
-        QuickHelpText[ russian ] = "Farbtoleranz";
-        QuickHelpText[ polish ] = "Farbtoleranz";
+        QuickHelpText[ russian ] = "Φβεςξβξι δξοσρκ!";
+        QuickHelpText[ polish ] = "Tolerancja koloru!";
         QuickHelpText[ japanese ] = "F‚Μ‹–—e";
         QuickHelpText[ chinese_simplified ] = "ΡΥΙ«Ζ«²ξ";
         QuickHelpText[ chinese_traditional ] = "ΓC¦β°Ύ®t";
@@ -643,7 +643,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
         CustomUnitText[ greek ] = "%";
         CustomUnitText[ korean ] = "%";
         QuickHelpText[ greek ] = "Color Tolerance";
-        QuickHelpText[ korean ] = "Color Tolerance";
+        QuickHelpText[ korean ] = "»φ»σ΅΅ΏΐΒχ!";
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbtoleranz";
@@ -749,7 +749,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ chinese_traditional ] = "©wΈq¤@­Σ·sªΊ½sΏθ°Ο°μ·|²M°£½όΉψ΅C\n±z―u­nΔ~Δς΅H";
     Text[ arabic ] = "ΚΪννδ γΣΗΝΙ Ϊγα ΜΟνΟΙ Σζέ\nνΔΟν Εαμ ΝΠέ ΗαΞΨ ΗαίέΗέν. \nεα ΚΡνΟ ΗαγΚΗΘΪΙ ΘΗαέΪαΏ";
     Text[ greek ] = "Ο ορισμός μιας νέας περιοχής εργασίας\nέχει ως αποτέλεσμα τη διαγραφή του περιγράμματος.\nΘέλετε πραγματικά να συνεχίσετε;";
-    Text[ korean ] = "»υΐΫΎχΏµΏªΐ» Ό³Α¤ΗΟ°Τ µΗΈι\n ΐ±°ϋΐΜ »θΑ¦µΛ΄Ο΄Ω. ±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "»υ ΐΫΎχΏµΏªΐ» Ό³Α¤ΗΟ°Τ µΗΈι\n ΐ±°ϋΐΜ »θΑ¦µΛ΄Ο΄Ω. ±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Yeni bir ηalύώma alanύ belirlenmesi durumunda\nkontur silinecek.\nDevam etmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
 };
