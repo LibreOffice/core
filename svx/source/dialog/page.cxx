@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 14:56:18 $
+ *  last change: $Author: os $ $Date: 2002-02-11 12:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,14 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
         aTextFlowLbl.Show(FALSE);
         aTextFlowBox.Show(FALSE);
     }
+    else
+    {
+        //remove non-implemented entries
+        sal_uInt32 nVal = FRMDIR_VERT_TOP_LEFT;
+        USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
+        aTextFlowBox.RemoveEntry( nPos );
+
+    }
     Init_Impl();
 
     FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
@@ -401,8 +409,6 @@ void SvxPageDescPage::Init_Impl()
     aHorzBox.SetClickHdl( LINK( this, SvxPageDescPage, CenterHdl_Impl ) );
     aVertBox.SetClickHdl( LINK( this, SvxPageDescPage, CenterHdl_Impl ) );
 
-    //Textfluss
-    aTextFlowBox.SetSelectHdl( LINK( this, SvxPageDescPage, TextFlowSelect_Impl ));
 }
 
 // -----------------------------------------------------------------------
@@ -657,12 +663,10 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         aTextFlowLbl.Show();
         aTextFlowBox.Show();
 
-        sal_uInt16 nPos, nVal = SFX_ITEM_SET == eState
+        sal_uInt32 nVal  = SFX_ITEM_SET == eState
                                 ? ((SvxFrameDirectionItem*)pItem)->GetValue()
                                 : 0;
-        for( nPos = aTextFlowBox.GetEntryCount(); nPos; )
-            if( (sal_uInt16)(long)aTextFlowBox.GetEntryData( --nPos ) == nVal )
-                break;
+        USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
         aTextFlowBox.SelectEntryPos( nPos );
         aTextFlowBox.SaveValue();
     }
@@ -901,7 +905,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         ( nPos = aTextFlowBox.GetSelectEntryPos() ) !=
                                             aTextFlowBox.GetSavedValue() )
     {
-        nPos = (sal_uInt16)(long)aTextFlowBox.GetEntryData( nPos );
+        sal_uInt32 nPos = (sal_uInt32)aTextFlowBox.GetEntryData( nPos );
         rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nPos,
                                     GetWhich( SID_ATTR_FRAMEDIRECTION )));
         bModified = TRUE;
@@ -1686,12 +1690,5 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
     }
     aRegisterFT.Enable( bEnable );
     aRegisterLB.Enable( bEnable );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SvxPageDescPage, TextFlowSelect_Impl, ListBox*, pBox )
-{
     return 0;
 }
