@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:39:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Il contenuto di campo è ~NULL";
         Text[ danish ] = "Feltindhold er lig med NULL";
         Text[ swedish ] = "Fältinnehåll är NULL";
-        Text[ polish ] = "Zawartoœci¹ pola jest ~NULL";
+        Text[ polish ] = "Zawarto?ci¹ pola jest ~NULL";
         Text[ portuguese_brazilian ] = "Field content is ~NULL";
         Text[ japanese ] = "Ì¨°ÙÄŞ“à—e‚Í~NULL";
         Text[ korean ] = "ÇÊµå ³»¿ëÀÌ ~NULLÀÓ";
@@ -174,7 +174,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Il contenuto di campo non è N~ULL";
         Text[ danish ] = "Feltindhold er forskellig fra NULL";
         Text[ swedish ] = "Fältinnehåll är inte NULL";
-        Text[ polish ] = "Zawartoœæ pola jest nierówna NULL";
+        Text[ polish ] = "Zawarto?æ pola jest nierówna NULL";
         Text[ portuguese_brazilian ] = "Field content is n~ot NULL";
         Text[ japanese ] = "Ì¨°ÙÄŞ“à—e‚ÍNU~LL‚Å‚Í‚È‚¢";
         Text[ korean ] = "ÇÊµå ³»¿ëÀÌ NU~LLÀÌ¡¡¾Æ´Ô";
@@ -462,7 +462,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         TabStop = TRUE;
         HelpId = HID_SEARCH_BACKWARD;
         Text[ italian ] = "Cerca indietro";
-        Text[ portuguese_brazilian ] = "rüc~kwärts suchen";
+        Text[ portuguese_brazilian ] = "r?~kw?rts suchen";
         Text[ portuguese ] = "Pro~curar para trás";
         Text[ danish ] = "Søg baglæns";
         Text[ french ] = "Recherche vers le haut";
@@ -552,7 +552,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         TabStop = TRUE;
         HelpId = HID_SEARCH_REGULAR;
         Text[ italian ] = "Espressione regolare";
-        Text[ portuguese_brazilian ] = "re~gulärer Ausdruck";
+        Text[ portuguese_brazilian ] = "re~gul?rer Ausdruck";
         Text[ portuguese ] = "~Expressão regular";
         Text[ danish ] = "Regulært udtryk";
         Text[ french ] = "Caractère générique";
@@ -582,7 +582,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         TabStop = TRUE;
         HelpId = HID_SEARCH_APPROX;
         Text[ italian ] = "Ricerca per simili";
-        Text[ portuguese_brazilian ] = "~Ähnlichkeitssuche";
+        Text[ portuguese_brazilian ] = "~?hnlichkeitssuche";
         Text[ portuguese ] = "Pro~cura por semelhança";
         Text[ danish ] = "Søg lignende";
         Text[ french ] = "R~echerche de similarité";
@@ -650,7 +650,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Larghezza intera/ridotta";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Zwyk³a/po³owa szerokoœci";
+        Text[ polish ] = "Zwyk³a/po³owa szeroko?ci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ğ‹æ•Ê";
         Text[ korean ] = "Match half/full width forms";
@@ -825,7 +825,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text [ ENGLISH ] = "S~chließen";
         TabStop = TRUE;
         Text[ italian ] = "Chiudi";
-        Text[ portuguese_brazilian ] = "S~chließen";
+        Text[ portuguese_brazilian ] = "S~chlie?en";
         Text[ portuguese ] = "~Fechar";
         Text[ danish ] = "Luk";
         Text[ french ] = "F~ermer";
@@ -958,7 +958,7 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message = "Es wurden keine Datensätze, die zu Ihren Angaben passen, gefunden !" ;
     Message [ ENGLISH ] = "Es wurden keine Datensätze, die zu Ihren Angaben passen, gefunden !" ;
     Message[ italian ] = "Non sono stati trovati record di dati corrispondenti ai vostri dati!";
-    Message[ portuguese_brazilian ] = "Es wurden keine Datensätze, die zu Ihren Angaben passen, gefunden !";
+    Message[ portuguese_brazilian ] = "Es wurden keine Datens?tze, die zu Ihren Angaben passen, gefunden !";
     Message[ portuguese ] = "Impossível encontrar registos de dados correspondentes às indicações fornecidas!";
     Message[ danish ] = "Der blev ikke fundet nogen dataposter, som svarer til dine angivelser!";
     Message[ french ] = "Aucun enregistrement trouvé qui corresponde à vos indications !";
@@ -995,7 +995,7 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ danish ] = "Der opstod en ukendt fejl. Det var ikke muligt at afslutte søgningen!";
     Message[ swedish ] = "Det har uppstått ett okänt fel. Det gick inte att avsluta sökningen!";
     Message[ polish ] = "Wyst¹pi³ bli¿ej nieznany b³¹d. Wyszukiwania ne mo¿na by³o zakoñczyæ!";
-    Message[ portuguese_brazilian ] = "Es trat ein nicht näher bekannter Fehler auf. Die Suche konnte nicht beendet werden !";
+    Message[ portuguese_brazilian ] = "Es trat ein nicht n?her bekannter Fehler auf. Die Suche konnte nicht beendet werden !";
     Message[ japanese ] = "‚æ‚­‚í‚©‚ç‚È‚¢´×°‚ª¶‚¶‚Ü‚µ‚½BŒŸõ‚ğI—¹‚Å‚«‚Ü‚¹‚ñ!";
     Message[ chinese_simplified ] = "³öÏÖÒ»¸ö²»Ã÷µÄ´íÎó¡£ÎŞ·¨½áÊøËÑÑ°ÃüÁî£¡";
     Message[ chinese_traditional ] = "¥X²{¤@­Ó¤£©úªº¿ù»~¡CµLªkµ²§ô·j´M¡I";
@@ -1013,7 +1013,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text = "Überlauf, Suche wurde am Anfang forgesetzt;Überlauf, Suche wurde am Ende forgesetzt" ;
     Text [ ENGLISH ] = "Überlauf, Suche wurde am Anfang forgesetzt;Überlauf, Suche wurde am Ende forgesetzt" ;
     Text[ italian ] = "Overflow, la ricerca è stata proseguita dall'inizio;Overflow, la ricerca è stata proseguita dalla fine";
-    Text[ portuguese_brazilian ] = "Überlauf, Suche wurde am Anfang forgesetzt;Überlauf, Suche wurde am Ende forgesetzt";
+    Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang forgesetzt;?berlauf, Suche wurde am Ende forgesetzt";
     Text[ portuguese ] = "Transbordo - Localizar continua pelo início;Transbordo - Localizar continua pelo final.";
     Text[ danish ] = "Overløb, søgning blev fortsat ved begyndelsen;Overløb, søgningen blev fortsat ved slutningen";
     Text[ french ] = "Débordement ; la recherche a été poursuivie vers le haut;Débordement ; la recherche a été poursuivie vers le bas";
@@ -1040,7 +1040,7 @@ String RID_STR_SEARCH_COUNTING
     Text = "zähle Datensätze" ;
     Text [ ENGLISH ] = "zähle Datensätze" ;
     Text[ italian ] = "Overflow, la ricerca è stata proseguita dall'inizio, la ricerca è stata proseguita dalla fine";
-    Text[ portuguese_brazilian ] = "Überlauf, Suche wurde am Anfang forgesetzt;Überlauf, Suche wurde am Ende forgesetzt";
+    Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang forgesetzt;?berlauf, Suche wurde am Ende forgesetzt";
     Text[ portuguese ] = "Contar registos de dados";
     Text[ danish ] = "tæller dataposter";
     Text[ french ] = "Compter les enregistrements";
