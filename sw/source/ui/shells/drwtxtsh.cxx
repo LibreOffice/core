@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-15 07:30:40 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 09:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,11 +576,43 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
 void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
-    if ( !IsTextEdit() )
-        return;
-
-    SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
-    pSfxViewFrame->ExecuteSlot(rReq, pSfxViewFrame->GetInterface());
+    if( IsTextEdit() )
+    {
+        BOOL bCallBase = TRUE;
+        const SfxItemSet* pArgs = rReq.GetArgs();
+        if( pArgs )
+        {
+            USHORT nId = rReq.GetSlot(), nCnt = 1;
+            const SfxPoolItem* pItem;
+            switch( nId )
+            {
+            case SID_UNDO:
+            case SID_REDO:
+                if( SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ) &&
+                    1 < (nCnt = ((SfxUInt16Item*)pItem)->GetValue()) )
+                {
+                    // then we make by ourself.
+                    SfxUndoManager* pUndoMgr = GetUndoManager();
+                    if( pUndoMgr )
+                    {
+                        if( SID_UNDO == nId )
+                            while( nCnt-- )
+                                pUndoMgr->Undo(0);
+                        else
+                            while( nCnt-- )
+                                pUndoMgr->Redo(0);
+                    }
+                    bCallBase = FALSE;
+                }
+                break;
+            }
+        }
+        if( bCallBase )
+        {
+            SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
+            pSfxViewFrame->ExecuteSlot(rReq, pSfxViewFrame->GetInterface());
+        }
+    }
 }
 
 /*--------------------------------------------------------------------
