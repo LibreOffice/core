@@ -1,0 +1,72 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.DrawingDocument.1]
+@="StarOffice Embedded Draw Document"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.DrawingDocument.1\CLSID]
+@="{41662FC2-0D57-4aff-AB27-AD2E12E7C273}"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.DrawingDocument.1\Insertable]
+
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.DrawingDocument]
+@="StarOffice Embedded Draw Document"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.DrawingDocument\CLSID]
+@="{41662FC2-0D57-4aff-AB27-AD2E12E7C273}"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.DrawingDocument\CurVer]
+@="com.sun.star.comp.Draw.DrawingDocument.1"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.DrawingDocument\Insertable]
+
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}]
+@="StarOffice Embedded Draw Document"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\LocalServer32]
+@="d:\\OFFICES\\SRX644\\mav3_nonpro\\program\\soffice.exe -nodefault -nologo"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\InprocHandler32]
+@="ole32.dll"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DefaultIcon]
+@="d:\\OFFICES\\SRX644\\mav3_nonpro\\program\\soffice.exe,0"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\Insertable]
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\ProgID]
+@="com.sun.star.comp.Draw.DrawingDocument.1"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\Programmable]
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\MiscStatus]
+@="16"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\verb\0]
+@="&Edit,0,0"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\verb\-1]
+@="Show,0,0"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\verb\-2]
+@="Open,0,0"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\VersionIndependentProgID]
+@="com.sun.star.comp.Draw.DrawingDocument"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DataFormats\GetSet\0]
+@="Embed Source,1,8,1"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DataFormats\GetSet\1]
+@="3,1,32,1"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DataFormats\GetSet\2]
+@="2,1,16,1"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\AuxUserType\2]
+@="StarOffice"
+
+[HKEY_CLASSES_ROOT\CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\AuxUserType\3]
+@="StarOffice Draw Document"
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:50:10 $
+ *  last change: $Author: mav $ $Date: 2003-03-17 11:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,26 @@
 
     if ( *guid == OID_MathServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Math)" ) );
+
+    return ::rtl::OUString();
+}
+
+::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid )
+{
+    if ( *guid == OID_WriterTextServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxw" ) );
+
+    if ( *guid == OID_CalcServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxc" ) );
+
+    if ( *guid == OID_DrawingServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxd" ) );
+
+    if ( *guid == OID_PresentationServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxi" ) );
+
+    if ( *guid == OID_MathServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxm" ) );
 
     return ::rtl::OUString();
 }

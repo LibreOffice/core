@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-12 15:37:57 $
+ *  last change: $Author: mav $ $Date: 2003-03-17 11:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ using namespace ::com::sun::star;
 extern ::rtl::OUString  getServiceNameFromGUID_Impl( GUID* );
 extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 // extern CLIPFORMAT        getClipFormatFromGUID_Impl( GUID* );
+::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid );
 
 const ::rtl::OUString aOfficeEmbedStreamName( RTL_CONSTASCII_USTRINGPARAM ( "package_stream" ) );
 
@@ -239,7 +240,7 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD nStreamMode )
 {
     uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 4 : 3 );
-    rtl::OUString sDocUrl( rtl::OUString::createFromAscii( "file:///d:/test.sxw" ) ); // REMOVE
+    rtl::OUString sDocUrl = getTestFileURLFromGUID_Impl( &m_guid ); // REMOVE
 
     aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
 
