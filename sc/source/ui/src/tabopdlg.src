@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:13:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: hr $
- //     $Date: 2003-04-29 17:13:38 $
- // $Revision: 1.17 $
+ //     $Date: 2003-06-13 13:47:17 $
+ // $Revision: 1.18 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -125,6 +125,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Vzorce";
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~सूत्र";
+        Text[ slovak ] = "Vzorc~e";
     };
     Edit ED_FORMULARANGE
     {
@@ -165,6 +166,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_ROWCELL
     {
@@ -198,6 +200,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Vstupní buňka řádku";
         Text[ hebrew ] = "~Zeile";
         Text[ hindi ] = "~पंक्ति इनपुट कोष्ठ";
+        Text[ slovak ] = "Vložiť bunku do ~riadka";
     };
     Edit ED_ROWCELL
     {
@@ -238,6 +241,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedText FT_COLCELL
     {
@@ -271,6 +275,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Vstupní buňka sloupce";
         Text[ hebrew ] = "~Spalte";
         Text[ hindi ] = "~स्तंभ इनपुट कोष्ठ";
+        Text[ slovak ] = "Vložiť bunku do stĺp~ca";
     };
     Edit ED_COLCELL
     {
@@ -311,6 +316,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     FixedLine FL_VARIABLES
     {
@@ -344,6 +350,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Výchozí nastavení";
         Text[ hebrew ] = "Vorgaben";
         Text[ hindi ] = "अनुपस्थिति निर्धारण";
+        Text[ slovak ] = "Východzie nastavenia";
     };
     OKButton BTN_OK
     {
@@ -391,6 +398,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Vzorec nebyl zadán.";
         Text[ hebrew ] = "Keine Formel eingetragen";
         Text[ hindi ] = "कोई सूत्र निर्दिष्ट नहीं किया है ।";
+        Text[ slovak ] = "Vzorec nebol zadaný.";
     };
     String STR_NOCOLROW
     {
@@ -422,6 +430,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Nebyl uveden řádek ani sloupec.";
         Text[ hebrew ] = "Weder Zeile noch Spalte eingetragen";
         Text[ hindi ] = "न पंक्ति को निर्दिष्ट किया है न स्तंभ को ।";
+        Text[ slovak ] = "Nebol zadaný riadok ani stĺpec.";
     };
     String STR_WRONGFORMULA
     {
@@ -453,6 +462,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Nedefinovaný název nebo oblast!";
         Text[ hebrew ] = "Undefinierter Name oder Bereich";
         Text[ hindi ] = "Undefined name or range.";
+        Text[ slovak ] = "Nedefinovaný názov alebo oblasť!";
     };
     String STR_WRONGROWCOL
     {
@@ -484,6 +494,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Nedefinované jméno nebo špatný odkaz na buňku.";
         Text[ hebrew ] = "Undefinierter Name oder falsche Zellreferenz";
         Text[ hindi ] = "परिभाषा न किया हुआ नाम् अथवा गलत कोष्ठ का रेफरेन्स ।";
+        Text[ slovak ] = "Nedefinovaný názov alebo nesprávny odkaz na bunku.";
     };
     String STR_NOCOLFORMULA
     {
@@ -515,6 +526,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Vzorce netvoří sloupec!";
         Text[ hebrew ] = "Formeln bilden keine Spalte";
         Text[ hindi ] = "सूत्र स्तंभ को उत्पन्न नहीं करता है ।";
+        Text[ slovak ] = "Vzorce netvoria stĺpec!";
     };
     String STR_NOROWFORMULA
     {
@@ -546,6 +558,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ czech ] = "Vzorce netvoří řádek!";
         Text[ hebrew ] = "Formeln bilden keine Zeile";
         Text[ hindi ] = "सूत्र पंक्ति को उत्पन्न नहीं करता है ।";
+        Text[ slovak ] = "Vzorce netvoria riadok!";
     };
     Text[ chinese_simplified ] = "多重计算";
     Text[ russian ] = "����������� ��������";
@@ -562,7 +575,10 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ czech ] = "Vícenásobné operace";
     Text[ hebrew ] = "Mehrfachoperationen";
     Text[ hindi ] = "बहुमुखी कार्य";
+    Text[ slovak ] = "Viacnásobné operácie";
 };
+
+
 
 
 
