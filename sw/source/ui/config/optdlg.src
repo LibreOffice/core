@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:57:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,7 +879,7 @@ TabPage TP_LAYOUT_OPT
         Text [ spanish ] = "Barra de desplazamiento ~horizontal" ;
         Text [ french ] = "Barre de défilement ~horizontale" ;
         Text [ dutch ] = "H~orizontale beeldschuifbalk" ;
-        Text [ swedish ] = "H~orisontell bildrullningslist" ;
+        Text [ swedish ] = "Horisontell r~ullningslist" ;
         Text [ danish ] = "Vandret rullepanel" ;
         Text [ portuguese_brazilian ] = "Horizontale Bildla~ufleiste" ;
         Text [ portuguese ] = "Barra de deslocação ~horizontal" ;
@@ -905,7 +905,7 @@ TabPage TP_LAYOUT_OPT
         Text [ spanish ] = "Barra de desplazamiento ~vertical" ;
         Text [ french ] = "Barre de défilement ~verticale" ;
         Text [ dutch ] = "~Verticale schuifbalk" ;
-        Text [ swedish ] = "~Vertikal bildrullningslist" ;
+        Text [ swedish ] = "~Vertikal rullningslist" ;
         Text [ danish ] = "Lodret rullepanel" ;
         Text [ portuguese_brazilian ] = "~Vertikale Bildlaufleiste" ;
         Text [ portuguese ] = "Barra de deslocamento ~vertical" ;
@@ -1497,7 +1497,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Campi di controllo" ;
         Text [ portuguese_brazilian ] = "Controles" ;
         Text [ portuguese ] = "Campos de controlo" ;
-        Text [ english_us ] = "Controls" ;
+        Text [ english_us ] = "Control~s" ;
         Text [ finnish ] = "Ohjausobjektit" ;
         Text [ danish ] = "Kontrolelementer" ;
         Text [ french ] = "~Champs de contrôle" ;
@@ -1689,7 +1689,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Pr~ospekt" ;
         Text [ ENGLISH ] = "Pr~ospectus" ;
         Text [ dutch ] = "~Prospectus" ;
-        Text [ english_us ] = "Bro~chure" ;
+        Text [ english_us ] = "Broc~hure" ;
         Text [ italian ] = "Depliant" ;
         Text [ spanish ] = "~Prospecto" ;
         Text [ french ] = "Pr~ospectus" ;
@@ -1858,21 +1858,21 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Sonstiges" ;
         Text [ English ] = "Other" ;
         Text [ dutch ] = "Papierinvoer" ;
-        Text [ english_us ] = "Paper tray" ;
+        Text [ english_us ] = "Other" ;
         Text [ italian ] = "Cassetto" ;
-        Text [ spanish ] = "Origen del papel" ;
-        Text [ french ] = "Bac d'alimentation" ;
-        Text [ swedish ] = "Pappersmagasin" ;
+        Text [ spanish ] = "Otros" ;
+        Text [ french ] = "Autres" ;
+        Text [ swedish ] = "Övrigt" ;
         Text [ danish ] = "Papirbakke" ;
         Text [ portuguese ] = "Tabuleiro de alimentação" ;
         Text [ portuguese_brazilian ] = "Bandeja para o papel" ;
-        Text[ chinese_simplified ] = "Ö½ÕÅÀ´Ô´";
-        Text[ russian ] = "Ïîäà÷à áóìàãè";
-        Text[ polish ] = "Zasobnik papieru";
-        Text[ japanese ] = "‹‹†•û–@";
-        Text[ chinese_traditional ] = "¯È±i¨Ó·½";
-        Text[ arabic ] = "ÏÑÌ ÇáæÑŞ";
-        Text[ greek ] = "Äßóêïò ÷áñôéïı";
+        Text[ chinese_simplified ] = "ÆäËü";
+        Text[ russian ] = "Ïğî÷åå";
+        Text[ polish ] = "Inne";
+        Text[ japanese ] = "‚»‚Ì‘¼";
+        Text[ chinese_traditional ] = "¨ä¥¦";
+        Text[ arabic ] = "ÛíÑ Ğáß";
+        Text[ greek ] = "ÄéÜöïñá";
         Text[ korean ] = "¿ëÁö °ø±Ş";
         Group = TRUE ;
         Text[ turkish ] = "Kağıt kaynağı";
@@ -1884,7 +1884,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Einzelne Druck~jobs erzeugen" ;
         Text [ ENGLISH ] = "Si~ngle print jobs" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Create ~single print jobs" ;
+        Text [ english_us ] = "Create s~ingle print jobs" ;
         Text [ portuguese_brazilian ] = "Einzelne Druckjobs erzeugen" ;
         Text [ swedish ] = "Skapa enstaka utskrifts~jobb" ;
         Text [ danish ] = "Opret enkelte printerjob" ;
@@ -1911,24 +1911,24 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Papierschacht aus ~Druckereinstellung" ;
         Text [ ENGLISH ] = "Paper tray from printer ~setup" ;
         Text [ norwegian ] = "Paper tray from printer ~setup" ;
-        Text[ english_us ] = "From printer ~settings";
+        Text[ english_us ] = "Paper tray from printer ~settings";
         Text[ portuguese ] = "Da configuração da ~impressora";
-        Text[ russian ] = "èç íàñòğîéêè ïğèíòåğà";
-        Text[ greek ] = "áğü ôéò ñõèìßóåéò ôïõ åêôõğùôŞ";
+        Text[ russian ] = "Èç íàñòğîåê ïğèíòåğà";
+        Text[ greek ] = "~Äßóêïò ÷áñôéïı áğü ôéò ñõèìŞóåéò ôïõ åêôõğùôŞ";
         Text[ dutch ] = "~uit printerinstelling";
-        Text[ french ] = "d'après ~les paramètres de l'imprimante";
-        Text[ spanish ] = "De la c~onfiguración de la impresora";
+        Text[ french ] = "D'après les paramètres de l'~imprimante";
+        Text[ spanish ] = "Bandeja según c~onfiguración de impresora";
         Text[ italian ] = "Come da  imposta~zione stampante";
         Text[ danish ] = "fra udskriftsindstillingerne";
-        Text[ swedish ] = "från ~skrivarinställning";
-        Text[ polish ] = "Z ustaw~ienia drukarki";
+        Text[ swedish ] = "Pappersmagasin från ~skrivarinställning";
+        Text[ polish ] = "Zasobnik papieru z ustaw~ieñ drukarki";
         Text[ portuguese_brazilian ] = "da impressora ~setup";
-        Text[ japanese ] = "ÌßØİÀ‚Ìİ’è‚©‚ç(~S)";
+        Text[ japanese ] = "ÌßØİÀİ’è‚©‚ç‚Ì‹‹†•û–@(~S)";
         Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤À¸·Î ºÎÅÍ(~S)";
-        Text[ chinese_simplified ] = "²ÉÓÃ´òÓ¡»úµÄÉè¶¨(~S)";
-        Text[ chinese_traditional ] = "±Ä¥Î¦Lªí¾÷ªº³]©w(~S)";
+        Text[ chinese_simplified ] = "²ÉÓÃ´òÓ¡»úµÄÉè¶¨";
+        Text[ chinese_traditional ] = "±Ä¥Î¦Lªí¾÷ªº³]©w";
         Text[ turkish ] = "Yazıcı ayarlarını kullan";
-        Text[ arabic ] = "ãä ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ";
+        Text[ arabic ] = "ÏÑÌ ÇáæÑŞ ãä ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ";
     };
     FixedText FT_FAX
     {
@@ -1937,13 +1937,13 @@ TabPage TP_OPTPRINT_PAGE
         Group = TRUE ;
         Text = "Fa~x" ;
         Text[English] = "Fax" ;
-        Text[ english_us ] = "Fax";
+        Text[ english_us ] = "~Fax";
         Text[ portuguese ] = "Fax";
         Text[ russian ] = "Ôàêñ";
         Text[ greek ] = "Fa~x";
         Text[ dutch ] = "Fax";
-        Text[ french ] = "Fax";
-        Text[ spanish ] = "Fax";
+        Text[ french ] = "Fa~x";
+        Text[ spanish ] = "~Fax";
         Text[ italian ] = "Fax";
         Text[ danish ] = "Fax";
         Text[ swedish ] = "Fa~x";
@@ -2676,7 +2676,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ russian ] = "İòè íàñòğîéêè äåéñòâóşò ïğè îáñëóæèâàíèè êëàâèàòóğû.";
         Text[ polish ] = "Ustawienia te s¹ uaktywnione podczas korzystania z klawiatury.";
         Text[ japanese ] = "‚±‚Ìİ’è‚Í·°ÎŞ°ÄŞ‘€ì‚ÌÛ‚É—LŒø‚É‚È‚è‚Ü‚·";
-        Text[ chinese_traditional ] = "³o­Ó³]©wÓì¥Î©óÁä½L¾Ş§@¡C";
+        Text[ chinese_traditional ] = "³o­Ó³]©wÓì¥Î©óÁä½L¡C";
         Text[ arabic ] = "ÓÊßæä åĞå ÇáÅÚÏÇÏÇÊ ÓÇÑíÉ ÇáãİÚæá ÚäÏ ÇÓÊÎÏÇã áæÍÉ ÇáãİÇÊíÍ.";
         Text[ greek ] = "Áõôİò ïé ñõèìßóåéò åğçñåÜæïõí ôïí ÷åéñéóìü ôïõ ğëçêôñïëïãßïõ.";
         Text[ korean ] = "ÀÌ·¯ÇÑ ¼³Á¤Àº Å°º¸µå Á¦¾î¿¡¿µÇâÀ» ¹ÌÄ¨´Ï´Ù .";
