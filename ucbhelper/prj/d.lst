@@ -8,6 +8,7 @@
 ..\util\ucbhelper.xml %_DEST%\xml%_EXT%\ucbhelper.xml
 
 mkdir: %_DEST%\inc%_EXT%\ucbhelper
+..\inc\ucbhelper\backgrounddownload.hxx %_DEST%\inc%_EXT%\ucbhelper\backgrounddownload.hxx
 ..\inc\ucbhelper\configurationkeys.hxx %_DEST%\inc%_EXT%\ucbhelper\configurationkeys.hxx
 ..\inc\ucbhelper\configureucb.hxx %_DEST%\inc%_EXT%\ucbhelper\configureucb.hxx
 ..\inc\ucbhelper\content.hxx %_DEST%\inc%_EXT%\ucbhelper\content.hxx
