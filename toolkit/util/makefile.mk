@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-07 16:17:58 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:08:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,13 @@ PRJ=..
 PRJNAME=toolkit
 TARGET=tk
 VERSION=$(UPD)
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
 
 # --- Allgemein ----------------------------------------------------------
 
@@ -80,6 +83,7 @@ LIB1FILES=	$(SLB)$/awt.lib \
             $(SLB)$/helper.lib
 SHL1TARGET= tk$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= itk
+SHL1USE_EXPORTS=ordinal
 
 SHL1STDLIBS=\
         $(VCLLIB)			\
@@ -96,13 +100,9 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN=$(LIB1TARGET)
 
 DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
-        $(LIB1TARGET)
-DEF1DEPN+=$(DEF1EXPORTFILE)
+DEF1DEPN	=$(LIB1TARGET)
 DEF1DES		=TK
 DEFLIB1NAME	=tk
-
-DEF1EXPORTFILE=	tk.dxp 
 
 .IF "$(OS)"=="MACOSX" 
 
@@ -125,30 +125,3 @@ RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
 
 .INCLUDE :	target.mk
-
-# --- Targets ------------------------------------------------------------
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider> $@
-    @echo UnoControlEditModel>> $@
-    @echo UnoFixedTextControl>> $@
-    @echo UnoControlFixedTextModel>> $@
-    @echo UnoButtonControl>> $@
-    @echo UnoControlButtonModel>> $@
-    @echo UnoListBoxControl>> $@
-    @echo UnoControlListBoxModel>> $@
-    @echo VCLXButton>> $@
-    @echo VCLXCheckBox>> $@
-    @echo VCLXComboBox>> $@
-    @echo VCLXFixedText>> $@
-    @echo VCLXFontMetric>> $@
-    @echo VCLXGraphics>> $@
-    @echo VCLXListBox>> $@
-    @echo VCLXMessageBox>> $@
-    @echo VCLXRadioButton>> $@
-    @echo VCLXScrollBar>> $@
-    @echo VCLXVirtualDevice>> $@
-    @echo VCLXToolkit>> $@
-    @echo __CT>> $@
