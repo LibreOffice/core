@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 11:33:36 $
+ *  last change: $Author: mib $ $Date: 2001-09-20 14:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
     if(xShapes.is() && xShapes->getCount())
     {
         // write group shape
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aPGR(rExport, XML_NAMESPACE_DRAW, XML_G, bCreateNewline, sal_True);
 
         ImpExportEvents( xShape );
@@ -626,7 +626,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, aStr );
 
         // write text-box
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_TEXT_BOX, bCreateNewline, sal_True);
 
         ImpExportEvents( xShape );
@@ -659,7 +659,7 @@ void XMLShapeExport::ImpExportRectangleShape(
         }
 
         // write rectangle
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_RECT, bCreateNewline, sal_True);
 
         ImpExportEvents( xShape );
@@ -768,7 +768,7 @@ void XMLShapeExport::ImpExportLineShape(
         rExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
         // write line
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_LINE, bCreateNewline, sal_True);
 
         ImpExportEvents( xShape );
@@ -821,7 +821,7 @@ void XMLShapeExport::ImpExportEllipseShape(
             rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_ANGLE, sStringBuffer.makeStringAndClear() );
         }
 
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
 
         if(bCircle)
         {
@@ -878,7 +878,7 @@ void XMLShapeExport::ImpExportPolygonShape(
         SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
         rExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString(rExport.GetMM100UnitConverter()));
 
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
 
         if(bBezier)
         {
@@ -1038,7 +1038,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         }
 
         // write graphic object
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_IMAGE, bCreateNewline, sal_True);
 
         if( sImageURL.getLength() )
@@ -1120,7 +1120,7 @@ void XMLShapeExport::ImpExportControlShape(
         }
     }
 
-    sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_CONTROL, bCreateNewline, sal_True);
 }
 
@@ -1265,7 +1265,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     }
 
     // write connector shape. Add Export later.
-    sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_CONNECTOR, bCreateNewline, sal_True);
 
     ImpExportEvents( xShape );
@@ -1337,7 +1337,7 @@ void XMLShapeExport::ImpExportMeasureShape(
     rExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
     // write measure shape
-    sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
     SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_MEASURE, bCreateNewline, sal_True);
 
     ImpExportEvents( xShape );
@@ -1401,7 +1401,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
         }
 
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         enum XMLTokenEnum eElem = sClassId.getLength() ? XML_OBJECT_OLE : XML_OBJECT;
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, eElem, bCreateNewline, sal_True );
 
@@ -1458,7 +1458,7 @@ void XMLShapeExport::ImpExportPageShape(
         }
 
         // write Page shape
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_PAGE_THUMBNAIL, bCreateNewline, sal_True);
     }
 }
@@ -1501,7 +1501,7 @@ void XMLShapeExport::ImpExportCaptionShape(
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_Y, msBuffer.makeStringAndClear() );
 
         // write Caption shape. Add export later.
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_CAPTION, bCreateNewline, sal_True);
 
         ImpExportEvents( xShape );
@@ -1536,7 +1536,7 @@ void XMLShapeExport::ImpExportFrameShape(
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
 
         // write floating frame
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_FLOATING_FRAME, bCreateNewline, sal_True);
     }
 }
@@ -1576,7 +1576,7 @@ void XMLShapeExport::ImpExportAppletShape(
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bIsScript ? XML_TRUE : XML_FALSE );
 
         // write applet
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_APPLET, bCreateNewline, sal_True);
 
         // export parameters
@@ -1620,7 +1620,7 @@ void XMLShapeExport::ImpExportPluginShape(
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
 
         // write plugin
-        sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_PLUGIN, bCreateNewline, sal_True);
 
         // export parameters

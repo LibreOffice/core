@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-07 09:06:08 $
+ *  last change: $Author: mib $ $Date: 2001-09-20 14:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1926,6 +1926,11 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
                                                            (sal_Int32)nPage );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_PAGE_NUMBER,
                                   sValue.makeStringAndClear() );
+    }
+    else
+    {
+        // #92210#
+        nShapeFeatures |= SEF_EXPORT_NO_WS;
     }
 
     if( !bShape )
