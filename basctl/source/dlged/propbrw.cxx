@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,8 @@ sal_Bool PropBrw::Close()
         if (pGroupIterator)
             delete pGroupIterator;
     }
-    return new ::comphelper::OComposedPropertySet(Sequence< Reference< XPropertySet > >(aSets.begin(), aSets.size()));
+    Reference< XPropertySet > *pSets = aSets.empty() ? 0 : &aSets[0];
+    return new ::comphelper::OComposedPropertySet(Sequence< Reference< XPropertySet > >(pSets, aSets.size()));
 }
 
 //----------------------------------------------------------------------------
