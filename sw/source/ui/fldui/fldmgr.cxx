@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:02:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,15 +402,11 @@ static const SwFldPack __FAR_DATA aSwFlds[] =
     TYP_USERFLD,        0,                  0,              FMT_USERVAR_BEGIN,  FMT_USERVAR_END
 };
 
-String* SwFldMgr::pDate = 0;
-String* SwFldMgr::pTime = 0;
-
-
 /*--------------------------------------------------------------------
     Beschreibung: Zugriff auf die Shell
  --------------------------------------------------------------------*/
 
-SwWrtShell* lcl_GetShell()
+static SwWrtShell* lcl_GetShell()
 {
     SwView* pView;
     if ( 0 != (pView = ::GetActiveView()) )
@@ -626,18 +622,16 @@ const String& SwFldMgr::GetTypeStr(USHORT nPos)
     // Sonderbehandlung fuer Datum/Zeit Felder (ohne var/fix)
     if( TYP_DATEFLD == nFldWh )
     {
-        if( !pDate )
-            pDate = new SW_RESSTR( STR_DATEFLD );
-        return *pDate;
+        static String g_aDate( SW_RES( STR_DATEFLD ) );
+        return g_aDate;
     }
     if( TYP_TIMEFLD == nFldWh )
     {
-        if( !pTime )
-            pTime = new SW_RESSTR( STR_TIMEFLD );
-        return *pTime;
+        static String g_aTime( SW_RES( STR_TIMEFLD ) );
+        return g_aTime;
     }
 
-    return *SwFieldType::GetFldNames()->GetObject( nFldWh );
+    return SwFieldType::GetTypeStr( nFldWh );
 }
 
 /*--------------------------------------------------------------------
