@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-17 00:41:15 $
+ *  last change: $Author: er $ $Date: 2001-06-21 12:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,9 +572,9 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
         if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= aParam.nRow2 )
         {
             nRow = pCol->pItems[nColRow].nRow;
-            if ((pDoc->pTab[nTab])->ValidQuery(nRow, aParam))
+            ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
+            if ((pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL, pCell ))
             {
-                ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
                 switch (pCell->GetCellType())
                 {
                     case CELLTYPE_VALUE:
@@ -858,8 +858,9 @@ ScBaseCell* ScQueryCellIterator::GetThis()
             else
             {
                 nRow = pCol->pItems[nColRow].nRow;
-                if ((pDoc->pTab[nTab])->ValidQuery(nRow, aParam))
-                    return pCol->pItems[nColRow].pCell;     // gefunden
+                ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
+                if ((pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL, pCell ))
+                    return pCell;     // found
                 else if ( nStopOnMismatch )
                 {
                     nStopOnMismatch |= nStopOnMismatchOccured;

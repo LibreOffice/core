@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:34:53 $
+ *  last change: $Author: er $ $Date: 2001-06-21 12:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,8 @@ public:
     BOOL        Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgress ) const;
 
     void        Sort(const ScSortParam& rSortParam, BOOL bKeepQuery);
-    BOOL        ValidQuery(USHORT nRow, const ScQueryParam& rQueryParam, BOOL* pSpecial = NULL);
+    BOOL        ValidQuery(USHORT nRow, const ScQueryParam& rQueryParam,
+                    BOOL* pSpecial = NULL, ScBaseCell* pCell = NULL );
     void        TopTenQuery( ScQueryParam& );
     USHORT      Query(ScQueryParam& rQueryParam, BOOL bKeepSub);
     BOOL        CreateQueryParam(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, ScQueryParam& rQueryParam);

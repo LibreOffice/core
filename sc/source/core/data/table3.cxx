@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
+ *  last change: $Author: er $ $Date: 2001-06-21 12:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "attarray.hxx"
 #include "userlist.hxx"
 #include "progress.hxx"
+#include "cellform.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -896,7 +897,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
 }
 
 
-BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial)
+BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
+        BOOL* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ )
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return TRUE;
@@ -906,6 +908,8 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
     const USHORT nFixedBools = 32;
     BOOL aBool[nFixedBools];
     USHORT nEntryCount = rParam.GetEntryCount();
+    if ( pCell && nEntryCount > 1 && rParam.GetEntry(1).bDoQuery )
+        pCell = NULL;   // we can only handle one single direct query
     BOOL* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new BOOL[nEntryCount] );
 
     short   nPos = -1;
@@ -927,9 +931,27 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
             else // if (rEntry.nVal == SC_NONEMPTYFIELDS)
                 bOk = aCol[rEntry.nField].HasDataAt( nRow );
         }
-        else if (!rEntry.bQueryByString && HasValueData(rEntry.nField, nRow))
+        else if ( !rEntry.bQueryByString &&
+                (pCell ? pCell->HasValueData() : HasValueData(rEntry.nField, nRow)) )
         {   // by Value
-            double  nCellVal = GetValue(rEntry.nField, nRow);
+            double nCellVal;
+            if ( pCell )
+            {
+                switch ( pCell->GetCellType() )
+                {
+                    case CELLTYPE_VALUE :
+                        nCellVal = ((ScValueCell*)pCell)->GetValue();
+                    break;
+                    case CELLTYPE_FORMULA :
+                        nCellVal = ((ScFormulaCell*)pCell)->GetValue();
+                    break;
+                    default:
+                        nCellVal = 0.0;
+                }
+
+            }
+            else
+                nCellVal = GetValue( rEntry.nField, nRow );
             switch (rEntry.eOp)
             {
                 case SC_EQUAL :
@@ -954,11 +976,20 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
         }
         else if ( (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
                 || (rEntry.bQueryByString
-                    && HasStringData(rEntry.nField, nRow))
+                    && (pCell ? pCell->HasStringData() : HasStringData(rEntry.nField, nRow)))
             )
         {   // by String
             String  aCellStr;
-            GetInputString(rEntry.nField, nRow, aCellStr);
+            if ( pCell )
+            {
+                if (pCell->GetCellType() != CELLTYPE_NOTE)
+                {
+                    ULONG nFormat = GetNumberFormat( nRow );
+                    ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(pDocument->GetFormatTable()) );
+                }
+            }
+            else
+                GetInputString( rEntry.nField, nRow, aCellStr );
 
             if (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
                                 || (rEntry.eOp == SC_NOT_EQUAL)) )
