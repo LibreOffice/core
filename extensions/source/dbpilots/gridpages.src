@@ -1,0 +1,258 @@
+/*************************************************************************
+ *
+ *  $RCSfile: gridpages.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:52:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
+#include "dbpresid.hrc"
+#endif
+
+TabPage RID_PAGE_GW_FIELDSELECTION
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    Text = "Feldauswahl";
+    Text [ english ] = "Field Selection";
+    Text [ english_us ] = "Field Selection";
+    Text [ portuguese ] = "Selecção de campo";
+    Text [ russian ] = "Âûáîð ïîëÿ";
+    Text [ dutch ] = "veld selecteren";
+    Text [ french ] = "Sélection de champ";
+    Text [ spanish ] = "Selección de campo";
+    Text [ italian ] = "Selezione campo";
+    Text [ danish ] = "Feltudvalg";
+    Text [ swedish ] = "Fälturval";
+    Text [ polish ] = "Wybór pola";
+    Text [ portuguese_brazilian ] = "Feldauswahl";
+    Text [ japanese ] = "Ì¨°ÙÄÞ‚Ì‘I‘ð";
+    Text [ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
+    Text [ chinese_traditional ] = "¡G¿ï¾ÜÄæ¦ì";
+    Text [ arabic ] = "ÊÍÏíÏ ÇáÍÞá";
+    Text [ dutch ] = "veld selecteren";
+    Text [ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
+    Text [ greek ] = "ÅðéëïãÞ ðåäßïõ";
+    Text [ korean ] = "ÇÊµå ¼±ÅÃ";
+    Text [ turkish ] = "Alan seçimi";
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+
+    FixedText FT_EXISTING_FIELDS
+    {
+        Pos = MAP_APPFONT ( 7, 15 );
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 8 );
+        Text = "Vorhandene Felder";
+        Text [ english ] = "Existing fields";
+        Text [ english_us ] = "Existing fields";
+        Text [ portuguese ] = "Campos disponíveis";
+        Text [ russian ] = "Èìåþùèåñÿ ïîëÿ";
+        Text [ dutch ] = "Bestaande velden";
+        Text [ french ] = "Champs existants";
+        Text [ spanish ] = "Campos existentes";
+        Text [ italian ] = "Campi disponibili";
+        Text [ danish ] = "Eksisterende felter";
+        Text [ swedish ] = "Existerande fält";
+        Text [ polish ] = "Istniej¹ce pola";
+        Text [ portuguese_brazilian ] = "Vorhandene Felder";
+        Text [ japanese ] = "Žg—p‚Å‚«‚éÌ¨°ÙÄÞ";
+        Text [ chinese_simplified ] = "ÏÖÓÐµÄ×Ö¶Î(V)";
+        Text [ chinese_traditional ] = "²{¦sªºÄæ¦ì";
+        Text [ arabic ] = "ÇáÍÞæá ÇáãÊæÝÑÉ";
+        Text [ dutch ] = "Bestaande velden";
+        Text [ chinese_simplified ] = "ÏÖÓÐµÄ×Ö¶Î(V)";
+        Text [ greek ] = "ÄéáèÝóéìá ðåäßá";
+        Text [ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
+        Text [ turkish ] = "Mevcut alanlar";
+    };
+    ListBox LB_EXISTING_FIELDS
+    {
+        Pos = MAP_APPFONT ( 7 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 26 - 6 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+        DropDown = FALSE;
+    };
+    PushButton PB_FIELDRIGHT
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 );
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
+        Text = "->";
+    };
+    PushButton PB_ALLFIELDSRIGHT
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 + ITEM_BUTTON_SIZE_Y + 3 );
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
+        Text = "=>>";
+    };
+    PushButton PB_FIELDLEFT
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 );
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
+        Text = "<-";
+    };
+    PushButton PB_ALLFIELDSLEFT
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 + ITEM_BUTTON_SIZE_Y + 3 );
+        Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
+        Text = "<<=";
+    };
+    FixedText FT_SELECTED_FIELDS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6, 15 );
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 8 );
+        Text = "Ausgewählte Felder";
+        Text [ english ] = "Selected fields";
+        Text [ english_us ] = "Selected fields";
+        Text [ portuguese ] = "Campos seleccionados";
+        Text [ russian ] = "Îòîáðàííûå ïîëÿ";
+        Text [ dutch ] = "Geselecteerde velden";
+        Text [ french ] = "Champs sélectionnés";
+        Text [ spanish ] = "Campos seleccionados";
+        Text [ italian ] = "Campi selezionati";
+        Text [ danish ] = "Valgte felter";
+        Text [ swedish ] = "Utvalda fält";
+        Text [ polish ] = "Wybrane pola";
+        Text [ portuguese_brazilian ] = "Ausgewählte Felder";
+        Text [ japanese ] = "‘I‘ð‚³‚ê‚½Ì¨°ÙÄÞ";
+        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î(A)";
+        Text [ chinese_traditional ] = "¿ï¾ÜªºÄæ¦ì";
+        Text [ arabic ] = "ÇáÍÞæá ÇáãõÍÏÏÉ";
+        Text [ dutch ] = "Geselecteerde velden";
+        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î(A)";
+        Text [ greek ] = "ÅðéëåãìÝíá ðåäßá";
+        Text [ korean ] = "ÇÊµå ¼±ÅÃ";
+        Text [ turkish ] = "Seçilmiþ alanlar";
+    };
+    ListBox LB_SELECTED_FIELDS
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 26 - 6 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+        DropDown = FALSE;
+    };
+};
+
+String RID_STR_DATEPOSTFIX
+{
+    Text = " (Datum)";
+    Text [ english_us ] = "(Date)";
+    Text [ portuguese ] = "(Data)";
+    Text [ russian ] = "(Äàòà)";
+    Text [ dutch ] = "(Datum)";
+    Text [ french ] = "(Date)";
+    Text [ spanish ] = "(Fecha)";
+    Text [ italian ] = "(Data)";
+    Text [ danish ] = "(Dato)";
+    Text [ swedish ] = "(Datum)";
+    Text [ polish ] = "(Data)";
+    Text [ portuguese_brazilian ] = "(Datum)";
+    Text [ japanese ] = "(“ú•t)";
+    Text [ chinese_simplified ] = "(ÈÕÆÚ)";
+    Text [ chinese_traditional ] = "(¤é´Á)";
+    Text [ arabic ] = "(ÇáÊÇÑíÎ)";
+    Text [ dutch ] = "(Datum)";
+    Text [ chinese_simplified ] = "(ÈÕÆÚ)";
+    Text [ greek ] = "(Çìåñïìçíßá)";
+    Text [ korean ] = " (³¯Â¥)";
+    Text [ turkish ] = "(Tarih)";
+    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
+};
+
+String RID_STR_TIMEPOSTFIX
+{
+    Text = " (Zeit)";
+    Text [ english_us ] = " (Time)";
+    Text [ portuguese ] = " (hora)";
+    Text [ russian ] = " (Âðåìÿ)";
+    Text [ dutch ] = " (Tijd)";
+    Text [ french ] = " (Heure)";
+    Text [ spanish ] = " (Hora)";
+    Text [ italian ] = " (Ora)";
+    Text [ danish ] = " (Klokkeslæt)";
+    Text [ swedish ] = " (Tid)";
+    Text [ polish ] = " (Godzina)";
+    Text [ portuguese_brazilian ] = " (Zeit)";
+    Text [ japanese ] = " (ŽžŠÔ)";
+    Text [ chinese_simplified ] = " (Ê±¼ä)";
+    Text [ chinese_traditional ] = " (®É¶¡)";
+    Text [ arabic ] = " (ÇáæÞÊ)";
+    Text [ dutch ] = " (Tijd)";
+    Text [ chinese_simplified ] = " (Ê±¼ä)";
+    Text [ greek ] = "(¿ñá)";
+    Text [ korean ] = " (½Ã°£)";
+    Text [ turkish ] = " (Saat)";
+    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 05.03.01 09:50:25  fs
+ ************************************************************************/
+
