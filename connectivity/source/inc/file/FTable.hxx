@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace connectivity
             virtual void SAL_CALL disposing(void);
 
             OConnection* getConnection() const { return m_pConnection;}
-            virtual sal_Int32 getCurrentLastPos() const {return 0;}
+            virtual sal_Int32 getCurrentLastPos() const {return -1;}
 
             virtual sal_Bool seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
             virtual sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool bRetrieveData) = 0;
