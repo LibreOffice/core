@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodtabl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:38:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 
 #include "xdash.hxx"
 #include "svdmodel.hxx"
+#include "unofill.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
