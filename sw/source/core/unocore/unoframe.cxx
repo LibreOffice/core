@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:55 $
+ *  last change: $Author: mib $ $Date: 2000-12-20 07:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,6 +1162,25 @@ SdrObject *lcl_GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
     return pObject;
 }
 
+SwFrmFmt *lcl_GetFrmFmt( const uno::Any& rValue, SwDoc *pDoc )
+{
+    SwFrmFmt *pRet = 0;
+    SwDocShell* pDocSh = pDoc->GetDocShell();
+    if(pDocSh)
+    {
+        OUString uTemp;
+        rValue >>= uTemp;
+        String sStyle(SwXStyleFamilies::GetUIName(uTemp, SFX_STYLE_FAMILY_FRAME));
+        SwDocStyleSheet* pStyle =
+                (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle,
+                                                    SFX_STYLE_FAMILY_FRAME);
+        if(pStyle)
+            pRet = pStyle->GetFrmFmt();
+    }
+
+    return pRet;
+}
+
 void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
     throw( UnknownPropertyException, PropertyVetoException, lang::IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
@@ -1227,23 +1246,15 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         }
         else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_FRAME_STYLE_NAME))
         {
-            SwDocShell* pDocSh = pFmt->GetDoc()->GetDocShell();
-            if(pDocSh)
+            SwFrmFmt *pFrmFmt = lcl_GetFrmFmt( aValue, pFmt->GetDoc() );
+            if( pFrmFmt )
             {
-                OUString uTemp;
-                aValue >>= uTemp;
-                String sStyle(SwXStyleFamilies::GetUIName(uTemp, SFX_STYLE_FAMILY_FRAME));
-                SwDocStyleSheet* pStyle =
-                    (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_FRAME);
-                if(pStyle)
-                {
-//                  pSh->SetFrmFmt( pStyle->GetFrmFmt() );
-                    UnoActionContext aAction(pFmt->GetDoc());
-                    pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pStyle->GetFrmFmt());
-                }
-                else
-                    throw IllegalArgumentException();
+//              pSh->SetFrmFmt( pStyle->GetFrmFmt() );
+                UnoActionContext aAction(pFmt->GetDoc());
+                pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt );
             }
+            else
+                throw IllegalArgumentException();
         }
         else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL) ||
                 COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_FILTER))
@@ -1883,11 +1894,17 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             SwFmtAnchor aAnchor(FLY_AT_CNTNT);
             aFrmSet.Put(aAnchor);
         }
+        uno::Any* pStyle;
+        SwFrmFmt *pParentFrmFmt = 0;
+        if(pProps->GetProperty(C2S(UNO_NAME_FRAME_STYLE_NAME), pStyle))
+            pParentFrmFmt = lcl_GetFrmFmt( *pStyle, pDoc );
+
         SwFlyFrmFmt* pFmt = 0;
         if( eType == FLYCNTTYPE_FRM)
         {
             UnoActionContext aCont(pDoc);
-            pFmt = pDoc->MakeFlySection( FLY_AT_CNTNT, aPam.GetPoint(), &aFrmSet );
+            pFmt = pDoc->MakeFlySection( FLY_AT_CNTNT, aPam.GetPoint(),
+                                         &aFrmSet, pParentFrmFmt );
             if(pFmt)
             {
                 pFmt->Add(this);
@@ -1934,9 +1951,10 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             }
 
             pFmt =
-                pGrfObj ? pDoc->Insert( aPam, *pGrfObj, &aFrmSet, &aGrSet)
+                pGrfObj ? pDoc->Insert( aPam, *pGrfObj, &aFrmSet, &aGrSet,
+                                        pParentFrmFmt )
                          : pDoc->Insert( aPam, sGraphicURL, sFltName, 0,
-                                        &aFrmSet, &aGrSet );
+                                        &aFrmSet, &aGrSet, pParentFrmFmt  );
             delete pGrfObj;
             if(pFmt)
             {
@@ -1971,9 +1989,6 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         {
             setPropertyValue(C2U(UNO_NAME_Z_ORDER), *pOrder);
         }
-        uno::Any* pStyle;
-        if(pProps->GetProperty(C2S(UNO_NAME_FRAME_STYLE_NAME), pStyle))
-            setPropertyValue(C2U(UNO_NAME_FRAME_STYLE_NAME), *pStyle);
 
     }
     else
