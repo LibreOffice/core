@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 14:08:13 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:26:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,9 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
+
+EXCEPTIONSFILES = \
+        $(SLO)$/xcl97rec.obj
 
 SLOFILES =	\
         $(SLO)$/xcl97dum.obj				\
