@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:36:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
             Text[ swedish ] = "Infoga";\
             Text[ polish ] = "Wstaw";\
             Text[ portuguese_brazilian ] = "Insert";\
-            Text[ japanese ] = "搊榐";\
+            Text[ japanese ] = "憓擖";\
             Text[ korean ] = "火涝";\
             Text[ chinese_simplified ] = "插入";\
             Text[ chinese_traditional ] = "础";\
@@ -944,7 +944,7 @@ String STR_IDXMRK_INSERT
             Text[ swedish ] = "Infoga";\
             Text[ polish ] = "Wstaw";\
             Text[ portuguese_brazilian ] = "Insert";\
-            Text[ japanese ] = "搊榐";\
+            Text[ japanese ] = "憓擖";\
             Text[ korean ] = "火涝";\
             Text[ chinese_simplified ] = "插入";\
             Text[ chinese_traditional ] = "础";\
@@ -1150,7 +1150,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ swedish ] = "Definiera litteraturpost";
     Text[ polish ] = "Zdefiniuj wpis bibliograficzny";
     Text[ portuguese_brazilian ] = "Define authority entry";
-    Text[ japanese ] = "嶲峫暥專崁栚偺掕媊";
+    Text[ japanese ] = "嶲峫暥專崁栚偺搊榐";
     Text[ korean ] = "曼绊巩清 亲格 沥狼";
     Text[ chinese_simplified ] = "定义文献条目";
     Text[ chinese_traditional ] = "﹚竡把σゅ膍兵ヘ";
@@ -1199,7 +1199,7 @@ String STR_AUTHMRK_INSERT
     Text[ swedish ] = "Infoga post i litteraturf鰎teckning";
     Text[ polish ] = "Wstaw wpis bibliograficzny";
     Text[ portuguese_brazilian ] = "Insert authority entry";
-    Text[ japanese ] = "嶲峫暥專崁栚偺搊榐";
+    Text[ japanese ] = "嶲峫暥專崁栚偺憓擖";
     Text[ korean ] = "曼焊巩清 亲格 火涝";
     Text[ chinese_simplified ] = "插入文献目录条目";
     Text[ chinese_traditional ] = "础把σゅ膍ヘ魁兵ヘ";
