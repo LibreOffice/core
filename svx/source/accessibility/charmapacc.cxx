@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-01 12:45:07 $
+ *  last change: $Author: oj $ $Date: 2002-09-20 11:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,7 @@ sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
 ::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
+    OExternalLockGuard aGuard( this );
     return SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION );
 }
 
