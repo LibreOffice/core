@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2002-06-25 09:12:54 $
+ *  last change: $Author: kso $ $Date: 2002-07-02 11:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,22 +61,20 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Configuration" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+    <!--Responsible: KSO -->
     <templates>
         <group oor:name="ContentProviderData">
             <prop oor:name="ServiceName" oor:type="xs:string">
-                <!-- Responsible: KSO -->
                 <info>
                     <desc xml:lang="en-US">Name of the UNO service to be used to instantiate the UCP</desc>
                 </info>
             </prop>
             <prop oor:name="URLTemplate" oor:type="xs:string">
-                <!-- Responsible: KSO -->
                 <info>
                     <desc xml:lang="en-US">URL template</desc>
                 </info>
             </prop>
             <prop oor:name="Arguments" oor:type="xs:string">
-                <!-- Responsible: KSO -->
                 <info>
                     <desc xml:lang="en-US">Additional arguments for UCP creation</desc>
                 </info>
@@ -84,7 +82,6 @@
         </group>
         <group oor:name="ContentProvidersDataSecondaryKeys">
             <set oor:name="ProviderData" oor:node-type="ContentProviderData">
-                <!--Responsible: KSO -->
                 <info>
                     <desc xml:lang="en-US">Contains Content Provider configuration data for the UCB</desc>
                 </info>
@@ -92,7 +89,6 @@
         </group>
         <group oor:name="ContentProvidersDataPrimaryKeys">
             <set oor:name="SecondaryKeys" oor:node-type="ContentProvidersDataSecondaryKeys">
-                <!--Responsible: KSO -->
                 <info>
                     <desc xml:lang="en-US">Contains secondary keys for Content Provider configuration for the UCB</desc>
                 </info>
@@ -101,7 +97,6 @@
     </templates>
     <component>
         <set oor:name="ContentProviders" oor:node-type="ContentProvidersDataPrimaryKeys">
-            <!--Responsible: KSO -->
             <info>
                 <desc xml:lang="en-US">Contains Content Provider configuration for the UCB</desc>
             </info>
