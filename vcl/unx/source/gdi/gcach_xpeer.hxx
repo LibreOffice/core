@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-19 15:38:38 $
+ *  last change: $Author: hdu $ $Date: 2001-04-05 07:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,11 @@ class X11GlyphPeer
 public:
                         X11GlyphPeer();
 
-    void                SetDisplay( Display* );
+    void                SetDisplay( Display*, Visual* );
 
     Pixmap              GetPixmap( ServerFont&, int nGlyphIndex );
+    const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
+    bool                ForcedAntialiasing( const ServerFont& ) const;
 
 #ifdef USE_XRENDER
     GlyphSet            GetGlyphSet( ServerFont& );
@@ -90,10 +92,11 @@ protected:
     virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
 
 private:
-    enum { EMPTY_KIND=0, PIXMAP_KIND, XRENDER_KIND };
+    enum { EMPTY_KIND=0, PIXMAP_KIND, XRENDER_KIND, AAFORCED_KIND };
 
     Display*            mpDisplay;
     RawBitmap           maRawBitmap;
+    bool                mbForcedAA;
 
 #ifdef USE_XRENDER
     bool                mbUsingXRender;

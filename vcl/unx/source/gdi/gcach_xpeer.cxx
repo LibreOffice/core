@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-08 11:42:23 $
+ *  last change: $Author: hdu $ $Date: 2001-04-05 07:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 X11GlyphPeer::X11GlyphPeer()
 :   mpDisplay(NULL)
+,   mbForcedAA(false)
 #ifdef USE_XRENDER
 ,   mbUsingXRender(false)
 ,   mpGlyphFormat(NULL)
@@ -82,17 +83,32 @@ X11GlyphPeer::X11GlyphPeer()
 
 // ---------------------------------------------------------------------------
 
-void X11GlyphPeer::SetDisplay( Display* _pDisplay )
+void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 {
     if( mpDisplay == _pDisplay )
         return;
 
     mpDisplay = _pDisplay;
 
-#ifdef USE_XRENDER
     if( getenv("SAL_ANTIALIAS_DISABLE") )
         return;
 
+    // we can do anti aliasing on the client side
+    // when the display's visuals are suitable
+    mbForcedAA = true;
+    XVisualInfo aXVisualInfo;
+    aXVisualInfo.visualid = _pVisual->visualid;
+    int nVisuals = 0;
+    XVisualInfo* pXVisualInfo = XGetVisualInfo( mpDisplay, VisualIDMask, &aXVisualInfo, &nVisuals );
+    for( int i = nVisuals; --i >= 0; ++pXVisualInfo )
+        if( ((pXVisualInfo->c_class==PseudoColor) || (pXVisualInfo->depth<24))
+        && ((pXVisualInfo->c_class>GrayScale) || (pXVisualInfo->depth!=8) ) )
+            mbForcedAA = false;
+    if( pXVisualInfo != NULL )
+        XFree( pXVisualInfo );
+
+#ifdef USE_XRENDER
+    // but we prefer the hardware accelerated solution
     int nDummy;
     if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
@@ -102,7 +118,8 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay )
     // => load them dynamically when they are there
     void* pRenderLib = dlopen( "libXrender.so", RTLD_GLOBAL | RTLD_LAZY );
     if( !pRenderLib ) {
-        printf( "XRender extension but no libXrender.so installed. Please install for improved display quality\n" );
+        fprintf( stderr, "Display can do XRender, but no libXrender.so installed.\n"
+            "Please install for improved display quality\n" );
         return;
     }
 
@@ -154,10 +171,10 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay )
     mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay, 0, &aPictFormat, 1 );
 
     // and support for the visual
-    Visual* pVisual = DefaultVisual( mpDisplay, 0 );
-    XRenderPictFormat*  pVisualFormat =  (*pXRenderFindVisualFormat)( mpDisplay, pVisual );
+    XRenderPictFormat*  pVisualFormat =  (*pXRenderFindVisualFormat)( mpDisplay, _pVisual );
     if( pVisualFormat != NULL )
         mbUsingXRender = true;
+
 #endif // USE_XRENDER
 }
 
@@ -168,6 +185,7 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
     switch( rServerFont.GetExtInfo() )
     {
         case PIXMAP_KIND:
+        case AAFORCED_KIND:
             break;
 
 #ifdef USE_XRENDER
@@ -201,13 +219,25 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             }
             break;
 
+        case AAFORCED_KIND:
+            {
+                RawBitmap* pRawBitmap = (RawBitmap*)rGlyphData.GetExtPointer();
+                if( pRawBitmap != NULL )
+                {
+                    mnBytesUsed -= pRawBitmap->mnScanlineSize * pRawBitmap->mnHeight;
+                    mnBytesUsed -= sizeof(RawBitmap);
+                    delete pRawBitmap;
+                }
+            }
+            break;
+
 #ifdef USE_XRENDER
         case XRENDER_KIND:
         {
             GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
             Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
-            // current version of XRENDER does not implement XRenderFreeGlyphs()
-//###       (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
+            // TODO: current version of XRENDER does not implement XRenderFreeGlyphs()
+            // (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
             mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
 
             break;
@@ -219,6 +249,15 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
         mnBytesUsed = 0;
 
     rGlyphData.SetExtended( EMPTY_KIND, NULL );
+}
+
+// ---------------------------------------------------------------------------
+
+bool X11GlyphPeer::ForcedAntialiasing( const ServerFont& rServerFont ) const
+{
+    bool bForceOk = rServerFont.GetAntialiasAdvice();
+    bForceOk &= (rServerFont.GetFontSelData().mnHeight < 250);
+    return (bForceOk && mbForcedAA);
 }
 
 // ---------------------------------------------------------------------------
@@ -243,9 +282,8 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
                 // => prevents crashes caused by X11 requests >= 256k
                 // => prefer readablity of hinted glyphs at small sizes
                 // => prefer "grey clouds" to "black clouds" at very small sizes
-                const ImplFontSelectData& rFSD = rServerFont.GetFontSelData();
-                if( !rFSD.mbNonAntialiased
-                && rFSD.mnHeight<250  && (rFSD.mnHeight>=12 || rFSD.mnHeight<8) )
+                int nHeight = rServerFont.GetFontSelData().mnHeight;
+                if( nHeight<250 && rServerFont.GetAntialiasAdvice() )
                 {
                     aGlyphSet = (*pXRenderCreateGlyphSet)( mpDisplay, mpGlyphFormat );
                     rServerFont.SetExtended( XRENDER_KIND, (void*)aGlyphSet );
@@ -340,6 +378,37 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
 
 // ---------------------------------------------------------------------------
 
+const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
+    int nGlyphIndex )
+{
+    RawBitmap* pRawBitmap = NULL;
+
+    GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
+    if( rGlyphData.GetExtInfo() == AAFORCED_KIND )
+        pRawBitmap = (RawBitmap*)rGlyphData.GetExtPointer();
+    else
+    {
+        pRawBitmap = new RawBitmap;
+        pRawBitmap->mpBits = NULL;
+        pRawBitmap->mnAllocated = 0;
+        if( !rServerFont.GetGlyphBitmap8( nGlyphIndex, *pRawBitmap ) )
+        {
+            delete pRawBitmap;
+            if( nGlyphIndex == 0 )
+                return NULL;
+            return GetRawBitmap( rServerFont, 0 );
+        }
+
+        mnBytesUsed += pRawBitmap->mnScanlineSize * pRawBitmap->mnHeight;
+        mnBytesUsed += sizeof(RawBitmap);
+        rGlyphData.SetExtended( AAFORCED_KIND, (void*)pRawBitmap );
+    }
+
+    return pRawBitmap;
+}
+
+// ---------------------------------------------------------------------------
+
 #ifdef USE_XRENDER
 Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 {
@@ -360,8 +429,10 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
         aGlyphInfo.x        = -maRawBitmap.mnXOffset;
         aGlyphInfo.y        = -maRawBitmap.mnYOffset;
 
-        const GlyphMetric& rGM  = rGlyphData.GetMetric();
+        rGlyphData.SetSize( Size( maRawBitmap.mnWidth, maRawBitmap.mnHeight ) );
+        rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
 
+        const GlyphMetric& rGM = rGlyphData.GetMetric();
         aGlyphInfo.xOff     = +rGM.GetDelta().X();
         aGlyphInfo.yOff     = +rGM.GetDelta().Y();
 
