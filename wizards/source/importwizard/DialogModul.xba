@@ -381,16 +381,16 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(1,0) = &quot;sdc&quot;
 	XMLFilterName(1,1) = &quot;scalc: StarOffice XML (Calc)&quot;
 	XMLFilterName(1,2) = &quot;sxc&quot;
-
+&apos; Todo: Gepacktes &apos;sdp&apos; Format berücksichtigen
 	XMLFilterName(2,0) = &quot;sdd|sda&quot;
 	XMLFilterName(2,1) = &quot;simpress: StarOffice XML (Impress)|sdraw: StarOffice XML (Draw)&quot;
 	XMLFilterName(2,2) = &quot;sxi|sxd&quot;
 
 	XMLFilterName(3,0) = &quot;smf&quot;
-	XMLFilterName(3,1) = &quot;smath: MathML XML (Math)&quot;
-	XMLFilterName(3,2) = &quot;mml&quot;
+	XMLFilterName(3,1) = &quot;smath: StarOffice XML (Math)&quot;
+	XMLFilterName(3,2) = &quot;sxm&quot;
 
-	XMLFilterName(4,0) = &quot;application/vnd.stardivision.writer;application/x-starwriter&quot;
+	XMLFilterName(4,0) = &quot;application/vnd.stardivision.writer;application/vnd.stardivision.writer/web;application/x-starwriter&quot;
 	XMLFilterName(4,1) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
 	XMLFilterName(4,2) = &quot;stw&quot;
 
@@ -402,7 +402,6 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(6,1) = &quot;simpress: impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
 	XMLFilterName(6,2) = &quot;sti|std&quot;
 
-&apos; ToDo: define Filter for Masterdocument
 	XMLFilterName(7,0) = &quot;sgl&quot;
 	XMLFilterName(7,1) = &quot;swriter: writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
 	XMLFilterName(7,2) = &quot;sxg&quot;
@@ -508,7 +507,7 @@ Dim sPath as String
 Dim InitPath as String
 Dim RefControlName as String
 Dim oRefControl
-	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.FolderPicker&quot;)
+	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
 	RefControlName = aEvent.Source.Model.Tag
 	oRefControl = ImportDialogArea.GetControl(RefControlName)
 	InitPath = ConvertToUrl(oRefControl.Model.Text)

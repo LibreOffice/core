@@ -5,14 +5,21 @@
 &apos;  *****  BASIC  *****
 &apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden koennen.
 &apos; Evt. Erkennen der Arbeitsverzeichnisse von MS Office
-&apos; Filternamen fuer Ziel-XML-Dokumente und deren Extensionen feststellen (auch fuer StarMath)
-&apos; Extension fuer XML-Vorlagen klaeren
 Public HeaderPreviews(4) as Object
 Public ImportDialog as Object
 Public ImportDialogArea as Object
+Public bSetFonts as Boolean
+&apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is 
+&apos; set to False
+Public bCallCancelMsg as Boolean
 
-Sub Main
+Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	bSetFonts = False
+	If bSetFonts Then
+		BasicLibraries.LoadLibrary(&quot;Translater&quot;)
+		GetFontNames()
+	End If
 	sCRLF = CHR(10) &amp; CHR(13)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	If Not bDebugWizard Then
@@ -30,7 +37,7 @@ Sub Main
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-	ImportDialogArea.SetVisible(True)
+	ImportDialogArea.SetVisible(True) &apos;Execute()
 	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
@@ -53,6 +60,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
+	bCallCancelMsg = False
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 1
@@ -90,6 +98,7 @@ Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
 	End If
+	bCallCancelMsg = False	
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 4
@@ -118,13 +127,15 @@ End Sub
 
 
 Sub CancelButton
-&apos;	If ImportDialog.Step = 4 Then
-&apos;		Call CancelButtonPressed()
-&apos;	Else
+	If bCallCancelMsg Then
+		&apos; Conversion is already running
+		ImportDialog.cbCancel.Enabled = False
+		bCancelTask = True
+	Else
 		ImportDialogArea.EndExecute
 		ImportDialogArea.Dispose()
 		End
-&apos;	End If
+	End If
 End Sub
 
 
@@ -139,11 +150,6 @@ Sub CancelTask()
 	End If
 End Sub
 
-
-&apos;Sub CancelButtonPressed()
-&apos;	ImportDialog.cbCancel.Enabled = False
-&apos;	bCancelTask = True
-&apos;End Sub
 
 
 Sub TemplateDirSearchDialog()
