@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:03:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,13 @@
  *
  ************************************************************************/
 
-
 #ifndef _SDTREELB_HXX
 #define _SDTREELB_HXX
 
 #ifndef _TRANSFER_HXX //autogen
 #include <svtools/transfer.hxx>
 #endif
+
 #ifndef _SD_SDRESID_HXX
 #include "sdresid.hxx"
 #endif
@@ -85,18 +85,21 @@
 #include <tools/ref.hxx>
 #endif
 
-#ifndef SV_DECL_SDDRAWDOCSHELL_DEFINED
-#define SV_DECL_SDDRAWDOCSHELL_DEFINED
-SV_DECL_REF(SdDrawDocShell)
-#endif
 
 class SdDrawDocument;
-class SdDrawDocShell;
 class SfxMedium;
 class SfxViewFrame;
 class SdNavigatorWin;
 class SdrObject;
 class SdPage;
+
+namespace sd {
+class DrawDocShell;
+#ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
+#define SV_DECL_DRAW_DOC_SHELL_DEFINED
+SV_DECL_REF(DrawDocShell)
+#endif
+}
 
 /*************************************************************************
 |*
@@ -119,7 +122,7 @@ public:
 
         SdPageObjsTLB&      mrParent;
         INetBookmark        maBookmark;
-        SdDrawDocShell&     mrDocShell;
+        ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType   meDragType;
 
         virtual             ~SdPageObjsTransferable();
@@ -132,16 +135,18 @@ public:
 
     public:
 
-                            SdPageObjsTransferable( SdPageObjsTLB& rParent,
-                                                    const INetBookmark& rBookmark,
-                                                    SdDrawDocShell& rDocShell,
-                                                    NavigatorDragType eDragType ) :
-                                mrParent( rParent ),
-                                maBookmark( rBookmark ),
-                                mrDocShell( rDocShell ),
-                                meDragType( eDragType ) {}
+        SdPageObjsTransferable(
+            SdPageObjsTLB& rParent,
+            const INetBookmark& rBookmark,
+            ::sd::DrawDocShell& rDocShell,
+            NavigatorDragType eDragType )
+            : mrParent( rParent ),
+              maBookmark( rBookmark ),
+              mrDocShell( rDocShell ),
+              meDragType( eDragType )
+        {}
 
-        SdDrawDocShell&     GetDocShell() const;
+        ::sd::DrawDocShell&     GetDocShell() const;
         NavigatorDragType   GetDragType() const;
 
     public:
@@ -179,8 +184,8 @@ protected:
     BOOL                    bLinkableSelected;
     BOOL                    bDragEnabled;
     String                  aDocName;
-    SdDrawDocShellRef       xBookmarkDocShRef;  // Zum Laden von Bookmarks
-    SdDrawDocShell*         pDropDocSh;
+    ::sd::DrawDocShellRef       xBookmarkDocShRef;  // Zum Laden von Bookmarks
+    ::sd::DrawDocShell*         pDropDocSh;
     SdNavigatorWin*         pDropNavWin;
     SfxViewFrame*           pFrame;
 
@@ -220,7 +225,7 @@ public:
     List*                   GetSelectEntryList( USHORT nDepth );
     List*                   GetBookmarkList( USHORT nType );
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
-    SdDrawDocShell*         GetDropDocSh() { return(pDropDocSh); }
+    ::sd::DrawDocShell*         GetDropDocSh() { return(pDropDocSh); }
     void                    CloseBookmarkDoc();
 
     BOOL                    IsLinkableSelected() const { return bLinkableSelected; }
