@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-15 19:31:19 $
+ *  last change: $Author: pluby $ $Date: 2000-11-16 06:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,13 @@
 
 // =======================================================================
 
+static long ImplSalFrameCallbackDummy( void*, SalFrame*, USHORT, const void* )
+{
+    return 0;
+}
+
+// =======================================================================
+
 SalFrame::SalFrame()
 {
     SalData* pSalData = GetSalData();
@@ -88,7 +95,7 @@ SalFrame::SalFrame()
     maFrameData.mhWnd               = 0;
     maFrameData.mpGraphics          = NULL;
     maFrameData.mpInst              = NULL;
-    maFrameData.mpProc              = NULL;
+    maFrameData.mpProc              = ImplSalFrameCallbackDummy;
     maFrameData.mnInputLang         = 0;
     maFrameData.mnInputCodePage     = 0;
     maFrameData.mbGraphics          = FALSE;
@@ -349,4 +356,9 @@ void SalFrame::Beep( SoundType eSoundType )
 
 void SalFrame::SetCallback( void* pInst, SALFRAMEPROC pProc )
 {
+    maFrameData.mpInst = pInst;
+    if ( pProc )
+        maFrameData.mpProc = pProc;
+    else
+        maFrameData.mpProc = ImplSalFrameCallbackDummy;
 }
