@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: pluby $ $Date: 2000-11-17 08:04:49 $
+#   last change: $Author: pluby $ $Date: 2000-11-17 16:37:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,8 +70,12 @@ LINKOUTPUT_FILTER=
 # _PTHREADS is needed for the stl
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSION=321 -D_USE_NAMESPACE=1
 
-# Temporary defines to make debugging more convenient
-CDEFS+=-DDBG_UTIL
+# Temporary settings to enable VCL test code. These should be deleted once
+# VCL development is complete.
+.IF "$(BUILD_SOSL)"!=""
+dbgutil=true
+product=
+.ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
