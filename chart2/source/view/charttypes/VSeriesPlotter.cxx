@@ -757,7 +757,7 @@ void VSeriesPlotter::setMappedProperties(
 double VSeriesPlotter::getMinimumX()
 {
     if( m_bCategoryXAxis )
-        return -0.5;
+        return 0.5;//first category (index 0) matches with real number 1.0
 
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
@@ -769,7 +769,7 @@ double VSeriesPlotter::getMaximumX()
     {
         //return category count
         sal_Int32 nPointCount = getPointCount( m_aXSlots );
-        return nPointCount-0.5;
+        return nPointCount+0.5;//first category (index 0) matches with real number 1.0
     }
 
     double fMinimum, fMaximum;

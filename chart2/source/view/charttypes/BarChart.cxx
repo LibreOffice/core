@@ -58,13 +58,15 @@ public:
     void                updateSeriesCount( double fSeriesCount ); /*only enter the size of x stacked series*/
 
     double              getStartCategoryIndex() const {
-                            sal_Int32 nStart = static_cast<sal_Int32>(getLogicMinX() + 1.49);//@todo +0.5 if clipping of half categories is implemented
+                            //first category (index 0) matches with real number 1.0
+                            sal_Int32 nStart = static_cast<sal_Int32>(getLogicMinX() - 0.5);
                             if( nStart < 0 )
                                 nStart = 0;
                             return nStart;
                         }
     double              getEndCategoryIndex() const  {
-                            sal_Int32 nEnd = static_cast<sal_Int32>(getLogicMaxX() + 0.5);
+                            //first category (index 0) matches with real number 1.0
+                            sal_Int32 nEnd = static_cast<sal_Int32>(getLogicMaxX() - 0.5);
                             if( nEnd < 0 )
                                 nEnd = 0;
                             return nEnd;
@@ -345,7 +347,7 @@ void BarChart::createShapes()
                     getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
 
                 //collect data point information (logic coordinates, style ):
-                double fLogicX = m_pPosHelper->getSlotPos( (double)nCatIndex, fSlotX );
+                double fLogicX = m_pPosHelper->getSlotPos( (*aSeriesIter)->getX( nCatIndex ), fSlotX );
                 double fLogicBarHeight = (*aSeriesIter)->getY( nCatIndex );
                 if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
                     continue;

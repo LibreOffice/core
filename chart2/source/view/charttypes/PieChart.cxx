@@ -59,13 +59,15 @@ public:
     DataPointGeometry   transformLogicGeom( const DataPointGeometry& rGeom, sal_Int32 nDim  );
 
     double              getStartCategoryIndex() const {
-                            sal_Int32 nStart = getLogicMinX() + 0.5;
+                            //first category (index 0) matches with real number 1.0
+                            sal_Int32 nStart = static_cast<sal_Int32>(getLogicMinX() - 0.5);
                             if( nStart < 0 )
                                 nStart = 0;
                             return nStart;
                         }
     double              getEndCategoryIndex() const  {
-                            sal_Int32 nEnd = getLogicMaxX() + 0.5;
+                            //first category (index 0) matches with real number 1.0
+                            sal_Int32 nEnd = static_cast<sal_Int32>(getLogicMaxX() - 0.5);
                             if( nEnd < 0 )
                                 nEnd = 0;
                             return nEnd;
@@ -319,10 +321,10 @@ void PieChart::createShapes()
             aSeriesIter = pSeriesList->begin();
 
             bool bIsVisible;
-            double fInnerXRadius      = m_pPosHelper->getInnerRadius( (double)nCatIndex, bIsVisible );
+            double fInnerXRadius      = m_pPosHelper->getInnerRadius( (double)nCatIndex+1.0, bIsVisible );
             if( !bIsVisible )
                 continue;
-            double fOuterXRadius      = m_pPosHelper->getOuterRadius( (double)nCatIndex );
+            double fOuterXRadius      = m_pPosHelper->getOuterRadius( (double)nCatIndex+1.0 );
             double fOuterYRadius      = fOuterXRadius;
             //the radii are already clipped and had scaling now
 

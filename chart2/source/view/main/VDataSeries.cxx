@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:19 $
+ *  last change: $Author: iha $ $Date: 2004-01-05 14:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ double VDataSeries::getX( sal_Int32 index ) const
     else
     {
         if( 0<=index && index < m_YValues_Double.getLength() )
-            return index;
+            return index+1;//first category (index 0) matches with real number 1.0
     }
     double fNan;
     ::rtl::math::setNan( & fNan );
@@ -283,9 +283,10 @@ uno::Sequence< double > VDataSeries::getAllX() const
     if(!m_xData_XValues.is() && !m_XValues_Double.getLength() && m_YValues_Double.getLength())
     {
         //init x values from category indexes
+        //first category (index 0) matches with real number 1.0
         m_XValues_Double.realloc( m_YValues_Double.getLength() );
         for(sal_Int32 nN=m_XValues_Double.getLength();nN--;)
-            m_XValues_Double[nN] = nN;
+            m_XValues_Double[nN] = nN+1;
     }
     return m_XValues_Double;
 }
