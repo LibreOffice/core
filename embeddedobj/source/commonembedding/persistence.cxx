@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 09:49:26 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,37 @@ using namespace ::com::sun::star;
 
 
 //------------------------------------------------------
+uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr )
+{
+    uno::Sequence< beans::PropertyValue > aResult;
+    sal_Int32 nResLen = 0;
+
+    for ( sal_Int32 nInd = 0; nInd < aMedDescr.getLength(); nInd++ )
+    {
+        if ( aMedDescr[nInd].Name.equalsAscii( "ComponentData" )
+          || aMedDescr[nInd].Name.equalsAscii( "DocumentTitle" )
+          || aMedDescr[nInd].Name.equalsAscii( "InteractionHandler" )
+          || aMedDescr[nInd].Name.equalsAscii( "JumpMark" )
+          // || aMedDescr[nInd].Name.equalsAscii( "Password" ) makes no sence for embedded objects
+          || aMedDescr[nInd].Name.equalsAscii( "Preview" )
+          || aMedDescr[nInd].Name.equalsAscii( "ReadOnly" )
+          || aMedDescr[nInd].Name.equalsAscii( "StartPresentation" )
+          || aMedDescr[nInd].Name.equalsAscii( "RepairPackage" )
+          || aMedDescr[nInd].Name.equalsAscii( "StatusIndicator" )
+          || aMedDescr[nInd].Name.equalsAscii( "ViewData" )
+          || aMedDescr[nInd].Name.equalsAscii( "ViewId" )
+          || aMedDescr[nInd].Name.equalsAscii( "MacroExecutionMode" )
+          || aMedDescr[nInd].Name.equalsAscii( "UpdateDocMode" ) )
+        {
+            aResult.realloc( ++nResLen );
+            aResult[nResLen-1] = aMedDescr[nInd];
+        }
+    }
+
+    return aResult;
+}
+
+//------------------------------------------------------
 uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans::PropertyValue >& aOrig )
 {
     sal_Bool bAsTemplateSet = sal_False;
@@ -170,7 +201,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] <<= xTempStream;
-        aArgs[1] <<= embed::ElementModes::ELEMENT_READWRITE;
+        aArgs[1] <<= embed::ElementModes::READWRITE;
         uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
                                                         uno::UNO_QUERY );
         if ( !xTempStorage.is() )
@@ -181,7 +212,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
             xStorage->copyToStorage( xTempStorage );
         } catch( uno::Exception& e )
         {
-            throw embed::StorageWTException(
+            throw embed::StorageWrappedTargetException(
                         ::rtl::OUString::createFromAscii( "Can't copy storage!" ),
                         uno::Reference< uno::XInterface >(),
                         uno::makeAny( e ) );
@@ -237,7 +268,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
 void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                                   const ::rtl::OUString& aNewName )
 {
-    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
+    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
     uno::Reference< embed::XStorage > xNewOwnStorage = xNewParentStorage->openStorageElement( aNewName, nStorageMode );
     OSL_ENSURE( xNewOwnStorage.is(), "The method can not return empty reference!" );
@@ -353,6 +384,13 @@ uno::Reference< frame::XModel > OCommonEmbeddedObject::LoadDocumentFromStorage_I
     aArgs[3].Value <<= aFilterName;
     aArgs[4].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
     aArgs[4].Value <<= sal_True;
+
+    for ( sal_Int32 nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
+    {
+        aArgs.realloc( nInd + 5 );
+        aArgs[nInd+5].Name = m_aDocMediaDescriptor[nInd].Name;
+        aArgs[nInd+5].Value = m_aDocMediaDescriptor[nInd].Value;
+    }
 
     try
     {
@@ -543,8 +581,6 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                 uno::Exception,
                 uno::RuntimeException )
 {
-    // TODO: use lObjArgs
-
     // the type of the object must be already set
     // a kind of typedetection should be done in the factory
 
@@ -562,9 +598,9 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
-    // May be EMBED_LOADED should be forbidden here ???
-    if ( ( m_nObjectState != -1 || nEntryConnectionMode == embed::EntryInitModes::ENTRY_NO_INIT )
-      && ( m_nObjectState == -1 || nEntryConnectionMode != embed::EntryInitModes::ENTRY_NO_INIT ) )
+    // May be LOADED should be forbidden here ???
+    if ( ( m_nObjectState != -1 || nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
+      && ( m_nObjectState == -1 || nEntryConnectionMode != embed::EntryInitModes::NO_INIT ) )
     {
         // if the object is not loaded
         // it can not get persistant representation without initialization
@@ -593,21 +629,34 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
     // detect entry existence
     sal_Bool bElExists = xNameAccess->hasByName( sEntName );
 
+    m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments );
+
     m_bReadOnly = sal_False;
     for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
         if ( lArguments[nInd].Name.equalsAscii( "ReadOnly" ) )
             lArguments[nInd].Value >>= m_bReadOnly;
 
-    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
+    // TODO: use lObjArgs for StoreVisualReplacement
+    for ( sal_Int32 nObjInd = 0; nObjInd < lObjArgs.getLength(); nObjInd++ )
+        if ( lObjArgs[nObjInd].Name.equalsAscii( "OutplaceDispatchInterceptor" ) )
+        {
+            uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
+            if ( lObjArgs[nObjInd].Value >>= xDispatchInterceptor )
+                m_pDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+
+            break;
+        }
+
+    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
     SwitchOwnPersistence( xStorage, sEntName );
 
-    if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_DEFAULT_INIT )
+    if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT )
     {
         if ( bElExists )
         {
             // the initialization from existing storage allows to leave object in loaded state
-            m_nObjectState = embed::EmbedStates::EMBED_LOADED;
+            m_nObjectState = embed::EmbedStates::LOADED;
         }
         else
         {
@@ -615,21 +664,21 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             if ( !m_pDocHolder->GetDocument().is() )
                 throw io::IOException(); // TODO: can not create document
 
-            m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+            m_nObjectState = embed::EmbedStates::RUNNING;
         }
     }
     else
     {
-        if ( ( nStorageMode & embed::ElementModes::ELEMENT_READWRITE ) != embed::ElementModes::ELEMENT_READWRITE )
+        if ( ( nStorageMode & embed::ElementModes::READWRITE ) != embed::ElementModes::READWRITE )
             throw io::IOException();
 
-        if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_NO_INIT )
+        if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
         {
             // the document just already changed its storage to store to
             // the links to OOo documents for now ignore this call
             // TODO: OOo links will have persistence so it will be switched here
         }
-        else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRUNCATE_INIT )
+        else if ( nEntryConnectionMode == embed::EntryInitModes::TRUNCATE_INIT )
         {
             // TODO:
             m_pDocHolder->SetDocument( InitNewDocument_Impl(), m_bReadOnly );
@@ -637,14 +686,14 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             if ( !m_pDocHolder->GetDocument().is() )
                 throw io::IOException(); // TODO: can not create document
 
-            m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+            m_nObjectState = embed::EmbedStates::RUNNING;
         }
-        else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT )
+        else if ( nEntryConnectionMode == embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT )
         {
             m_pDocHolder->SetDocument( CreateDocFromMediaDescr_Impl( lArguments ), m_bReadOnly );
-            m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+            m_nObjectState = embed::EmbedStates::RUNNING;
         }
-        //else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRANSFERABLE_INIT )
+        //else if ( nEntryConnectionMode == embed::EntryInitModes::TRANSFERABLE_INIT )
         //{
             //TODO:
         //}
@@ -685,7 +734,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     if ( m_bReadOnly )
         throw io::IOException(); // TODO: access denied
 
-    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
         return; // nothing to do, the object is in loaded state
 
     OSL_ENSURE( m_pDocHolder->GetDocument().is(), "If an object is activated or in running state it must have a document!\n" );
@@ -713,7 +762,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
     // TODO:
     // notify listeners
-    if ( m_nUpdateMode == embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
+    if ( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
     {
         // TODO: update visual representation
     }
@@ -751,7 +800,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     OSL_ENSURE( m_bIsLink || m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
 
     uno::Reference< embed::XStorage > xSubStorage =
-                xStorage->openStorageElement( sEntName, embed::ElementModes::ELEMENT_READWRITE );
+                xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
 
     if ( !xSubStorage.is() )
         throw uno::RuntimeException(); //TODO
@@ -793,7 +842,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     OSL_ENSURE( m_bIsLink || m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
 
     uno::Reference< embed::XStorage > xSubStorage =
-                xStorage->openStorageElement( sEntName, embed::ElementModes::ELEMENT_READWRITE );
+                xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
 
     if ( !xSubStorage.is() )
         throw uno::RuntimeException(); //TODO
@@ -867,7 +916,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     {
         // TODO: notify listeners
 
-        if ( m_nUpdateMode == embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
+        if ( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
         {
             // TODO: update visual representation
         }
@@ -966,7 +1015,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
-    if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState != embed::EmbedStates::LOADED )
     {
         // the object is still not loaded
         throw embed::WrongStateException(
@@ -979,11 +1028,23 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
+    // TODO: get rid of useless part of MediaDescriptor
+    m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments );
+
+    // TODO: use lObjArgs for StoreVisualReplacement
+    for ( sal_Int32 nObjInd = 0; nObjInd < lObjArgs.getLength(); nObjInd++ )
+        if ( lObjArgs[nObjInd].Name.equalsAscii( "OutplaceDispatchInterceptor" ) )
+        {
+            uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
+            if ( lObjArgs[nObjInd].Value >>= xDispatchInterceptor )
+                m_pDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+
+            break;
+        }
+
     // TODO:
     // when document allows reloading through API the object can be reloaded not only in loaded state
 
-    // probably readonly mode will disappear
-    /*
     sal_Bool bOldReadOnlyValue = m_bReadOnly;
 
     m_bReadOnly = sal_False;
@@ -1004,13 +1065,9 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         {
         }
 
-        sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
-        uno::Reference< embed::XStorage > xNewOwnStorage =
-                                                    m_xParentStorage->openStorageElement( m_aEntryName, nStorageMode );
-
-        m_xObjectStorage = xNewObjectStorage;
+        sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
+        m_xObjectStorage = m_xParentStorage->openStorageElement( m_aEntryName, nStorageMode );
     }
-    */
 }
 
 //------------------------------------------------------
@@ -1057,7 +1114,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     sal_Bool bElExists = xNameAccess->hasByName( sEntName );
 
     m_bReadOnly = sal_False;
-    sal_Int32 nStorageMode = embed::ElementModes::ELEMENT_READWRITE;
+    sal_Int32 nStorageMode = embed::ElementModes::READWRITE;
 
     if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
         SwitchOwnPersistence( xStorage, sEntName );
@@ -1080,9 +1137,9 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     m_pDocHolder->SetDocument( xDocument, m_bReadOnly );
     OSL_ENSURE( m_pDocHolder->GetDocument().is(), "If document cant be created, an exception must be thrown!\n" );
 
-    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
-        m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
-    else if ( m_nObjectState == embed::EmbedStates::EMBED_ACTIVE )
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
+        m_nObjectState = embed::EmbedStates::RUNNING;
+    else if ( m_nObjectState == embed::EmbedStates::ACTIVE )
         m_pDocHolder->Show();
 
     m_bIsLink = sal_False;
