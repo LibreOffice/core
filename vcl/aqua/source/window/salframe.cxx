@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-16 19:53:30 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-17 00:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,32 +217,55 @@ void SalFrame::Show( BOOL bVisible )
 
         // Draw a polygon on the native content view (no color)
 
-        ULONG  nPoints = 7;
+        ULONG  nPoints = 5;
         long   pXPtsAry[nPoints];
         long   pYPtsAry[nPoints];
 
-        pXPtsAry[0] = 15;
-        pYPtsAry[0] = 250;
+        pXPtsAry[0] = 300;
+        pYPtsAry[0] = 200;
 
-        pXPtsAry[1] = 145;
-        pYPtsAry[1] = 250;
+        pXPtsAry[1] = 400;
+        pYPtsAry[1] = 200;
 
-        pXPtsAry[2] = 165;
-        pYPtsAry[2] = 200;
+        pXPtsAry[2] = 325;
+        pYPtsAry[2] = 300;
 
-        pXPtsAry[3] = 185;
-        pYPtsAry[3] = 250;
+        pXPtsAry[3] = 350;
+        pYPtsAry[3] = 150;
 
-        pXPtsAry[4] = 325;
-        pYPtsAry[4] = 250;
-
-        pXPtsAry[5] = 215;
-        pYPtsAry[5] = 320;
-
-        pXPtsAry[6] = 125;
-        pYPtsAry[6] = 320;
+        pXPtsAry[4] = 375;
+        pYPtsAry[4] = 300;
 
         VCLGraphics_drawPolyLine ( hView, nPoints, pXPtsAry, pYPtsAry );
+
+        // Draw a polygon on the native content view (color)
+
+        ULONG  cPolyVertexCount = 7;
+        long   cPolyVertexXC[nPoints];
+        long   cPolyVertexYC[nPoints];
+
+        cPolyVertexXC[0] = 15;
+        cPolyVertexYC[0] = 250;
+
+        cPolyVertexXC[1] = 145;
+        cPolyVertexYC[1] = 250;
+
+        cPolyVertexXC[2] = 165;
+        cPolyVertexYC[2] = 200;
+
+        cPolyVertexXC[3] = 185;
+        cPolyVertexYC[3] = 250;
+
+        cPolyVertexXC[4] = 325;
+        cPolyVertexYC[4] = 250;
+
+        cPolyVertexXC[5] = 215;
+        cPolyVertexYC[5] = 320;
+
+        cPolyVertexXC[6] = 125;
+        cPolyVertexYC[6] = 320;
+
+        VCLGraphics_drawPolygon  ( hView, cPolyVertexCount, cPolyVertexXC, cPolyVertexYC );
     } // SalFrame::Show
 
 // -----------------------------------------------------------------------

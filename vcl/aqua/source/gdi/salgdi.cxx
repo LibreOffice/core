@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-16 19:53:29 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-17 00:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 #ifndef _SV_VCLGRAPHICS_H
 #include <VCLGraphics.h>
 #endif
-
 
 // =======================================================================
 
@@ -254,11 +253,8 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
 void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
     {
-        // Temporary implementation until a proper method
+        // Temporary QD implementation until a proper method
         // is determined to do a color polygon fill
-
-        // This implementation is identical to that of
-        // method SalGraphics::DrawPolyLine
 
         if  ( nPoints > 1 )
             {
@@ -275,7 +271,7 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
                 if ( hView )
                     {
-                        VCLGraphics_drawPolyLine
+                        VCLGraphics_drawPolygon
                             (
                                 hView,
                                 nPoints,
