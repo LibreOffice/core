@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:11:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-29 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,7 +897,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 pContext->AddAttribute(
                     XML_NAMESPACE_FO, XML_KEEP_TOGETHER,
                     GetXMLToken(
-                        IsXMLToken( rAttrValue, XML_COLUMNSPLIT_AVOID )
+                        IsXMLToken( sAttrValue, XML_COLUMNSPLIT_AVOID )
                         ? XML_ALWAYS
                         : XML_AUTO ) );
             }
