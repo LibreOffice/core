@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2004-01-26 16:40:45 $
+ *  last change: $Author: cd $ $Date: 2004-01-30 15:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <tools/resmgr.hxx>
 #include <tools/rc.h>
 #include <tools/isolang.hxx>
-#include <vcl/rc.hxx>
+//#include <vcl/rc.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
@@ -202,7 +202,7 @@ const char* ModuleToXML_Mapping[] =
     "BasicIDECommands",
     "BibliographyCommands",
     "StartModuleCommands",
-    "DbAccessCommands",
+    "DbuCommands",
     0
 };
 
@@ -404,7 +404,10 @@ bool ReadMenuLabels( int nLangIndex, Menu* pMenu, MODULES eModule, bool bHasSlot
             if ( pMenu->GetPopupMenu( nId ) != 0 )
             {
                 CommandLabels* pCmdLabels = 0;
-                pCmdLabels = RetrieveCommandLabelsFromID( nId, eModule );
+                // Special popup menus have ID's between 5000-10000. Apps uses various ID's from their number area =>
+                // don't use ID if outside this area, you can accidently map popups to functions!!
+                if (( nId > 5000 ) && ( nId < 10000 ))
+                    pCmdLabels = RetrieveCommandLabelsFromID( nId, eModule );
                 if ( !pCmdLabels )
                     pCmdLabels = RetrieveCommandLabelsFromCommand( aCommand, eModule );
 
@@ -676,6 +679,36 @@ OString EncodeString( const OUString& aToEncodeStr )
     return aString;
 }
 
+// Mark all commands which are popups
+void FindAndMarkModulePopupMenuCmds()
+{
+    for ( int i = 0; i < int( MODULE_COUNT ); i++ )
+    {
+        CommandToLabelsMap::iterator pCmdIter = modulePopupMenusCmd[i].begin();
+        while ( pCmdIter != modulePopupMenusCmd[i].end() )
+        {
+            CommandLabels& rCmdLabel = pCmdIter->second;
+            if ( rCmdLabel.bPopupMenu )
+            {
+                CommandIDToLabelsMap::iterator pIDIter = moduleMapFiles[i].begin();
+                while ( pIDIter != moduleMapFiles[i].end() )
+                {
+                    CommandLabels& rIDLabel = pIDIter->second;
+                    if ( rIDLabel.aCommand.equals( rCmdLabel.aCommand ))
+                    {
+                        rIDLabel.bPopupMenu = true;
+                        break;
+                    }
+                    ++pIDIter;
+                }
+            }
+
+            ++pCmdIter;
+        }
+    }
+}
+
+
 bool FindAndMarkPopupMenuCmds( const OUString& aCommand, MODULES eExcludeModule )
 {
     bool bFound( sal_False );
@@ -741,11 +774,12 @@ static const char XMLStart[]        = "<?xml version=\"1.0\" encoding=\"UTF-8\"?
 
 bool WriteXMLFiles( const OUString& aOutputDirURL)
 {
-    static const char DocType[]                 = "<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n";
+    static const char DocType[]                 = "<!DOCTYPE oor:component-data SYSTEM \"../../../../../component-update.dtd\">\n";
     static const char ComponentDataStart[]      = "<oor:component-data oor:name=\"";
     static const char ComponentDataStartEnd[]   = "\" oor:package=\"org.openoffice.Office.UI\" xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n";
     static const char GroupText[]               = "\t<node oor:name=\"UserInterface\">\n";
-    static const char SetText[]                 = "\t\t<node oor:name=\"Label\">\n";
+    static const char SetTextCmds[]             = "\t\t<node oor:name=\"Commands\">\n";
+    static const char SetTextPopups[]           = "\t\t<node oor:name=\"Popups\">\n";
     static const char NodeStart[]               = "\t\t\t<node oor:name=\"";
     static const char ReplaceOp[]               = "\" oor:op=\"replace\">\n";
     static const char NodeEnd[]                 = "\t\t\t</node>\n";
@@ -761,6 +795,8 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
 
     // Search popup menu commands that can be moved to the global list as they are used in more than one project
     FindAndMoveGlobalPopupMenus();
+    // Search and mark all commands which are popups
+    FindAndMarkModulePopupMenuCmds();
 
     OUString aOutputDirectoryURL( aOutputDirURL );
     if ( aOutputDirectoryURL.getLength() > 0 && aOutputDirectoryURL[aOutputDirectoryURL.getLength()-1] != '/' )
@@ -793,119 +829,159 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
             aXMLFile.write( ModuleToXML_Mapping[i], strlen( ModuleToXML_Mapping[i] ), nWritten );
             aXMLFile.write( ComponentDataStartEnd, strlen( ComponentDataStartEnd ), nWritten );
             aXMLFile.write( GroupText, strlen( GroupText ), nWritten );
-            aXMLFile.write( SetText, strlen( SetText ), nWritten );
 
             if (( moduleMapFiles[i].size() > 0      ) ||
                 ( modulePopupMenusCmd[i].size() > 0 )    )
             {
-                CommandIDToLabelsMap::const_iterator pIter = moduleMapFiles[i].begin();
-                while ( pIter != moduleMapFiles[i].end() )
+                for ( int nSets = 0; nSets < 2; nSets++ )
                 {
-                    const CommandLabels& rCmdLabels = pIter->second;
+                    if ( nSets == 0 )
+                        aXMLFile.write( SetTextCmds, strlen( SetTextCmds ), nWritten );
+                    else
+                        aXMLFile.write( SetTextPopups, strlen( SetTextPopups ), nWritten );
 
-                    CommandToLabelsMap::iterator pCmdIter = modulePopupMenusCmd[i].find( rCmdLabels.aCommand );
-                    if ( pCmdIter != modulePopupMenusCmd[i].end() )
+                    CommandIDToLabelsMap::iterator pIter = moduleMapFiles[i].begin();
+                    while ( pIter != moduleMapFiles[i].end() )
                     {
-                        CommandLabels& rCmdLabel = pCmdIter->second;
-                        rCmdLabel.bWritten = true;
-                    }
+                        CommandLabels& rCmdLabels = pIter->second;
 
-                    // we have to use UTF-8 as encoding
-                    OString aCmd = OUStringToOString( rCmdLabels.aCommand, RTL_TEXTENCODING_UTF8 );
-
-                    aXMLFile.write( NodeStart, strlen( NodeStart ), nWritten );
-                    aXMLFile.write( aCmd.getStr(), aCmd.getLength(), nWritten );
-                    aXMLFile.write( ReplaceOp, strlen( ReplaceOp ), nWritten );
-                    aXMLFile.write( PropNodeStart, strlen( PropNodeStart ), nWritten );
-
-                    sal_Bool bLabels( sal_False );
-                    for ( int j = 0; j < NUM_LANGUAGES; j++ )
-                    {
-                        OString aLabel;
-                        if ( rCmdLabels.aLabels[j].getLength() > 0 )
+                        if ( rCmdLabels.bWritten )
                         {
-                            bLabels = sal_True;
-
-                            // Encode label to the XML rules.
-                            aLabel = EncodeString( rCmdLabels.aLabels[j] );
+                            ++pIter;
+                            continue;
                         }
-                        else
+
+                        CommandToLabelsMap::iterator pCmdIter = modulePopupMenusCmd[i].find( rCmdLabels.aCommand );
+                        if ( pCmdIter != modulePopupMenusCmd[i].end() )
                         {
-                            CommandToLabelsMap::const_iterator pIter = modulePopupMenusCmd[i].find( rCmdLabels.aCommand );
-                            if ( pIter != modulePopupMenusCmd[i].end() )
+                            // Mark as written within the popup menus hash table
+                            CommandLabels& rCmdLabel = pCmdIter->second;
+                            rCmdLabel.bWritten = true;
+                        }
+
+                        // We have to save popups on the next iteration
+                        if (( nSets == 0 ) && rCmdLabels.bPopupMenu )
+                        {
+                            ++pIter;
+                            continue;
+                        }
+
+                        // Mark as written for next iteration
+                        rCmdLabels.bWritten = true;
+
+                        // we have to use UTF-8 as encoding
+                        OString aCmd = OUStringToOString( rCmdLabels.aCommand, RTL_TEXTENCODING_UTF8 );
+
+                        aXMLFile.write( NodeStart, strlen( NodeStart ), nWritten );
+                        aXMLFile.write( aCmd.getStr(), aCmd.getLength(), nWritten );
+                        aXMLFile.write( ReplaceOp, strlen( ReplaceOp ), nWritten );
+                        aXMLFile.write( PropNodeStart, strlen( PropNodeStart ), nWritten );
+
+                        sal_Bool bLabels( sal_False );
+                        for ( int j = 0; j < NUM_LANGUAGES; j++ )
+                        {
+                            OString aLabel;
+                            if ( rCmdLabels.aLabels[j].getLength() > 0 )
                             {
-                                const CommandLabels& rCmdLabels = pIter->second;
-                                if ( rCmdLabels.aLabels[j].getLength() > 0 )
-                                {
-                                    bLabels = sal_True;
-                                    aLabel = EncodeString( rCmdLabels.aLabels[j] );
-                                }
+                                bLabels = sal_True;
+
+                                // Encode label to the XML rules.
+                                aLabel = EncodeString( rCmdLabels.aLabels[j] );
                             }
-                        }
-
-                        if ( aLabel.getLength() > 0 )
-                        {
-                            aXMLFile.write( ValueNodeStart, strlen( ValueNodeStart ), nWritten );
-                            aXMLFile.write( Language_Mapping[j].pISO, strlen( Language_Mapping[j].pISO ), nWritten );
-                            aXMLFile.write( ValueNodeMid, strlen( ValueNodeMid ), nWritten );
-                            aXMLFile.write( aLabel.getStr(), aLabel.getLength(), nWritten );
-                            aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
-                        }
-                    }
-
-                    if ( !bLabels )
-                        aXMLFile.write( ValueNodeEmpty, strlen( ValueNodeEmpty ), nWritten );
-
-                    aXMLFile.write( PropNodeEnd, strlen( PropNodeEnd ), nWritten );
-                    aXMLFile.write( NodeEnd, strlen( NodeEnd ), nWritten );
-                    ++pIter;
-                }
-
-                sal_uInt32 nSize = modulePopupMenusCmd[i].size();
-                if ( nSize > 0 )
-                {
-                    CommandToLabelsMap::const_iterator pIter = modulePopupMenusCmd[i].begin();
-                    while ( pIter != modulePopupMenusCmd[i].end() )
-                    {
-                        const CommandLabels& rCmdLabels = pIter->second;
-                        if ( !rCmdLabels.bWritten )
-                        {
-                            OString aCmd( OUStringToOString( rCmdLabels.aCommand, RTL_TEXTENCODING_UTF8 ));
-                            aXMLFile.write( NodeStart, strlen( NodeStart ), nWritten );
-                            aXMLFile.write( aCmd.getStr(), aCmd.getLength(), nWritten );
-                            aXMLFile.write( ReplaceOp, strlen( ReplaceOp ), nWritten );
-                            aXMLFile.write( PropNodeStart, strlen( PropNodeStart ), nWritten );
-
-                            sal_Bool bLabels( sal_False );
-                            for ( int k = 0; k < NUM_LANGUAGES; k++ )
+                            else
                             {
-                                if ( rCmdLabels.aLabels[k].getLength() > 0 )
+                                CommandToLabelsMap::const_iterator pIter = modulePopupMenusCmd[i].find( rCmdLabels.aCommand );
+                                if ( pIter != modulePopupMenusCmd[i].end() )
                                 {
-                                    bLabels = sal_True;
-                                    OString aLabel( OUStringToOString( rCmdLabels.aLabels[k], RTL_TEXTENCODING_UTF8 ));
-
-                                    aXMLFile.write( ValueNodeStart, strlen( ValueNodeStart ), nWritten );
-                                    aXMLFile.write( Language_Mapping[k].pISO, strlen( Language_Mapping[k].pISO ), nWritten );
-                                    aXMLFile.write( ValueNodeMid, strlen( ValueNodeMid ), nWritten );
-                                    aXMLFile.write( aLabel.getStr(), aLabel.getLength(), nWritten );
-                                    aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
+                                    const CommandLabels& rCmdLabels = pIter->second;
+                                    if ( rCmdLabels.aLabels[j].getLength() > 0 )
+                                    {
+                                        bLabels = sal_True;
+                                        aLabel = EncodeString( rCmdLabels.aLabels[j] );
+                                    }
                                 }
                             }
 
-                            if ( !bLabels )
-                                aXMLFile.write( ValueNodeEmpty, strlen( ValueNodeEmpty ), nWritten );
-
-                            aXMLFile.write( PropNodeEnd, strlen( PropNodeEnd ), nWritten );
-                            aXMLFile.write( NodeEnd, strlen( NodeEnd ), nWritten );
+                            if ( aLabel.getLength() > 0 )
+                            {
+                                aXMLFile.write( ValueNodeStart, strlen( ValueNodeStart ), nWritten );
+                                aXMLFile.write( Language_Mapping[j].pISO, strlen( Language_Mapping[j].pISO ), nWritten );
+                                aXMLFile.write( ValueNodeMid, strlen( ValueNodeMid ), nWritten );
+                                aXMLFile.write( aLabel.getStr(), aLabel.getLength(), nWritten );
+                                aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
+                            }
                         }
 
+                        if ( !bLabels )
+                            aXMLFile.write( ValueNodeEmpty, strlen( ValueNodeEmpty ), nWritten );
+
+                        aXMLFile.write( PropNodeEnd, strlen( PropNodeEnd ), nWritten );
+                        aXMLFile.write( NodeEnd, strlen( NodeEnd ), nWritten );
                         ++pIter;
                     }
-                }
 
+                    sal_uInt32 nSize = modulePopupMenusCmd[i].size();
+                    if ( nSize > 0 )
+                    {
+                        CommandToLabelsMap::iterator pIter = modulePopupMenusCmd[i].begin();
+                        while ( pIter != modulePopupMenusCmd[i].end() )
+                        {
+                            CommandLabels& rCmdLabels = pIter->second;
+
+                            if (( nSets == 0 ) && rCmdLabels.bPopupMenu )
+                            {
+                                ++pIter;
+                                continue;
+                            }
+
+                            if ( !rCmdLabels.bWritten )
+                            {
+                                rCmdLabels.bWritten = true;
+                                OString aCmd( OUStringToOString( rCmdLabels.aCommand, RTL_TEXTENCODING_UTF8 ));
+                                aXMLFile.write( NodeStart, strlen( NodeStart ), nWritten );
+                                aXMLFile.write( aCmd.getStr(), aCmd.getLength(), nWritten );
+                                aXMLFile.write( ReplaceOp, strlen( ReplaceOp ), nWritten );
+                                aXMLFile.write( PropNodeStart, strlen( PropNodeStart ), nWritten );
+
+                                sal_Bool bLabels( sal_False );
+                                for ( int k = 0; k < NUM_LANGUAGES; k++ )
+                                {
+                                    if ( rCmdLabels.aLabels[k].getLength() > 0 )
+                                    {
+                                        bLabels = sal_True;
+                                        OString aLabel( OUStringToOString( rCmdLabels.aLabels[k], RTL_TEXTENCODING_UTF8 ));
+
+                                        aXMLFile.write( ValueNodeStart, strlen( ValueNodeStart ), nWritten );
+                                        aXMLFile.write( Language_Mapping[k].pISO, strlen( Language_Mapping[k].pISO ), nWritten );
+                                        aXMLFile.write( ValueNodeMid, strlen( ValueNodeMid ), nWritten );
+                                        aXMLFile.write( aLabel.getStr(), aLabel.getLength(), nWritten );
+                                        aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
+                                    }
+                                }
+
+                                if ( !bLabels )
+                                    aXMLFile.write( ValueNodeEmpty, strlen( ValueNodeEmpty ), nWritten );
+
+                                aXMLFile.write( PropNodeEnd, strlen( PropNodeEnd ), nWritten );
+                                aXMLFile.write( NodeEnd, strlen( NodeEnd ), nWritten );
+                            }
+
+                            ++pIter;
+                        }
+                    }
+
+                    aXMLFile.write( SetTextEnd, strlen( SetTextEnd ), nWritten );
+                }
+            }
+            else
+            {
+                // Write empty sets
+                aXMLFile.write( SetTextCmds, strlen( SetTextCmds ), nWritten );
+                aXMLFile.write( SetTextEnd, strlen( SetTextEnd ), nWritten );
+                aXMLFile.write( SetTextPopups, strlen( SetTextPopups ), nWritten );
+                aXMLFile.write( SetTextEnd, strlen( SetTextEnd ), nWritten );
             }
 
-            aXMLFile.write( SetTextEnd, strlen( SetTextEnd ), nWritten );
             aXMLFile.write( GroupTextEnd, strlen( GroupTextEnd ), nWritten );
             aXMLFile.write( ComponentDataEnd, strlen( ComponentDataEnd ), nWritten );
 
@@ -1045,15 +1121,18 @@ bool WriteMenuBarXML( osl::File& rFile, Menu* pMenu, MODULES eModule, int nLevel
 
             if ( pMenu->GetPopupMenu( nId ) != 0 )
             {
-                CommandLabels* pCmdLabels = 0;
-                pCmdLabels = RetrieveCommandLabelsFromID( nId, eModule );
-                if ( !pCmdLabels )
-                    pCmdLabels = RetrieveCommandLabelsFromCommand( aCommand, eModule );
+                if ( !bHasUnoCommand )
+                {
+                    CommandLabels* pCmdLabels = 0;
+                    pCmdLabels = RetrieveCommandLabelsFromID( nId, eModule );
+                    if ( !pCmdLabels )
+                        pCmdLabels = RetrieveCommandLabelsFromCommand( aCommand, eModule );
 
-                if ( pCmdLabels )
-                    aCommand = pCmdLabels->aCommand;
-                else
-                    aCommand = OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ));
+                    if ( pCmdLabels )
+                        aCommand = pCmdLabels->aCommand;
+                    else if ( aCommand.getLength() == 0 )
+                        aCommand = OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ));
+                }
 
                 WriteMenuStart( rFile, aCommand, nLevel );
                 WritePopupMenuStart( rFile, nLevel+1 );
