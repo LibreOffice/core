@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:33:37 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 package com.sun.star.lib.uno.typedesc;
 
+import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
+import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.IFieldDescription;
 import com.sun.star.uno.IMethodDescription;
@@ -77,7 +79,8 @@ public final class TypeDescription_Test extends ComplexTestCase {
     }
 
     public String[] getTestMethodNames() {
-        return new String[] { "test", "testUnsigned" };
+        return new String[] { "test", "testUnsigned",
+                              "testGetMethodDescription" };
     }
 
     public void test() throws Exception {
@@ -175,7 +178,23 @@ public final class TypeDescription_Test extends ComplexTestCase {
 
     public void testUnsigned() throws ClassNotFoundException {
         assure("TypeDescription for UNSIGNED LONG",
-               TypeDescription.getTypeDescription(Type.UNSIGNED_LONG).getTypeName().equals("unsigned long"));
+               TypeDescription.getTypeDescription(Type.UNSIGNED_LONG).
+               getTypeName().equals("unsigned long"));
+    }
+
+    public void testGetMethodDescription() {
+        TypeDescription td = TypeDescription.getTypeDescription(XDerived.class);
+        td.getMethodDescription("fn");
+    }
+
+    public interface XBase {
+        void fn();
+
+        TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("fn", 0, 0) };
+    }
+
+    public interface XDerived extends XBase {
+        TypeInfo[] UNOTYPEINFO = null;
     }
 
     private final class MethodSignature {
