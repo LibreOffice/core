@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-30 15:28:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,8 @@ import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.loader.CannotActivateFactoryException;
 import com.sun.star.loader.XImplementationLoader;
 
-import com.sun.star.comp.loader.RegistrationClassFinder;
-
 import com.sun.star.lang.XEventListener;
 //import com.sun.star.lang.EventObject;
-
-import com.sun.star.comp.loader.JavaLoader;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -102,7 +98,7 @@ import java.lang.reflect.InvocationTargetException;
  * calls to the implementing objects and are used instead of casts
  * and identity comparisons.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2002-10-30 15:28:39 $
+ * @version     $Revision: 1.7 $ $ $Date: 2004-07-23 14:44:07 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.container.XSet
@@ -791,7 +787,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * implementation of the @see com.sun.star.container.XEnumeration interface.
      * It is a inner wrapper for a java.util.Enumeration object.
      * <p>
-     * @version     $Revision: 1.6 $ $ $Date: 2002-10-30 15:28:39 $
+     * @version     $Revision: 1.7 $ $ $Date: 2004-07-23 14:44:07 $
      * @author      Markus Herzog
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
@@ -864,7 +860,7 @@ public class ServiceManager implements XMultiServiceFactory,
  * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
  * interfaces.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2002-10-30 15:28:39 $
+ * @version     $Revision: 1.7 $ $ $Date: 2004-07-23 14:44:07 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
