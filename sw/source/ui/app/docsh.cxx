@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 14:32:03 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 20:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,7 +1242,6 @@ void SwDocShell::SetView(SwView* pVw)
 
 void SwDocShell::PrepareReload()
 {
-    ::RemoveFromBackgroundCache( *this, TRUE );
     ::DelAllGrfCacheEntries( pDoc );
     pDoc->GetLinkManager().PrepareReload();
 }
@@ -1468,6 +1467,9 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/30 14:32:03  jp
+    Bug #79589#: View must not exist
+
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
 

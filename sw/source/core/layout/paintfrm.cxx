@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 20:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,9 +326,6 @@ static SfxProgress *pProgress = 0;
 
 //Nicht mehr als ein Beep pro Paint, wird auch im Textbereich benutzt!
 FASTBOOL bOneBeepOnly = TRUE;
-
-class SwBackgroundCache;
-static SwBackgroundCache *pBackgroundCache = 0;
 
 static SwFlyFrm *pFlyOnlyDraw = 0;
 
@@ -1282,439 +1279,10 @@ inline FASTBOOL IsShortCut( const SwRect &rRect, const SwRect &rFrmRect )
 }
 
 
-//---------------- Cache und Ausgabe fuer das BrushItem ----------------
+//---------------- Ausgabe fuer das BrushItem ----------------
 
-//Die Objekte werden, bei gelinkten Grafiken mit derselben ULR, ggf. von mehreren
-//DocShells verwendet. Jede dieser DocShell wird in das (long-)Array eingetragen.
-//Wenn eine DocShell ein Reload bekommt wird sie aus dem Array entfernt
-//(RemoveFromBackgroundCache()). Gleichzeitig wird das Objekt eingefroren, ab diesem
-//Zeitpunkt wird das Objekt nur noch von den restlichen DocShells verwendet.
-//weitere DocShells muessen sich ein neues (aber wieder gemeinsam verwendetes)
-//Objekt erzeugen.
-
-class SwBackgroundCacheObj
-{
-    XubString aStr; //Die URL bei gelinkten Grafiken
-    Graphic   aGrf; //Die Graphic, kann gepurged sein bei gelinkten Grafiken
-    const SvxBrushItem   *pItem; //Der Owner bei nicht gelinkten Grafiken
-    SwBackgroundCacheObj *pPrev,
-                         *pNext;
-    BitmapEx *pBmp; //Die QuickDrawBitmap, kann 0 sein.
-    Size     aSz;   //Die Size fuer die die Bitmap erzeugt wurde
-    Size     aGrfSz;//Originalgroesse der Grafik
-    Size     aGrfPixSz;
-    FASTBOOL bFreezed;     //Darf nur noch von denjenigen DocShells verwendet
-                           //werden, die noch in dem Array eingetragen sind.
-    SvLongs  aDocShellArr; //'Pointer' auf diejenigen DocShells, die dieses
-                           //Objekt 'verwenden'
-    MapMode  aMap;         //Der MapMode fuer den die Bitmap erzeugt wurde
-
-
-public:
-    SwBackgroundCacheObj( const SvxBrushItem &rBrush, SfxObjectShell &rObjSh );
-    ~SwBackgroundCacheObj() { if ( pBmp ) delete pBmp; }
-
-    SwBackgroundCacheObj *GetNext() { return pNext; }
-    SwBackgroundCacheObj *GetPrev() { return pPrev; }
-    void SetNext( SwBackgroundCacheObj *p ) { pNext = p; }
-    void SetPrev( SwBackgroundCacheObj *p ) { pPrev = p; }
-
-    USHORT Find( const SfxObjectShell &rDocSh ) const;
-
-    const XubString &GetStr() const              { return aStr; }
-    const SvxBrushItem *GetBrushItem() const { return pItem;}
-          BitmapEx*GetBmp()                  { return pBmp; }
-    const BitmapEx*GetBmp() const            { return pBmp; }
-    const MapMode &GetMap() const            { return aMap; }
-    const Graphic &GetGrf() const            { return aGrf; }
-    const Size    &GetSize()const            { return aSz;  }
-    const Size    &GetGrfSize() const        { return aGrfSz;}
-    const Size    &GetGrfPixSize() const     { return aGrfPixSz;}
-          FASTBOOL IsFreezed() const         { return bFreezed; }
-          SvLongs &GetDocShells()            { return aDocShellArr; }
-
-    void SetBmp ( BitmapEx *p )         { pBmp = p; }
-    void SetMap ( const MapMode &r)     { aMap = r; }
-    void SetSize( const Size &r   )     { aSz  = r; }
-    void ResetGrf()                     { aGrf = Graphic(); }
-    void SetGrf ( const Graphic &rGrf ) { aGrf = rGrf; }
-    void SetItem( const SvxBrushItem*p) { pItem= p; }
-    void Freeze()                       { bFreezed = TRUE; }
-};
-
-
-class SwBackgroundCache
-{
-    friend void RemoveFromBackgroundCache( const SfxObjectShell &, FASTBOOL );
-
-    Timer aTimer;
-    SwBackgroundCacheObj *pFirst;
-
-    SwBackgroundCacheObj *Insert( const SvxBrushItem &rBrush, ViewShell &rSh );
-
-public:
-    SwBackgroundCache();
-    ~SwBackgroundCache();
-
-    DECL_STATIC_LINK( SwBackgroundCache, TimeoutHdl, Timer* );
-
-    SwBackgroundCacheObj *Find( const SvxBrushItem &rBrush, ViewShell &rSh );
-
-    Size MakeQuickDrawBmp( const SvxBrushItem &rBrush,
-                           SwBackgroundCacheObj *pObj,
-                           OutputDevice *pOut, ViewShell &rSh,
-                           const Size &rSize, BOOL bGrfNum );
-};
-
-void InitBackgroundCache( FASTBOOL bNew )
-{
-    delete pBackgroundCache;
-    if ( bNew )
-        pBackgroundCache = new SwBackgroundCache;
-}
-
-void RemoveFromBackgroundCache( const SfxObjectShell &rDocShell,
-                                FASTBOOL bFreeze )
-{
-    SwBackgroundCacheObj *pObj = pBackgroundCache->pFirst;
-    while ( pObj )
-    {
-        USHORT nPos;
-        if ( USHRT_MAX != (nPos = pObj->Find( rDocShell )) )
-        {
-            pObj->GetDocShells().Remove( nPos );
-            if ( !pObj->GetDocShells().Count() )
-            {
-                if ( pObj == pBackgroundCache->pFirst )
-                    pBackgroundCache->pFirst = pObj->GetNext();
-                if ( pObj->GetPrev() )
-                    pObj->GetPrev()->SetNext( pObj->GetNext() );
-                if ( pObj->GetNext() )
-                    pObj->GetNext()->SetPrev( pObj->GetPrev() );
-                SwBackgroundCacheObj *pDel = pObj;
-                pObj = pObj->GetNext();
-                delete pDel;
-                continue;
-            }
-            else if ( bFreeze )
-                pObj->Freeze();
-        }
-        pObj = pObj->GetNext();
-    }
-}
-
-
-SwBackgroundCacheObj::SwBackgroundCacheObj( const SvxBrushItem &rBrush,
-                                            SfxObjectShell &rObjSh ) :
-    aStr( aEmptyStr ),
-    aGrf( *rBrush.GetGraphic( &rObjSh ) ),
-    pItem( &rBrush ),
-    pBmp( 0 ),
-    pPrev( 0 ),
-    pNext( 0 ),
-    bFreezed( FALSE )
-{
-    aDocShellArr.Insert( long(&rObjSh), aDocShellArr.Count() );
-    if ( rBrush.GetGraphicLink() )
-        aStr = *rBrush.GetGraphicLink();
-
-    if ( aGrf.IsSupportedGraphic() )
-    {
-        const MapMode aMapTwip( MAP_TWIP );
-        if ( aGrf.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-        {
-            OutputDevice *pTmp = (OutputDevice*) GetpApp()->GetDefaultDevice();
-            MapMode aOldMap( pTmp->GetMapMode() );
-            pTmp->SetMapMode( aMapTwip );
-            aGrfSz = pTmp->PixelToLogic( aGrf.GetPrefSize() );
-            pTmp->SetMapMode( aOldMap );
-            aGrfPixSz = aGrf.GetPrefSize();
-        }
-        else
-        {
-            aGrfSz = OutputDevice::LogicToLogic( aGrf.GetPrefSize(),
-                                        aGrf.GetPrefMapMode(), aMapTwip );
-            MapMode aMapPixel( MAP_PIXEL );
-            aGrfPixSz = OutputDevice::LogicToLogic( aGrf.GetPrefSize(),
-                                        aGrf.GetPrefMapMode(), MAP_PIXEL );
-        }
-    }
-}
-
-USHORT SwBackgroundCacheObj::Find( const SfxObjectShell &rDocSh ) const
-{
-    for ( USHORT i = 0; i < aDocShellArr.Count(); ++i )
-    {
-        if ( (long)(&rDocSh) == aDocShellArr[i] )
-            return i;
-    }
-    return USHRT_MAX;
-}
-
-SwBackgroundCache::SwBackgroundCache() :
-    pFirst( 0 )
-{
-    aTimer.SetTimeoutHdl( STATIC_LINK( this, SwBackgroundCache, TimeoutHdl ));
-    aTimer.SetTimeout( 10000 );
-    aTimer.Stop();
-}
-
-SwBackgroundCache::~SwBackgroundCache()
-{
-    SwBackgroundCacheObj *pObj = pFirst;
-    while ( pObj )
-    {
-        SwBackgroundCacheObj *pTmp = pObj->GetNext();
-        delete pObj;
-        pObj = pTmp;
-    }
-}
-
-IMPL_STATIC_LINK( SwBackgroundCache, TimeoutHdl, Timer*, EMPTYARG )
-{
-    if ( pThis->pFirst )
-    {
-        SwBackgroundCacheObj *pObj = pThis->pFirst;
-        long nSizeBytes = 0;
-        while ( pObj && nSizeBytes < 250*1024 )
-        {
-            if ( pObj->GetBmp() )
-                nSizeBytes += pObj->GetBmp()->GetSizeBytes();
-            nSizeBytes += pObj->GetGrf().GetSizeBytes();
-            pObj = pObj->GetNext();
-        }
-
-        if ( pObj )
-        {
-            pObj->GetPrev()->SetNext( 0 );
-            while ( pObj )
-            {
-                SwBackgroundCacheObj *pDel = pObj;
-                pObj = pObj->GetNext();
-                delete pDel;
-            }
-        }
-    }
-    return 0;
-}
-
-
-SwBackgroundCacheObj *SwBackgroundCache::Find( const SvxBrushItem &rBrush,
-                                               ViewShell &rSh )
-{
-    SwBackgroundCacheObj *pObj = pFirst;
-    while (  pObj )
-    {
-        if ( rBrush.GetGraphicLink() && rBrush.GetGraphicLink()->Len() )
-        {
-            if ( pObj->GetStr() == *rBrush.GetGraphicLink() )
-            {
-                //Immer das aktuelle Item setzen, denn das alte koennte bereits
-                //zerstoert sein. Das neue lebt auf jedenfall und es ist letzlich
-                //egal welches Item hier steht.
-
-                //ObjektShell eintragen wenn noch nicht vorhanden
-                const SfxObjectShell &rDocSh = *GETOBJSHELL();
-                if ( USHRT_MAX == pObj->Find( rDocSh ) )
-                {
-                    if ( !pObj->IsFreezed() ) //Werden noch neue aufgenommen?
-                    {
-                        pObj->GetDocShells().Insert( long(&rDocSh),
-                                                     pObj->GetDocShells().Count());
-                        pObj->SetItem( &rBrush );
-                        break;
-                    }
-                }
-                else
-                {
-                    pObj->SetItem( &rBrush );
-                    break;
-                }
-            }
-        }
-        else if ( pObj->GetBrushItem() == &rBrush )
-            break;
-        pObj = pObj->GetNext();
-    }
-    if ( !pObj )
-        pObj = Insert( rBrush, rSh );
-    //touchen!
-    if ( pObj && pObj != pFirst )
-    {
-        pObj->GetPrev()->SetNext( pObj->GetNext() );
-        if ( pObj->GetNext() )
-            pObj->GetNext()->SetPrev( pObj->GetPrev() );
-        pFirst->SetPrev( pObj );
-        pObj->SetNext( pFirst );
-        pObj->SetPrev( 0 );
-        pFirst = pObj;
-    }
-    return pObj;
-}
-
-SwBackgroundCacheObj *SwBackgroundCache::Insert( const SvxBrushItem &rBrush,
-                                                 ViewShell &rSh )
-{
-    ((SvxBrushItem&)rBrush).SetDoneLink( STATIC_LINK(
-                                    rSh.GetDoc(), SwDoc, BackgroundDone ) );
-    SfxObjectShell &rObjSh = *GETOBJSHELL();
-    if ( rBrush.GetGraphic( &rObjSh ) &&
-         rBrush.GetGraphic( &rObjSh )->GetType() != GRAPHIC_NONE)
-    {
-        SwBackgroundCacheObj *pObj = new SwBackgroundCacheObj( rBrush, rObjSh );
-        if ( pFirst )
-        {
-            pFirst->SetPrev( pObj );
-            pObj->SetNext( pFirst );
-        }
-        pFirst = pObj;
-        aTimer.Start();
-        return pFirst;
-    }
-    return 0;
-}
-
-Size SwBackgroundCache::MakeQuickDrawBmp( const SvxBrushItem &rBrush,
-                                        SwBackgroundCacheObj *pObj,
-                                        OutputDevice *pOut, ViewShell &rSh,
-                                        const Size &rSize, BOOL bGrfNum )
-{
-    Size aOutSize = rSize;
-    if ( OUTDEV_PRINTER != pOut->GetOutDevType() && !pOut->GetConnectMetaFile() &&
-         aOutSize.Width() && aOutSize.Height() )
-    {
-        const FASTBOOL bTiled = rBrush.GetGraphicPos() == GPOS_TILED;
-        if ( bTiled )
-        {
-            long nTmp = 30 * nPixelSzH;
-            if ( aOutSize.Height() < nTmp )
-                aOutSize.Height() *= (nTmp+aOutSize.Height()) / aOutSize.Height();
-            nTmp = 30 * nPixelSzW;
-            if ( aOutSize.Width() < nTmp )
-                aOutSize.Width() *= (nTmp+aOutSize.Width()) / aOutSize.Width();
-            //Die Grafik sollte schon ganzahlig hineinpassen!
-            aOutSize.Width() -= aOutSize.Width() % pObj->GetGrfPixSize().Width();
-            aOutSize.Height()-= aOutSize.Height()% pObj->GetGrfPixSize().Height();
-        }
-
-        BitmapEx *pQuickDrawBmp = pObj->GetBmp();
-        if ( pQuickDrawBmp )
-        {
-            if ( aOutSize != pObj->GetSize() ||
-                 pObj->GetMap().GetScaleX() != pOut->GetMapMode().GetScaleX() ||
-                 pObj->GetMap().GetScaleY() != pOut->GetMapMode().GetScaleY() )
-            {
-                DELETEZ( pQuickDrawBmp );
-            }
-        }
-        if ( !pQuickDrawBmp )
-        {
-            Size aSizePixel = pOut->LogicToPixel( rSize );
-            ULONG nArea     = (ULONG)aSizePixel.Width() *
-                                (ULONG)aSizePixel.Height();
-            ULONG nColors   = pOut->GetColorCount();
-            if( nColors <= 16 )
-                nArea /= 2;
-            else if( nColors > 65536 )
-                nArea *= 4;
-            nArea *= 2;
-
-            const Graphic &rGraphic = (Graphic&)pObj->GetGrf();
-            if ( rGraphic.GetType() == GRAPHIC_NONE )
-            {
-                ((SvxBrushItem*)pObj->GetBrushItem())->SetDoneLink( Link() );
-                const Graphic *pGrf = pObj->GetBrushItem()->GetGraphic(
-                                                        GETOBJSHELL() );
-                if ( pGrf )
-                    pObj->SetGrf( *pGrf );
-            }
-
-            if ( rGraphic.GetType() != GRAPHIC_NONE &&
-                 rGraphic.GetType() != GRAPHIC_DEFAULT &&
-                (rGraphic.GetType() != GRAPHIC_BITMAP ||
-                 ((nArea < 2000000) && (rGraphic.GetType() == GRAPHIC_BITMAP))))
-            {
-                pQuickDrawBmp = new BitmapEx;
-                // JP 23.08.96: aus Performance keine Transparence an der
-                //              Bitmap zulassen. Bugdoc ware dazu
-                //                  http://www.cherryh.com
-                  if( rGraphic.IsTransparent() && !bGrfNum )
-                {
-                    // Bug 30581: aber keinen schwarzen Hintergrund!!
-                    //            Die Farbe aus dem BrushItem holen.
-                    Point aTmpPt;
-                    Size aBmpSz( rGraphic.GetPrefSize() );
-                    VirtualDevice aVout( *pOut );
-                    aVout.SetMapMode( rGraphic.GetPrefMapMode() );
-                    if( aVout.SetOutputSize( aBmpSz ) )
-                    {
-                        aVout.SetFillColor( rBrush.GetColor() );
-                        aVout.SetLineColor( rBrush.GetColor() );
-                        aVout.DrawRect( Rectangle( aTmpPt, aBmpSz ) );
-                        rGraphic.Draw( &aVout, aTmpPt );
-
-                        *pQuickDrawBmp = XOutBitmap::CreateQuickDrawBitmapEx(
-                                         aVout.GetBitmap( aTmpPt, aBmpSz ),
-                                         *pOut, pOut->GetMapMode(), rSize,
-                                         Point(), rSize );
-                    }
-                    else
-                        *pQuickDrawBmp = XOutBitmap::CreateQuickDrawBitmapEx(
-                                         rGraphic.GetBitmap(), *pOut, pOut->GetMapMode(),
-                                           rSize, Point(), rSize );
-                }
-                else
-                      *pQuickDrawBmp = XOutBitmap::CreateQuickDrawBitmapEx(
-                                     rGraphic, *pOut, pOut->GetMapMode(),
-                                       rSize, Point(), rSize );
-
-                const Size aTSize = pQuickDrawBmp->GetSizePixel();
-                if( !aTSize.Width() || !aTSize.Height() )
-                {   DELETEZ( pQuickDrawBmp ); }
-                else
-                {
-                    pObj->SetSize( aOutSize );
-                    pObj->SetMap ( pOut->GetMapMode() );
-                    if ( bTiled && aOutSize != rSize )
-                    {
-                        VirtualDevice aVout( *pOut );
-                        MapMode aMapMode( pOut->GetMapMode() );
-                        aMapMode.SetOrigin( Point() );
-                        aVout.SetMapMode( aMapMode );
-                        if ( aVout.SetOutputSize( aOutSize ) )
-                        {
-                            aVout.SetLineColor( pOut->GetLineColor() );
-                            aVout.SetFillColor( pOut->GetFillColor() );
-                            const Point aPoint;
-                            Rectangle aOut( aPoint, aOutSize );
-                            XOutBitmap::DrawTiledBitmapEx( &aVout,
-                                                aPoint, rSize,
-                                                aOut, *pQuickDrawBmp );
-                            delete pQuickDrawBmp;
-                            pQuickDrawBmp = new BitmapEx(
-                                        aVout.GetBitmap( aPoint, aOutSize) );
-                        }
-                        else
-                            aOutSize = rSize;
-                    }
-                }
-            }
-            pObj->SetBmp( pQuickDrawBmp );
-            if ( pQuickDrawBmp && rGraphic.GetType() != GRAPHIC_DEFAULT )
-            {
-                pObj->ResetGrf();
-                if ( pObj->GetBrushItem()->GetGraphicLink() &&
-                     pObj->GetBrushItem()->GetGraphicLink()->Len() )
-                    rBrush.PurgeGraphic();
-            }
-        }
-    }
-    return aOutSize;
-}
-
-void lcl_DrawGraphic( const SwBackgroundCacheObj &rObj, OutputDevice *pOut,
-                      ViewShell &rSh,
-                      const SwRect &rGrf, const SwRect &rOut,
+void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
+                      ViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       BOOL bClip, BOOL bGrfNum )
 {
     const FASTBOOL bNotInside = bClip && !rOut.IsInside( rGrf );
@@ -1724,43 +1292,24 @@ void lcl_DrawGraphic( const SwBackgroundCacheObj &rObj, OutputDevice *pOut,
         pOut->IntersectClipRegion( rOut.SVRect() );
     }
 
-    const Color aColor( !rObj.GetBrushItem()->GetColor().GetTransparency() || bFlyMetafile
-                ? rObj.GetBrushItem()->GetColor()
-                : aGlobalRetoucheColor );
+    //Hier kein Link, wir wollen die Grafik synchron laden!
+    ((SvxBrushItem&)rBrush).SetDoneLink( Link() );
+    GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject(
+                                                    GETOBJSHELL() );
 
-      const FASTBOOL bUseQuickBmp = OUTDEV_PRINTER != pOut->GetOutDevType() &&
-                                  !pOut->GetConnectMetaFile();
-    if ( bUseQuickBmp && rObj.GetBmp() )
+    if( !bGrfNum &&
+         ( pGrf->IsTransparent() || GRAPHIC_NONE == pGrf->GetType() ) )
     {
-        if ( rObj.GetBmp()->IsTransparent() && !bGrfNum )
-        {
-            if ( pOut->GetFillColor() != aColor )
-                pOut->SetFillColor( aColor );
-            pOut->DrawRect( rGrf.SVRect() );
-        }
-        XOutBitmap::DrawQuickDrawBitmapEx( pOut, rGrf.Pos(), rGrf.SSize(), *rObj.GetBmp());
+        const Color aColor( !rBrush.GetColor().GetTransparency() ||
+                                bFlyMetafile
+                            ? rBrush.GetColor()
+                            : aGlobalRetoucheColor );
+
+        if ( pOut->GetFillColor() != aColor )
+            pOut->SetFillColor( aColor );
+        pOut->DrawRect( rGrf.SVRect() );
     }
-    else
-    {
-        const Graphic *pGrf = 0;
-        if ( !bUseQuickBmp )
-        {   //Hier kein Link, wir wollen die Grafik synchron laden!
-            ((SvxBrushItem*)rObj.GetBrushItem())->SetDoneLink( Link() );
-            pGrf = rObj.GetBrushItem()->GetGraphic( GETOBJSHELL() );
-            if ( pGrf && rObj.GetGrf().GetType() == GRAPHIC_NONE )
-                ((SwBackgroundCacheObj&)rObj).SetGrf( *pGrf );
-        }
-        if ( !pGrf )
-            pGrf = (Graphic*)&rObj.GetGrf();
-        if ( !bGrfNum &&
-             ( pGrf->IsTransparent() || !pGrf->IsSupportedGraphic() ) )
-        {
-            if ( pOut->GetFillColor() != aColor )
-                pOut->SetFillColor( aColor );
-            pOut->DrawRect( rGrf.SVRect() );
-        }
-        ((Graphic*)pGrf)->Draw( pOut, rGrf.Pos(), rGrf.SSize() );
-    }
+    pGrf->Draw( pOut, rGrf.Pos(), rGrf.SSize() );
 
     if ( bNotInside )
         pOut->Pop();
@@ -1772,25 +1321,26 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
     ViewShell &rSh = *pGlobalShell;
     BOOL bReplaceGrfNum = GRFNUM_REPLACE == nGrfNum;
     BOOL bGrfNum = GRFNUM_NO != nGrfNum;
-    SwBackgroundCacheObj *pObj = 0;
     Size aGrfSize;
     SvxGraphicPosition ePos = GPOS_NONE;
     if( pBrush && !bReplaceGrfNum )
     {
         if( rSh.GetViewOptions()->IsGraphic() )
-            pObj = pBackgroundCache->Find( *pBrush, rSh );
+        {
+            ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
+                                    rSh.GetDoc(), SwDoc, BackgroundDone ) );
+            SfxObjectShell &rObjSh = *GETOBJSHELL();
+            const Graphic* pGrf = pBrush->GetGraphic( &rObjSh );
+            if( pGrf && GRAPHIC_NONE != pGrf->GetType() )
+            {
+                ePos = pBrush->GetGraphicPos();
+                if( pGrf->IsSupportedGraphic() )
+                    aGrfSize = ::GetGraphicSizeTwip( *pGrf, pOut );
+            }
+        }
         else
             bReplaceGrfNum = bGrfNum;
     }
-    if ( pObj )
-    {
-        ePos = pBrush->GetGraphicPos();
-        aGrfSize = pObj->GetGrfSize();
-    }
-
-    const Color aColor( pBrush && ( (!pBrush->GetColor().GetTransparency()) || bFlyMetafile )
-                ? pBrush->GetColor()
-                : aGlobalRetoucheColor );
 
     SwRect aGrf;
     aGrf.SSize( aGrfSize );
@@ -1798,106 +1348,113 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
     FASTBOOL bRetouche = TRUE;
     switch ( ePos )
     {
-        case GPOS_LT: aGrf.Pos() = rOrg.Pos();
-                      break;
-        case GPOS_MT: aGrf.Pos().Y() = rOrg.Top();
-                      aGrf.Pos().X() = rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2;
-                      break;
-        case GPOS_RT: aGrf.Pos().Y() = rOrg.Top();
-                      aGrf.Pos().X() = rOrg.Right() - aGrfSize.Width();
-                      break;
+    case GPOS_LT:
+        aGrf.Pos() = rOrg.Pos();
+        break;
 
-        case GPOS_LM: aGrf.Pos().Y() = rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2;
-                      aGrf.Pos().X() = rOrg.Left();
-                      break;
-        case GPOS_MM: aGrf.Pos().Y() = rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2;
-                      aGrf.Pos().X() = rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2;
-                      break;
-        case GPOS_RM: aGrf.Pos().Y() = rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2;
-                      aGrf.Pos().X() = rOrg.Right() - aGrfSize.Width();
-                      break;
+    case GPOS_MT:
+        aGrf.Pos().Y() = rOrg.Top();
+        aGrf.Pos().X() = rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2;
+        break;
 
-        case GPOS_LB: aGrf.Pos().Y() = rOrg.Bottom() - aGrfSize.Height();
-                      aGrf.Pos().X() = rOrg.Left();
-                      break;
-        case GPOS_MB: aGrf.Pos().Y() = rOrg.Bottom() - aGrfSize.Height();
-                      aGrf.Pos().X() = rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2;
-                      break;
-        case GPOS_RB: aGrf.Pos().Y() = rOrg.Bottom() - aGrfSize.Height();
-                      aGrf.Pos().X() = rOrg.Right() - aGrfSize.Width();
-                      break;
+    case GPOS_RT:
+        aGrf.Pos().Y() = rOrg.Top();
+        aGrf.Pos().X() = rOrg.Right() - aGrfSize.Width();
+        break;
 
-        case GPOS_AREA:
-                      aGrf = rOrg;
-                      bRetouche = FALSE;
-                      break;
-        case GPOS_TILED:
-                      {
-                      aGrf.Pos() = rOrg.Pos();
-                      aGrf.SSize() = pBackgroundCache->MakeQuickDrawBmp(
-                                *pBrush, pObj, pOut, rSh, aGrf.SSize(), bGrfNum);
-                      BitmapEx *pBmpEx = pObj->GetBmp();
-                      const FASTBOOL bQuick = OUTDEV_PRINTER != pOut->GetOutDevType() &&
-                                                !pOut->GetConnectMetaFile();
+    case GPOS_LM:
+        aGrf.Pos().Y() = rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2;
+        aGrf.Pos().X() = rOrg.Left();
+        break;
 
-                      if ( bQuick && pBmpEx )
-                      {
-                          const Rectangle aOut( rOut.SVRect() );
-                          if ( pBmpEx->IsTransparent() )
-                          {
-                              if ( pOut->GetFillColor() != aColor )
-                                  pOut->SetFillColor( aColor );
-                              pOut->DrawRect( aOut );
-                          }
-                            XOutBitmap::DrawTiledBitmapEx( pOut, aGrf.Pos(),
-                                                           aGrf.SSize(),
-                                                         aOut, *pBmpEx );
-                      }
-                      else
-                      {
-                            pOut->Push( PUSH_CLIPREGION );
-                          pOut->IntersectClipRegion( rOut.SVRect() );
-                          do
-                          { do
-                            {   if ( aGrf.IsOver( rOut ) )
-                                    lcl_DrawGraphic( *pObj, pOut, rSh, aGrf,
-                                                     rOut, FALSE, bGrfNum);
-                                aGrf.Pos().X() += aGrf.Width();
+    case GPOS_MM:
+        aGrf.Pos().Y() = rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2;
+        aGrf.Pos().X() = rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2;
+        break;
 
-                            } while ( aGrf.Left() < rOut.Right() );
+    case GPOS_RM:
+        aGrf.Pos().Y() = rOrg.Top() + rOrg.Height()/2 - aGrfSize.Height()/2;
+        aGrf.Pos().X() = rOrg.Right() - aGrfSize.Width();
+        break;
 
-                            aGrf.Pos().X() = rOrg.Left();
-                            aGrf.Pos().Y() += aGrf.Height();
+    case GPOS_LB:
+        aGrf.Pos().Y() = rOrg.Bottom() - aGrfSize.Height();
+        aGrf.Pos().X() = rOrg.Left();
+        break;
 
-                          }  while ( aGrf.Top() < rOut.Bottom() ) ;
-                          pOut->Pop();
-                      }
-                      bDraw = bRetouche = FALSE;
-                      break;
-                      }
-        case GPOS_NONE:
-                      bDraw = FALSE;
-                      break;
+    case GPOS_MB:
+        aGrf.Pos().Y() = rOrg.Bottom() - aGrfSize.Height();
+        aGrf.Pos().X() = rOrg.Left() + rOrg.Width()/2 - aGrfSize.Width()/2;
+        break;
 
-        default: ASSERT( !pOut, "new Graphic position?" );
+    case GPOS_RB:
+        aGrf.Pos().Y() = rOrg.Bottom() - aGrfSize.Height();
+        aGrf.Pos().X() = rOrg.Right() - aGrfSize.Width();
+        break;
+
+    case GPOS_AREA:
+        aGrf = rOrg;
+        bRetouche = FALSE;
+        break;
+
+    case GPOS_TILED:
+        {
+
+// !!!!!!!!!!!
+// Optimization from KA - new method on the graphic object, like the old
+//                      method
+//                          XOutBitmap::DrawTiledBitmapEx( &aVout,
+//                                  aPoint, rSize, aOut, *pQuickDrawBmp );
+// !!!!!!!!!!!
+            aGrf.Pos() = rOrg.Pos();
+            pOut->Push( PUSH_CLIPREGION );
+            pOut->IntersectClipRegion( rOut.SVRect() );
+            do {
+                do{
+                    if( aGrf.IsOver( rOut ) )
+                        lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf,
+                                                rOut, FALSE, bGrfNum );
+                    aGrf.Pos().X() += aGrf.Width();
+
+                } while( aGrf.Left() < rOut.Right() );
+
+                aGrf.Pos().X() = rOrg.Left();
+                aGrf.Pos().Y() += aGrf.Height();
+
+            }  while( aGrf.Top() < rOut.Bottom() ) ;
+            pOut->Pop();
+
+            bDraw = bRetouche = FALSE;
+        }
+        break;
+
+    case GPOS_NONE:
+        bDraw = FALSE;
+        break;
+
+    default: ASSERT( !pOut, "new Graphic position?" );
     }
+
     if ( bRetouche )
     {
         SwRegionRects aRegion( rOut, 4 );
         aRegion -= aGrf;
         pOut->Push( PUSH_FILLCOLOR );
-        if ( pOut->GetFillColor() != aColor )
+
+        const Color aColor( pBrush && ( (!pBrush->GetColor().
+                                            GetTransparency()) || bFlyMetafile )
+                    ? pBrush->GetColor()
+                    : aGlobalRetoucheColor );
+
+        if( pOut->GetFillColor() != aColor )
             pOut->SetFillColor( aColor );
-        for ( USHORT i = 0; i < aRegion.Count(); ++i )
+        for( USHORT i = 0; i < aRegion.Count(); ++i )
             pOut->DrawRect( aRegion[i].SVRect() );
         pOut->Pop();
     }
-    if ( bDraw && aGrf.IsOver( rOut ) )
-    {
-        pBackgroundCache->MakeQuickDrawBmp( *pBrush, pObj, pOut, rSh,
-                                            aGrf.SSize(), bGrfNum );
-        lcl_DrawGraphic( *pObj, pOut, rSh, aGrf, rOut, TRUE, bGrfNum );
-    }
+    if( bDraw && aGrf.IsOver( rOut ) )
+        lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf, rOut, TRUE, bGrfNum );
+
     if( bReplaceGrfNum )
     {
         const Bitmap& rBmp = SwNoTxtFrm::GetBitmap( FALSE );

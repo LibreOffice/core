@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 20:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,6 @@ USHORT SwFrm::nLastFrmId=0;
 #endif
 
 
-//paintfrm.cxx
-extern void InitBackgroundCache( FASTBOOL );
-
 TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
 TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
 
@@ -160,7 +157,6 @@ void _FrmInit()
 #endif
     );
     SwFrm::SetCache( pNew );
-    ::InitBackgroundCache( TRUE );
 }
 
 
@@ -178,7 +174,6 @@ void _FrmFinit()
 #endif
     delete SwRootFrm::pVout;
     delete SwFrm::GetCachePtr();
-    ::InitBackgroundCache( FALSE );
 }
 
 /*************************************************************************

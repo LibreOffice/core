@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-09 18:15:05 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 20:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,8 +401,6 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 
  SwDocShell::~SwDocShell()
 {
-    ::RemoveFromBackgroundCache( *this, sal_False );
-
     RemoveLink();
     delete pIo;
     delete pFontList;
@@ -779,6 +777,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/09 18:15:05  jp
+    Bug #78395#: set fontcharset to systemcharset
+
     Revision 1.2  2000/09/28 15:22:17  os
     use of configuration service in view options
 
