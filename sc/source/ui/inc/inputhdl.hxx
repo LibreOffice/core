@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:13:04 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 19:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ private:
     void            AutoParAdded();
     BOOL            CursorAtClosingPar();
     void            SkipClosingPar();
+    void            StopInputWinEngine( BOOL bAll );
 #endif
 
 public:

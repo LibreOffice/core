@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:11:09 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 19:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,6 +1296,14 @@ void ScInputHandler::UpdateActiveView()
         pTopView = NULL;
 }
 
+void ScInputHandler::StopInputWinEngine( BOOL bAll )
+{
+    if (pInputWin)
+        pInputWin->StopEditEngine( bAll );
+
+    pTopView = NULL;        // invalid now
+}
+
 void ScInputHandler::ActivateInputWindow( const String&     rText,
                                           const ESelection& rSel )
 {
@@ -1521,8 +1529,7 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped )               // TRUE = ne
             {
                 bProtected = TRUE;
                 eMode = SC_INPUT_NONE;
-                if (pInputWin)
-                    pInputWin->StopEditEngine( TRUE );
+                StopInputWinEngine( TRUE );
                 UpdateFormulaMode();
                 if (pActiveViewSh)
                 {
@@ -1777,8 +1784,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     if (bProtected)
     {
         eMode = SC_INPUT_NONE;
-        if (pInputWin)
-            pInputWin->StopEditEngine( TRUE );
+        StopInputWinEngine( TRUE );
         if (pActiveViewSh)
             pActiveViewSh->GetActiveWin()->GrabFocus();
         return;
@@ -1786,8 +1792,8 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
 
     ScInputMode eOldMode = eMode;
     eMode = eNewMode;
-    if (eOldMode == SC_INPUT_TOP && eNewMode != eOldMode && pInputWin)
-        pInputWin->StopEditEngine( FALSE );
+    if (eOldMode == SC_INPUT_TOP && eNewMode != eOldMode)
+        StopInputWinEngine( FALSE );
 
     if (eMode==SC_INPUT_TOP || eMode==SC_INPUT_TABLE)
     {
@@ -2034,8 +2040,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     bModified = FALSE;
     bSelIsRef = FALSE;
     eMode     = SC_INPUT_NONE;
-    if (pInputWin)
-        pInputWin->StopEditEngine( TRUE );
+    StopInputWinEngine( TRUE );
 
     if (bOldMod && !bProtected && !bForget)
     {
@@ -2146,8 +2151,7 @@ void ScInputHandler::CancelHandler()
     ResetAutoPar();
 
     eMode = SC_INPUT_NONE;
-    if (pInputWin)
-        pInputWin->StopEditEngine( TRUE );
+    StopInputWinEngine( TRUE );
     if (pExecuteSh)
         pExecuteSh->StopEditShell();
 
