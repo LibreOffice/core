@@ -1,0 +1,42 @@
+    <node oor:name="StarOffice XML (Draw)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>draw_StarOffice_XML_Draw</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>XML</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">%productname% %formatversion% - Rysunek</value>
+            <value xml:lang="hu">%productname% %formatversion%-rajz</value>
+            <value xml:lang="ja">%productname% %formatversion% 図形描画</value>
+            <value xml:lang="es">%productname% %formatversion% Dibujo</value>
+            <value xml:lang="tr">%productname% %formatversion% Drawing</value>
+            <value xml:lang="ru">%productname% %formatversion% Рисунок</value>
+            <value xml:lang="th">%productname% %formatversion% Drawing</value>
+            <value xml:lang="x-comment">%productname% %formatversion% Zeichnung</value>
+            <value xml:lang="ca">%productname% %formatversion% Drawing</value>
+            <value xml:lang="el">%productname% %formatversion% Drawing</value>
+            <value xml:lang="zh-CN">%productname% %formatversion% 绘图</value>
+            <value xml:lang="pt">%productname% %formatversion% Desenho</value>
+            <value xml:lang="cs">Kresba %productname% %formatversion%</value>
+            <value xml:lang="fr">%productname% %formatversion% Dessin</value>
+            <value xml:lang="ar">%productname% %formatversion% Drawing</value>
+            <value xml:lang="zh-TW">%productname% %formatversion% 繪圖</value>
+            <value xml:lang="sl">%productname% %formatversion% Risba</value>
+            <value xml:lang="fi">%productname% %formatversion% Drawing</value>
+            <value xml:lang="hi-IN">%productname% %formatversion% Drawing</value>
+            <value xml:lang="en-US">%productname% %formatversion% Drawing</value>
+            <value xml:lang="sk">Kresba %productname% %formatversion%</value>
+            <value xml:lang="he">‮סרטוט %productname% %formatversion%‬</value>
+            <value xml:lang="sv">%productname% %formatversion% teckning</value>
+            <value xml:lang="da">%productname% %formatversion%-tegning</value>
+            <value xml:lang="de">%productname% %formatversion% Zeichnung</value>
+            <value xml:lang="ko">%productname% %formatversion% 그리기</value>
+            <value xml:lang="nl">%productname% %formatversion% Tekening</value>
+            <value xml:lang="pt-BR">Desenho %productname% %formatversion% </value>
+            <value xml:lang="it">%productname% %formatversion% Disegno</value>
+            <value xml:lang="x-translate">%productname% %formatversion% Zeichnung</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT PREFERRED</value></prop>
+    </node>
