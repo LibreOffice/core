@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:07:33 $
+ *  last change: $Author: cd $ $Date: 2001-06-05 08:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
+#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
+#include <svtools/internaloptions.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -119,6 +122,7 @@
 #include "frameobj.hxx"
 #include "sfxbasecontroller.hxx"
 #include "topfrm.hxx"
+#include "mailmodel.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -171,7 +175,21 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         case SID_MAIL_SENDDOC:
-            GetViewFrame()->SetChildWindow( SID_MAIL_CHILDWIN, TRUE );
+            if ( SvtInternalOptions().MailUIEnabled() )
+            {
+                GetViewFrame()->SetChildWindow( SID_MAIL_CHILDWIN, TRUE );
+            }
+            else
+            {
+                SfxMailModel_Impl aModel( &GetViewFrame()->GetBindings() );
+                sal_Bool bResult = aModel.Send();
+                if ( bResult == sal_False )
+                {
+                    InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+                    aBox.Execute();
+                }
+            }
+
             break;
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
