@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 18:37:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,8 +140,12 @@ SVXLIGHTOBJFILES= \
 SRCFILES=	editeng.src
 
 EXCEPTIONSFILES= \
-    $(SLO)$/unolingu.obj    \
+    $(SLO)$/unolingu.obj
+
+.IF "$(SVXLIGHT)"!=""
+EXCEPTIONSFILES+= \
     $(OBJ)$/sxl_unolingu.obj
+.ENDIF          # "$(SVXLIGHT)"!=""
 
 .INCLUDE :  target.mk
 
