@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:43:57 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ class ScDocument;
 class ScDocShell;
 class SdrUndoAction;
 class ScRefUndoData;
+class ScDBData;
 
 //----------------------------------------------------------------------------
 
@@ -127,6 +128,27 @@ protected:
 
     BOOL            AdjustHeight();
     void            ShowBlock();
+};
+
+//----------------------------------------------------------------------------
+
+// for functions that act on a database range - takes care of the unnamed database range
+// (collected separately, before the undo action, for showing dialogs etc.)
+
+class ScDBFuncUndo: public ScSimpleUndo
+{
+    ScDBData*       pAutoDBRange;
+    ScRange         aOriginalRange;
+
+public:
+                    TYPEINFO();
+                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal );
+    virtual         ~ScDBFuncUndo();
+
+    void            BeginUndo();
+    void            EndUndo();
+    void            BeginRedo();
+    void            EndRedo();
 };
 
 //----------------------------------------------------------------------------
