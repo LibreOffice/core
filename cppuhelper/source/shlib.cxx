@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-01-19 10:42:18 $
+ *  last change: $Author: pluby $ $Date: 2001-02-10 17:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,6 @@ static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd 
 //==================================================================================================
 static OUString makeComponentPath(
     const OUString & rLibName, const OUString & rPath
-#ifdef MACOSX // only for mac hack: provide pure lib name
-    , OUString * pCompName
-#endif
     ) throw ()
 {
     OUStringBuffer buf( rPath.getLength() + 32 );
@@ -251,7 +248,7 @@ static OUString makeComponentPath(
     if (rPath.getLength())
     {
         buf.append( rPath );
-#if defined( SAL_UNX ) || defined( MACOSX )
+#if defined( SAL_UNX )
         if (rPath[ rPath.getLength() -1 ] != (sal_Unicode)'/')
         {
             buf.append( (sal_Unicode)'/' ); // for unc and system
@@ -270,28 +267,21 @@ static OUString makeComponentPath(
 #endif
     }
 
+#if defined( SAL_UNX )
 #if defined( MACOSX )
-    // determine start and end of component name
     sal_Int32 nEnd = endsWith( rLibName, OUString( RTL_CONSTASCII_USTRINGPARAM(".dylib.framework") ) );
-    if (nEnd < 0)
-    {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
-        buf.append( *pCompName = rLibName.copy( rLibName.lastIndexOf( (sal_Unicode)'/' ) +1 ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
-    }
-    else // name is completely pre/postfixed
-    {
-        sal_Int32 nStart = rLibName.lastIndexOf( (sal_Unicode)'/' ) +4;  // /lib...
-        *pCompName = rLibName.copy( nStart, nEnd - nStart );
-        buf.append( rLibName );
-    }
-#elif defined( SAL_UNX )
+#else
     sal_Int32 nEnd = endsWith( rLibName, OUString( RTL_CONSTASCII_USTRINGPARAM(".so") ) );
+#endif
     if (nEnd < 0) // !endsWith
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
         buf.append( rLibName );
+#if defined( MACOSX )
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
+#else
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
+#endif
     }
     else // name is completely pre/postfixed
     {
@@ -319,12 +309,7 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
     Reference< XRegistryKey > const & xKey )
     throw (CannotActivateFactoryException)
 {
-#ifdef MACOSX
-    OUString aComponentName;
-    OUString aModulePath( makeComponentPath( rLibName, rPath, &aComponentName ) );
-#else
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
-#endif
 
     OUString aExcMsg;
 
@@ -347,12 +332,7 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
     Reference< XSingleServiceFactory > xRet;
 
     void * pSym;
-#ifdef MACOSX
-    OUString aGetEnvName(
-        aComponentName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) ) );
-#else
     OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
-#endif
     if (pSym = ::osl_getSymbol( lib, aGetEnvName.pData ))
     {
         uno_Environment * pCurrentEnv = 0;
@@ -382,12 +362,7 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
             }
         }
 
-#ifdef MACOSX
-        OUString aGetFactoryName(
-            aComponentName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) ) );
-#else
         OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
-#endif
         if (pSym = ::osl_getSymbol( lib, aGetFactoryName.pData ))
         {
             OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
@@ -491,12 +466,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     Reference< XRegistryKey > const & xKey )
     throw (CannotRegisterImplementationException)
 {
-#ifdef MACOSX
-    OUString aComponentName;
-    OUString aModulePath( makeComponentPath( rLibName, rPath, &aComponentName ) );
-#else
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
-#endif
 
     OUString aExcMsg;
 
@@ -519,12 +489,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     sal_Bool bRet = sal_False;
 
     void * pSym;
-#ifdef MACOSX
-    OUString aGetEnvName(
-        aComponentName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) ) );
-#else
     OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
-#endif
     if (pSym = ::osl_getSymbol( lib, aGetEnvName.pData ))
     {
         uno_Environment * pCurrentEnv = 0;
@@ -554,12 +519,7 @@ void SAL_CALL writeSharedLibComponentInfo(
             }
         }
 
-#ifdef MACOSX
-        OUString aWriteInfoName(
-            aComponentName + OUString( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) ) );
-#else
         OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
-#endif
         if (pSym = ::osl_getSymbol( lib, aWriteInfoName.pData ))
         {
             if (bNeedsMapping)
