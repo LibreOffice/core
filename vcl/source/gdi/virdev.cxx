@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:43:19 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,8 +408,8 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
     case REFDEV_MODE48:
         mnDPIX = mnDPIY = 4800;
         break;
-    case REFDEV_MODE96:
-        mnDPIX = mnDPIY = 1440; // as agreed with FME and AMA
+    case REFDEV_MODE_MSO1:
+        mnDPIX = mnDPIY = 6*1440;
         break;
     }
 
