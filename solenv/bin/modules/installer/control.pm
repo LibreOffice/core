@@ -2,9 +2,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:57:10 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:51:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -317,6 +317,8 @@ sub check_logfile
 
         my $compareline = $line;
         $compareline =~ s/Error\.idt//g;    # removing all occurences of "Error.idt"
+        $compareline =~ s/Error\.mlf//g;    # removing all occurences of "Error.mlf"
+        $compareline =~ s/Error\.ulf//g;    # removing all occurences of "Error.ulf"
 
         if ( $compareline =~ /\bError\b/i )
         {
@@ -379,11 +381,14 @@ sub determine_ship_directory
 
     my $shipdrive = $ENV{'SHIPDRIVE'};
 
+    my $languagestring = $$languagesref;
+    if ( $installer::globals::is_unix_multi ) { $languagestring = $installer::globals::unixmultipath; } # AAA
+
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
                 $installer::globals::productextension . $installer::globals::separator .
                 $installer::globals::product . $installer::globals::separator .
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
-                "native_inprogress-number_" . $$languagesref . "\." . $installer::globals::buildid;
+                "native_inprogress-number_" . $languagestring . "\." . $installer::globals::buildid;
 
     return $destdir;
 }
@@ -443,7 +448,22 @@ sub check_updatepack
                         push(@installer::globals::globallogfileinfo, $infoline);
                     }
                 }
+                else
+                {
+                    $infoline = "Ship drive not found: No updatepack\n";
+                    push(@installer::globals::globallogfileinfo, $infoline);
+                }
             }
+            else
+            {
+                $infoline = "Environment variable SHIPDRIVE not set: No updatepack\n";
+                push(@installer::globals::globallogfileinfo, $infoline);
+            }
+        }
+        else
+        {
+            $infoline = "Environment variable CWS_WORK_STAMP defined: No updatepack\n";
+            push(@installer::globals::globallogfileinfo, $infoline);
         }
     }
 
@@ -451,5 +471,60 @@ sub check_updatepack
     else { $infoline = "\nNo updatepack\n"; }
     push(@installer::globals::globallogfileinfo, $infoline);
 }
+
+#############################################################
+# Reading the Windows list file for language encodings
+#############################################################
+
+sub read_encodinglist
+{
+    my ($patharrayref) = @_;
+
+    my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$installer::globals::encodinglistname, $patharrayref , 0);
+
+    if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Did not find Windows encoding list $installer::globals::encodinglistname!", "read_encodinglist"); }
+
+    my $infoline = "Found encoding file: $$fileref\n";
+    push(@installer::globals::globallogfileinfo, $infoline);
+
+    my $encodinglist = installer::files::read_file($$fileref);
+
+    my %msiencoding = ();
+    my %msilanguage = ();
+
+    # Controlling the encoding list
+
+    for ( my $i = 0; $i <= $#{$encodinglist}; $i++ )
+    {
+        my $line = ${$encodinglist}[$i];
+
+        if ( $line =~ /^\s*\#/ ) { next; }  # this is a comment line
+
+        if ( $line =~ /^(.*?)(\#.*)$/ ) { $line = $1; } # removing comments after "#"
+
+        if ( $line =~ /^\s*([\w-]+)\s*(\d+)\s*(\d+)\s*$/ )
+        {
+            my $onelanguage = $1;
+            my $codepage = $2;
+            my $windowslanguage = $3;
+
+            $msiencoding{$onelanguage} = $codepage;
+            $msilanguage{$onelanguage} = $windowslanguage;
+        }
+        else
+        {
+            installer::exiter::exit_program("ERROR: Wrong syntax in Windows encoding list $installer::globals::encodinglistname : en-US 1252 1033 !", "read_encodinglist");
+        }
+    }
+
+    $installer::globals::msiencoding = \%msiencoding;
+    $installer::globals::msilanguage = \%msilanguage;
+
+    # my $key;
+    # foreach $key (keys %{$installer::globals::msiencoding}) { print "A Key: $key : Value: $installer::globals::msiencoding->{$key}\n"; }
+    # foreach $key (keys %{$installer::globals::msilanguage}) { print "B Key: $key : Value: $installer::globals::msilanguage->{$key}\n"; }
+
+}
+
 
 1;
