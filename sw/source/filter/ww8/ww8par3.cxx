@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-26 14:45:16 $
+ *  last change: $Author: cmc $ $Date: 2002-06-27 14:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,15 +576,50 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             return sal_False;
         // "sprmPDxaLeft"  pap.dxaLeft;dxa;word;
         sal_uInt8* pSprm;
-        if( (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        if (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx))
         {
             short nDxaLeft = SVBT16ToShort( pSprm );
             aLVL.nDxaLeft = (0 < nDxaLeft) ? (sal_uInt16)nDxaLeft
                             : (sal_uInt16)(-nDxaLeft);
         }
+
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
         if( (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
             aLVL.nDxaLeft1 = SVBT16ToShort(  pSprm );
+
+        // If there is a tab setting with a larger value, then use that.
+        // Ideally we would allow tabs to be used in numbering fields and set
+        // this on the containing paragraph which would make it actually work
+        // most of the time.
+        if( (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        {
+            bool bDone=false;
+            if (*(pSprm-1) == 5)
+            {
+                if (*pSprm++ == 0) //nDel
+                {
+                    if (*pSprm++ == 1) //nIns
+                    {
+                        short nTabPos = SVBT16ToShort(pSprm);
+                        pSprm+=2;
+                        if (*pSprm == 6) //type
+                        {
+                            USHORT nDesired = aLVL.nDxaLeft + aLVL.nDxaLeft1;
+
+                               aLVL.nDxaLeft = (0 < nTabPos) ? (sal_uInt16)nTabPos
+                                : (sal_uInt16)(-nTabPos);
+
+                            aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
+
+                            bDone=true;
+                        }
+                    }
+                }
+            }
+            ASSERT(bDone, "tab setting in numbering is "
+                "of unexpected configuration");
+        }
+
     }
     //
     // 3. ggfs. CHPx einlesen und
