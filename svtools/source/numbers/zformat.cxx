@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2000-11-23 13:00:06 $
+ *  last change: $Author: er $ $Date: 2000-11-24 19:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,12 +621,18 @@ SvNumberformat::SvNumberformat(String& rString,
         if (NumFor[1].GetnAnz() == 0)               // kein 2. Teilstring
         {
             if (NumFor[1].Info().eScannedType != NUMBERFORMAT_NUMBER)
-                rString.InsertAscii(";Standard", rString.Len());
+            {
+                rString += ';';
+                rString += pSc->GetStandardName();
+            }
         }
         else if (NumFor[2].GetnAnz() == 0 && eOp2 != NUMBERFORMAT_OP_NO)
         {
             if (NumFor[2].Info().eScannedType != NUMBERFORMAT_NUMBER)
-                rString.InsertAscii(";Standard", rString.Len());
+            {
+                rString += ';';
+                rString += pSc->GetStandardName();
+            }
         }
     }
     sFormatstring = rString;
@@ -803,6 +809,13 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     break;
                     case '$' :
                     {   // Waehrung ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                        eType = SYMBOLTYPE_FORMAT;
+                        sSymbol += cToken;
+                        eState = SsGetString;
+                    }
+                    break;
+                    case '~' :
+                    {   // calendarID as of SV_NUMBERFORMATTER_VERSION_CALENDAR
                         eType = SYMBOLTYPE_FORMAT;
                         sSymbol += cToken;
                         eState = SsGetString;
@@ -2126,6 +2139,63 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     return bRes;
 }
 
+
+BOOL SvNumberformat::IsGengouCalendar( const ImpSvNumFor& rNumFor ) const
+{
+    const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
+    const USHORT nAnz = rNumFor.GetnAnz();
+    USHORT i;
+    BOOL bGfound = FALSE;
+    for ( i = 0; i < nAnz && !bGfound; i++ )
+    {
+        switch ( rInfo.nTypeArray[i] )
+        {
+            case SYMBOLTYPE_CALENDAR :
+                return FALSE;
+            break;
+            case NF_KEY_G :
+            case NF_KEY_GG :
+            case NF_KEY_GGG :
+                bGfound = TRUE;
+            break;
+        }
+    }
+    for ( ; i < nAnz; i++ )
+    {
+        switch ( rInfo.nTypeArray[i] )
+        {
+            case NF_KEY_EC :
+            case NF_KEY_EEC :
+                return TRUE;
+            break;
+            case SYMBOLTYPE_STAR :
+            case SYMBOLTYPE_BLANK :
+            case SYMBOLTYPE_STRING :
+                // allowed between G,GG,GGG and E,EE
+            break;
+            default:
+                return FALSE;   // all others
+        }
+    }
+    return FALSE;
+}
+
+
+void SvNumberformat::SwitchToGengouCalendar( String& rOrgCalendar, double& fOrgDateTime )
+{
+    CalendarWrapper& rCal = GetCal();
+    ::rtl::OUString aGengou( RTL_CONSTASCII_USTRINGPARAM( "gengou" ) );
+    if ( rCal.getUniqueID() != aGengou )
+    {
+        rOrgCalendar = rCal.getUniqueID();
+        fOrgDateTime = rCal.getDateTime();
+        rCal.loadCalendar( aGengou,
+            SvNumberFormatter::ConvertLanguageToLocale( LANGUAGE_JAPANESE ) );
+        rCal.setDateTime( fOrgDateTime );
+    }
+}
+
+
 BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                                    USHORT nIx,
                                    String& OutString)
@@ -2141,12 +2211,25 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     Date aDate = *(rScan.GetNullDate()) + nNum;
     CalendarWrapper& rCal = GetCal();
     rCal.setGregorianDateTime( aDate );
+    String aOrgCalendar;        // empty => not changed yet
+    double fOrgDateTime;
+    if ( IsGengouCalendar( NumFor[nIx] ) )
+        SwitchToGengouCalendar( aOrgCalendar, fOrgDateTime );
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const USHORT nAnz = NumFor[nIx].GetnAnz();
     for (USHORT i = 0; i < nAnz; i++)
     {
         switch (rInfo.nTypeArray[i])
         {
+            case SYMBOLTYPE_CALENDAR :
+                if ( !aOrgCalendar.Len() )
+                {
+                    aOrgCalendar = rCal.getUniqueID();
+                    fOrgDateTime = rCal.getDateTime();
+                }
+                rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
+                rCal.setDateTime( fOrgDateTime );
+                break;
             case SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
@@ -2189,6 +2272,13 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                     nVal, 1 );
             }
             break;
+            case NF_KEY_MMMMM:              // MMMMM
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
+                    nVal, 1 ).GetChar(0);
+            }
+            break;
             case NF_KEY_Q:                  // Q
             case NF_KEY_QQ:                 // QQ
             {
@@ -2211,11 +2301,11 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 }
             }
             break;
-            case NF_KEY_T:                  // T
+            case NF_KEY_D:                  // D
                 OutString += String::CreateFromInt32( rCal.getValue(
                     CalendarFieldIndex::DAY_OF_MONTH ) );
             break;
-            case NF_KEY_TT:                 // TT
+            case NF_KEY_DD:                 // DD
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
                 if ( nVal < 10 )
@@ -2223,21 +2313,21 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 OutString += String::CreateFromInt32( nVal );
             }
             break;
-            case NF_KEY_TTT:                // TTT
+            case NF_KEY_DDD:                // DDD
             {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 0 );
             }
             break;
-            case NF_KEY_TTTT:               // TTTT
+            case NF_KEY_DDDD:               // DDDD
             {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 1 );
             }
             break;
-            case NF_KEY_JJ:                 // JJ
+            case NF_KEY_YY:                 // YY
             {
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
@@ -2248,13 +2338,16 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 OutString += String::CreateFromInt32( nVal );
             }
             break;
-            case NF_KEY_JJJJ:               // JJJJ
+            case NF_KEY_YYYY:               // YYYY
+            {
 //! TODO: what about negative values? abs and append era?
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::YEAR ) );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                OutString += String::CreateFromInt32( nVal );
+            }
             break;
             case NF_KEY_EC:                 // E
             {
+//! TODO: is this really the same as JJJJ or should it be modulo 100?
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += String::CreateFromInt32( nVal );
@@ -2300,17 +2393,16 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             case NF_KEY_G:                  // G
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-//! TODO: is this right? what if the calendar is not Japanese?
+//! TODO: what if the calendar is not Japanese "gengou"?
                 sal_Unicode cEra;
                 switch ( nVal )
                 {
-                    case 0 :    cEra = 'M'; break;
-                    case 1 :    cEra = 'T'; break;
-                    case 2 :    cEra = 'S'; break;
-                    case 3 :    cEra = 'H'; break;
+                    case 1 :    cEra = 'M'; break;
+                    case 2 :    cEra = 'T'; break;
+                    case 3 :    cEra = 'S'; break;
+                    case 4 :    cEra = 'H'; break;
                     default:
                         cEra = '?';
-                        DBG_ERRORFILE( "SvNumberformat::ImpGetDateOutput: which era is it?" );
                 }
                 OutString += cEra;
             }
@@ -2333,6 +2425,8 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
         }
     }
+    if ( aOrgCalendar.Len() )
+        rCal.loadCalendar( aOrgCalendar, rLoc().getLocale() );  // restore calendar
     return bRes;
 }
 
@@ -2355,6 +2449,10 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     aDateTime += fNumber;
     CalendarWrapper& rCal = GetCal();
     rCal.setGregorianDateTime( aDateTime );
+    String aOrgCalendar;        // empty => not changed yet
+    double fOrgDateTime;
+    if ( IsGengouCalendar( NumFor[nIx] ) )
+        SwitchToGengouCalendar( aOrgCalendar, fOrgDateTime );
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     double fTime = fNum2*86400.0;
@@ -2377,7 +2475,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     }
     else
-    nSeconds = (ULONG)floor( fTime );
+        nSeconds = (ULONG)floor( fTime );
 
     String sSecStr;
     SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', rInfo.nCntPost);
@@ -2432,6 +2530,15 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     {
         switch (rInfo.nTypeArray[i])
         {
+            case SYMBOLTYPE_CALENDAR :
+                if ( !aOrgCalendar.Len() )
+                {
+                    aOrgCalendar = rCal.getUniqueID();
+                    fOrgDateTime = rCal.getDateTime();
+                }
+                rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
+                rCal.setDateTime( fOrgDateTime );
+                break;
             case SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
@@ -2533,6 +2640,13 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                     nVal, 1 );
             }
             break;
+            case NF_KEY_MMMMM:              // MMMMM
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
+                    nVal, 1 ).GetChar(0);
+            }
+            break;
             case NF_KEY_Q:                  // Q
             case NF_KEY_QQ:                 // QQ
             {
@@ -2555,11 +2669,11 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 }
             }
             break;
-            case NF_KEY_T:                  // T
+            case NF_KEY_D:                  // D
                 OutString += String::CreateFromInt32( rCal.getValue(
                     CalendarFieldIndex::DAY_OF_MONTH ) );
             break;
-            case NF_KEY_TT:                 // TT
+            case NF_KEY_DD:                 // DD
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
                 if ( nVal < 10 )
@@ -2567,23 +2681,23 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 OutString += String::CreateFromInt32( nVal );
             }
             break;
-            case NF_KEY_TTT:                // TTT
+            case NF_KEY_DDD:                // DDD
             {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 0 );
             }
             break;
-            case NF_KEY_TTTT:               // TTTT
+            case NF_KEY_DDDD:               // DDDD
             {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 1 );
             }
             break;
-            case NF_KEY_JJ:                 // JJ
+            case NF_KEY_YY:                 // YY
             {
-                //! TODO: what about negative values? abs and era?
+//! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 if ( 99 < nVal )
                     nVal %= 100;
@@ -2592,10 +2706,29 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 OutString += String::CreateFromInt32( nVal );
             }
             break;
-            case NF_KEY_JJJJ:               // JJJJ
-                //! TODO: what about negative values? abs and era?
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::YEAR ) );
+            case NF_KEY_YYYY:               // YYYY
+            {
+//! TODO: what about negative values? abs and append era?
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                OutString += String::CreateFromInt32( nVal );
+            }
+            break;
+            case NF_KEY_EC:                 // E
+            {
+//! TODO: is this really the same as JJJJ or should it be modulo 100?
+//! TODO: what about negative values? abs and append era?
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                OutString += String::CreateFromInt32( nVal );
+            }
+            break;
+            case NF_KEY_EEC:                // EE
+            {
+//! TODO: what about negative values? abs and append era?
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+                if ( nVal < 10 )
+                    OutString += '0';
+                OutString += String::CreateFromInt32( nVal );
+            }
             break;
             case NF_KEY_NN:                 // NN
             {
@@ -2623,10 +2756,43 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 OutString += String::CreateFromInt32( rCal.getValue(
                     CalendarFieldIndex::WEEK_OF_YEAR ) );
             break;
+            case NF_KEY_G:                  // G
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+//! TODO: what if the calendar is not Japanese "gengou"?
+                sal_Unicode cEra;
+                switch ( nVal )
+                {
+                    case 1 :    cEra = 'M'; break;
+                    case 2 :    cEra = 'T'; break;
+                    case 3 :    cEra = 'S'; break;
+                    case 4 :    cEra = 'H'; break;
+                    default:
+                        cEra = '?';
+                }
+                OutString += cEra;
+            }
+            break;
+            case NF_KEY_GG:                 // GG
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
+                    nVal, 0 );
+            }
+            break;
+            case NF_KEY_GGG:                // GGG
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
+                    nVal, 1 );
+            }
+            break;
             default:
             break;
         }
     }
+    if ( aOrgCalendar.Len() )
+        rCal.loadCalendar( aOrgCalendar, rLoc().getLocale() );  // restore calendar
     return bRes;
 }
 
@@ -3186,18 +3352,19 @@ DateFormat SvNumberformat::GetDateOrder() const
         {
             switch ( pType[j] )
             {
-                case NF_KEY_T :
-                case NF_KEY_TT :
+                case NF_KEY_D :
+                case NF_KEY_DD :
                     return DMY;
                 break;
                 case NF_KEY_M :
                 case NF_KEY_MM :
                 case NF_KEY_MMM :
                 case NF_KEY_MMMM :
+                case NF_KEY_MMMMM :
                     return MDY;
                 break;
-                case NF_KEY_JJ :
-                case NF_KEY_JJJJ :
+                case NF_KEY_YY :
+                case NF_KEY_YYYY :
                     return YMD;
                 break;
             }

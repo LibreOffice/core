@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2000-11-23 13:00:06 $
+ *  last change: $Author: er $ $Date: 2000-11-24 19:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,21 +90,23 @@ struct ImpSvNumberformatInfo;
 
 enum Sc_SymbolType
 {
-    SYMBOLTYPE_STRING = -1,                     // String in Ausgabe
-    SYMBOLTYPE_DEL    = -2,                     // Sonderzeichen
-    SYMBOLTYPE_BLANK  = -3,                     // Blank fuer '_'
-    SYMBOLTYPE_STAR   = -4,                     // *-Buchstabe
-    SYMBOLTYPE_DIGIT  = -5,                     // Ziffernplatzhalter
-    SYMBOLTYPE_DECSEP = -6,                     // Komma
-    SYMBOLTYPE_THSEP  = -7,                     // Tausenderpunkt
-    SYMBOLTYPE_EXP    = -8,                     // Exponent E
-    SYMBOLTYPE_FRAC   = -9,                     // Bruch /
-    SYMBOLTYPE_EMPTY  = -10,                    // geloeschte Symbole
-    SYMBOLTYPE_FRACBLANK = -11,                 // Trenner Zahl - Zaehler bei Bruch
-    SYMBOLTYPE_COMMENT = -12,                   // Kommentar folgt
-    SYMBOLTYPE_CURRENCY = -13,                  // Waehrungssymbol
-    SYMBOLTYPE_CURRDEL  = -14,                  // Waehrungssymbol Delimiter [$]
-    SYMBOLTYPE_CURREXT  = -15                   // Waehrungssymbol Extension -xxx
+    SYMBOLTYPE_STRING = -1,                     // literal string in output
+    SYMBOLTYPE_DEL    = -2,                     // special character
+    SYMBOLTYPE_BLANK  = -3,                     // blank for '_'
+    SYMBOLTYPE_STAR   = -4,                     // *-character
+    SYMBOLTYPE_DIGIT  = -5,                     // digit place holder
+    SYMBOLTYPE_DECSEP = -6,                     // decimal separator
+    SYMBOLTYPE_THSEP  = -7,                     // group AKA thousand separator
+    SYMBOLTYPE_EXP    = -8,                     // exponent E
+    SYMBOLTYPE_FRAC   = -9,                     // fraction /
+    SYMBOLTYPE_EMPTY  = -10,                    // deleted symbols
+    SYMBOLTYPE_FRACBLANK = -11,                 // delimiter between integer and fraction
+    SYMBOLTYPE_COMMENT = -12,                   // comment is following
+    SYMBOLTYPE_CURRENCY = -13,                  // currency symbol
+    SYMBOLTYPE_CURRDEL  = -14,                  // currency symbol delimiter [$]
+    SYMBOLTYPE_CURREXT  = -15,                  // currency symbol extension -xxx
+    SYMBOLTYPE_CALENDAR = -16,                  // calendar ID
+    SYMBOLTYPE_CALDEL   = -17                   // calendar delimiter [~]
 };
 
 
@@ -251,6 +253,8 @@ private:                            // ---- privater Teil
     xub_StrLen ScanType(const String& rString); // Analyse des Formattyps
     xub_StrLen FinalScan( String& rString, String& rComment );  // Endanalyse mit Vorgabe
                                                 // des Typs
+    // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found
+    int FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i, USHORT& nAnzResStrings );
 
     static inline BOOL StringEqualsChar( const String& rStr, sal_Unicode ch )
         { return rStr.GetChar(0) == ch && rStr.Len() == 1; }

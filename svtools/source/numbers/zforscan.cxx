@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2000-11-23 13:00:06 $
+ *  last change: $Author: er $ $Date: 2000-11-24 19:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,18 +178,19 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         case LANGUAGE_GERMAN_LIECHTENSTEIN:
         {
             //! all capital letters
-            sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "M" ) );            // Monat
-            sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "MM" ) );           // Monat
-            sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "MMM" ) );      // Monat Jan
-            sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "MMMM" ) );     // Monat Januar
-            sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "H" ) );            // Stunde  2
-            sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "HH" ) );           // Stunde 02
-            sKeyword[NF_KEY_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "T" ) );
-            sKeyword[NF_KEY_TT].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "TT" ) );
-            sKeyword[NF_KEY_TTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "TTT" ) );
-            sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "TTTT" ) );
-            sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "JJ" ) );
-            sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "JJJJ" ) );
+            sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "M" ) );            // month 1
+            sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "MM" ) );           // month 01
+            sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "MMM" ) );      // month Jan
+            sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "MMMM" ) ); // month Januar
+            sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "MMMMM" ) );// month J
+            sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "H" ) );            // hour 2
+            sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "HH" ) );           // hour 02
+            sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "T" ) );
+            sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "TT" ) );
+            sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "TTT" ) );
+            sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "TTTT" ) );
+            sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "JJ" ) );
+            sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "JJJJ" ) );
             sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "LOGISCH" ) );
             sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "FARBE" ) );
             sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "SCHWARZ" ) );
@@ -211,10 +212,10 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             {
                 case LANGUAGE_ITALIAN       :
                 case LANGUAGE_ITALIAN_SWISS :
-                    sKeyword[NF_KEY_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "G" ) );
-                    sKeyword[NF_KEY_TT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GG" ) );
-                    sKeyword[NF_KEY_TTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGG" ) );
-                    sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGGG" ) );
+                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "G" ) );
+                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GG" ) );
+                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGG" ) );
+                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGGG" ) );
                     // must exchange the era code, same as Xcl
                     sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "X" ) );
                     sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "XX" ) );
@@ -226,22 +227,22 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                 case LANGUAGE_FRENCH_SWISS      :
                 case LANGUAGE_FRENCH_LUXEMBOURG :
                 case LANGUAGE_FRENCH_MONACO     :
-                    sKeyword[NF_KEY_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "J" ) );
-                    sKeyword[NF_KEY_TT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJ" ) );
-                    sKeyword[NF_KEY_TTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJ" ) );
-                    sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJJ" ) );
+                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "J" ) );
+                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJ" ) );
+                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJ" ) );
+                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJJ" ) );
                 break;
                 case LANGUAGE_FINNISH :
-                    sKeyword[NF_KEY_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "P" ) );
-                    sKeyword[NF_KEY_TT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PP" ) );
-                    sKeyword[NF_KEY_TTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PPP" ) );
-                    sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PPPP" ) );
+                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "P" ) );
+                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PP" ) );
+                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PPP" ) );
+                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PPPP" ) );
                 break;
                 default:
-                    sKeyword[NF_KEY_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D" ) );
-                    sKeyword[NF_KEY_TT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DD" ) );
-                    sKeyword[NF_KEY_TTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDD" ) );
-                    sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDDD" ) );
+                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D" ) );
+                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DD" ) );
+                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDD" ) );
+                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDDD" ) );
             }
             // month
             switch ( eLang )
@@ -251,12 +252,14 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KK" ) );
                     sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KKK" ) );
                     sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KKKK" ) );
+                    sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KKKKK" ) );
                 break;
                 default:
                     sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "M" ) );
                     sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MM" ) );
                     sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMM" ) );
                     sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMMM" ) );
+                    sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMMMM" ) );
             }
             // year
             switch ( eLang )
@@ -291,24 +294,24 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                 case LANGUAGE_SPANISH_HONDURAS    :
                 case LANGUAGE_SPANISH_NICARAGUA   :
                 case LANGUAGE_SPANISH_PUERTO_RICO :
-                    sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AA" ) );
-                    sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AAAA" ) );
+                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AA" ) );
+                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AAAA" ) );
                     // must exchange the day of week name code, same as Xcl
                     sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "OOO" ) );
                     sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "OOOO" ) );
                 break;
                 case LANGUAGE_DUTCH         :
                 case LANGUAGE_DUTCH_BELGIAN :
-                    sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJ" ) );
-                    sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJJ" ) );
+                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJ" ) );
+                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJJ" ) );
                 break;
                 case LANGUAGE_FINNISH :
-                    sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "VV" ) );
-                    sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "VVVV" ) );
+                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "VV" ) );
+                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "VVVV" ) );
                 break;
                 default:
-                    sKeyword[NF_KEY_JJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YY" ) );
-                    sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YYYY" ) );
+                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YY" ) );
+                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YYYY" ) );
             }
             // hour
             switch ( eLang )
@@ -1023,14 +1026,15 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                 break;
                 case NF_KEY_MMM:                // MMM
                 case NF_KEY_MMMM:               // MMMM
+                case NF_KEY_MMMMM:              // MMMMM
                 case NF_KEY_Q:                  // Q
                 case NF_KEY_QQ:                 // QQ
-                case NF_KEY_T:                  // T
-                case NF_KEY_TT:                 // TT
-                case NF_KEY_TTT:                // TTT
-                case NF_KEY_TTTT:               // TTTT
-                case NF_KEY_JJ:                 // JJ
-                case NF_KEY_JJJJ:               // JJJ
+                case NF_KEY_D:                  // D
+                case NF_KEY_DD:                 // DD
+                case NF_KEY_DDD:                // DDD
+                case NF_KEY_DDDD:               // DDDD
+                case NF_KEY_YY:                 // YY
+                case NF_KEY_YYYY:               // YYYY
                 case NF_KEY_NN:                 // NN
                 case NF_KEY_NNN:                // NNN
                 case NF_KEY_NNNN:               // NNNN
@@ -1096,8 +1100,14 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                     if ( i < nAnzStrings-1 &&
                             nTypeArray[i+1] == SYMBOLTYPE_STRING &&
                             sStrArray[i+1].GetChar(0) == '$' )
-                    {
+                    {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
                         eNewType = NUMBERFORMAT_CURRENCY;
+                    }
+                    else if ( i < nAnzStrings-1 &&
+                            nTypeArray[i+1] == SYMBOLTYPE_STRING &&
+                            sStrArray[i+1].GetChar(0) == '~' )
+                    {   // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
+                        eNewType = NUMBERFORMAT_DATE;
                     }
                     else
                     {
@@ -1284,6 +1294,51 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
         eScannedType = NUMBERFORMAT_DEFINED;
 //      eScannedType = NUMBERFORMAT_TEXT;
     return 0;                               // Alles ok
+}
+
+
+int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
+            USHORT& nAnzResStrings )
+{
+    if ( sStrArray[i].GetChar(0) == '[' &&
+            i < nAnzStrings-1 &&
+            nTypeArray[i+1] == SYMBOLTYPE_STRING &&
+            sStrArray[i+1].GetChar(0) == '~' )
+    {   // [~calendarID]
+        // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
+        nPos += sStrArray[i].Len();         // [
+        nTypeArray[i] = SYMBOLTYPE_CALDEL;
+        nPos += sStrArray[++i].Len();       // ~
+        sStrArray[i-1] += sStrArray[i];     // [~
+        nTypeArray[i] = SYMBOLTYPE_EMPTY;
+        nAnzResStrings--;
+        if ( ++i >= nAnzStrings )
+            return -1;      // error
+        nPos += sStrArray[i].Len();         // calendarID
+        String& rStr = sStrArray[i];
+        nTypeArray[i] = SYMBOLTYPE_CALENDAR;    // convert
+        i++;
+        while ( i < nAnzStrings &&
+                sStrArray[i].GetChar(0) != ']' )
+        {
+            nPos += sStrArray[i].Len();
+            rStr += sStrArray[i];
+            nTypeArray[i] = SYMBOLTYPE_EMPTY;
+            nAnzResStrings--;
+            i++;
+        }
+        if ( rStr.Len() && i < nAnzStrings &&
+                sStrArray[i].GetChar(0) == ']' )
+        {
+            nTypeArray[i] = SYMBOLTYPE_CALDEL;
+            nPos += sStrArray[i].Len();
+            i++;
+        }
+        else
+            return -1;      // error
+        return 1;
+    }
+    return 0;
 }
 
 xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
@@ -1928,6 +1983,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case SYMBOLTYPE_BLANK:
                     case SYMBOLTYPE_STAR:
                     case SYMBOLTYPE_STRING:
+                        nPos += sStrArray[i].Len();
+                        i++;
                     break;
                     case SYMBOLTYPE_COMMENT:
                     {
@@ -1937,27 +1994,45 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         rComment += rStr;
                         nTypeArray[i] = SYMBOLTYPE_EMPTY;
                         nAnzResStrings--;
+                        i++;
                     }
                     break;
                     case SYMBOLTYPE_DEL:
                     {
+                        int nCalRet;
                         if (bConvertMode && sStrArray[i] == sOldDateSep)
-                            sStrArray[i].Replace( 0, 1, pLoc->getDateSep() );
-                        nTypeArray[i] = SYMBOLTYPE_STRING;
+                        {
+                            sStrArray[i] = pLoc->getDateSep();
+                            nTypeArray[i] = SYMBOLTYPE_STRING;
+                            nPos += sStrArray[i].Len();
+                            i++;
+                        }
+                        else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
+                        {
+                            if ( nCalRet < 0  )
+                                return nPos;        // error
+                        }
+                        else
+                        {
+                            nTypeArray[i] = SYMBOLTYPE_STRING;
+                            nPos += sStrArray[i].Len();
+                            i++;
+                        }
                     }
                     break;
                     case NF_KEY_M:                          // M
                     case NF_KEY_MM:                         // MM
                     case NF_KEY_MMM:                        // MMM
                     case NF_KEY_MMMM:                       // MMMM
+                    case NF_KEY_MMMMM:                      // MMMMM
                     case NF_KEY_Q:                          // Q
                     case NF_KEY_QQ:                         // QQ
-                    case NF_KEY_T:                          // T
-                    case NF_KEY_TT:                         // TT
-                    case NF_KEY_TTT:                        // TTT
-                    case NF_KEY_TTTT:                       // TTTT
-                    case NF_KEY_JJ:                         // JJ
-                    case NF_KEY_JJJJ:                       // JJJJ
+                    case NF_KEY_D:                          // D
+                    case NF_KEY_DD:                         // DD
+                    case NF_KEY_DDD:                        // DDD
+                    case NF_KEY_DDDD:                       // DDDD
+                    case NF_KEY_YY:                         // YY
+                    case NF_KEY_YYYY:                       // YYYY
                     case NF_KEY_NN:                         // NN
                     case NF_KEY_NNN:                        // NNN
                     case NF_KEY_NNNN:                       // NNNN
@@ -1970,13 +2045,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_GG :                        // GG
                     case NF_KEY_GGG :                       // GGG
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        nPos += sStrArray[i].Len();
+                        i++;
                     break;
                     default:                            // andere Keywords
                         nTypeArray[i] = SYMBOLTYPE_STRING;
+                        nPos += sStrArray[i].Len();
+                        i++;
                     break;
                 }
-                nPos += sStrArray[i].Len();
-                i++;
             }                                       // of while
         }
         break;                                      // of NUMBERFORMAT_DATE
@@ -2061,9 +2138,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             break;
                             default:
                             {
-                                if (bConvertMode &&
-                                    sStrArray[i] == sOldTimeSep)
-                                    sStrArray[i].Replace( 0, 1, pLoc->getTimeSep() );
+                                if (bConvertMode && sStrArray[i] == sOldTimeSep)
+                                    sStrArray[i] = pLoc->getTimeSep();
                                 nTypeArray[i] = SYMBOLTYPE_STRING;
                                 nPos += sStrArray[i].Len();
                                 i++;
@@ -2133,6 +2209,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case SYMBOLTYPE_BLANK:
                     case SYMBOLTYPE_STAR:
                     case SYMBOLTYPE_STRING:
+                        nPos += sStrArray[i].Len();
+                        i++;
                     break;
                     case SYMBOLTYPE_COMMENT:
                     {
@@ -2142,15 +2220,37 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         rComment += rStr;
                         nTypeArray[i] = SYMBOLTYPE_EMPTY;
                         nAnzResStrings--;
+                        i++;
                     }
                     break;
                     case SYMBOLTYPE_DEL:
                     {
+                        int nCalRet;
                         if (bConvertMode && sStrArray[i] == sOldDateSep)
-                            sStrArray[i].Replace( 0, 1, pLoc->getDateSep() );
-                        if (bConvertMode && sStrArray[i] == sOldTimeSep)
-                            sStrArray[i].Replace( 0, 1, pLoc->getTimeSep() );
-                        nTypeArray[i] = SYMBOLTYPE_STRING;
+                        {
+                            sStrArray[i] = pLoc->getDateSep();
+                            nTypeArray[i] = SYMBOLTYPE_STRING;
+                            nPos += sStrArray[i].Len();
+                            i++;
+                        }
+                        else if (bConvertMode && sStrArray[i] == sOldTimeSep)
+                        {
+                            sStrArray[i] = pLoc->getTimeSep();
+                            nTypeArray[i] = SYMBOLTYPE_STRING;
+                            nPos += sStrArray[i].Len();
+                            i++;
+                        }
+                        else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
+                        {
+                            if ( nCalRet < 0  )
+                                return nPos;        // error
+                        }
+                        else
+                        {
+                            nTypeArray[i] = SYMBOLTYPE_STRING;
+                            nPos += sStrArray[i].Len();
+                            i++;
+                        }
                     }
                     break;
                     case NF_KEY_AMPM:                       // AM/PM
@@ -2158,6 +2258,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     {
                         bExp = TRUE;                    // missbraucht fuer A/P
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        nTypeArray[i] = SYMBOLTYPE_STRING;
+                        nPos += sStrArray[i].Len();
+                        i++;
                     }
                     break;
                     case NF_KEY_MI:                         // M
@@ -2170,14 +2273,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_MM:                         // MM
                     case NF_KEY_MMM:                        // MMM
                     case NF_KEY_MMMM:                       // MMMM
+                    case NF_KEY_MMMMM:                      // MMMMM
                     case NF_KEY_Q:                          // Q
                     case NF_KEY_QQ:                         // QQ
-                    case NF_KEY_T:                          // T
-                    case NF_KEY_TT:                         // TT
-                    case NF_KEY_TTT:                        // TTT
-                    case NF_KEY_TTTT:                       // TTTT
-                    case NF_KEY_JJ:                         // JJ
-                    case NF_KEY_JJJJ:                       // JJJJ
+                    case NF_KEY_D:                          // D
+                    case NF_KEY_DD:                         // DD
+                    case NF_KEY_DDD:                        // DDD
+                    case NF_KEY_DDDD:                       // DDDD
+                    case NF_KEY_YY:                         // YY
+                    case NF_KEY_YYYY:                       // YYYY
                     case NF_KEY_NN:                         // NN
                     case NF_KEY_NNN:                        // NNN
                     case NF_KEY_NNNN:                       // NNNN
@@ -2190,18 +2294,20 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_GG :                        // GG
                     case NF_KEY_GGG :                       // GGG
                         sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        nPos += sStrArray[i].Len();
+                        i++;
                     break;
                     default:                            // andere Keywords
                         nTypeArray[i] = SYMBOLTYPE_STRING;
+                        nPos += sStrArray[i].Len();
+                        i++;
                     break;
                 }
-                nPos += sStrArray[i].Len();
-                i++;
             }                                       // of while
             if (bExp)
                 nCntExp = 1;                        // merkt AM/PM
         }
-        break;                                      // of Sc_N_F_DATETIME
+        break;                                      // of NUMBERFORMAT_DATETIME
         default:
         break;
     }
