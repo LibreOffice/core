@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:11:43 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 11:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
     rOStm << GetVersion();
     rOStm << ( (UINT16) eEncoding );
 
-    const ByteString aRelURL( String(URIHelper::simpleNormalizedMakeRelative( rBaseURL, aURL )), eEncoding );
+    const ByteString aRelURL = ByteString( String(URIHelper::simpleNormalizedMakeRelative( rBaseURL, aURL )), eEncoding );
     rOStm.WriteByteString( aRelURL );
     rOStm.WriteByteString( ByteString( aDescription, eEncoding ) );
     rOStm << bActive;
