@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:19:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "~विकल्प";
+        Text[ slovak ] = "M~ožnosti";
     };
     FixedText TXT_SAMPLE
     {
@@ -178,6 +179,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "~Kategorie";
         Text[ hindi ] = "व~र्ग";
+        Text[ slovak ] = "Ka~tegórie";
     };
     ComboBox BOX_CATEGORY
     {
@@ -220,6 +222,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "~संख्या देना";
+        Text[ slovak ] = "Číslova~nie";
     };
     ListBox BOX_FORMAT
     {
@@ -262,6 +265,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Popisek";
         Text[ hebrew ] = "~Beschriftungstext";
         Text[ hindi ] = "~कॉप्शन्";
+        Text[ slovak ] = "~Popisok";
     };
     Edit EDT_TEXT
     {
@@ -304,6 +308,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
+        Text[ slovak ] = "~Umiestnenie";
     };
     ListBox BOX_POS
     {
@@ -346,6 +351,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Použít ohraničení a stín";
         Text[ hebrew ] = "~Umrandung und Schatten übernehmen";
         Text[ hindi ] = "~किनारा और छाया लागू करो";
+        Text[ slovak ] = "Použiť ohr~aničenie a tieňovanie";
     };
     FixedText FT_OBJECT_NAME
     {
@@ -378,6 +384,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Název objektu";
         Text[ hebrew ] = "~Objektname";
         Text[ hindi ] = "~वस्तु नाम";
+        Text[ slovak ] = "Názov o~bjektu";
     };
     Edit ED_OBJECT_NAME
     {
@@ -417,6 +424,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     String STR_BEGINNING
     {
@@ -448,6 +456,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Výše";
         Text[ hebrew ] = "Am Anfang";
         Text[ hindi ] = "ऊपर";
+        Text[ slovak ] = "Nad";
     };
     String STR_END
     {
@@ -479,6 +488,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Níže";
         Text[ hebrew ] = "Am Ende";
         Text[ hindi ] = "नीचे";
+        Text[ slovak ] = "Pod";
     };
     String STR_ABOVE
     {
@@ -510,6 +520,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Výše";
         Text[ hebrew ] = "Oberhalb";
         Text[ hindi ] = "ऊपर";
+        Text[ slovak ] = "Nad";
     };
     String STR_CP_BELOW
     {
@@ -541,6 +552,7 @@ ModalDialog DLG_CAPTION
         Text[ czech ] = "Níže";
         Text[ hebrew ] = "Unterhalb";
         Text[ hindi ] = "नीचे";
+        Text[ slovak ] = "Pod";
     };
     Text[ chinese_simplified ] = "标签";
     Text[ russian ] = "��������";
@@ -557,6 +569,7 @@ ModalDialog DLG_CAPTION
     Text[ czech ] = "Popisek";
     Text[ hebrew ] = "Beschriftung";
     Text[ hindi ] = "कॉप्शन्";
+    Text[ slovak ] = "Popisok";
 };
 ModalDialog DLG_SEQUENCE_OPTION
 {
@@ -617,6 +630,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ czech ] = "Číslování podle kapitol";
         Text[ hebrew ] = "Kapitelweise Nummerierung";
         Text[ hindi ] = "अध्याय के अनुसार संख्या देना";
+        Text[ slovak ] = "Číslovanie podľa kapitol";
     };
     FixedText FT_LEVEL
     {
@@ -649,6 +663,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ czech ] = "Úroveň";
         Text[ hebrew ] = "E~bene";
         Text[ hindi ] = "~स्तर";
+        Text[ slovak ] = "Ú~roveň";
     };
     ListBox LB_LEVEL
     {
@@ -765,6 +780,10 @@ ModalDialog DLG_SEQUENCE_OPTION
     {
          < "कोई नहीं" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Žiadne" ; > ;
+    };
     };
     FixedText FT_SEPARATOR
     {
@@ -797,6 +816,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ czech ] = "Oddělovač";
         Text[ hebrew ] = "~Trenner";
         Text[ hindi ] = "~अलगानेवाला";
+        Text[ slovak ] = "O~ddeľovač";
     };
     Edit ED_SEPARATOR
     {
@@ -831,8 +851,11 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ czech ] = "Volby intervalu číslování";
     Text[ hebrew ] = "Nummernkreis Optionen";
     Text[ hindi ] = "संख्या फैलाव विकल्प";
+    Text[ slovak ] = "Voľby intervalu číslovania";
 };
  // ********************************************************************** EOF
+
+
 
 
 
