@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:15:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,14 +677,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD, sal_False );
                     BOOL bDo = TRUE;
 
-                    // xmlsec05:
+                    // xmlsec05/06:
                     // getting real parent window when called from Security-Options TP
-                    Window* pParent;
+                    Window* pParent = NULL;
                     const SfxPoolItem* pParentItem;
                     if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
                         pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
-                    else
-                        pParent = NULL;
 
                     // desired state
                     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
@@ -697,7 +695,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         if ( !pItem )
                         {
                             // no dialog on playing the macro
-                            WarningBox aBox( GetDialogParent(),
+                            WarningBox aBox( pParent ? pParent : GetDialogParent(),
                                 WinBits(WB_YES_NO | WB_DEF_NO),
                                 ScGlobal::GetRscString( STR_END_REDLINING ) );
                             bDo = ( aBox.Execute() == RET_YES );
@@ -706,7 +704,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         if ( bDo )
                         {
                             if ( pChangeTrack->IsProtected() )
-                                bDo = ExecuteChangeProtectionDialog();
+                                bDo = ExecuteChangeProtectionDialog( NULL );
                             if ( bDo )
                             {
                                 pDoc->EndChangeTracking();
@@ -751,7 +749,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_CHG_PROTECT :
             {
-                if ( ExecuteChangeProtectionDialog() )
+                Window* pParent = NULL;
+                const SfxPoolItem* pParentItem;
+                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
+                    pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                if ( ExecuteChangeProtectionDialog( pParent ) )
                 {
                     rReq.Done();
                     SetDocumentModified();
@@ -774,12 +776,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             WinBits(WB_YES_NO | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         if( aBox.Execute() == RET_YES )
-                            bDo = ExecuteChangeProtectionDialog( TRUE );
+                            bDo = ExecuteChangeProtectionDialog( NULL, TRUE );
                         else
                             bDo = FALSE;
                     }
                     else    // merge might reject some actions
-                        bDo = ExecuteChangeProtectionDialog( TRUE );
+                        bDo = ExecuteChangeProtectionDialog( NULL, TRUE );
                 }
                 if ( !bDo )
                 {
@@ -1029,7 +1031,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
 //------------------------------------------------------------------
 
-BOOL ScDocShell::ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected )
+BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQueryIfProtected )
 {
     BOOL bDone = FALSE;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
@@ -1044,7 +1046,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected )
         String aPassword;
 
         SfxPasswordDialog* pDlg = new SfxPasswordDialog(
-            GetDialogParent(), &aText );
+            _pParent ? _pParent : GetDialogParent(), &aText );
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );
         pDlg->SetHelpId( SID_CHG_PROTECT );
