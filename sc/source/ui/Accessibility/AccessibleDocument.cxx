@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
+ *  last change: $Author: sab $ $Date: 2002-08-20 08:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(const ScAccessibleShapeData*
 
 uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
 {
-    if (maZOrderedShapes.empty())
+    if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
     if (static_cast<sal_uInt32>(nIndex) >= maZOrderedShapes.size())
@@ -635,7 +635,7 @@ sal_Bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
                         uno::Reference<drawing::XShape>& rShape) const
 {
     sal_Bool bResult (sal_False);
-    if (maZOrderedShapes.empty())
+    if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
     if (!xSelectionSupplier.is())
@@ -695,7 +695,7 @@ sal_Bool ScChildrenShapes::SelectionChanged()
 
 void ScChildrenShapes::Select(sal_Int32 nIndex)
 {
-    if (maZOrderedShapes.empty())
+    if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
     if (!xSelectionSupplier.is())
@@ -748,10 +748,10 @@ void ScChildrenShapes::SelectAll()
     if (!xSelectionSupplier.is())
         throw uno::RuntimeException();
 
-    if (maZOrderedShapes.empty())
+    if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with filtered shapes (no internal shapes)
 
-    if (!maZOrderedShapes.empty())
+    if (maZOrderedShapes.size() > 1)
     {
         uno::Reference<drawing::XShapes> xShapes;
         xShapes = new SvxShapeCollection();
@@ -795,7 +795,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
 {
     uno::Reference< XAccessible > xAccessible;
 
-    if (maZOrderedShapes.empty())
+    if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with shapes
 
     if (!bTabSelected)
