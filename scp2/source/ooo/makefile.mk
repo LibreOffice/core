@@ -2,10 +2,6 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
-#
-#   last change: $Author: obo $ $Date: 2005-01-25 15:21:05 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #
@@ -153,6 +149,7 @@ PARFILES=                          \
         file_resource_ooo.par      \
         shortcut_ooo.par           \
         module_ooo.par             \
+        module_hidden_ooo.par      \
         profile_ooo.par            \
         profileitem_ooo.par
 
