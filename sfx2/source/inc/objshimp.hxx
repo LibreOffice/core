@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:01:45 $
+ *  last change: $Author: mba $ $Date: 2001-04-12 09:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,16 @@
 #ifndef _SFX_OBJSHIMP_HXX
 #define _SFX_OBJSHIMP_HXX
 
-#include "objsh.hxx"
-#include "bitset.hxx"
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
-#include <com/sun/star/document/XFilter.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
 #endif
+
+#include "objsh.hxx"
+#include "bitset.hxx"
+
 class AsynchronLink;
 
 //====================================================================
@@ -87,18 +86,11 @@ struct MarkData_Impl
 };
 
 class SfxFrame;
-#if SUPD<582
-class SfxJSDocument;
-class SfxJSDocumentManager;
-#endif
-class SvIPCClient;
 class SfxDialogLibraryContainer;
 class SfxScriptLibraryContainer;
 
 struct SfxObjectShell_Impl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xFilter;
-    String              aStarOneFilterName;
     SfxDocumentInfo*    pDocInfo;
     SfxConfigManager*   pCfgMgr;
     SfxInPlaceObject*   pInPlaceObj;        // das dazugeh"orige SO2-Objekt, falls this ein SfxInPlaceObject ist

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-10 10:59:42 $
+ *  last change: $Author: mba $ $Date: 2001-04-12 09:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1160,12 +1160,6 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         rMedium.GetItemSet()->Put( SfxStringItem( SID_OPENURL, rMedium.GetName() ) );
         TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
         xLoader->filter( lDescriptor );
-
-        pImp->xFilter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > ( xLoader, ::com::sun::star::uno::UNO_QUERY );
-        if ( pImp->xFilter.is() )
-            pImp->aStarOneFilterName = aFilterName;
-        else
-            pImp->aStarOneFilterName.Erase();
         return sal_True;
     }
 
@@ -1178,10 +1172,6 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
     ::rtl::OUString aFilterName( GetMedium()->GetFilter()->GetFilterName() );
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > xExporter;
 
-    if ( pImp->aStarOneFilterName == String( aFilterName ) )
-        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter >
-            ( pImp->xFilter, ::com::sun::star::uno::UNO_QUERY );
-    else
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilterFact (
