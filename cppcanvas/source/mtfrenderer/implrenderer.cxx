@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:54:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,6 @@ namespace cppcanvas
             // action extraction.
             const USHORT nSteps( rGradient.GetSteps() );
 
-#if 0
             if( // step count is infinite, can use native canvas
                 // gradients here
                 nSteps == 0 ||
@@ -405,8 +404,8 @@ namespace cppcanvas
                             {
                                 case GRADIENT_LINEAR:
                                     nOffsetX = rGradient.GetBorder() / 100.0;
-                                    aTexture.Gradient = xFactory->createLinearHorizontalGradient( aEndColor,
-                                                                                                  aStartColor );
+                                    aTexture.Gradient = xFactory->createLinearHorizontalGradient( aStartColor,
+                                                                                                  aEndColor );
                                     break;
 
                                 case GRADIENT_AXIAL:
@@ -491,12 +490,6 @@ namespace cppcanvas
                             {
                                 case GRADIENT_RADIAL:
                                 {
-                                    // enlarge gradient slightly
-                                    aTextureTransformation.translate( -0.5, -0.5 );
-                                    const double nSqrt2( sqrt(2.0) );
-                                    aTextureTransformation.scale( nSqrt2,nSqrt2 );
-                                    aTextureTransformation.translate( 0.5, 0.5 );
-
                                     // create isotrophic scaling
                                     if( nScaleX > nScaleY )
                                     {
@@ -509,8 +502,16 @@ namespace cppcanvas
                                         nScaleX = nScaleY;
                                     }
 
-                                    aTexture.Gradient = xFactory->createCircularGradient( aEndColor,
-                                                                                          aStartColor );
+                                    // enlarge gradient to match bound rect diagonal
+                                    aTextureTransformation.translate( -0.5, -0.5 );
+                                    const double nScale( hypot(aBounds.GetWidth(), aBounds.GetHeight()) / nScaleX );
+                                    aTextureTransformation.scale( nScale, nScale );
+                                    aTextureTransformation.translate( 0.5, 0.5 );
+
+                                    aTexture.Gradient = xFactory->createEllipticalGradient( aEndColor,
+                                                                                            aStartColor,
+                                                                                            geometry::RealRectangle2D(0.0,0.0,
+                                                                                                                    1.0,1.0) );
                                 }
                                 break;
 
@@ -522,8 +523,12 @@ namespace cppcanvas
                                     aTextureTransformation.scale( nSqrt2,nSqrt2 );
                                     aTextureTransformation.translate( 0.5, 0.5 );
 
-                                    aTexture.Gradient = xFactory->createCircularGradient( aEndColor,
-                                                                                          aStartColor );
+                                    aTexture.Gradient = xFactory->createEllipticalGradient( aEndColor,
+                                                                                            aStartColor,
+                                                                                            geometry::RealRectangle2D( aBounds.Left(),
+                                                                                                                       aBounds.Top(),
+                                                                                                                       aBounds.Right(),
+                                                                                                                       aBounds.Bottom() ) );
                                 }
                                 break;
 
@@ -577,6 +582,16 @@ namespace cppcanvas
                             break;
                     }
 
+                    // As the texture coordinate space is relative to
+                    // the polygon coordinate space (NOT to the
+                    // polygon itself), move gradient to the start of
+                    // the actual polygon. If we skip this, the
+                    // gradient will always display at the origin, and
+                    // not within the polygon bound (which might be
+                    // miles away from the origin).
+                    aTextureTransformation.translate( aBounds.Left(),
+                                                      aBounds.Top() );
+
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
                                                                     aTextureTransformation );
 
@@ -593,10 +608,10 @@ namespace cppcanvas
                     return;
                 }
             }
-#endif
 
-            // cannot currently use native canvas gradients, as
-            // step size is given
+            // cannot currently use native canvas gradients, as a
+            // finite step size is given (this funny feature is not
+            // supported by the XCanvas API)
             pushState( rStates );
 
             if( !bIsPolygonRectangle )
