@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-29 10:33:58 $
+ *  last change: $Author: hdu $ $Date: 2002-05-31 09:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,8 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         // try again if it didn't fit
         if( aGCP.nMaxFit < mnGlyphCount )
         {
-            nGcpOption &= ~(GCP_JUSTIFY |GCP_MAXEXTENT);
+            nGcpOption &= ~(GCP_JUSTIFY | GCP_MAXEXTENT);
+            aGCP.nGlyphs = mnGlyphCount;
             nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
                     mnGlyphCount, 0, &aGCP, nGcpOption );
         }
@@ -208,7 +209,8 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         // try again if it didn't fit
         if( aGCP.nMaxFit < mnGlyphCount )
         {
-            nGcpOption &= ~(GCP_JUSTIFY |GCP_MAXEXTENT);
+            nGcpOption &= ~(GCP_JUSTIFY | GCP_MAXEXTENT);
+            aGCP.nGlyphs = mnGlyphCount;
             nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
         }
