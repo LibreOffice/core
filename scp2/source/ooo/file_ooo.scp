@@ -1731,6 +1731,12 @@ File gid_File_Registry_Lang
     EXTRA_ALL_LANG(registry);
 End
 
+File gid_File_Registry_Filter_Zip
+    Dir = gid_Dir_Share_Registry_Res_Lang;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(fcfg_langpack);
+End
+
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
