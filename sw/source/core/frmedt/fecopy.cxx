@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:08:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 16:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
                         GetAllObjBoundRect().Top() );
 
         SwPosition aPos( aSttIdx, SwIndex( pTxtNd, 0 ));
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
@@ -478,7 +478,7 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
 
     //Die Liste muss kopiert werden, weil unten die neuen Objekte
     //selektiert werden.
-    const SdrMarkList aMrkList( Imp()->GetDrawView()->GetMarkList() );
+    const SdrMarkList aMrkList( Imp()->GetDrawView()->GetMarkedObjectList() );
     ULONG nMarkCount = aMrkList.GetMarkCount();
     if( !pDestShell->Imp()->GetDrawView() )
         // sollte mal eine erzeugt werden
@@ -604,7 +604,7 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
     {
         if( pDestShell == this )
         {
-            const SdrMarkList aList( pSrcDrwView->GetMarkList() );
+            const SdrMarkList aList( pSrcDrwView->GetMarkedObjectList() );
             pSrcDrwView->UnmarkAll();
 
             ULONG nMarkCount = aMrkList.GetMarkCount();
@@ -1118,7 +1118,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
 BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
 {
     ASSERT( Imp()->HasDrawView(), "GetDrawObjGraphic without DrawView?" );
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     BOOL bConvert = TRUE;
     if( rMrkList.GetMarkCount() )
     {
@@ -1219,14 +1219,14 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 
     //Drop auf bestehendes Objekt: Objekt ersetzen oder neu Attributieren.
     if( 1 == pModel->GetPage(0)->GetObjCount() &&
-        1 == pView->GetMarkList().GetMarkCount() )
+        1 == pView->GetMarkedObjectList().GetMarkCount() )
     {
         // OD 10.07.2003 #110742# - replace a marked 'virtual' drawing object
         // by its corresponding 'master' drawing object in the mark list.
         SwDrawView::ReplaceMarkedDrawVirtObjs( *pView );
 
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
-        SdrObject* pOldObj = pView->GetMarkList().GetMark( 0 )->GetObj();
+        SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetObj();
 
         if( SW_PASTESDR_SETATTR == nAction && pOldObj->ISA(SwVirtFlyDrawObj) )
             nAction = SW_PASTESDR_REPLACE;
@@ -1340,22 +1340,20 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 
         pView->Paste( *pModel, aPos );
 
-        ULONG nCnt = pView->GetMarkList().GetMarkCount();
+        ULONG nCnt = pView->GetMarkedObjectList().GetMarkCount();
         if( nCnt )
         {
             const Point aNull( 0, 0 );
             for( ULONG i=0; i < nCnt; ++i )
             {
-                SdrObject *pObj = pView->GetMarkList().GetMark(i)->GetObj();
-                // OD 2004-04-05 #i26791# - direct positioning of object for
-                // <ImpEndCreate()>.
+                SdrObject *pObj = pView->GetMarkedObjectList().GetMark(i)->GetObj();
                 pObj->ImpSetAnchorPos( aNull );
             }
 
             pView->SetCurrentObj( OBJ_GRUP, SdrInventor );
             if ( nCnt > 1 )
                 pView->GroupMarked();
-            SdrObject *pObj = pView->GetMarkList().GetMark(0)->GetObj();
+            SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
             if( pObj->ISA( SdrUnoObj ) )
             {
                 pObj->SetLayer( GetDoc()->GetControlsId() );
@@ -1383,8 +1381,8 @@ BOOL SwFEShell::Paste( const Graphic &rGrf )
     SdrObject* pObj;
     SdrView *pView = Imp()->GetDrawView();
 
-    BOOL bRet = 1 == pView->GetMarkList().GetMarkCount() &&
-        (pObj = pView->GetMarkList().GetMark( 0 )->GetObj())->IsClosedObj() &&
+    BOOL bRet = 1 == pView->GetMarkedObjectList().GetMarkCount() &&
+        (pObj = pView->GetMarkedObjectList().GetMark( 0 )->GetObj())->IsClosedObj() &&
         !pObj->ISA( SdrOle2Obj );
 
     if( bRet )
