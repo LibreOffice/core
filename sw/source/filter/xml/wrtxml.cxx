@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-21 06:00:38 $
+ *  last change: $Author: mib $ $Date: 2001-05-29 12:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
 #endif
+#ifndef _DOCSTAT_HXX //autogen wg. SwDoc
+#include <docstat.hxx>
+#endif
 #ifndef _DOCSH_HXX //autogen wg. SwDoc
 #include <docsh.hxx>
 #endif
@@ -177,10 +180,12 @@ sal_uInt32 SwXMLWriter::_Write()
                                              *pStg, *pPersist,
                                              EMBEDDEDOBJECTHELPER_MODE_WRITE,
                                              sal_False );
+#if SUPD > 632
         else
             pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                              *pPersist,
                                              EMBEDDEDOBJECTHELPER_MODE_WRITE );
+#endif
 
         xObjectResolver = pObjectHelper;
     }
@@ -360,6 +365,29 @@ sal_uInt32 SwXMLWriter::_Write()
                 bErr = sal_True;
                 sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
                                    RTL_TEXTENCODING_ASCII_US );
+            }
+        }
+
+        if( pDoc->GetRootFrm() && pDoc->GetDocStat().nPage > 1 &&
+            !(bOrganizerMode || bBlock || bErr) )
+        {
+//          DBG_ASSERT( !pDoc->GetDocStat().bModified,
+//                      "doc stat is modified!" );
+            OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
+            SvStorageStreamRef xStrm =  pStg->OpenStream( sStreamName,
+                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+            DBG_ASSERT(xStrm.Is(), "Can't create output stream in package!");
+            if( xStrm.Is() )
+            {
+                xStrm->SetSize( 0 );
+                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+                OUString aMime( RTL_CONSTASCII_USTRINGPARAM("appication/binary") );
+                uno::Any aAny;
+                aAny <<= aMime;
+                xStrm->SetProperty( aPropName, aAny );
+                xStrm->SetBufferSize( 16*1024 );
+                pDoc->WriteLayoutCache( *xStrm );
+                xStrm->Commit();
             }
         }
     }
@@ -574,11 +602,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.30 2001-05-21 06:00:38 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.31 2001-05-29 12:55:39 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.30  2001/05/21 06:00:38  mib
+      #87246#: OLE support for flat files
+
       Revision 1.29  2001/05/14 12:26:47  dvo
       - fixed: no settings or meta data in block mode
       - fixed: use OUString instead of String

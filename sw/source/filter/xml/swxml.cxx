@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-21 06:00:38 $
+ *  last change: $Author: mib $ $Date: 2001-05-29 12:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,10 +426,12 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                                         *pStorage, *pPersist,
                                         EMBEDDEDOBJECTHELPER_MODE_READ,
                                         sal_False );
+#if SUPD > 632
         else
             pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                         *pPersist,
                                         EMBEDDEDOBJECTHELPER_MODE_READ );
+#endif
 
         xObjectResolver = pObjectHelper;
     }
@@ -615,6 +617,19 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                sal_False );
+
+        if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
+              aOpt.IsFmtsOnly() ) )
+        {
+            OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
+            SvStorageStreamRef xStrm = pStorage->OpenStream( sStreamName,
+                                          STREAM_READ | STREAM_NOCREATE );
+            if( xStrm.Is() && !xStrm->GetError() )
+            {
+                xStrm->SetBufferSize( 16*1024 );
+                rDoc.ReadLayoutCache( *xStrm );
+            }
+        }
         if( !nRet )
         {
             if( nWarn )
