@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-02 13:45:00 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:19:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1224,6 +1224,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Adding Assemblies into the tables MsiAssembly and MsiAssemblyName dynamically
             installer::windows::assembly::create_msiassembly_table($filesinproductlanguageresolvedarrayref, $newidtdir);
             installer::windows::assembly::create_msiassemblyname_table($filesinproductlanguageresolvedarrayref, $newidtdir);
+            installer::windows::assembly::add_assembly_condition_into_component_table($filesinproductlanguageresolvedarrayref, $newidtdir);
         }
 
         $infoline = "\n";
@@ -1397,6 +1398,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the custom action for the javafilter in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Jfregcadll2", "1", "jfregca.dll", "uninstall_jf", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll",  "Jfregcadll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the custom action for the existence check of dot net framework into the product (CustomAc.idt and InstallU.idt)
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Netframeworkdll", "1", "netframework.dll", "IsFrameworkInstalled", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "netframework.dll",  "Netframeworkdll", "Not REMOVE=\"ALL\"", "InstallWelcome", $filesinproductlanguageresolvedarrayref, $installuitablename); }
 
             installer::files::save_file($customactionidttablename, $customactionidttable);
             installer::files::save_file($installexecutetablename, $installexecutetable);
