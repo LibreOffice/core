@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-26 15:47:38 $
+ *  last change: $Author: sj $ $Date: 2001-02-06 17:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5098,54 +5098,13 @@ SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
         case mso_sptCurvedUpArrow             : nNewType= 54; break;
         case mso_sptCurvedDownArrow           : nNewType= 55; break;
         case mso_sptNotchedRightArrow         : nNewType= 57; break;
-        case mso_sptIrregularSeal1            : nNewType= 68; break;
-        case mso_sptIrregularSeal2            : nNewType= 69; break;
-        case mso_sptSeal4                     : nNewType= 70; break;
-        case mso_sptStar                      : nNewType= 71; break;
-        case mso_sptSeal8                     : nNewType= 72; break;
-        case mso_sptSeal16                    : nNewType= 73; break;
-        case mso_sptSeal24                    : nNewType= 74; break;
-        case mso_sptSeal32                    : nNewType= 75; break;
-        case mso_sptRibbon2                   : nNewType= 76; break;
-        case mso_sptRibbon                    : nNewType= 77; break;
-        case mso_sptEllipseRibbon2            : nNewType= 78; break;
-        case mso_sptEllipseRibbon             : nNewType= 79; break;
-        case mso_sptVerticalScroll            : nNewType= 80; break;
-        case mso_sptHorizontalScroll          : nNewType= 81; break;
         case mso_sptWave                      : nNewType= 89; break;
         case mso_sptDoubleWave                : nNewType= 90; break;
+
         case mso_sptWedgeRectCallout          : nNewType= 98; break;
         case mso_sptWedgeRRectCallout         : nNewType= 99; break;
         case mso_sptWedgeEllipseCallout       : nNewType=100; break;
         case mso_sptCloudCallout              : nNewType=101; break;
-        case mso_sptFlowChartProcess          : nNewType= 33; break;
-        case mso_sptFlowChartAlternateProcess : nNewType= 34; break;
-        case mso_sptFlowChartDecision         : nNewType= 35; break;
-        case mso_sptFlowChartInputOutput      : nNewType= 36; break;
-        case mso_sptFlowChartPredefinedProcess: nNewType= 37; break;
-        case mso_sptFlowChartInternalStorage  : nNewType= 38; break;
-        case mso_sptFlowChartDocument         : nNewType= 39; break;
-        case mso_sptFlowChartMultidocument    : nNewType= 82; break;
-        case mso_sptFlowChartTerminator       : nNewType= 83; break;
-        case mso_sptFlowChartPreparation      : nNewType= 84; break;
-        case mso_sptFlowChartManualInput      : nNewType= 85; break;
-        case mso_sptFlowChartManualOperation  : nNewType= 86; break;
-        case mso_sptFlowChartConnector        : nNewType= 87; break;
-        case mso_sptFlowChartOffpageConnector : nNewType= 88; break;
-        case mso_sptFlowChartPunchedCard      : nNewType= 91; break;
-        case mso_sptFlowChartPunchedTape      : nNewType= 92; break;
-        case mso_sptFlowChartSummingJunction  : nNewType= 93; break;
-        case mso_sptFlowChartOr               : nNewType= 94; break;
-        case mso_sptFlowChartCollate          : nNewType= 95; break;
-        case mso_sptFlowChartSort             : nNewType= 96; break;
-        case mso_sptFlowChartExtract          : nNewType= 97; break;
-        case mso_sptFlowChartMerge            : nNewType=102; break;
-        case mso_sptFlowChartOfflineStorage   : nNewType=103; break;
-        case mso_sptFlowChartDelay            : nNewType=104; break;
-        case mso_sptFlowChartMagneticTape     : nNewType=105; break;
-        case mso_sptFlowChartMagneticDisk     : nNewType=106; break;
-        case mso_sptFlowChartMagneticDrum     : nNewType=107; break;
-        case mso_sptFlowChartDisplay          : nNewType=108; break;
     }
     // Model holen falls noch nicht angelegt
     if( !pFormModel )
