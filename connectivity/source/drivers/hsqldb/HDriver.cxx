@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:39:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,14 @@
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
-#include <com/sun/star/embed/XStorage.hpp>
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
+#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
@@ -82,6 +88,9 @@
 #include "hsqldb/HStorageMap.hxx"
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -124,6 +133,7 @@ namespace connectivity
     ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory)
         : ODriverDelegator_BASE(m_aMutex)
         ,m_xFactory(_rxFactory)
+        ,m_bInShutDownConnections(sal_False)
     {
     }
 
@@ -220,7 +230,8 @@ namespace connectivity
                 Sequence< PropertyValue > aConvertedProperties(8);
                 sal_Int32 nPos = 0;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_key"));
-                ::rtl::OUString sKey = StorageContainer::registerStorage(xStorage,sSystemPath);
+                ::rtl::OUString sConnPartURL = sSystemPath.copy(0,nIndex);
+                ::rtl::OUString sKey = StorageContainer::registerStorage(xStorage,sConnPartURL);
                 aConvertedProperties[nPos++].Value <<= sKey;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_class_name"));
                 aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.StorageAccess"));
@@ -238,10 +249,23 @@ namespace connectivity
                 aConvertedProperties[nPos++].Value <<= sal_True;
 
                 ::rtl::OUString sConnectURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:"));
-                sConnectURL += sSystemPath.copy(0,nIndex);
 
-
-                Reference<XConnection> xOrig = xDriver->connect( sConnectURL, aConvertedProperties );
+                sConnectURL += sConnPartURL;
+                Reference<XConnection> xOrig;
+                try
+                {
+                    xOrig = xDriver->connect( sConnectURL, aConvertedProperties );
+                }
+                catch(SQLException e)
+                {
+                    StorageContainer::revokeStorage(sKey,NULL);
+                    throw e;
+                }
+                catch(Exception e)
+                {
+                    StorageContainer::revokeStorage(sKey,NULL);
+                    throw e;
+                }
 
                 if ( xOrig.is() )
                 {
@@ -258,7 +282,6 @@ namespace connectivity
                     Reference<XComponent> xComp(xOrig,UNO_QUERY);
                     if ( xComp.is() )
                         xComp->addEventListener(this);
-                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,pMetaConnection)));
 
                     // we want to close all connections when the office shuts down
                     static Reference< XTerminateListener> s_xTerminateListener;
@@ -274,6 +297,14 @@ namespace connectivity
                     }
                     Reference< XComponent> xIfc = new OConnectionWeakWrapper(xOrig,m_xFactory);
                     xConnection.set(xIfc,UNO_QUERY);
+                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,WeakReferenceHelper(xConnection))));
+
+                    Reference<XTransactionBroadcaster> xBroad(xStorage,UNO_QUERY);
+                    if ( xBroad.is() )
+                    {
+                        Reference<XTransactionListener> xListener(*this,UNO_QUERY);
+                        xBroad->addTransactionListener(xListener);
+                    }
                 }
             }
         }
@@ -395,56 +426,128 @@ namespace connectivity
     {
     }
     //------------------------------------------------------------------
+    void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )
+    {
+        OSL_ENSURE(m_aConnections.end() != _aIter,"Iterator equals .end()");
+        sal_Bool bLastOne = sal_True;
+        try
+        {
+            Reference<XConnection> _xConnection(_aIter->first.get(),UNO_QUERY);
+
+            if ( _xConnection.is() )
+            {
+                Reference<XStatement> xStmt = _xConnection->createStatement();
+                if ( xStmt.is() )
+                {
+                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" SELECT COUNT(*) FROM SYSTEM_SESSIONS WHERE USER_NAME ='SA'"))),UNO_QUERY);
+                    Reference<XRow> xRow(xRes,UNO_QUERY);
+                    if ( xRow.is() && xRes->next() )
+                        bLastOne = xRow->getInt(1) == 1;
+                    if ( bLastOne )
+                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shutdown")));
+                }
+            }
+        }
+        catch(Exception&)
+        {
+        }
+        if ( bLastOne )
+        {
+            Reference<XTransactionListener> xListener(*this,UNO_QUERY);
+            StorageContainer::revokeStorage(_aIter->second.first,xListener);
+        }
+        if ( !m_bInShutDownConnections )
+            m_aConnections.erase(_aIter);
+    }
+    //------------------------------------------------------------------
     void SAL_CALL ODriverDelegator::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         Reference<XConnection> xCon(Source.Source,UNO_QUERY);
-        for (TWeakPairVector::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
+        TWeakPairVector::iterator i = m_aConnections.begin();
+        for (; m_aConnections.end() != i; ++i)
         {
             if ( i->first.get() == xCon.get() )
             {
-                try
-                {
-                    if ( xCon.is() )
-                    {
-                        Reference<XStatement> xStmt = xCon->createStatement();
-                        if ( xStmt.is() )
-                            xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shutdown")));
-                    }
-                }
-                catch(Exception&)
-                {
-                }
-                StorageContainer::revokeStorage(i->second.first);
-                m_aConnections.erase(i);
+                shutdownConnection(i);
                 break;
+            }
+        }
+        if ( !xCon.is() )
+        {
+            Reference< XStorage> xStorage(Source.Source,UNO_QUERY);
+            if ( xStorage.is() )
+            {
+                ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
+                i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
+                                ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
+                                ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
+                if ( i != m_aConnections.end() )
+                    shutdownConnection(i);
             }
         }
     }
     //------------------------------------------------------------------
     void ODriverDelegator::shutdownConnections()
     {
+        m_bInShutDownConnections = sal_True;
         TWeakPairVector::iterator aEnd = m_aConnections.end();
         for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
         {
             try
             {
                 Reference<XConnection> xCon(i->first,UNO_QUERY);
-                if ( xCon.is() )
+                ::comphelper::disposeComponent(xCon);
+            }
+            catch(Exception&)
+            {
+            }
+        }
+        m_aConnections.clear();
+        m_bInShutDownConnections = sal_True;
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        Reference< XStorage> xStorage(aEvent.Source,UNO_QUERY);
+        ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
+        TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
+                         ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
+                        ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
+        if ( i != m_aConnections.end() )
+        {
+            try
+            {
+                Reference<XConnection> xConnection(i->first,UNO_QUERY);
+                if ( xConnection.is() )
                 {
-                    Reference<XStatement> xStmt = xCon->createStatement();
+                    Reference< XStatement> xStmt = xConnection->createStatement();
                     if ( xStmt.is() )
-                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shutdown")));
+                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET WRITE_DELAY 60")));
                 }
             }
             catch(Exception&)
             {
             }
-            StorageContainer::revokeStorage(i->second.first);
         }
-        m_aConnections.clear();
     }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //------------------------------------------------------------------
     //------------------------------------------------------------------
 //........................................................................
 }   // namespace connectivity
 //........................................................................
+
