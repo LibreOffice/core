@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:07:50 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,8 +671,7 @@ IMPL_LINK( SdDrawDocument, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
                 }
             }
 
-            delete pDeletedPresObjList;
-            pDeletedPresObjList = NULL;
+            ClearDeletedPresObjList();
         }
 
         if (pDocSh)
@@ -1394,6 +1393,18 @@ List* SdDrawDocument::GetDeletedPresObjList()
 
     return pDeletedPresObjList;
 }
+
+
+
+
+void SdDrawDocument::ClearDeletedPresObjList (void)
+{
+    delete pDeletedPresObjList;
+    pDeletedPresObjList = NULL;
+}
+
+
+
 
 /** this method enforces that the masterpages are in the currect order,
     that is at position 1 is a PK_STANDARD masterpage followed by a
