@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: bootstrap.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2001-10-05 08:00:22 $
+#   last change: $Author: kr $ $Date: 2001-10-11 13:14:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,41 @@ if (!$rc) {
     $state = 0;
 }
 
+if ($ENV{GUI} eq "WNT") {
+    $comment = $comment . '$SYSUSERHOME not testable under windows' . "\n";
+    $state = 0;
+}
+else {
+    $rc = system "./testbootstrap", "file://$ENV{HOME}", '-env:MYBOOTSTRAPTESTVALUE=$SYSUSERHOME';
+    if (!$rc) {
+        $comment = $comment . '$SYSUSERHOME test not passed' . "\n";
+        $state = 0;
+    }
+}
+
+if ($ENV{GUI} eq "WNT") {
+    $comment = $comment . '$SYSUSERCONFIG' . " not testable under windows\n";
+    $state = 0;
+}
+else {
+    $rc = system "./testbootstrap", "file://$ENV{HOME}", '-env:MYBOOTSTRAPTESTVALUE=$SYSUSERCONFIG';
+    if (!$rc) {
+        $comment = $comment . '$SYSUSERCONFIG test not passed' . "\n";
+        $state = 0;
+    }
+}
+
+if ($ENV{GUI} eq "WNT") {
+    $comment = $comment . '$SYSBINDIR' . " not testable under windows\n";
+    $state = 0;
+}
+else {
+    $rc = system "./testbootstrap", "file://$ENV{PWD}", '-env:MYBOOTSTRAPTESTVALUE=$SYSBINDIR';
+    if (!$rc) {
+        $comment = $comment . '$SYSBINDIR test not passed' . "\n";
+        $state = 0;
+    }
+}
 
 if ($ENV{GUI} eq "WNT") {
     $rc = system "./testbootstrap", "inherited_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_VALUE', "-env:iniName=ini.ini";
