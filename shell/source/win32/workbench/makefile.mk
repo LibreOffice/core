@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-14 08:19:24 $
+#   last change: $Author: tra $ $Date: 2001-05-25 08:22:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..$/..$/..
 PRJNAME=		sysshell
 TARGET=			testsyssh
 TARGET1=		testsmplmail
+TARGET2=		testprx
 LIBTARGET=		NO
 TARGETTYPE=		CUI
 
@@ -82,6 +83,7 @@ CFLAGS+=/GX
 
 OBJFILES1=$(OBJ)$/TestSysShExec.obj
 OBJFILES2=$(OBJ)$/TestSmplMail.obj
+OBJFILES3=$(OBJ)$/TestProxySet.obj
 
 OBJFILES=$(OBJFILES1)\
          $(OBJFILES2)
@@ -108,6 +110,17 @@ APP2STDLIBS+=	$(CPPULIB)			\
                 user32.lib
                 
 APP2DEF=		$(MISC)$/$(APP2TARGET).def
+
+# --- TestProxy ---
+
+APP3TARGET=$(TARGET2)
+APP3OBJS=$(OBJFILES3)
+
+APP3STDLIBS+=	$(CPPULIB)			\
+                $(CPPUHELPERLIB)	\
+                $(SALLIB)
+
+APP3DEF=		$(MISC)$/$(APP3TARGET).def
 
 # --- Targets ------------------------------------------------------
 
