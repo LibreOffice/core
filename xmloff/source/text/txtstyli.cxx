@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ void XMLTextStyleContext::FillPropertySet(
         struct _ContextID_Index_Pair aContextIDs[] =
         {
             { CTF_COMBINED_CHARACTERS_FIELD, -1 },
+            { CTF_KEEP_TOGETHER, -1 },
 #ifdef CONV_STAR_FONTS
             { CTF_FONTFAMILYNAME, -1 },
             { CTF_FONTFAMILYNAME_CJK, -1 },
@@ -431,6 +432,24 @@ void XMLTextStyleContext::FillPropertySet(
             sal_Bool bVal = *(sal_Bool*)rAny.getValue();
             bHasCombinedCharactersLetter = bVal;
         }
+
+        // keep-together: the application default is different from
+        // the file format default. Hence, if we always set this
+        // value; if we didn't find one, we'll set to false, the file
+        // format default.
+        if( IsDefaultStyle() )
+        {
+            OUString sIsSplitAllowed =
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSplitAllowed" ) );
+
+            DBG_ASSERT( xInfo->hasPropertyByName( sIsSplitAllowed ),
+                        "property missing?" );
+            rPropSet->setPropertyValue( sIsSplitAllowed,
+                (aContextIDs[1].nIndex == -1)
+                ? makeAny( false )
+                : GetProperties()[aContextIDs[1].nIndex].maValue );
+        }
+
 
 #ifdef CONV_STAR_FONTS
         // check for StarBats and StarMath fonts
