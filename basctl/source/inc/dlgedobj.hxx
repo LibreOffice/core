@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-15 13:09:43 $
+ *  last change: $Author: tbe $ $Date: 2001-07-18 16:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,10 @@ public:
     virtual ::std::vector<DlgEdObj*> GetChilds() const { return pChilds; }
 
     virtual void UpdateStep();
+
+    virtual void SetRectFromProps();
+    virtual void SetPropsFromRect();
+
     virtual void SortByTabIndex();
 
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
