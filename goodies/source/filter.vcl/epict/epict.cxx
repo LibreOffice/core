@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 11:04:49 $
+ *  last change: $Author: sj $ $Date: 2001-03-14 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2228,7 +2228,7 @@ extern "C" BOOL _cdecl GraphicExport(SvStream & rStream, Graphic & rGraphic,
 #else
 extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
                               PFilterCallback pCallback, void * pCallerData,
-                              FilterConfigItem, BOOL)
+                              FilterConfigItem*, BOOL)
 #endif
 {
     PictWriter      aPictWriter;
