@@ -78,7 +78,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-                <supported-service>drafts.com.sun.star.formula.AccessibleFormulaView</supported-service>
+                <supported-service>com.sun.star.formula.AccessibleFormulaView</supported-service>
     </component-description>
     <component-description>
                 <author>TL</author>
@@ -87,6 +87,6 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-                <supported-service>drafts.com.sun.star.formula.AccessibleFormulaText</supported-service>
+                <supported-service>com.sun.star.formula.AccessibleFormulaText</supported-service>
     </component-description>
 </module-description>
