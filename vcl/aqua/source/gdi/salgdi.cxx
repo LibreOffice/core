@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-17 00:39:12 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-17 23:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
         if ( hView )
             {
-                VCLGraphics_drawLine ( hView,
+                VCLGraphics_DrawLine ( hView,
                                        nX1,
                                        nY1,
                                        nX2,
@@ -210,7 +210,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 
         if ( hView )
             {
-                VCLGraphics_drawRect ( hView,
+                VCLGraphics_DrawRect ( hView,
                                        nX,
                                        nY,
                                        nWidth,
@@ -238,7 +238,7 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
                 if ( hView )
                     {
-                        VCLGraphics_drawPolyLine
+                        VCLGraphics_DrawPolygon
                             (
                                 hView,
                                 nPoints,
@@ -271,13 +271,14 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
                 if ( hView )
                     {
-                        VCLGraphics_drawPolygon
+                        /*VCLGraphics_DrawColorPolygon
                             (
                                 hView,
                                 nPoints,
                                 pXPtsArray,
-                                pYPtsArray
-                            );
+                                pYPtsArray,
+                                NULL
+                            );*/
                     } // if
             } // if
     } // SalGraphics::DrawPolygon
