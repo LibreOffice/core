@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-06 12:48:40 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,35 +954,24 @@ void OTableController::appendKey(Reference<XKeysSupplier>& _rxSup)
 {
     if(!_rxSup.is())
         return; // the database doesn't support keys
-    try
-    {
-        OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
-        Reference<XDataDescriptorFactory> xKeyFactory(_rxSup->getKeys(),UNO_QUERY);
-        OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
-        Reference<XAppend> xAppend(xKeyFactory,UNO_QUERY);
-        OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
-        Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
-        OSL_ENSURE(xKey.is(),"Key is null!");
-        xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::PRIMARY));
+    OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
+    Reference<XDataDescriptorFactory> xKeyFactory(_rxSup->getKeys(),UNO_QUERY);
+    OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
+    Reference<XAppend> xAppend(xKeyFactory,UNO_QUERY);
+    OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
-        Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
-        if(xColSup.is())
-        {
-            appendColumns(xColSup,sal_True);
-            Reference<XNameAccess> xColumns = xColSup->getColumns();
-            if(xColumns->getElementNames().getLength())
-                xAppend->appendByDescriptor(xKey);
-        }
+    Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
+    OSL_ENSURE(xKey.is(),"Key is null!");
+    xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::PRIMARY));
 
-    }
-    catch(SQLException& e)
+    Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
+    if(xColSup.is())
     {
-        showError(SQLExceptionInfo(e));
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(sal_False, "OTableController::appendKey: caught an exception!");
+        appendColumns(xColSup,sal_True);
+        Reference<XNameAccess> xColumns = xColSup->getColumns();
+        if(xColumns->hasElements())
+            xAppend->appendByDescriptor(xKey);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1350,28 +1339,29 @@ void OTableController::alterColumns()
                 }
                 // exceptions are catched outside
                 xNewColumn = NULL;
-                xColumns->getByName(pField->GetName()) >>= xColumn;
+                if(xColumns->hasByName(pField->GetName()))
+                    xColumns->getByName(pField->GetName()) >>= xColumn;
                 bReload = sal_True;
             }
 
             if(nFormatKey != pField->GetFormatKey())
             {
-                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
+                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
                     xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
             }
             if(nAlignment != dbaui::mapTextAllign(pField->GetHorJustify()))
             {
-                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
+                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
                     xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
             }
             if(sDescription != pField->GetDescription())
             {
-                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
+                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                     xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetDescription()));
             }
             if(sControlDefault != pField->GetDefaultValue())
             {
-                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
                     xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,makeAny(pField->GetDefaultValue()));
             }
         }
