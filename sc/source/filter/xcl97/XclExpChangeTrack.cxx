@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:06:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,6 @@
 #ifndef _XCL97REC_HXX
 #include "xcl97rec.hxx"
 #endif
-
-//___________________________________________________________________
-
-extern const sal_Char*  pRevLogStreamName;
-extern const sal_Char*  pUserNamesStreamName;
 
 //___________________________________________________________________
 // local functions
@@ -1279,12 +1274,12 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
 sal_Bool XclExpChangeTrack::WriteUserNamesStream()
 {
     sal_Bool bRet = sal_False;
-    String sStreamName( pUserNamesStreamName, RTL_TEXTENCODING_ASCII_US );
-    SvStorageStreamRef xSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
+    const XclExpRoot& rRoot = *pExcRoot->pER;
+    SvStorageStreamRef xSvStrm = rRoot.OpenStream( EXC_STREAM_USERNAMES );
     DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
     if( xSvStrm.Is() )
     {
-        XclExpStream aXclStrm( *xSvStrm, *pExcRoot->pER );
+        XclExpStream aXclStrm( *xSvStrm, rRoot );
         XclExpChTr0x0191().Save( aXclStrm );
         XclExpChTr0x0198().Save( aXclStrm );
         XclExpChTr0x0192().Save( aXclStrm );
@@ -1302,12 +1297,12 @@ void XclExpChangeTrack::Write()
 
     if( WriteUserNamesStream() )
     {
-        String sStreamName( pRevLogStreamName, RTL_TEXTENCODING_ASCII_US );
-        SvStorageStreamRef xSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
+        const XclExpRoot& rRoot = *pExcRoot->pER;
+        SvStorageStreamRef xSvStrm = rRoot.OpenStream( EXC_STREAM_REVLOG );
         DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
         if( xSvStrm.Is() )
         {
-            XclExpStream aXclStrm( *xSvStrm, *pExcRoot->pER, EXC_MAXRECSIZE_BIFF8 + 8 );
+            XclExpStream aXclStrm( *xSvStrm, rRoot, EXC_MAXRECSIZE_BIFF8 + 8 );
             aRecList.Save( aXclStrm );
             xSvStrm->Commit();
         }
