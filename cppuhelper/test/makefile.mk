@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2003-03-20 12:26:58 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:25:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,16 +177,16 @@ $(BIN)$/cpputest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
-    +regcomp -register -r $@ -c $(DLLPRE)corefl$(DLLPOST)
+    +regcomp -register -r $@ -c corereflection.uno$(DLLPOST)
     touch $@
-    +$(COPY) $(UNO_PATH)$/*smgr* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/*cpld* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/*simreg* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/*defreg* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/*tdmgr* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/*rdbtdp* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/*impreg* $(UNO_OUT)
-    +$(COPY) $(UNO_PATH)$/*sec* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/servicemgr.uno* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/shlibloader.uno* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/simplereg.uno* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/nestedreg.uno* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/typemgr.uno* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/regtypeprov.uno* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/implreg.uno* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/security.uno* $(UNO_OUT)
 
 unoheader: $(BIN)$/cpputest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES)" $(BIN)$/cpputest.rdb
