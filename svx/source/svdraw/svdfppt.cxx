@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-16 16:00:56 $
+ *  last change: $Author: sj $ $Date: 2001-08-23 12:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,16 +1598,25 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
             if ( !pFonts )
                 ReadFontCollection();
 
-            // reading TxSI styles (default language setting ... )
-            PPTTextSpecInfoAtomInterpreter aTxSIStyle;
+            // reading TxPF, TxSI
+            PPTTextParagraphStyleAtomInterpreter    aTxPFStyle;
+            PPTTextSpecInfoAtomInterpreter          aTxSIStyle; // styles (default language setting ... )
+
             DffRecordHeader* pEnvHd = aDocRecManager.GetRecordHeader( PPT_PST_Environment );
             if ( pEnvHd )
             {
+                pEnvHd->SeekToContent( rStCtrl );
+                DffRecordHeader aTxPFStyleRecHd;
+                if ( SeekToRec( rStCtrl, PPT_PST_TxPFStyleAtom, pEnvHd->GetRecEndFilePos(), &aTxPFStyleRecHd ) )
+                    aTxPFStyle.Read( rStCtrl, aTxPFStyleRecHd );
+
                 pEnvHd->SeekToContent( rStCtrl );
                 DffRecordHeader aTxSIStyleRecHd;
                 if ( SeekToRec( rStCtrl, PPT_PST_TxSIStyleAtom, pEnvHd->GetRecEndFilePos(), &aTxSIStyleRecHd ) )
                     aTxSIStyle.Read( rStCtrl, aTxSIStyleRecHd, PPT_PST_TxSIStyleAtom );
             }
+
+            // todo:: PPT_PST_TxPFStyleAtom
 
             // SlidePersists Lesen
             pMasterPages=new PptSlidePersistList;
@@ -1701,7 +1710,7 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
                                     if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
                                         aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
 
-                                    pE->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxSI );
+                                    pE->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI );
                                     pDefaultSheet = pE->pStyleSheet;
                                 }
                                 if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
@@ -4288,6 +4297,7 @@ PPTParaSheet::PPTParaSheet( UINT32 nInstance )
         maParaLevel[ i ].mnTextOfs = 0;
         maParaLevel[ i ].mnBulletOfs = 0;
         maParaLevel[ i ].mnDefaultTab = 0x240;
+        maParaLevel[ i ].mnAsianLineBreak = 0;
     }
 }
 
@@ -4373,7 +4383,7 @@ void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
             if ( nPMask & 0x40000 )
                 rIn >> nVal16;
             if ( nPMask & 0x80000 )
-                rIn >> nVal16;
+                rIn >> maParaLevel[ nLevel ].mnAsianLineBreak;
             if ( nPMask & 0x100000 )
                 rIn >> nVal16;
 
@@ -4411,17 +4421,24 @@ void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
             rIn >> maParaLevel[ nLevel ].mnBulletOfs;
         if ( nPMask & 0x10000 )
             rIn >> nVal16;
-        if ( nPMask & 0x20000 )
-        {
-            DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
-            rIn >> nVal16;
-        }
         if ( bSimpleText )
             nPMask &=0x7ffff;
-        else if ( nPMask & 0x200000 )
+        else
         {
-            rIn >> nVal16;  // #88602#
-            nPMask &=~0x200000;
+            if ( nPMask & 0xe0000 )
+            {
+                sal_uInt16 nFlagsToModifyMask = (sal_uInt16)( ( nPMask >> 17 ) & 7 );
+                rIn >> nVal16;
+                // bits that are not involved to zero
+                nVal16 &= nFlagsToModifyMask;
+                // bits that are to change to zero
+                maParaLevel[ nLevel ].mnAsianLineBreak &=~nFlagsToModifyMask;
+                // now set the corresponding bits
+                maParaLevel[ nLevel ].mnAsianLineBreak |= nVal16;
+            }
+            if ( nPMask & 0x200000 )
+                rIn >> nVal16;      // #88602#
+            nPMask &=~0x2e0000;
         }
         nPMask >>= 18; // wenn normaler Text obere Flags ignorieren
         for ( UINT16 i = 18; nPMask; i++, nPMask >>= 1 )
@@ -4436,7 +4453,7 @@ void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
 }
 
 PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, SdrPowerPointImport& rManager,
-                                const PPTTextSpecInfo& rTextSpecInfo ) :
+                                const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle, const PPTTextSpecInfo& rTextSpecInfo ) :
     maTxSI                  ( rTextSpecInfo ),
     PPTNumberFormatCreator  ( new PPTExtParaProv( rManager, rIn, &rSlideHd ) )
 {
@@ -4618,6 +4635,21 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                             mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
                         }
                         mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, TRUE, nLev, bFirst, FALSE );
+                        if ( !nLev )
+                        {
+                            // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
+                            if ( rTxPFStyle.bValid )
+                            {
+                                PPTParaLevel& rParaLevel = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ 0 ];
+                                rParaLevel.mnAsianLineBreak = 0;
+                                if ( rTxPFStyle.bForbiddenRules )
+                                    rParaLevel.mnAsianLineBreak |= 1;
+                                if ( !rTxPFStyle.bLatinTextWrap )
+                                    rParaLevel.mnAsianLineBreak |= 2;
+                                if ( rTxPFStyle.bHangingPunctuation )
+                                    rParaLevel.mnAsianLineBreak |= 4;
+                            }
+                        }
                         mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, TRUE, nLev, bFirst, FALSE );
                         bFirst = FALSE;
                         nLev++;
@@ -4944,6 +4976,84 @@ PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+PPTTextParagraphStyleAtomInterpreter::PPTTextParagraphStyleAtomInterpreter() :
+    bValid              ( sal_False ),
+    bForbiddenRules     ( sal_False ),
+    bHangingPunctuation ( sal_False ),
+    bLatinTextWrap      ( sal_False )
+{
+}
+
+sal_Bool PPTTextParagraphStyleAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader& rRecHd )
+{
+    bValid = sal_False;
+    rRecHd.SeekToContent( rIn );
+    sal_uInt32 nDummy32, nFlags, nRecEndPos = rRecHd.GetRecEndFilePos();
+    sal_uInt16 nDummy16;
+
+    rIn >> nDummy16
+        >> nFlags;
+
+    if ( nFlags & 0xf && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // BuFlags
+    if ( nFlags & 0x80 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // BuChar
+    if ( nFlags & 0x10 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // nBuFont;
+    if ( nFlags & 0x40 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // nBuHeight;
+    if ( nFlags & 0x0020 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy32;    // nBuColor;
+    if ( nFlags & 0x800 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // AbsJust!
+    if ( nFlags & 0x400 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;
+    if ( nFlags & 0x200 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;
+    if ( nFlags & 0x100 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;
+    if ( nFlags & 0x1000 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // LineFeed
+    if ( nFlags & 0x2000 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // nUpperDist
+    if ( nFlags & 0x4000 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;    // nLowerDist
+    if ( nFlags & 0x8000 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;
+    if ( nFlags & 0x10000 && ( rIn.Tell() < nRecEndPos ) )
+        rIn >> nDummy16;
+    if ( nFlags & 0xe0000 && ( rIn.Tell() < nRecEndPos ) )
+    {
+        rIn >> nDummy16;
+        if ( nFlags & 0x20000 )
+            bForbiddenRules = ( nDummy16 & 1 ) == 1;
+        if ( nFlags & 0x40000 )
+            bLatinTextWrap = ( nDummy16 & 2 ) == 0;
+        if ( nFlags & 0x80000 )
+            bHangingPunctuation = ( nDummy16 & 4 ) == 4;
+    }
+    nFlags &=~ 0xfffff;
+    sal_uInt32 nMask = 0x100000;
+    while ( nFlags && nMask && ( rIn.Tell() < nRecEndPos ) )
+    {
+        if ( nFlags & nMask )
+        {
+            rIn >> nDummy16;
+            nFlags ^= nMask;
+        }
+        nMask <<= 1;
+    }
+    bValid = rIn.Tell() == nRecEndPos;
+    return bValid;
+}
+
+PPTTextParagraphStyleAtomInterpreter::~PPTTextParagraphStyleAtomInterpreter()
+{
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 PPTTextSpecInfoAtomInterpreter::PPTTextSpecInfoAtomInterpreter() :
     bValid  ( sal_False )
@@ -5153,7 +5263,16 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 if ( nMask & 0x10000 )
                     rIn >> nDummy16;
                 if ( nMask & 0xe0000 )
+                {
                     rIn >> nDummy16;
+                    if ( nMask & 0x20000 )
+                        aSet.mpArry[ PPT_ParaAttr_AsianLB_1 ] = nDummy16 & 1;
+                    if ( nMask & 0x40000 )
+                        aSet.mpArry[ PPT_ParaAttr_AsianLB_2 ] = ( nDummy16 >> 1 ) & 1;
+                    if ( nMask & 0x80000 )
+                        aSet.mpArry[ PPT_ParaAttr_AsianLB_3 ] = ( nDummy16 >> 2 ) & 1;
+                    aSet.mnAttrSet |= ( ( nMask >> 17 ) & 7 ) << PPT_ParaAttr_AsianLB_1;
+                }
                 if ( nMask & 0x200000 )                     // #88602#
                     rIn >> nDummy16;
             }
@@ -5860,7 +5979,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
     UINT32  nMask = 1 << nAttr;
     nRetValue = 0;
 
-    if ( nAttr > 17 )
+    if ( nAttr > 20 )
     {
         DBG_ERROR( "SJ:PPTParagraphObj::GetAttrib - attribute does not exist" );
         return FALSE;
@@ -6010,6 +6129,28 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                 if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletOfs ) )
                     bIsHardAttribute = 1;
             }
+            break;
+            case PPT_ParaAttr_AsianLB_1 :
+            {
+                nRetValue = rParaLevel.mnAsianLineBreak & 1;
+                if ( pParaLevel && ( nRetValue != ( (sal_uInt32)pParaLevel->mnAsianLineBreak & 1 ) ) )
+                    bIsHardAttribute = 1;
+            }
+            break;
+            case PPT_ParaAttr_AsianLB_2 :
+            {
+                nRetValue = ( rParaLevel.mnAsianLineBreak >> 1 ) & 1;
+                if ( pParaLevel && ( nRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 1 ) & 1 ) ) )
+                    bIsHardAttribute = 1;
+            }
+            break;
+            case PPT_ParaAttr_AsianLB_3 :
+            {
+                nRetValue = ( rParaLevel.mnAsianLineBreak >> 2 ) & 1;
+                if ( pParaLevel && ( nRetValue != ( ( (sal_uInt32)pParaLevel->mnAsianLineBreak >> 2 ) & 1 ) ) )
+                    bIsHardAttribute = 1;
+            }
+            break;
         }
     }
     return (BOOL)bIsHardAttribute;
@@ -6090,6 +6231,11 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
             rSet.Put( SvxAdjustItem( aAdj[ nVal ] ) );
         }
     }
+
+    if ( GetAttrib( PPT_ParaAttr_AsianLB_1, nVal, nInstanceInSheet ) )
+        rSet.Put( SfxBoolItem( EE_PARA_FORBIDDENRULES, nVal != 0 ) );
+    if ( GetAttrib( PPT_ParaAttr_AsianLB_3, nVal, nInstanceInSheet ) )
+        rSet.Put( SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, nVal != 0 ) );
 
     // LineSpacing
     PPTPortionObj* pPortion = First();
