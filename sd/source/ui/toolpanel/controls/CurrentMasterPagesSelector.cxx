@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:59:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,12 @@
 #include "PreviewValueSet.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include <vcl/image.hxx>
 #include "MasterPageContainer.hxx"
+#include "app.hrc"
+
+#include <vcl/image.hxx>
 #include <svx/svdmodel.hxx>
+
 #include <set>
 
 
@@ -84,6 +87,10 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
       mxListener(NULL)
 {
     SetName(String(RTL_CONSTASCII_USTRINGPARAM("CurrentMasterPagesSelector")));
+
+    // For this master page selector only we change the default action for
+    // left clicks.
+    mnDefaultClickAction = SID_TP_APPLY_TO_SELECTED_SLIDES;
 }
 
 
@@ -119,6 +126,7 @@ void CurrentMasterPagesSelector::LateInit (void)
 void CurrentMasterPagesSelector::Fill (void)
 {
     Clear();
+
     USHORT nPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     SdPage* pMasterPage;
     // Remember the names of the master pages that have been inserted to
@@ -133,11 +141,88 @@ void CurrentMasterPagesSelector::Fill (void)
             if (aMasterPageNames.find(sName)==aMasterPageNames.end())
             {
                 aMasterPageNames.insert (sName);
-                AddItemForPage (String(),sName,pMasterPage,Image());
+
+                int nIndex = mpPageSet->GetItemCount() + 1;
+
+                Image aPreview = MasterPageContainer::Instance().GetPreviewForPage (
+                    pMasterPage,
+                    mnPreviewWidth);
+                mpPageSet->InsertItem (
+                    nIndex,
+                    aPreview,
+                    pMasterPage->GetName());
+                mpPageSet->SetItemData (
+                    nIndex,
+                    pMasterPage);
             }
         }
     }
     GetParentNode()->RequestResize();
+}
+
+
+
+
+void CurrentMasterPagesSelector::Clear (void)
+{
+    mpPageSet->Clear ();
+}
+
+
+
+
+void CurrentMasterPagesSelector::UpdateAllPreviews (void)
+{
+    SdPage* pMasterPage;
+    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    {
+        pMasterPage = reinterpret_cast<SdPage*>(mpPageSet->GetItemData(nIndex));
+        if (pMasterPage != NULL)
+            mpPageSet->SetItemImage (nIndex,
+                MasterPageContainer::Instance().GetPreviewForPage (
+                    pMasterPage,
+                    mnPreviewWidth));
+    }
+    GetParentNode()->RequestResize();
+}
+
+
+
+
+void CurrentMasterPagesSelector::UpdatePreview (USHORT nIndex)
+{
+    SdPage* pMasterPage = reinterpret_cast<SdPage*>(mpPageSet->GetItemData(nIndex));
+    if (pMasterPage != NULL)
+        mpPageSet->SetItemImage (nIndex,
+            MasterPageContainer::Instance().GetPreviewForPage (
+                pMasterPage,
+                mnPreviewWidth));
+    GetParentNode()->RequestResize();
+}
+
+
+
+
+void CurrentMasterPagesSelector::InvalidatePreview (const SdPage* pPage)
+{
+    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    {
+        if (pPage == reinterpret_cast<SdPage*>(mpPageSet->GetItemData(nIndex)))
+        {
+            MasterPagesSelector::InvalidatePreview(nIndex);
+            break;
+        }
+    }
+}
+
+
+
+
+SdPage* CurrentMasterPagesSelector::GetSelectedMasterPage (void)
+{
+    USHORT nIndex = mpPageSet->GetSelectItemId();
+    SdPage* pMasterPage = reinterpret_cast<SdPage*>(mpPageSet->GetItemData (nIndex));
+    return pMasterPage;
 }
 
 
@@ -156,14 +241,10 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
         pPage = mrDocument.GetSdPage (nIndex, PK_STANDARD);
         if (pPage != NULL && pPage->IsSelected())
         {
-      //USHORT nMasterPageCount (pPage->GetMasterPageCount());
-      //            for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
-      //            {
-      SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
-      SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
-                if (pMasterPage != NULL)
-                    aNames.insert (pMasterPage->GetName());
-        //            }
+            SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
+            SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
+            if (pMasterPage != NULL)
+                aNames.insert (pMasterPage->GetName());
         }
     }
 
