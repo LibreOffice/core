@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 15:58:11 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 16:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,5 +302,13 @@ void SAL_CALL OIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, Index
     }
 }
 // -------------------------------------------------------------------------
+void SAL_CALL OIndexes::disposing(void)
+{
+    if(m_xIndexes.is())
+        clear_NoDispose();
+    else
+        OCollection_TYPE::disposing();
+}
+// -----------------------------------------------------------------------------
 
 
