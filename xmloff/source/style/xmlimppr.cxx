@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-22 16:39:27 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,8 +189,7 @@ void SvXMLImportPropertyMapper::importXML(
                 // create a XMLPropertyState with an empty value
 
                 nFlags = maPropMapper->GetEntryFlags( nIndex );
-                if( ( nFlags & (MID_FLAG_NO_ITEM_IMPORT |
-                               MID_FLAG_ELEMENT_ITEM_IMPORT) ) == 0 )
+                if( ( nFlags & MID_FLAG_ELEMENT_ITEM_IMPORT ) == 0 )
                 {
                     XMLPropertyState aNewProperty( nIndex );
                     sal_Int32 nReference = -1;
@@ -237,9 +236,6 @@ void SvXMLImportPropertyMapper::importXML(
                             rProperties[nReference] = aNewProperty;
                     }
                 }
-                else
-                    handleNoItem( nIndex, rProperties, rValue, rUnitConverter,
-                                                            rNamespaceMap );
             }
             else
             {
@@ -315,22 +311,6 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
     if( mxNextMapper.is() )
         return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
-    else
-        return FALSE;
-}
-
-/** this method is called for every item that has the MID_FLAG_NO_ITEM_IMPORT flag set */
-BOOL SvXMLImportPropertyMapper::handleNoItem(
-        sal_Int32 nIndex,
-        vector< XMLPropertyState >& rProperties,
-          const OUString& rValue,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap) const
-{
-    DBG_ASSERT( mxNextMapper.is(), "unsuported no item in xml import" );
-    if( mxNextMapper.is() )
-        return mxNextMapper->handleNoItem( nIndex, rProperties, rValue,
-                                          rUnitConverter, rNamespaceMap );
     else
         return FALSE;
 }

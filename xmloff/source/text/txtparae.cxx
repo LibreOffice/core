@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-29 08:51:40 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,8 @@ SV_DECL_PTRARR_SORT_DEL( OUStringsSort_Impl, OUStringPtr, 20, 10 )
 SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
-                                    const Reference < XPropertySet > & rPropSet )
+                                  const Reference < XPropertySet > & rPropSet,
+                                  const XMLPropertyState* pAddState)
 {
     sal_Bool bCache = sal_False;
     UniReference < SvXMLExportPropertyMapper > xPropMapper;
@@ -289,6 +290,8 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
 
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
+    if (NULL != pAddState)
+        xPropStates.push_back(*pAddState);
 
     if( xPropStates.size() > 0L || bCache )
     {
@@ -377,7 +380,8 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
 OUString XMLTextParagraphExport::Find(
         sal_uInt16 nFamily,
            const Reference < XPropertySet > & rPropSet,
-        const OUString& rParent ) const
+        const OUString& rParent,
+        const XMLPropertyState* pAddState) const
 {
     sal_Bool bCache = sal_False;
     OUString sName( rParent );
@@ -413,6 +417,8 @@ OUString XMLTextParagraphExport::Find(
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
+    if (NULL != pAddState)
+        xPropStates.push_back(*pAddState);
 
     if( xPropStates.size() > 0L )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
@@ -747,11 +753,22 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
     xFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                               GetExport() );
-
-    pFieldExport = new XMLTextFieldExport( rExp );
     pSectionExport = new XMLSectionExport( rExp, *this );
     pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
     pRedlineExport = IsBlockMode() ? NULL : new XMLRedlineExport( rExp );
+
+    // The text field helper needs a pre-constructed XMLPropertyState
+    // to export the combined characters field. We construct that
+    // here, because we need the text property mapper to do it.
+
+    // construct Any value, then find index
+    Any aAny;
+    sal_Bool bTmp = sal_True;
+    aAny.setValue(&bTmp, ::getBooleanCppuType());
+    sal_Int32 nIndex = xTextPropMapper->getPropertySetMapper()->FindEntryIndex(
+                                "", XML_NAMESPACE_STYLE, sXML_text_combine);
+    pFieldExport = new XMLTextFieldExport(
+        rExp, new XMLPropertyState( nIndex, aAny )  );
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
@@ -1338,27 +1355,19 @@ void XMLTextParagraphExport::exportTextField(
         {
             if( bAutoStyles )
             {
-                Add( XML_STYLE_FAMILY_TEXT_TEXT, xPropSet );
                 pFieldExport->ExportFieldAutoStyle( xTxtFld );
             }
             else
             {
-                OUString sStyle = FindTextStyle( xPropSet );
-                OUString sText = rTextRange->getString();
-                if( sStyle.getLength() )
-                {
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                              sXML_style_name, sStyle );
-                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                              sXML_span, sal_False, sal_False);
-                    pFieldExport->ExportField( xTxtFld );
-                }
-                else
-                {
-                    pFieldExport->ExportField( xTxtFld );
-                }
+                pFieldExport->ExportField( xTxtFld );
             }
         }
+        else
+        {
+            // write only characters
+            GetExport().GetDocHandler()->characters(rTextRange->getString());
+        }
+
     }
 }
 

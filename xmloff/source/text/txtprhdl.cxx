@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,6 +1252,11 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     case XML_TYPE_TEXT_COMBINE:
         pHdl = new XMLNamedBoolPropertyHdl(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_lines ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) ) );
+        break;
+    case XML_TYPE_TEXT_COMBINE_CHARACTERS:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_letters ) ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) ) );
         break;
     case XML_TYPE_TEXT_COMBINECHAR:

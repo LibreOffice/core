@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:30 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 
 class SvXMLExport;
 class SvXMLNumFmtExport;
+struct XMLPropertyState;
 
 namespace com { namespace sun { namespace star { namespace util {
     struct DateTime;
@@ -171,6 +172,8 @@ enum FieldIdEnum {
     FIELD_ID_SCRIPT,                // script fields (for HTML pages, mostly)
     FIELD_ID_ANNOTATION,            // annotation (notice) field
 
+    FIELD_ID_COMBINED_CHARACTERS,   // combined characters (asian typography)
+
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };
 
@@ -190,16 +193,18 @@ class XMLTextFieldExport
 
 public:
 
-    XMLTextFieldExport( SvXMLExport& rExp );
+    XMLTextFieldExport( SvXMLExport& rExp,
+                        /// XMLPropertyState for the combined characters field
+                        XMLPropertyState* pCombinedCharState = NULL );
     virtual ~XMLTextFieldExport();
 
-    /// export this field. Assumes styles have been exported.
+    /// Export this field and the surrounding span element with the formatting.
     /// To be called for every field in the document body.
     void ExportField(const ::com::sun::star::uno::Reference <
                       ::com::sun::star::text::XTextField > & rTextField );
 
-    /// export styles for this field (if appropriate).
-    /// (requires final call to SvXMLNumFmtExport)
+    /// collect styles (character styles, data styles, ...) for this field
+    /// (if appropriate).
     /// to be called for every field during style export.
     void ExportFieldAutoStyle(const ::com::sun::star::uno::Reference <
                       ::com::sun::star::text::XTextField > & rTextField );
@@ -230,6 +235,16 @@ public:
 protected:
 
     SvXMLExport& GetExport() { return rExport; }
+
+    /// export a field after <text:span> is already written
+    void XMLTextFieldExport::ExportFieldHelper(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextField> & rTextField,
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet> & rPropSet,
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet> & rRangePropSet,
+        enum FieldIdEnum nToken);
 
     /// export an empty element
     void ExportElement(const sal_Char* pElementName,    /// element name
@@ -347,7 +362,7 @@ protected:
 
     /// export all attributes for bibliography data fields
     void ProcessBibliographyData(
-        ::com::sun::star::uno::Reference <
+        const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropertySet);
 
     /// for XDependentTextFields, get PropertySet of FieldMaster
@@ -461,6 +476,9 @@ private:
     const ::rtl::OUString sPropertyDate;
 
     const ::rtl::OUString sEmpty;
+
+    XMLPropertyState* pCombinedCharactersPropertyState;
+
 };
 
 

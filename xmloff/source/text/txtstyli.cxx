@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:02:58 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #include "XMLEventsImportContext.hxx"
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -179,6 +182,7 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
                          nFamily, bDefaultStyle ),
     bAutoUpdate( sal_False ),
     bHasMasterPageName( sal_False ),
+    bHasCombinedCharactersLetter( sal_False ),
     pEventContext( NULL ),
     sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) ),
@@ -324,6 +328,64 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
             Any aAny;
             aAny <<= sMasterPageName;
             xPropSet->setPropertyValue( sPageDescName, aAny );
+        }
+    }
+}
+
+void XMLTextStyleContext::FillPropertySet(
+    const Reference<XPropertySet > & rPropSet )
+{
+    // imitate the FillPropertySet of the super class, so we get a chance to
+    // catch the combined characters attribute
+
+    // imitate XMLPropStyleContext::FillPropertySet(...)
+    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        ((SvXMLStylesContext *)GetStyles())->GetImportPropertyMapper(GetFamily());
+    DBG_ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
+    if( xImpPrMap.is() )
+    {
+
+        // imitate SvXMLImportPropertyMapper::FillPropertySet(...)
+
+        sal_Bool bSet = sal_False;
+        Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
+
+        sal_Int32 nCount = GetProperties().size();
+        for( sal_Int32 i=0; i < nCount; i++ )
+        {
+            const XMLPropertyState& rProp = GetProperties()[i];
+            sal_Int32 nIdx = rProp.mnIndex;
+            if( -1 == nIdx )
+                continue;
+
+            UniReference<XMLPropertySetMapper> rPropMapper =
+                xImpPrMap->getPropertySetMapper();
+
+
+            // catch combined characters
+            if (XML_NAMESPACE_STYLE == rPropMapper->GetEntryNameSpace(nIdx) &&
+                rPropMapper->GetEntryXMLName(nIdx).equalsAsciiL(
+                    sXML_text_combine, sizeof(sXML_text_combine)-1) &&
+                (rPropMapper->GetEntryAPIName(nIdx).getLength() == 0) )
+            {
+                Any aAny = rProp.maValue;
+                sal_Bool bVal = *(sal_Bool*)aAny.getValue();
+                bHasCombinedCharactersLetter = bVal;
+            }
+
+            // now proceed normally
+            const OUString& rPropName = rPropMapper->GetEntryAPIName( nIdx );
+            if( xInfo->hasPropertyByName( rPropName ) )
+            {
+                try
+                {
+                    rPropSet->setPropertyValue( rPropName, rProp.maValue );
+                    bSet = sal_True;
+                }
+                catch(...)
+                {
+                }
+            }
         }
     }
 }

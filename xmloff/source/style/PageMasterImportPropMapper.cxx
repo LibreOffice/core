@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:01:54 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,16 +136,6 @@ sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
     return bRet;
 }
 
-
-/*sal_Bool PageMasterImportPropertyMapper::handleNoItem(
-        sal_Int32 nIndex,
-        ::std::vector< XMLPropertyState >& rProperties,
-        const ::rtl::OUString& rValue,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
-{
-    return sal_True;
-}*/
 
 void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {

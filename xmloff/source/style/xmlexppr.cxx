@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-22 16:38:39 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,9 +197,12 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::Filter(
             sal_Int32 nCount = 0;
             for( sal_Int32 i=0; i < nProps; i++ )
             {
+                // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
                 // Does the PropertySet contain name of mpEntries-array ?
                 const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
-                if( xInfo->hasPropertyByName( rAPIName ) )
+                const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
+                if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
+                    xInfo->hasPropertyByName( rAPIName ) )
                 {
                     pNames[nCount] = rAPIName;
                     pIndexes[nCount] = i;
@@ -230,9 +233,12 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::Filter(
         {
             for( sal_Int32 i=0; i < nProps; i++ )
             {
+                // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
                 // Does the PropertySet contain name of mpEntries-array ?
                 const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
-                if( xInfo->hasPropertyByName( rAPIName ) )
+                const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
+                if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
+                    xInfo->hasPropertyByName( rAPIName ) )
                 {
                     // If there isn't a XPropertyState we can't filter by its state
                     if( !xPropState.is() ||
@@ -473,22 +479,6 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
 }
 
 /** this method is called for every item that has the
-    MID_FLAG_NO_ITEM_EXPORT flag set */
-void SvXMLExportPropertyMapper::handleNoItem(
-        SvXMLAttributeList& rAttrList,
-        const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties,
-        sal_uInt32 nIdx ) const
-{
-    DBG_ASSERT( mxNextMapper.is(), "no item not handled in xml export" );
-    if( mxNextMapper.is() )
-        mxNextMapper->handleNoItem( rAttrList, rProperty, rUnitConverter,
-                                   rNamespaceMap, pProperties, nIdx );
-}
-
-/** this method is called for every item that has the
     MID_FLAG_ELEMENT_EXPORT flag set */
 void SvXMLExportPropertyMapper::handleElementItem(
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
@@ -537,26 +527,17 @@ void SvXMLExportPropertyMapper::_exportXML(
         {
             // we have a valid map entry here, so lets use it...
             if( ( maPropMapper->GetEntryFlags( nPropMapIdx )
-                        & MID_FLAG_NO_ITEM_EXPORT ) == 0 )
+                  & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
             {
-                if( ( maPropMapper->GetEntryFlags( nPropMapIdx )
-                      & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
-                {
-                    // element items do not add any properties,
-                    // we export it later
-                    if( pIndexArray )
-                        pIndexArray->Insert( nIndex, pIndexArray->Count() );
-                }
-                else
-                {
-                    _exportXML( rAttrList, rProperties[nIndex], rUnitConverter,
-                               rNamespaceMap, nFlags, &rProperties, nIndex );
-                }
+                // element items do not add any properties,
+                // we export it later
+                if( pIndexArray )
+                    pIndexArray->Insert( nIndex, pIndexArray->Count() );
             }
             else
             {
-                handleNoItem( rAttrList, rProperties[nIndex], rUnitConverter,
-                              rNamespaceMap, &rProperties, nIndex );
+                _exportXML( rAttrList, rProperties[nIndex], rUnitConverter,
+                            rNamespaceMap, nFlags, &rProperties, nIndex );
             }
         }
 

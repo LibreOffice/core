@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-23 16:11:10 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -206,6 +210,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::lang;
 using ::com::sun::star::util::DateTime;
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
@@ -481,6 +486,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+// maximum allowed length of combined characters field
+#define MAX_COMBINED_CHARACTERS 6
+
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM,
@@ -501,9 +509,10 @@ XMLTextImportHelper::XMLTextImportHelper(
     bInsertMode( bInsertM ),
     bStylesOnlyMode( bStylesOnlyM ),
     bProgress( bPrg ),
-    pFootnoteBackpatcher(NULL),
-    pSequenceIdBackpatcher(NULL),
-    pSequenceNameBackpatcher(NULL),
+    pFootnoteBackpatcher( NULL ),
+    pSequenceIdBackpatcher( NULL ),
+    pSequenceNameBackpatcher( NULL ),
+    xServiceFactory( rModel, UNO_QUERY ),
     sParaStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
     sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
     sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")),
@@ -525,7 +534,10 @@ XMLTextImportHelper::XMLTextImportHelper(
     sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame")),
     sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName")),
     sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
-    sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM("HyperLinkEvents"))
+    sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM("HyperLinkEvents")),
+    sContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
+    sServiceCombinedCharacters(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.text.TextField.CombinedCharacters"))
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -802,6 +814,43 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 Any aAny;
                 aAny <<= rMasterPageName;
                 xPropSet->setPropertyValue( sPageDescName, aAny );
+            }
+        }
+
+        // combined characters special treatment
+        if (!bPara && pStyle->HasCombinedCharactersLetter())
+        {
+            // insert combined characters text field
+            if( xServiceFactory.is() )
+            {
+                Reference<XInterface> xIfc =
+                   xServiceFactory->createInstance(sServiceCombinedCharacters);
+                if( xIfc.is() )
+                {
+                    // fix cursor if larger than possible for
+                    // combined characters field
+                    if (rCursor->getString().getLength() >
+                            MAX_COMBINED_CHARACTERS)
+                    {
+                        rCursor->gotoRange(rCursor->getStart(), sal_False);
+                        rCursor->goRight(MAX_COMBINED_CHARACTERS, sal_True);
+                    }
+
+                    // set field value (the combined character string)
+                    Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
+                    Any aAny;
+                    aAny <<= rCursor->getString();
+                    xTmp->setPropertyValue(sContent, aAny);
+
+                    // insert the field over it's original text
+                    Reference<XTextRange> xRange(rCursor, UNO_QUERY);
+                    Reference<XTextContent> xTextContent(xTmp, UNO_QUERY);
+                    if (xText.is() && xRange.is())
+                    {
+                        xText->insertTextContent( xRange, xTextContent,
+                                                  sal_True );
+                    }
+                }
             }
         }
     }

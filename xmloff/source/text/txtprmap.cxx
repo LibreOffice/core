@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,9 +437,13 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_CHRATR_EMPHASIS_MARK
     M_E( "CharEmphasize",           STYLE,      text_emphasize,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
     // RES_CHRATR_TWO_LINES
-    M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE, 0 ),
+    M_E( "CharCombineIsOn",         STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "CharCombinePrefix",       STYLE,      text_combine_start_char,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
     M_E( "CharCombineSuffix",       STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
+
+    // combined characters field, does not correspond to a property
+    M_E( "",                        STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE_CHARACTERS|MID_FLAG_NO_PROPERTY, 0 ),
+
     // RES_TXTATR_INETFMT
     // TODO
     // RES_TXTATR_REFMARK
