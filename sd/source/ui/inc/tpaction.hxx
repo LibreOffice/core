@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:44:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,29 +133,17 @@ private:
     FixedText               aFtAction;              // always visible
     ListBox                 aLbAction;
 
-    FixedLine               aFlEffect;              // fade controls
-    FixedText               aFtAnimation;
-    ListBox                 aLbEffect;
-    FixedText               aFtSpeed;
-    RadioButton             aRbtSlow;
-    RadioButton             aRbtMedium;
-    RadioButton             aRbtFast;
-
     FixedText               aFtTree;                // jump destination controls
     SdPageObjsTLB           aLbTree;
     SdPageObjsTLB           aLbTreeDocument;
-    ListBox                 aLbOLEAction;
 
     FixedLine               aFlSeparator;
-    TriStateBox             aTsbSound;
-    Edit                    aEdtSound;
     Edit                    aEdtBookmark;
     Edit                    aEdtDocument;
     Edit                    aEdtProgram;
     Edit                    aEdtMacro;
     PushButton              aBtnSearch;
     PushButton              aBtnSeek;
-    TriStateBox             aTsbPlayFull;
 
     const SfxItemSet&       rOutAttrs;
     const ::sd::View*           pView;
@@ -163,21 +151,16 @@ private:
     XColorTable*            pColTab;
 
     BOOL                    bTreeUpdated;
-    List*                   pCurrentEffects;
     List*                   pCurrentActions;
     String                  aLastFile;
     ::std::vector< long >   aVerbVector;
 
     //------------------------------------
 
-    DECL_LINK( ClickSoundHdl, void * );
     DECL_LINK( ClickSearchHdl, void * );
-    DECL_LINK( ChangeEffectHdl, void * ); // !!!?
     DECL_LINK( ClickActionHdl, void * );
     DECL_LINK( SelectTreeHdl, void * );
     DECL_LINK( CheckFileHdl, void * );
-
-    virtual ::com::sun::star::presentation::AnimationEffect GetActualAnimationEffect();
 
     void                    UpdateTree();
     virtual void            OpenFileDialog();
