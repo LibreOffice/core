@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:46:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,8 @@ namespace objectpositioning
             /** adjust calculated vertical in order to keep object inside
                 'page' alignment layout frame.
 
-                OD 2004-07-22 #i31805# - add 3rd parameter <_bCheckBottom>
+                OD 2004-07-22 #i31805# - add parameter <_bCheckBottom>
+                OD 2004-10-08 #i26945# - add parameter <_bFollowTextFlow>
 
                 @param _nTopOfAnch
                 input parameter - 'vertical' position, at which the relative
@@ -187,6 +188,10 @@ namespace objectpositioning
                 input parameter - proposed relative vertical position, which
                 will be adjusted.
 
+                @param _bFollowTextFlow
+                input parameter - value of attribute 'Follow text flow' of the
+                anchored object.
+
                 @param _bCheckBottom
                 input parameter - boolean indicating, if bottom of anchored
                 object has to be checked and thus, (if needed) the proposed
@@ -198,6 +203,7 @@ namespace objectpositioning
                                        const bool _bVert,
                                        const SwFrm&  _rPageAlignLayFrm,
                                        const SwTwips _nProposedRelPosY,
+                                       const bool _bFollowTextFlow,
                                        const bool _bCheckBottom = true ) const;
 
         // *********************************************************************
