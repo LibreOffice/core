@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseImportDescriptor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:37:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,12 @@ published service DatabaseImportDescriptor
      */
     [optional, property] boolean IsNative;
 
+    //-------------------------------------------------------------------------
+
+    /** indicates a connection URL, which locates a database driver.
+        @since #i25410#
+     */
+    [optional, property] string ConnectionResource;
 
 };
 
