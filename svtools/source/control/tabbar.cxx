@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-06-29 15:37:47 $
+ *  last change: $Author: th $ $Date: 2001-08-28 13:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,8 +421,8 @@ void TabBar::ImplInit( WinBits nWinStyle )
         mnOffY++;
 
     ImplInitControls();
-    ImplInitSettings( TRUE, TRUE );
     SetSizePixel( Size( 100, CalcWindowSizePixel().Height() ) );
+    ImplInitSettings( TRUE, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -477,6 +477,16 @@ void TabBar::ImplInitSettings( BOOL bFont, BOOL bBackground )
             aFont.Merge( GetControlFont() );
         aFont.SetWeight( WEIGHT_BOLD );
         SetZoomedPointFont( aFont );
+
+        // Font in der groesse Anpassen, wenn Fenster zu klein?
+        while ( GetTextHeight() > (GetOutputSizePixel().Height()-1) )
+        {
+            Font aFont = GetFont();
+            if ( aFont.GetHeight() <= 6 )
+                break;
+            aFont.SetHeight( aFont.GetHeight()-1 );
+            SetFont( aFont );
+        }
     }
 
     if ( bBackground )
@@ -1270,6 +1280,9 @@ void TabBar::Resize()
     long nHeight = aNewSize.Height();
     if ( nHeight != maWinSize.Height() )
     {
+        // Font in der groesse Anpassen?
+        ImplInitSettings( TRUE, FALSE );
+
         long nX = 0;
         Size aBtnSize( nHeight, nHeight );
         if ( mpFirstBtn )
@@ -2558,5 +2571,5 @@ Size TabBar::CalcWindowSizePixel() const
         nWidth += TABBAR_OFFSET_X+TABBAR_OFFSET_X2;
     }
 
-    return Size( nWidth, GetTextHeight()+3 );
+    return Size( nWidth, GetSettings().GetStyleSettings().GetScrollBarSize() );
 }
