@@ -2,9 +2,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:34:11 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:10:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,7 +191,7 @@ sub update_property_table
     my $propertyfile = installer::files::read_file($properyfilename);
 
     # Getting the new values
-    # Some values (arpcomments, arpcontacts, ...) are inserted from the Property.lng
+    # Some values (arpcomments, arpcontacts, ...) are inserted from the Property.ulf
 
     #   my $arpcomments = get_arpcomments_for_property_table($allvariables);
     #   my $arpcontact = get_arpcontact_for_property_table();
