@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:28:47 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
         // in case no filter defined use default one
         if( !aFilterName.Len() )
         {
-            const SfxFilter* pFilt = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT | SFX_FILTER_IMPORT, SFX_FILTER_INTERNAL );
+            const SfxFilter* pFilt = SfxFilter::GetDefaultFilterFromFactory(GetFactory().GetFactoryName());
 
             DBG_ASSERT( pFilt, "No default filter!\n" );
             if( pFilt )
@@ -348,14 +348,10 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     }
     else
     {
-        SfxFilterFlags nMust = SFX_FILTER_EXPORT;
-        SfxFilterFlags nDont = SFX_FILTER_INTERNAL;
         if ( !bSaveTo )
-            nMust |= SFX_FILTER_IMPORT;
+            pFilt = SfxFilter::GetDefaultFilterFromFactory(GetFactory().GetFactoryName());
         if ( bIsExport )
-            nDont |= SFX_FILTER_IMPORT;
-
-        pFilt = GetFactory().GetFilterContainer()->GetAnyFilter( nMust, nDont );
+            pFilt = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL | SFX_FILTER_IMPORT);
     }
 
     DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
@@ -893,9 +889,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     SFX_REQUEST_ARG( rReq, pFilterItem, SfxStringItem, SID_FILTER_NAME, FALSE);
 
     const SfxFilter *pCurFilter = GetMedium()->GetFilter();
-    const SfxFilter *pDefFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT );
+    const SfxFilter *pDefFilter = SfxFilter::GetDefaultFilterFromFactory(GetFactory().GetFactoryName());
 
-    if ( nId == SID_SAVEDOC && pCurFilter && !pCurFilter->CanExport() && pDefFilter && pDefFilter->IsInternal() )
+    if ( nId == SID_SAVEDOC && pCurFilter && !pCurFilter->CanExport() )
         nId = SID_SAVEASDOC;
 
     // in case of saving an interaction handler can be required for authentication
@@ -933,7 +929,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
                         GetMedium()->GetFilter()->GetUIName() );
             aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ),
-                        GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL )->GetUIName() );
+                        pDefFilter->GetUIName() );
             QueryBox aWarnBox(0,WB_OK_CANCEL|WB_DEF_OK,aWarn);
             if ( aWarnBox.Execute() == RET_OK )
             {
@@ -963,7 +959,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
                                 GetMedium()->GetFilter()->GetUIName());
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ),
-                                GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL )->GetUIName() );
+                                pDefFilter->GetUIName() );
 
                     SfxViewFrame *pFrame = SfxObjectShell::Current() == this ?
                         SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
