@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 13:20:08 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ using namespace ::com::sun::star::sdbc;
 //========================================================================
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
-    delete pActFieldDescr;
 }
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
@@ -201,6 +200,7 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
     return ((OWizTypeSelect*)GetParent())->m_pParent->m_xConnection;
 }
+
 //========================================================================
 DBG_NAME(OWizTypeSelect);
 #define IMG_PRIMARY_KEY 1
@@ -230,10 +230,16 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
 
     m_lbColumnNames.EnableMultiSelection(sal_True);
 
-    // Datenbank kann keine PrimKeys verarbeiten oder keine Zeilenselektion
-    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-    m_lbColumnNames.SetPKey(xMetaData->supportsCoreSQLGrammar());
+    try
+    {
+        // Datenbank kann keine PrimKeys verarbeiten oder keine Zeilenselektion
+        Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
+        m_lbColumnNames.SetPKey(xMetaData->supportsCoreSQLGrammar());
 
+    }
+    catch(const Exception&)
+    {
+    }
 
     FreeResource();
 }
@@ -423,4 +429,5 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
     }
 }
 // -----------------------------------------------------------------------------
+
 
