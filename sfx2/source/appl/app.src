@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-22 07:11:26 $
+ *  last change: $Author: kz $ $Date: 2002-05-23 20:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     DEFBUTTON = WB_DEF_OK ;
     Message = "Beim Starten des Web-Browsers ist ein Fehler aufgetreten. Bitte �berpr�fen Sie die Einstellungen von %PRODUCTNAME unter 'Extras - Optionen - %PRODUCTNAME - Hilfsprogramme' und die Einstellungen Ihres Web-Browsers." ;
     Message [ ENGLISH ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser." ;
-    Message[ english_us ] = "An error occurred in starting the web browser.\nPlease check the %PRODUCTNAME and web browser settings.";
+    Message[ english_us ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
     Message[ portuguese ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ russian ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ greek ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
@@ -373,7 +373,7 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     Message[ finnish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ italian ] = "Si � verificato un errore durante l'avvio del browser Web.\nVerificate le impostazioni di %PRODUCTNAME e del browser Web.";
     Message[ danish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
-    Message[ swedish ] = "Det uppstod ett fel n�r webbl�saren skulle startas.\nKontrollera inst�llningarna i %PRODUCTNAME och webbl�saren.";
+    Message[ swedish ] = "Det uppstod ett fel n�r webbl�saren skulle startas. Kontrollera inst�llningarna i %PRODUCTNAME under 'Verktyg - Alternativ - %PRODUCTNAME - Hj�lpprogram' och inst�llningarna i din webbl�sare.";
     Message[ polish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ portuguese_brazilian ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ japanese ] = "webブラウザを開始する際のエラー。\n%PRODUCTNAME および webブラウザの設定をもう一度確認してください。";
