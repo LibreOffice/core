@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-01-08 11:49:38 $
+ *  last change: $Author: nf $ $Date: 2001-03-01 17:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ SourceDirectory *SourceDirectory::GetSubDirectory(
 
         BOOL bBreak = FALSE;
         for ( ULONG i = sLimitation.GetTokenCount( '\\' ); i > 0 && !bBreak; i-- ) {
-            if ( !pActDir || ( *pActDir != sLimitation.GetToken( i - 1, '\\' )))
+            if (( !pActDir ) || ( *pActDir != sLimitation.GetToken(( USHORT )( i - 1 ), '\\' )))
                 bBreak = TRUE;
             else
                 pActDir = pActDir->pParent;
@@ -796,9 +796,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.3 $\n"
+        "#   $Revision: 1.4 $\n"
         "#\n"
-        "#   last change: $Author: hjs $ $Date: 2001-01-08 11:49:38 $\n"
+        "#   last change: $Author: nf $ $Date: 2001-03-01 17:44:49 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"

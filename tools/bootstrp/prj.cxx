@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-23 15:43:32 $
+ *  last change: $Author: nf $ $Date: 2001-03-01 17:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sstring.hxx>
+#include <vos/mutex.hxx>
 
 #include "stream.hxx"
 #include "geninfo.hxx"
@@ -631,10 +632,14 @@ Star::~Star()
 BOOL Star::NeedsUpdate()
 /*****************************************************************************/
 {
+    aMutex.acquire();
     for ( ULONG i = 0; i < aLoadedFilesList.Count(); i++ )
-        if ( aLoadedFilesList.GetObject( i )->NeedsUpdate())
+        if ( aLoadedFilesList.GetObject( i )->NeedsUpdate()) {
+            aMutex.release();
             return TRUE;
+        }
 
+    aMutex.release();
     return FALSE;
 }
 
@@ -657,7 +662,9 @@ void Star::Read( String &rFileName )
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
+        aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        aMutex.release();
         aFileList.Remove(( ULONG ) 0 );
     }
     // resolve all dependencies recursive
@@ -678,7 +685,9 @@ void Star::Read( SolarFileList *pSolarFiles )
                 InsertToken (( char * ) aString.GetBuffer());
         }
 
+        aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        aMutex.release();
         delete pSolarFiles->Remove(( ULONG ) 0 );
     }
     delete pSolarFiles;
@@ -1173,7 +1182,9 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
                 InsertTokenLine ( aString );
         }
 
+        aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        aMutex.release();
         delete aFileList.Remove(( ULONG ) 0 );
     }
     // resolve all dependencies recursive
@@ -1201,7 +1212,9 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
                 InsertTokenLine ( aString );
         }
 
+        aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        aMutex.release();
         delete pSolarFiles->Remove(( ULONG ) 0 );
     }
     delete pSolarFiles;
