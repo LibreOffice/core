@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:46:49 $
+#   last change: $Author: rt $ $Date: 2003-04-08 15:54:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,25 @@ SLOFILES=\
         $(SLO)$/DllMain.obj\
         $(SLO)$/ResolveThunk.obj\
         $(SLO)$/snprintf.obj\
-        $(SLO)$/snwprintf.obj
+        $(SLO)$/snwprintf.obj\
+        $(SLO)$/FindFirstVolumeA.obj\
+        $(SLO)$/FindFirstVolumeW.obj\
+        $(SLO)$/FindNextVolumeA.obj\
+        $(SLO)$/FindNextVolumeW.obj\
+        $(SLO)$/FindVolumeClose.obj\
+        $(SLO)$/FindFirstVolumeMountPointA.obj\
+        $(SLO)$/FindFirstVolumeMountPointW.obj\
+        $(SLO)$/FindNextVolumeMountPointA.obj\
+        $(SLO)$/FindNextVolumeMountPointW.obj\
+        $(SLO)$/FindVolumeMountPointClose.obj\
+        $(SLO)$/GetVolumeNameForVolumeMountPointA.obj\
+        $(SLO)$/GetVolumeNameForVolumeMountPointW.obj\
+        $(SLO)$/DeleteVolumeMountPointA.obj\
+        $(SLO)$/DeleteVolumeMountPointW.obj\
+        $(SLO)$/GetVolumePathNameA.obj\
+        $(SLO)$/GetVolumePathNameW.obj\
+        $(SLO)$/SetVolumeMountPointA.obj\
+        $(SLO)$/SetVolumeMountPointW.obj
 
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
