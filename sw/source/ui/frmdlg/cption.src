@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:08:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,8 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ slovak ] = "Voľby intervalu číslovania";
 };
  // ********************************************************************** EOF
+
+
 
 
 
