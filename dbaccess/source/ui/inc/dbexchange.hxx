@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 10:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,17 +83,18 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> m_xRtf;
         OHTMLImportExport*      m_pHtml;
         ORTFImportExport*       m_pRtf;
+
+        sal_Int32               m_nObjectType;
+            // the object type as extracted from the property sequence given in the ctor.
+            // We need different clipboard formats for queries and tables, so we need this information
+        ::rtl::OUString         m_sCompatibleObjectDescription;
+            // needed to provide a SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
+
     public:
         ODataClipboard( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aSeq,
-                        OHTMLImportExport*  _pHtml/* will be assigned to Reference<>*/,
-                        ORTFImportExport*   _pRtf/* will be assigned to Reference<>*/)
-            :m_aSeq(_aSeq)
-            ,m_xHtml(_pHtml)
-            ,m_xRtf(_pRtf)
-            ,m_pHtml(_pHtml)
-            ,m_pRtf(_pRtf)
+                        OHTMLImportExport*  _pHtml/* will be hold by Reference<>*/,
+                        ORTFImportExport*   _pRtf/* will be hold by Reference<>*/);
 
-        {}
     protected:
         virtual void        AddSupportedFormats();
         virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
