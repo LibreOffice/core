@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 09:58:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3432,7 +3432,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                 UpdatePointer( aDocPt, rMEvt.GetModifier() );
 
-                const SwFrmFmt* pFmt;
+                const SwFrmFmt* pFmt = 0;
                 const SwFmtINetFmt* pINet = 0;
                 SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
                 if( rSh.GetContentAtPos( aDocPt, aCntntAtPos ) )
