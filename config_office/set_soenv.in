@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.22 $
-# Date:        $Date: 2004-09-09 11:22:23 $
+# Version:     $Revision: 1.23 $
+# Date:        $Date: 2004-10-11 13:48:47 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -82,11 +82,11 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
      $URD_ONLY, $SOLARROOT, $SOLARSRC, $RSCRES, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, 
-     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $WDEVENV_PATH, 
+     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $NMAKE_PATH, $WDEVENV_PATH, 
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
-     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
-     $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
+     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $EXTRA_DOTNET_FILES, $USE_NEW_SDK, $FRAME_HOME, 
+     $ATL_LIB, $ATL_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $ENABLE_DEBUG, $ENABLE_STATIC_GTK,
 	 $PROEXT,
      $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME );
@@ -502,8 +502,14 @@ elsif ( $platform eq "$Winnt" )
       $MSPDB_PATH     = PosixFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PosixFormat('@MIDL_PATH@');
       $CSC_PATH       = PosixFormat('@CSC_PATH@');
+      $NMAKE_PATH     = PosixFormat('@NMAKE_PATH@');
       $WDEVENV_PATH   = PosixFormat('@WDEVENV_PATH@');
       $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
+      if('@EXTRA_DOTNET_FILES@') {
+          $EXTRA_DOTNET_FILES = PosixFormat('@EXTRA_DOTNET_FILES@');
+      } else {
+          $EXTRA_DOTNET_FILES = '';
+      }
       $FRAME_HOME     = PosixFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $NO_HIDS        = "TRUE";
@@ -544,6 +550,13 @@ elsif ( $platform eq "$Winnt" )
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
       $COMEX          = '@COMEX@';
+      if ( $EXTRA_DOTNET_FILES ) {
+          $ATL_LIB     = $EXTRA_DOTNET_FILES;
+          $ATL_INCLUDE = $EXTRA_DOTNET_FILES;
+      } else {
+          $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+          $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
+      }
       if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
           $CVER        = "M1310";
       } elsif ( "@COMEX@" eq "8" ) { # .NET 2002 needs M1300
@@ -964,6 +977,12 @@ if ($platform eq "$Winnt")
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $ILIB       .= $ps.'$COMPATH'.$LIB;
+      if ( '@ENABLE_DIRECTX@' ) {
+          $ILIB   .= $ps.PosixFormat('@DIRECTXSDK_HOME@').$LIB;
+      }
+      if ( "$EXTRA_DOTNET_FILES" ) {
+          $ILIB   .= $ps.$EXTRA_DOTNET_FILES;
+      }
    }
 
    $JAVAHOME          = '$JAVA_HOME';
@@ -1053,8 +1072,12 @@ elsif ($platform eq "$Winnt")
 		   if ( $noldPATH !~ /(?:[:]|\A)(?:$CSC_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$CSC_PATH;
 		   }
-		   # .NET needs wdevenv.exe
-		   if ( $noldPATH !~ /(?:[:]|\A)(?:$WDEVENV_PATH)(?:[:]|\Z)/ ) {
+		   # VC toolkit needs nmake.exe
+		   if ( "@ENABLE_VCTK@" and $noldPATH !~ /(?:[:]|\A)(?:$NMAKE_PATH)(?:[:]|\Z)/ ) {
+			   $PATH .= $ps.$NMAKE_PATH;
+		   }
+		   # .NET needs wdevenv.exe, VC toolkit doesn't
+		   if ( !"@ENABLE_VCTK@" and $noldPATH !~ /(?:[:]|\A)(?:$WDEVENV_PATH)(?:[:]|\Z)/ ) {
 			   $PATH .= $ps.$WDEVENV_PATH;
 		   }
 	   }
@@ -1241,7 +1264,13 @@ elsif ($platform eq "$Winnt")
                         $I.'$PSDK_HOME'.$INCLUDE;
    # Mingw is different
    if ( $COM eq "MSC" )
-   { $SOLARINC       .= $I.'$COMPATH'.$ds."include";
+   {  $SOLARINC       .= $I.'$COMPATH'.$ds."include";
+      if ( '@ENABLE_DIRECTX@' ) {
+          $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
+      }
+      if ( "$EXTRA_DOTNET_FILES" ) {
+          $SOLARINC   .= $I.$EXTRA_DOTNET_FILES;
+      }
    }
 }
 elsif ($platform eq "$Macosx")
@@ -1619,6 +1648,10 @@ ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform eq "$Winnt" )
 {  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
+   ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
+   ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+   ToFile( "ENABLE_VCTK",       "@ENABLE_VCTK@",    "e" );
+   ToFile( "NETTOOLKIT",        "@NETTOOLKIT@",     "e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
    ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 }
