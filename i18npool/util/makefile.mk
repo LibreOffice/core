@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2001-09-16 15:23:00 $
+#*  last change: $Author: er $ $Date: 2001-11-23 15:00:27 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -69,7 +69,7 @@ USE_LDUMP2=TRUE
 # Make symbol renaming match library name for Mac OS X
 .IF "$(OS)"=="MACOSX"
 SYMBOLPREFIX=i18n$(UPD)$(DLLPOSTFIX)
-.ENDIF  
+.ENDIF
 
 # --- Settings -----------------------------------------------------------
 
@@ -103,7 +103,6 @@ SHL3TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
 SHL3IMPLIB= i$(TARGET)
 
 SHL3STDLIBS=\
-        $(UNOTOOLSLIB)				\
         $(TOOLSLIB)				\
         $(CPPULIB)				\
         $(COMPHELPERLIB)			\
@@ -114,13 +113,6 @@ SHL3LIBS=	$(LIB3TARGET)
 SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=	$(SHL3TARGET)
 DEF3EXPORTFILE=	$(TARGET).dxp
-
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"!="MACOSX"
-SHL3STDLIBS +=\
-    -lX11 -lXt -lXmu
-.ENDIF
-.ENDIF
 
 # --- Targets ------------------------------------------------------------
 
