@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:14:57 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ String STR_NONAME
     Text[ hebrew ] = "‮ללא כותרת‬";
     Text[ hindi ] = "नाम रहित";
     Text[ slovak ] = "Bez_názvu";
+    Text[ hungarian ] = "Névtelen";
+    Text[ slovenian ] = "Neimenovano";
 };
 
 String STR_NONE
@@ -123,6 +125,8 @@ String STR_NONE
     Text[ hebrew ] = "‮- ללא -‬";
     Text[ hindi ] = "- कोई नहीं -";
     Text[ slovak ] = "- žiadna -";
+    Text[ hungarian ] = "- Nincs szegély -";
+    Text[ slovenian ] = "-Brez-";
 };
 
 String STR_CLOSE
@@ -155,6 +159,8 @@ String STR_CLOSE
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "बन्द करो";
     Text[ slovak ] = "Zavrieť";
+    Text[ hungarian ] = "Bezárás";
+    Text[ slovenian ] = "Zapri";
 };
 
 String STR_STYLE_FILTER_AUTO
@@ -187,6 +193,8 @@ String STR_STYLE_FILTER_AUTO
     TEXT[ hebrew ] = "‮אוטומטי‬";
     TEXT[ hindi ] = "स्वचालित";
     TEXT[ slovak ] = "Automaticky";
+    TEXT[ hungarian ] = "Automatikus";
+    TEXT[ slovenian ] = "Samodejno";
 };
 
 String STR_STYLE_FILTER_USED
@@ -219,6 +227,8 @@ String STR_STYLE_FILTER_USED
     TEXT[ hebrew ] = "‮סגנונות מיושמים‬";
     TEXT[ hindi ] = "लागू किया हुआ शैलियाँ";
     TEXT[ slovak ] = "Použité štýly";
+    TEXT[ hungarian ] = "Alkalmazott stílusok";
+    TEXT[ slovenian ] = "Uporabljeni slogi";
 };
 
 
@@ -232,7 +242,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT [ portuguese_brazilian ] = "Estilos personalizados" ;
     TEXT [ portuguese ] = "Estilos do utilizador" ;
     TEXT [ finnish ] = "Mukautetut tyylit" ;
-    TEXT [ danish ] = "Brugertypografier" ;
+    TEXT [ danish ] = "Brugerdefinerede typografier" ;
     TEXT [ french ] = "Styles personnalis�s" ;
     TEXT [ swedish ] = "Anv�ndardefinierade formatmallar" ;
     TEXT [ dutch ] = "Eigen opmaakprofielen" ;
@@ -253,6 +263,8 @@ String STR_STYLE_FILTER_USERDEF
     TEXT[ hebrew ] = "‮סגנונות מותאמים‬";
     TEXT[ hindi ] = "शैलियों को व्यवस्था करो";
     TEXT[ slovak ] = "Vlastné štýly";
+    TEXT[ hungarian ] = "Egyéni stílusok";
+    TEXT[ slovenian ] = "Slogi po meri";
 };
 
 String STR_STYLE_FILTER_ALL
@@ -285,6 +297,8 @@ String STR_STYLE_FILTER_ALL
     TEXT[ hebrew ] = "‮כל הסגנונות‬";
     TEXT[ hindi ] = "सब शैलियाँ";
     TEXT[ slovak ] = "Všetky štýly";
+    TEXT[ hungarian ] = "Minden stílus";
+    TEXT[ slovenian ] = "Vsi slogi";
 };
 
 String STR_STANDARD
@@ -316,6 +330,8 @@ String STR_STANDARD
     Text[ hebrew ] = "‮רגיל‬";
     Text[ hindi ] = "स्टान्डार्ड";
     Text[ slovak ] = "Štandardný";
+    Text[ hungarian ] = "Standard";
+    Text[ slovenian ] = "Standardno";
 };
 String STR_STANDARD_SHORTCUT
 {
@@ -346,6 +362,8 @@ String STR_STANDARD_SHORTCUT
     Text[ hebrew ] = "‮רגיל‬";
     Text[ hindi ] = "Standard";
     Text[ slovak ] = "Štandardný";
+    Text[ hungarian ] = "Standard";
+    Text[ slovenian ] = "Standardno";
 };
 
 String STR_FILTERNAME_ALL
@@ -377,6 +395,8 @@ String STR_FILTERNAME_ALL
     Text[ hebrew ] = "‮כל הקבצים (*.*)‬";
     Text[ hindi ] = "सब फाइलें (*.*)";
     Text[ slovak ] = "Všetky súbory (*.*)";
+    Text[ hungarian ] = "Minden fájl (*.*)";
+    Text[ slovenian ] = "Vse datoteke (*.*)";
 };
 
 String STR_HUMAN_APPNAME
@@ -413,6 +433,8 @@ String STR_BYTES
     Text[ hebrew ] = "‮בתים‬";
     Text[ hindi ] = "बइट्स";
     Text[ slovak ] = "Bajtov";
+    Text[ hungarian ] = "Byte";
+    Text[ slovenian ] = "Bajtov";
 };
 
 String STR_KB
@@ -444,6 +466,8 @@ String STR_KB
     Text[ hebrew ] = "‮KB‬";
     Text[ hindi ] = "KB";
     Text[ slovak ] = "kB";
+    Text[ hungarian ] = "kB";
+    Text[ slovenian ] = "KB";
 };
 
 String STR_MB
@@ -475,6 +499,8 @@ String STR_MB
     Text[ hebrew ] = "MB";
     Text[ hindi ] = "MB";
     Text[ slovak ] = "MB";
+    Text[ hungarian ] = "MB";
+    Text[ slovenian ] = "MB";
 };
 
 
@@ -507,6 +533,8 @@ String STR_GB
     Text[ hebrew ] = "‮GB‬";
     Text[ hindi ] = "GB";
     Text[ slovak ] = "GB";
+    Text[ hungarian ] = "GB";
+    Text[ slovenian ] = "GB";
 };
 
 String STR_UNDO
@@ -540,6 +568,8 @@ String STR_UNDO
     Text[ hebrew ] = "‮ביטול פעולה:‬";
     Text[ hindi ] = "अनावृत्ति: ";
     Text[ slovak ] = "Späť: ";
+    Text[ hungarian ] = "Visszavonás:";
+    Text[ slovenian ] = "Razveljavi: ";
 };
 
 String STR_REDO
@@ -571,6 +601,8 @@ String STR_REDO
     Text[ hebrew ] = "‮שחזור פעולה:‬";
     Text[ hindi ] = "फ़िर से ~करो: ";
     Text[ slovak ] = "Z~novu: ";
+    Text[ hungarian ] = "~Ismét:";
+    Text[ slovenian ] = "~Uveljavi: ";
 };
 
 String STR_REPEAT
@@ -581,7 +613,7 @@ String STR_REPEAT
     Text [ portuguese ] = "~Repetir: " ;
     Text [ portuguese_brazilian ] = "~Repetir: " ;
     Text [ swedish ] = "Senaste ~kommando:  " ;
-    Text [ danish ] = "Sidste ~kommado: " ;
+    Text [ danish ] = "~Gentag: " ;
     Text [ italian ] = "Ultimo ~comando: " ;
     Text [ spanish ] = "~Repetir: " ;
     Text [ french ] = "~R�p�ter : " ;
@@ -602,6 +634,8 @@ String STR_REPEAT
     Text[ hebrew ] = "‮בצוע חוזר:‬";
     Text[ hindi ] = "~दुहराना: ";
     Text[ slovak ] = "Opako~vať: ";
+    Text[ hungarian ] = "Ismé~tlés:";
+    Text[ slovenian ] = "~Ponovi: ";
 };
 
 String RID_STR_NEW_TASK
@@ -633,6 +667,8 @@ String RID_STR_NEW_TASK
     Text[ hebrew ] = "‮משימה חדשה‬";
     Text[ hindi ] = "नया कार्य";
     Text[ slovak ] = "Nová úloha";
+    Text[ hungarian ] = "Új feladat";
+    Text[ slovenian ] = "Novo opravilo";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
@@ -667,7 +703,10 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ hebrew ] = "‮האם לבטל כל השינויים?‬";
     Message[ hindi ] = "सब परिवर्तनों को रद्द करना है?";
     Message[ slovak ] = "Zrušiť všetky zmeny?";
+    Message[ hungarian ] = "Minden változást elvet?";
+    Message[ slovenian ] = "Prekličem vse spremembe?";
 };
+
 
 
 
