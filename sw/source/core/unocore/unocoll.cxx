@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 12:29:49 $
+ *  last change: $Author: os $ $Date: 2000-11-22 12:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,7 +962,7 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
 
         break;
         case FLYCNTTYPE_OLE:
-            aRet = ::getCppuType((uno::Reference<XTextEmbeddedObject>*)0);
+            aRet = ::getCppuType((uno::Reference<XEmbeddedObjectSupplier>*)0);
         break;
     }
     return aRet;
