@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _serviceregistration_model.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include "Grid.hxx"
 #include "Title.hxx"
 #include "FormattedString.hxx"
+#include "PageBackground.hxx"
 
 #include "DataSeriesTree.hxx"
 #include "ChartTypeGroup.hxx"
@@ -235,7 +236,15 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
         , 0
         , 0
     }
-    ,{ 0, 0, 0, 0, 0, 0 }
+     ,{
+          ::chart::PageBackground::create
+        , ::chart::PageBackground::getImplementationName_Static
+        , ::chart::PageBackground::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+   ,{ 0, 0, 0, 0, 0, 0 }
 };
 
 // component exports
