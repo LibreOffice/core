@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: csaba $ $Date: 2000-10-16 14:50:27 $
+#   last change: $Author: mh $ $Date: 2000-11-02 15:38:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..
 
-PRJNAME=BASCTL
+PRJNAME=basctl
 TARGET=basctl
 #svx.hid generieren
 GEN_HID=TRUE
