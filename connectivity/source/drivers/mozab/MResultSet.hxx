@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:07:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,14 +367,7 @@ public:
             void SAL_CALL executeQuery() throw( ::com::sun::star::sdbc::SQLException,
                                                 ::com::sun::star::uno::RuntimeException);
 
-            void setTable(OTable* _rTable)
-            {
-                m_pTable = _rTable;
-                m_pTable->acquire();
-                m_xTableColumns = m_pTable->getColumns();
-                if(m_xTableColumns.is())
-                    m_aColumnNames = m_xTableColumns->getElementNames();
-            }
+            void setTable(OTable* _rTable);
 
             void setParameterRow(const OValueRow& _rParaRow)
                       { m_aParameterRow = _rParaRow; }
@@ -387,11 +380,9 @@ public:
 
             void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping);
 
-            void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)
-                      { m_aOrderbyColumnNumber = _aColumnOrderBy; }
+            void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy);
 
-            void setOrderByAscending(const ::std::vector<sal_Int16>& _aOrderbyAsc)
-                      { m_aOrderbyAscending = _aOrderbyAsc; }
+            void setOrderByAscending(const ::std::vector<sal_Int16>& _aOrderbyAsc);
 
             inline sal_Int32 mapColumn(sal_Int32 column);
 
