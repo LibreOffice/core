@@ -1,0 +1,360 @@
+/*************************************************************************
+ *
+ *  $RCSfile: indexdialog.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-03-16 16:23:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef _DBAUI_INDEXDIALOG_HRC_
+#include "indexdialog.hrc"
+#endif
+
+#define DIALOG_SIZE_X       220
+#define DIALOG_SIZE_Y       140
+#define BUTTON_SIZE_X       50
+#define BUTTON_SIZE_Y       14
+
+#define LIST_WIDTH          70
+
+ModalDialog DLG_INDEXDESIGN
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( DIALOG_SIZE_X , DIALOG_SIZE_Y ) ;
+    Text = "Indizes" ;
+    Text [ english ] = "Indexes" ;
+    Text [ english_us ] = "Indexes" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    ToolBox TLB_ACTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - 14 , 14 ) ;
+        ButtonType = BUTTON_SYMBOL;
+        Align = BOXALIGN_TOP;
+        Customize = FALSE;
+
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_NEW;
+                Command = ".index:createNew";
+                ItemBitmap = Bitmap { File = "indexnew_sc.bmp"; };
+                Text = "neuer Index" ;
+                Text [ english ] = "new index" ;
+                Text [ english_us ] = "new index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_DROP;
+                Command = ".index:dropCurrent";
+                ItemBitmap = Bitmap { File = "indexdrop_sc.bmp"; };
+                Text = "aktuellen Index lˆschen" ;
+                Text [ english ] = "drop current index" ;
+                Text [ english_us ] = "drop current index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_RENAME;
+                Command = ".index:renameCurrent";
+                ItemBitmap = Bitmap { File = "indexrename_sc.bmp"; };
+                Text = "aktuellen Index umbenennen" ;
+                Text [ english ] = "rename current index" ;
+                Text [ english_us ] = "rename current index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_SAVE;
+                Command = ".index:saveCurrent";
+                ItemBitmap = Bitmap { File = "indexsave_sc.bmp"; };
+                Text = "aktuellen Index speichern" ;
+                Text [ english ] = "save current index" ;
+                Text [ english_us ] = "save current index" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ID_INDEX_RESET;
+                Command = ".index:resetCurrent";
+                ItemBitmap = Bitmap { File = "indexreset_sc.bmp"; };
+                Text = "aktuellen Index zur¸cksetzen" ;
+                Text [ english ] = "reset current index" ;
+                Text [ english_us ] = "reset current index" ;
+            };
+        };
+    };
+    Control CTR_INDEXLIST
+    {
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( LIST_WIDTH , DIALOG_SIZE_Y - (BUTTON_SIZE_Y + 4) - 29 ) ;
+        SVLook = TRUE;
+        Border  = TRUE;
+    };
+    FixedLine FL_INDEXDETAILS
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16 - 3, 9 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
+        Text = "Index-Details";
+        Text [ english ] = "Index details";
+        Text [ english_us ] = "Index details";
+    };
+    FixedText FT_DESC_LABEL
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 23 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
+        Text = "Indexbezeichner:";
+        Text [ english ] = "Index identifier:";
+        Text [ english_us ] = "Index identifier:";
+        Text [ portuguese_brazilian ] = "Indexbezeichner:";
+        Text [ swedish ] = "Indexnamn:";
+        Text [ danish ] = "Indeksidentifikator:";
+        Text [ italian ] = "Identificatore indice:";
+        Text [ spanish ] = "Identificador de Ìndice:";
+        Text [ french ] = "Identificateur d'index:";
+        Text [ dutch ] = "Indexidentificator:";
+        Text [ portuguese ] = "Identificador de Ìndice:";
+        Text [ chinese_simplified ] = "À˜“˝±Í÷æ:";
+        Text [ russian ] = "»‰ÂÌÚËÙËÍ‡ÚÓ ËÌ‰ÂÍÒ‡:";
+        Text [ polish ] = "Identyfikator indeksu:";
+        Text [ japanese ] = "≤›√ﬁØ∏ΩÇÃämîF:";
+        Text [ chinese_traditional ] = "Ø¡§ﬁº–ªx:";
+        Text [ arabic ] = "„⁄—¯› «·›Â—”:";
+        Text [ dutch ] = "Indexidentificator:";
+        Text [ chinese_simplified ] = "À˜“˝±Í÷æ:";
+        Text [ greek ] = "¡Ì·„Ì˘ÒÈÛÙÈÍ¸ ÂıÒÂÙÁÒﬂÔı:";
+        Text [ korean ] = "¿Œµ¶Ω∫ »Æ¿Œ¿⁄:";
+    };
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 69, 23 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 75, 8 ) ;
+    };
+    CheckBox CB_UNIQUE
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 34 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
+        SVLook = TRUE;
+        Text = "Eindeutig";
+        Text [ english ] = "Unique";
+        Text [ english_us ] = "Unique";
+    };
+    FixedText FT_FIELDS
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 48 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
+        SVLook = TRUE;
+        Text = "Felder";
+        Text [ english ] = "Fields";
+        Text [ english_us ] = "Fields";
+    };
+    Control CTR_FIELDS
+    {
+        Pos = MAP_APPFONT ( LIST_WIDTH + 16, 59 ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, DIALOG_SIZE_Y - (BUTTON_SIZE_Y + 4) - 65 ) ;
+        SVLook = TRUE;
+        Border  = TRUE;
+    };
+    PushButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+        SVLook = TRUE;
+        DefButton = TRUE;
+        Text = "S~chlieﬂen";
+        Text [ english ] = "~Close";
+        Text [ english_us ] = "~Close";
+    };
+};
+
+String STR_TAB_INDEX_SORTORDER
+{
+    Text = "Sortierreihenfolge" ;
+    Text [ english ] = "Sort order" ;
+    Text [ english_us ] = "Sort order" ;
+    Text [ dutch ] = "Sorteervolgorde" ;
+    Text [ italian ] = "Sequenza di ordine" ;
+    Text [ spanish ] = "Orden de clasificaciÛn" ;
+    Text [ french ] = "Ordre de tri" ;
+    Text [ swedish ] = "Sorteringsordning" ;
+    Text [ danish ] = "SorteringsrÊkkef¯lge" ;
+    Text [ portuguese_brazilian ] = "Sortierreihenfolge" ;
+    Text [ portuguese ] = "Ordem de classificaÁ„o" ;
+    Text [ chinese_simplified ] = "≈≈–ÚπÊ‘Ú";
+    Text [ russian ] = "œÓˇ‰ÓÍ ÒÓÚËÓ‚ÍË";
+    Text [ polish ] = "KolejnoúÊ sortowania";
+    Text [ japanese ] = "ï¿Ç◊ë÷Ç¶ÇÃèáèò";
+    Text [ chinese_traditional ] = "±∆ß«≥W´h";
+    Text [ arabic ] = " — Ì» «·›—“";
+    Text [ dutch ] = "Sorteervolgorde";
+    Text [ chinese_simplified ] = "≈≈–ÚπÊ‘Ú";
+    Text [ greek ] = "”ÂÈÒ‹ Ù·ÓÈÌ¸ÏÁÛÁÚ";
+    Text [ korean ] = "¡§∑ƒº¯º≠";
+};
+String STR_TAB_INDEX_FIELD
+{
+    Text = "Indexfeld" ;
+    Text [ english ] = "Index field" ;
+    Text [ english_us ] = "Index field" ;
+};
+String STR_ORDER_ASCENDING
+{
+    Text = "Aufsteigend" ;
+    Text [ english ] = "Ascending" ;
+    Text [ dutch ] = "Oplopend" ;
+    Text [ english_us ] = "Ascending" ;
+    Text [ italian ] = "Crescente" ;
+    Text [ spanish ] = "Ascendente" ;
+    Text [ french ] = "Croissant" ;
+    Text [ swedish ] = "Stigande" ;
+    Text [ danish ] = "Stigende" ;
+    Text [ portuguese_brazilian ] = "Aufsteigend" ;
+    Text [ portuguese ] = "Ascendente" ;
+    Text [ chinese_simplified ] = "œÚ…œ";
+    Text [ russian ] = "œÓ ‚ÓÁ‡ÒÚ‡ÌË˛";
+    Text [ polish ] = "Rosnπco";
+    Text [ japanese ] = "è∏èá";
+    Text [ chinese_traditional ] = "¶V§W";
+    Text [ arabic ] = " ’«⁄œÌ";
+    Text [ dutch ] = "Oplopend";
+    Text [ chinese_simplified ] = "œÚ…œ";
+    Text [ greek ] = "¡˝ÓÔıÛ·";
+    Text [ korean ] = "ø¿∏ß ¬˜º¯";
+};
+String STR_ORDER_DESCENDING
+{
+    Text = "Absteigend" ;
+    Text [ english ] = "Descending" ;
+    Text [ english_us ] = "Descending" ;
+    Text [ italian ] = "Decrescente" ;
+    Text [ spanish ] = "Descendente" ;
+    Text [ french ] = "DÈcroissant" ;
+    Text [ dutch ] = "Aflopend" ;
+    Text [ swedish ] = "Fallande" ;
+    Text [ danish ] = "Faldende" ;
+    Text [ portuguese_brazilian ] = "Absteigend" ;
+    Text [ portuguese ] = "Descendente" ;
+    Text [ chinese_simplified ] = "œÚœ¬";
+    Text [ russian ] = "œÓ Û·˚‚‡ÌË˛";
+    Text [ polish ] = "Malejπco";
+    Text [ japanese ] = "ç~èá";
+    Text [ chinese_traditional ] = "¶V§U";
+    Text [ arabic ] = " ‰«“·Ì";
+    Text [ dutch ] = "Aflopend";
+    Text [ chinese_simplified ] = "œÚœ¬";
+    Text [ greek ] = "÷ËﬂÌÔıÛ·";
+    Text [ korean ] = "≥ª∏≤¬˜º¯";
+};
+
+String STR_CONFIRM_DROP_INDEX
+{
+    Text = "Wollen Sie den Index '$name$' wirklich lˆschen?";
+    Text [ english ] = "Do you really want to drop the index '$name$'?";
+    Text [ english_us ] = "Do you really want to drop the index '$name$'?";
+};
+
+String STR_LOGICAL_INDEX_NAME
+{
+    Text = "index";
+    Text [ english ] = "index";
+    Text [ english_us ] = "index";
+    Text [ language_user1 ] = "This is a logical name only. It should be the word for 'Index' (in a database sense), but written in lower case (if appliable to your language :).";
+};
+
+Image IMG_PKEYICON
+{
+    ImageBitmap = Bitmap { File = "pkey.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+ErrorBox ERR_NEED_INDEX_FIELDS
+{
+    Title = "Index speichern";
+    Title [ english ] = "Save Index";
+    Title [ english_us ] = "Save Index";
+
+    Message = "Der Index muﬂ mindestens ein Feld enthalten.";
+    Message [ english ] = "Der Index muﬂ mindestens ein Feld enthalten.";
+    Message [ english_us ] = "Der Index muﬂ mindestens ein Feld enthalten.";
+
+    Buttons = WB_OK;
+};
+
+QueryBox QUERY_SAVE_CURRENT_INDEX
+{
+    Title = "Index-Entwurf verlassen";
+    Title [ english ] = "close index design";
+    Title [ english_us ] = "close index design";
+
+    Message = "Wollen Sie die ƒnderungen am aktuellen Index noch speichern?";
+    Message [ english ] = "Do you want to save the changes made on the current index?";
+    Message [ english_us ] = "Do you want to save the changes made on the current index?";
+
+    Buttons = WB_YES_NO_CANCEL;
+    DefButton = WB_DEF_YES;
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 07.03.01 12:17:10  fs
+ ************************************************************************/
+
