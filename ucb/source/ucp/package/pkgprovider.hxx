@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:27:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@ namespace package_ucp {
                 "application/" PACKAGE_URL_SCHEME "-folder"
 #define PACKAGE_STREAM_CONTENT_TYPE \
                 "application/" PACKAGE_URL_SCHEME "-stream"
+#define PACKAGE_ZIP_FOLDER_CONTENT_TYPE \
+                "application/" PACKAGE_ZIP_URL_SCHEME "-folder"
+#define PACKAGE_ZIP_STREAM_CONTENT_TYPE \
+                "application/" PACKAGE_ZIP_URL_SCHEME "-stream"
 
 //=========================================================================
 
