@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-31 15:52:31 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,9 @@ SfxTopFrame::~SfxTopFrame()
 
 void SfxTopFrame::SetPresentationMode( BOOL bSet )
 {
+    if ( GetCurrentViewFrame() )
+        GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
+
     SetMenuBarOn_Impl( !bSet );
     if ( GetWorkWindow_Impl() )
         GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
@@ -657,6 +660,13 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     if ( !pImp->bHidden )
     {
+#if SUPD>=640
+        const SfxFilter* pFilter = pDoc->GetMedium()->GetFilter();
+        if ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL )
+            pFrame->GetDispatcher()->HideUI( TRUE );
+        else
+            pFrame->GetDispatcher()->HideUI( FALSE );
+#endif
         pFrame->Show();
         GetWindow().Show();
         pFrame->MakeActive_Impl( TRUE );
