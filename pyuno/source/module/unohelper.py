@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unohelper.py,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2003-05-24 23:23:38 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:31:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,7 @@
 import uno
 import pyuno
 import os
+import sys
 
 from com.sun.star.lang import XTypeProvider, XSingleComponentFactory, XServiceInfo
 from com.sun.star.uno import RuntimeException
@@ -229,12 +230,17 @@ def addComponentsToContext( toBeExtendedContext, contextRuntime, componentUrls, 
     implReg = smgr.createInstanceWithContext( "com.sun.star.registry.ImplementationRegistration",contextRuntime)
 
     isWin = os.name == 'nt' or os.name == 'dos'
+    isMac = sys.platform == 'darwin'
     #   create a temporary registry
     for componentUrl in componentUrls:
         reg = smgr.createInstanceWithContext( "com.sun.star.registry.SimpleRegistry", contextRuntime )
 	reg.open( "", 0, 1 )
         if not isWin and componentUrl.endswith( ".uno" ):  # still allow platform independent naming
-            componentUrl = componentUrl + ".so"
+            if isMac:
+               componentUrl = componentUrl + ".dylib"
+            else:
+               componentUrl = componentUrl + ".so"
+
 	implReg.registerImplementation( loaderName,componentUrl, reg )
 	rootKey = reg.getRootKey()
 	implementationKey = rootKey.openKey( "IMPLEMENTATIONS" )
