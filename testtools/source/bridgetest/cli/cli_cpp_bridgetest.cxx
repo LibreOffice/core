@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cpp_bridgetest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:16:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #using <System.dll>
 #using <cli_types.dll>
 #using <cli_ure.dll>
+#using <cli_types_bridgetest.dll>
 
 using namespace System;
 using namespace System::Diagnostics;
@@ -72,8 +73,8 @@ using namespace uno;
 using namespace uno::util;
 using namespace unoidl::com::sun::star::uno;
 using namespace unoidl::com::sun::star::lang;
-using namespace unoidl::com::sun::star::test::bridge;
-
+//using namespace unoidl::com::sun::star::test::bridge;
+using namespace unoidl::test::testtools::bridgetest;
 namespace foo
 {
     public __gc  __interface MyInterface
