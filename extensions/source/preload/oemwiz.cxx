@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-11-14 16:05:22 $
+ *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ namespace preload
         TabPage* pWelcomePage;
         TabPage* pLicensePage;
         TabPage* pUserDataPage;
-        TabPage* pReadMePage;
 
         OEMPreloadDialog_Impl(Window* pDialog);
         ~OEMPreloadDialog_Impl()
@@ -129,7 +128,6 @@ namespace preload
             delete pWelcomePage;
             delete pLicensePage;
             delete pUserDataPage;
-            delete pReadMePage;
             delete pSet;
         }
         void WriteUserData();
@@ -162,7 +160,6 @@ namespace preload
             pLicensePage = new OEMLicenseTabPage(pDialog);
             pUserDataPage = new SvxGeneralTabPage(pDialog, *pSet);
             ((SvxGeneralTabPage*)pUserDataPage)->Reset(*pSet);
-            pReadMePage = new OEMReadMeTabPage(pDialog);
         }
 /* -----------------------------14.11.2001 11:33------------------------------
 
@@ -204,9 +201,13 @@ namespace preload
         ,aCancelPB(this,    ResId(PB_CANCEL ))
         ,aAcceptST(ResId(ST_ACCEPT))
         ,aFinishST(ResId(ST_FINISH))
+        ,aLicense(ResId(ST_LICENSE_AGREEMENT))
+        ,aUserData(ResId(ST_INSERT_USER_DATA))
         ,pImpl(new OEMPreloadDialog_Impl(this))
     {
           FreeResource();
+          aDlgTitle = GetText();
+          aPrevPB.Enable(FALSE);
           aNextST = aNextPB.GetText();
           aPrevPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
           aNextPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
@@ -220,11 +221,9 @@ namespace preload
           AddPage( pImpl->pWelcomePage );
           AddPage( pImpl->pLicensePage );
           AddPage( pImpl->pUserDataPage );
-          AddPage( pImpl->pReadMePage );
           SetPage( OEM_WELCOME, pImpl->pWelcomePage );
           SetPage( OEM_LICENSE, pImpl->pLicensePage );
           SetPage( OEM_USERDATA, pImpl->pUserDataPage );
-          SetPage( OEM_README, pImpl->pReadMePage );
           ShowPage( OEM_WELCOME );
     }
 /* -----------------------------14.11.2001 11:33------------------------------
@@ -244,7 +243,7 @@ namespace preload
             if(GetCurLevel())
                 ShowPage(GetCurLevel() - 1);
         }
-        else if(OEM_README > GetCurLevel())
+        else if(OEM_USERDATA > GetCurLevel())
             ShowPage(GetCurLevel() + 1);
         else
         {
@@ -252,19 +251,25 @@ namespace preload
             Finnish(RET_OK);
         }
 
+        String sTitle(aDlgTitle);
+
         switch(GetCurLevel())
         {
             case OEM_WELCOME:
-            case OEM_USERDATA:
                 aNextPB.SetText(aNextST);
             break;
             case OEM_LICENSE:
+                sTitle += aLicense;
                 aNextPB.SetText(aAcceptST);
+                aCancelPB.GrabFocus();
             break;
-            case OEM_README:
+            case OEM_USERDATA:
+                sTitle += aUserData;
                 aNextPB.SetText(aFinishST);
             break;
         }
+        SetText(sTitle);
+        aPrevPB.Enable(GetCurLevel() != OEM_WELCOME);
         return 0;
     }
 /* -----------------------------14.11.2001 11:33------------------------------
@@ -343,35 +348,6 @@ namespace preload
         aLicenseML.SetText( sLicense );
     }
 
-/* -----------------------------13.11.2001 12:29------------------------------
-
- ---------------------------------------------------------------------------*/
-    OEMReadMeTabPage::OEMReadMeTabPage(Window* pParent) :
-        TabPage(pParent, ModuleRes(RID_TP_README)),
-        aInfoFT(this, ResId(FT_INFO)),
-        aReadmeML(this, ResId(ML_README))
-    {
-        FreeResource();
-    }
-/* -----------------------------13.11.2001 12:30------------------------------
-
- ---------------------------------------------------------------------------*/
-    OEMReadMeTabPage::~OEMReadMeTabPage()
-    {
-    }
-
-/* -----------------------------14.11.2001 09:18------------------------------
-
- ---------------------------------------------------------------------------*/
-void OEMReadMeTabPage::ActivatePage()
-{
-    if(aReadmeML.GetText().Len())
-        return;
-    aReadmeML.SetLeftMargin( 5 );
-    String sReadme;
-    OEMPreloadDialog::LoadFromLocalFile(String::CreateFromAscii("readme.txt"), sReadme);
-    aReadmeML.SetText( sReadme );
-}
 //.........................................................................
 }   // namespace preload
 //.........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-11-14 13:18:06 $
+ *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 
 #define RID_DLG_OEMWIZARD   1024
 #define RID_TP_LICENSE      1025
-#define RID_TP_README       1026
 #define RID_TP_WELCOME      1027
 
 
@@ -79,4 +78,7 @@
 #define FT_INFO1            9
 #define FT_INFO2            10
 #define ML_LICENSE          11
+#define ST_LICENSE_AGREEMENT    12
+#define ST_INSERT_USER_DATA     13
+
 #endif

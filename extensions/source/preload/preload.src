@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:47:02 $
+ *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,17 @@ ModalDialog RID_DLG_OEMWIZARD
         Text[ arabic ] = "Finish";
         Text[ catalan ] = "Finish";
     };
+    String ST_LICENSE_AGREEMENT
+    {
+        Text = " - Software-Lizenzvereinbarung";
+        Text[english_us] = " - Software License Agreement";
+    };
+
+    String ST_INSERT_USER_DATA
+    {
+        Text = " - Benutzerdaten";
+        Text[english_us] = "- User Data";
+    };
 };
 TabPage RID_TP_WELCOME
 {
@@ -188,7 +199,7 @@ TabPage RID_TP_WELCOME
     Text [ ENGLISH ] = "Welcome" ;
     FixedText FT_INFO
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 248 , 160 ) ;
         WordBreak = TRUE ;
         Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\nUm %PRODUCTNAME %PRODUCTVERSION OEM starten zu können, geben Sie bitte auf der dem Lizenztext folgenden Dialogseite Ihre Benutzerdaten ein.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch.\n\nDes weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/staroffice.\n\nWir wünschen Ihnen viel Spaß und Erfolg mit Ihrem neuen %PRODUCTNAME.\n\nIhr %PRODUCTNAME Team.";
@@ -273,16 +284,17 @@ TabPage RID_TP_LICENSE
     };
     MultiLineEdit ML_LICENSE
     {
-        PosSize = MAP_APPFONT ( 6 , 23 , 248, 123 ) ;
+        PosSize = MAP_APPFONT ( 6 , 25 , 248, 123 ) ;
         Border = TRUE ;
         VScroll = TRUE ;
         ReadOnly = TRUE ;
+        IgnoreTab = TRUE;
     };
     FixedText FT_INFO2
     {
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( 6 , 152 ) ;
-        Size = MAP_APPFONT ( 148 , 27 ) ;
+        Size = MAP_APPFONT ( 248 , 27 ) ;
         Text = "Akzeptieren Sie sämtliche Bedingungen im vorliegenden Lizenzabkommen, klicken Sie auf die Schaltfläche '%1'. Stimmen Sie den Bedingungen nicht zu klicken Sie auf '%2', die Installation wird dann abgebrochen." ;
         Text [ english_us ] = "If you accept all terms of the license agreement, click '%1'. Otherwise, click '%2' to cancel the installation." ;
         Text [ portuguese ] = "Clique no botão '%1' se concordar com os termos do contrato de licença. Se não os aceitar clique no botão '%2' e a instalação será cancelada." ;
@@ -327,85 +339,6 @@ TabPage RID_TP_LICENSE
     Text[ arabic ] = "License Agreement";
     Text[ catalan ] = "License Agreement";
 };
-TabPage RID_TP_README
-{
-//    HelpId = ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "ReadMe" ;
-    Text [ ENGLISH ] = "ReadMe" ;
-    FixedText FT_INFO
-    {
-        WordBreak = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 20 ) ;
-        Text = "Dieser Text enthält zusätzliche und wichtige Informationen zu %1. Mit der Bildlaufleiste können Sie den Rest des Text sichtbar machen." ;
-        Text [ english_us ] = "This text contains additional information for %1. Use the scroll bar to display the entire text." ;
-        Text [ portuguese_brazilian ] = "Dieser Text enth?lt zus?tzliche und wichtige Informationen zu %1. Mit der Bildlaufleiste k?nen Sie den Rest des Text sichtbar machen." ;
-        Text [ swedish ] = "Den här texten innehåller mer information om %1. Med hjälp av rullningslisten kan du se resten av texten." ;
-        Text [ danish ] = "Denne tekst indeholder yderligere, vigtige informationer om %1. Ved hjælp af rullepanelet kan du se resten af teksten." ;
-        Text [ italian ] = "Questo testo contiene importanti informazioni su %1. Con la barra di scorrimento è possibile visualizzare l'intero testo." ;
-        Text [ spanish ] = "Este texto contiene información adicional e importante sobre %1. Con la barra de desplazamiento podrá visualizar el resto del texto." ;
-        Text [ french ] = "Ce texte contient des informations importantes sur %1. Pour vous déplacer dans le texte, utilisez la barre de défilement." ;
-        Text [ dutch ] = "Deze tekst bevat nog verdere belangrijke informatie over  %1. Met de beeldschuifbalk kunt u de rest van de tekst zichtbaar maken." ;
-        Text [ portuguese ] = "Este texto contém informações adicionais sobre o %1. Use a barra de deslocamento para visualizar o texto completo." ;
-        Text[ chinese_simplified ] = "ä»¥ä¸‹è¿™æ®µæ–‡å­—ä¸­å«æœ‰é™„åŠ çš„æœ‰å…³ %1 çš„é‡è¦ä¿¡æ¯ã€‚æ‚¨å¯ä»¥é€šè¿‡ç§»åŠ¨æ»šåŠ¨æ¡æ¥é˜…è¯»å…¶ä¸‹åŠéƒ¨åˆ†ã€‚";
-        Text[ russian ] = "Â ıòîì òåêñòå ñîäåğæèòñÿ äîïîëíèòåëüíàÿ è âàæíàÿ èíôîğìàöèÿ ïî %1. Èñïîëüçóéòå ïîëîñó ïğîêğóòêè, ÷òîáû óâèäåòü îñòàëüíóş ÷àñòü òåêñòà.";
-        Text[ polish ] = "Tutaj znajduj¹ siê dodatkowe informacje o programie %1. Po przesuniêciu paska przewijania obrazu odkryta zostanie pozosta³a czêœæ tekstu.";
-        Text[ japanese ] = "ã“ã®æ–‡ç« ã«ã¯ %1 ã«ã¤ã„ã¦ã•ã‚‰ã«é‡è¦ãªæƒ…å ±ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã‚’å‹•ã‹ã™ã¨ã€æ®‹ã‚Šã®æ–‡ç« ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚";
-        Text[ chinese_traditional ] = "é€™æ®µæ–‡å­—å«æœ‰é™„åŠ çš„é—œæ–¼ %1 çš„é‡è¦è³‡è¨Šã€‚æ‚¨å¯ä»¥æŒ‰ä¸€ä¸‹æ²è»¸ï¹é–±è®€å…¶ä¸‹åŠéƒ¨ä»½ã€‚";
-        Text[ arabic ] = "íÍÊæí åĞÇ ÇáäÕ Úáì ãÚáæãÇÊ ÅÖÇİíÉ åÇãÉ ÈÎÕæÕ %1. ÇÓÊÎÏã ÔÑíØ ÊÍÑíß ÇáÕİÍÉ áÅÙåÇÑ ÇáÌÒÁ ÇáãÊÈŞí ãä ÇáäÕ.";
-        Text[ greek ] = "Ôï êåßìåíï áõôü ğåñéİ÷åé óçìáíôéêİò ğëçñïöïñßåò ãéá ôï %1. ×ñçóéìïğïéşíôáò ôçí ãñáììŞ êıëéóçò åìöáíßæåôáé ïëüêëçñï ôï êåßìåíï.";
-        Text[ korean ] = "ì´ í…ìŠ¤íŠ¸ëŠ” %1ì— ëŒ€í•œ ì¤‘ìš”í•œ ì¶”ê°€ ì •ë³´ì…ë‹ˆë‹¤.  ìŠ¤í¬ë¡¤ ë°”ë¥¼ ì‚¬ìš©í•˜ì—¬ ë‚˜ë¨¸ì§€ í…ìŠ¤íŠ¸ë¥¼ ë³¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Bu metin %1 ile ilgili önemli ek bilgiler içeriyor. Sayfa kaydırma çubuğunu kullanarak, metnin devamını görüntüleyebilirsiniz.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Este texto contiene información adicional e importante sobre %1. Con la barra de desplazamiento puede hacer visible el resto del texto.";
-        Text[ finnish ] = "Tässä tekstissä on lisätietoja kohteesta %1. Voit vierittää tekstiä vierityspalkin avulla.";
-    };
-    MultiLineEdit ML_README
-    {
-        PosSize = MAP_APPFONT ( 6 , 23 , 248, 156 ) ;
-        Border = TRUE ;
-        VScroll = TRUE ;
-        ReadOnly = TRUE ;
-    };
-    Text[ english_us ] = "ReadMe";
-    Text[ portuguese ] = "ReadMe";
-    Text[ russian ] = "ReadMe";
-    Text[ greek ] = "ReadMe";
-    Text[ dutch ] = "ReadMe";
-    Text[ french ] = "ReadMe";
-    Text[ spanish ] = "ReadMe";
-    Text[ finnish ] = "ReadMe";
-    Text[ italian ] = "Readme";
-    Text[ danish ] = "ReadMe";
-    Text[ swedish ] = "ReadMe";
-    Text[ polish ] = "ReadMe";
-    Text[ portuguese_brazilian ] = "ReadMe";
-    Text[ japanese ] = "ReadMe";
-    Text[ korean ] = "ReadMe";
-    Text[ chinese_simplified ] = "ReadMe";
-    Text[ chinese_traditional ] = "ReadMe";
-    Text[ turkish ] = "ReadMe";
-    Text[ arabic ] = "ReadMe";
-    Text[ catalan ] = "ReadMe";
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

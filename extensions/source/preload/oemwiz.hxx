@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-11-14 13:18:01 $
+ *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ namespace preload
     #define OEM_WELCOME     0
     #define OEM_LICENSE     1
     #define OEM_USERDATA    2
-    #define OEM_README      3
 
 //.........................................................................
     //=====================================================================
@@ -107,6 +106,9 @@ namespace preload
         String          aNextST;
         String          aAcceptST;
         String          aFinishST;
+        String          aDlgTitle;
+        String          aLicense;
+        String          aUserData;
         OEMPreloadDialog_Impl* pImpl;
 
         DECL_LINK(NextPrevPageHdl, PushButton*);
@@ -140,17 +142,6 @@ namespace preload
         public:
             OEMLicenseTabPage(Window* pParent);
             ~OEMLicenseTabPage();
-
-            virtual void ActivatePage();
-    };
-    class OEMReadMeTabPage : public TabPage
-    {
-        FixedText       aInfoFT;
-        MultiLineEdit   aReadmeML;
-
-        public:
-            OEMReadMeTabPage(Window* pParent);
-            ~OEMReadMeTabPage();
 
             virtual void ActivatePage();
     };
