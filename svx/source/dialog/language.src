@@ -2,9 +2,9 @@
  *
  *  $RCSfile: language.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:19:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,12 @@ String RID_SVXSTR_LANGUAGE_ALL
     Text[ hebrew ] = "‮[הכל]‬";
     Text[ hindi ] = "[सब]";
     Text[ slovak ] = "[Všetko]";
+    Text[ hungarian ] = "[összes]";
+    Text[ slovenian ] = "[Vsi]";
 };
 
  // ********************************************************************** EOF
+
 
 
 
