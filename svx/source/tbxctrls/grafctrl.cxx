@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:35:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,7 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
     maImage.Show();
 
     maField.SetHelpId( nSlotId );
+    maField.SetSmartHelpId( SmartId( rCmd ));
     maField.Show();
 }
 
