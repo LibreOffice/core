@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:51 $
+ *  last change: $Author: toconnor $ $Date: 2003-06-19 11:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <vector>
+#include <stdlib.h>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -154,7 +155,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
 
     Any any;
     OUString docUri;
-    sal_Int32 filesysScriptStorageID;
+    sal_Int32 filesysScriptStorageID = -1;
     Reference < storage::XScriptStorageManager > xScriptStorageMgr;
     sal_Int32 docSid;
     try
