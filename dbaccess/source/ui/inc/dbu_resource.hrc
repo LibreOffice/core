@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 11:36:03 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,8 @@
 #define STR_TABLEDESIGN_NO_PRIM_KEY         RID_STRING_START + 145
 #define STR_TABLEDESIGN_TITLE               RID_STRING_START + 146
 #define STR_CONNECTING_DATASOURCE           RID_STRING_START + 147
+#define STR_LOADING_QUERY                   RID_STRING_START + 148
+#define STR_LOADING_TABLE                   RID_STRING_START + 149
 
 //========================================================================
 // untyped resources
@@ -390,6 +392,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37  2001/04/11 11:36:03  oj
+ *  #85699# check if pkey already exists
+ *
  *  Revision 1.36  2001/04/03 08:14:57  fs
  *  +STR_CONNECTING_DATASOURCE
  *
