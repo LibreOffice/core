@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.6 2000-10-17 15:14:57 sab Exp $
+	$Id: style.mod,v 1.7 2000-10-18 17:27:35 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -260,8 +260,6 @@
 	style:rotation-angle %nonNegativeInteger; #IMPLIED
 	style:rotation-align (none | bottom | top | center) #IMPLIED
 	style:cell-protect CDATA #IMPLIED
-<!--	stayes in a higher section -->
-<!--	style:print-content %boolean; #IMPLIED -->
 	fo:wrap-option (no-wrap | wrap) #IMPLIED
 >
 <!ELEMENT style:columns (style:column*)>
