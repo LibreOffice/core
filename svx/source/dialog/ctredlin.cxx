@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-23 10:50:19 $
+ *  last change: $Author: dr $ $Date: 2002-07-30 10:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ SvxRedlinTable::SvxRedlinTable( Window* pParent,WinBits nBits ):
     bComment=FALSE;
     nDatePos=WRITER_DATE;
     pCommentSearcher=NULL;
+    SetNodeDefaultImages();
 }
 
 SvxRedlinTable::SvxRedlinTable( Window* pParent,const ResId& rResId):
@@ -283,6 +284,7 @@ SvxRedlinTable::SvxRedlinTable( Window* pParent,const ResId& rResId):
     bComment=FALSE;
     nDatePos=WRITER_DATE;
     pCommentSearcher=NULL;
+    SetNodeDefaultImages();
 }
 
 SvxRedlinTable::~SvxRedlinTable()
