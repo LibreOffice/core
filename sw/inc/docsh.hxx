@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:51:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
                                 { pWrtShell = pShell; }
 
     void                    RemoveOLEObjects();
+    void                    CalcLayoutForOLEObjects();
 
     void                    Init_Impl();
     DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
