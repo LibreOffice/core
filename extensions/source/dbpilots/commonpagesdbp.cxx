@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:42:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,21 +341,6 @@ namespace dbp
         m_aTable.Clear();
 
         WaitObject aWaitCursor(this);
-        // get the default SDB interaction handler
-        Reference< XMultiServiceFactory > xORB = getServiceFactory();
-        Reference< XInteractionHandler > xHandler;
-        const ::rtl::OUString sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler");
-        try
-        {
-            if (xORB.is())
-                xHandler = Reference< XInteractionHandler >(xORB->createInstance(sInteractionHandlerServiceName), UNO_QUERY);
-        }
-        catch(Exception&) { }
-        if (!xHandler.is() && xORB.is())
-        {
-            ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, sal_True);
-            return;
-        }
 
         // will be the table tables of the selected data source
         Sequence< ::rtl::OUString > aTableNames;
@@ -385,6 +370,10 @@ namespace dbp
 
                     if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
                     {   // connect
+                        // get the default SDB interaction handler
+                        Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(this);
+                        if (!xHandler.is() )
+                            return;
                         xConn = xDatasource->connectWithCompletion(xHandler);
                         setFormConnection( xConn );
                     }
@@ -423,8 +412,6 @@ namespace dbp
                     if ( xQueries.is() )
                         aQueryNames = xQueries->getElementNames();
                 }
-
-                setFormConnection( xConn );
             }
             catch(SQLContext& e) { aSQLException <<= e; }
             catch(SQLWarning& e) { aSQLException <<= e; }
@@ -436,12 +423,15 @@ namespace dbp
         }
 
 
-        if (aSQLException.hasValue() && xHandler.is())
+        if ( aSQLException.hasValue() )
         {   // an SQLException (or derivee) was thrown ...
             Reference< XInteractionRequest > xRequest = new OInteractionRequest(aSQLException);
             try
             {
-                xHandler->handle(xRequest);
+                // get the default SDB interaction handler
+                Reference< XInteractionHandler > xHandler = getDialog()->getInteractionHandler(this);
+                if ( xHandler.is() )
+                    xHandler->handle(xRequest);
             }
             catch(Exception&) { }
             return;
