@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mhayes $ $Date: 2002-11-26 10:21:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,7 @@ StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *c
             && pSubset )
         {
             ::vcl::I18NStatus::get().changeIM( String( ByteString( pSubset->name ), RTL_TEXTENCODING_UTF8 ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "got XNUnicodeCharacterSubset\n   %d\n   %d\n   %s\n   %d\n", pSubset->index, pSubset->subset_id, pSubset->name, pSubset->is_active );
 #endif
         }
@@ -728,7 +728,7 @@ StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *c
         }
         ::vcl::I18NStatus::get().setStatusText( aText );
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "XIMStatusDataType %s not supported\n",
                  call_data->type == XIMBitmapType ? "XIMBitmapType" : ByteString::CreateFromInt32( call_data->type ).GetBuffer() );
