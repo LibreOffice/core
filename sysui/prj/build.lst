@@ -8,4 +8,4 @@ su	sysui\source\win32\folderpicker	nmake	-	w	su_win32_folderpicker NULL
 su  sysui\source\win32\misc			nmake	-	w	su_win32_misc su_win32_filepicker su_win32_folderpicker NULL
 su	sysui\unix\office\scripts       nmake	-	u	su_scripts NULL
 su	sysui\source\win32\QuickStart	nmake	-	w	su_win32_quickstart NULL
-su	sysui\util						nmake	-	all	su_util su_win32_filepicker su_win32_misc su_win32_folderpicker NULL
+su	sysui\util						nmake	-	all	su_util su_win32_filepicker.w su_win32_misc.w su_win32_folderpicker.w NULL
