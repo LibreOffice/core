@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:19:19 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,8 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     pDoc->bInReading = FALSE;
 
+    pDoc->PropagateOutlineRule();
+
     pDoc->InvalidateNumRules();
     pDoc->UpdateNumRule();
     pDoc->SetAllUniqueFlyNames();
@@ -502,6 +504,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     po->SetBlockMode( FALSE );
     po->SetOrganizerMode( FALSE );
     po->SetIgnoreHTMLComments( FALSE );
+
     return nError;
 }
 
