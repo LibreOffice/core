@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:02 $
+ *  last change: $Author: pl $ $Date: 2001-09-14 12:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,36 @@
 #include <psprint/helper.hxx>
 #include <tools/string.hxx>
 #include <osl/file.hxx>
+#include <unotools/configmgr.hxx>
 
 const ::rtl::OUString& psp::getPrinterPath()
 {
-    static const char* pEnv = getenv( "SAL_PSPRINT" );
-    static ::rtl::OUString aPath( pEnv ? pEnv : "", pEnv ? strlen( pEnv ) : 0, gsl_getSystemTextEncoding() );
+    static ::rtl::OUString aPath;
+
+    if( ! aPath.getLength() )
+    {
+        ::com::sun::star::uno::Any aPathEntry;
+        ::rtl::OUString aEntry;
+
+        aPathEntry = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::OFFICEINSTALL );
+        aPathEntry >>= aPath;
+        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/share/psprint:" ) );
+        aPathEntry = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::INSTALLPATH );
+        aPathEntry >>= aEntry;
+        aPath += aEntry;
+        aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/psprint" ) );
+
+        const char* pEnv = getenv( "SAL_PSPRINT" );
+        if( pEnv && *pEnv )
+        {
+            aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
+            aEntry = ::rtl::OUString( pEnv ? pEnv : "", pEnv ? strlen( pEnv ) : 0, gsl_getSystemTextEncoding() );
+            aPath += aEntry;
+        }
+#ifdef DEBUG
+        fprintf( stderr, "initalizing printer path to \"%s\"\n", ::rtl::OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
+    }
     return aPath;
 }
 
