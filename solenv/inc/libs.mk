@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-03 09:55:33 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 15:24:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -161,8 +161,7 @@ SWLIB=$(L)$/libswlib.x
 .ELSE				# "$(OS)"=="S390"
 
 GPC3RDLIB=-lgpc
-.INCLUDE .IGNORE : salhelper$/version.mk
-SALHELPERLIB=-lsalhelper$(SALHELPER_MAJOR)$(COM)
+SALHELPERLIB=-lsalhelper$(COM)
 XMLSCRIPTLIB =-lxcr$(UPD)$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp2
 CONNECTIVITYLIB=-lconnectivity
@@ -177,27 +176,21 @@ TOOLSLIB=-ltl$(UPD)$(DLLPOSTFIX)
 OSLLIB=
 RTLLIB=
 TECLIB=
-.INCLUDE .IGNORE : cppu$/version.mk
-CPPULIB=-lcppu$(CPPU_MAJOR)
-.INCLUDE .IGNORE : cppuhelper$/version.mk
-CPPUHELPERLIB=-lcppuhelper$(CPPUHELPER_MAJOR)$(COM)
+CPPULIB=-lcppu
+CPPUHELPERLIB=-lcppuhelper$(COM)
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COM)
-.INCLUDE .IGNORE : registry$/version.mk
-REGLIB=-lreg$(REGISTRY_MAJOR)
+REGLIB=-lreg
 .INCLUDE .IGNORE : vos$/version.mk
 VOSLIB=-lvos$(VOS_MAJOR)$(COM)
 XMLOFFLIB=-lxo$(UPD)$(DLLPOSTFIX)
-.INCLUDE .IGNORE : store$/version.mk
-STORELIB=-lstore$(STORE_MAJOR)
-.INCLUDE .IGNORE : sal$/version.mk
-SALLIB=-lsal$(SAL_MAJOR)
+STORELIB=-lstore
+SALLIB=-lsal
 .INCLUDE .IGNORE : connectivity$/version.mk
 ODBCLIB=-lodbc$(ODBC_MAJOR)
 SALTLSLIB=-lsaltls$(SAL_MAJOR)
 SALZIPLIB=-lsalzip$(SAL_MAJOR)
-.INCLUDE .IGNORE : bridges$/version.mk
-RMCXTLIB=-lrmcxt$(RMCXT_MAJOR)
+RMCXTLIB=-lrmcxt
 BTSTRPLIB=-lbtstrp
 IOTXLIB=
 OTXLIB=-lotx_ind
