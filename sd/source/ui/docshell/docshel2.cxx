@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
+ *  last change: $Author: thb $ $Date: 2002-03-13 11:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,14 +417,73 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
 
     String aStrPage( SdResId( STR_SD_PAGE ) );
 
-    if( rName.Search( aStrPage ) != STRING_NOTFOUND
-        && ( rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= '0'
-        &&  rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= '9' ))
+    // prevent also _future_ slide names of the form "'STR_SD_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
+    // (arabic, lower- and upper case single letter, lower- and upper case roman numbers)
+    if( rName.Search( aStrPage ) != STRING_NOTFOUND &&
+        rName.GetToken( 1, sal_Unicode(' ') ).Len() != 0 )
     {
-        rName = String();
-        return( TRUE );
-    }
+        if( rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= '0' &&
+            rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= '9' )
+        {
+            // check for arabic numbering
 
+            // gobble up all following numbers
+            String sRemainder = rName.GetToken( 1, sal_Unicode(' ') );
+            while( sRemainder.Len() &&
+                   sRemainder.GetChar(0) >= '0' &&
+                   sRemainder.GetChar(0) <= '9' )
+            {
+                // trim by one
+                sRemainder.Erase(0, 1);
+            }
+
+            // EOL? Reserved name!
+            if( !sRemainder.Len() )
+            {
+                rName = String();
+                return( TRUE );
+            }
+        }
+        else if( rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'a' &&
+            rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'z' &&
+            rName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+        {
+            // lower case, single character: reserved
+            rName = String();
+            return( TRUE );
+        }
+        else if( rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'A' &&
+            rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'Z' &&
+            rName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+        {
+            // upper case, single character: reserved
+            rName = String();
+            return( TRUE );
+        }
+        else
+        {
+            // check for upper/lower case roman numbering
+            String sReserved( String::CreateFromAscii( "cdilmvx" ) );
+
+            // gobble up all following characters contained in one reserved class
+            String sRemainder = rName.GetToken( 1, sal_Unicode(' ') );
+            if( sReserved.Search( sRemainder.GetChar(0) ) == STRING_NOTFOUND )
+                sReserved.ToUpperAscii();
+
+            while( sReserved.Search( sRemainder.GetChar(0) ) != STRING_NOTFOUND )
+            {
+                // trim by one
+                sRemainder.Erase(0, 1);
+            }
+
+            // EOL? Reserved name!
+            if( !sRemainder.Len() )
+            {
+                rName = String();
+                return( TRUE );
+            }
+        }
+    }
 
     // Ist der Seitenname schon vorhanden?
     BOOL    bIsMasterPage;
