@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5287,6 +5287,35 @@ UniString INetURLObject::RelToAbs(UniString const & rTheRelURIRef,
                rTheRelURIRef;
 }
 
+
+// #88865# a temporary hack, to be removed together with
+// INetURLObject::AbsToRel
+
+#include <ucbhelper/content.hxx>
+
+static star::uno::Any GetCasePreservedURL(INetURLObject& aObj)
+{
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+    try
+    {
+        ucb::Content aCnt(
+            aObj.GetMainURL(INetURLObject::NO_DECODE),
+            star::uno::Reference<
+            star::ucb::XCommandEnvironment > () );
+
+        return aCnt.getPropertyValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL")));
+    }
+    catch( star::uno::Exception& )
+    {
+        DBG_WARNING( "Any other exception" );
+    }
+
+    return star::uno::Any();
+}
+
+
+
 //============================================================================
 // static
 UniString INetURLObject::AbsToRel(ByteString const & rTheAbsURIRef,
@@ -5296,9 +5325,37 @@ UniString INetURLObject::AbsToRel(ByteString const & rTheAbsURIRef,
                                   FSysStyle eStyle)
 {
     UniString aTheRelURIRef;
-    m_aBaseURIRef.convertAbsToRel(extend(rTheAbsURIRef), true, aTheRelURIRef,
-                                  eEncodeMechanism, eDecodeMechanism,
-                                  eCharset, eStyle);
+    star::uno::Any aAny =
+        GetCasePreservedURL(m_aBaseURIRef);
+
+    rtl::OUString aBaseURL;
+    sal_Bool success = (aAny >>= aBaseURL);
+
+    if(success)
+    {
+        INetURLObject aAbsURIRef(rTheAbsURIRef,eEncodeMechanism,eCharset);
+
+        star::uno::Any aAny =
+            GetCasePreservedURL(aAbsURIRef);
+        rtl::OUString aAbsURL;
+        success = (aAny >>= aAbsURL);
+        if(success)
+            INetURLObject(aBaseURL).convertAbsToRel(
+                String(aAbsURL),false,aTheRelURIRef,
+                WAS_ENCODED,eDecodeMechanism,
+                RTL_TEXTENCODING_UTF8,eStyle);
+        else
+            INetURLObject(aBaseURL).convertAbsToRel(
+                extend(rTheAbsURIRef), true, aTheRelURIRef,
+                eEncodeMechanism, eDecodeMechanism,
+                eCharset, eStyle);
+    }
+    else
+        m_aBaseURIRef.convertAbsToRel(
+            extend(rTheAbsURIRef), true, aTheRelURIRef,
+            eEncodeMechanism, eDecodeMechanism,
+            eCharset, eStyle);
+
     return aTheRelURIRef;
 }
 
@@ -5311,9 +5368,38 @@ UniString INetURLObject::AbsToRel(UniString const & rTheAbsURIRef,
                                   FSysStyle eStyle)
 {
     UniString aTheRelURIRef;
-    m_aBaseURIRef.convertAbsToRel(rTheAbsURIRef, false, aTheRelURIRef,
-                                  eEncodeMechanism, eDecodeMechanism,
-                                  eCharset, eStyle);
+
+    star::uno::Any aAny =
+        GetCasePreservedURL(m_aBaseURIRef);
+
+    rtl::OUString aBaseURL;
+    sal_Bool success = (aAny >>= aBaseURL);
+
+    if(success)
+    {
+        INetURLObject aAbsURIRef(rTheAbsURIRef,eEncodeMechanism,eCharset);
+
+        star::uno::Any aAny =
+            GetCasePreservedURL(aAbsURIRef);
+        rtl::OUString aAbsURL;
+        success = (aAny >>= aAbsURL);
+        if(success)
+            INetURLObject(aBaseURL).convertAbsToRel(
+                String(aAbsURL),false,aTheRelURIRef,
+                WAS_ENCODED,eDecodeMechanism,
+                RTL_TEXTENCODING_UTF8,eStyle);
+        else
+            INetURLObject(aBaseURL).convertAbsToRel(
+                rTheAbsURIRef, false, aTheRelURIRef,
+                eEncodeMechanism, eDecodeMechanism,
+                eCharset, eStyle);
+    }
+    else
+        m_aBaseURIRef.convertAbsToRel(
+            rTheAbsURIRef, false, aTheRelURIRef,
+            eEncodeMechanism, eDecodeMechanism,
+            eCharset, eStyle);
+
     return aTheRelURIRef;
 }
 
