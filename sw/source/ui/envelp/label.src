@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-19 18:08:37 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "è¡¨æ ¼";
         Text[ arabic ] = "ÇáÌÏæá";
         Text[ greek ] = "Ðßíáêáò";
-        Text[ korean ] = "í‘œ";
+        Text[ korean ] = "ì‹œíŠ¸";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Tablo";
         Text[ catalan ] = "Tabla";
@@ -1650,6 +1650,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
