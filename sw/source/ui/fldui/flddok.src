@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:44:33 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ TabPage TP_FLD_DOK
         Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo de campo";
     };
     ListBox LB_DOKTYPE
     {
@@ -136,6 +137,7 @@ TabPage TP_FLD_DOK
         Text[ korean ] = "¼±ÅÃ(~E)";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Se~lección";
     };
     ListBox LB_DOKSELECTION
     {
@@ -170,6 +172,7 @@ TabPage TP_FLD_DOK
         Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "F~ormato";
     };
     ListBox LB_DOKFORMAT
     {
@@ -219,6 +222,7 @@ TabPage TP_FLD_DOK
         TEXT[ korean ] = "¼öÁ¤(~F)";
         TEXT[ turkish ] = "Düzeltme";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Corrección";
     };
     Edit ED_DOKVALUE
     {
@@ -284,6 +288,7 @@ TabPage TP_FLD_DOK
         Text[ korean ] = "³»¿ë °íÁ¤(~F)";
         Text[ turkish ] = "İçeriği sabitle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fijar contenido";
     };
     Bitmap BMP_DOKROOT_OPENED
     {
@@ -316,6 +321,7 @@ TabPage TP_FLD_DOK
         Text[ korean ] = "¸çÄ¥ ¾È¿¡ ¼öÁ¤(~E)";
         Text[ turkish ] = "Düzeltme (gün)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Corrección en días";
     };
     String STR_DOKTIMEOFF
     {
@@ -340,6 +346,7 @@ TabPage TP_FLD_DOK
         Text[ korean ] = "¸î ºĞ³» ¼öÁ¤(~E)";
         Text[ turkish ] = "Düzeltme (dakika)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Corrección en minutos";
     };
     Text [ english_us ] = "Document" ;
     Text [ portuguese_brazilian ] = "Dokument" ;
@@ -353,11 +360,12 @@ TabPage TP_FLD_DOK
     Text[ chinese_simplified ] = "ÎÄµµ";
     Text[ russian ] = "Äîêóìåíò";
     Text[ polish ] = "Dokument";
-    Text[ japanese ] = "•¶‘";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ";
     Text[ chinese_traditional ] = "¤å¥ó";
     Text[ arabic ] = "ÇáãÓÊäÏ";
     Text[ greek ] = "¸ããñáöï";
     Text[ korean ] = "¹®¼­";
     Text[ turkish ] = "Belge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Documento";
 };
