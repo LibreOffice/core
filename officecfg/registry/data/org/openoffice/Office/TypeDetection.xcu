@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-20 13:46:48 $
+ *  last change: $Author: ka $ $Date: 2002-08-20 13:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2007,7 +2007,7 @@
         <value xml:lang="en-US">HTML Document (%productname% Draw)</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,graphic_HTML,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
+        <value>1,graphic_HTML,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_html_Export" oor:op="replace">
@@ -2021,7 +2021,7 @@
         <value xml:lang="en-US">HTML Document (%productname% Impress)</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,graphic_HTML,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
+        <value>1,graphic_HTML,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="CTOS DEF (W4W)" oor:op="replace">
