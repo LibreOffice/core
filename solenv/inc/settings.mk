@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-21 16:36:29 $
+#   last change: $Author: hjs $ $Date: 2001-05-22 12:09:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -859,6 +859,8 @@ INCCOMX=$(LDINC)
 .ENDIF			# "$(solarlang)" != "deut"
 .ENDIF			# "$(NO_REC_RES)"==""
 
+#bmp itself
+BMP=bmp
 # Bitmap-Pfad fuer bmp
 BMP_IN*=$(PRJ)$/res
 BMP_OUT*=$(RES)
