@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:51:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ norwegian ] = "~Tab" ;
         TEXT [ italian ] = "~Tabulazione" ;
         TEXT [ portuguese_brazilian ] = "~Tabulação" ;
-        TEXT [ portuguese ] = "~Tabulações" ;
+        TEXT [ portuguese ] = "~Tabulação" ;
         TEXT [ finnish ] = "~Sarkain" ;
         TEXT [ danish ] = "Tabulator" ;
         TEXT [ french ] = "~Tabulation" ;
@@ -476,7 +476,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ russian ] = "Ïğåîáğàçîâàòü òàáëèöó â òåêñò";
     TEXT[ polish ] = "Konwertuj tabelê na tekst";
     TEXT[ japanese ] = "•\\‚ğÃ·½Ä‚É‚·‚é";
-    TEXT[ chinese_traditional ] = "Âà´«ªí®æ¦¨¤å¦r";
+    TEXT[ chinese_traditional ] = "ªí®æÂà´«¦¨¤å¦r";
     TEXT[ arabic ] = "ÊÍæíá ÇáÌÏæá Åáì äÕ";
     TEXT[ greek ] = "ÌåôáôñïğŞ ğßíáêá óå êåßìåíï";
     TEXT[ korean ] = "Ç¥¸¦ ÅØ½ºÆ®·Î º¯È¯";
