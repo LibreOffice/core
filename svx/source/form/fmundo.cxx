@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:01:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,15 +250,25 @@ void FmXUndoEnvironment::Clear()
     sal_uInt16 i;
     for (i = 0; i < nCount; i++)
     {
-        Reference< XInterface >  xInt(((FmFormPage*)rModel.GetPage(i))->GetForms());
-        RemoveElement(xInt);
+        FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
+        if ( pPage )
+        {
+            Reference< XInterface > xForms = pPage->GetForms( false );
+            if ( xForms.is() )
+                RemoveElement( xForms );
+        }
     }
 
     nCount = rModel.GetMasterPageCount();
     for (i = 0; i < nCount; i++)
     {
-        Reference< XInterface >  xInt(((FmFormPage*)rModel.GetMasterPage(i))->GetForms());
-        RemoveElement(xInt);
+        FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
+        if ( pPage )
+        {
+            Reference< XInterface > xForms = pPage->GetForms( false );
+            if ( xForms.is() )
+                RemoveElement( xForms );
+        }
     }
     UnLock();
 
@@ -278,15 +288,25 @@ void FmXUndoEnvironment::ModeChanged()
         sal_uInt16 i;
         for (i = 0; i < nCount; i++)
         {
-            Reference< XInterface >  xInt(((FmFormPage*)rModel.GetPage(i))->GetForms());
-            TogglePropertyListening(xInt);
+            FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
+            if ( pPage )
+            {
+                Reference< XInterface > xForms = pPage->GetForms( false );
+                if ( xForms.is() )
+                    TogglePropertyListening( xForms );
+            }
         }
 
         nCount = rModel.GetMasterPageCount();
         for (i = 0; i < nCount; i++)
         {
-            Reference< XInterface >  xInt(((FmFormPage*)rModel.GetMasterPage(i))->GetForms());
-            TogglePropertyListening(xInt);
+            FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
+            if ( pPage )
+            {
+                Reference< XInterface > xForms = pPage->GetForms( false );
+                if ( xForms.is() )
+                    TogglePropertyListening( xForms );
+            }
         }
 
         if (!bReadOnly)
