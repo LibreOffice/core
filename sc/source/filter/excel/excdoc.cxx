@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:48:24 $
+ *  last change: $Author: dr $ $Date: 2001-03-13 10:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,7 +704,7 @@ void ExcTable::FillAsTable( void )
 
     // at least one ROW rec
     if( !bIter )
-        AddRow( new ExcRow( 0, nScTab, 0, 1, nDefXF, rDoc, aExcOLRow ) );
+        AddRow( new ExcRow( 0, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow ) );
 
     while( bIter )
     {
@@ -715,7 +715,7 @@ void ExcTable::FillAsTable( void )
         // add ROW recs from empty rows
         while( nPrevRow < nRow )
         {
-            ExcRow* pRow = new ExcRow( nPrevRow, nScTab, 0, 1, nDefXF, rDoc, aExcOLRow );
+            ExcRow* pRow = new ExcRow( nPrevRow, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow );
             AddUsedRow( pRow );
             nPrevRow++;
         }
@@ -954,7 +954,7 @@ void ExcTable::FillAsTable( void )
         // new row -> add previous ROW rec
         if( !bIter || (nPrevRow < nRow) )
         {
-            AddRow( new ExcRow( nPrevRow, nScTab, nColMin, nCol + 1, nDefXF, rDoc, aExcOLRow ) );
+            AddRow( new ExcRow( nPrevRow, nScTab, nColMin, nCol, nDefXF, rDoc, aExcOLRow ) );
             nPrevRow++;
             nColMin = aIterator.GetStartCol();
             nFirstCol = Min( nFirstCol, nColMin );
@@ -965,7 +965,7 @@ void ExcTable::FillAsTable( void )
     while( nRow < nMaxFlagRow )
     {
         nRow++;
-        ExcRow* pRow = new ExcRow( nRow, nScTab, 0, 1, nDefXF, rDoc, aExcOLRow );
+        ExcRow* pRow = new ExcRow( nRow, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow );
         AddUsedRow( pRow );
     }
 
