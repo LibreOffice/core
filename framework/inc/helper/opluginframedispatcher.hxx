@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opluginframedispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-18 12:16:38 $
+ *  last change: $Author: mba $ $Date: 2001-02-02 14:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,10 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
     //-------------------------------------------------------------------------------------------------------------
 
     public:
+
+        static void AddArguments( const SEQUENCE < PROPERTYVALUE > & rArgs, const ::rtl::OUString& rURL );
+        static const SEQUENCE < PROPERTYVALUE >* GetArguments( const ::rtl::OUString& rURL );
+        static void RemoveArguments( const ::rtl::OUString& rURL );
 
         //---------------------------------------------------------------------------------------------------------
         //  constructor / destructor
