@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:54:30 $
+ *  last change: $Author: hdu $ $Date: 2002-07-22 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,9 +114,9 @@ public:
     // definition of structs
     struct BuiltinFont
     {
-        const char * const      m_pName;                     // Name
-        const char * const      m_pStyleName;                // StyleName
-        const char * const      m_pPSName;                   // PSName
+        const char *                m_pName;                     // Name
+        const char *                m_pStyleName;                // StyleName
+        const char *                m_pPSName;                   // PSName
         int                         m_nAscent;
         int                         m_nDescent;
         FontFamily                  m_eFamily;                   // Family
