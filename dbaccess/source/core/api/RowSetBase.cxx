@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,8 @@ void SAL_CALL ORowSetBase::disposing(void)
 
     if(m_pColumns)
         m_pColumns->disposing();
-
-    m_pCache    = NULL;
+    m_xEmptyCollection  = NULL;
+    m_pCache            = NULL;
 }
 // -------------------------------------------------------------------------
 // comphelper::OPropertyArrayUsageHelper
@@ -651,10 +651,13 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeExcep
         throw DisposedException();
 
     if(!m_pColumns)
-        return new OEmptyCollection(*m_pMySelf,m_aColumnsMutex);
+    {
+        if(!m_xEmptyCollection.is())
+            m_xEmptyCollection = new OEmptyCollection(*m_pMySelf,m_aColumnsMutex);
+        return m_xEmptyCollection;
+    }
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-
     return m_pColumns;
 }
 // -------------------------------------------------------------------------

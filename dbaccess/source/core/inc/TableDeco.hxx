@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:02:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 13:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ namespace dbaccess
             throw(::com::sun::star::sdbc::SQLException);
         virtual ~ODBTableDecorator();
 
+        void setTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable);
         // ODescriptor
         virtual void construct();
 

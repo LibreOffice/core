@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
 #endif
@@ -165,6 +168,7 @@ namespace dbaccess
         ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
         // is used when the formatkey for database types is set
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>   m_xNumberFormatTypes;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xEmptyCollection;
 
         sal_Int32                               m_nRowCount;        // contains the current count of rows which have been fetched
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 11:24:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,6 +773,12 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
             ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
             if(pDecoTable)
             {
+                Reference<XColumnsSupplier> xColsSup;
+                if(m_xMasterTables->hasByName(sComposedName))
+                    m_xMasterTables->getByName(sComposedName) >>= xColsSup;
+                if(xColsSup.is())
+                    pDecoTable->setTable(xColsSup);
+
                 pDecoTable->setConfigurationNode(aTableConfig.cloneAsRoot());
             }
             else
