@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-27 08:45:51 $
+ *  last change: $Author: aw $ $Date: 2001-07-31 16:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
 #endif
+
+// #80365# include necessary for XML progress bar at load time
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
@@ -239,11 +245,49 @@ sal_Bool SdXMLFilter::Import()
     /** property map for export info set */
     PropertyMapEntry aImportInfoMap[] =
     {
+        // #80365# necessary properties for XML progress bar at load time
+        { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+
         { MAP_LEN( "PageLayouts" ), 0, SEQTYPE(::getCppuType((const uno::Reference< container::XNameAccess >*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
+
+    // #80365# try to get an XStatusIndicator from the Medium
+    if( mbShowProgress )
+    {
+        SfxItemSet* pSet = mrMedium.GetItemSet();
+        if(pSet)
+        {
+            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+            if (pItem)
+            {
+                pItem->GetValue() >>= mxStatusIndicator;
+            }
+        }
+
+        if(mxStatusIndicator.is())
+        {
+            sal_Int32 nProgressRange(1000000);
+            sal_Int32 nProgressCurrent(0);
+            OUString aMsg = String( SdResId( STR_LOAD_DOC ) );
+            mxStatusIndicator->start(aMsg, nProgressRange);
+
+            // set ProgressRange
+            uno::Any aProgRange;
+            aProgRange <<= nProgressRange;
+            xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
+
+            // set ProgressCurrent
+            uno::Any aProgCurrent;
+            aProgCurrent <<= nProgressCurrent;
+            xInfoSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressCurrent")), aProgCurrent);
+        }
+    }
 
     sal_Bool    bRet = sal_False;
 
@@ -281,17 +325,6 @@ sal_Bool SdXMLFilter::Import()
 
                 pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
                 xGrfResolver = pGraphicHelper;
-            }
-
-            if( mbShowProgress )
-            {
-                CreateStatusIndicator();
-
-                if( mxStatusIndicator.is() )
-                {
-                                        OUString aMsg = String( SdResId( STR_LOAD_DOC ) );
-                    mxStatusIndicator->start(aMsg, 100);
-                }
             }
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
@@ -463,6 +496,13 @@ sal_Bool SdXMLFilter::Import()
     }
     while( 0 );
 
+    // #80365# hide progress bar when load is completed
+    if(mbShowProgress)
+    {
+        if(mxStatusIndicator.is())
+            mxStatusIndicator->end();
+    }
+
     mxModel->unlockControllers();
 
     return bRet;
@@ -559,7 +599,7 @@ sal_Bool SdXMLFilter::Export()
                 {
                     sal_Int32 nProgressRange(1000000);
                     sal_Int32 nProgressCurrent(0);
-                                        OUString aMsg = String( SdResId( STR_SAVE_DOC ) );
+                    OUString aMsg = String( SdResId( STR_SAVE_DOC ) );
                     mxStatusIndicator->start(aMsg, nProgressRange);
 
                     // set ProgressRange
