@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
         // When a page is moved, the SdrModel::MovePage calls an InsertPage only, but
         // no preceding RemovePage. Thus, we (as a derivee) don't have a chance to see
         // that the page which is just being inserted is (in real) already a part of the
-        // model. Especially, we do not have a change to notice that the UndoEnvironment
+        // model. Especially, we do not have a chance to notice that the UndoEnvironment
         // already _knows_ the forms we're just going to add below.
         //
         // The real solution to this would have been to fix SdrModel::MovePage, which
@@ -356,7 +356,7 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
         // we know, and ignore any AddForms calls which are for such a page.
         // But I refuse to do this (much more) work to hack a bug in the SdrModel.
         //
-        // I the decision is to do this "small hack" here (which I don't consider really
+        // The decision is to do this "small hack" here (which I don't consider really
         // bad).
         //
         // 2002-01-10 - #i3235# - fs@openoffice.org
