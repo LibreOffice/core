@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:11:07 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 13:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,8 @@
 TabDialog RID_SVXDLG_CUSTOMIZE
 {
     OutputSize = TRUE ;
-    Text = "Anpassen" ;
-    Text [ English ] = "Customize" ;
-    Text [ english_us ] = "Customize" ;
+    Text [ de ] = "Anpassen" ;
+    Text [ en-US ] = "Customize" ;
     Moveable = TRUE ;
     SvLook = TRUE ;
     TabControl 1
@@ -78,33 +77,29 @@ TabDialog RID_SVXDLG_CUSTOMIZE
             PageItem
             {
                 Identifier = RID_SVXPAGE_MENUS ;
-                Text = "Menüs" ;
-                Text [ English ] = "Menus" ;
-                Text [ english_us ] = "Menus" ;
+                Text [ de ] = "Menüs" ;
+                Text [ en-US ] = "Menus" ;
                 PageResID = 300 ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_KEYBOARD ;
-                Text = "Keyboard" ;
-                Text [ ENGLISH ] = "Keyboard" ;
-                Text [ english_us ] = "Keyboard" ;
+                Text [ de ] = "Keyboard" ;
+                Text [ en-US ] = "Keyboard" ;
                 PageResID = 301 ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TOOLBARS ;
-                Text = "Symbolleisten" ;
-                Text [ ENGLISH ] = "Toolbars" ;
-                Text [ english_us ] = "Toolbars" ;
+                Text [ de ] = "Symbolleisten" ;
+                Text [ en-US ] = "Toolbars" ;
                 PageResID = 302 ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_EVENTS ;
-                Text = "Events" ;
-                Text [ ENGLISH ] = "Events" ;
-                Text [ english_us ] = "Events" ;
+                Text [ de ] = "Events" ;
+                Text [ en-US ] = "Events" ;
                 PageResID = 303 ;
             };
         };
@@ -112,54 +107,44 @@ TabDialog RID_SVXDLG_CUSTOMIZE
 };
 
 #define TEXT_MENU \
-    Text = "Menü" ; \
-    Text [ ENGLISH ] = "Menu" ; \
-    Text [ english_us ] = "Menu" ;
+    Text [ de ] = "Menü" ; \
+    Text [ en-US ] = "Menu" ;
 
 #define TEXT_BEGIN_GROUP \
-    Text = "Gruppe beginnen" ; \
-    Text [ English ] = "Begin a Group" ; \
-    Text [ english_us ] = "Begin a Group" ;
+    Text [ de ] = "Gruppe beginnen" ; \
+    Text [ en-US ] = "Begin a Group" ;
 
 #define TEXT_RENAME \
-    Text = "Umbenennen..." ; \
-    Text [ English ] = "Rename..." ; \
-    Text [ english_us ] = "Rename..." ;
+    Text [ de ] = "Umbenennen..." ; \
+    Text [ en-US ] = "Rename..." ;
 
 #define TEXT_DELETE \
-    Text = "Entfernen..." ; \
-    Text [ English ] = "Delete..." ; \
-    Text [ english_us ] = "Delete..." ;
+    Text [ de ] = "Entfernen..." ; \
+    Text [ en-US ] = "Delete..." ;
 
 #define TEXT_DELETE_NODOTS \
-    Text = "Entfernen" ; \
-    Text [ English ] = "Delete" ; \
-    Text [ english_us ] = "Delete" ;
+    Text [ de ] = "Entfernen" ; \
+    Text [ en-US ] = "Delete" ;
 
 #define TEXT_MOVE \
-    Text = "Verschieben..." ; \
-    Text [ English ] = "Move..." ; \
-    Text [ english_us ] = "Move..." ;
+    Text [ de ] = "Verschieben..." ; \
+    Text [ en-US ] = "Move..." ;
 
 #define TEXT_DEFAULT_STYLE \
-    Text = "Standard Einstellungen herstellen" ; \
-    Text [ English ] = "Restore Default Settings" ; \
-    Text [ english_us ] = "Restore Default Settings" ;
+    Text [ de ] = "Standard Einstellungen herstellen" ; \
+    Text [ en-US ] = "Restore Default Settings" ;
 
 #define TEXT_TEXT_ONLY \
-    Text = "Nur Text" ; \
-    Text [ English ] = "Text only" ; \
-    Text [ english_us ] = "Text only" ;
+    Text [ de ] = "Nur Text" ; \
+    Text [ en-US ] = "Text only" ;
 
 #define TEXT_TOOLBAR_NAME \
-    Text = "Name der Symbolleiste" ; \
-    Text [ ENGLISH ] = "Toolbar Name" ; \
-    Text [ english_us ] = "Toolbar Name" ;
+    Text [ de ] = "Name der Symbolleiste" ; \
+    Text [ en-US ] = "Toolbar Name" ;
 
 #define TEXT_SAVE_IN \
-    Text = "Speichern in" ; \
-    Text [ ENGLISH ] = "Save In" ; \
-    Text [ english_us ] = "Save In" ;
+    Text [ de ] = "Speichern in" ; \
+    Text [ en-US ] = "Save In" ;
 
 TabPage RID_SVXPAGE_MENUS
 {
@@ -170,9 +155,8 @@ TabPage RID_SVXPAGE_MENUS
     {
         Pos = MAP_APPFONT ( 6 , 11 ) ;
         Size = MAP_APPFONT ( 232 , 8 ) ;
-        Text = "%PRODUDUCTNAME %PRODUCTMODULE Menüs" ;
-        Text [ ENGLISH ] = "%PRODUCTNAME %MODULENAME Menus" ;
-        Text [ english_us ] = "%PRODUCTNAME %MODULENAME Menus" ;
+        Text [ de ] = "%PRODUDUCTNAME %PRODUCTMODULE Menüs" ;
+        Text [ en-US ] = "%PRODUCTNAME %MODULENAME Menus" ;
     };
     FixedText FT_MENUS
     {
@@ -192,9 +176,8 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 188 , 22 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Neu..." ;
-        Text [ ENGLISH ] = "New..." ;
-        Text [ english_us ] = "New..." ;
+        Text [ de ] = "Neu..." ;
+        Text [ en-US ] = "New..." ;
     };
     MenuButton BTN_CHANGE
     {
@@ -207,18 +190,16 @@ TabPage RID_SVXPAGE_MENUS
     {
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 232 , 8 ) ;
-        Text = "Menüinhalt" ;
-        Text [ ENGLISH ] = "Menu Content" ;
-        Text [ english_us ] = "Menu Content" ;
+        Text [ de ] = "Menüinhalt" ;
+        Text [ en-US ] = "Menu Content" ;
     };
     FixedText GRP_MENU_ENTRIES
     {
         Pos = MAP_APPFONT ( 9 , 67 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Group = TRUE ;
-        Text = "Einträge" ;
-        Text [ ENGLISH ] = "Entries" ;
-        Text [ english_us ] = "Entries" ;
+        Text [ de ] = "Einträge" ;
+        Text [ en-US ] = "Entries" ;
     };
     Control BOX_ENTRIES
     {
@@ -233,18 +214,16 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 188 , 67 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Befehle hinzufügen..." ;
-        Text [ ENGLISH ] = "Add Commands..." ;
-        Text [ english_us ] = "Add Commands..." ;
+        Text [ de ] = "Befehle hinzufügen..." ;
+        Text [ en-US ] = "Add Commands..." ;
     };
     MenuButton BTN_CHANGE_ENTRY
     {
         Pos = MAP_APPFONT ( 188 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Befehl" ;
-        Text [ ENGLISH ] = "Command" ;
-        Text [ english_us ] = "Command" ;
+        Text [ de ] = "Befehl" ;
+        Text [ en-US ] = "Command" ;
     };
     ImageButton BTN_UP
     {
@@ -279,9 +258,8 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 6 , 205 ) ;
         Size = MAP_APPFONT ( 232 , 8 ) ;
         Group = TRUE ;
-        Text = "Beschreibung" ;
-        Text [ ENGLISH ] = "Description" ;
-        Text [ english_us ] = "Description" ;
+        Text [ de ] = "Beschreibung" ;
+        Text [ en-US ] = "Description" ;
     };
     FixedText TXT_DESCRIPTION
     {
@@ -324,9 +302,8 @@ Menu MODIFY_ENTRY
         MenuItem
         {
             Identifier = ID_ADD_SUBMENU ;
-            Text = "Untermenü einfügen..." ;
-            Text [ English ] = "Add Submenu..." ;
-            Text [ english_us ] = "Add Submenu..." ;
+            Text [ de ] = "Untermenü einfügen..." ;
+            Text [ en-US ] = "Add Submenu..." ;
         };
         MenuItem
         {
@@ -386,9 +363,8 @@ Menu MODIFY_TOOLBAR
             Identifier = ID_ICONS_ONLY ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
-            Text = "Nur Symbole" ;
-            Text [ English ] = "Icons Only" ;
-            Text [ english_us ] = "Icons Only" ;
+            Text [ de ] = "Nur Symbole" ;
+            Text [ en-US ] = "Icons Only" ;
         };
         MenuItem
         {
@@ -402,9 +378,8 @@ Menu MODIFY_TOOLBAR
             Identifier = ID_ICONS_AND_TEXT ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
-            Text = "Symbole & Text" ;
-            Text [ English ] = "Icons & Text" ;
-            Text [ english_us ] = "Icons & Text" ;
+            Text [ de ] = "Symbole & Text" ;
+            Text [ en-US ] = "Icons & Text" ;
         };
     };
 };
@@ -445,27 +420,24 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_ICON_ONLY ;
-            Text = "Nur Symbol" ;
-            Text [ English ] = "Icon Only" ;
-            Text [ english_us ] = "Icon Only" ;
+            Text [ de ] = "Nur Symbol" ;
+            Text [ en-US ] = "Icon Only" ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
         };
         MenuItem
         {
             Identifier = ID_TEXT_ONLY ;
-            Text = "Nur Text" ;
-            Text [ English ] = "Text Only" ;
-            Text [ english_us ] = "Text Only" ;
+            Text [ de ] = "Nur Text" ;
+            Text [ en-US ] = "Text Only" ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
         };
         MenuItem
         {
             Identifier = ID_ICON_AND_TEXT ;
-            Text = "Symbol & Text" ;
-            Text [ English ] = "Icon & Text" ;
-            Text [ english_us ] = "Icon & Text" ;
+            Text [ de ] = "Symbol & Text" ;
+            Text [ en-US ] = "Icon & Text" ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
         };
@@ -477,16 +449,14 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_CHANGE_SYMBOL ;
-            Text = "Symbol austauschen..." ;
-            Text [ English ] = "Change Icon..." ;
-            Text [ english_us ] = "Change Icon..." ;
+            Text [ de ] = "Symbol austauschen..." ;
+            Text [ en-US ] = "Change Icon..." ;
         };
         MenuItem
         {
             Identifier = ID_RESET_SYMBOL ;
-            Text = "Symbol zurücksetzen" ;
-            Text [ English ] = "Reset Icon" ;
-            Text [ english_us ] = "Reset Icon" ;
+            Text [ de ] = "Symbol zurücksetzen" ;
+            Text [ en-US ] = "Reset Icon" ;
         };
     };
 };
@@ -494,54 +464,47 @@ Menu MODIFY_TOOLBAR_CONTENT
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
 String RID_SVXSTR_NEW_MENU
 {
-    TEXT = "Neues Menü %n";
-    TEXT [ English ] = "New Menu %n";
-    TEXT [ english_us ] = "New Menu %n";
+    Text [ de ] = "Neues Menü %n";
+    Text [ en-US ] = "New Menu %n";
 };
 
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
 String RID_SVXSTR_NEW_TOOLBAR
 {
-    TEXT = "Neue Symbolleiste %n";
-    TEXT [ English ] = "New Toolbar %n";
-    TEXT [ english_us ] = "New Toolbar %n";
+    Text [ de ] = "Neue Symbolleiste %n";
+    Text [ en-US ] = "New Toolbar %n";
 };
 
 String RID_SVXSTR_MOVE_MENU
 {
-    TEXT = "Menü verschieben";
-    TEXT [ English ] = "Move Menu";
-    TEXT [ english_us ] = "Move Menu";
+    Text [ de ] = "Menü verschieben";
+    Text [ en-US ] = "Move Menu";
 };
 
 String RID_SVXSTR_ADD_SUBMENU
 {
-    TEXT = "Untermenü hinzufügen";
-    TEXT [ English ] = "Add Submenu";
-    TEXT [ english_us ] = "Add Submenu";
+    Text [ de ] = "Untermenü hinzufügen";
+    Text [ en-US ] = "Add Submenu";
 };
 
 String RID_SVXSTR_SUBMENU_NAME
 {
-    TEXT = "Name des Untermenüs";
-    TEXT [ English ] = "Submenu name";
-    TEXT [ english_us ] = "Submenu name";
+    Text [ de ] = "Name des Untermenüs";
+    Text [ en-US ] = "Submenu name";
 };
 
 String RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION
 {
-    TEXT = "Um Befehle einem menu hinzuzufügen, wählen Sie zuerst eine Kategorie und dann den Befehl. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Menüs' im Dialog 'Anpassen'.";
-    TEXT [ English ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
-    TEXT [ english_us ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
+    Text [ de ] = "Um Befehle einem menu hinzuzufügen, wählen Sie zuerst eine Kategorie und dann den Befehl. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Menüs' im Dialog 'Anpassen'.";
+    Text [ en-US ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
 };
 
 ModalDialog MD_MENU_ORGANISER
 {
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 172 , 154 ) ;
-    Text = "Neues Menü" ;
-    Text [ English ] = "New Menu" ;
-    Text [ english_us ] = "New Menu" ;
+    Text [ de ] = "Neues Menü" ;
+    Text [ en-US ] = "New Menu" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
     FixedText TXT_MENU_NAME
@@ -550,9 +513,8 @@ ModalDialog MD_MENU_ORGANISER
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
-        Text = "Menüname" ;
-        Text [ ENGLISH ] = "Menu name" ;
-        Text [ english_us ] = "Menu name" ;
+        Text [ de ] = "Menüname" ;
+        Text [ en-US ] = "Menu name" ;
     };
     Edit EDIT_MENU_NAME
     {
@@ -567,9 +529,8 @@ ModalDialog MD_MENU_ORGANISER
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
-        Text = "Menüposition" ;
-        Text [ ENGLISH ] = "Menu position" ;
-        Text [ english_us ] = "Menu position" ;
+        Text [ de ] = "Menüposition" ;
+        Text [ en-US ] = "Menu position" ;
     };
     Control BOX_MAIN_MENUS
     {
@@ -616,9 +577,8 @@ ModalDialog MD_NEW_TOOLBAR
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 165 , 63 ) ;
-    Text = "Name" ;
-    Text [ English ] = "Name" ;
-    Text [ english_us ] = "Name" ;
+    Text [ de ] = "Name" ;
+    Text [ en-US ] = "Name" ;
     Moveable = TRUE ;
     FixedText FT_DESCRIPTION
     {
@@ -678,47 +638,15 @@ ModalDialog MD_ICONSELECTOR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 136 ) ;
-    Text = "Symbole Austauschen" ;
-    Text [ English ] = "Change Icon" ;
-    Text [ english_us ] = "Change Icon" ;
+    Text [ de ] = "Symbole Austauschen" ;
+    Text [ en-US ] = "Change Icon" ;
     Moveable = TRUE ;
     FixedText FT_SYMBOLS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 172 , 8 ) ;
-        Text = "Symbole" ;
-        Text [ English ] = "Symbols" ;
-        Text [ norwegian ] = "Symbols" ;
-        Text [ italian ] = "Simboli" ;
-        Text [ portuguese_brazilian ] = "Botões" ;
-        Text [ portuguese ] = "Ícones" ;
-        Text [ finnish ] = "Painikkeet" ;
-        Text [ danish ] = "Knapper" ;
-        Text [ french ] = "Icônes" ;
-        Text [ swedish ] = "Ikoner" ;
-        Text [ dutch ] = "Pictogrammen" ;
-        Text [ spanish ] = "Símbolos" ;
-        Text [ english_us ] = "Buttons" ;
-        Text[ chinese_simplified ] = "å›¾æ ‡";
-        Text[ russian ] = "Êíîïêè";
-        Text[ polish ] = "Przyciski";
-        Text[ japanese ] = "ã‚¢ã‚¤ã‚³ãƒ³ãƒœã‚¿ãƒ³";
-        Text[ chinese_traditional ] = "åœ–ç¤º";
-        Text[ arabic ] = "ÇáÑãæÒ";
-        Text[ dutch ] = "Pictogrammen";
-        Text[ chinese_simplified ] = "å›¾æ ‡";
-        Text [ language_user1 ] = "Symbols" ;
-        Text[ greek ] = "ÊïõìğéÜ";
-        Text[ korean ] = "ë²„íŠ¼";
-        Text[ turkish ] = "Düğmeler";
-        Text[ catalan ] = "Botons";
-        Text[ thai ] = "à¸›à¸¸à¹ˆà¸¡";
-        Text[ czech ] = "TlaÄÃ­tka";
-        Text[ hebrew ] = "â€®×›×¤×ª×•×¨×™×â€¬";
-        Text[ hindi ] = "à¤¬à¤Ÿà¤¨à¥‡à¤‚";
-        Text[ slovak ] = "KlÃ¡vesy";
-        Text[ hungarian ] = "Gombok";
-        Text[ slovenian ] = "Gumbi";
+        Text [ de ] = "Symbole" ;
+        Text [ en-US ] = "Buttons" ;
     };
     ToolBox TB_SYMBOLS
     {
@@ -752,17 +680,15 @@ ModalDialog MD_ICONSELECTOR
         Pos = MAP_APPFONT ( 184 , 95 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Importieren..." ;
-        Text [ English ] = "Import..." ;
-            Text[ english_us ] = "Import...";
+        Text [ de ] = "Importieren..." ;
+            Text[ en-US ] = "Import...";
     };
     FixedText FT_NOTE
     {
         Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 172 , 8 ) ;
-        Text = "Hinweis:\nBitte beachten Sie das für einen erfolgreichen Import die Symbole eine Größe  von 16x16 Pixel haben müssen." ;
-        Text [ English ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
-        Text [ english_us ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
+        Text [ de ] = "Hinweis:\nBitte beachten Sie das für einen erfolgreichen Import die Symbole eine Größe  von 16x16 Pixel haben müssen." ;
+        Text [ en-US ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
         Left = TRUE ;
     };
     Color IMAGE_BTN_COLOR
@@ -776,37 +702,32 @@ ModalDialog MD_ICONSELECTOR
 // Strings ---------------------------------------------------------------
 String RID_SVXSTR_PRODUCTNAME_TOOLBARS
 {
-    Text = "%PRODUCTNAME %MODULENAME Symbolleisten" ;
-    Text [ ENGLISH ] = "%PRODUCTNAME %MODULENAME Toolbars" ;
-    Text [ english_us ] = "%PRODUCTNAME %MODULENAME Toolbars" ;
+    Text [ de ] = "%PRODUCTNAME %MODULENAME Symbolleisten" ;
+    Text [ en-US ] = "%PRODUCTNAME %MODULENAME Toolbars" ;
 };
 
 String RID_SVXSTR_TOOLBAR
 {
-    Text = "Symbolleiste" ;
-    Text [ ENGLISH ] = "Toolbar" ;
-    Text [ english_us ] = "Toolbar" ;
+    Text [ de ] = "Symbolleiste" ;
+    Text [ en-US ] = "Toolbar" ;
 };
 
 String RID_SVXSTR_TOOLBAR_CONTENT
 {
-    Text = "Symbolleisteninhalt" ;
-    Text [ ENGLISH ] = "Toolbar Content" ;
-    Text [ english_us ] = "Toolbar Content" ;
+    Text [ de ] = "Symbolleisteninhalt" ;
+    Text [ en-US ] = "Toolbar Content" ;
 };
 
 String RID_SVXSTR_COMMANDS
 {
-    Text = "Befehle" ;
-    Text [ ENGLISH ] = "Commands" ;
-    Text [ english_us ] = "Commands" ;
+    Text [ de ] = "Befehle" ;
+    Text [ en-US ] = "Commands" ;
 };
 
 String RID_SVXSTR_COMMAND
 {
-    Text = "Befehl" ;
-    Text [ ENGLISH ] = "Command" ;
-    Text [ english_us ] = "Command" ;
+    Text [ de ] = "Befehl" ;
+    Text [ en-US ] = "Command" ;
 };
 
 String RID_SVXSTR_TOOLBAR_NAME
@@ -817,9 +738,8 @@ String RID_SVXSTR_TOOLBAR_NAME
 /* %MENUNAME will be replaced at runtime by the name of the selected menu. */
 QueryBox QBX_CONFIRM_DELETE_MENU
 {
-    Message = "Sind Sie sicher, dass Sie das Menü '%MENUNAME' löschen möchten?";
-    Message [ ENGLISH ] = "Are you sure you want to delete the '%MENUNAME' menu?";
-    Message [ english_us ] = "Are you sure you want to delete the '%MENUNAME' menu?";
+    Message [ de ] = "Sind Sie sicher, dass Sie das Menü '%MENUNAME' löschen möchten?";
+    Message [ en-US ] = "Are you sure you want to delete the '%MENUNAME' menu?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
@@ -829,53 +749,22 @@ QueryBox QBX_CONFIRM_DELETE_MENU
 */
 QueryBox QBX_CONFIRM_RESET
 {
-    Message = "Die Menükonfiguration für %SAVE IN SELECTION% wird auf die Standardeinstellung zurückgesetzt. Möchten Sie fortfahren?";
-    Message [ ENGLISH ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
-    Message [ english_us ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
+    Message [ de ] = "Die Menükonfiguration für %SAVE IN SELECTION% wird auf die Standardeinstellung zurückgesetzt. Möchten Sie fortfahren?";
+    Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
 
 QueryBox QBX_CONFIRM_RESTORE_DEFAULT
 {
-    Message = "Alle Anpassungen die an dieser Symbolleiste vorgenommen wurden werden gelöscht. Möchten Sie diese Symbolleiste wirklich zurücksetzen?";
-    Message [ ENGLISH ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
-    Message [ english_us ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
+    Message [ de ] = "Alle Anpassungen die an dieser Symbolleiste vorgenommen wurden werden gelöscht. Möchten Sie diese Symbolleiste wirklich zurücksetzen?";
+    Message [ en-US ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
 
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
-    Message = "Die Funktion ist bereits in diesem Popup enthalten." ;
-    Message [ ENGLISH ] = "Function is already included in this popup." ;
-    Message [ norwegian ] = "Funksjon er allerede inkludert i denne tilleggsmenyen." ;
-    Message [ italian ] = "Funzione già inclusa in questo elenco." ;
-    Message [ portuguese_brazilian ] = "A função já está incluída neste menu pop-up." ;
-    Message [ portuguese ] = "A função já está incluída neste menu instantâneo." ;
-    Message [ finnish ] = "Toiminto on jo tässä valikossa." ;
-    Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
-    Message [ french ] = "Cette fonction est déjà incluse dans ce Pop-up." ;
-    Message [ swedish ] = "Funktionen ingår redan i denna snabbmeny." ;
-    Message [ dutch ] = "Deze functie komt al voor in dit menu." ;
-    Message [ spanish ] = "La función ya está incluida en este emergente." ;
-    Message [ english_us ] = "Function is already included in this popup." ;
-    Message[ chinese_simplified ] = "è¿™ä¸ªå¼¹å‡ºå¼èœå•å·²ç»åŒ…å«äº†è¿™ä¸ªåŠŸèƒ½ã€‚";
-    Message[ russian ] = "İòà ôóíêöèÿ óæå ñîäåğæèòñÿ âî âñïëûâàşùåì ìåíş.";
-    Message[ polish ] = "Funkcja jest ju¿ w tym menu podrêcznym.";
-    Message[ japanese ] = "æ©Ÿèƒ½ã¯ã™ã§ã«ã“ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã«å«ã¾ã‚Œã¦ã„ã¾ã™ã€‚";
-    Message[ chinese_traditional ] = "é€™å€‹å¿«é€ŸåŠŸèƒ½è¡¨å·²ç¶“åŒ…å«äº†é€™å€‹åŠŸèƒ½ã€‚";
-    Message[ arabic ] = "ÇáãåãÉ ãæÌæÏÉ ãÓÈŞÇğ İí åĞå ÇáŞÇÆãÉ ÇáãäÈËŞÉ.";
-    Message[ greek ] = "Ç óõíÜñôçóç ğåñéİ÷åôáé Şäç óå áõôü ôï áíáäõüìåíï êåßìåíï.";
-    Message[ korean ] = "ê¸°ëŠ¥ì´ ì´ë¯¸ ì´ íŒì—…ì— í¬í•¨ë˜ì–´ ìˆìŠµë‹ˆë‹¤.";
-    Message[ turkish ] = "İşlev zaten bu açılan mönüde mevcut.";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La funció ja està inclosa en aquest emergent.";
-    Message[ thai ] = "à¸£à¸§à¸¡à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¹ƒà¸™à¸à¸²à¸£à¸œà¸¸à¸”à¸‚à¸¶à¹‰à¸™à¸™à¸µà¹‰à¹à¸¥à¹‰à¸§";
-    Message[ czech ] = "Funkce uÅ¾ byla zahrnuta v tomto kontextovÃ©m menu.";
-    Message[ hebrew ] = "â€®×”×¤×•×¤××¤ ×›×‘×¨ ××›×™×œ ×ª×¤×§×•×“ ×–×”â€¬";
-    Message[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥ à¤•à¥‹ à¤‡à¤¸ à¤ªà¥‰à¤ªà¥-à¤…à¤ªà¥ à¤®à¥‡à¤‚ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤";
-    Message[ slovak ] = "Funkcia uÅ¾ bola zahrnutÃ¡ v tomto kontextovom menu.";
-    Message[ hungarian ] = "Az elÅ‘ugrÃ³ menÃ¼ mÃ¡r tartalmazza a fÃ¼ggvÃ©nyt.";
-    Message[ slovenian ] = "Funkcija je Å¾e vkljuÄena v to pojavno okno.";
+    Message [ de ] = "Die Funktion ist bereits in diesem Popup enthalten." ;
+    Message [ en-US ] = "Function is already included in this popup." ;
 };

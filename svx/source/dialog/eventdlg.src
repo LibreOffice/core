@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:12:17 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 13:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,67 +70,13 @@ TabPage RID_SVXPAGE_EVENTS
     Size = MAP_APPFONT ( 244 , 258 ) ;
     String STR_EVENT
     {
-        Text = "Ereignis" ;
-        Text [ ENGLISH ] = "Event" ;
-        Text [ english_us ] = "Event" ;
-        Text [ italian ] = "Evento" ;
-        Text [ spanish ] = "Acción" ;
-        Text [ french ] = "Événement" ;
-        Text [ dutch ] = "Gebeurtenis" ;
-        Text [ swedish ] = "Händelse" ;
-        Text [ danish ] = "Hændelse" ;
-        Text [ portuguese_brazilian ] = "Evento" ;
-        Text [ portuguese ] = "Evento" ;
-        Text[ chinese_simplified ] = "äº‹ä»¶";
-        Text[ russian ] = "Ñîáûòèå";
-        Text[ polish ] = "Wydarzenie";
-        Text[ japanese ] = "ã‚¤ãƒ™ãƒ³ãƒˆ";
-        Text[ chinese_traditional ] = "äº‹ä»¶";
-        Text[ arabic ] = "ÇáÍÏË";
-        Text[ greek ] = "Ãåãïíüò";
-        Text[ korean ] = "ì´ë²¤íŠ¸";
-        Text[ turkish ] = "Olay";
-        Text[ catalan ] = "Acontecimiento";
-        Text[ finnish ] = "Tapahtuma";
-        Text[ thai ] = "à¹€à¸«à¸•à¸¸à¸à¸²à¸£à¸“à¹Œ";
-        Text[ czech ] = "UdÃ¡lost";
-        Text[ hebrew ] = "â€®××¨×•×¢â€¬";
-        Text[ hindi ] = "à¤˜à¤Ÿà¤¨à¤¾";
-        Text[ slovak ] = "UdalosÅ¥";
-        Text[ hungarian ] = "EsemÃ©ny";
-        Text[ slovenian ] = "Dogodek";
+        Text [ de ] = "Ereignis" ;
+        Text [ en-US ] = "Event" ;
     };
     String STR_ASSMACRO
     {
-        Text = "Zugewiesenes Makro";
-        Text[ english ] = "Assigned macro";
-        Text[ english_us ] = "Assigned macro";
-        Text[ portuguese ] = "Assigned macro";
-        Text[ russian ] = "Assigned macro";
-        Text[ greek ] = "Assigned macro";
-        Text[ dutch ] = "Toegewezen macro";
-        Text[ french ] = "Macro assignée";
-        Text[ spanish ] = "Macro asignada";
-        Text[ finnish ] = "Assigned macro";
-        Text[ italian ] = "Macro assegnata";
-        Text[ danish ] = "Tildelt makro";
-        Text[ swedish ] = "Tilldelat makro";
-        Text[ polish ] = "Assigned macro";
-        Text[ portuguese_brazilian ] = "Macro atribuída";
-        Text[ japanese ] = "å‰²ã‚Šå½“ã¦ã‚‰ã‚ŒãŸãƒã‚¯ãƒ­";
-        Text[ korean ] = "ì§€ì •ëœ ë§¤í¬ë¡œ";
-        Text[ chinese_simplified ] = "æŒ‡å®šçš„å®";
-        Text[ chinese_traditional ] = "æŒ‡å®šçš„å·¨é›†";
-        Text[ turkish ] = "Atanan makro";
-        Text[ arabic ] = "Assigned macro";
-        Text[ catalan ] = "Assigned macro";
-        Text[ thai ] = "Assigned macro";
-        Text[ czech ] = "PÅ™iÅ™azenÃ© makro";
-        Text[ hebrew ] = "â€®××§×¨××• ×××•×©×â€¬";
-        Text[ hindi ] = "Assigned macro";
-        Text[ slovak ] = "PriradenÃ© makro";
-        Text[ hungarian ] = "HozzÃ¡rendelt makrÃ³";
-        Text[ slovenian ] = "Dodeljeni makro";
+        Text[ de ] = "Zugewiesenes Makro";
+        Text[ en-US ] = "Assigned macro";
     };
     Control LB_EVENT
     {
@@ -147,9 +93,8 @@ TabPage RID_SVXPAGE_EVENTS
         Pos = MAP_APPFONT ( 6 , 244 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Group = TRUE ;
-        Text = "Speichern in" ;
-        Text [ ENGLISH ] = "Save In" ;
-        Text [ english_us ] = "Save In" ;
+        Text [ de ] = "Speichern in" ;
+        Text [ en-US ] = "Save In" ;
     };
     ListBox LB_SAVEIN
     {
@@ -163,58 +108,15 @@ TabPage RID_SVXPAGE_EVENTS
         Pos = MAP_APPFONT ( 190 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text = "Assign Macro";
-        Text [ English ] = "Assign Macro";
-        Text [ english_us ] = "Assign Macro";
+        Text [ de ] = "Assign Macro";
+        Text [ en-US ] = "Assign Macro";
     };
     PushButton PB_DELETE
     {
         Pos = MAP_APPFONT ( 190 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text = "Remove Macro";
-        Text [ English ] = "Remove Macro";
-        Text [ english_us ] = "Remove Macro";
+        Text [ de ] = "Remove Macro";
+        Text [ en-US ] = "Remove Macro";
     };
-    Text[ greek ] = "Áíôéóôïß÷éóç ìáêñïåíôïëŞò";
-    Text[ korean ] = "¸ÅÅ©·Î ÁöÁ¤";
-    Text[ turkish ] = "Makro ata";
-    Text[ catalan ] = "Asignar macro";
-    Text[ english_us ] = "Assign Macro";
-    Text[ portuguese ] = "Atribuir macro";
-    Text[ russian ] = "Íàçíà÷èòü ìàêğîñ";
-    Text[ dutch ] = "Macro toewijzen";
-    Text[ french ] = "Assignation de macro";
-    Text[ spanish ] = "Asignar macro";
-    Text[ finnish ] = "Määritä makro";
-    Text[ italian ] = "Assegna macro";
-    Text[ danish ] = "Tildel makro";
-    Text[ swedish ] = "Tilldela makro";
-    Text[ polish ] = "Przypisz makro";
-    Text[ portuguese_brazilian ] = "Makro zuweisen";
-    Text[ japanese ] = "Ï¸Û‚ÌŠ„‚è“–‚Ä";
-    Text[ chinese_simplified ] = "Ö¸¶¨ºê";
-    Text[ chinese_traditional ] = "«ü©w¥¨¶°";
-    Text[ arabic ] = "ÊÚííä ãÇßÑæ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
