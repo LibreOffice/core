@@ -1,4 +1,4 @@
-dr	dtrans	:	drafts rdbmaker NULL
+dr	dtrans	:	drafts rdbmaker vos NULL
 dr	dtrans									usr1	-	all	dr_mkout NULL
 dr	dtrans\source\cnttype					nmake	-	all	dr_cnttype	NULL
 dr	dtrans\source\win32\misc				nmake	-	w	dr_win32_misc NULL
