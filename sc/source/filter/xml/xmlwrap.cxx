@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
+ *  last change: $Author: sab $ $Date: 2001-03-15 09:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,8 @@ sal_Bool ScXMLImportWrapper::Import()
         if( pObjectHelper )
             SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
 
-        return bDocRetval && bMetaRetval && bStylesRetval;
+        // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
+        return bDocRetval;
     }
     return sal_False;
 }
