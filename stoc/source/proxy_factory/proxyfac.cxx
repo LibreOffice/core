@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:59 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,14 +251,17 @@ static void SAL_CALL uno_proxy_dispatch(
             (*pThis->pTarget->pDispatcher)( pThis->pTarget, pMemberType, pReturn, pArgs, ppException );
         }
     }
-    catch (...)
+    catch (Exception & exc)
     {
         RuntimeException aExc;
-        aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("unexpected exception occured!" ) );
-        aExc.Context = (XAggregation *)pThis->pRoot;
+        aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                     "unexpected exception occured: " ) ) +
+            exc.Message;
+        aExc.Context = exc.Context;
         const Type & rExcType = ::getCppuType( &aExc );
-        uno_type_any_constructAndConvert( *ppException, &aExc, rExcType.getTypeLibType(),
-                                          pThis->pRoot->pFactory->aCpp2Uno.get() );
+        uno_type_any_constructAndConvert(
+            *ppException, &aExc, rExcType.getTypeLibType(),
+            pThis->pRoot->pFactory->aCpp2Uno.get() );
     }
 }
 //--------------------------------------------------------------------------------------------------
