@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:41:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ italian ] = "Ellisse" ;
                 Text [ portuguese_brazilian ] = "Elipse" ;
                 Text [ portuguese ] = "Elipse" ;
-                Text [ finnish ] = "Soikio" ;
+                Text [ finnish ] = "Ellipsi" ;
                 Text [ danish ] = "Ellipse" ;
                 Text [ french ] = "Ellipse" ;
                 Text [ swedish ] = "Ellips" ;
@@ -214,7 +214,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ italian ] = "Poligono" ;
                 Text [ portuguese_brazilian ] = "Polígono" ;
                 Text [ portuguese ] = "Polígono" ;
-                Text [ finnish ] = "Murtoviiva" ;
+                Text [ finnish ] = "Polygoni" ;
                 Text [ danish ] = "Polygon" ;
                 Text [ french ] = "Polygone" ;
                 Text [ swedish ] = "Polygon" ;
@@ -260,6 +260,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "Bézier";
                 Text[ turkish ] = "Bezier";
                 Text[ catalan ] = "Bézier";
+                Text[ finnish ] = "Bézier";
             };
             ToolBoxItem
             {
@@ -288,6 +289,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Serbest biçim";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Mano alzada";
+                Text[ finnish ] = "Vapaamuoto";
             };
             ToolBoxItem
             {
@@ -346,6 +348,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Elips dilimi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sector de elipse";
+                Text[ finnish ] = "Ellipsikaavio";
             };
             ToolBoxItem
             {
@@ -374,6 +377,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Yay dilimi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Segmento de círculo";
+                Text[ finnish ] = "Ympyrän segmentti";
             };
             ToolBoxItem
             {
@@ -431,6 +435,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Vertical Text";
                 Text[ arabic ] = "äÕ ÚãæÏí";
                 Text[ catalan ] = "Texto vertical";
+                Text[ finnish ] = "Vertikaler Text";
             };
             ToolBoxItem
             {
@@ -459,6 +464,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Metin canlandýrma";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Animación de texto";
+                Text[ finnish ] = "Tekstin animaatio";
             };
             ToolBoxItem
             {
@@ -471,7 +477,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text [ italian ] = "Legenda" ;
                 Text [ portuguese_brazilian ] = "Legenda" ;
                 Text [ portuguese ] = "Legenda" ;
-                Text [ finnish ] = "Selite" ;
+                Text [ finnish ] = "Kuvatekstit" ;
                 Text [ danish ] = "Forklaring" ;
                 Text [ french ] = "Légende" ;
                 Text [ swedish ] = "Förklaring" ;
@@ -516,6 +522,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Vertical Caption";
                 Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ ÚãæÏíÉ";
                 Text[ catalan ] = "Leyenda vertical";
+                Text[ finnish ] = "Vertikale Legende";
             };
         };
     };
@@ -539,6 +546,7 @@ FloatingWindow RID_SVXTBX_DRAW
     Text[ turkish ] = "Çizim iþlevleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funciones de dibujo";
+    Text[ finnish ] = "Piirtotoiminnot";
 };
 FloatingWindow RID_SVXTBX_ALIGNMENT
 {
@@ -606,7 +614,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Centrato" ;
                 Text [ portuguese_brazilian ] = "Centralizado" ;
                 Text [ portuguese ] = "Centrado" ;
-                Text [ finnish ] = "Keski" ;
+                Text [ finnish ] = "Keskitä" ;
                 Text [ danish ] = "Centreret" ;
                 Text [ french ] = "Centré" ;
                 Text [ swedish ] = "Centrerat" ;
@@ -664,7 +672,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Sopra" ;
                 Text [ portuguese_brazilian ] = "Topo" ;
                 Text [ portuguese ] = "Em cima" ;
-                Text [ finnish ] = "Ylä" ;
+                Text [ finnish ] = "Yläosa" ;
                 Text [ danish ] = "Øverst" ;
                 Text [ french ] = "En haut" ;
                 Text [ swedish ] = "Överst" ;
@@ -693,7 +701,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Centro" ;
                 Text [ portuguese_brazilian ] = "Centralizado" ;
                 Text [ portuguese ] = "Centro" ;
-                Text [ finnish ] = "Keski" ;
+                Text [ finnish ] = "Keskitetty" ;
                 Text [ danish ] = "Centreret" ;
                 Text [ french ] = "Milieu" ;
                 Text [ swedish ] = "Mitten" ;
@@ -722,7 +730,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Sotto" ;
                 Text [ portuguese_brazilian ] = "Base" ;
                 Text [ portuguese ] = "Em baixo" ;
-                Text [ finnish ] = "Ala" ;
+                Text [ finnish ] = "Alaosa" ;
                 Text [ danish ] = "Nederst" ;
                 Text [ french ] = "En bas" ;
                 Text [ swedish ] = "Nederst" ;
