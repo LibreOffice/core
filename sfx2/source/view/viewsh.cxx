@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:35:32 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ ErrCode SfxViewShell::DoVerb(long nVerb)
 /*  [Beschreibung]
 
     Virtuelle Methode, um am selektierten Objekt ein Verb auszuf"uhren.
-    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muá DoVerb
+    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muï¿½ DoVerb
     dort "uberlschrieben werden.
 
 */
@@ -864,6 +864,11 @@ SfxViewShell::~SfxViewShell()
     }
 
     delete pImp->pMenuBarResId;
+    if (pImp->pAccExec)
+    {
+        delete pImp->pAccExec;
+        pImp->pAccExec = 0;
+    }
     delete pImp;
     delete pIPClientList;
 }

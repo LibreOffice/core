@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:16:51 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2825,11 +2825,31 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
         if ( pNamedHint )
         {
+
             if ( SFX_EVENT_STORAGECHANGED == pNamedHint->GetEventId() )
             {
-                // for now this event is sent only on creation of a new storage for new document,
+                // for now this event is sent only on creation of a new storage for new document
+                // and in case of reload of medium without document reload
                 // other events are used to detect storage change
                 // NotifyStorageListeners_Impl();
+
+                if ( m_pData->m_xUIConfigurationManager.is() )
+                {
+                    REFERENCE< XSTORAGE > xConfigStorage;
+                    rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+
+                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
+                    if ( !xConfigStorage.is() )
+                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READ );
+
+                    if ( xConfigStorage.is() || !m_pData->m_pObjectShell->GetStorage()->hasByName( aUIConfigFolderName ) )
+                    {
+                        // the storage is different, since otherwise it could not be opened, so it must be exchanged
+                        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
+                        xUIConfigStorage->setStorage( xConfigStorage );
+                    }
+                }
+
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
             else if ( SFX_EVENT_LOADFINISHED == pNamedHint->GetEventId() )
@@ -3449,12 +3469,12 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
 
     if ( !m_pData->m_xUIConfigurationManager.is() )
     {
-        m_pData->m_xUIConfigurationManager = REFERENCE< XUICONFIGURATIONMANAGER >(
+        REFERENCE< XUICONFIGURATIONMANAGER > xNewUIConfMan(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString::createFromAscii( "drafts.com.sun.star.ui.UIConfigurationManager" )),
                 UNOQUERY );
 
-        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
+        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( xNewUIConfMan, UNOQUERY );
         if ( xUIConfigStorage.is() )
         {
             rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
@@ -3481,6 +3501,8 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
             // initialize ui configuration manager with document substorage
             xUIConfigStorage->setStorage( xConfigStorage );
         }
+
+        m_pData->m_xUIConfigurationManager = xNewUIConfMan;
     }
 
     return m_pData->m_xUIConfigurationManager;
