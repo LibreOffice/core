@@ -313,13 +313,29 @@ End Sub
 Sub ShowOverwriteAllDialog(FilePath as String, sTitle as String)
 Dim QueryString as String
 Dim LocRetValue as Integer
+Dim lblYes as String
+Dim lblNo as String
+Dim lblYesToAll as String
+Dim lblCancel as String
+Dim OverwriteModel as Object
 	If InitResources(&quot;&quot;, &quot;com&quot;) Then
-		DlgOverwrite = LoadDialog(&quot;Tools&quot;, &quot;DlgOverwriteAll&quot;)
-		DlgOverwrite.Title = sTitle
-		QueryString = &quot;Das Dokument &apos;&lt;PATH&gt;&apos; existiert bereits.&lt;BR&gt;&lt;BR&gt;Möchten Sie Datei(en) überschreiben?&quot;
+		QueryString = GetResText(1007)
 		QueryString = ReplaceString(QueryString, ConvertFromUrl(FilePath), &quot;&lt;PATH&gt;&quot;)
 		QueryString = ReplaceString(QueryString, chr(13), &quot;&lt;BR&gt;&quot;)
-		DlgOverwrite.Model.lblQueryforSave.Label = QueryString
+		lblYes = GetResText(1008)
+		lblYesToAll = GetResText(1009)
+		lblNo = GetResText(1010)
+		lblCancel = GetResText(1011)
+		DlgOverwrite = LoadDialog(&quot;Tools&quot;, &quot;DlgOverwriteAll&quot;)
+		DlgOverwrite.Title = sTitle
+		OverwriteModel = DlgOverwrite.Model
+		OverwriteModel.cmdYes.Label = lblYes
+		OverwriteModel.cmdYesToAll.Label = lblYesToAll
+		OverwriteModel.cmdNo.Label = lblNo
+		OverwriteModel.cmdCancel.Label = lblCancel
+		OverwriteModel.lblQueryforSave.Label = QueryString
+		OverwriteModel.cmdNo.DefaultButton = True
+		DlgOverwrite.GetControl(&quot;cmdNo&quot;).SetFocus()		
 		LocRetValue = DlgOverwrite.execute()
 		If LocRetValue = 0 Then
 			iGeneralOverwrite = SBOVERWRITECANCEL
