@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-27 11:06:47 $
+ *  last change: $Author: ka $ $Date: 2001-03-05 12:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,8 @@ void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject
 void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEvent& rDTDE ) throw( RuntimeException )
 {
     Application::GetSolarMutex().acquire();
-    const sal_Int8 nRet = mrParent.ExecuteDrop( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ),
-                                                rDTDE.SourceActions, rDTDE.Transferable );
+
+    const sal_Int8 nRet = mrParent.ExecuteDrop( ExecuteDropEvent( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
 
     if( DNDConstants::ACTION_NONE == nRet )
         rDTDE.Context->rejectDrop();
@@ -144,6 +144,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
         rDTDE.Context->acceptDrop( nRet );
 
     rDTDE.Context->dropComplete( DNDConstants::ACTION_NONE != nRet );
+
     Application::GetSolarMutex().release();
 }
 
@@ -152,8 +153,12 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
 void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetDragEnterEvent& rDTDEE ) throw( RuntimeException )
 {
     Application::GetSolarMutex().acquire();
+
     mrParent.ImplBeginDrag( rDTDEE.SupportedDataFlavors );
+
     Application::GetSolarMutex().release();
+
+    dragOver( rDTDEE );
 }
 
 // -----------------------------------------------------------------------------
@@ -161,7 +166,9 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetD
 void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& dte ) throw( RuntimeException )
 {
     Application::GetSolarMutex().acquire();
+
     mrParent.ImplEndDrag();
+
     Application::GetSolarMutex().release();
 }
 
@@ -170,13 +177,14 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
 void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDragEvent& rDTDE ) throw( RuntimeException )
 {
     Application::GetSolarMutex().acquire();
-    const sal_Int8 nRet = mrParent.AcceptDrop( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ),
-                                               rDTDE.SourceActions );
+
+    const sal_Int8 nRet = mrParent.AcceptDrop( AcceptDropEvent( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
 
     if( DNDConstants::ACTION_NONE == nRet )
         rDTDE.Context->rejectDrag();
     else
         rDTDE.Context->acceptDrag( nRet );
+
     Application::GetSolarMutex().release();
 }
 
@@ -190,8 +198,8 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const Dro
 // - DropTargetHelper -
 // --------------------
 
-DropTargetHelper::DropTargetHelper( Window& rWindow ) :
-    mxDropTarget( rWindow.GetDropTarget() )
+DropTargetHelper::DropTargetHelper( Window* pWindow ) :
+    mxDropTarget( pWindow->GetDropTarget() )
 {
     ImplConstruct();
 }
@@ -253,15 +261,14 @@ void DropTargetHelper::ImplEndDrag()
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 DropTargetHelper::AcceptDrop( sal_Int8 nDropAction, const Point& rPointerPos, sal_Int8 nDnDSourceActions )
+sal_Int8 DropTargetHelper::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     return( DNDConstants::ACTION_NONE );
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Int8 DropTargetHelper::ExecuteDrop( sal_Int8 nDropAction, const Point& rPointerPos, sal_Int8 nDnDSourceActions,
-                                        const Reference< XTransferable >& rxTransferable )
+sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     return( DNDConstants::ACTION_NONE );
 }

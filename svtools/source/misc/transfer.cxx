@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-27 11:06:47 $
+ *  last change: $Author: ka $ $Date: 2001-03-05 12:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,9 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
         Application::GetSolarMutex().acquire();
         GetData( rFlavor );
         Application::GetSolarMutex().release();
+
+        if( !maAny.hasValue() )
+            throw UnsupportedFlavorException();
     }
 
     return maAny;
@@ -666,7 +669,7 @@ void TransferableHelper::CopyToClipboard() const
             mxClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
             Application::AcquireSolarMutex( nRef );
         }
-        catch( ... )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             DBG_ERROR( "Could not copy to clipboard" );
         }
@@ -675,15 +678,32 @@ void TransferableHelper::CopyToClipboard() const
 
 // -----------------------------------------------------------------------------
 
-void TransferableHelper::StartDrag( Window& rWindow, sal_Int8 nDnDSourceActions,
+void TransferableHelper::FlushToClipboard() const
+{
+/*
+    if( mxClipboard.is() )
+    {
+        Reference< XFlushableClipboard > xFlushableClipboard( mxClipboard, UNO_QUERY );
+
+        if( xFlushableClipboard.is() )
+        {
+        }
+    }
+*/
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
                                     sal_Int32 nDnDPointer, sal_Int32 nDnDImage )
 {
-    Reference< XDragSource > xDragSource( rWindow.GetDragSource() );
+    DBG_ASSERT( pWindow, "Window pointer is NULL" );
+    Reference< XDragSource > xDragSource( pWindow->GetDragSource() );
 
     if( xDragSource.is() )
     {
         DragGestureEvent    aEvt;
-        const Point         aPt( rWindow.GetPointerPosPixel() );
+        const Point         aPt( pWindow->GetPointerPosPixel() );
 
         aEvt.DragAction = DNDConstants::ACTION_COPY;
         aEvt.DragOriginX = aPt.X();
@@ -696,7 +716,7 @@ void TransferableHelper::StartDrag( Window& rWindow, sal_Int8 nDnDSourceActions,
             xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, nDnDImage, this, this );
             Application::AcquireSolarMutex( nRef );
         }
-        catch( ... )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             DBG_ERROR( "Could not start drag" );
         }
@@ -719,7 +739,7 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
                                                                          UNO_QUERY );
         }
     }
-    catch( ... )
+    catch( const ::com::sun::star::uno::Exception& )
     {
         DBG_ERROR( "Clipboard could not be initialized" );
     }
@@ -774,7 +794,7 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
         if( mxTransfer.is() )
             aRet = mxTransfer->getTransferData( rFlavor );
     }
-    catch( ... )
+    catch( const ::com::sun::star::uno::Exception& )
     {
         DBG_ERROR( "Could not get data from transferable" );
     }
@@ -1242,7 +1262,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
                 aRet.mxClipboard = xClipboard;
             }
         }
-        catch( ... )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             DBG_ERROR( "Could not get clipboard content" );
         }
