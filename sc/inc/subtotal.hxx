@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtotal.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:42:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ private:
     USHORT  nProgress;
 
 public:
-    USHORT  nIndex;         // Test
+    SCSIZE  nIndex;         // Test
 
 public:
             SubTotal();
