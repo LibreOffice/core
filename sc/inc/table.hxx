@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 16:55:05 $
+ *  last change: $Author: sab $ $Date: 2002-12-04 11:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ private:
                                 BOOL bMarked, BOOL bUnprotected );
 
     void        AutoFormatArea(USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
-                                USHORT nIndex, USHORT nFormatNo);
+                                const ScPatternAttr& rAttr, USHORT nFormatNo);
     void        GetAutoFormatAttr(USHORT nCol, USHORT nRow, USHORT nIndex, ScAutoFormatData& rData);
     void        GetAutoFormatFrame(USHORT nCol, USHORT nRow, USHORT nFlags, USHORT nIndex, ScAutoFormatData& rData);
     BOOL        SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT nRow,

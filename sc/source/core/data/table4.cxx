@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-07-03 18:44:22 $
+ *  last change: $Author: sab $ $Date: 2002-12-04 11:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,7 +1509,7 @@ void ScTable::Fill( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
 
 
 void ScTable::AutoFormatArea(USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
-                                USHORT nIndex, USHORT nFormatNo)
+                                const ScPatternAttr& rAttr, USHORT nFormatNo)
 {
     ScAutoFormat* pAutoFormat = ScGlobal::GetAutoFormat();
     if (pAutoFormat)
@@ -1517,9 +1517,9 @@ void ScTable::AutoFormatArea(USHORT nStartCol, USHORT nStartRow, USHORT nEndCol,
         ScAutoFormatData* pData = (*pAutoFormat)[nFormatNo];
         if (pData)
         {
-            ScPatternAttr aPattern(pDocument->GetPool());
-            pData->FillToItemSet(nIndex, aPattern.GetItemSet(), *pDocument);
-            ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, aPattern);
+//          ScPatternAttr aPattern(pDocument->GetPool());
+//            pData->FillToItemSet(nIndex, aPattern.GetItemSet(), *pDocument);
+            ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, rAttr);
         }
     }
 }
@@ -1535,20 +1535,27 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
             ScAutoFormatData* pData = (*pAutoFormat)[nFormatNo];
             if (pData)
             {
+                ScPatternAttr* pPatternAttrs[16];
+                for (sal_uInt8 i = 0; i < 16; ++i)
+                {
+                    pPatternAttrs[i] = new ScPatternAttr(pDocument->GetPool());
+                    pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), *pDocument);
+                }
+
                 USHORT nCol = nStartCol;
                 USHORT nRow = nStartRow;
                 USHORT nIndex = 0;
                 // Linke obere Ecke
-                AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                 // Linke Spalte
                 if (pData->IsEqualData(4, 8))
-                    AutoFormatArea(nStartCol, nStartRow + 1, nStartCol, nEndRow - 1, 4, nFormatNo);
+                    AutoFormatArea(nStartCol, nStartRow + 1, nStartCol, nEndRow - 1, *pPatternAttrs[4], nFormatNo);
                 else
                 {
                     nIndex = 4;
                     for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
                     {
-                        AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                        AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                         if (nIndex == 4)
                             nIndex = 8;
                         else
@@ -1558,21 +1565,21 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
                 // Linke untere Ecke
                 nRow = nEndRow;
                 nIndex = 12;
-                AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                 // Rechte obere Ecke
                 nCol = nEndCol;
                 nRow = nStartRow;
                 nIndex = 3;
-                AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                 // Rechte Spalte
                 if (pData->IsEqualData(7, 11))
-                    AutoFormatArea(nEndCol, nStartRow + 1, nEndCol, nEndRow - 1, 7, nFormatNo);
+                    AutoFormatArea(nEndCol, nStartRow + 1, nEndCol, nEndRow - 1, *pPatternAttrs[7], nFormatNo);
                 else
                 {
                     nIndex = 7;
                     for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
                     {
-                        AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                        AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                         if (nIndex == 7)
                             nIndex = 11;
                         else
@@ -1582,12 +1589,12 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
                 // Rechte untere Ecke
                 nRow = nEndRow;
                 nIndex = 15;
-                AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                 nRow = nStartRow;
                 nIndex = 1;
                 for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
                 {
-                    AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                    AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                     if (nIndex == 1)
                         nIndex = 2;
                     else
@@ -1598,7 +1605,7 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
                 nIndex = 13;
                 for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
                 {
-                    AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                    AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                     if (nIndex == 13)
                         nIndex = 14;
                     else
@@ -1606,7 +1613,7 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
                 }
                 // Boddy
                 if ((pData->IsEqualData(5, 6)) && (pData->IsEqualData(9, 10)) && (pData->IsEqualData(5, 9)))
-                    AutoFormatArea(nStartCol + 1, nStartRow + 1, nEndCol-1, nEndRow - 1, 5, nFormatNo);
+                    AutoFormatArea(nStartCol + 1, nStartRow + 1, nEndCol-1, nEndRow - 1, *pPatternAttrs[5], nFormatNo);
                 else
                 {
                     if ((pData->IsEqualData(5, 9)) && (pData->IsEqualData(6, 10)))
@@ -1614,7 +1621,7 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
                         nIndex = 5;
                         for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
                         {
-                            AutoFormatArea(nCol, nStartRow + 1, nCol, nEndRow - 1, nIndex, nFormatNo);
+                            AutoFormatArea(nCol, nStartRow + 1, nCol, nEndRow - 1, *pPatternAttrs[nIndex], nFormatNo);
                             if (nIndex == 5)
                                 nIndex = 6;
                             else
@@ -1628,7 +1635,7 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
                         {
                             for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
                             {
-                                AutoFormatArea(nCol, nRow, nCol, nRow, nIndex, nFormatNo);
+                                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                                 if ((nIndex == 5) || (nIndex == 9))
                                 {
                                     if (nIndex == 5)
@@ -1651,6 +1658,9 @@ void ScTable::AutoFormat( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, US
                         } // for nCol
                     } // if not equal Column
                 } // if not all equal
+
+                for (sal_uInt8 j = 0; j < 16; ++j)
+                    delete pPatternAttrs[j];
             } // if AutoFormatData != NULL
         } // if AutoFormat != NULL
     } // if ValidColRow
