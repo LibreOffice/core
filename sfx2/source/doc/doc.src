@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-09 21:07:47 $
+ *  last change: $Author: kz $ $Date: 2002-01-10 21:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2168,7 +2168,7 @@ QueryBox DLG_MACROQUERY
     Title[ chinese_simplified ] = "æ‰§è¡Œå®";
     Title[ russian ] = "Âûïîëíèòü ìàêğîñ";
     Title[ polish ] = "Wykonaj makro";
-    Title[ japanese ] = "ï¾ï½¸ï¾›ã®å®Ÿè¡Œ";
+    Title[ japanese ] = "ãƒã‚¯ãƒ­ã®å®Ÿè¡Œ";
     Title[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
     Title[ arabic ] = "ÊäİíĞ ÇáãÇßÑæ";
     Title[ dutch ] = "Macro uitvoeren";
@@ -2185,6 +2185,7 @@ QueryBox DLG_MACROQUERY
     Message [English_us] = "This document contains macros. $(TEXT)";
     Message[ french ] = "Ce document contient des macros. $(TEXT)";
     Message[ spanish ] = "Ejecutar macro";
+    Message[ japanese ] = "ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã¯ãƒã‚¯ãƒ­ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚$(TEXT)";
 };
 
 String BTN_OK
@@ -2262,6 +2263,7 @@ String FT_OK
 };
 
 // ******************************************************************* EOF
+
 
 
 
