@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextDocument.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:10 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ interface XTextDocument: com::sun::star::frame::XModel
 
     // DocMerge from idl: method com::sun::star::text::XTextDocument::getText
     /** @returns
-                the major <type scope="com::sun::star::drawing">Text</type> of the text document.
+                the major <type scope="com::sun::star::text">Text</type> of the text document.
 
                 <p>This text does not contain texts in <type>TextFrame</type>s,
                 or cells of <type>TextTable</type>s etc. directly. These are
