@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 12:36:51 $
+ *  last change: $Author: cmc $ $Date: 2002-07-26 12:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,22 +310,25 @@ void SwWW8Writer::OutListTab()
                         sNumStr.SetChar(0, cChar-0xF000);
                 }
             }
-            else if( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
+            else
             {
-                BYTE* pLvlPos = aNumLvlPos;
-                aNdNum.SetLevel( nLvl );
-                sNumStr = rRule.MakeNumString( aNdNum, FALSE, TRUE );
-
-                // now search the nums in the string
-                for( BYTE i = 0; i <= nLvl; ++i )
+                if (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType())
                 {
-                    String sSrch( String::CreateFromInt32( i ));
-                    xub_StrLen nFnd = sNumStr.Search( sSrch );
-                    if( STRING_NOTFOUND != nFnd )
+                    BYTE* pLvlPos = aNumLvlPos;
+                    aNdNum.SetLevel( nLvl );
+                    sNumStr = rRule.MakeNumString( aNdNum, FALSE, TRUE );
+
+                    // now search the nums in the string
+                    for( BYTE i = 0; i <= nLvl; ++i )
                     {
-                        *pLvlPos = (BYTE)(nFnd + rFmt.GetPrefix().Len() + 1 );
-                        ++pLvlPos;
-                        sNumStr.SetChar( nFnd, (char)i );
+                        String sSrch( String::CreateFromInt32( i ));
+                        xub_StrLen nFnd = sNumStr.Search( sSrch );
+                        if( STRING_NOTFOUND != nFnd )
+                        {
+                            *pLvlPos = (BYTE)(nFnd + rFmt.GetPrefix().Len() + 1 );
+                            ++pLvlPos;
+                            sNumStr.SetChar( nFnd, (char)i );
+                        }
                     }
                 }
 
