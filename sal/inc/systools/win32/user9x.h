@@ -2,9 +2,9 @@
  *
  *  $RCSfile: user9x.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-02 15:35:02 $
+ *  last change: $Author: tra $ $Date: 2000-11-14 06:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,14 @@ extern "C"{
 #undef UnregisterClassW
 #endif
 
+#ifdef RegisterClipboardFormatW
+#undef RegisterClipboardFormatW
+#endif
+
+#ifdef GetClipboardFormatNameW
+#undef GetClipboardFormatNameW
+#endif
+
 extern LRESULT ( WINAPI * lpfnSendMessageW) (
     HWND hWnd,      // handle to the destination window
     UINT Msg,       // message
@@ -117,12 +125,24 @@ extern BOOL ( WINAPI * lpfnUnregisterClassW ) (
     HINSTANCE hInstance  // handle to application instance
 );
 
+extern UINT (WINAPI * lpfnRegisterClipboardFormatW) (
+    LPCWSTR lpszFormat // name of new format
+);
+
+extern int ( WINAPI * lpfnGetClipboardFormatNameW ) (
+    UINT   format,          // clipboard format to retrieve
+    LPWSTR lpszFormatName,  // format name
+    int    cchMaxCount      // length of format name buffer
+);
 
 /* define as macro */
-#define SendMessageW       lpfnSendMessageW
-#define CreateWindowExW    lpfnCreateWindowExW
-#define RegisterClassExW   lpfnRegisterClassExW
-#define UnregisterClassW   lpfnUnregisterClassW
+#define SendMessageW                lpfnSendMessageW
+#define CreateWindowExW             lpfnCreateWindowExW
+#define RegisterClassExW            lpfnRegisterClassExW
+#define UnregisterClassW            lpfnUnregisterClassW
+#define RegisterClipboardFormatW    lpfnRegisterClipboardFormatW
+#define GetClipboardFormatNameW     lpfnGetClipboardFormatNameW
+
 
 void WINAPI User9xInit(LPOSVERSIONINFO lpVersionInfo);
 void WINAPI User9xDeInit();
