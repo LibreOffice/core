@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-26 10:00:29 $
+ *  last change:$Date: 2003-11-18 16:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ public class utils {
 
    public static String getFullURL( String sDocName ) {
         String fullDocPath = sDocName;
+        System.out.println("##### getFullURL (in): "+sDocName);
         if (fullDocPath.startsWith("http:")) {
             return fullDocPath;
         }
@@ -171,7 +172,15 @@ public class utils {
             if (fullDocPath.startsWith("/")) prefix="file://";
                                     else prefix="file:///";
         }
+
+        if (!fullDocPath.endsWith("/")) {
+            File aFile = new File(fullDocPath);
+            if (aFile.isDirectory()) {
+                fullDocPath +="/";
+            }
+        }
         String fulldocURL = prefix+fullDocPath;
+        System.out.println("##### getFullURL (out): "+fulldocURL);
         return fulldocURL;
     }
 
@@ -474,61 +483,6 @@ public class utils {
         return 65535;
     }
 
-    public static void writeImplIDToDB(String language, String module,
-                                            String component, String remark) {
-        String dbURL = System.getProperty("DBURL");
-        if (dbURL.equals("none")) {
-            //System.out.println("No DBURL given to write ImplID");
-            return;
-        }
-
-        Connection con= null;
-        Statement stmt=null;
-        String platform = System.getProperty("OS");
-        String tBase = System.getProperty("TESTBASE");
-        String version = System.getProperty("VERSION");
-
-        //Connect the database
-        try {
-//            DriverManager.registerDriver (new org.gjt.mm.mysql.Driver() );
-            String url = dbURL ;
-            con = DriverManager.getConnection(url,platform,platform);
-        }
-        catch (Exception ex) {
-            System.out.println("Couldn't connect database");
-            return;
-        }
-
-
-        //creating the statement
-        try {
-            stmt = con.createStatement();
-            stmt.executeQuery("insert into ImplID_State values (\""+language+"\",\""
-                +platform+"\",\""+tBase+"\",\""+module+"\",\""+component+"\",\""+version
-                                                        +"\",\""+remark+"\",\"none\")");
-            con.close();
-        }
-        catch(SQLException e) {
-            while(e != null) {
-                if (e.getMessage().indexOf("Duplicate entry") != -1) {
-                    try {
-                        stmt.execute("update ImplID_State set version=\""+version+
-                        "\" where platform=\""+platform+"\" AND language=\"java\" AND testbase=\""
-                        +tBase+"\" AND module=\""+module+"\" AND component=\""+component+"\"");
-                        con.close();
-                    } catch (SQLException ex) {ex.printStackTrace();}
-                } else {
-                    System.out.println("Message: "+ e.getMessage());
-                    System.out.println("SQLState: "+ e.getSQLState());
-                    System.out.println("Vendor: " + "" + e.getErrorCode());
-                    e = e.getNextException();
-                }
-            }
-            e.printStackTrace();
-        }
-
-    }
-
     public static URL parseURL(XMultiServiceFactory xMSF, String url){
         URL[] rUrl = new URL[1];
         rUrl[0] = new URL();
@@ -549,18 +503,10 @@ public class utils {
 
     public static String getOfficeURL(XMultiServiceFactory msf) {
         try {
-            Object settings = msf.createInstance("com.sun.star.frame.Settings");
-            XNameAccess settingNames = (XNameAccess)
-                            UnoRuntime.queryInterface(XNameAccess.class,settings);
-            Object pSettings = settingNames.getByName("PathSettings");
-            XPropertySet pthSettings = null;
-            try {
-                pthSettings = (XPropertySet) AnyConverter.toObject(
-                                    new Type(XPropertySet.class),pSettings);
-            } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                System.out.println("### couldn't convert Any");
-            }
-            String path = (String) pthSettings.getPropertyValue("ProgPath");
+            Object settings = msf.createInstance("com.sun.star.util.PathSettings");
+            XPropertySet settingProps = (XPropertySet)
+                            UnoRuntime.queryInterface(XPropertySet.class, settings);
+            String path = (String) settingProps.getPropertyValue("Module");
             return path;
         } catch (Exception e) {
             System.out.println("Couldn't get Office Settings ");
