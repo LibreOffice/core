@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:38 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,12 @@ HtmlFactory_Idl::write_ManualLinks( Xml::Element &  o_screen,
         Xml::Element &
             rLink = aDocuList.Produce_Definition() >> *new Html::Link( Env().Link2Manual(*it));
         if ( (*(it+1)).empty() )
-            rLink << *it;
+            // HACK KORR_FUTURE
+            // Research what happens with manual links which contain normal characters
+            // in non-utf-8 texts. And research, why utfF-8 does not work here.
+            rLink << new Xml::XmlCode(*it);
         else
-            rLink << *(it+1);
+            rLink << new Xml::XmlCode( *(it+1) );
         ++it;
     }   // end for
 }
