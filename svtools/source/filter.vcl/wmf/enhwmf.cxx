@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-28 08:44:52 $
+ *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,12 +204,12 @@ SvStream& operator>>( SvStream& rIn, XForm& rXForm )
 
 BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
 {
-    UINT32 nStretchBltMode = 0;
-    UINT32  nRecType, nRecSize, nNextPos;
-    UINT32  nWidth, nHeight, nPoints, nColor, nIndex;
-    UINT32  nDat32, nNom1, nDen1, nNom2, nDen2;
-    INT32   nX32, nY32, nx32, ny32;
-    INT16   nX16, nY16;
+    sal_uInt32  nStretchBltMode = 0;
+    sal_uInt32  nRecType, nRecSize, nNextPos,
+                nWidth, nHeight, nPoints, nColor, nIndex,
+                nDat32, nNom1, nDen1, nNom2, nDen2;
+    sal_Int32   nX32, nY32, nx32, ny32;
+    sal_Int16   nX16, nY16;
 
     sal_Bool    bFlag, bStatus = ReadHeader();
 
@@ -701,14 +701,27 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pOut->SetClipPath( pOut->GetPathObj(), nClippingMode );
             }
             break;
+            case EMR_EXTSELECTCLIPRGN :
+            {
+                sal_Int32 nClippingMode;
+                *pWMF >> nIndex
+                      >> nClippingMode;
+
+                if ( ( nIndex == 0 ) && ( nClippingMode == RGN_COPY ) )
+                {
+                    PolyPolygon aEmptyPolyPoly;
+                    pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY );
+                }
+            }
+            break;
 
             case EMR_GDICOMMENT :
             case EMR_FILLRGN :
             case EMR_FRAMERGN :
             case EMR_INVERTRGN :
             case EMR_PAINTRGN :
-            case EMR_EXTSELECTCLIPRGN :
             break;
+
             case EMR_BITBLT :
             {
                 UINT32      nRasterOp;
@@ -1018,18 +1031,15 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             };
             break;
             case EMR_POLYDRAW16 :
-            break;
             case EMR_CREATEMONOBRUSH :
             case EMR_CREATEDIBPATTERNBRUSHPT :
             case EMR_EXTCREATEPEN :
             case EMR_POLYTEXTOUTA :
             case EMR_POLYTEXTOUTW :
             case EMR_SETICMMODE :
-            break;
             case EMR_CREATECOLORSPACE :
             case EMR_SETCOLORSPACE :
             case EMR_DELETECOLORSPACE :
-            break;
             case EMR_GLSRECORD :
             case EMR_GLSBOUNDEDRECORD :
             case EMR_PIXELFORMAT :

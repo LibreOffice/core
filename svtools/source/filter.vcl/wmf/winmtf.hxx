@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-28 08:44:52 $
+ *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,11 @@
 #ifndef _FLTCALL_HXX
 #include <fltcall.hxx>
 #endif
+
+#define ERROR                   0
+#define NULLREGION              1
+#define SIMPLEREGION            2
+#define COMPLEXREGION           3
 
 #define RGN_AND                 1
 #define RGN_OR                  2
@@ -313,6 +318,12 @@ class WinMtfClipPath
 
         WinMtfClipPathType GetType() const { return eType; };
         const PolyPolygon& GetClipPath() const { return aPolyPoly; };
+
+        sal_Bool operator==( const WinMtfClipPath& rPath )
+        {
+            return  ( rPath.eType == eType ) &&
+                    ( rPath.aPolyPoly == aPolyPoly );
+        };
 };
 
 class WinMtfPathObj : public PolyPolygon
@@ -424,18 +435,20 @@ struct XForm
 
 struct SaveStruct
 {
-    UINT32              nBkMode;
-    BOOL                bWinExtSet;
+    sal_uInt32          nBkMode;
+    sal_Bool            bWinExtSet;
     long                nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
     long                nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
     WinMtfLineStyle     aLineStyle;
     WinMtfFillStyle     aFillStyle;
+
+    Font                aFont;
     Color               aBkColor;
     Color               aTextColor;
+    sal_uInt32          nTextAlign;
+    RasterOp            eRasterOp;
+
     Point               aActPos;
-    BOOL                bFontChanged;
-    Font                aFont;
-    UINT32              nActTextAlign;
     sal_Bool            bRecordPath;
     WinMtfPathObj       aPathObj;
     WinMtfClipPath      aClipPath;
@@ -509,29 +522,32 @@ class WinMtfOutput
 
         WinMtfPathObj       aPathObj;
         WinMtfClipPath      aClipPath;
+
         WinMtfLineStyle     maLatestLineStyle;
+        WinMtfLineStyle     maLineStyle;
         WinMtfFillStyle     maLatestFillStyle;
+        WinMtfFillStyle     maFillStyle;
+        Font                maLatestFont;
+        Font                maFont;
+        sal_uInt32          mnLatestTextAlign;
+        sal_uInt32          mnTextAlign;
+        Color               maLatestTextColor;
+        Color               maTextColor;
+        Color               maLatestBkColor;
+        Color               maBkColor;
+        sal_uInt32          mnLatestBkMode;
+        sal_uInt32          mnBkMode;
+        RasterOp            meLatestRasterOp;
+        RasterOp            meRasterOp;
 
         GDIObj**            mpGDIObj;
         sal_uInt32          mnEntrys;
-        sal_uInt32          mnActTextAlign;         // Aktuelle Textausrichtung (im MS-Windows-Format)
-        sal_uInt32          mnBkMode;               // Aktueller Modus, wie der Hintergrund uebermalt
         Point               maActPos;               // wird. (ist gleich TRANSPARENT oder nicht)
 
-
-        sal_Bool            mbFontChanged;
-        Font                maFont;
-        WinMtfLineStyle     maLineStyle;
-        WinMtfFillStyle     maFillStyle;
-
-        Color               maTextColor;
-        Color               maBkColor;
-
         sal_uInt32          mnRop;
-        RasterOp            meRasterOp;
-        BOOL                mbNopMode;
+        sal_Bool            mbNopMode;
 
-        SaveStack           maSaveStack;                // Stapel fuer aktuelle Zustaende bzw. DCs (Drawing-Contexts)
+        SaveStack           maSaveStack;            // Stapel fuer aktuelle Zustaende bzw. DCs (Drawing-Contexts)
 
         sal_uInt32          mnMapMode;
         XForm               maXForm;
@@ -540,7 +556,7 @@ class WinMtfOutput
         long                mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
         long                mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
 
-        UINT32              mnPushPopCount;             // hoehe des Stapels
+
         GDIMetaFile*        mpGDIMetaFile;
 
         void                UpdateLineStyle();

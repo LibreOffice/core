@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-28 08:44:52 $
+ *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nCl
         }
         aPolyPoly = aNewClipPath;
     }
+    else
+        aPolyPoly = rPolyPolygon;
     ImpUpdateType();
 }
 
@@ -505,25 +507,7 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
                 maFillStyle = (WinMtfFillStyle*)pGDIObj->pStyle;
             break;
             case GDI_FONT :
-            {
                 maFont = ((WinMtfFontStyle*)pGDIObj->pStyle)->aFont;
-                if ( ( mnActTextAlign & TA_BASELINE) == TA_BASELINE )
-                    maFont.SetAlign( ALIGN_BASELINE );
-                else if( ( mnActTextAlign & TA_BOTTOM) == TA_BOTTOM )
-                    maFont.SetAlign( ALIGN_BOTTOM );
-                else
-                    maFont.SetAlign( ALIGN_TOP );
-
-                if( mnBkMode == TRANSPARENT )
-                    maFont.SetTransparent( TRUE );
-                else
-                {
-                    maFont.SetFillColor( maBkColor );
-                    maFont.SetTransparent( FALSE );
-                }
-                maFont.SetColor( maTextColor );
-                mbFontChanged = TRUE;
-            }
             break;
         }
     }
@@ -535,8 +519,7 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
 
 void WinMtfOutput::SetBkMode( UINT32 nMode )
 {
-    maFont.SetTransparent( ( mnBkMode = nMode ) == TRANSPARENT );
-    mbFontChanged = TRUE;
+    mnBkMode = nMode;
 }
 
 //-----------------------------------------------------------------------------------
@@ -544,35 +527,20 @@ void WinMtfOutput::SetBkMode( UINT32 nMode )
 void WinMtfOutput::SetBkColor( const Color& rColor )
 {
     maBkColor = rColor;
-    maFont.SetFillColor( rColor );
-    maFont.SetTransparent( mnBkMode == TRANSPARENT );
-    mbFontChanged = TRUE;
 }
-
 
 //-----------------------------------------------------------------------------------
 
 void WinMtfOutput::SetTextColor( const Color& rColor )
 {
     maTextColor = rColor;
-    maFont.SetColor( rColor );
-    mbFontChanged = TRUE;
 }
 
 //-----------------------------------------------------------------------------------
 
 void WinMtfOutput::SetTextAlign( UINT32 nAlign )
 {
-    mnActTextAlign = nAlign;
-
-    if ( ( mnActTextAlign & TA_BASELINE ) == TA_BASELINE )
-        maFont.SetAlign( ALIGN_BASELINE );
-    else if( ( mnActTextAlign & TA_BOTTOM ) == TA_BOTTOM )
-        maFont.SetAlign( ALIGN_BOTTOM );
-    else
-        maFont.SetAlign( ALIGN_TOP );
-
-    mbFontChanged = TRUE;
+    mnTextAlign = nAlign;
 }
 
 //-----------------------------------------------------------------------------------
@@ -732,26 +700,29 @@ void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClip
 //-----------------------------------------------------------------------------------
 
 WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
-    mnActTextAlign      ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
+    mpGDIMetaFile       ( &rGDIMetaFile ),
+    mnTextAlign         ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
+    mnLatestTextAlign   ( 0 ),
     mnBkMode            ( OPAQUE ),
+    mnLatestBkMode      ( 0 ),
     maBkColor           ( COL_WHITE ),
+    maLatestBkColor     ( 0x12345678 ),
     mnMapMode           ( MM_ANISOTROPIC ),
     mbNopMode           ( sal_False ),
-    mbFontChanged       ( sal_False ),
     maActPos            ( Point() ),
     meRasterOp          ( ROP_OVERPAINT ),
+    meLatestRasterOp    ( ROP_INVERT ),
     mnEntrys            ( 16 )
 {
-    maFont.SetCharSet( gsl_getSystemTextEncoding() );
-    mpGDIObj = new GDIObj*[ mnEntrys ];
-    for ( UINT32 i = 0; i < mnEntrys; i++ )
+    mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  // The original clipregion has to be on top
+    maFont.SetCharSet( gsl_getSystemTextEncoding() );                   // of the stack so it can always be restored
+    mpGDIObj = new GDIObj*[ mnEntrys ];                                 // this is necessary to be able to support
+    for ( UINT32 i = 0; i < mnEntrys; i++ )                             // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
     {
         mpGDIObj[ i ] = NULL;
     }
     maLatestLineStyle.aLineColor = Color( 0x12, 0x34, 0x56 );
     maLatestFillStyle.aFillColor = Color( 0x12, 0x34, 0x56 );
-    mpGDIMetaFile = &rGDIMetaFile;
-    mnPushPopCount = 0;
 
     mnRop = R2_BLACK + 1;
     SetRasterOp( R2_BLACK );
@@ -761,16 +732,12 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
 
 WinMtfOutput::~WinMtfOutput()
 {
-    while( mnPushPopCount > 0 )
-    {
-        mpGDIMetaFile->AddAction( new MetaPopAction() );
-        mnPushPopCount--;
-    }
-    mpGDIMetaFile->SetPrefMapMode( MAP_100TH_MM );
-    mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
-
     while( maSaveStack.Count() )
         delete maSaveStack.Pop();
+
+    mpGDIMetaFile->AddAction( new MetaPopAction() );
+    mpGDIMetaFile->SetPrefMapMode( MAP_100TH_MM );
+    mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
 
     for ( UINT32 i = 0; i < mnEntrys; i++ )
     {
@@ -786,15 +753,13 @@ void WinMtfOutput::UpdateClipRegion()
     if ( aClipPath.bNeedsUpdate )
     {
         aClipPath.bNeedsUpdate = sal_False;
+
+        mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the orignal clipregion
+        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  //
+
         switch ( aClipPath.GetType() )
         {
             case RECTANGLE :
-            {
-                Rectangle aClipRect( aClipPath.GetClipPath().GetBoundRect() );
-                mpGDIMetaFile->AddAction( new MetaISectRectClipRegionAction( aClipRect ) );
-            }
-            break;
-
             case COMPLEX :
             {
 //              we will not generate a RegionClipRegion Action, because this action
@@ -863,7 +828,7 @@ sal_uInt32 WinMtfOutput::SetRasterOp( UINT32 nRasterOp )
             // gesetzten Pen und Brush aktivieren
             maFillStyle = aNopFillStyle;
             maLineStyle = aNopLineStyle;
-            mbNopMode = FALSE;
+            mbNopMode = sal_False;
         }
         switch( nRasterOp )
         {
@@ -878,13 +843,13 @@ sal_uInt32 WinMtfOutput::SetRasterOp( UINT32 nRasterOp )
             case R2_NOP:
             {
                 meRasterOp = ROP_OVERPAINT;
-                if( mbNopMode = FALSE  )
+                if( mbNopMode == sal_False )
                 {
                     aNopFillStyle = maFillStyle;
                     aNopLineStyle = maLineStyle;
                     maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), TRUE );
                     maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), TRUE );
-                    mbNopMode = TRUE;
+                    mbNopMode = sal_True;
                 }
             }
             break;
@@ -1266,16 +1231,63 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sa
             pDXArry[ i ] = nSum;
         }
     }
-    if( mbFontChanged )
+    sal_Bool bChangeFont = maLatestFont != maFont;
+    if ( mnLatestTextAlign != mnTextAlign )
     {
-        mpGDIMetaFile->AddAction( new MetaFontAction( maFont ) );
-        mpGDIMetaFile->AddAction( new MetaTextAlignAction( maFont.GetAlign() ) );
-        mpGDIMetaFile->AddAction( new MetaTextColorAction( maFont.GetColor() ) );
-        mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
-        mbFontChanged = FALSE;
+        bChangeFont = sal_True;
+        mnLatestTextAlign = mnTextAlign;
+        TextAlign eTextAlign;
+        if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
+            eTextAlign = ALIGN_BASELINE;
+        else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
+            eTextAlign = ALIGN_BOTTOM;
+        else
+            eTextAlign = ALIGN_TOP;
+        mpGDIMetaFile->AddAction( new MetaTextAlignAction( eTextAlign ) );
     }
+    if ( maLatestTextColor != maTextColor )
+    {
+        bChangeFont = sal_True;
+        maLatestTextColor = maTextColor;
+        mpGDIMetaFile->AddAction( new MetaTextColorAction( maTextColor ) );
+    }
+    sal_Bool bChangeFillColor = sal_False;
+    if ( maLatestBkColor != maBkColor )
+    {
+        bChangeFillColor = sal_True;
+        maLatestBkColor = maBkColor;
+    }
+    if ( mnLatestBkMode != mnBkMode )
+    {
+        bChangeFillColor = sal_True;
+        mnLatestBkMode = mnBkMode;
+    }
+    if ( bChangeFillColor )
+    {
+        bChangeFont = sal_True;
+        mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
+    }
+    if ( bChangeFont )
+    {
+        maLatestFont = maFont;
+        Font aTmp( maFont );
+        aTmp.SetColor( maTextColor );
+        aTmp.SetFillColor( maBkColor );
 
-    if( mnActTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
+        if( mnBkMode == TRANSPARENT )
+            maFont.SetTransparent( sal_True );
+        else
+            maFont.SetTransparent( sal_False );
+
+        if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
+            aTmp.SetAlign( ALIGN_BASELINE );
+        else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
+            aTmp.SetAlign( ALIGN_BOTTOM );
+        else
+            aTmp.SetAlign( ALIGN_TOP );
+        mpGDIMetaFile->AddAction( new MetaFontAction( aTmp ) );
+    }
+    if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
     {
         VirtualDevice   aVDev;
         sal_Int32       nTextWidth;
@@ -1293,13 +1305,13 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sa
         else
             nTextWidth = aVDev.GetTextWidth( rText );
 
-        if( mnActTextAlign & TA_UPDATECP )
+        if( mnTextAlign & TA_UPDATECP )
             rPosition = maActPos;
 
-        if( mnActTextAlign & TA_RIGHT_CENTER )
-            rPosition.X() -= ( ( mnActTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : ( nTextWidth >> 1 );
+        if( mnTextAlign & TA_RIGHT_CENTER )
+            rPosition.X() -= ( ( mnTextAlign & TA_RIGHT_CENTER ) == TA_RIGHT ) ? nTextWidth : ( nTextWidth >> 1 );
 
-        if( mnActTextAlign & TA_UPDATECP )
+        if( mnTextAlign & TA_UPDATECP )
             maActPos.X() = rPosition.X() + nTextWidth;
     }
     if ( bRecordPath )
@@ -1623,21 +1635,22 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::Push( BOOL bExtSet )
-{
-    UpdateClipRegion();
-
+void WinMtfOutput::Push( sal_Bool bExtSet )     // !! to be able to access the original ClipRegion it
+{                                               // is not allowed to use the MetaPushAction()
+    UpdateClipRegion();                         // (the original clip region is on top of the stack) (SJ)
     SaveStruct* pSave = new SaveStruct;
-    pSave->aActPos = maActPos;
-    pSave->nActTextAlign = mnActTextAlign;
-    pSave->nBkMode = mnBkMode;
-    pSave->aBkColor = maBkColor;
-    pSave->bWinExtSet = bExtSet;
+
     pSave->aLineStyle = maLineStyle;
     pSave->aFillStyle = maFillStyle;
-    pSave->aTextColor = maTextColor;
+
     pSave->aFont = maFont;
-    pSave->bFontChanged = mbFontChanged;
+    pSave->aTextColor = maTextColor;
+    pSave->nTextAlign = mnTextAlign;
+    pSave->nBkMode = mnBkMode;
+    pSave->aBkColor = maBkColor;
+
+    pSave->aActPos = maActPos;
+    pSave->bWinExtSet = bExtSet;
     pSave->aXForm = maXForm;
 
     if ( bExtSet )
@@ -1654,22 +1667,6 @@ void WinMtfOutput::Push( BOOL bExtSet )
     pSave->aPathObj = aPathObj;
     pSave->aClipPath = aClipPath;
     maSaveStack.Push( pSave );
-
-    // bei SaveDC muessen wir die verzoegerte Selektion
-    // von Objekten umgehen, damit beim RestoreDC wieder
-    // die richtigen Objekte selektiert werden
-    UpdateLineStyle();
-    UpdateFillStyle();
-    if( mbFontChanged )
-    {
-        mpGDIMetaFile->AddAction( new MetaFontAction( maFont ) );
-        mpGDIMetaFile->AddAction( new MetaTextAlignAction( maFont.GetAlign() ) );
-        mpGDIMetaFile->AddAction( new MetaTextColorAction( maFont.GetColor() ) );
-        mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
-        mbFontChanged = FALSE;
-    }
-    mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_ALL ) );
-    mnPushPopCount++;
 }
 
 //-----------------------------------------------------------------------------------
@@ -1682,16 +1679,18 @@ void WinMtfOutput::Pop()
         // Die aktuelle Daten auf dem Stack sichern
         SaveStruct* pSave = maSaveStack.Pop();
 
-        mnBkMode = pSave->nBkMode;
-        maBkColor = pSave->aBkColor;
-        maActPos = pSave->aActPos;
-        mnActTextAlign = pSave->nActTextAlign;
         maLineStyle = pSave->aLineStyle;
         maFillStyle = pSave->aFillStyle;
-        maTextColor = pSave->aTextColor;
+
         maFont = pSave->aFont;
-        mbFontChanged = pSave->bFontChanged;
+        maTextColor = pSave->aTextColor;
+        mnTextAlign = pSave->nTextAlign;
+        mnBkMode = pSave->nBkMode;
+        maBkColor = pSave->aBkColor;
+
+        maActPos = pSave->aActPos;
         maXForm = pSave->aXForm;
+        meRasterOp = pSave->eRasterOp;
 
         if ( pSave->bWinExtSet )
         {
@@ -1705,15 +1704,14 @@ void WinMtfOutput::Pop()
             mnDevHeight = pSave->nDevHeight;
         }
         aPathObj = pSave->aPathObj;
-        aClipPath = pSave->aClipPath;
+        if ( ! ( aClipPath == pSave->aClipPath ) )
+        {
+            aClipPath = pSave->aClipPath;
+            aClipPath.bNeedsUpdate = sal_True;
+        }
+        if ( meLatestRasterOp != meRasterOp )
+            mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
         delete pSave;
-    }
-    maLatestLineStyle = maLineStyle;
-    maLatestFillStyle = maFillStyle;
-    if( mnPushPopCount > 0 )
-    {
-        mpGDIMetaFile->AddAction( new MetaPopAction() );
-        mnPushPopCount--;
     }
 }
 

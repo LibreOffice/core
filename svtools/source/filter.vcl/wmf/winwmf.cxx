@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-01 16:15:18 $
+ *  last change: $Author: sj $ $Date: 2001-10-18 10:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,22 +705,18 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         case W_META_CREATEREGION:
         {
             pOut->CreateObject( GDI_DUMMY );
+#ifdef DBG_ASSERT
+            DBG_ASSERT( 0, "WMF-Import : W_META_CREATEREGION needs to be implemented (SJ)" );
+#endif
         }
         break;
 
-        case W_META_SETRELABS:
-        case W_META_SETPOLYFILLMODE:
-        case W_META_SETSTRETCHBLTMODE:
-        case W_META_SETTEXTCHAREXTRA:
-        case W_META_SETTEXTJUSTIFICATION:
-        break;
         case W_META_EXCLUDECLIPRECT :
         {
             pOut->ExcludeClipRect( ReadRectangle() );
         }
         break;
-        case W_META_FLOODFILL :
-        break;
+
         case W_META_PATBLT:
         {
             UINT32 nROP, nOldROP;
@@ -731,12 +727,30 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             pOut->SetRasterOp( nOldROP );
         }
         break;
+
+        case W_META_SELECTCLIPREGION:
+        {
+            sal_Int16 nObjIndex;
+            *pWMF >> nObjIndex;
+            if ( !nObjIndex )
+            {
+                PolyPolygon aEmptyPolyPoly;
+                pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY );
+            }
+        }
+        break;
+
+        case W_META_SETRELABS:
+        case W_META_SETPOLYFILLMODE:
+        case W_META_SETSTRETCHBLTMODE:
+        case W_META_SETTEXTCHAREXTRA:
+        case W_META_SETTEXTJUSTIFICATION:
+        case W_META_FLOODFILL :
         case W_META_ESCAPE:
         case W_META_FILLREGION:
         case W_META_FRAMEREGION:
         case W_META_INVERTREGION:
         case W_META_PAINTREGION:
-        case W_META_SELECTCLIPREGION:
         case W_META_DRAWTEXT:
         case W_META_SETMAPPERFLAGS:
         case W_META_SETDIBTODEV:
@@ -752,6 +766,9 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         case W_META_ENDPAGE:
         case W_META_ABORTDOC:
         case W_META_ENDDOC:
+        {
+            sal_Int32 nFunc = nFunction;
+        }
         break;
     }
 }
