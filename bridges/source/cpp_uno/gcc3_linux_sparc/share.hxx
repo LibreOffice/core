@@ -2,9 +2,9 @@
  *
  *  $RCSfile: share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:29:01 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,13 @@
  *
  *
  ************************************************************************/
-
+#include "uno/mapping.h"
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
-
 namespace CPPU_CURRENT_NAMESPACE
 {
-
+void dummy_can_throw_anything( char const * );
 // ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
 
 struct _Unwind_Exception
