@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:45:41 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,10 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>
 
-#include "bridges/cpp_uno/share/bridge.hxx"
-#include "bridges/cpp_uno/share/types.hxx"
-#include "bridges/cpp_uno/share/unointerfaceproxy.hxx"
-#include "bridges/cpp_uno/share/vtables.hxx"
+#include "bridges/cpp_uno/shared/bridge.hxx"
+#include "bridges/cpp_uno/shared/types.hxx"
+#include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
+#include "bridges/cpp_uno/shared/vtables.hxx"
 
 #include "share.hxx"
 
@@ -441,7 +441,7 @@ static void cpp_call(
                 ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
             }
             // is in/inout
-            else if (bridges:cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
+            else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
             {
                 uno_copyAndConvertData(
                     *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
