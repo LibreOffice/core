@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:39:57 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-
 
 // Paper size =================================================================
 
@@ -197,7 +196,6 @@ static const XclPaperSize pPaperSizeTable[] =
 #undef IN2TWIPS
 #undef MM2TWIPS
 
-
 // Page settings ==============================================================
 
 XclPageData::XclPageData()
@@ -217,9 +215,11 @@ void XclPageData::SetDefaults()
     mpBrushItem.reset();
     maHeader.Erase();
     maFooter.Erase();
-    mfLeftMargin   = mfRightMargin  = XclTools::GetInchFromHmm( 1900 );
-    mfTopMargin    = mfBottomMargin = XclTools::GetInchFromHmm( 2500 );
-    mfHeaderMargin = mfFooterMargin = XclTools::GetInchFromHmm( 1300 );
+    mfLeftMargin    = mfRightMargin    = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_LR );
+    mfTopMargin     = mfBottomMargin   = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_TB );
+    mfHeaderMargin  = mfFooterMargin   = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_HF );
+    mfHdrLeftMargin = mfHdrRightMargin = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_HLR );
+    mfFtrLeftMargin = mfFtrRightMargin = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_FLR );
     mnPaperSize = EXC_PAPERSIZE_DEFAULT;
     mnCopies = 1;
     mnStartPage = 0;
@@ -275,7 +275,6 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait )
         }
     }
 }
-
 
 // ============================================================================
 
