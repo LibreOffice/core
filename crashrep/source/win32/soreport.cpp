@@ -59,7 +59,6 @@ using namespace ::std;
 
 
 string  g_strDefaultLanguage;
-string  g_strProductKey;
 FILE    *g_fpStackFile = NULL;
 DWORD   g_dwExceptionCode = 0;
 
@@ -472,6 +471,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
                 TCHAR   tszUserName[256] = TEXT("");
                 DWORD   dwUserNameSize = elementsof(tszUserName);
                 const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
+                const char *pszProductName = getenv( "PRODUCTNAME" );
 
                 GetUserName( tszUserName, &dwUserNameSize );
 
@@ -506,7 +506,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
                     g_strDefaultLanguage.c_str(),
                     GetModuleDirectory( NULL ).c_str(),
                     g_dwExceptionCode,
-                    g_strProductKey.c_str()
+                    pszProductName ? pszProductName : ""
                     );
 
                 OSVERSIONINFO   VersionInfo;
@@ -1762,12 +1762,6 @@ static bool ReadBootstrapParams()
         szModuleName )
         )
     {
-        int needed = WideCharToMultiByte( CP_UTF8, 0, szBuffer, -1, NULL, 0, NULL, NULL );
-        char *pszBufferA = (char *)alloca( needed );
-
-        WideCharToMultiByte( CP_UTF8, 0, szBuffer, -1, pszBufferA, needed, NULL, NULL );
-        g_strProductKey = pszBufferA;
-
         TCHAR   *pVersion = _tcschr( szBuffer, ' ' );
 
         if ( pVersion )
