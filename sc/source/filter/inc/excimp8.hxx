@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:07:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,9 @@
  *
  ************************************************************************/
 
-
-
 #ifndef _EXCIMP8_HXX
 #define _EXCIMP8_HXX
 
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
-#endif
 #include <string.h>
 
 #ifndef _IMP_OP_HXX
@@ -74,9 +69,6 @@
 #endif
 #ifndef _ROOT_HXX
 #include "root.hxx"
-#endif
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
 #endif
 #ifndef _EXCSCEN_HXX
 #include "excscen.hxx"
