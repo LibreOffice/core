@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-09 08:04:52 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ polish ] = "Separator ;";
         Text[ japanese ] = "‹æØ‚è‹L†;";
         Text[ chinese_traditional ] = "¤À¸¹;";
-        Text[ arabic ] = "İÇÕá º";
+        Text[ arabic ] = "ÇÓÊÎÏã ; áİÕá ÇáÅÏÎÇáÇÊ";
         Text[ greek ] = "Åíùôéêü ;";
         Text[ korean ] = "±¸ºĞ ±âÈ£ ;";
         Text[ turkish ] = "Ayırma işareti ;";
@@ -670,7 +670,7 @@ TabPage RID_SVXPAGE_INET_CACHE
         Text[ polish ] = "Pamiêæ wspomagaj¹ca";
         Text[ japanese ] = "ÒÓØ·¬¯¼­(~M)";
         Text[ chinese_traditional ] = "°O¾ĞÅé½w¨R°Ï(~M)";
-        Text[ arabic ] = "æÍÏÉ ÇáÊÎÒíä ÇáãÄŞÊ";
+        Text[ arabic ] = "ÊÎÒíä ãÄŞÊ İí ÇáĞÇßÑÉ ÇáæÓíØÉ";
         Text[ greek ] = "ÊñõöŞ ìíŞìç";
         Text[ korean ] = "¸Ş¸ğ¸® Ä³½Ã(~M)";
         Text[ turkish ] = "~Önbellek";
@@ -764,7 +764,7 @@ TabPage RID_SVXPAGE_INET_CACHE
         Text[ polish ] = "Pamiêæ podrêczna dysku";
         Text[ japanese ] = "Ê°ÄŞÃŞ¨½¸·¬¯¼­(~H)";
         Text[ chinese_traditional ] = "ºÏºĞ½w¨R°Ï(~H)";
-        Text[ arabic ] = "ÇáĞÇßÑÉ ßÇÔ ááŞÑÕ ÇáÕáÈ";
+        Text[ arabic ] = "ÊÎÒíä ãÄŞÊ Úáì ÇáŞÑÕ ÇáÕáÈ";
         Text[ greek ] = "Êñõ~öŞ ìíŞìç óêëçñïı äßóêïõ";
         Text[ korean ] = "ÇÏµåµğ½ºÅ© Ä³½Ã(~H)";
         Text[ turkish ] = "Sabit disk önbelleği";
@@ -873,10 +873,10 @@ TabPage RID_SVXPAGE_INET_CACHE
         Text = "Verfalls~prüfung" ;
         Text [ English ] = "Expiration test" ;
         Text [ dutch ] = "Verval~controle" ;
-        Text [ english_us ] = "~Verify document:" ;
+        Text [ english_us ] = "C~ompare documents:" ;
         Text [ italian ] = "Test di ~scadenza" ;
         Text [ spanish ] = "~Verificar documento" ;
-        Text [ french ] = "Comparaison réseau" ;
+        Text [ french ] = "Comparer les documents" ;
         Text [ swedish ] = "Validitets~test" ;
         Text [ danish ] = "Forfaldskontrol" ;
         Text [ portuguese ] = "Verificar documento:" ;
@@ -1009,7 +1009,7 @@ TabPage RID_SVXPAGE_INET_CACHE
     StringList [ greek ] =
     {
             < "ĞÜíôá" ; CACHE_VERIFY_ALWAYS ; > ;
-        < "Ìéá öïñÜ áíÜ åğßóêåøç" ; CACHE_VERIFY_ONCE ; > ;
+        < "Ìéá öïñÜ áíÜ óõíäéÜëåîç" ; CACHE_VERIFY_ONCE ; > ;
         < "Ğïôİ" ; CACHE_VERIFY_NEVER ; > ;
     };
     StringList [ korean ] =
@@ -1072,7 +1072,7 @@ TabPage RID_SVXPAGE_INET_CACHE
         Text[ polish ] = "Brak pamiêci podrêcznej dla";
         Text[ japanese ] = "·¬¯¼­‚È‚µ";
         Text[ chinese_traditional ] = "½w¨R°Ï¤£Óì¥Î©ó";
-        Text[ arabic ] = "áÇ íæÌÏ æÍÏÉ ÊÎÒíä áÜ";
+        Text[ arabic ] = "ÚÏã ÇÓÊÎÏÇã ÇáÊÎÒíä ÇáãÄŞÊ áÜ";
         Text[ greek ] = "Äåí õğÜñ÷åé êñõöŞ ìíŞìç ãéá";
         Text[ korean ] = "Ä³½Ã ¾øÀ½";
         Text[ turkish ] = "Şunun için önbellek yok:";
@@ -1130,7 +1130,7 @@ TabPage RID_SVXPAGE_INET_CACHE
         Text[ polish ] = "Separator ;";
         Text[ japanese ] = "‹æØ‚è‹L†;";
         Text[ chinese_traditional ] = "¤À¸¹;";
-        Text[ arabic ] = "İÇÕá º";
+        Text[ arabic ] = "ÇÓÊÎÏã ; áİÕá ÇáÅÏÎÇáÇÊ";
         Text[ greek ] = "Åíùôéêü ;";
         Text[ korean ] = "±¸ºĞ±âÈ£ ;";
         Text[ turkish ] = "Ayırma işareti ;";
@@ -1181,7 +1181,7 @@ TabPage RID_SVXPAGE_INET_TYPE
         Text [ english_us ] = "File types" ;
         Text [ italian ] = "Correlazione tipi di file" ;
         Text [ spanish ] = "Asignar tipos de archivo" ;
-        Text [ french ] = "Attribution type de fichiers" ;
+        Text [ french ] = "Attribution des types de fichier" ;
         Text [ swedish ] = "Tilldelning av filtyper" ;
         Text [ danish ] = "Tildeling af filtyper" ;
         Text [ portuguese_brazilian ] = "Zuordnung Dateitypen" ;
@@ -1260,7 +1260,7 @@ TabPage RID_SVXPAGE_INET_TYPE
         Text[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ ID(~C)";
         Text[ chinese_traditional ] = "°Å¶KÃ¯¼ĞÃÑ(~C)";
         Text[ arabic ] = "ÊÚÑíİ ÇáÍÇİÙÉ";
-        Text[ greek ] = "Ôáõôüôçôá ôïõ ~Clipboard";
+        Text[ greek ] = "Ôáõôüôçôá (ID) ôïõ ğñü÷åéñïõ";
         Text[ korean ] = "Å¬¸³º¸µå ID(~C)";
         Text[ turkish ] = "Pano tanıtıcısı";
         Text[ language_user1 ] = " ";
@@ -2603,7 +2603,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text [ english_us ] = "Homepage" ;
         Text [ italian ] = "Homepage" ;
         Text [ spanish ] = "Página principal" ;
-        Text [ french ] = "Page d'accueil" ;
+        Text [ french ] = "Homepage" ;
         Text [ dutch ] = "Homepage" ;
         Text [ swedish ] = "Hemsida" ;
         Text [ danish ] = "Hjemmeside" ;
@@ -3645,7 +3645,7 @@ TabPage RID_SVXPAGE_INET_SSLSITE
         {
             < "Tous les certificats" ; > ;
             < "Certificats de site" ; > ;
-            < "Organisation de certification" ; > ;
+            < "Émetteur du certification" ; > ;
         };
         stringlist [ dutch ] =
         {
@@ -4164,7 +4164,7 @@ TabPage RID_SVXPAGE_INET_COOKIES
         Text [ danish ] = "Secure" ;
         Text [ italian ] = "Secure" ;
         Text [ spanish ] = "Seguro" ;
-        Text [ french ] = "En sécurité" ;
+        Text [ french ] = "Sécurisé" ;
         Text [ dutch ] = "Secure" ;
         Text [ portuguese ] = "Seguro" ;
         Text[ chinese_simplified ] = "°²È«";
@@ -4619,7 +4619,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text [ spanish ] = "Tenga en cuenta que junto con Java\ntambién desactivará Javascript.\n\n¿Desea aún desactivar Java?";
         Text [ french ] = "Veuillez noter qu'en désactivant Java,\nvous désactiverez également le Javascript.\n\nVoulez-vous vraiment poursuivre ?";
         Text[ portuguese ] = "Note que ao desactivar Java\nestará também a desactivar Javascript.\n\nMesmo assim desactivar?";
-        Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî îòêëş÷àÿ Java\nÂû îòêëş÷èòå è JavaScript.\n\nÎòêëş÷èòü Java íåñìîòğÿ íà ıòî?";
+        Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî îòêëş÷àÿ Java,\nâû îòêëş÷èòå è JavaScript.\n\nÎòêëş÷èòü Java íåñìîòğÿ íà ıòî?";
         Text[ dutch ] = "Wij wijzen u erop dat u met Java\nook Javascript uitschakelt.\n\nWilt u Java toch uitschakelen?";
         Text[ danish ] = "Bemærk venligst, at du deaktiverer\nJavaScript sammenmed Java.\n\nVil du deaktivere Java alligevel?";
         Text[ swedish ] = "Tänk på att Du även stänger av\nJavascript tillsammans med Java.\n\nVill Du trots det stänga av Java?";
