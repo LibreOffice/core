@@ -23425,3 +23425,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?PutValue@SvxObjectItem@@MAEEABVAny@uno@star@sun@com@@E@Z
 ?QueryValue@SvxColumnItem@@MBEEAAVAny@uno@star@sun@com@@E@Z
 ?QueryValue@SvxObjectItem@@MBEEAAVAny@uno@star@sun@com@@E@Z
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx271882370@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx943029868@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
