@@ -31,7 +31,7 @@ extern SetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetCfgFile();
 extern isQuiet();
-
+extern void removeTempFile();
 /* forwards */
 void YYWarning();
 
@@ -205,6 +205,8 @@ main( int argc, char* argv[])
 	if( !isQuiet() ){
         fprintf( stdout, "\n===================================\n\n" );
     }
-	/* return error level */
+    
+    removeTempFile();
+/* return error level */
 	return nRetValue;
 }
