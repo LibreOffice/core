@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 16:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
 #define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
+#define DLG_INDEXDESIGN                 RID_DIALOG_START + 18
 
 //========================================================================
 // tab pages
@@ -138,6 +139,7 @@
 #define ERR_CANTADMINQUERIES            RID_ERRORBOX_START + 13
 #define ERR_INVALID_LISTBOX_ENTRY       RID_ERRORBOX_START + 14
 #define ERROR_INVALID_TABLE_NAME        RID_ERRORBOX_START + 15
+#define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START + 16
 
 //========================================================================
 // query boxes
@@ -149,6 +151,7 @@
 #define QUERY_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  4
 #define TABLE_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
 #define TABLE_QUERY_CONNECTION_LOST     RID_QUERYBOX_START +  6
+#define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
 
 //========================================================================
 // warning boxes
@@ -192,6 +195,7 @@
 #define IMG_DATABASE_MODIFIED           RID_IMAGE_START +  9
 #define IMG_DATABASE_NEW                RID_IMAGE_START + 10
 #define IMG_DATABASE_DELETED            RID_IMAGE_START + 11
+#define IMG_PKEYICON                    RID_IMAGE_START + 12
 
 //========================================================================
 // image lists
@@ -347,8 +351,13 @@
 #define STR_RELATIONDESIGN_NOT_AVAILABLE    RID_STRING_START + 127
 #define STR_OPENTABLES_WARNINGS             RID_STRING_START + 128
 #define STR_OPENTABLES_WARNINGS_DETAILS     RID_STRING_START + 129
-#define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STRING_START + 130
-
+#define STR_TAB_INDEX_SORTORDER             RID_STRING_START + 130
+#define STR_TAB_INDEX_FIELD                 RID_STRING_START + 131
+#define STR_ORDER_ASCENDING                 RID_STRING_START + 132
+#define STR_ORDER_DESCENDING                RID_STRING_START + 133
+#define STR_CONFIRM_DROP_INDEX              RID_STRING_START + 134
+#define STR_LOGICAL_INDEX_NAME              RID_STRING_START + 135
+#define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STRING_START + 136
 
 //========================================================================
 // untyped resources
@@ -363,6 +372,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/03/14 10:35:10  oj
+ *  #84840# check if connection is null and show extra button
+ *
  *  Revision 1.29  2001/03/02 17:05:09  fs
  *  +RID_OPENTABLES_WARNINGS*
  *
