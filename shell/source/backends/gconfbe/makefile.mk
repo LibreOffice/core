@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-19 14:55:27 $
+#   last change: $Author: obo $ $Date: 2004-10-21 11:51:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ LINKFLAGS+=-z nodefs
 .ENDIF          # "$(OS)" == "SOLARIS"
 
 # Disable lazy binding of symbols
-.IF "$(OS)" == "LINUX"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "SOLARIS"
 LINKFLAGS+=-z now
 .ENDIF  
 
