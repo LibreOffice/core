@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:43:44 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 12:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,18 +850,11 @@ static void testEnvironment(void)
     (*pEnv->release)( pEnv );
 }
 
-#ifdef SOLARIS
-extern "C" void ChangeGlobalInit();
-#endif
-
 /*
  * main.
  */
 int SAL_CALL main(int argc, char **argv)
 {
-#ifdef SOLARIS
-    ChangeGlobalInit();
-#endif
     typelib_setCacheSize( 200 );
 #ifdef SAL_W32
     Reference< XMultiServiceFactory > xMgr( cppu::createRegistryServiceFactory(
