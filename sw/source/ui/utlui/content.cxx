@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-18 10:04:16 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 13:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@
 #endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -2980,7 +2983,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             if(pActiveShell->GotoINetAttr(
                             *((SwURLFieldContent*)pCnt)->GetINetAttr() ))
             {
-                pActiveShell->Right(sal_True, 1, sal_False);
+                pActiveShell->Right( CRSR_SKIP_CHARS, sal_True, 1, sal_False);
                 pActiveShell->SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, sal_True );
             }
 
@@ -3143,92 +3146,4 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.12  2001/09/28 06:39:30  os
-    #92514# cast of Any::getValue removed
-
-    Revision 1.11  2001/07/26 06:09:42  os
-    #89714# prevent removing of current entry after drag and drop
-
-    Revision 1.10  2001/07/04 13:00:06  os
-    #75450# restore scroll position
-
-    Revision 1.9  2001/07/03 14:55:09  os
-    #89174# don't use GetActiveView anymore
-
-    Revision 1.8  2001/06/26 13:34:16  os
-    #84088# index edit: not allowed in protected sections
-
-    Revision 1.7  2001/05/08 16:31:20  jp
-    remove old clipboard headerfile
-
-    Revision 1.6  2001/05/07 09:04:37  jp
-    chg: Drag&Drop interface changed to TransferData & Helper classes
-
-    Revision 1.5  2001/02/23 12:45:30  os
-    Complete use of DefaultNumbering component
-
-    Revision 1.4  2001/01/29 12:43:43  os
-    #339# fixed: update/rename of indexes
-
-    Revision 1.3  2000/11/03 11:32:31  os
-    allow editing of indexes independent from the cursor position
-
-    Revision 1.2  2000/10/20 13:42:18  jp
-    use correct INetURL-Decode enum
-
-    Revision 1.1.1.1  2000/09/18 17:14:50  hr
-    initial import
-
-    Revision 1.161  2000/09/18 16:06:17  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.160  2000/09/08 15:11:58  os
-    use configuration service
-
-    Revision 1.159  2000/09/07 15:59:34  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.158  2000/08/17 13:46:34  jp
-    UI with decode URL; integer -> string bugs fixed
-
-    Revision 1.157  2000/07/20 13:17:38  jp
-    change old txtatr-character to the two new characters
-
-    Revision 1.156  2000/07/03 08:54:55  jp
-    must changes for VCL
-
-    Revision 1.155  2000/06/30 10:25:49  os
-    #63367# keep selected position in root mode, too
-
-    Revision 1.154  2000/06/06 09:11:51  os
-    76056# CreateFromInt32
-
-    Revision 1.153  2000/05/23 19:54:16  jp
-    Bugfixes for Unicode
-
-    Revision 1.152  2000/04/26 15:03:20  os
-    GetName() returns const String&
-
-    Revision 1.151  2000/04/18 15:14:08  os
-    UNICODE
-
-    Revision 1.150  2000/03/23 07:51:10  os
-    UNO III
-
-    Revision 1.149  2000/03/03 15:17:05  os
-    StarView remainders removed
-
-    Revision 1.148  2000/02/22 16:56:35  jp
-    Bug #73303#: new IsProtectedOutlinePara
-
-    Revision 1.147  2000/02/11 15:00:33  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.146  2000/02/01 12:41:04  os
-    #72443# visibility of section must be checked in SwContentType::Init
-
-------------------------------------------------------------------------*/
 
