@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:01:28 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:31:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,10 +63,7 @@
 PRJ=..
 PRJNAME=forms
 TARGET=frm
-USE_LDUMP2=TRUE
-
 USE_DEFFILE=TRUE
-
 
 # --- Settings ----------------------------------
 
@@ -105,13 +102,13 @@ SHL1STDLIBS= \
         $(SVXLIB)
 
 SHL1LIBS=$(LIB1TARGET)
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN=	$(LIB1TARGET)	\
         makefile.mk
 
 
+SHL1VERSIONMAP=$(TARGET).map 
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=$(TARGET).dxp 
 
 # === .res file ==========================================================
 
