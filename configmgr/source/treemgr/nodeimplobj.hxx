@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ namespace configmgr
             virtual std::auto_ptr<ValueChange> preCommitChange();
             virtual void finishCommit(ValueChange& rChange);
             virtual void revertCommit(ValueChange& rChange);
+            virtual void failedCommit(ValueChange& rChange);
 
             virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);
         protected:
@@ -250,6 +251,7 @@ namespace configmgr
             virtual std::auto_ptr<SubtreeChange> preCommitChanges();
             virtual void finishCommit(SubtreeChange& rChange);
             virtual void revertCommit(SubtreeChange& rChange);
+            virtual void failedCommit(SubtreeChange& rChange);
 
         // Base obverrideables
         private:
@@ -402,6 +404,7 @@ namespace configmgr
             virtual std::auto_ptr<SubtreeChange> preCommitChanges();
             virtual void finishCommit(SubtreeChange& rChanges);
             virtual void revertCommit(SubtreeChange& rChanges);
+            virtual void failedCommit(SubtreeChange& rChanges);
 
         // Base Overrideables
         private:
@@ -457,6 +460,7 @@ namespace configmgr
             virtual std::auto_ptr<SubtreeChange> preCommitChanges();
             virtual void finishCommit(SubtreeChange& rChanges);
             virtual void revertCommit(SubtreeChange& rChanges);
+            virtual void failedCommit(SubtreeChange& rChanges);
 
         // Base Overrideables
         private:

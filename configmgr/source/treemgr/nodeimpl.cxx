@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,16 @@ void SetNodeImpl::revertCommit(SubtreeChange& rChange)
 }
 //-----------------------------------------------------------------------------
 
+void SetNodeImpl::failedCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+    OSL_ENSURE( rChange.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
+                "ERROR: Element template of change does not match the template of the set");
+
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not recovered");
+}
+//-----------------------------------------------------------------------------
+
 void SetNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const
 {
     OSL_ENSURE(getParentTree()  == pParent, "Unexpected value for context tree parameter");
@@ -399,6 +409,13 @@ void GroupNodeImpl::revertCommit(SubtreeChange& rChange)
 }
 //-----------------------------------------------------------------------------
 
+void GroupNodeImpl::failedCommit(SubtreeChange& rChange)
+{
+    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not recovered");
+}
+//-----------------------------------------------------------------------------
+
 void GroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
 {
     OSL_ENSURE(!hasChanges(),"ERROR: Some Pending changes may be missed by collection");
@@ -422,6 +439,12 @@ void ValueNodeImpl::finishCommit(ValueChange& )
 void ValueNodeImpl::revertCommit(ValueChange& )
 {
     OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
+}
+//-----------------------------------------------------------------------------
+
+void ValueNodeImpl::failedCommit(ValueChange& )
+{
+    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not recovered");
 }
 //-----------------------------------------------------------------------------
 

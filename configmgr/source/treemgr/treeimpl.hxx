@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:10:21 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,16 +361,19 @@ namespace configmgr
             std::auto_ptr<Change>   legacyCommitChanges();
             void legacyFinishCommit(Change& rRootChange);
             void legacyRevertCommit(Change& rRootChange);
+            void legacyFailedCommit(Change& rRootChange);
         protected:
             std::auto_ptr<Change> doCommitChanges(NodeOffset nNode);
             void doFinishCommit(Change& rChange, NodeOffset nNode);
             void doRevertCommit(Change& rChange, NodeOffset nNode);
+            void doFailedCommit(Change& rChange, NodeOffset nNode);
             void doAdjustToChanges(NodeChanges& rLocalChanges, Change const& rChange, NodeOffset nNode,
                                     TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             void doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
+            void doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doAdjustToSubChanges(NodeChanges& rLocalChanges, SubtreeChange const& rChange, NodeOffset nParentNode,
                                         TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
         protected:

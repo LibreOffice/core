@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ namespace configmgr
             virtual std::auto_ptr<SubtreeChange> preCommitChanges();
             virtual void finishCommit(SubtreeChange& rChanges);
             virtual void revertCommit(SubtreeChange& rChanges);
+            virtual void failedCommit(SubtreeChange& rChanges);
 
         // MoreNodeImpl implementation - direct clients don't need it
         private:
@@ -229,6 +230,7 @@ namespace configmgr
             virtual std::auto_ptr<SubtreeChange> preCommitChanges();
             virtual void finishCommit(SubtreeChange& rChanges);
             virtual void revertCommit(SubtreeChange& rChanges);
+            virtual void failedCommit(SubtreeChange& rChanges);
 
             void adjustToChanges(NodeChanges& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
         protected:
@@ -293,6 +295,7 @@ namespace configmgr
             virtual std::auto_ptr<ValueChange> preCommitChange();
             virtual void finishCommit(ValueChange& rChange);
             virtual void revertCommit(ValueChange& rChange);
+            virtual void failedCommit(ValueChange& rChange);
 
             void adjustToChange(NodeChanges& rLocalChanges, ValueChange const& rExternalChange, TreeImpl& rParentTree, NodeOffset nPos);
         // More NodeImpl implementation - direct clients don't need it

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:10:21 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,6 +462,12 @@ void TreeImpl::legacyRevertCommit(Change& rRootChange)
 }
 //-----------------------------------------------------------------------------
 
+void TreeImpl::legacyFailedCommit(Change& rRootChange)
+{
+    doFailedCommit( rRootChange, root() );
+}
+//-----------------------------------------------------------------------------
+
 void TreeImpl::adjustToChanges(NodeChanges& rLocalChanges, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
 {
     OSL_PRECOND( name(root()).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
@@ -597,6 +603,44 @@ void TreeImpl::doRevertCommit(Change& rChange, NodeOffset nNode)
 }
 //-----------------------------------------------------------------------------
 
+void TreeImpl::doFailedCommit(Change& rChange, NodeOffset nNode)
+{
+    OSL_ASSERT(isValidNode(nNode));
+    Node* pNode = node(nNode);
+
+    OSL_ENSURE(rChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    if (pNode->isValueNode())
+    {
+        OSL_ENSURE(rChange.ISA(ValueChange),"ERROR: Change type does not match node");
+
+        ValueChange& rValueChange = static_cast<ValueChange&>(rChange);
+
+        pNode->valueImpl().failedCommit(rValueChange);
+    }
+    else if (pNode->isSetNode())
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
+
+        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
+
+        pNode->setImpl().failedCommit(rSubtreeChange);
+    }
+    else
+    {
+        OSL_ENSURE(rChange.ISA(SubtreeChange),"ERROR: Change type does not match node");
+
+        SubtreeChange& rSubtreeChange = static_cast<SubtreeChange&>(rChange);
+
+        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
+
+        pNode->groupImpl().failedCommit(rSubtreeChange);
+        doFailedSubCommitted( rSubtreeChange, nNode);
+    }
+}
+//-----------------------------------------------------------------------------
+
 void TreeImpl::doAdjustToChanges(NodeChanges& rLocalChanges, Change const& rChange, NodeOffset nNode, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
 {
     OSL_ASSERT(isValidNode(nNode));
@@ -672,6 +716,22 @@ void TreeImpl::doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nP
         OSL_ENSURE( nNode != 0, "Changed node not found in tree");
 
         doRevertCommit(*it,nNode);
+    }
+}
+//-----------------------------------------------------------------------------
+
+void TreeImpl::doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode)
+{
+    for(SubtreeChange::MutatingChildIterator
+            it = aChangesParent.begin_changes(),
+            stop = aChangesParent.end_changes();
+        it != stop;
+        ++it)
+    {
+        NodeOffset nNode = findChild(nParentNode, Name(it->getNodeName(), Name::NoValidate()) );
+        OSL_ENSURE( nNode != 0, "Changed node not found in tree");
+
+        doFailedCommit(*it,nNode);
     }
 }
 //-----------------------------------------------------------------------------
