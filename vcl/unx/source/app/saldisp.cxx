@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cp $ $Date: 2004-07-29 11:31:26 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,7 +1159,7 @@ void SalDisplay::Init( Colormap hXColmap, Visual *pVisual )
     pIntegrator->Acquire();
 
 #ifdef HAVE_LIBSN
-    m_pSnDisplay = sn_display_new( display, SnErrorTrapPush, SnErrorTrapPop );
+    m_pSnDisplay = sn_display_new( pDisp_, SnErrorTrapPush, SnErrorTrapPop );
     m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, nScreen_ );
 #  ifdef DBG_UTIL
     if( !m_pSnLauncheeContext )
@@ -1898,8 +1898,10 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
     if( aCur != None )
         return aCur;
 
-    Pixmap          aCursBitmap, aMaskBitmap;
-    unsigned int    nXHot, nYHot;
+    Pixmap          aCursBitmap = 0;
+    Pixmap          aMaskBitmap = 0;
+    unsigned int    nXHot = 0;
+    unsigned int    nYHot = 0;
 
     switch( ePointerStyle )
     {
@@ -1908,42 +1910,54 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
         case POINTER_ARROW:
             aCur = XCreateFontCursor( pDisp_, XC_left_ptr );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WAIT:
             aCur = XCreateFontCursor( pDisp_, XC_watch );
             break;
         case POINTER_TEXT:          // Mouse Pointer ist ein "I" Beam
             aCur = XCreateFontCursor( pDisp_, XC_xterm );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_HELP:
             aCur = XCreateFontCursor( pDisp_, XC_question_arrow );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_CROSS:         // Mouse Pointer ist ein Kreuz
             aCur = XCreateFontCursor( pDisp_, XC_crosshair );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_NSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_SSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_ESIZE:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WINDOW_NSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_top_side );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WINDOW_SSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_side );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WINDOW_WSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_left_side );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WINDOW_ESIZE:
             aCur = XCreateFontCursor( pDisp_, XC_right_side );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_NWSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
@@ -1959,15 +1973,19 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
         case POINTER_WINDOW_NWSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WINDOW_NESIZE:
             aCur = XCreateFontCursor( pDisp_, XC_top_right_corner );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WINDOW_SWSIZE:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_left_corner );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_WINDOW_SESIZE:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_right_corner );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_HSPLIT:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
@@ -1977,12 +1995,15 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
         case POINTER_HSIZEBAR:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow ); // ???
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_VSIZEBAR:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow ); // ???
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_REFHAND:
             aCur = XCreateFontCursor( pDisp_, XC_hand1 );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_HAND:
             aCur = XCreateFontCursor( pDisp_, XC_hand2 );
@@ -2079,6 +2100,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
         case POINTER_PEN:       // Mouse Pointer ist ein Stift
             aCur = XCreateFontCursor( pDisp_, XC_pencil );
+            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
         case POINTER_LINKDATA:
             MAKE_CURSOR( linkdata_ );
