@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:58:08 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include "impltools.hxx"
 #include "spritecanvas.hxx"
 #include "sprite.hxx"
+#include "repainttarget.hxx"
 
 
 #define CANVASCUSTOMSPRITE_IMPLEMENTATION_NAME "VCLCanvas::CanvasCustomSprite"
@@ -110,7 +111,8 @@ namespace vclcanvas
     /* Definition of CanvasCustomSprite class */
 
     class CanvasCustomSprite : public Sprite,
-                               public CanvasCustomSprite_Base
+                               public CanvasCustomSprite_Base,
+                               public RepaintTarget
     {
     public:
         CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
@@ -161,6 +163,12 @@ namespace vclcanvas
         virtual ::basegfx::B2DPoint getPos() const;
         virtual ::basegfx::B2DSize  getSize() const;
 
+        // RepaintTarget
+        virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
+                              const ::Point&                rPt,
+                              const ::Size&                 rSz,
+                              const GraphicAttr&            rAttr ) const;
+
     protected:
         ~CanvasCustomSprite(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
@@ -175,15 +183,15 @@ namespace vclcanvas
 
         SpriteCanvas::ImplRef   mpSpriteCanvas;
 
-        mutable ::canvas::vcltools::VCLObject<BitmapEx>             maContent;
+        mutable ::canvas::vcltools::VCLObject<BitmapEx>     maContent;
 
         // sprite state
-        ::basegfx::B2DPoint                                         maPosition;
-        Size                                                        maSize;
+        ::basegfx::B2DPoint                                 maPosition;
+        Size                                                maSize;
         ::com::sun::star::uno::Reference<
               ::com::sun::star::rendering::XPolyPolygon2D > mxClipPoly;
-        double                                                      mfAlpha;
-        bool                                                        mbActive;
+        double                                              mfAlpha;
+        bool                                                mbActive;
 
         /** OutDev render speedup.
 
@@ -192,7 +200,7 @@ namespace vclcanvas
             to the screen can use a plain Bitmap instead of the
             BitmapEx.
          */
-        mutable bool                                                mbIsContentFullyOpaque;
+        mutable bool                                        mbIsContentFullyOpaque;
     };
 }
 
