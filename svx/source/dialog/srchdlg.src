@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:18:21 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";
         Text[ russian ] = "Òî÷íûé ïîèñê";
         Text[ polish ] = "Dok³adne wyszukiwanie";
-        Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È‚à‚Ì‚ğŒŸõ‚·‚é(~T)";
+        Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È‚à‚Ì‚ğŒŸõ(~T)";
         Text[ chinese_traditional ] = "ºë½T·j´M(~T)";
         Text[ arabic ] = "ÈÍË ÏŞíŞ";
         Text[ language_user1 ] = " ";
@@ -535,7 +535,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ swedish ] = "Halv-/normalbreda former";
         Text[ polish ] = "Formy o zwyk³ej/o po³owie szerokoœci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
-        Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ğ‹æ•Ê‚·‚é";
+        Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ğ‹æ•Ê";
         Text[ korean ] = "Match half/full width forms";
         Text[ chinese_simplified ] = "°ë½ÇºÍÈ«½Ç×Ö·û";
         Text[ chinese_traditional ] = "¥b§Î©M¥ş§Î¦r¤¸";
