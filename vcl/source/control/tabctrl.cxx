@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-05 11:18:27 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #ifndef _SV_TABCTRL_HXX
 #include <tabctrl.hxx>
 #endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <controllayout.hxx>
+#endif
+
+#include <hash_map>
+#include <vector>
 
 #pragma hdrstop
 
@@ -102,8 +108,11 @@
 
 struct ImplTabCtrlData
 {
-    PushButton*         mpLeftBtn;
-    PushButton*         mpRightBtn;
+    PushButton*                     mpLeftBtn;
+    PushButton*                     mpRightBtn;
+    std::hash_map< int, int >       maLayoutPageIdToLine;
+    std::hash_map< int, int >       maLayoutLineToPageId;
+    std::vector< Rectangle >        maTabRectangles;
 };
 
 // -----------------------------------------------------------------------
@@ -169,35 +178,30 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
 
     Control::ImplInit( pParent, nStyle, NULL );
 
-    mpItemList          = new ImplTabItemList( 8, 8 );
-    mpTabCtrlData       = NULL;
-    mnLastWidth         = 0;
-    mnLastHeight        = 0;
-    mnBtnSize           = 0;
-    mnMaxPageWidth      = 0;
-    mnActPageId         = 0;
-    mnCurPageId         = 0;
-    mnFirstPagePos      = 0;
-    mnLastFirstPagePos  = 0;
-    mbFormat            = TRUE;
-    mbRestoreHelpId     = FALSE;
-    mbRestoreUnqId      = FALSE;
-    mbSingleLine        = FALSE;
-    mbScroll            = FALSE;
-    mbColored           = FALSE;
-    mbSmallInvalidate   = FALSE;
-    mbExtraSpace        = FALSE;
+    mpItemList                  = new ImplTabItemList( 8, 8 );
+    mnLastWidth                 = 0;
+    mnLastHeight                = 0;
+    mnBtnSize                   = 0;
+    mnMaxPageWidth              = 0;
+    mnActPageId                 = 0;
+    mnCurPageId                 = 0;
+    mnFirstPagePos              = 0;
+    mnLastFirstPagePos          = 0;
+    mbFormat                    = TRUE;
+    mbRestoreHelpId             = FALSE;
+    mbRestoreUnqId              = FALSE;
+    mbSingleLine                = FALSE;
+    mbScroll                    = FALSE;
+    mbColored                   = FALSE;
+    mbSmallInvalidate           = FALSE;
+    mbExtraSpace                = FALSE;
+    mpTabCtrlData               = new ImplTabCtrlData;
+    mpTabCtrlData->mpLeftBtn    = NULL;
+    mpTabCtrlData->mpRightBtn   = NULL;
 
     if ( (GetSettings().GetStyleSettings().GetTabControlStyle() & STYLE_TABCONTROL_SINGLELINE) ||
          (nStyle & WB_SINGLELINE) )
         mbSingleLine = TRUE;
-
-    if ( mbSingleLine )
-    {
-        mpTabCtrlData               = new ImplTabCtrlData;
-        mpTabCtrlData->mpLeftBtn    = NULL;
-        mpTabCtrlData->mpRightBtn   = NULL;
-    }
 
     ImplInitSettings( TRUE, TRUE, TRUE );
 }
@@ -258,6 +262,18 @@ void TabControl::ImplInitSettings( BOOL bFont,
 
 // -----------------------------------------------------------------------
 
+void TabControl::ImplFreeLayoutData()
+{
+    if( mpLayoutData )
+    {
+        delete mpLayoutData, mpLayoutData = NULL;
+        mpTabCtrlData->maLayoutPageIdToLine.clear();
+        mpTabCtrlData->maLayoutLineToPageId.clear();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 TabControl::TabControl( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_TABCONTROL )
 {
@@ -303,6 +319,8 @@ void TabControl::ImplLoadRes( const ResId& rResId )
 
 TabControl::~TabControl()
 {
+    ImplFreeLayoutData();
+
     // Alle Items loeschen
     ImplTabItem* pItem = mpItemList->First();
     while ( pItem )
@@ -719,6 +737,8 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
 
 void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
 {
+    ImplFreeLayoutData();
+
     ImplTabItem*    pOldItem = ImplGetItem( nOldId );
     ImplTabItem*    pItem = ImplGetItem( nId );
     TabPage*        pOldPage = (pOldItem) ? pOldItem->mpTabPage : NULL;
@@ -848,6 +868,8 @@ void TabControl::ImplSetFirstPagePos( USHORT nPagePos )
     if ( !mbSingleLine )
         return;
 
+    ImplFreeLayoutData();
+
     if ( mbFormat )
         mnFirstPagePos = nPagePos;
     else
@@ -900,10 +922,21 @@ void TabControl::ImplShowFocus()
 
 // -----------------------------------------------------------------------
 
-void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect )
+void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout )
 {
     if ( pItem->maRect.IsEmpty() )
         return;
+
+    if( bLayout )
+    {
+        if( ! mpLayoutData )
+        {
+            mpLayoutData = new vcl::ControlLayoutData();
+            mpTabCtrlData->maLayoutLineToPageId.clear();
+            mpTabCtrlData->maLayoutPageIdToLine.clear();
+            mpTabCtrlData->maTabRectangles.clear();
+        }
+    }
 
     const StyleSettings&    rStyleSettings  = GetSettings().GetStyleSettings();
     Rectangle               aRect = pItem->maRect;
@@ -949,63 +982,75 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect )
         }
     }
 
-    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    if( ! bLayout )
     {
-        if ( mbColored )
+        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
         {
-            USHORT  nPos = (USHORT)mpItemList->GetPos( pItem );
-            Color   aOldFillColor = GetFillColor();
-            SetLineColor();
-            SetFillColor( aImplTabColorAry[nPos%TABCOLORCOUNT] );
-            Rectangle aColorRect;
-            aColorRect.Left()   = aRect.Left()-nOff2+1;
-            aColorRect.Top()    = aRect.Top()-nOff2+1;
-            aColorRect.Right()  = aRect.Right()+nOff2-3;
-            aColorRect.Bottom() = nLeftBottom;
-            if ( pItem->mnId != mnCurPageId )
-                aColorRect.Bottom()--;
-            DrawRect( aColorRect );
-            SetFillColor( aOldFillColor );
-        }
+            if ( mbColored )
+            {
+                USHORT  nPos = (USHORT)mpItemList->GetPos( pItem );
+                Color   aOldFillColor = GetFillColor();
+                SetLineColor();
+                SetFillColor( aImplTabColorAry[nPos%TABCOLORCOUNT] );
+                Rectangle aColorRect;
+                aColorRect.Left()   = aRect.Left()-nOff2+1;
+                aColorRect.Top()    = aRect.Top()-nOff2+1;
+                aColorRect.Right()  = aRect.Right()+nOff2-3;
+                aColorRect.Bottom() = nLeftBottom;
+                if ( pItem->mnId != mnCurPageId )
+                    aColorRect.Bottom()--;
+                DrawRect( aColorRect );
+                SetFillColor( aOldFillColor );
+            }
 
-        SetLineColor( rStyleSettings.GetLightColor() );
-        DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );
-        if ( bLeftBorder )
-        {
-            DrawLine( Point( aRect.Left()-nOff2, aRect.Top()+2-nOff2 ),
-                      Point( aRect.Left()-nOff2, nLeftBottom-1 ) );
-        }
-        DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),
-                  Point( aRect.Right()+nOff2-3, aRect.Top()-nOff2 ) );
+            SetLineColor( rStyleSettings.GetLightColor() );
+            DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );
+            if ( bLeftBorder )
+            {
+                DrawLine( Point( aRect.Left()-nOff2, aRect.Top()+2-nOff2 ),
+                          Point( aRect.Left()-nOff2, nLeftBottom-1 ) );
+            }
+            DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),
+                      Point( aRect.Right()+nOff2-3, aRect.Top()-nOff2 ) );
 
-        if ( bRightBorder )
-        {
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( Point( aRect.Right()+nOff2-2, aRect.Top()+1-nOff2 ),
-                      Point( aRect.Right()+nOff2-2, nRightBottom-1 ) );
+            if ( bRightBorder )
+            {
+                SetLineColor( rStyleSettings.GetShadowColor() );
+                DrawLine( Point( aRect.Right()+nOff2-2, aRect.Top()+1-nOff2 ),
+                          Point( aRect.Right()+nOff2-2, nRightBottom-1 ) );
 
-            SetLineColor( rStyleSettings.GetDarkShadowColor() );
-            DrawLine( Point( aRect.Right()+nOff2-1, aRect.Top()+3-nOff2 ),
-                      Point( aRect.Right()+nOff2-1, nRightBottom-1 ) );
+                SetLineColor( rStyleSettings.GetDarkShadowColor() );
+                DrawLine( Point( aRect.Right()+nOff2-1, aRect.Top()+3-nOff2 ),
+                          Point( aRect.Right()+nOff2-1, nRightBottom-1 ) );
+            }
         }
-    }
-    else
-    {
-        SetLineColor( Color( COL_BLACK ) );
-        DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );
-        DrawPixel( Point( aRect.Right()+nOff2-2, aRect.Top()+1-nOff2 ) );
-        if ( bLeftBorder )
+        else
         {
-            DrawLine( Point( aRect.Left()-nOff2, aRect.Top()+2-nOff2 ),
-                      Point( aRect.Left()-nOff2, nLeftBottom-1 ) );
-        }
-        DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),
-                  Point( aRect.Right()-3, aRect.Top()-nOff2 ) );
-        if ( bRightBorder )
-        {
+            SetLineColor( Color( COL_BLACK ) );
+            DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );
+            DrawPixel( Point( aRect.Right()+nOff2-2, aRect.Top()+1-nOff2 ) );
+            if ( bLeftBorder )
+            {
+                DrawLine( Point( aRect.Left()-nOff2, aRect.Top()+2-nOff2 ),
+                          Point( aRect.Left()-nOff2, nLeftBottom-1 ) );
+            }
+            DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),
+                      Point( aRect.Right()-3, aRect.Top()-nOff2 ) );
+            if ( bRightBorder )
+            {
             DrawLine( Point( aRect.Right()+nOff2-1, aRect.Top()+2-nOff2 ),
                       Point( aRect.Right()+nOff2-1, nRightBottom-1 ) );
+            }
         }
+    }
+
+    if( bLayout )
+    {
+        int nLine = mpLayoutData->m_aLineIndices.size();
+        mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
+        mpTabCtrlData->maLayoutPageIdToLine[ (int)pItem->mnId ] = nLine;
+        mpTabCtrlData->maLayoutLineToPageId[ nLine ] = (int)pItem->mnId;
+        mpTabCtrlData->maTabRectangles.push_back( aRect );
     }
 
     Size aTabSize = aRect.GetSize();
@@ -1013,7 +1058,11 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect )
     long nTextWidth = GetCtrlTextWidth( pItem->maFormatText );
     DrawCtrlText( Point( aRect.Left()+((aTabSize.Width()-nTextWidth)/2)-nOff-nOff3,
                          aRect.Top()+((aTabSize.Height()-nTextHeight)/2)-nOff3 ),
-                  pItem->maFormatText );
+                  pItem->maFormatText,
+                  0, STRING_LEN, TEXT_DRAW_MNEMONIC,
+                  bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL,
+                  bLayout ? &mpLayoutData->m_aDisplayText : NULL
+                  );
 }
 
 // -----------------------------------------------------------------------
@@ -1059,7 +1108,15 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
 
 void TabControl::Paint( const Rectangle& rRect )
 {
-    HideFocus();
+    ImplPaint( rRect, false );
+}
+
+// -----------------------------------------------------------------------
+
+void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
+{
+    if( ! bLayout )
+        HideFocus();
 
     // Hier wird gegebenenfalls auch neu formatiert
     Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
@@ -1103,33 +1160,42 @@ void TabControl::Paint( const Rectangle& rRect )
     if ( pCurItem && !pCurItem->maRect.IsEmpty() )
     {
         aCurRect = pCurItem->maRect;
-        DrawLine( aRect.TopLeft(), Point( aCurRect.Left()-2, aRect.Top() ) );
+        if( ! bLayout )
+            DrawLine( aRect.TopLeft(), Point( aCurRect.Left()-2, aRect.Top() ) );
         if ( aCurRect.Right()+1 < aRect.Right() )
-            DrawLine( Point( aCurRect.Right(), aRect.Top() ), aRect.TopRight() );
+        {
+            if( ! bLayout )
+                DrawLine( Point( aCurRect.Right(), aRect.Top() ), aRect.TopRight() );
+        }
         else
             nTopOff = 0;
     }
     else
-        DrawLine( aRect.TopLeft(), aRect.TopRight() );
-    DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+        if( ! bLayout )
+            DrawLine( aRect.TopLeft(), aRect.TopRight() );
 
-    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    if( ! bLayout )
     {
-        SetLineColor( rStyleSettings.GetShadowColor() );
-        DrawLine( Point( 1, aRect.Bottom()-1 ),
-                  Point( aRect.Right()-1, aRect.Bottom()-1 ) );
-        DrawLine( Point( aRect.Right()-1, aRect.Top()+nTopOff ),
-                  Point( aRect.Right()-1, aRect.Bottom()-1 ) );
-        SetLineColor( rStyleSettings.GetDarkShadowColor() );
-        DrawLine( Point( 0, aRect.Bottom() ),
-                  Point( aRect.Right(), aRect.Bottom() ) );
-        DrawLine( Point( aRect.Right(), aRect.Top()+nTopOff ),
-                  Point( aRect.Right(), aRect.Bottom() ) );
-    }
-    else
-    {
-        DrawLine( aRect.TopRight(), aRect.BottomRight() );
-        DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+        DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+
+        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+        {
+            SetLineColor( rStyleSettings.GetShadowColor() );
+            DrawLine( Point( 1, aRect.Bottom()-1 ),
+                      Point( aRect.Right()-1, aRect.Bottom()-1 ) );
+            DrawLine( Point( aRect.Right()-1, aRect.Top()+nTopOff ),
+                      Point( aRect.Right()-1, aRect.Bottom()-1 ) );
+            SetLineColor( rStyleSettings.GetDarkShadowColor() );
+            DrawLine( Point( 0, aRect.Bottom() ),
+                      Point( aRect.Right(), aRect.Bottom() ) );
+            DrawLine( Point( aRect.Right(), aRect.Top()+nTopOff ),
+                      Point( aRect.Right(), aRect.Bottom() ) );
+        }
+        else
+        {
+            DrawLine( aRect.TopRight(), aRect.BottomRight() );
+            DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+        }
     }
 
     // Alle Items bis auf das aktuelle Zeichnen (nicht fett)
@@ -1138,25 +1204,28 @@ void TabControl::Paint( const Rectangle& rRect )
     while ( pItem )
     {
         if ( pItem != pCurItem )
-            ImplDrawItem( pItem, aCurRect );
+            ImplDrawItem( pItem, aCurRect, bLayout );
         pItem = mpItemList->Next();
     }
 
     // aktuelles Item zeichnen wir fett
     SetFont( aFont );
     if ( pCurItem )
-        ImplDrawItem( pCurItem, aCurRect );
+        ImplDrawItem( pCurItem, aCurRect, bLayout );
 
-    if ( HasFocus() )
+    if ( !bLayout && HasFocus() )
         ImplShowFocus();
 
-    mbSmallInvalidate = TRUE;
+    if( ! bLayout )
+        mbSmallInvalidate = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void TabControl::Resize()
 {
+    ImplFreeLayoutData();
+
     if ( !IsReallyShown() )
         return;
 
@@ -1443,6 +1512,8 @@ long TabControl::DeactivatePage()
 
 void TabControl::SetTabPageSizePixel( const Size& rSize )
 {
+    ImplFreeLayoutData();
+
     Size aNewSize( rSize );
     aNewSize.Width() += TAB_OFFSET*2;
     Rectangle aRect = ImplGetTabRect( TAB_PAGERECT,
@@ -1515,6 +1586,8 @@ void TabControl::InsertPage( USHORT nPageId, const XubString& rText,
     if ( IsUpdateMode() )
         Invalidate();
 
+    ImplFreeLayoutData();
+
     ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, (void*) nPageId );
 }
 
@@ -1553,6 +1626,8 @@ void TabControl::RemovePage( USHORT nPageId )
         if ( IsUpdateMode() )
             Invalidate();
 
+        ImplFreeLayoutData();
+
         ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVED, (void*) nPageId );
     }
 }
@@ -1573,6 +1648,8 @@ void TabControl::Clear()
     // Items aus der Liste loeschen
     mpItemList->Clear();
     mnCurPageId = 0;
+
+    ImplFreeLayoutData();
 
     mbFormat = TRUE;
     if ( IsUpdateMode() )
@@ -1683,6 +1760,8 @@ void TabControl::SelectTabPage( USHORT nPageId )
 {
     if ( nPageId && (nPageId != mnCurPageId) )
     {
+        ImplFreeLayoutData();
+
         ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, (void*) mnCurPageId );
         if ( DeactivatePage() )
         {
@@ -1753,12 +1832,14 @@ void TabControl::SetPageText( USHORT nPageId, const XubString& rText )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
-    if ( pItem )
+    if ( pItem && pItem->maText != rText )
     {
         pItem->maText = rText;
         mbFormat = TRUE;
         if ( IsUpdateMode() )
             Invalidate();
+        ImplFreeLayoutData();
+        ImplCallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, (void*) nPageId );
     }
 }
 
@@ -1825,4 +1906,107 @@ ULONG TabControl::GetHelpId( USHORT nPageId ) const
         return pItem->mnHelpId;
     else
         return 0;
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle TabControl::GetCharacterBounds( USHORT nPageId, long nIndex ) const
+{
+    Rectangle aRet;
+
+    if( ! mpLayoutData || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+        FillLayoutData();
+
+    if( mpLayoutData )
+    {
+        std::hash_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPageId );
+        if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
+        {
+            Pair aPair = mpLayoutData->GetLineStartEnd( it->second );
+            if( (aPair.B() - aPair.A()) >= nIndex )
+                aRet = mpLayoutData->GetCharacterBounds( aPair.A() + nIndex );
+        }
+    }
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+long TabControl::GetIndexForPoint( const Point& rPoint, USHORT& rPageId ) const
+{
+    long nRet = -1;
+
+    if( ! mpLayoutData || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+        FillLayoutData();
+
+    if( mpLayoutData )
+    {
+        int nIndex = mpLayoutData->GetIndexForPoint( rPoint );
+        if( nIndex != -1 )
+        {
+            // what line (->pageid) is this index in ?
+            int nLines = mpLayoutData->GetLineCount();
+            int nLine = -1;
+            while( ++nLine < nLines )
+            {
+                Pair aPair = mpLayoutData->GetLineStartEnd( nLine );
+                if( aPair.A() <= nIndex && aPair.B() >= nIndex )
+                {
+                    nRet = nIndex - aPair.A();
+                    rPageId = (USHORT)mpTabCtrlData->maLayoutLineToPageId[ nLine ];
+                    break;
+                }
+            }
+        }
+    }
+
+    return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+void TabControl::FillLayoutData() const
+{
+    mpTabCtrlData->maLayoutLineToPageId.clear();
+    mpTabCtrlData->maLayoutPageIdToLine.clear();
+    const_cast<TabControl*>(this)->ImplPaint( Rectangle(), true );
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle TabControl::GetTabPageBounds( USHORT nPage ) const
+{
+    Rectangle aRet;
+
+    if( ! mpLayoutData || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+        FillLayoutData();
+
+    if( mpLayoutData )
+    {
+        std::hash_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPage );
+        if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
+        {
+            if( it->second >= 0 && it->second < mpTabCtrlData->maTabRectangles.size() )
+            {
+                aRet = mpTabCtrlData->maTabRectangles[ it->second ];
+                aRet.Union( const_cast<TabControl*>(this)->ImplGetTabRect( TAB_PAGERECT ) );
+            }
+        }
+    }
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle TabControl::GetTabBounds( USHORT nPageId ) const
+{
+    Rectangle aRet;
+
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+    if(pItem)
+        aRet = pItem->maRect;
+
+    return aRet;
 }
