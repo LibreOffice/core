@@ -1,0 +1,4 @@
+"ImplementationRegistration";"com::sun::star::registry::XImplementationRegistration";"registerImplementation()"
+"ImplementationRegistration";"com::sun::star::registry::XImplementationRegistration";"revokeImplementation()"
+"ImplementationRegistration";"com::sun::star::registry::XImplementationRegistration";"getImplementations()"
+"ImplementationRegistration";"com::sun::star::registry::XImplementationRegistration";"checkInstantiation()"
