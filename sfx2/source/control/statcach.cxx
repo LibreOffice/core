@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 12:27:32 $
+ *  last change: $Author: mba $ $Date: 2002-09-09 09:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::
     , pSlot( pCache->aSlotServ.GetSlot() )
 {
     if ( !pSlot )
-        const SfxSlot* pSlot = SFX_SLOTPOOL().GetSlot( pCache->GetId() );
+        pSlot = SFX_SLOTPOOL().GetSlot( pCache->GetId() );
     DBG_ASSERT( pSlot, "Unknown slot!");
     aStatus.IsEnabled = sal_True;
 }
