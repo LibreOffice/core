@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:46:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@
 #define SC_UNONAME_OHEIGHT          "OptimalHeight"
 #define SC_UNONAME_OWIDTH           "OptimalWidth"
 #define SC_UNONAME_PAGESTL          "PageStyle"
+#define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
 
 //  LinkTarget
 #define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
