@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:21:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ namespace SL
     IMPLCONSTSTRINGARRAY(0Table);
     IMPLCONSTSTRINGARRAY(Data);
     IMPLCONSTSTRINGARRAY(CheckBox);
+    IMPLCONSTSTRINGARRAY(ListBox);
     IMPLCONSTSTRINGARRAY(TextBox);
     IMPLCONSTSTRINGARRAY(TextField);
     IMPLCONSTSTRINGARRAY(MSMacroCmds);
@@ -656,7 +657,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x7030, 4, L_FIX}, // "sprmSDxtCharSpace" sep.dxtCharSpace;dxt;long;
         {0x9031, 2, L_FIX}, // "sprmSDyaLinePitch"
                             // sep.dyaLinePitch;dya; WRONG:long; RIGHT:short; !
-        {0x5032, 1, L_FIX}, // "sprmSClm" ;;;
+        {0x5032, 2, L_FIX}, // "sprmSClm" ;;;
         {0x5033, 2, L_FIX}, // "sprmSTextFlow" sep.wTextFlow;complex
         {0x5400, 2, L_FIX}, // "sprmTJc" tap.jc;jc;word (low order byte is
                             // significant);
@@ -5272,7 +5273,7 @@ WW8Fib::WW8Fib(BYTE nVer)
         wMagicCreated = 0x6143;
         wMagicRevised = 0x6C6F;
         wMagicCreatedPrivate = 0x6E61;
-        wMagicRevisedPrivate = 0x3136;
+        wMagicRevisedPrivate = 0x3037;
     }
     else
     {
