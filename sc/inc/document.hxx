@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:21:08 $
+ *  last change: $Author: nn $ $Date: 2002-08-15 10:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,8 +885,8 @@ public:
 
     BOOL            InsertRow( USHORT nStartCol, USHORT nStartTab,
                                USHORT nEndCol,   USHORT nEndTab,
-                               USHORT nStartRow, USHORT nSize );
-    BOOL            InsertRow( const ScRange& rRange );
+                               USHORT nStartRow, USHORT nSize, ScDocument* pRefUndoDoc = NULL );
+    BOOL            InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc = NULL );
     void            DeleteRow( USHORT nStartCol, USHORT nStartTab,
                                USHORT nEndCol,   USHORT nEndTab,
                                USHORT nStartRow, USHORT nSize,
@@ -895,8 +895,8 @@ public:
                                ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
     BOOL            InsertCol( USHORT nStartRow, USHORT nStartTab,
                                USHORT nEndRow,   USHORT nEndTab,
-                               USHORT nStartCol, USHORT nSize );
-    BOOL            InsertCol( const ScRange& rRange );
+                               USHORT nStartCol, USHORT nSize, ScDocument* pRefUndoDoc = NULL );
+    BOOL            InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc = NULL );
     void            DeleteCol( USHORT nStartRow, USHORT nStartTab,
                                USHORT nEndRow, USHORT nEndTab,
                                USHORT nStartCol, USHORT nSize,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:23:39 $
+ *  last change: $Author: nn $ $Date: 2002-08-15 10:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,7 @@ BOOL ScDocument::CanInsertRow( const ScRange& rRange ) const
 
 BOOL ScDocument::InsertRow( USHORT nStartCol, USHORT nStartTab,
                             USHORT nEndCol,   USHORT nEndTab,
-                            USHORT nStartRow, USHORT nSize )
+                            USHORT nStartRow, USHORT nSize, ScDocument* pRefUndoDoc )
 {
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartTab, nEndTab );
@@ -603,7 +603,7 @@ BOOL ScDocument::InsertRow( USHORT nStartCol, USHORT nStartTab,
             ScAddress( nEndCol, MAXROW, nEndTab )), 0, nSize, 0 );
         UpdateReference( URM_INSDEL, nStartCol, nStartRow, nStartTab,
                          nEndCol, MAXROW, nEndTab,
-                         0, nSize, 0, NULL, FALSE );        // without drawing objects
+                         0, nSize, 0, pRefUndoDoc, FALSE );     // without drawing objects
         for (i=nStartTab; i<=nEndTab; i++)
             if (pTab[i])
                 pTab[i]->InsertRow( nStartCol, nEndCol, nStartRow, nSize );
@@ -641,11 +641,12 @@ BOOL ScDocument::InsertRow( USHORT nStartCol, USHORT nStartTab,
 }
 
 
-BOOL ScDocument::InsertRow( const ScRange& rRange )
+BOOL ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     return InsertRow( rRange.aStart.Col(), rRange.aStart.Tab(),
                       rRange.aEnd.Col(),   rRange.aEnd.Tab(),
-                      rRange.aStart.Row(), rRange.aEnd.Row()-rRange.aStart.Row()+1 );
+                      rRange.aStart.Row(), rRange.aEnd.Row()-rRange.aStart.Row()+1,
+                      pRefUndoDoc );
 }
 
 
@@ -737,7 +738,7 @@ BOOL ScDocument::CanInsertCol( const ScRange& rRange ) const
 
 BOOL ScDocument::InsertCol( USHORT nStartRow, USHORT nStartTab,
                             USHORT nEndRow,   USHORT nEndTab,
-                            USHORT nStartCol, USHORT nSize )
+                            USHORT nStartCol, USHORT nSize, ScDocument* pRefUndoDoc )
 {
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartTab, nEndTab );
@@ -756,7 +757,7 @@ BOOL ScDocument::InsertCol( USHORT nStartRow, USHORT nStartTab,
             ScAddress( MAXCOL, nEndRow, nEndTab )), nSize, 0, 0 );
         UpdateReference( URM_INSDEL, nStartCol, nStartRow, nStartTab,
                          MAXCOL, nEndRow, nEndTab,
-                         nSize, 0, 0 );
+                         nSize, 0, 0, pRefUndoDoc );
         for (i=nStartTab; i<=nEndTab; i++)
             if (pTab[i])
                 pTab[i]->InsertCol( nStartCol, nStartRow, nEndRow, nSize );
@@ -786,11 +787,12 @@ BOOL ScDocument::InsertCol( USHORT nStartRow, USHORT nStartTab,
 }
 
 
-BOOL ScDocument::InsertCol( const ScRange& rRange )
+BOOL ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
 {
     return InsertCol( rRange.aStart.Row(), rRange.aStart.Tab(),
                       rRange.aEnd.Row(),   rRange.aEnd.Tab(),
-                      rRange.aStart.Col(), rRange.aEnd.Col()-rRange.aStart.Col()+1 );
+                      rRange.aStart.Col(), rRange.aEnd.Col()-rRange.aStart.Col()+1,
+                      pRefUndoDoc );
 }
 
 
