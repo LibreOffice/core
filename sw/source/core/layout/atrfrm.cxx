@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:26:26 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,8 +909,11 @@ BOOL SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             {
                 const SwPageDesc* pDesc = GetPageDesc();
                 if( pDesc )
-                    rVal <<= OUString(
-                        SwStyleNameMapper::GetProgName(pDesc->GetName(), GET_POOLID_PAGEDESC ));
+                {
+                    String aString;
+                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, GET_POOLID_PAGEDESC, sal_True );
+                    rVal <<= OUString( aString );
+                }
                 else
                     rVal.clear();
             }

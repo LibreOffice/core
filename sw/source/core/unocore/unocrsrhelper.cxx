@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:32:02 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 if( pAny )
                 {
-                    String sVal = SwStyleNameMapper::GetProgName(pFmt->GetName(), GET_POOLID_TXTCOLL );
+                    String sVal;
+                    SwStyleNameMapper::FillProgName(pFmt->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
                     *pAny <<= OUString(sVal);
                 }
             }
@@ -644,7 +645,7 @@ String GetCurPageStyle(SwPaM& rPaM)
     const SwPageFrm* pPage = rPaM.GetCntntNode()->GetFrm()->FindPageFrm();
     if(pPage)
     {
-        sRet = SwStyleNameMapper::GetProgName( pPage->GetPageDesc()->GetName(), GET_POOLID_PAGEDESC );
+        SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), sRet, GET_POOLID_PAGEDESC, sal_True );
     }
     return sRet;
 }

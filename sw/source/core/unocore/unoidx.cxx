@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:09:03 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,8 +547,11 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
 //          break;
             break;
             case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME   :
-                pTOXBase->SetMainEntryCharStyle(
-                    SwStyleNameMapper::GetUIName(lcl_AnyToString(aValue), GET_POOLID_CHRFMT));
+            {
+                String aString;
+                SwStyleNameMapper::FillUIName(lcl_AnyToString(aValue), aString, GET_POOLID_CHRFMT, sal_True);
+                pTOXBase->SetMainEntryCharStyle( aString );
+            }
             break;
             case WID_CREATE_FROM_TABLES                :
                 nCreate = lcl_AnyToBool(aValue) ? nCreate | TOX_TABLE : nCreate & ~TOX_TABLE;
@@ -581,19 +584,25 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 nOLEOptions = lcl_AnyToBool(aValue) ? nOLEOptions | TOO_OTHER : nOLEOptions & ~TOO_OTHER;
             break;
             case WID_PARA_HEAD             :
+            {
+                String aString;
+                SwStyleNameMapper::FillUIName( lcl_AnyToString(aValue), aString, GET_POOLID_TXTCOLL, sal_True);
                 bForm = sal_True;
                 //Header steht an Pos 0
-                aForm.SetTemplate( 0, SwStyleNameMapper::GetUIName(
-                    lcl_AnyToString(aValue), GET_POOLID_TXTCOLL));
+                aForm.SetTemplate( 0, aString );
+            }
             break;
             case WID_IS_RELATIVE_TABSTOPS:
                 bForm = sal_True;
                 aForm.SetRelTabPos(lcl_AnyToBool(aValue));
             break;
             case WID_PARA_SEP              :
+            {
+                String aString;
                 bForm = sal_True;
-                aForm.SetTemplate( 1, SwStyleNameMapper::GetUIName(
-                    lcl_AnyToString(aValue), GET_POOLID_TXTCOLL));
+                SwStyleNameMapper::FillUIName( lcl_AnyToString(aValue), aString, GET_POOLID_TXTCOLL, sal_True);
+                aForm.SetTemplate( 1, aString );
+            }
             break;
             case WID_CREATE_FROM_PARAGRAPH_STYLES:
                 nCreate = lcl_AnyToBool(aValue) ?
@@ -614,9 +623,9 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 bForm = sal_True;
                 // im sdbcx::Index beginnt Lebel 1 bei Pos 2 sonst bei Pos 1
                 sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
-                aForm.SetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1,
-                    SwStyleNameMapper::GetUIName(
-                        lcl_AnyToString(aValue), GET_POOLID_TXTCOLL));
+                String aString;
+                SwStyleNameMapper::FillUIName( lcl_AnyToString(aValue), aString, GET_POOLID_TXTCOLL, sal_True);
+                aForm.SetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1, aString );
             }
             break;
             default:
@@ -845,10 +854,16 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             //case WID_???                             :
             break;
             case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME   :
+            {
                 bBOOL = sal_False;
-                aRet <<= OUString(
-                    SwStyleNameMapper::GetProgName(
-                        pTOXBase->GetMainEntryCharStyle(), GET_POOLID_CHRFMT ));
+                String aString;
+                SwStyleNameMapper::FillProgName(
+                        pTOXBase->GetMainEntryCharStyle(),
+                        aString,
+                        GET_POOLID_CHRFMT,
+                        sal_True);
+                aRet <<= OUString( aString );
+            }
             break;
             case WID_CREATE_FROM_TABLES                :
                 bRet = 0 != (nCreate & TOX_TABLE);
@@ -881,16 +896,26 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 bRet = 0 != (nCreate & TOX_TEMPLATE);
             break;
             case WID_PARA_HEAD             :
+            {
                 //Header steht an Pos 0
-                aRet <<= OUString(
-                    SwStyleNameMapper::GetProgName(rForm.GetTemplate( 0 ), GET_POOLID_TXTCOLL ));
+                String aString;
+                SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
+                        GET_POOLID_TXTCOLL, sal_True );
+                aRet <<= OUString( aString );
                 bBOOL = sal_False;
+            }
             break;
             case WID_PARA_SEP              :
-                aRet <<= OUString(
-                    SwStyleNameMapper::GetProgName(
-                        rForm.GetTemplate( 1 ), GET_POOLID_TXTCOLL ));
+            {
+                String aString;
+                SwStyleNameMapper::FillProgName(
+                        rForm.GetTemplate( 1 ),
+                        aString,
+                        GET_POOLID_TXTCOLL,
+                        sal_True);
+                aRet <<= OUString( aString );
                 bBOOL = sal_False;
+            }
             break;
             case WID_PARA_LEV1             :
             case WID_PARA_LEV2             :
@@ -905,10 +930,13 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             {
                 // im sdbcx::Index beginnt Lebel 1 bei Pos 2 sonst bei Pos 1
                 sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
-                aRet <<= OUString(
-                SwStyleNameMapper::GetProgName(
+                String aString;
+                SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1),
-                                                            GET_POOLID_TXTCOLL));
+                        aString,
+                        GET_POOLID_TXTCOLL,
+                        sal_True);
+                aRet <<= OUString( aString );
                 bBOOL = sal_False;
             }
             break;
@@ -2126,11 +2154,13 @@ void SwXIndexStyleAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
     sal_uInt16 nStyles = aSeq.getLength();
     const OUString* pStyles = aSeq.getConstArray();
     String sSetStyles;
+    String aString;
     for(sal_uInt16 i = 0; i < nStyles; i++)
     {
         if(i)
             sSetStyles += TOX_STYLE_DELIMITER;
-        sSetStyles += SwStyleNameMapper::GetUIName(pStyles[i], GET_POOLID_TXTCOLL);
+        SwStyleNameMapper::FillUIName(pStyles[i], aString, GET_POOLID_TXTCOLL, sal_True);
+        sSetStyles +=  aString;
     }
     pTOXBase->SetStyleNames(sSetStyles, (sal_uInt16) nIndex);
 }
@@ -2162,10 +2192,15 @@ uno::Any SwXIndexStyleAccess_Impl::getByIndex(sal_Int32 nIndex)
     sal_uInt16 nStyles = rStyles.GetTokenCount(TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
+    String aString;
     for(sal_uInt16 i = 0; i < nStyles; i++)
     {
-        pStyles[i] = OUString(SwStyleNameMapper::GetProgName(
-            rStyles.GetToken(i, TOX_STYLE_DELIMITER), GET_POOLID_TXTCOLL));
+        SwStyleNameMapper::FillProgName(
+            rStyles.GetToken(i, TOX_STYLE_DELIMITER),
+            aString,
+            GET_POOLID_TXTCOLL,
+            sal_True);
+        pStyles[i] = OUString( aString );
     }
     uno::Any aRet(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
     return aRet;
@@ -2291,10 +2326,12 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
             }
             else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharacterStyleName"  )  ))
             {
-                const String sCharStyleName =
-                    SwStyleNameMapper::GetUIName(
+                String sCharStyleName;
+                SwStyleNameMapper::FillUIName(
                         lcl_AnyToString(pProperties[j].Value),
-                            GET_POOLID_CHRFMT);
+                        sCharStyleName,
+                        GET_POOLID_CHRFMT,
+                        sal_True);
                 aToken.sCharStyleName = sCharStyleName;
                 aToken.nPoolId = SwStyleNameMapper::GetPoolIdFromUIName (
                             sCharStyleName, GET_POOLID_CHRFMT );
@@ -2417,6 +2454,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                                         GetPattern((sal_uInt16) nIndex));
     sal_uInt16 nTokenCount = 0;
     uno::Sequence< PropertyValues > aRetSeq;
+    String aString;
     while(aEnumerator.HasNextToken())
     {
         nTokenCount++;
@@ -2425,8 +2463,12 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         SwFormToken  aToken = aEnumerator.GetNextToken();
 
         Sequence< PropertyValue >& rCurTokenSeq = pTokenProps[nTokenCount-1];
-        const OUString aProgCharStyle(SwStyleNameMapper::GetProgName(
-                        aToken.sCharStyleName, GET_POOLID_CHRFMT ));
+        SwStyleNameMapper::FillProgName(
+                        aToken.sCharStyleName,
+                        aString,
+                        GET_POOLID_CHRFMT,
+                        sal_True );
+        const OUString aProgCharStyle( aString );
         switch(aToken.eTokenType)
         {
             case TOKEN_ENTRY_NO     :

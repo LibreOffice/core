@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:37:46 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,6 +895,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutoma
     USHORT nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
+    String aString;
     for(USHORT n = 0; n < nCount; n++)
     {
         const SwRubyListEntryPtr pEntry = aList[n];
@@ -909,8 +910,8 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutoma
         pValues[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_TEXT));
         pValues[1].Value <<= OUString(rAttr.GetText());
         pValues[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
-        pValues[2].Value <<= OUString(
-                SwStyleNameMapper::GetProgName(rAttr.GetCharFmtName(), GET_POOLID_CHRFMT ));
+        SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, GET_POOLID_CHRFMT, sal_True );
+        pValues[2].Value <<= OUString( aString );
         pValues[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
         pValues[4].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
@@ -965,7 +966,8 @@ void SAL_CALL SwXTextView::setRubyList(
             {
                 if((pProperties[nProp].Value >>= sTmp))
                 {
-                    String sName(SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT ));
+                    String sName;
+                    SwStyleNameMapper::FillUIName(sTmp, sName, GET_POOLID_CHRFMT, sal_True );
                     sal_uInt16 nPoolId = sName.Len() ?
                         SwStyleNameMapper::GetPoolIdFromUIName( sName, GET_POOLID_CHRFMT ) : 0;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:36:30 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
             const SwPageDesc* pDesc = 0;
             if(sPageStyle.Len())
             {
-                sPageStyle = SwStyleNameMapper::GetUIName(sPageStyle, GET_POOLID_PAGEDESC );
+                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, GET_POOLID_PAGEDESC, sal_True );
                 const SwPageDesc* pDesc = ::GetPageDescByName_Impl(*pFmt->GetDoc(), sPageStyle);
                 if(pDesc)
                 {
@@ -2022,7 +2022,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         const SwPageDesc* pDesc = 0;
         if(sPageStyle.Len())
         {
-            sPageStyle = SwStyleNameMapper::GetUIName(sPageStyle, GET_POOLID_PAGEDESC );
+            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, GET_POOLID_PAGEDESC, sal_True );
             const SwPageDesc* pDesc = ::GetPageDescByName_Impl(rDoc, sPageStyle);
             if(pDesc)
             {
@@ -4209,8 +4209,12 @@ void SwXCellRange::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew );
     if(!GetRegisteredIn() || !aCursorDepend.GetRegisteredIn())
     {
-        if(!aCursorDepend.GetRegisteredIn())
+        /*
+         * Not sure if this will cause a memory leak - this pTblCrsr
+         * is deleted in SwDoc and GPFs here when deleted again
+         * if(!aCursorDepend.GetRegisteredIn())
             delete pTblCrsr;
+         */
         pTblCrsr = 0;
         aChartLstnrCntnr.Disposing();
     }

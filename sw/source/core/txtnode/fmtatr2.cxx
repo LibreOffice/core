@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 15:56:21 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,9 @@ BOOL SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 }
 BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    XubString sCharFmtName;
+    String sCharFmtName;
     if(GetCharFmt())
-        sCharFmtName = SwStyleNameMapper::GetProgName(GetCharFmt()->GetName(), GET_POOLID_CHRFMT );
+        SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  GET_POOLID_CHRFMT, sal_True );
     rVal <<= OUString( sCharFmtName );
     return TRUE;
 }
@@ -359,14 +359,14 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             if( !sVal.Len() && nVisitedId != 0 )
                 SwStyleNameMapper::FillUIName( nVisitedId, sVal );
             if( sVal.Len() )
-                sVal = SwStyleNameMapper::GetProgName( sVal, GET_POOLID_CHRFMT );
+                SwStyleNameMapper::FillProgName( sVal, sVal, GET_POOLID_CHRFMT, sal_True );
         break;
         case MID_URL_UNVISITED_FMT:
             sVal = aINetFmt;
             if( !sVal.Len() && nINetId != 0 )
                 SwStyleNameMapper::FillUIName( nINetId, sVal );
             if( sVal.Len() )
-                SwStyleNameMapper::GetProgName( sVal, GET_POOLID_CHRFMT );
+                SwStyleNameMapper::FillProgName( sVal, sVal, GET_POOLID_CHRFMT, sal_True );
         break;
         case MID_URL_HYPERLINKEVENTS:
         {
@@ -431,16 +431,18 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
                 break;
             case MID_URL_VISITED_FMT:
             {
-                aVisitedFmt = SwStyleNameMapper::GetUIName(
-                    sVal, GET_POOLID_CHRFMT );
+                String aString;
+                SwStyleNameMapper::FillUIName( sVal, aString, GET_POOLID_CHRFMT, sal_True );
+                aVisitedFmt = OUString ( aString );
                 nVisitedId = SwStyleNameMapper::GetPoolIdFromUIName( aVisitedFmt,
                                                GET_POOLID_CHRFMT );
             }
             break;
             case MID_URL_UNVISITED_FMT:
             {
-                aINetFmt = SwStyleNameMapper::GetUIName(
-                    sVal, GET_POOLID_CHRFMT );
+                String aString;
+                SwStyleNameMapper::FillUIName( sVal, aString, GET_POOLID_CHRFMT, sal_True );
+                aINetFmt = OUString ( aString );
                 nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, GET_POOLID_CHRFMT );
             }
             break;
@@ -514,7 +516,11 @@ BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
         case MID_RUBY_TEXT: rVal <<= (OUString)sRubyTxt;                    break;
          case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
         case MID_RUBY_CHARSTYLE:
-                rVal <<= (OUString)SwStyleNameMapper::GetProgName(sCharFmtName, GET_POOLID_CHRFMT );
+        {
+            String aString;
+            SwStyleNameMapper::FillProgName(sCharFmtName, aString, GET_POOLID_CHRFMT, sal_True );
+            rVal <<= OUString ( aString );
+        }
         break;
         case MID_RUBY_ABOVE:
         {

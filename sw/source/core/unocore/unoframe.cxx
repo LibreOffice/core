@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 12:51:14 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,7 +961,8 @@ SwFrmFmt *lcl_GetFrmFmt( const uno::Any& rValue, SwDoc *pDoc )
     {
         OUString uTemp;
         rValue >>= uTemp;
-        String sStyle(SwStyleNameMapper::GetUIName(String (uTemp), GET_POOLID_FRMFMT) );
+        String sStyle;
+        SwStyleNameMapper::FillUIName(String (uTemp), sStyle, GET_POOLID_FRMFMT, sal_True );
         SwDocStyleSheet* pStyle =
                 (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle,
                                                     SFX_STYLE_FAMILY_FRAME);
