@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1845,7 +1845,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aHyphenAfterLabel   ( this, ResId( FT_HYPHENAFTER ) ),
     aMaxHyphenLabel     ( this, ResId( FT_MAXHYPH ) ),
     aMaxHyphenEdit      ( this, ResId( ED_MAXHYPH ) ),
-    aExtFrm             ( this, ResId( GB_HYPHEN ) ),
+    aExtFL              ( this, ResId( FL_HYPHEN ) ),
     aPageBreakBox       ( this, ResId( BTN_PAGEBREAK ) ),
     aPageBox            ( this, ResId( BTN_BREAKPAGE ) ),
     aColumnBox          ( this, ResId( BTN_BREAKCOLUMN ) ),
@@ -1863,7 +1863,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aWidowBox           ( this, ResId( BTN_WIDOWS ) ),
     aWidowRowNo         ( this, ResId( ED_WIDOWS ) ),
     aWidowRowLabel      ( this, ResId( FT_WIDOWS ) ),
-    aExtendFrm          ( this, ResId( GB_OPTIONS ) ),
+    aExtendFL           ( this, ResId( FL_OPTIONS ) ),
 
     bHtmlMode   ( FALSE ),
     bPageBreak  ( TRUE ),
@@ -1918,7 +1918,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
         aHyphenAfterLabel    .Enable(FALSE);
         aMaxHyphenLabel      .Enable(FALSE);
         aMaxHyphenEdit       .Enable(FALSE);
-        aExtFrm              .Enable(FALSE);
+        aExtFL               .Enable(FALSE);
         aPagenumText         .Enable(FALSE);
         aPagenumEdit         .Enable(FALSE);
     }

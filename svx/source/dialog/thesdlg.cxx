@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 10:44:41 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ class SvxThesaurusLanguageDlg_Impl : public ModalDialog
 {
 private:
     SvxLanguageBox  aLangLB;
-    GroupBox        aLangBox;
+    FixedLine       aLangFL;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
@@ -163,7 +163,7 @@ SvxThesaurusLanguageDlg_Impl::SvxThesaurusLanguageDlg_Impl( Window* pParent ) :
     ModalDialog( pParent, SVX_RES( RID_SVXDLG_THES_LANGUAGE ) ),
 
     aLangLB     ( this, ResId( LB_THES_LANGUAGE ) ),
-    aLangBox    ( this, ResId( GB_THES_LANGUAGE ) ),
+    aLangFL     ( this, ResId( FL_THES_LANGUAGE ) ),
     aOKBtn      ( this, ResId( BTN_LANG_OK ) ),
     aCancelBtn  ( this, ResId( BTN_LANG_CANCEL ) ),
     aHelpBtn    ( this, ResId( BTN_LANG_HELP ) )
@@ -219,7 +219,7 @@ SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< XThesaurus >
     aMeanLB     ( this, ResId( LB_MEAN ) ),
     aSynonymText( this, ResId( FT_SYNON ) ),
     aSynonymLB  ( this, ResId( LB_SYNON ) ),
-    aVarBox     ( this, ResId( GB_VAR ) ),
+    aVarFL      ( this, ResId( FL_VAR ) ),
     aOkBtn      ( this, ResId( BTN_THES_OK ) ),
     aCancelBtn  ( this, ResId( BTN_THES_CANCEL ) ),
     aLookUpBtn  ( this, ResId( BTN_LOOKUP ) ),

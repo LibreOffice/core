@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:40:50 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     FixedText FT_WORD
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text = "~Wort" ;
         Text [ English ] = "~Word" ;
         Text [ norwegian ] = "~Ord" ;
@@ -192,13 +192,13 @@ ModalDialog RID_SVXDLG_THESAURUS
     ListBox LB_WORD
     {
         DropDown = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 96 , 63 ) ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 96 , 65 ) ;
     };
     FixedText FT_MEAN
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text = "~Bedeutung " ;
         Text [ English ] = "~Meaning" ;
         Text [ norwegian ] = "~Mening" ;
@@ -228,14 +228,14 @@ ModalDialog RID_SVXDLG_THESAURUS
     ListBox LB_MEAN
     {
         BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 96 , 48 ) ;
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
+        Size = MAP_APPFONT ( 96 , 50 ) ;
         AutoHScroll = TRUE ;
     };
     FixedText FT_SYNON
     {
         Pos = MAP_APPFONT ( 111 , 43 ) ;
-        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text = "~Synonym" ;
         Text [ English ] = "Sy~nonym" ;
         Text [ norwegian ] = "Sy~nonym" ;
@@ -265,14 +265,14 @@ ModalDialog RID_SVXDLG_THESAURUS
     ListBox LB_SYNON
     {
         BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 56 ) ;
-        Size = MAP_APPFONT ( 96 , 48 ) ;
+        Pos = MAP_APPFONT ( 111 , 55 ) ;
+        Size = MAP_APPFONT ( 96 , 50 ) ;
         AutoHScroll = TRUE ;
     };
     FixedText FT_REPL
     {
         Pos = MAP_APPFONT ( 111 , 14 ) ;
-        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
         Text = "~Ersetzen" ;
         Text [ English ] = "R~eplace" ;
         Text [ norwegian ] = "E~statte" ;
@@ -302,14 +302,14 @@ ModalDialog RID_SVXDLG_THESAURUS
     Edit ED_REPL
     {
         BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 27 ) ;
+        Pos = MAP_APPFONT ( 111 , 25 ) ;
         Size = MAP_APPFONT ( 96 , 12 ) ;
         LEFT = TRUE ;
     };
-    GroupBox GB_VAR
+    FixedLine FL_VAR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 207 , 107 ) ;
+        Size = MAP_APPFONT ( 207 , 8 ) ;
         Text = "Variationen" ;
         Text [ English ] = "Variations" ;
         Text [ norwegian ] = "Variasjoner" ;
@@ -402,10 +402,10 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Size = MAP_APPFONT ( 90 , 60 ) ;
         Sort = TRUE ;
     };
-    GroupBox GB_THES_LANGUAGE
+    FixedLine FL_THES_LANGUAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 102 , 77 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "Auswahl" ;
         Text [ English ] = "Choice" ;
         Text [ english_us ] = "Selection" ;

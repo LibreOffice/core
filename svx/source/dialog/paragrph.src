@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:56:07 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1664,10 +1664,10 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Maximum = 99 ;
         Last = 99 ;
     };
-    GroupBox GB_HYPHEN
+    FixedLine FL_HYPHEN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Silbentrennung" ;
         Text [ ENGLISH ] = "Hyphenation" ;
         Text [ norwegian ] = "Orddeling" ;
@@ -1889,7 +1889,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     FixedText FT_PAGENUM
     {
-        Pos = MAP_APPFONT ( 161 , 105 ) ;
+        Pos = MAP_APPFONT ( 163 , 105 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
         Center = TRUE ;
         Text = "Se~itennummer" ;
@@ -1989,83 +1989,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mantener p·rra~fos juntos";
     };
-    TriStateBox BTN_WIDOWS
-    {
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text = "Hu~renkinderregelung" ;
-        Text [ ENGLISH ] = "~Widow control" ;
-        Group = TRUE ;
-        Text[ language_user1 ] = " ";
-        Text[ english_us ] = "~Widow control";
-        Text[ portuguese ] = "Controlo de linhas ~isoladas";
-        Text[ russian ] = "¡ÂÁ ÍÓÌˆÂ‚˚ı ‚ËÒˇ˜Ëı ÒÚÓÍ";
-        Text[ greek ] = " ·Ì¸Ì·Ú '~ÔÒˆ·ÌÔ˝'";
-        Text[ dutch ] = "~Zwevende regels: wezen";
-        Text[ french ] = "Traitement des ~veuves";
-        Text[ spanish ] = "Ajuste de ~huÈrfanas";
-        Text[ italian ] = "Controllo ~vedove";
-        Text[ danish ] = "Fransk horeunge-ordning";
-        Text[ swedish ] = "Ho~rungekontroll";
-        Text[ polish ] = "Bez oddz. pierw. wiersza akap.";
-        Text[ portuguese_brazilian ] = "~Vi?as";
-        Text[ japanese ] = "íióéëOÇ≈â¸Õﬂ∞ºﬁ(~W)";
-        Text[ korean ] = "√≥¿Ω «—¡Ÿ ∫–∏Æ πÊ¡ˆ(~O)";
-        Text[ chinese_simplified ] = "∂Œ¬‰÷Æ÷–≤ª∑÷“≥";
-        Text[ chinese_traditional ] = "¨q∏®§ß§§§£§¿≠∂";
-        Text[ turkish ] = "~›lk sat˝r˝ paragrafla birle˛tir";
-        Text[ arabic ] = " ⁄œÌ· «‰›’«· ”ÿ— «·›ﬁ—… «·√Ê·";
-        Text[ catalan ] = "Ajuste de ~huÈrfanas";
-        Text[ finnish ] = "~Orporivien esto";
-    };
-    NumericField ED_WIDOWS
-    {
-        Disable = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 176 , 159 ) ;
-        Size = MAP_APPFONT ( 26 , 12 ) ;
-        Group = TRUE ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 2 ;
-        Maximum = 9 ;
-        Value = 2 ;
-        First = 2 ;
-        Last = 9 ;
-    };
-    FixedText FT_WIDOWS
-    {
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 205 , 161 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Zeilen" ;
-        Text [ ENGLISH ] = "Rows" ;
-        Text [ norwegian ] = "Rows" ;
-        Text [ italian ] = "Righe" ;
-        Text [ portuguese_brazilian ] = "Fileiras" ;
-        Text [ portuguese ] = "Linhas" ;
-        Text [ finnish ] = "Viivat" ;
-        Text [ danish ] = "Linjer" ;
-        Text [ french ] = "Lignes" ;
-        Text [ swedish ] = "rader" ;
-        Text [ dutch ] = "regels" ;
-        Text [ spanish ] = "LÌneas" ;
-        Text [ english_us ] = "Lines" ;
-        Left = TRUE ;
-        Text[ chinese_simplified ] = "––";
-        Text[ russian ] = "—ÚÓÍË";
-        Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "çs";
-        Text[ chinese_traditional ] = "¶Ê";
-        Text[ arabic ] = "√”ÿ—";
-        Text[ greek ] = "√Ò·ÏÏ›Ú";
-        Text[ korean ] = "¡Ÿ";
-        Text[ turkish ] = "Sat˝r";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LÌneas";
-    };
     TriStateBox BTN_ORPHANS
     {
         Disable = TRUE ;
@@ -2100,7 +2023,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 176 , 145 ) ;
+        Pos = MAP_APPFONT ( 176 , 146 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -2115,7 +2038,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 205 , 147 ) ;
+        Pos = MAP_APPFONT ( 205 , 148 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
@@ -2143,10 +2066,87 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "LÌneas";
     };
-    GroupBox GB_OPTIONS
+    TriStateBox BTN_WIDOWS
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 163 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text = "Hu~renkinderregelung" ;
+        Text [ ENGLISH ] = "~Widow control" ;
+        Group = TRUE ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "~Widow control";
+        Text[ portuguese ] = "Controlo de linhas ~isoladas";
+        Text[ russian ] = "¡ÂÁ ÍÓÌˆÂ‚˚ı ‚ËÒˇ˜Ëı ÒÚÓÍ";
+        Text[ greek ] = " ·Ì¸Ì·Ú '~ÔÒˆ·ÌÔ˝'";
+        Text[ dutch ] = "~Zwevende regels: wezen";
+        Text[ french ] = "Traitement des ~veuves";
+        Text[ spanish ] = "Ajuste de ~huÈrfanas";
+        Text[ italian ] = "Controllo ~vedove";
+        Text[ danish ] = "Fransk horeunge-ordning";
+        Text[ swedish ] = "Ho~rungekontroll";
+        Text[ polish ] = "Bez oddz. pierw. wiersza akap.";
+        Text[ portuguese_brazilian ] = "~Vi?as";
+        Text[ japanese ] = "íióéëOÇ≈â¸Õﬂ∞ºﬁ(~W)";
+        Text[ korean ] = "√≥¿Ω «—¡Ÿ ∫–∏Æ πÊ¡ˆ(~O)";
+        Text[ chinese_simplified ] = "∂Œ¬‰÷Æ÷–≤ª∑÷“≥";
+        Text[ chinese_traditional ] = "¨q∏®§ß§§§£§¿≠∂";
+        Text[ turkish ] = "~›lk sat˝r˝ paragrafla birle˛tir";
+        Text[ arabic ] = " ⁄œÌ· «‰›’«· ”ÿ— «·›ﬁ—… «·√Ê·";
+        Text[ catalan ] = "Ajuste de ~huÈrfanas";
+        Text[ finnish ] = "~Orporivien esto";
+    };
+    NumericField ED_WIDOWS
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 176 , 162 ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        Maximum = 9 ;
+        Value = 2 ;
+        First = 2 ;
+        Last = 9 ;
+    };
+    FixedText FT_WIDOWS
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 205 , 164 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text = "Zeilen" ;
+        Text [ ENGLISH ] = "Rows" ;
+        Text [ norwegian ] = "Rows" ;
+        Text [ italian ] = "Righe" ;
+        Text [ portuguese_brazilian ] = "Fileiras" ;
+        Text [ portuguese ] = "Linhas" ;
+        Text [ finnish ] = "Viivat" ;
+        Text [ danish ] = "Linjer" ;
+        Text [ french ] = "Lignes" ;
+        Text [ swedish ] = "rader" ;
+        Text [ dutch ] = "regels" ;
+        Text [ spanish ] = "LÌneas" ;
+        Text [ english_us ] = "Lines" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "––";
+        Text[ russian ] = "—ÚÓÍË";
+        Text[ polish ] = "Wiersze";
+        Text[ japanese ] = "çs";
+        Text[ chinese_traditional ] = "¶Ê";
+        Text[ arabic ] = "√”ÿ—";
+        Text[ greek ] = "√Ò·ÏÏ›Ú";
+        Text[ korean ] = "¡Ÿ";
+        Text[ turkish ] = "Sat˝r";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "LÌneas";
+    };
+    FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 64 ) ;
-        Size = MAP_APPFONT ( 248 , 110 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zus‰tze" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;

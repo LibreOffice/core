@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 #define FT_AFTER                        54
 #define ED_HYPHENAFTER          55
 #define FT_HYPHENAFTER          56
-#define GB_HYPHEN                       57
+#define FL_HYPHEN                       57
 
 #define BTN_PAGEBREAK           60
 #define BTN_BREAKPAGE           61
@@ -124,7 +124,7 @@
 #define BTN_ORPHANS                     71
 #define ED_ORPHANS                      72
 #define FT_ORPHANS                      73
-#define GB_OPTIONS                      74
+#define FL_OPTIONS                      74
 #define FT_PAGENUM                      75
 #define ED_PAGENUM                      76
 
