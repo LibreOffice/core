@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:47:37 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 20:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,13 +999,13 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ finnish ] = "Lisää kaava";
     SlotName[ italian ] = "Inserisci formula";
     SlotName[ danish ] = "Indsæt formel";
-    SlotName[ swedish ] = "Infoga formel";
+    SlotName[ swedish ] = "Formellist";
     SlotName[ polish ] = "Wstaw formu³ê";
     SlotName[ portuguese_brazilian ] = "InsertFormula";
     SlotName[ japanese ] = "æ•°å¼ã®æŒ¿å…¥";
     SlotName[ korean ] = "ìˆ˜ì‹ ì‚½ì…";
     SlotName[ chinese_simplified ] = "æ’å…¥å…¬å¼";
-    SlotName[ chinese_traditional ] = "æ’å…¥å…¬å¼";
+    SlotName[ chinese_traditional ] = "ç·¨è¼¯åˆ—";
     SlotName[ turkish ] = "Formül ekle";
     SlotName[ arabic ] = "ÅÏÑÇÌ ÕíÛÉ";
     SlotName[ catalan ] = "Insertar fórmula";
@@ -9889,13 +9889,13 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
     SlotName[ finnish ] = "Close preview";
     SlotName[ italian ] = "Close preview";
     SlotName[ danish ] = "Close preview";
-    SlotName[ swedish ] = "Close preview";
+    SlotName[ swedish ] = "Stäng förhandsgranskning";
     SlotName[ polish ] = "Close preview";
     SlotName[ portuguese_brazilian ] = "Close preview";
     SlotName[ japanese ] = "Close preview";
     SlotName[ korean ] = "Close preview";
     SlotName[ chinese_simplified ] = "Close preview";
-    SlotName[ chinese_traditional ] = "Close preview";
+    SlotName[ chinese_traditional ] = "é—œé–‰é è¦½";
     SlotName[ turkish ] = "Close preview";
     SlotName[ arabic ] = "Close preview";
     SlotName[ catalan ] = "Close preview";
