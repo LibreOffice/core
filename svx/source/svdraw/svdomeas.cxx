@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:11:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +173,10 @@ int __EXPORT SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 
 void __EXPORT SdrMeasureField::Load(SvPersistStream& rIn)
 {
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrMeasureField");
-#endif
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrMeasureField");
+//BFS01#endif
     UINT16 nFieldKind;
     rIn>>nFieldKind;
     eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
@@ -184,10 +184,10 @@ void __EXPORT SdrMeasureField::Load(SvPersistStream& rIn)
 
 void __EXPORT SdrMeasureField::Save(SvPersistStream& rOut)
 {
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrMeasureField");
-#endif
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrMeasureField");
+//BFS01#endif
     rOut<<(UINT16)eMeasureFieldKind;
 }
 
@@ -658,7 +658,7 @@ void SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol, XPolyPolygon& rXPP)
     rXPP.Insert(aXP);
 }
 
-sal_Bool SdrMeasureObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrMeasureObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
     //// Hidden objects on masterpages, draw nothing
@@ -890,8 +890,8 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 
 SdrObject* SdrMeasureObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
-    FASTBOOL bHit=FALSE;
-    if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
+    sal_Bool bHit(sal_False);
+    if (pVisiLayer!=NULL && !pVisiLayer->IsSet((sal_uInt8)nLayerId)) return NULL;
     INT32 nMyTol=nTol;
     INT32 nWdt=ImpGetLineWdt()/2; // Halbe Strichstaerke
     if (nWdt>nMyTol) nMyTol=nWdt; // Bei dicker Linie keine Toleranz noetig
@@ -1400,82 +1400,102 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-::std::auto_ptr< SdrLineGeometry > SdrMeasureObj::CreateLinePoly( OutputDevice& rOut,
-                                                                  BOOL          bForceOnePixel,
-                                                                  BOOL          bForceTwoPixel,
-                                                                  BOOL          bIsLineDraft    ) const
+::std::auto_ptr< SdrLineGeometry > SdrMeasureObj::CreateLinePoly(
+//BFS07 OutputDevice& rOut,
+    sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel, sal_Bool bIsLineDraft ) const
 {
-    PolyPolygon3D aPolyPoly3D;
-    PolyPolygon3D aLinePoly3D;
+    //PolyPolygon3D aPolyPoly3D;
+    //PolyPolygon3D aLinePoly3D;
+    ::basegfx::B2DPolyPolygon aAreaPolyPolygon;
+    ::basegfx::B2DPolyPolygon aLinePolyPolygon;
 
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon;
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetObjectItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft, &rOut);
-    ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, bIsLineDraft);
+//BFS06 ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft, &rOut);
+    ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft);
+    //ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, bIsLineDraft);
+    ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon, bIsLineDraft);
     UINT16 nCount(aTmpPolyPolygon.Count());
-    Polygon3D aPoly3D;
+    // Polygon3D aPoly3D;
+    ::basegfx::B2DPolygon aCandidate;
     UINT16 nLoopStart(0);
 
     if(nCount == 3)
     {
         // three lines, first one is the middle one
-        aPoly3D = Polygon3D(aTmpPolyPolygon[0]);
-        aLineCreator.AddPolygon3D(aPoly3D);
+        aCandidate = ::basegfx::B2DPolygon(aTmpPolyPolygon[0].getB2DPolygon());
+        aLineCreator.AddPolygon(aCandidate);
+        //aPoly3D = Polygon3D(aTmpPolyPolygon[0]);
+        //aLineCreator.AddPolygon3D(aPoly3D);
 
-        aLineAttr.ForceNoArrowsLeft(TRUE);
-        aLineAttr.ForceNoArrowsRight(TRUE);
+        aLineAttr.ForceNoArrowsLeft(sal_True);
+        aLineAttr.ForceNoArrowsRight(sal_True);
         nLoopStart = 1;
     }
     else if(nCount == 4)
     {
         // four lines, middle line with gap, so there are two lines used
         // which have one arrow each
-        aLineAttr.ForceNoArrowsRight(TRUE);
+        aLineAttr.ForceNoArrowsRight(sal_True);
 
-        aPoly3D = Polygon3D(aTmpPolyPolygon[0]);
-        aLineCreator.AddPolygon3D(aPoly3D);
+        aCandidate = ::basegfx::B2DPolygon(aTmpPolyPolygon[0].getB2DPolygon());
+        aLineCreator.AddPolygon(aCandidate);
+        //aPoly3D = Polygon3D(aTmpPolyPolygon[0]);
+        //aLineCreator.AddPolygon3D(aPoly3D);
 
-        aLineAttr.ForceNoArrowsRight(FALSE);
-        aLineAttr.ForceNoArrowsLeft(TRUE);
+        aLineAttr.ForceNoArrowsRight(sal_False);
+        aLineAttr.ForceNoArrowsLeft(sal_True);
 
-        aPoly3D = Polygon3D(aTmpPolyPolygon[1]);
-        aLineCreator.AddPolygon3D(aPoly3D);
+        aCandidate = ::basegfx::B2DPolygon(aTmpPolyPolygon[1].getB2DPolygon());
+        aLineCreator.AddPolygon(aCandidate);
+        //aPoly3D = Polygon3D(aTmpPolyPolygon[1]);
+        //aLineCreator.AddPolygon3D(aPoly3D);
 
-        aLineAttr.ForceNoArrowsRight(TRUE);
+        aLineAttr.ForceNoArrowsRight(sal_True);
         nLoopStart = 2;
     }
     else if(nCount == 5)
     {
         // five lines, first two are the outer ones
-        aLineAttr.ForceNoArrowsRight(TRUE);
+        aLineAttr.ForceNoArrowsRight(sal_True);
 
-        aPoly3D = Polygon3D(aTmpPolyPolygon[0]);
-        aLineCreator.AddPolygon3D(aPoly3D);
+        aCandidate = ::basegfx::B2DPolygon(aTmpPolyPolygon[0].getB2DPolygon());
+        aLineCreator.AddPolygon(aCandidate);
+        //aPoly3D = Polygon3D(aTmpPolyPolygon[0]);
+        //aLineCreator.AddPolygon3D(aPoly3D);
 
-        aLineAttr.ForceNoArrowsRight(FALSE);
-        aLineAttr.ForceNoArrowsLeft(TRUE);
+        aLineAttr.ForceNoArrowsRight(sal_False);
+        aLineAttr.ForceNoArrowsLeft(sal_True);
 
-        aPoly3D = Polygon3D(aTmpPolyPolygon[1]);
-        aLineCreator.AddPolygon3D(aPoly3D);
+        aCandidate = ::basegfx::B2DPolygon(aTmpPolyPolygon[1].getB2DPolygon());
+        aLineCreator.AddPolygon(aCandidate);
+        //aPoly3D = Polygon3D(aTmpPolyPolygon[1]);
+        //aLineCreator.AddPolygon3D(aPoly3D);
 
-        aLineAttr.ForceNoArrowsRight(TRUE);
+        aLineAttr.ForceNoArrowsRight(sal_True);
         nLoopStart = 2;
     }
 
     for(;nLoopStart<nCount;nLoopStart++)
     {
-        aPoly3D = Polygon3D(aTmpPolyPolygon[nLoopStart]);
-        aLineCreator.AddPolygon3D(aPoly3D);
+        aCandidate = ::basegfx::B2DPolygon(aTmpPolyPolygon[nLoopStart].getB2DPolygon());
+        aLineCreator.AddPolygon(aCandidate);
+        //aPoly3D = Polygon3D(aTmpPolyPolygon[nLoopStart]);
+        //aLineCreator.AddPolygon3D(aPoly3D);
     }
 
-    if(aPolyPoly3D.Count() || aLinePoly3D.Count())
-        return ::std::auto_ptr< SdrLineGeometry > (new SdrLineGeometry(aPolyPoly3D, aLinePoly3D,
-                                                                       aLineAttr, bForceOnePixel, bForceTwoPixel));
+    if(aAreaPolyPolygon.count() || aLinePolyPolygon.count())
+    {
+        return ::std::auto_ptr< SdrLineGeometry > (new SdrLineGeometry(
+            aAreaPolyPolygon, aLinePolyPolygon, aLineAttr, bForceOnePixel, bForceTwoPixel));
+    }
     else
+    {
         return ::std::auto_ptr< SdrLineGeometry > (NULL);
+    }
 }
 
 SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
@@ -1705,59 +1725,60 @@ USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrMeasureObj::WriteData(SvStream& rOut) const
-{
-    UndirtyText();
+//BFS01void SdrMeasureObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 UndirtyText();
+//BFS01
+//BFS01 SdrTextObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrMeasureObj");
+//BFS01#endif
+//BFS01
+//BFS01 rOut << aPt1;
+//BFS01 rOut << aPt2;
+//BFS01 rOut << BOOL(FALSE); // bTextOverwritten wg. Kompatibilitaet. Gibt's nicht mehr.
+//BFS01
+//BFS01 SfxItemPool* pPool=GetItemPool();
+//BFS01
+//BFS01 if(pPool)
+//BFS01 {
+//BFS01     const SfxItemSet& rSet = GetObjectItemSet();
+//BFS01
+//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_MEASURE));
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     rOut << sal_uInt16(SFX_ITEMS_NULL);
+//BFS01 }
+//BFS01}
 
-    SdrTextObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrMeasureObj");
-#endif
+//BFS01void SdrMeasureObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 SdrTextObj::ReadData(rHead,rIn);
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrMeasureObj");
+//BFS01#endif
+//BFS01 rIn>>aPt1;
+//BFS01 rIn>>aPt2;
+//BFS01 BOOL bTextOverwrittenTmp;
+//BFS01 rIn>>bTextOverwrittenTmp;
+//BFS01 SfxItemPool* pPool=GetItemPool();
+//BFS01
+//BFS01 if(pPool)
+//BFS01 {
+//BFS01     sal_uInt16 nSetID = SDRATTRSET_MEASURE;
+//BFS01     const SdrMeasureSetItem* pMeasAttr = (const SdrMeasureSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+//BFS01     if(pMeasAttr)
+//BFS01         SetObjectItemSet(pMeasAttr->GetItemSet());
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     sal_uInt16 nSuroDum;
+//BFS01     rIn >> nSuroDum;
+//BFS01 }
+//BFS01}
 
-    rOut << aPt1;
-    rOut << aPt2;
-    rOut << BOOL(FALSE); // bTextOverwritten wg. Kompatibilitaet. Gibt's nicht mehr.
-
-    SfxItemPool* pPool=GetItemPool();
-
-    if(pPool)
-    {
-        const SfxItemSet& rSet = GetObjectItemSet();
-
-        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_MEASURE));
-    }
-    else
-    {
-        rOut << sal_uInt16(SFX_ITEMS_NULL);
-    }
-}
-
-void SdrMeasureObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError()!=0) return;
-    SdrTextObj::ReadData(rHead,rIn);
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrMeasureObj");
-#endif
-    rIn>>aPt1;
-    rIn>>aPt2;
-    BOOL bTextOverwrittenTmp;
-    rIn>>bTextOverwrittenTmp;
-    SfxItemPool* pPool=GetItemPool();
-
-    if(pPool)
-    {
-        sal_uInt16 nSetID = SDRATTRSET_MEASURE;
-        const SdrMeasureSetItem* pMeasAttr = (const SdrMeasureSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-        if(pMeasAttr)
-            SetObjectItemSet(pMeasAttr->GetItemSet());
-    }
-    else
-    {
-        sal_uInt16 nSuroDum;
-        rIn >> nSuroDum;
-    }
-}
-
+// eof
