@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-22 09:28:10 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 12:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifndef _EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
+#ifndef _SOT_EXCHANGE_HXX
+#include <sot/exchange.hxx>
 #endif
 #ifndef _COM_SUN_STAR_PLUGIN_PLUGINMODE_HPP_
 #include <com/sun/star/plugin/PluginMode.hpp>
@@ -312,7 +312,7 @@ SfxOfficeFilter::SfxOfficeFilter( const SfxFilterContainer* pContainer ) :
         String( SfxResId( RID_OFFICEFILTER ) ),
         String( SfxResId( RID_OFFICEFILTER_WILDCARD ) ),
         SFX_FILTER_IMPORT | SFX_FILTER_REDIRECT | SFX_FILTER_NOTINCHOOSER,
-        Exchange::RegisterFormatName( DEFINE_CONST_UNICODE("OfficeDocument") ),
+        SotExchange::RegisterFormatName( DEFINE_CONST_UNICODE("OfficeDocument") ),
         String( SfxResId( RID_OFFICEFILTER_MACTYPE ) ),
         String( SfxResId( RID_OFFICEFILTER_OS2TYPE ) ),
         0, String(), pContainer, String() )
