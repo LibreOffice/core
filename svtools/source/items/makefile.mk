@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 14:38:57 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:42:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,16 +65,14 @@ PRJ=..$/..
 PROJECTPCH=items
 PROJECTPCHSOURCE=items
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=items
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # Every source directory generates headers in a own output directory to
 # enable parallel building of the source directories within a project!
@@ -164,9 +162,11 @@ SLOFILES=\
 
 .ENDIF
 
-SRCFILES=\
+SRS1NAME=$(TARGET)
+SRC1FILES=\
     cstitem.src
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
