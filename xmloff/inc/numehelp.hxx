@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: sab $ $Date: 2001-05-16 10:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,29 +72,79 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 
+#ifndef __SGI_STL_SET
+#include <set>
+#endif
+
 class SvXMLExport;
 namespace rtl
 {
     class OUString;
 }
 
+struct XMLNumberFormat
+{
+    rtl::OUString   sCurrency;
+    sal_Int32       nNumberFormat;
+    sal_Int16       nType;
+    XMLNumberFormat() : nNumberFormat(0), nType(0) {}
+    XMLNumberFormat(const rtl::OUString& sTempCurrency, sal_Int32 nTempFormat,
+        sal_Int16 nTempType) : sCurrency(sTempCurrency), nNumberFormat(nTempFormat),
+            nType(nTempType) {}
+};
+
+struct LessNumberFormat
+{
+    sal_Bool operator() (const XMLNumberFormat& rValue1, const XMLNumberFormat& rValue2) const
+    {
+        return rValue1.nNumberFormat < rValue2.nNumberFormat;
+    }
+};
+
+typedef std::set<XMLNumberFormat, LessNumberFormat> XMLNumberFormatSet;
+
 class XMLNumberFormatAttributesExportHelper
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > xNumberFormatsSupplier;
+    rtl::OUString       sEmpty;
+    SvXMLExport&        rXMLExport;
+    XMLNumberFormatSet  aNumberFormats;
 public :
-    static sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& sCurrencySymbol,
+    XMLNumberFormatAttributesExportHelper(SvXMLExport& rXMLExport);
+    ~XMLNumberFormatAttributesExportHelper();
+
+    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard);
+    void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,
+                                      const double& rValue,
+                                      sal_uInt16 nNamespace,
+                                      sal_Bool bExportValue = sal_True);
+    void SetNumberFormatAttributes(const rtl::OUString& rValue,
+                                          const rtl::OUString& rCharacters,
+                                          sal_uInt16 nNamespace,
+                                          sal_Bool bExportValue = sal_True,
+                                          sal_Bool bExportTypeAttribute = sal_True);
+
+    static void WriteAttributes(SvXMLExport& rXMLExport,
+                                const sal_Int16 nTypeKey,
+                                const double& rValue,
+                                const rtl::OUString& rCurrencySymbol,
+                                sal_uInt16 nNamespace,
+                                sal_Bool bExportValue = sal_True);
+    static sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& rCurrencySymbol,
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
     static sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard,
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
                                           const sal_Int32 nNumberFormat,
-                                          const double& fValue,
+                                          const double& rValue,
                                           sal_uInt16 nNamespace,
                                           sal_Bool bExportValue = sal_True);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
-                                          const rtl::OUString& sValue,
-                                          const rtl::OUString& sCharacters,
+                                          const rtl::OUString& rValue,
+                                          const rtl::OUString& rCharacters,
                                           sal_uInt16 nNamespace,
-                                          sal_Bool bExportValue = sal_True);
+                                          sal_Bool bExportValue = sal_True,
+                                          sal_Bool bExportTypeAttribute = sal_True);
 };
 
 #endif
