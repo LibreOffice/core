@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusnapln.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "fusnapln.hxx"
+
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -74,18 +76,26 @@
 #include "strings.hrc"
 
 #include "sdattr.hxx"
-#include "sdview.hxx"
-#include "viewshel.hxx"
-#include "drviewsh.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "dlgsnap.hxx"
 #include "sdresid.hxx"
-#include "fusnapln.hxx"
 
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
 
+namespace sd {
 
 TYPEINIT1( FuSnapLine, FuPoor );
 
@@ -95,7 +105,7 @@ TYPEINIT1( FuSnapLine, FuPoor );
 |*
 \************************************************************************/
 
-FuSnapLine::FuSnapLine(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
+FuSnapLine::FuSnapLine(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                        SdDrawDocument* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -108,8 +118,8 @@ FuSnapLine::FuSnapLine(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     {
         SfxItemSet aNewAttr(pViewSh->GetPool(), ATTR_SNAPLINE_START,
                                                 ATTR_SNAPLINE_END);
-        Point aLinePos = ((SdDrawViewShell*) pViewSh)->GetMousePos();
-        ((SdDrawViewShell*) pViewSh)->SetMousePosFreezed( FALSE );
+        Point aLinePos = static_cast<DrawViewShell*>(pViewSh)->GetMousePos();
+        static_cast<DrawViewShell*>(pViewSh)->SetMousePosFreezed( FALSE );
         BOOL bLineExist = FALSE;
 
         pPV = pView->GetPageViewPvNum(0);
@@ -210,3 +220,4 @@ FuSnapLine::FuSnapLine(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
 
 
+} // end of namespace sd
