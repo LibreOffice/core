@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: abi $ $Date: 2001-07-11 15:35:25 $
+#   last change: $Author: abi $ $Date: 2001-07-17 14:46:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@
 PRJ=..$/..
 PRJNAME=xmlhelp
 TARGET=tvhlp
+USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
@@ -89,27 +90,13 @@ SHL1STDLIBS=\
     $(SALLIB)  \
     $(VOSLIB) \
     $(UCBHELPERLIB)
+SHL1VERSIONMAP=	$(TARGET).map
 
 DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORT1 =component_getImplementationEnvironment
-DEF1EXPORT2 =component_writeInfo
-DEF1EXPORT3 =component_getFactory
 DEF1DES=UCB : Treeview help
 
 
 .INCLUDE: target.mk
 
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo cpp >> $@
-    @echo m_ >> $@
-    @echo rtl >> $@
-    @echo vos >> $@
-    @echo component_getImplementationEnvironment >> $@
-    @echo component_writeInfo >> $@
-    @echo component_getFactory >> $@
-.IF "$(COM)"=="MSC"
-    @echo ??_ >> $@
-.ENDIF # COM MSC
+

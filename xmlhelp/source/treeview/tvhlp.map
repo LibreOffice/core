@@ -1,0 +1,9 @@
+TVHLP_1_0 {
+    global:
+        GetVersionInfo;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
+    local:
+        *;
+};
