@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:41:28 $
+ *  last change: $Author: os $ $Date: 2001-07-10 06:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,34 @@ sal_Bool lcl_Find(
             )
             return sal_True;
     return sal_False;
+}
+/* -----------------------------10.07.01 08:05--------------------------------
+    search for the first slash that is unquoted
+
+ ---------------------------------------------------------------------------*/
+lcl_FindFirstSlashInPath(const OUString& rPath)
+{
+    const sal_Unicode cSglQuote('\'');
+    const sal_Unicode cDblQuote('\"');
+    const sal_Unicode cSlash('/');
+    sal_Int32 nSglQuote = rPath.indexOf(cSglQuote);
+    sal_Int32 nDblQuote = rPath.indexOf(cDblQuote);
+    sal_Int32 nSlash = rPath.indexOf(cSlash);
+    if(nSglQuote > -1 && nSglQuote < nSlash)
+    {
+        sal_Int32 nForward = rPath.indexOf(cSglQuote, ++nSglQuote);
+        OSL_ENSURE(nForward < rPath.getLength() -1, "incorrect quoting");
+        nSlash = rPath.indexOf(cSlash, ++nForward);
+        OSL_ENSURE(nSlash > 0, "incorrect quoting");
+    }
+    else if(nDblQuote > -1 && nDblQuote < nSlash)
+    {
+        sal_Int32 nForward = rPath.indexOf(cDblQuote, ++nDblQuote);
+        OSL_ENSURE(nForward < rPath.getLength() -1, "incorrect quoting");
+        nSlash = rPath.indexOf(cSlash, ++nForward);
+        OSL_ENSURE(nSlash > 0, "incorrect quoting");
+    }
+    return nSlash;
 }
 //-----------------------------------------------------------------------------
 void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException)
@@ -515,6 +543,13 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
  ---------------------------------------------------------------------------*/
 Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
 {
+//#ifdef DEBUG
+//    sal_Int32 nSlash = lcl_FindFirstSlashInPath(C2U("name/name"));
+//    nSlash = lcl_FindFirstSlashInPath(C2U("name"));
+//    nSlash = lcl_FindFirstSlashInPath(C2U("name/*['test/test']/name"));
+//    nSlash = lcl_FindFirstSlashInPath(C2U("*['test/test']/name"));
+//    nSlash = lcl_FindFirstSlashInPath(C2U("*[\"test/te/st\"]/name"));
+//#endif
     Sequence< Any > aRet(rNames.getLength());
     const OUString* pNames = rNames.getConstArray();
     Any* pRet = aRet.getArray();
@@ -619,6 +654,8 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
             {
                 try
                 {
+                    // quoted node names should not be a problem - the last slash
+                    // must be behind the last quoting
                     sal_Int32 nLastIndex = pNames[i].lastIndexOf( '/',  pNames[i].getLength());
 
                     if(nLastIndex > 0)
@@ -866,8 +903,9 @@ sal_Bool ConfigItem::SetSetProperties(
                 for(sal_Int32 i = 0; i < rValues.getLength(); i++)
                 {
                     OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                    if(sSubNode.indexOf('/') >= 0)
-                        sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
+                    sal_Int32 nSlashIndex = lcl_FindFirstSlashInPath(sSubNode);
+                    if( nSlashIndex >= 0 )
+                        sSubNode = sSubNode.copy(0, nSlashIndex);
                     if(sLastSubNode != sSubNode)
                     {
                         pSubNodeNames[nSubIndex++] = sSubNode;
@@ -978,8 +1016,9 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 for(sal_Int32 i = 0; i < rValues.getLength(); i++)
                 {
                     OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                    if(sSubNode.indexOf('/') >= 0)
-                        sSubNode = sSubNode.copy(0, sSubNode.indexOf('/'));
+                    sal_Int32 nSlashIndex = lcl_FindFirstSlashInPath(sSubNode);
+                    if(nSlashIndex >= 0)
+                        sSubNode = sSubNode.copy(0, nSlashIndex);
                     if(sLastSubNode != sSubNode)
                     {
                         pSubNodeNames[nSubIndex++] = sSubNode;
