@@ -9,13 +9,14 @@
 #endif
 #include <vector>
 
-class SdViewShell;
 class Window;
 class OutputDevice;
 class SdDrawDocument;
 
 
 namespace sd {
+
+class ViewShell;
 
 /** The purpose of the <type>WindowUpdater</type> is to update output
     devices to take care of modified global values.  These values are
@@ -24,8 +25,8 @@ namespace sd {
     Other values may be added in the future.
 
     <p>The methods of this class have not been included into the
-    <type>SdViewShell</type> class in order to not clutter its interface any
-    further.  This class accesses some of <type>SdViewShell</type> data
+    <type>ViewShell</type> class in order to not clutter its interface any
+    further.  This class accesses some of <type>ViewShell</type> data
     members directly and thus is declared as its friend.</p>
 
     <p>Windows that are to be kept up-to-date have to be registered via the
@@ -48,7 +49,7 @@ public:
             This device is added to the device list if it is not <null/> and
             when it is not already a member of that list.
     */
-    void RegisterWindow (Window* pWindow);
+    void RegisterWindow (::Window* pWindow);
 
     /** Remove the given device from the list of devices which will be updated
         when one of the monitored values changes.
@@ -56,14 +57,14 @@ public:
             This device is removed from the device list when it is a member
             of that list.
     */
-    void UnregisterWindow (Window* pWindow);
+    void UnregisterWindow (::Window* pWindow);
 
     /** Set the view shell whose output devices shall be kept up to date.
         It is used to access the preview windows and to clear the master
         page cache so that a redraw affects the master page content as
         well.
     */
-    void SetViewShell (SdViewShell& rViewShell);
+    void SetViewShell (ViewShell& rViewShell);
 
     /** Set the document so that it is reformatted when one of the monitored
         values changes.
@@ -106,21 +107,21 @@ private:
     SvtCTLOptions maCTLOptions;
 
     /// Keep the output devices of this view shell up to date.
-    SdViewShell* mpViewShell;
+    ViewShell* mpViewShell;
 
     /// The document rendered in the output devices.
     SdDrawDocument* mpDocument;
 
     /// Copy constructor not supported.
-    WindowUpdater (const WindowUpdater& pViewShell);
+    WindowUpdater (const WindowUpdater& rUpdater);
 
     /// Assignment operator not supported.
-    WindowUpdater operator= (const WindowUpdater& rViewShell);
+    WindowUpdater operator= (const WindowUpdater& rUpdater);
 
     /** Type and data member for a list of devices that have to be kept
         up-to-date.
     */
-    typedef ::std::vector<Window*> tWindowList;
+    typedef ::std::vector< ::Window*> tWindowList;
     tWindowList maWindowList;
 
     /** The central method of this class.  Update the given output device.
@@ -139,7 +140,7 @@ private:
             Returns <null/> when there is no preview window or no view shell
             has been set from which the preview can be retrieved.
     */
-    Window* GetPreviewWindow (void) const;
+    ::Window* GetPreviewWindow (void) const;
 };
 
 } // end of namespace sd
