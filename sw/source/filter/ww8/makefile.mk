@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-02 08:00:44 $
+#   last change: $Author: rt $ $Date: 2003-09-25 07:40:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ CXXFILES = \
         ww8par6.cxx \
         ww8glsy.cxx \
         tracer.cxx \
+        fields.cxx \
         ww8scan.cxx \
         writerhelper.cxx \
         writerwordglue.cxx
@@ -119,6 +120,7 @@ SLOFILES =	\
         $(SLO)$/ww8par6.obj \
         $(SLO)$/ww8glsy.obj \
         $(SLO)$/tracer.obj \
+        $(SLO)$/fields.obj \
         $(SLO)$/ww8scan.obj \
         $(SLO)$/writerhelper.obj \
         $(SLO)$/writerwordglue.obj
@@ -127,6 +129,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/ww8par3.obj \
         $(SLO)$/ww8par5.obj \
         $(SLO)$/tracer.obj \
+        $(SLO)$/fields.obj \
         $(SLO)$/ww8graf2.obj \
         $(SLO)$/wrtw8esh.obj \
         $(SLO)$/wrtw8nds.obj \
