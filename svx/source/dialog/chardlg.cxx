@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:58:35 $
+ *  last change: $Author: pb $ $Date: 2001-04-11 05:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3103,6 +3103,9 @@ void SvxCharNamePage::Initialize()
     m_aWestFontNameLB.SetModifyHdl( aLink );
     m_aWestFontStyleLB.SetModifyHdl( aLink );
     m_aWestFontSizeLB.SetModifyHdl( aLink );
+    m_aEastFontNameLB.SetModifyHdl( aLink );
+    m_aEastFontStyleLB.SetModifyHdl( aLink );
+    m_aEastFontSizeLB.SetModifyHdl( aLink );
 
     m_pImpl->m_aUpdateTimer.SetTimeoutHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
     m_pImpl->m_aUpdateTimer.Start();
@@ -3724,7 +3727,7 @@ IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pBox )
 {
     m_pImpl->m_aUpdateTimer.Start();
 
-    if ( &m_aWestFontLanguageLB == pBox || &m_aEastFontLanguageLB == pBox )
+    if ( &m_aWestFontNameLB == pBox || &m_aEastFontNameLB == pBox )
     {
         FillStyleBox_Impl( (FontNameBox*)pBox );
         FillSizeBox_Impl( (FontNameBox*)pBox );
