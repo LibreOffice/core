@@ -11,7 +11,7 @@ Public Source as String
 Public SubstFile as String
 Public SubstDir as String
 Public NoArgs()
-Public FilterList(6) as String
+Public FilterList(9) as String
 Public GoOn as Boolean
 Public DoUnprotect as Integer
 Public Password as String
@@ -60,12 +60,15 @@ Dim bDisposable as Boolean
 			FilterList(0) = &quot;application/x-starcalc&quot;
 			FilterList(1) = &quot;application/vnd.stardivision.calc&quot;
 			FilterList(2) = &quot;application/vnd.sun.xml.calc&quot;
+			FilterList(3) = &quot;application/x-vnd.oasis.openoffice.spreadsheet&quot;
 			If DialogModel.chkTextDocuments.State = 1 Then
-				ReDim Preserve FilterList(6) as String
-				FilterList(3) = &quot;application/x-starwriter&quot;
-				FilterList(4) = &quot;application/vnd.stardivision.writer&quot;
-				FilterList(5) = &quot;application/vnd.stardivision.writer/web&quot;
-				FilterList(6) = &quot;application/vnd.sun.xml.writer&quot;
+				ReDim Preserve FilterList(8) as String
+				
+				FilterList(4) = &quot;application/x-starwriter&quot;
+				FilterList(5) = &quot;application/vnd.stardivision.writer&quot;
+				FilterList(6) = &quot;application/vnd.stardivision.writer/web&quot;
+				FilterList(7) = &quot;application/vnd.sun.xml.writer&quot;
+				FilterList(8) = &quot;application/x-vnd.oasis.openoffice.text&quot;
 			End If
 			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, FilterList())
 			TotDocCount = Ubound(FilesList(),1) + 1
@@ -302,12 +305,12 @@ Dim sNoDirMessage as String
 			If bCheckFileType Then
 				sLocMimeType = GetRealFileContent(oDocInfo, sPath)
 				If DialogModel.chkTextDocuments.State = 1 Then
-					If (Instr(1, sLocMimeType, &quot;writer&quot;) = 0) And (Instr(1, sLocMimeType, &quot;calc&quot;) = 0) Then
+					If (Instr(1, sLocMimeType, &quot;text&quot;) = 0) And (Instr(1, sLocMimeType, &quot;calc&quot;) = 0) Then
 						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
 						bIsValid = False						
 					End If				
 				Else
-					If Instr(1, sLocMimeType, &quot;calc&quot;) = 0 Then
+					If Instr(1, sLocMimeType, &quot;spreadsheet&quot;) = 0 Then
 						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
 						bIsValid = False
 					End If
@@ -360,21 +363,25 @@ Sub CallFilePicker()
 		Dim oTypes() as Object
 		Dim oUIKey() as Object
 		
-		oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
+		oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.TypeDetection.Types&quot;)
 		oTypes() = oMasterKey.Types
 		oUIKey = GetRegistryKeyContent(&quot;org.openoffice.Office.UI/FilterClassification/LocalFilters&quot;)
 		If DialogModel.chkTextDocuments.State = 1 Then
-			Dim FilterNames(7,1) as String
-			FilterNames(4,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
-			FilterNames(4,1) = &quot;*.sxw&quot;
-			FilterNames(5,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
-			FilterNames(5,1) = &quot;*.stw&quot;
-			FilterNames(6,0) = oUIKey.Classes.GetByName(&quot;sw3to5&quot;).DisplayName
-			FilterNames(6,1) = &quot;*.sdw&quot;
-			FilterNames(7,0) = oUIKey.Classes.GetByName(&quot;sw3to5templ&quot;).DisplayName
-			Filternames(7,1) = &quot;*.vor&quot;
+			Dim FilterNames(11,1) as String
+			FilterNames(6,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+			FilterNames(6,1) = &quot;*.sxw&quot;
+			FilterNames(7,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
+			FilterNames(7,1) = &quot;*.stw&quot;
+			FilterNames(8,0) = oUIKey.Classes.GetByName(&quot;sw3to5&quot;).DisplayName
+			FilterNames(8,1) = &quot;*.sdw&quot;
+			FilterNames(9,0) = oUIKey.Classes.GetByName(&quot;sw3to5templ&quot;).DisplayName
+			Filternames(9,1) = &quot;*.vor&quot;
+			FilterNames(10,0) = oTypes.GetByName(&quot;writer8&quot;).UIName
+			FilterNames(10,1) = &quot;*.oot&quot;
+			FilterNames(11,0) = oTypes.GetByName(&quot;writer8_template&quot;).UIName
+			FilterNames(11,1) = &quot;*.ott&quot;
 		Else
-			ReDim FilterNames(3,1) as String
+			ReDim FilterNames(5,1) as String
 		End If
 		FilterNames(0,0) = oTypes.GetByName(&quot;calc_StarOffice_XML_Calc&quot;).UIName	
 		Filternames(0,1) = &quot;*.sxc&quot;
@@ -384,6 +391,10 @@ Sub CallFilePicker()
 		FilterNames(2,1) = &quot;*.sdc&quot;
 		FilterNames(3,0) = oUIKey.Classes.GetByName(&quot;sc345templ&quot;).DisplayName
 		Filternames(3,1) = &quot;*.vor&quot;
+		FilterNames(4,0) = oTypes.GetByName(&quot;calc8&quot;).UIName	
+		Filternames(4,1) = &quot;*.oos&quot;
+		FilterNames(5,0) = oTypes.GetByName(&quot;calc8_template&quot;).UIName	
+		Filternames(5,1) = &quot;*.ots&quot;
 		GetFileName(DialogModel.txtSource, Filternames())
 	Else
 		GetFolderName(DialogModel.txtSource)
@@ -396,4 +407,5 @@ Sub PreviousStep()
 	DialogModel.Step = 2
 	DialogModel.cmdGoOn.Label =  sGOON
 	DialogModel.cmdCancel.Label = sCANCEL
-End Sub</script:module>
+End Sub
+</script:module>
