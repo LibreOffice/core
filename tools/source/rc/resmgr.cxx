@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-16 14:21:17 $
+ *  last change: $Author: pl $ $Date: 2000-12-01 14:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,6 +1264,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
     static const LanguageType aLanguages[] =
     {
         LANGUAGE_ENGLISH_US,
+        LANGUAGE_GERMAN,
         LANGUAGE_FRENCH,
         LANGUAGE_ITALIAN,
         LANGUAGE_SPANISH,
