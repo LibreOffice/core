@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,26 @@
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _TOOLS_RESMGR_HXX
+#include <tools/resmgr.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef _SOLAR_HRC
+#include <svtools/solar.hrc>
+#endif
+
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 
 namespace framework
@@ -608,9 +628,16 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory(m_xSMGR, m_xWindow, sal_True);
     m_xStatus = css::uno::Reference< css::task::XStatusIndicatorFactory >(static_cast< ::cppu::OWeakObject* >(pIndicatorFactoryHelper), css::uno::UNO_QUERY);
 
-    // load the menu from a resource
+    // load the default menu from the ofa resource
+    ResMgr*               pOfaResMgr = CREATERESMGR(ofa);
+    INetURLObject         aResFile  (URIHelper::SmartRelToAbs(pOfaResMgr->GetFileName()));
+    ::rtl::OUStringBuffer sMenuRes(256);
+    sMenuRes.appendAscii("private:resource/");
+    sMenuRes.append     (aResFile.GetName() );
+    sMenuRes.appendAscii("/261"             );
+
     css::util::URL aURL;
-    aURL.Complete = DECLARE_ASCII("private:resource/261");
+    aURL.Complete = sMenuRes.makeStringAndClear();
     css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
     if (xParser.is())
         xParser->parseStrict(aURL);
