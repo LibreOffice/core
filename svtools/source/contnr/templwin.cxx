@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:34:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 14:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,6 +993,8 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
     try
     {
         xDocInfo->read( rURL );
+        Reference< XPropertySet > aPropSet( xDocInfo, UNO_QUERY );
+        pEditWin->fill( aPropSet, rURL );
 
         // info fields
         Reference< XNameContainer > aNameCnt( xDocInfo, UNO_QUERY );
