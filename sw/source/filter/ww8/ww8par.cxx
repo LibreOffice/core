@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-16 14:15:34 $
+ *  last change: $Author: cmc $ $Date: 2001-03-30 15:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2006,19 +2006,6 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 
         ReadAttrs( nNext, l, bStartLine );// behandelt auch Section-Breaks
 
-        if( bPgSecBreak ) // Pagebreak, aber kein Sectionbreak
-        {
-            SwPosition&  rPt = *pPaM->GetPoint();
-            // new behavior: insert additional node only WHEN the Pagebreak
-            // ( #74468# )   is contained in a NODE that is NOT EMPTY
-            if(    (nLastFlyNode == rPt.nNode.GetIndex())
-                || (0             < rPt.nContent.GetIndex()) )
-            {
-                rDoc.AppendTxtNode( rPt );
-            }
-            rDoc.Insert( *pPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ) );
-            bPgSecBreak = FALSE;
-        }
         if( l>= nStartCp + nTextLen )
             break;
 
@@ -2032,6 +2019,34 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
                 && nType == MAN_MAINTEXT ){         // nicht fuer Header u. ae.
                 nProgress = (USHORT)( l * 100 / nTextLen );
                 ::SetProgressState( nProgress, rDoc.GetDocShell() ); // Update
+            }
+        }
+
+        // If we have encountered a 0x0c which indicates either section or
+        // pagebreak then look it up to see if it is a section break, and
+        // if it is not then insert a page break. If it is a section break
+        // it will be handled as such in the ReadAttrs of the next loop
+        if( bPgSecBreak)
+        {
+            // We need only to see if a section is ending at this cp,
+            // the plcf will already be sitting on the correct location
+            // if it is there.
+            WW8PLCFxDesc aTemp;
+            pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
+            if ((aTemp.nStartPos != l) && (aTemp.nEndPos != l))
+            {
+                SwPosition&  rPt = *pPaM->GetPoint();
+
+                // new behavior: insert additional node only WHEN the Pagebreak
+                // ( #74468# ) is contained in a NODE that is NOT EMPTY
+                if(    (nLastFlyNode == rPt.nNode.GetIndex())
+                    || (0             < rPt.nContent.GetIndex()) )
+                {
+                    rDoc.AppendTxtNode( rPt );
+                }
+
+                rDoc.Insert( *pPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ) );
+                bPgSecBreak = FALSE;
             }
         }
     }
@@ -3049,11 +3064,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.14 2001-03-16 14:15:34 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.15 2001-03-30 15:20:23 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/03/16 14:15:34  cmc
+      reformat code
+
       Revision 1.13  2001/02/27 15:03:08  os
       Complete use of DefaultNumbering component
 
