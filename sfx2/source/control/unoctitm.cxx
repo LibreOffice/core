@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:28:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
     }
 }
 
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
     //MACOSX moved outside of class above
     // {38 57 CA 80 09 36 11 d4 83 FE 00 50 04 52 6B 21}
     static sal_uInt8 pGUID[16] = { 0x38, 0x57, 0xCA, 0x80, 0x09, 0x36, 0x11, 0xd4, 0x83, 0xFE, 0x00, 0x50, 0x04, 0x52, 0x6B, 0x21 };
@@ -413,7 +413,7 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
 
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::impl_getStaticIdentifier()
 {
-#ifndef MACOSX
+#if !(defined(MACOSX) && (__GNUC__ < 3))
     //MACOSX moved outside of class above
     // {38 57 CA 80 09 36 11 d4 83 FE 00 50 04 52 6B 21}
     static sal_uInt8 pGUID[16] = { 0x38, 0x57, 0xCA, 0x80, 0x09, 0x36, 0x11, 0xd4, 0x83, 0xFE, 0x00, 0x50, 0x04, 0x52, 0x6B, 0x21 };
