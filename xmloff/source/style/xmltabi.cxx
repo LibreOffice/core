@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_POSITION,
     XML_TOK_TABSTOP_TYPE,
     XML_TOK_TABSTOP_CHAR,
-    XML_TOK_TABSTOP_LEADER,
+    XML_TOK_TABSTOP_LEADER_STYLE,
+    XML_TOK_TABSTOP_LEADER_TEXT,
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
@@ -119,7 +120,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
     { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
     { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },
     { XML_NAMESPACE_STYLE, XML_CHAR,         XML_TOK_TABSTOP_CHAR },
-    { XML_NAMESPACE_STYLE, XML_LEADER_CHAR,  XML_TOK_TABSTOP_LEADER },
+    { XML_NAMESPACE_STYLE, XML_LEADER_TEXT,  XML_TOK_TABSTOP_LEADER_TEXT },
+    { XML_NAMESPACE_STYLE, XML_LEADER_STYLE,  XML_TOK_TABSTOP_LEADER_STYLE },
     XML_TOKEN_MAP_END
 };
 
@@ -158,6 +160,7 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
     aTabStop.Alignment = style::TabAlign_LEFT;
     aTabStop.DecimalChar = sal_Unicode( ',' );
     aTabStop.FillChar = sal_Unicode( ' ' );
+    sal_Unicode cTextFillChar = 0;
 
     SvXMLTokenMap aTokenMap( aTabsAttributesAttrTokenMap );
 
@@ -205,12 +208,23 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
             if( 0 != rValue.getLength() )
                 aTabStop.DecimalChar = rValue[0];
             break;
-        case XML_TOK_TABSTOP_LEADER:
+        case XML_TOK_TABSTOP_LEADER_STYLE:
+            if( IsXMLToken( rValue, XML_NONE ) )
+                aTabStop.FillChar = ' ';
+            else if( IsXMLToken( rValue, XML_DOTTED ) )
+                aTabStop.FillChar = '.';
+            else
+                aTabStop.FillChar = '_';
+            break;
+        case XML_TOK_TABSTOP_LEADER_TEXT:
             if( 0 != rValue.getLength() )
-                aTabStop.FillChar = rValue[0];
+                cTextFillChar = rValue[0];
             break;
         }
     }
+
+    if( cTextFillChar != 0 && aTabStop.FillChar != ' ' )
+        aTabStop.FillChar = cTextFillChar;
 }
 
 SvxXMLTabStopContext_Impl::~SvxXMLTabStopContext_Impl()
