@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:35:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
                 return sal_True;
         }
         if( pFrm->IsFlyFrm() )
-            aFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchor();
+            aFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm();
         else
             aFrm = pFrm->GetUpper();
     } while( aFrm.GetSwFrm() && !aFrm.IsAccessible( IsInPagePreview() ) );
@@ -540,7 +540,7 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj,
             if( pFly->IsFlyInCntFrm() )
             {
                 // For FLY_IN_CNTNT the parent is the anchor
-                aParent = pFly->GetAnchor();
+                aParent = pFly->GetAnchorFrm();
                 ASSERT( aParent.IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
             }
@@ -575,7 +575,7 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj,
             if( pFrmFmt && FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
             {
                 // For FLY_IN_CNTNT the parent is the anchor
-                aParent = pContact->GetAnchor();
+                aParent = pContact->GetAnchorFrm();
                 ASSERT( aParent.IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
 
@@ -584,9 +584,9 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj,
             {
                 // In any other case the parent is the root frm
                 if( bInPagePreview )
-                    aParent = pContact->GetAnchor()->FindPageFrm();
+                    aParent = pContact->GetAnchorFrm()->FindPageFrm();
                 else
-                    aParent = pContact->GetAnchor()->FindRootFrm();
+                    aParent = pContact->GetAnchorFrm()->FindRootFrm();
             }
         }
     }
