@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvtext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: sj $ $Date: 2000-09-28 15:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,16 +762,16 @@ void InitProcessCharState(ProcChrSta& State, ObjTextType& AktAtr, USHORT IndexA)
 
 BOOL UpcasePossible(UCHAR c)
 {
-    if ((c>='a' && c<='z') || c=='ä' || c=='ö' || c=='ü') return TRUE;
+    if ((c>='a' && c<='z') || c == 0xe4 || c == 0xf6 || c == 0xfc ) return TRUE;
     else return FALSE;
 }
 
 UCHAR Upcase(UCHAR c)
 {
     if ((c>=(UCHAR)'a' && c<=(UCHAR)'z')) c=(c-(UCHAR)'a')+(UCHAR)'A';
-    else if (c==(UCHAR)'ä') c=(UCHAR)'Ä';
-    else if (c==(UCHAR)'ö') c=(UCHAR)'Ö';
-    else if (c==(UCHAR)'ü') c=(UCHAR)'Ü';
+    else if ( c == 0xe4 ) c = 0xc4;
+    else if ( c == 0xf6 ) c = 0xd6;
+    else if ( c == 0xfc ) c = 0xdc;
     return c;
 }
 
