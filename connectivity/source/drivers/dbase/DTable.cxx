@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:45:54 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,14 @@ void SAL_CALL ODbaseTable::disposing(void)
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
+#ifdef DEBUG
+    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> xProp = *aIter;
+        xProp = NULL;
+    }
     m_aColumns->clear();
+#endif
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
@@ -811,7 +818,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
                 default:
                     OSL_ASSERT("Falscher Type");
             }
-            (*_rRow)[i].setType(nType);
+            (*_rRow)[i].setTypeKind(nType);
         }
 
 //      if (aStatus.IsError())
@@ -822,7 +829,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
     return sal_True;
 }
 //------------------------------------------------------------------
-BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, OFileValue& aVariable)
+BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 {
     BOOL bIsText = TRUE;
     //  SdbConnection* pConnection = GetConnection();
@@ -833,7 +840,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, OFileValue& aVariable)
         case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
         {
             const char cEOF = (char) 0x1a;
-            ByteString aStr;
+            ByteString aBStr;
             static char aBuf[514];
             aBuf[512] = 0;          // sonst kann der Zufall uebel mitspielen
             BOOL bReady = sal_False;
@@ -848,11 +855,13 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, OFileValue& aVariable)
                 bReady = aBuf[i] == cEOF;
 
                 aBuf[i] = 0;
-                aStr += aBuf;
+                aBStr += aBuf;
 
-            } while (!bReady && !m_aMemoStream.IsEof() && aStr.Len() < STRING_MAXLEN);
+            } while (!bReady && !m_aMemoStream.IsEof() && aBStr.Len() < STRING_MAXLEN);
 
-            aVariable = ::rtl::OUString(aStr.GetBuffer(), aStr.Len(),getConnection()->getTextEncoding());
+            ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),getConnection()->getTextEncoding());
+            aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),aStr.getLength());
+
         } break;
         case MemoFoxPro:
         case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
@@ -897,23 +906,25 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, OFileValue& aVariable)
             //  char cChar;
             if (nLength < STRING_MAXLEN && bIsText)
             {
-                ByteString aStr;
-                aStr.Expand(USHORT (nLength));
-                m_aMemoStream.Read(aStr.AllocBuffer((USHORT)nLength),nLength);
-                aStr.ReleaseBufferAccess();
-                aVariable = ::rtl::OUString(aStr.GetBuffer(),aStr.Len(), getConnection()->getTextEncoding());
+                ByteString aBStr;
+                aBStr.Expand(USHORT (nLength));
+                m_aMemoStream.Read(aBStr.AllocBuffer((USHORT)nLength),nLength);
+                aBStr.ReleaseBufferAccess();
+                ::rtl::OUString aStr(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
+                aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),aStr.getLength());
             }
             else
             {
-//                              ::Sequence<sal_Int8> aText(nLength);
-//              sal_Int8* pData = aText.getArray();
-//              for (ULONG i = 0; i < nLength; i++)
-//              {
-//                  m_aMemoStream.Read(&cChar,1);
-//                  (*pData++) = cChar;
-//              }
-//              aVariable.setBytes(aText);
-                return sal_False;
+                Sequence<sal_Int8> aText(nLength);
+                sal_Int8* pData = aText.getArray();
+                sal_Char cChar;
+                for (ULONG i = 0; i < nLength; i++)
+                {
+                    m_aMemoStream.Read(&cChar,1);
+                    (*pData++) = cChar;
+                }
+                aVariable = aText;
+                //  return sal_False;
             }
         }
     }
@@ -1415,7 +1426,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseTable::WriteMemo(OFileValue& aVariable, ULONG& rBlockNr)
+BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
 {
     // wird die BlockNr 0 vorgegeben, wird der block ans Ende gehaengt
     char cChar = 0;

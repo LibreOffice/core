@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:42:44 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,9 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLE
         throw DisposedException();
     OFlatStatement* pStmt = new OFlatStatement(this);
 
+    Reference< XStatement > xStmt = pStmt;
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return pStmt;
+    return xStmt;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
@@ -195,9 +196,11 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
         throw DisposedException();
 
     OFlatPreparedStatement* pStmt = new OFlatPreparedStatement(this,m_aTypeInfo);
+    Reference< XPreparedStatement > xStmt = pStmt;
     pStmt->construct(sql);
+
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return pStmt;
+    return xStmt;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)

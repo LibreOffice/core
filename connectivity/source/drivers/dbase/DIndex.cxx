@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:30:30 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
     return new OIndexIterator(this, pOp, pOperand);
 }
 //------------------------------------------------------------------
-BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const OFileValue& rValue)
+BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
     // Sucht ein bestimmten Wert im Index
@@ -262,7 +262,7 @@ BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const OFileValue&
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Find(sal_uInt32 nRec, const OFileValue& rValue)
+BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
@@ -273,7 +273,7 @@ BOOL ODbaseIndex::Find(sal_uInt32 nRec, const OFileValue& rValue)
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const OFileValue& rValue)
+BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
@@ -297,8 +297,8 @@ BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const OFileValue& rValue)
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Update(sal_uInt32 nRec, const OFileValue& rOldValue,
-                         const OFileValue& rNewValue)
+BOOL ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
+                         const ORowSetValue& rNewValue)
 {
     openIndexFile();
     OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
@@ -310,7 +310,7 @@ BOOL ODbaseIndex::Update(sal_uInt32 nRec, const OFileValue& rOldValue,
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const OFileValue& rValue)
+BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSHURE(m_aFileStream.IsOpen(),"FileStream is not opened!");
@@ -650,7 +650,7 @@ BOOL ODbaseIndex::CreateImpl()
         // ueberpruefen auf doppelten eintrag
         if (m_IsUnique && m_nCurNode != NODE_NOTFOUND)
         {
-            ONDXKey aKey(m_aHeader.db_keytype ? OFileValue(xRow->getDouble(1)) : OFileValue(xRow->getString(1)), nType, 0);
+            ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, 0);
             if (aKey == (*m_aCurLeaf)[m_nCurNode].GetKey())
             {
 //              String aText = String(OResId(STR_STAT_INDEX_NOT_UNIQUE));
@@ -662,7 +662,7 @@ BOOL ODbaseIndex::CreateImpl()
                 break;
             }
         }
-        ONDXKey aKey(m_aHeader.db_keytype ? OFileValue(xRow->getDouble(1)) : OFileValue(xRow->getString(1)), nType, xSet->getRow());
+        ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, xSet->getRow());
         ONDXNode aNewNode(aKey);
         if (!m_aCurLeaf->Insert(aNewNode, --nRowsLeft))
             break;

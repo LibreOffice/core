@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 14:51:31 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 09:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,8 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
         throw DisposedException();
 
     ODbasePreparedStatement* pStmt = new ODbasePreparedStatement(this,m_aTypeInfo);
-    pStmt->construct(sql);
     Reference< XPreparedStatement > xHoldAlive = pStmt;
+    pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
 }
