@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:11:29 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@
 #ifndef SD_SLIDE_VIEW_SHELL_HXX
 #include "SlideViewShell.hxx"
 #endif
+#include "TaskPaneViewShell.hxx"
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
@@ -190,13 +191,6 @@
 #include "sdattr.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "unslprms.hxx"
-#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
-#include "SlideChangeChildWindow.hxx"
-#endif
-#ifndef SD_SLIDE_CHANGE_HXX
-#include "slidechg.hxx"
-#endif
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
@@ -232,275 +226,6 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 
 namespace sd {
-
-/*************************************************************************
-|*
-|* EffekteWindow updaten
-|*
-\************************************************************************/
-
-void ViewShell::UpdateSlideChangeWindow()
-{
-    USHORT nId = SlideChangeChildWindow::GetChildWindowId();
-    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
-    if( pWindow )
-    {
-        SlideChangeWindow* pSlideChangeWin = static_cast<SlideChangeWindow*>(
-            pWindow->GetWindow());
-        if( pSlideChangeWin && pSlideChangeWin->IsUpdateMode() )
-        {
-            SdPage* pPage      = NULL;
-            USHORT  nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
-            USHORT  nPage;
-            BOOL    bPageSelected = FALSE;
-
-            // falls nichts selektiert ist, machen wir das schnell selbst
-            for (USHORT i = 0; i < nNoOfPages; i++)
-            {
-                pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
-                if (pPage->IsSelected())
-                {
-                    bPageSelected = TRUE;
-                    break;
-                }
-            }
-
-            // ItemSet fuer Dialog (jetzt Window) fuellen
-            SfxItemSet aSet(GetDoc()->GetPool(), ATTR_DIA_START, ATTR_DIA_END);
-
-            if( bPageSelected )
-            {
-                // jetzt werden die Seitenattribute "per Hand" gemerged
-                BOOL bSameEffect  = TRUE;         // Annahme: alle Seiten haben die
-                BOOL bSameSpeed   = TRUE;         // gleichen Attribute
-                BOOL bSameTime    = TRUE;
-                BOOL bSameChange  = TRUE;
-                BOOL bSameSoundOn = TRUE;
-                BOOL bSameSound   = TRUE;
-
-                presentation::FadeEffect eLastEffect;
-                FadeSpeed  eLastSpeed;
-                ULONG      nLastTime;
-                PresChange eLastChange;
-                BOOL       bLastSoundOn;
-                String     aLastSound;
-
-                // Attribute der ersten selektierten Seite
-                for (nPage = 0; nPage < nNoOfPages; nPage++)
-                {
-                    pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
-                    if (pPage->IsSelected())
-                    {
-                        eLastEffect  = pPage->GetFadeEffect();
-                        eLastSpeed   = pPage->GetFadeSpeed();
-                        nLastTime    = pPage->GetTime();
-                        eLastChange  = pPage->GetPresChange();
-                        bLastSoundOn = pPage->IsSoundOn();
-                        aLastSound   = pPage->GetSoundFile();
-                        break;
-                    }
-                }
-
-                // mit den anderen selektierten Seiten vergleichen
-                for (; nPage < nNoOfPages; nPage++)
-                {
-                    pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
-                    if (pPage->IsSelected())
-                    {
-                        if (eLastEffect  != pPage->GetFadeEffect()) bSameEffect  = FALSE;
-                        if (eLastSpeed   != pPage->GetFadeSpeed())  bSameSpeed   = FALSE;
-                        if (nLastTime    != pPage->GetTime())       bSameTime    = FALSE;
-                        if (eLastChange  != pPage->GetPresChange()) bSameChange  = FALSE;
-                        if (bLastSoundOn != pPage->IsSoundOn())     bSameSoundOn = FALSE;
-                        if (aLastSound   != pPage->GetSoundFile())  bSameSound   = FALSE;
-                    }
-                }
-
-                // das Set besetzen
-                if (bSameEffect)  aSet.Put( DiaEffectItem( eLastEffect ) );
-                else              aSet.InvalidateItem( ATTR_DIA_EFFECT );
-
-                if (bSameSpeed)   aSet.Put( DiaSpeedItem( eLastSpeed ) );
-                else              aSet.InvalidateItem( ATTR_DIA_SPEED );
-
-                if (bSameChange)  aSet.Put( DiaAutoItem( eLastChange ) );
-                else              aSet.InvalidateItem( ATTR_DIA_AUTO );
-
-                if (bSameTime)    aSet.Put( DiaTimeItem( nLastTime ) );
-                else              aSet.InvalidateItem( ATTR_DIA_TIME );
-
-                if (bSameSoundOn) aSet.Put(SfxBoolItem(ATTR_DIA_SOUND, bLastSoundOn));
-                else              aSet.InvalidateItem(ATTR_DIA_SOUND);
-
-                if (bSameSound && aLastSound.Len() > 0)
-                {
-                    aSet.Put(SfxStringItem(ATTR_DIA_SOUNDFILE, aLastSound));
-                }
-                else
-                    aSet.InvalidateItem(ATTR_DIA_SOUNDFILE);
-
-                pSlideChangeWin->EnableAssignButton();
-            }
-            else // keine selektierte Seite
-            {
-                aSet.InvalidateItem( ATTR_DIA_EFFECT );
-                aSet.InvalidateItem( ATTR_DIA_SPEED );
-                aSet.InvalidateItem( ATTR_DIA_AUTO );
-                aSet.InvalidateItem( ATTR_DIA_TIME );
-                aSet.InvalidateItem( ATTR_DIA_SOUND );
-                aSet.InvalidateItem( ATTR_DIA_SOUNDFILE );
-
-                pSlideChangeWin->EnableAssignButton( FALSE );
-            }
-            pSlideChangeWin->Update( aSet );
-        }
-    }
-}
-
-/*************************************************************************
-|*
-|* Vom EffekteWindow zuweisen
-|*
-\************************************************************************/
-
-void ViewShell::AssignFromSlideChangeWindow (EditMode eEditMode)
-{
-    USHORT nId = SlideChangeChildWindow::GetChildWindowId();
-    SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
-    if( pWindow )
-    {
-        SlideChangeWindow* pSlideChangeWin = static_cast<SlideChangeWindow*>(
-            pWindow->GetWindow());
-        if( pSlideChangeWin )
-        {
-            SdPage* pPage      = NULL;
-            USHORT  nPage;
-            USHORT  nNoOfPages;
-            if (eEditMode == EM_PAGE)
-                nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
-            else
-                nNoOfPages = GetDoc()->GetMasterSdPageCount(PK_STANDARD);
-
-
-            SfxItemSet aSet(GetDoc()->GetPool(), ATTR_DIA_START, ATTR_DIA_END );
-            pSlideChangeWin->GetAttr( aSet );
-
-            // Auswertung des ItemSets
-
-            // Undo Gruppe erzeugen
-            SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
-            String aComment(SdResId(STR_UNDO_SLIDE_PARAMS));
-            pUndoGroup->SetComment(aComment);
-
-            for (nPage = 0; nPage < nNoOfPages; nPage++)
-            {
-                if (eEditMode == EM_PAGE)
-                    pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
-                else
-                    pPage = GetDoc()->GetMasterSdPage(nPage, PK_STANDARD);
-                if (pPage->IsSelected())
-                {
-                    // alte Attribute fuer UndoAction merken
-                    FadeSpeed  eOldFadeSpeed  = pPage->GetFadeSpeed();
-                    presentation::FadeEffect eOldFadeEffect = pPage->GetFadeEffect();
-                    PresChange eOldChange     = pPage->GetPresChange();
-                    UINT32     nOldTime       = pPage->GetTime();
-                    BOOL       bOldSoundOn    = pPage->IsSoundOn();
-                    String     aOldSoundFile  = pPage->GetSoundFile();
-
-                    if (aSet.GetItemState(ATTR_DIA_EFFECT) == SFX_ITEM_SET)
-                    {
-                       presentation::FadeEffect eOldEffect = pPage->GetFadeEffect();
-                       presentation::FadeEffect eNewEffect = (presentation::FadeEffect)((const DiaEffectItem&)
-                                                   aSet.Get(ATTR_DIA_EFFECT)).
-                                                       GetValue();
-
-                        pPage->SetFadeEffect((presentation::FadeEffect)((const DiaEffectItem&)
-                                aSet.Get(ATTR_DIA_EFFECT)).GetValue());
-
-                        // ist es eine Aenderung und kann man sie sehen?
-                        if (((eOldEffect != presentation::FadeEffect_NONE &&
-                              eNewEffect == presentation::FadeEffect_NONE)    ||
-                             (eOldEffect == presentation::FadeEffect_NONE &&
-                              eNewEffect != presentation::FadeEffect_NONE))  &&
-                            (this->ISA(SlideViewShell)))
-                        {
-                            GetView()->InvalidateAllWin (
-                                static_cast<SlideView*>(GetView())
-                                ->GetFadeIconArea(nPage));
-                        }
-                    }
-
-                    if (aSet.GetItemState(ATTR_DIA_SPEED) == SFX_ITEM_SET)
-                        pPage->SetFadeSpeed((FadeSpeed)((const DiaSpeedItem&)
-                                aSet.Get(ATTR_DIA_SPEED)).GetValue());
-
-                    if (aSet.GetItemState(ATTR_DIA_TIME) == SFX_ITEM_SET)
-                        pPage->SetTime(((DiaTimeItem&)
-                                aSet.Get(ATTR_DIA_TIME)).GetValue());
-
-                    if (aSet.GetItemState(ATTR_DIA_AUTO) == SFX_ITEM_SET)
-                        pPage->SetPresChange(((DiaAutoItem&)
-                                aSet.Get(ATTR_DIA_AUTO)).GetValue());
-
-                    if (aSet.GetItemState(ATTR_DIA_SOUND) == SFX_ITEM_SET)
-                        pPage->SetSound(((SfxBoolItem&)
-                                aSet.Get(ATTR_DIA_SOUND)).GetValue());
-
-                    if (aSet.GetItemState(ATTR_DIA_SOUNDFILE) == SFX_ITEM_SET)
-                    {
-                        String aTemp(((SfxStringItem&)aSet.Get(ATTR_DIA_SOUNDFILE)).GetValue());
-                        pPage->SetSoundFile(aTemp);
-                    }
-
-                    // Undo-Action erzeugen und in Gruppe stellen
-                    SdUndoAction* pUndoAction = new SlideParametersUndoAction
-                                    (GetDoc(), pPage,
-                                     eOldFadeSpeed,  pPage->GetFadeSpeed(),
-                                     eOldFadeEffect, pPage->GetFadeEffect(),
-                                     eOldChange,     pPage->GetPresChange(),
-                                     nOldTime,       pPage->GetTime(),
-                                     bOldSoundOn,    pPage->IsSoundOn(),
-                                     aOldSoundFile,  pPage->GetSoundFile());
-                    pUndoGroup->AddAction(pUndoAction);
-                }
-            }
-
-            // Undo Gruppe dem Undo Manager uebergeben
-            GetViewFrame()->GetObjectShell()->GetUndoManager()->
-                        AddUndoAction(pUndoGroup);
-
-            /***************************************************************
-            |* ggfs. in Preview anzeigen
-            \**************************************************************/
-            SfxChildWindow* pPreviewChildWindow =
-                GetViewFrame()->GetChildWindow(
-                    PreviewChildWindow::GetChildWindowId());
-            if (pPreviewChildWindow)
-            {
-                PreviewWindow* pPreviewWindow = static_cast<PreviewWindow*>(
-                    pPreviewChildWindow->GetWindow());
-                if (pPreviewWindow!=NULL && pPreviewWindow->GetDoc()==GetDoc())
-                {
-                    pPreviewWindow->AnimatePage();
-                }
-            }
-
-
-            static USHORT SidArray[] = {
-                            SID_DIA_EFFECT,
-                            SID_DIA_SPEED,
-                            SID_DIA_AUTO,
-                            SID_DIA_TIME,
-                            0 };
-
-            GetViewFrame()->GetBindings().Invalidate( SidArray );
-
-            // Model geaendert
-            GetDoc()->SetChanged();
-        }
-    }
-}
 
 /*************************************************************************
 |*
@@ -1563,59 +1288,19 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT,
                 eAutoLayout ) );
 
-        AbstractSdNewFoilDlg* pDlg = NULL; //CHINA001 SdNewFoilDlg* pDlg = NULL;
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        // Make the layout menu visible in the tool pane.
+        SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+        SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
+            toolpanel::TaskPaneViewShell::PID_LAYOUT);
+        GetDispatcher()->Execute (
+            SID_TASK_PANE,
+            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+            &aMakeToolPaneVisible,
+            &aPanelId,
+            NULL);
 
-        // Do not show the dialog for the Draw application.
-        if (nSId == SID_INSERTPAGE
-            && !GetViewShellBase().ISA(GraphicViewShellBase))
-        { //add by CHINA001
-            //CHINA001 pDlg = new SdNewFoilDlg(GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), FALSE);
-            pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), FALSE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        }
-        if (pDlg && pDlg->Execute () != RET_OK)
-        {
-            Cancel();
-
-            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-            delete pDlg;
-            rRequest.Ignore ();
-            return NULL;
-        }
-        else
-        {
-            // AutoLayouts muessen fertig sein
-            pDocument->StopWorkStartupDelay();
-
-            if (pDlg)
-            {
-                pDlg->GetAttr( aAttrSet );
-            }
-
-            if (ePageKind == PK_NOTES)
-            {
-                aNotesPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
-                eNotesLayout   = (AutoLayout) ((const SfxAllEnumItem &)
-                    aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
-            }
-            else
-            {
-                aStandardPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
-                eStandardLayout   = (AutoLayout) ((const SfxAllEnumItem &)
-                    aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
-            }
-
-            bIsPageBack = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_BACKGROUND)).GetValue ();
-            bIsPageObj  = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_OBJECTS)).GetValue();
-
-            pDocument->SetChanged(TRUE);
-        }
-
-        delete pDlg;
+        // AutoLayouts muessen fertig sein
+        pDocument->StopWorkStartupDelay();
     }
     else if (pArgs->Count () != 4)
     {
