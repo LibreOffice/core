@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:20:08 $
+ *  last change: $Author: kz $ $Date: 2004-09-07 10:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,7 +676,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     if (eUpdateRefMode == URM_INSDEL)
     {
         bIsInsert = (nDx >= 0 && nDy >= 0 && nDz >= 0);
-        if ( nDx > 0 && nRow >= nRow1 && nRow <= nRow2 &&
+        if ( nDx && nRow >= nRow1 && nRow <= nRow2 &&
             nTab >= nTab1 && nTab <= nTab2 )
         {
             if (nCol >= nCol1)
@@ -690,7 +690,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 //              bPosChanged = TRUE;
             }
         }
-        if ( nDy > 0 && nCol >= nCol1 && nCol <= nCol2 &&
+        if ( nDy && nCol >= nCol1 && nCol <= nCol2 &&
             nTab >= nTab1 && nTab <= nTab2 )
         {
             if (nRow >= nRow1)
@@ -704,7 +704,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 //              bPosChanged = TRUE;
             }
         }
-        if ( nDz > 0 && nCol >= nCol1 && nCol <= nCol2 &&
+        if ( nDz && nCol >= nCol1 && nCol <= nCol2 &&
             nRow >= nRow1 && nRow <= nRow2 )
         {
             if (nTab >= nTab1)
@@ -765,8 +765,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bOnRefMove = (bValChanged || (aPos != aOldPos));
             // Zelle referiert sich evtl. selbst, z.B. ocColumn, ocRow ohne Parameter
 
-        BOOL bColRowNameCompile, bHasRelName, bNewListening, bNewRelName,
-            bInDeleteUndo;
+        BOOL bColRowNameCompile, bHasRelName, bNewListening, bInDeleteUndo;
         if ( bHasRefs )
         {
             // Bei Insert muessen ColRowNames neu kompiliert werden, falls genau
@@ -851,23 +850,21 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 bInDeleteUndo = TRUE;
             else
                 bInDeleteUndo = FALSE;
+            // RelNameRefs are always moved
+            bHasRelName = HasRelNameReference();
             // Referenz geaendert und neues Listening noetig?
             // ausser Insert/Delete ohne Spezialitaeten
-            bNewListening = ( bRangeModified || pRangeData || bColRowNameCompile
-                || (bValChanged && (eUpdateRefMode != URM_INSDEL ||
-                    bInDeleteUndo)) );
-            bHasRelName = HasRelNameReference();
-            bNewRelName = (bHasRelName && eUpdateRefMode != URM_COPY);
+            bNewListening = (bRangeModified || pRangeData || bColRowNameCompile
+                    || (bValChanged &&
+                        (eUpdateRefMode != URM_INSDEL || bInDeleteUndo)) ||
+                    (bHasRelName && eUpdateRefMode != URM_COPY));
             if ( bNewListening )
-                EndListeningTo( pDocument, 0, pOld, aOldPos );
-            else if ( bNewRelName )
-                EndListeningTo( pDocument, SC_LISTENING_NAMES_REL, pOld, aOldPos );
-                // RelNameRefs werden immer mitverschoben
+                EndListeningTo( pDocument, pOld, aOldPos );
         }
         else
         {
-            bColRowNameCompile = bHasRelName = bNewListening = bNewRelName =
-                bInDeleteUndo = FALSE;
+            bColRowNameCompile = bHasRelName = bNewListening = bInDeleteUndo =
+                FALSE;
         }
 
         BOOL bNeedDirty;
@@ -896,7 +893,6 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
-            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.MoveRelWrap();
             aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, r,
@@ -914,24 +910,17 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             // InsertCol/InsertRow
             if ( bNewListening )
             {
-                if ( pRangeData && eUpdateRefMode == URM_INSDEL )
+                if ( eUpdateRefMode == URM_INSDEL )
                 {
+                    // Inserts/Deletes re-establish listeners after all
+                    // UpdateReference calls.
                     // All replaced shared formula listeners have to be
                     // established after an Insert or Delete. Do nothing here.
-                }
-                else if ( eUpdateRefMode == URM_INSDEL && !bIsInsert )
-                {
-                    // Deletes establish listeners on names _after_
-                    // UpdateReference and the following Delete.
-                    StartListeningTo( pDocument, SC_LISTENING_EXCEPT |
-                            SC_LISTENING_NAMES_ABS | SC_LISTENING_NAMES_REL );
+                    SetNeedsListening( TRUE);
                 }
                 else
-                    StartListeningTo( pDocument, 0 );
+                    StartListeningTo( pDocument );
             }
-            else if ( bNewRelName && eUpdateRefMode != URM_INSDEL )
-                StartListeningTo( pDocument, SC_LISTENING_NAMES_REL );
-                // Insert/Delete RelNameListening/SetDirty follows later
         }
         if ( bNeedDirty && (!(eUpdateRefMode == URM_INSDEL && bHasRelName) || pRangeData) )
         {   // Referenzen abgeschnitten, ungueltig o.ae.?
@@ -965,7 +954,6 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = new ScTokenArray( *pRangeData->GetCode() );
-            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.MoveRelWrap();
             aComp2.UpdateInsertTab( nTable, FALSE );
@@ -999,7 +987,6 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
-            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
@@ -1035,7 +1022,6 @@ void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
-            pCode->SetReplacedSharedFormula( TRUE );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
