@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:59:56 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,7 +1659,7 @@ TabPage PAGE_ADO
         Text [ arabic ] = "URL";
         Text [ greek ] = "U~RL";
         Text [ korean ] = "U~RL";
-        Text [ turkish ] = "U~RL";
+        Text [ turkish ] = "\nU~RL";
         Text [ language_user1 ] = " ";
         Text[ finnish ] = "U~RL-osoite";
         Text[ catalan ] = "U~RL";
@@ -4752,9 +4752,10 @@ String STR_ADDRESSBOOK_EVOLUTION
     Text[ arabic ] = "Evolution address book";
     Text[ catalan ] = "Evolution address book";
     Text[ thai ] = "Evolution address book";
-    Text[ czech ] = "Evolution address book";
-    Text[ slovak ] = "Evolution address book";
+    Text[ czech ] = "Databáze kontaktů z Evolution";
+    Text[ slovak ] = "Adresár Evolution";
     Text[ hebrew ] = "Evolution address book";
+    Text[ hindi ] = "Evolution address book";
 };
 String STR_ADDRESSBOOK_LDAP
 {
@@ -4910,7 +4911,7 @@ ModalDialog DLG_DOMAINPASSWORD
         Text[ spanish ] = "Introduzca la ~contrase�a para el usuario 'DOMAIN'.";
         Text[ finnish ] = "Please enter the ~password for the user 'DOMAIN'.";
         Text[ italian ] = "Indicate una ~password per il 'DOMAIN' dell'utente.";
-        Text[ czech ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ czech ] = "Prosím zadejte heslo pro uživatele 'DOMAIN'.";
         Text[ danish ] = "Please enter the ~password for the user 'DOMAIN'.";
         Text[ swedish ] = "Ange ~l�senordet f�r anv�ndaren 'DOMAIN'.";
         Text[ polish ] = "Please enter the ~password for the user 'DOMAIN'.";
@@ -4925,6 +4926,7 @@ ModalDialog DLG_DOMAINPASSWORD
         Text[ catalan ] = "Please enter the ~password for the user 'DOMAIN'.";
         Text[ thai ] = "Please enter the ~password for the user 'DOMAIN'.";
         Text[ slovak ] = "Prosím zadajte heslo ~pre užívateľa 'DOMAIN'.";
+        Text[ hindi ] = "Please enter the ~password for the user 'DOMAIN'.";
     };
 
     Edit ET_PASSWORD
@@ -4958,7 +4960,7 @@ ModalDialog DLG_DOMAINPASSWORD
     Text[ spanish ] = "Conversi�n de la base de datos";
     Text[ finnish ] = "Convert Database";
     Text[ italian ] = "Converti database";
-    Text[ czech ] = "Convert Database";
+    Text[ czech ] = "Konvertovat databázi";
     Text[ danish ] = "Convert Database";
     Text[ swedish ] = "Konvertera databas";
     Text[ polish ] = "Convert Database";
@@ -4973,6 +4975,7 @@ ModalDialog DLG_DOMAINPASSWORD
     Text[ catalan ] = "Convert Database";
     Text[ thai ] = "Convert Database";
     Text[ slovak ] = "Konvertovať databázu";
+    Text[ hindi ] = "Convert Database";
 };
 //.........................................................................
 TabPage PAGE_USERDRIVER
@@ -5015,7 +5018,7 @@ TabPage PAGE_USERDRIVER
         Text[ czech ] = "Uživatelské jméno";
         Text[ hebrew ] = "‮שם משתמש‬";
         Text[ hindi ] = "~उपभोक्ता नाम";
-        Text[ slovak ] = "~Užívateľ";
+        Text[ slovak ] = "Užívateľské meno";
     };
     Edit ET_USERNAME
     {
@@ -5053,7 +5056,7 @@ TabPage PAGE_USERDRIVER
         Text[ finnish ] = "Salasana pakollinen";
         Text[ catalan ] = "Es necessita una contrasenya";
         Text[ thai ] = "ต้องการรหัสผ่าน";
-        Text[ czech ] = "Vyžadováno heslo";
+        Text[ czech ] = "Požadované heslo";
         Text[ hebrew ] = "Kennwort erforderlich";
         Text[ hindi ] = "कूटशब्द का आवश्यकता";
         Text[ slovak ] = "Požadované heslo";
@@ -5092,7 +5095,7 @@ TabPage PAGE_USERDRIVER
         Text [ language_user1 ] = " ";
         Text[ catalan ] = "Par�metres del programa de control";
         Text[ thai ] = "ตั้งค่าไดร้ฟ์เวอร์ ";
-        Text[ czech ] = "Konfigurace ovladače";
+        Text[ czech ] = "Nastavení ovladače";
         Text[ hebrew ] = "~Treibereinstellungen";
         Text[ hindi ] = "ड्रइव निर्धारण";
         Text[ slovak ] = "Nastavenie ovládača";
@@ -5180,7 +5183,7 @@ TabPage PAGE_USERDRIVER
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
-        Text[ slovak ] = "Všeobecné";
+        Text[ slovak ] = "Všeobecný";
     };
 
     AUTO_INCREMENT_CONTROLS (80 )
@@ -5211,10 +5214,10 @@ TabPage PAGE_USERDRIVER
         Text[ chinese_traditional ] = "使用 SQL92 命名規則";
         Text[ turkish ] = "SQL92 ad�ndaki s�n�rlamay� kullan";
         Text[ arabic ] = "Use SQL92 naming convention";
-        Text[ czech ] = "Použít jména vyhovující SQL92";
+        Text[ czech ] = "Použít omezení v pojmenování SQL92";
         Text[ hebrew ] = "SQL92 Namensbeschränkung verwenden";
         Text[ catalan ] = "Use SQL92 naming constraints";
-        Text[ portuguese_brazilian ] = "Use SQL92 naming constraints";
+        Text[ portuguese_brazilian ] = "Usar restri��es de nomes do SQL92";
         Text[ thai ] = "Use SQL92 naming constraints";
         Text[ hindi ] = "Use SQL92 naming constraints";
         Text[ slovak ] = "Použite SQL92 pomenovanie";
@@ -5250,12 +5253,16 @@ TabPage PAGE_USERDRIVER
         Text[ finnish ] = "K�yt� luetteloa tiedostopohjaisissa tietokannoissa";
         Text[ catalan ] = "Utilitza el cat�leg per a les bases de dades basades en fitxers";
         Text[ thai ] = "ใช้ส่วนแสดงรายการสำหรับฐานข้อมูลแฟ้มพื้นฐาน";
-        Text[ czech ] = "Použít katalog pro souborově orientované databáze";
+        Text[ czech ] = "Pro souborové databáze použít katalog";
         Text[ hebrew ] = "Catalog verwenden bei dateibasierten Datenbanken";
         Text[ hindi ] = "फाइल-आधारित लेखासंचय केलिए सूचीपत्र का उपयोग करो";
         Text[ slovak ] = "Pre súborové databázy použiť katalóg";
     };
 };
+
+
+
+
 
 
 
