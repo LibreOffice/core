@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:20:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-17 15:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,9 @@ namespace framework{
 #define PRODUCTNAME_VARIABLE                        DECLARE_ASCII("%productname%")
 #define PRODUCTNAME_VARLENGTH                       13
 #define PRODUCTNAME_FALLBACK                        DECLARE_ASCII("StarOffice"                                      )   /// fallback, if configuration can't give us current set product name ...
-#define PRODUCTPATCH_ORGVERSION                     DECLARE_ASCII("6.0/7"                                           )
-#define PRODUCTPATCH_NEWVERSION                     DECLARE_ASCII("1.0"                                             )
-#define PRODUCTPATCH_VARLENGTH                      3
+#define FORMATVERSION_VARIABLE                      DECLARE_ASCII("%formatversion%"                                 )
+#define FORMATVERSION_VARLENGTH                     15
+#define FORMATVERSION_FALLBACK                      DECLARE_ASCII("6.0/7"                                           )
 
 //*****************************************************************************************************************
 // We know some default values ...
@@ -885,7 +885,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
         sal_Int32       m_nKeyCountLoaders             ;
         sal_Int32       m_nKeyCountContentHandlers     ;
         ::rtl::OUString m_sProductName                 ;
-        sal_Bool        m_bActivateOpenofficePatch     ;    // <TRUE/> (which is valid for m_sProductname="openoffice.org" only) force replace of 6.0 with 1.0 inside filter uinames!
+        ::rtl::OUString m_sFormatVersion               ;
 };
 /*DRAFT
 class FilterCFGListener : public  css::util::XChangesListener
