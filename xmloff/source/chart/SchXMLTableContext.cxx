@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-15 20:18:32 $
+ *  last change: $Author: bm $ $Date: 2001-03-26 15:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,10 +577,6 @@ void SchXMLTableHelper::applyTable(
                         xData->setRowDescriptions( aLabels );
                     }
                 }
-
-                // apply data to chart
-                // not necessary ?
-                // xChartDoc->attachData( xChartData );
             }
         }
     }
