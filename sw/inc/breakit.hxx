@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-24 15:05:35 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 16:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ public:
     }
 
     USHORT GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
+       USHORT GetAllScriptsOfText( const String& rTxt ) const;
 };
 
 extern SwBreakIt* pBreakIt;

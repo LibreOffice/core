@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-24 15:05:13 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 16:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,3 +149,34 @@ USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
         nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
     return nScript;
 }
+
+USHORT SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
+{
+    const USHORT coAllScripts = ( SCRIPTTYPE_LATIN |
+                                  SCRIPTTYPE_ASIAN |
+                                  SCRIPTTYPE_COMPLEX );
+    USHORT nRet = 0, nScript;
+    if( !xBreak.is() )
+        nRet = coAllScripts;
+    else if( rTxt.Len() )
+    {
+        for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd;
+                n = xBreak->endOfScript( rTxt, n, nScript ) )
+        {
+            switch( nScript = xBreak->getScriptType( rTxt, n ) )
+            {
+            case ScriptType::LATIN:     nRet |= SCRIPTTYPE_LATIN;   break;
+            case ScriptType::ASIAN:     nRet |= SCRIPTTYPE_ASIAN;   break;
+            case ScriptType::COMPLEX:   nRet |= SCRIPTTYPE_COMPLEX; break;
+            case ScriptType::WEAK:
+                    if( !nRet )
+                        nRet |= coAllScripts;
+                    break;
+            }
+            if( coAllScripts == nRet )
+                break;
+        }
+    }
+    return nRet;
+}
+
