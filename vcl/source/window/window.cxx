@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-04 05:59:33 $
+ *  last change: $Author: ssa $ $Date: 2001-09-17 11:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5973,6 +5973,18 @@ void Window::SetPosSizePixel( long nX, long nY,
         if ( IsReallyVisible() )
             ImplGenerateMouseMove();
     }
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle Window::GetDesktopRectPixel() const
+{
+/*
+    Rectangle rRect;
+    mpFrameWindow->mpFrame->GetWorkArea( rRect );
+    return rRect;
+    */
+    return Rectangle( ScreenToOutputPixel( Point() ), mpFrameWindow->GetOutputSizePixel() );
 }
 
 // -----------------------------------------------------------------------
