@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 11:58:54 $
+ *  last change: $Author: cmc $ $Date: 2001-05-17 11:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3237,6 +3237,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
         sal_True,sal_False);
     sal_Unicode nArse[2];
     nArse[0] = MathType::aMathTypeTable[pTemp->GetText().GetChar(0)&0x00FF];
+    DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
 }
@@ -3428,9 +3429,11 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         nArse[1] = 0;
         nArse[0] = MathType::aMathTypeTable[pLeft->GetText().GetChar(0)
             & 0x00FF];
+        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH,sXML_open,nArse);
         nArse[0] = MathType::aMathTypeTable[pRight->GetText().GetChar(0)
             & 0x00FF];
+        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH,sXML_close,nArse);
         pFences = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mfenced,
             sal_True,sal_True);
@@ -3450,8 +3453,6 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     else
         pRow = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mrow,
             sal_True, sal_True);
-
-
 
     if (pTemp = pNode->GetSubNode(1))
         ExportExpression(pTemp,nLevel+1);
