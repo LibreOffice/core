@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-18 10:48:00 $
+ *  last change: $Author: dg $ $Date: 2001-06-18 11:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ namespace configmgr
         if (bNeedProfile)
         try
         {
-#ifdef TF_CFG
+#ifdef TF_CFGDATA
             static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"));
 #else
             static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile"));
@@ -230,7 +230,7 @@ namespace configmgr
     {
         OSL_ASSERT(pProfile);
 
-#ifdef TF_CFG
+#ifdef TF_CFGDATA
         static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("Office"));
         static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 #else
