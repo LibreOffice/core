@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-01 15:47:57 $
+ *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1791,12 +1791,12 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
 
         nRows++;
         pActBand->nRows++;
-
+#if 0
         WW8_CP nMyStartCp=nStartCp;
         if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nTable))
             if (SwWW8ImplReader::ParseTabPos(&aTabPos,pPap))
                 pTabPos = &aTabPos;
-
+#endif
         //Seek our pap to its next block of properties
         WW8PLCFxDesc aRes;
         aRes.pMemPos = 0;
@@ -1809,6 +1809,24 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         }
         pPap->GetSprms(&aRes);
         pPap->SetDirty(false);
+
+#if 1
+        WW8_CP nMyStartCp=nStartCp;
+        if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nTable))
+            if (SwWW8ImplReader::ParseTabPos(&aTabPos, pPap))
+                pTabPos = &aTabPos;
+
+        aRes.pMemPos = 0;
+        aRes.nStartPos = nStartCp;
+
+        if (!(pPap->SeekPos(aRes.nStartPos)))
+        {
+            aRes.nEndPos = LONG_MAX;
+            pPap->SetDirty(true);
+        }
+        pPap->GetSprms(&aRes);
+        pPap->SetDirty(false);
+#endif
 
         nStartCp = aRes.nEndPos;
 
@@ -2127,18 +2145,45 @@ void WW8TabDesc::CreateSwTable()
     // that this content remains ABOVE the table
     SwPosition* pPoint = pIo->pPaM->GetPoint();
     bool bInsNode = pPoint->nContent.GetIndex() ? true : false;
-    if( !bInsNode && pIo->pNode_FLY_AT_CNTNT == &pPoint->nNode.GetNode() )
+    bool bSetMinHeight = false;
+
+    /*
+     #i8062#
+     Set fly anchor to its anchor pos, so that if a table starts immediately
+     at this position a new node will be inserted before inserting the table.
+    */
+    if (!bInsNode && pIo->pFmtOfJustInsertedApo)
     {
-        bInsNode = true;
-        // minimize Fontsize to minimize height growth of the header/footer
-        SvxFontHeightItem aSz( 20 );
-        pIo->NewAttr( aSz );
-        pIo->pCtrlStck->SetAttr( *pPoint, RES_CHRATR_FONTSIZE );
+        const SwPosition* pAPos =
+            pIo->pFmtOfJustInsertedApo->GetAnchor().GetCntntAnchor();
+        if (&pAPos->nNode.GetNode() == &pPoint->nNode.GetNode())
+        {
+            bInsNode = true;
+            bSetMinHeight = true;
+
+            SwFmtSurround aSur(pIo->pFmtOfJustInsertedApo->GetSurround());
+            aSur.SetAnchorOnly(true);
+            pIo->pFmtOfJustInsertedApo->SetAttr(aSur);
+        }
     }
 
-    // set font size to 1 point to minimize y-growth of Hd/Ft
-    if( bInsNode )
-        pIo->AppendTxtNode( *pPoint );
+    if (!bInsNode && pIo->pNode_FLY_AT_CNTNT == &pPoint->nNode.GetNode())
+    {
+        bInsNode = true;
+        bSetMinHeight = true;
+    }
+
+    if (bSetMinHeight == true)
+    {
+        // minimize Fontsize to minimize height growth of the header/footer
+        // set font size to 1 point to minimize y-growth of Hd/Ft
+        SvxFontHeightItem aSz(20);
+        pIo->NewAttr( aSz );
+        pIo->pCtrlStck->SetAttr(*pPoint, RES_CHRATR_FONTSIZE);
+    }
+
+    if (bInsNode)
+        pIo->AppendTxtNode(*pPoint);
 
     pTmpPos = new SwPosition( *pIo->pPaM->GetPoint() );
 

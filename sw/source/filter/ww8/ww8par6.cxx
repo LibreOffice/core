@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-01 15:47:58 $
+ *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3070,6 +3070,11 @@ void SwWW8ImplReader::StopApo()
 // pFlyFrm->MakeFrms() gerufen
 
     }
+
+    //#i8062#
+    if (pSFlyPara && pSFlyPara->pFlyFmt)
+        pFmtOfJustInsertedApo = pSFlyPara->pFlyFmt;
+
     DELETEZ( pSFlyPara );
     DELETEZ( pWFlyPara );
 }

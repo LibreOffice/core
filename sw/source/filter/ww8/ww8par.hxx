@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-10 16:49:22 $
+ *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,6 +668,7 @@ friend class WW8FormulaControl;
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
     SwFrmFmt* pFmtOfJustInsertedGraphicOrOLE;
+    SwFrmFmt* pFmtOfJustInsertedApo;
 
     /*
     Keep track of generated Ruby character formats we we can minimize the

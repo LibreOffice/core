@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-27 10:17:29 $
+ *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,11 +1497,10 @@ bool SwWW8ImplReader::ProcessSpecial(bool bAllEnd, bool* pbReSync,
                             // WW8TabDesc::TableCellEnd() from making nonsense
 #if 0
     //we shouldn't need this anymore with table in table support.
-    if( nTable && !bStopTab && ( bStartApo || bStopApo ) )
-    {                                   // Wenn Apowechsel in Tabelle
-        bStopTab = bStartTab = true;    // ... dann auch neue Tabelle
-    }
 #endif
+    if (nTable && !bStopTab && (bStartApo || bStopApo))
+        bStopTab = bStartTab = true;    // Required to stop and start table
+
 //  Dann auf Anl (Nummerierung) testen
 //  und dann alle Ereignisse in der richtigen Reihenfolge bearbeiten
 
@@ -2242,6 +2241,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pSFlyPara       = 0;
     pFlyFmtOfJustInsertedGraphic   = 0;
     pFmtOfJustInsertedGraphicOrOLE = 0;
+    pFmtOfJustInsertedApo = 0;
     nColls = nAktColl = 0;
     nObjLocFc = nPicLocFc = 0;
     nTable=0;
