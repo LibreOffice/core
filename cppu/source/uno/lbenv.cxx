@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:29:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ EnvironmentsData::~EnvironmentsData() SAL_THROW( () )
 
         if (pHard)
         {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
             uno_dumpEnvironment( 0, pHard, 0 );
 #endif
 #if defined CPPU_LEAK_STATIC_DATA
