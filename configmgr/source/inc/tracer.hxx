@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-13 09:47:14 $
+ *  last change: $Author: pluby $ $Date: 2001-03-11 02:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-#include <sys/timeb.h>
+#include <sys/time.h>
 
 #define OUSTRING2ASCII(rtlOUString) ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ASCII_US).getStr()
 
@@ -103,7 +103,7 @@ class OConfigTracer
 protected:
     static  ::osl::Mutex    s_aMutex;
     static OTracerSetup*    s_pImpl;
-    static timeb            s_aStartTime;
+    static timeval          s_aStartTime;
 
 private:
     OConfigTracer();    // never implemented, no instantiation of this class allowed, only static members
@@ -161,6 +161,9 @@ public:
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.2  2001/02/13 09:47:14  dg
+//  #83239# timing output
+//
 //  Revision 1.1.1.1  2000/09/18 16:13:41  hr
 //  initial import
 //

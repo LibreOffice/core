@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-27 14:27:25 $
+ *  last change: $Author: pluby $ $Date: 2001-03-11 02:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,23 +152,23 @@ struct OTracerSetup
 //==========================================================================
 ::osl::Mutex    OConfigTracer::s_aMutex;
 OTracerSetup*   OConfigTracer::s_pImpl = NULL;
-timeb           OConfigTracer::s_aStartTime;
+timeval         OConfigTracer::s_aStartTime;
 
 
 //--------------------------------------------------------------------------
 void OConfigTracer::startGlobalTimer()
 {
-    ftime( &s_aStartTime );
+    gettimeofday( &s_aStartTime, NULL );
 }
 
 //--------------------------------------------------------------------------
 sal_uInt32 OConfigTracer::getGlobalTimer()
 {
-    struct timeb currentTime;
+    struct timeval currentTime;
     sal_uInt32 nSeconds;
-    ftime( &currentTime );
-    nSeconds = (sal_uInt32)( currentTime.time - s_aStartTime.time );
-    return ( nSeconds * 1000 ) + (long)( currentTime.millitm - s_aStartTime.millitm );
+    gettimeofday( &currentTime, NULL );
+    nSeconds = (sal_uInt32)( currentTime.tv_sec - s_aStartTime.tv_sec );
+    return ( nSeconds * 1000 ) + (long)( currentTime.tv_usec - s_aStartTime.tv_usec );
 }
 
 //--------------------------------------------------------------------------
@@ -521,6 +521,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.6  2001/02/27 14:27:25  jb
+//  Correction: Do not print the message type twice
+//
 //  Revision 1.5  2001/02/26 15:53:00  jb
 //  Add thread-sensitive tracing
 //
