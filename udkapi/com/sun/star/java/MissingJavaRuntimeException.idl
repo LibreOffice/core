@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MissingJavaRuntimeException.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:56:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module java {
     This happens when a user moves or deletes a Java installation after
     the office has been configured to use that Java installation.
 
-    @since OOo1.1.2
+    @since OOo 1.1.2
  */
 published exception MissingJavaRuntimeException: JavaInitializationException
 {
