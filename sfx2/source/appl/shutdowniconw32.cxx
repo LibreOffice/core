@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-01 13:18:15 $
+ *  last change: $Author: hro $ $Date: 2001-11-12 11:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,21 @@ typedef BOOL ( WINAPI * SHGetPathFromIDListW_Proc_T ) (
     LPCITEMIDLIST pidl, LPWSTR pszPath );
 SHGetPathFromIDListW_Proc_T lpfnSHGetPathFromIDListW = NULL;
 
+
+typedef BOOL ( WINAPI * DrawStateW_Proc_T ) (
+  HDC hdc,                     // handle to device context
+  HBRUSH hbr,                  // handle to brush
+  DRAWSTATEPROC lpOutputFunc,  // callback function
+  LPARAM lData,                // image information
+  WPARAM wData,                // more image information
+  int x,                       // horizontal location
+  int y,                       // vertical location
+  int cx,                      // image width
+  int cy,                      // image height
+  UINT fuFlags                 // image type and state
+);
+DrawStateW_Proc_T           lpfnDrawStateW = NULL;
+
 static void WINAPI User9xInit( )
 {
     if ( lpfnInsertMenuItemW && lpfnSHGetPathFromIDListW )
@@ -124,6 +139,8 @@ static void WINAPI User9xInit( )
                 hModule, "InsertMenuItemW_9x" );
             lpfnSHGetPathFromIDListW = (SHGetPathFromIDListW_Proc_T)GetProcAddress(
                 hModule, "SHGetPathFromIDListW_9x" );
+            lpfnDrawStateW = (DrawStateW_Proc_T)GetProcAddress(
+                hModule, "DrawStateW_9x" );
         }
     }
     else
@@ -133,6 +150,8 @@ static void WINAPI User9xInit( )
         {
             lpfnInsertMenuItemW = ( InsertMenuItemW_Proc_T )GetProcAddress(
                 hModule, "InsertMenuItemW" );
+            lpfnDrawStateW = (DrawStateW_Proc_T)GetProcAddress(
+                hModule, "DrawStateW" );
         }
         hModule = LoadLibraryA( "Shell32.dll" );
         if ( NULL != hModule )
