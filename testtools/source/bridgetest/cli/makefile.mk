@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 14:28:51 $
+#   last change: $Author: rt $ $Date: 2004-12-03 14:19:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,7 @@ INCPRE+=$(OUT)$/inc
 
 #-----------------------
 
-CFLAGS += -clr /AI $(OUT)$/bin /AI $(SOLARBINDIR)
+CFLAGS += -clr -AI $(OUT)$/bin -AI $(SOLARBINDIR)
 
 SLOFILES= \
     $(SLO)$/cli_cpp_bridgetest.obj		
@@ -154,7 +154,7 @@ $(DESTDIR)$/cli_cs_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +csc $(CSCFLAGS) -target:library -out:$@ \
+    +$(WRAPCMD) csc $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_BASETYPES) \
@@ -166,7 +166,7 @@ $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +csc $(CSCFLAGS) -target:library -out:$@ \
+    +$(WRAPCMD) csc $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_BASETYPES) \
@@ -180,7 +180,7 @@ $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +vbc $(VBC_FLAGS) \
+    +$(WRAPCMD) vbc $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_TYPES) \
@@ -197,7 +197,7 @@ $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +vbc $(VBC_FLAGS) \
+    +$(WRAPCMD) vbc $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_BASETYPES) \
@@ -221,7 +221,7 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         $(CLI_TYPES) \
         $(CLI_URE) \
         $(CLI_CPPUHELPER)
-    +csc $(CSCFLAGS) -target:exe -out:$@ \
+    +$(WRAPCMD) csc $(CSCFLAGS) -target:exe -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_TYPES) \
