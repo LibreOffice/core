@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:22:23 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 14:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,24 @@
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
-
 #include <svmedit.hxx>
-
 #include <fmtfield.hxx>
+
+#ifndef _COM_SUN_STAR_AWT_XIMAGECONSUMER_HPP_
+#include <com/sun/star/awt/XImageConsumer.hpp>
+#endif
+
+
+#include <comphelper/uno3.hxx>
+//#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+//#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
+
+#ifndef _COM_SUN_STAR_AWT_XITEMEVENTBROADCASTER_HPP_
+#include <com/sun/star/awt/XItemEventBroadcaster.hpp>
+#endif
+
 
 namespace com { namespace sun { namespace star { namespace util {
     class XNumberFormatsSupplier;
@@ -238,6 +252,90 @@ protected:
 
     virtual void    SetWindow(Window* _pWindow);
 };
+
+
+
+//  ----------------------------------------------------
+//  class SVTXRoadmap
+//  ----------------------------------------------------
+
+namespace svt
+{
+    class ORoadmap;
+}
+
+typedef ::cppu::ImplHelper4< ::com::sun::star::container::XContainerListener,
+                             ::com::sun::star::beans::XPropertyChangeListener,
+                             ::com::sun::star::awt::XImageConsumer,
+                             ::com::sun::star::awt::XItemEventBroadcaster>    SVTXRoadmap_Base;
+
+    struct RMItemData
+    {
+        sal_Bool            b_Enabled;
+        sal_Int32           n_ID;
+        ::rtl::OUString     Label;
+    };
+
+class SVTXRoadmap : public VCLXWindow,
+                    public SVTXRoadmap_Base
+
+
+{
+
+
+private:
+
+    ItemListenerMultiplexer     maItemListeners;
+    ImageConsumer               maImageConsumer;
+    BitmapEx                    maBitmap;
+
+    RMItemData CurRMItemData;
+    RMItemData GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent );
+    void            ImplUpdateImage( sal_Bool bGetNewImage );
+
+protected:
+    ::svt::ORoadmap*                GetRoadmap() const { return (::svt::ORoadmap*)GetWindow(); }
+    void                            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
+
+
+public:
+    SVTXRoadmap();
+    ~SVTXRoadmap();
+
+    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { VCLXWindow::disposing( Source ); }
+
+    // ::com::sun::star::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& rEvent )throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
+
+
+    virtual void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw (::com::sun::star::uno::RuntimeException);
+
+    DECLARE_XINTERFACE()
+    DECLARE_XTYPEPROVIDER()
+
+protected:
+
+    virtual void SetWindow( Window* _pWindow );
+
+};
+
+
 
 //  ----------------------------------------------------
 //  class SVTXNumericField
