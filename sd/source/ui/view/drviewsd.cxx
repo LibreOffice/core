@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-12 12:46:15 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -91,16 +93,24 @@
 
 #include "app.hrc"
 
-#include "drviewsh.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "pgjump.hxx"
-#include "navichld.hxx"
+#ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
+#include "NavigatorChildWindow.hxx"
+#endif
+#ifndef SD_NAVIGATION_HXX
 #include "navigatr.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 
+namespace sd {
 
 /*************************************************************************
 |*
@@ -108,7 +118,7 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
+void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 {
     CheckLineTo (rReq);
 
@@ -124,7 +134,7 @@ void SdDrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
             {
                 SdNavigatorWin* pNavWin = (SdNavigatorWin*)( pWindow->GetContextWindow( SD_MOD() ) );
                 if( pNavWin )
-                    pNavWin->InitTreeLB( pDoc );
+                    pNavWin->InitTreeLB( GetDoc() );
             }
         }
         break;
@@ -178,7 +188,7 @@ void SdDrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                     case PAGE_LAST:
                     {
                         // Sprung zu letzter Seite
-                        SwitchPage(pDoc->GetSdPageCount(pActualPage->GetPageKind()) - 1);
+                        SwitchPage(GetDoc()->GetSdPageCount(pActualPage->GetPageKind()) - 1);
                     }
                     break;
 
@@ -187,7 +197,7 @@ void SdDrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                         // Sprung zu naechster Seite
                         USHORT nSdPage = (pActualPage->GetPageNum() - 1) / 2;
 
-                        if (nSdPage < pDoc->GetSdPageCount(pActualPage->GetPageKind()) - 1)
+                        if (nSdPage < GetDoc()->GetSdPageCount(pActualPage->GetPageKind()) - 1)
                         {
                             SwitchPage(nSdPage + 1);
                         }
@@ -216,7 +226,7 @@ void SdDrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                                  Get(SID_NAVIGATOR_OBJECT)).GetValue();
                 aBookmarkStr += aTarget;
                 SfxStringItem aStrItem(SID_FILE_NAME, aBookmarkStr);
-                SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
+                SfxStringItem aReferer(SID_REFERER, GetDocSh()->GetMedium()->GetName());
                 SfxViewFrame* pFrame = GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                 SfxBoolItem aBrowseItem(SID_BROWSE, TRUE);
@@ -242,7 +252,7 @@ void SdDrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
+void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 {
     UINT32 nState = NAVSTATE_NONE;
     USHORT nCurrentPage;
@@ -270,8 +280,22 @@ void SdDrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         nLastPage = pFuSlideShow->GetLastPage();
         bEndless = FALSE; //pFuSlideShow->IsEndless();
 
-        SdPage* pPage = pDoc->GetSdPage( nCurrentPage, ePageKind );
-        if( pPage )
+        // Get the page for the current page index.  Handle special cases by
+        // setting the page pointer to NULL.
+        SdPage* pPage;
+        switch (nCurrentPage)
+        {
+            case PAGE_NO_END:
+            case PAGE_NO_SOFTEND:
+            case PAGE_NO_PAUSE:
+            //same as PAGE_NO_PAUSE:  case PAGE_NO_FIRSTDEF:
+                pPage = NULL;
+                break;
+
+            default:
+                pPage = GetDoc()->GetSdPage (nCurrentPage, ePageKind);
+        }
+        if (pPage != NULL)
             aPageName = pPage->GetName();
     }
     else
@@ -280,7 +304,7 @@ void SdDrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
                   NAVTLB_UPDATE;
 
         nCurrentPage = ( pActualPage->GetPageNum() - 1 ) / 2;
-        nLastPage = pDoc->GetSdPageCount( ePageKind ) - 1;
+        nLastPage = GetDoc()->GetSdPageCount( ePageKind ) - 1;
         aPageName = pActualPage->GetName();
     }
 
@@ -312,4 +336,4 @@ void SdDrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     rSet.Put( SfxStringItem( SID_NAVIGATOR_PAGENAME, aPageName ) );
 }
 
-
+} // end of namespace sd
