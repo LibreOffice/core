@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 08:30:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,12 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
 }
 
 Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow )
+{
+    VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
+    return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
+}
+
+Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
     return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
