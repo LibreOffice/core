@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-13 10:39:01 $
+ *  last change: $Author: aw $ $Date: 2001-06-13 12:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2153,6 +2153,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
         if (pObj)
         {
             USHORT nIndexBackground = 0;
+            // #88084# remember aTopLeft as original TopLeft
+            Point aTopLeft(pObj->GetBoundRect().TopLeft());
 
             if (bIsPresObjOnMaster &&
                 (ePageKind == PK_HANDOUT ||
@@ -2170,7 +2172,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 **************************************************************/
                 if (bScaleObjects)
                 {
-                    aRefPnt = pObj->GetBoundRect().TopLeft();
+                    // #88084# use aTopLeft as original TopLeft
+                    aRefPnt = aTopLeft;
                 }
 
                 pObj->Resize(aRefPnt, aFractX, aFractY);
@@ -2329,22 +2332,21 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 /**************************************************************
                 * Objektposition skalieren
                 **************************************************************/
-                Rectangle aBoundRect(pObj->GetBoundRect());
-                Point aOldPos(aBoundRect.TopLeft());
-                Point aNewPos; //(aOldPos);
+                Point aNewPos;
 
                 // #76447# corrected scaling; only distances may be scaled
-                aNewPos.X() = long((aOldPos.X() - GetLftBorder()) * (double)aFractX) + nLeft;
-                aNewPos.Y() = long((aOldPos.Y() - GetUppBorder()) * (double)aFractY) + nUpper;
+                // #88084# use aTopLeft as original TopLeft
+                aNewPos.X() = long((aTopLeft.X() - GetLftBorder()) * (double)aFractX) + nLeft;
+                aNewPos.Y() = long((aTopLeft.Y() - GetUppBorder()) * (double)aFractY) + nUpper;
 
-                Size aVec(aNewPos.X() - aOldPos.X(), aNewPos.Y() - aOldPos.Y());
+                Size aVec(aNewPos.X() - aTopLeft.X(), aNewPos.Y() - aTopLeft.Y());
 
                 if (aVec.Height() != 0 || aVec.Width() != 0)
                 {
                     pObj->NbcMove(aVec);
                 }
 
-                aBoundRect = pObj->GetBoundRect();
+                Rectangle aBoundRect = pObj->GetBoundRect();
 
                 if (!aBorderRect.IsInside(aBoundRect))
                 {
