@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityTools.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-11-02 11:47:31 $
+ *  last change:$Date: 2005-02-24 17:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ public class AccessibilityTools {
 
     public static void printAccessibleTree(PrintWriter log, XAccessible xacc, boolean debugIsActive) {
         debug = debugIsActive;
-        printAccessibleTree(log, xacc, "");
+        if (debug) printAccessibleTree(log, xacc, "");
     }
 
     public static void printAccessibleTree(PrintWriter log, XAccessible xacc) {
@@ -337,6 +337,7 @@ public class AccessibilityTools {
 
     protected static void printAccessibleTree(PrintWriter log,
                                               XAccessible xacc, String indent) {
+
         XAccessibleContext ac = xacc.getAccessibleContext();
 
         logging(log,indent + ac.getAccessibleRole() + "," +
