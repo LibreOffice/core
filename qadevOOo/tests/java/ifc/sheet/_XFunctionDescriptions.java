@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFunctionDescriptions.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:27 $
+ *  last change:$Date: 2003-09-08 11:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,12 @@
 
 package ifc.sheet;
 
+import java.util.Random;
+
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.sheet.XFunctionDescriptions;
-import java.util.Random;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sheet.XFunctionDescriptions</code>
