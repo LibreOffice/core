@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-18 14:25:21 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 14:57:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,11 @@
 #
 #*************************************************************************
 
+COMPVERMK:=$(SOLARINCDIR)$/comp_ver.mk
+
+.INCLUDE .IGNORE : $(COMPVERMK)
+
+.IF "$(COMNAME)"==""
 .IF "$(L10N_framework)"==""
 
 COMNAME:=
@@ -131,3 +136,4 @@ compiler_version_error:
 CDEFS+=-DCPPU_ENV=$(COMNAME)
 
 .ENDIF			# "$(L10N_framework)"==""
+.ENDIF			# "$(COMNAME)"==""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-12 12:36:54 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 14:57:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1870,6 +1870,7 @@ ALLTAR:	\
 #		$(NOOPTTARGET) $(EXCEPTIONSTARGET)
 
 ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
+        $(COMPVERMK) \
         $(target_empty) \
         $(OS2_COPY_MK)		\
         $(SUBDIRS)		\
@@ -2152,6 +2153,15 @@ $(SCP_PRODUCT_TYPE):
     @+-$(MKDIRHIER) $(BIN)$/$@ >& $(NULLDEV)
 
 .ENDIF			# "$(PARFILES)"!=""
+
+.IF "$(COMPVERMK)"!=""
+"$(COMPVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
+    @echo COMNAME:=$(COMNAME) > $@
+    @echo COMID:=$(COMID) >> $@
+    @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $@
+    
+.ENDIF			# "$(COMPVERMK)"!=""
+
 
 .IF "$(IMGLSTTARGET)"!=""
 $(IMGLSTTARGET): $(IMGLST_SRS)
@@ -2539,13 +2549,8 @@ warn_lazy_deps:
 
 $(ADDOPTTARGET):
     @+echo --- ADDOPT ---
-.IF "$(WORK_STAMP)"!="SRV506"
     @+echo no longer supported
     force_dmake_to_error
-.ELSE
-    @dmake $(MFLAGS) add_cflags=$(add_cflags) add_cflagscxx=$(add_cflagscxx) addopt=true $(ADDOPTFILES) ADDOPT_FLAG=TRUE $(CALLMACROS)
-.ENDIF
-
 .ENDIF
 .ENDIF
 
@@ -2561,13 +2566,8 @@ $(ADDOPTTARGET):
 
 $(DELOPTTARGET):
     @+echo --- DELOPT ---
-.IF "$(WORK_STAMP)"!="SRV506"
     @+echo no longer supported
     force_dmake_to_error
-.ELSE
-    @dmake $(MFLAGS) delopt=true $(DELOPTFILES) DELOPT_FLAG=TRUE $(CALLMACROS)
-.ENDIF
-
 .ENDIF
 .ENDIF
 # ----------------------------------
