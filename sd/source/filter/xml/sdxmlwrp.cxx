@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-02 10:13:02 $
+ *  last change: $Author: mib $ $Date: 2000-12-03 09:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ BOOL SdXMLWrapper::Export()
         return FALSE;
     }
 
-    SvStorage* pStorage = mrMedium.GetOutputStorage();
+    SvStorage* pStorage = mrMedium.GetOutputStorage( sal_True );
 
     if( pStorage )
     {
