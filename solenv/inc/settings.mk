@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: jmarmion $ $Date: 2000-10-06 15:09:56 $
-#*    $Revision: 1.6 $
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-10-09 14:44:44 $
+#*    $Revision: 1.7 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -577,10 +577,10 @@ common_build_sign_jar=true
 
 %world.mk :
     @+_mkout $(OUT)
-    @+echo "#" > $(OUT)$/inc$/myworld.mk
+    @+echo \# > $(OUT)$/inc$/myworld.mk
 .IF "$(common_build)"!=""
     @+_mkout $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
-    @+echo "#" > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
+    @+echo \# > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : $(OUT)$/inc$/myworld.mk
