@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2003-08-21 15:21:06 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:46:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,12 +71,7 @@ TARGET=ooo_boost
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=boost_1_27_0
-TARFILE_ROOTDIR=boost_1_27_0
-
-PATCH_FILE_NAME=boost_1_27_0.patch
-
-ADDITIONAL_FILES=boost$/detail$/linux_atomic.h
+TARFILE_NAME=boost-1.30.2
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -85,29 +80,9 @@ BUILD_DIR=
 BUILD_ACTION=
 BUILD_FLAGS=
 
-.IF "$(GUI)"=="UNX"
-.IF "$(COMNAME)"=="sunpro5"
-.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-CC:=$(COMPATH)$/bin$/cc
-CXX:=$(COMPATH)$/bin$/CC
-.ENDIF          # "$(COMNAME)"=="sunpro5"
-.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
-all: \
-    $(MISC)$/remove_build.flag \
-    ALLTAR
-    
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-# Since you never know what will be in a patch (for example, it may already
-# patch at configure level), we remove the entire package directory if a patch
-# is newer.
-$(MISC)$/remove_build.flag : $(PATCH_FILE_NAME)
-    $(REMOVE_PACKAGE_COMMAND)
-    +$(TOUCH) $(MISC)$/remove_build.flag
 
