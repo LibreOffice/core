@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:43:35 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 13:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1406,10 +1406,15 @@ sal_Bool ImplSdPPTImport::Import()
         pDoc->SetPresFullScreen( ( nFlags & 0x10 ) == 0 );
 //      pDoc->SetPresPause( );
 //      pDoc->SetPresShowLogo( );
-        if ( nStartSlide && ( nStartSlide <= aSlideNameList.Count() ) )
+        if ( nStartSlide )
         {
-            String aPresPage( *(String*)aSlideNameList.GetObject( nStartSlide - 1 ) );
-            pDoc->SetPresPage( aPresPage );
+            sal_uInt32 nSlideCount = GetPageCount();
+            if ( nStartSlide <= nSlideCount )
+            {
+                SdPage* pPage = pDoc->GetSdPage( nStartSlide - 1, PK_STANDARD );
+                if ( pPage )
+                    pDoc->SetPresPage( pPage->GetName() );
+            }
         }
     }
 
@@ -2398,7 +2403,30 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
         {
-            if ( ePresKind != PRESOBJ_NONE )
+            if ( ( pTextObj->GetInstance() != TSS_TYPE_SUBTITLE )
+                && ( pTextObj->GetInstance() != TSS_TYPE_TEXT_IN_SHAPE )
+                    && ( pTextObj->GetInstance() != TSS_TYPE_UNUSED ) )
+            {
+                pText->SetNotVisibleAsMaster( TRUE );
+                pText->SetEmptyPresObj( TRUE );
+//              if ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE )
+//                  ePresKind = PRESOBJ_TITLE;
+                String aString( pPage->GetPresObjText( ePresKind ) );
+                pText->SetUserCall( pPage );
+                pPage->GetPresObjList()->Insert( pText, LIST_APPEND );
+                SdrOutliner* pOutl = NULL;
+                if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
+                    pOutl = GetDrawOutliner( pText );
+                pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aString);
+                pText->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresKind ), TRUE );
+                SfxItemSet aTempAttr( pDoc->GetPool() );
+                SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );
+                aTempAttr.Put( aMinHeight );
+                SdrTextAutoGrowHeightItem aAutoGrowHeight( FALSE );
+                aTempAttr.Put( aAutoGrowHeight );
+                pText->SetItemSet(aTempAttr);
+            }
+            else
             {
                 if ( pTextObj->GetInstance() != TSS_TYPE_SUBTITLE )
                 {
