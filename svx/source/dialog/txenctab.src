@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2002-05-16 18:45:03 $
+ *  last change: $Author: kz $ $Date: 2002-05-23 20:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,7 @@ ItemList [ language_user1 ] =
         < "Coreano (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ russian ] =
     {
@@ -529,6 +530,7 @@ ItemList [ language_user1 ] =
         < "Êîðåéñêèé (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Êîðåéñêèé (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Þíèêîä"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ greek ] =
@@ -600,6 +602,7 @@ ItemList [ language_user1 ] =
         < "ÊïñåáôéêÜ (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ dutch ] =
     {
@@ -669,6 +672,7 @@ ItemList [ language_user1 ] =
         < "Koreaans (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Koreaans (Windows-Johab-1361)"                   ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ french ] =
@@ -740,6 +744,7 @@ ItemList [ language_user1 ] =
         < "Coréen (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ spanish ] =
     {
@@ -809,6 +814,7 @@ ItemList [ language_user1 ] =
         < "Coreano (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Coreano (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ italian ] =
@@ -880,6 +886,7 @@ ItemList [ language_user1 ] =
         < "Coreano (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ danish ] =
     {
@@ -949,6 +956,7 @@ ItemList [ language_user1 ] =
         < "Koreanisch (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ swedish ] =
@@ -1020,6 +1028,7 @@ ItemList [ language_user1 ] =
         < "Koreansk (Windows-Johab-1361)"                   ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ polish ] =
     {
@@ -1089,6 +1098,7 @@ ItemList [ language_user1 ] =
         < "Koreañski (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Koreañski (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ portuguese_brazilian ] =
@@ -1160,6 +1170,7 @@ ItemList [ language_user1 ] =
         < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ japanese ] =
     {
@@ -1229,6 +1240,7 @@ ItemList [ language_user1 ] =
         < "éŸ“å›½èªž(ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "éŸ“å›½èªž(Windows-Johab-1361)"                   ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "ãƒ¦ãƒ‹ã‚³ãƒ¼ãƒ‰"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ korean ] =
@@ -1371,6 +1383,7 @@ ItemList [ language_user1 ] =
         < "éŸ©æ–‡ (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "ç»Ÿä¸€ç "                                           ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
@@ -1440,6 +1453,7 @@ ItemList [ language_user1 ] =
         < "éŸ“æ–‡(ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "éŸ“æ–‡(Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "çµ±ä¸€ç¢¼"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ turkish ] =
@@ -1511,6 +1525,7 @@ ItemList [ language_user1 ] =
         < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ arabic ] =
     {
@@ -1580,6 +1595,7 @@ ItemList [ language_user1 ] =
         < "ÇáßæÑíÉ (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "ÇáßæÑíÉ (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ catalan ] =
@@ -1651,6 +1667,7 @@ ItemList [ language_user1 ] =
         < "Coreano (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ finnish ] =
     {
@@ -1720,6 +1737,7 @@ ItemList [ language_user1 ] =
         < "Korealainen (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "Korealainen (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     };
