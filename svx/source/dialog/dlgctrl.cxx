@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-28 09:23:12 $
+ *  last change: $Author: cl $ $Date: 2002-02-15 14:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,8 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
         if( WINDOW_TABPAGE == GetParent()->GetType() )
             ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
     }
+
+    SetFocusRectangle();
 }
 
 // -----------------------------------------------------------------------
@@ -315,6 +317,8 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 
         if( WINDOW_TABPAGE == GetParent()->GetType() )
             ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+
+        SetFocusRectangle();
     }
 }
 
@@ -465,6 +469,33 @@ void SvxRectCtl::Paint( const Rectangle& rRect )
     if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
     {
         DrawBitmap( aPtNew - aToCenter, aDstBtnSize, aBtnPnt2, aBtnSize, *pBitmap );
+    }
+}
+
+void SvxRectCtl::GetFocus()
+{
+    Control::GetFocus();
+
+    SetFocusRectangle();
+}
+
+void SvxRectCtl::LoseFocus()
+{
+    Control::HideFocus();
+
+    HideFocus();
+}
+
+void SvxRectCtl::SetFocusRectangle()
+{
+    if( HasFocus() && IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
+    {
+        Size aBtnSize( 16, 16 );
+        Size aDstBtnSize(  PixelToLogic( aBtnSize ) );
+        Point aToCenter( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1);
+
+        Rectangle aFocusRect( aPtNew - aToCenter, aDstBtnSize );
+        ShowFocus( aFocusRect );
     }
 }
 
