@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 15:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,17 @@ ExtendedXlfd::ToString( ByteString &rString,
     AppendAttribute( mpFactory->RetrieveSetwidth(mnSetwidth), rString );
 }
 
+void
+ExtendedXlfd::ToString( ByteString &rString,
+        unsigned short nPixelSize, char* pMatricsString, rtl_TextEncoding nEncoding ) const
+{
+    AppendAttribute( mpFactory->RetrieveFoundry(mnFoundry),   rString );
+    AppendAttribute( mpFactory->RetrieveFamily(mnFamily),     rString );
+    AppendAttribute( mpFactory->RetrieveWeight(mnWeight),     rString );
+    AppendAttribute( mpFactory->RetrieveSlant(mnSlant),       rString );
+    AppendAttribute( mpFactory->RetrieveSetwidth(mnSetwidth), rString );
+}
+
 // interface to the independent vcl class implfontdata
 // this must not be called if mnEncodings is zero
 void
@@ -416,6 +427,54 @@ ScalableBitmapXlfd::ToString( ByteString &rString,
 }
 
 void
+ScalableBitmapXlfd::ToString( ByteString &rString,
+        unsigned short nPixelSize, char *pMatricsString, rtl_TextEncoding nEncoding ) const
+{
+    int nIdx = GetEncodingIdx( nEncoding );
+    if ( nIdx < 0 )
+        return;
+
+    ExtendedXlfd::ToString( rString, nPixelSize, nEncoding );
+    EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
+
+    AppendAttribute( mpFactory->RetrieveAddstyle(rInfo.mnAddstyle), rString );
+
+    rString += "-*-";
+    char pTmp[256];
+    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    rString += pTmp;
+    rString += "-*-*-";
+    rString += rInfo.mcSpacing;
+    rString += "-*";
+
+    AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
+}
+
+void
+BitmapXlfd::ToString( ByteString &rString,
+        unsigned short nPixelSize, char *pMatricsString, rtl_TextEncoding nEncoding ) const
+{
+    int nIdx = GetEncodingIdx( nEncoding );
+    if ( nIdx < 0 )
+        return;
+
+    ExtendedXlfd::ToString( rString, nPixelSize, nEncoding );
+    EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
+
+    AppendAttribute( mpFactory->RetrieveAddstyle(rInfo.mnAddstyle), rString );
+
+    rString += "-*-";
+    char pTmp[256];
+    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    rString += pTmp;
+    rString += "-*-*-";
+    rString += rInfo.mcSpacing;
+    rString += "-*";
+
+    AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
+}
+
+void
 ScalableBitmapXlfd::ToImplFontData( ImplFontData *pFontData ) const
 {
     ExtendedXlfd::ToImplFontData( pFontData );
@@ -518,6 +577,30 @@ ScalableXlfd::ToString( ByteString &rString,
     rString += "-0-0-0-";
     rString += rInfo.mcSpacing;
     rString += "-0";
+
+    AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
+}
+
+void
+ScalableXlfd::ToString( ByteString &rString,
+        unsigned short nPixelSize, char* pMatricsString, rtl_TextEncoding nEncoding ) const
+{
+    int nIdx = GetEncodingIdx( nEncoding );
+    if ( nIdx < 0 )
+        return;
+
+    ExtendedXlfd::ToString( rString, nPixelSize, nEncoding);
+
+    EncodingInfo& rInfo = mpEncodingInfo[ nIdx ];
+    AppendAttribute( mpFactory->RetrieveAddstyle(rInfo.mnAddstyle), rString );
+
+    rString += "-*-";
+    char pTmp[256];
+    sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
+    rString += pTmp;
+    rString += "-*-*-";
+    rString += rInfo.mcSpacing;
+    rString += "-*";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 15:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,11 @@ class ExtendedXlfd {
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                        rtl_TextEncoding nEncoding ) const ;
+        virtual void        ToString( ByteString &rString,
+                                      unsigned short nPixelSize,
+                                                              char* pMatricsString,
+                                                              rtl_TextEncoding nEncoding  ) const;
+
         virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
         virtual FontType    GetFontType() const
                                     { return TYPE_DONTKNOW; }
@@ -152,6 +157,11 @@ class ScalableBitmapXlfd : public ExtendedXlfd {
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                     rtl_TextEncoding nEncoding ) const;
+        virtual void        ToString( ByteString &rString,
+                                    unsigned short nPixelSize,
+                                    char* pMatricsString,
+                                    rtl_TextEncoding nEncoding ) const;
+
         virtual void        ToImplFontData( ImplFontData *pFontData ) const;
         virtual FontType    GetFontType() const
                                     { return TYPE_SCALABLE; }
@@ -169,6 +179,10 @@ class BitmapXlfd : public ExtendedXlfd {
                                     { return mnPixelSize; }
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
+                                    rtl_TextEncoding nEncoding ) const;
+        virtual void        ToString( ByteString &rString,
+                                    unsigned short nPixelSize,
+                                    char* pMatricsString,
                                     rtl_TextEncoding nEncoding ) const;
         virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
         virtual FontType    GetFontType() const
@@ -191,6 +205,10 @@ class ScalableXlfd : public ExtendedXlfd {
                                     unsigned short nPixelSize,
                                     rtl_TextEncoding nEncoding ) const;
 
+        virtual void        ToString( ByteString &rString,
+                                    unsigned short nPixelSize,
+                                    char* pMatricsString,
+                                    rtl_TextEncoding  nEncoding ) const;
         virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
         virtual FontType    GetFontType() const
                                     { return TYPE_SCALABLE; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 15:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,14 @@
 #include <stdio.h>
 #endif
 
+#define VCLASS_ROTATE       0
+#define VCLASS_ROTATE_REVERSE   1
+#define VCLASS_TRANSFORM1   2
+#define VCLASS_TRANSFORM2   3
+#define VCLASS_CJK      4
+#define VCLASS_DONTKNOW         5
+#define VCLASS_FONT_NUM     2 // Other than rotate and rotate_reverse, don't have spacial font
+
 ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay,
         unsigned short nPixelSize, ExtendedXlfd* pXlfd,
         SalConverterCache* pCvt ) :
@@ -92,6 +100,12 @@ ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay,
     // already loaded fonts
     mpXFontStruct = (XFontStruct**)calloc( mpXlfd->NumEncodings(),
                                             sizeof(XFontStruct*) );
+    mpVXFontStruct = (XFontStruct***)calloc( mpXlfd->NumEncodings(), sizeof(XFontStruct**) );
+    for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
+    {
+        mpVXFontStruct[nIdx] = (XFontStruct**)calloc( VCLASS_FONT_NUM, sizeof (XFontStruct*) );
+    }
+
     mnDefaultWidth = GetDefaultWidth( pCvt );
 }
 
@@ -101,6 +115,12 @@ ExtendedFontStruct::~ExtendedFontStruct()
     {
         if ( mpXFontStruct[nIdx] != NULL )
             XFreeFont( mpDisplay, mpXFontStruct[nIdx] );
+
+        for ( int nIdx2 = 0; nIdx2 < VCLASS_FONT_NUM; nIdx2++ )
+        {
+            if ( mpVXFontStruct[nIdx][nIdx2] != NULL )
+                XFreeFont( mpDisplay, mpVXFontStruct[nIdx][nIdx2] );
+        }
     }
 }
 
@@ -556,4 +576,250 @@ ExtendedFontStruct::GetCharWidth( SalConverterCache *pCvt,
     }
 
     return nConverted;
+}
+
+#define VINIT_SIZE 256
+#define VGROW_SIZE 64
+static int nMaxItems = VINIT_SIZE;
+
+static short GetVerticalClass( sal_Unicode nChar )
+{
+    if ( (nChar >= 0x1100 && nChar <= 0x11f9) ||    // Hangul Jamo
+         (nChar >= 0x3000 && nChar <= 0xfaff) )     // other CJK
+    {
+        if ( nChar == 0x2010 || nChar == 0x2015 ||
+             nChar == 0x2016 || nChar == 0x2026 ||
+             (nChar >= 0x3008 && nChar <= 0x3017) )
+        {
+            return VCLASS_ROTATE;
+        }
+        else if ( nChar == 0x3001 || nChar == 0x3002 )
+        {
+            return VCLASS_TRANSFORM1;
+        }
+        else if ( nChar == 0x3041 || nChar == 0x3043 ||
+              nChar == 0x3045 || nChar == 0x3047 ||
+              nChar == 0x3049 || nChar == 0x3063 ||
+              nChar == 0x3083 || nChar == 0x3085 ||
+              nChar == 0x3087 || nChar == 0x308e ||
+              nChar == 0x30a1 || nChar == 0x30a3 ||
+              nChar == 0x30a5 || nChar == 0x30a7 ||
+              nChar == 0x30a9 || nChar == 0x30c3 ||
+              nChar == 0x30e3 || nChar == 0x30e5 ||
+              nChar == 0x30e7 || nChar == 0x30ee ||
+              nChar == 0x30f5 || nChar == 0x30f6 )
+        {
+            return VCLASS_TRANSFORM2;
+        }
+        else if ( nChar == 0x30fc )
+        {
+            return VCLASS_ROTATE_REVERSE;
+        }
+        return VCLASS_CJK;
+    }
+    return VCLASS_ROTATE;
+}
+
+XFontStruct*
+ExtendedFontStruct::GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass )
+{
+    int nIdx = mpXlfd->GetEncodingIdx( nEncoding );
+    if (nIdx < 0)
+            return NULL;
+
+    switch( nVClass )
+    {
+        case VCLASS_ROTATE_REVERSE:
+        {
+            if (mpVXFontStruct[nIdx][nVClass] == NULL)
+            {
+                ByteString aFontName;
+                mpXlfd->ToString( aFontName, mnPixelSize, "[0 ~%d ~%d 0]", nEncoding );
+                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay, aFontName.GetBuffer() );
+                if ( (pXFontStruct != NULL) && (pXFontStruct->fid == 0) )
+                    pXFontStruct->fid = XLoadFont( mpDisplay, aFontName.GetBuffer() );
+
+                mpVXFontStruct[nIdx][nVClass] = pXFontStruct;
+            }
+            break;
+        }
+        case VCLASS_ROTATE:
+        {
+            if (mpVXFontStruct[nIdx][nVClass] == NULL)
+            {
+                ByteString aFontName;
+                mpXlfd->ToString( aFontName, mnPixelSize, "[0 ~%d %d 0]", nEncoding );
+                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay, aFontName.GetBuffer() );
+                if ( (pXFontStruct != NULL) && (pXFontStruct->fid == 0) )
+                    pXFontStruct->fid = XLoadFont( mpDisplay, aFontName.GetBuffer() );
+
+                mpVXFontStruct[nIdx][nVClass] = pXFontStruct;
+            }
+            break;
+        }
+            case VCLASS_CJK:
+        default:
+            return mpXFontStruct[nIdx];
+
+    }
+    return mpVXFontStruct[nIdx][nVClass];
+}
+
+int
+ExtendedFontStruct::GetVTransX( rtl_TextEncoding nEncoding, short nVClass )
+{
+    int nAscent, nDescent, nWidth;
+    XCharStruct aBoundingBox;
+    XFontStruct *pXFontStruct = GetFontStruct( nEncoding );
+    if (pXFontStruct->per_char == NULL)
+    {
+        int nDirection;
+        XCharStruct aBoundingBox;
+        XChar2b cTestChar;
+        cTestChar.byte1 = pXFontStruct->min_byte1;
+        cTestChar.byte2 = pXFontStruct->min_char_or_byte2;
+        XQueryTextExtents16( mpDisplay, pXFontStruct->fid, &cTestChar, 1,
+                     &nDirection, &nAscent, &nDescent, &aBoundingBox );
+        nWidth = aBoundingBox.width;
+    }
+    else
+    {
+        if ( GetFontBoundingBox( &aBoundingBox, &nAscent, &nDescent ) )
+            nWidth = aBoundingBox.width;
+        else
+            nWidth = mnDefaultWidth;
+    }
+
+    switch( nVClass )
+    {
+        case VCLASS_ROTATE_REVERSE:
+            return nWidth * 2.2 / 5;
+        case VCLASS_TRANSFORM1:
+            return 0;
+        case VCLASS_TRANSFORM2:
+            return -nWidth / 3;
+        case VCLASS_ROTATE:
+        default:
+            return -nWidth / 2;
+    }
+}
+
+int
+ExtendedFontStruct::GetVTransY( short nVClass )
+{
+    int nAscent, nDescent, nHeight;
+    XCharStruct aBoundingBox;
+    if ( GetFontBoundingBox( &aBoundingBox, &nAscent, &nDescent ) )
+    {
+        nHeight = nAscent + nDescent;
+    }
+    else
+    {
+        nHeight = 0;
+    }
+    switch( nVClass )
+    {
+        case VCLASS_TRANSFORM1:
+            return nHeight / 3;
+        case VCLASS_TRANSFORM2:
+            return nHeight * 5 / 6;
+        case VCLASS_ROTATE:
+        case VCLASS_ROTATE_REVERSE:
+            return 0;
+        default:
+            return nHeight;
+    }
+}
+
+int
+ExtendedFontStruct::GetVerticalTextItems( const sal_Unicode* pStr, int nLength, rtl_TextEncoding nEncoding,
+                      const sal_Unicode* pOutStr, VerticalTextItem** &pTextItems )
+{
+    int nNumItem = 0;
+    short nCurrentVClass = GetVerticalClass( *pStr );
+    short nNextVClass;
+    VerticalTextItem** items = (VerticalTextItem**)calloc( nMaxItems, sizeof(VerticalTextItem*) );
+    int nPrevPtr = 0;
+    for ( int nIdx = 0; nIdx < nLength; nIdx++ )
+    {
+        nNextVClass = (nIdx == nLength - 1) ? VCLASS_DONTKNOW : GetVerticalClass( *(pStr + nIdx + 1) );
+        if ( nNextVClass != nCurrentVClass )
+        {
+            int nLen = nIdx - nPrevPtr + 1;
+            if ( nNumItem >= nMaxItems )
+            {
+                nMaxItems += VGROW_SIZE;
+                VerticalTextItem** pTmp = (VerticalTextItem**)calloc( nMaxItems, sizeof(VerticalTextItem*) );
+                memcpy( pTmp, items, nNumItem * sizeof(VerticalTextItem*) );
+                free( items );
+                items = pTmp;
+            }
+
+            switch(nCurrentVClass)
+            {
+                case VCLASS_ROTATE:
+                case VCLASS_ROTATE_REVERSE:
+                {
+                    XFontStruct *pXFontStruct = GetFontStruct ( nEncoding );
+                    int *pAdvanceAry = new int[nLen];
+                    for ( int nIdx2 = 0; nIdx2 < nLen; nIdx2++ )
+                    {
+                        if (pXFontStruct->per_char == NULL)
+                        {
+                            int nDirection, nAscent, nDescent;
+                            XCharStruct aBoundingBox;
+                            XQueryTextExtents16( mpDisplay, pXFontStruct->fid,
+                                         (XChar2b*)(pOutStr + nPrevPtr + nIdx2), 1,
+                                         &nDirection, &nAscent, &nDescent,
+                                         &aBoundingBox );
+                            pAdvanceAry[nIdx2] = aBoundingBox.width;
+                        }
+                        else
+                        {
+                            XCharStruct *pChar = GetCharinfo( pXFontStruct,
+                                              *(pOutStr + nPrevPtr + nIdx2) );
+                            pAdvanceAry[nIdx2] = CharExists(pChar) ? pChar->width : mnDefaultWidth;
+                        }
+                    }
+                    items[nNumItem++] = new VerticalTextItem( GetVXFontStruct( nEncoding, nCurrentVClass ),
+                                          pOutStr + nPrevPtr,
+                                          nLen,
+                                          GetVTransX( nEncoding, nCurrentVClass ),
+                                          GetVTransY( nCurrentVClass ),
+                                          pAdvanceAry );
+                }
+                break;
+                default:
+                {
+                    int nAscent, nDescent, nHeight;
+                    XCharStruct aBoundingBox;
+                    if ( GetFontBoundingBox( &aBoundingBox, &nAscent, &nDescent ) )
+                    {
+                        nHeight = nAscent + nDescent;
+                    }
+                    else
+                    {
+                        nHeight = 0;
+                    }
+                    items[nNumItem++] = new VerticalTextItem( GetVXFontStruct( nEncoding, nCurrentVClass ),
+                                          pOutStr + nPrevPtr,
+                                          nLen,
+                                          GetVTransX( nEncoding, nCurrentVClass ),
+                                          GetVTransY( nCurrentVClass ),
+                                          nHeight );
+                }
+            }
+            nPrevPtr = nIdx + 1;
+            nCurrentVClass = nNextVClass;
+        }
+    }
+
+    VerticalTextItem** pTmp = (VerticalTextItem**)calloc( nNumItem, sizeof(VerticalTextItem*) );
+    memcpy( pTmp, items, nNumItem * sizeof(VerticalTextItem*) );
+    free( items );
+    nMaxItems = VINIT_SIZE;
+
+    pTextItems = pTmp;
+
+    return nNumItem;
 }
