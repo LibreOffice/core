@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 08:32:32 $
+ *  last change: $Author: os $ $Date: 2001-06-01 10:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,7 +824,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutoma
         const String& rEntryText = pEntry->GetText();
         const SwFmtRuby& rAttr = pEntry->GetRubyAttr();
 
-        pRet[n].realloc(4);
+        pRet[n].realloc(5);
         PropertyValue* pValues = pRet[n].getArray();
         pValues[0].Name = C2U(UNO_NAME_RUBY_BASE_TEXT);
         pValues[0].Value <<= OUString(rEntryText);
@@ -835,6 +835,9 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutoma
                 SwXStyleFamilies::GetProgrammaticName(rAttr.GetCharFmtName(),SFX_STYLE_FAMILY_CHAR));
         pValues[3].Name = C2U(UNO_NAME_RUBY_ADJUST);
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
+        pValues[4].Name = C2U(UNO_NAME_RUBY_IS_ABOVE);
+        sal_Bool bVal = !rAttr.GetPosition();
+        pValues[4].Value.setValue(&bVal, ::getBooleanCppuType());
     }
     return aRet;
 }
@@ -882,7 +885,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 pProperties[nProp].Value >>= sTmp;
                 String sName(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
                 sal_uInt16 nPoolId = sName.Len() ?
-                    SwDoc::GetPoolId( sName, GET_POOLID_CHRFMT ) : -1;
+                    SwDoc::GetPoolId( sName, GET_POOLID_CHRFMT ) : 0;
 
                 pEntry->GetRubyAttr().SetCharFmtName( sName );
                 pEntry->GetRubyAttr().SetCharFmtId( nPoolId );
@@ -892,6 +895,11 @@ void SAL_CALL SwXTextView::setRubyList(
                 sal_Int16 nTmp;
                 pProperties[nProp].Value >>= nTmp;
                 pEntry->GetRubyAttr().SetAdjustment(nTmp);
+            }
+            else if(!pProperties[nProp].Name.compareToAscii(UNO_NAME_RUBY_IS_ABOVE.pName))
+            {
+                sal_Bool bValue = *(sal_Bool*)pProperties[nProp].Value.getValue();
+                pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }
         aList.Insert(pEntry, (USHORT)nPos);
