@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:05:10 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ japanese ] = "1/2 ...γ‚’ Β½ ...γ«η½®ζ›";
         Text[ chinese_traditional ] = "η”¨ Β½ ... δ»£ζ›Ώ 1/2 ...";
         Text[ arabic ] = "ΗΣΚΘΟΗα 1/2 ... Θά ½...";
-        Text[ greek ] = "Αντικατάσταση 1/2 ... με ½ ...";
+        Text[ greek ] = "Αντικατάσταση 1/2 ... με 1/2 ...";
         Text[ korean ] = "1/2 ...μ„ Β½...λ΅ λ°”κΎΈκΈ°";
         Text[ turkish ] = "1/2 yazύldύπύnda ... ½ ile deπiώtir ...";
         Text[ language_user1 ] = " ";
@@ -604,7 +604,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text = "Setze Vorlage \"Textkφrper Einrόckung\"" ;
         Text [ English ] = "Set template \"Text body move in\"" ;
         Text[ italian ] = "Imposta modello \"rientro corpo del testo\"";
-        Text[ portuguese_brazilian ] = "Definir Estilo 'Recuo do corpo do texto'";
+        Text[ portuguese_brazilian ] = "Definir estilo 'recuo do corpo de texto'";
         Text[ portuguese ] = "Aplicar estilo \"Avanηo corpo do texto\"";
         Text[ danish ] = "Anvend typografi \"Brψdtekst indrykning\"";
         Text[ french ] = "Appliquer le style \"Retrait du corps de texte\"";
@@ -769,7 +769,7 @@ String STR_EVENT_START_INS_GLOSSARY
     TEXT[ english_us ] = "Before inserting AutoText";
     TEXT[ portuguese ] = "Inserir antes de AutoTexto";
     TEXT[ russian ] = "Οεπεδ βρςΰβκξι ΰβςξςεκρςΰ";
-    TEXT[ greek ] = "Πριν από την προσθήκη του ΑυτοΚείμενο";
+    TEXT[ greek ] = "Πριν από την εισαγωγή του αυτόματου κειμένου";
     TEXT[ dutch ] = "Voor het invoegen van AutoTekst";
     TEXT[ french ] = "Avant insertion de l'AutoTexte";
     TEXT[ spanish ] = "Antes de insertar el Texto automαtico";
@@ -801,7 +801,7 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ english_us ] = "After inserting AutoText";
     TEXT[ portuguese ] = "Inserir apσs AutoTexto";
     TEXT[ russian ] = "Οξρλε βρςΰβκθ ΰβςξςεκρςΰ";
-    TEXT[ greek ] = "Μετά την προσθήκη του ΑυτοΚείμενο";
+    TEXT[ greek ] = "Μετά την εισαγωγή του αυτόματου κειμένου";
     TEXT[ dutch ] = "Na invoegen van AutoTekst";
     TEXT[ french ] = "Aprθs insertion de l'AutoTexte";
     TEXT[ spanish ] = "Tras insertar el Texto automαtico";
@@ -1345,7 +1345,7 @@ String STR_CONTENT_TYPE_REGION
     Text[ japanese ] = "η―„ε›²";
     Text[ chinese_traditional ] = "ε€ε";
     Text[ arabic ] = "δΨΗήΗΚ";
-    Text[ greek ] = "Κατηγορίες";
+    Text[ greek ] = "Ενότητες";
     Text[ korean ] = "κµ¬μ—­";
     Text[ turkish ] = "Bφlόm";
     Text[ language_user1 ] = " ";
@@ -1407,7 +1407,7 @@ String STR_CONTENT_TYPE_REFERENCE
     Text[ japanese ] = "ε‚η…§";
     Text[ chinese_traditional ] = "εƒη…§";
     Text[ arabic ] = "γΡΗΜΪ";
-    Text[ greek ] = "Αναφορές";
+    Text[ greek ] = "Παραπομπές";
     Text[ korean ] = "μ°Έμ΅°";
     Text[ turkish ] = "Referanslar";
     Text[ language_user1 ] = " ";
@@ -1780,7 +1780,7 @@ String STR_CONTENT_TYPE_SINGLE_REFERENCE
     Text[ japanese ] = "ε‚η…§";
     Text[ chinese_traditional ] = "εƒη…§";
     Text[ arabic ] = "γΡΜΪ";
-    Text[ greek ] = "Αναφορά";
+    Text[ greek ] = "Παραπομπή";
     Text[ korean ] = "μ°Έμ΅°";
     Text[ turkish ] = "Referans";
     Text[ language_user1 ] = " ";
@@ -1953,7 +1953,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ english_us ] = "The interactive spellcheck is already active\\in a different document";
     Text[ portuguese ] = "A verificaηγo ortogrαfica interactiva jα estα\nactiva noutro documento";
     Text[ russian ] = "Θνςεπΰκςθβνΰÿ οπξβεπκΰ ξπτξγπΰτθθ\nσζε βκλώχενΰ β δπσγξμ δξκσμενςε";
-    Text[ greek ] = "Το διαλογικό πρόγραμμα ελέγχου ορθογραφίας\nχρησιμοποιείται από κάποιο άλλο έγγραφο";
+    Text[ greek ] = "Το αναδραστικό πρόγραμμα ορθογραφικού ελέγχου\nχρησιμοποιείται από κάποιο άλλο έγγραφο";
     Text[ dutch ] = "De interactieve spellingcontrole is\nreeds actief in een ander document.";
     Text[ french ] = "La vιrification orthographique interactive est\nen cours d'utilisation dans un autre document.";
     Text[ spanish ] = "La correcciσn ortogrαfica interactiva\nya estα activada en otro documento";
@@ -2013,7 +2013,7 @@ String STR_SPELL_TITLE
     Text[ english_us ] = "Spellcheck";
     Text[ portuguese ] = "Ortografia";
     Text[ russian ] = "Οπξβεπκΰ ξπτξγπΰτθθ";
-    Text[ greek ] = "Έλεγχος ορθογραφίας";
+    Text[ greek ] = "Ορθογραφικός έλεγχος";
     Text[ dutch ] = "Spellingcontrole";
     Text[ french ] = "Vιrification orthographique";
     Text[ spanish ] = "Correcciσn ortogrαfica";
@@ -2185,6 +2185,7 @@ String STR_HYPERCTRL_HYP
     Text[ hindi ] = "HYP";
     Text[ slovak ] = "HYP";
 };
+
 
 
 
