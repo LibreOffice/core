@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:26:25 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2079,7 +2079,7 @@ SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( Window *pParent,
     aEndNtAtTextEndCB   ( this, SW_RES( CB_END_AT_TXTEND )),
     aEndNtNumCB         ( this, SW_RES( CB_END_NUM )),
     aEndNtNumFmtCB      ( this, SW_RES( CB_END_NUM_FMT ) ),
-    aEndNumViewBox      ( this, SW_RES( LB_END_NUMVIEW  )),
+    aEndNumViewBox      ( this, SW_RES( LB_END_NUMVIEW  ), INSERT_NUM_EXTENDED_TYPES),
     aEndOffsetLbl       ( this, SW_RES( FT_END_OFFSET   )),
     aEndOffsetFld       ( this, SW_RES( FLD_END_OFFSET   )),
     aEndPrefixFT        ( this, SW_RES( FT_END_PREFIX   )),
@@ -2138,7 +2138,7 @@ BOOL SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     switch( aEnd.GetValue() )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
-        aEnd.SetNumType( GetNumType( aEndNumViewBox.GetSelectEntryPos() ));
+        aEnd.SetNumType( aEndNumViewBox.GetSelectedNumberingType() );
         aEnd.SetPrefix( aEndPrefixED.GetText() );
         aEnd.SetSuffix( aEndSuffixED.GetText() );
         // no break;
