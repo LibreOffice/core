@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2000-12-01 16:31:36 $
+ *  last change: $Author: th $ $Date: 2000-12-14 13:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,9 +306,6 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     ImplSaveFrameState( pFrame );
     pFrame->maFrameData.mbDefPos = TRUE;
 
-    // CreateHDC in the main thread
-    pFrame->ReleaseGraphics( pFrame->GetGraphics() );
-
     return pFrame;
 }
 
@@ -601,6 +598,7 @@ SalFrame::SalFrame()
     maFrameData.mhCursor            = LoadCursor( 0, IDC_ARROW );
     maFrameData.mhDefIMEContext     = 0;
     maFrameData.mpGraphics          = NULL;
+    maFrameData.mpGraphics2         = NULL;
     maFrameData.mpInst              = NULL;
     maFrameData.mpProc              = ImplSalCallbackDummy;
     maFrameData.mnShowState         = SW_SHOWNORMAL;
@@ -651,6 +649,11 @@ SalFrame::~SalFrame()
 {
     SalData* pSalData = GetSalData();
 
+    // Release Cache DC
+    if ( maFrameData.mpGraphics2 &&
+         maFrameData.mpGraphics2->maGraphicsData.mhDC )
+        ReleaseGraphics( maFrameData.mpGraphics2 );
+
     // destroy saved DC
     if ( maFrameData.mpGraphics )
     {
@@ -699,38 +702,98 @@ SalGraphics* SalFrame::GetGraphics()
     if ( maFrameData.mbGraphics )
         return NULL;
 
-    if ( !maFrameData.mpGraphics )
+    // Other threads get an own DC, because Windows modify in the
+    // other case our DC (changing clip region), when they send a
+    // WM_ERASEBACKGROUND message
+    SalData* pSalData = GetSalData();
+    if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
     {
-        HDC hDC = GetDC( maFrameData.mhWnd );
+        // We use only three CacheDC's for all threads, because W9x is limited
+        // to max. 5 Cache DC's per thread
+        if ( pSalData->mnCacheDCInUse >= 3 )
+            return NULL;
+
+        if ( !maFrameData.mpGraphics2 )
+        {
+            maFrameData.mpGraphics2 = new SalGraphics;
+            maFrameData.mpGraphics2->maGraphicsData.mhDC        = 0;
+            maFrameData.mpGraphics2->maGraphicsData.mhWnd       = maFrameData.mhWnd;
+            maFrameData.mpGraphics2->maGraphicsData.mbPrinter   = FALSE;
+            maFrameData.mpGraphics2->maGraphicsData.mbVirDev    = FALSE;
+            maFrameData.mpGraphics2->maGraphicsData.mbWindow    = TRUE;
+            maFrameData.mpGraphics2->maGraphicsData.mbScreen    = TRUE;
+        }
+
+        HDC hDC = (HDC)ImplSendMessage( pSalData->mpFirstInstance->maInstData.mhComWnd,
+                                        SAL_MSG_GETDC,
+                                        (WPARAM)maFrameData.mhWnd, 0 );
         if ( hDC )
         {
-            SalData* pSalData = GetSalData();
-            maFrameData.mpGraphics = new SalGraphics;
-            maFrameData.mpGraphics->maGraphicsData.mhDC      = hDC;
-            maFrameData.mpGraphics->maGraphicsData.mhWnd     = maFrameData.mhWnd;
-            maFrameData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
-            maFrameData.mpGraphics->maGraphicsData.mbVirDev  = FALSE;
-            maFrameData.mpGraphics->maGraphicsData.mbWindow  = TRUE;
-            maFrameData.mpGraphics->maGraphicsData.mbScreen  = TRUE;
+            maFrameData.mpGraphics2->maGraphicsData.mhDC = hDC;
             if ( pSalData->mhDitherPal )
             {
-                maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+                maFrameData.mpGraphics2->maGraphicsData.mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
                 RealizePalette( hDC );
             }
-            ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
+            ImplSalInitGraphics( &(maFrameData.mpGraphics2->maGraphicsData) );
             maFrameData.mbGraphics = TRUE;
+            pSalData->mnCacheDCInUse++;
+            return maFrameData.mpGraphics2;
         }
+        else
+            return NULL;
     }
     else
-        maFrameData.mbGraphics = TRUE;
+    {
+        if ( !maFrameData.mpGraphics )
+        {
+            HDC hDC = GetDC( maFrameData.mhWnd );
+            if ( hDC )
+            {
+                maFrameData.mpGraphics = new SalGraphics;
+                maFrameData.mpGraphics->maGraphicsData.mhDC      = hDC;
+                maFrameData.mpGraphics->maGraphicsData.mhWnd     = maFrameData.mhWnd;
+                maFrameData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
+                maFrameData.mpGraphics->maGraphicsData.mbVirDev  = FALSE;
+                maFrameData.mpGraphics->maGraphicsData.mbWindow  = TRUE;
+                maFrameData.mpGraphics->maGraphicsData.mbScreen  = TRUE;
+                if ( pSalData->mhDitherPal )
+                {
+                    maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+                    RealizePalette( hDC );
+                }
+                ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
+                maFrameData.mbGraphics = TRUE;
+            }
+        }
+        else
+            maFrameData.mbGraphics = TRUE;
 
-    return maFrameData.mpGraphics;
+        return maFrameData.mpGraphics;
+    }
 }
 
 // -----------------------------------------------------------------------
 
-void SalFrame::ReleaseGraphics( SalGraphics* )
+void SalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
+    if ( maFrameData.mpGraphics2 == pGraphics )
+    {
+        if ( maFrameData.mpGraphics2->maGraphicsData.mhDC )
+        {
+            SalData* pSalData = GetSalData();
+            if ( maFrameData.mpGraphics2->maGraphicsData.mhDefPal )
+                SelectPalette( maFrameData.mpGraphics2->maGraphicsData.mhDC, maFrameData.mpGraphics2->maGraphicsData.mhDefPal, TRUE );
+            ImplSalDeInitGraphics( &(maFrameData.mpGraphics2->maGraphicsData) );
+            ImplSendMessage( pSalData->mpFirstInstance->maInstData.mhComWnd,
+                             SAL_MSG_RELEASEDC,
+                             (WPARAM)maFrameData.mhWnd,
+                             (LPARAM)maFrameData.mpGraphics2->maGraphicsData.mhDC );
+            maFrameData.mpGraphics2->maGraphicsData.mhDC = 0;
+            pSalData->mnCacheDCInUse--;
+        }
+    }
+
     maFrameData.mbGraphics = FALSE;
 }
 
@@ -786,7 +849,13 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
         }
         pFrame->maFrameData.mnShowState = SW_SHOW;
         pFrame->maFrameData.mbInShow = FALSE;
-        UpdateWindow( hWnd );
+
+        // Direct Paint only, if we get the SolarMutx
+        if ( ImplSalYieldMutexTryToAcquire() )
+        {
+            UpdateWindow( hWnd );
+            ImplSalYieldMutexRelease();
+        }
     }
     else
     {
@@ -826,9 +895,13 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
 
 void SalFrame::Show( BOOL bVisible )
 {
-    // Send this Message to the window, because this only works
-    // in the thread of the window, which has create this window
-    ImplSendMessage( maFrameData.mhWnd, SAL_MSG_SHOW, bVisible, 0 );
+    // Post this Message to the window, because this only works
+    // in the thread of the window, which has create this window.
+    // We post this message to avoid deadlocks
+    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
+        ImplPostMessage( maFrameData.mhWnd, SAL_MSG_SHOW, bVisible, 0 );
+    else
+        ImplSalShow( maFrameData.mhWnd, bVisible );
 }
 
 // -----------------------------------------------------------------------
@@ -1275,9 +1348,13 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
 
 void SalFrame::ToTop( USHORT nFlags )
 {
-    // Send this Message to the window, because SetFocus() only work
-    // in the thread of the window, which has create this window
-    ImplSendMessage( maFrameData.mhWnd, SAL_MSG_TOTOP, nFlags, 0 );
+    // Post this Message to the window, because this only works
+    // in the thread of the window, which has create this window.
+    // We post this message to avoid deadlocks
+    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
+        ImplPostMessage( maFrameData.mhWnd, SAL_MSG_TOTOP, nFlags, 0 );
+    else
+        ImplSalToTop( maFrameData.mhWnd, nFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -2742,64 +2819,72 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 static void ImplHandlePaintMsg( HWND hWnd )
 {
-    // Clip-Region muss zurueckgesetzt werden, da wir sonst kein
-    // ordentliches Bounding-Rectangle bekommen
+    BOOL bMutex = FALSE;
     if ( ImplSalYieldMutexTryToAcquire() )
+        bMutex = TRUE;
+
+    // if we don't get the mutex, we can also change the clip region,
+    // because other threads doesn't use the mutex from the main
+    // thread --> see GetGraphics()
+
+    SalFrame* pFrame = GetWindowPtr( hWnd );
+    if ( pFrame )
     {
-        SalFrame* pFrame = GetWindowPtr( hWnd );
-        if ( pFrame && pFrame->maFrameData.mpGraphics )
+        // Clip-Region muss zurueckgesetzt werden, da wir sonst kein
+        // ordentliches Bounding-Rectangle bekommen
+        if ( pFrame->maFrameData.mpGraphics && pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion )
+            SelectClipRgn( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC, 0 );
+
+        // Laut Window-Doku soll man erst abfragen, ob ueberhaupt eine
+        // Paint-Region anliegt
+        if ( GetUpdateRect( hWnd, NULL, FALSE ) )
         {
-            if ( pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion )
-                SelectClipRgn( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC, 0 );
-        }
-        ImplSalYieldMutexRelease();
-    }
+            // Call BeginPaint/EndPaint to query the rect and send
+            // this Notofication to rect
+            RECT aUpdateRect;
+            PAINTSTRUCT aPs;
+            BeginPaint( hWnd, &aPs );
+            CopyRect( &aUpdateRect, &aPs.rcPaint );
+            EndPaint( hWnd, &aPs );
 
-    // Laut Window-Doku soll man erst abfragen, ob ueberhaupt eine
-    // Paint-Region anliegt
-    if ( !GetUpdateRect( hWnd, NULL, FALSE ) )
-        return;
-
-    // BeginPaint
-    PAINTSTRUCT aPs;
-    BeginPaint( hWnd, &aPs );
-
-    // Paint
-    if ( ImplSalYieldMutexTryToAcquire() )
-    {
-        SalFrame* pFrame = GetWindowPtr( hWnd );
-        if ( pFrame )
-        {
+            // Paint
             // ClipRegion wieder herstellen
-            if ( pFrame->maFrameData.mpGraphics )
+            if ( pFrame->maFrameData.mpGraphics && pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion )
             {
-                if ( pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion )
-                {
-                    SelectClipRgn( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC,
-                                   pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion );
-                }
+                SelectClipRgn( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC,
+                               pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion );
             }
 
-            SalPaintEvent aPEvt;
-            aPEvt.mnBoundX          = aPs.rcPaint.left;
-            aPEvt.mnBoundY          = aPs.rcPaint.top;
-            aPEvt.mnBoundWidth      = aPs.rcPaint.right-aPs.rcPaint.left;
-            aPEvt.mnBoundHeight     = aPs.rcPaint.bottom-aPs.rcPaint.top;
-            pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                        SALEVENT_PAINT, &aPEvt );
+            if ( bMutex )
+            {
+                SalPaintEvent aPEvt;
+                aPEvt.mnBoundX          = aUpdateRect.left;
+                aPEvt.mnBoundY          = aUpdateRect.top;
+                aPEvt.mnBoundWidth      = aUpdateRect.right-aUpdateRect.left;
+                aPEvt.mnBoundHeight     = aUpdateRect.bottom-aUpdateRect.top;
+                pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                            SALEVENT_PAINT, &aPEvt );
+            }
+            else
+            {
+                RECT* pRect = new RECT;
+                CopyRect( pRect, &aUpdateRect );
+                ImplPostMessage( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
+            }
         }
+        else
+        {
+            // ClipRegion wieder herstellen
+            if ( pFrame->maFrameData.mpGraphics && pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion )
+            {
+                SelectClipRgn( pFrame->maFrameData.mpGraphics->maGraphicsData.mhDC,
+                               pFrame->maFrameData.mpGraphics->maGraphicsData.mhRegion );
+            }
+        }
+    }
 
+    if ( bMutex )
         ImplSalYieldMutexRelease();
-    }
-    else
-    {
-        RECT* pRect = new RECT;
-        *pRect = aPs.rcPaint;
-        ImplPostMessage( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
-    }
-
-    // EndPaint
-    EndPaint( hWnd, &aPs );
 }
 
 // -----------------------------------------------------------------------

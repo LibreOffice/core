@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: th $ $Date: 2000-12-14 13:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,6 +741,14 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             break;
         case SAL_MSG_DESTROYSOUND:
             ((SalSound*)lParam)->ImplDestroy();
+            rDef = FALSE;
+            break;
+        case SAL_MSG_GETDC:
+            nRet = (LRESULT)GetDCEx( (HWND)wParam, 0, DCX_CACHE );
+            rDef = FALSE;
+            break;
+        case SAL_MSG_RELEASEDC:
+            ReleaseDC( (HWND)wParam, (HDC)lParam );
             rDef = FALSE;
             break;
     }
