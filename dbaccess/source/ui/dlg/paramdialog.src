@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:46:24 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_PARAMETERS
         Text[ arabic ] = "ÇáãÚáãÇÊ";
         Text[ turkish ] = "Parametre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Parámetros";
     };
     ListBox LB_ALLPARAMS
     {
@@ -133,6 +134,7 @@ ModalDialog DLG_PARAMETERS
         Text[ arabic ] = "ÇáÞíãÉ";
         Text[ turkish ] = "Deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Valor";
     };
     Edit ET_PARAM
     {
@@ -167,6 +169,7 @@ ModalDialog DLG_PARAMETERS
         Text[ chinese_traditional ] = "¤U¤@­Ó(~N)";
         Text[ arabic ] = "ÇáÊÇáí";
         Text[ turkish ] = "Sonraki";
+        Text[ catalan ] = "~siguiente";
     };
     FixedLine FT_DELIM
     {
@@ -228,12 +231,17 @@ ModalDialog DLG_PARAMETERS
         Text[ chinese_traditional ] = "³o­Ó¿é¤J­ÈµLªkÂà´«¦¨Äæ ¡§$name$¡¨ ªº¦³®Ä­È¡C";
         Text[ arabic ] = "ÊÚÐÑ ÊÍæíá ÇáÅÏÎÇá Åáì ÞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
         Text[ turkish ] = "Giriþ, \"$name$\" sütunu için geçerli bir deðere dönüþtürülemedi.";
+        Text[ catalan ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
     };
+    Text[ catalan ] = "Entrada de parámetro";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/09 20:46:24  avy
+ *  Merge SRC624: 03/09/01 - 21:46:05 (NoBranch)
+ *
  *  Revision 1.5  2001/02/09 20:22:33  kz
  *  Merge SWT614: 02/09/01 - 21:22:03
  *
