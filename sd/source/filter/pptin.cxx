@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:10:48 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 13:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,7 +861,7 @@ sal_Bool ImplSdPPTImport::Import()
                 if ( SeekToAktPage( &aPageHd ) )
                 {
                     if ( mbTracing )
-                        mpTracer->AddAttribute( rtl::OUString::createFromAscii( "MasterPage" ), rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
+                        mpTracer->AddAttribute( rtl::OUString::createFromAscii( "MasterPage" ), rtl::OUString::valueOf( (sal_Int32) (nAktPageNum + 1) ) );
                     sal_uInt32 nPageRecEnd = aPageHd.GetRecEndFilePos();
                     DffRecordHeader aPPDrawHd;
                     if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, nPageRecEnd, &aPPDrawHd ) )
