@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:50:16 $
+ *  last change: $Author: nn $ $Date: 2000-12-13 18:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,35 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
 }
 
 //! StandardDecimals als Property und vom NumberFormatter ????????
+
+const SfxItemPropertyMap* lcl_GetColumnsPropertyMap()
+{
+    static SfxItemPropertyMap aColumnsPropertyMap_Impl[] =
+    {
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_OWIDTH),   0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLWID),  0,  &getCppuType((sal_Int32*)0),    0, 0 },
+        {0,0,0,0}
+    };
+    return aColumnsPropertyMap_Impl;
+}
+
+const SfxItemPropertyMap* lcl_GetRowsPropertyMap()
+{
+    static SfxItemPropertyMap aRowsPropertyMap_Impl[] =
+    {
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHGT),  0,  &getCppuType((sal_Int32*)0),    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLFILT), 0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_OHEIGHT),  0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  0,  &getBooleanCppuType(),          0, 0 },
+        {0,0,0,0}
+    };
+    return aRowsPropertyMap_Impl;
+}
+
+//! move these functions to a header file
+inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 //------------------------------------------------------------------------
 
@@ -1603,6 +1632,112 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const rtl::OUString& aName )
     return FALSE;       // nicht gefunden
 }
 
+// XPropertySet
+
+uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableColumnsObj::getPropertySetInfo()
+                                                        throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    static uno::Reference<beans::XPropertySetInfo> aRef =
+        new SfxItemPropertySetInfo( lcl_GetColumnsPropertyMap() );
+    return aRef;
+}
+
+void SAL_CALL ScTableColumnsObj::setPropertyValue(
+                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+                        lang::IllegalArgumentException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!pDocShell)
+        throw uno::RuntimeException();
+
+    ScDocFunc aFunc(*pDocShell);
+    ScDocument* pDoc = pDocShell->GetDocument();
+    USHORT nColArr[2];
+    nColArr[0] = nStartCol;
+    nColArr[1] = nEndCol;
+    String aNameString = aPropertyName;
+
+    if ( aNameString.EqualsAscii( SC_UNONAME_CELLWID ) )
+    {
+        sal_Int32 nNewWidth;
+        if ( aValue >>= nNewWidth )
+            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, SC_SIZE_DIRECT,
+                                    (USHORT)HMMToTwips(nNewWidth), TRUE, TRUE );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
+    {
+        BOOL bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
+        aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, eMode, 0, TRUE, TRUE );
+        //  SC_SIZE_DIRECT with size 0: hide
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_OWIDTH ) )
+    {
+        BOOL bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        if (bOpt)
+            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab,
+                                    SC_SIZE_OPTIMAL, STD_EXTRA_WIDTH, TRUE, TRUE );
+        // FALSE for columns currently has no effect
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE ) || aNameString.EqualsAscii( SC_UNONAME_MANPAGE ) )
+    {
+        //! single function to set/remove all breaks?
+        BOOL bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        for (USHORT nCol=nStartCol; nCol<=nEndCol; nCol++)
+            if (bSet)
+                aFunc.InsertPageBreak( TRUE, ScAddress(nCol,0,nTab), TRUE, TRUE, TRUE );
+            else
+                aFunc.RemovePageBreak( TRUE, ScAddress(nCol,0,nTab), TRUE, TRUE, TRUE );
+    }
+}
+
+uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const rtl::OUString& aPropertyName )
+                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!pDocShell)
+        throw uno::RuntimeException();
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    String aNameString = aPropertyName;
+    uno::Any aAny;
+
+    //! loop over all columns for current state?
+
+    if ( aNameString.EqualsAscii( SC_UNONAME_CELLWID ) )
+    {
+        USHORT nWidth = pDoc->GetColWidth( nStartCol, nTab );
+        aAny <<= (sal_Int32)TwipsToHMM(nWidth);
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
+    {
+        BOOL bVis = !(pDoc->GetColFlags( nStartCol, nTab ) & CR_HIDDEN);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_OWIDTH ) )
+    {
+        BOOL bOpt = !(pDoc->GetColFlags( nStartCol, nTab ) & CR_MANUALSIZE);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bOpt );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE ) )
+    {
+        BOOL bBreak = ( 0 != (pDoc->GetColFlags( nStartCol, nTab ) & (CR_PAGEBREAK|CR_MANUALBREAK)) );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_MANPAGE ) )
+    {
+        BOOL bBreak = ( 0 != (pDoc->GetColFlags( nStartCol, nTab ) & (CR_MANUALBREAK)) );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+    }
+
+    return aAny;
+}
+
+SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableColumnsObj )
 
 //------------------------------------------------------------------------
 
@@ -1721,6 +1856,134 @@ sal_Bool SAL_CALL ScTableRowsObj::hasElements() throw(uno::RuntimeException)
     ScUnoGuard aGuard;
     return ( getCount() != 0 );
 }
+
+// XPropertySet
+
+uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableRowsObj::getPropertySetInfo()
+                                                        throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    static uno::Reference<beans::XPropertySetInfo> aRef =
+        new SfxItemPropertySetInfo( lcl_GetRowsPropertyMap() );
+    return aRef;
+}
+
+void SAL_CALL ScTableRowsObj::setPropertyValue(
+                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+                        lang::IllegalArgumentException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!pDocShell)
+        throw uno::RuntimeException();
+
+    ScDocFunc aFunc(*pDocShell);
+    ScDocument* pDoc = pDocShell->GetDocument();
+    USHORT nRowArr[2];
+    nRowArr[0] = nStartRow;
+    nRowArr[1] = nEndRow;
+    String aNameString = aPropertyName;
+
+    if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
+    {
+        sal_Int32 nNewHeight;
+        if ( aValue >>= nNewHeight )
+            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_DIRECT,
+                                    (USHORT)HMMToTwips(nNewHeight), TRUE, TRUE );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
+    {
+        BOOL bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
+        aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, eMode, 0, TRUE, TRUE );
+        //  SC_SIZE_DIRECT with size 0: hide
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLFILT ) )
+    {
+        //! undo etc.
+        BOOL bFil = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        for (USHORT nRow=nStartRow; nRow<=nEndRow; nRow++)
+        {
+            BYTE nFlags = pDoc->GetRowFlags(nRow, nTab);
+            if (bFil)
+                nFlags |= CR_FILTERED;
+            else
+                nFlags &= ~CR_FILTERED;
+            pDoc->SetRowFlags(nRow, nTab, nFlags);
+        }
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_OHEIGHT ) )
+    {
+        BOOL bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        if (bOpt)
+            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, TRUE, TRUE );
+        else
+        {
+            //! manually set old heights again?
+        }
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE) || aNameString.EqualsAscii( SC_UNONAME_MANPAGE) )
+    {
+        //! single function to set/remove all breaks?
+        BOOL bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+        for (USHORT nRow=nStartRow; nRow<=nEndRow; nRow++)
+            if (bSet)
+                aFunc.InsertPageBreak( FALSE, ScAddress(0,nRow,nTab), TRUE, TRUE, TRUE );
+            else
+                aFunc.RemovePageBreak( FALSE, ScAddress(0,nRow,nTab), TRUE, TRUE, TRUE );
+    }
+}
+
+uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aPropertyName )
+                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!pDocShell)
+        throw uno::RuntimeException();
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    String aNameString = aPropertyName;
+    uno::Any aAny;
+
+    //! loop over all rows for current state?
+
+    if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
+    {
+        USHORT nHeight = pDoc->GetRowHeight( nStartRow, nTab );
+        aAny <<= (sal_Int32)TwipsToHMM(nHeight);
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
+    {
+        BOOL bVis = !(pDoc->GetRowFlags( nStartRow, nTab ) & CR_HIDDEN);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLFILT ) )
+    {
+        BOOL bVis = ((pDoc->GetRowFlags( nStartRow, nTab ) & CR_FILTERED) != 0);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_OHEIGHT ) )
+    {
+        BOOL bOpt = !(pDoc->GetRowFlags( nStartRow, nTab ) & CR_MANUALSIZE);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bOpt );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE ) )
+    {
+        BOOL bBreak = ( 0 != (pDoc->GetRowFlags( nStartRow, nTab ) & (CR_PAGEBREAK|CR_MANUALBREAK)) );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_MANPAGE ) )
+    {
+        BOOL bBreak = ( 0 != (pDoc->GetRowFlags( nStartRow, nTab ) & (CR_MANUALBREAK)) );
+        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+    }
+
+    return aAny;
+}
+
+SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
 //------------------------------------------------------------------------
 
