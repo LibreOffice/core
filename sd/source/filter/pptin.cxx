@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:26:58 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,8 @@
 #include <svtools/pathoptions.hxx>
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
+
+
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium, MSFilterTracer* pTracer )
 {
@@ -942,7 +944,7 @@ sal_Bool ImplSdPPTImport::Import()
                             pObj->SetMergedItemSet( aTempAttr );
                             pObj->SetStyleSheet( pSheet, FALSE );
                         }
-                        pMPage->GetPresObjList()->Insert( pObj, LIST_APPEND );
+                        pMPage->InsertPresObj( pObj, PRESOBJ_BACKGROUND );
 
                         // #110094#-15
                         // tell the page that it's visualization has changed
@@ -985,6 +987,7 @@ sal_Bool ImplSdPPTImport::Import()
                     pPage->SetLayoutName( ( (SdPage*)pPage->GetMasterPage( 0 ) )->GetLayoutName() );
                 }
                 ImportPage( pPage, pMasterPersist );
+                SetHeaderFooterPageSettings( pPage, pMasterPersist );
                 pPage->SetPageKind( PK_STANDARD );
                 ImportPageEffect( (SdPage*)pPage );
                 pSdrModel->InsertPage( pPage );
@@ -1011,6 +1014,7 @@ sal_Bool ImplSdPPTImport::Import()
                         pNotesPage->SetLayoutName( ( (SdPage*)pNotesPage->GetMasterPage( 0 ) )->GetLayoutName() );
                     }
                     ImportPage( pNotesPage, pMasterPersist );
+                    SetHeaderFooterPageSettings( pNotesPage, pMasterPersist );
                     pNotesPage->SetPageKind( PK_NOTES );
                     pNotesPage->InsertMasterPage( nNotesMasterNum );
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
@@ -1175,58 +1179,7 @@ sal_Bool ImplSdPPTImport::Import()
         // Handzettel-MasterPage: Autolayout setzen                 //
         //////////////////////////////////////////////////////////////
         SdPage* pHandoutMPage = pDoc->GetMasterSdPage( 0, PK_HANDOUT );
-        pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT4, TRUE );
-    }
-
-    /////////////////////////////////
-    // create missing headerfooter //
-    /////////////////////////////////
-    HeaderFooterMaster* pM;
-    for ( pM = (HeaderFooterMaster*)aHFMasterList.First(); pM; pM = (HeaderFooterMaster*)aHFMasterList.Next() )
-    {
-        HeaderFooterEntry *pSlave, *pMaster = (HeaderFooterEntry*)pM->aHeaderFooterEntryList.First();
-        if ( pMaster )
-        {
-            HeaderFooterMaster& rM = pMaster->rMaster;
-            SdrObject* pObj;
-            for ( UINT32 nInstanceCount = pMaster->nInstanceCount; nInstanceCount; )
-            {
-                UINT32 nInstance = pMaster->pInstanceOrder[ --nInstanceCount ];
-                if ( nInstance < 4 )
-                {
-                    if ( rM.nDirtyInstance & ( 1 << nInstance ) )
-                    {
-                        while ( ( pSlave = (HeaderFooterEntry*)pM->aHeaderFooterEntryList.Next() ) )
-                        {
-                            if ( pSlave->IsToDisplay( nInstance ) )
-                            {   // this headerfooter is to display
-                                pObj = pSlave->pSdrObject[ nInstance ];
-                                if ( pObj )
-                                    pSlave->pSdrObject[ nInstance ] = NULL;
-                                else
-                                {   // we have to use the default from the masterpage
-                                    pObj = pMaster->pSdrObject[ nInstance ];
-                                    if ( pObj )
-                                        pObj = pObj->Clone();
-                                }
-                                if ( pObj )
-                                    pSlave->pSdPage->NbcInsertObject( pObj, 0 );
-                            }
-                        }
-                        pM->aHeaderFooterEntryList.Seek( (UINT32)0 );
-                    }
-                    else
-                    {
-                        pObj = pMaster->pSdrObject[ nInstance ];
-                        if ( pObj && pMaster->IsToDisplay( nInstance ) )
-                        {
-                            pMaster->pSdPage->NbcInsertObject( pObj, pMaster->pPageIndex[ nInstance ] );
-                            pMaster->pSdrObject[ nInstance ] = NULL;
-                        }
-                    }
-                }
-            }
-        }
+        pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT6, TRUE, TRUE );
     }
 
     UINT32 nSlideCount = GetPageCount();
@@ -1438,6 +1391,79 @@ sal_Bool ImplSdPPTImport::Import()
     delete( pNewDocInfo );
     pSdrModel->setLock( sal_False );
     return bOk;
+}
+
+void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist )
+{
+    sal_uInt32 i;
+    PptSlidePersistList* pList = GetPageList( eAktPageKind );
+    if ( ( !pList ) || ( pList->Count() <= nAktPageNum ) )
+        return;
+    PptSlidePersistEntry& rSlidePersist = *(*pList)[ nAktPageNum ];
+    HeaderFooterEntry* pHFE = rSlidePersist.pHeaderFooterEntry;
+    if ( pHFE )
+    {
+        for ( i = 0; i < 4; i++ )
+        {
+            bool bVisible = pHFE->IsToDisplay( i );
+            if ( ( eAktPageKind == PPT_SLIDEPAGE )
+                && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PPT_LAYOUT_TITLESLIDE )
+                    && ( aDocAtom.bTitlePlaceholdersOmitted == TRUE ) )
+            {
+                bVisible = sal_False;
+            }
+            if ( bVisible && pMasterPersist )
+            {
+                sal_uInt32 nPosition = pHFE->NeedToImportInstance( i, rSlidePersist );
+                if ( nPosition )
+                {
+                    Rectangle aEmpty;
+                    bVisible = sal_False;
+                    rStCtrl.Seek( nPosition );
+                    ProcessData aProcessData( rSlidePersist, (SdPage*)pPage );
+                    SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                    if ( pObj )
+                        pPage->NbcInsertObject( pObj, 0 );
+                }
+            }
+            String aPlaceHolderString;
+            if ( pHFE->pPlaceholder )
+                aPlaceHolderString = pHFE->pPlaceholder[ i ];
+
+            sd::HeaderFooterSettings& rHeaderFooterSettings = pPage->getHeaderFooterSettings();
+            switch( i )
+            {
+                case 0 :
+                {
+                    rHeaderFooterSettings.mbDateTimeVisible = bVisible;
+                    rHeaderFooterSettings.mbDateTimeIsFixed = ( pHFE->nAtom & 0x20000 ) == 0;
+                    rHeaderFooterSettings.maDateTimeText = aPlaceHolderString;
+                    SvxDateFormat eDateFormat;
+                    SvxTimeFormat eTimeFormat;
+                    PPTFieldEntry::GetDateTime( pHFE->nAtom & 0xff, eDateFormat, eTimeFormat );
+                    rHeaderFooterSettings.meDateTimeFormat = eDateFormat | ( eTimeFormat << 4 );
+                }
+                break;
+                case 1 :
+                {
+                    rHeaderFooterSettings.mbHeaderVisible = bVisible;
+                    rHeaderFooterSettings.maHeaderText = aPlaceHolderString;
+                }
+                break;
+                case 2 :
+                {
+                    rHeaderFooterSettings.mbFooterVisible = bVisible;
+                    rHeaderFooterSettings.maFooterText = aPlaceHolderString;
+                }
+                break;
+                case 3 :
+                {
+                    rHeaderFooterSettings.mbSlideNumberVisible = bVisible;
+                }
+                break;
+            }
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -2337,16 +2363,52 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     SdrObject*      pRet = pText;
 
     ppStyleSheetAry = NULL;
+
     PresObjKind ePresKind = PRESOBJ_NONE;
     PptOEPlaceholderAtom* pPlaceHolder = pTextObj->GetOEPlaceHolderAtom();
-
+    String aPresentationText;
+    if ( pPlaceHolder )
+    {
+        switch( pPlaceHolder->nPlaceholderId )
+        {
+            case PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE :
+            case PPT_PLACEHOLDER_MASTERCENTEREDTITLE :
+            case PPT_PLACEHOLDER_MASTERTITLE :
+            {
+                ePresKind = PRESOBJ_TITLE;
+                aPresentationText = pPage->GetPresObjText( ePresKind );
+            }
+            break;
+            case PPT_PLACEHOLDER_MASTERBODY :
+            {
+                ePresKind = PRESOBJ_OUTLINE;
+                aPresentationText = pPage->GetPresObjText( ePresKind );
+            }
+            break;
+            case PPT_PLACEHOLDER_MASTERSUBTITLE :
+            {
+                ePresKind = PRESOBJ_TEXT;
+                aPresentationText = pPage->GetPresObjText( ePresKind );
+            }
+            break;
+            case PPT_PLACEHOLDER_MASTERNOTESBODYIMAGE :
+            {
+                ePresKind = PRESOBJ_NOTES;
+                aPresentationText = pPage->GetPresObjText( ePresKind );
+            }
+            break;
+            case PPT_PLACEHOLDER_MASTERDATE :           ePresKind = PRESOBJ_DATETIME;   break;
+            case PPT_PLACEHOLDER_MASTERSLIDENUMBER :    ePresKind = PRESOBJ_SLIDENUMBER;break;
+            case PPT_PLACEHOLDER_MASTERFOOTER :         ePresKind = PRESOBJ_FOOTER;     break;
+            case PPT_PLACEHOLDER_MASTERHEADER :         ePresKind = PRESOBJ_HEADER;     break;
+        }
+    }
     switch ( pTextObj->GetInstance() )
     {
         case TSS_TYPE_PAGETITLE :
         case TSS_TYPE_TITLE :
         {
-            ePresKind = PRESOBJ_TITLE;
-            pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
+            pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             if ( pSheet )
                 ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
@@ -2354,8 +2416,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         break;
         case TSS_TYPE_SUBTITLE :
         {
-            ePresKind = PRESOBJ_TEXT;
-            pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
+            pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
             if ( pSheet )
                 ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for subtitleobject (SJ)" );
@@ -2365,7 +2426,6 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         case TSS_TYPE_HALFBODY :
         case TSS_TYPE_QUARTERBODY :
         {
-            ePresKind = PRESOBJ_OUTLINE;
             for ( UINT16 nLevel = 9; nLevel; nLevel-- )
             {
                 String aName( pPage->GetLayoutName() );
@@ -2384,19 +2444,17 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         break;
         case TSS_TYPE_NOTES :
         {
-            ePresKind = PRESOBJ_NOTES;
             if ( pPlaceHolder && ( ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE )
                 || ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) ) )
             {
-                ePresKind = PRESOBJ_TITLE;
-                pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
+                pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                 if ( pSheet )
                     ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
             }
             else
             {
-                pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
+                pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_NOTES );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for notesobj (SJ)" );
                 if ( pSheet )
                     ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
@@ -2423,7 +2481,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 //                  ePresKind = PRESOBJ_TITLE;
                 String aString( pPage->GetPresObjText( ePresKind ) );
                 pText->SetUserCall( pPage );
-                pPage->GetPresObjList()->Insert( pText, LIST_APPEND );
+                pPage->InsertPresObj( pText, ePresKind );
                 SdrOutliner* pOutl = NULL;
                 if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
                     pOutl = GetDrawOutliner( pText );
@@ -2440,17 +2498,20 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 if ( pTextObj->GetInstance() != TSS_TYPE_SUBTITLE )
                 {
-                    pText->SetNotVisibleAsMaster( TRUE );
-                    pText->SetEmptyPresObj( TRUE );
+                    if( (ePresKind != PRESOBJ_HEADER) && (ePresKind != PRESOBJ_FOOTER) && (ePresKind != PRESOBJ_DATETIME) && (ePresKind != PRESOBJ_SLIDENUMBER) )
+                    {
+                        pText->SetNotVisibleAsMaster( TRUE );
+                        pText->SetEmptyPresObj( TRUE );
+                    }
     //              if ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE )
     //                  ePresKind = PRESOBJ_TITLE;
-                    String aString( pPage->GetPresObjText( ePresKind ) );
                     pText->SetUserCall( pPage );
-                    pPage->GetPresObjList()->Insert( pText, LIST_APPEND );
+                    pPage->InsertPresObj( pText, ePresKind );
                     SdrOutliner* pOutl = NULL;
                     if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
                         pOutl = GetDrawOutliner( pText );
-                    pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aString);
+                    if ( aPresentationText.Len() )
+                        pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
                     pText->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresKind ), TRUE );
                     SfxItemSet aTempAttr( pDoc->GetPool() );
                     SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );
@@ -2538,8 +2599,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     {
                         if ( !bEmptyPresObj )
                         {
-                            List* pPresObjList = pPage->GetPresObjList();
-                            pPresObjList->Insert( pRet );
+                            pPage->InsertPresObj( pRet, ePresObjKind );
                         }
                         else
                         {
