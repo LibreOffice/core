@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidclex.l,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:49:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 %{
 
-static char *Revision     = "$Revision: 1.2 $" ;
+static char *Revision     = "$Revision: 1.3 $" ;
 
 /*
 
@@ -870,7 +870,7 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 		lasttoken = TOK_IDNUM;
 
 	}
-{string}	{
+<INITIAL,EXCLUDE_STATE>{string}	{
 			ring->set_broken();
             lasttoken = TOK_STRING;
 			//printf("%6s %11s %8d %s \n",project,filename,yylineno, yytext);
