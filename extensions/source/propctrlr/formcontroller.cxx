@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 15:37:05 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 08:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,10 @@ namespace pcr
                     {
                         xConnection = ::dbtools::connectRowset( xRowSet, m_xORB, sal_False );
                     }
+
+                    // set on the row set
+                    m_xPropValueAccess->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xConnection ) );
+
                     // remember for later disposal
                     // (we opened the connection, thus we own it)
                     m_xRowsetConnection = xConnection;
@@ -2550,6 +2554,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.39  2001/08/06 15:37:05  fs
+ *  #88300# UpdateUI: don't grab the focus if we didn't have it before ...
+ *
  *  Revision 1.38  2001/08/06 14:52:59  fs
  *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
  *
