@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextAlign.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:52:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** specifies the alignment of text.
  */
-constants TextAlign
+published constants TextAlign
 {
     //-------------------------------------------------------------------------
 
