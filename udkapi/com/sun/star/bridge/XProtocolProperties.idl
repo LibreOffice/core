@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProtocolProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@ module com { module sun { module star { module bridge {
 
     <p>INTERNAL INTERFACE, DO NOT USE IT ELSEWHERE!</p>
 */
-[ uik(A7EF98B1-8D82-11d4-9F1B0050-04D7755D), ident( "XProtocolProperties", 1.0 ) ]
 interface XProtocolProperties : com::sun::star::uno::XInterface
 {
     /** called to get a list of bridge internal properties. Which properties can be retrieved,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeFactory.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-12 10:18:48 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 
 /** @missing
  */
-[ uik(4D463C50-D3E8-11d3-9EE80050-04D7755D), ident( "XBridgeFactory", 1.0 ) ]
 interface XBridgeFactory: com::sun::star::uno::XInterface
 {
     // DocMerge from idl: method com::sun::star::bridge::XBridgeFactory::createBridge

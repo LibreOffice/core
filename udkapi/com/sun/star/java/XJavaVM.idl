@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-13 15:46:58 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ module com {  module sun {  module star {  module java {
 
     @incomplete
  */
-[ uik(F7662401-B540-11D2-89480060-0857BB21), ident( "XJavaVM", 1.0 ) ]
 interface XJavaVM: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -117,6 +116,9 @@ interface XJavaVM: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/13 15:46:58  mi
+    symtactical documentation and minor semantic documentation flaws fixed
+
     Revision 1.4  2000/11/08 12:28:40  mi
     moved from api
 

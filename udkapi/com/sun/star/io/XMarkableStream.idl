@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMarkableStream.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ module com {  module sun {  module star {  module io {
 // DocMerge from xml: interface com::sun::star::io::XMarkableStream
 /** makes it possible to set and remove seekable marks to a stream.
  */
-[ uik(799AC0E0-2DFC-11D3-9ED10010-5A677293), ident( "XMarkableStream", 1.0 ) ]
 interface XMarkableStream: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -143,7 +142,7 @@ interface XMarkableStream: com::sun::star::uno::XInterface
         @throws IOException
             if an I/O error has occurred.
      */
-    [const] long offsetToMark( [in] long nMark )
+    long offsetToMark( [in] long nMark )
             raises( com::sun::star::io::IOException,
                     com::sun::star::lang::IllegalArgumentException );
 
@@ -156,6 +155,9 @@ interface XMarkableStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

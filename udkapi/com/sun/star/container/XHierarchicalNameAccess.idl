@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalNameAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 15:32:24 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 
     @see com::sun::star::beans::XExactName
  */
-[ uik(94263A00-7FDE-11D3-87BD00A0-24494732), ident( "XHierarchicalNameAccess", 1.0 ) ]
 interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -102,7 +101,7 @@ interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
         @throws NoSuchElementException
             if an element under Name does not exist.
      */
-    [const] any getByHierarchicalName( [in] string aName )
+    any getByHierarchicalName( [in] string aName )
             raises( com::sun::star::container::NoSuchElementException );
 
     //-------------------------------------------------------------------------
@@ -118,7 +117,7 @@ interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
         @param aName
             the name of the object.
      */
-    [const] boolean hasByHierarchicalName( [in] string aName );
+    boolean hasByHierarchicalName( [in] string aName );
 
 };
 
@@ -129,6 +128,9 @@ interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/19 15:32:24  mi
+    documentation syntax fixed
+
     Revision 1.5  2000/12/11 16:09:45  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataTransferEventListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ module com {  module sun {  module star {  module io {
 // DocMerge from xml: interface com::sun::star::io::XDataTransferEventListener
 /** is used to receive callbacks from an importer or exporter.
  */
-[ uik(E2280125-33D6-11D1-AABE00A0-249D5590), ident( "XDataTransferEventListener", 1.0 ) ]
 interface XDataTransferEventListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
@@ -105,6 +104,9 @@ interface XDataTransferEventListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

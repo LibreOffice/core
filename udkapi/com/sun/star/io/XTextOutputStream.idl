@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextOutputStream.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ module com {  module sun {  module star {  module io {
 /** makes it possible to write machine-independent simple data types to a
     stream.
  */
-[ uik(4EC78070-5CBA-11d4-9F9B0050-04D8BBC7), ident( "XTextOutputStream", 1.0 ) ]
 interface XTextOutputStream: com::sun::star::io::XOutputStream
 {
     //-------------------------------------------------------------------------
@@ -118,6 +117,9 @@ interface XTextOutputStream: com::sun::star::io::XOutputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

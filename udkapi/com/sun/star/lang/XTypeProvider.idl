@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeProvider.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-31 09:45:41 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ module com {  module sun {  module star {  module lang {
 /** interface to get information about the types
     (usually interface types) supported by an object.
  */
-[ uik(B163A7B0-C432-11d3-9F070050-04D8BBC7), ident( "XTypeProvider", 1.0 ) ]
 interface XTypeProvider: com::sun::star::uno::XInterface
 {
 
@@ -112,6 +111,9 @@ interface XTypeProvider: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/31 09:45:41  mi
+    TYPE_XIDLCLASS is now 'type'
+
     Revision 1.5  2000/12/13 15:47:01  mi
     symtactical documentation and minor semantic documentation flaws fixed
 

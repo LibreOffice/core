@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEnumTypeDescription.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:46 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::reflection::XEnumTypeDescription
 /** the type description of an enum.
  */
-[ uik(24AB9855-3064-11D3-9F1D0010-5AD848AF), ident( "XEnumTypeDescription", 1.0 ) ]
 interface XEnumTypeDescription: com::sun::star::reflection::XTypeDescription
 {
     //-------------------------------------------------------------------------
@@ -108,6 +107,9 @@ interface XEnumTypeDescription: com::sun::star::reflection::XTypeDescription
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:46  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:31  hjs
     initial import
 

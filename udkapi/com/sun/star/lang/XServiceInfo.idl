@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-13 15:47:01 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ module com {  module sun {  module star {  module lang {
 /** provides information regarding which services are implemented.@see XSingleServiceFactory
         @see XToolSupplier
  */
-[ uik(E227A3E0-33D6-11D1-AABE00A0-249D5590), ident( "XServiceInfo", 1.0 ) ]
 interface XServiceInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -117,6 +116,9 @@ interface XServiceInfo: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/13 15:47:01  mi
+    symtactical documentation and minor semantic documentation flaws fixed
+
     Revision 1.4  2000/11/08 12:28:41  mi
     moved from api
 

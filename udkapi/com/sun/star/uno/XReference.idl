@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XReference.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:29:00 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 /** must be implemented by anyone who holds the adapter on the client side.@see XWeak
         for decription af concepts.
  */
-[ uik(E227A547-33D6-11D1-AABE00A0-249D5590), ident( "XReference", 1.0 ) ]
 interface XReference: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -103,6 +102,9 @@ interface XReference: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:29:00  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:18  hjs
     initial import
 

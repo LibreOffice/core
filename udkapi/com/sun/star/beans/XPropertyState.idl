@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyState.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 16:22:48 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ module com {  module sun {  module star {  module beans {
             (multi selection with multipe values).</li>
     </ul>
  */
-[ uik(E227A393-33D6-11D1-AABE00A0-249D5590), ident( "XPropertyState", 1.0 ) ]
 interface XPropertyState: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -178,7 +177,7 @@ interface XPropertyState: com::sun::star::uno::XInterface
             In this case the original exception is wrapped into that
             <type scope="com::sun::star::lang">WrappedTargetException</type>.
      */
-    [const] any getPropertyDefault( [in] string aPropertyName )
+    any getPropertyDefault( [in] string aPropertyName )
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 };
@@ -190,6 +189,9 @@ interface XPropertyState: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/15 16:22:48  mi
+    lost documentation from src536 inserted
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

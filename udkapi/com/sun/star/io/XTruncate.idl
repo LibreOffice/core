@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTruncate.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-02-02 16:20:03 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ module com {  module sun {  module star {  module io {
 /** makes it possible to set the size of the underlying data of a stream
     to zero.
  */
-[ uik(2BD1A7D0-F926-11D4-A0080010-5AEF84A7), ident( "XTruncate", 1.0 ) ]
 interface XTruncate: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -99,6 +98,9 @@ interface XTruncate: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/02/02 16:20:03  mi
+    new interface XTruncate
+
 
 =============================================================================*/
 #endif

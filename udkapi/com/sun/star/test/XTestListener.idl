@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTestListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:57 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ module com { module sun { module star { module test {
 //=============================================================================
 /** is used to handle errors/exceptions and warnings during tests.
 */
-[ uik(DEB08300-3235-11d4-9F730050-04D8BBC7), ident( "XTestListener", 1.0 ) ]
 interface XTestListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------

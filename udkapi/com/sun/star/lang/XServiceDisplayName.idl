@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceDisplayName.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-13 15:47:01 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ module com {  module sun {  module star {  module lang {
      implementation name. It should not be used to identify / select a
      specific service / implementation.</p>
  */
-[ uik(53C10382-AC08-11d4-9F1A0050-04D8BBC5), ident( "XServiceDisplayName", 1.0 ) ]
 interface XServiceDisplayName : ::com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

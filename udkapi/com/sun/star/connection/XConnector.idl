@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnector.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-12 10:13:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 module com {  module sun {  module star {  module connection {
 
 // DocMerge: empty anyway
-[ uik(4F73C140-D329-11d3-9EE70050-04D7755D), ident( "XConnector", 1.0 ) ]
 interface XConnector: com::sun::star::uno::XInterface
 {
 

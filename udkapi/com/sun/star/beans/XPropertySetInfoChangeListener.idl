@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySetInfoChangeListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:15:24 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
     @see    PropertySetInfoChangeEvent
     @see    XPropertySetInfoChangeNotifier
  */
-[ uik(54D27621-DA3A-11d3-9F590050-04526AC8), ident( "XPropertySetInfoChangeListener", 1.0 ) ]
 interface XPropertySetInfoChangeListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
@@ -100,6 +99,9 @@ interface XPropertySetInfoChangeListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 16:15:24  mi
+    documentation syntax fixed
+
     Revision 1.4  2000/11/08 12:28:20  mi
     moved from api
 

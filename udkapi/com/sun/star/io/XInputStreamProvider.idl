@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStreamProvider.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:43:47 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ module com {  module sun {  module star {  module io {
     When calling createInputStream() you get a fresh input stream to read from,
     anytime providing the same data.
 */
-[ uik(91D12584-92A9-4c97-B8BED54C-3123F9F6), ident( "XInputStreamProvider", 1.0 ) ]
 interface XInputStreamProvider : com::sun::star::uno::XInterface
 {
     /** Creates a new input stream providing the same data.
@@ -92,6 +91,9 @@ interface XInputStreamProvider : com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/03/14 16:43:47  dbo
+    new
+
 
 =============================================================================*/
 #endif

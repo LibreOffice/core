@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeSupplier2.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-12 10:18:48 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@
 
     @see com::sun::star::bridge::OleBridgeSupplier2
  */
-[ uik(5F97D2F0-50F8-11d4-83240050-04526AB4), ident( "XBridgeSupplier2", 1.0 ) ]
 interface XBridgeSupplier2: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -143,6 +142,9 @@ interface XBridgeSupplier2: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/12 10:18:48  jbu
+    reconstructed some method references, that have gone lost during merges
+
     Revision 1.5  2000/12/11 16:09:40  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

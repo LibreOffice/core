@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertySet.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:15:24 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@ module com {  module sun {  module star {  module beans {
 // DocMerge from xml: interface com::sun::star::beans::XMultiPropertySet
 /** provides access to multiple properties with a single call.
  */
-[ uik(E227A45C-33D6-11D1-AABE00A0-249D5590), ident( "XMultiPropertySet", 1.0 ) ]
 interface XMultiPropertySet: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -109,7 +108,7 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         @see XPropertySet::getPropertySetInfo
      */
-    [const] com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+    com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
 
     //-------------------------------------------------------------------------
 
@@ -156,7 +155,7 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
             specifies the names of the properties.
             This sequence must be alphabetically sorted.
      */
-    [const] sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames );
+    sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames );
 
     //-------------------------------------------------------------------------
 
@@ -216,6 +215,9 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/12/19 16:15:24  mi
+    documentation syntax fixed
+
     Revision 1.6  2000/12/15 16:22:48  mi
     lost documentation from src536 inserted
 

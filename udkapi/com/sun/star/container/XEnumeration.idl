@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEnumeration.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:45 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ module com {  module sun {  module star {  module container {
     <p> If the object changed, the behavior of the enumeration is
     not specified. This is not a remote interface.  </p>
  */
-[ uik(E227A397-33D6-11D1-AABE00A0-249D5590), ident( "XEnumeration", 1.0 ) ]
 interface XEnumeration: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -140,6 +139,9 @@ interface XEnumeration: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:45  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:31  mi
     moved from api
 

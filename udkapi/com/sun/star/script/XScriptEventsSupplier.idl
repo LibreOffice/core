@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScriptEventsSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-21 16:33:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
     Gives access to an event container represented by an XNameContainer.
     containing ScriptEventDescriptor instances
  */
-[ uik(E2EFC6A0-FC25-11d4-A0170050-04D8BBC7), ident( "XScriptEventsSupplier", 1.0 ) ]
 interface XScriptEventsSupplier: com::sun::star::uno::XInterface
 {
 

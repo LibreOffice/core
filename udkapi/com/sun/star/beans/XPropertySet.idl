@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@
 
     @see com::sun::star::beans::XExactName
  */
-[ uik(E227A3A8-33D6-11D1-AABE00A0-249D5590), ident( "XPropertySet", 1.0 ) ]
 interface XPropertySet: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -137,7 +136,7 @@ interface XPropertySet: com::sun::star::uno::XInterface
             not provide information about the properties; otherwise the
             interface <type>XPropertySetInfo</type> is returned.
      */
-    [const] com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+    com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
 
     //-------------------------------------------------------------------------
 
@@ -173,7 +172,7 @@ interface XPropertySet: com::sun::star::uno::XInterface
             In this case the original exception is wrapped into that
             <type scope="com::sun::star::lang">WrappedTargetException</type>.
      */
-    [const] any getPropertyValue( [in] string PropertyName )
+    any getPropertyValue( [in] string PropertyName )
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 
@@ -249,6 +248,9 @@ interface XPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:35  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:20  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterfaceAttributeTypeDescription.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:46 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 /** The interface attribute type description.
     The type class of this description is TypeClass_INTERFACE_ATTRIBUTE.
  */
-[ uik(24AB9852-3064-11D3-9F1D0010-5AD848AF), ident( "XInterfaceAttributeTypeDescription", 1.0 ) ]
 interface XInterfaceAttributeTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
 {
     //-------------------------------------------------------------------------
@@ -106,6 +105,9 @@ interface XInterfaceAttributeTypeDescription: com::sun::star::reflection::XInter
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:46  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:32  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlReflection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:46 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@
 
     </p>
  */
-[ uik(E227A3BF-33D6-11D1-AABE00A0-249D5590), ident( "XIdlReflection", 1.0 ) ]
 interface XIdlReflection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -125,6 +124,9 @@ interface XIdlReflection: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:46  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:31  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionPointContainer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-31 09:45:41 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ interface XConnectionPoint;
     @see XConnectionPoint
     @see com::sun::star::uno::XWeak
  */
-[ uik(E227A3D4-33D6-11D1-AABE00A0-249D5590), ident( "XConnectionPointContainer", 1.0 ) ]
 interface XConnectionPointContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -98,7 +97,7 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
             a sequence of all outgoing type spefifies which are supported
             by this connectable object.
      */
-    [const] sequence<type> getConnectionPointTypes();
+    sequence<type> getConnectionPointTypes();
 
     //-------------------------------------------------------------------------
 
@@ -154,6 +153,9 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/31 09:45:41  mi
+    TYPE_XIDLCLASS is now 'type'
+
     Revision 1.5  2000/12/13 15:47:01  mi
     symtactical documentation and minor semantic documentation flaws fixed
 

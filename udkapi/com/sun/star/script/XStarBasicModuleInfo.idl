@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStarBasicModuleInfo.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-13 12:07:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 
 /** Script Module containing some scripting code in a certain scripting language
  */
-[ uik(25AE6C50-B65A-11d4-9FF30050-04D8BBC7), ident( "XStarBasicModuleInfo", 1.0 ) ]
 interface XStarBasicModuleInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceProvider.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 /** @missing
  */
-[ uik(F84614A0-D3F0-11d3-9EE80050-04D7755D), ident("XInstanceProvider",  0.1) ]
 interface XInstanceProvider: com::sun::star::uno::XInterface
 {
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnionTypeDescription.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:46 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::reflection::XUnionTypeDescription
 /** The type description of a union.
  */
-[ uik(D67A22C0-9D0E-11d3-9ED20050-04D7677E), ident( "XUnionTypeDescription", 1.0 ) ]
 interface XUnionTypeDescription: com::sun::star::reflection::XTypeDescription
 {
 
@@ -122,6 +121,9 @@ interface XUnionTypeDescription: com::sun::star::reflection::XTypeDescription
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:46  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:32  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalPropertySet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@
         (separated by dots '.' or '::') is used.  </p>
 
  */
-[ uik(7916BF21-A373-11D4-9F6A0050-DA6BA2A6), ident( "XHierarchicalPropertySet", 1.0 ) ]
 interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -130,7 +129,7 @@ interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
                 not provide information about the properties; otherwise the
                 interface <type>XHierarchicalPropertySetInfo</type> is returned.
      */
-    [const] com::sun::star::beans::XHierarchicalPropertySetInfo
+    com::sun::star::beans::XHierarchicalPropertySetInfo
                 getHierarchicalPropertySetInfo();
 
     //-------------------------------------------------------------------------
@@ -194,7 +193,7 @@ interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
 
         @see XPropertySet::getPropertyValue
      */
-    [const] any getHierarchicalPropertyValue( [in] string aHierarchicalPropertyName )
+    any getHierarchicalPropertyValue( [in] string aHierarchicalPropertyName )
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
@@ -210,6 +209,9 @@ interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:35  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:20  mi
     moved from api
 

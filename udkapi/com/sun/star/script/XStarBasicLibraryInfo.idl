@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStarBasicLibraryInfo.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-13 12:07:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 
 /** Interface representing a library and provides access to its modules
  */
-[ uik(72454270-B646-11d4-9FF30050-04D8BBC7), ident( "XStarBasicLibraryInfo", 1.0 ) ]
 interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

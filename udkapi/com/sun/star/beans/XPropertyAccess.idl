@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 16:22:48 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ module com {  module sun {  module star {  module beans {
     <p>Another advantage of this method is that conflicts are avoided
     if property value restrictions depend on the value of other properties.</p>
  */
-[ uik(E227A394-33D6-11D1-AABE00A0-249D5590), ident( "XPropertyAccess", 1.0 ) ]
 interface XPropertyAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -113,7 +112,7 @@ interface XPropertyAccess: com::sun::star::uno::XInterface
     /** @returns
             a sequence of all property values within the object in a single call.
      */
-    [const] sequence<com::sun::star::beans::PropertyValue> getPropertyValues();
+    sequence<com::sun::star::beans::PropertyValue> getPropertyValues();
 
     //-------------------------------------------------------------------------
 
@@ -138,6 +137,9 @@ interface XPropertyAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/15 16:22:48  mi
+    lost documentation from src536 inserted
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

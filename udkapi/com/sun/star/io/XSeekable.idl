@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSeekable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ module com {  module sun {  module star {  module io {
     be fast enough.  You should not support this interface, for example, if
     you have a continuous stream like a video stream.
  */
-[ uik(A70C54B0-A297-11d3-ABD600A0-249D5590), ident( "XSeekable", 1.0 ) ]
 interface XSeekable: com::sun::star::uno::XInterface
 {
 
@@ -126,6 +125,9 @@ interface XSeekable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XObjectOutputStream.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:49 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ interface XPersistObject;
             <li>storing: A,B,C,D; loading: A,B,C is wrong</li>
         </ul>
  */
-[ uik(DF881FF1-2401-11D3-9ECD0010-5A677293), ident( "XObjectOutputStream", 1.0 ) ]
 interface XObjectOutputStream: XDataOutputStream
 {
     //-------------------------------------------------------------------------
@@ -118,6 +117,9 @@ interface XObjectOutputStream: XDataOutputStream
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:49  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:36  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPerformanceTest.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:59 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ struct ComplexTypes : SimpleTypes
  * <li>raising RuntimeException</li>
  *<BR>
  */
-[ uik(F3EA02B8-F114-42b0-A4E5214C-E96F7852), ident("XPerformanceTest", 1.0) ]
 interface XPerformanceTest : com::sun::star::uno::XInterface
 {
     [oneway] void async();

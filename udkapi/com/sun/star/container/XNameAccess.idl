@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNameAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 15:32:24 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 
     @see com::sun::star::beans::XExactName
  */
-[ uik(E227A417-33D6-11D1-AABE00A0-249D5590), ident( "XNameAccess", 1.0 ) ]
 interface XNameAccess: com::sun::star::container::XElementAccess
 {
     //-------------------------------------------------------------------------
@@ -109,7 +108,7 @@ interface XNameAccess: com::sun::star::container::XElementAccess
                 then wrap these in a <type>WrappedTargetException</type>
                 exception.
      */
-    [const] any getByName( [in] string aName )
+    any getByName( [in] string aName )
             raises( com::sun::star::container::NoSuchElementException,
                     com::sun::star::lang::WrappedTargetException );
 
@@ -121,7 +120,7 @@ interface XNameAccess: com::sun::star::container::XElementAccess
 
         <p>The order of the names is not specified. </p>
      */
-    [const] sequence<string> getElementNames();
+    sequence<string> getElementNames();
 
     //-------------------------------------------------------------------------
 
@@ -136,7 +135,7 @@ interface XNameAccess: com::sun::star::container::XElementAccess
         @param iaName
             the name of the object.
      */
-    [const] boolean hasByName( [in] string aName );
+    boolean hasByName( [in] string aName );
 
 };
 
@@ -147,6 +146,9 @@ interface XNameAccess: com::sun::star::container::XElementAccess
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/19 15:32:24  mi
+    documentation syntax fixed
+
     Revision 1.5  2000/12/11 16:09:45  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

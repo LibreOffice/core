@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySetInfo.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 16:22:48 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ module com {  module sun {  module star {  module beans {
     <p>The specification only describes the properties, it does not contain
     any values.</p>
  */
-[ uik(E227A3A9-33D6-11D1-AABE00A0-249D5590), ident( "XPropertySetInfo", 1.0 ) ]
 interface XPropertySetInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -103,7 +102,7 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
             a sequence with all property descriptors which are specified
             within this <type>XPropertySetInfo</type>.
      */
-    [const] sequence<com::sun::star::beans::Property> getProperties();
+    sequence<com::sun::star::beans::Property> getProperties();
 
     //-------------------------------------------------------------------------
 
@@ -117,7 +116,7 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
         @throws UnknownPropertyException
             if the property does not exist.
      */
-    [const] com::sun::star::beans::Property getPropertyByName( [in] string aName )
+    com::sun::star::beans::Property getPropertyByName( [in] string aName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
     //-------------------------------------------------------------------------
@@ -130,7 +129,7 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
         @param aName
             specifies the name of the property.
      */
-    [const] boolean hasPropertyByName( [in] string Name );
+    boolean hasPropertyByName( [in] string Name );
 
 };
 
@@ -141,6 +140,9 @@ interface XPropertySetInfo: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/15 16:22:48  mi
+    lost documentation from src536 inserted
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

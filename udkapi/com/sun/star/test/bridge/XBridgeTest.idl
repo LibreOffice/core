@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeTest.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:15:29 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@ struct TestDataElements : TestElement
  */
 typedef TestDataElements TestData;
 
-[ uik(A61C77C0-5D65-11d4-9F090050-04D7755D), ident("XRecursiveCall", 1.0) ]
 interface XRecursiveCall : com::sun::star::uno::XInterface
 {
     /***
@@ -147,7 +146,6 @@ interface XRecursiveCall : com::sun::star::uno::XInterface
  * An implementation of this object has to store given values and return whenever there
  * is an out param or return value.
  */
-[ uik(46833373-3462-11d3-87A400A0-24494732), ident("XBridgeTestBase", 1.0) ]
 interface XBridgeTestBase : com::sun::star::uno::XInterface
 {
     /**
@@ -239,7 +237,6 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
 /**
  * Inherting from monster; adds raiseException(), attribute raising RuntimeException.
  */
-[ uik(44C34C20-3478-11d3-87A400A0-24494732), ident("XBridgeTest", 1.0) ]
 interface XBridgeTest : XBridgeTestBase
 {
     /**

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionBroadcaster.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:44 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 // DocMerge from idl: interface com::sun::star::connection::XConnectionBroadcaster
 /** @missing
  */
-[ uik(B4B4B406-6329-4c7a-B8F43822-E9ACC142), ident( "XConnectionBroadcaster", 1.0 ) ]
 interface XConnectionBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XElementAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-31 09:45:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ module com {  module sun {  module star {  module container {
 // DocMerge from xml: interface com::sun::star::container::XElementAccess
 /** This is the base interface of all collection interfaces.
  */
-[ uik(E227A395-33D6-11D1-AABE00A0-249D5590), ident( "XElementAccess", 1.0 ) ]
 interface XElementAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -90,7 +89,7 @@ interface XElementAccess: com::sun::star::uno::XInterface
             multi-type container and you cannot determine the exact types
             with this interface.
      */
-    [const] type getElementType();
+    type getElementType();
 
     //-------------------------------------------------------------------------
 
@@ -99,7 +98,7 @@ interface XElementAccess: com::sun::star::uno::XInterface
             <TRUE/> if the object contain elements,
             otherwise <FALSE/>.
      */
-    [const] boolean hasElements();
+    boolean hasElements();
 
 };
 
@@ -110,6 +109,9 @@ interface XElementAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/01/31 09:45:40  mi
+    TYPE_XIDLCLASS is now 'type'
+
     Revision 1.6  2000/12/19 13:49:34  mi
     syntax errors in documentation fixed
 

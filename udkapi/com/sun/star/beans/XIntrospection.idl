@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIntrospection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-12 10:21:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 
     @see XIntrospectionAccess
  */
-[ uik(E227A4AA-33D6-11D1-AABE00A0-249D5590), ident( "XIntrospection", 1.0 ) ]
 interface XIntrospection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -152,6 +151,9 @@ interface XIntrospection: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/12 10:21:31  jbu
+    reconstructed some method references, that have gone lost during merges
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

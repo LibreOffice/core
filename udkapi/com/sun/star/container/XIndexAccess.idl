@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIndexAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:45 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@ module com {  module sun {  module star {  module container {
     <p>This interface should only be used if the data structure, itself,
     is indexed.</p>
  */
-[ uik(E227A418-33D6-11D1-AABE00A0-249D5590), ident( "XIndexAccess", 1.0 ) ]
 interface XIndexAccess: com::sun::star::container::XElementAccess
 {
     //-------------------------------------------------------------------------
@@ -96,7 +95,7 @@ interface XIndexAccess: com::sun::star::container::XElementAccess
     /** @returns
                 the number of elements.
      */
-    [const] long getCount();
+    long getCount();
 
     //-------------------------------------------------------------------------
 
@@ -115,7 +114,7 @@ interface XIndexAccess: com::sun::star::container::XElementAccess
             then wrap these in a <type>WrappedTargetException</type>
             exception.
      */
-    [const] any getByIndex( [in] long Index )
+    any getByIndex( [in] long Index )
             raises( com::sun::star::lang::IndexOutOfBoundsException,
                     com::sun::star::lang::WrappedTargetException );
 
@@ -128,6 +127,9 @@ interface XIndexAccess: com::sun::star::container::XElementAccess
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:45  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:31  mi
     moved from api
 
