@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWindowState.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:19:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,21 @@
                     <value>false</value>
                 </prop>
             </node>
+            <node oor:name="private:resource/toolbar/formtextobjectbar" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Text Box Formatting</value>
+                    <value xml:lang="de">Textfeld Formatierungs</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+            </node>
             <node oor:name="private:resource/toolbar/formsfilterbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Filter</value>
@@ -246,7 +261,7 @@
             <node oor:name="private:resource/toolbar/formcontrols" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Controls</value>
-                    <value xml:lang="de">Formular Steuerelemente</value>
+                    <value xml:lang="de">Formular-Steuerelemente</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -263,6 +278,9 @@
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
+                <prop oor:name="Pos" oor:type="xs:string">
+                    <value>600,230</value>
+                </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
@@ -276,7 +294,13 @@
                     <value xml:lang="de">Formular Entwurf</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DockingArea" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+                <prop oor:name="DockPos" oor:type="xs:string">
+                    <value>0,2</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
