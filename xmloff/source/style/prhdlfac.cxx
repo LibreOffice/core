@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:01 $
+ *  last change: $Author: cl $ $Date: 2001-01-30 13:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@
 #endif
 #ifndef _XMLOFF_ATTRIBUTECONTAINERHANDLER_HXX
 #include "AttributeContainerHandler.hxx"
+#endif
+#ifndef _XMLOFF_PROPERTYHANDLER_DURATIONS_HXX
+#include "durationhdl.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -382,6 +385,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_COLOR_MODE:
                 pPropHdl = new XMLEnumPropertyHdl( aXML_ColorMode_EnumMap, ::getCppuType((const drawing::ColorMode*)0) );
+                break;
+            case XML_TYPE_DURATION16_MS:
+                pPropHdl = new XMLDurationMS16PropHdl_Impl;
                 break;
         }
 
