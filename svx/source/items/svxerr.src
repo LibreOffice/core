@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:29:56 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ Resource RID_SVXERRCODE
         Text[ swedish ] = "Det uppstod ett fel vid läsning av en punkt. Det gick inte att ladda alla punkter";
         Text[ polish ] = "Wyst¹pi³ b³¹d przy odczycie wypunktowania. Nie mo¿na by³o za³adowaæ wszystkich wypunktowañ.";
         Text[ portuguese_brazilian ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
-        Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚ŞÛ‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚Ş‚Æ‚«‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚Í“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "±Û¸Ó¸®±âÈ£¸¦ ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ±Û¸Ó¸®±âÈ£¸¦ ¸ğµÎ ·ÎµåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÍ¼±ê·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÈëÈ«²¿Í¼±ê·ûºÅ¡£";
         Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø½s¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
