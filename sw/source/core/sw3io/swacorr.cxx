@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:21:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,7 @@
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
 
@@ -94,30 +92,23 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
 
-BOOL SwAutoCorrect::GetLongText( SvStorageRef& rStg, const String& rShort, String& rLong )
+BOOL SwAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rShort, String& rLong )
 {
     ULONG nRet;
-    if (rStg.Is())
+    if (rStg.is())
     {
-        if (rStg->IsOLEStorage ())
-        {
-            Sw3TextBlocks aBlk( *rStg );
-            nRet = aBlk.GetText( rShort, rLong );
-        }
-        else
-        {
-            SwXMLTextBlocks aBlk( *rStg );
-            nRet = aBlk.GetText( rShort, rLong );
-        }
+        //TODO/MBA: can't pass filename of storage; the only place where it seems to be used is in SwImpBlocks::IsFileChanged()
+        SwXMLTextBlocks aBlk( rStg, String() );
+        nRet = aBlk.GetText( rShort, rLong );
     }
     else
-        ASSERT ( rStg.Is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
+        ASSERT ( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
     return !IsError( nRet ) && rLong.Len();
 }
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
-BOOL SwAutoCorrect::PutText( SvStorage& rStg, const String& rShort,
+BOOL SwAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&  rStg, const String& rShort,
                             SfxObjectShell& rObjSh, String& rLong )
 {
     if( !rObjSh.IsA( TYPE(SwDocShell) ) )
@@ -129,36 +120,20 @@ BOOL SwAutoCorrect::PutText( SvStorage& rStg, const String& rShort,
     INetURLObject::SetBaseURL( aEmptyStr );
     ULONG nRet = 0;
 
-    if (rStg.IsOLEStorage ())
+    //TODO/MBA: can't pass filename of storage; the only place where it seems to be used is in SwImpBlocks::IsFileChanged()
+    SwXMLTextBlocks aBlk( rStg, String() );
+    SwDoc* pDoc = aBlk.GetDoc();
+
+    nRet = aBlk.BeginPutDoc( rShort, rShort );
+    if( !IsError( nRet ) )
     {
-        Sw3TextBlocks aBlk( rStg );
-        SwDoc* pDoc = aBlk.GetDoc();
-
-        nRet = aBlk.BeginPutDoc( rShort, rShort );
+        ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
+        nRet = aBlk.PutDoc();
+        aBlk.AddName ( rShort, rShort, FALSE );
         if( !IsError( nRet ) )
-        {
-            ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
-            nRet = aBlk.PutDoc();
-            if( !IsError( nRet ) )
-                nRet = aBlk.GetText( rShort, rLong );
-        }
-
+            nRet = aBlk.GetText( rShort, rLong );
     }
-    else
-    {
-        SwXMLTextBlocks aBlk( rStg );
-        SwDoc* pDoc = aBlk.GetDoc();
 
-        nRet = aBlk.BeginPutDoc( rShort, rShort );
-        if( !IsError( nRet ) )
-        {
-            ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
-            nRet = aBlk.PutDoc();
-            aBlk.AddName ( rShort, rShort, FALSE );
-            if( !IsError( nRet ) )
-                nRet = aBlk.GetText( rShort, rLong );
-        }
-    }
     INetURLObject::SetBaseURL( aOldURL );
     return !IsError( nRet );
 }
