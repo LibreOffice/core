@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 12:04:44 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ french ] = "Prot�ger" ;
         Text [ swedish ] = "S~kydda" ;
         Text [ dutch ] = "~Beveiligen" ;
-        Text [ spanish ] = "~Proteger" ;
+        Text [ spanish ] = "Proteger" ;
         Text [ english_us ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "保护(~O)";
@@ -1104,7 +1104,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ french ] = "Prot�ger" ;
         Text [ swedish ] = "S~kydda" ;
         Text [ dutch ] = "~Beveiligen" ;
-        Text [ spanish ] = "~Proteger" ;
+        Text [ spanish ] = "Proteger" ;
         Text [ english_us ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "保护(~O)";
