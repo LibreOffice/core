@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:49:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #endif
 #ifndef _REFFLD_HXX
 #include <reffld.hxx>
+#endif
+#ifndef _FLDDROPDOWN_HXX
+#include <flddropdown.hxx>
 #endif
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
@@ -1674,6 +1677,7 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     pFldTypes->Insert( new SwJumpEditFieldType( this ), nFldType++ );
     pFldTypes->Insert( new SwScriptFieldType( this ), nFldType++ );
     pFldTypes->Insert( new SwCombinedCharFieldType, nFldType++ );
+    pFldTypes->Insert( new SwDropDownFieldType, nFldType++ );
 
     // Types muessen am Ende stehen !!
     // Im InsertFldType wird davon ausgegangen !!!!
