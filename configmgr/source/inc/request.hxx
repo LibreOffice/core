@@ -2,9 +2,9 @@
  *
  *  $RCSfile: request.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:40:17 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,9 @@ namespace configmgr
 
             Name            const & getComponentName()  const { return m_aComponentName; }
             RequestOptions  const & getOptions()        const { return m_aOptions; }
-        };
+
+            void forceReload() { m_aOptions.forceReload(); }
+     };
 // ---------------------------------------------------------------------------
 
         class TemplateRequest
@@ -121,14 +123,14 @@ namespace configmgr
             Name    m_aTemplateName;
 
         public:
-            explicit
-            TemplateRequest(Name const & _aComponentName)
-            : m_aComponentName(_aComponentName)
-            , m_aTemplateName()
-            {}
+            static
+            TemplateRequest forComponent(Name const & _aComponentName)
+            {
+                return TemplateRequest( Name(), _aComponentName);
+            }
 
             explicit
-            TemplateRequest(Name const & _aComponentName, Name const & _aTemplateName)
+            TemplateRequest(Name const & _aTemplateName, Name const & _aComponentName)
             : m_aComponentName(_aComponentName)
             , m_aTemplateName(_aTemplateName)
             {}
@@ -149,44 +151,52 @@ namespace configmgr
         {
             typedef rtl::OUString RequestId;
 
-            UpdateInstance  m_aUpdate;
+            ConstUpdateInstance  m_aUpdate;
             RequestOptions  m_aOptions;
             RequestId       m_aRQID;
             bool            m_bForceFlush;
         public:
             explicit
-            UpdateRequest(  UpdateInstance & _aUpdate,
-                            RequestOptions const & _aOptions,
-                            RequestId const & _aRequestId)
+            UpdateRequest(  UpdateInstance const & _aUpdate,
+                            RequestOptions const & _aOptions)
             : m_aUpdate(_aUpdate)
             , m_aOptions(_aOptions)
             , m_bForceFlush( _aOptions.isForcingReload() )
-            , m_aRQID(_aRequestId)
             {}
 
             explicit
-            UpdateRequest(  AbsolutePath const & _aRootpath,
-                            UpdateInstance::Data & _aUpdateData,
-                            RequestOptions const & _aOptions,
-                            RequestId const & _aRequestId)
-            : m_aUpdate(_aRootpath,_aUpdateData)
+            UpdateRequest(  ConstUpdateInstance const & _aUpdate,
+                            RequestOptions const & _aOptions)
+            : m_aUpdate(_aUpdate)
             , m_aOptions(_aOptions)
             , m_bForceFlush( _aOptions.isForcingReload() )
-            , m_aRQID(_aRequestId)
+            {}
+
+            explicit
+            UpdateRequest(  ConstUpdateInstance::Data _aUpdateData,
+                            AbsolutePath const & _aRootpath,
+                            RequestOptions const & _aOptions)
+            : m_aUpdate(_aUpdateData, _aRootpath)
+            , m_aOptions(_aOptions)
+            , m_bForceFlush( _aOptions.isForcingReload() )
             {}
 
             void forceFlush() { m_bForceFlush = true; }
 
             bool isForcingFlush() const { return m_bForceFlush; }
 
-            UpdateInstance const & getUpdate()  const { return m_aUpdate; }
-            RequestOptions const & getOptions() const { return m_aOptions; }
+            RequestOptions const & getOptions()  const { return m_aOptions; }
+            NodePath const & getUpdateRoot()     const { return m_aUpdate.root(); }
 
+            ConstUpdateInstance const & getUpdate()   const { return m_aUpdate; }
+            ConstUpdateInstance::Data getUpdateData() const { return m_aUpdate.data(); }
+
+            void setRequestId(RequestId const & _aRQID) { m_aRQID = _aRQID; }
             RequestId getRequestId() const { return m_aRQID; }
         };
 
         inline ComponentRequest getComponentRequest(UpdateRequest const & _aUR)
-        { return ComponentRequest(_aUR.getUpdate().root.getModuleName(), _aUR.getOptions()); }
+        { return ComponentRequest(_aUR.getUpdateRoot().getModuleName(), _aUR.getOptions()); }
 // ---------------------------------------------------------------------------
     } // namespace
 // ---------------------------------------------------------------------------
