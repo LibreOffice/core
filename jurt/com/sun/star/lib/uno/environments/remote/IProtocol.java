@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IProtocol.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:46:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 14:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,29 +58,16 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.lib.uno.environments.remote;
 
-
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-
-import com.sun.star.uno.IBridge;
-
-
-
-import com.sun.star.uno.ITypeDescription;
-
 
 /**
  * This interface provides an abstraction for protocols
  * for remote bridges.
- * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2001-05-17 12:46:27 $
- * @author      Kay Ramme
- * @see         com.sun.star.lib.uno.environments.remote.IMessage
- * @see         com.sun.star.lib.uno.environments.remote.Job
  */
 public interface IProtocol {
     /**
@@ -98,31 +85,12 @@ public interface IProtocol {
      */
     IMessage readMessage(InputStream inputStream) throws IOException;
 
-
-    public void writeRequest(String oid,
-                             ITypeDescription zInterface,
-                             String operation,
-                             ThreadId threadId,
-                             Object params[],
-                             Boolean synchron[],
-                             Boolean mustReply[]);
+    void writeRequest(
+        String oid, TypeDescription zInterface, String operation,
+        ThreadId threadId, Object[] params, Boolean[] synchron,
+        Boolean[] mustReply);
 
     public void writeReply(boolean exception, ThreadId threadId, Object result);
 
-    public void flush(java.io.DataOutput dataOutput) throws IOException;
-
-
-    /**
-     * for testing and debugging
-     */
-
-    int getRequestsSendCount();
-
-    int getRequestsReceivedCount();
-
-    IMarshal createMarshal();
-    IUnmarshal createUnmarshal(byte bytes[]);
+    public void flush(DataOutput dataOutput) throws IOException;
 }
-
-
-
