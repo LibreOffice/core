@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:29:39 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,68 @@ BYTE SwWW8Writer::GetNumId( USHORT eNumType )
     return nRet;
 }
 
+void SwWW8Writer::ExportOutlineNumbering(BYTE nLvl, const SwNumFmt &rNFmt,
+    const SwFmt &rFmt)
+{
+    if (nLvl >= WW8ListManager::nMaxLevel)
+        nLvl = WW8ListManager::nMaxLevel-1;
+
+    if( bWrtWW8 )
+    {
+        // write sprmPOutLvl sprmPIlvl and sprmPIlfo
+        SwWW8Writer::InsUInt16( *pO, 0x2640 );
+        pO->Insert( nLvl, pO->Count() );
+        SwWW8Writer::InsUInt16( *pO, 0x260a );
+        pO->Insert( nLvl, pO->Count() );
+        SwWW8Writer::InsUInt16( *pO, 0x460b );
+        SwWW8Writer::InsUInt16( *pO, 1 + GetId(
+                            *pDoc->GetOutlineNumRule() ) );
+    }
+    else
+    {
+        Out_SwNumLvl( nLvl );
+        if (rNFmt.GetAbsLSpace())
+        {
+            SwNumFmt aNumFmt(rNFmt);
+            const SvxLRSpaceItem& rLR =
+                ItemGet<SvxLRSpaceItem>(rFmt, RES_LR_SPACE);
+            aNumFmt.SetAbsLSpace(writer_cast<short>(
+                    aNumFmt.GetAbsLSpace() + rLR.GetLeft()));
+            Out_NumRuleAnld( *pDoc->GetOutlineNumRule(),
+                            aNumFmt, nLvl );
+        }
+        else
+            Out_NumRuleAnld( *pDoc->GetOutlineNumRule(),
+                            rNFmt, nLvl );
+    }
+}
+
+void SwWW8Writer::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
+{
+    //If there is no numbering on this fmt, but its parent was outline
+    //numbered, then in writer this is no inheritied, but in word it would
+    //be, so we must export "no numbering" and "body level" to make word
+    //behave like writer (see #i25755)
+    if (SFX_ITEM_SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
+    {
+        if (const SwFmt *pParent = rFmt.DerivedFrom())
+        {
+            BYTE nLvl = ((const SwTxtFmtColl*)pParent)->GetOutlineLevel();
+            if (MAXLEVEL > nLvl)
+            {
+                if (bWrtWW8)
+                {
+                    SwWW8Writer::InsUInt16(*pO, 0x2640);
+                    pO->Insert(BYTE(9), pO->Count());
+                    SwWW8Writer::InsUInt16(*pO, 0x460b);
+                    SwWW8Writer::InsUInt16(*pO, 0);
+                }
+                /*whats the winword 6 way to do this ?*/
+            }
+        }
+    }
+}
+
 void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
     bool bFlyFmt)
 {
@@ -832,46 +894,15 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
         if( bPapFmt )
         {
             BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();
-            if( MAXLEVEL > nLvl )
+            if (MAXLEVEL > nLvl)
             {
+                //if outline numbered
                 // if Write StyleDefinition then write the OutlineRule
                 const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get(nLvl);
-                if( bStyDef )
-                {
-                    if (nLvl >= WW8ListManager::nMaxLevel)
-                        nLvl = WW8ListManager::nMaxLevel-1;
+                if (bStyDef)
+                    ExportOutlineNumbering(nLvl, rNFmt, rFmt);
 
-                    if( bWrtWW8 )
-                    {
-                        // write sprmPOutLvl sprmPIlvl and sprmPIlfo
-                        SwWW8Writer::InsUInt16( *pO, 0x2640 );
-                        pO->Insert( nLvl, pO->Count() );
-                        SwWW8Writer::InsUInt16( *pO, 0x260a );
-                        pO->Insert( nLvl, pO->Count() );
-                        SwWW8Writer::InsUInt16( *pO, 0x460b );
-                        SwWW8Writer::InsUInt16( *pO, 1 + GetId(
-                                            *pDoc->GetOutlineNumRule() ) );
-                    }
-                    else
-                    {
-                        Out_SwNumLvl( nLvl );
-                        if (rNFmt.GetAbsLSpace())
-                        {
-                            SwNumFmt aNumFmt(rNFmt);
-                            const SvxLRSpaceItem& rLR =
-                                ItemGet<SvxLRSpaceItem>(rFmt, RES_LR_SPACE);
-                            aNumFmt.SetAbsLSpace(writer_cast<short>(
-                                    aNumFmt.GetAbsLSpace() + rLR.GetLeft()));
-                            Out_NumRuleAnld( *pDoc->GetOutlineNumRule(),
-                                            aNumFmt, nLvl );
-                        }
-                        else
-                            Out_NumRuleAnld( *pDoc->GetOutlineNumRule(),
-                                            rNFmt, nLvl );
-                    }
-                }
-
-                if( rNFmt.GetAbsLSpace() )
+                if (rNFmt.GetAbsLSpace())
                 {
                     SfxItemSet aSet( rFmt.GetAttrSet() );
                     SvxLRSpaceItem aLR(
@@ -886,6 +917,13 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
                         com::sun::star::i18n::ScriptType::LATIN);
                     bCallOutSet = false;
                 }
+            }
+            else
+            {
+                //otherwise we might have to remove outline numbering from
+                //what gets exported if the parent style was outline numbered
+                if (bStyDef)
+                    DisallowInheritingOutlineNumbering(rFmt);
             }
         }
         break;
@@ -3330,6 +3368,19 @@ void SwWW8Writer::WriteRowEnd()
     pMagicTable->Append(Fc2Cp(Strm().Tell()),0x1B6);
 }
 
+static Writer& OutWW8_SwFmtPageDesc(Writer& rWrt, const SfxPoolItem& rHt)
+{
+    SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
+    if (rWW8Wrt.bStyDef && rWW8Wrt.pOutFmtNode && rWW8Wrt.pOutFmtNode->ISA(SwTxtFmtColl))
+    {
+        const SwFmtPageDesc &rPgDesc = (const SwFmtPageDesc&)rHt;
+        const SwTxtFmtColl* pC = (SwTxtFmtColl*)rWW8Wrt.pOutFmtNode;
+        if ((SFX_ITEM_SET != pC->GetItemState(RES_BREAK, false)) && rPgDesc.GetRegisteredIn())
+            OutWW8_SwFmtBreak(rWrt, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
+    }
+    return rWrt;
+}
+
 // Breaks schreiben nichts in das Ausgabe-Feld rWrt.pO,
 // sondern nur in den Text-Stream ( Bedingung dafuer, dass sie von Out_Break...
 // gerufen werden duerfen )
@@ -4755,7 +4806,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_PAPER_BIN   */               OutWW8_SvxPaperBin,
 /* RES_LR_SPACE */                  OutWW8_SwFmtLRSpace,
 /* RES_UL_SPACE */                  OutWW8_SwFmtULSpace,
-/* RES_PAGEDESC */                  0,  // wird bei OutBreaks beachtet
+/* RES_PAGEDESC */                  OutWW8_SwFmtPageDesc,
 /* RES_BREAK */                     OutWW8_SwFmtBreak,
 /* RES_CNTNT */                     0, /* 0, // OutW4W_??? */
 /* RES_HEADER */                    0,  // wird bei der PageDesc ausgabe beachtet
