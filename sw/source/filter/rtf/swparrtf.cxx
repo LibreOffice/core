@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 11:49:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,11 +306,12 @@ SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     : SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
     maParaStyleMapper(*pD), maCharStyleMapper(*pD), maSegments(*this),
     maInsertedTables(*pD),
-    aMergeBoxes(0, 5), aTblFmts(0, 10), mpBookmarkStart(0), pGrfAttrSet(0),
-    pTableNode(0), pOldTblNd(0), pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
+    aMergeBoxes(0, 5), aTblFmts(0, 10), mpBookmarkStart(0), mpRedlineStack(0),
+    pRedlineInsert(0), pRedlineDelete(0),
+    pGrfAttrSet(0), pTableNode(0), pOldTblNd(0), pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
     pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)), nAktPageDesc(0),
     nAktFirstPageDesc(0), nAktBox(0), nInsTblRow(USHRT_MAX),
-    nNewNumSectDef(USHRT_MAX), nRowsToRepeat(0)
+    nNewNumSectDef(USHRT_MAX), nRowsToRepeat(0), pAuthorInfos(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
@@ -341,6 +342,8 @@ SvParserState SwRTFParser::CallParser()
 
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
+
+    mpRedlineStack = new sw::util::RedlineStack(*pDoc);
 
     return SvxRTFParser::CallParser();
 }
@@ -1181,6 +1184,8 @@ void InsertedTablesManager::InsertTable(SwTableNode &rTableNode, SwPaM &rPaM)
 SwRTFParser::~SwRTFParser()
 {
     maInsertedTables.DelAndMakeTblFrms();
+    mpRedlineStack->closeall(*pPam->GetPoint());
+    delete mpRedlineStack;
 
     delete pSttNdIdx;
     delete pRegionEndIdx;
@@ -1192,6 +1197,8 @@ SwRTFParser::~SwRTFParser()
 
     if (pGrfAttrSet)
         DELETEZ( pGrfAttrSet );
+
+    DELETEZ( pAuthorInfos );
 }
 
 //i19718
@@ -1215,6 +1222,56 @@ void SwRTFParser::ReadShpRslt()
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                                 USHORT& rSubType, ULONG &rFmt,
                                 USHORT nVersion );
+
+USHORT SwRTFParser::ReadRevTbl()
+{
+    // rStr.Erase( 0 );
+    int nOpenBrakets = 1, nToken;       // die erste wurde schon vorher erkannt !!
+    bool bFirstAuthor = true;
+    USHORT nAuthorTableIndex = 0;
+
+    while( nOpenBrakets && IsParserWorking() )
+    {
+        switch( nToken = GetNextToken() )
+        {
+        case '}':       --nOpenBrakets; break;
+        case '{':
+            {
+                if( RTF_IGNOREFLAG != GetNextToken() )
+                    nToken = SkipToken( -1 );
+                else if( RTF_UNKNOWNCONTROL != GetNextToken() )
+                    nToken = SkipToken( -2 );
+                else
+                {
+                    ReadUnknownData();
+                    nToken = GetNextToken();
+                    if( '}' != nToken )
+                        eState = SVPAR_ERROR;
+                    break;
+                }
+                ++nOpenBrakets;
+            }
+            break;
+
+        case RTF_TEXTTOKEN:
+            aToken.EraseTrailingChars(';');
+
+            USHORT nSWId = pDoc->InsertRedlineAuthor(aToken);
+            // Store matchpair
+            if( !pAuthorInfos )
+                pAuthorInfos = new sw::util::AuthorInfos;
+            sw::util::AuthorInfo* pAutorInfo = new sw::util::AuthorInfo( nAuthorTableIndex, nSWId );
+            if( 0 == pAuthorInfos->Insert( pAutorInfo ) )
+                delete pAutorInfo;
+
+            aRevTbl.push_back(aToken);
+            nAuthorTableIndex++;
+            break;
+        }
+    }
+    SkipToken( -1 );
+    return nAuthorTableIndex;
+}
 
 void SwRTFParser::NextToken( int nToken )
 {
@@ -1410,6 +1467,63 @@ void SwRTFParser::NextToken( int nToken )
         }
         break;
 
+    case RTF_REVTBL:
+        ReadRevTbl();
+        break;
+
+    case RTF_REVISED:
+        pRedlineInsert = new SwFltRedline(REDLINE_INSERT, 0, DateTime(Date( 0 ), Time( 0 )));
+        break;
+
+    case RTF_DELETED:
+        pRedlineDelete = new SwFltRedline(REDLINE_DELETE, 0, DateTime(Date( 0 ), Time( 0 )));
+        break;
+
+    case RTF_REVAUTH:
+        {
+            sw::util::AuthorInfo aEntry(nTokenValue);
+            USHORT nPos;
+
+            if(pRedlineInsert)
+            {
+                if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
+                {
+                    if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
+                    {
+                        pRedlineInsert->nAutorNo = pAuthor->nOurId;
+                    }
+                }
+            }
+        }
+        break;
+
+    case RTF_REVAUTHDEL:
+        {
+            sw::util::AuthorInfo aEntry(nTokenValue);
+            USHORT nPos;
+
+            if(pRedlineDelete)
+            {
+                if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
+                {
+                    if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
+                    {
+                        pRedlineDelete->nAutorNo = pAuthor->nOurId;
+                    }
+                }
+            }
+        }
+        break;
+
+    case RTF_REVDTTM:
+        pRedlineInsert->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
+        break;
+
+    case RTF_REVDTTMDEL:
+        pRedlineDelete->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
+        break;
+
+
     case RTF_FLY_INPARA:
             // \pard  und plain ueberlesen !
         if( '}' != GetNextToken() && '}' != GetNextToken() )
@@ -1509,11 +1623,6 @@ SETCHDATEFIELD:
         }
         break;
 
-//  case RTF_REVDTTM:
-//      UnknownAttrToken( nToken, &GetAttrSet() );
-//      break;
-
-
 // RTF_SUBENTRYINDEX
 
     default:
@@ -1553,13 +1662,32 @@ SETCHDATEFIELD:
 }
 
 
+
 void SwRTFParser::InsertText()
 {
     bContainsPara = false;
     // dann fuege den String ein, ohne das Attribute am Ende
     // aufgespannt werden.
     CheckInsNewTblLine();
+
+    if(pRedlineInsert)
+        mpRedlineStack->open(*pPam->GetPoint(), *pRedlineInsert);
+    if(pRedlineDelete)
+        mpRedlineStack->open(*pPam->GetPoint(), *pRedlineDelete);
+
     pDoc->Insert( *pPam, aToken );
+
+    if(pRedlineDelete)
+    {
+        mpRedlineStack->close(*pPam->GetPoint(), pRedlineDelete->eType);
+    }
+
+    if(pRedlineInsert)
+    {
+        mpRedlineStack->close(*pPam->GetPoint(), pRedlineInsert->eType);
+    }
+
+
 }
 
 
@@ -2622,6 +2750,27 @@ void SwRTFParser::ReadSectControls( int nToken )
 
     SkipToken(-1);
 }
+
+void SwRTFParser::EnterEnvironment()
+{
+}
+
+
+void SwRTFParser::LeaveEnvironment()
+{
+    if(pRedlineDelete)
+    {
+        delete pRedlineDelete;
+        pRedlineDelete = 0;
+    }
+
+    if(pRedlineInsert)
+    {
+        delete pRedlineInsert;
+        pRedlineInsert = 0;
+    }
+}
+
 
 void SwRTFParser::ReadPageDescTbl()
 {
@@ -3696,29 +3845,6 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
     case RTF_KEEPN:
 */
 
-
-    // Revision Time Stamp
-/*  case RTF_REVDTTM:
-        {
-            USHORT nMin, nHour, nDay, nMon, nYear, nDayOfWeek;
-// long wird gelesen, wird haben aber nur einen short!!!
-            ULONG nDtm = aToken.Copy( 7 );
-            //  3         2         1         0
-            // 10987654321098765432109876543210
-            // DOW|   Y    | M | D  | H  | Min
-            //
-            nMin       = 0x3F & ( nDtm >>= 0 );
-            nHour      = 0x1f & ( nDtm >>= 6 );
-            nDay       = 0x1f & ( nDtm >>= 5 );
-            nMon       = 0x0F & ( nDtm >>= 5 );
-            nYear      =(0x7F & ( nDtm >>= 4 )) + 1900;
-            nDayOfWeek = 0x07 & ( nDtm >>= 7 );
-
-            Time aTime( nHour, nMin );
-            Date aDate( nDay, nMon, nYear );
-        }
-        break;
-*/
     }
 }
 
