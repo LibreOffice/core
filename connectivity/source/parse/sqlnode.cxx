@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: patrick.luby $ $Date: 2000-09-25 04:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
+#endif
+#ifndef __SGI_STL_ROPE
+#include <stl/rope>
 #endif
 
 using namespace ::com::sun::star::sdbc;
