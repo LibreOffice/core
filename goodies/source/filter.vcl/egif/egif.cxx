@@ -2,9 +2,9 @@
  *
  *  $RCSfile: egif.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:29:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,6 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
         // 256 Farben
         const UINT16    nWidth = (UINT16) rSize.Width();
         const UINT16    nHeight = (UINT16) rSize.Height();
-        const UINT16    nDummy = 0;
         const BYTE      cFlags = 128 | ( 7 << 4 );
 
         // Werte rausschreiben
@@ -624,8 +623,9 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 }
 
 // ------------------------------------------------------------------------
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
