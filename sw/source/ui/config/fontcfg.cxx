@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 08:39:28 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,8 +208,10 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         case FONT_LIST_CJK    :
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
-            bSame = sDefaultFonts[nFontType].EqualsAscii(cStd) &&
-                    sDefaultFonts[FONT_STANDARD_CJK].EqualsAscii(cStd);
+        {
+            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK].EqualsAscii(cStd);
+            bSame = b1 && sDefaultFonts[nFontType].EqualsAscii(cStd);
+        }
         break;
     }
     return bSame;
