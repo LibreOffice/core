@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-29 11:24:25 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 16:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,13 @@ Menu MENU_TABLETREE_POPUP
             Text[ polish ] = "Sortuj rosn¹co";
             Text[ portuguese_brazilian ] = "Functions";
             Text[ japanese ] = "æ˜‡é †ã«ä¸¦ã¹æ›¿ãˆ";
-            Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ  ì •ë ¬";
+            Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ì •ë ¬";
             Text[ chinese_simplified ] = "å‘ä¸Šæ’åº";
             Text[ chinese_traditional ] = "å‘ä¸Šæ’åº";
             Text[ arabic ] = "İÑÒ ÊÕÇÚÏí";
             Text[ turkish ] = "Artan sıralama";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Orden ascendente";
+            Text[ catalan ] = "Ordena de manera ascendent";
             Text[ finnish ] = "Nouseva lajittelu";
         };
         MenuItem
@@ -133,13 +133,13 @@ Menu MENU_TABLETREE_POPUP
             Text[ polish ] = "Sortuj malej¹co";
             Text[ portuguese_brazilian ] = "Functions";
             Text[ japanese ] = "é™é †ã«ä¸¦ã¹æ›¿ãˆ";
-            Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ  ì •ë ¬";
+            Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ ì •ë ¬";
             Text[ chinese_simplified ] = "å‘ä¸‹æ’åº";
             Text[ chinese_traditional ] = "å‘ä¸‹æ’åº";
             Text[ arabic ] = "İÑÒ ÊäÇÒáí";
             Text[ turkish ] = "Azalan sıralama";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Orden descendente";
+            Text[ catalan ] = "Ordena de manera descendent";
             Text[ finnish ] = "Laskeva lajittelu";
         };
     };
@@ -161,14 +161,14 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ swedish ] = "Det gick inte att upprätta en förbindelse till SDBC-drivrutinsmanagern (#servicename#).";
     Text[ polish ] = "Brak po³¹czenia z mened¿erem sterownika SDCB (#servicename#).";
     Text[ portuguese_brazilian ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
-    Text[ japanese ] = "SDBC ï¾„ï¾ï¾—ï½²ï¾Šï¾ï¾ï¾ˆï½¼ï¾ï½¬ï½°(#servicename#)ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "SDBC ë“œë¼ì´ë²„ ê´€ë¦¬ì (#servicename#)ì— ëŒ€í•œ ì—°ê²°ì„ ) êµ¬ì¶•í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ japanese ] = "SDBC ãƒ‰ãƒ©ã‚¤ãƒãƒãƒã‚¸ãƒ£ãƒ¼(#servicename#)ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "SDBC ë“œë¼ì´ë²„ ê´€ë¦¬ì (#servicename#)ì— ëŒ€í•œ ì—°ê²°ì„) êµ¬ì¶•í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "æ— æ³•å’Œ SDBC é©±åŠ¨ç¨‹å¼ç®¡ç†å™¨(#servicename#)å»ºç«‹è¿æ¥ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ° SDBC é©…å‹•ç¨‹å¼ç®¡ç†(#servicename#) ã€‚";
     Text[ turkish ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇáÇÊÕÇá ÈÜ (#servicename#) SDBC Driver Manager .";
-    Text[ catalan ] = "No se pudo establecer una conexión al administrador de controladores SDBC (#servicename#).";
-    Text[ finnish ] = "Yhteyden muodostaminen SDBC-ajurien hallintaan ei onnistu (servicename).";
+    Text[ catalan ] = "No es pot establir una connexió amb el gestor del programa de control SDBC (#servicename#).";
+    Text[ finnish ] = "Yhteyden muodostaminen SDBC-ajurien hallintaan ei onnistu (#servicename#).";
 };
 
 String STR_NOREGISTEREDDRIVER
@@ -187,21 +187,21 @@ String STR_NOREGISTEREDDRIVER
     Text[ swedish ] = "Det har inte registrerats någon drivrutin för URL:en #connurl#.";
     Text[ polish ] = "Brak zarejestrowanego sterownika dla URL #connurl# !";
     Text[ portuguese_brazilian ] = "There is no registered driver for the URL #connurl#";
-    Text[ japanese ] = "URL #connurl# ã®ï¾„ï¾ï¾—ï½²ï¾Šï¾ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
+    Text[ japanese ] = "URL #connurl# ã®ãƒ‰ãƒ©ã‚¤ãƒãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
     Text[ korean ] = "URL #connurl#ì— ëŒ€í•´ ë“±ë¡ëœ ë“œë¼ì´ë²„ê°€ ì—†ìŠµë‹ˆë‹¤!";
     Text[ chinese_simplified ] = "æ²¡æœ‰ä¸º URL #connurl# ç™»è®°é©±åŠ¨ç¨‹åºã€‚";
     Text[ chinese_traditional ] = "ä¸å­˜åœ¨ä»»ä½•ç™»è¨˜çš„ URL #connurl# é©…å‹•ç¨‹åºã€‚";
     Text[ turkish ] = "There is no registered driver for the URL #connurl#";
     Text[ arabic ] = "áÇ íæÌÏ ÈÑäÇãÌ ÊÔÛíá ãÓÌá ááÜ URL #connurl#!";
-    Text[ catalan ] = "No existe un controlador registrado para la URL #connurl#";
-    Text[ finnish ] = "Ajuria ei ole rekisteröity URL-osoitteelle connurl.";
+    Text[ catalan ] = "Hi ha un programa de control que no està registrat per a l'URL #connurl#.";
+    Text[ finnish ] = "Ajuria ei ole rekisteröity URL-osoitteelle #connurl#.";
 };
 
 String STR_COULDNOTCONNECT
 {
     Text = "Es konnte keine Verbindung für den URL #connurl# aufgebaut werden.";
     Text [ english ] = "A connection could not be established for URL #connurl#.";
-    Text [ english_us ] = "A connection could not be established for URL #connurl#.";
+    Text [ english_us ] = "No connection could be established for the URL #connurl#.";
     Text[ portuguese ] = "Foi impossível estabelecer ligação para o URL #connurl#.";
     Text[ russian ] = "Ñîçäàòü ñîåäèíåíèå ñ URL #connurl# íå óäàåòñÿ.";
     Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé ç óıíäåóç ìå ôï URL #connurl#.";
@@ -210,7 +210,7 @@ String STR_COULDNOTCONNECT
     Text[ spanish ] = "No se pudo realizar ninguna conexión para la URL #connurl#.";
     Text[ italian ] = "Non è possibile creare il collegamento all'URL #connurl#.";
     Text[ danish ] = "Det var ikke muligt at oprette en forbindelse for URL'en #connurl#.";
-    Text[ swedish ] = "Det gick inte att upprätta någon förbindelse till URL:en #connurl#.";
+    Text[ swedish ] = "Det gick inte att upprätta någon förbindelse för URL:en #connurl#.";
     Text[ polish ] = "Brak po³¹czenia z URL #connurl#.";
     Text[ portuguese_brazilian ] = "A connection could not be established for URL #connurl#.";
     Text[ japanese ] = "URL #connurl# ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
@@ -219,32 +219,32 @@ String STR_COULDNOTCONNECT
     Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ° URL #connurl# ã€‚";
     Text[ turkish ] = "A connection could not be established for URL #connurl#.";
     Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇÊÕÇá ááÜ URL #connurl#..";
-    Text[ catalan ] = "No se pudo realizar ninguna conexión para la URL #connurl#.";
-    Text[ finnish ] = "Yhteyden muodostaminen URL-osoitteeseen connurl ei onnistunut.";
+    Text[ catalan ] = "No s'ha pogut establir una connexió per a l'URL #connurl#.";
+    Text[ finnish ] = "Yhteyden muodostaminen URL-osoitteeseen #connurl# ei onnistunut.";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
     Text = "Bitte überprüfen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Passwort.";
     Text [ english ] = "Please check the current settings, e.g. with respect to user name and password.";
-    Text [ english_us ] = "Please check the current settings, e.g. regarding user name and password.";
+    Text [ english_us ] = "Please check the current settings, e.g. user name and password.";
     Text[ portuguese ] = "Verifique as definições actuais, por exemplo, nome de utilizador e senha.";
     Text[ russian ] = "Ïğîâåğüòå, ïîæàëóéñòà, âàøè òåêóùèå íàñòğîéêè, îòíîñèòåëüíî,  íàïğèìåğ, èìåíè è ïàğîëÿ ïîëüçîâàòåëÿ.";
     Text[ greek ] = "Ğáñáêáëş åëİãîôå ôéò ôñİ÷ïõóåò ñõèìßóåéò, ğ.÷ ó÷åôéêÜ ìå ôï üíïìá ÷ñŞóôç êáé ôïí êùäéêü ğñüóâáóçò.";
     Text[ dutch ] = "Controleer de actuele instellingen, bijv. wat betreft naam gebruiker en wachtwoord.";
     Text[ french ] = "Vérifiez les paramètres actifs - par ex. ceux qui concernent le nom d'utilisateur et le mot de passe.";
-    Text[ spanish ] = "Compruebe la configuración actual, p.ej. el nombre de usuario y la contraseña.";
+    Text[ spanish ] = "Compruebe la configuración actual, en especial la que se refiere al nombre de usuario y a la contraseña.";
     Text[ italian ] = "Verificare le impostazioni attuali; in particolare quelle in riferimento al nome utente e password.";
     Text[ danish ] = "Kontroller venligst de aktuelle indstillinger, f.eks. med hensyn til brugernavn og adgangskode.";
-    Text[ swedish ] = "Kontrollera de aktuella inställningarna, t.ex. med avseende på användarnamn och lösenord.";
+    Text[ swedish ] = "Kontrollera de aktuella inställningarna, till exempel med avseende på användarnamn och lösenord.";
     Text[ polish ] = "SprawdŸ bie¿¹ce konfiguracje, np. nazwê u¿ytkownika i has³o.";
     Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
-    Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°åã‚„ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ãªã©ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’ã‚‚ã†ä¸€åº¦ï¾ï½ªï½¯ï½¸ã—ã¦ãã ã•ã„ã€‚";
+    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼åã‚„ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãªã©ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’ã‚‚ã†ä¸€åº¦ãƒã‚§ãƒƒã‚¯ã—ã¦ãã ã•ã„ã€‚";
     Text[ korean ] = "í˜„ì¬ì˜ ì„¤ì •ì„ ì ê²€í•˜ì‹­ì‹œì˜¤,  ì˜ˆë¥¼ ë“¤ë©´ ì‚¬ìš©ì ì´ë¦„/ íŒ¨ìŠ¤ì›Œë“œì™€ ê´€ë ¨í•´ì„œ.";
     Text[ chinese_simplified ] = "è¯·æ‚¨æ£€æŸ¥å½“å‰çš„è®¾å®šï¼Œå¦‚ä½¿ç”¨åå’Œå¯†ç ã€‚";
-    Text[ chinese_traditional ] = "è«‹æ‚¨æª¢æŸ¥æ‚¨çš„è¨­å®šï¼Œå¦‚ä½¿ç”¨è€…å’Œå¯†ç¢¼ã€‚";
+    Text[ chinese_traditional ] = "è«‹æ‚¨æª¢æŸ¥ç›®å‰çš„è¨­å®šï¼Œå¦‚ä½¿ç”¨è€…å’Œå¯†ç¢¼ã€‚";
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ arabic ] = "ÇáÑÌÇÁ İÍÕ ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ¡ ãËá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ Úáì ÓÈíá ÇáãËÇá.";
-    Text[ catalan ] = "Compruebe la configuración actual, p.ej. el nombre de usuario y la contraseña.";
+    Text[ catalan ] = "Si us plau, comproveu els paràmetres actuals, com ara els referents al nom d'usuari i la contrasenya.";
     Text[ finnish ] = "Tarkista, että nykyiset asetukset (esimerkiksi salasana- ja käyttäjätunnusasetukset) ovat oikeat.";
 };
 String STR_NOTABLEINFO
@@ -263,13 +263,13 @@ String STR_NOTABLEINFO
     Text[ swedish ] = "Förbindelsen upprättades men det gick inte att få fram någon information om tabeller i databasen.";
     Text[ polish ] = "Po³¹czenie zosta³o pomyœlnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
     Text[ portuguese_brazilian ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
-    Text[ japanese ] = "æ­£å¸¸ã«æ¥ç¶šã§ãã¾ã—ãŸãŒã€ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã®ï¾ƒï½°ï¾Œï¾ï¾™ã«é–¢ã™ã‚‹æƒ…å ±ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì—°ê²°ì€ ì„±ê³µì ìœ¼ë¡œ êµ¬ì¶•ë˜ì—ˆì§€ë§Œ, í‘œ ê·¸ë¦¬ê³ /ë˜ëŠ” ë³´ê¸°ì— ëŒ€í•œ ì •ë³´ë¥¼ ìˆ˜ì§‘í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ japanese ] = "æ­£å¸¸ã«æ¥ç¶šã§ãã¾ã—ãŸãŒã€ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã«é–¢ã™ã‚‹æƒ…å ±ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "ì—°ê²°ì€ ì„±ê³µì ìœ¼ë¡œ êµ¬ì¶•ë˜ì—ˆì§€ë§Œ, ì‹œíŠ¸ ë° ë³´ê¸°ì— ëŒ€í•œ ì •ë³´ë¥¼ ìˆ˜ì§‘í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "è¿æ¥å·²ç»æˆåŠŸï¼Œä½†æ˜¯æ— æ³•è·å¾—ç›¸å…³çš„æ•°æ®åº“è¡¨æ ¼æ•°æ®ã€‚";
     Text[ chinese_traditional ] = "å·²ç¶“æˆåŠŸé€£ç·šï¼Œä½†æ˜¯æ²’æœ‰æ‰¾åˆ°è³‡æ–™åº«çš„è¡¨æ ¼å…§å®¹ã€‚";
     Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ arabic ] = "Êã ÊÃÓíÓ ÇáÇÊÕÇá ÈäÌÇÍ¡ ÅáÇ Ãäå ÊÚĞÑ ÇáÍÕæá Úáì ãÚáæãÇÊ ÈÎÕæÕ ÌÏÇæá ŞÇÚÏÉ ÇáÈíÇäÇÊ.";
-    Text[ catalan ] = "Se ha realizado una conexión satisfactoriamente, pero no se ha conseguido ninguna información sobre tablas en la base de datos.";
+    Text[ catalan ] = "S'ha pogut establir la connexió però la informació sobre les taules del banc de dades no està disponible.";
     Text[ finnish ] = "Yhteys on muodostettu, mutta tietokannan taulukkotiedot eivät ole käytettävissä.";
 };
 String STR_ALL_TABLES
@@ -288,14 +288,14 @@ String STR_ALL_TABLES
     Text[ swedish ] = "Alla tabeller";
     Text[ polish ] = "Wszystkie tabele";
     Text[ portuguese_brazilian ] = "All tables";
-    Text[ japanese ] = "ã™ã¹ã¦ã®ï¾ƒï½°ï¾Œï¾ï¾™";
-    Text[ korean ] = "ëª¨ë“  í…Œì´ë¸”";
+    Text[ japanese ] = "ã™ã¹ã¦ã®ãƒ†ãƒ¼ãƒ–ãƒ«";
+    Text[ korean ] = "ëª¨ë“  ì‹œíŠ¸";
     Text[ chinese_simplified ] = "å…¨éƒ¨çš„è¡¨æ ¼";
     Text[ chinese_traditional ] = "å…¨éƒ¨çš„è¡¨æ ¼";
     Text[ turkish ] = "All tables";
     Text[ arabic ] = "ßá ÇáÌÏÇæá";
-    Text[ catalan ] = "Todas las tablas";
-    Text[ finnish ] = "Alle Tabellen";
+    Text[ catalan ] = "Totes les taules";
+    Text[ finnish ] = "Kaikki taulukot";
 };
 String STR_ALL_VIEWS
 {
@@ -313,14 +313,14 @@ String STR_ALL_VIEWS
     Text[ swedish ] = "Alla tabellvyer";
     Text[ polish ] = "Wszystkie widoki tabeli";
     Text[ portuguese_brazilian ] = "All views";
-    Text[ japanese ] = "ã™ã¹ã¦ã®ï¾ƒï½°ï¾Œï¾ï¾™ï¾‹ï¾ï½­ï½°";
-    Text[ korean ] = "ëª¨ë“  í…Œì´ë¸” ë³´ê¸°";
+    Text[ japanese ] = "ã™ã¹ã¦ã®ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ“ãƒ¥ãƒ¼";
+    Text[ korean ] = "ëª¨ë“  ì‹œíŠ¸ ë³´ê¸°";
     Text[ chinese_simplified ] = "å…¨éƒ¨çš„è¡¨æ ¼è§†å›¾";
     Text[ chinese_traditional ] = "æ‰€æœ‰çš„è¡¨æ ¼æª¢è¦–";
     Text[ turkish ] = "All views";
     Text[ arabic ] = "ßÇİÉ ØÑŞ ÚÑÖ ÇáÌÏÇæá";
-    Text[ catalan ] = "Todas las visualizaciones de tablas";
-    Text[ finnish ] = "Alle Tabellensichten";
+    Text[ catalan ] = "Totes les vistes";
+    Text[ finnish ] = "Kaikki näkymät";
 };
 String STR_ALL_TABLES_AND_VIEWS
 {
@@ -338,19 +338,22 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ swedish ] = "Alla tabeller och tabellvyer";
     Text[ polish ] = "Wszystkie tabele i widoki tabeli";
     Text[ portuguese_brazilian ] = "All tables and views";
-    Text[ japanese ] = "ã™ã¹ã¦ã®ï¾ƒï½°ï¾Œï¾ï¾™ã¨ï¾ƒï½°ï¾Œï¾ï¾™ï¾‹ï¾ï½­ï½°";
-    Text[ korean ] = "ëª¨ë“  í…Œì´ë¸”ê³¼ í…Œì´ë¸” ë³´ê¸°";
+    Text[ japanese ] = "ã™ã¹ã¦ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã¨ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ“ãƒ¥ãƒ¼";
+    Text[ korean ] = "ëª¨ë“  ì‹œíŠ¸ì™€ ì‹œíŠ¸ ë³´ê¸°";
     Text[ chinese_simplified ] = "å…¨éƒ¨çš„è¡¨æ ¼å’Œè¡¨æ ¼è§†å›¾";
     Text[ chinese_traditional ] = "æ‰€æœ‰çš„è¡¨æ ¼å’Œè¡¨æ ¼æª¢è¦–";
     Text[ turkish ] = "All tables and views";
     Text[ arabic ] = "ßÇİÉ ÇáÌÏÇæá æØÑŞ ÚÑÖåÇ";
-    Text[ catalan ] = "Todas las tablas y visualizaciones de tablas";
-    Text[ finnish ] = "Alle Tabellen und Tabellensichten";
+    Text[ catalan ] = "Totes les taules i vistes";
+    Text[ finnish ] = "Kaikki taulukot ja näkymät";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/11/29 11:24:25  pb
+ *  fix: #93646# correct german spellcheck
+ *
  *  Revision 1.19  2001/11/16 22:30:20  vg
  *  Merge SRC638: 16.11.01 - 22:30:53
  *
@@ -411,6 +414,7 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
 
 
 
