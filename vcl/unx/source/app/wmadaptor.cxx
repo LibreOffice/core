@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,9 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_pSalDisplay( pDisplay ),
         m_bTransientBehaviour( true ),
-        m_bEnableAlwaysOnTopWorks( false )
+        m_bEnableAlwaysOnTopWorks( false ),
+        m_nWinGravity( StaticGravity ),
+        m_nInitWinGravity( StaticGravity )
 {
     Atom                aRealType   = None;
     int                 nFormat     = 8;
@@ -318,41 +320,71 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             {
                 m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
                 m_bTransientBehaviour = false;
-#if 0
-                /*
-                 *  Note: m_bTransientBehaviour was originally false in
-                 *  in case of Dtwm. The transient behaviour can be restored
-                 *  by settting the following X-resource in $HOME/.Xdefaults:
-                 *  Dtwm*VCLSalFrame*secondariesOnTop: True
-                 */
-                /*
-                 * Sad but true: there are Dtwm versions, where the resource
-                 * database is set correctly but the transient behaviour is still
-                 * rotten. So back to always false.
-                 */
-                char* pDisplayResource = XResourceManagerString( m_pDisplay );
-                if( pDisplayResource )
-                {
-                    XrmDatabase aDB = XrmGetStringDatabase( pDisplayResource );
-                    XrmValue aValue;
-                    char* pType = NULL;
-                    if( XrmGetResource( aDB,
-                                        "Dtwm*VCLSalFrame*secondariesOnTop",
-                                        "Dtwm*VCLSalFrame",
-                                        &pType,
-                                        &aValue ) )
-                    {
-                        if( aValue.addr && ! strncasecmp( aValue.addr, "true", 4 ) )
-                            m_bTransientBehaviour = true;
-                    }
-#ifdef DEBUG
-                    fprintf( stderr, "set m_bTransientBehaviour to %s from database\n", m_bTransientBehaviour ? "true" : "false" );
-#endif
-                    XrmDestroyDatabase( aDB );
-                }
-#endif
+                m_nWinGravity = CenterGravity;
             }
             XFree (pProperty);
+        }
+    }
+    if( m_aWMName.Len() == 0 )
+    {
+        // check for window maker - needs different gravity
+        Atom aWMakerRunning = XInternAtom( m_pDisplay, "_WINDOWMAKER_WM_PROTOCOLS", True );
+        if( aWMakerRunning != None &&
+            XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                aWMakerRunning,
+                                0, 32,
+                                False,
+                                XA_ATOM,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0 )
+        {
+            if( aRealType == XA_ATOM )
+                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("Windowmaker" ) );
+            XFree( pProperty );
+            m_nInitWinGravity = NorthWestGravity;
+        }
+    }
+    if( m_aWMName.Len() == 0 )
+    {
+        // check for ReflectionX wm (as it needs a workaround in Windows mode
+        Atom aRwmRunning = XInternAtom( m_pDisplay, "RWM_RUNNING", True );
+        if( aRwmRunning != None &&
+            XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                aRwmRunning,
+                                0, 32,
+                                False,
+                                aRwmRunning,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0 )
+        {
+            if( aRealType == aRwmRunning )
+                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("ReflectionX" ) );
+            XFree( pProperty );
+        }
+        else if( (aRwmRunning = XInternAtom( m_pDisplay, "_WRQ_WM_RUNNING", True )) != None &&
+            XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                aRwmRunning,
+                                0, 32,
+                                False,
+                                XA_STRING,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0 )
+        {
+            if( aRealType == XA_STRING )
+                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM( "ReflectionX Windows" ) );
+            XFree( pProperty );
         }
     }
 }
@@ -679,6 +711,12 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                         m_aWMAtoms[ nProtocol ] = pAtoms[ i ];
                         if( pMatch->nProtocol == WIN_LAYER )
                             m_bEnableAlwaysOnTopWorks = true;
+                    }
+                    if( strncmp( "_ICEWM_TRAY", pAtomNames[i], 11 ) == 0 )
+                    {
+                        m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("IceWM" ));
+                        m_nWinGravity = NorthWestGravity;
+                        m_nInitWinGravity = NorthWestGravity;
                     }
 #ifdef DEBUG
                     fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
@@ -1406,8 +1444,21 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
 
     if( bHorizontal || bVertical )
     {
-        const Size& aScreenSize( m_pSalDisplay->GetScreenSize() );
-        Rectangle aTarget( Point( rGeom.nLeftDecoration, rGeom.nTopDecoration ),
+        Size aScreenSize( m_pSalDisplay->GetScreenSize() );
+        Point aTL( rGeom.nLeftDecoration, rGeom.nTopDecoration );
+        if( m_pSalDisplay->IsXinerama() )
+        {
+            Point aMed( aTL.X() + rGeom.nWidth/2, aTL.Y() + rGeom.nHeight/2 );
+            const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
+            for( int i = 0; i < rScreens.size(); i++ )
+                if( rScreens[i].IsInside( aMed ) )
+                {
+                    aTL += rScreens[i].TopLeft();
+                    aScreenSize = rScreens[i].GetSize();
+                    break;
+                }
+        }
+        Rectangle aTarget( aTL,
                            Size( aScreenSize.Width() - rGeom.nLeftDecoration - rGeom.nTopDecoration,
                                  aScreenSize.Height() - rGeom.nTopDecoration - rGeom.nBottomDecoration )
                            );
