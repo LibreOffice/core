@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:54:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2244,8 +2244,10 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
 
     // OD 2004-05-18 #i27767#
+    // --> OD 2004-10-18 #i35017# - constant name has changed
     Put( SwFmtWrapInfluenceOnObjPos(
-                text::WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED ) );
+                text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ) );
+    // <--
 
     if( !bGraf )
     {
