@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XBackendEntities.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:20:52 $
+ *  last change:$Date: 2004-03-30 14:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,23 @@ import lib.MultiMethodTest;
 public class _XBackendEntities extends MultiMethodTest {
     String AdminEntity = "";
     String OwnerEntity = "";
+    String adm = "";
     public XBackendEntities oObj;
 
+    public void before() {
+        adm = (String) tEnv.getObjRelation("NoAdmin");
+    }
+
     public void _getAdminEntity() {
+        if (adm != null) {
+            AdminEntity = adm;
+            log.println(
+                    "This component doesn't have an AdminEntity, setting it to default");
+            tRes.tested("getAdminEntity()", true);
+
+            return;
+        }
+
         AdminEntity = oObj.getAdminEntity();
 
         boolean res = AdminEntity.endsWith("/share/registry");
@@ -102,7 +116,8 @@ public class _XBackendEntities extends MultiMethodTest {
 
         try {
             localRes = oObj.isEqualEntity("", "");
-            log.println("No Exception thrown for isEqualEntity(\"\",\"\") -- FAILED");
+            log.println(
+                    "No Exception thrown for isEqualEntity(\"\",\"\") -- FAILED");
             res &= false;
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("Unexpected Exception (" + e + ") -- FAILED");
@@ -146,7 +161,8 @@ public class _XBackendEntities extends MultiMethodTest {
             log.println("Unexpected Exception (" + e + ") -- FAILED");
             res &= false;
         }
-        tRes.tested("isEqualEntity()",res);
+
+        tRes.tested("isEqualEntity()", res);
     }
 
     public void _supportsEntity() {
@@ -155,7 +171,8 @@ public class _XBackendEntities extends MultiMethodTest {
 
         try {
             localRes = oObj.supportsEntity("illegal");
-            log.println("No Exception thrown for supportsEntity(\"\") -- FAILED");
+            log.println(
+                    "No Exception thrown for supportsEntity(\"\") -- FAILED");
             res &= false;
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("Expected Exception (" + e + ") -- OK");
@@ -164,6 +181,14 @@ public class _XBackendEntities extends MultiMethodTest {
 
         try {
             localRes = oObj.supportsEntity(AdminEntity);
+
+            if (adm != null) {
+                Object msb = tEnv.getObjRelation("MSB") ;
+                if (msb == null){
+                    localRes = !localRes;
+                    log.println("This Component doesn't support the AdminEntity");
+                }
+            }
 
             if (!localRes) {
                 log.println(
@@ -180,11 +205,11 @@ public class _XBackendEntities extends MultiMethodTest {
             }
 
             res &= localRes;
-
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
             log.println("Unexpected Exception (" + e + ") -- FAILED");
             res &= false;
         }
-        tRes.tested("supportsEntity()",res);
+
+        tRes.tested("supportsEntity()", res);
     }
 }
