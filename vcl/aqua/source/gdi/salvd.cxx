@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 11:39:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALVD_CXX
 
 #ifndef _SV_SALVD_HXX
     #include <salvd.hxx>
