@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:32:35 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,23 +237,26 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
          propertie != rProperties.end();
          propertie++ )
     {
-        switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
+        if (propertie->mnIndex != -1)
         {
-            case CTF_SC_ALLPADDING:         pPadding = propertie; break;
-            case CTF_SC_BOTTOMPADDING:      pPadding_Bottom = propertie; break;
-            case CTF_SC_LEFTPADDING:        pPadding_Left = propertie; break;
-            case CTF_SC_RIGHTPADDING:       pPadding_Right = propertie; break;
-            case CTF_SC_TOPPADDING:         pPadding_Top = propertie; break;
-            case CTF_SC_ALLBORDER:          pBorder = propertie; break;
-            case CTF_SC_LEFTBORDER:         pBorder_Left = propertie; break;
-            case CTF_SC_RIGHTBORDER:        pBorder_Right = propertie; break;
-            case CTF_SC_BOTTOMBORDER:       pBorder_Bottom = propertie; break;
-            case CTF_SC_TOPBORDER:          pBorder_Top = propertie; break;
-            case CTF_SC_ALLBORDERWIDTH:     pAllBorderWidthState = propertie; break;
-            case CTF_SC_LEFTBORDERWIDTH:    pLeftBorderWidthState = propertie; break;
-            case CTF_SC_RIGHTBORDERWIDTH:   pRightBorderWidthState = propertie; break;
-            case CTF_SC_TOPBORDERWIDTH:     pTopBorderWidthState = propertie; break;
-            case CTF_SC_BOTTOMBORDERWIDTH:  pBottomBorderWidthState = propertie; break;
+            switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
+            {
+                case CTF_SC_ALLPADDING:         pPadding = propertie; break;
+                case CTF_SC_BOTTOMPADDING:      pPadding_Bottom = propertie; break;
+                case CTF_SC_LEFTPADDING:        pPadding_Left = propertie; break;
+                case CTF_SC_RIGHTPADDING:       pPadding_Right = propertie; break;
+                case CTF_SC_TOPPADDING:         pPadding_Top = propertie; break;
+                case CTF_SC_ALLBORDER:          pBorder = propertie; break;
+                case CTF_SC_LEFTBORDER:         pBorder_Left = propertie; break;
+                case CTF_SC_RIGHTBORDER:        pBorder_Right = propertie; break;
+                case CTF_SC_BOTTOMBORDER:       pBorder_Bottom = propertie; break;
+                case CTF_SC_TOPBORDER:          pBorder_Top = propertie; break;
+                case CTF_SC_ALLBORDERWIDTH:     pAllBorderWidthState = propertie; break;
+                case CTF_SC_LEFTBORDERWIDTH:    pLeftBorderWidthState = propertie; break;
+                case CTF_SC_RIGHTBORDERWIDTH:   pRightBorderWidthState = propertie; break;
+                case CTF_SC_TOPBORDERWIDTH:     pTopBorderWidthState = propertie; break;
+                case CTF_SC_BOTTOMBORDERWIDTH:  pBottomBorderWidthState = propertie; break;
+            }
         }
     }
 
@@ -476,27 +479,30 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         for (i; (i != rProperties.end()); i++)
         {
-            UniReference< XMLPropertySetMapper > aPropMapper =
-                rScXMLExport.GetCellStylesPropertySetMapper();
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
-            switch (nContextID)
+            if (i->mnIndex != -1)
             {
-                case CTF_SC_NUMBERFORMAT :
+                UniReference< XMLPropertySetMapper > aPropMapper =
+                    rScXMLExport.GetCellStylesPropertySetMapper();
+                sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
+                switch (nContextID)
                 {
-                    sal_Int32 nNumberFormat;
-                    if (i->maValue >>= nNumberFormat)
+                    case CTF_SC_NUMBERFORMAT :
                     {
-                        rtl::OUString sAttrValue = rScXMLExport.getDataStyleName(nNumberFormat);
-                        if (sAttrValue.getLength())
+                        sal_Int32 nNumberFormat;
+                        if (i->maValue >>= nNumberFormat)
                         {
-                            GetExport().AddAttribute(
-                                aPropMapper->GetEntryNameSpace(i->mnIndex),
-                                aPropMapper->GetEntryXMLName(i->mnIndex),
-                                sAttrValue );
+                            rtl::OUString sAttrValue = rScXMLExport.getDataStyleName(nNumberFormat);
+                            if (sAttrValue.getLength())
+                            {
+                                GetExport().AddAttribute(
+                                    aPropMapper->GetEntryNameSpace(i->mnIndex),
+                                    aPropMapper->GetEntryXMLName(i->mnIndex),
+                                    sAttrValue );
+                            }
                         }
                     }
+                    break;
                 }
-                break;
             }
         }
     }
@@ -505,23 +511,26 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         for (i; (i != rProperties.end()); i++)
         {
-            UniReference< XMLPropertySetMapper > aPropMapper =
-                rScXMLExport.GetTableStylesPropertySetMapper();
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
-            switch (nContextID)
+            if (i->mnIndex != -1)
             {
-                case CTF_SC_MASTERPAGENAME :
+                UniReference< XMLPropertySetMapper > aPropMapper =
+                    rScXMLExport.GetTableStylesPropertySetMapper();
+                sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
+                switch (nContextID)
                 {
-                    rtl::OUString sName;
-                    if (i->maValue >>= sName)
+                    case CTF_SC_MASTERPAGENAME :
                     {
-                        GetExport().AddAttribute(
-                            aPropMapper->GetEntryNameSpace(i->mnIndex),
-                            aPropMapper->GetEntryXMLName(i->mnIndex),
-                            sName );
+                        rtl::OUString sName;
+                        if (i->maValue >>= sName)
+                        {
+                            GetExport().AddAttribute(
+                                aPropMapper->GetEntryNameSpace(i->mnIndex),
+                                aPropMapper->GetEntryXMLName(i->mnIndex),
+                                sName );
+                        }
                     }
+                    break;
                 }
-                break;
             }
         }
     }
@@ -543,92 +552,95 @@ void ScXMLAutoStylePoolP::exportStyleContent(
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         for (i; (i != rProperties.end()) && bNotFound; i++)
         {
-            sal_Int16 nContextID = rScXMLExport.GetCellStylesPropertySetMapper()->GetEntryContextId(i->mnIndex);
-            switch (nContextID)
+            if (i->mnIndex != -1)
             {
-                case CTF_SC_MAP :
+                sal_Int16 nContextID = rScXMLExport.GetCellStylesPropertySetMapper()->GetEntryContextId(i->mnIndex);
+                switch (nContextID)
                 {
-                    uno::Reference <sheet::XSheetConditionalEntries> xSheetConditionalEntries;
-                    if (i->maValue >>= xSheetConditionalEntries)
+                    case CTF_SC_MAP :
                     {
-                        uno::Reference<container::XIndexAccess> xIndex( xSheetConditionalEntries, uno::UNO_QUERY );
-                        if ( xIndex.is() )
+                        uno::Reference <sheet::XSheetConditionalEntries> xSheetConditionalEntries;
+                        if (i->maValue >>= xSheetConditionalEntries)
                         {
-                            sal_Int32 nConditionCount = xIndex->getCount();
-                            for (sal_Int32 nCondition = 0; nCondition < nConditionCount; nCondition++)
+                            uno::Reference<container::XIndexAccess> xIndex( xSheetConditionalEntries, uno::UNO_QUERY );
+                            if ( xIndex.is() )
                             {
-                                uno::Any aSheetConditionalEntry = xIndex->getByIndex(nCondition);
-                                uno::Reference <sheet::XSheetConditionalEntry> xSheetConditionalEntry;
-                                if (aSheetConditionalEntry >>= xSheetConditionalEntry)
+                                sal_Int32 nConditionCount = xIndex->getCount();
+                                for (sal_Int32 nCondition = 0; nCondition < nConditionCount; nCondition++)
                                 {
-                                    rtl::OUString sStyleName = xSheetConditionalEntry->getStyleName();
-                                    uno::Reference <sheet::XSheetCondition> xSheetCondition(xSheetConditionalEntry, uno::UNO_QUERY);
-                                    if (xSheetCondition.is())
+                                    uno::Any aSheetConditionalEntry = xIndex->getByIndex(nCondition);
+                                    uno::Reference <sheet::XSheetConditionalEntry> xSheetConditionalEntry;
+                                    if (aSheetConditionalEntry >>= xSheetConditionalEntry)
                                     {
-                                        sheet::ConditionOperator aOperator = xSheetCondition->getOperator();
-                                        if (aOperator != sheet::ConditionOperator_NONE)
+                                        rtl::OUString sStyleName = xSheetConditionalEntry->getStyleName();
+                                        uno::Reference <sheet::XSheetCondition> xSheetCondition(xSheetConditionalEntry, uno::UNO_QUERY);
+                                        if (xSheetCondition.is())
                                         {
-                                            if (aOperator == sheet::ConditionOperator_FORMULA)
+                                            sheet::ConditionOperator aOperator = xSheetCondition->getOperator();
+                                            if (aOperator != sheet::ConditionOperator_NONE)
                                             {
-                                                rtl::OUString sCondition(RTL_CONSTASCII_USTRINGPARAM("is-true-formula("));
-                                                sCondition += xSheetCondition->getFormula1();
-                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
-                                                OUString sOUBaseAddress;
-                                                ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
-                                                    xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
-                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
-                                            }
-                                            else
-                                            {
-                                                rtl::OUString sCondition;
-                                                if (aOperator == sheet::ConditionOperator_BETWEEN ||
-                                                    aOperator == sheet::ConditionOperator_NOT_BETWEEN)
+                                                if (aOperator == sheet::ConditionOperator_FORMULA)
                                                 {
-                                                    if (aOperator == sheet::ConditionOperator_BETWEEN)
-                                                        sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-between("));
-                                                    else
-                                                        sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-not-between("));
+                                                    rtl::OUString sCondition(RTL_CONSTASCII_USTRINGPARAM("is-true-formula("));
                                                     sCondition += xSheetCondition->getFormula1();
-                                                    sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-                                                    sCondition += xSheetCondition->getFormula2();
                                                     sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
+                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
+                                                    OUString sOUBaseAddress;
+                                                    ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
+                                                        xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
+                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
+                                                    SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
                                                 }
                                                 else
                                                 {
-                                                    sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
-                                                    switch (aOperator)
+                                                    rtl::OUString sCondition;
+                                                    if (aOperator == sheet::ConditionOperator_BETWEEN ||
+                                                        aOperator == sheet::ConditionOperator_NOT_BETWEEN)
                                                     {
-                                                        case sheet::ConditionOperator_LESS:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-                                                        break;
-                                                        case sheet::ConditionOperator_GREATER:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-                                                        break;
-                                                        case sheet::ConditionOperator_LESS_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-                                                        break;
-                                                        case sheet::ConditionOperator_GREATER_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-                                                        break;
-                                                        case sheet::ConditionOperator_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-                                                        break;
-                                                        case sheet::ConditionOperator_NOT_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
-                                                        break;
+                                                        if (aOperator == sheet::ConditionOperator_BETWEEN)
+                                                            sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-between("));
+                                                        else
+                                                            sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-not-between("));
+                                                        sCondition += xSheetCondition->getFormula1();
+                                                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                                                        sCondition += xSheetCondition->getFormula2();
+                                                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                                                     }
-                                                    sCondition += xSheetCondition->getFormula1();
+                                                    else
+                                                    {
+                                                        sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
+                                                        switch (aOperator)
+                                                        {
+                                                            case sheet::ConditionOperator_LESS:
+                                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+                                                            break;
+                                                            case sheet::ConditionOperator_GREATER:
+                                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+                                                            break;
+                                                            case sheet::ConditionOperator_LESS_EQUAL:
+                                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+                                                            break;
+                                                            case sheet::ConditionOperator_GREATER_EQUAL:
+                                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+                                                            break;
+                                                            case sheet::ConditionOperator_EQUAL:
+                                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                                                            break;
+                                                            case sheet::ConditionOperator_NOT_EQUAL:
+                                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
+                                                            break;
+                                                        }
+                                                        sCondition += xSheetCondition->getFormula1();
+                                                    }
+                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
+                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
+                                                    OUString sOUBaseAddress;
+                                                    ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
+                                                        xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
+                                                    rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
+                                                    SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
                                                 }
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
-                                                OUString sOUBaseAddress;
-                                                ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
-                                                    xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
-                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
                                             }
                                         }
                                     }
@@ -636,8 +648,8 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                             }
                         }
                     }
+                    break;
                 }
-                break;
             }
         }
     }
