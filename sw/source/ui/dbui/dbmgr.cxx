@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:41:01 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,39 @@ struct SwNewDBMgr_Impl
        ,xDisposeListener(new SwConnectionDisposedListener_Impl(rDBMgr))
         {}
 };
+/*-- 24.10.2003 15:54:18---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void lcl_InitNumberFormatter(SwDSParam& rParam, Reference<XDataSource> xSource)
+{
+    Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
+    if( xMgr.is() )
+    {
+        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
+        rParam.xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
+    }
+    if(!xSource.is())
+        xSource = SwNewDBMgr::getDataSourceAsParent(rParam.xConnection, rParam.sDataSource);
+
+    Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
+    if(xSourceProps.is())
+    {
+        Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
+        if(aFormats.hasValue())
+        {
+            Reference<XNumberFormatsSupplier> xSuppl;
+            aFormats >>= xSuppl;
+            if(xSuppl.is())
+            {
+                Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
+                Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
+                aNull >>= rParam.aNullDate;
+                if(rParam.xFormatter.is())
+                    rParam.xFormatter->attachNumberFormatsSupplier(xSuppl);
+            }
+        }
+    }
+}
 /* -----------------------------17.07.00 17:04--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -404,6 +437,12 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     aCol >>= xColumnProps;
 
     SwDBFormatData aFormatData;
+    if(!pParam->xFormatter.is())
+    {
+        Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(
+                                    pParam->xConnection,pParam->sDataSource);
+        lcl_InitNumberFormatter(*pParam, xSource );
+    }
     aFormatData.aNullDate = pParam->aNullDate;
     aFormatData.xFormatter = pParam->xFormatter;
 
@@ -506,29 +545,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
 
     Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
 
-    Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
-    if( xMgr.is() )
-    {
-        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
-        pImpl->pMergeData->xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
-    }
-
-    Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
-    if(xSourceProps.is())
-    {
-        Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
-        if(aFormats.hasValue())
-        {
-            Reference<XNumberFormatsSupplier> xSuppl;
-            aFormats >>= xSuppl;
-            if(xSuppl.is())
-            {
-                Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
-                Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
-                aNull >>= pImpl->pMergeData->aNullDate;
-            }
-        }
-    }
+    lcl_InitNumberFormatter(*pImpl->pMergeData, xSource);
 
     rSh.ChgDBData(aData);
     bInMerge = TRUE;
@@ -1289,6 +1306,8 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                     if( bColumnName )
                     {
                         SwDBFormatData aDBFormat;
+                        aDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
+                        aDBFormat.aNullDate = pImpl->pMergeData->aNullDate;
                         sAddress = GetDBField( xColumnProp, aDBFormat);
                         if (!sAddress.Len())
                             sAddress = '_';
@@ -2167,6 +2186,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
 /* -----------------------------14.08.2001 10:27------------------------------
 
  ---------------------------------------------------------------------------*/
+
 SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL bCreate)
 {
     SwDSParam* pFound = 0;
