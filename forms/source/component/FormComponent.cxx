@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 14:04:53 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 06:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,7 +800,7 @@ DBG_NAME(frm_OBoundControlModel);
 //------------------------------------------------------------------
 Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
-        Any aReturn;
+    Any aReturn;
 
     aReturn = OControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -1293,7 +1293,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             }
             else
             {
-                OSL_ASSERT("OBoundControlModel::connectToField: property NAME not supported!");
+                OSL_ENSURE(sal_False, "OBoundControlModel::connectToField: property NAME not supported!");
                 m_xField = NULL;
             }
         }
