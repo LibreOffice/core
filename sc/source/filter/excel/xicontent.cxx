@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:16 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,24 @@
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
+#endif
+#ifndef _SVX_WGHTITEM_HXX
+#include <svx/wghtitem.hxx>
+#endif
+#ifndef _SVX_UDLNITEM_HXX
+#include <svx/udlnitem.hxx>
+#endif
+#ifndef _SVX_POSTITEM_HXX
+#include <svx/postitem.hxx>
+#endif
+#ifndef _SVX_COLRITEM_HXX
+#include <svx/colritem.hxx>
+#endif
+#ifndef _SVX_CRSDITEM_HXX
+#include <svx/crsditem.hxx>
+#endif
 
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
@@ -139,12 +157,18 @@
 #ifndef SC_AREALINK_HXX
 #include "arealink.hxx"
 #endif
+#ifndef SC_STLSHEET_HXX
+#include "stlsheet.hxx"
+#endif
 
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
+#endif
+#ifndef SC_XISTYLE_HXX
+#include "xistyle.hxx"
 #endif
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
@@ -235,7 +259,12 @@ void XclImpBitmap::ReadBitmap( XclImpStream& rStrm )
 
 // Hyperlinks =================================================================
 
-void XclImpHyperlink::AppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars, bool b16Bit )
+namespace {
+
+/** Reads character array and stores it into rString.
+    @param nChars  Number of following characters (not byte count!).
+    @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
+void lclAppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars, bool b16Bit )
 {
     sal_uInt16 nReadChars = static_cast< sal_uInt16 >( ::std::min( nChars, 0xFFFFUL ) );
     rStrm.AppendRawUniString( rString, nReadChars, b16Bit );
@@ -246,12 +275,16 @@ void XclImpHyperlink::AppendString32( String& rString, XclImpStream& rStrm, sal_
     rStrm.Ignore( nIgnore );
 }
 
-void XclImpHyperlink::AppendString32( String& rString, XclImpStream& rStrm, bool b16Bit )
+/** Reads 32-bit string length and the character array and stores it into rString.
+    @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
+void lclAppendString32( String& rString, XclImpStream& rStrm, bool b16Bit )
 {
-    AppendString32( rString, rStrm, rStrm.ReaduInt32(), b16Bit );
+    lclAppendString32( rString, rStrm, rStrm.ReaduInt32(), b16Bit );
 }
 
-void XclImpHyperlink::IgnoreString32( XclImpStream& rStrm, bool b16Bit )
+/** Reads 32-bit string length and ignores following character array.
+    @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
+void lclIgnoreString32( XclImpStream& rStrm, bool b16Bit )
 {
     sal_uInt32 nChars;
     rStrm >> nChars;
@@ -260,7 +293,10 @@ void XclImpHyperlink::IgnoreString32( XclImpStream& rStrm, bool b16Bit )
     rStrm.Ignore( nChars );
 }
 
-void XclImpHyperlink::GetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell )
+/** Converts a path to an absolute path.
+    @param rPath  The source path. The resulting path is returned here.
+    @param nLevel  Number of parent directories to add in front of the path. */
+void lclGetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell )
 {
     String aTmpStr;
     while( nLevel )
@@ -280,7 +316,8 @@ void XclImpHyperlink::GetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShe
         rPath = aTmpStr;
 }
 
-void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const String& rURL, sal_uInt16 nCol, sal_uInt16 nRow )
+/** Inserts the URL into a text cell. Does not modify value or formula cells. */
+void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, sal_uInt16 nCol, sal_uInt16 nRow )
 {
     ScDocument& rDoc = rRoot.GetDoc();
     sal_uInt16 nTab = rRoot.GetScTab();
@@ -307,6 +344,11 @@ void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const String& rURL, sa
     }
 }
 
+} // namespace
+
+
+// ----------------------------------------------------------------------------
+
 void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
@@ -332,17 +374,17 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 
     // description (ignore)
     if( ::get_flag( nFlags, EXC_HLINK_DESCR ) )
-        IgnoreString32( rStrm, true );
+        lclIgnoreString32( rStrm, true );
     // target frame (ignore) !! DESCR/FRAME - is this the right order? (never seen them together)
     if( ::get_flag( nFlags, EXC_HLINK_FRAME ) )
-        IgnoreString32( rStrm, true );
+        lclIgnoreString32( rStrm, true );
 
     // UNC path
     if( ::get_flag( nFlags, EXC_HLINK_UNC ) )
     {
         pLongName.reset( new String );
-        AppendString32( *pLongName, rStrm, true );
-        GetAbsPath( *pLongName, 0, pDocShell );
+        lclAppendString32( *pLongName, rStrm, true );
+        lclGetAbsPath( *pLongName, 0, pDocShell );
     }
     // file link or URL
     else if( ::get_flag( nFlags, EXC_HLINK_BODY ) )
@@ -353,7 +395,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
         {
             rStrm >> nLevel;
             pShortName.reset( new String );
-            AppendString32( *pShortName, rStrm, false );
+            lclAppendString32( *pShortName, rStrm, false );
             rStrm.Ignore( 24 );
 
             sal_uInt32 nStrLen;
@@ -364,11 +406,11 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
                 nStrLen /= 2;       // it's byte count here...
                 rStrm.Ignore( 2 );
                 pLongName.reset( new String );
-                AppendString32( *pLongName, rStrm, nStrLen, true );
-                GetAbsPath( *pLongName, nLevel, pDocShell );
+                lclAppendString32( *pLongName, rStrm, nStrLen, true );
+                lclGetAbsPath( *pLongName, nLevel, pDocShell );
             }
             else
-                GetAbsPath( *pShortName, nLevel, pDocShell );
+                lclGetAbsPath( *pShortName, nLevel, pDocShell );
         }
         else if( aGuid == XclTools::maGuidUrlMoniker )
         {
@@ -376,9 +418,9 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
             rStrm >> nStrLen;
             nStrLen /= 2;       // it's byte count here...
             pLongName.reset( new String );
-            AppendString32( *pLongName, rStrm, nStrLen, true );
+            lclAppendString32( *pLongName, rStrm, nStrLen, true );
             if( !::get_flag( nFlags, EXC_HLINK_ABS ) )
-                GetAbsPath( *pLongName, 0, pDocShell );
+                lclGetAbsPath( *pLongName, 0, pDocShell );
         }
         else
             DBG_ERRORFILE( "XclImpHyperlink::ReadHlink - unknown content GUID" );
@@ -388,7 +430,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     if( ::get_flag( nFlags, EXC_HLINK_MARK ) )
     {
         pTextMark.reset( new String );
-        AppendString32( *pTextMark, rStrm, true );
+        lclAppendString32( *pTextMark, rStrm, true );
     }
 
     DBG_ASSERT( !rStrm.GetRecLeft(), "XclImpHyperlink::ReadHlink - record size mismatch" );
@@ -415,7 +457,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
             aRange.GetVars( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
             for( sal_uInt16 nCol = nCol1; nCol <= nCol2 ; ++nCol )
                 for( sal_uInt16 nRow = nRow1; nRow <= nRow2; ++nRow )
-                    InsertUrl( rRoot, *pLongName, nCol, nRow );
+                    lclInsertUrl( rRoot, *pLongName, nCol, nRow );
         }
     }
 }
@@ -479,6 +521,213 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
 }
 
 
+// Conditional formatting =====================================================
+
+XclImpCondFormat::XclImpCondFormat( const XclImpRoot& rRoot, sal_uInt32 nFormatIndex ) :
+    XclImpRoot( rRoot ),
+    mnFormatIndex( nFormatIndex ),
+    mnCondCount( 0 ),
+    mnCondIndex( 0 )
+{
+}
+
+XclImpCondFormat::~XclImpCondFormat()
+{
+}
+
+void XclImpCondFormat::ReadCondfmt( XclImpStream& rStrm )
+{
+    DBG_ASSERT( !mnCondCount, "XclImpCondFormat::ReadCondfmt - already initialized" );
+    rStrm >> mnCondCount;
+    rStrm.Ignore( 10 );
+    rStrm >> maRanges;
+    CheckCellRangeList( maRanges );
+}
+
+void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
+{
+    if( mnCondIndex >= mnCondCount )
+    {
+        DBG_ERRORFILE( "XclImpCondFormat::ReadCF - CF without leading CONDFMT" );
+        return;
+    }
+
+    // entire conditional format outside of valid range?
+    if( !maRanges.Count() )
+        return;
+
+    sal_uInt8 nType, nOperator;
+    sal_uInt16 nFmlaSize1, nFmlaSize2;
+    sal_uInt32 nFlags;
+
+    rStrm >> nType >> nOperator >> nFmlaSize1 >> nFmlaSize2 >> nFlags;
+    rStrm.Ignore( 2 );
+
+    // *** mode and comparison operator ***
+
+    ScConditionMode eMode = SC_COND_NONE;
+    switch( nType )
+    {
+        case EXC_CF_TYPE_CELL:
+        {
+            switch( nOperator )
+            {
+                case EXC_CF_CMP_BETWEEN:        eMode = SC_COND_BETWEEN;    break;
+                case EXC_CF_CMP_NOT_BETWEEN:    eMode = SC_COND_NOTBETWEEN; break;
+                case EXC_CF_CMP_EQUAL:          eMode = SC_COND_EQUAL;      break;
+                case EXC_CF_CMP_NOT_EQUAL:      eMode = SC_COND_NOTEQUAL;   break;
+                case EXC_CF_CMP_GREATER:        eMode = SC_COND_GREATER;    break;
+                case EXC_CF_CMP_LESS:           eMode = SC_COND_LESS;       break;
+                case EXC_CF_CMP_GREATER_EQUAL:  eMode = SC_COND_EQGREATER;  break;
+                case EXC_CF_CMP_LESS_EQUAL:     eMode = SC_COND_EQLESS;     break;
+                default:
+                    DBG_ERROR1( "XclImpCondFormat::ReadCF - unknown CF comparison 0x%02hX", nOperator );
+            }
+        }
+        break;
+
+        case EXC_CF_TYPE_FMLA:
+            eMode = SC_COND_DIRECT;
+        break;
+
+        default:
+            DBG_ERROR1( "XclImpCondFormat::ReadCF - unknown CF mode 0x%02hX", nType );
+            return;
+    }
+
+    // *** create style sheet ***
+
+    String aStyleName( XclTools::GetCondFormatStyleName( GetScTab(), mnFormatIndex, mnCondIndex ) );
+    SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
+
+    const XclImpPalette& rPalette = GetPalette();
+
+    // *** font block ***
+
+    if( ::get_flag( nFlags, EXC_CF_BLOCK_FONT ) )
+    {
+        XclImpFont aFont( GetRoot() );
+        aFont.ReadCFFontBlock( rStrm );
+        aFont.FillToItemSet( rStyleItemSet, xlFontScIDs );
+    }
+
+    // *** border block ***
+
+    if( ::get_flag( nFlags, EXC_CF_BLOCK_BORDER ) )
+    {
+        sal_uInt16 nLineStyle;
+        sal_uInt32 nLineColor;
+        rStrm >> nLineStyle >> nLineColor;
+        rStrm.Ignore( 2 );
+
+        XclImpCellBorder aBorder;
+        aBorder.FillFromCF8( nLineStyle, nLineColor, nFlags );
+        aBorder.FillToItemSet( rStyleItemSet, rPalette );
+    }
+
+    // *** pattern block ***
+
+    if( ::get_flag( nFlags, EXC_CF_BLOCK_AREA ) )
+    {
+        sal_uInt16 nPattern, nColor;
+        rStrm >> nPattern >> nColor;
+
+        XclImpCellArea aArea;
+        aArea.FillFromCF8( nPattern, nColor, nFlags );
+        aArea.FillToItemSet( rStyleItemSet, rPalette );
+    }
+
+    // *** formulas ***
+
+    const ScAddress& rPos = maRanges.GetObject( 0 )->aStart;    // assured above that maRanges is not empty
+    ExcelToSc& rFmlaConv = GetFmlaConverter();
+
+    ::std::auto_ptr< ScTokenArray > pTokArr1;
+    if( nFmlaSize1 )
+    {
+        const ScTokenArray* pTokArr = NULL;
+        rFmlaConv.Reset( rPos );
+        rFmlaConv.Convert( pTokArr, nFmlaSize1, FT_RangeName );
+        // formula converter owns pTokArr -> create a copy of the token array
+        if( pTokArr )
+            pTokArr1.reset( pTokArr->Clone() );
+    }
+
+    ::std::auto_ptr< ScTokenArray > pTokArr2;
+    if( nFmlaSize2 )
+    {
+        const ScTokenArray* pTokArr = NULL;
+        rFmlaConv.Reset( rPos );
+        rFmlaConv.Convert( pTokArr, nFmlaSize2, FT_RangeName );
+        // formula converter owns pTokArr -> create a copy of the token array
+        if( pTokArr )
+            pTokArr2.reset( pTokArr->Clone() );
+    }
+
+    // *** create the Calc conditional formatting ***
+
+    if( !mpScCondFormat.get() )
+    {
+        ULONG nKey = 0;
+        mpScCondFormat.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
+    }
+
+    ScCondFormatEntry aEntry( eMode, pTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );
+    mpScCondFormat->AddEntry( aEntry );
+    ++mnCondIndex;
+}
+
+void XclImpCondFormat::Apply()
+{
+    if( mpScCondFormat.get() )
+    {
+        ScDocument& rDoc = GetDoc();
+
+        ULONG nKey = rDoc.AddCondFormat( *mpScCondFormat );
+        ScPatternAttr aPattern( rDoc.GetPool() );
+        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
+
+        // maRanges contains only valid cell ranges
+        for( const ScRange* pRange = maRanges.First(); pRange; pRange = maRanges.Next() )
+        {
+            rDoc.ApplyPatternAreaTab(
+                pRange->aStart.Col(), pRange->aStart.Row(),
+                pRange->aEnd.Col(), pRange->aEnd.Row(),
+                pRange->aStart.Tab(), aPattern );
+        }
+    }
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclImpCondFormatManager::XclImpCondFormatManager( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
+{
+}
+
+void XclImpCondFormatManager::ReadCondfmt( XclImpStream& rStrm )
+{
+    XclImpCondFormat* pFmt = new XclImpCondFormat( GetRoot(), maCondFmtList.Count() );
+    pFmt->ReadCondfmt( rStrm );
+    maCondFmtList.Append( pFmt );
+}
+
+void XclImpCondFormatManager::ReadCF( XclImpStream& rStrm )
+{
+    DBG_ASSERT( !maCondFmtList.Empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
+    if( !maCondFmtList.Empty() )
+        maCondFmtList.GetObject( maCondFmtList.Count() - 1 )->ReadCF( rStrm );
+}
+
+void XclImpCondFormatManager::Apply()
+{
+    for( XclImpCondFormat* pFmt = maCondFmtList.First(); pFmt; pFmt = maCondFmtList.Next() )
+        pFmt->Apply();
+    maCondFmtList.Clear();
+}
+
+
 // Data Validation ============================================================
 
 void XclImpValidation::ReadDval( XclImpStream& rStrm )
@@ -496,7 +745,7 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     }
 }
 
-void XclImpValidation::ReadDv( XclImpStream& rStrm )
+void XclImpValidation::ReadDV( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
     DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
