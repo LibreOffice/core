@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-29 14:43:33 $
+ *  last change: $Author: dl $ $Date: 2001-07-06 10:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,7 +1309,7 @@ void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
     {
         // Get StyleSheet attributes
         SfxItemSet aSet(*pPool,
-            SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,
+            SDRATTR_START, SDRATTR_NOTPERSIST_FIRST-1,
             SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
             EE_ITEMS_START,EE_ITEMS_END,
             0,0);
@@ -1320,7 +1320,7 @@ void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 
         while( nWhich )
         {
-            if( SFX_ITEM_SET == mpStyleSheet->GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+            if( SFX_ITEM_SET == mpStyleSheet->GetItemSet().GetItemState(nWhich, TRUE, &pItem) )
                 aSet.Put( *pItem->Clone() );
 
             nWhich = aIter.NextWhich();
