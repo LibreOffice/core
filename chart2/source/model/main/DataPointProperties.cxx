@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-13 09:40:42 $
+ *  last change: $Author: bm $ $Date: 2003-11-13 12:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,8 @@ void DataPointProperties::AddDefaultsToMap(
     chart2::SymbolProperties aSymbProp;
     aSymbProp.aStyle = chart2::SymbolStyle_NONE;
     aSymbProp.nStandardSymbol = 0;
+    aSymbProp.aSize = awt::Size( 423, 423 ); // 12pt x 12pt
+    aSymbProp.nFillColor = 0xee4000;         // OrangeRed2
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_SYMBOL_PROP ));
     rOutMap[ PROP_DATAPOINT_SYMBOL_PROP ] =
         uno::makeAny( aSymbProp );
