@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-13 17:29:38 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-13 18:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                     rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
                     OSL_TRACE( "no of elts in path list = %d",
                         (int)m_secureURL.getLength() );
+                    bool match = false;
                     for(int j=m_secureURL.getLength();j>0;j--)
                     {
 #ifdef __WIN32__
@@ -174,6 +175,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                         if( path.equals( m_secureURL[j-1] ) )
 #endif
                         {
+                            match = true;
                             if( m_warning == sal_True )
                             {
                                 OUString dummyStr;
@@ -191,6 +193,10 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                             }
                             break;
                         }
+                    }
+                    if ( match == true )
+                    {
+                        break;
                     }
                     if( m_confirmationRequired == sal_True )
                     {
