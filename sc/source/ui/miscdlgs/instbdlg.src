@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:16:25 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Text [ PORTUGUESE_BRAZILIAN ] = "Tabelle einf?en" ;
     Text [ SWEDISH ] = "Infoga tabell" ;
     Text [ PORTUGUESE ] = "Inserir folha" ;
-    Text[ chinese_simplified ] = "²åÈë¹¤×÷±í";
+    Text[ chinese_simplified ] = "æ’å…¥å·¥ä½œè¡¨";
     Text[ russian ] = "Âñòàâèòü ëèñò";
     Text[ polish ] = "Wstaw arkusz";
-    Text[ japanese ] = "•\\‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J¤u§@ªí";
+    Text[ japanese ] = "è¡¨ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥å·¥ä½œè¡¨";
     Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
     Text[ greek ] = "ÅéóáãùãŞ ğßíáêá";
-    Text[ korean ] = "½ÃÆ® »ğÀÔ";
+    Text[ korean ] = "ì‹œíŠ¸ ì‚½ì…";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar hoja";
@@ -122,14 +122,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ french ] = "Position" ;
         Text [ dutch ] = "Positie" ;
         Text [ portuguese ] = "Posição" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ chinese_simplified ] = "ä½ç½®";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ˆÊ’u";
-        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ japanese ] = "ä½ç½®";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición";
@@ -151,14 +151,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ spanish ] = "~Delante de la hoja actual" ;
         Text [ french ] = "A~vant la feuille courante" ;
         Text [ dutch ] = "~Voor actuele tabel" ;
-        Text[ chinese_simplified ] = "ÔÚµ±Ç°µÄ¹¤×÷±íÖ®Ç°(~E)";
+        Text[ chinese_simplified ] = "åœ¨å½“å‰çš„å·¥ä½œè¡¨ä¹‹å‰(~E)";
         Text[ russian ] = "Ïåğåä òåêóùèì ëèñòîì";
         Text[ polish ] = "Przed zaz~naczonym arkuszem";
-        Text[ japanese ] = "•\\¦’†‚Ì•\\‚Ì‘O‚É(~E)";
-        Text[ chinese_traditional ] = "¦b·í«eªº¤u§@ªí¤§«e(~E)";
+        Text[ japanese ] = "è¡¨ç¤ºä¸­ã®è¡¨ã®å‰ã«(~E)";
+        Text[ chinese_traditional ] = "åœ¨ç•¶å‰çš„å·¥ä½œè¡¨ä¹‹å‰(~E)";
         Text[ arabic ] = "ŞÈá ÇáÌÏæá ÇáÍÇáí";
         Text[ greek ] = "Ğñéí áğü ôïí åíåñãü ğßíáêá";
-        Text[ korean ] = "ÇöÀç Ç¥ ¾Õ¿¡(~E)";
+        Text[ korean ] = "í˜„ì¬ í‘œ ì•ì—(~E)";
         Text[ turkish ] = "Açık tablonun ~önüne";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Delante de la hoja actual";
@@ -180,14 +180,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ spanish ] = "Detrás de la ~hoja actual" ;
         Text [ french ] = "~Après la feuille courante" ;
         Text [ dutch ] = "~Na actuele tabel" ;
-        Text[ chinese_simplified ] = "ÔÚµ±Ç°µÄ¹¤×÷±íÖ®ºó(~A)";
+        Text[ chinese_simplified ] = "åœ¨å½“å‰çš„å·¥ä½œè¡¨ä¹‹å(~A)";
         Text[ russian ] = "Ïîñëå òåêóùåãî ëèñòà";
         Text[ polish ] = "Za ~zaznaczonym arkuszem";
-        Text[ japanese ] = "•\\¦’†‚Ì•\\‚ÌŒã‚É(~A)";
-        Text[ chinese_traditional ] = "¦b·í«eªº¤u§@ªí¤§«á(~A)";
+        Text[ japanese ] = "è¡¨ç¤ºä¸­ã®è¡¨ã®å¾Œã«(~A)";
+        Text[ chinese_traditional ] = "åœ¨ç•¶å‰çš„å·¥ä½œè¡¨ä¹‹å¾Œ(~A)";
         Text[ arabic ] = "ÈÚÏ ÇáÌÏæá ÇáÍÇáí";
         Text[ greek ] = "ÌåôÜ áğü ôïí åíåñãü ğßíáêá";
-        Text[ korean ] = "ÇöÀç Ç¥ µÚ¿¡(~A)";
+        Text[ korean ] = "í˜„ì¬ í‘œ ë’¤ì—(~A)";
         Text[ turkish ] = "Açık tablonun ~arkasına";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Detrás de la ~hoja actual";
@@ -208,14 +208,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ french ] = "Feuille" ;
         Text [ dutch ] = "Tabel" ;
         Text [ portuguese ] = "Folha" ;
-        Text[ chinese_simplified ] = "¹¤×÷±í";
+        Text[ chinese_simplified ] = "å·¥ä½œè¡¨";
         Text[ russian ] = "Ëèñò";
         Text[ polish ] = "Arkusz";
-        Text[ japanese ] = "•\\";
-        Text[ chinese_traditional ] = "¤u§@ªí";
+        Text[ japanese ] = "è¡¨";
+        Text[ chinese_traditional ] = "å·¥ä½œè¡¨";
         Text[ arabic ] = "ÌÏæá";
         Text[ greek ] = "Ğßíáêáò";
-        Text[ korean ] = "½ÃÆ®";
+        Text[ korean ] = "ì‹œíŠ¸";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Hoja";
@@ -236,14 +236,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ PORTUGUESE_BRAZILIAN ] = "~Neu erstellen" ;
         Text [ SWEDISH ] = "Skapa ~ny" ;
         Text [ PORTUGUESE ] = "~Nova folha" ;
-        Text[ chinese_simplified ] = "ĞÂ½¨¹¤×÷±í(~N)";
+        Text[ chinese_simplified ] = "æ–°å»ºå·¥ä½œè¡¨(~N)";
         Text[ russian ] = "Íîâûé ëèñò";
         Text[ polish ] = "Utwórz ponownie";
-        Text[ japanese ] = "V‚µ‚­ì¬(~N)";
-        Text[ chinese_traditional ] = "·s¼W¤u§@ªí(~N)";
+        Text[ japanese ] = "æ–°ã—ãä½œæˆ(~N)";
+        Text[ chinese_traditional ] = "æ–°å¢å·¥ä½œè¡¨(~N)";
         Text[ arabic ] = "ÅäÔÇÁ ãä ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "»õ·Î ¸¸µé±â(~N)";
+        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
         Text[ turkish ] = "~Yeni tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crear una nueva";
@@ -264,14 +264,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ spanish ] = "~Núm. de hojas" ;
         Text [ french ] = "N~ombre" ;
         Text [ dutch ] = "Aan~tal" ;
-        Text[ chinese_simplified ] = "ÊıÄ¿(~O)";
+        Text[ chinese_simplified ] = "æ•°ç›®(~O)";
         Text[ russian ] = "×èñëî ëèñòîâ";
         Text[ polish ] = "Iloœæ";
-        Text[ japanese ] = "•\\‚Ì”(~O)";
-        Text[ chinese_traditional ] = "¼Æ¥Ø(~O)";
+        Text[ japanese ] = "è¡¨ã®æ•°(~O)";
+        Text[ chinese_traditional ] = "æ•¸ç›®(~O)";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "Áñé~èìüò";
-        Text[ korean ] = "°³¼ö(~O)";
+        Text[ korean ] = "ê°œìˆ˜(~O)";
         Text[ turkish ] = "A~det";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Núm. de hojas";
@@ -307,10 +307,10 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ swedish ] = "Na~mn";
         Text[ polish ] = "Nazwa";
         Text[ portuguese_brazilian ] = "Name";
-        Text[ japanese ] = "–¼‘O(~M)";
-        Text[ korean ] = "ÀÌ¸§(~M)";
-        Text[ chinese_simplified ] = "Ãû³Æ(~M)";
-        Text[ chinese_traditional ] = "¦WºÙ(~M)";
+        Text[ japanese ] = "åå‰(~M)";
+        Text[ korean ] = "ì´ë¦„(~M)";
+        Text[ chinese_simplified ] = "åç§°(~M)";
+        Text[ chinese_traditional ] = "åç¨±(~M)";
         Text[ turkish ] = "~Ad";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ catalan ] = "No~mbre";
@@ -337,14 +337,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ PORTUGUESE_BRAZILIAN ] = "~Aus Datei erstellen" ;
         Text [ SWEDISH ] = "Sk~apa från fil" ;
         Text [ PORTUGUESE ] = "~Criar a partir do ficheiro" ;
-        Text[ chinese_simplified ] = "´ÓÎÄ¼ş´´½¨(~F)";
+        Text[ chinese_simplified ] = "ä»æ–‡ä»¶åˆ›å»º(~F)";
         Text[ russian ] = "Ñîçäàòü èç ôàéëà";
         Text[ polish ] = "Utwórz z pliku";
-        Text[ japanese ] = "Ì§²Ù‚©‚çì¬(~F)";
-        Text[ chinese_traditional ] = "±qÀÉ®×·s¼W(~F)";
+        Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã‹ã‚‰ä½œæˆ(~F)";
+        Text[ chinese_traditional ] = "å¾æª”æ¡ˆæ–°å¢(~F)";
         Text[ arabic ] = "ÅäÔÇÁ ãä Çáãáİ";
         Text[ greek ] = "Äçìéïõñãß~á áğü áñ÷åßï";
-        Text[ korean ] = "£®£®ÆÄÀÏ·ÎºÎÅÍ¡¡¸¸µé±â(~F)";
+        Text[ korean ] = "ï¼ï¼íŒŒì¼ë¡œë¶€í„°ã€€ë§Œë“¤ê¸°(~F)";
         Text[ turkish ] = "~Dosyadan oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~A partir de archivo";
@@ -373,14 +373,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ PORTUGUESE_BRAZILIAN ] = "~Durchsuchen..." ;
         Text [ SWEDISH ] = "~Genomsök..." ;
         Text [ PORTUGUESE ] = "~Pesquisar" ;
-        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
+        Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
         Text[ russian ] = "Îáçîğ...";
         Text[ polish ] = "Przegl¹d~aj...";
-        Text[ japanese ] = "ŒŸõ(~B)...";
-        Text[ chinese_traditional ] = "ÂsÄı(~B)...";
+        Text[ japanese ] = "æ¤œç´¢(~B)...";
+        Text[ chinese_traditional ] = "ç€è¦½(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
         Text[ greek ] = "ÁíáæŞôçóç...";
-        Text[ korean ] = "°Ë»ö(~B)...";
+        Text[ korean ] = "ê²€ìƒ‰(~B)...";
         Text[ turkish ] = "~Tara...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xaminar...";
@@ -402,14 +402,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ PORTUGUESE_BRAZILIAN ] = "~Verknüpfen" ;
         Text [ SWEDISH ] = "Län~ka" ;
         Text [ PORTUGUESE ] = "~Ligar" ;
-        Text[ chinese_simplified ] = "Á´½Ó(~K)";
+        Text[ chinese_simplified ] = "é“¾æ¥(~K)";
         Text[ russian ] = "Ñâÿçàòü";
         Text[ polish ] = "Po³¹cz";
-        Text[ japanese ] = "Øİ¸(~K)";
-        Text[ chinese_traditional ] = "±¶®|(~K)";
+        Text[ japanese ] = "ï¾˜ï¾ï½¸(~K)";
+        Text[ chinese_traditional ] = "æ·å¾‘(~K)";
         Text[ arabic ] = "ÑÈØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "¸µÅ©(~K)";
+        Text[ korean ] = "ë§í¬(~K)";
         Text[ turkish ] = "Bağ~la";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vincular";
@@ -421,6 +421,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 192 , 8 ) ;
     };
 };
+
 
 
 
