@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 11:56:04 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 12:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@ protected:
 public:
     SmModel( SfxObjectShell *pObjSh = 0 );
     virtual ~SmModel();
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValueSequence ( const ::com::sun::star::uno::Sequence < ::rtl::OUString > & rPropertyNames);
 
     //XInterface
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);

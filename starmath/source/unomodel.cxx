@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-27 12:52:36 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 12:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,8 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::Ru
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
     throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException)
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
     SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
     if ( NULL == pDocSh )
