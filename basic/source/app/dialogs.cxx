@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: gh $ $Date: 2002-11-07 13:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 {
     FreeResource();
 
-    ResMgr* pRM = CREATERESMGR( svt );
+/*  ResMgr* pRM = CREATERESMGR( svt );
     ToolBox aOrig( this, ResId( 12345, pRM ) );
     delete pRM;
 
@@ -764,7 +764,7 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
     aTbConf.InsertSeparator();
     aTbConf.CopyItem( aOrig, 5 );
     aTbConf.CopyItem( aOrig, 6 );
-    aTbConf.CopyItem( aOrig, 7 );
+    aTbConf.CopyItem( aOrig, 7 );             */
     aTbConf.SetOutStyle( TOOLBOX_STYLE_FLAT );
 
 #ifndef DEBUG
