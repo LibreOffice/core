@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 17:49:38 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _VOS_THREAD_HXX
 #include <vos/thread.hxx>
 #endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
+#endif
 
 class SalYieldMutex : public NAMESPACE_VOS(OMutex)
 {
@@ -90,20 +93,59 @@ public:
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class SalInstanceData
+class X11SalInstance : public SalInstance
 {
-    friend class SalInstance;
+    SalYieldMutex*                  mpSalYieldMutex;
+    bool                            mbPrinterInit;
 
 public:
+    X11SalInstance();
+    virtual ~X11SalInstance();
 
-    void*                           mpFilterInst;
-    void*                           mpFilterCallback;
-    SalYieldMutex*                  mpSalYieldMutex;
-    bool(*mpEventCallback)(void*,void*,int);
-    void*                           mpEventInst;
-    bool(*mpErrorEventCallback)(void*,void*,int);
-    void*                           mpErrorEventInst;
-    bool                            mbPrinterInit;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual void                DestroyFrame( SalFrame* pFrame );
+
+    virtual SalObject*          CreateObject( SalFrame* pParent );
+    virtual void                DestroyObject( SalObject* pObject );
+
+    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
+                                                     long nDX, long nDY,
+                                                     USHORT nBitCount );
+    virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice );
+
+    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+                                               ImplJobSetup* pSetupData );
+    virtual void                DestroyInfoPrinter( SalInfoPrinter* pPrinter );
+    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
+    virtual void                DestroyPrinter( SalPrinter* pPrinter );
+
+    virtual void                GetPrinterQueueInfo( ImplPrnQueueList* pList );
+    virtual void                GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
+    virtual void                DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
+    virtual String             GetDefaultPrinter();
+
+    virtual SalSound*           CreateSalSound();
+    virtual SalTimer*           CreateSalTimer();
+    virtual SalOpenGL*          CreateSalOpenGL( SalGraphics* pGraphics );
+    virtual SalI18NImeStatus*   CreateI18NImeStatus();
+    virtual SalSystem*          CreateSalSystem();
+    virtual SalBitmap*          CreateSalBitmap();
+
+    virtual vos::IMutex*        GetYieldMutex();
+    virtual ULONG               ReleaseYieldMutex();
+    virtual void                AcquireYieldMutex( ULONG nCount );
+
+    virtual void                Yield( BOOL bWait );
+    virtual bool                AnyInput( USHORT nType );
+
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+
+
+    bool isPrinterInit() const
+    {
+        return mbPrinterInit;
+    }
 };
 
 #endif // _SV_SALINST_H
