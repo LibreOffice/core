@@ -24191,3 +24191,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?setFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx1985417413@@YAXABVSvxFont@@AAV2@@Z
 ?setFontSize@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx1985417413@@YAXAAVFont@@@Z
 ?ConfirmLeave@SvxSearchTabPage@@AAEEABVString@@@Z
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx281208119@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx2758312218@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
