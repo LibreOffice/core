@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 11:43:05 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1730,6 +1730,8 @@ sal_Bool FmXGridPeer::isDesignMode() throw( ::com::sun::star::uno::RuntimeExcept
 //------------------------------------------------------------------------------
 void FmXGridPeer::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     // Handle Column beruecksichtigen
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
