@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 08:04:14 $
+ *  last change: $Author: mba $ $Date: 2001-11-19 11:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
                 aGuard.clear();
                 ErrCode nErr;
                 if ( Warn_Impl() )
-                    nErr = SfxMacroLoader::loadMacro( aScript );
+                    nErr = SfxMacroLoader::loadMacro( aScript, mpObjShell );
                 else
                     nErr = 0;
             }

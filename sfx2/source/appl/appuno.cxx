@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-07 18:13:01 $
+ *  last change: $Author: mba $ $Date: 2001-11-19 11:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include "appuno.hxx"
 
+#include <svtools/sbx.hxx>
+
 #ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
 #endif
@@ -94,7 +96,11 @@
 #ifndef _BASMGR_HXX
 #include <basic/basmgr.hxx>
 #endif
+#ifndef _BASIC_SBUNO_HXX
+#include <basic/sbuno.hxx>
+#endif
 
+#include <svtools/sbxcore.hxx>
 #include <svtools/ownlist.hxx>
 #include <svtools/lckbitem.hxx>
 #include <svtools/stritem.hxx>
@@ -745,7 +751,7 @@ void SAL_CALL SfxMacroLoader::cancel(void) throw ( ::com::sun::star::uno::Runtim
 }
 
 // -----------------------------------------------------------------------
-ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
+ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* pSh )
     throw ( ::com::sun::star::uno::RuntimeException )
 {
     SfxApplication* pApp = SFX_APP();
@@ -759,6 +765,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
     String aMacro( rURL );
     sal_uInt16 nHashPos = aMacro.Search( '/', 8 );
     sal_uInt16 nArgsPos = aMacro.Search( '(' );
+    BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
     BasicManager *pBasMgr = 0;
     ErrCode nErr = ERRCODE_NONE;
 
@@ -768,7 +775,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
         // BasManager ermitteln
         String aBasMgrName( INetURLObject::decode(aMacro.Copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
         if ( !aBasMgrName.Len() )
-            pBasMgr = pApp->GetBasicManager();
+            pBasMgr = pAppMgr;
         else if ( aBasMgrName.EqualsAscii(".") )
             pBasMgr = SfxObjectShell::Current()->GetBasicManager();
         else
@@ -818,12 +825,37 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
                     aQuotedArgs += ')';
                 }
 
+                SbxBaseRef xOldVar;
+                SbxVariable *pCompVar = NULL;
+                if ( pSh && pBasMgr == pAppMgr )
+                {
+                    pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                            xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
+                    ::com::sun::star::uno::Any aAny;
+                    aAny <<= xInterface;
+                    if ( pCompVar )
+                    {
+                        xOldVar = pCompVar->GetObject();
+                        pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny ) );
+                    }
+                    else
+                    {
+                        SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
+                        xUnoObj->SetFlag( SBX_DONTSTORE );
+                        pAppMgr->GetLib(0)->Insert( xUnoObj );
+                        pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                    }
+                }
+
                 String aCall( '[' );
                 aCall += pMethod->GetName();
                 aCall += aQuotedArgs;
                 aCall += ']';
                 pMethod->GetParent()->Execute( aCall );
                 nErr = SbxBase::GetError();
+                if ( pCompVar )
+                    pCompVar->PutObject( xOldVar );
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;
@@ -837,7 +869,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
         String aCall( '[' );
         aCall += INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET);
         aCall += ']';
-        pApp->GetBasicManager()->GetLib(0)->Execute( aCall );
+        pAppMgr->GetLib(0)->Execute( aCall );
         nErr = SbxBase::GetError();
     }
 
