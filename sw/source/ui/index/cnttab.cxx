@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:34:14 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 16:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2222,6 +2222,9 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aAlphaDelimCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
     aCommaSeparatedCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
     aRelToStyleCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
+
+    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    SetMetric(aTabPosMF, aMetric);
 
     aSortDocPosRB.Check();
 
