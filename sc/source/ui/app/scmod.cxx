@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:31:08 $
+ *  last change: $Author: nn $ $Date: 2001-11-28 11:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,17 +1483,41 @@ void ScModule::OpenTeamDlg()
         pTeamDlg->Center();
 }
 
+SfxChildWindow* lcl_GetChildWinFromAnyView( USHORT nId )
+{
+    //  first try the current view
+
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nId );
+    if ( pChildWnd )
+        return pChildWnd;           // found in the current view
+
+    //  if not found there, get the child window from any open view
+    //  it can be open only in one view because nCurRefDlgId is global
+
+    pViewFrm = SfxViewFrame::GetFirst();
+    while ( pViewFrm )
+    {
+        pChildWnd = pViewFrm->GetChildWindow( nId );
+        if ( pChildWnd )
+            return pChildWnd;       // found in any view
+
+        pViewFrm = SfxViewFrame::GetNext( *pViewFrm );
+    }
+
+    return NULL;                    // none found
+}
+
 BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
     BOOL bIsModal = FALSE;
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
-    if ( nCurRefDlgId && pViewFrm )
+    if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
         {
             ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
@@ -1503,11 +1527,8 @@ BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
         else
         {
             // in 592 and above, the dialog isn't visible in other views
+            //  if the dialog is open but can't be accessed, disable input
 
-            //! find the dialog even if it was opened for a different view
-            //! (allow input for function ap from different document!)
-            //! also modify IsTableLocked, IsRefDialogOpen
-            //! until then, always disable input:
             bIsModal = TRUE;
         }
 
@@ -1530,13 +1551,12 @@ BOOL ScModule::IsTableLocked()
     //! (only keep function autopilot here for references to other documents)
 
     BOOL bLocked = FALSE;
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
     //  bisher nur bei ScAnyRefDlg
 
-    if ( nCurRefDlgId && pViewFrm )
+    if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
             bLocked = ((ScAnyRefDlg*)pChildWnd->GetWindow())->IsTableLocked();
         else
@@ -1552,11 +1572,10 @@ BOOL ScModule::IsRefDialogOpen()
     //! (only keep function autopilot here for references to other documents)
 
     BOOL bIsOpen = FALSE;
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
-    if ( nCurRefDlgId && pViewFrm )
+    if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
             bIsOpen = ((ScAnyRefDlg*)pChildWnd->GetWindow())->IsVisible();
         else
@@ -1572,11 +1591,10 @@ BOOL ScModule::IsFormulaMode()
     //! (only keep function autopilot here for references to other documents)
 
     BOOL bIsFormula = FALSE;
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
-    if ( nCurRefDlgId && pViewFrm )
+    if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
         {
             ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
@@ -1621,14 +1639,12 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
     //  in Ref-Dialogen wird hiermit auch das Zoom-In ausgeloest,
     //  wenn Start und Ende der Ref unterschiedlich sind
 
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-
     ScRange aNew = rRef;
     aNew.Justify();                 // immer "richtig herum"
 
-    if( nCurRefDlgId && pViewFrm )
+    if( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         DBG_ASSERT( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
@@ -1642,6 +1658,10 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
             }
 
             ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+
+            //  hide the (color) selection now instead of later from LoseFocus,
+            //  don't abort the ref input that causes this call (bDoneRefMode = FALSE)
+            pRefDlg->HideReference( FALSE );
             pRefDlg->SetReference( aNew, pDoc );
         }
     }
@@ -1660,10 +1680,9 @@ void ScModule::AddRefEntry()                        // "Mehrfachselektion"
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if ( nCurRefDlgId && pViewFrm )
+    if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         DBG_ASSERT( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
@@ -1688,10 +1707,9 @@ void ScModule::EndReference()
 
     //! ShowRefFrame am InputHdl, wenn der Funktions-AP offen ist ???
 
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if ( nCurRefDlgId && pViewFrm )
+    if ( nCurRefDlgId )
     {
-        SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
+        SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         DBG_ASSERT( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
