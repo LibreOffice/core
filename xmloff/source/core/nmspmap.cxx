@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:07:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::xmloff::token::GetXMLToken;
 using ::xmloff::token::XML_XMLNS;
+using ::xmloff::token::XML_URN_OASIS_NAMES_TC;
+using ::xmloff::token::XML_OPENDOCUMENT;
+using ::xmloff::token::XML_1_0;
 
 /* The basic idea of this class is that we have two two ways to search our
  * data...by prefix and by key. We use an STL hash_map for fast prefix
@@ -174,6 +177,24 @@ sal_uInt16 SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rNam
 
     return nKey;
 }
+
+sal_uInt16 SvXMLNamespaceMap::AddIfKnown( const OUString& rPrefix, const OUString& rName )
+{
+    sal_uInt16 nKey = GetKeyByName( rName );
+
+    DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
+                "SvXMLNamespaceMap::AddIfKnown: invalid namespace key" );
+
+    if( XML_NAMESPACE_NONE == nKey )
+        return XML_NAMESPACE_UNKNOWN;
+
+    if( XML_NAMESPACE_UNKNOWN != nKey &&
+        aNameHash.find ( rPrefix ) == aNameHash.end() )
+        nKey = _Add( rPrefix, rName, nKey );
+
+    return nKey;
+}
+
 
 sal_uInt16 SvXMLNamespaceMap::GetKeyByPrefix( const OUString& rPrefix ) const
 {
@@ -454,4 +475,67 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
                                             USHORT nIdxGuess ) const
 {
     return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
+}
+
+sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
+{
+    // Check if URN matches
+    // :urn:oasis:names:tc:[^:]*:xmlns:[^:]*:1.[^:]*
+    //                     |---|       |---| |-----|
+    //                     TC-Id      Sub-Id Version
+
+    sal_Int32 nNameLen = rName.getLength();
+    // :urn:oasis:names:tc.*
+    const OUString& rOasisURN = GetXMLToken( XML_URN_OASIS_NAMES_TC );
+    if( 0 != rName.compareTo( rOasisURN, rOasisURN.getLength() ) )
+        return sal_False;
+
+    // :urn:oasis:names:tc:.*
+    sal_Int32 nPos = rOasisURN.getLength();
+    if( nPos >= nNameLen || rName[nPos] != ':' )
+        return sal_False;
+
+    // :urn:oasis:names:tc:[^:]:.*
+    sal_Int32 nTCIdStart = nPos+1;
+    sal_Int32 nTCIdEnd = rName.indexOf( ':', nTCIdStart );
+    if( -1 == nTCIdEnd )
+        return sal_False;
+
+    // :urn:oasis:names:tc:[^:]:xmlns.*
+    nPos = nTCIdEnd + 1;
+    OUString sTmp( rName.copy( nPos ) );
+    const OUString& rXMLNS = GetXMLToken( XML_XMLNS );
+    if( 0!= sTmp.compareTo( rXMLNS, rXMLNS.getLength() ) )
+        return sal_False;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:.*
+    nPos += rXMLNS.getLength();
+    if( nPos >= nNameLen || rName[nPos] != ':' )
+        return sal_False;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:.*
+    nPos = rName.indexOf( ':', nPos+1 );
+    if( -1 == nPos )
+        return sal_False;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:[^:][^:][^:][^:]*
+    sal_Int32 nVersionStart = nPos+1;
+    if( nVersionStart+2 >= nNameLen ||
+        -1 != rName.indexOf( ':', nVersionStart ) )
+        return sal_False;
+
+    // :urn:oasis:names:tc:[^:]:xmlns:[^:]*:1\.[^:][^:]*
+    if( rName[nVersionStart] != '1' || rName[nVersionStart+1] != '.' )
+        return sal_False;
+
+    // replace [tcid] with current TCID and version with current version.
+    OUStringBuffer aNewName( nNameLen +20 );
+    aNewName.append( rName.copy( 0, nTCIdStart ) );
+    aNewName.append( GetXMLToken( XML_OPENDOCUMENT ) );
+    aNewName.append( rName.copy( nTCIdEnd, nVersionStart-nTCIdEnd ) );
+    aNewName.append( GetXMLToken( XML_1_0 ) );
+
+    rName = aNewName.makeStringAndClear();
+
+    return sal_True;
 }
