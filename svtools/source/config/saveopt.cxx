@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:27:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,16 @@
 #endif
 
 #include <osl/mutex.hxx>
+#include <comphelper/configurationhelper.hxx>
+#include <unotools/processfactory.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+namespace css = ::com::sun::star;
+
 class SvtSaveOptions_Impl;
 class SvtLoadOptions_Impl;
 
@@ -180,6 +184,7 @@ void SvtSaveOptions_Impl::SetAutoSaveTime( sal_Int32 n )
     {
         nAutoSaveTime = n;
         SetModified();
+        Commit();
     }
 }
 
@@ -207,6 +212,7 @@ void SvtSaveOptions_Impl::SetAutoSave( BOOL b )
     {
         bAutoSave = b;
         SetModified();
+        Commit();
     }
 }
 
@@ -531,6 +537,26 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
             }
         }
     }
+
+    try
+    {
+    css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
+        ::utl::getProcessServiceFactory(),
+        ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
+        ::comphelper::ConfigurationHelper::E_READONLY);
+
+    ::comphelper::ConfigurationHelper::readRelativeKey(
+        xCFG,
+        ::rtl::OUString::createFromAscii("AutoSave"),
+        ::rtl::OUString::createFromAscii("Enabled")) >>= bAutoSave;
+
+    ::comphelper::ConfigurationHelper::readRelativeKey(
+        xCFG,
+        ::rtl::OUString::createFromAscii("AutoSave"),
+        ::rtl::OUString::createFromAscii("TimeIntervall")) >>= nAutoSaveTime;
+    }
+    catch(const css::uno::Exception&)
+        { DBG_ERROR("Could not find needed informations for AutoSave feature."); }
 }
 
 SvtSaveOptions_Impl::~SvtSaveOptions_Impl()
@@ -673,13 +699,31 @@ void SvtSaveOptions_Impl::Commit()
     aNames.realloc(nRealCount);
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
+
+    css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
+        ::utl::getProcessServiceFactory(),
+        ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
+        ::comphelper::ConfigurationHelper::E_STANDARD);
+
+    ::comphelper::ConfigurationHelper::writeRelativeKey(
+        xCFG,
+        ::rtl::OUString::createFromAscii("AutoSave"),
+        ::rtl::OUString::createFromAscii("TimeIntervall"),
+        css::uno::makeAny(nAutoSaveTime));
+
+    ::comphelper::ConfigurationHelper::writeRelativeKey(
+        xCFG,
+        ::rtl::OUString::createFromAscii("AutoSave"),
+        ::rtl::OUString::createFromAscii("Enabled"),
+        css::uno::makeAny(bAutoSave));
+
+    ::comphelper::ConfigurationHelper::flush(xCFG);
 }
 
 // -----------------------------------------------------------------------
 
 void SvtSaveOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
 {
-    DBG_ERRORFILE( "properties have been changed" );
 }
 
 
