@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:39:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,26 @@ class MediaDescriptor : public SequenceAsHashMap
                     be created as new item. FALSE otherwhise.
          */
         sal_Bool addInputStream();
+
+        //---------------------------------------
+        /** @short  it checks if the descriptor describes a readonly stream.
+
+            @descr  The descriptor itself isnt changed doing so.
+                    It's only checked if the stream seems to be based
+                    of a real readonly file.
+
+            @Attention
+                    We dont check the property "ReadOnly" here. Because
+                    this property can be set from outside and overwrites
+                    the readonly state of  the stream.
+                    If e.g. the stream could be opened read/write ...
+                    but "ReadOnly" property is set to TRUE, this means:
+                    show a readonly UI on top of this read/write stream.
+
+            @return TRUE, if the stream must be interpreted as readonly ...
+                    FALSE otherwhise.
+         */
+        sal_Bool isStreamReadOnly() const;
 
     //-------------------------------------------
     // helper
