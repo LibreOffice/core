@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 11:11:24 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,38 +1158,6 @@ const SfxFilter* SfxExecutableFilterContainer::GetFilter4Protocol(
     return SfxFilterContainer::GetFilter4Protocol( rMed, nMust, nDont );
 }
 
-const SfxFilter* SfxExecutableFilterContainer::CheckForFolder( SfxMedium& rMed, SfxFilterFlags nMust, SfxFilterFlags nDont )
-{
-    INetProtocol eProt;
-    String aName;
-    const INetURLObject &rURL = rMed.GetURLObject();
-    aName = rURL.GetMainURL();
-    eProt = rURL.GetProtocol();
-
-    Reference < XContent > xContent( rMed.GetContent() );
-    FASTBOOL bHandled = sal_False;
-    sal_Bool bTest = sal_True;
-
-    if ( INET_PROT_FTP == eProt && SvBinding::ShouldUseFtpProxy( aName ) )
-        bTest = sal_False;
-
-    if ( bTest )
-    {
-        if ( xContent.is() )
-        {
-            Any aAny( UCB_Helper::GetProperty( xContent, WID_FLAG_IS_FOLDER ) );
-            Any aNotherAny( UCB_Helper::GetProperty( xContent, WID_FLAG_IS_DOCUMENT ) );
-            sal_Bool bIsDocument = TRUE;
-            sal_Bool bIsFolder = FALSE;
-            aAny >>= bIsFolder;
-            aNotherAny >>= bIsDocument;
-            bHandled = bIsFolder && !bIsDocument;
-        }
-    }
-
-    return bHandled ? GetExplorerFilter() : NULL;
-}
-
 //----------------------------------------------------------------
 
 const SfxFilter* SfxExecutableFilterContainer::GetDownloadFilter()
@@ -2272,39 +2240,15 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     }
 #endif
 
-    SfxFilterContainer *pCont = GetContainer( DEFINE_CONST_UNICODE("soffice") );
-    if ( pCont )
-    {
-        if ( !pFilter )
-            pFilter = SfxExecutableFilterContainer::CheckForFolder( rMedium, nMust, nDont );
-/*
-        if ( !pFilter )
-        {
-            // Wenn eine Komponente f"ur das vorhandene ::com::sun::star::util::URL-Pattern registriert ist und sie auch
-            // mit der speziellen ::com::sun::star::util::URL was anfangen kann, gibt createObject einen Loader zur"uck
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::utl::getProcessServiceFactory() );
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xReg( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.FrameLoaderFactory") ), ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  aRef = xReg->createInstance( aFileName );
-            if ( aRef.is() )
-                pFilter = pCont->GetFilter4FilterName(DEFINE_CONST_UNICODE("component"), nMust, nDont );
-        }
- */
-    }
-
     if( !pFilter )
         pFilter = SFX_APP()->GetFilterMatcher().GetFilter4Protocol( rMedium );
 
-    sal_Bool bCheckExternBrowser = rMedium.IsAllowedForExternalBrowser();
-    if ( bCheckExternBrowser && !GetContainer( DEFINE_CONST_UNICODE("soffice") ) )
-        bCheckExternBrowser = sal_False;
-    if ( bCheckExternBrowser && ( (nDont & SFX_EXE_FILTERFLAGS ) || (( nMust & SFX_EXE_FILTERFLAGS ) != nMust ) ) )
-        bCheckExternBrowser = sal_False;
-
+    sal_Bool bCheckExternBrowser = sal_False;
     if( pFilter )
     {
         pFilter = ResolveRedirection( pFilter, rMedium );
     }
-    else if ( rMedium.ProvidesData_Impl() )
+    else
     {
         // Falls Medium Remote, Zunaechst ueber Mimetypen pruefen ( nicht bei ExternBrowser, sofern dabei angeladen wird )
         if( !pFilter && rMedium.SupportsMIME_Impl() && ( !bCheckExternBrowser || rObj.GetProtocol() != INET_PROT_HTTP && rObj.GetProtocol() != INET_PROT_HTTPS ) )
@@ -2344,8 +2288,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
                 }
 
                 // Bei MIME Typen keinen Storage anfordern
-                if( !nErr && rMedium.SupportsMIME_Impl() && rMedium.ProvidesData_Impl() &&
-                    pFilter && !pFilter->UsesStorage() )
+                if( !nErr && rMedium.SupportsMIME_Impl() && pFilter && !pFilter->UsesStorage() )
                 {
                     rMedium.GetInStream();
                     nErr = rMedium.GetError();
@@ -2365,7 +2308,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
             }
         }
 
-        if( !pFilter && rMedium.ProvidesFile_Impl() && rMedium.IsDownloadDone_Impl() )
+        if( !pFilter && rMedium.IsDownloadDone_Impl() )
         {
             // dann ueber Storage CLSID
             // Remote macht das keinen Sinn, wenn der Download noch la"uft
@@ -2464,12 +2407,11 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
     const SfxFilter* pFilter = pOldFilter;
 
     sal_Bool bConsultUser = sal_False;
-    sal_Bool bProvidesData = rMedium.ProvidesData_Impl();
     sal_Bool bSupportsMime = rMedium.SupportsMIME_Impl();
 
     // Zunaechst, falls Filter mitkommt einmal testen, ob dieser in Ordnung ist.
     ErrCode nErr = ERRCODE_NONE;
-    if( pFilter && bProvidesData && ( pFilter->GetFilterContainer()->GetFlags() & SFX_FILTER_CONTAINER_FACTORY ) )
+    if( pFilter && ( pFilter->GetFilterContainer()->GetFlags() & SFX_FILTER_CONTAINER_FACTORY ) )
     {
         rMedium.StartDownload();
         if ( !rMedium.IsDownloadDone_Impl() )
@@ -2538,26 +2480,6 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
             pFilter = ResolveRedirection( pFilter, rMedium );
             *ppFilter = pFilter;
         }
-
-        if ( !pFilter && SFX_APP()->ShouldUseExternalBrowser( rMedium.GetName() ) )
-        {
-            sal_Bool bIExplorer = sal_False;
-            INetURLObject aObj( rMedium.GetName() );
-            if ( aObj.GetProtocol() == INET_PROT_HTTP )
-            {
-                bIExplorer = sal_True;
-            }
-            else if ( aObj.GetProtocol() == INET_PROT_FILE || aObj.GetProtocol() == INET_PROT_FTP )
-            {
-                String aExt = aObj.GetExtension().ToLowerAscii();
-                if ( aExt.EqualsAscii("htm") || aExt.EqualsAscii("html") )
-                    bIExplorer = sal_True;
-            }
-
-            if ( bIExplorer )
-                DBG_ERROR( "Das wäre ihr Preis gewesen ... " );
-        }
-
 /*
         // Erst jetzt auch das Betriebssystem einschalten
         if ( !pFilter && 0 != GetContainer( DEFINE_CONST_UNICODE(SFX_FCONTNR_EXTAPP) ) )
@@ -2610,7 +2532,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
 
         // Jetzt wird geprueft, ob das Modul auch einverstanden ist; ist das nicht der Fall, wird auf
         // jeden Fall auf ConsultUser umgeschaltet
-        if( pFilter && bProvidesData )
+        if( pFilter )
         {
             if( nErr == ERRCODE_SFX_NEVERCHECKCONTENT )
                 nErr = ERRCODE_NONE;
@@ -2698,11 +2620,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
             ( !pOldFilter->IsOwnTemplateFormat() || !pFilter->IsOwnFormat() ) ) ) &&
              nErr != ERRCODE_SFX_FORCEQUIET || bConsultUser )
         return ERRCODE_SFX_CONSULTUSER;
-/*
-    if( rMedium.SupportsMIME_Impl() && bProvidesData &&
-        pFilter && !pFilter->UsesStorage() )
-        rMedium.GetInStream();    // Bei MIME Typen keinen Storage anfordern
-*/
+
     if( !pOldFilter )
         pOldFilter = pFilter;
 

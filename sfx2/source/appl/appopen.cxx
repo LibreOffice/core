@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,8 +342,7 @@ ULONG CheckPasswd_Impl
 
 {
     ULONG nRet=0;
-    if( ( !pFile->GetFilter() || pFile->GetFilter()->UsesStorage() ) &&
-        pFile->ProvidesData_Impl() && pFile->IsStorage())
+    if( ( !pFile->GetFilter() || pFile->GetFilter()->UsesStorage() ) && pFile->IsStorage() )
     {
         SvStorageRef aRef = pFile->GetStorage();
         if(aRef.Is())
@@ -511,7 +510,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
 void SfxApplication::LoadEa_Impl(SfxMedium &rMedium, SfxObjectShell& rObj)
 {
-    if ( !rMedium.ProvidesData_Impl() || !rMedium.IsStorage() )
+    if ( !rMedium.IsStorage() )
         return;
     const SfxFilter *pFilter = rMedium.GetFilter();
     if ( !pFilter || !pFilter->IsOwnFormat() )
