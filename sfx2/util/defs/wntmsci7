@@ -8736,3 +8736,15 @@ threadFunc
 ?release@?$WeakImplHelper2@VXStatusIndicator@task@star@sun@com@@VXEventListener@lang@345@@cppu@@WBI@AAXXZ
 ?s_cd@?$WeakImplHelper2@VXStatusIndicator@task@star@sun@com@@VXEventListener@lang@345@@cppu@@0Uclass_data2@2@A
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx38082001@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx630728847@@YAXABVSbxVariableRef@@PAX@Z
+??0INetURLObject@@QAE@ABVString@@W4EncodeMechanism@0@G@Z
+?ChangeState@SfxInternetPage@@AAEXW4STATE@1@@Z
+?ClickHdlBrowseURL@SfxInternetPage@@AAEJPAVPushButton@@@Z
+?ClickHdlForward@SfxInternetPage@@AAEJPAVControl@@@Z
+?ClickHdlNoUpdate@SfxInternetPage@@AAEJPAVControl@@@Z
+?ClickHdlReload@SfxInternetPage@@AAEJPAVControl@@@Z
+?DeactivatePage@SfxInternetPage@@MAEHPAVSfxItemSet@@@Z
+?EnableForward@SfxInternetPage@@AAEXE@Z
+?EnableNoUpdate@SfxInternetPage@@AAEXE@Z
+?EnableReload@SfxInternetPage@@AAEXE@Z
+?reset@?$auto_ptr@VString@@@_STL@@QAEXPAVString@@@Z
