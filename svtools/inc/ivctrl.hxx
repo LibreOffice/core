@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:41:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,8 @@ protected:
 
     virtual void        FillLayoutData() const;
 
+    void                CallImplEventListeners(ULONG nEvent, void* pData);
+
 public:
 
                         SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );
@@ -413,9 +415,6 @@ public:
     void                SetNoSelection();
 
     // ACCESSIBILITY ==========================================================
-
-    void                AddEventListener( const Link& rEventListener );
-    void                RemoveEventListener( const Link& rEventListener );
 
     /** Creates and returns the accessible object of the Box. */
     virtual ::com::sun::star::uno::Reference<
