@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:05:50 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 14:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,7 +1191,7 @@ String SwView::GetSelectionText( sal_Bool bCompleteWrds )
 /*-----------------09/16/97 09:50am-----------------
 
 --------------------------------------------------*/
-String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrd,
+String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrds,
                                        sal_Bool bEraseTrail )
 {
     String sReturn;
