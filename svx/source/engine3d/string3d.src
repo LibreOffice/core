@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:03:27 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ String RID_SVX_3D_UNDO_EXTRUDE
     Text[ russian ] = "Ρξηδΰςό ξαϊεκς ύκρςπσηθθ";
     Text[ polish ] = "Utwσrz obiekt wyt³aczany";
     Text[ japanese ] = "•‚‚«o‚µµΜήΌήªΈΔ‚Μμ¬";
-    Text[ chinese_traditional ] = "¥Ν¦¨ΌÒΐ£¦΅ª«¥σ";
+    Text[ chinese_traditional ] = "²£¥ΝΌÒΐ£¦΅ª«¥σ";
     Text[ arabic ] = "ΕδΤΗΑ ίΗΖδ ήΠέ";
     Text[ greek ] = "Δημιουργία αντικειμένου εξώθησης";
     Text[ korean ] = "ΐΤΓΌΈι °³ΓΌ ΐΫΌΊ";
