@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:38:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
 #endif
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 // ---------------------------------------------------------------------------
 
@@ -96,26 +99,26 @@ private:
     long            nSmallWidth;
     long            nBigWidth;
 
-    USHORT          nSize;
+    SCCOLROW        nSize;
 
-    USHORT          nMarkStart;
-    USHORT          nMarkEnd;
+    SCCOLROW        nMarkStart;
+    SCCOLROW        nMarkEnd;
     BOOL            bMarkRange;
 
     BOOL            bDragging;              // Groessen aendern
-    USHORT          nDragNo;
+    SCCOLROW        nDragNo;
     long            nDragStart;
     long            nDragPos;
     BOOL            bDragMoved;
 
     BOOL            bIgnoreMove;
 
-    long            GetScrPos( USHORT nEntryNo );
-    USHORT          GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder );
+    long            GetScrPos( SCCOLROW nEntryNo );
+    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder );
 
     void            ShowDragHelp();
 
-    void            DoPaint( USHORT nStart, USHORT nEnd );
+    void            DoPaint( SCCOLROW nStart, SCCOLROW nEnd );
 
 protected:
                     //  von Window ueberladen
@@ -131,16 +134,16 @@ protected:
 
                     //  neue Methoden
 
-    virtual USHORT  GetPos() = 0;                               // aktuelle Position (Scrolling)
-    virtual USHORT  GetEntrySize( USHORT nEntryNo ) = 0;        // Breite / Hoehe (Pixel)
-    virtual String  GetEntryText( USHORT nEntryNo ) = 0;
+    virtual SCCOLROW    GetPos() = 0;                               // aktuelle Position (Scrolling)
+    virtual USHORT  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // Breite / Hoehe (Pixel)
+    virtual String  GetEntryText( SCCOLROW nEntryNo ) = 0;
 
-    virtual USHORT  GetHiddenCount( USHORT nEntryNo );
+    virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo );
     virtual BOOL    IsLayoutRTL();
     virtual BOOL    IsMirrored();
 
-    virtual void    SetEntrySize( USHORT nPos, USHORT nNewWidth ) = 0;
-    virtual void    HideEntries( USHORT nStart, USHORT nEnd ) = 0;
+    virtual void    SetEntrySize( SCCOLROW nPos, USHORT nNewWidth ) = 0;
+    virtual void    HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) = 0;
 
     virtual void    SetMarking( BOOL bSet );
     virtual void    SelectWindow();
@@ -153,14 +156,14 @@ protected:
 
 public:
             ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
-                                USHORT nNewSize, USHORT nNewFlags );
+                                SCCOLROW nNewSize, USHORT nNewFlags );
             ~ScHeaderControl();
 
     void    SetIgnoreMove(BOOL bSet)            { bIgnoreMove = bSet; }
 
     void    StopMarking();
 
-    void    SetMark( BOOL bNewSet, USHORT nNewStart, USHORT nNewEnd );
+    void    SetMark( BOOL bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
 
     long    GetWidth() const                    { return nWidth; }
     long    GetSmallWidth() const               { return nSmallWidth; }
