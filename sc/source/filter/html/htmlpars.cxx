@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:47:01 $
+ *  last change: $Author: er $ $Date: 2001-07-20 09:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 #include "htmlpars.hxx"
 #include "global.hxx"
@@ -1949,7 +1952,10 @@ void ScHTMLParser::ProcToken( ImportInfo* pInfo )
             if( RTL_TEXTENCODING_DONTKNOW != eEnc &&
                     eEnc < RTL_TEXTENCODING_STD_COUNT &&
                     pParser->GetSrcEncoding() < RTL_TEXTENCODING_STD_COUNT )
+            {
+                eEnc = GetExtendedCompatibilityTextEncoding( eEnc );
                 pParser->SetSrcEncoding( eEnc );
+            }
         }
         break;
         case HTML_TITLE_ON:
