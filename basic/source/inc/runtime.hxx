@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-01 10:59:25 $
+ *  last change: $Author: ab $ $Date: 2001-08-22 10:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
+#include <tools/solmath.hxx>
 #endif
 
 #include <vector>
@@ -479,6 +482,21 @@ public:
 
     SbxBase* FindElementExtern( const String& rName );
 };
+
+inline void checkArithmeticOverflow( double d )
+{
+    if( SolarMath::IsINF( d ) || SolarMath::IsNAN( d ) )
+        StarBASIC::Error( SbERR_MATH_OVERFLOW );
+}
+
+inline void checkArithmeticOverflow( SbxVariable* pVar )
+{
+    if( pVar->GetType() == SbxDOUBLE )
+    {
+        double d = pVar->GetDouble();
+        checkArithmeticOverflow( d );
+    }
+}
 
 // Hilfsfunktion, um aktives Basic zu finden
 StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic );
