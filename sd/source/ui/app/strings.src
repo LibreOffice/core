@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:01:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,16 +934,6 @@ String STR_WARN_OBJECT_EXISTS
 {
     Text [ de ] = "Der Objektname ist schon vorhanden. Geben Sie bitte einen anderen Namen ein" ;
     Text [ en-US ] = "The object name already exists. Please enter another name." ;
-};
-String STR_FORMAT_STRING
-{
-    Text [ de ] = "Unformatierter Text" ;
-    Text [ en-US ] = "Unformatted Text" ;
-};
-String STR_FORMAT_RTF
-{
-    Text [ de ] = "Formatierter Text (RTF)" ;
-    Text [ en-US ] = "Formatted Text (RTF)" ;
 };
 String STR_SNAPDLG_SETLINE
 {
@@ -2828,13 +2818,6 @@ String STR_UNDO_APPLY_3D_FAVOURITE
 {
     Text [ de ] = "3D Favorit zuweisen" ;
     Text [ en-US ] = "Apply 3D favorite";
-};
-
-String STR_ERROR_OBJNOCREATE_PLUGIN
-{
-    Comment = "% wird durch URL-Namen ersetzt" ;
-    Text [ de ] = "PlugIn aus Dokument % kann nicht eingefügt werden." ;
-    Text [ en-US ] = "Plug-in from document % could not be inserted." ;
 };
 
 String STR_UNDO_GRAFFILTER
