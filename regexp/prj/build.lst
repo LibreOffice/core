@@ -1,0 +1,3 @@
+re  regexp : offapi comphelper i18nutil NULL
+re  regexp                                      usr1    -   all re_mkout NULL
+re  regexp\source                               nmake   -   all re_source NULL
