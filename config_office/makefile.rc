@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: svesik $ $Date: 2000-12-20 00:56:44 $
+#   last change: $Author: svesik $ $Date: 2001-01-24 16:40:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ RC_SUBDIRS =  \
 	officecfg \
 	offmgr \
 	offuh \
+	package \
 	rdbmaker \
 	readlicense \
 	registry \
@@ -197,6 +198,7 @@ configure .PHONY SETDIR=config_office :
 
 DocumentProperties : svtools
 UnoControls : cppuhelper offuh tools
+XmlSearch : external
 automation : basic
 basctl : svx
 basic : goodies
@@ -228,6 +230,7 @@ jut : javaunohelper
 offapi : udkapi
 offmgr : basctl sch sim2 starmath uui
 offuh : codemaker drafts
+package : tools unotools
 rdbmaker : cppuhelper
 registry : store
 remotebridges : bridges rdbmaker
@@ -251,7 +254,7 @@ starmath : svx
 stoc : bridges rdbmaker
 store : vos
 svtools : toolkit ucbhelper unotools
-svx : connectivity xmloff
+svx : connectivity xmloff sfx2
 sw : connectivity offmgr sd
 toolkit : vcl
 tools : external vos
@@ -266,7 +269,7 @@ uui : svtools
 vcl : rsc sot ucbhelper unotools
 vos : sal
 wizards : offmgr
-xmlhelp : jut
+xmlhelp : external jut XmlSearch
 xmloff : lingu
 
 # 
