@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mainwn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:12:32 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,9 @@ void EndProgress( SwDocShell *pDocShell )
             pProgressContainer->Remove( i );
             delete pProgress->pProgress;
             delete pProgress;
-            if ( !pProgressContainer->Count() )
+            //#112337# it may happen that the container has been removed
+            //while rescheduling
+            if ( pProgressContainer && !pProgressContainer->Count() )
                 delete pProgressContainer, pProgressContainer = 0;
         }
     }
