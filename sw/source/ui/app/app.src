@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:29:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,8 +285,6 @@ String STR_PAGE_COUNT_MACRO
         FN_TABLE_MODE_FIX_PROP ;\
         FN_TABLE_MODE_VARIABLE ;\
         FN_PRINT_LAYOUT ;\
-        FN_INSERT_HEADER;\
-        FN_INSERT_FOOTER;\
         FN_TABLE_AUTOSUM;\
         FN_PREVIEW_PRINT_OPTIONS;\
         FN_PREVIEW_ZOOM;\
@@ -333,7 +331,7 @@ String STR_PAGE_COUNT_MACRO
                                         \
         };                              \
     IdCount = {                         \
-        164;                            \
+        162;                            \
     };
 
 
