@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-30 15:59:24 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 07:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XBINARYSTREAMRESOLVER_HPP_
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_SAXINVALIDCHARACTEREXCEPTION_HPP_
+#include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
@@ -1632,6 +1635,12 @@ void SvXMLExport::StartElement(const OUString& rName,
                 xHandler->ignorableWhitespace( sWS );
             xHandler->startElement( rName, GetXAttrList() );
         }
+        catch ( SAXInvalidCharacterException& e )
+        {
+            Sequence<OUString> aPars(1);
+            aPars[0] = rName;
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, NULL );
+        }
         catch ( SAXException& e )
         {
             Sequence<OUString> aPars(1);
@@ -1650,6 +1659,12 @@ void SvXMLExport::Characters(const ::rtl::OUString& rChars)
         try
         {
             xHandler->characters(rChars);
+        }
+        catch ( SAXInvalidCharacterException& e )
+        {
+            Sequence<OUString> aPars(1);
+            aPars[0] = rChars;
+            SetError( XMLERROR_SAX|XMLERROR_FLAG_WARNING, aPars, e.Message, NULL );
         }
         catch ( SAXException& e )
         {
