@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:21:10 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
     void                                                                        updateFromModel();
+    void                                                                        peerCreated();
     sal_Bool                                                                    IsUpdatingModel() const { return mbUpdatingModel; }
     void                                                                        StartUpdatingModel()    { mbUpdatingModel = sal_True; }
     void                                                                        EndUpdatingModel()      { mbUpdatingModel = sal_False; }
