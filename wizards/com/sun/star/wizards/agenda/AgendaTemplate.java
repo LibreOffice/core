@@ -2,8 +2,8 @@
  *
  *  $RCSfile: AgendaTemplate.java,v $
  *
- *  $Revision: 1.3 $
- *  last change: $Author: kz $  $Date: 2004-11-27 09:04:17 $
+ *  $Revision: 1.4 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -56,7 +56,6 @@
  *  Contributor(s): _______________________________________
  *
  */
-
 package com.sun.star.wizards.agenda;
 
 import java.util.Calendar;
@@ -89,6 +88,7 @@ import com.sun.star.util.XSearchable;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.wizards.text.TextSectionHandler;
@@ -466,12 +466,12 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
             docNullTime = calendar.getTimeInMillis();
 
-            dateFormat = Desktop.getNumberFormatterKey( nfs, NumberFormatIndex.DATE_SYSTEM_LONG );
-            timeFormat = Desktop.getNumberFormatterKey( nfs, NumberFormatIndex.TIME_HHMM );
+            dateFormat = NumberFormatter.getNumberFormatterKey( nfs, NumberFormatIndex.DATE_SYSTEM_LONG );
+            timeFormat = NumberFormatter.getNumberFormatterKey( nfs, NumberFormatIndex.TIME_HHMM );
 
 
-            dateFormatter = Desktop.createNumberFormatter(xMSF, nfs );
-            timeFormatter = Desktop.createNumberFormatter(xMSF, nfs );
+            dateFormatter = NumberFormatter.createNumberFormatter(xMSF, nfs );
+            timeFormatter = NumberFormatter.createNumberFormatter(xMSF, nfs );
         }
         catch (Exception ex) {
             ex.printStackTrace();
