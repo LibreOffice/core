@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 14:52:22 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,15 +110,11 @@
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "ucbhelp.hxx"
 #include "appuno.hxx"
 
 SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         bServer( false ),
-        pAppCfg (0),
         pProgress(0),
         pPool(0),
         pFactArr(0),
