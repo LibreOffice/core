@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-12-06 13:48:30 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 16:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <ide_pch.hxx>
 #pragma hdrstop
 
-#define __PRIVATE 1
+#define _SOLAR__PRIVATE 1
 
 // #define _SVX_NOIDERESIDS
 
