@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: jp $ $Date: 2000-09-27 12:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
+#endif
+#ifndef SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
 #endif
 #ifndef _SFX_INIMGR_HXX
 #include <sfx2/inimgr.hxx>
@@ -414,43 +417,11 @@ void SwGlossaryList::Update()
                 sName += pGroup->sName.GetToken(0, GLOS_DELIM);
                 sName += String::CreateFromAscii(pGlosExt);
 
-                uno::Reference< XCommandEnvironment > xCmdEnv;
-                ::ucb::Content aTestContent(
-#if SUPD<591
-                    SW_MOD()->GetContentBroker(),
-#endif
-                sName,
-                xCmdEnv);
+                FStatHelper::GetModifiedDateTimeOfFile( sName,
+                                                &pGroup->aDateModified,
+                                                &pGroup->aDateModified );
 
-#ifdef DEBUG
-                Reference< beans::XPropertySetInfo > xInfo = aTestContent.  getProperties();
-                Sequence< beans::Property > aSeq = xInfo->getProperties(  );
-                const beans::Property* pProps = aSeq.getConstArray();
-                OUString sMsg;
-                for(int nProp = 0; nProp < aSeq.getLength(); nProp++)
-                {
-                    sMsg += pProps[nProp].Name;
-                    sMsg += OUString::createFromAscii("  ");
-                }
-
-#endif
-
-                try
-                {
-                    uno::Any aAny = aTestContent.getPropertyValue( OUString::createFromAscii("DateModified") );
-                    if(aAny.hasValue())
-                    {
-                         const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
-                        pGroup->aDateModified = ::DateTime(
-                                    ::Date(pDT->Day, pDT->Month, pDT->Year),
-                                    ::Time(pDT->Hours, pDT->Minutes, pDT->Seconds, pDT->HundredthSeconds));
-                    }
-                }
-                catch(...)
-                {
-                }
-
-                aGroupArr.Insert(pGroup, i);
+                aGroupArr.Insert( pGroup, i );
             }
         }
         bFilled = TRUE;
@@ -462,9 +433,6 @@ void SwGlossaryList::Update()
               try
             {
                 ::ucb::Content aCnt(
-    #if SUPD<591
-                SW_MOD()->GetContentBroker(),
-    #endif
                         *(*pPathArr)[nPath], uno::Reference< XCommandEnvironment >());
                    Reference< sdbc::XResultSet > xResultSet;
                   Sequence< OUString > aProps(2);
@@ -561,7 +529,7 @@ void SwGlossaryList::Update()
 ********************************************************************/
 
 
-void __EXPORT SwGlossaryList::Timeout()
+void SwGlossaryList::Timeout()
 {
     // nur, wenn eine SwView den Fokus hat, wird automatisch upgedated
     if(::GetActiveView())
@@ -657,11 +625,14 @@ void    SwGlossaryList::ClearGroups()
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.1.1.1 2000-09-18 17:14:50 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.2 2000-09-27 12:27:59 jp Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:50  hr
+    initial import
+
     Revision 1.29  2000/09/18 16:06:17  willem.vandorp
     OpenOffice header added.
 
