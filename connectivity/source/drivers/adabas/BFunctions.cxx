@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BFunctions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:30:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,14 +147,20 @@ sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath)
         return sal_True;
 
     rtl_uString* pPath = NULL;
-    ::rtl::OUString sTemp = ::rtl::OUString::createFromAscii("DBROOT");
-    if(osl_getEnvironment(sTemp.pData,&pPath) == osl_Process_E_None && pPath)
+    ::rtl::OUString sTemp(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
+    if ( osl_getEnvironment(sTemp.pData,&pPath) == osl_Process_E_None && pPath )
     {
 
 #if ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX) || defined(MACOSX)
         _rPath = ::rtl::OUString(pPath);
         _rPath += ::rtl::OUString::createFromAscii("/lib/");
 #endif
+        rtl_uString_release(pPath);
+    }
+    else
+    {
+        _rPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The variable DBROOT is not set."));
+        return sal_False;
     }
 #if defined(WIN) || defined(WNT)
     _rPath += ::rtl::OUString::createFromAscii("SQLOD32.DLL");
