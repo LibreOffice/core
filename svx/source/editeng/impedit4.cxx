@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 09:21:17 $
+ *  last change: $Author: mt $ $Date: 2002-08-05 11:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1366,22 +1366,27 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
         sal_Bool bParaAttribs = sal_False;
         if ( bNewContent || ( ( n > 0 ) && ( n < (nContents-1) ) ) )
         {
-            // nur dann Style und ParaAttribs, wenn neuer Absatz, oder
-            // komplett inneliegender...
-            bParaAttribs = pC->GetParaAttribs().Count() ? sal_True : sal_False;
-            if ( GetStyleSheetPool() && pC->GetStyle().Len() )
+            bParaAttribs = sal_False;
+            // #101512# Don't overwrite level/style from existing paragraph in OutlineView
+            if ( !aStatus.IsOutliner() || n )
             {
-                SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() );
-                DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );
-                SetStyleSheet( nPara, pStyle );
-            }
-            if ( !bConvertItems )
-                SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), pC->GetParaAttribs() );
-            else
-            {
-                SfxItemSet aAttribs( GetEmptyItemSet() );
-                ConvertAndPutItems( aAttribs, pC->GetParaAttribs(), &eSourceUnit, &eDestUnit );
-                SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), aAttribs );
+                // nur dann Style und ParaAttribs, wenn neuer Absatz, oder
+                // komplett inneliegender...
+                bParaAttribs = pC->GetParaAttribs().Count() ? sal_True : sal_False;
+                if ( GetStyleSheetPool() && pC->GetStyle().Len() )
+                {
+                    SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() );
+                    DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );
+                    SetStyleSheet( nPara, pStyle );
+                }
+                if ( !bConvertItems )
+                    SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), pC->GetParaAttribs() );
+                else
+                {
+                    SfxItemSet aAttribs( GetEmptyItemSet() );
+                    ConvertAndPutItems( aAttribs, pC->GetParaAttribs(), &eSourceUnit, &eDestUnit );
+                    SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), aAttribs );
+                }
             }
             if ( bNewContent && bUsePortionInfo )
             {
