@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ english_us ] = "Placeholder expression";
         Text[ chinese_simplified ] = "Í¨Åä·û±í´ï";
         Text[ russian ] = "Âûğàæåíèå ìåòêè-çàïîëíèòåëÿ";
-        Text[ polish ] = "Wyra¿enie znaku-wype³niacza";
+        Text[ polish ] = "Wyra¿enie symbolu wieloznacznego";
         Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ‚Ì•\\Œ»";
         Text[ chinese_traditional ] = "³q°t²Å-ªí¹F";
         Text[ arabic ] = "ÊÚÈíÑ ÚäÕÑ äÇÆÈ";
@@ -733,7 +733,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ dutch ] = "~Help";
         Text[ spanish ] = "~Ayuda";
         Text[ english_us ] = "~Help";
-        Text[ chinese_simplified ] = "ÇóÖú(~H)";
+        Text[ chinese_simplified ] = "°ïÖú(~H)";
         Text[ russian ] = "Ñï~ğàâêà";
         Text[ polish ] = "~Pomoc";
         Text[ japanese ] = "ÍÙÌß(~H)";
@@ -854,7 +854,7 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ spanish ] = "Ha ocurrido un error desconocido. La búsqueda no se pudo completar.";
     Message[ italian ] = "Impossibile terminare la ricerca. Si è verificato un errore non ben definito.";
     Message[ danish ] = "Der opstod en ukendt fejl. Det var ikke muligt at afslutte søgningen!";
-    Message[ swedish ] = "Ett okänt fel har uppstått. Sökningen kunde inte avslutas!";
+    Message[ swedish ] = "Det har uppstått ett okänt fel. Det gick inte att avsluta sökningen!";
     Message[ polish ] = "Wyst¹pi³ bli¿ej nieznany b³¹d. Wyszukiwania ne mo¿na by³o zakoñczyæ!";
     Message[ portuguese_brazilian ] = "Es trat ein nicht näher bekannter Fehler auf. Die Suche konnte nicht beendet werden !";
     Message[ japanese ] = "‚æ‚­‚í‚©‚ç‚È‚¢´×°‚ª¶‚¶‚Ü‚µ‚½BŒŸõ‚ğI—¹‚Å‚«‚Ü‚¹‚ñ!";
