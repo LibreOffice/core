@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-05 12:04:23 $
+ *  last change: $Author: ka $ $Date: 2001-09-28 13:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ TYPEINIT1( SdPresViewShell, SdDrawViewShell );
 // -----------------------------------------------------------------------------
 
 SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, SfxViewShell *pOldShell ) :
-    SdDrawViewShell( pFrame, pOldShell )
+    SdDrawViewShell( pFrame, pOldShell ),
+    mbShowStarted( sal_False )
 {
     if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         maOldVisArea = pDocSh->GetVisArea( ASPECT_CONTENT );
@@ -117,7 +118,8 @@ SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, SfxViewShell *pOldShell 
 // -----------------------------------------------------------------------------
 
 SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, const SdDrawViewShell& rShell ) :
-    SdDrawViewShell( pFrame, rShell )
+    SdDrawViewShell( pFrame, rShell ),
+    mbShowStarted( sal_False )
 {
     if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         maOldVisArea = pDocSh->GetVisArea( ASPECT_CONTENT );
@@ -148,6 +150,40 @@ SdPresViewShell::~SdPresViewShell()
 
 // -----------------------------------------------------------------------------
 
+void SdPresViewShell::Activate( BOOL bIsMDIActivate )
+{
+    SfxViewShell::Activate( bIsMDIActivate );
+
+    if( bIsMDIActivate )
+    {
+        SdView*     pView = GetView();
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
+
+        GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+
+        if( pFuSlideShow && !pFuSlideShow->IsTerminated() )
+            pFuSlideShow->Activate();
+
+        if( pFuActual )
+            pFuActual->Activate();
+
+        if( pView )
+            pView->ShowMarkHdl( NULL );
+    }
+
+    ReadFrameViewData( pFrameView );
+    pDocSh->Connect( this );
+    pDrView->UpdateSelectionClipboard( FALSE );
+
+    if( pFuSlideShow && !mbShowStarted )
+    {
+        pFuSlideShow->StartShow();
+        mbShowStarted = sal_True;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxRequest& rReq )
 {
     SFX_REQUEST_ARG( rReq, pAlwaysOnTop, SfxBoolItem, ATTR_PRESENT_ALWAYS_ON_TOP, FALSE );
@@ -170,6 +206,5 @@ void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxReques
     pShell->GetViewFrame()->GetDispatcher()->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
     pShell->GetViewFrame()->Show();
     pShell->pFuSlideShow = new FuSlideShow( pShell, pShell->pWindow, pShell->pDrView, pShell->pDoc, rReq );
-    pShell->pFuSlideShow->StartShow();
-    pShell->pFuSlideShow->Activate();
+    pShell->GetActiveWindow()->GrabFocus();
 }
