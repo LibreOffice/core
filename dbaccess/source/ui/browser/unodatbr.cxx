@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 11:40:07 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 #ifndef _SFXDISPATCH_HXX //autogen
@@ -227,7 +230,12 @@
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
 #endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
+#endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -371,7 +379,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
         m_pSplitter->Show();
 
-        m_pTreeView = new DBTreeView(getContent(), WB_TABSTOP);
+        m_pTreeView = new DBTreeView(getContent(), m_xMultiServiceFacatory, WB_TABSTOP);
         m_pTreeView->Show();
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
@@ -394,6 +402,8 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         getContent()->SetUniqueId(UID_CTL_CONTENT);
         if (getContent()->getVclControl()->GetHeaderBar())
             getContent()->getVclControl()->GetHeaderBar()->SetHelpId(HID_DATABROWSE_HEADER);
+
+        InvalidateFeature(ID_BROWSER_EXPLORER);
     }
 
     return sal_True;
@@ -1013,6 +1023,7 @@ void SbaTableQueryBrowser::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/FormLetter")]    = ID_BROWSER_FORMLETTER;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertColumns")] = ID_BROWSER_INSERTCOLUMNS;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertContent")] = ID_BROWSER_INSERTCONTENT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/ToggleExplorer")] = ID_BROWSER_EXPLORER;
 
             // TODO reenable our own code if we really have a handling for the formslots
 //      ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToFirst"),        SID_FM_RECORD_FIRST     ),
@@ -1028,6 +1039,13 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
 {
     FeatureState aReturn;
         // (disabled automatically)
+
+    if (ID_BROWSER_EXPLORER == nId)
+    {   // this slot is available even if no form is loaded
+        aReturn.bEnabled = sal_True;
+        aReturn.aState = ::cppu::bool2any(haveExplorer());
+        return aReturn;
+    }
 
     try
     {
@@ -1142,6 +1160,10 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 {
     switch (nId)
     {
+        case ID_BROWSER_EXPLORER:
+            toggleExplorer();
+            break;
+
         case ID_BROWSER_EDITDOC:
             SbaXDataBrowserController::Execute(nId);
             break;
@@ -1301,13 +1323,22 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
     SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_DBTEXTITEM));
     OSL_ENSHURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");
     String aName(pString->GetText());
-    Any aValue(m_xDatabaseContext->getByName(aName));
+    Any aValue;
+    try { aValue = m_xDatabaseContext->getByName(aName); }
+    catch(Exception&) { }
     if(pData->bTable)
     {
         Reference<XPropertySet> xProp;
         aValue >>= xProp;
         ::rtl::OUString sPwd, sUser;
         sal_Bool bPwdReq = sal_False;
+
+        if (!xProp.is())
+        {
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnExpandEntry: could not retrieve the data source object!");
+            return 0;   // indicates an error
+        }
+
         try
         {
             xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
@@ -1322,6 +1353,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         SQLExceptionInfo aInfo;
         try
         {
+            WaitObject aWaitCursor(getContent());
 
             Reference<XConnection> xConnection;  // supports the service sdb::connection
             if(bPwdReq && !sPwd.getLength())
@@ -1335,14 +1367,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 {   // instantiate the default SDB interaction handler
                     Reference< XInteractionHandler > xHandler(m_xMultiServiceFacatory->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
                     if (!xHandler.is())
-                    {
                         ShowServiceNotAvailableError(getContent(), String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
-                            // TODO: a real parent!
-                    }
                     else
-                    {
                         xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
-                    }
                 }
             }
             else
@@ -1437,6 +1464,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 
     if(bRebuild)
     {
+        WaitObject aWaitCursor(getContent());
+
         // tell the old entry it has been deselected
         SvLBoxEntry* pEntry = m_pCurrentlyDisplayed;
         while (pEntry)
@@ -1539,6 +1568,43 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
             }
         }
     }
+}
+
+// -------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::haveExplorer() const
+{
+    return m_pTreeView && m_pTreeView->IsVisible();
+}
+
+// -------------------------------------------------------------------------
+void SbaTableQueryBrowser::hideExplorer()
+{
+    if (!haveExplorer())
+        return;
+    if (!getContent())
+        return;
+
+    m_pTreeView->Hide();
+    m_pSplitter->Hide();
+    getContent()->Resize();
+
+    InvalidateFeature(ID_BROWSER_EXPLORER);
+}
+
+// -------------------------------------------------------------------------
+void SbaTableQueryBrowser::showExplorer()
+{
+    if (haveExplorer())
+        return;
+
+    if (!getContent())
+        return;
+
+    m_pTreeView->Show();
+    m_pSplitter->Show();
+    getContent()->Resize();
+
+    InvalidateFeature(ID_BROWSER_EXPLORER);
 }
 
 // .........................................................................

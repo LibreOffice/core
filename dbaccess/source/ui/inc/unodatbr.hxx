@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 10:46:21 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,12 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId);
 
         String getURL() const;
+
+        sal_Bool    haveExplorer() const;
+        void        hideExplorer();
+        void        showExplorer();
+        void        toggleExplorer() { if (haveExplorer()) hideExplorer(); else showExplorer(); }
+
     private:
         // check the state of the external slot given, update any UI elements if necessary
         void implCheckExternalSlot(sal_Int32 _nId);
