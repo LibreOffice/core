@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:49:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ public:
 public:
     enum eBorderCode
     {
-        single0, single1, single2, single3, single4,
+        single0, single1, single2, single3, single4, single5,
         double0, double1, double2, double3, double4, double5, double6,
         double7, double8, double9, double10,
         none
