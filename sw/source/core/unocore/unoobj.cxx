@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:08 $
+ *  last change: $Author: jp $ $Date: 2000-12-12 20:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,59 +479,43 @@ sal_Bool lcl_IsStartOfPara(SwPaM& rUnoCrsr)
 /* -----------------20.05.98 14:59-------------------
  *
  * --------------------------------------------------*/
-void lcl_Append(sal_Unicode*& pCurrent, const SVBT16* pStr, sal_uInt32 nLen)
-{
-    for(sal_uInt32 i = 0; i < nLen; i++)
-    {
-         sal_uInt16 nVal = SVBT16ToShort( *pStr );
-        pStr += 1;
-        *pCurrent++ = nVal;
-    }
-}
-
 void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
 {
     if(!aCrsr.HasMark())
         return;
-    SvCacheStream aStream(20480);
+    SvCacheStream aStream( 20480 );
     WriterRef xWrt;
     SwIoSystem::GetWriter( C2S(FILTER_TEXT_DLG), xWrt );
     if( xWrt.Is() )
     {
-        SwWriter aWriter(aStream, aCrsr);
+        SwWriter aWriter( aStream, aCrsr );
         xWrt->bASCII_NoLastLineEnd = sal_True;
         SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
         aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
         xWrt->SetAsciiOptions( aOpt );
         xWrt->bUCS2_WithStartChar = FALSE;
 
-        if(!IsError( aWriter.Write( xWrt )))
+        long lLen;
+        if( !IsError( aWriter.Write( xWrt ) ) &&
+            STRING_MAXLEN > (( lLen  = aStream.GetSize() )
+                                    / sizeof( sal_Unicode )) + 1 )
         {
-            long lLen  = aStream.GetSize();
-            lLen /= 2;
-            sal_Unicode* pUnicodeBuffer = new sal_Unicode[lLen],
-            *pCurrentBuffer = pUnicodeBuffer;
-            const void* pStr = aStream.GetBuffer();
-            if(pStr)
-            {
-                lcl_Append(pCurrentBuffer, (SVBT16*)pStr, lLen);
-            }
+            aStream << (sal_Unicode)'\0';
+
+            String sBuf;
+            const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
+            if( p )
+                sBuf = p;
             else
             {
+                sal_Unicode* pStrBuf = sBuf.AllocBuffer( xub_StrLen(
+                                ( lLen / sizeof( sal_Unicode )) + 1 ) );
                 aStream.Seek( 0 );
                 aStream.ResetError();
-                char *pBuffer = new char[16384];
-                long lLocalLen  = lLen;
-                while(lLocalLen > 0)
-                {
-                    long nRead = aStream.Read( pBuffer, 16384 );
-                    lcl_Append(pCurrentBuffer, (SVBT16*)pBuffer, nRead / 2);
-                    lLocalLen -= nRead;
-                }
-                delete pBuffer;
+                aStream.Read( pStrBuf, lLen );
+                pStrBuf[ lLen ] = '\0';
             }
-            rBuffer = OUString(pUnicodeBuffer, lLen);
-            delete pUnicodeBuffer;
+            rBuffer = OUString( sBuf );
         }
     }
 }
@@ -2205,8 +2189,7 @@ sal_Bool SwXTextCursor::isStartOfSentence(void) throw( uno::RuntimeException )
                     xub_StrLen nStt = aCrsr.Start()->nContent.GetIndex();
                     String aTxt = pTxtNd->GetExpandTxt( nStt,
                         aCrsr.End()->nContent.GetIndex() - nStt );
-                    char cChar = aTxt.GetChar(0);
-                    switch(cChar)
+                    switch(aTxt.GetChar(0))
                     {
                         case ';':
                         case '.':
@@ -2250,8 +2233,7 @@ sal_Bool SwXTextCursor::isEndOfSentence(void) throw( uno::RuntimeException )
                     xub_StrLen nStt = aCrsr.Start()->nContent.GetIndex();
                     String aTxt = pTxtNd->GetExpandTxt( nStt,
                         aCrsr.End()->nContent.GetIndex() - nStt );
-                    char cChar = aTxt.GetChar(0);
-                    switch(cChar)
+                    switch( aTxt.GetChar( 0 ) )
                     {
                         case ';':
                         case '.':
