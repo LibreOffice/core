@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-07 13:18:11 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 16:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ Reference< XSingleServiceFactory > loadLibComponentFactory(
                 OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
                 Mapping aUno2Cpp( aUnoEnvTypeName, aCppEnvTypeName );
                 Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
-                OSL_ENSHURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
+                OSL_ENSURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
 
                 if (aUno2Cpp.is() && aCpp2Uno.is())
                 {
