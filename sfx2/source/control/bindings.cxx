@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.27 $
- *  last change: $Author: rt $ $Date: 2003-12-01 11:58:10 $
+ *  $Revision: 1.28 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,6 +57,8 @@
  *
  *
  ************************************************************************/
+
+//#include <stdio.h>
 
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -1740,8 +1742,8 @@ void SfxBindings::UpdateSlotServer_Impl()
         {
             ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
                 ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
-            if ( xFrame.is() )
-                xFrame->contextChanged();
+            //if ( xFrame.is() )
+            //    xFrame->contextChanged();
             pImp->bContextChanged = FALSE;
         }
         else
@@ -2232,6 +2234,9 @@ sal_uInt16 SfxBindings::EnterRegistrations(char *pFile, int nLine)
         aMsg += " Line: ";
         aMsg += ByteString::CreateFromInt32(nLine);
     }
+//    FILE* pLog = fopen( "c:\\bindings.log", "a+w" );
+//    fwrite( aMsg.GetBuffer(), 1, aMsg.Len(), pLog );
+//    fclose( pLog );
     DbgTrace( aMsg.GetBuffer() );
 #endif
 
@@ -2322,11 +2327,12 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, char *pFile, int nLine 
     {
         if ( pImp->bContextChanged )
         {
+            pImp->bContextChanged = FALSE;
+            /*
             ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame
                 ( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
             if ( xFrame.is() )
-                xFrame->contextChanged();
-            pImp->bContextChanged = FALSE;
+                xFrame->contextChanged();*/
         }
 
 #ifndef slow
@@ -2382,6 +2388,9 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, char *pFile, int nLine 
         aMsg += " Line: ";
         aMsg += ByteString::CreateFromInt32(nLine);
     }
+//    FILE* pLog = fopen( "c:\\bindings.log", "a+w" );
+//    fwrite( aMsg.GetBuffer(), 1, aMsg.Len(), pLog );
+//    fclose( pLog );
     DbgTrace( aMsg.GetBuffer() );
 #endif
 }
