@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:33:47 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,8 +484,12 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     aIter = m_pColumnNames->begin();
     for(;aIter != m_pColumnNames->end();++aIter)
     {
-        if((*_rInsertRow)[aIter->second.first].isModified())
-            setParameter(i++,xParameter,(*_rInsertRow)[aIter->second.first],aIter->second.second);
+        sal_Int32 nPos = aIter->second.first;
+        if((*_rInsertRow)[nPos].isModified())
+        {
+            (*_rInsertRow)[nPos].setSigned((*_rOrginalRow)[nPos].isSigned());
+            setParameter(i++,xParameter,(*_rInsertRow)[nPos],aIter->second.second);
+        }
     }
     // and then the values of the where condition
     aIter = (*m_pKeyColumnNames).begin();
@@ -552,12 +556,16 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     OColumnNamePos::const_iterator aPosIter = m_pColumnNames->begin();
     for(sal_Int32 i = 1;aPosIter != m_pColumnNames->end();++aPosIter)
     {
-        if((*_rInsertRow)[aPosIter->second.first].isModified())
+        sal_Int32 nPos = aPosIter->second.first;
+        if((*_rInsertRow)[nPos].isModified())
         {
-            if((*_rInsertRow)[aPosIter->second.first].isNull())
-                xParameter->setNull(i++,(*_rInsertRow)[aPosIter->second.first].getTypeKind());
+            if((*_rInsertRow)[nPos].isNull())
+                xParameter->setNull(i++,(*_rInsertRow)[nPos].getTypeKind());
             else
-                setParameter(i++,xParameter,(*_rInsertRow)[aPosIter->second.first],aPosIter->second.second);
+            {
+                (*_rInsertRow)[nPos].setSigned(m_aSignedFlags[nPos-1]);
+                setParameter(i++,xParameter,(*_rInsertRow)[nPos],aPosIter->second.second);
+            }
         }
     }
 
@@ -968,7 +976,10 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
             xParameter->setString(nPos,*aExternParamIter);
             break;
         case DataType::BIGINT:
-            xParameter->setLong(nPos,*aExternParamIter);
+            if ( aExternParamIter->isSigned() )
+                xParameter->setLong(nPos,*aExternParamIter);
+            else
+                xParameter->setString(nPos,*aExternParamIter);
             break;
         case DataType::FLOAT:
             xParameter->setFloat(nPos,*aExternParamIter);
@@ -995,13 +1006,22 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
             xParameter->setBoolean(nPos,*aExternParamIter);
             break;
         case DataType::TINYINT:
-            xParameter->setByte(nPos,*aExternParamIter);
+            if ( aExternParamIter->isSigned() )
+                xParameter->setByte(nPos,*aExternParamIter);
+            else
+                xParameter->setShort(nPos,*aExternParamIter);
             break;
         case DataType::SMALLINT:
-            xParameter->setShort(nPos,*aExternParamIter);
+            if ( aExternParamIter->isSigned() )
+                xParameter->setShort(nPos,*aExternParamIter);
+            else
+                xParameter->setInt(nPos,*aExternParamIter);
             break;
         case DataType::INTEGER:
-            xParameter->setInt(nPos,*aExternParamIter);
+            if ( aExternParamIter->isSigned() )
+                xParameter->setInt(nPos,*aExternParamIter);
+            else
+                xParameter->setLong(nPos,*aExternParamIter);
             break;
         case DataType::CLOB:
             {
@@ -1022,68 +1042,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     connectivity::ORowVector< ORowSetValue >::const_iterator aIter = m_aKeyIter->second.first->begin();
     OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter,++nPos)
-    {
-        switch(aIter->getTypeKind())
-        {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-        case DataType::LONGVARCHAR:
-            xParameter->setString(nPos,*aIter);
-            break;
-        case DataType::BIGINT:
-            xParameter->setLong(nPos,*aIter);
-            break;
-        case DataType::FLOAT:
-            xParameter->setFloat(nPos,*aIter);
-            break;
-        case DataType::DOUBLE:
-        case DataType::REAL:
-            xParameter->setDouble(nPos,*aIter);
-            break;
-        case DataType::DATE:
-            xParameter->setDate(nPos,*aIter);
-            break;
-        case DataType::TIME:
-            xParameter->setTime(nPos,*aIter);
-            break;
-        case DataType::TIMESTAMP:
-            xParameter->setTimestamp(nPos,*aIter);
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            xParameter->setBytes(nPos,*aIter);
-            break;
-        case DataType::BIT:
-            xParameter->setBoolean(nPos,*aIter);
-            break;
-        case DataType::TINYINT:
-//          xParameter->setByte(nPos,*aIter); //SQLSERVER doesn't run with this
-//          break;
-        case DataType::SMALLINT:
-            xParameter->setShort(nPos,*aIter);
-            break;
-        case DataType::INTEGER:
-            xParameter->setInt(nPos,*aIter);
-            break;
-        case DataType::CLOB:
-            {
-                Reference<XInputStream> xStream;
-                aIter->getAny() >>= xStream;
-                xParameter->setCharacterStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
-            }
-            break;
-        case DataType::BLOB:
-            {
-                Reference<XInputStream> xStream;
-                aIter->getAny() >>= xStream;
-                xParameter->setBinaryStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
-            }
-            break;
-        }
-    }
+        setParameter(nPos,xParameter,*aIter);
 
     m_xSet = m_xStatement->executeQuery();
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
@@ -1294,71 +1253,6 @@ void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >
         ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_True,::dbtools::eInDataManipulation);
 
     return aComposedName;
-}
-// -----------------------------------------------------------------------------
-void OKeySet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>& _xRow,ORowSetValue& _rValue)
-{
-    sal_Bool bReadData = sal_True;
-    switch(_nType)
-    {
-    case DataType::CHAR:
-    case DataType::VARCHAR:
-    case DataType::DECIMAL:
-    case DataType::NUMERIC:
-    case DataType::LONGVARCHAR:
-        _rValue = _xRow->getString(_nPos);
-        break;
-    case DataType::BIGINT:
-        _rValue = _xRow->getLong(_nPos);
-        break;
-    case DataType::FLOAT:
-        _rValue = _xRow->getFloat(_nPos);
-        break;
-    case DataType::DOUBLE:
-    case DataType::REAL:
-        _rValue = _xRow->getDouble(_nPos);
-        break;
-    case DataType::DATE:
-        _rValue = _xRow->getDate(_nPos);
-        break;
-    case DataType::TIME:
-        _rValue = _xRow->getTime(_nPos);
-        break;
-    case DataType::TIMESTAMP:
-        _rValue = _xRow->getTimestamp(_nPos);
-        break;
-    case DataType::BINARY:
-    case DataType::VARBINARY:
-    case DataType::LONGVARBINARY:
-        _rValue = _xRow->getBytes(_nPos);
-        break;
-    case DataType::BIT:
-        _rValue = _xRow->getBoolean(_nPos);
-        break;
-    case DataType::TINYINT:
-        _rValue = (sal_Int32)_xRow->getByte(_nPos);
-        break;
-    case DataType::SMALLINT:
-        _rValue = (sal_Int32)_xRow->getShort(_nPos);
-        break;
-    case DataType::INTEGER:
-        _rValue = _xRow->getInt(_nPos);
-        break;
-    case DataType::CLOB:
-        _rValue = makeAny(_xRow->getCharacterStream(_nPos));
-        _rValue.setTypeKind(DataType::CLOB);
-        break;
-    case DataType::BLOB:
-        _rValue = makeAny(_xRow->getBinaryStream(_nPos));
-        _rValue.setTypeKind(DataType::BLOB);
-        break;
-    default:
-        bReadData = sal_False;
-        break;
-    }
-    if ( bReadData && _xRow->wasNull() )
-        _rValue.setNull();
-    _rValue.setTypeKind(_nType);
 }
 // -----------------------------------------------------------------------------
 namespace dbaccess
