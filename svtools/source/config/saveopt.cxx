@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-26 12:58:47 $
+ *  last change: $Author: pb $ $Date: 2000-11-13 09:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,8 @@ public:
 
     void                    SetAutoSaveTime( sal_Int32 n )      { nAutoSaveTime = n; SetModified();  }
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
+    void                    SetUseUserData( BOOL b )            { bUseUserData = b; SetModified();}
+    BOOL                    IsUseUserData() const               { return bUseUserData; }
     void                    SetBackup( BOOL b )                 { bBackup = b; SetModified();}
     BOOL                    IsBackup() const                    { return bBackup; }
     void                    SetAutoSave( BOOL b )               { bAutoSave = b; SetModified();    }
@@ -360,6 +362,16 @@ void SvtSaveOptions::SetAutoSaveTime( sal_Int32 n )
 sal_Int32 SvtSaveOptions::GetAutoSaveTime() const
 {
     return pImp->GetAutoSaveTime();
+}
+
+void SvtSaveOptions::SetUseUserData( sal_Bool b )
+{
+    pImp->SetUseUserData( b );
+}
+
+sal_Bool SvtSaveOptions::IsUseUserData() const
+{
+    return pImp->IsUseUserData();
 }
 
 void SvtSaveOptions::SetBackup( sal_Bool b )
