@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 05:51:38 $
+ *  last change: $Author: vg $ $Date: 2001-10-24 20:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3335,7 +3335,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "serial_number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num_seriale" ;
+            Text [ italian ] = "Numero seriale" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Núm_série" ;
             Text [ finnish ] = "Luku" ;
@@ -3364,7 +3364,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Interner Zeitwert." ;
             Text [ english ] = "is the date-time code used for date and time calculations." ;
             Text [ norwegian ] = "Interner Zeitwert." ;
-            Text [ italian ] = "valore di tempo interno." ;
+            Text [ italian ] = "Valore di tempo espresso come numero seriale." ;
             Text [ portuguese_brazilian ] = "Interner Zeitwert." ;
             Text [ portuguese ] = "é o código data-hora usado para calcular a data e a hora." ;
             Text [ finnish ] = "Kellonajan sisäinen arvo" ;
@@ -3397,7 +3397,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt zu dem Zeitwert die fortlaufende Minute pro Stunde als Zahl (0 - 59)." ;
             Text [ english ] = "Returns the minute corresponding to serial_number." ;
             Text [ norwegian ] = "Bestimmt zu dem Zeitwert die fortlaufende Minute pro Stunde als Zahl (0 - 59)." ;
-            Text [ italian ] = "Restituisce i minuti corrispondenti a num_seriale (0 - 59)." ;
+            Text [ italian ] = "Restituisce i minuti espressi a in un numero seriale (0 - 59)." ;
             Text [ portuguese_brazilian ] = "Bestimmt zu dem Zeitwert die fortlaufende Minute pro Stunde als Zahl (0 - 59)." ;
             Text [ portuguese ] = "Devolve o minuto correspondente a núm_série na forma de número inteiro de 0 a 59." ;
             Text [ finnish ] = "Määrittää aika-arvon minuuttien määrän (0 - 59)." ;
@@ -3432,7 +3432,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "serial_number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num_seriale" ;
+            Text [ italian ] = "Numero seriale" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Núm_série" ;
             Text [ finnish ] = "Luku" ;
@@ -3461,7 +3461,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Interner Zeitwert." ;
             Text [ english ] = "is the date-time code used for date and time calculations." ;
             Text [ norwegian ] = "Interner Zeitwert." ;
-            Text [ italian ] = "numero interno per il tempo." ;
+            Text [ italian ] = "Valore di tempo espresso come numero seriale." ;
             Text [ portuguese_brazilian ] = "Interner Zeitwert." ;
             Text [ portuguese ] = "é o código data-hora usado para calcular a data e a hora." ;
             Text [ finnish ] = "Kellonajan sisäinen arvo." ;
@@ -3494,7 +3494,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt zu dem Datumswert den fortlaufenden Monat im Jahr als Zahl (1 - 12)." ;
             Text [ english ] = "Returns the month corresponding to serial_number." ;
             Text [ norwegian ] = "Bestimmt zu dem Datumswert den fortlaufenden Monat im Jahr als Zahl (1 - 12)." ;
-            Text [ italian ] = "Restituisce il mese corrispondente a num_seriale." ;
+            Text [ italian ] = "Restituisce il mese espresso come numero seriale (1 - 12)." ;
             Text [ portuguese_brazilian ] = "Bestimmt zu dem Datumswert den fortlaufenden Monat im Jahr als Zahl (1 - 12)." ;
             Text [ portuguese ] = "Devolve o mês correspondente a núm_série na forma de número inteiro, entre 1 (Janeiro) e 12 (Dezembro)." ;
             Text [ finnish ] = "Määrittää päivämääräarvon kuukausien määrän (1 -12)." ;
@@ -3529,7 +3529,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "serial_number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num_seriale" ;
+            Text [ italian ] = "Numero seriale" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Núm_série" ;
             Text [ finnish ] = "Luku" ;
@@ -3630,7 +3630,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt zu dem Zeitwert die fortlaufende Sekunde in einer Minute als Zahl (0 - 59)." ;
             Text [ english ] = "Returns the second corresponding to serial_number." ;
             Text [ norwegian ] = "Bestimmt zu dem Zeitwert die fortlaufende Sekunde in einer Minute als Zahl (0 - 59)." ;
-            Text [ italian ] = "Restituisce i secondi corrispondenti a num_seriale (0 - 59)." ;
+            Text [ italian ] = "Restituisce i secondi espressi come numero seriale (0 - 59)." ;
             Text [ portuguese_brazilian ] = "Bestimmt zu dem Zeitwert die fortlaufende Sekunde in einer Minute als Zahl (0 - 59)." ;
             Text [ portuguese ] = "Devolve o minuto correspondente a núm_série na forma de número inteiro de 0 a 59." ;
             Text [ finnish ] = "Määrittää aika-arvon sekuntien määrän (0 - 59)." ;
@@ -3665,7 +3665,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "serial_number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num_seriale" ;
+            Text [ italian ] = "Numero seriale" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Núm_série" ;
             Text [ finnish ] = "Luku" ;
@@ -3694,7 +3694,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Interner Zeitwert." ;
             Text [ english ] = "is the date-time code used for date and time calculations." ;
             Text [ norwegian ] = "Interner Zeitwert." ;
-            Text [ italian ] = "numero interno per il tempo." ;
+            Text [ italian ] = "Valore di tempo espresso come numero seriale." ;
             Text [ portuguese_brazilian ] = "Interner Zeitwert." ;
             Text [ portuguese ] = "é o código data-hora usado para calcular a data e a hora." ;
             Text [ finnish ] = "Kellonajan sisäinen arvo." ;
@@ -3763,7 +3763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Stunde" ;
             Text [ english ] = "hour" ;
             Text [ norwegian ] = "Stunde" ;
-            Text [ italian ] = "ora" ;
+            Text [ italian ] = "Ora" ;
             Text [ portuguese_brazilian ] = "Stunde" ;
             Text [ portuguese ] = "Hora" ;
             Text [ finnish ] = "tunti" ;
@@ -3793,7 +3793,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ganze Zahl für die Stunde." ;
             Text [ english ] = "is a number from 0 to 23 representing the hour." ;
             Text [ norwegian ] = "Ganze Zahl für die Stunde." ;
-            Text [ italian ] = "è un numero intero compreso tra 0 e 23 che rappresenta l'ora." ;
+            Text [ italian ] = "Numero intero compreso tra 0 e 23 che rappresenta l'ora." ;
             Text [ portuguese_brazilian ] = "Ganze Zahl f? die Stunde." ;
             Text [ portuguese ] = "é um número inteiro entre 0 e 23 que representa a hora." ;
             Text [ finnish ] = "Tunteja kuvaava muuttuja." ;
@@ -3822,7 +3822,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Minute" ;
             Text [ english ] = "minute" ;
             Text [ norwegian ] = "Minute" ;
-            Text [ italian ] = "minuto" ;
+            Text [ italian ] = "Minuto" ;
             Text [ portuguese_brazilian ] = "Minute" ;
             Text [ portuguese ] = "Minuto" ;
             Text [ finnish ] = "minuutti" ;
@@ -3852,7 +3852,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ganze Zahl für die Minute." ;
             Text [ english ] = "is a number from 0 to 59 representing the minute." ;
             Text [ norwegian ] = "Ganze Zahl für die Minute." ;
-            Text [ italian ] = "è un numero intero compreso tra 0 e 59 che rappresenta i minuti." ;
+            Text [ italian ] = "Numero intero compreso tra 0 e 59 che rappresenta i minuti." ;
             Text [ portuguese_brazilian ] = "Ganze Zahl f? die Minute." ;
             Text [ portuguese ] = "é um número inteiro entre 0 e 59 que representa o minuto." ;
             Text [ finnish ] = "Minuutteja kuvaava muuttuja." ;
@@ -3881,7 +3881,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Sekunde" ;
             Text [ english ] = "second" ;
             Text [ norwegian ] = "Sekunde" ;
-            Text [ italian ] = "secondo" ;
+            Text [ italian ] = "Secondo" ;
             Text [ portuguese_brazilian ] = "Sekunde" ;
             Text [ portuguese ] = "Segundo" ;
             Text [ finnish ] = "sekunti" ;
@@ -4010,7 +4010,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ein in Anführungszeichen eingeschlossener Text, der eine Zeitangabe in einem %PRODUCTNAME Zeitformat wiedergibt." ;
             Text [ english ] = "is a text string that gives a time in any one of the StarCalc time formats" ;
             Text [ norwegian ] = "Ein in Anführungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt." ;
-            Text [ italian ] = "il testo tra virgolette che riproduce un'indicazione oraria in formato %PRODUCTNAME." ;
+            Text [ italian ] = "Testo tra virgolette che riproduce un'indicazione oraria in formato %PRODUCTNAME." ;
             Text [ portuguese_brazilian ] = "Ein in Anf?rungszeichen eingeschlossener Text, der eine Zeitangabe in einem %PRODUCTNAME Calc Zeitformat wiedergibt." ;
             Text [ portuguese ] = "Um texto que fornece uma hora num dos vários formatos de horas do %PRODUCTNAME." ;
             Text [ finnish ] = "Lainausmerkeillä rajattu teksti, joka palauttaa kellonajan ohjelman %PRODUCTNAME aikamuodossa." ;
@@ -4043,7 +4043,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt das aktuelle Datum des Computers." ;
             Text [ english ] = "Returns the serial number of the current date." ;
             Text [ norwegian ] = "Bestimmt das aktuelle Datum des Computers." ;
-            Text [ italian ] = "Restituisce il numero seriale della data corrente." ;
+            Text [ italian ] = "Restituisce la data corrente espressa come numero seriale." ;
             Text [ portuguese_brazilian ] = "Bestimmt das aktuelle Datum des Computers." ;
             Text [ portuguese ] = "Determina o número de série da data corrente." ;
             Text [ finnish ] = "Määrittää tietokoneen nykyisen päivämäärän." ;
@@ -4082,7 +4082,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt zu dem Datumswert den Wochentag als Zahl (1 - 7)." ;
             Text [ english ] = "Returns the day of the week corresponding to serial_number." ;
             Text [ norwegian ] = "Bestimmt zu dem Datumswert den Wochentag als Zahl (1 - 7)." ;
-            Text [ italian ] = "Restituisce il giorno della settimana corrispondente a num_seriale (1 - 7)." ;
+            Text [ italian ] = "Restituisce il giorno della settimana espresso come numero seriale (1 - 7)." ;
             Text [ portuguese_brazilian ] = "Bestimmt zu dem Datumswert den Wochentag als Zahl (1 - 7)." ;
             Text [ portuguese ] = "Devolve o dia da semana (1 a 7) correspondente a núm_série." ;
             Text [ finnish ] = "Palauttaa päivämääräarvon päivämäärityksen kokonaislukuna (1-7)." ;
@@ -4117,7 +4117,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num_seriale" ;
+            Text [ italian ] = "Numero seriale" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Núm_série" ;
             Text [ finnish ] = "Luku" ;
@@ -4175,7 +4175,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Art" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Art" ;
-            Text [ italian ] = "tipo" ;
+            Text [ italian ] = "Tipo" ;
             Text [ portuguese_brazilian ] = "Art" ;
             Text [ portuguese ] = "Tipo_devolvido" ;
             Text [ finnish ] = "Tyyppi" ;
@@ -4204,7 +4204,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Legt den Wochenanfang und die Art der Berechnung fest" ;
             Text [ english ] = "is a number that determines the type of return value." ;
             Text [ norwegian ] = "Legt den Wochenanfang und die Art der Berechnung fest" ;
-            Text [ italian ] = "è un numero che determina il giorno in cui inizia la settimana e il tipo di calcolo." ;
+            Text [ italian ] = "Numero che determina il giorno in cui inizia la settimana e il tipo di calcolo." ;
             Text [ portuguese_brazilian ] = "Legt den Wochenanfang und die Art der Berechnung fest" ;
             Text [ portuguese ] = "é um número que determina o dia de início da semana e o tipo de cálculo." ;
             Text [ finnish ] = "Korjaa käytettävän viikonalun ja laskentatavan." ;
@@ -4237,7 +4237,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt zu dem Datumswert das Jahr als Zahl." ;
             Text [ english ] = "Returns the year corresponding to serial_number." ;
             Text [ norwegian ] = "Bestimmt zu dem Datumswert das Jahr als Zahl." ;
-            Text [ italian ] = "Restituisce l'anno corrispondente a num_seriale." ;
+            Text [ italian ] = "Restituisce l'anno espresso come numero seriale." ;
             Text [ portuguese_brazilian ] = "Bestimmt zu dem Datumswert das Jahr als Zahl." ;
             Text [ portuguese ] = "Devolve o ano correspondente a núm_série." ;
             Text [ finnish ] = "Palauttaa päivämäärän vuosiarvon muuttujana." ;
@@ -4272,7 +4272,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "serial_number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "Num_seriale" ;
+            Text [ italian ] = "Numero seriale" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Núm_série" ;
             Text [ finnish ] = "Luku" ;
@@ -4624,7 +4624,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ chinese_simplified ] = "è®¾å®šæ¯å‘¨çš„ç¬¬ä¸€å¤©(1 = æ˜ŸæœŸæ—¥ï¼Œå¦åˆ™ = æ˜ŸæœŸä¸€ï¼‰ã€‚";
             Text[ russian ] = "Óñòàíàâëèâàåò ïåğâûé äåíü íåäåëè (1 = âîñêğåñåíüå, îñòàëüíûå çíà÷åíèÿ = ïîíåäåëüíèê).";
             Text[ polish ] = "Definiuje pierwszy dzieñ tygodnia (1 = niedziela, pozosta³e wartoœci = poniedzia³ek).";
-            Text[ japanese ] = "ä½•æ›œæ—¥ã§å§‹ã¾ã‚‹ã‹ã‚’æŒ‡å®šã€‚";
+            Text[ japanese ] = "é€±ã®é–‹å§‹æ›œæ—¥ã€‚(1 = æ—¥æ›œæ—¥ã€1 ä»¥å¤– = æœˆæ›œæ—¥)";
             Text[ chinese_traditional ] = "ç¢ºå®šæ¯é€±çš„ç¬¬ä¸€å¤©(1 = æ˜ŸæœŸå¤©ï¼Œå…¶ä»–æ•¸å€¼ = æ˜ŸæœŸä¸€)ã€‚";
             Text[ arabic ] = "ÊÍÏÏ Çáíæã ÇáÃæá İí ÇáÃÓÈæÚ.";
             Text[ dutch ] = "Bepaalt de eerste dag van de week (1 = zondag, andere waarde = maandag).";
@@ -4718,7 +4718,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ portuguese_brazilian ] = "is an integer between 1583 and 9956 or 0 and 99 (19xx or 20xx depending on the defined option).";
             Text[ japanese ] = "1583ã‹ã‚‰9956ã¾ã§ã€ã‚ã‚‹ã„ã¯0ã‹ã‚‰99ã¾ã§ã®æ•´æ•°(19xx ã¾ãŸã¯20xx å®šç¾©ã—ãŸï½µï¾Œï¾Ÿï½¼ï½®ï¾ã«å¿œã˜ã‚‹)ã€‚";
             Text[ chinese_simplified ] = "æ˜¯ä¸€ä¸ªåœ¨1583 å’Œ 9956 æˆ– 0 å’Œ 99 ä¹‹é—´çš„æ•´æ•°\n(19xx æˆ– 20xx èµ·å†³äºè®¾å®šçš„é€‰é¡¹)ã€‚";
-            Text[ chinese_traditional ] = "æ˜¯ä¸€å€‹åœ¨1583 å’Œ 9956 æˆ– 0 å’Œ 99 ä¹‹é–“çš„æ•´æ•¸(19xx æˆ– 20xx èµ·æ±ºäºè¨­å®šçš„é¸é …)ã€‚";
+            Text[ chinese_traditional ] = "æ˜¯ä¸€å€‹åœ¨1583 å’Œ 9956 æˆ– 0 å’Œ 99 ä¹‹é–“çš„æ•´æ•¸(19xx æˆ– 20xx èµ·æ±ºæ–¼è¨­å®šçš„é¸é …)ã€‚";
             Text[ arabic ] = "ÑŞã ÕÍíÍ Èíä 1583 æ9956¡ Ãæ Èíä 0 æ99 (19xx Ãæ  20xxÊÈÚÇğ ááÎíÇÑ ÇáãÍÏÏ).";
             Text[ dutch ] = "is een geheel getal tussen 1583 en 9956 of 0 en 99 (19xx of 20xx afhankelijk van de gedefinieerde optie).";
             Text[ chinese_simplified ] = "æ˜¯ä¸€ä¸ªåœ¨1583 å’Œ 9956 æˆ– 0 å’Œ 99 ä¹‹é—´çš„æ•´æ•°\n(19xx æˆ– 20xx èµ·å†³äºè®¾å®šçš„é€‰é¡¹)ã€‚";
@@ -4831,7 +4831,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZZR" ;
             Text [ english ] = "nper" ;
             Text [ norwegian ] = "ZZR" ;
-            Text [ italian ] = "NUM.RATE" ;
+            Text [ italian ] = "Numero rate" ;
             Text [ portuguese_brazilian ] = "ZZR" ;
             Text [ portuguese ] = "NPER" ;
             Text [ finnish ] = "NPER" ;
@@ -4890,7 +4890,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "RMZ" ;
             Text [ english ] = "pmt" ;
             Text [ norwegian ] = "RMZ" ;
-            Text [ italian ] = "RATA" ;
+            Text [ italian ] = "Rata" ;
             Text [ portuguese_brazilian ] = "RMZ" ;
             Text [ portuguese ] = "Pgto" ;
             Text [ finnish ] = "PMT" ;
@@ -4949,7 +4949,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZW" ;
             Text [ english ] = "fv" ;
             Text [ norwegian ] = "ZW" ;
-            Text [ italian ] = "VALFUT" ;
+            Text [ italian ] = "Valore futuro" ;
             Text [ portuguese_brazilian ] = "ZW" ;
             Text [ portuguese ] = "Vf" ;
             Text [ finnish ] = "FV" ;
@@ -5136,7 +5136,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zinssatz pro Periode." ;
             Text [ english ] = "is the interest rate per period." ;
             Text [ norwegian ] = "Der Zinssatz pro Periode." ;
-            Text [ italian ] = "è il tasso di interesse per periodo." ;
+            Text [ italian ] = "Tasso di interesse per periodo." ;
             Text [ portuguese_brazilian ] = "Der Zinssatz pro Periode." ;
             Text [ portuguese ] = "é a taxa de juros periódica." ;
             Text [ finnish ] = "Kausikohtainen korkoprosentti." ;
@@ -5165,7 +5165,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZZR" ;
             Text [ english ] = "nper" ;
             Text [ norwegian ] = "ZZR" ;
-            Text [ italian ] = "NUM.RATE" ;
+            Text [ italian ] = "Numero rate" ;
             Text [ portuguese_brazilian ] = "ZZR" ;
             Text [ portuguese ] = "Nper" ;
             Text [ finnish ] = "NPER" ;
@@ -5195,7 +5195,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
             Text [ english ] = "is the total number of payment periods in an annuity." ;
             Text [ norwegian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
-            Text [ italian ] = "è il numero totale dei periodi di pagamento in un'annualità." ;
+            Text [ italian ] = "Numero totale dei periodi di pagamento in un'annualità." ;
             Text [ portuguese_brazilian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuit?t (Rente) gezahlt wird." ;
             Text [ portuguese ] = "é o número total de períodos de pagamento numa anuidade." ;
             Text [ finnish ] = "Maksukausi. Maksukaudet, joiden aikana annuiteetti (eläke) maksetaan." ;
@@ -5224,7 +5224,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "RMZ" ;
             Text [ english ] = "pmt" ;
             Text [ norwegian ] = "RMZ" ;
-            Text [ italian ] = "RATA" ;
+            Text [ italian ] = "Rata" ;
             Text [ portuguese_brazilian ] = "RMZ" ;
             Text [ portuguese ] = "Pgto" ;
             Text [ finnish ] = "PMT" ;
@@ -5254,7 +5254,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird." ;
             Text [ english ] = "is the payment made each period; it cannot change over the life of the annuity." ;
             Text [ norwegian ] = "Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird." ;
-            Text [ italian ] = "è il pagamento effettuato in ciascun periodo e non può variare nel corso dell'annualità." ;
+            Text [ italian ] = "Pagamento effettuato in ciascun periodo e non può variare nel corso dell'annualità." ;
             Text [ portuguese_brazilian ] = "Regelm??ige Zahlung. Die konstante Annuit?t, die in jeder Periode gezahlt wird." ;
             Text [ portuguese ] = "é o pagamento feito em cada período, mantendo-se constante durante a vigência da anuidade." ;
             Text [ finnish ] = "Säännölliset maksut. Kunakin kautena maksettava vakioannuiteetti." ;
@@ -5283,7 +5283,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "BW" ;
             Text [ english ] = "pv" ;
             Text [ norwegian ] = "BW" ;
-            Text [ italian ] = "VA" ;
+            Text [ italian ] = "Valore attuale" ;
             Text [ portuguese_brazilian ] = "BW" ;
             Text [ portuguese ] = "VA" ;
             Text [ finnish ] = "NA" ;
@@ -5312,7 +5312,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ english ] = "is the present value, or the lump-sum amount that a series of future payments is worth right now." ;
             Text [ norwegian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
-            Text [ italian ] = "è il valore attuale o la somma forfettaria che rappresenta il valore attuale di una serie di pagamenti futuri." ;
+            Text [ italian ] = "Valore attuale di una serie di pagamenti." ;
             Text [ portuguese_brazilian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ portuguese ] = "é o valor presente ou a quantia total actual correspondente a uma série de pagamentos futuros." ;
             Text [ finnish ] = "Nykyinen arvo. Maksusarjan nykyinen arvo" ;
@@ -5371,7 +5371,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ english ] = "is the number 0 or 1 and indicates when payments are due." ;
             Text [ norwegian ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
-            Text [ italian ] = "Scadenze dei pagamenti. F = 1 significa all'inizio di un periodo, F = 0 alla fine." ;
+            Text [ italian ] = "Scadenze dei pagamenti. Il valore 1 significa all'inizio di un periodo, il valore 0 alla fine." ;
             Text [ portuguese_brazilian ] = "F?lligkeit. F = 1 hei?t F?lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ portuguese ] = "é o vencimento dos pagamentos de juros. 1 significa no ínicio do período, 0 no final." ;
             Text [ finnish ] = "Tyyppi = 1 tarkoittaa kauden alkua ja = 0 kauden loppua." ;
@@ -5469,7 +5469,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zinssatz pro Periode." ;
             Text [ english ] = "is the interest rate per period." ;
             Text [ norwegian ] = "Der Zinssatz pro Periode." ;
-            Text [ italian ] = "è il tasso di interesse per periodo." ;
+            Text [ italian ] = "Tasso di interesse per periodo." ;
             Text [ portuguese_brazilian ] = "Der Zinssatz pro Periode." ;
             Text [ portuguese ] = "é a taxa de juros periódica." ;
             Text [ finnish ] = "Kausikohtainen korkoprosentti." ;
@@ -5498,7 +5498,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "RMZ" ;
             Text [ english ] = "pmt" ;
             Text [ norwegian ] = "RMZ" ;
-            Text [ italian ] = "RATA" ;
+            Text [ italian ] = "Rata" ;
             Text [ portuguese_brazilian ] = "RMZ" ;
             Text [ portuguese ] = "Pgto" ;
             Text [ finnish ] = "PMT" ;
@@ -5557,7 +5557,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "BW" ;
             Text [ english ] = "pv" ;
             Text [ norwegian ] = "BW" ;
-            Text [ italian ] = "VA" ;
+            Text [ italian ] = "Valore attuale" ;
             Text [ portuguese_brazilian ] = "BW" ;
             Text [ portuguese ] = "VA" ;
             Text [ finnish ] = "PV" ;
@@ -5586,7 +5586,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ english ] = "is the present value, or the lump-sum amount that a series of future payments is worth right now." ;
             Text [ norwegian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
-            Text [ italian ] = "è il valore futuro o il saldo in contanti che si desidera raggiungere dopo aver effettuato l'ultimo pagamento." ;
+            Text [ italian ] = "Valore futuro o il saldo in contanti che si desidera raggiungere dopo aver effettuato l'ultimo pagamento." ;
             Text [ portuguese_brazilian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ portuguese ] = "é o valor presente ou a quantia total actual correspondente a uma série de pagamentos futuros." ;
             Text [ finnish ] = "Nykyinen arvo. Maksusarjan nykyinen arvo" ;
@@ -5615,7 +5615,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZW" ;
             Text [ english ] = "fv" ;
             Text [ norwegian ] = "ZW" ;
-            Text [ italian ] = "VAL.FUT" ;
+            Text [ italian ] = "Valore futuro" ;
             Text [ portuguese_brazilian ] = "ZW" ;
             Text [ portuguese ] = "VF" ;
             Text [ finnish ] = "FV" ;
@@ -5645,7 +5645,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ english ] = "is the future value, or a cash balance you want to attain after the last payment is made." ;
             Text [ norwegian ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
-            Text [ italian ] = "corrisponde a 0 o a 1 e indica le scadenze dei pagamenti." ;
+            Text [ italian ] = "Il valore (valore finale) che si desidera raggiungere dopo l'ultimo pagamento." ;
             Text [ portuguese_brazilian ] = "Zuk?ftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ portuguese ] = "é o valor futuro ou um saldo de caixa obtido depois de efectuado o último pagamento." ;
             Text [ finnish ] = "Tuleva arvo. Viimeisen maksun jälkeinen arvo (loppuarvo)." ;
@@ -5674,7 +5674,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "F" ;
             Text [ english ] = "type" ;
             Text [ norwegian ] = "F" ;
-            Text [ italian ] = "tipo" ;
+            Text [ italian ] = "Tipo" ;
             Text [ portuguese_brazilian ] = "F" ;
             Text [ portuguese ] = "Tipo" ;
             Text [ finnish ] = "Tyyppi" ;
@@ -5704,7 +5704,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ english ] = "is the number 0 or 1 and indicates when payments are due." ;
             Text [ norwegian ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
-            Text [ italian ] = "Scadenza. 1= all'inizio, 0=alla fine del periodo." ;
+            Text [ italian ] = "Tipo di scadenza. 1 = all'inizio, 0 = alla fine del periodo." ;
             Text [ portuguese_brazilian ] = "F?lligkeit. F = 1 hei?t F?lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ portuguese ] = "é o vencimento dos pagamentos de juros. 1 significa no ínicio do período, 0 no final." ;
             Text [ finnish ] = "Tyyppi = 1 tarkoittaa kauden alkua ja = 0 kauden loppua." ;
@@ -5802,7 +5802,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Zinssatz pro Periode." ;
             Text [ english ] = "is the interest rate per period." ;
             Text [ norwegian ] = "Der Zinssatz pro Periode." ;
-            Text [ italian ] = "è il tasso di interesse per periodo." ;
+            Text [ italian ] = "Tasso di interesse per periodo." ;
             Text [ portuguese_brazilian ] = "Der Zinssatz pro Periode." ;
             Text [ portuguese ] = "é a taxa de juro periódica." ;
             Text [ finnish ] = "Kausikohtainen korkoprosentti." ;
@@ -5831,7 +5831,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZZR" ;
             Text [ english ] = "nper" ;
             Text [ norwegian ] = "ZZR" ;
-            Text [ italian ] = "NUM.RATE" ;
+            Text [ italian ] = "Numero rate" ;
             Text [ portuguese_brazilian ] = "ZZR" ;
             Text [ portuguese ] = "Nper" ;
             Text [ finnish ] = "NPER" ;
@@ -5861,7 +5861,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
             Text [ english ] = "is the total number of payment periods in an annuity." ;
             Text [ norwegian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
-            Text [ italian ] = "è il numero totale dei periodi di pagamento in un'annualità." ;
+            Text [ italian ] = "Numero totale dei periodi di pagamento in un'annualità." ;
             Text [ portuguese_brazilian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuit?t (Rente) gezahlt wird." ;
             Text [ portuguese ] = "é o número total de períodos de pagamento numa anuidade." ;
             Text [ finnish ] = "Maksukausi. Maksukaudet, joiden aikana annuiteetti (eläke) maksetaan." ;
@@ -5890,7 +5890,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "BW" ;
             Text [ english ] = "pv" ;
             Text [ norwegian ] = "BW" ;
-            Text [ italian ] = "VA" ;
+            Text [ italian ] = "Valore attuale" ;
             Text [ portuguese_brazilian ] = "BW" ;
             Text [ portuguese ] = "VA" ;
             Text [ finnish ] = "PV" ;
@@ -5919,7 +5919,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ english ] = "is the present valueùthe total amount that a series of future payments is worth now." ;
             Text [ norwegian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
-            Text [ italian ] = "è il valore attuale o la somma forfettaria che rappresenta il valore attuale di una serie di pagamenti futuri." ;
+            Text [ italian ] = "Valore attuale di una serie di pagamenti." ;
             Text [ portuguese_brazilian ] = "Barwert. Der derzeitige Wert der Reihe von Zahlungen." ;
             Text [ portuguese ] = "é o valor total actual de uma série de pagamentos futuros." ;
             Text [ finnish ] = "Nykyinen arvo. Maksusarjan nykyinen arvo" ;
@@ -5948,7 +5948,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZW" ;
             Text [ english ] = "fv" ;
             Text [ norwegian ] = "ZW" ;
-            Text [ italian ] = "VAL.FUT" ;
+            Text [ italian ] = "Valore futuro" ;
             Text [ portuguese_brazilian ] = "ZW" ;
             Text [ portuguese ] = "VF" ;
             Text [ finnish ] = "FV" ;
@@ -5978,7 +5978,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ english ] = "is the future value, or a cash balance you want to attain after the last payment is made." ;
             Text [ norwegian ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
-            Text [ italian ] = "è il valore futuro o il saldo in contanti che si desidera raggiungere dopo aver effettuato l'ultimo pagamento." ;
+            Text [ italian ] = "Valore futuro (valore finale) che si desidera raggiungere dopo l'ultimo pagamento." ;
             Text [ portuguese_brazilian ] = "Zuk?ftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ portuguese ] = "é o valor futuro ou um saldo de caixa obtido depois de efectuado o último pagamento." ;
             Text [ finnish ] = "Tuleva arvo. Viimeisen maksun jälkeinen arvo (loppuarvo)." ;
@@ -6007,7 +6007,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "F" ;
             Text [ english ] = "type" ;
             Text [ norwegian ] = "F" ;
-            Text [ italian ] = "tipo" ;
+            Text [ italian ] = "Tipo" ;
             Text [ portuguese_brazilian ] = "F" ;
             Text [ portuguese ] = "Tipo" ;
             Text [ finnish ] = "Tyyppi" ;
@@ -6037,7 +6037,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
-            Text [ italian ] = "Corrisponde a 0 o a 1 e indica le scadenze dei pagamenti." ;
+            Text [ italian ] = "Tipo di scadenza. 1 = all'inizio, 0 = alla fine del periodo." ;
             Text [ portuguese_brazilian ] = "F?lligkeit. F = 1 hei?t F?lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ portuguese ] = "é o vencimento dos pagamentos de juros. 1 significa no ínicio do período, 0 no final." ;
             Text [ finnish ] = "Tyyppi = 1 tarkoittaa kauden alkua ja = 0 kauden loppua." ;
@@ -6106,7 +6106,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "ZZR" ;
             Text [ english ] = "nper" ;
             Text [ norwegian ] = "ZZR" ;
-            Text [ italian ] = "NUM.RATE" ;
+            Text [ italian ] = "Numero rate" ;
             Text [ portuguese_brazilian ] = "ZZR" ;
             Text [ portuguese ] = "Nper" ;
             Text [ finnish ] = "NPER" ;
@@ -6136,7 +6136,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
             Text [ english ] = "is the total number of payment periods in an annuity." ;
             Text [ norwegian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
-            Text [ italian ] = "è il numero totale dei periodi di pagamento in un'annualità." ;
+            Text [ italian ] = "Numero totale dei periodi di pagamento in un'annualità." ;
             Text [ portuguese_brazilian ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuit?t (Rente) gezahlt wird." ;
             Text [ portuguese ] = "é o número total de períodos de pagamento numa anuidade." ;
             Text [ finnish ] = "Maksukausi. Maksukaudet, joiden aikana annuiteetti (eläke) maksetaan." ;
@@ -6165,7 +6165,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "RMZ" ;
             Text [ english ] = "pmt" ;
             Text [ norwegian ] = "RMZ" ;
-            Text [ italian ] = "RATA" ;
+            Text [ italian ] = "Rata" ;
             Text [ portuguese_brazilian ] = "RMZ" ;
             Text [ portuguese ] = "Pgto" ;
             Text [ finnish ] = "PMT" ;
@@ -6400,7 +6400,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "SW" ;
             Text [ english ] = "guess" ;
             Text [ norwegian ] = "SW" ;
-            Text [ italian ] = "ipotesi" ;
+            Text [ italian ] = "Ipotesi" ;
             Text [ portuguese_brazilian ] = "SW" ;
             Text [ portuguese ] = "Estimativa" ;
             Text [ finnish ] = "Arvio" ;
@@ -9631,7 +9631,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Berechnet die jährliche Effektivverzinsung zu einer Nominalverzinsung." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Berechnet die jährliche Effektivverzinsung zu einer Nominalverzinsung." ;
-            Text [ italian ] = "Calcola l'interesse effettivo annuale per un'interesse nominale." ;
+            Text [ italian ] = "Restituisce l'interesse effettivo annuale per un'interesse nominale." ;
             Text [ portuguese_brazilian ] = "Berechnet die j?hrliche Effektivverzinsung zu einer Nominalverzinsung." ;
             Text [ portuguese ] = "Calcula a taxa de juros anual efectiva para uma taxa de juros nominal." ;
             Text [ finnish ] = "Laskee nimellisen koron vuosittaisen nettosumman." ;
@@ -9666,7 +9666,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "NZ" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "NZ" ;
-            Text [ italian ] = "Int_nominale" ;
+            Text [ italian ] = "Interesse nominale" ;
             Text [ portuguese_brazilian ] = "NZ" ;
             Text [ portuguese ] = "NOMINAL" ;
             Text [ finnish ] = "NOM" ;
@@ -9787,7 +9787,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Berechnet die jährlichen Nominalzinsen zu einer Effektivverzinsung." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Berechnet die jährlichen Nominalzinsen zu einer Effektivverzinsung." ;
-            Text [ italian ] = "Calcola l'interesse nominale annuale per un interesse effettivo" ;
+            Text [ italian ] = "Restituisce l'interesse nominale annuale per un interesse effettivo." ;
             Text [ portuguese_brazilian ] = "Berechnet die j?hrlichen Nominalzinsen zu einer Effektivverzinsung." ;
             Text [ portuguese ] = "Calcula a taxa nominal anual com base numa taxa de juros efectiva." ;
             Text [ finnish ] = "Laskee todellisen korkoprosentin vuosittaisen nimelliskorkoprosentin mukaan." ;
@@ -10036,7 +10036,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert " ;
             Text [ english ] = "value " ;
             Text [ norwegian ] = "Wert " ;
-            Text [ italian ] = "valore " ;
+            Text [ italian ] = "Valore " ;
             Text [ portuguese_brazilian ] = "Wert " ;
             Text [ portuguese ] = "Valor " ;
             Text [ finnish ] = "arvo" ;
@@ -10135,7 +10135,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Werte" ;
             Text [ english ] = "values" ;
             Text [ norwegian ] = "Werte" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valori" ;
             Text [ portuguese_brazilian ] = "Werte" ;
             Text [ portuguese ] = "Valores" ;
             Text [ finnish ] = "Arvot" ;
@@ -10164,7 +10164,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Matrix oder Zellbezug auf Zellen, deren Inhalt den Zahlungen entsprechen. " ;
             Text [ english ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return." ;
             Text [ norwegian ] = "Matrix oder Zellbezug auf Zellen, deren Inhalt den Zahlungen entsprechen. " ;
-            Text [ italian ] = "È una matrice o un riferimento a celle il cui contenuto corrisponde ai pagamenti. " ;
+            Text [ italian ] = "È riferimento a una cella celle o una matrice che contiene i valori degli importi di pagamento. " ;
             Text [ portuguese_brazilian ] = "Matrix oder Zellbezug auf Zellen, deren Inhalt den Zahlungen entsprechen. " ;
             Text [ portuguese ] = "é uma matriz ou uma referência a células, cujos conteúdos correspondem aos pagamentos. " ;
             Text [ finnish ] = "Matriisi tai soluviite maksuja vastaaviin soluihin. " ;
@@ -10193,7 +10193,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "SW" ;
             Text [ english ] = "guess" ;
             Text [ norwegian ] = "SW" ;
-            Text [ italian ] = "ipotesi" ;
+            Text [ italian ] = "Ipotesi" ;
             Text [ portuguese_brazilian ] = "SW" ;
             Text [ portuguese ] = "Estimativa" ;
             Text [ finnish ] = "Arvio" ;
@@ -10318,7 +10318,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Matrix of celverwijzing naar cellen waarvan de inhoud overeenkomt met de betalingen.  ";
             Text[ french ] = "Une matrice ou une référence à des cellules dont le contenu correspond aux paiements.";
             Text[ spanish ] = "Matriz o referencia de celda a celdas cuyo contenido corresponde a los pagos.";
-            Text[ italian ] = "È una matrice o un riferimento a celle il cui contenuto corrisponde ai pagamenti.";
+            Text[ italian ] = "È riferimento a una cella celle o una matrice che contiene i valori degli importi di pagamento.";
             Text[ danish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
             Text[ swedish ] = "Matris eller cellreferens till celler vars innehåll motsvarar betalningarna.";
             Text[ polish ] = "Macierz lub odwo³anie komórek do komórek, których zawartoœci odpowiadaj¹ p³atnoœciom.  ";
@@ -10578,7 +10578,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "gehele_termijn";
             Text[ french ] = "Durée_totale";
             Text[ spanish ] = "Período_total";
-            Text[ italian ] = "Periodo_totale";
+            Text[ italian ] = "Periodi";
             Text[ danish ] = "total_periods";
             Text[ swedish ] = "Perioder_totalt";
             Text[ polish ] = "Suma_okresów";
@@ -10676,7 +10676,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Laufzeit. Berechnet die Anzahl der Perioden, die eine Investition benötigt, um auf einen angestrebten Wert zu kommen." ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Laufzeit. Berechnet die Anzahl der Perioden, die eine Einlage benötigt, um auf einen angestrebten Wert zu kommen." ;
-            Text [ italian ] = "Durata. Il numero di periodi necessari affinché un investimento raggiunga un valore voluto." ;
+            Text [ italian ] = "Restituisce il numero di periodi necessari affinché un investimento raggiunga un valore voluto." ;
             Text [ portuguese_brazilian ] = "Laufzeit. Berechnet die Anzahl der Perioden, die eine Einlage ben?igt, um auf einen angestrebten Wert zu kommen." ;
             Text [ portuguese ] = "Duração. Devolve a quantidade de períodos necessários para que um investimento atinja o valor desejado." ;
             Text [ finnish ] = "Kesto: Laskee kausien määrän, joka tarvitaan sijoituksen halutun arvon saavuttamiseen." ;
@@ -11140,7 +11140,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11238,7 +11238,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11336,7 +11336,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11434,7 +11434,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11533,7 +11533,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11631,7 +11631,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11729,7 +11729,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11827,7 +11827,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -11925,7 +11925,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -12206,7 +12206,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -12343,7 +12343,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -14389,7 +14389,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -14487,7 +14487,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Wert" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -21671,7 +21671,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è®¡ç®—æ•°å­—é¡¹çš„ä¸ªæ•°ã€‚";
             Text[ russian ] = "Ïîäñ÷èòûâàåò, ñêîëüêî ÷èñåë ñîäåğæèòñÿ â ñïèñêå àğãóìåíòîâ.";
             Text[ polish ] = "Oblicza, ile liczb zawiera lista argumentów.";
-            Text[ japanese ] = "å¼•æ•°ï¾˜ï½½ï¾„ã®å„é …ç›®ã«å«ã¾ã‚Œã‚‹æ•°å€¤ã®å€‹æ•°ã®åˆè¨ˆã‚’è¿”ã—ã¾ã™ã€‚";
+            Text[ japanese ] = "å¼•æ•°ï¾˜ï½½ï¾„å«ã¾ã‚Œã‚‹æ•°å€¤ã®å€‹æ•°ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "è¨ˆç®—æ•¸å­—é …çš„å€‹æ•¸ã€‚";
             Text[ arabic ] = "ÊÍÓÈ ÚÏÏ ÇáÃÑŞÇã ÇáãæÌæÏÉ İí ŞÇÆãÉ ãä ÇáæÓÇÆØ.";
             Text[ dutch ] = "Telt hoeveel getallen een lijst van argumenten bevat.";
@@ -21693,7 +21693,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert " ;
             Text [ english ] = "value " ;
             Text [ norwegian ] = "Wert " ;
-            Text [ italian ] = "valore " ;
+            Text [ italian ] = "Valore " ;
             Text [ portuguese_brazilian ] = "Wert " ;
             Text [ portuguese ] = "Valor " ;
             Text [ finnish ] = "arvo" ;
@@ -21706,7 +21706,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "value ";
             Text[ russian ] = "Çíà÷åíèå  ";
             Text[ polish ] = "Wartoœæ ";
-            Text[ japanese ] = "æ•°å€¤ ";
+            Text[ japanese ] = "å€¤ ";
             Text[ chinese_traditional ] = "value ";
             Text[ arabic ] = "ÇáŞíãÉ ";
             Text[ dutch ] = "Waarde  ";
@@ -21736,7 +21736,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "æ•°å€¼1; æ•°å€¼ 2;... æ˜¯ 1 è‡³ 30ä¸ªå«æœ‰å„ç§ç±»å‹æ•°æ®çš„\nå‚æ•°ï¼Œä½†åªè®¡æ•°æ•°å­—ç±»å‹çš„æ•°æ®ã€‚";
             Text[ russian ] = "Çíà÷åíèå 1; çíà÷åíèå 2;... îò 1 äî 30 àğãóìåíòîâ, êîòîğûå ìîãóò ñîäåğæàòü èëè ññûëàòüñÿ íà äàííûå ğàçëè÷íûõ òèïîâ, íî â ïîäñ÷åòå ó÷àñòâóşò òîëüêî ÷èñëà.";
             Text[ polish ] = "Od 1 do 30 argumentów, które mog¹ odnosiæ siê do argumentów ró¿nych typów danych, przy czym zliczane bêd¹ tylko liczby.";
-            Text[ japanese ] = "å€¤ 1;å€¤ 2;...ã¯1ã‹ã‚‰30å€‹ã¾ã§ã®ï½¾ï¾™ç¯„å›²ã§ä»»æ„ã®ï¾ƒï¾ï½°ï¾€ã‚’å¯¾è±¡ã¨ã—ã¾ã™ãŒã€æ•°å€¤ã®ï½¾ï¾™ã®ã¿ã‚’æ•°ãˆã¾ã™ã€‚";
+            Text[ japanese ] = "å€¤ 1;å€¤ 2;...ã¯30å€‹ã¾ã§ã®ï½¾ï¾™ç¯„å›²ã€‚";
             Text[ chinese_traditional ] = "æ•¸å€¼1; æ•¸å€¼ 2;... æ˜¯ 1 è‡³ 30å€‹å«æœ‰å„ç¨®é¡å‹è³‡æ–™çš„åƒæ•¸ï¹\nä½†åªè¨ˆæ•¸æ•¸å­—é¡å‹çš„è³‡æ–™ã€‚";
             Text[ arabic ] = "value1;value2;... ãä 1 Åáì 30 æÓíØÉ ĞÇÊ ÃäãÇØ ÈíÇäÇÊ ãÎÊáİÉº ÅáÇ Ãä ÇáÃÑŞÇã İŞØ åí ÇáÊí Óæİ ÊÚÏ.";
             Text[ dutch ] = "Waarde 1; Waarde 2;...zijn maximaal 30 argumenten met verschillende typen gegevens, waarbij alleen de getallen worden geteld.";
@@ -21770,7 +21770,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è®¡ç®—æ•°æ®é¡¹çš„ä¸ªæ•°ã€‚";
             Text[ russian ] = "Ïîäñ÷èòûâàåò, ñêîëüêî çíà÷åíèé ñîäåğæèòñÿ â ñïèñêå àğãóìåíòîâ.";
             Text[ polish ] = "Oblicza, ile wartoœci zawiera lista argumentów.";
-            Text[ japanese ] = "å¼•æ•°ã®ï¾˜ï½½ï¾„ã«å«ã¾ã‚Œã‚‹æ•°å€¤ã®å€‹æ•°ã‚’è¿”ã—ã¾ã™ã€‚";
+            Text[ japanese ] = "å¼•æ•°ï¾˜ï½½ï¾„ã«å«ã¾ã‚Œã‚‹ç©ºç™½ã§ãªã„ï½¾ï¾™ã®å€‹æ•°ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "è¨ˆç®—æ•¸æ“šé …çš„å€‹æ•¸ã€‚";
             Text[ arabic ] = "ÊÍÓÈ ÚÏÏ ÇáŞíã ÇáãæÌæÏÉ İí ŞÇÆãÉ ãä ÇáæÓÇÆØ.";
             Text[ dutch ] = "Telt hoeveel waarden een lijst van argumenten bevat.";
@@ -21792,7 +21792,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert " ;
             Text [ english ] = "value " ;
             Text [ norwegian ] = "Wert " ;
-            Text [ italian ] = "valore " ;
+            Text [ italian ] = "Valore " ;
             Text [ portuguese_brazilian ] = "Wert " ;
             Text [ portuguese ] = "Valor " ;
             Text [ finnish ] = "arvo" ;
@@ -21805,7 +21805,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "value ";
             Text[ russian ] = "Çíà÷åíèå  ";
             Text[ polish ] = "Wartoœæ  ";
-            Text[ japanese ] = "æ•°å€¤ ";
+            Text[ japanese ] = "å€¤ ";
             Text[ chinese_traditional ] = "value ";
             Text[ arabic ] = "ÇáŞíãÉ ";
             Text[ dutch ] = "Waarde  ";
@@ -21835,7 +21835,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "æ•°å€¼ 1; æ•°å€¼ 2;... æ˜¯ 1 è‡³ 30 ä¸ªè¦è®¡æ•°çš„å‚æ•°ã€‚";
             Text[ russian ] = "Çíà÷åíèå 1; çíà÷åíèå 2;... îò 1 äî 30 àğãóìåíòîâ, êîëè÷åñòâî êîòîğûõ òğåáóåòñÿ ñîñ÷èòàòü.";
             Text[ polish ] = "Od 1 do 30 argumentów, które odpowiadaj¹ wartoœciom do zliczania.";
-            Text[ japanese ] = "å€¤ 1; å€¤ 2;...ã¯1ã‹ã‚‰30å€‹ã¾ã§ã®ï½¾ï¾™ç¯„å›²ã§ä»»æ„ã®ï¾ƒï¾ï½°ï¾€ã‚’å¯¾è±¡ã¨ã—ã¾ã™ã€‚";
+            Text[ japanese ] = "å€¤ 1; å€¤ 2;...ã¯30å€‹ã¾ã§ã®ï½¾ï¾™ç¯„å›²ã€‚";
             Text[ chinese_traditional ] = "æ•¸å€¼ 1; æ•¸å€¼ 2;... æ˜¯ 1 è‡³ 30 å€‹è¦è¨ˆæ•¸çš„åƒæ•¸ã€‚";
             Text[ arabic ] = "value1;value2... ãä 1 Åáì 30 æÓíØÉ ÊãËá ÇáŞíã ÇáãÑÇÏ ÚÏåÇ.";
             Text[ dutch ] = "Waarde 1; Waarde 2;... zijn maximaal 30 argumenten met de waarden die geteld moeten worden.";
@@ -21987,7 +21987,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert " ;
             Text [ english ] = "value " ;
-            Text[ italian ] = "valore ";
+            Text[ italian ] = "Valore ";
             Text[ portuguese_brazilian ] = "value ";
             Text[ portuguese ] = "valor ";
             Text[ danish ] = "Værdi ";
@@ -22015,7 +22015,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, deren größter Wert bestimmt werden soll." ;
             Text [ english ] = "are 1 to 30 arguments of which to determine the maximum value." ;
-            Text[ italian ] = "val 1, val 2; ... sono da 1 a 30 argomenti per i quali si determina il volore massimo.";
+            Text[ italian ] = "Valore 1, Valore 2; ... sono da 1 a 30 argomenti per i quali si determina il valore massimo.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments of which to determine the maximum value.";
             Text[ portuguese ] = "núm1; núm2; ... são argumentos entre 1 e 30 para os quais deverá ser encontrado o valor máximo.";
             Text[ danish ] = "Værdi 1; værdi 2; ... er 1 til 30 argumenter, for hvilke den største værdi skal findes.";
@@ -22178,7 +22178,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert " ;
             Text [ english ] = "value " ;
-            Text[ italian ] = "valore ";
+            Text[ italian ] = "Valore ";
             Text[ portuguese_brazilian ] = "value ";
             Text[ portuguese ] = "valor ";
             Text[ danish ] = "Værdi ";
@@ -22206,7 +22206,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, deren kleinste Zahl bestimmt werden soll." ;
             Text [ english ] = "are 1 to 30 arguments of which to determine the minimum value." ;
-            Text[ italian ] = "val 1, val 2; ... sono da 1 a 30 argomenti per i quali si determina il volore minimo.";
+            Text[ italian ] = "Valore 1, Valore 2; ... sono da 1 a 30 argomenti per i quali si determina il valore minimo.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments of which to determine the minimum value.";
             Text[ portuguese ] = "núm1; núm2;...são argumentos entre 1 e 30 para os quais se deverá encontrar o valor mínimo.";
             Text[ danish ] = "Værdi 1; værdi 2; ... er 1 til 30 argumenter, for hvilke den mindste værdi skal findes.";
@@ -22369,7 +22369,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert " ;
             Text [ english ] = "value " ;
-            Text[ italian ] = "valore ";
+            Text[ italian ] = "Valore ";
             Text[ portuguese_brazilian ] = "value ";
             Text[ portuguese ] = "valor ";
             Text[ danish ] = "Værdi ";
@@ -22397,7 +22397,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 arguments corresponding to a sample population." ;
-            Text[ italian ] = "val 1; val 2; ... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
+            Text[ italian ] = "Valore 1; Valore 2; ... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments corresponding to a sample population.";
             Text[ portuguese ] = "núm1; núm2;... são argumentos entre 1 e 30 correspondentes a uma amostra de população.";
             Text[ danish ] = "Værdi 1; værdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en stikprøve fra en population.";
@@ -22562,7 +22562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert " ;
             Text [ english ] = "value " ;
-            Text[ italian ] = "valore ";
+            Text[ italian ] = "Valore ";
             Text[ portuguese_brazilian ] = "value ";
             Text[ portuguese ] = "valor ";
             Text[ danish ] = "Værdi ";
@@ -22590,7 +22590,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die einer Grundgesamtheit entsprechen." ;
             Text [ english ] = "are 1 to 30 arguments representing a population." ;
-            Text[ italian ] = "val 1, val 2; ... sono da 1 a 30 argomenti che rappresentano una popolazione.";
+            Text[ italian ] = "Valore 1, Valore 2; ... sono da 1 a 30 argomenti che rappresentano una popolazione.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments representing a population.";
             Text[ portuguese ] = "valor1; valor2;... são argumentos entre 1 e 30 e que representam uma população.";
             Text[ danish ] = "Værdi 1; værdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en hel population.";
@@ -22753,7 +22753,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert " ;
             Text [ english ] = "value " ;
-            Text[ italian ] = "valore ";
+            Text[ italian ] = "Valore ";
             Text[ portuguese_brazilian ] = "value ";
             Text[ portuguese ] = "valor ";
             Text[ danish ] = "Værdi ";
@@ -22781,7 +22781,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ english ] = "are 1 to 30 arguments corresponding to a sample of a population." ;
-            Text[ italian ] = "val 1; val 2; ... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
+            Text[ italian ] = "Valore 1; Valore 2; ... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments corresponding to a sample of a population.";
             Text[ portuguese ] = "valor1; valor2;... são argumentos entre 1 e 30 correspondentes a uma amostra de população.";
             Text[ danish ] = "Værdi 1; værdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en stikprøve fra en population.";
@@ -22946,7 +22946,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert " ;
             Text [ english ] = "value " ;
-            Text[ italian ] = "valore ";
+            Text[ italian ] = "Valore ";
             Text[ portuguese_brazilian ] = "value ";
             Text[ portuguese ] = "valor ";
             Text[ danish ] = "Værdi ";
@@ -22974,7 +22974,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die einer Grundgesamtheit entsprechen." ;
             Text [ english ] = "are 1 to 30 arguments representing a population." ;
-            Text[ italian ] = "val 1, val 2; ... sono da 1 a 30 argomenti che rappresentano una popolazione.";
+            Text[ italian ] = "Valore 1, Valore 2; ... sono da 1 a 30 argomenti che rappresentano una popolazione.";
             Text[ portuguese_brazilian ] = "are 1 to 30 arguments representing a population.";
             Text[ portuguese ] = "valor1; valor2;... são argumetnos entre 1 e 30 que representam uma população.";
             Text[ danish ] = "Værdi 1; værdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en hel population.";
@@ -23137,7 +23137,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert " ;
             Text [ english ] = "value " ;
-            Text[ italian ] = "valore ";
+            Text[ italian ] = "Valore ";
             Text[ portuguese_brazilian ] = "value ";
             Text[ portuguese ] = "valor ";
             Text[ danish ] = "Værdi ";
@@ -23165,7 +23165,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen." ;
             Text [ english ] = "Value 1, value 2;... are 1 to 30 arguments representing a population sample, for which to find the average." ;
-            Text[ italian ] = "val 1, val 2;... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
+            Text[ italian ] = "Valore 1, Valore 2;... sono da 1 a 30 argomenti che rappresentano un campione di popolazione.";
             Text[ portuguese_brazilian ] = "Value 1, value 2;... are 1 to 30 arguments representing a population sample, for which to find the average.";
             Text[ portuguese ] = "valor1; valor2;... são argumentos entre 1 e 30 que representam uma amostra de população para a qual se deverá calcular a média aritmética.";
             Text[ danish ] = "Værdi 1; værdi 2; ... er 1 til 30 numeriske argumenter, der svarer til en stikprøve fra en population.";
@@ -25530,7 +25530,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "å•ä¸ªè¯•éªŒçš„æˆåŠŸæ¦‚ç‡";
             Text[ russian ] = "Âåğîÿòíîñòü óñïåõà êàæäîãî ğåçóëüòàòà èñïûòàíèé";
             Text[ polish ] = "Prawdopodobieñstwo sukcesu próby.";
-            Text[ japanese ] = "è©¦è¡Œçµæœã®1å›ã‚ãŸã‚Šã®ç¢ºç‡ã€‚";
+            Text[ japanese ] = "è©¦è¡ŒãŒ1å›æˆåŠŸã™ã‚‹ç¢ºç‡ã€‚";
             Text[ chinese_traditional ] = "å–®å€‹è©¦é©—çš„æˆåŠŸæ¦‚ç‡";
             Text[ arabic ] = "ÇÍÊãÇá ÇáäÌÇÍ İí ßá ÊÌÑÈÉ.";
             Text[ dutch ] = "Kans op succes bij een test.";
@@ -25588,7 +25588,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è¯•éªŒæˆåŠŸæ¬¡æ•°çš„ä¸‹é™ã€‚";
             Text[ russian ] = "Êîëè÷åñòâî èñïûòàíèé (íèæíèé ïğåäåë).";
             Text[ polish ] = "Liczba prób (dolny limit).";
-            Text[ japanese ] = "è©¦è¡Œå›æ•°ã®ä¸‹é™ã€‚";
+            Text[ japanese ] = "è©¦è¡ŒãŒæˆåŠŸã™ã‚‹å›æ•°ã®ä¸‹é™ã€‚";
             Text[ chinese_traditional ] = "è©¦é©—æˆåŠŸæ¬¡æ•¸çš„ä¸‹é™ã€‚";
             Text[ arabic ] = "ÇáÍÏ ÇáÃÏäì áÚÏÏ ÇáÊÌÇÑÈ.";
             Text[ dutch ] = "Onderste limiet van het aantal tests";
@@ -25646,7 +25646,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è¯•éªŒæˆåŠŸæ¬¡æ•°çš„ä¸Šé™ã€‚";
             Text[ russian ] = "Êîëè÷åñòâî èñïûòàíèé (âåğõíèé ïğåäåë).";
             Text[ polish ] = "Liczba prób (górny limit).";
-            Text[ japanese ] = "è©¦è¡Œå›æ•°ã®ä¸Šé™ã€‚";
+            Text[ japanese ] = "è©¦è¡ŒãŒæˆåŠŸã™ã‚‹å›æ•°ã®ä¸Šé™ã€‚";
             Text[ chinese_traditional ] = "è©¦é©—æˆåŠŸæ¬¡æ•¸çš„ä¸Šé™ã€‚";
             Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì áÚÏÏ ÇáÊÌÇÑÈ.";
             Text[ dutch ] = "Bovenste limiet van het aantal tests.";
@@ -25744,7 +25744,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "Çíà÷åíèå, äëÿ êîòîğîãî âû÷èñëÿåòñÿ ñòàíäàğòíîå íîğìàëüíîå ğàñïğåäåëåíèå.";
             Text[ polish ] = "Wartoœæ, dla której ma zostaæ obliczony standardowy rozk³ad normalny.";
             Text[ japanese ] = "æ¨™æº–æ­£è¦åˆ†å¸ƒé–¢æ•°ã«ä»£å…¥ã™ã‚‹å€¤ã€‚";
-            Text[ chinese_traditional ] = "ç”¨äºè¨ˆç®—æ¨™æº–æ­£æ…‹åˆ†ä½ˆçš„æ•¸å€¼ã€‚";
+            Text[ chinese_traditional ] = "ç”¨æ–¼è¨ˆç®—æ¨™æº–æ­£æ…‹åˆ†ä½ˆçš„æ•¸å€¼ã€‚";
             Text[ arabic ] = "ÇáŞíãÉ ÇáÊí ÓíÊã ÍÓÇÈ ÇáÊæÒíÚ ÇáØÈíÚí ÇáŞíÇÓí áåÇ.";
             Text[ dutch ] = "De waarde waarvan de standaardnormale verdeling wordt berekend.";
             Text[ chinese_simplified ] = "ç”¨äºè®¡ç®—æ ‡å‡†æ­£æ€åˆ†å¸ƒçš„æ•°å€¼ã€‚";
@@ -26103,7 +26103,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "number_s";
             Text[ russian ] = "X";
             Text[ polish ] = "X";
-            Text[ japanese ] = "æ•°å€¤";
+            Text[ japanese ] = "æˆåŠŸæ•°";
             Text[ chinese_traditional ] = "number_s";
             Text[ arabic ] = "Number_s";
             Text[ dutch ] = "X";
@@ -26132,7 +26132,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è¯•éªŒç³»åˆ—çš„æˆåŠŸæ¬¡æ•°ã€‚";
             Text[ russian ] = "Êîëè÷åñòâî óñïåøíûõ èñïûòàíèé.";
             Text[ polish ] = "Liczba sukcesów podczas prób.";
-            Text[ japanese ] = "è©¦è¡Œå›æ•°ã«å«ã¾ã‚Œã‚‹æˆåŠŸã®å›æ•°ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "è©¦è¡Œå›æ•°ã«å«ã¾ã‚Œã‚‹æˆåŠŸã®å›æ•°ã€‚";
             Text[ chinese_traditional ] = "è©¦é©—ç³»åˆ—çš„æˆåŠŸæ¬¡æ•¸ã€‚";
             Text[ arabic ] = "ÚÏÏ ÇáäÌÇÍÇÊ İí ÓáÓáÉ ÇáÊÌÇÑÈ.";
             Text[ dutch ] = "Het aantal successen in een reeks experimenten.";
@@ -26248,7 +26248,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "å•ä¸ªè¯•éªŒçš„æˆåŠŸæ¦‚ç‡ã€‚";
             Text[ russian ] = "Âåğîÿòíîñòü óñïåõà êàæäîãî èñïûòàíèÿ.";
             Text[ polish ] = "Prawdopodobieñstwo sukcesu próby.";
-            Text[ japanese ] = "1å›ã®è©¦è¡ŒãŒæˆåŠŸã™ã‚‹ç¢ºç‡ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "1å›ã®è©¦è¡ŒãŒæˆåŠŸã™ã‚‹ç¢ºç‡ã€‚";
             Text[ chinese_traditional ] = "å–®å€‹è©¦é©—çš„æˆåŠŸæ¦‚ç‡ã€‚";
             Text[ arabic ] = "ÇÍÊãÇá äÌÇÍ ÊÌÑÈÉ.";
             Text[ dutch ] = "De kans op succes bij een experiment.";
@@ -26306,7 +26306,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "é€»è¾‘å€¼ã€‚K = 0 è®¡ç®—æ¦‚ç‡å¯†åº¦ï¼ŒK = 1 è®¡ç®—ç´¯ç§¯æ¦‚ç‡ã€‚";
             Text[ russian ] = "Ëîãè÷åñêîå çíà÷åíèå, îïğåäåëÿşùåå âèä ôóíêöèè: èíòåãğàëüíàÿ ôóíêöèÿ ğàñïğåäåëåíèÿ (1) èëè âåñîâàÿ ôóíêöèÿ ğàñïğåäåëåíèÿ (0).";
             Text[ polish ] = "Skumulowany. K = 0 oblicza pojedyncze prawdopodobieñstwo, K = 1 skumulowane prawdopodobieñstwo.";
-            Text[ japanese ] = "é–¢æ•°å½¢å¼ã€‚ é–¢æ•°ã®å½¢å¼ã‚’è«–ç†å€¤ã§æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "é–¢æ•°å½¢å¼ 0 ã¯ç¢ºç‡å¯†åº¦é–¢æ•°ã€1 ã¯ç´¯ç©åˆ†å¸ƒé–¢æ•°ã€‚";
             Text[ chinese_traditional ] = "é‚è¼¯å€¼ã€‚K = 0 è¡¨ç¤ºè¨ˆç®—æ¦‚ç‡å¯†åº¦ï¹K = 1 è¡¨ç¤ºè¨ˆç®—ç´¯ç©æ¦‚ç‡ã€‚";
             Text[ arabic ] = "ŞíãÉ ãäØŞíÉ ÊÍÏÏ äãØ ÇáÏÇáÉ.";
             Text[ dutch ] = "Cumulatief. C = 0 berekent de enkele, C = 1 de cumulatieve kans.";
@@ -29001,7 +29001,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è´å¡”åˆ†å¸ƒçš„å‚å˜é‡é˜¿å°”æ³•ã€‚";
             Text[ russian ] = "Ïàğàìåòğ ğàñïğåäåëåíèÿ.";
             Text[ polish ] = "Parametr alfa w rozk³adzie beta.";
-            Text[ japanese ] = "ç¢ºç‡åˆ†å¸ƒã«å¯¾ã™ã‚‹ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ç¢ºç‡åˆ†å¸ƒã«å¯¾ã™ã‚‹ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€ã€‚";
             Text[ chinese_traditional ] = "è²å¡”åˆ†ä½ˆçš„åƒè®Šé‡é˜¿çˆ¾æ³•ã€‚";
             Text[ arabic ] = "ÇáãÚáãÉ ÃáİÇ áÊæÒíÚ ÈíÊÇ.";
             Text[ dutch ] = "De parameter alfa van de beta-verdeling";
@@ -29059,7 +29059,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è´å¡”åˆ†å¸ƒçš„å‚å˜é‡è´å¡”ã€‚";
             Text[ russian ] = "Ïàğàìåòğ ğàñïğåäåëåíèÿ.";
             Text[ polish ] = "Parametr beta w rozk³adzie beta.";
-            Text[ japanese ] = "ç¢ºç‡åˆ†å¸ƒã«å¯¾ã™ã‚‹ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ç¢ºç‡åˆ†å¸ƒã«å¯¾ã™ã‚‹ï¾Šï¾Ÿï¾—ï¾’ï½°ï¾€ã€‚";
             Text[ chinese_traditional ] = "è²å¡”åˆ†ä½ˆçš„åƒè®Šé‡è²å¡”ã€‚";
             Text[ arabic ] = "ÇáãÚáãÉ ÈíÊÇ áÊæÒíÚ ÈíÊÇ.";
             Text[ dutch ] = "De parameter beta van de beta-verdeling";
@@ -30365,7 +30365,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "Çíà÷åíèå âåğîÿòíîñòè, äëÿ êîòîğîãî íåîáõîäèìî âû÷èñëèòü îáğàòîíîå t-ğàñïğåäåëåíèå.";
             Text[ polish ] = "Prawdopodobieñstwo, dla którego ma zostaæ obliczona odwrotnoœæ rozk³adu t Studenta.";
             Text[ japanese ] = "t åˆ†å¸ƒã®é€†é–¢æ•°ã®è¨ˆç®—ã«ä½¿ã†ç¢ºç‡ã€‚";
-            Text[ chinese_traditional ] = "å°æ‡‰äºé›™å°¾å­¸ç”Ÿæ° t åˆ†ä½ˆçš„æ¦‚ç‡ã€‚";
+            Text[ chinese_traditional ] = "å°æ‡‰æ–¼é›™å°¾å­¸ç”Ÿæ° t åˆ†ä½ˆçš„æ¦‚ç‡ã€‚";
             Text[ arabic ] = "ÇáÇÍÊãÇá ÇáãÑÇÏ ÍÓÇÈ ÊæÒíÚ t ÇáÚßÓí ÚäÏå.";
             Text[ dutch ] = "De kans die samenhangt met de inverse T-verdeling.";
             Text[ chinese_simplified ] = "å¯¹åº”äºåŒå°¾å­¦ç”Ÿæ°  t åˆ†å¸ƒçš„æ¦‚ç‡ã€‚";
@@ -31038,7 +31038,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Chi å¹³æ–¹åˆ†å¸ƒå•å°¾æ¦‚ç‡çš„é€†å‡½æ•°ã€‚";
             Text[ russian ] = "Âîçâğàùàåò çíà÷åíèå, îáğàòíîå ê îäíîñòîğîííåé âåğîÿòíîñòè ğàñïğåäåëíèÿ õè-êâàäğàò.";
             Text[ polish ] = "Wyznacza odwrotnoœæ rozk³adu chi-kwadrat.";
-            Text[ japanese ] = "ï½¶ï½²2ä¹—(Ï‡2)åˆ†å¸ƒã®é€†é–¢æ•°ã‚’è¿”ã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ï½¶ï½²2ä¹—åˆ†å¸ƒã®ï¼…ç‚¹é€†å¼•ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "Chi å¹³æ–¹åˆ†ä½ˆå–®å°¾æ¦‚ç‡çš„é€†å‡½æ•¸ã€‚";
             Text[ arabic ] = "Şíã ÚßÓ ÊæÒíÚ Chi ÇáÊÑÈíÚí.";
             Text[ dutch ] = "Waarden van de inverse chi kwadraatverdeling.";
@@ -31073,7 +31073,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "number";
             Text[ russian ] = "×èñëî";
             Text[ polish ] = "Liczba";
-            Text[ japanese ] = "æ•°å€¤";
+            Text[ japanese ] = "å±é™ºç‡";
             Text[ chinese_traditional ] = "number";
             Text[ arabic ] = "number";
             Text[ dutch ] = "Getal";
@@ -31102,7 +31102,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Chi å¹³æ–¹åˆ†å¸ƒçš„å•å°¾æ¦‚ç‡ã€‚";
             Text[ russian ] = "Âåğîÿòíîñòü, ñâÿçàííàÿ ñ ğàñïğåäåëåíèåì õè-êâàäğàò";
             Text[ polish ] = "Prawdopodobieñstwo, dla którego ma zostaæ obliczona odwrotnoœæ rozk³adu chi-kwadrat.";
-            Text[ japanese ] = "é€†é–¢æ•°ï½¶ï½²2ä¹—(Ï‡2)åˆ†å¸ƒã«ä¼´ã†ç¢ºç‡ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "é–¢æ•°ã«ä½¿ç”¨ã™ã‚‹å±é™ºç‡ã€‚";
             Text[ chinese_traditional ] = "Chi å¹³æ–¹åˆ†ä½ˆçš„å–®å°¾æ¦‚ç‡ã€‚";
             Text[ arabic ] = "ÇÍÊãÇá ãŞÊÑä ãÚ ÊæÒíÚ ßÇí ÊÑÈíÚ.";
             Text[ dutch ] = "De kansdichtheid, waarop de inverse chi-kwadraatverdeling moet worden berekend.";
@@ -32726,7 +32726,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è®¡ç®— Pearson ä¹˜ç§¯çŸ©ç›¸å…³ç³»æ•°çš„å¹³æ–¹ã€‚";
             Text[ russian ] = "Âû÷èñëÿåò êâàäğàò êîıôôèöèåíòà êîğğåëÿöèè Ïèğñîíà ïî òî÷êàì äàííûõ.";
             Text[ polish ] = "Wyznacza kwadrat chwilowego wspó³czynnika korelacji iloczynu Pearsona.";
-            Text[ japanese ] = "ï¾‹ï¾Ÿï½±ï½¿ï¾ã®ç©ç‡ç›¸é–¢ä¿‚æ•°ã®å€¤ã‚’2ä¹—ã—ã¦è¿”ã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ï¾‹ï¾Ÿï½±ï½¿ï¾ã®ç©ç‡ç›¸é–¢ä¿‚æ•°ã®å€¤ã‚’2ä¹—ã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "è¨ˆç®— Pearson ä¹˜ç©çŸ©ç›¸é—œä¿‚æ•¸çš„å¹³æ–¹ã€‚";
             Text[ arabic ] = "ÊÍÓÈ ÊÑÈíÚ ãÚÇãá Pearson ááÇÑÊÈÇØ ÇáÚÒæãí.";
             Text[ dutch ] = "Berekent de correlatiecoëfficiënt van Peorson in kwadraatvorm.";
@@ -32790,7 +32790,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "Y - æ•°ç»„æˆ–æ•°æ®ç‚¹åŒºåŸŸã€‚";
             Text[ russian ] = "Ìàññèâ äàííûõ Y.";
             Text[ polish ] = "Macierz danych Y.";
-            Text[ japanese ] = "æ—¢çŸ¥ã® y ã®ï¾ƒï¾ï½°ï¾€ã‚’å«ã‚€é…åˆ—ã¾ãŸã¯ï½¾ï¾™ç¯„å›²ã€‚";
+            Text[ japanese ] = "Y ã®ï¾ƒï¾ï½°ï¾€ãŒå…¥åŠ›ã•ã‚Œã¦ã„ã‚‹ï½¾ï¾™ç¯„å›²ã€‚";
             Text[ chinese_traditional ] = "Y - æ•¸çµ„æˆ–è³‡æ–™é»å€åŸŸã€‚";
             Text[ arabic ] = "Õİíİ Ãæ äØÇŞ ãä äŞÇØ ÇáÈíÇäÇÊ.";
             Text[ dutch ] = "De matrix van de Y-gegevens";
@@ -32848,7 +32848,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "X - æ•°ç»„æˆ–æ•°æ®ç‚¹åŒºåŸŸã€‚";
             Text[ russian ] = "Ìàññèâ äàííûõ X.";
             Text[ polish ] = "Macierz danych X.";
-            Text[ japanese ] = "æ—¢çŸ¥ã® x ã‚’å«ã‚€é…åˆ—ã¾ãŸã¯ï½¾ï¾™ç¯„å›²ã€‚";
+            Text[ japanese ] = "X ã®ï¾ƒï¾ï½°ï¾€ãŒå…¥åŠ›ã•ã‚Œã¦ã„ã‚‹ï½¾ï¾™ç¯„å›²ã€‚";
             Text[ chinese_traditional ] = "X - æ•¸çµ„æˆ–æ•¸æ“šé»å€åŸŸã€‚";
             Text[ arabic ] = "Õİíİ Ãæ äØÇŞ ãä äŞÇØ ÇáÈíÇäÇÊ.";
             Text[ dutch ] = "De matrix van de X-gegevens";
@@ -33765,7 +33765,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix des zweiten Datensatzes." ;
             Text [ english ] = "is the second cell range of integers." ;
             Text [ norwegian ] = "Die Matrix des zweiten Datensatzes." ;
-            Text [ italian ] = "è il secondo intervallo di celle." ;
+            Text [ italian ] = "La matrice del secondo record di dati." ;
             Text [ portuguese_brazilian ] = "Die Matrix des zweiten Datensatzes." ;
             Text [ portuguese ] = "é o segundo intervalo de números inteiros." ;
             Text [ finnish ] = "Toinen tietuematriisi." ;
@@ -33798,7 +33798,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Berechnet einen Wert auf der Regressionsgeraden." ;
             Text [ english ] = "Returns a predicted value for x based on a linear regression of known x- and y-arrays or ranges of data." ;
             Text [ norwegian ] = "Berechnet einen Wert auf der Regressionsgeraden." ;
-            Text [ italian ] = "Restituisce un valore su una regressione lineare." ;
+            Text [ italian ] = "Restituisce un valore su una retta di regressione." ;
             Text [ portuguese_brazilian ] = "Berechnet einen Wert auf der Regressionsgeraden." ;
             Text [ portuguese ] = "Devolve um valor baseando-se numa regressão linear." ;
             Text [ finnish ] = "Palauttaa lineaarisen regression arvon" ;
@@ -33833,7 +33833,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "Num" ;
+            Text [ italian ] = "Numero" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor_X" ;
             Text [ finnish ] = "arvo" ;
@@ -33862,7 +33862,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der X-Wert, zu dem der Y-Wert auf der Regressionsgeraden berechnet wird." ;
             Text [ english ] = "is the data point for which you want to predict a value." ;
             Text [ norwegian ] = "Der X-Wert, zu dem der Y-Wert auf der Regressionsgeraden berechnet wird." ;
-            Text [ italian ] = "è la variabile di cui si desidera prevedere un valore." ;
+            Text [ italian ] = "Il valore X per il quale si calcola il valore Y della retta di regressione." ;
             Text [ portuguese_brazilian ] = "Der X-Wert, zu dem der Y-Wert auf der Regressionsgeraden berechnet wird." ;
             Text [ portuguese ] = "é o dado cujo valor deseja calcular." ;
             Text [ finnish ] = "X-arvo, jota vastaavan lineaarisen regression Y-arvo lasketaan." ;
@@ -33920,7 +33920,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is the dependent array or range of data." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "è la matrice o l'intervallo di dati dipendente." ;
+            Text [ italian ] = "Matrice dei dati Y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "é a matriz ou o intervalo de célula de dados dependentes." ;
             Text [ finnish ] = "Tietomatriisi Y." ;
@@ -34318,7 +34318,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Bezug" ;
             Text [ english ] = "reference" ;
             Text [ norwegian ] = "Bezug" ;
-            Text [ italian ] = "rif" ;
+            Text [ italian ] = "Riferimento" ;
             Text [ portuguese_brazilian ] = "Bezug" ;
             Text [ portuguese ] = "Referência" ;
             Text [ finnish ] = "viite" ;
@@ -34416,7 +34416,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Index" ;
             Text [ english ] = "index_num" ;
             Text [ norwegian ] = "Index" ;
-            Text [ italian ] = "indice" ;
+            Text [ italian ] = "Indice" ;
             Text [ portuguese_brazilian ] = "Index" ;
             Text [ portuguese ] = "Núm_índice" ;
             Text [ finnish ] = "Hakemisto" ;
@@ -34519,7 +34519,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "Çíà÷åíèå 1; çíà÷åíèå 2;... îò 1 äî 29 àğãóìåíòîâ-çíà÷åíèé, èç êîòîğûõ ÂÛÁÎĞ, èïîëüçóÿ íîìåğ_èíäåêñà, âûáèğàåò çíà÷åíèå èëè âûïîëíÿåìîå äåéñòâèå.";
             Text[ polish ] = "Wartoœæ 1; Wartoœæ 2;... Lista argumentów, z której ma zostaæ wybrana wartoœæ.";
             Text[ japanese ] = "å€¤ 1;å€¤ 2;...ã¯å¼•æ•°ï¾˜ï½½ï¾„ã®é …ç›®ã§ã€ï½²ï¾ï¾ƒï¾ï½¯ï½¸ï½½ã§é¸æŠã™ã‚‹å€¤ã€‚";
-            Text[ chinese_traditional ] = "æ•¸å€¼ 1;  æ•¸å€¼ 2;... ç”¨äºé€²è¡Œæ•¸æ“šé¸æ“‡çš„æ•¸æ“šè¡¨ã€‚";
+            Text[ chinese_traditional ] = "æ•¸å€¼ 1;  æ•¸å€¼ 2;... ç”¨æ–¼é¸æ“‡æ•¸å€¼çš„è³‡æ–™è¡¨ã€‚";
             Text[ arabic ] = "value1;value2... ŞÇÆãÉ ÇáæÓÇÆØ ÇáÊí ÊÑíÏ ÊÍÏíÏ ÃÍÏ ÇáŞíã ãäåÇ.";
             Text[ dutch ] = "Waarde 1; Waarde 2;... De lijst van argumenten waaruit een waarde wordt gekozen.";
             Text[ chinese_simplified ] = "æ•°å€¼ 1;  æ•°å€¼ 2;... ç”¨äºè¿›è¡Œæ•°æ®é€‰æ‹©çš„æ•°æ®è¡¨ã€‚";
@@ -34573,7 +34573,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Bezug" ;
             Text [ english ] = "reference" ;
             Text [ norwegian ] = "Bezug" ;
-            Text [ italian ] = "rif" ;
+            Text [ italian ] = "Riferimento" ;
             Text [ portuguese_brazilian ] = "Bezug" ;
             Text [ portuguese ] = "Referência" ;
             Text [ finnish ] = "viite" ;
@@ -34670,7 +34670,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Bezug" ;
             Text [ english ] = "reference" ;
             Text [ norwegian ] = "Bezug" ;
-            Text [ italian ] = "rif" ;
+            Text [ italian ] = "Riferimento" ;
             Text [ portuguese_brazilian ] = "Bezug" ;
             Text [ portuguese ] = "Referência" ;
             Text [ finnish ] = "viite" ;
@@ -34699,7 +34699,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Bezug auf eine Zelle oder einen Bereich." ;
             Text [ english ] = "is the cell or range of cells for which you want the row number." ;
             Text [ norwegian ] = "Der Bezug auf eine Zelle oder einen Bereich." ;
-            Text [ italian ] = "Íl riferimento a una cella o a un'area." ;
+            Text [ italian ] = "Il riferimento a una cella o a un'area." ;
             Text [ portuguese_brazilian ] = "Der Bezug auf eine Zelle oder einen Bereich." ;
             Text [ portuguese ] = "é a célula ou intervalo de células para os quais deseja obter o número de linha." ;
             Text [ finnish ] = "Viittaus soluun tai solualueeseen." ;
@@ -37635,7 +37635,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "å°†æ•°å­—ä»£ç è½¬åŒ–æˆå­—ç¬¦ã€‚";
             Text[ russian ] = "Ïğåîáğàçóåò êîäîâîå ÷èñëî â ñèìâîë èëè áóêâó.";
             Text[ polish ] = "Zamienia liczbê kodu w znak lub literê.";
-            Text[ japanese ] = "ï½ºï½°ï¾„ï¾ç•ªå·ã§æŒ‡å®šã—ãŸæ–‡å­—ã‚’è¿”ã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ï½ºï½°ï¾„ï¾ç•ªå·ã«è©²å½“ã™ã‚‹æ–‡å­—ã‚’è¿”ã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "å°‡æ•¸å­—ä»£ç¢¼è½‰åŒ–æˆå­—å…ƒã€‚";
             Text[ arabic ] = "ÊÍæá ÑŞã ßæÏí Åáì ÑãÒ Ãæ ÍÑİ.";
             Text[ dutch ] = "Verandert een codegetal in een teken of letter.";
@@ -37831,7 +37831,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "å°†è‹¥å¹²æ–‡å­—ä¸²åˆå¹¶åˆ°ä¸€ä¸ªæ–‡å­—ä¸²ä¸­ã€‚";
             Text[ russian ] = "Îáúåäèíÿåò íåñêîëüêî òåêñòîâ â îäèí.";
             Text[ polish ] = "£¹czy elementy tekstu w jeden.";
-            Text[ japanese ] = "è¤‡æ•°ã®æ–‡å­—åˆ—ã‚’çµåˆã—ã¦1ã¤ã®æ–‡å­—åˆ—ã«ã¾ã¨ã‚ã¾ã™ã€‚";
+            Text[ japanese ] = "è¤‡æ•°ã®æ–‡å­—åˆ—ã‚’1ã¤ã«çµåˆã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "å°‡è‹¥å¹²æ–‡å­—ä¸²åˆä½µåˆ°ä¸€å€‹æ–‡å­—ä¸²ä¸­ã€‚";
             Text[ arabic ] = "ÊÕá ÚÏÉ äÕæÕ İí äÕ æÇÍÏ.";
             Text[ dutch ] = "Verschillende teksten tot één enkele samenvoegen.";
@@ -37896,7 +37896,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "æ˜¯å°†è¦åˆå¹¶çš„å­—ä¸²ã€‚";
             Text[ russian ] = "Òåêñò 1; òåêñò 2;...îò 1 äî 30 ıëåìåíòîâ òåêñòà, îáúäèíÿåìûõ â îäèí ıëåìåíò òåêñòà.";
             Text[ polish ] = "Od 1 do 30 ci¹gów znaków, które maj¹ byæ po³¹czone w jeden ci¹g.";
-            Text[ japanese ] = "è¤‡æ•°ã®æ–‡å­—åˆ—ã‚’çµåˆã—ã¦1ã¤ã«ã¾ã¨ã‚ã‚‹æ–‡å­—åˆ—ã€‚";
+            Text[ japanese ] = "çµåˆã™ã‚‹æ–‡å­—åˆ—ã€‚";
             Text[ chinese_traditional ] = "æ˜¯å°‡è¦åˆä½µçš„å­—ä¸²ã€‚";
             Text[ arabic ] = "ãä 1 Åáì 30 ÓáÓáÉ äÕíÉ áæÕáåÇ áÊÕÈÍ ÓáÓáÉ äÕíÉ æÇÍÏÉ.";
             Text[ dutch ] = "Tekst voor de samenvoeging.";
@@ -40369,7 +40369,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "æŒ‰ç…§ç»™å®šçš„æ¬¡æ•°é‡å¤å­—ä¸²ã€‚";
             Text[ russian ] = "Ïîâòîğÿåò òåêñò çàäàííîå ÷èñëî ğàç.";
             Text[ polish ] = "Powtarza tekst przez dan¹ liczbê razy.";
-            Text[ japanese ] = "æ–‡å­—åˆ—ã‚’æŒ‡å®šã•ã‚ŒãŸå›æ•°ã ã‘ç¹°ã‚Šè¿”ã—ã¾ã™ã€‚";
+            Text[ japanese ] = "æ–‡å­—åˆ—ã‚’æŒ‡å®šã®å›æ•°ç¹°ã‚Šè¿”ã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "æŒ‰ç…§æŒ‡å®šçš„æ¬¡æ•¸é‡è¤‡å­—ä¸²ã€‚";
             Text[ arabic ] = "ÊßÑÑ äÕ ãÇ ÈÚÏÏ ãÑÇÊ ãÚØì.";
             Text[ dutch ] = "Herhaalt een tekst zo vaak als aangegeven.";
@@ -40524,7 +40524,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "å¤šé‡æ›¿æ¢ä¸€ä¸ªå­—ä¸²å†…çš„å­—ç¬¦ã€‚";
             Text[ russian ] = "Çàìåíÿåò ìíîãîêğàòíî ÷àñòè ñëîâ â òåêñòå.";
             Text[ polish ] = "Podstawia nowy tekst w miejsce starego we wskazanym ci¹gu znaków.";
-            Text[ japanese ] = "æ–‡å­—åˆ—ä¸­ã®æŒ‡å®šã•ã‚ŒãŸæ–‡å­—ã‚’ä»–ã®æ–‡å­—ã«ç½®ãæ›ãˆã¾ã™ã€‚";
+            Text[ japanese ] = "æ–‡å­—åˆ—ä¸­ã®ç‰¹å®šã®æ–‡å­—ã‚’ä»–ã®æ–‡å­—ã«ç½®ãæ›ãˆã¾ã™ã€‚";
             Text[ chinese_traditional ] = "å¤šé‡æ›´æ›¿ä¸€å€‹å­—ä¸²å…§çš„å­—å…ƒã€‚";
             Text[ arabic ] = "ÊÓÊÈÏá ÇáäÕ ÇáŞÏíã ÈÃÎÑ ÌÏíÏ İí ÇáÓáÓáÉ ÇáäÕíÉ.";
             Text[ dutch ] = "Vervangt meermaals tekens in een tekst.";
@@ -40588,7 +40588,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è¦æ›¿æ¢å…¶ä¸­å­—ç¬¦çš„å­—ä¸²ã€‚";
             Text[ russian ] = "Òåêñò, â êîòîğîì çàìåíÿşòñÿ ÷àñòè ñëîâ.";
             Text[ polish ] = "Tekst, w którym czêœci s³owa zostan¹ wymienione.";
-            Text[ japanese ] = "ç½®ãæ›ãˆã‚‹æ–‡å­—ã‚’å«ã‚€æ–‡å­—åˆ—ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ç½®æ›ã•ã‚Œã‚‹æ–‡å­—ã‚’å«ã‚€æ–‡å­—åˆ—ã€‚";
             Text[ chinese_traditional ] = "è¦æ›¿æ›å…¶ä¸­å­—å…ƒçš„å­—ä¸²ã€‚";
             Text[ arabic ] = "ÇáäÕ ÇáãÑÇÏ ÇÓÊÈÏÇá ÃÌÒÇÁ ãä ßáãÇÊå.";
             Text[ dutch ] = "De tekst waarin tekens worden vervangen.";
@@ -40646,7 +40646,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è¦(å¤šé‡)æ›¿æ¢çš„å­—ç¬¦ã€‚";
             Text[ russian ] = "×àñòü ñëîâà, êîòîğóş íåîáõîäèìî (ìíîãîêğàòíî) çàìåíèòü.";
             Text[ polish ] = "S³owo cz¹stkowe, które ma zostaæ (wielokrotnie) zast¹pione.";
-            Text[ japanese ] = "ç½®ãæ›ãˆã‚‹æ–‡å­—åˆ—ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ç½®æ›ã•ã‚Œã‚‹æ–‡å­—åˆ—ã€‚";
             Text[ chinese_traditional ] = "è¦(å¤šé‡)æ›´æ›¿çš„å­—å…ƒã€‚";
             Text[ arabic ] = "ÇáÌÒÁ ãä ÇáßáãÉ ÇáãÑÇÏ ÇÓÊÈÏÇáå ÃßËÑ ãä ãÑÉ.";
             Text[ dutch ] = "Het woorddeel dat (meermaals) moeten worden vervangen.";
@@ -40704,7 +40704,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ç”¨æ¥æ›¿æ¢åŸæ¥å­—ç¬¦çš„å­—ä¸²ã€‚";
             Text[ russian ] = "Òåêñò, çàìåíÿşùèé ÷àñòü ñëîâà.";
             Text[ polish ] = "Tekst, który ma zast¹piæ ci¹g znaków.";
-            Text[ japanese ] = "æ¤œç´¢æ–‡å­—åˆ—ã¨ç½®ãæ›ãˆã‚‹æ–‡å­—åˆ—ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "æ¤œç´¢æ–‡å­—åˆ—ã¨ç½®æ›ã™ã‚‹æ–‡å­—åˆ—ã€‚";
             Text[ chinese_traditional ] = "ç”¨ä¾†æ›¿æ›åŸä¾†å­—å…ƒçš„å­—ä¸²ã€‚";
             Text[ arabic ] = "ÇáäÕ ÇáãÓÊÎÏã áÇÓÊÈÏÇá ÇáÓáÓáÉ ÇáäÕíÉ.";
             Text[ dutch ] = "De tekst die het woorddeel vervangt.";
@@ -40762,7 +40762,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "è¦è¢«æ›¿æ¢çš„æ˜¯ç¬¬å‡ æ¬¡å‡ºç°çš„å­—ç¬¦ã€‚";
             Text[ russian ] = "Îïğåäåëÿåò, êàêîå âõîæäåíèå òåêñòà íóæíî çàìåíèòü.";
             Text[ polish ] = "Okreœla, które powtórzenie ci¹gu znaków ma zostaæ zast¹pione.";
-            Text[ japanese ] = "æ–‡å­—åˆ—ã«å«ã¾ã‚Œã‚‹ä½•ç•ªç›®ã®æ–‡å­—åˆ—ã‚’ç½®æ›æ–‡å­—åˆ—ã¨ç½®ãæ›ãˆã‚‹ã‹ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
+            Text[ japanese ] = "ä½•ç•ªç›®ã®è©²å½“æ–‡å­—åˆ—ã‚’ç½®æ›æ–‡å­—åˆ—ã«ç½®ãæ›ãˆã‚‹ã‹ã‚’æŒ‡å®šã—ã¾ã™ã€‚";
             Text[ chinese_traditional ] = "è¦è¢«æ›´æ›¿çš„æ˜¯ç¬¬å¹¾æ¬¡å‡ºç¾çš„å­—å…ƒã€‚";
             Text[ arabic ] = "ÊÍÏÏ Ãí ÙåæÑ ááäÕ íÌÈ ÇÓÊÈÏÇáå.";
             Text[ dutch ] = "Geeft aan bij het hoeveelste optreden het woorddeel moet worden vervangen.";
@@ -40968,7 +40968,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "Åñëè òåêñò ÿâëÿåòñÿ êîğî÷å, îí áóäåò ñëåâà çàïîëíÿòüñÿ íóëÿìè.";
             Text[ polish ] = "Jeœli tekst jest krótszy ni¿ podana d³ugoœæ, zostanie uzupe³niony zerami.";
             Text[ japanese ] = "æŒ‡å®šã—ãŸé•·ã•ã‚ˆã‚ŠçŸ­ã„çµæœã«ã¯ã€å·¦ã«ï½¾ï¾ï¾›ãŒè¿½åŠ ã•ã‚Œã¾ã™ã€‚";
-            Text[ chinese_traditional ] = "å¦‚æœæ–‡å­—çŸ­äºæŒ‡å®šé•·åº¦ï¹å°±è«‹åœ¨æ–‡å­—å·¦æ–¹æ·»åŠ é›¶ã€‚";
+            Text[ chinese_traditional ] = "å¦‚æœæ–‡å­—çŸ­æ–¼æŒ‡å®šé•·åº¦ï¹å°±è«‹åœ¨æ–‡å­—å·¦æ–¹æ·»åŠ é›¶ã€‚";
             Text[ arabic ] = "ÅĞÇ ßÇä ÇáäÕ ÃŞÕÑ ãä ÇáØæá ÇáãÚØì¡ İÓæİ íÊã æÖÚ ÃÕİÇÑ Úáì íÓÇÑå.";
             Text[ dutch ] = "Als de tekst korter is wordt deze links met nullen opgevuld.";
             Text[ chinese_simplified ] = "å¦‚æœæ–‡å­—çŸ­äºæŒ‡å®šé•¿åº¦ï¼Œå°±è¯·åœ¨æ–‡å­—å·¦æ–¹æ·»åŠ é›¶ã€‚";
@@ -41172,7 +41172,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert" ;
             Text [ english ] = "value" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "val" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
