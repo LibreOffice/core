@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:15:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "Alan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campos";
+        Text[ finnish ] = "Kentät";
     };
     FixedText FT_TYPE
     {
@@ -135,6 +136,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "T~ip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "T~ipo";
+        Text[ finnish ] = "~Tyyppi";
     };
     ListBox LB_TYPE1
     {
@@ -171,6 +173,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "Ayýrma iþa. seçenekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones de separación";
+        Text[ finnish ] = "Erotinasetukset";
     };
     RadioButton RB_FIXED
     {
@@ -201,6 +204,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "~Sabit geniþlik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ancho ~fijo";
+        Text[ finnish ] = "~Kiinteä leveys";
     };
     RadioButton RB_SEPARATED
     {
@@ -232,6 +236,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "~Ayrý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separado";
+        Text[ finnish ] = "~Erottimena";
     };
     FixedText FT_CHARSET
     {
@@ -261,6 +266,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ korean ] = "¹®ÀÚÁýÇÕ(~H)";
         Text[ turkish ] = "~Karakter kümesi";
         Text[ catalan ] = "Juego de caracteres";
+        Text[ finnish ] = "~Merkistö";
     };
     ListBox LB_CHARSET
     {
@@ -298,6 +304,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "Ýçe aktar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Importación";
+        Text[ finnish ] = "Tuo";
     };
     FixedText FT_TEXTSEP
     {
@@ -327,6 +334,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "Me~tin ayýrma iþareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separador de te~xto";
+        Text[ finnish ] = "~Tekstin erottimet";
     };
     ComboBox CB_TEXTSEP
     {
@@ -380,6 +388,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Columna";
+        Text[ finnish ] = "Sarake ";
     };
     String STR_TO
     {
@@ -407,6 +416,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "son";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "hasta";
+        Text[ finnish ] = "kohteeseen";
     };
     CheckBox CKB_TAB
     {
@@ -437,6 +447,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "~Sekme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tabulación";
+        Text[ finnish ] = "~Sarkain";
     };
     CheckBox CKB_SEMICOLON
     {
@@ -467,6 +478,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "~Noktalý virgül";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Punto y coma";
+        Text[ finnish ] = "~Puolipiste";
     };
     CheckBox CKB_COMMA
     {
@@ -497,6 +509,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "~Virgül";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~ma";
+        Text[ finnish ] = "~Pilkku";
     };
     CheckBox CKB_SPACE
     {
@@ -527,6 +540,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "B~oþluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Espacio";
+        Text[ finnish ] = "~Väli";
     };
     CheckBox CKB_OTHER
     {
@@ -557,6 +571,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "~Diðer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Otros";
+        Text[ finnish ] = "~Muu";
     };
     Edit ED_OTHER
     {
@@ -594,6 +609,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "Ýlk sa~týr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A partir de ~línea";
+        Text[ finnish ] = "Riviltä";
     };
     NumericField NF_AT_ROW
     {
@@ -654,6 +670,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ turkish ] = "Ay~ýrma iþaretlerini özetle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reagrupar los ~separadores de campo";
+        Text[ finnish ] = "~Tiivistetty näyttö";
     };
     Text[ chinese_simplified ] = "ÊäÈëÎÄ×Ö";
     Text[ russian ] = "Èìïîðò òåêñòà";
@@ -668,4 +685,5 @@ ModalDialog RID_SCDLG_ASCII
     Text[ turkish ] = "Ýçe aktar (metin)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Importar texto";
+    Text[ finnish ] = "Tekstin tuonti";
 };
