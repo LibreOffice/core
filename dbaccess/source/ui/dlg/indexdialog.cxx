@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:24:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,9 @@ namespace dbaui
 //      }
 
         // if all of the indexes have an empty description, we're not interested in displaying it
-        for (   OIndexCollection::const_iterator aCheck = m_pIndexes->begin();
+        OIndexCollection::const_iterator aCheck;
+
+        for (   aCheck = m_pIndexes->begin();
                 aCheck != m_pIndexes->end();
                 ++aCheck
             )
@@ -444,7 +446,9 @@ namespace dbaui
         // get a new unique name for the new index
         String sNewIndexName;
         const String sNewIndexNameBase(ModuleRes(STR_LOGICAL_INDEX_NAME));
-        for (sal_Int32 i=1; i<0x7FFFFFFF; ++i)
+        sal_Int32 i;
+
+        for ( i = 1; i < 0x7FFFFFFF; ++i )
         {
             sNewIndexName = sNewIndexNameBase;
             sNewIndexName += String::CreateFromInt32(i);
