@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:37:54 $
+ *  last change: $Author: nn $ $Date: 2002-04-12 19:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1766,8 +1766,11 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     ScRefUndoData* pUndoData = NULL;
     if (bRecord)
     {
+        BOOL bWholeCols = ( nStartRow == 0 && nEndRow == MAXROW );
+        BOOL bWholeRows = ( nStartCol == 0 && nEndCol == MAXCOL );
+
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab, FALSE, FALSE );
+        pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab, bWholeCols, bWholeRows );
 
         if (bCut)
         {
@@ -1778,7 +1781,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         }
 
         if ( nDestTab != nStartTab )
-            pUndoDoc->AddUndoTab( nDestTab, nDestEndTab, FALSE, FALSE );
+            pUndoDoc->AddUndoTab( nDestTab, nDestEndTab, bWholeCols, bWholeRows );
         pDoc->CopyToDocument( nDestCol, nDestRow, nDestTab,
                                     nDestEndCol, nDestEndRow, nDestEndTab,
                                     IDF_ALL, FALSE, pUndoDoc );
@@ -1900,7 +1903,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
             nPaintEndY = MAXROW;
             nFlags |= PAINT_TOP;
         }
-        if ( bDestHeight )
+        if ( bDestHeight || ( nStartCol == 0 && nEndCol == MAXCOL ) )
         {
             nPaintEndY = MAXROW;
             nPaintStartX = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:30:20 $
+ *  last change: $Author: nn $ $Date: 2002-04-12 19:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,18 @@ void ScUndoDragDrop::PaintArea( ScRange aRange ) const
         aRange.aStart.SetRow(0);
         aRange.aEnd.SetCol(MAXCOL);
         aRange.aEnd.SetRow(MAXROW);
+    }
+
+    //  column/row info (width/height) included if whole columns/rows were copied
+    if ( aSrcRange.aStart.Col() == 0 && aSrcRange.aEnd.Col() == MAXCOL )
+    {
+        nExtFlags |= PAINT_LEFT;
+        aRange.aEnd.SetRow(MAXROW);
+    }
+    if ( aSrcRange.aStart.Row() == 0 && aSrcRange.aEnd.Row() == MAXROW )
+    {
+        nExtFlags |= PAINT_TOP;
+        aRange.aEnd.SetCol(MAXCOL);
     }
 
     pDocShell->PostPaint( aRange, nExtFlags );
