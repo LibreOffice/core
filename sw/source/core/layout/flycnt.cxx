@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:09:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,11 +319,6 @@ SwOszControl::~SwOszControl()
         SwOszControl::pStk4 = 0;
     else if ( SwOszControl::pStk5 == pFly )
         SwOszControl::pStk5 = 0;
-}
-
-FASTBOOL IsInProgress( const SwFlyFrm *pFly )
-{
-    return SwOszControl::IsInProgress( pFly );
 }
 
 FASTBOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
