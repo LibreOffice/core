@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 12:45:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,54 +1971,57 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
 
     sal_Int32 nSelectedRows = GetSelectRowCount(), i = 0;
     Sequence< Any> aBookmarks(nSelectedRows);
-    Any* pBookmarks = (Any*)aBookmarks.getArray();
-
-    // (I'm not sure if the problem isn't deeper : The szenario : a large table displayed by a grid with a
-    // thread-safe cursor (dBase). On loading the sdb-cursor started a counting thread. While this counting progress
-    // was running, I tried do delete 3 records from within the grid. Deletion caused a SeekCursor, which did a
-    // m_pSeekCursor->moveRelative and a m_pSeekCursor->getPosition.
-    // Unfortunally the first call caused a propertyChanged(RECORDCOUNT) which resulted in a repaint of the
-    // navigation bar and the grid. The latter itself will result in SeekRow calls. So after (successfully) returning
-    // from the moveRelative the getPosition returns an invalid value. And so the SeekCursor fails.
-    // In the consequence ALL parts of code where two calls to the seek cursor are done, while the second call _relys_ on
-    // the first one, should be secured against recursion, with a broad-minded interpretion of "recursion" : if any of these
-    // code parts is executed, no other should be accessible. But this sounds very difficult to achieve ....
-    // )
-
-    // The next problem caused by the same behaviuor (SeekCursor causes a propertyChanged) : when adjusting rows we implicitly
-    // change our selection. So a "FirstSelected(); SeekCursor(); NextSelected();" may produce unpredictable results.
-    // That's why we _first_ collect the indicies of the selected rows and _then_ their bookmarks.
-    long nIdx = FirstSelectedRow();
-    while (nIdx >= 0)
+    if ( nSelectedRows )
     {
-        // (we misuse the bookmarks array for this ...)
-        pBookmarks[i++] <<= (sal_Int32)nIdx;
-        nIdx = NextSelectedRow();
-    }
-    DBG_ASSERT(i == nSelectedRows, "FmGridControl::DeleteSelectedRows : could not collect the row indicies !");
+        Any* pBookmarks = (Any*)aBookmarks.getArray();
 
-    for (i=0; i<nSelectedRows; ++i)
-    {
-        nIdx = ::comphelper::getINT32(pBookmarks[i]);
-        if (IsEmptyRow(nIdx))
+        // (I'm not sure if the problem isn't deeper : The szenario : a large table displayed by a grid with a
+        // thread-safe cursor (dBase). On loading the sdb-cursor started a counting thread. While this counting progress
+        // was running, I tried do delete 3 records from within the grid. Deletion caused a SeekCursor, which did a
+        // m_pSeekCursor->moveRelative and a m_pSeekCursor->getPosition.
+        // Unfortunally the first call caused a propertyChanged(RECORDCOUNT) which resulted in a repaint of the
+        // navigation bar and the grid. The latter itself will result in SeekRow calls. So after (successfully) returning
+        // from the moveRelative the getPosition returns an invalid value. And so the SeekCursor fails.
+        // In the consequence ALL parts of code where two calls to the seek cursor are done, while the second call _relys_ on
+        // the first one, should be secured against recursion, with a broad-minded interpretion of "recursion" : if any of these
+        // code parts is executed, no other should be accessible. But this sounds very difficult to achieve ....
+        // )
+
+        // The next problem caused by the same behaviuor (SeekCursor causes a propertyChanged) : when adjusting rows we implicitly
+        // change our selection. So a "FirstSelected(); SeekCursor(); NextSelected();" may produce unpredictable results.
+        // That's why we _first_ collect the indicies of the selected rows and _then_ their bookmarks.
+        long nIdx = FirstSelectedRow();
+        while (nIdx >= 0)
         {
-            // leerzeile nicht loeschen
-            aBookmarks.realloc(--nSelectedRows);
-            SelectRow(nIdx,sal_False);          // selection aufheben fuer leerzeile
-            break;
+            // (we misuse the bookmarks array for this ...)
+            pBookmarks[i++] <<= (sal_Int32)nIdx;
+            nIdx = NextSelectedRow();
         }
+        DBG_ASSERT(i == nSelectedRows, "FmGridControl::DeleteSelectedRows : could not collect the row indicies !");
 
-        // Zunaechst den DatenCursor auf den selektierten Satz pos.
-        if (SeekCursor(nIdx))
+        for (i=0; i<nSelectedRows; ++i)
         {
-            GetSeekRow()->SetState(m_pSeekCursor, sal_True);
+            nIdx = ::comphelper::getINT32(pBookmarks[i]);
+            if (IsEmptyRow(nIdx))
+            {
+                // leerzeile nicht loeschen
+                aBookmarks.realloc(--nSelectedRows);
+                SelectRow(nIdx,sal_False);          // selection aufheben fuer leerzeile
+                break;
+            }
 
-            pBookmarks[i] = m_pSeekCursor->getBookmark();
+            // Zunaechst den DatenCursor auf den selektierten Satz pos.
+            if (SeekCursor(nIdx))
+            {
+                GetSeekRow()->SetState(m_pSeekCursor, sal_True);
+
+                pBookmarks[i] = m_pSeekCursor->getBookmark();
+            }
+    #if DBG_UTIL
+            else
+                DBG_ERROR("FmGridControl::DeleteSelectedRows : a bookmark could not be determined !");
+    #endif
         }
-#if DBG_UTIL
-        else
-            DBG_ERROR("FmGridControl::DeleteSelectedRows : a bookmark could not be determined !");
-#endif
     }
     SetUpdateMode(sal_True);
 
