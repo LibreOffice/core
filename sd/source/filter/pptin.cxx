@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-26 15:01:05 $
+ *  last change: $Author: sj $ $Date: 2002-03-21 10:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2001,7 +2001,7 @@ SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
                         eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;   // Verkleinern von unterem Bildschirm
                     break;
                     case 0x16:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRETCH; // quer dehnen
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRETCH;   // quer dehnen
                     break;
                     case 0x17:
                         eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LEFT;    // von links dehnen
