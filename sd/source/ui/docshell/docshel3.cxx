@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:46:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include "DrawDocShell.hxx"
+
 #include "app.hrc"
 
 #define ITEMID_FONTLIST         SID_ATTR_CHAR_FONTLIST
@@ -119,15 +122,26 @@
 #include "res_bmp.hrc"
 
 #include "app.hxx"
-#include "docshell.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "sdattr.hxx"
+#ifndef SD_FU_SPELL_HXX
 #include "fuspell.hxx"
+#endif
+#ifndef SD_FU_SEARCH_HXX
 #include "fusearch.hxx"
-#include "viewshel.hxx"
-#include "sdview.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
+
+namespace sd {
 
 #define POOL_BUFFER_SIZE        (USHORT)32768
 #define BASIC_BUFFER_SIZE       (USHORT)8192
@@ -139,7 +153,7 @@
 |*
 \************************************************************************/
 
-void SdDrawDocShell::Execute( SfxRequest& rReq )
+void DrawDocShell::Execute( SfxRequest& rReq )
 {
     if (pViewShell)
     {
@@ -162,7 +176,7 @@ void SdDrawDocShell::Execute( SfxRequest& rReq )
                     GetWindow(), RID_SVXERRCTX, DIALOG_MGR() );
 
                 {
-                    SdView* pView = pViewShell->GetView();
+                    ::sd::View* pView = pViewShell->GetView();
 
                     if ( pView->IsTextEdit() )
                     {
@@ -218,9 +232,9 @@ void SdDrawDocShell::Execute( SfxRequest& rReq )
 
                 while (pShell)
                 {
-                    if (pShell->ISA(SdDrawDocShell))
+                    if (pShell->ISA(DrawDocShell))
                     {
-                        ( (SdDrawDocShell*) pShell)->CancelSearching();
+                        ( (DrawDocShell*) pShell)->CancelSearching();
                     }
 
                     pShell = SfxObjectShell::GetNext(*pShell);
@@ -248,7 +262,7 @@ void SdDrawDocShell::Execute( SfxRequest& rReq )
                 if ( !pFuActual || !pFuActual->ISA(FuSearch) )
                 {
                     delete pFuActual;
-                    SdView* pView = pViewShell->GetView();
+                    ::sd::View* pView = pViewShell->GetView();
                     pFuActual = new FuSearch( pViewShell, pViewShell->GetActiveWindow(),
                                               pView, pDoc, rReq );
                 }
@@ -309,7 +323,7 @@ void SdDrawDocShell::Execute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawDocShell::SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const
+void DrawDocShell::SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const
 {
     pBasePool->SetSearchMask(SFX_STYLE_FAMILY_PARA,
                              SFXSTYLEBIT_USERDEF | SFXSTYLEBIT_USED);
@@ -317,5 +331,4 @@ void SdDrawDocShell::SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) co
 
 
 
-
-
+} // end of namespace sd
