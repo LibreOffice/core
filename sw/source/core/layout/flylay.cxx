@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:05:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,13 @@
 #include "ndole.hxx"
 #include "tabfrm.hxx"
 #include "flyfrms.hxx"
+// OD 22.09.2003 #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+#ifndef _ANCHOREDOBJECTPOSITION_HXX
+#include <anchoredobjectposition.hxx>
+#endif
 
 #ifdef ACCESSIBLE_LAYOUT
 #ifndef _VIEWSH_HXX
@@ -1001,27 +1008,35 @@ SwFrm *SwPageFrm::PlaceFly( SwFlyFrm *pFly, SwFrmFmt *pFmt,
 |*  Letzte Aenderung    MA  18. Dec. 96
 |*
 |*************************************************************************/
-
+// OD 22.09.2003 #i18732# - adjustments for following text flow or not
+// AND alignment at 'page areas' for to paragraph/to character anchored objects
 BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
 {
     BOOL bRet = TRUE;
     if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
     {
         const SwFlyFrm *pFly = ((const SwVirtFlyDrawObj*)pSdrObj)->GetFlyFrm();
+        const bool bFollowTextFlow = pFly->GetFmt()->GetFollowTextFlow().GetValue();
+        const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
         if( pFly->IsFlyLayFrm() )
         {
-#ifdef AMA_OUT_OF_FLY
-            const SwFrm *pClip = pFly->GetAnchor()->FindPageFrm();
-#else
-            const SwFrm *pClip = pFly->GetAnchor();
-#endif
+            // OD 22.09.2003 #i18732#
+            const SwFrm* pClip;
+            if ( !bFollowTextFlow )
+            {
+                pClip = pFly->GetAnchor()->FindPageFrm();
+            }
+            else
+            {
+                pClip = pFly->GetAnchor();
+            }
             pClip->Calc();
 
             rRect = pClip->Frm();
             SWRECTFN( pClip )
 
             //Vertikales clipping: Top und Bottom, ggf. an PrtArea
-            const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
+//          const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
             if( rV.GetVertOrient() != VERT_NONE &&
                 rV.GetRelationOrient() == PRTAREA )
             {
@@ -1039,94 +1054,146 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         }
         else if( pFly->IsFlyAtCntFrm() )
         {
-            const SwFrm *pClip = pFly->GetAnchor();
-            SWRECTFN( pClip )
-            const SwLayoutFrm *pUp = pClip->GetUpper();
-            const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
-            USHORT nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
-                                   FRM_FOOTER | FRM_FTN
-                                 : FRM_BODY   | FRM_FLY | FRM_HEADER |
-                                   FRM_FOOTER | FRM_CELL| FRM_FTN;
+            // OD 22.09.2003 #i18732# - consider following text flow or not
+            // AND alignment at 'page areas'
+            const SwFrm* pVertPosOrientFrm =
+                    static_cast<const SwFlyAtCntFrm*>(pFly)->GetVertPosOrientFrm();
+            if ( !pVertPosOrientFrm )
+            {
+                ASSERT( false,
+                        "::CalcClipRect(..) - frame, vertical position is oriented at, is missing .");
+                pVertPosOrientFrm = pFly->GetAnchor();
+            }
 
-            while ( !(pUp->GetType() & nType) || pUp->IsColBodyFrm() )
+            if ( !bFollowTextFlow )
             {
-                pUp = pUp->GetUpper();
-                if ( !pCell && pUp->IsCellFrm() )
-                    pCell = pUp;
+                const SwLayoutFrm* pClipFrm = pVertPosOrientFrm->FindPageFrm();
+                rRect = bMove ? pClipFrm->GetUpper()->Frm()
+                              : pClipFrm->Frm();
             }
-            if ( bMove )
+            else if ( rV.GetRelationOrient() == REL_PG_FRAME ||
+                      rV.GetRelationOrient() == REL_PG_PRTAREA )
             {
-                if ( pUp->IsRootFrm() )
+                const SwLayoutFrm& rVertClipFrm =
+                    objectpositioning::SwAnchoredObjectPosition::
+                        GetVertEnvironmentLayoutFrm( *pVertPosOrientFrm,
+                                                     bFollowTextFlow, true );
+                if ( rV.GetRelationOrient() == REL_PG_FRAME )
                 {
-                    rRect  = pUp->Prt();
-                    rRect += pUp->Frm().Pos();
-                    pUp = 0;
+                    rRect = rVertClipFrm.Frm();
                 }
-            }
-            if ( pUp )
-            {
-                if ( !pUp->IsFooterFrm() && ( !pUp->IsFlyFrm() ||
-                     (!pUp->Lower() || !pUp->Lower()->IsColumnFrm()) ) )
-                    pUp->Calc();
-                if ( pUp->GetType() & FRM_BODY )
+                else if ( rV.GetRelationOrient() == REL_PG_PRTAREA )
                 {
-                    const SwPageFrm *pPg;
-                    if ( pUp->GetUpper() != (pPg = pFly->FindPageFrm()) )
-                        pUp = pPg->FindBodyCont();
-                    rRect = pUp->GetUpper()->Frm();
-                    (rRect.*fnRect->fnSetTop)( (pUp->*fnRect->fnGetPrtTop)() );
-                    (rRect.*fnRect->fnSetBottom)((pUp->*fnRect->fnGetPrtBottom)());
-                }
-                else
-                {
-                    if( ( pUp->GetType() & (FRM_FLY | FRM_FTN ) ) &&
-                        !pUp->Frm().IsInside( pFly->Frm().Pos() ) )
+                    if ( rVertClipFrm.IsPageFrm() )
                     {
-                        if( pUp->IsFlyFrm() )
+                        rRect = static_cast<const SwPageFrm&>(rVertClipFrm).PrtWithoutHeaderAndFooter();
+                    }
+                    else
+                    {
+                        rRect = rVertClipFrm.Frm();
+                    }
+                }
+                const SwLayoutFrm* pHoriClipFrm =
+                        pFly->GetAnchor()->FindPageFrm()->GetUpper();
+                SWRECTFN( pFly->GetAnchor() )
+                (rRect.*fnRect->fnSetLeft)( (pHoriClipFrm->Frm().*fnRect->fnGetLeft)() );
+                (rRect.*fnRect->fnSetRight)((pHoriClipFrm->Frm().*fnRect->fnGetRight)());
+            }
+            else
+            {
+                const SwFrm *pClip = pFly->GetAnchor();
+                SWRECTFN( pClip )
+                const SwLayoutFrm *pUp = pClip->GetUpper();
+                const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
+                USHORT nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
+                                       FRM_FOOTER | FRM_FTN
+                                     : FRM_BODY   | FRM_FLY | FRM_HEADER |
+                                       FRM_FOOTER | FRM_CELL| FRM_FTN;
+
+                while ( !(pUp->GetType() & nType) || pUp->IsColBodyFrm() )
+                {
+                    pUp = pUp->GetUpper();
+                    if ( !pCell && pUp->IsCellFrm() )
+                        pCell = pUp;
+                }
+                if ( bMove )
+                {
+                    if ( pUp->IsRootFrm() )
+                    {
+                        rRect  = pUp->Prt();
+                        rRect += pUp->Frm().Pos();
+                        pUp = 0;
+                    }
+                }
+                if ( pUp )
+                {
+                    if ( !pUp->IsFooterFrm() && ( !pUp->IsFlyFrm() ||
+                         (!pUp->Lower() || !pUp->Lower()->IsColumnFrm()) ) )
+                        pUp->Calc();
+                    if ( pUp->GetType() & FRM_BODY )
+                    {
+                        const SwPageFrm *pPg;
+                        if ( pUp->GetUpper() != (pPg = pFly->FindPageFrm()) )
+                            pUp = pPg->FindBodyCont();
+                        rRect = pUp->GetUpper()->Frm();
+                        (rRect.*fnRect->fnSetTop)( (pUp->*fnRect->fnGetPrtTop)() );
+                        (rRect.*fnRect->fnSetBottom)((pUp->*fnRect->fnGetPrtBottom)());
+                    }
+                    else
+                    {
+                        if( ( pUp->GetType() & (FRM_FLY | FRM_FTN ) ) &&
+                            !pUp->Frm().IsInside( pFly->Frm().Pos() ) )
                         {
-                            SwFlyFrm *pTmpFly = (SwFlyFrm*)pUp;
-                            while( pTmpFly->GetNextLink() )
+                            if( pUp->IsFlyFrm() )
                             {
-                                pTmpFly = pTmpFly->GetNextLink();
-                                if( pTmpFly->Frm().IsInside( pFly->Frm().Pos() ) )
-                                    break;
+                                SwFlyFrm *pTmpFly = (SwFlyFrm*)pUp;
+                                while( pTmpFly->GetNextLink() )
+                                {
+                                    pTmpFly = pTmpFly->GetNextLink();
+                                    if( pTmpFly->Frm().IsInside( pFly->Frm().Pos() ) )
+                                        break;
+                                }
+                                pUp = pTmpFly;
                             }
-                            pUp = pTmpFly;
+                            else if( pUp->IsInFtn() )
+                            {
+                                const SwFtnFrm *pTmp = pUp->FindFtnFrm();
+                                while( pTmp->GetFollow() )
+                                {
+                                    pTmp = pTmp->GetFollow();
+                                    if( pTmp->Frm().IsInside( pFly->Frm().Pos() ) )
+                                        break;
+                                }
+                                pUp = pTmp;
+                            }
                         }
-                        else if( pUp->IsInFtn() )
+                        rRect = pUp->Prt();
+                        rRect.Pos() += pUp->Frm().Pos();
+                        if ( pUp->GetType() & (FRM_HEADER | FRM_FOOTER) )
                         {
-                            const SwFtnFrm *pTmp = pUp->FindFtnFrm();
-                            while( pTmp->GetFollow() )
-                            {
-                                pTmp = pTmp->GetFollow();
-                                if( pTmp->Frm().IsInside( pFly->Frm().Pos() ) )
-                                    break;
-                            }
-                            pUp = pTmp;
+                            rRect.Left ( pUp->GetUpper()->Frm().Left() );
+                            rRect.Width( pUp->GetUpper()->Frm().Width());
                         }
-                    }
-                    rRect = pUp->Prt();
-                    rRect.Pos() += pUp->Frm().Pos();
-                    if ( pUp->GetType() & (FRM_HEADER | FRM_FOOTER) )
-                    {
-                        rRect.Left ( pUp->GetUpper()->Frm().Left() );
-                        rRect.Width( pUp->GetUpper()->Frm().Width());
-                    }
-                    else if ( pUp->IsCellFrm() )                //MA_FLY_HEIGHT
-                    {
-                        const SwFrm *pTab = pUp->FindTabFrm();
-                        (rRect.*fnRect->fnSetBottom)(
-                                    (pTab->GetUpper()->*fnRect->fnGetPrtBottom)() );
+                        else if ( pUp->IsCellFrm() )                //MA_FLY_HEIGHT
+                        {
+                            const SwFrm *pTab = pUp->FindTabFrm();
+                            (rRect.*fnRect->fnSetBottom)(
+                                        (pTab->GetUpper()->*fnRect->fnGetPrtBottom)() );
+                            // OD 08.08.2003 #110978# - expand to left and right
+                            // cell border
+                            rRect.Left ( pUp->Frm().Left() );
+                            rRect.Width( pUp->Frm().Width() );
+                        }
                     }
                 }
-            }
-            if ( pCell )
-            {
-                //CellFrms koennen auch in 'unerlaubten' Bereichen stehen, dann
-                //darf der Fly das auch.
-                SwRect aTmp( pCell->Prt() );
-                aTmp += pCell->Frm().Pos();
-                rRect.Union( aTmp );
+                if ( pCell )
+                {
+                    //CellFrms koennen auch in 'unerlaubten' Bereichen stehen, dann
+                    //darf der Fly das auch.
+                    SwRect aTmp( pCell->Prt() );
+                    aTmp += pCell->Frm().Pos();
+                    rRect.Union( aTmp );
+                }
             }
         }
         else
