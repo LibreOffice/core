@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-20 11:33:35 $
+ *  last change: $Author: hdu $ $Date: 2001-02-27 18:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <X11/Xlib.h>
 #include <gcach_xpeer.hxx>
+#include <stdlib.h>
 
 #ifdef USE_XRENDER
     #include <dlfcn.h>
@@ -89,6 +90,9 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay )
     mpDisplay = _pDisplay;
 
 #ifdef USE_XRENDER
+    if( getenv("SAL_ANTIALIAS_DISABLE") )
+        return;
+
     int nDummy;
     if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
@@ -186,8 +190,14 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
     switch( rServerFont.GetExtInfo() )
     {
         case PIXMAP_KIND:
-            XFreePixmap( mpDisplay, (Pixmap)rServerFont.GetExtPointer() );
-            mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
+            {
+                Pixmap aPixmap = (Pixmap)rServerFont.GetExtPointer();
+                if( aPixmap != None )
+                {
+                    XFreePixmap( mpDisplay, aPixmap );
+                    mnBytesUsed -= nHeight * ((nWidth + 7) >> 3);
+                }
+            }
             break;
 
 #ifdef USE_XRENDER
@@ -262,7 +272,7 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
     {
         if( rServerFont.GetGlyphBitmap1( nGlyphIndex, maRawBitmap ) )
         {
-            rGlyphData.SetSize( Size( maRawBitmap.mnWidth, maRawBitmap.mnHeight) );
+            rGlyphData.SetSize( Size( maRawBitmap.mnWidth, maRawBitmap.mnHeight ) );
             rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
 
             const ULONG nBytes = maRawBitmap.mnHeight * maRawBitmap.mnScanlineSize;
@@ -309,19 +319,11 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
                 for( int i = nBytes; --i >= 0; ++pTemp )
                     *pTemp = lsb2msb[ *pTemp ];
 
-                aPixmap = XCreatePixmapFromBitmapData(
-                    mpDisplay,
+                aPixmap = XCreatePixmapFromBitmapData( mpDisplay,
                     DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
-                    maRawBitmap.mnScanlineSize*8, maRawBitmap.mnHeight, 0, 1, 1 );
+                    maRawBitmap.mnWidth, maRawBitmap.mnHeight, 0, 1, 1 );
                 mnBytesUsed += nBytes;
             }
-        }
-        if( aPixmap == None )
-        {
-            char cEmpty = 0;
-            aPixmap = XCreatePixmapFromBitmapData(
-                mpDisplay,
-                DefaultRootWindow( mpDisplay ), &cEmpty, 1, 1, 0, 1, 1 );
         }
 
         rGlyphData.SetExtended( PIXMAP_KIND, (void*)aPixmap );
