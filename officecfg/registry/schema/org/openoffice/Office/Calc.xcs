@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-03 10:43:17 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 10:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,8 +712,17 @@
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US">If set, text metrics from the printer will be used to format text on the screen</desc>
+					<desc xml:lang="en-US">If set, text metrics from the printer will be used to format text on the screen.</desc>
 					<label xml:lang="en-US">Use printer metrics for text formatting</label>
+				</info>
+			</prop>
+			<prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean">
+				<!-- Responsible: NN -->
+				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+				<value>true</value>
+				<info>
+					<desc xml:lang="en-US">If set, a warning box will appear when existing existing cells are replaced (i.e. pasting from clipboard).</desc>
+					<label xml:lang="en-US">Warn before replacing cells</label>
 				</info>
 			</prop>
 			<prop oor:name="LastFunctions" oor:type="oor:int-list">
