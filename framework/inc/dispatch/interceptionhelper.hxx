@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interceptionhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:20:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,24 +66,28 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
-#include <macros/generic.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
-#include <macros/xinterface.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
-#include <macros/debug.hxx>
+#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
+#include <services/frame.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
 #endif
 
-#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
-#include <services/frame.hxx>
+#ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
+#include <classes/wildcard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
+#include <macros/xinterface.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
+#include <macros/generic.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
+#include <macros/debug.hxx>
 #endif
 
 #ifndef __FRAMEWORK_GENERAL_H_
@@ -148,269 +152,254 @@ namespace framework{
 //  exported const
 //_________________________________________________________________________________________________________________
 
-//_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
+//_________________________________________________________
+// definitions
+//_________________________________________________________
 
-/*-************************************************************************************************************//**
-    We must save a performant list with URL pattern for all registered interceptor objects.
-    We implement this as a dynamical vector of interceptor references with a URL list for every item.
-*//*-*************************************************************************************************************/
+/** @short      implements a helper to support interception with additional functionality.
 
-struct  IMPL_TInterceptorInfo
+    @descr      This helper implements the complete XDispatchProviderInterception interface with
+                master/slave functionality AND using of optional features like registration of URL pattern!
+
+    @attention  Don't use this class as direct member - use it dynamicly. Do not derive from this class.
+                We hold a weakreference to ouer owner not to ouer superclass.
+ */
+class InterceptionHelper : public  css::frame::XDispatchProvider
+                         , public  css::frame::XDispatchProviderInterception
+                         , public  css::lang::XEventListener
+                           // order of base classes is important for right initialization of mutex member!
+                         , private ThreadHelpBase
+                         , public  ::cppu::OWeakObject
 {
-    css::uno::Reference< css::frame::XDispatchProviderInterceptor > xInterceptor    ;
-    css::uno::Sequence< ::rtl::OUString >                           seqPatternList  ;
-};
+    //_____________________________________________________
+    // structs, helper
 
-class IMPL_CInterceptorList : public ::std::deque< IMPL_TInterceptorInfo >
-{
-    public:
-        // Implement our own find method to search for an interceptor in our list of structures!
-        // We can't search for it directly with ::std::find_if() or something else.
-        iterator find( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor )
-        {
-            // I hope that the iterator has a right implemented ++operator and we arrive end() exactly!
-            // If it is so - we can use aItem->... without any problems and must not check it.
-            iterator aItem;
-            for( aItem=begin(); aItem!=end(); ++aItem )
+    /** @short bind an interceptor component to it's URL pattern registration. */
+    struct InterceptorInfo
+    {
+        /** @short reference to the interceptor component. */
+        css::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
+
+        /** @short it's registration for URL patterns.
+
+            @descr If the interceptor component does not support the optional interface
+                   XInterceptorInfo, it will be registered for one pattern "*" by default.
+                   That would make it possible to handle it in the same manner then real
+                   registered interceptor objects and we must not implement any special code. */
+        css::uno::Sequence< ::rtl::OUString > lURLPattern;
+    };
+
+    //_____________________________________________________
+
+    /** @short implements a list of items of type InterceptorInfo, and provides some special
+               functions on it.
+
+        @descr Because interceptor objects can be registered for URL patterns,
+               it supports a wildcard search on all list items.
+     */
+    class InterceptorList : public ::std::deque< InterceptorInfo >
+    {
+        public:
+
+            //_____________________________________________
+
+            /** @short search for an interceptor inside this list using it's reference.
+
+                @param xInterceptor
+                        points to the interceptor object, which should be located inside this list.
+
+                @return An iterator object, which points directly to the located item inside this list.
+                        In case no interceptor could be found, it points to the end of this list!
+              */
+            iterator findByReference(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
             {
-                if( aItem->xInterceptor == xInterceptor )
+                css::uno::Reference< css::frame::XDispatchProviderInterceptor > xProviderInterface(xInterceptor, css::uno::UNO_QUERY);
+                iterator pIt;
+                for (pIt=begin(); pIt!=end(); ++pIt)
                 {
-                    break;
+                    if (pIt->xInterceptor == xProviderInterface)
+                        return pIt;
                 }
+                return end();
             }
-            return aItem;
-        }
-};
 
-/*-************************************************************************************************************//**
-    @short          implement a helper to support interception with additional functionality
-    @descr          These helper implement the complete XDispatchProviderInterception interface with
-                    master/slave functionality AND using of optional features like URL lists!
+            //_____________________________________________
 
-    @implements     XInterface
-                    XDispatchProviderInterception
-    @base           ThreadHelpBase
-                    OWeakObject
+            /** @short search for an interceptor inside this list using it's reference.
 
-    @attention      Don't use this class as direct member - use it dynamicly. Do not derive from this class.
-                    We hold a weakreference to ouer owner not to ouer superclass.
+                @param xInterceptor
+                        points to the interceptor object, which should be located inside this list.
 
-    @devstatus      ready to use
-    @threadsafe     yes
-*//*-*************************************************************************************************************/
+                @return An iterator object, which points directly to the located item inside this list.
+                        In case no interceptor could be found, it points to the end of this list!
+              */
+            iterator findByPattern(const ::rtl::OUString& sURL)
+            {
+                iterator pIt;
+                for (pIt=begin(); pIt!=end(); ++pIt)
+                {
+                    sal_Int32              c        = pIt->lURLPattern.getLength();
+                    const ::rtl::OUString* pPattern = pIt->lURLPattern.getConstArray();
+                    for (sal_Int32 i=0; i<c; ++i)
+                    {
+                        if (Wildcard::match(sURL, pPattern[i]))
+                            return pIt;
+                    }
+                }
+                return end();
+            }
+    };
 
-class InterceptionHelper   :   public css::frame::XDispatchProvider                ,
-                                public css::frame::XDispatchProviderInterception    ,
-                                public css::lang::XEventListener                    ,
-                                public ThreadHelpBase                                   ,
-                                public ::cppu::OWeakObject
-{
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    //_____________________________________________________
+    // member
+
+    private:
+
+        /** @short reference to the frame, which uses this instance to implement it's own interception.
+
+            @descr We hold a weak reference only, to make disposing operations easy. */
+        css::uno::WeakReference< css::frame::XFrame > m_xOwnerWeak;
+
+        /** @short this interception helper implements the top level master of an interceptor list ...
+                   but this member is the lowest possible slave! */
+        css::uno::Reference< css::frame::XDispatchProvider > m_xSlave;
+
+        /** @short contains all registered interceptor objects. */
+        InterceptorList m_lInterceptionRegs;
+
+        /** @short it regulates, which interceptor is used first.
+                   The last or the first registered one. */
+        static sal_Bool m_bPreferrFirstInterceptor;
+
+    //_____________________________________________________
+    // native interface
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+        //_________________________________________________
 
-        /*-****************************************************************************************************//**
-            @short      standard ctor
-            @descr      These initialize a new instance of this class with all needed informations for work.
-                        We share mutex with owner implementation and hold a weakreference to it!
+        /** @short creates a new interception helper instance.
 
-            @seealso    -
+            @param xOwner
+                    points to the frame, which use this instances to support it's own interception interfaces.
 
-            @param      "xSlaveDispatcher"  , reference to a dispatch helper of our owner. We need it as slave for registered interceptors.
-            @return     -
+            @param xSlave
+                    an outside creates dispatch provider, which has to be used here as lowest slave "interceptor".
+         */
+        InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
+                           const css::uno::Reference< css::frame::XDispatchProvider >& xSlave);
 
-            @onerror    -
-        *//*-*****************************************************************************************************/
+    protected:
 
-        InterceptionHelper(    const   css::uno::Reference< css::frame::XFrame >&              xFrame              ,
-                                const   css::uno::Reference< css::frame::XDispatchProvider >&   xSlaveDispatcher    );
+        //_________________________________________________
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
+        /** @short standard destructor.
+
+            @descr This method destruct an instance of this class and clear some member.
+                   This method is protected, because its not allowed to use this class as a direct member!
+                   You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
+         */
+        virtual ~InterceptionHelper();
+
+    //_____________________________________________________
+    // uno interface
+
+    public:
 
         DECLARE_XINTERFACE
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XDispatchProvider
-        //---------------------------------------------------------------------------------------------------------
+        //_________________________________________________
+        // XDispatchProvider
 
-        /*-****************************************************************************************************//**
-            @short      query for a dispatcher for given parameter
-            @descr      If somebody will dispatch a URL he must have a valid dispatch object to do it.
-                        With these function you he can get these object ... if target exist or could create!
-                        If an interceptor is registered for given URL we used - otherwise not.
+        /** @short  query for a dispatch, which implements the requested feature.
 
-            @seealso    interface XDispatch
-            @seealso    method queryDispatches()
+            @descr  We search inside our list of interception registrations, to locate
+                    any interested interceptor. In case no interceptor exists or nobody is
+                    interested on this URL our lowest slave will be used.
 
-            @param      "aURL"              , the URL to dispatch
-            @param      "sTargetFrameName"  , the name of the target frame or a special name like "_blank", "_top" ...
-            @param      "nSearchFlags"      , optional search parameter for targeting
-            @return     -
+            @param  aURL
+                        describes the requested dispatch functionality.
 
-            @onerror    A null reference is returned.
-        *//*-*****************************************************************************************************/
+            @param  sTargetFrameName
+                        the name of the target frame or a special name like "_blank", "_top" ...
+                        Won't be used here ... but may by one of our registered interceptor objects
+                        or our slave.
 
-        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(    const   css::util::URL&     aURL            ,
-                                                                                        const   ::rtl::OUString&    sTargetFrameName,
-                                                                                                sal_Int32           nSearchFlags    ) throw( css::uno::RuntimeException );
+            @param  nSearchFlags
+                        optional search parameter for targeting, if sTargetFrameName isn't a special one.
 
-        /*-****************************************************************************************************//**
-            @short      query for more then one dispatcher at the same time
-            @descr      These function do the same like queryDispatch() before, but for a lot of URLs at the same time.
-                        A registered interceptor is used automaticly.
+            @return A valid dispatch object, if any interceptor or at least our slave is interested on the given URL;
+                    or NULL otherwhise.
+         */
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(const css::util::URL&  aURL            ,
+                                                                                    const ::rtl::OUString& sTargetFrameName,
+                                                                                          sal_Int32        nSearchFlags    )
+            throw(css::uno::RuntimeException);
 
-            @seealso    interface XDispatch
-            @seealso    method queryDispatch()
+        //_________________________________________________
+        // XDispatchProvider
 
-            @param      "aDescriptor", list to describe more then one dispatches
-            @return     -
+        /** @short implements an optimized queryDispatch() for remote.
 
-            @onerror    An empty list is returned or if one dispatch was wrong one result is missing!
-        *//*-*****************************************************************************************************/
+            @descr It capsulate more then one queryDispatch() requests and return a lits of dispatch objects
+                   as result. Because both lists (in and out) coreespond together, it's not allowed to
+                   pack it - means supress NULL references!
 
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException );
+            @param lDescriptor
+                    a list of queryDispatch() arguments.
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XDispatchProviderInterception
-        //---------------------------------------------------------------------------------------------------------
+            @return A list of dispatch objects.
+         */
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor)
+            throw(css::uno::RuntimeException);
 
-        /*-****************************************************************************************************//**
-            @short      register an interceptor for dispatches
+        //_________________________________________________
+        // XDispatchProviderInterception
+
+        /** @short      register an interceptor.
+
             @descr      Somebody can register himself to intercept all or some special dispatches.
                         It's depend from his supported interfaces. If he implement XInterceptorInfo
                         he his called for some special URLs only - otherwise we call it for every request!
 
-            @seealso    interface XDispatchProviderInterceptor
-            @seealso    interface XInterceptorInfo
-            @seealso    method releaseDispatchProviderInterceptor()
+            @attention  We don't check for double registrations here!
 
-            @param      "xInterceptor", reference to interceptor for register
-            @return     -
+            @param      xInterceptor
+                        reference to interceptor, which wish to be registered here.
 
-            @onerror    Listener is'nt added to our container.
-        *//*-*****************************************************************************************************/
+            @throw      A RuntimeException if the given reference is NULL!
+         */
+        virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+            throw(css::uno::RuntimeException);
 
-        virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
+        //_________________________________________________
+        // XDispatchProviderInterception
 
-        /*-****************************************************************************************************//**
-            @short      release an interceptor for dispatches
-            @descr      Remove registered interceptor from our internal list and all special informations about him.
+        /** @short      release an interceptor.
 
-            @seealso    method registerDispatchProviderInterceptor()
+            @descr      Remove the registered interceptor from our internal list
+                        and delete all special informations about it.
 
-            @param      "xInterceptor", reference to interceptor for release
-            @return     -
+            @param      xInterceptor
+                        reference to the interceptor, which wish to be deregistered.
 
-            @onerror    Listener is'nt removed from our container.
-        *//*-*****************************************************************************************************/
-
+            @throw      A RuntimeException if the given reference is NULL!
+         */
         virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XEventListener
-        //---------------------------------------------------------------------------------------------------------
+        //_________________________________________________
+        // XEventListener
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException );
+        /** @short      Is called from our owner frame, in case he will be disposed.
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+            @descr      We have to relaease all references to him then.
+                        Normaly we will die by ref count too ...
+         */
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
+            throw(css::uno::RuntimeException);
 
-    protected:
+}; // class InterceptionHelper
 
-        /*-****************************************************************************************************//**
-            @short      standard destructor
-            @descr      This method destruct an instance of this class and clear some member.
-                        This method is protected, because its not allowed to use this class as a direct member!
-                        You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
+} // namespace framework
 
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual ~InterceptionHelper();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        /*-****************************************************************************************************//**
-            @short      search an interceptor which is registered for given URL
-            @descr      We search in our list to get the right interceptor, which wish to intercept these URL.
-                        We don't must use the highest one!
-
-            @seealso    -
-
-            @param      "sURL", URL which must match with a registered pattern
-            @return     Reference to a registered interceptor for these URL or NULL if no object was found.
-
-            @onerror    A null reference is returned.
-        *//*-*****************************************************************************************************/
-
-        css::uno::Reference< css::frame::XDispatchProviderInterceptor > impl_searchMatchingInterceptor( const ::rtl::OUString& sURL );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False ,on invalid parameter
-            @return     sal_True  ,otherwise
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool impldbg_checkParameter_InterceptionHelper                  (   const   css::uno::Reference< css::frame::XDispatchProvider >&               xSlaveDispatcher);
-        static sal_Bool impldbg_checkParameter_queryDispatch                        (   const   css::util::URL&                                                     aURL            ,
-                                                                                        const   ::rtl::OUString&                                                    sTargetFrameName,
-                                                                                                sal_Int32                                                           nSearchFlags    );
-        static sal_Bool impldbg_checkParameter_queryDispatches                      (   const   css::uno::Sequence< css::frame::DispatchDescriptor >&               seqDescriptor   );
-        static sal_Bool impldbg_checkParameter_registerDispatchProviderInterceptor  (   const   css::uno::Reference< css::frame::XDispatchProviderInterceptor >&    xInterceptor    );
-        static sal_Bool impldbg_checkParameter_releaseDispatchProviderInterceptor   (   const   css::uno::Reference< css::frame::XDispatchProviderInterceptor >&    xInterceptor    );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        css::uno::WeakReference< css::frame::XFrame >                   m_xOwnerWeak            ;   /// weakreference to owner (Don't use a hard reference. Owner can't delete us then!)
-        css::uno::Reference< css::frame::XDispatchProvider >            m_xSlaveDispatcher      ;   /// helper for XDispatchProvider and XDispatch interfaces
-        IMPL_CInterceptorList                                           m_aInterceptorList      ;   /// an interceptor can register himself for a list of URLs or URL pattern
-
-};      //  class InterceptionHelper
-
-}       //  namespace framework
-
-#endif  //  #ifndef __FRAMEWORK_HELPER_INTERCEPTIONHELPER_HXX_
+#endif // #ifndef __FRAMEWORK_HELPER_INTERCEPTIONHELPER_HXX_
