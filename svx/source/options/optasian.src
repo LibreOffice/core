@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,14 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ korean ] = "커닝";
         Text[ chinese_simplified ] = "字符间隔";
         Text[ chinese_traditional ] = "字元間隔";
-        Text[ turkish ] = "Kerning";
+        Text[ turkish ] = "Aral�k azaltma";
         Text[ arabic ] = "����� ����";
         Text[ catalan ] = "Interlletratge";
         Text[ finnish ] = "V�listys";
         Text[ thai ] = "ปรับระยะ";
+        Text[ czech ] = "Kerning";
+        Text[ hebrew ] = "‮קירוב תווים‬";
+        Text[ hindi ] = "केर्निंग";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -117,17 +120,20 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Solo caratteri occidentali";
         Text[ danish ] = "~Kun vestlige tegn";
         Text[ swedish ] = "Bara v�stliga tecke~n";
-        Text[ polish ] = "Tylko znaki zachodnie";
-        Text[ portuguese_brazilian ] = "Western characters only";
+        Text[ polish ] = "~Tylko znaki zachodnie";
+        Text[ portuguese_brazilian ] = "~Somente caracteres ocidentais";
         Text[ japanese ] = "英字のみ(~W)";
         Text[ korean ] = "영어 문자만(~W)";
         Text[ chinese_simplified ] = "仅适用于西文(~W)";
         Text[ chinese_traditional ] = "僅用於西文(~W)";
-        Text[ turkish ] = "Western characters only";
+        Text[ turkish ] = "Sadece Bat� Karakterleri";
         Text[ arabic ] = "���� ����� ���";
         Text[ catalan ] = "Nom�s car�cters de l'alfabet occidental";
         Text[ finnish ] = "Vain l�nsimaiset merkit";
         Text[ thai ] = "ตัวอักขระแบบ~ตะวันตกเท่านั้น";
+        Text[ czech ] = "Pouze západní znaky";
+        Text[ hebrew ] = "‮תווים מערביים בלבד‬";
+        Text[ hindi ] = "केवल ~पाश्चात्य अक्षर";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -146,16 +152,19 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "~Testo occidentale e punteggiatura asiatica";
         Text[ danish ] = "~Vestlig tekst og tegns�tning";
         Text[ swedish ] = "~V�stliga tecken och asiatisk interpunktion";
-        Text[ polish ] = "Znaki zachodnie i interpunkcja azjatycka";
-        Text[ portuguese_brazilian ] = "Western text and punctuation";
+        Text[ polish ] = "Znaki ~zachodnie i interpunkcja azjatycka";
+        Text[ portuguese_brazilian ] = "~Texto Ocidental e pontua��o Asi�tica";
         Text[ japanese ] = "半角英字と日本語の区切り記号(~T)";
         Text[ korean ] = "영어 텍스트 및 한국어 문장 부호(~T)";
         Text[ chinese_simplified ] = "西文字符和中日韩标点符号(~T)";
         Text[ chinese_traditional ] = "西文和中日韓文字標點符號(~T)";
-        Text[ turkish ] = "Western text and punctuation";
+        Text[ turkish ] = "Bat� metni ve Asya noktalama i�aretleri";
         Text[ arabic ] = "�� ���� ������� �����";
         Text[ catalan ] = "Text i puntuaci� occidentals";
         Text[ thai ] = "~ข้อความและเครื่องหมายวรรคตอนแบบตะวันตก";
+        Text[ czech ] = "Západní text a asijská interpunkce";
+        Text[ hebrew ] = "‮טקסט מערבי וסימן פיסוק של מזרח הרחוק‬";
+        Text[ hindi ] = "पाश्चात्य ~टेक्स्ट् और ऐशियन विराम-चिह्न";
     };
     FixedLine GB_CHAR_DIST
     {
@@ -174,16 +183,19 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ danish ] = "Linjeafstand";
         Text[ swedish ] = "Teckenavst�nd";
         Text[ polish ] = "Odst�py mi�dzy znakami";
-        Text[ portuguese_brazilian ] = "Character distance";
+        Text[ portuguese_brazilian ] = "Afastamento entre caracteres";
         Text[ japanese ] = "文字間隔の調整";
         Text[ korean ] = "문자 간격 조정";
         Text[ chinese_simplified ] = "字符间隔";
         Text[ chinese_traditional ] = "字元間隔";
-        Text[ turkish ] = "Character distance";
+        Text[ turkish ] = "Karakter aral���";
         Text[ arabic ] = "����� ������";
         Text[ catalan ] = "Espai entre car�cters";
         Text[ finnish ] = "Merkkien v�lit";
         Text[ thai ] = "ระยะห่างตัวอักขระ";
+        Text[ czech ] = "Rozestup znaků";
+        Text[ hebrew ] = "‮ריווח תוים‬";
+        Text[ hindi ] = "अक्षर का अंतर देना";
     };
     RadioButton RB_NO_COMP
     {
@@ -201,17 +213,20 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Senza compressione";
         Text[ danish ] = "~Ingen kompression";
         Text[ swedish ] = "Ingen ~kompression";
-        Text[ polish ] = "Bez kompresji";
-        Text[ portuguese_brazilian ] = "No compression";
+        Text[ polish ] = "~Bez kompresji";
+        Text[ portuguese_brazilian ] = "~Sem compress�o";
         Text[ japanese ] = "間隔を詰めない(~N)";
         Text[ korean ] = "간격 좁히지 않음(~N)";
         Text[ chinese_simplified ] = "不压缩(~N)";
         Text[ chinese_traditional ] = "不壓縮(~N)";
-        Text[ turkish ] = "No compression";
+        Text[ turkish ] = "S�k��t�rma yok";
         Text[ arabic ] = "���� ���";
         Text[ catalan ] = "Sense compressi�";
         Text[ finnish ] = "Ei pakkausta";
         Text[ thai ] = "ไ~ม่ย่อ";
+        Text[ czech ] = "Bez komprese";
+        Text[ hebrew ] = "‮ללא דחיסה‬";
+        Text[ hindi ] = "कोई दबाव ~नहीं";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -229,17 +244,20 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Comprimi solo le interpunzioni";
         Text[ danish ] = "K~omprimer kun tegns�tning";
         Text[ swedish ] = "Komprimera bara ~interpunktion";
-        Text[ polish ] = "Skompresuj tylko interpunkcj�";
-        Text[ portuguese_brazilian ] = "Compress punctuation only";
+        Text[ polish ] = "~Kondensuj tylko interpunkcj�";
+        Text[ portuguese_brazilian ] = "~Comprimir somente a pontua��o";
         Text[ japanese ] = "句読点のみを詰める(~C)";
         Text[ korean ] = "문장 부호만 좁힘(~C)";
         Text[ chinese_simplified ] = "只压缩标点符号(~C)";
         Text[ chinese_traditional ] = "僅壓縮標點符號(~C)";
-        Text[ turkish ] = "Compress punctuation only";
+        Text[ turkish ] = "Sadece s�k��t�rma i�aretleri";
         Text[ arabic ] = "��� ������ ������� ���";
         Text[ catalan ] = "Comprimeix nom�s la puntuaci�";
         Text[ finnish ] = "Vain v�limerkkien tiivistys";
         Text[ thai ] = "~ย่อเครื่องหมายวรรคตอนเท่านั้น";
+        Text[ czech ] = "Komprimovat pouze interpunkci";
+        Text[ hebrew ] = "‮דחיסת סימני פיסוק בלבד‬";
+        Text[ hindi ] = "केवल विराम-चिह्न को ~दबाओ";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -257,17 +275,20 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Comprimi interpunzioni e kana giapponese";
         Text[ danish ] = "Komprimer tegns�tning og ~japansk Kana";
         Text[ swedish ] = "Komprimera interpunktion och ~japansk Kana";
-        Text[ polish ] = "Skompresuj interpunkcj� i japo�sk� Kan�";
-        Text[ portuguese_brazilian ] = "Compress punctuation and japanese Kana";
+        Text[ polish ] = "Kondensuj ~interpunkcj� i japo�sk� Kan�";
+        Text[ portuguese_brazilian ] = "Comprimir ~pontua��o e Kana Japon�s";
         Text[ japanese ] = "句読点とかなを詰める(~P)";
         Text[ korean ] = "문장 부호 및 일본 가나문자만 좁힘(~P)";
         Text[ chinese_simplified ] = "压缩标点符号和日文假名(~P)";
         Text[ chinese_traditional ] = "僅壓縮標點符號和日文假名(~P)";
-        Text[ turkish ] = "Compress punctuation and japanese Kana";
+        Text[ turkish ] = "S�k��t�rma i�aretleri ve  Japonca Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
         Text[ catalan ] = "Comprimeix la puntuaci� i el Kana japon�s";
         Text[ finnish ] = "V�limerkkien ja japanilaisten kana-merkkien tiivistys";
         Text[ thai ] = "ย่อเ~ครื่องหมายวรรคตอนและภาษาญี่ปุ่นแบบคานะ";
+        Text[ czech ] = "Komprimovat interpunkci a japonskou Kana";
+        Text[ hebrew ] = "‮דחיסת סימני פיסוק וקנא יפנית‬";
+        Text[ hindi ] = "~विराम-चिह्न और जपानीस काना को दबाओ";
     };
     FixedLine GB_START_END
     {
@@ -286,16 +307,19 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ danish ] = "Start- og sluttegn";
         Text[ swedish ] = "Start- och sluttecken";
         Text[ polish ] = "Znaki wiod�ce i ko�cowe";
-        Text[ portuguese_brazilian ] = "Start and end characters";
+        Text[ portuguese_brazilian ] = "Caracteres iniciais e finais";
         Text[ japanese ] = "行頭禁則文字と行末禁則文字";
         Text[ korean ] = "금칙 문자";
         Text[ chinese_simplified ] = "开头和结尾字符";
         Text[ chinese_traditional ] = "開頭字元和結尾字元";
-        Text[ turkish ] = "Start and end characters";
+        Text[ turkish ] = "Ba�lang�� ve biti� karakterleri";
         Text[ arabic ] = "���� ������� ��������";
         Text[ catalan ] = "Primers i �ltims car�cters";
         Text[ finnish ] = "Aloitus- ja lopetusmerkit";
         Text[ thai ] = "ตัวอักขระตัวแรกและตัวสุดท้าย";
+        Text[ czech ] = "První a poslední znaky";
+        Text[ hebrew ] = "‮אותיות ראשונות ואחרונות‬";
+        Text[ hindi ] = "प्रारंभ और अंत का अक्षरें";
     };
     FixedText FT_LANGUAGE
     {
@@ -313,17 +337,20 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "~Lingua";
         Text[ danish ] = "~Sprog";
         Text[ swedish ] = "~Spr�k";
-        Text[ polish ] = "J�zyk";
-        Text[ portuguese_brazilian ] = "Language";
+        Text[ polish ] = "~J�zyk";
+        Text[ portuguese_brazilian ] = "~Idioma";
         Text[ japanese ] = "言語(~L)";
         Text[ korean ] = "언어(~L)";
         Text[ chinese_simplified ] = "语言(~L)";
         Text[ chinese_traditional ] = "語言(~L)";
-        Text[ turkish ] = "Language";
+        Text[ turkish ] = "Dil";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Idioma";
         Text[ finnish ] = "Kieli";
         Text[ thai ] = "~ภาษา";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ hindi ] = "~भाषा";
     };
     ListBox LB_LANGUAGE
     {
@@ -348,17 +375,20 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "~Standard";
         Text[ danish ] = "Stan~dard";
         Text[ swedish ] = "St~andard";
-        Text[ polish ] = "Domy�lnie";
-        Text[ portuguese_brazilian ] = "Standard";
+        Text[ polish ] = "~Domy�lnie";
+        Text[ portuguese_brazilian ] = "~Padr�o";
         Text[ japanese ] = "標準(~D)";
         Text[ korean ] = "기본값(~D)";
         Text[ chinese_simplified ] = "标准(~D)";
         Text[ chinese_traditional ] = "標準(~D)";
-        Text[ turkish ] = "Standard";
+        Text[ turkish ] = "Standart";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Per defecte";
         Text[ finnish ] = "Oletus";
         Text[ thai ] = "~ค่าเริ่มต้น";
+        Text[ czech ] = "Výchozí";
+        Text[ hebrew ] = "‮ברירת מחדל‬";
+        Text[ hindi ] = "~अनुपस्थिति";
     };
     FixedText FT_START
     {
@@ -376,18 +406,21 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "No ad inizio riga:";
         Text[ danish ] = "I~ngen linjestart:";
         Text[ swedish ] = "Inte i ~b�rjan av rad:";
-        Text[ polish ] = "Nie na pocz�tku wiersza:";
-        Text[ portuguese_brazilian ] = "No start of line:";
+        Text[ polish ] = "~Nie na pocz�tku wiersza:";
+        Text[ portuguese_brazilian ] = "N�o est� no in�cio da linha:";
         Text[ japanese ] = "行頭禁則文字:";
         Text[ korean ] = "줄 앞 금칙 문자:";
         Text[ chinese_simplified ] = "行首禁止使用字符：";
         Text[ chinese_traditional ] = "行首禁止使用字元：";
-        Text[ turkish ] = "No start of line:";
+        Text[ turkish ] = "Sat�r�n ba��nda de�il:";
         Text[ arabic ] = "���� ����� �����:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sense inici de fila:";
         Text[ finnish ] = "Ei rivin alussa:";
         Text[ thai ] = "ไม่ใช่จุดเริ่มของบรรทัด:";
+        Text[ czech ] = "Ne na začátku řádku:";
+        Text[ hebrew ] = "‮לא בתחילת שורה: ‬";
+        Text[ hindi ] = "रेखा की प्रारंभ में नहीं:";
     };
     Edit ED_START
     {
@@ -411,18 +444,21 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "No a fine riga:";
         Text[ danish ] = "Ingen linje~afslutning:";
         Text[ swedish ] = "Inte i slut~et av rad:";
-        Text[ polish ] = "Nie na ko�cu wiersza:";
-        Text[ portuguese_brazilian ] = "No end of line:";
+        Text[ polish ] = "Ni~e na ko�cu wiersza:";
+        Text[ portuguese_brazilian ] = "N�o est� no final da linha:";
         Text[ japanese ] = "行末禁則文字:";
         Text[ korean ] = "줄 뒤 금칙 문자:";
         Text[ chinese_simplified ] = "行末禁止使用字符：";
         Text[ chinese_traditional ] = "行末禁止使用字元：";
-        Text[ turkish ] = "No end of line:";
+        Text[ turkish ] = "Sat�r�n sonunda de�il:";
         Text[ arabic ] = "���� ����� ���:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
         Text[ catalan ] = "Sense final de l�nia:";
         Text[ finnish ] = "Ei rivin lopussa:";
         Text[ thai ] = "ไม่ใช่จุดสิ้นสุดบรรทัด:";
+        Text[ czech ] = "Ne na konci řádku:";
+        Text[ hebrew ] = "‮לא בסוף שורה:‬";
+        Text[ hindi ] = "रेखा की अंत में नहीं:";
     };
     Edit ED_END
     {
@@ -447,16 +483,19 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ danish ] = "Uden brugerdefinerede linjeskifttegn";
         Text[ swedish ] = "Utan anv�ndardefinierade radbrytningstecken";
         Text[ polish ] = "Bez zdefiniowanych indywidualnie znak�w podzia�u wiersza";
-        Text[ portuguese_brazilian ] = "Without user-defined line break symbols";
+        Text[ portuguese_brazilian ] = "Sem s�mbolos de quebra de linha definidos pelo usu�rio";
         Text[ japanese ] = "ユーザー定義の改行時の禁則文字は除く";
         Text[ korean ] = "사용자 정의 줄바꿈 기호 없음";
         Text[ chinese_simplified ] = "不附带使用者自定的换行符号";
         Text[ chinese_traditional ] = "不附帶使用者自訂的換行符號";
-        Text[ turkish ] = "Without user-defined line break symbols";
+        Text[ turkish ] = "Kullan�c� �ntan�ml� sat�r sonu i�aretleri olmadan";
         Text[ arabic ] = "���� ������ ��� ���� �����";
         Text[ catalan ] = "Sense car�cter de canvi de fila definit per l'usuari";
         Text[ finnish ] = "Ilman k�ytt�j�n m��ritt�mi� rivinvaihtomerkkej�";
         Text[ thai ] = "ไม่มีบรรทัดระบุผู้ใช้แบ่งสัญลักษณ์";
+        Text[ czech ] = "Bez uživatelem definovaných symbolů pro zalomení řádku";
+        Text[ hebrew ] = "‮ללא סימני שבירת שורה מוגדרים בידי המשתמש‬";
+        Text[ hindi ] = "उपभोक्ता से परिभाषा किया हुआ रेखा खण्डन संकेत रहित";
     };
     Text[ english_us ] = "Proxy";
     Text[ portuguese ] = "Proxy";
@@ -479,7 +518,19 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ catalan ] = "Servidor intermediari";
     Text[ finnish ] = "V�lityspalvelin";
     Text[ thai ] = "Proxy";
+    Text[ czech ] = "Proxy";
+    Text[ hebrew ] = "‮פרוקסי‬";
+    Text[ hindi ] = "प्रॉक्सी";
 };
+
+
+
+
+
+
+
+
+
 
 
 
