@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:01:56 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,16 @@
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
+// --> OD 2004-08-12 #i32795#
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+// <--
+// --> OD 2004-08-12 #i32795#
+// template class <std::vector>
+#include <vector>
+// <--
+
 // --> OD 2004-08-10 #i28749#
 #ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -112,6 +122,9 @@ class SwPosNotify
     public:
         SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj );
         ~SwPosNotify();
+        // --> OD 2004-08-12 #i32795#
+        Point LastObjPos() const;
+        // <--
 };
 
 SwPosNotify::SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj ) :
@@ -164,6 +177,84 @@ SwPosNotify::~SwPosNotify()
             mpAnchoredDrawObj->AnchorFrm()->InvalidatePos();
         }
     }
+}
+
+// --> OD 2004-08-12 #i32795#
+Point SwPosNotify::LastObjPos() const
+{
+    return maOldObjRect.Pos();
+}
+//<--
+
+// ============================================================================
+// OD 2004-08-12 #i32795#
+// helper class for oscillation control on object positioning
+// ============================================================================
+class SwObjPosOscillationControl
+{
+    private:
+        sal_uInt8 mnPosStackSize;
+
+        const SwAnchoredDrawObject* mpAnchoredDrawObj;
+
+        std::vector<Point*> maObjPositions;
+
+    public:
+        SwObjPosOscillationControl( const SwAnchoredDrawObject& _rAnchoredDrawObj );
+        ~SwObjPosOscillationControl();
+
+        bool OscillationDetected();
+};
+
+SwObjPosOscillationControl::SwObjPosOscillationControl(
+                                const SwAnchoredDrawObject& _rAnchoredDrawObj )
+    : mnPosStackSize( 20 ),
+      mpAnchoredDrawObj( &_rAnchoredDrawObj )
+{
+}
+
+SwObjPosOscillationControl::~SwObjPosOscillationControl()
+{
+    while ( !maObjPositions.empty() )
+    {
+        Point* pPos = maObjPositions.back();
+        delete pPos;
+
+        maObjPositions.pop_back();
+    }
+}
+
+bool SwObjPosOscillationControl::OscillationDetected()
+{
+    bool bOscillationDetected = false;
+
+    if ( maObjPositions.size() == mnPosStackSize )
+    {
+        // position stack is full -> oscillation
+        bOscillationDetected = true;
+    }
+    else
+    {
+        Point* pNewObjPos = new Point( mpAnchoredDrawObj->GetObjRect().Pos() );
+        for ( std::vector<Point*>::iterator aObjPosIter = maObjPositions.begin();
+              aObjPosIter != maObjPositions.end();
+              ++aObjPosIter )
+        {
+            if ( *(pNewObjPos) == *(*aObjPosIter) )
+            {
+                // position already occured -> oscillation
+                bOscillationDetected = true;
+                delete pNewObjPos;
+                break;
+            }
+        }
+        if ( !bOscillationDetected )
+        {
+            maObjPositions.push_back( pNewObjPos );
+        }
+    }
+
+    return bOscillationDetected;
 }
 
 // ============================================================================
@@ -230,75 +321,44 @@ void SwAnchoredDrawObject::MakeObjPos()
     // indicate that positioning is in progress
     SwObjPositioningInProgress aObjPosInProgress( *this );
 
-    // indicate that position will be valid after positioning is performed
-    mbValidPos = true;
-
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(::GetUserCall( GetDrawObj() ));
 
-    // scope for created instance of <SwPosNotify>
+    // determine relative position of drawing object and set it
+    switch ( pDrawContact->GetAnchorId() )
     {
-        // create instance of <SwPosNotify> for correct notification
-        SwPosNotify aPosNotify( this );
-
-        // determine relative position of drawing object and set it
-        switch ( pDrawContact->GetAnchorId() )
+        case FLY_IN_CNTNT:
         {
-            case FLY_IN_CNTNT:
-            {
-                // nothing to do, because as-character anchored objects are positioned
-                // during the format of its anchor frame - see <SwFlyCntPortion::SetBase(..)>
-            }
-            break;
-            case FLY_AT_CNTNT:
-            case FLY_AUTO_CNTNT:
-            {
-                // --> OD 2004-07-29 #i31698#
-                _SetDrawObjAnchor();
-                // <--
-                objectpositioning::SwToCntntAnchoredObjectPosition
-                        aObjPositioning( *DrawObj() );
-                aObjPositioning.CalcPosition();
-                SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
-            }
-            break;
-            case FLY_PAGE:
-            case FLY_AT_FLY:
-            {
-                // --> OD 2004-07-29 #i31698#
-                _SetDrawObjAnchor();
-                // <--
-                objectpositioning::SwToLayoutAnchoredObjectPosition
-                        aObjPositioning( *DrawObj() );
-                aObjPositioning.CalcPosition();
-                // --> OD 2004-07-29 #i31698#
-//                Point aOffsetToFrmAnchorPos( aObjPositioning.GetOffsetToFrmAnchorPos() );
-//                _SetDrawObjAnchor( aOffsetToFrmAnchorPos );
-//                SetCurrRelPos( aObjPositioning.GetRelPos() );
-//                SetObjLeft( ( DrawObj()->GetAnchorPos().X() -
-//                              aOffsetToFrmAnchorPos.X() ) +
-//                            GetCurrRelPos().X() );
-//                SetObjTop( ( DrawObj()->GetAnchorPos().Y() -
-//                             aOffsetToFrmAnchorPos.Y() ) +
-//                           GetCurrRelPos().Y() );
-                SetCurrRelPos( aObjPositioning.GetRelPos() );
-                const SwFrm* pAnchorFrm = GetAnchorFrm();
-                SWRECTFN( pAnchorFrm );
-                const Point aAnchPos( (pAnchorFrm->Frm().*fnRect->fnGetPos)() );
-                SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
-                SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
-                // <--
-            }
-            break;
-            default:
-            {
-                ASSERT( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
-            }
+            // indicate that position will be valid after positioning is performed
+            mbValidPos = true;
+            // nothing to do, because as-character anchored objects are positioned
+            // during the format of its anchor frame - see <SwFlyCntPortion::SetBase(..)>
         }
-
-        // keep, current object rectangle
-        LastObjRect() = GetObjRect().SVRect();
+        break;
+        case FLY_AT_CNTNT:
+        case FLY_AUTO_CNTNT:
+        {
+            // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
+            // helper method <_MakeObjPosAnchoredAtPara()>
+            _MakeObjPosAnchoredAtPara();
+        }
+        break;
+        case FLY_PAGE:
+        case FLY_AT_FLY:
+        {
+            // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
+            // helper method <_MakeObjPosAnchoredAtLayout()>
+            _MakeObjPosAnchoredAtLayout();
+        }
+        break;
+        default:
+        {
+            ASSERT( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
+        }
     }
+
+    // keep, current object rectangle
+    LastObjRect() = GetObjRect().SVRect();
 
     // Assure for 'master' drawing object, that it's registered at the correct page.
     // Perform check not for as-character anchored drawing objects and only if
@@ -309,6 +369,128 @@ void SwAnchoredDrawObject::MakeObjPos()
     {
         pDrawContact->ChkPage();
     }
+}
+
+/** method for the intrinsic positioning of a at-paragraph|at-character
+    anchored drawing object
+
+    OD 2004-08-12 #i32795# - helper method for method <MakeObjPos>
+
+    @author OD
+*/
+void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
+{
+    // --> OD 2004-08-12 #i32795# - adopt positioning algorithm from Writer
+    // fly frames, which are anchored at paragraph|at character
+
+    // Determine, if anchor frame can/has to be formatted.
+    // If yes, after each object positioning the anchor frame is formatted.
+    // If after the anchor frame format the object position isn't valid, the
+    // object is positioned again.
+    const bool bFormatAnchor =
+            !static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked() &&
+            !ConsiderObjWrapInfluenceOnObjPos();
+
+    if ( bFormatAnchor )
+    {
+        GetAnchorFrm()->Calc();
+    }
+
+    bool bOscillationDetected = false;
+    SwObjPosOscillationControl aObjPosOscCtrl( *this );
+    // --> OD 2004-08-25 #i3317# - boolean, to apply temporarly the
+    // 'straightforward positioning process' for the frame due to its
+    // overlapping with a previous column.
+    bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
+    // <--
+    do {
+        // indicate that position will be valid after positioning is performed
+        mbValidPos = true;
+
+        // create instance of <SwPosNotify> for correct notification
+        SwPosNotify aPosNotify( this );
+
+        // determine and set position
+        objectpositioning::SwToCntntAnchoredObjectPosition
+                aObjPositioning( *DrawObj() );
+        aObjPositioning.CalcPosition();
+
+        // get further needed results of the positioning algorithm
+        SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
+        _SetDrawObjAnchor();
+
+        // format anchor frame, if requested.
+        // Note: the format of the anchor frame can cause the object position
+        // to be invalid.
+        if ( bFormatAnchor )
+        {
+            GetAnchorFrm()->Calc();
+        }
+
+        // --> OD 2004-08-25 #i3317#
+        if ( !ConsiderObjWrapInfluenceOnObjPos() &&
+             OverlapsPrevColumn() )
+        {
+            bConsiderWrapInfluenceDueToOverlapPrevCol = true;
+        }
+        // <--
+        // check for object position oscillation, if position has changed.
+        if ( GetObjRect().Pos() != aPosNotify.LastObjPos() )
+        {
+            bOscillationDetected = aObjPosOscCtrl.OscillationDetected();
+        }
+    } while ( !mbValidPos && !bOscillationDetected &&
+              !bConsiderWrapInfluenceDueToOverlapPrevCol );
+
+    // --> OD 2004-08-25 #i3317# - consider a detected oscillation and overlapping
+    // with previous column.
+    // temporarly consider the anchored objects wrapping style influence
+    if ( bOscillationDetected || bConsiderWrapInfluenceDueToOverlapPrevCol )
+    {
+        SetTmpConsiderWrapInfluence( true );
+        SetRestartLayoutProcess( true );
+    }
+    // <--
+}
+
+/** method for the intrinsic positioning of a at-page|at-frame anchored
+    drawing object
+
+    OD 2004-08-12 #i32795# - helper method for method <MakeObjPos>
+
+    @author OD
+*/
+void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
+{
+    // indicate that position will be valid after positioning is performed
+    mbValidPos = true;
+
+    // create instance of <SwPosNotify> for correct notification
+    SwPosNotify aPosNotify( this );
+
+    // determine position
+    objectpositioning::SwToLayoutAnchoredObjectPosition
+            aObjPositioning( *DrawObj() );
+    aObjPositioning.CalcPosition();
+
+    // set position
+    // --> OD 2004-07-29 #i31698#
+//    Point aOffsetToFrmAnchorPos( aObjPositioning.GetOffsetToFrmAnchorPos() );
+//    _SetDrawObjAnchor( aOffsetToFrmAnchorPos );
+//    SetCurrRelPos( aObjPositioning.GetRelPos() );
+//    SetObjLeft( ( DrawObj()->GetAnchorPos().X() -
+//                  aOffsetToFrmAnchorPos.X() ) +
+//                GetCurrRelPos().X() );
+//    SetObjTop( ( DrawObj()->GetAnchorPos().Y() -
+//                 aOffsetToFrmAnchorPos.Y() ) +
+//               GetCurrRelPos().Y() );
+    SetCurrRelPos( aObjPositioning.GetRelPos() );
+    const SwFrm* pAnchorFrm = GetAnchorFrm();
+    SWRECTFN( pAnchorFrm );
+    const Point aAnchPos( (pAnchorFrm->Frm().*fnRect->fnGetPos)() );
+    SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
+    SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
+    // <--
 }
 
 void SwAnchoredDrawObject::_SetDrawObjAnchor()
@@ -367,8 +549,18 @@ void SwAnchoredDrawObject::InvalidateObjPos()
 
         SwPageFrm* pPageFrm = AnchorFrm()->FindPageFrm();
         _InvalidatePage( pPageFrm );
+        // --> OD 2004-08-12 #i32270# - also invalidate page frame, at which the
+        // drawing object is registered at.
+        SwPageFrm* pPageFrmRegisteredAt = GetPageFrm();
+        if ( pPageFrmRegisteredAt &&
+             pPageFrmRegisteredAt != pPageFrm )
+        {
+            _InvalidatePage( pPageFrmRegisteredAt );
+        }
+        // <--
         SwPageFrm* pPageFrmOfAnchor = &GetPageFrmOfAnchor();
-        if ( pPageFrmOfAnchor != pPageFrm )
+        if ( pPageFrmOfAnchor != pPageFrm &&
+             pPageFrmOfAnchor != pPageFrmRegisteredAt )
         {
             _InvalidatePage( pPageFrmOfAnchor );
         }
@@ -407,14 +599,19 @@ void SwAnchoredDrawObject::SetObjLeft( const SwTwips _nLeft )
 
 /** adjust positioning and alignment attributes for new anchor frame
 
+    OD 2004-08-24 #i33313# - add second optional parameter <_pNewObjRect>
+
     @author OD
 */
-void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm )
+void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
+                                                  const SwRect* _pNewObjRect )
 {
     SwTwips nHoriRelPos = 0;
     SwTwips nVertRelPos = 0;
     const Point aAnchorPos = _pNewAnchorFrm->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) );
-    const SwRect aObjRect = GetObjRect();
+    // --> OD 2004-08-24 #i33313#
+    const SwRect aObjRect( _pNewObjRect ? *_pNewObjRect : GetObjRect() );
+    // <--
     const bool bVert = _pNewAnchorFrm->IsVertical();
     const bool bR2L = _pNewAnchorFrm->IsRightToLeft();
     if ( bVert )
