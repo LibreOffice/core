@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 09:56:25 $
+ *  last change: $Author: mt $ $Date: 2002-10-17 09:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
     mnTextWidth = 0;
 
     mpTextWindow = new TextWindow( pEdt );
+
     mpTextWindow->Show();
 
     InitFromStyle( nWinStyle );
@@ -392,12 +393,15 @@ IMPL_LINK( ImpSvMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
 
 void ImpSvMEdit::SetAlign( WinBits nWinStyle )
 {
+    BOOL bRTL = Application::GetSettings().GetLayoutRTL();
+    mpTextWindow->GetTextEngine()->SetRightToLeft( bRTL );
+
     if ( nWinStyle & WB_CENTER )
         mpTextWindow->GetTextEngine()->SetTextAlign( TXTALIGN_CENTER );
-    else if ( nWinStyle & WB_RIGHT || Application::GetSettings().GetLayoutRTL() )
-        mpTextWindow->GetTextEngine()->SetTextAlign( TXTALIGN_RIGHT );
-    else
-        mpTextWindow->GetTextEngine()->SetTextAlign( TXTALIGN_LEFT );
+    else if ( nWinStyle & WB_RIGHT )
+        mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TXTALIGN_RIGHT : TXTALIGN_LEFT );
+    else if ( nWinStyle & WB_LEFT )
+        mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TXTALIGN_LEFT : TXTALIGN_RIGHT );
 }
 
 void ImpSvMEdit::SetTextWindowOffset( const Point& rOffset )

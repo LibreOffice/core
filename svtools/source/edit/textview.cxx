@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-01 19:12:05 $
+ *  last change: $Author: mt $ $Date: 2002-10-17 09:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2121,7 +2121,7 @@ Point TextView::GetDocPos( const Point& rWindowPos ) const
     else
     {
         Size aSz = mpWindow->GetOutputSizePixel();
-        aPoint.X() = rWindowPos.X() - ( aSz.Width() - 1 ) + maStartDocPos.X();
+        aPoint.X() = ( aSz.Width() - 1 ) - rWindowPos.X() + maStartDocPos.X();
     }
 
     return aPoint;
