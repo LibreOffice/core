@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 14:54:06 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:41:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,9 +62,10 @@
 PRJ=..$/..$/..$/..
 
 PRJNAME=officecfg
-TARGET=data
+TARGET=data_oopenoffice
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
 
@@ -76,6 +77,7 @@ XCUFILES= \
     VCL.xcu
 
 MODULEFILES= \
+    Inet-defaultsearchengine.xcu \
     Setup-writer.xcu   \
     Setup-calc.xcu   \
     Setup-draw.xcu   \
@@ -88,7 +90,6 @@ SAMPLEFILES= \
     LDAP.xcu.sample
 
 .INCLUDE :  target.mk
-.INCLUDE :  $(PRJ)$/registry$/data$/localtarget.mk
 
 LANGUAGEPACKS=$(MISC)$/registry$/spool$/Langpack-{$(alllangiso)}.xcu
 SAMPLETARGETS=$(MISC)$/registry$/data$/$(PACKAGEDIR)$/{$(SAMPLEFILES)}
@@ -100,4 +101,3 @@ $(SAMPLETARGETS) : $(SAMPLEFILES)
     -$(MKDIRHIER) $(@:d)
     +$(COPY) $< $@
 
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
