@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,19 +93,32 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 
-DECLARE_LIST( RscCharList, char * );
+using namespace rtl;
+
+const char* StringContainer::putString( const char* pString )
+{
+    OString aString( static_cast<const sal_Char*>(pString) );
+    std::pair<
+        std::hash_set< OString, OStringHash >::iterator,
+        bool > aInsert =
+        m_aStrings.insert( aString );
+
+    return aInsert.first->getStr();
+}
+
 /*************************************************************************/
 int             c;
 BOOL            bLastInclude;// War letztes Symbol INCLUDE
 RscFileInst*    pFI;
 RscTypCont*     pTC;
-RscCharStack *  pCS;
 RscExpression * pExp;
 struct {
     int     nKeyWord;
     YYSTYPE aYYSType;
 } aKeyVal[ 1 ];
 BOOL bTargetDefined;
+
+StringContainer* pStringContainer = NULL;
 
 
 /****************** C O D E **********************************************/
@@ -146,24 +159,8 @@ UINT32 GetNumber(){
     return( l );
 }
 
-char * MallocString(){
-    char *  pRet;
-
-    if( NULL == (pRet = pCS->Pop()) )
-        pRet = (char *)RscMem::Malloc( MINBUF );
-
-    *pRet = '\0';
-
-    return( pRet );
-}
-
-void PutStringBack( char * pStr ){
-    //pCS->Push( pStr );
-}
-
 int MakeToken( YYSTYPE * pTokenVal ){
     int             c1;
-    USHORT          i;
     char *          pStr;
 
     while( TRUE ){  // Kommentare und Leerzeichen ueberlesen
@@ -200,68 +197,48 @@ int MakeToken( YYSTYPE * pTokenVal ){
     if( bLastInclude ){
         bLastInclude = FALSE; //Zuruecksetzten
         if( '<' == c ){
-            USHORT          nBufLen = MINBUF;
-            char *          pBuf = MallocString();
-
-            i = 0;
+            OStringBuffer aBuf( 256 );
             c = pFI->GetFastChar();
             while( '>' != c && !pFI->IsEof() )
             {
-                if( nBufLen <= (USHORT)(i +1) )
-                {
-                    nBufLen += MINBUF;
-                    pBuf = (char *)RscMem::Realloc( pBuf, nBufLen );
-                }
-                pBuf[i++] = c;
+                aBuf.append( sal_Char(c) );
                 c = pFI->GetFastChar();
             };
             c = pFI->GetFastChar();
-            pBuf[i] = '\0';
-            pTokenVal->string = pBuf;
+            pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
             return( INCLUDE_STRING );
         };
     }
 
     if( c == '"' )
     {
-        USHORT          nBufLen = MINBUF;
-        char *          pBuf = MallocString();
-
-        i = 0;
+        OStringBuffer aBuf( 256 );
         BOOL bDone = FALSE;
         while( !bDone && !pFI->IsEof() && c )
         {
-            if( nBufLen <= (USHORT)(i +2) )
-            {
-                nBufLen += MINBUF;
-                pBuf = (char *)RscMem::Realloc( pBuf, nBufLen );
-            }
             c = pFI->GetFastChar();
             if( c == '"' )
             {
                 c = pFI->GetFastChar();
                 if( c == '"' )
                 {
-                    pBuf[i++] = '"';
-                    pBuf[i++] = '"';
+                    aBuf.append( '"' );
+                    aBuf.append( '"' );
                 }
                 else
                     bDone = TRUE;
             }
             else if( c == '\\' )
             {
-                pBuf[i++] = '\\';
+                aBuf.append( '\\' );
                 c = pFI->GetFastChar();
                 if( c )
-                {
-                    pBuf[i++] = c;
-                }
+                    aBuf.append( sal_Char(c) );
             }
             else
-                pBuf[i++]   = c;
+                aBuf.append( sal_Char(c) );
         }
-        pBuf[i++] = '\0';
-        pStr = pTokenVal->string = pBuf;
+        pStr = pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
         return( STRING );
     }
     if (isdigit (c)){
@@ -271,124 +248,65 @@ int MakeToken( YYSTYPE * pTokenVal ){
 
     if( isalpha (c) || (c == '_') ){
         HASHID      nHashId;
-        USHORT      nBufLen = MINBUF;
-        char *      pBuf = MallocString();
+        OStringBuffer aBuf( 256 );
 
-
-        i = 0;
         while( isalnum (c) || (c == '_') || (c == '-') )
         {
-            if( nBufLen <= (USHORT)(i +1) )
-            {
-                nBufLen += MINBUF;
-                pBuf = (char *)RscMem::Realloc( pBuf, nBufLen );
-            }
-            pBuf[i++] = c;
+            aBuf.append( sal_Char(c) );
             c = pFI->GetFastChar();
         }
-        /*
-        if( pBuf[0] == 'L' && i == 1 && c == '"' )
+
+        nHashId = pHS->Test( aBuf.getStr() );
+        if( HASH_NONAME != nHashId )
         {
-            // it is an L string
+            KEY_STRUCT  aKey;
 
-            i = 0;
-            BOOL bDone = FALSE;
-            while( !bDone && !pFI->IsEof() && c )
+            // Suche nach dem Schluesselwort
+            if( pTC->aNmTb.Get( nHashId, &aKey ) )
             {
-                if( nBufLen <= (USHORT)(i +2) )
-                {
-                    nBufLen += MINBUF;
-                    pBuf = (char *)RscMem::Realloc( pBuf, nBufLen );
-                }
-                c = pFI->GetFastChar();
-                if( c == '"' )
-                {
-                    c = pFI->GetFastChar();
-                    if( c == '"' )
-                    {
-                        pBuf[i++] = '"';
-                        pBuf[i++] = '"';
-                    }
-                    else
-                        bDone = TRUE;
-                }
-                else if( c == '\\' )
-                {
-                    pBuf[i++] = '\\';
-                    c = pFI->GetFastChar();
-                    if( c )
-                    {
-                        pBuf[i++] = c;
-                    }
-                }
-                else
-                    pBuf[i++]   = c;
-            }
-            pBuf[i++] = '\0';
-            pStr = pTokenVal->string = RscChar::MakeUTF8FromL( pBuf );
-            PutStringBack( pBuf );
-            return( STRING );
-        }
-        else
-        */
-        {
-            pBuf[i++] = '\0';
 
-            nHashId = pHS->Test( pBuf );
-            if( HASH_NONAME != nHashId )
+                // Schluesselwort gefunden
+                switch( aKey.nTyp )
+                {
+                    case CLASSNAME:
+                        pTokenVal->pClass = (RscTop *)aKey.yylval;
+                        break;
+                    case VARNAME:
+                        pTokenVal->varid = aKey.nName;
+                        break;
+                    case CONSTNAME:
+                        pTokenVal->constname.hashid = aKey.nName;
+                        pTokenVal->constname.nValue = aKey.yylval;
+                        break;
+                    case BOOLEAN:
+                        pTokenVal->svbool = (BOOL)aKey.yylval;
+                        break;
+                    case INCLUDE:
+                        bLastInclude = TRUE;
+                    default:
+                        pTokenVal->value = aKey.yylval;
+                };
+
+                return( aKey.nTyp );
+            }
+            else
             {
-                KEY_STRUCT  aKey;
-
-                // Suche nach dem Schluesselwort
-                if( pTC->aNmTb.Get( nHashId, &aKey ) )
-                {
-
-                    // Schluesselwort gefunden
-                    switch( aKey.nTyp )
-                    {
-                        case CLASSNAME:
-                            pTokenVal->pClass = (RscTop *)aKey.yylval;
-                            break;
-                        case VARNAME:
-                            pTokenVal->varid = aKey.nName;
-                            break;
-                        case CONSTNAME:
-                            pTokenVal->constname.hashid = aKey.nName;
-                            pTokenVal->constname.nValue = aKey.yylval;
-                            break;
-                        case BOOLEAN:
-                            pTokenVal->svbool = (BOOL)aKey.yylval;
-                            break;
-                        case INCLUDE:
-                            bLastInclude = TRUE;
-                        default:
-                            pTokenVal->value = aKey.yylval;
-                    };
-
-                    // String zurueckgeben
-                    PutStringBack( pBuf );
-                    return( aKey.nTyp );
-                }
-                else{
-                    pTokenVal->string = pBuf;
-                    return( SYMBOL );
-                }
-            }
-            else{       // Symbol
-                RscDefine  * pDef;
-
-                pDef = pTC->aFileTab.FindDef( pBuf );
-                if( pDef ){
-                    pTokenVal->defineele = pDef;
-
-                    // String zurueckgeben
-                    PutStringBack( pBuf );
-                    return( RSCDEFINE );
-                }
-
-                pTokenVal->string = pBuf;
+                pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
                 return( SYMBOL );
             }
+        }
+        else{       // Symbol
+            RscDefine  * pDef;
+
+            pDef = pTC->aFileTab.FindDef( aBuf.getStr() );
+            if( pDef ){
+                pTokenVal->defineele = pDef;
+
+                return( RSCDEFINE );
+            }
+
+            pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
+            return( SYMBOL );
         }
     }
 
@@ -454,7 +372,7 @@ void InitParser( RscFileInst * pFileInst )
 {
     pTC = pFileInst->pTypCont;          // Datenkontainer setzten
     pFI = pFileInst;
-    pCS = new RscCharStack();   //Puffer Vorrat
+    pStringContainer = new StringContainer();
     pExp = NULL;                //fuer MacroParser
     bTargetDefined = FALSE;
 
@@ -464,21 +382,18 @@ void InitParser( RscFileInst * pFileInst )
 }
 
 void EndParser(){
-    char *  pStr;
-
     // Stack abraeumen
     while( ! S.IsEmpty() )
         S.Pop();
 
-    // Speicher freigeben
-    while( NULL != (pStr = pCS->Pop()) )
-        RscMem::Free( pStr );
-    delete pCS;
+    // free string container
+    delete pStringContainer;
+    pStringContainer = NULL;
+
     if( pExp )
         delete pExp;
     pTC      = NULL;
     pFI      = NULL;
-    pCS      = NULL;
     pExp     = NULL;
 
 }
@@ -509,14 +424,6 @@ void IncludeParser( RscFileInst * pFileInst )
                     pFName->InsertDependFile( lKey, LIST_APPEND );
                 };
             };
-        };
-        switch( nToken ){
-            case STRING:
-            case INCLUDE_STRING:
-            case SYMBOL:
-                // String zurueckgeben
-                pCS->Push( aYYSType.string );
-                break;
         };
         nToken = MakeToken( &aYYSType );
     };
