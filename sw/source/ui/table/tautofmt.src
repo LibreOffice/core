@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:10 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ finnish ] = "~Muotoile" ;
         Text [ danish ] = "~Format" ;
         Text [ french ] = "Forma~t" ;
-        Text [ swedish ] = "Cell~format" ;
+        Text [ swedish ] = "~Format" ;
         Text [ dutch ] = "~Formaat" ;
         Text [ spanish ] = "~Formato" ;
         Text [ english_us ] = "F~ormat" ;
@@ -550,7 +550,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_traditional ] = "§R°£¥H¤Uªº¦Û°Ê®æ¦¡¡G";
         Text[ arabic ] = "Óæİ íÊã ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí ÇáÊÇáí:";
         Text[ greek ] = "Ç åîŞò ÁõôïÌïñöŞ èá äéáãñáöåß:";
-        Text[ korean ] = "´ÙÀ½°ú°°Àº ÀÚµ¿¼­½ÄÀº¡¡»èÁ¦µË´Ï´Ù :";
+        Text[ korean ] = "´ÙÀ½°ú °°Àº ÀÚµ¿¼­½ÄÀº »èÁ¦µË´Ï´Ù:";
         Text[ turkish ] = "Aşağıdaki otomatik formatlama silinecek:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El siguiente AutoFormato se eliminará:";
@@ -733,7 +733,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ english_us ] = "Mid" ;
         Text[ chinese_simplified ] = "ÖĞ";
         Text[ russian ] = "Ñåğåäèíà";
-        Text[ polish ] = "Po?rodku";
+        Text[ polish ] = "Poœrodku";
         Text[ japanese ] = "’†‰›";
         Text[ chinese_traditional ] = "¤¤";
         Text[ arabic ] = "ÇáæÓØ";
@@ -873,3 +873,4 @@ ModalDialog DLG_SWDLG_STRINPUT
         TabStop = TRUE ;
     };
 };
+
