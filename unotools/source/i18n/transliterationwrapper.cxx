@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 14:58:15 $
+ *  last change: $Author: er $ $Date: 2001-08-08 14:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,8 +296,7 @@ sal_Bool TransliterationWrapper::isEqual( const String& rStr1, const String& rSt
     sal_Bool bMatch = equals(
         rStr1, 0, rStr1.Len(), nMatch1,
         rStr2, 0, rStr2.Len(), nMatch2 );
-    return bMatch && nMatch1 == nMatch2 && nMatch1 == rStr1.Len() &&
-        nMatch2 == rStr2.Len();
+    return bMatch;
 }
 
 
@@ -307,5 +306,5 @@ sal_Bool TransliterationWrapper::isMatch( const String& rStr1, const String& rSt
     sal_Bool bMatch = equals(
         rStr1, 0, rStr1.Len(), nMatch1,
         rStr2, 0, rStr2.Len(), nMatch2 );
-    return bMatch && nMatch1 <= nMatch2 && nMatch1 == rStr1.Len();
+    return (nMatch1 <= nMatch2) && (nMatch1 == rStr1.Len());
 }
