@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 11:32:53 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #include <tools/stream.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "inetimg.hxx"
 
@@ -146,7 +148,6 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
 */
             rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
             sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
-            int nLen;
             ByteString sData;
 
             nFilePos = rIStm.Tell();
