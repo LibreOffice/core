@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 20:15:27 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ greek ] = "Áğï~ìíçìüíåõóç êùäéêïı İùò ôï ôİëïò ôçò åöáñìïãŞò";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
     Text[ japanese ] = "Êß½Ü°ÄŞ‚Í±ÌßØ¹°¼®İI—¹‚Ü‚Å‹L‰¯‚µ‚Ä‚¨‚­(~R)";
-    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÒ ¶§±îÁö ÆĞ½º¿öµå ±â¾ï";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÒ ¶§±îÁö ÆĞ½º¿öµå ±â¾ï(~R)";
     Text[ polish ] = "Zapamiêtaj has³o do koñca aplikacji";
     Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
@@ -94,9 +94,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text = "Passwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
-    Text[ chinese_traditional ] = "Àx¦s±K½X(~S)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
+    Text[ chinese_traditional ] = "Àx¦s±K½X(~R)";
     Text[ danish ] = "Gem adgangskoden permanent";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ dutch ] = "Wachtwoord ~opslaan";
@@ -104,8 +104,8 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ french ] = "~Enregistrer le mot de passe";
     Text[ greek ] = "Ìüíéìç áğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
     Text[ italian ] = "Salva pa~ssword ";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚ğ‚¸‚Á‚Æ•Û‘¶(~S)";
-    Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå";
+    Text[ japanese ] = "Êß½Ü°ÄŞ‚ğ‚¸‚Á‚Æ•Û‘¶(~R)";
+    Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå(~R)";
     Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
     Text[ portuguese_brazilian ] = "Passwort ~speichern";
@@ -119,6 +119,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/09 20:15:27  obo
+ *  Merge SWT614: 09.02.01 - 21:15:08
+ *
  *  Revision 1.4  2000/11/29 09:48:05  kz
  *  Merge SRC614: 29.11.00 - 10:47:26 (NoBranch)
  *
