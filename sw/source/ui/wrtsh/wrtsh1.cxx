@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-29 11:23:24 $
+ *  last change: $Author: jp $ $Date: 2001-12-10 22:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,9 @@ BOOL SwWrtShell::FinishOLEObj()                     // Server wird beendet
     BOOL bRet = pIPClient && pIPClient->IsInPlaceActive();
     if( bRet )
     {
-        ClearAutomaticContour();
+        if( CNT_OLE == GetCntType() )
+            ClearAutomaticContour();
+
         //  Link fuer Daten-Highlighting im Chart zuruecksetzen
         SvtModuleOptions aMOpt;
         if( aMOpt.IsChart() )
