@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-16 13:07:12 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:32:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,12 @@ PRJNAME=connectivity
 TARGET=odbcbase
 TARGET2=odbc
 
-USE_LDUMP2=TRUE
-USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
+USE_DEFFILE=TRUE
 LDUMP=ldump2.exe
+
 # --- Settings ----------------------------------
+
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
@@ -78,8 +79,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
 
-
 # --- Files -------------------------------------
+
 SLOFILES=\
         $(SLO)$/OPreparedStatement.obj			\
         $(SLO)$/OStatement.obj					\
@@ -91,20 +92,17 @@ SLOFILES=\
         $(SLO)$/ODriver.obj						\
         $(SLO)$/OConnection.obj
 
-        
-
 # --- ODBC BASE Library -----------------------------------
 
 SHL1TARGET=	$(ODBC2_TARGET)$(ODBC2_MAJOR)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
-    $(CPPULIB)					\
-    $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
-    $(OSLLIB)					\
-    $(SALLIB)					\
     $(DBTOOLSLIB)				\
-    $(COMPHELPERLIB)
+    $(COMPHELPERLIB)			\
+    $(CPPUHELPERLIB)			\
+    $(CPPULIB)					\
+    $(VOSLIB)					\
+    $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(ODBC2_TARGET)
@@ -118,23 +116,21 @@ DEFLIB1NAME=$(TARGET)
 
 # --- ODBC Library -----------------------------------
 # --- Files -------------------------------------
+
 SLO2FILES=\
         $(SLO)$/oservices.obj	\
         $(SLO)$/ORealDriver.obj	\
         $(SLO)$/OFunctions.obj
 
 # --- ODBC Library -----------------------------------
+
 SHL2TARGET=	$(ODBC_TARGET)$(ODBC_MAJOR)
 SHL2OBJS=$(SLO2FILES)
 SHL2STDLIBS=\
-    $(CPPULIB)					\
-    $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
-    $(OSLLIB)					\
-    $(SALLIB)					\
-    $(DBTOOLSLIB)				\
     $(ODBCBASELIB)				\
-    $(COMPHELPERLIB)
+    $(CPPUHELPERLIB)			\
+    $(CPPULIB)					\
+    $(SALLIB)
 
 .IF "$(ODBCBASELIB)" == ""
 SHL2STDLIBS+= iodbcbase.lib
@@ -146,8 +142,7 @@ SHL2IMPLIB=	i$(ODBC_TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME=	$(SHL2TARGET)
-DEF2EXPORTFILE=	exports.dxp
-
+SHL2VERSIONMAP=odbc.map
 
 # --- Targets ----------------------------------
 
