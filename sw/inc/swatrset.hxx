@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:04:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@ class SwFmtNoBalancedColumns;
 class SvxFrameDirectionItem;
 class SwTextGridItem;
 class SwHeaderAndFooterEatSpacingItem;
+// OD 18.09.2003 #i18732#
+class SwFmtFollowTextFlow;
 
 // Grafik-Attribute
 class SwMirrorGrf;
@@ -188,6 +190,9 @@ class SwAttrPool : public SfxItemPool
     static USHORT* pVersionMap2;
     static USHORT* pVersionMap3;
     static USHORT* pVersionMap4;
+    // OD 2004-01-21 #i18732# - due to extension of attribute set a new version
+    // map for binary filter is necessary (version map 5).
+    static USHORT* pVersionMap5;
 
     SwDoc* pDoc;
 
@@ -329,6 +334,8 @@ public:
     INLINE const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
     INLINE const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
+    // OD 18.09.2003 #i18732#
+    inline const SwFmtFollowTextFlow    &GetFollowTextFlow(BOOL = TRUE) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     INLINE const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
