@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 11:51:36 $
+#   last change: $Author: rt $ $Date: 2005-01-11 15:00:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,14 +65,15 @@ PRJ=..
 ENABLE_EXCEPTIONS=TRUE
 PRJNAME=sfx2
 TARGET=sfx
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 #sfx.hid generieren
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Allgemein ----------------------------------------------------
 
@@ -103,6 +104,7 @@ LIB2FILES=  $(LB)$/isfx.lib
 
 SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= isfx
+SHL1USE_EXPORTS=ordinal
 
 SHL1STDLIBS+=\
         $(FWELIB) \
@@ -154,24 +156,8 @@ SHL1OBJS=   $(SLO)$/sfxdll.obj
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt	\
-                $(HXX1FILES)	\
-                $(HXX2FILES)	\
-                $(HXX3FILES)	\
-                $(HXX4FILES)	\
-                $(HXX5FILES)	\
-                $(HXX6FILES)	\
-                $(HXX7FILES)	\
-                $(HXX8FILES)	\
-                $(HXX9FILES)	\
-                $(HXX10FILES)
 DEFLIB1NAME	=sfx
 DEF1DES		=Sfx
-
-.IF "$(GUI)"=="WNT"
-DEF1EXPORT6 = component_writeInfo
-DEF1EXPORT7 = component_getFactory
-.ENDIF
 
 SFXSRSLIST=\
         $(SRS)$/accel.srs \
@@ -195,11 +181,3 @@ RESLIB1SRSFILES=$(SFXSRSLIST)
 
 
 .INCLUDE :  target.mk
-
-# --- SFX-Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @+$(TYPE) sfxwin.flt > $@
-
