@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,12 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                         "com.sun.star.util.PathSubstitution" ))),
                                                 UNO_QUERY );
+
+    if ( !m_xPathSettings.is() || !m_xSubstVariables.is() )
+    {   // #112719#: check for existance
+        DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
+        return;
+    }
 
     // Create temporary hash map to have a mapping between property names and property handles
     Reference< XPropertySet > xPropertySet = Reference< XPropertySet >( m_xPathSettings, UNO_QUERY );
