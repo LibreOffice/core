@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-30 17:24:53 $
+#   last change: $Author: hjs $ $Date: 2001-09-28 12:12:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,6 @@ rescharset_01=$(enus$(LANG_GUI))
 RCLANGFLAGS_01+= -d ENGLISH
 iso_01=en-US
 .ENDIF
-
-.IF "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
 
 .IF "$(RES_ITAL)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=39
@@ -308,8 +306,6 @@ rescharset_35=$(finn$(LANG_GUI))
 RCLANGFLAGS_35+= -d FINNISH
 iso_35=fi
 .ENDIF          # "$(RES_FINN)"!="" || "$(give_me_all_languages)"!=""
-
-.ENDIF			#  "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
 
 .IF "$(L10N_framework)"!=""
 alllangext+=99
