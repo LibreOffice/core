@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 10:48:52 $
+ *  last change: $Author: as $ $Date: 2002-06-19 13:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2081,7 +2081,12 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
 
 SfxMedium::~SfxMedium()
 {
-    CancelTransfers();
+    /* Attention
+        Don't enable CancelTransfers() till you know that the writer/web has changed his asynchronous load
+        behaviour. Otherwhise may StyleSheets inside a html file will be loaded at the right time.
+        => further the help will be empty then ... #100490#
+     */
+    //CancelTransfers();
     ::vos::OClearableGuard aGuard( pImp->aHandler->GetMutex() );
     pImp->aHandler->ReleaseMedium();
     aGuard.clear();
