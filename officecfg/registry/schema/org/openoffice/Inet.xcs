@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:49:03 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice" xml:lang="en-US"> <info>
 		<author>SB</author>
-		<desc xml:lang="en-US">Contains Internet-related configurations (proxies, search engines, etc.).</desc>
+		<desc >Contains Internet-related configurations (proxies, search engines, etc.).</desc>
 	</info>
 	<templates>
 		<info>
@@ -70,288 +70,45 @@
 		</info>
 		<group oor:name="SearchEngine">
 			<info>
-				<desc xml:lang="en-US">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="el">Ορίζει τον τύπο της αναζήτησης δηλ. ακριβής ή αναζήτηση κατά συνάφεια.</desc>
-				<desc xml:lang="nl">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="fr">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="fi">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="cs">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="da">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="zh-CN">指定搜寻类型，即关系搜寻或精确搜寻。</desc>
-				<desc xml:lang="zh-TW">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="ar">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="he">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="ca">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="pt">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="ru">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="es">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="it">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="sv">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="pl">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="pt-BR">Especifica o tipo de pesquisa, i.e. nexo ou pesquisa exata.</desc>
-				<desc xml:lang="ja">検索の種類 (連鎖検索または正確な検索) を指定します。</desc>
-				<desc xml:lang="ko">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="tr">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="th">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="hi-IN">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="x-comment">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="sk">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="hu">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="sl">Specifies the search type, i.e. nexus or exact search.</desc>
+				<desc>Specifies the search type, i.e. nexus or exact search.</desc>
 			</info>
 			<group oor:name="And">
 				<info>
-					<desc xml:lang="en-US">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="el">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="nl">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="fr">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="fi">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="cs">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="da">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="zh-CN">指定“和”搜寻的搜寻选项(必须找到所有字)。</desc>
-					<desc xml:lang="zh-TW">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="ar">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="he">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="ca">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="pt">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="ru">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="es">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="it">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="sv">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="pl">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="pt-BR">Especifica as opções para pesquisas &apos;E&apos; (todas as palavras devem ser encontradas).</desc>
-					<desc xml:lang="ja">&apos;AND&apos; 検索 (すべての単語が一致する必要があります) の検索オプションを指定します。</desc>
-					<desc xml:lang="ko">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="tr">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="th">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="hi-IN">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="x-comment">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="sk">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="hu">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="sl">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
+					<desc>Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="el">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="nl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="fr">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="fi">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="cs">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="da">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="zh-CN">指定搜寻表达式，即 URL 和查询命令。</desc>
-						<desc xml:lang="zh-TW">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ar">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="he">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ca">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ru">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="es">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="it">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sv">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt-BR">Especifica a expressão da pesquisa, i.e. comando URLs e consultas </desc>
-						<desc xml:lang="ja">検索式 (つまり URL およびクエリーコマンド) を指定します。</desc>
-						<desc xml:lang="ko">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="tr">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="hu">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sl">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc>Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the suffix.</desc>
-						<desc xml:lang="el">Ορίζει το επίθεμα.</desc>
-						<desc xml:lang="nl">Specifies the suffix.</desc>
-						<desc xml:lang="fr">Specifies the suffix.</desc>
-						<desc xml:lang="fi">Specifies the suffix.</desc>
-						<desc xml:lang="cs">Specifies the suffix.</desc>
-						<desc xml:lang="da">Specifies the suffix.</desc>
-						<desc xml:lang="zh-CN">指定后缀。</desc>
-						<desc xml:lang="zh-TW">Specifies the suffix.</desc>
-						<desc xml:lang="ar">Specifies the suffix.</desc>
-						<desc xml:lang="he">Specifies the suffix.</desc>
-						<desc xml:lang="ca">Specifies the suffix.</desc>
-						<desc xml:lang="pt">Specifies the suffix.</desc>
-						<desc xml:lang="ru">Specifies the suffix.</desc>
-						<desc xml:lang="es">Specifies the suffix.</desc>
-						<desc xml:lang="it">Specifies the suffix.</desc>
-						<desc xml:lang="sv">Specifies the suffix.</desc>
-						<desc xml:lang="pl">Specifies the suffix.</desc>
-						<desc xml:lang="pt-BR">Especifica o sufixo. </desc>
-						<desc xml:lang="ja">サフィックスを指定します。</desc>
-						<desc xml:lang="ko">Specifies the suffix.</desc>
-						<desc xml:lang="tr">Specifies the suffix.</desc>
-						<desc xml:lang="th">Specifies the suffix.</desc>
-						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
-						<desc xml:lang="x-comment">Specifies the suffix.</desc>
-						<desc xml:lang="sk">Specifies the suffix.</desc>
-						<desc xml:lang="hu">Specifies the suffix.</desc>
-						<desc xml:lang="sl">Specifies the suffix.</desc>
+						<desc>Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the separator</desc>
-						<desc xml:lang="el">Ορίζει το διαχωριστικό</desc>
-						<desc xml:lang="nl">Specifies the separator</desc>
-						<desc xml:lang="fr">Specifies the separator</desc>
-						<desc xml:lang="fi">Specifies the separator</desc>
-						<desc xml:lang="cs">Specifies the separator</desc>
-						<desc xml:lang="da">Specifies the separator</desc>
-						<desc xml:lang="zh-CN">指定分隔符</desc>
-						<desc xml:lang="zh-TW">Specifies the separator</desc>
-						<desc xml:lang="ar">Specifies the separator</desc>
-						<desc xml:lang="he">Specifies the separator</desc>
-						<desc xml:lang="ca">Specifies the separator</desc>
-						<desc xml:lang="pt">Specifies the separator</desc>
-						<desc xml:lang="ru">Specifies the separator</desc>
-						<desc xml:lang="es">Specifies the separator</desc>
-						<desc xml:lang="it">Specifies the separator</desc>
-						<desc xml:lang="sv">Specifies the separator</desc>
-						<desc xml:lang="pl">Specifies the separator</desc>
-						<desc xml:lang="pt-BR">Especifica o separador</desc>
-						<desc xml:lang="ja">区切り記号を指定します。</desc>
-						<desc xml:lang="ko">Specifies the separator</desc>
-						<desc xml:lang="tr">Specifies the separator</desc>
-						<desc xml:lang="th">Specifies the separator</desc>
-						<desc xml:lang="hi-IN">Specifies the separator</desc>
-						<desc xml:lang="x-comment">Specifies the separator</desc>
-						<desc xml:lang="sk">Specifies the separator</desc>
-						<desc xml:lang="hu">Specifies the separator</desc>
-						<desc xml:lang="sl">Specifies the separator</desc>
+						<desc>Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="el">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="nl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="fr">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="fi">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="cs">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="da">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="zh-CN">指定是否区分大小写。</desc>
-						<desc xml:lang="zh-TW">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ar">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="he">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ca">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ru">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="es">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="it">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sv">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt-BR">Especifica se a pesquisa considerará maiúsculas e minúsculas</desc>
-						<desc xml:lang="ja">大文字および小文字のスペルを考慮するかどうか指定します。</desc>
-						<desc xml:lang="ko">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="tr">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="hu">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sl">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc>Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">None</desc>
-								<desc xml:lang="el">Κανένα</desc>
-								<desc xml:lang="nl">Geen</desc>
-								<desc xml:lang="fr">Aucun(e)</desc>
-								<desc xml:lang="fi">Ei mitään</desc>
-								<desc xml:lang="cs">Žádné</desc>
-								<desc xml:lang="da">Ingen</desc>
-								<desc xml:lang="zh-CN">无</desc>
-								<desc xml:lang="zh-TW">無充填</desc>
-								<desc xml:lang="ar">بدون</desc>
-								<desc xml:lang="he">‮ללא‬</desc>
-								<desc xml:lang="ca">Cap</desc>
-								<desc xml:lang="pt">Nenhum</desc>
-								<desc xml:lang="ru">Без</desc>
-								<desc xml:lang="es">Ninguno</desc>
-								<desc xml:lang="it">Senza</desc>
-								<desc xml:lang="sv">Ingen</desc>
-								<desc xml:lang="pl">Brak</desc>
-								<desc xml:lang="pt-BR">Nenhum</desc>
-								<desc xml:lang="ja">なし</desc>
-								<desc xml:lang="ko">없음</desc>
-								<desc xml:lang="tr">Yok</desc>
-								<desc xml:lang="th">ไม่มี</desc>
-								<desc xml:lang="hi-IN">कोई नहीं</desc>
-								<desc xml:lang="x-comment">None</desc>
-								<desc xml:lang="sk">Žiadne</desc>
-								<desc xml:lang="hu">None</desc>
-								<desc xml:lang="sl">None</desc>
+								<desc>None</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Upper</desc>
-								<desc xml:lang="el">Upper</desc>
-								<desc xml:lang="nl">Groot</desc>
-								<desc xml:lang="fr">Majuscules</desc>
-								<desc xml:lang="fi">Ylempi</desc>
-								<desc xml:lang="cs">velká</desc>
-								<desc xml:lang="da">Stor</desc>
-								<desc xml:lang="zh-CN">大写</desc>
-								<desc xml:lang="zh-TW">大寫</desc>
-								<desc xml:lang="ar">كبير</desc>
-								<desc xml:lang="he">‮אותיות גדולות‬</desc>
-								<desc xml:lang="ca">Superior</desc>
-								<desc xml:lang="pt">Maiúsculas</desc>
-								<desc xml:lang="ru">Прописные</desc>
-								<desc xml:lang="es">Mayúsculas</desc>
-								<desc xml:lang="it">Grande</desc>
-								<desc xml:lang="sv">Stor</desc>
-								<desc xml:lang="pl">Wielkie</desc>
-								<desc xml:lang="pt-BR">Maiúsculas</desc>
-								<desc xml:lang="ja">大文字</desc>
-								<desc xml:lang="ko">대문자</desc>
-								<desc xml:lang="tr">Büyük</desc>
-								<desc xml:lang="th">ด้านบน</desc>
-								<desc xml:lang="hi-IN">अप्पर</desc>
-								<desc xml:lang="x-comment">Upper</desc>
-								<desc xml:lang="sk">Horný</desc>
-								<desc xml:lang="hu">Upper</desc>
-								<desc xml:lang="sl">Upper</desc>
+								<desc>Upper</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Lower</desc>
-								<desc xml:lang="el">Lower</desc>
-								<desc xml:lang="nl">Klein</desc>
-								<desc xml:lang="fr">Minuscules</desc>
-								<desc xml:lang="fi">Alempi</desc>
-								<desc xml:lang="cs">malá</desc>
-								<desc xml:lang="da">Små</desc>
-								<desc xml:lang="zh-CN">小写</desc>
-								<desc xml:lang="zh-TW">小寫</desc>
-								<desc xml:lang="ar">صغير</desc>
-								<desc xml:lang="he">‮אותיות קטנות‬</desc>
-								<desc xml:lang="ca">Inferior</desc>
-								<desc xml:lang="pt">Minúsculas</desc>
-								<desc xml:lang="ru">Строчные</desc>
-								<desc xml:lang="es">Minúsculas</desc>
-								<desc xml:lang="it">Piccolo</desc>
-								<desc xml:lang="sv">Liten</desc>
-								<desc xml:lang="pl">Mały</desc>
-								<desc xml:lang="pt-BR">Minúsculas</desc>
-								<desc xml:lang="ja">小文字</desc>
-								<desc xml:lang="ko">소문자</desc>
-								<desc xml:lang="tr">Küçük</desc>
-								<desc xml:lang="th">ด้านล่าง</desc>
-								<desc xml:lang="hi-IN">लोवर</desc>
-								<desc xml:lang="x-comment">Lower</desc>
-								<desc xml:lang="sk">Spodný</desc>
-								<desc xml:lang="hu">Lower</desc>
-								<desc xml:lang="sl">Lower</desc>
+								<desc>Lower</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -359,257 +116,41 @@
 			</group>
 			<group oor:name="Or">
 				<info>
-					<desc xml:lang="en-US">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="el">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="nl">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="fr">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="fi">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="cs">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="da">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="zh-CN">指定“或”搜寻的搜寻选项(必须至少找到一个字)。</desc>
-					<desc xml:lang="zh-TW">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="ar">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="he">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="ca">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="pt">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="ru">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="es">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="it">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="sv">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="pl">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="pt-BR">Especifica as opções para pesquisas &apos;OU&apos; (Pelo menos uma palavras deve ser encontrada).</desc>
-					<desc xml:lang="ja">&apos;OR&apos; 検索 (少なくとも １ つの単語が一致する必要があります) の検索オプションを指定します。</desc>
-					<desc xml:lang="ko">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="tr">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="th">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="hi-IN">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="x-comment">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="sk">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="hu">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="sl">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
+					<desc>Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="el">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="nl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="fr">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="fi">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="cs">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="da">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="zh-CN">指定搜寻表达式，即 URL 和查询命令。</desc>
-						<desc xml:lang="zh-TW">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ar">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="he">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ca">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ru">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="es">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="it">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sv">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt-BR">Especifica a expressão da pesquisa, i.e. comando URLs e consultas </desc>
-						<desc xml:lang="ja">検索式 (つまり URL およびクエリーコマンド) を指定します。</desc>
-						<desc xml:lang="ko">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="tr">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="hu">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sl">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc>Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the suffix.</desc>
-						<desc xml:lang="el">Ορίζει το επίθεμα.</desc>
-						<desc xml:lang="nl">Specifies the suffix.</desc>
-						<desc xml:lang="fr">Specifies the suffix.</desc>
-						<desc xml:lang="fi">Specifies the suffix.</desc>
-						<desc xml:lang="cs">Specifies the suffix.</desc>
-						<desc xml:lang="da">Specifies the suffix.</desc>
-						<desc xml:lang="zh-CN">指定后缀。</desc>
-						<desc xml:lang="zh-TW">Specifies the suffix.</desc>
-						<desc xml:lang="ar">Specifies the suffix.</desc>
-						<desc xml:lang="he">Specifies the suffix.</desc>
-						<desc xml:lang="ca">Specifies the suffix.</desc>
-						<desc xml:lang="pt">Specifies the suffix.</desc>
-						<desc xml:lang="ru">Specifies the suffix.</desc>
-						<desc xml:lang="es">Specifies the suffix.</desc>
-						<desc xml:lang="it">Specifies the suffix.</desc>
-						<desc xml:lang="sv">Specifies the suffix.</desc>
-						<desc xml:lang="pl">Specifies the suffix.</desc>
-						<desc xml:lang="pt-BR">Especifica o sufixo. </desc>
-						<desc xml:lang="ja">サフィックスを指定します。</desc>
-						<desc xml:lang="ko">Specifies the suffix.</desc>
-						<desc xml:lang="tr">Specifies the suffix.</desc>
-						<desc xml:lang="th">Specifies the suffix.</desc>
-						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
-						<desc xml:lang="x-comment">Specifies the suffix.</desc>
-						<desc xml:lang="sk">Specifies the suffix.</desc>
-						<desc xml:lang="hu">Specifies the suffix.</desc>
-						<desc xml:lang="sl">Specifies the suffix.</desc>
+						<desc>Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the separator</desc>
-						<desc xml:lang="el">Ορίζει το διαχωριστικό</desc>
-						<desc xml:lang="nl">Specifies the separator</desc>
-						<desc xml:lang="fr">Specifies the separator</desc>
-						<desc xml:lang="fi">Specifies the separator</desc>
-						<desc xml:lang="cs">Specifies the separator</desc>
-						<desc xml:lang="da">Specifies the separator</desc>
-						<desc xml:lang="zh-CN">指定分隔符</desc>
-						<desc xml:lang="zh-TW">Specifies the separator</desc>
-						<desc xml:lang="ar">Specifies the separator</desc>
-						<desc xml:lang="he">Specifies the separator</desc>
-						<desc xml:lang="ca">Specifies the separator</desc>
-						<desc xml:lang="pt">Specifies the separator</desc>
-						<desc xml:lang="ru">Specifies the separator</desc>
-						<desc xml:lang="es">Specifies the separator</desc>
-						<desc xml:lang="it">Specifies the separator</desc>
-						<desc xml:lang="sv">Specifies the separator</desc>
-						<desc xml:lang="pl">Specifies the separator</desc>
-						<desc xml:lang="pt-BR">Especifica o separador</desc>
-						<desc xml:lang="ja">区切り記号を指定します。</desc>
-						<desc xml:lang="ko">Specifies the separator</desc>
-						<desc xml:lang="tr">Specifies the separator</desc>
-						<desc xml:lang="th">Specifies the separator</desc>
-						<desc xml:lang="hi-IN">Specifies the separator</desc>
-						<desc xml:lang="x-comment">Specifies the separator</desc>
-						<desc xml:lang="sk">Specifies the separator</desc>
-						<desc xml:lang="hu">Specifies the separator</desc>
-						<desc xml:lang="sl">Specifies the separator</desc>
+						<desc>Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="el">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="nl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="fr">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="fi">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="cs">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="da">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="zh-CN">指定是否区分大小写。</desc>
-						<desc xml:lang="zh-TW">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ar">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="he">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ca">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ru">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="es">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="it">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sv">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt-BR">Especifica se a pesquisa considerará maiúsculas e minúsculas</desc>
-						<desc xml:lang="ja">大文字および小文字のスペルを考慮するかどうか指定します。</desc>
-						<desc xml:lang="ko">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="tr">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="hu">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sl">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc>Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">None</desc>
-								<desc xml:lang="el">Κανένα</desc>
-								<desc xml:lang="nl">Geen</desc>
-								<desc xml:lang="fr">Aucun(e)</desc>
-								<desc xml:lang="fi">Ei mitään</desc>
-								<desc xml:lang="cs">Žádné</desc>
-								<desc xml:lang="da">Ingen</desc>
-								<desc xml:lang="zh-CN">无</desc>
-								<desc xml:lang="zh-TW">無充填</desc>
-								<desc xml:lang="ar">بدون</desc>
-								<desc xml:lang="he">‮ללא‬</desc>
-								<desc xml:lang="ca">Cap</desc>
-								<desc xml:lang="pt">Nenhum</desc>
-								<desc xml:lang="ru">Без</desc>
-								<desc xml:lang="es">Ninguno</desc>
-								<desc xml:lang="it">Senza</desc>
-								<desc xml:lang="sv">Ingen</desc>
-								<desc xml:lang="pl">Brak</desc>
-								<desc xml:lang="pt-BR">Nenhum</desc>
-								<desc xml:lang="ja">なし</desc>
-								<desc xml:lang="ko">없음</desc>
-								<desc xml:lang="tr">Yok</desc>
-								<desc xml:lang="th">ไม่มี</desc>
-								<desc xml:lang="hi-IN">कोई नहीं</desc>
-								<desc xml:lang="x-comment">None</desc>
-								<desc xml:lang="sk">Žiadne</desc>
-								<desc xml:lang="hu">None</desc>
-								<desc xml:lang="sl">None</desc>
+								<desc>None</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Upper</desc>
-								<desc xml:lang="el">Upper</desc>
-								<desc xml:lang="nl">Groot</desc>
-								<desc xml:lang="fr">Majuscules</desc>
-								<desc xml:lang="fi">Ylempi</desc>
-								<desc xml:lang="cs">velká</desc>
-								<desc xml:lang="da">Stor</desc>
-								<desc xml:lang="zh-CN">大写</desc>
-								<desc xml:lang="zh-TW">大寫</desc>
-								<desc xml:lang="ar">كبير</desc>
-								<desc xml:lang="he">‮אותיות גדולות‬</desc>
-								<desc xml:lang="ca">Superior</desc>
-								<desc xml:lang="pt">Maiúsculas</desc>
-								<desc xml:lang="ru">Прописные</desc>
-								<desc xml:lang="es">Mayúsculas</desc>
-								<desc xml:lang="it">Grande</desc>
-								<desc xml:lang="sv">Stor</desc>
-								<desc xml:lang="pl">Wielkie</desc>
-								<desc xml:lang="pt-BR">Maiúsculas</desc>
-								<desc xml:lang="ja">大文字</desc>
-								<desc xml:lang="ko">대문자</desc>
-								<desc xml:lang="tr">Büyük</desc>
-								<desc xml:lang="th">ด้านบน</desc>
-								<desc xml:lang="hi-IN">अप्पर</desc>
-								<desc xml:lang="x-comment">Upper</desc>
-								<desc xml:lang="sk">Horný</desc>
-								<desc xml:lang="hu">Upper</desc>
-								<desc xml:lang="sl">Upper</desc>
+								<desc>Upper</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Lower</desc>
-								<desc xml:lang="el">Lower</desc>
-								<desc xml:lang="nl">Klein</desc>
-								<desc xml:lang="fr">Minuscules</desc>
-								<desc xml:lang="fi">Alempi</desc>
-								<desc xml:lang="cs">malá</desc>
-								<desc xml:lang="da">Små</desc>
-								<desc xml:lang="zh-CN">小写</desc>
-								<desc xml:lang="zh-TW">小寫</desc>
-								<desc xml:lang="ar">صغير</desc>
-								<desc xml:lang="he">‮אותיות קטנות‬</desc>
-								<desc xml:lang="ca">Inferior</desc>
-								<desc xml:lang="pt">Minúsculas</desc>
-								<desc xml:lang="ru">Строчные</desc>
-								<desc xml:lang="es">Minúsculas</desc>
-								<desc xml:lang="it">Piccolo</desc>
-								<desc xml:lang="sv">Liten</desc>
-								<desc xml:lang="pl">Mały</desc>
-								<desc xml:lang="pt-BR">Minúsculas</desc>
-								<desc xml:lang="ja">小文字</desc>
-								<desc xml:lang="ko">소문자</desc>
-								<desc xml:lang="tr">Küçük</desc>
-								<desc xml:lang="th">ด้านล่าง</desc>
-								<desc xml:lang="hi-IN">लोवर</desc>
-								<desc xml:lang="x-comment">Lower</desc>
-								<desc xml:lang="sk">Spodný</desc>
-								<desc xml:lang="hu">Lower</desc>
-								<desc xml:lang="sl">Lower</desc>
+								<desc>Lower</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -617,257 +158,41 @@
 			</group>
 			<group oor:name="Exact">
 				<info>
-					<desc xml:lang="en-US">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="el">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="nl">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="fr">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="fi">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="cs">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="da">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="zh-CN">指定“精确”搜寻的搜寻选项(必须找到整个文字)。</desc>
-					<desc xml:lang="zh-TW">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="ar">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="he">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="ca">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="pt">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="ru">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="es">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="it">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="sv">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="pl">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="pt-BR">Especifica as opções para pesquisas &apos;Exatas&apos; (O texto completo deve ser encontrado).</desc>
-					<desc xml:lang="ja">&apos;Exact&apos; 検索 (テキスト全体が一致する必要があります) の検索オプションを指定します。</desc>
-					<desc xml:lang="ko">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="tr">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="th">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="hi-IN">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="x-comment">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="sk">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="hu">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="sl">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
+					<desc>Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="el">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="nl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="fr">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="fi">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="cs">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="da">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="zh-CN">指定搜寻表达式，即 URL 和查询命令。</desc>
-						<desc xml:lang="zh-TW">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ar">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="he">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ca">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ru">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="es">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="it">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sv">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt-BR">Especifica a expressão da pesquisa, i.e. comando URLs e consultas </desc>
-						<desc xml:lang="ja">検索式 (つまり URL およびクエリーコマンド) を指定します。</desc>
-						<desc xml:lang="ko">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="tr">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="hu">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="sl">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc>Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the suffix.</desc>
-						<desc xml:lang="el">Specifies the suffix.</desc>
-						<desc xml:lang="nl">Specifies the suffix.</desc>
-						<desc xml:lang="fr">Specifies the suffix.</desc>
-						<desc xml:lang="fi">Specifies the suffix.</desc>
-						<desc xml:lang="cs">Specifies the suffix.</desc>
-						<desc xml:lang="da">Specifies the suffix.</desc>
-						<desc xml:lang="zh-CN">指定后缀。</desc>
-						<desc xml:lang="zh-TW">Specifies the suffix.</desc>
-						<desc xml:lang="ar">Specifies the suffix.</desc>
-						<desc xml:lang="he">Specifies the suffix.</desc>
-						<desc xml:lang="ca">Specifies the suffix.</desc>
-						<desc xml:lang="pt">Specifies the suffix.</desc>
-						<desc xml:lang="ru">Specifies the suffix.</desc>
-						<desc xml:lang="es">Specifies the suffix.</desc>
-						<desc xml:lang="it">Specifies the suffix.</desc>
-						<desc xml:lang="sv">Specifies the suffix.</desc>
-						<desc xml:lang="pl">Specifies the suffix.</desc>
-						<desc xml:lang="pt-BR">Especifica o sufixo. </desc>
-						<desc xml:lang="ja">サフィックスを指定します。</desc>
-						<desc xml:lang="ko">Specifies the suffix.</desc>
-						<desc xml:lang="tr">Specifies the suffix.</desc>
-						<desc xml:lang="th">Specifies the suffix.</desc>
-						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
-						<desc xml:lang="x-comment">Specifies the suffix.</desc>
-						<desc xml:lang="sk">Specifies the suffix.</desc>
-						<desc xml:lang="hu">Specifies the suffix.</desc>
-						<desc xml:lang="sl">Specifies the suffix.</desc>
+						<desc>Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the separator</desc>
-						<desc xml:lang="el">Specifies the separator</desc>
-						<desc xml:lang="nl">Specifies the separator</desc>
-						<desc xml:lang="fr">Specifies the separator</desc>
-						<desc xml:lang="fi">Specifies the separator</desc>
-						<desc xml:lang="cs">Specifies the separator</desc>
-						<desc xml:lang="da">Specifies the separator</desc>
-						<desc xml:lang="zh-CN">指定分隔符</desc>
-						<desc xml:lang="zh-TW">Specifies the separator</desc>
-						<desc xml:lang="ar">Specifies the separator</desc>
-						<desc xml:lang="he">Specifies the separator</desc>
-						<desc xml:lang="ca">Specifies the separator</desc>
-						<desc xml:lang="pt">Specifies the separator</desc>
-						<desc xml:lang="ru">Specifies the separator</desc>
-						<desc xml:lang="es">Specifies the separator</desc>
-						<desc xml:lang="it">Specifies the separator</desc>
-						<desc xml:lang="sv">Specifies the separator</desc>
-						<desc xml:lang="pl">Specifies the separator</desc>
-						<desc xml:lang="pt-BR">Especifica o separador</desc>
-						<desc xml:lang="ja">区切り記号を指定します。</desc>
-						<desc xml:lang="ko">Specifies the separator</desc>
-						<desc xml:lang="tr">Specifies the separator</desc>
-						<desc xml:lang="th">Specifies the separator</desc>
-						<desc xml:lang="hi-IN">Specifies the separator</desc>
-						<desc xml:lang="x-comment">Specifies the separator</desc>
-						<desc xml:lang="sk">Specifies the separator</desc>
-						<desc xml:lang="hu">Specifies the separator</desc>
-						<desc xml:lang="sl">Specifies the separator</desc>
+						<desc>Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="el">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="nl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="fr">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="fi">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="cs">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="da">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="zh-CN">指定是否区分大小写。</desc>
-						<desc xml:lang="zh-TW">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ar">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="he">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ca">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ru">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="es">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="it">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sv">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt-BR">Especifica se a pesquisa considerará maiúsculas e minúsculas</desc>
-						<desc xml:lang="ja">大文字および小文字のスペルを考慮するかどうか指定します。</desc>
-						<desc xml:lang="ko">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="tr">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="hu">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="sl">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc>Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">None</desc>
-								<desc xml:lang="el">Κανένα</desc>
-								<desc xml:lang="nl">Geen</desc>
-								<desc xml:lang="fr">Aucun(e)</desc>
-								<desc xml:lang="fi">Ei mitään</desc>
-								<desc xml:lang="cs">Žádné</desc>
-								<desc xml:lang="da">Ingen</desc>
-								<desc xml:lang="zh-CN">无</desc>
-								<desc xml:lang="zh-TW">無充填</desc>
-								<desc xml:lang="ar">بدون</desc>
-								<desc xml:lang="he">‮ללא‬</desc>
-								<desc xml:lang="ca">Cap</desc>
-								<desc xml:lang="pt">Nenhum</desc>
-								<desc xml:lang="ru">Без</desc>
-								<desc xml:lang="es">Ninguno</desc>
-								<desc xml:lang="it">Senza</desc>
-								<desc xml:lang="sv">Ingen</desc>
-								<desc xml:lang="pl">Brak</desc>
-								<desc xml:lang="pt-BR">Nenhum</desc>
-								<desc xml:lang="ja">なし</desc>
-								<desc xml:lang="ko">없음</desc>
-								<desc xml:lang="tr">Yok</desc>
-								<desc xml:lang="th">ไม่มี</desc>
-								<desc xml:lang="hi-IN">कोई नहीं</desc>
-								<desc xml:lang="x-comment">None</desc>
-								<desc xml:lang="sk">Žiadne</desc>
-								<desc xml:lang="hu">None</desc>
-								<desc xml:lang="sl">None</desc>
+								<desc>None</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Upper</desc>
-								<desc xml:lang="el">Upper</desc>
-								<desc xml:lang="nl">Groot</desc>
-								<desc xml:lang="fr">Majuscules</desc>
-								<desc xml:lang="fi">Ylempi</desc>
-								<desc xml:lang="cs">velká</desc>
-								<desc xml:lang="da">Stor</desc>
-								<desc xml:lang="zh-CN">大写</desc>
-								<desc xml:lang="zh-TW">大寫</desc>
-								<desc xml:lang="ar">كبير</desc>
-								<desc xml:lang="he">‮אותיות גדולות‬</desc>
-								<desc xml:lang="ca">Superior</desc>
-								<desc xml:lang="pt">Maiúsculas</desc>
-								<desc xml:lang="ru">Прописные</desc>
-								<desc xml:lang="es">Mayúsculas</desc>
-								<desc xml:lang="it">Grande</desc>
-								<desc xml:lang="sv">Stor</desc>
-								<desc xml:lang="pl">Wielkie</desc>
-								<desc xml:lang="pt-BR">Maiúsculas</desc>
-								<desc xml:lang="ja">大文字</desc>
-								<desc xml:lang="ko">대문자</desc>
-								<desc xml:lang="tr">Büyük</desc>
-								<desc xml:lang="th">ด้านบน</desc>
-								<desc xml:lang="hi-IN">अप्पर</desc>
-								<desc xml:lang="x-comment">Upper</desc>
-								<desc xml:lang="sk">Horný</desc>
-								<desc xml:lang="hu">Upper</desc>
-								<desc xml:lang="sl">Upper</desc>
+								<desc>Upper</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Lower</desc>
-								<desc xml:lang="el">Lower</desc>
-								<desc xml:lang="nl">Klein</desc>
-								<desc xml:lang="fr">Minuscules</desc>
-								<desc xml:lang="fi">Alempi</desc>
-								<desc xml:lang="cs">malá</desc>
-								<desc xml:lang="da">Små</desc>
-								<desc xml:lang="zh-CN">小写</desc>
-								<desc xml:lang="zh-TW">小寫</desc>
-								<desc xml:lang="ar">صغير</desc>
-								<desc xml:lang="he">‮אותיות קטנות‬</desc>
-								<desc xml:lang="ca">Inferior</desc>
-								<desc xml:lang="pt">Minúsculas</desc>
-								<desc xml:lang="ru">Строчные</desc>
-								<desc xml:lang="es">Minúsculas</desc>
-								<desc xml:lang="it">Piccolo</desc>
-								<desc xml:lang="sv">Liten</desc>
-								<desc xml:lang="pl">Mały</desc>
-								<desc xml:lang="pt-BR">Minúsculas</desc>
-								<desc xml:lang="ja">小文字</desc>
-								<desc xml:lang="ko">소문자</desc>
-								<desc xml:lang="tr">Küçük</desc>
-								<desc xml:lang="th">ด้านล่าง</desc>
-								<desc xml:lang="hi-IN">लोवर</desc>
-								<desc xml:lang="x-comment">Lower</desc>
-								<desc xml:lang="sk">Spodný</desc>
-								<desc xml:lang="hu">Lower</desc>
-								<desc xml:lang="sl">Lower</desc>
+								<desc>Lower</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -878,34 +203,7 @@
 	<component>
 		<group oor:name="Settings">
 			<info>
-				<desc xml:lang="en-US">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="el">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="nl">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="fr">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="fi">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="cs">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="da">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="zh-CN">含有与国际互联网相关的配置 (服务器、代理服务器等)。</desc>
-				<desc xml:lang="zh-TW">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="ar">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="he">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="ca">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="pt">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="ru">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="es">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="it">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="sv">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="pl">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="pt-BR">Contém configurações relacionadas com a Internet (servidores, proxies, etc...).</desc>
-				<desc xml:lang="ja">インターネット関連の構成 (サーバー、プロキシなど) が含まれます。</desc>
-				<desc xml:lang="ko">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="tr">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="th">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="hi-IN">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="x-comment">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="sk">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="hu">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="sl">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+				<desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
 			</info>
 			<prop oor:name="ooInetDNSServer" oor:type="xs:string">
 				<!-- OldPath: Inet/DNS -->
@@ -914,34 +212,7 @@
 				<info>
 					<deprecated/>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="el">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="nl">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="fr">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="fi">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="cs">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="da">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="zh-CN">指定 DNS 服务器的 IP 地址。如果该字串为空，将自动指定 DNS 服务器。</desc>
-					<desc xml:lang="zh-TW">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="ar">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="he">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="ca">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="pt">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="ru">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="es">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="it">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="sv">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="pl">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="pt-BR">Especifica o endereço IP do servidor DNS. Se o string for vazio, o servidor DNS será especificado automaticamente.</desc>
-					<desc xml:lang="ja">DNS サーバーの IP アドレスを指定します。空の文字列を指定した場合、DNS サーバーが自動的に指定されます。</desc>
-					<desc xml:lang="ko">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="tr">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="th">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="hi-IN">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="x-comment">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="sk">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="hu">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="sl">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc>Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -952,34 +223,7 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="el">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="nl">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="fr">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="fi">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="cs">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="da">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="zh-CN">枚举不需要任何代理服务器的服务器名称。</desc>
-					<desc xml:lang="zh-TW">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="ar">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="he">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="ca">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="pt">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="ru">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="es">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="it">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="sv">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="pl">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="pt-BR">Enumera os nomes de servidores que não necessitam de proxy.</desc>
-					<desc xml:lang="ja">プロキシを必要としないサーバーの名前を指定します。</desc>
-					<desc xml:lang="ko">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="tr">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="th">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="hi-IN">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="x-comment">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="sk">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="hu">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="sl">Enumerates the names of servers that do not require any proxies.</desc>
+					<desc>Enumerates the names of servers that do not require any proxies.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -990,130 +234,22 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="el">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="nl">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="fr">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="fi">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="cs">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="da">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="zh-CN">指定代理服务器选择的类型。</desc>
-					<desc xml:lang="zh-TW">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="ar">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="he">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="ca">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="pt">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="ru">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="es">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="it">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="sv">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="pl">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="pt-BR">Especifica o tipo de seleção de proxy. </desc>
-					<desc xml:lang="ja">プロキシ選択の種類を指定します。</desc>
-					<desc xml:lang="ko">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="tr">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="th">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="hi-IN">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="x-comment">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="sk">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="hu">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="sl">Specifies the type of proxy selection.</desc>
+					<desc>Specifies the type of proxy selection.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">No proxies</desc>
-							<desc xml:lang="el">No proxies</desc>
-							<desc xml:lang="nl">No proxies</desc>
-							<desc xml:lang="fr">No proxies</desc>
-							<desc xml:lang="fi">No proxies</desc>
-							<desc xml:lang="cs">No proxies</desc>
-							<desc xml:lang="da">No proxies</desc>
-							<desc xml:lang="zh-CN">不用代理</desc>
-							<desc xml:lang="zh-TW">No proxies</desc>
-							<desc xml:lang="ar">No proxies</desc>
-							<desc xml:lang="he">No proxies</desc>
-							<desc xml:lang="ca">No proxies</desc>
-							<desc xml:lang="pt">No proxies</desc>
-							<desc xml:lang="ru">No proxies</desc>
-							<desc xml:lang="es">No proxies</desc>
-							<desc xml:lang="it">No proxies</desc>
-							<desc xml:lang="sv">No proxies</desc>
-							<desc xml:lang="pl">No proxies</desc>
-							<desc xml:lang="pt-BR">Sem proxies</desc>
-							<desc xml:lang="ja">プロキシなし</desc>
-							<desc xml:lang="ko">No proxies</desc>
-							<desc xml:lang="tr">No proxies</desc>
-							<desc xml:lang="th">No proxies</desc>
-							<desc xml:lang="hi-IN">No proxies</desc>
-							<desc xml:lang="x-comment">No proxies</desc>
-							<desc xml:lang="sk">No proxies</desc>
-							<desc xml:lang="hu">No proxies</desc>
-							<desc xml:lang="sl">No proxies</desc>
+							<desc>No proxies</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Automatic proxy configuration</desc>
-							<desc xml:lang="el">Automatic proxy configuration</desc>
-							<desc xml:lang="nl">Automatic proxy configuration</desc>
-							<desc xml:lang="fr">Automatic proxy configuration</desc>
-							<desc xml:lang="fi">Automatic proxy configuration</desc>
-							<desc xml:lang="cs">Automatic proxy configuration</desc>
-							<desc xml:lang="da">Automatic proxy configuration</desc>
-							<desc xml:lang="zh-CN">自动配置代理</desc>
-							<desc xml:lang="zh-TW">Automatic proxy configuration</desc>
-							<desc xml:lang="ar">Automatic proxy configuration</desc>
-							<desc xml:lang="he">Automatic proxy configuration</desc>
-							<desc xml:lang="ca">Automatic proxy configuration</desc>
-							<desc xml:lang="pt">Automatic proxy configuration</desc>
-							<desc xml:lang="ru">Automatic proxy configuration</desc>
-							<desc xml:lang="es">Automatic proxy configuration</desc>
-							<desc xml:lang="it">Automatic proxy configuration</desc>
-							<desc xml:lang="sv">Automatic proxy configuration</desc>
-							<desc xml:lang="pl">Automatic proxy configuration</desc>
-							<desc xml:lang="pt-BR">Configuração automática do proxy</desc>
-							<desc xml:lang="ja">自動でプロキシを設定</desc>
-							<desc xml:lang="ko">Automatic proxy configuration</desc>
-							<desc xml:lang="tr">Automatic proxy configuration</desc>
-							<desc xml:lang="th">Automatic proxy configuration</desc>
-							<desc xml:lang="hi-IN">Automatic proxy configuration</desc>
-							<desc xml:lang="x-comment">Automatic proxy configuration</desc>
-							<desc xml:lang="sk">Automatic proxy configuration</desc>
-							<desc xml:lang="hu">Automatic proxy configuration</desc>
-							<desc xml:lang="sl">Automatic proxy configuration</desc>
+							<desc>Automatic proxy configuration</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Manual proxy configuration</desc>
-							<desc xml:lang="el">Manual proxy configuration</desc>
-							<desc xml:lang="nl">Manual proxy configuration</desc>
-							<desc xml:lang="fr">Manual proxy configuration</desc>
-							<desc xml:lang="fi">Manual proxy configuration</desc>
-							<desc xml:lang="cs">Manual proxy configuration</desc>
-							<desc xml:lang="da">Manual proxy configuration</desc>
-							<desc xml:lang="zh-CN">手工配置代理</desc>
-							<desc xml:lang="zh-TW">Manual proxy configuration</desc>
-							<desc xml:lang="ar">Manual proxy configuration</desc>
-							<desc xml:lang="he">Manual proxy configuration</desc>
-							<desc xml:lang="ca">Manual proxy configuration</desc>
-							<desc xml:lang="pt">Manual proxy configuration</desc>
-							<desc xml:lang="ru">Manual proxy configuration</desc>
-							<desc xml:lang="es">Manual proxy configuration</desc>
-							<desc xml:lang="it">Manual proxy configuration</desc>
-							<desc xml:lang="sv">Manual proxy configuration</desc>
-							<desc xml:lang="pl">Manual proxy configuration</desc>
-							<desc xml:lang="pt-BR">Configuração manual do proxy</desc>
-							<desc xml:lang="ja">手動でプロキシを設定</desc>
-							<desc xml:lang="ko">Manual proxy configuration</desc>
-							<desc xml:lang="tr">Manual proxy configuration</desc>
-							<desc xml:lang="th">Manual proxy configuration</desc>
-							<desc xml:lang="hi-IN">Manual proxy configuration</desc>
-							<desc xml:lang="x-comment">Manual proxy configuration</desc>
-							<desc xml:lang="sk">Manual proxy configuration</desc>
-							<desc xml:lang="hu">Manual proxy configuration</desc>
-							<desc xml:lang="sl">Manual proxy configuration</desc>
+							<desc>Manual proxy configuration</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1124,34 +260,7 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="el">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="nl">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="fr">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="fi">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="cs">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="da">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="zh-CN">指定 FTP 代理服务器的名称。</desc>
-					<desc xml:lang="zh-TW">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="ar">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="he">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="ca">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="pt">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="ru">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="es">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="it">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="sv">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="pl">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Especifica o nome do servidor proxy para FTP.</desc>
-					<desc xml:lang="ja">FTP プロキシサーバーの名前を指定します。</desc>
-					<desc xml:lang="ko">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="tr">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="th">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="hi-IN">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="x-comment">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="sk">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="hu">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="sl">Specifies the name of the FTP proxy server.</desc>
+					<desc>Specifies the name of the FTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1162,98 +271,17 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="el">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="nl">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="fr">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="fi">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="cs">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="da">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="zh-CN">指定 FTP 代理服务器的端口。</desc>
-					<desc xml:lang="zh-TW">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="ar">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="he">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="ca">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="pt">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="ru">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="es">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="it">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="sv">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="pl">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Especifica a porta do servidor proxy para FTP.</desc>
-					<desc xml:lang="ja">FTP プロキシサーバーのポートを指定します。</desc>
-					<desc xml:lang="ko">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="tr">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="th">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="hi-IN">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="x-comment">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="sk">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="hu">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="sl">Specifies the port of the FTP proxy server.</desc>
+					<desc>Specifies the port of the FTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="el">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="nl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="fr">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="fi">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="cs">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="da">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="zh-CN">指定允许的端口最少数目。</desc>
-							<desc xml:lang="zh-TW">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ar">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="he">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ca">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ru">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="es">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="it">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sv">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Especifica o número mínimo permitido para a porta.</desc>
-							<desc xml:lang="ja">許可する最小ポート番号を指定します。</desc>
-							<desc xml:lang="ko">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="tr">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="hu">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sl">Specifies the minimum allowed port number.</desc>
+							<desc>Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
 						<info>
-							<desc xml:lang="en-US">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="el">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="nl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="fr">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="fi">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="cs">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="da">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="zh-CN">指定允许的端口最多数目。</desc>
-							<desc xml:lang="zh-TW">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ar">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="he">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ca">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ru">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="es">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="it">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sv">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Especifica o número máximo permitido para a porta.</desc>
-							<desc xml:lang="ja">許可する最大ポート番号を指定します。</desc>
-							<desc xml:lang="ko">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="tr">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="hu">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sl">Specifies the maximum allowed port number.</desc>
+							<desc>Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1264,34 +292,7 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="el">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="nl">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="fr">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="fi">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="cs">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="da">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="zh-CN">指定 HTTP 代理服务器的名称。</desc>
-					<desc xml:lang="zh-TW">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="ar">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="he">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="ca">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="pt">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="ru">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="es">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="it">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="sv">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="pl">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Especifica o nome do servidor proxy para HTTP.</desc>
-					<desc xml:lang="ja">HTTP プロキシサーバーの名前を指定します。</desc>
-					<desc xml:lang="ko">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="tr">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="th">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="hi-IN">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="x-comment">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="sk">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="hu">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="sl">Specifies the name of the HTTP proxy server.</desc>
+					<desc>Specifies the name of the HTTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1302,98 +303,17 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="el">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="nl">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="fr">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="fi">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="cs">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="da">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="zh-CN">指定 HTTP 代理服务器的端口。</desc>
-					<desc xml:lang="zh-TW">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="ar">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="he">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="ca">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="pt">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="ru">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="es">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="it">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="sv">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="pl">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Especifica a porta do servidor proxy para HTTP.</desc>
-					<desc xml:lang="ja">HTTP プロキシサーバーのポートを指定します。</desc>
-					<desc xml:lang="ko">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="tr">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="th">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="hi-IN">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="x-comment">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="sk">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="hu">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="sl">Specifies the port of the HTTP proxy server.</desc>
+					<desc>Specifies the port of the HTTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="el">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="nl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="fr">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="fi">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="cs">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="da">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="zh-CN">指定允许的端口最少数目。</desc>
-							<desc xml:lang="zh-TW">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ar">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="he">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ca">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ru">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="es">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="it">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sv">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Especifica o número mínimo permitido para a porta.</desc>
-							<desc xml:lang="ja">許可する最小ポート番号を指定します。</desc>
-							<desc xml:lang="ko">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="tr">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="hu">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sl">Specifies the minimum allowed port number.</desc>
+							<desc>Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
 						<info>
-							<desc xml:lang="en-US">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="el">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="nl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="fr">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="fi">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="cs">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="da">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="zh-CN">指定允许的端口最多数目。</desc>
-							<desc xml:lang="zh-TW">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ar">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="he">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ca">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ru">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="es">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="it">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sv">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Especifica o número máximo permitido para a porta.</desc>
-							<desc xml:lang="ja">許可する最大ポート番号を指定します。</desc>
-							<desc xml:lang="ko">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="tr">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="hu">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sl">Specifies the maximum allowed port number.</desc>
+							<desc>Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1405,34 +325,7 @@
 				<info>
 					<deprecated/>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="el">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="nl">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="fr">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="fi">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="cs">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="da">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="zh-CN">指定 Socks 代理服务器的名称。</desc>
-					<desc xml:lang="zh-TW">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="ar">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="he">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="ca">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="pt">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="ru">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="es">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="it">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="sv">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="pl">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="pt-BR">Especifica o nome do servidor proxy para Socks.</desc>
-					<desc xml:lang="ja">Socks プロキシサーバーの名前を指定します。</desc>
-					<desc xml:lang="ko">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="tr">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="th">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="hi-IN">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="x-comment">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="sk">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="hu">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="sl">Specifies the name of the Socks proxy server.</desc>
+					<desc>Specifies the name of the Socks proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1444,98 +337,17 @@
 				<info>
 					<deprecated/>
 					<author>ABI/SB/MHU</author>
-					<desc xml:lang="en-US">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="el">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="nl">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="fr">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="fi">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="cs">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="da">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="zh-CN">指定 Socks 代理服务器的端口。</desc>
-					<desc xml:lang="zh-TW">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="ar">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="he">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="ca">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="pt">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="ru">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="es">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="it">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="sv">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="pl">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="pt-BR">Especifica a porta do servidor proxy para Socks.</desc>
-					<desc xml:lang="ja">Socks プロキシサーバーのポートを指定します。</desc>
-					<desc xml:lang="ko">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="tr">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="th">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="hi-IN">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="x-comment">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="sk">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="hu">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="sl">Specifies the port of the Socks proxy server.</desc>
+					<desc>Specifies the port of the Socks proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="el">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="nl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="fr">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="fi">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="cs">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="da">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="zh-CN">指定允许的端口最少数目。</desc>
-							<desc xml:lang="zh-TW">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ar">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="he">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ca">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ru">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="es">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="it">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sv">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Especifica o número mínimo permitido para a porta.</desc>
-							<desc xml:lang="ja">許可する最小ポート番号を指定します。</desc>
-							<desc xml:lang="ko">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="tr">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="hu">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="sl">Specifies the minimum allowed port number.</desc>
+							<desc>Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
 						<info>
-							<desc xml:lang="en-US">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="el">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="nl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="fr">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="fi">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="cs">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="da">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="zh-CN">指定允许的端口最多数目。</desc>
-							<desc xml:lang="zh-TW">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ar">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="he">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ca">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ru">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="es">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="it">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sv">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Especifica o número máximo permitido para a porta.</desc>
-							<desc xml:lang="ja">許可する最大ポート番号を指定します。</desc>
-							<desc xml:lang="ko">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="tr">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="hu">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="sl">Specifies the maximum allowed port number.</desc>
+							<desc>Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1545,34 +357,7 @@
 			<!--UI: Tools - Options - Internet - Search-->
 			<info>
 				<author>OS / TV</author>
-				<desc xml:lang="en-US">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="el">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="nl">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="fr">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="fi">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="cs">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="da">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="zh-CN">用于配置搜寻引擎。设置程序应该编写一组默认的、本地化的搜寻引擎 (包括其配置)。</desc>
-				<desc xml:lang="zh-TW">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="ar">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="he">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="ca">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="pt">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="ru">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="es">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="it">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="sv">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="pl">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="pt-BR">Servidor para a configuração de motores de busca. Um grupo padrão de motores de busca (localizados) incluindo suas configurações deverá ser gravado pelo Setup. </desc>
-				<desc xml:lang="ja">検索エンジンの構成として適用されます。設定を含む (ローカライズ済みの) 検索エンジンの標準グループをセットアップによって書き込む必要があります。</desc>
-				<desc xml:lang="ko">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="tr">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="th">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="hi-IN">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="x-comment">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="sk">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="hu">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="sl">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
+				<desc>Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 			</info>
 		</set>
 	</component>
