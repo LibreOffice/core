@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:04:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,12 @@ XclExpTabInfo& XclExpRoot::GetTabInfo() const
     return *mrExpData.mxTabInfo;
 }
 
+XclExpAddressConverter& XclExpRoot::GetAddressConverter() const
+{
+    DBG_ASSERT( mrExpData.mxAddrConv.is(), "XclExpRoot::GetAddressConverter - missing object (wrong BIFF?)" );
+    return *mrExpData.mxAddrConv;
+}
+
 XclExpFormulaCompiler& XclExpRoot::GetFormulaCompiler() const
 {
     DBG_ASSERT( mrExpData.mxFmlaComp.is(), "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
@@ -204,6 +210,7 @@ XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 void XclExpRoot::InitializeConvert()
 {
     mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
+    mrExpData.mxAddrConv.reset( new XclExpAddressConverter( GetRoot() ) );
     mrExpData.mxFmlaComp.reset( new XclExpFormulaCompiler( GetRoot() ) );
     mrExpData.mxProgress.reset( new XclExpProgressBar( GetRoot() ) );
 
@@ -214,7 +221,7 @@ void XclExpRoot::InitializeGlobals()
 {
     SetCurrScTab( SCTAB_GLOBAL );
 
-    if( GetBiff() >= xlBiff5 )
+    if( GetBiff() >= EXC_BIFF5 )
     {
         mrExpData.mxPalette.reset( new XclExpPalette( GetRoot() ) );
         mrExpData.mxFontBfr.reset( new XclExpFontBuffer( GetRoot() ) );
@@ -224,7 +231,7 @@ void XclExpRoot::InitializeGlobals()
         mrExpData.mxNameMgr.reset( new XclExpNameManager( GetRoot() ) );
     }
 
-    if( GetBiff() >= xlBiff8 )
+    if( GetBiff() == EXC_BIFF8 )
     {
         mrExpData.mxSst.reset( new XclExpSst );
         mrExpData.mxFilterMgr.reset( new XclExpFilterManager( GetRoot() ) );
@@ -240,7 +247,7 @@ void XclExpRoot::InitializeGlobals()
 void XclExpRoot::InitializeTable( SCTAB nScTab )
 {
     SetCurrScTab( nScTab );
-    if( (GetBiff() == xlBiff5) || (GetBiff() == xlBiff7) )
+    if( GetBiff() == EXC_BIFF5 )
     {
         // local link manager per sheet
         mrExpData.mxLocLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
@@ -268,21 +275,6 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
     }
     DBG_ASSERT( xRec.is(), "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;
-}
-
-bool XclExpRoot::CheckCellAddress( const ScAddress& rPos ) const
-{
-    return XclRoot::CheckCellAddress( rPos, GetXclMaxPos() );
-}
-
-bool XclExpRoot::CheckCellRange( ScRange& rRange ) const
-{
-    return XclRoot::CheckCellRange( rRange, GetXclMaxPos() );
-}
-
-void XclExpRoot::CheckCellRangeList( ScRangeList& rRanges ) const
-{
-    XclRoot::CheckCellRangeList( rRanges, GetXclMaxPos() );
 }
 
 XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const
