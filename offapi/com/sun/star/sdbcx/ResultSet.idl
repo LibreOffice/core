@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:16:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,15 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-interface XRowLocate;
-interface XDeleteRows;
+ published interface XRowLocate;
+ published interface XDeleteRows;
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::ResultSet
 /** extends the SDBC ResultSet by the possibility of bookmark positioning, cancelling
     the positioning, and updating of rows.
  */
-service ResultSet
+published service ResultSet
 {
     // DocMerge: empty anyway
     service com::sun::star::sdbc::ResultSet;
