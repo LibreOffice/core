@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextDocument.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-08 14:36:20 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:39:44 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XStorable;
 import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
@@ -116,6 +117,7 @@ public class TextDocument {
     public Size DocSize;
     public com.sun.star.awt.Rectangle PosSize;
     public com.sun.star.lang.Locale CharLocale;
+    public XStorable xStorable;
 
     //creates an instance of TextDocument and creates a frame
     public TextDocument(XMultiServiceFactory xMSF) {
@@ -153,13 +155,14 @@ public class TextDocument {
         xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
         xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
         xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
-
         XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
         xDocInfo = xDocInfoSuppl.getDocumentInfo();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
+        xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDocument);
     }
 
-        //creates an instance of TextDocument and creates a frame with an empty document
+
+    //creates an instance of TextDocument and creates a frame with an empty document
     public TextDocument(XMultiServiceFactory xMSF,XTextDocument _textDocument, boolean bshowStatusIndicator) {
         this.xMSF = xMSF;
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
@@ -184,6 +187,7 @@ public class TextDocument {
         xDocInfo = xDocInfoSuppl.getDocumentInfo();
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
     }
+
 
     public XTextDocument loadAsPreview(String sDefaultTemplate, boolean asTemplate) {
         PropertyValue loadValues[] = new PropertyValue[3];
