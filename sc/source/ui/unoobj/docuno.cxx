@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-21 17:54:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
         ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
+            BOOL bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
             BOOL bCursor = pSelObj->IsCursorOnly();
             const ScRangeList& rRanges = pSelObj->GetRangeList();
 
@@ -557,7 +558,9 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
 
             if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
             {
-                if ( bCursor )              // nothing selected -> use whole tables
+                // a sheet object is treated like an empty selection: print the used area of the sheet
+
+                if ( bCursor || bSheet )                // nothing selected -> use whole tables
                 {
                     rMark.ResetMark();      // doesn't change table selection
                     rStatus.SetMode( SC_PRINTSEL_CURSOR );
@@ -631,18 +634,53 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         delete pPrintFuncCache;
         pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
     }
-    if ( nRenderer >= pPrintFuncCache->GetPageCount() )
+    long nTotalPages = pPrintFuncCache->GetPageCount();
+    if ( nRenderer >= nTotalPages )
         throw lang::IllegalArgumentException();
 
+    //  printer is used as device (just for page layout), draw view is not needed
+
     USHORT nTab = pPrintFuncCache->GetTabForPage( nRenderer );
-    ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab );      // just for page size
+
+    ScRange aRange;
+    const ScRange* pSelRange = NULL;
+    if ( aMark.IsMarked() )
+    {
+        aMark.GetMarkArea( aRange );
+        pSelRange = &aRange;
+    }
+    ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
+                        pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange );
+    aFunc.SetRenderFlag( TRUE );
+
+    Range aPageRange( nRenderer+1, nRenderer+1 );
+    MultiSelection aPage( aPageRange );
+    aPage.SetTotalRange( Range(0,RANGE_MAX) );
+    aPage.Select( aPageRange );
+
+    long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
+    long nTabStart = pPrintFuncCache->GetTabStart( nTab );
+
+    long nPrinted = aFunc.DoPrint( aPage, nTabStart, nDisplayStart, FALSE, NULL, NULL );
+
+    ScRange aCellRange;
+    BOOL bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
     Size aTwips = aFunc.GetPageSize();
     awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
 
-    uno::Sequence<beans::PropertyValue> aSequence(3);
+    long nPropCount = bWasCellRange ? 2 : 1;
+    uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
     beans::PropertyValue* pArray = aSequence.getArray();
     pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_PAGESIZE );
     pArray[0].Value <<= aPageSize;
+    if ( bWasCellRange )
+    {
+        table::CellRangeAddress aRangeAddress( nTab,
+                        aCellRange.aStart.Col(), aCellRange.aStart.Row(),
+                        aCellRange.aEnd.Col(), aCellRange.aEnd.Row() );
+        pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
+        pArray[1].Value <<= aRangeAddress;
+    }
     return aSequence;
 }
 
