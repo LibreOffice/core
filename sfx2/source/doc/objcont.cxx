@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mh $ $Date: 2000-11-14 09:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,7 +660,7 @@ SfxDocumentInfo& SfxObjectShell::UpdateTime_Impl(SfxDocumentInfo &rInfo)
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
             --nDays;
              nAddTime    =  nDays*n24Time.GetTime() ;
-            nAddTime    +=  n24Time-pImp->nTime     ;
+            nAddTime    +=  n24Time-(const Time&)pImp->nTime        ;
             nAddTime    +=  aNow                    ;
         }
 
