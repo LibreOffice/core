@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-04 15:23:42 $
+ *  last change: $Author: mt $ $Date: 2002-01-29 08:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,18 @@ ULONG Outliner::GetTextHeight() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetTextHeight();
+}
+
+void Outliner::SetNotifyHdl( const Link& rLink )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetNotifyHdl( rLink );
+}
+
+Link Outliner::GetNotifyHdl() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->GetNotifyHdl();
 }
 
 void Outliner::SetStatusEventHdl( const Link& rLink )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-16 10:37:33 $
+ *  last change: $Author: mt $ $Date: 2002-01-29 08:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,9 +320,8 @@ public:
     Rectangle       GetVisDocArea() const;
 
     EditSelection&  GetEditSelection()          { return aEditSelection; }
-    void            SetEditSelection( const EditSelection& rEditSelection )
-                        {  aEditSelection = rEditSelection; }
-    sal_Bool            HasSelection() const { return aEditSelection.HasRange(); }
+    void            SetEditSelection( const EditSelection& rEditSelection );
+    sal_Bool        HasSelection() const { return aEditSelection.HasRange(); }
 
     void            DrawSelection() { DrawSelection( aEditSelection ); }
     void            DrawSelection( EditSelection, Region* pRegion = NULL );
@@ -499,6 +498,7 @@ private:
     // muss, dies aber nicht sofort geschehen darf (kritischer Abschnitt):
     Timer               aStatusTimer;
     Link                aStatusHdlLink;
+    Link                aNotifyHdl;
     Link                aImportHdl;
     Link                aBeginMovingParagraphsHdl;
     Link                aEndMovingParagraphsHdl;
@@ -514,7 +514,7 @@ private:
 
     void                CursorMoved( ContentNode* pPrevNode );
     void                ParaAttribsChanged( ContentNode* pNode );
-    inline void         TextModified();
+    void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );
 
     // ggf. lieber inline, aber so einiges...
@@ -790,6 +790,9 @@ public:
     void            SetStatusEventHdl( const Link& rLink )  { aStatusHdlLink = rLink; }
     Link            GetStatusEventHdl() const               { return aStatusHdlLink; }
 
+    void            SetNotifyHdl( const Link& rLink )       { aNotifyHdl = rLink; }
+    Link            GetNotifyHdl() const            { return aNotifyHdl; }
+
     void            FormatAndUpdate( EditView* pCurView = 0 );
     inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );
 
@@ -959,11 +962,6 @@ inline void ImpEditEngine::EraseVirtualDevice()
 inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
 {
     aIdleFormatter.DoIdleFormat( pCurView );
-}
-
-inline void ImpEditEngine::TextModified()
-{
-    bFormatted = FALSE;
 }
 
 #ifndef SVX_LIGHT

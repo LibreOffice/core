@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-21 16:55:50 $
+ *  last change: $Author: mt $ $Date: 2002-01-29 08:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,20 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
     delete pBackgroundColor;
     pBackgroundColor = new Color( rColor );
 }
+
+void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
+{
+    if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_TEXTVIEWSELECTIONCHANGED );
+        aNotify.pEditEngine = pEditEngine;
+        aNotify.pEditView = GetEditViewPtr();
+        pEditEngine->pImpEditEngine->GetNotifyHdl().Call( &aNotify );
+    }
+
+    aEditSelection = rEditSelection;
+}
+
 
 void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
 {
@@ -957,6 +971,14 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
             Rectangle aCursorRec( pCrsr->GetPos(), pCrsr->GetSize() );
             if ( aOutArea.IsInside( aCursorRec ) )
                 pCrsr->Show();
+        }
+
+        if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
+        {
+            EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
+            aNotify.pEditEngine = pEditEngine;
+            aNotify.pEditView = GetEditViewPtr();
+            pEditEngine->pImpEditEngine->GetNotifyHdl().Call( &aNotify );
         }
     }
 

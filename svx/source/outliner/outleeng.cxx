@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 11:31:28 $
+ *  last change: $Author: mt $ $Date: 2002-01-29 08:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,11 +106,15 @@ Rectangle OutlinerEditEng::GetBulletArea( USHORT nPara )
 void OutlinerEditEng::ParagraphInserted( USHORT nNewParagraph )
 {
     pOwner->ParagraphInserted( nNewParagraph );
+
+    EditEngine::ParagraphInserted( nNewParagraph );
 }
 
 void OutlinerEditEng::ParagraphDeleted( USHORT nDeletedParagraph )
 {
     pOwner->ParagraphDeleted( nDeletedParagraph );
+
+    EditEngine::ParagraphDeleted( nDeletedParagraph );
 }
 
 void OutlinerEditEng::StyleSheetChanged( SfxStyleSheet* pStyle )
@@ -126,6 +130,8 @@ void OutlinerEditEng::ParaAttribsChanged( USHORT nPara )
 void OutlinerEditEng::ParagraphHeightChanged( USHORT nPara )
 {
     pOwner->ParagraphHeightChanged( nPara );
+
+    EditEngine::ParagraphHeightChanged( USHORT nPara );
 }
 
 BOOL OutlinerEditEng::SpellNextDocument()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-16 10:40:10 $
+ *  last change: $Author: mt $ $Date: 2002-01-29 08:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,6 +800,19 @@ void ImpEditEngine::CursorMoved( ContentNode* pPrevNode )
         pPrevNode->GetCharAttribs().DeleteEmptyAttribs( aEditDoc.GetItemPool() );
 }
 
+void ImpEditEngine::TextModified()
+{
+    bFormatted = FALSE;
+
+    if ( GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_TEXTMODIFIED );
+        aNotify.pEditEngine = GetEditEnginePtr();
+        GetNotifyHdl().Call( &aNotify );
+    }
+}
+
+
 void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
 {
     DBG_ASSERT( pNode, "ParaAttribsChanged: Welcher?" );
@@ -1537,6 +1550,17 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNew
     }
 
     aEndMovingParagraphsHdl.Call( &aMoveParagraphsInfo );
+
+    if ( GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_PARAGRAPHSMOVED );
+        aNotify.pEditEngine = GetEditEnginePtr();
+        aNotify.nParagraph = nNewPos;
+        aNotify.nParam1 = aOldPositions.Min();
+        aNotify.nParam2 = aOldPositions.Max();
+        GetNotifyHdl().Call( &aNotify );
+    }
+
     aEditDoc.SetModified( TRUE );
 
     if ( pRecalc1 )
@@ -1795,8 +1819,11 @@ void ImpEditEngine::ImpRemoveParagraph( USHORT nPara )
     /* delete */ aEditDoc.Remove( nPara );
     GetParaPortions().Remove( nPara );
     delete pPortion;
+
     if ( IsCallParaInsertedOrDeleted() )
+    {
         GetEditEnginePtr()->ParagraphDeleted( nPara );
+    }
 
     // Im folgenden muss ggf. Extra-Space neu ermittelt werden.
     // Bei ParaAttribsChanged wird leider der Absatz neu formatiert,

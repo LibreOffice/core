@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-04 19:26:22 $
+ *  last change: $Author: mt $ $Date: 2002-01-29 08:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1139,6 +1139,18 @@ sal_Bool EditEngine::IsParagraphVisible( sal_uInt16 nParagraph )
     return pImpEditEngine->IsParagraphVisible( nParagraph );
 }
 
+void EditEngine::SetNotifyHdl( const Link& rLink )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetNotifyHdl( rLink );
+}
+
+Link EditEngine::GetNotifyHdl() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetNotifyHdl();
+}
+
 void EditEngine::SetStatusEventHdl( const Link& rLink )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2053,14 +2065,30 @@ void __EXPORT EditEngine::PaintingFirstLine( sal_uInt16, const Point&, long, con
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::ParagraphInserted( sal_uInt16 )
+void __EXPORT EditEngine::ParagraphInserted( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
+
+    if ( GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_PARAGRAPHINSERTED );
+        aNotify.pEditEngine = this;
+        aNotify.nParagraph = nPara;
+        GetNotifyHdl().Call( &aNotify );
+    }
 }
 
-void __EXPORT EditEngine::ParagraphDeleted( sal_uInt16 )
+void __EXPORT EditEngine::ParagraphDeleted( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
+
+    if ( GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_PARAGRAPHREMOVED );
+        aNotify.pEditEngine = this;
+        aNotify.nParagraph = nPara;
+        GetNotifyHdl().Call( &aNotify );
+    }
 }
 
 sal_Bool __EXPORT EditEngine::FormattingParagraph( sal_uInt16 )
@@ -2080,9 +2108,17 @@ void __EXPORT EditEngine::StyleSheetChanged( SfxStyleSheet* /* pStyle */ )
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::ParagraphHeightChanged( sal_uInt16 )
+void __EXPORT EditEngine::ParagraphHeightChanged( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
+
+    if ( GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_TEXTHEIGHTCHANGED );
+        aNotify.pEditEngine = this;
+        aNotify.nParagraph = nPara;
+        GetNotifyHdl().Call( &aNotify );
+    }
 }
 
 XubString __EXPORT EditEngine::GetUndoComment( sal_uInt16 nId ) const
