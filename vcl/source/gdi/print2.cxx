@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:54:48 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_PRINT_CXX
 #define _SPOOLPRINTER_EXT
 
 #include <functional>
@@ -604,9 +603,6 @@ struct ConnectedComponents
 typedef ::std::list< ConnectedComponents > ConnectedComponentsList;
 
 // remove comment to enable highlighting of generated output
-#ifdef DBG_UTIL
-//#define DEBUG_GetPreparedMetaFile
-#endif
 
 void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                    long nMaxBmpDPIX, long nMaxBmpDPIY )
@@ -1041,10 +1037,6 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
                                                                       aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
                                     }
 
-#ifdef DEBUG_GetPreparedMetaFile
-                                    //aBandBmp.Invert();
-#endif
-
                                     rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
                                     rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
                                     rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END" ) );
@@ -1140,20 +1132,6 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
 
         rOutMtf.SetPrefMapMode( rInMtf.GetPrefMapMode() );
         rOutMtf.SetPrefSize( rInMtf.GetPrefSize() );
-
-#ifdef DEBUG_GetPreparedMetaFile
-        // iterate over all aCCList members and generate rectangles for the bounding boxes
-        rOutMtf.AddAction( new MetaFillColorAction( COL_WHITE, FALSE ) );
-        for( aCurr = aCCList.begin(); aCurr != aLast; ++aCurr )
-        {
-            if( aCurr->bIsSpecial )
-                rOutMtf.AddAction( new MetaLineColorAction( COL_RED, TRUE) );
-            else
-                rOutMtf.AddAction( new MetaLineColorAction( COL_BLUE, TRUE) );
-
-            rOutMtf.AddAction( new MetaRectAction( aMapModeVDev.PixelToLogic( aCurr->aBounds ) ) );
-        }
-#endif
     }
 }
 
