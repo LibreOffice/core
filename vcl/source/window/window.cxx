@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-13 14:03:02 $
+ *  last change: $Author: ssa $ $Date: 2002-08-13 14:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6001,6 +6001,8 @@ void Window::Enable( BOOL bEnable, BOOL bChild )
 //      if ( mbFrame )
 //          mpFrame->Enable( bEnable && !mbInputDisabled );
         StateChanged( STATE_CHANGE_ENABLE );
+
+        ImplCallEventListeners( bEnable ? VCLEVENT_WINDOW_ENABLED : VCLEVENT_WINDOW_DISABLED );
     }
 
     if ( bChild || mbChildNotify )
