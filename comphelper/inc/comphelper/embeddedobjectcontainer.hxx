@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:05:39 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,10 +143,13 @@ public:
     ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >
                         InsertEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >&, ::rtl::OUString& );
 
-    // copy an embedded object into the storage and create another object from it
-    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > CopyEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
+    // copy an embedded object into the storage
+    sal_Bool CopyEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
 
-    // remove an embedded object from the container and from the storage
+    // move an embedded object from one container to another one
+    sal_Bool MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
+
+    // remove an embedded object from the container and from the storage; if object can't be closed
     sal_Bool            RemoveEmbeddedObject( const ::rtl::OUString& rName, sal_Bool bClose=sal_True );
     sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, sal_Bool bClose=sal_True );
 
@@ -161,6 +164,8 @@ public:
 
     // remove a graphical representation for an object
     sal_Bool            RemoveGraphicStream( const ::rtl::OUString& rObjectName );
+
+    void                CloseEmbeddedObjects();
 };
 
 };
