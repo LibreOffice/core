@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:51:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 
 #pragma hdrstop
+
+#include <com/sun/star/text/NotePrintMode.hpp>
 
 #if STLPORT_VERSION>=321
 #include <cstdarg>
@@ -175,6 +177,7 @@
 #include <app.hrc>
 #endif
 
+#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 /*--------------------------------------------------------------------
     Beschreibung:   Drucker an Sfx uebergeben
@@ -354,6 +357,38 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
                             pSh->GetPrintData() );
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
+
+            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aViewProperties(14);
+            com::sun::star::beans::PropertyValue* pViewProperties =  aViewProperties.getArray();
+            pViewProperties[1].Name = C2U("PrintGraphics");
+            pViewProperties[1].Value <<= (sal_Bool)aOpts.IsPrintGraphic();
+            pViewProperties[2].Name = C2U("PrintTables");
+            pViewProperties[2].Value <<= (sal_Bool)aOpts.IsPrintTable();
+            pViewProperties[3].Name = C2U("PrintDrawings");
+            pViewProperties[3].Value <<= (sal_Bool)aOpts.IsPrintDraw();
+            pViewProperties[4].Name = C2U("PrintLeftPages");
+            pViewProperties[4].Value <<= (sal_Bool)aOpts.IsPrintLeftPage();
+            pViewProperties[5].Name = C2U("PrintRightPages");
+            pViewProperties[5].Value <<= (sal_Bool)aOpts.IsPrintRightPage();
+            pViewProperties[6].Name = C2U("PrintControls");
+            pViewProperties[6].Value <<= (sal_Bool)aOpts.IsPrintControl();
+            pViewProperties[7].Name = C2U("PrintReversed");
+            pViewProperties[7].Value <<= (sal_Bool)aOpts.IsPrintReverse();
+            pViewProperties[8].Name = C2U("PrintPaperFromSetup");
+            pViewProperties[8].Value <<= (sal_Bool)aOpts.IsPaperFromSetup();
+            pViewProperties[9].Name = C2U("PrintFaxName");
+            pViewProperties[9].Value <<= aOpts.GetFaxName();
+            pViewProperties[10].Name = C2U("PrintAnnotationMode");
+            pViewProperties[10].Value <<= (::com::sun::star::text::NotePrintMode) aOpts.GetPrintPostIts();
+            pViewProperties[11].Name = C2U("PrintProspect");
+            pViewProperties[11].Value <<= (sal_Bool)aOpts.IsPrintProspect();
+            pViewProperties[12].Name = C2U("PrintPageBackground");
+            pViewProperties[12].Value <<= (sal_Bool)aOpts.IsPrintPageBackground();
+            pViewProperties[13].Name = C2U("PrintBlackFonts");
+            pViewProperties[13].Value <<= (sal_Bool)aOpts.IsPrintBlackFont();
+            pViewProperties[0].Name = C2U("IsSinglePrintJob");
+            pViewProperties[0].Value <<= (sal_Bool)aOpts.IsPrintSingleJobs();
+            SetAdditionalPrintOptions(aViewProperties);
 
             SfxViewShell::Print(*pProgress);
             if ( !pProgress->IsAborted() )
