@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: od $ $Date: 2002-10-11 11:25:13 $
+ *  last change: $Author: od $ $Date: 2002-11-20 09:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include "virtoutp.hxx"
 #include "viewopt.hxx"
 #include "rootfrm.hxx"
+// OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
+#include "setmapvirtdev.hxx"
 
 static const ViewShell *pVsh = 0;
 
@@ -128,6 +130,54 @@ BOOL SwRootFrm::HasSameRect( const SwRect& rRect )
         return ( rRect == SwRootFrm::pVout->GetOrgRect() );
     return FALSE;
 }
+
+/** method to set mapping/pixel offset for virtual output device
+
+    OD 12.11.2002 #96272# - method implements two solutions for the mapping of
+    the virtual output device:
+    The old solution set the origin of the mapping mode, which will be used in
+    the virtual output device. This causes several paint errors, because of the
+    different roundings in the virtual output device and the original output device.
+    The new solution avoids the rounding differences between virtual and original
+    output device by setting a pixel offset at the virtual output device.
+    A define controls, which solution is used, in order to switch in escalation
+    back to old solution.
+
+    @author OD
+
+    @param _pOrgOutDev
+    input parameter - constant instance of the original output device, for which
+    the virtual output device is created.
+
+    @param _pVirDev
+    input/output parameter - instance of the virtual output device.
+
+    @param _pMapMode
+    input/output parameter - instance of the mapping mode, which will be set
+    at the virtual output device.
+
+    @param _rNewOrigin
+    input parameter - constant instance of the origin, which will be used in
+    the virtual output device
+*/
+// define to control, if old or new solution for setting the mapping for
+// an virtual output device is used.
+#define USE_NEW_MAPPING
+void SetMappingForVirtDev(  const Point&    _rNewOrigin,
+                            MapMode*        _pMapMode,
+                            const OutputDevice* _pOrgOutDev,
+                            VirtualDevice*  _pVirDev )
+{
+#ifndef USE_NEW_MAPPING
+        // old solution: set origin at the mapping mode
+        _pMapMode->SetOrigin( Point(0,0) - _rNewOrigin );
+#else
+        // new solution: set pixel offset at virtual output device
+        Point aPixelOffset = _pOrgOutDev->LogicToPixel( _rNewOrigin );
+        _pVirDev->SetPixelOffset( Size( -aPixelOffset.X(), -aPixelOffset.Y() ) );
+#endif
+}
+
 
 /*************************************************************************
  *                          SwVOut::DoesFit()
@@ -227,7 +277,9 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
             pVirDev->SetFillColor( pOut->GetFillColor() );
 
         MapMode aMapMode( pOut->GetMapMode() );
-        aMapMode.SetOrigin( Point(0,0) - aRect.Pos() );
+        // OD 12.11.2002 #96272# - use method to set mapping
+        //aMapMode.SetOrigin( Point(0,0) - aRect.Pos() );
+        ::SetMappingForVirtDev( aRect.Pos(), &aMapMode, pOut, pVirDev );
 
         if( aMapMode != pVirDev->GetMapMode() )
             pVirDev->SetMapMode( aMapMode );
