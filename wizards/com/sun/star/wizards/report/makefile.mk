@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:23:22 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:18:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,7 @@ JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar commonwizards
 CUSTOMMANIFESTFILE= MANIFEST.MF
 
 JARCLASSDIRS	= com$/sun$/star$/wizards$/report
-JARTARGET		= $(TARGET).jar
-
+JARTARGET	= $(TARGET).jar
 # --- Files --------------------------------------------------------
 
 JAVAFILES=						\
