@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:10:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 14:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,8 +286,8 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_COPY ;
             HelpID = SID_COPY;
-            Text = "~Kopieren" ;
-            Text [ english_us ] = "~Copy" ;
+            Text [ de ] = "~Kopieren" ;
+            Text [ en-US ] = "~Copy" ;
         };
     };
 };
