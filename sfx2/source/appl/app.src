@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 06:54:53 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4327,6 +4327,26 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
     Message = "Dieser Hyperlink wird \"%s\" �ffnen. Wollen Sie fortfahren?" ;
     Message [ english ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
     Message [ english_us ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
+    Message[ portuguese ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ russian ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ greek ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ dutch ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ french ] = "Cet hyperlien ouvre \"%s\". Continuer ?";
+    Message[ spanish ] = "Este hiperenlace abrir� \"%s\". �Desea continuar?";
+    Message[ finnish ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ italian ] = "Questo hyperlink apre \"%s\". Volete procedere?";
+    Message[ danish ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ swedish ] = "Den h�r hyperl�nken kommmer att �ppna \"%s\".  Vill du forts�tta?";
+    Message[ polish ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ portuguese_brazilian ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ japanese ] = "このハイパーリンクを \"%s\" で開きます。続行しますか。";
+    Message[ korean ] = "이 하이퍼링크를 통해 \"%s\"이(가) 열립니다. 계속 진행하시겠습니까?";
+    Message[ chinese_simplified ] = "这个超链接将会打开 \"%s\" 。要继续吗？";
+    Message[ chinese_traditional ] = "這個超連結將會開啟 \"%s\" 。您要繼續嗎？";
+    Message[ turkish ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ arabic ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ catalan ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
+    Message[ thai ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
 };
 
 String RID_SECURITY_WARNING_TITLE
@@ -4334,4 +4354,24 @@ String RID_SECURITY_WARNING_TITLE
     Text = "Sicherheitswarnung" ;
     Text [ENGLISH] = "Security Warning" ;
     Text[ english_us ] = "Security Warning" ;
+    Text[ portuguese ] = "Security Warning";
+    Text[ russian ] = "Security Warning";
+    Text[ greek ] = "Security Warning";
+    Text[ dutch ] = "Security Warning";
+    Text[ french ] = "Avertissement de s�curit�";
+    Text[ spanish ] = "Aviso de seguridad";
+    Text[ finnish ] = "Security Warning";
+    Text[ italian ] = "Avviso di sicurezza";
+    Text[ danish ] = "Security Warning";
+    Text[ swedish ] = "S�kerhetsvarning";
+    Text[ polish ] = "Security Warning";
+    Text[ portuguese_brazilian ] = "Security Warning";
+    Text[ japanese ] = "セキュリティ警告";
+    Text[ korean ] = "보안 경고";
+    Text[ chinese_simplified ] = "安全警告";
+    Text[ chinese_traditional ] = "安全警告";
+    Text[ turkish ] = "Security Warning";
+    Text[ arabic ] = "Security Warning";
+    Text[ catalan ] = "Security Warning";
+    Text[ thai ] = "Security Warning";
 };
