@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-29 11:02:09 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,21 +1098,98 @@ String STR_DESCRIPTION_FACTORY_MATH
 String STR_DESCRIPTION_CALC_TEMPLATE
 {
     Text = "%PRODUCTNAME 6.0 Tabellendokument Vorlage" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Tabledocument Template" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Spreadsheet Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ russian ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ french ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de hoja de cálculo";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Modello di foglio elettronico";
+    Text[ danish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 tabelldokument mall";
+    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon arkusza kalkulacyjnego";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ turkish ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ arabic ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Tabledocument Template";
 };
 String STR_DESCRIPTION_DRAW_TEMPLATE
 {
     Text = "%PRODUCTNAME 6.0 Zeichnungsvorlage" ;
     Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ russian ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ french ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de dibujo";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Modelli di disegno";
+    Text[ danish ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 teckningsmall";
+    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon rysunku";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ turkish ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ arabic ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Drawing Template";
 };
 String STR_DESCRIPTION_IMPRESS_TEMPLATE
 {
     Text = "%PRODUCTNAME 6.0 Präsentationsvorlage" ;
     Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ russian ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ french ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de presentación";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Modello di presentazione";
+    Text[ danish ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 presentationsmall";
+    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon prezentacji";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ turkish ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ arabic ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Presentation Template";
 };
 String STR_DESCRIPTION_WRITER_TEMPLATE
 {
     Text = "%PRODUCTNAME 6.0 Textdokument Vorlage" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Textdocument Template" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Text Document Template" ;
+    Text[ portuguese ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ russian ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ greek ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ french ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Plantilla de documento de texto";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ italian ] = "%PRODUCTNAME 6.0 Modello di documento di testo";
+    Text[ danish ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 textdokument mall";
+    Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon dokumentu tekstowego";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ korean ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ turkish ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ arabic ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Textdocument Template";
 };
+
 
