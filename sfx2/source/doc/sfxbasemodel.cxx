@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: as $ $Date: 2002-06-28 11:45:10 $
+ *  last change: $Author: as $ $Date: 2002-07-12 10:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,7 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getPrinter() throw(::com::sun::
     aPrinter.getArray()[5].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_ORIENTATION ) );
 
     aPrinter.getArray()[4].Name = DEFINE_CONST_UNICODE( "IsBusy" );
-    aPrinter.getArray()[4].Value <<= ( pPrinter->IsJobActive() );
+    aPrinter.getArray()[4].Value <<= ( pPrinter->IsPrinting() );
 
     aPrinter.getArray()[3].Name = DEFINE_CONST_UNICODE( "PaperSize" );
     SIZE aSize = impl_Size_Object2Struct(pPrinter->GetPaperSize() );
