@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:00:40 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <svx/dialogs.hrc>
 #include "attrdlg.hrc"
 
@@ -378,7 +377,7 @@ TabDialog RID_SCDLG_ATTR
             };
         };
     };
-    Text[ chinese_simplified ] = "å•å…ƒæ ¼å±æ€§";
+    Text[ chinese_simplified ] = "å•å…ƒæ ¼æ ¼å¼";
     Text[ russian ] = "Àòğèáóòû ÿ÷åéêè";
     Text[ polish ] = "Atrybuty komórek";
     Text[ japanese ] = "ã‚»ãƒ«ã®æ›¸å¼è¨­å®š";
