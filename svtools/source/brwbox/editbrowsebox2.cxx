@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 #ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
 #include "editbrowseboxcell.hxx"
 #endif
@@ -73,28 +76,39 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
-
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 namespace svt
 {
     using namespace drafts::com::sun::star::accessibility;
     using namespace com::sun::star::uno;
+    using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
 
 // -----------------------------------------------------------------------------
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId )
 {
     Reference< XAccessible > xRet;
-    if ( nRow == GetCurRow() && IsEditing() )
+    if ( nRow == GetCurRow() && IsEditing() && nColumnId == GetCurColumnId() )
     {
-        CellController* pController = GetController(nRow, nColumnId);
-        if ( pController )
+        //CellController* pController = GetController(nRow, nColumnId);
+        if ( aController.Is() )
         {
-            Reference< XAccessible > xCont = pController->GetWindow().GetAccessible();
+            Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
             Reference< XAccessible > xMy = GetAccessible();
             if ( xMy.is() && xCont.is() )
             {
-                m_aImpl->m_xActiveCell = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBINDEX_TABLE),*this,nRow, nColumnId,xCont->getAccessibleContext());
+                m_aImpl->m_xActiveCell = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBINDEX_TABLE),
+                                                                    *this,
+                                                                    VCLUnoHelper::GetInterface(&aController->GetWindow()),
+                                                                    nRow,
+                                                                    nColumnId,
+                                                                    xCont->getAccessibleContext());
                 xRet = m_aImpl->m_xActiveCell;
-            }
+/*              commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
+                             com::sun::star::uno::Any(),
+                             com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
+*/          }
         }
     }
     else

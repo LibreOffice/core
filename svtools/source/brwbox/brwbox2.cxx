@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:19:03 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,13 +266,6 @@ void BrowseBox::Select()
 //-------------------------------------------------------------------
 
 void BrowseBox::DoubleClick( const BrowserMouseEvent & )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-}
-
-//-------------------------------------------------------------------
-
-void BrowseBox::CursorMoved()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 }
@@ -941,7 +934,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     // cache frequently used values
     Point aPos( aOverallAreaPos.X(), nRelTopRow * nDataRowHeigt + aOverallAreaPos.Y() );
     _rOut.SetLineColor( Color( COL_WHITE ) );
-    const StyleSettings &rSettings = _rOut.GetSettings().GetStyleSettings();
+    const AllSettings& rAllSets = _rOut.GetSettings();
+    const StyleSettings &rSettings = rAllSets.GetStyleSettings();
     const Color &rHighlightTextColor = rSettings.GetHighlightTextColor();
     const Color &rHighlightFillColor = rSettings.GetHighlightColor();
     Color aOldTextColor = _rOut.GetTextColor();
@@ -2063,51 +2057,6 @@ void BrowseBox::Dispatch( USHORT nId )
     }
 
     //! return bDone;
-}
-
-//-------------------------------------------------------------------
-
-void BrowseBox::LoseFocus()
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    DBG_TRACE1( "BrowseBox: %p->LoseFocus", this );
-
-    if ( bHasFocus )
-    {
-        DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
-        DoHideCursor( "LoseFocus" );
-
-        if ( !bKeepHighlight )
-        {
-            ToggleSelection();
-            bSelectionIsVisible = FALSE;
-        }
-
-        bHasFocus = FALSE;
-    }
-    Control::LoseFocus();
-}
-
-//-------------------------------------------------------------------
-
-void BrowseBox::GetFocus()
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    DBG_TRACE1( "BrowseBox: %p->GetFocus", this );
-
-    if ( !bHasFocus )
-    {
-        if ( !bSelectionIsVisible )
-        {
-            bSelectionIsVisible = TRUE;
-            if ( bBootstrapped )
-                ToggleSelection();
-        }
-
-        bHasFocus = TRUE;
-        DoShowCursor( "GetFocus" );
-    }
-    Control::GetFocus();
 }
 
 //-------------------------------------------------------------------

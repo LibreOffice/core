@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:19:03 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _SVTOOLS_ACCESSIBILEBROWSEBOXTABLECELL_HXX
 #include "AccessibleBrowseBoxTableCell.hxx"
 #endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 
 // Accessibility ==============================================================
 
@@ -112,15 +115,20 @@ namespace svt
         Reference< XAccessible > xRet;
         BrowseBoxImpl::THeaderCellMap::iterator aFind = _raHederCells.find( _nId );
         if ( aFind == _raHederCells.end() )
-            aFind = _raHederCells.insert(BrowseBoxImpl::THeaderCellMap::value_type(_nId,
-                                                new svt::AccessibleBrowseBoxHeaderCell(_nId,
+        {
+            svt::AccessibleBrowseBoxHeaderCell* pNew = new svt::AccessibleBrowseBoxHeaderCell(_nId,
                                                         _rParent,
                                                         _rBrowseBox,
-                                                        _eType)
-                                                )
-                                        ).first;
+                                                        NULL,
+                                                        _eType);
+            pNew->acquire();
+            aFind = _raHederCells.insert( BrowseBoxImpl::THeaderCellMap::value_type(_nId,pNew) ).first;
+        }
         if ( aFind != _raHederCells.end() )
+        {
+            sal_Int32 nId = aFind->first;
             xRet = aFind->second;
+        }
         return xRet;
     }
 }
@@ -150,7 +158,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
 Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnId )
 {
     // BBINDEX_TABLE must be the table
-    return new svt::AccessibleBrowseBoxTableCell(m_pImpl->m_pAccessible->getAccessibleChild(::svt::BBINDEX_TABLE),*this,_nRow,_nColumnId);
+    return new svt::AccessibleBrowseBoxTableCell(m_pImpl->m_pAccessible->getAccessibleChild(::svt::BBINDEX_TABLE),*this,NULL,_nRow,_nColumnId);
 }
 // -----------------------------------------------------------------------------
 
@@ -341,6 +349,7 @@ void BrowseBox::FillAccessibleStateSet(
                     rStateSet.AddState( AccessibleStateType::VISIBLE );
                 if ( !IsFrozen( nCurColumn ) )
                     rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+                rStateSet.AddState( AccessibleStateType::TRANSIENT );
             }
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:

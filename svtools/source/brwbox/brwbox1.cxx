@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-17 12:01:31 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
+
 
 #pragma hdrstop
 
@@ -2555,6 +2556,57 @@ long BrowseBox::CalcReverseZoom(long nVal)
 HeaderBar* BrowseBox::GetHeaderBar() const
 {
     return ((BrowserDataWin*)pDataWin)->pHeaderBar;
+}
+//-------------------------------------------------------------------
+
+void BrowseBox::CursorMoved()
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+}
+
+//-------------------------------------------------------------------
+
+void BrowseBox::LoseFocus()
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+    DBG_TRACE1( "BrowseBox: %p->LoseFocus", this );
+
+    if ( bHasFocus )
+    {
+        DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
+        DoHideCursor( "LoseFocus" );
+
+        if ( !bKeepHighlight )
+        {
+            ToggleSelection();
+            bSelectionIsVisible = FALSE;
+        }
+
+        bHasFocus = FALSE;
+    }
+    Control::LoseFocus();
+}
+
+//-------------------------------------------------------------------
+
+void BrowseBox::GetFocus()
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+    DBG_TRACE1( "BrowseBox: %p->GetFocus", this );
+
+    if ( !bHasFocus )
+    {
+        if ( !bSelectionIsVisible )
+        {
+            bSelectionIsVisible = TRUE;
+            if ( bBootstrapped )
+                ToggleSelection();
+        }
+
+        bHasFocus = TRUE;
+        DoShowCursor( "GetFocus" );
+    }
+    Control::GetFocus();
 }
 
 

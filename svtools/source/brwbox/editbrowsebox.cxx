@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-30 15:27:44 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,12 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 // .......................................................................
 namespace svt
 {
@@ -135,6 +140,8 @@ namespace svt
     }
 
     using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
+    using  drafts::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::uno::Reference;
     //==================================================================
 
     #define HANDLE_ID   0
@@ -987,6 +994,7 @@ namespace svt
         }
         ActivateCell();
         GetDataWindow().EnablePaint(sal_True);
+        BrowseBox::CursorMoved();
     }
 
     //------------------------------------------------------------------------------
@@ -1031,7 +1039,20 @@ namespace svt
 
                 // activate the cell only of the browser has the focus
                 if (bHasFocus && bCellFocus)
+                {
                     AsynchGetFocus();
+
+                    if ( m_aImpl->m_xActiveCell.is() )
+                    {
+                        Reference< XAccessible > xOldCell = m_aImpl->m_xActiveCell;
+                        CreateAccessibleCell(nRow,nCol);
+                        commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
+                                 com::sun::star::uno::makeAny(xOldCell),
+                                 com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
+
+                        ::comphelper::disposeComponent(xOldCell);
+                    }
+                }
             }
         }
     }
@@ -1041,10 +1062,10 @@ namespace svt
     {
         if (IsEditing())
         {
-            commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
-                             com::sun::star::uno::Any(),
-                             com::sun::star::uno::Any());
-            m_aImpl->disposeCell();
+//          commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
+//                           com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell),
+//                           com::sun::star::uno::Any());
+//          m_aImpl->disposeCell();
 
             aOldController = aController;
             aController.Clear();
@@ -1481,6 +1502,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/04/30 15:27:44  fs
+ *  #99048# corrected column selection
+ *
  *  Revision 1.7  2002/04/29 14:25:33  oj
  *  #98772# enable new imagelist
  *
