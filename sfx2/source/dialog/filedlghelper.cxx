@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dv $ $Date: 2001-08-29 10:06:21 $
+ *  last change: $Author: thb $ $Date: 2001-09-04 16:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,10 +831,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         break;
     case FILESAVE_AUTOEXTENSION_SELECTION:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
+        mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
         break;
     case FILESAVE_AUTOEXTENSION_TEMPLATE:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
+        mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
         break;
     case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
