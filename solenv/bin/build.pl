@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-31 15:27:12 $
+#   last change: $Author: vg $ $Date: 2001-08-31 17:16:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.35 $ ';
+$id_str = ' $Revision: 1.36 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -99,18 +99,17 @@ $deliver = 0;
 @UnresolvedParents = ();
 @dmake_args = ();
 %DeadParents = ();
-$CurrentPrj = "";
+$CurrentPrj = '';
 $StandDir = &get_stand_dir();
-$build_from = "";
-$is_from_built = 0;
+$build_from = '';
 &get_options;
-$ENV{mk_tmp} = "1";
+$ENV{mk_tmp}++;
 %prj_platform = ();
 
 #### main ####
 
-$dmake = GetDmakeCommando();
-BuildAll();
+$dmake = &GetDmakeCommando();
+&BuildAll();
 @TotenEltern = keys %DeadParents;
 if ($#TotenEltern != -1) {
     my ($DeadPrj);
@@ -120,7 +119,7 @@ if ($#TotenEltern != -1) {
     };
     print "\nnot found and couldn't be built. Correct build.lsts.\n";
 };
-$ENV{mk_tmp} = "";
+$ENV{mk_tmp} = '';
 
 #########################
 #                       #
@@ -138,11 +137,11 @@ sub GetParentDeps {
     $ParentsString = &GetParentsString($prj_dir);
     @DepsArray = &GetDependenciesArray($ParentsString);
     @UnresolvedParents = @DepsArray;
-    $$deps_hash{$CurrentPrj} = [@DepsArray];
+    $$deps_hash{$prj_dir} = [@DepsArray];
     while ($Prj = pop(@UnresolvedParents)) {
         my (@DepsArray);
         if (!($ParentsString = &GetParentsString($StandDir.$Prj))) {
-            $DeadParents{$Prj} = 1;
+            $DeadParents{$Prj}++;
             $$deps_hash{$Prj} = [];
             next;
         };
@@ -165,8 +164,8 @@ sub GetParentDeps {
 #
 sub BuildAll {
     if ($BuildAllParents) {
-        my ($Prj, $PrjDir, $DeadPrj);
-        &GetParentDeps('.' ,\%ParentDepsHash);
+        my ($Prj, $PrjDir);
+        &GetParentDeps( $CurrentPrj, \%ParentDepsHash);
         if ($build_from) {
             &remove_extra_prjs(\%ParentDepsHash);
         };
@@ -174,18 +173,18 @@ sub BuildAll {
             print "\n=============\n";
             print "Building project $Prj\n";
             print   "=============\n";
-            $PrjDir = CorrectPath($StandDir.$Prj);
+            $PrjDir = &CorrectPath($StandDir.$Prj);
             if ($ENV{GUI} eq "UNX") {
                 use Cwd 'chdir';
             };
             chdir $PrjDir;
             cwd();
-            BuildPrj($PrjDir) if (!$deliver);
+            &BuildPrj($PrjDir) if (!$deliver);
             system ("$ENV{DELIVER}") if (!$show);
-            RemoveFromDependencies($Prj, \%ParentDepsHash);
+            &RemoveFromDependencies($Prj, \%ParentDepsHash);
         };
     } else {
-        BuildPrj(".");
+        &BuildPrj('.');
     };
 };
 
@@ -195,8 +194,8 @@ sub BuildAll {
 sub MakeDir {
     my ($DirToBuild, $BuildDir, $error);
     $DirToBuild = shift;
-    $BuildDir = CorrectPath($StandDir.$PathHash{$DirToBuild});
-    if ($ENV{GUI} eq "UNX") {
+    $BuildDir = &CorrectPath($StandDir.$PathHash{$DirToBuild});
+    if ($ENV{GUI} eq 'UNX') {
         use Cwd 'chdir';
     };
     if (chdir ($BuildDir)) {
@@ -209,10 +208,10 @@ sub MakeDir {
     if (!$show) {
         $error = system ("$dmake");
         if (!$error) {
-            RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+            &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
         } else {
             print STDERR "Error $error occurred while making $BuildDir\n";
-            $ENV{mk_tmp} = "";
+            $ENV{mk_tmp} = '';
             exit(1);
         };
     } else {
@@ -227,8 +226,9 @@ sub MakeDir {
 sub GetParentsString {
     my ($PrjDir);
     $PrjDir = shift;
-    if (!open (PrjBuildFile, $PrjDir."/prj/build.lst")) {
-        return "";
+    $PrjDir = '.' if ($PrjDir eq $CurrentPrj);
+    if (!open (PrjBuildFile, $PrjDir.'/prj/build.lst')) {
+        return '';
     };
     while (<PrjBuildFile>) {
         s/\r\n//;
@@ -238,7 +238,7 @@ sub GetParentsString {
         };
     };
     close PrjBuildFile;
-    return "NULL";
+    return 'NULL';
 };
 
 #
@@ -274,9 +274,8 @@ sub get_prj_platform {
 sub BuildPrj {
     my ($dummy, $PrjToBuild);
     $PrjToBuild = shift;
-    open (PrjBuildFile, "prj/build.lst");
+    open (PrjBuildFile, 'prj/build.lst');
     &get_prj_platform;
-    BuildLstLoop:
     while (<PrjBuildFile>) {
         s/\r\n//;
         if ($_ =~ /nmake/) {
@@ -294,14 +293,14 @@ sub BuildPrj {
             $Dependencies =~ /\s+(\S+)\s+/;
             $DirAlias = $1;
             if (!&CheckPlatform($Platform)) {
-                $DeadDependencies{$DirAlias} = 1;
-                next BuildLstLoop;
+                $DeadDependencies{$DirAlias}++;
+                next;
             };
-            $PlatformHash{$DirAlias} = 1;
+            $PlatformHash{$DirAlias}++;
             $Dependencies = $';
             @Array = GetDependenciesArray($Dependencies);
             $LocalDepsHash{$DirAlias} = [@Array];
-            $BuildQueue{$DirAlias} = 1;
+            $BuildQueue{$DirAlias}++;
             $PathHash{$DirAlias} = $Dir;
         };
     };
@@ -314,7 +313,7 @@ sub BuildPrj {
             delete $DeadDependencies{$Dir};
         };
     };
-    BuildDependent();
+    &BuildDependent();
 };
 
 #
@@ -336,12 +335,12 @@ sub mark_platform {
 #
 sub CorrectPath {
     $_ = shift;
-    if ($ENV{GUI} eq "UNX") {
+    if ($ENV{GUI} eq 'UNX') {
         s/\\/\//g;
-    } elsif (   ($ENV{GUI} eq "WNT") ||
-                ($ENV{GUI} eq "WIN") ||
-                ($ENV{GUI} eq "MACOSX") ||
-                ($ENV{GUI} eq "OS2")) {
+    } elsif (   ($ENV{GUI} eq 'WNT') ||
+                ($ENV{GUI} eq 'WIN') ||
+                ($ENV{GUI} eq 'MACOSX') ||
+                ($ENV{GUI} eq 'OS2')) {
         s/\//\\/g;
     };
     return $_;
@@ -355,9 +354,9 @@ sub GetDmakeCommando {
     my ($dmake, $arg);
 
     # Setting alias for dmake
-    $dmake = "dmake";
+    $dmake = 'dmake';
     while ($arg = pop(@dmake_args)) {
-        $dmake .= " "."$arg";
+        $dmake .= ' '.$arg;
     };
     return $dmake;
 };
@@ -369,13 +368,13 @@ sub GetDmakeCommando {
 sub IsRootDir {
     my ($Dir);
     $Dir = shift;
-    if (        (($ENV{GUI} eq "UNX") ||
-                 ($ENV{GUI} eq "MACOSX")) &&
-                ($Dir eq "\/")) {
+    if (        (($ENV{GUI} eq 'UNX') ||
+                 ($ENV{GUI} eq 'MACOSX')) &&
+                ($Dir eq '/')) {
         return 1;
-    } elsif (   (($ENV{GUI} eq "WNT") ||
-                 ($ENV{GUI} eq "WIN") ||
-                 ($ENV{GUI} eq "OS2")) &&
+    } elsif (   (($ENV{GUI} eq 'WNT') ||
+                 ($ENV{GUI} eq 'WIN') ||
+                 ($ENV{GUI} eq 'OS2')) &&
                 ($Dir =~ /\S:\/$/)) {
         return 1;
     } else {
@@ -389,20 +388,20 @@ sub IsRootDir {
 #
 sub get_stand_dir {
     if (!(defined $ENV{GUI})) {
-        $ENV{mk_tmp} = "";
+        $ENV{mk_tmp} = '';
         die "No environment set\n";
     };
     my ($StandDir);
     do {
         $StandDir = cwd();
-        if (open(PrjBuildFile, "prj/build.lst")) {
+        if (open(PrjBuildFile, 'prj/build.lst')) {
             $StandDir =~ /(\w+$)/;
             $StandDir = $`;
             $CurrentPrj = $1;
             close(PrjBuildFile);
             return $StandDir;
-        } elsif (IsRootDir($StandDir)) {
-            $ENV{mk_tmp} = "";
+        } elsif (&IsRootDir($StandDir)) {
+            $ENV{mk_tmp} = '';
             die "Found no project to build\n"
         };
     }
@@ -414,9 +413,9 @@ sub get_stand_dir {
 #
 sub BuildDependent {
     my ($Dir);
-    while ($Dir = PickPrjToBuild(\%LocalDepsHash)) {
-        MakeDir($Dir);
-        $Dir = "";
+    while ($Dir = &PickPrjToBuild(\%LocalDepsHash)) {
+        &MakeDir($Dir);
+        $Dir = '';
     };
 };
 
@@ -452,18 +451,18 @@ sub PickPrjToBuild {
 sub CheckPlatform {
     my ($Platform);
     $Platform = shift;
-    if ($Platform eq "all") {
+    if ($Platform eq 'all') {
         return 1;
-    } elsif (($ENV{GUI} eq "WNT") &&
-                            (($Platform eq "w") || ($Platform eq "n"))) {
+    } elsif (($ENV{GUI} eq 'WNT') &&
+                            (($Platform eq 'w') || ($Platform eq 'n'))) {
         return 1;
-    } elsif (($ENV{GUI} eq "WIN") && ($Platform eq "w")) {
+    } elsif (($ENV{GUI} eq 'WIN') && ($Platform eq 'w')) {
         return 1;
-    } elsif (($ENV{GUI} eq "UNX") && ($Platform eq "u")) {
+    } elsif (($ENV{GUI} eq 'UNX') && ($Platform eq 'u')) {
         return 1;
-    } elsif (($ENV{GUI} eq "MACOSX") && ($Platform eq "m")) {
+    } elsif (($ENV{GUI} eq 'MACOSX') && ($Platform eq 'm')) {
         return 1;
-    } elsif (($ENV{GUI} eq "OS2") && ($Platform eq "p")) {
+    } elsif (($ENV{GUI} eq 'OS2') && ($Platform eq 'p')) {
         return 1;
     };
     return 0;
@@ -479,12 +478,11 @@ sub RemoveFromDependencies {
     $ExclPrj = shift;
     $Dependencies = shift;
     foreach $Prj (keys %$Dependencies) {
-        PrjDepsLoop:
         foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
             if (${$$Dependencies{$Prj}}[$i] eq $ExclPrj) {
                 splice (@{$$Dependencies{$Prj}}, $i, 1);
                 $i = 0;
-                last PrjDepsLoop;
+                last;
             };
         };
     };
@@ -513,9 +511,7 @@ sub FindIndepPrj {
             };
         };
         # If there are only dependent projects in hash - generate error
-        if ($build_from && !($is_from_built)) {
-            return "";
-        };
+        return '' if ($build_from);
         print "\nError: projects";
         DeadPrjLoop:
         foreach $Prj (keys %$Dependencies) {
@@ -523,13 +519,13 @@ sub FindIndepPrj {
                 next DeadPrjLoop;
             };
             $i = 0;
-            print "\n", $Prj, " depends on:";
+            print "\n$Prj depends on:";
             foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
-                print " ", ${$$Dependencies{$Prj}}[$i];
+                print ' ', ${$$Dependencies{$Prj}}[$i];
             };
         };
         print "\nhave dead or circular dependencies\n\n";
-        $ENV{mk_tmp} = "";
+        $ENV{mk_tmp} = '';
         exit (1);
     };
 };
@@ -574,7 +570,7 @@ sub GetDependenciesArray {
                 exit (1);
             };
             if (&CheckPlatform($1)) {
-                $AliveDependencies{$ParentPrj} = 1;
+                $AliveDependencies{$ParentPrj}++;
             }
             push(@Dependencies, $ParentPrj);
         } else {
