@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,19 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
     return new SfxObjectShellItem( Which(), pObjSh );
 }
 
+//--------------------------------------------------------------------
+
+sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    if ( pObjSh )
+    {
+        rVal <<= pObjSh->GetModel();
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 //=========================================================================
 
 SfxObjectItem::SfxObjectItem( USHORT nWhich, SfxShell *pSh )
@@ -112,5 +125,3 @@ SfxPoolItem* SfxObjectItem::Clone( SfxItemPool *) const
 {
     return new SfxObjectItem( Which(), _pSh );
 }
-
-
