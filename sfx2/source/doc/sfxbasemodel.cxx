@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:24:28 $
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ Size impl_Size_Struct2Object( const SIZE& aSize )
 
 extern void* getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta );
 extern void* getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize );
-extern SvMemoryStream* getMetaMemStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat );
+extern SvMemoryStream* getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat );
 extern sal_Bool supportsMetaFileHandle_Impl();
 
 class SfxPrintJob_Impl : public cppu::WeakImplHelper1
@@ -2070,7 +2070,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = getMetaMemStrFromGDI_Impl( pMetaFile, CVT_EMF );
+                    SvMemoryStream* pStream = getFormatStrFromGDI_Impl( pMetaFile, CVT_EMF );
                     delete pMetaFile;
                     if ( pStream )
                     {
@@ -2102,7 +2102,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = getMetaMemStrFromGDI_Impl( pMetaFile, CVT_WMF );
+                    SvMemoryStream* pStream = getFormatStrFromGDI_Impl( pMetaFile, CVT_WMF );
                     delete pMetaFile;
 
                     if ( pStream )
@@ -2131,6 +2131,29 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw UNSUPPORTEDFLAVOREXCEPTION();
         }
+        if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
+        {
+            if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            {
+                GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+
+                if ( pMetaFile )
+                {
+                    SvMemoryStream* pStream = getFormatStrFromGDI_Impl( pMetaFile, CVT_PNG );
+                    delete pMetaFile;
+
+                    if ( pStream )
+                    {
+                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
+                                                        pStream->Seek( STREAM_SEEK_TO_END ) );
+                        delete pStream;
+                    }
+                }
+            }
+            else
+                throw UNSUPPORTEDFLAVOREXCEPTION();
+        }
+
         else
             throw UNSUPPORTEDFLAVOREXCEPTION();
     }
