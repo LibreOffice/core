@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:27:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,8 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
             SwField* pFld = rFmtFld.GetFld();
 
-            if (RefToVar(pFld,pEntry))
+            // OD 2004-03-19 - <NOT> got lost from revision 1.128 to 1.129
+            if (!RefToVar(pFld,pEntry))
             {
                 USHORT nBkmNo;
                 if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
@@ -1015,6 +1016,10 @@ void SwWW8ImplReader::ImportDop()
     // OD, MMAHER 2004-03-01 #i25901#- set new compatibility option
     //      'Add paragraph and table spacing at bottom of table cells'
     rDoc.SetAddParaSpacingToTableCells( true );
+
+    // OD 2004-03-17 #i11860# - set new compatibility option
+    //      'Use former object positioning' to <FALSE>
+    rDoc.SetUseFormerObjectPositioning( false );
 
     if (!pWDop->fNoLeading)
         maTracer.Log(sw::log::eExtraLeading);
