@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-10 16:22:26 $
+#   last change: $Author: kz $ $Date: 2004-08-31 12:44:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,5 +110,4 @@ $(BIN)$/mozruntime.zip : $(OS)$(COM)$(CPU)runtime.zip
     +$(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
 
 .ENDIF	# "$(OS)" == "MACOSX"
-
 
