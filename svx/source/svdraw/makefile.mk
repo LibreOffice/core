@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 17:52:53 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 10:52:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ TARGET=svdraw
 
 SLOFILES=\
          $(SLO)$/svdobj.obj          \
+         $(SLO)$/svdoimp.obj         \
          $(SLO)$/svdoattr.obj        \
          $(SLO)$/svdotext.obj        \
          $(SLO)$/svdotxat.obj        \
