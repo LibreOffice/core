@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-02 14:54:21 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,11 +242,17 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAP_BUILTIN( POINTER_TEXT, GDK_XTERM );
             MAP_BUILTIN( POINTER_HELP, GDK_QUESTION_ARROW );
             MAP_BUILTIN( POINTER_CROSS, GDK_CROSSHAIR );
+            MAP_BUILTIN( POINTER_WAIT, GDK_WATCH );
 
             MAP_BUILTIN( POINTER_NSIZE, GDK_SB_V_DOUBLE_ARROW );
             MAP_BUILTIN( POINTER_SSIZE, GDK_SB_V_DOUBLE_ARROW );
             MAP_BUILTIN( POINTER_WSIZE, GDK_SB_H_DOUBLE_ARROW );
             MAP_BUILTIN( POINTER_ESIZE, GDK_SB_H_DOUBLE_ARROW );
+
+            MAP_BUILTIN( POINTER_NWSIZE, GDK_TOP_LEFT_CORNER );
+            MAP_BUILTIN( POINTER_NESIZE, GDK_TOP_RIGHT_CORNER );
+            MAP_BUILTIN( POINTER_SWSIZE, GDK_BOTTOM_LEFT_CORNER );
+            MAP_BUILTIN( POINTER_SESIZE, GDK_BOTTOM_RIGHT_CORNER );
 
             MAP_BUILTIN( POINTER_WINDOW_NSIZE, GDK_TOP_SIDE );
             MAP_BUILTIN( POINTER_WINDOW_SSIZE, GDK_BOTTOM_SIDE );
@@ -265,17 +271,14 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAP_BUILTIN( POINTER_HAND, GDK_HAND2 );
             MAP_BUILTIN( POINTER_PEN, GDK_PENCIL );
 
+            MAP_BUILTIN( POINTER_HSPLIT, GDK_SB_H_DOUBLE_ARROW );
+            MAP_BUILTIN( POINTER_VSPLIT, GDK_SB_V_DOUBLE_ARROW );
+
+            MAP_BUILTIN( POINTER_MOVE, GDK_FLEUR );
+
             MAKE_CURSOR( POINTER_NULL, null );
-            MAKE_CURSOR( POINTER_WAIT, wait_ );
-            MAKE_CURSOR( POINTER_NWSIZE, nwsesize_ );
-            MAKE_CURSOR( POINTER_NESIZE, neswsize_ );
-            MAKE_CURSOR( POINTER_SWSIZE, neswsize_ );
-            MAKE_CURSOR( POINTER_SESIZE, nwsesize_ );
-            MAKE_CURSOR( POINTER_HSPLIT, hsplit_ );
-            MAKE_CURSOR( POINTER_VSPLIT, vsplit_ );
             MAKE_CURSOR( POINTER_MAGNIFY, magnify_ );
             MAKE_CURSOR( POINTER_FILL, fill_ );
-            MAKE_CURSOR( POINTER_MOVE, move_ );
             MAKE_CURSOR( POINTER_MOVEDATA, movedata_ );
             MAKE_CURSOR( POINTER_COPYDATA, copydata_ );
             MAKE_CURSOR( POINTER_MOVEFILE, movefile_ );
