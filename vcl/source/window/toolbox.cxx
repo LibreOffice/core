@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-19 08:00:26 $
+ *  last change: $Author: ssa $ $Date: 2002-04-22 14:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3538,8 +3538,10 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             pItem = mpItemList->Next();
         }
 
-        // Wurde ein neuer Eintrag selektiert
-        if ( nNewPos != mnCurPos )
+        // was a new entery selected ?
+        // don't  change selection if keyboard selection is active and mouse leaves
+        // the tolbox
+        if ( nNewPos != mnCurPos && !( HasFocus() && nNewPos == TOOLBOX_ITEM_NOTFOUND ) )
         {
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
                 ImplDrawItem( mnCurPos );

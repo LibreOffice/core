@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-19 10:13:53 $
+ *  last change: $Author: ssa $ $Date: 2002-04-22 14:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,8 @@ const XubString& ToolBox::ImplConvertMenuString( const XubString& rStr )
 
 void ToolBox::ImplInvalidate( BOOL bNewCalc, BOOL bFullPaint )
 {
+    ImplUpdateInputEnable();
+
     if ( bNewCalc )
         mbCalc = TRUE;
 
@@ -1372,6 +1374,8 @@ void ToolBox::EnableItem( USHORT nItemId, BOOL bEnable )
 
             // Item updaten
             ImplUpdateItem( nPos );
+
+            ImplUpdateInputEnable();
         }
     }
 }
@@ -1548,4 +1552,24 @@ void ToolBox::SetOutStyle( USHORT nNewStyle )
 void ToolBox::RecalcItems()
 {
     ImplInvalidate( TRUE );
+}
+
+// -----------------------------------------------------------------------
+
+// disable key input if all items are disabled
+
+void ToolBox::ImplUpdateInputEnable()
+{
+    USHORT nCount = (USHORT)mpItemList->Count();
+    for( USHORT i = 0; i < nCount; i++ )
+    {
+        ImplToolItem* pItem = mpItemList->GetObject( i );
+        if( pItem->mbEnabled )
+        {
+            // at least one useful entry
+            mbInputDisabled = FALSE;
+            return;
+        }
+    }
+    mbInputDisabled = TRUE;
 }
