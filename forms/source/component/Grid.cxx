@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:47:11 $
+ *  last change: $Author: rt $ $Date: 2001-06-12 14:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
                     ,m_bAlwaysShowCursor(sal_False)
                     ,m_bDisplaySynchron(sal_True)
                     ,m_nFontRelief(awt::FontRelief::NONE)
-                    ,m_nFontEmphasis(FontEmphasisMark::NONE)
+                    ,m_nFontEmphasis(awt::FontEmphasisMark::NONE)
 {
     DBG_CTOR(OGridControlModel,NULL);
 
@@ -823,7 +823,7 @@ PropertyState OGridControlModel::getPropertyStateByHandle(sal_Int32 nHandle)
                 eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONTEMPHASISMARK:
-            if (FontEmphasisMark::NONE == m_nFontEmphasis)
+            if (awt::FontEmphasisMark::NONE == m_nFontEmphasis)
                 eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONTRELIEF:
@@ -926,7 +926,7 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
     switch (nHandle)
     {
         case PROPERTY_ID_FONTEMPHASISMARK:
-            setFastPropertyValue(nHandle, makeAny(FontEmphasisMark::NONE));
+            setFastPropertyValue(nHandle, makeAny(awt::FontEmphasisMark::NONE));
             break;
         case PROPERTY_ID_FONTRELIEF:
             setFastPropertyValue(nHandle, makeAny(awt::FontRelief::NONE));
@@ -985,7 +985,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
     switch (nHandle)
     {
         case PROPERTY_ID_FONTEMPHASISMARK:
-            aReturn <<= FontEmphasisMark::NONE;
+            aReturn <<= awt::FontEmphasisMark::NONE;
             break;
         case PROPERTY_ID_FONTRELIEF:
             aReturn <<= awt::FontRelief::NONE;
