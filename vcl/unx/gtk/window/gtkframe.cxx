@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:05:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #endif
 
 int GtkSalFrame::m_nFloats = 0;
+
+static GtkWidget * g_gtk_frame_ScrollWidget = NULL;
+
+
 
 static USHORT GetModCode( guint state )
 {
@@ -610,6 +614,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
                 gtk_im_context_reset( m_pIMContext );
             }
         }
+        CallCallback( SALEVENT_RESIZE, NULL );
     }
 }
 
@@ -633,13 +638,6 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
         (nWidth > 0 && nHeight > 0 ) // sometimes stupid things happen
             )
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( nWidth < 2 || nWidth > 2000 || nHeight < 2 || nHeight > 2000 )
-        {
-            fprintf( stderr, "Discarding bad size: %ld, %ld\n", nWidth, nHeight );
-            return;
-        }
-#endif
         m_bDefaultSize = false;
         gtk_window_resize( m_pWindow, nWidth, nHeight );
         if( ! m_bResizeable )
@@ -663,13 +661,6 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
     if( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( std::abs( nX ) > 2000 || std::abs( nY ) > 2000 )
-        {
-            fprintf( stderr, "Discarding bad pos: %ld, %ld\n", nX, nY );
-            return;
-        }
-#endif
         if( m_pParent )
         {
             nX += m_pParent->maGeometry.nX;
@@ -753,8 +744,12 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
     {
         if( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
             gtk_window_maximize( m_pWindow );
+        else
+            gtk_window_unmaximize( m_pWindow );
         if( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
             gtk_window_iconify( m_pWindow );
+        else
+            gtk_window_deiconify( m_pWindow );
     }
 }
 
@@ -1205,6 +1200,37 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     if( aInfo.m_ePitch != psp::pitch::Unknown )
         aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
 
+    if ( !g_gtk_frame_ScrollWidget )
+    {
+        g_gtk_frame_ScrollWidget = gtk_hscrollbar_new( NULL );
+
+        GtkWidget *pCacheWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+        GtkWidget *pDumbContainer = gtk_fixed_new();
+        gtk_container_add( GTK_CONTAINER( pCacheWindow ), pDumbContainer );
+        gtk_widget_realize( pDumbContainer );
+        gtk_widget_realize( pCacheWindow );
+
+        gtk_container_add( GTK_CONTAINER( pDumbContainer ), g_gtk_frame_ScrollWidget );
+        gtk_widget_realize( g_gtk_frame_ScrollWidget );
+    }
+
+    if ( g_gtk_frame_ScrollWidget )
+    {
+        gint slider_width = 14;
+        gint trough_border = 1;
+        gint min_slider_length = 21;
+
+        // Grab some button style attributes
+        gtk_widget_style_get( g_gtk_frame_ScrollWidget,
+                              "slider-width", &slider_width,
+                              "trough-border", &trough_border,
+                              "min-slider-length", &min_slider_length,
+                              NULL );
+        gint magic = trough_border ? 1 : 0;
+        aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
+        aStyleSet.SetMinThumbSize( min_slider_length - magic );
+    }
+
     aStyleSet.SetAppFont( aFont );
     aStyleSet.SetHelpFont( aFont );
     aStyleSet.SetTitleFont( aFont );
@@ -1322,12 +1348,19 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
     aEvent.mnCode   = GetModCode( pEvent->state );
 
     bool bClosePopups = false;
-    if( pEvent->type == GDK_BUTTON_PRESS && m_nFloats > 0 )
+    if( pEvent->type == GDK_BUTTON_PRESS )
     {
-        // close popups if user clicks outside our application
-        gint x, y;
-        bClosePopups = (gdk_display_get_window_at_pointer( pThis->getGdkDisplay(), &x, &y ) == NULL);
-        gdk_display_pointer_ungrab( pThis->getGdkDisplay(), GDK_CURRENT_TIME );
+        if( m_nFloats > 0 )
+        {
+            // close popups if user clicks outside our application
+            gint x, y;
+            bClosePopups = (gdk_display_get_window_at_pointer( pThis->getGdkDisplay(), &x, &y ) == NULL);
+        }
+        /*  #i30306# release implicit pointer grab if no popups are open; else
+         *  Drag cannot grab the pointer and will fail.
+         */
+        if( m_nFloats < 1 || bClosePopups )
+            gdk_display_pointer_ungrab( pThis->getGdkDisplay(), GDK_CURRENT_TIME );
     }
 
     GTK_YIELD_GRAB();
@@ -1342,6 +1375,15 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
             if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) && !(pEnv && *pEnv) )
                 pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
         }
+    }
+
+    int frame_x = (int)(pEvent->x_root - pEvent->x);
+    int frame_y = (int)(pEvent->y_root - pEvent->y);
+    if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
+    {
+        pThis->maGeometry.nX = frame_x;
+        pThis->maGeometry.nY = frame_y;
+        pThis->CallCallback( SALEVENT_MOVE, NULL );
     }
 
     return FALSE;
@@ -1390,6 +1432,15 @@ gboolean GtkSalFrame::signalMotion( GtkWidget* pWidget, GdkEventMotion* pEvent, 
 
     GTK_YIELD_GRAB();
     pThis->CallCallback( SALEVENT_MOUSEMOVE, &aEvent );
+
+    int frame_x = (int)(pEvent->x_root - pEvent->x);
+    int frame_y = (int)(pEvent->y_root - pEvent->y);
+    if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
+    {
+        pThis->maGeometry.nX = frame_x;
+        pThis->maGeometry.nY = frame_y;
+        pThis->CallCallback( SALEVENT_MOVE, NULL );
+    }
 
     // ask for the next hint
     gint x, y;
@@ -1501,19 +1552,20 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget* pWidget, GdkEventConfigure* pE
     bool bMoved = false, bSized = false;
     int x = pEvent->x, y = pEvent->y;
 
-    if( (pThis->m_nStyle & SAL_FRAME_STYLE_CHILD) )
-    {
-        // in child case the coordinates are not root coordinates,
-        // need to transform
-        XLIB_Window aChild;
-          XTranslateCoordinates( pThis->getDisplay()->GetDisplay(),
-                               GDK_WINDOW_XWINDOW(GTK_WIDGET(pThis->m_pWindow)->window),
-                                pThis->getDisplay()->GetRootWindow(),
-                                0, 0,
-                                &x, &y,
-                                &aChild );
-    }
+    // in child case the coordinates are not root coordinates,
+    // need to transform
 
+    /* #i31785# sadly one cannot really trust the x,y members of the event;
+     * they are e.g. not set correctly on maximize/demaximize; this rather
+     * sounds like a bug in gtk we have to workaround.
+     */
+    XLIB_Window aChild;
+    XTranslateCoordinates( pThis->getDisplay()->GetDisplay(),
+                           GDK_WINDOW_XWINDOW(GTK_WIDGET(pThis->m_pWindow)->window),
+                           pThis->getDisplay()->GetRootWindow(),
+                           0, 0,
+                           &x, &y,
+                           &aChild );
 
     if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
         bMoved = true;
