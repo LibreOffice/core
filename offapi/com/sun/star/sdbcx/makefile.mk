@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-27 09:57:49 $
+#   last change: $Author: oj $ $Date: 2002-12-06 12:12:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ IDLFILES=\
     Descriptor.idl \
     Driver.idl \
     Group.idl \
+    GroupDescriptor.idl \
     Index.idl \
     IndexColumn.idl \
     IndexColumnDescriptor.idl \
