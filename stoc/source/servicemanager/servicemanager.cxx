@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-12-07 15:26:19 $
+ *  last change: $Author: dbo $ $Date: 2001-12-11 15:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,11 +1556,31 @@ Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
     return Reference<XPropertySetInfo >();
 }
 
-void ORegistryServiceManager::setPropertyValue(const OUString& PropertyName,
-                                               const Any& aValue)
+void ORegistryServiceManager::setPropertyValue(
+    const OUString& PropertyName, const Any& aValue )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    throw UnknownPropertyException();
+    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
+    {
+        Reference< XComponentContext > xContext;
+        if (aValue >>= xContext)
+        {
+            MutexGuard aGuard( m_mutex );
+            m_xContext = xContext;
+        }
+        else
+        {
+            throw IllegalArgumentException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("no XComponentContext given!") ),
+                (OWeakObject *)this, 1 );
+        }
+    }
+    else
+    {
+        throw UnknownPropertyException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property ") ) + PropertyName,
+            (OWeakObject *)this );
+    }
 }
 
 Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
