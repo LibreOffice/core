@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2004-03-11 16:28:09 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 17:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ extern const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
 #endif
 
 
-BYTE GetRealLevel( BYTE nLvl )
+BYTE GetRealLevel( const BYTE nLvl )
 {
     return nLvl & (NO_NUMLEVEL - 1);
 }
