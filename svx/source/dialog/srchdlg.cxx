@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:26:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@
 #include "srchitem.hxx"
 #include "pageitem.hxx"
 #include "srchctrl.hxx"
-#include "srchxtra.hxx"
+//CHINA001 #include "srchxtra.hxx"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 
@@ -134,6 +134,8 @@
 #ifndef _SVX_BACKGRND_HXX //autogen
 #include <backgrnd.hxx>
 #endif
+
+#include "svxdlg.hxx" //CHINA001
 
 using namespace com::sun::star::i18n;
 
@@ -318,7 +320,7 @@ void SearchAttrItemList::Remove( USHORT nPos, USHORT nLen )
     SrchAttrItemList::Remove( nPos, nLen );
 }
 
-
+/* //CHINA001
 // class SvxJSearchOptionsDialog -----------------------------------------
 
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
@@ -357,7 +359,7 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
 {
     pPage->SetTransliterationFlags( nSettings );
 }
-
+*/ //CHINA001
 #ifdef INI_LIST
 #undef INI_LIST
 #endif
@@ -1250,35 +1252,52 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     }
     else if ( pBtn == &aSimilarityBtn )
     {
-        SvxSearchSimilarityDialog* pDlg =
-            new SvxSearchSimilarityDialog( this,
-                                           pSearchItem->IsLEVRelaxed(),
-                                           pSearchItem->GetLEVOther(),
-                                           pSearchItem->GetLEVShorter(),
-                                           pSearchItem->GetLEVLonger() );
-
-        if ( pDlg->Execute() == RET_OK )
+//CHINA001      SvxSearchSimilarityDialog* pDlg =
+//CHINA001          new SvxSearchSimilarityDialog( this,
+//CHINA001                                         pSearchItem->IsLEVRelaxed(),
+//CHINA001                                         pSearchItem->GetLEVOther(),
+//CHINA001                                         pSearchItem->GetLEVShorter(),
+//CHINA001                                         pSearchItem->GetLEVLonger() );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        if(pFact)
         {
-            pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
-            pSearchItem->SetLEVOther( pDlg->GetOther() );
-            pSearchItem->SetLEVShorter( pDlg->GetShorter() );
-            pSearchItem->SetLEVLonger( pDlg->GetLonger() );
-            SaveToModule_Impl();
+            AbstractSvxSearchSimilarityDialog* pDlg = pFact->CreateSvxSearchSimilarityDialog( this,
+                                                                        pSearchItem->IsLEVRelaxed(),
+                                                                        pSearchItem->GetLEVOther(),
+                                                                        pSearchItem->GetLEVShorter(),
+                                                                        pSearchItem->GetLEVLonger(),
+                                                                        ResId(RID_SVXDLG_SEARCHSIMILARITY) );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            if ( pDlg->Execute() == RET_OK )
+            {
+                pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
+                pSearchItem->SetLEVOther( pDlg->GetOther() );
+                pSearchItem->SetLEVShorter( pDlg->GetShorter() );
+                pSearchItem->SetLEVLonger( pDlg->GetLonger() );
+                SaveToModule_Impl();
+            }
+            delete pDlg;
         }
-        delete pDlg;
     }
     else if ( pBtn == &aJapOptionsBtn )
     {
         SfxItemSet aSet( SFX_APP()->GetPool() );
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
-        SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS,
-                                    pSearchItem->GetTransliterationFlags() );
-        int nRet = aDlg.Execute();
-        if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
+        //CHINA001 SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS,
+        //CHINA001                          pSearchItem->GetTransliterationFlags() );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        if(pFact)
         {
-            INT32 nFlags = aDlg.GetTransliterationFlags();
-            pSearchItem->SetTransliterationFlags( nFlags );
-            ApplyTransliterationFlags_Impl( nFlags );
+            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags(), ResId(RID_SVXPAGE_JSEARCH_OPTIONS) );
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
+            int nRet = aDlg->Execute(); //CHINA001 int nRet = aDlg.Execute();
+            if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
+            {
+                INT32 nFlags = aDlg->GetTransliterationFlags(); //CHINA001 INT32 nFlags = aDlg.GetTransliterationFlags();
+                pSearchItem->SetTransliterationFlags( nFlags );
+                ApplyTransliterationFlags_Impl( nFlags );
+            }
+            delete aDlg; //add for CHINA001
         }
     }
 
@@ -1831,36 +1850,41 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
     aSet.DisableItem(rPool.GetWhich(SID_ATTR_PARA_PAGEBREAK));
     aSet.DisableItem(rPool.GetWhich(SID_ATTR_PARA_KEEP));
 
-    SvxSearchFormatDialog* pDlg = new SvxSearchFormatDialog( this, aSet );
-
-    aTxt.Insert( pDlg->GetText(), 0 );
-    pDlg->SetText( aTxt );
-
-    if ( pDlg->Execute() == RET_OK )
+    //CHINA001 SvxSearchFormatDialog* pDlg = new SvxSearchFormatDialog( this, aSet );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
     {
-        DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
-        SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
+        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( this, aSet, ResId(RID_SVXDLG_SEARCHFORMAT) );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        aTxt.Insert( pDlg->GetText(), 0 );
+        pDlg->SetText( aTxt );
 
-        SearchAttrItemList* pList = bSearch ? pSearchList : pReplaceList;
+        if ( pDlg->Execute() == RET_OK )
+        {
+            DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
+            SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
 
-        SearchAttrItem* pAItem;
-        const SfxPoolItem* pItem;
-        for( USHORT n = 0; n < pList->Count(); ++n )
-            if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
-                SFX_ITEM_SET == aOutSet.GetItemState(
-                    pAItem->pItem->Which(), FALSE, &pItem ) )
-            {
-                delete pAItem->pItem;
-                pAItem->pItem = pItem->Clone();
-                aOutSet.ClearItem( pAItem->pItem->Which() );
-            }
+            SearchAttrItemList* pList = bSearch ? pSearchList : pReplaceList;
 
-        if( aOutSet.Count() )
-            pList->Put( aOutSet );
+            SearchAttrItem* pAItem;
+            const SfxPoolItem* pItem;
+            for( USHORT n = 0; n < pList->Count(); ++n )
+                if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
+                    SFX_ITEM_SET == aOutSet.GetItemState(
+                        pAItem->pItem->Which(), FALSE, &pItem ) )
+                {
+                    delete pAItem->pItem;
+                    pAItem->pItem = pItem->Clone();
+                    aOutSet.ClearItem( pAItem->pItem->Which() );
+                }
 
-        PaintAttrText_Impl(); // AttributText in GroupBox setzen
+            if( aOutSet.Count() )
+                pList->Put( aOutSet );
+
+            PaintAttrText_Impl(); // AttributText in GroupBox setzen
+        }
+        delete pDlg;
     }
-    delete pDlg;
     delete[] pWhRanges;
     return 0;
 }
@@ -1903,9 +1927,15 @@ IMPL_LINK( SvxSearchDialog, AttributeHdl_Impl, Button *, EMPTYARG )
     if ( !pSearchList || !pImpl->pRanges )
         return 0;
 
-    SvxSearchAttributeDialog* pDlg = new SvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges );
-    pDlg->Execute();
-    delete pDlg;
+    //CHINA001 SvxSearchAttributeDialog* pDlg = new SvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
+    {
+        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges, ResId(RID_SVXDLG_SEARCHATTR) );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        pDlg->Execute();
+        delete pDlg;
+    }
     PaintAttrText_Impl();
     return 0;
 }
