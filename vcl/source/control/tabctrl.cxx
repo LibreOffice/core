@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:10:02 $
+ *  last change: $Author: tbe $ $Date: 2002-08-19 16:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1669,6 +1669,7 @@ void TabControl::SelectTabPage( USHORT nPageId )
 {
     if ( nPageId && (nPageId != mnCurPageId) )
     {
+        ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, (void*) mnCurPageId );
         if ( DeactivatePage() )
         {
             mnActPageId = nPageId;
@@ -1677,6 +1678,7 @@ void TabControl::SelectTabPage( USHORT nPageId )
             nPageId = mnActPageId;
             mnActPageId = 0;
             SetCurPageId( nPageId );
+            ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, (void*) nPageId );
         }
     }
 }
