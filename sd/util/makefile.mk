@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:25:12 $
+#   last change: $Author: obo $ $Date: 2003-10-20 15:21:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -168,45 +168,9 @@ SHL2OBJS=   $(SLO)$/sddetect.obj \
 SHL2DEPN+=	makefile.mk
 
 
-.IF "$(depend)" == ""
-ALL:    \
-    ALLTAR
-.ENDIF
-
-
-.IF "$(SVXLIGHT)" != ""
-LIB5TARGET= $(LB)$/sdl.lib
-LIB5ARCHIV= $(LB)$/libsdl.a
-LIB5FILES=  \
-            $(LB)$/sxl_core.lib\
-            $(LB)$/sxl_unoidl.lib
-.ENDIF
-
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-.IF "$(depend)" == ""
-
-# -------------------------------------------------------------------------
-# Windows 
-# -------------------------------------------------------------------------
-
-.IF "$(GUI)" == "WNT"
-
-$(MISC)$/$(SHL1TARGET).def:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'SDRAW3 DLL'                                 >>$@
-    @echo DATA        READ WRITE NONSHARED                          >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo component_getImplementationEnvironment 				   >>$@
-    @echo component_writeInfo									   >>$@
-    @echo component_getFactory									   >>$@
-.ENDIF
-
-.ENDIF
 
 $(MISCX)$/$(SHL1TARGET).flt:
     @echo ------------------------------
