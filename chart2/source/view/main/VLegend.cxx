@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 16:23:29 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 20:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,25 +656,23 @@ awt::Point lcl_calculatePositionAndRemainingSpace( awt::Rectangle & rOutAvailabl
     {
         case chart2::LegendPosition_LINE_START:
         {
-            sal_Int32 nExtent = aLegendSize.Width + (aPos.X - rOutAvailableSpace.X)
-                + nOffsetX;
+            sal_Int32 nExtent = aLegendSize.Width + nOffsetX;
             rOutAvailableSpace.Width -= nExtent;
             rOutAvailableSpace.X += nExtent;
         }
         break;
         case chart2::LegendPosition_LINE_END:
-            rOutAvailableSpace.Width = (aPos.X + nOffsetX) - rOutAvailableSpace.X;
+            rOutAvailableSpace.Width -= ( aLegendSize.Width + nOffsetX );
             break;
         case chart2::LegendPosition_PAGE_START:
         {
-            sal_Int32 nExtent = aLegendSize.Height + (aPos.Y - rOutAvailableSpace.Y)
-                + nOffsetY;
+            sal_Int32 nExtent = aLegendSize.Height + nOffsetY;
             rOutAvailableSpace.Height -= nExtent;
             rOutAvailableSpace.Y += nExtent;
         }
         break;
         case chart2::LegendPosition_PAGE_END:
-            rOutAvailableSpace.Height = (aPos.Y + nOffsetY) - rOutAvailableSpace.Y;
+            rOutAvailableSpace.Height -= ( aLegendSize.Height + nOffsetY );
             break;
 
         default:
