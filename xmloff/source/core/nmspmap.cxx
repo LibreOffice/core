@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:34:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,12 @@ SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap )
 {
     aNameHash = rMap.aNameHash;
     aNameMap  = rMap.aNameMap;
+}
+
+void SvXMLNamespaceMap::operator=( const SvXMLNamespaceMap& rMap )
+{
+    aNameHash = rMap.aNameHash;
+    aNameMap = rMap.aNameMap;
 }
 
 SvXMLNamespaceMap::~SvXMLNamespaceMap()
