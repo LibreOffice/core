@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-09 18:29:48 $
-#*    $Revision: 1.22 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-09 22:41:37 $
+#*    $Revision: 1.23 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -108,7 +108,6 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
-    @strip $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
