@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:17:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,7 @@ sal_Int32 ZipFile::readCEN()
         aGrabber >> nCenLen;
         aGrabber >> nCenOff;
 
-        if ( nTotal < 0 || nTotal * CENHDR > nCenLen )
+        if ( nTotal * CENHDR > nCenLen )
             throw ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "invalid END header (bad entry count)") ), Reference < XInterface > () );
 
         if ( nTotal > ZIP_MAXENTRIES )
@@ -1012,7 +1012,7 @@ sal_Int32 ZipFile::getCRC( sal_Int32 nOffset, sal_Int32 nSize )
 {
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
-    sal_Int32 nBlockSize = ::std::min( nSize, 32000L );
+    sal_Int32 nBlockSize = ::std::min( nSize, static_cast< sal_Int32 >( 32000 ) );
 
     aGrabber.seek( nOffset );
     for ( int ind = 0;
@@ -1031,7 +1031,7 @@ void ZipFile::getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_I
     CRC32 aCRC;
     sal_Int32 nRealSize = 0;
     Inflater aInflater( sal_True );
-    sal_Int32 nBlockSize = ::std::min( nCompressedSize, 32000L );
+    sal_Int32 nBlockSize = ::std::min( nCompressedSize, static_cast< sal_Int32 >( 32000 ) );
 
     aGrabber.seek( nOffset );
     for ( int ind = 0;
