@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDataDefinitionSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:12:05 $
+ *  last change: $Date: 2003-09-08 10:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,16 @@
 
 package ifc.sdbcx;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDriver;
 import com.sun.star.sdbcx.XDataDefinitionSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.sdbcx.XDataDefinitionSupplier</code>
@@ -183,10 +184,11 @@ public class _XDataDefinitionSupplier extends MultiMethodTest {
      */
     public void _getDataDefinitionByURL() {
         boolean bRes = false;
+        XTablesSupplier xTS = null;
 
         try {
             log.println("getDataDefinitionByURL('" + url + "')");
-            XTablesSupplier xTS = oObj.getDataDefinitionByURL(url, info);
+            xTS = oObj.getDataDefinitionByURL(url, info);
             bRes = xTS != null;
         } catch (com.sun.star.sdbc.SQLException e) {
             log.println("Unexpected exception: " + e);
@@ -195,7 +197,7 @@ public class _XDataDefinitionSupplier extends MultiMethodTest {
 
         try {
             log.println("getDataDefinitionByURL('" + wrongUrl + "')");
-            XTablesSupplier xTS = oObj.getDataDefinitionByURL(wrongUrl, info);
+            xTS = oObj.getDataDefinitionByURL(wrongUrl, info);
             log.println("Exception was expected");
             bRes = false;
         } catch (com.sun.star.sdbc.SQLException e) {
