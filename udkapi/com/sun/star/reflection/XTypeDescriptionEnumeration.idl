@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: tdef.cxx,v $
+ *  $RCSfile: XTypeDescriptionEnumeration.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,60 +59,43 @@
  *
  ************************************************************************/
 
-#ifndef _STOC_RDBTDP_BASE_HXX
-#include "base.hxx"
+#ifndef __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
+#define __com_sun_star_reflection_XTypeDescriptionEnumeration_idl__
+
+#ifndef __com_sun_star_reflection_XTypeDescription_idl__
+#include <com/sun/star/reflection/XTypeDescription.idl>
+#endif
+#ifndef __com_sun_star_container_XEnumeration_idl__
+#include <com/sun/star/container/XEnumeration.idl>
+#endif
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
 #endif
 
-namespace stoc_rdbtdp
-{
-TypedefTypeDescriptionImpl::~TypedefTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+//=============================================================================
 
-// XTypeDescription
-//__________________________________________________________________________________________________
-TypeClass TypedefTypeDescriptionImpl::getTypeClass()
-    throw(::com::sun::star::uno::RuntimeException)
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** Defines an enumeration for type descriptions.
+  */
+interface XTypeDescriptionEnumeration : com::sun::star::container::XEnumeration
 {
-    return TypeClass_TYPEDEF;
-}
-//__________________________________________________________________________________________________
-OUString TypedefTypeDescriptionImpl::getName()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _aName;
-}
+    /** Returns the next element of the enumeration.
 
-// XIndirectTypeDescription
-//__________________________________________________________________________________________________
-Reference< XTypeDescription > TypedefTypeDescriptionImpl::getReferencedType()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (!_xRefTD.is() && _aRefName.getLength())
-    {
-        try
-        {
-            Reference< XTypeDescription > xRefTD;
-            if (_xTDMgr->getByHierarchicalName( _aRefName ) >>= xRefTD)
-            {
-                MutexGuard aGuard( _aMutex );
-                if (! _xRefTD.is())
-                {
-                    _xRefTD = xRefTD;
-                }
-                return _xRefTD;
-            }
-        }
-        catch (NoSuchElementException &)
-        {
-        }
-        // never try again, if no base td was found
-        _aRefName = OUString();
-    }
-    return _xRefTD;
-}
+        @returns
+            the next element of this enumeration.
 
-}
+        @throws com::sun::star::container::NoSuchElementException
+            if no more elements exist.
+      */
+    XTypeDescription nextTypeDescription()
+        raises( com::sun::star::container::NoSuchElementException );
+};
 
+//=============================================================================
 
+}; }; }; };
+
+#endif

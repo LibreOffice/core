@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: tdef.cxx,v $
+ *  $RCSfile: XServiceTypeDescription.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,60 +59,69 @@
  *
  ************************************************************************/
 
-#ifndef _STOC_RDBTDP_BASE_HXX
-#include "base.hxx"
+#ifndef __com_sun_star_reflection_XServiceTypeDescription_idl__
+#define __com_sun_star_reflection_XServiceTypeDescription_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_reflection_XInterfaceTypeDescription_idl__
+#include <com/sun/star/reflection/XInterfaceTypeDescription.idl>
+#endif
+#ifndef __com_sun_star_reflection_PropertyDescription_idl__
+#include <com/sun/star/reflection/PropertyDescription.idl>
 #endif
 
-namespace stoc_rdbtdp
-{
-TypedefTypeDescriptionImpl::~TypedefTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+//=============================================================================
 
-// XTypeDescription
-//__________________________________________________________________________________________________
-TypeClass TypedefTypeDescriptionImpl::getTypeClass()
-    throw(::com::sun::star::uno::RuntimeException)
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** Reflects a service.
+
+    <p>The type class of this type is
+    <member scope="com::sun::star::uno">TypeClass::SERVICE</type>.
+  */
+interface XServiceTypeDescription : com::sun::star::reflection::XTypeDescription
 {
-    return TypeClass_TYPEDEF;
-}
-//__________________________________________________________________________________________________
-OUString TypedefTypeDescriptionImpl::getName()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _aName;
-}
+    /** Returns the type descriptions of the mandatory services
+        defined for this service.
 
-// XIndirectTypeDescription
-//__________________________________________________________________________________________________
-Reference< XTypeDescription > TypedefTypeDescriptionImpl::getReferencedType()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (!_xRefTD.is() && _aRefName.getLength())
-    {
-        try
-        {
-            Reference< XTypeDescription > xRefTD;
-            if (_xTDMgr->getByHierarchicalName( _aRefName ) >>= xRefTD)
-            {
-                MutexGuard aGuard( _aMutex );
-                if (! _xRefTD.is())
-                {
-                    _xRefTD = xRefTD;
-                }
-                return _xRefTD;
-            }
-        }
-        catch (NoSuchElementException &)
-        {
-        }
-        // never try again, if no base td was found
-        _aRefName = OUString();
-    }
-    return _xRefTD;
-}
+        @return a sequence containing service type descriptions.
+      */
+    sequence< XServiceTypeDescription > getMandatoryServices();
 
-}
+    /** Returns the type descriptions of the optional services
+        defined for this service.
 
+        @return a sequence containing service type descriptions.
+      */
+    sequence< XServiceTypeDescription > getOptionalServices();
 
+    /** Returns the type descriptions of the mandatory interfaces
+        defined for this service.
+
+        @return a sequence containing interface type descriptions.
+      */
+    sequence< XInterfaceTypeDescription > getMandatoryInterfaces();
+
+    /** Returns the type descriptions of the optional interface
+        defined for this service.
+
+        @return a sequence containing interface type descriptions.
+      */
+    sequence< XInterfaceTypeDescription > getOptionalInterfaces();
+
+    /** Returns the properties defined for this service.
+
+        @return a sequence containing property descriptions.
+      */
+    sequence< PropertyDescription > getProperties();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-07 15:02:35 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _STOC_RDBTDP_BASE_HXX
+#define _STOC_RDBTDP_BASE_HXX
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -79,6 +82,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 
+#include <list>
 #include <vector>
 
 #include <com/sun/star/reflection/XTypeDescription.hpp>
@@ -86,9 +90,13 @@
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
+#include <com/sun/star/reflection/XServiceTypeDescription.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#endif
 
 using namespace std;
 using namespace rtl;
@@ -102,7 +110,45 @@ using namespace com::sun::star::reflection;
 
 namespace stoc_rdbtdp
 {
+//--------------------------------------------------------------------------------------------------
+
+typedef ::std::list< ::com::sun::star::uno::Reference<
+            ::com::sun::star::registry::XRegistryKey > > RegistryKeyList;
+
+//--------------------------------------------------------------------------------------------------
+
+class RegistryKeyCloser
+{
+public:
+    RegistryKeyCloser( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::registry::XRegistryKey > & xKey )
+    : m_xKey( xKey ) {}
+    ~RegistryKeyCloser()
+    { if ( m_xKey.is() ) { try { if ( m_xKey->isValid() ) m_xKey->closeKey(); } catch (...) {} } }
+
+    void reset() { m_xKey.clear(); }
+private:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::registry::XRegistryKey > m_xKey;
+};
+
+//--------------------------------------------------------------------------------------------------
+
+// helper to create XTypeDescription instances using RegistryTypeReader
+// (used from Type Provider and Type Description Enumeration implementation)
+::com::sun::star::uno::Reference<
+    ::com::sun::star::reflection::XTypeDescription >
+createTypeDescription(
+    const RegistryTypeReaderLoader & rLoader,
+    const ::com::sun::star::uno::Sequence< sal_Int8 > & rData,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XHierarchicalNameAccess > & xNameAccess,
+    bool bReturnEmptyRefForUnknownType );
+
+//--------------------------------------------------------------------------------------------------
+
 extern rtl_StandardModuleCount g_moduleCount;
+
 //--------------------------------------------------------------------------------------------------
 inline sal_Int32 getRTValueAsInt32( const RTConstValue & rVal )
 {
@@ -337,6 +383,71 @@ public:
     virtual Reference< XTypeDescription > SAL_CALL getReferencedType() throw(::com::sun::star::uno::RuntimeException);
 };
 
+//==================================================================================================
+class ServiceTypeDescriptionImpl : public WeakImplHelper1< XServiceTypeDescription >
+{
+    Mutex                                 _aMutex;
+    OUString                              _aName;
+    Sequence< sal_Int8 >                  _aBytes;
+    Reference< XHierarchicalNameAccess >  _xTDMgr;
+
+    Sequence< Reference< XServiceTypeDescription > > * _pMandatoryServices;
+    Sequence< Reference< XServiceTypeDescription > > * _pOptionalServices;
+    Sequence< Reference< XInterfaceTypeDescription > > * _pMandatoryInterfaces;
+    Sequence< Reference< XInterfaceTypeDescription > > * _pOptionalInterfaces;
+
+    Sequence< PropertyDescription > *     _pProps;
+
+public:
+    ServiceTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
+                                const OUString & rName,
+                                const Sequence< sal_Int8 > & rBytes)
+    : _aName( rName ), _aBytes( rBytes ), _xTDMgr( xTDMgr ),
+      _pMandatoryServices( 0 ), _pOptionalServices( 0 ),
+      _pMandatoryInterfaces ( 0 ), _pOptionalInterfaces( 0 ), _pProps( 0 )
+    {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
+    virtual ~ServiceTypeDescriptionImpl();
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL
+    getTypeClass()
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL
+    getName()
+        throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceTypeDescription
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::reflection::XServiceTypeDescription > > SAL_CALL
+    getMandatoryServices()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::reflection::XServiceTypeDescription > > SAL_CALL
+    getOptionalServices()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::reflection::XInterfaceTypeDescription > > SAL_CALL
+    getMandatoryInterfaces()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::reflection::XInterfaceTypeDescription > > SAL_CALL
+    getOptionalInterfaces()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<
+        ::com::sun::star::reflection::PropertyDescription > SAL_CALL
+    getProperties()
+        throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    void getReferences();
+};
+
 }
 
-
+#endif /* _STOC_RDBTDP_BASE_HXX */

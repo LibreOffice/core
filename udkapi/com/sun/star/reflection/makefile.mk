@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-03 13:57:45 $
+#   last change: $Author: kso $ $Date: 2002-11-11 08:30:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,17 @@ PACKAGE=com$/sun$/star$/reflection
 IDLFILES=\
     CoreReflection.idl\
     FieldAccessMode.idl\
+    InvalidTypeNameException.idl\
     InvocationTargetException.idl\
     MethodMode.idl\
+    NoSuchTypeNameException.idl\
     ParamInfo.idl\
     ParamMode.idl\
+    PropertyDescription.idl\
     ProxyFactory.idl\
     TypeDescriptionManager.idl\
     TypeDescriptionProvider.idl\
+    TypeDescriptionSearchDepth.idl\
     XArrayTypeDescription.idl\
     XCompoundTypeDescription.idl\
     XUnionTypeDescription.idl\
@@ -101,7 +105,10 @@ IDLFILES=\
     XInterfaceTypeDescription.idl\
     XMethodParameter.idl\
     XProxyFactory.idl\
+    XServiceTypeDescription.idl\
     XTypeDescription.idl\
+    XTypeDescriptionEnumeration.idl\
+    XTypeDescriptionEnumerationAccess.idl
 
 # ------------------------------------------------------------------
 

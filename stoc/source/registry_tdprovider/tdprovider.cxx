@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:53:51 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -90,10 +90,14 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 
-#include <list>
-
+#ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
+#endif
+#ifndef _STOC_RDBTDP_TDENUMERATION_HXX
+#include "rdbtdp_tdenumeration.hxx"
+#endif
 
 #define SERVICENAME "com.sun.star.reflection.TypeDescriptionProvider"
 #define IMPLNAME    "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"
@@ -136,8 +140,6 @@ static OUString rdbtdp_getImplementationName()
     return *pImplName;
 }
 
-typedef ::std::list< Reference< XRegistryKey > > RegistryKeyList;
-
 struct MutexHolder
 {
     Mutex _aComponentMutex;
@@ -145,7 +147,10 @@ struct MutexHolder
 //==================================================================================================
 class ProviderImpl
     : public MutexHolder
-    , public WeakComponentImplHelper3< XServiceInfo, XHierarchicalNameAccess, XInitialization >
+    , public WeakComponentImplHelper4< XServiceInfo,
+                                       XHierarchicalNameAccess,
+                                       XTypeDescriptionEnumerationAccess,
+                                       XInitialization >
 {
     Reference< XComponentContext >              _xContext;
     Reference< XHierarchicalNameAccess >        _xTDMgr;
@@ -172,11 +177,24 @@ public:
     // XHierarchicalNameAccess
     virtual Any SAL_CALL getByHierarchicalName( const OUString & rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString & rName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XTypeDescriptionEnumerationAccess
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::reflection::XTypeDescriptionEnumeration > SAL_CALL
+    createTypeDescriptionEnumeration(
+        const ::rtl::OUString& moduleName,
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::TypeClass >& types,
+        ::com::sun::star::reflection::TypeDescriptionSearchDepth depth )
+            throw ( ::com::sun::star::reflection::NoSuchTypeNameException,
+                    ::com::sun::star::reflection::InvalidTypeNameException,
+                    ::com::sun::star::uno::RuntimeException );
 };
 //__________________________________________________________________________________________________
 ProviderImpl::ProviderImpl( const Reference< XComponentContext > & xContext )
-    : WeakComponentImplHelper3<
-        XServiceInfo, XHierarchicalNameAccess, XInitialization >( _aComponentMutex )
+    : WeakComponentImplHelper4<
+        XServiceInfo, XHierarchicalNameAccess,
+        XTypeDescriptionEnumerationAccess, XInitialization >( _aComponentMutex )
     , _xContext( xContext )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
@@ -286,121 +304,93 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
         for ( RegistryKeyList::const_iterator iPos( _aBaseKeys.begin() );
               !aRet.hasValue() && iPos != _aBaseKeys.end(); ++iPos )
         {
-            Reference< XRegistryKey > xBaseKey( *iPos );
-            Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey ) );
-            if (xKey.is())
+            try
             {
-                if (xKey->getValueType() == RegistryValueType_BINARY)
+                Reference< XRegistryKey > xBaseKey( *iPos );
+                Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey ) );
+                if (xKey.is())
                 {
-                    Sequence< sal_Int8 > aBytes( xKey->getBinaryValue() );
-                    RegistryTypeReader aReader(
-                        _aLoader, (const sal_uInt8 *)aBytes.getConstArray(), aBytes.getLength(), sal_False );
+                    // closes key in it's dtor (which is
+                    // called even in case of exceptions).
+                    RegistryKeyCloser aCloser( xKey );
 
-                    OUString aName( aReader.getTypeName().replace( '/', '.' ) );
-
-                    switch (aReader.getTypeClass())
-                    {
-                    case RT_TYPE_INTERFACE:
-                    {
-                        RTUik aUik;
-                        aReader.getUik( aUik );
-                        aRet <<= Reference< XTypeDescription >( new InterfaceTypeDescriptionImpl(
-                            getTDMgr(), aName,
-                            aReader.getSuperTypeName().replace( '/', '.' ),
-                            aUik, aBytes ) );
-                        break;
-                    }
-                    case RT_TYPE_EXCEPTION:
-                        aRet <<= Reference< XTypeDescription >( new CompoundTypeDescriptionImpl(
-                            getTDMgr(), TypeClass_EXCEPTION, aName,
-                            aReader.getSuperTypeName().replace( '/', '.' ),
-                            aBytes ) );
-                        break;
-                    case RT_TYPE_STRUCT:
-                        aRet <<= Reference< XTypeDescription >( new CompoundTypeDescriptionImpl(
-                            getTDMgr(), TypeClass_STRUCT, aName,
-                            aReader.getSuperTypeName().replace( '/', '.' ),
-                            aBytes ) );
-                        break;
-                    case RT_TYPE_ENUM:
-                        aRet <<= Reference< XTypeDescription >( new EnumTypeDescriptionImpl(
-                            getTDMgr(), aName,
-                            getRTValueAsInt32( aReader.getFieldConstValue( 0 ) ),
-                            aBytes ) );
-                        break;
-                    case RT_TYPE_TYPEDEF:
-                        aRet <<= Reference< XTypeDescription >( new TypedefTypeDescriptionImpl(
-                            getTDMgr(), aName,
-                            aReader.getSuperTypeName().replace( '/', '.' ) ) );
-                        break;
-
-/*                      // these following are in question
-                    case RT_TYPE_MODULE:
-                        aRet <<= Reference< XTypeDescription >( new TypeDescriptionImpl(
-                            TypeClass_MODULE, aName ) );
-                        break;
-                    case RT_TYPE_SERVICE:
-                        aRet <<= Reference< XTypeDescription >( new TypeDescriptionImpl(
-                            TypeClass_SERVICE, aName ) );
-                        break;
-//                      case RT_TYPE_INVALID:
-//                      case RT_TYPE_CONSTANTS:
-//                      case RT_TYPE_OBJECT:
-                    default: // existing registry node
-                        aRet <<= Reference< XTypeDescription >( new TypeDescriptionImpl(
-                            TypeClass_UNKNOWN, aName ) );
-                        break;
-*/
-                    }
-                }
-                xKey->closeKey();
-            }
-            else // might be a constant
-            {
-                sal_Int32 nIndex = aKey.lastIndexOf( '/' );
-                if (nIndex > 0)
-                {
-                    // open module
-                    Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey.copy( 0, nIndex ) ) );
-                    if (xKey.is())
+                    if ( xKey->isValid() )
                     {
                         if (xKey->getValueType() == RegistryValueType_BINARY)
                         {
                             Sequence< sal_Int8 > aBytes( xKey->getBinaryValue() );
-                            RegistryTypeReader aReader(
-                                _aLoader, (const sal_uInt8 *)aBytes.getConstArray(),
-                                aBytes.getLength(), sal_False );
-
-                            if (aReader.getTypeClass() == RT_TYPE_MODULE ||
-                                aReader.getTypeClass() == RT_TYPE_CONSTANTS ||
-                                aReader.getTypeClass() == RT_TYPE_ENUM)
-                            {
-                                OUString aFieldName( aKey.copy( nIndex+1, aKey.getLength() - nIndex -1 ) );
-                                sal_Int32 nPos = aReader.getFieldCount();
-                                while (nPos--)
-                                {
-                                    if ( aFieldName.equals( aReader.getFieldName( (sal_uInt16)nPos )) )
-                                        break;
-                                }
-                                if (nPos >= 0)
-                                    aRet = getRTValue( aReader.getFieldConstValue( (sal_uInt16)nPos ) );
-                            }
+                            Reference< XTypeDescription > xTD(
+                                createTypeDescription( _aLoader,
+                                                       aBytes,
+                                                       getTDMgr(),
+                                                       true ) );
+                            if ( xTD.is() )
+                                aRet <<= xTD;
                         }
-                        xKey->closeKey();
                     }
                 }
+                else // might be a constant
+                {
+                    sal_Int32 nIndex = aKey.lastIndexOf( '/' );
+                    if (nIndex > 0)
+                    {
+                        // open module
+                        Reference< XRegistryKey > xKey( xBaseKey->openKey( aKey.copy( 0, nIndex ) ) );
+                        if (xKey.is())
+                        {
+                            // closes key in it's dtor (which is
+                            // called even in case of exceptions).
+                            RegistryKeyCloser aCloser( xKey );
+
+                            if ( xKey->isValid() )
+                            {
+                                if (xKey->getValueType() == RegistryValueType_BINARY)
+                                {
+                                    Sequence< sal_Int8 > aBytes( xKey->getBinaryValue() );
+                                    RegistryTypeReader aReader(
+                                        _aLoader, (const sal_uInt8 *)aBytes.getConstArray(),
+                                        aBytes.getLength(), sal_False );
+
+                                    if (aReader.getTypeClass() == RT_TYPE_MODULE ||
+                                        aReader.getTypeClass() == RT_TYPE_CONSTANTS ||
+                                        aReader.getTypeClass() == RT_TYPE_ENUM)
+                                    {
+                                        OUString aFieldName( aKey.copy( nIndex+1, aKey.getLength() - nIndex -1 ) );
+                                        sal_Int32 nPos = aReader.getFieldCount();
+                                        while (nPos--)
+                                        {
+                                            if ( aFieldName.equals( aReader.getFieldName( (sal_uInt16)nPos )) )
+                                                break;
+                                        }
+                                        if (nPos >= 0)
+                                            aRet = getRTValue( aReader.getFieldConstValue( (sal_uInt16)nPos ) );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( InvalidRegistryException const & )
+            {
+                OSL_ENSURE( sal_False,
+                            "ProviderImpl::getByHierarchicalName "
+                            "- Caught InvalidRegistryException!" );
+
+                // openKey, closeKey, getValueType, getBinaryValue, isValid
+
+                // Don't stop iteration in this case.
             }
         }
     }
 
-    if (! aRet.hasValue())
-    {
-        NoSuchElementException aExc;
-        aExc.Message = rName;
-        throw aExc;
-    }
+    if ( !aRet.hasValue() )
+        throw NoSuchElementException(
+            rName, static_cast< cppu::OWeakObject * >( this  ) );
+
     return aRet;
 }
+
 //__________________________________________________________________________________________________
 sal_Bool ProviderImpl::hasByHierarchicalName( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
@@ -415,12 +405,122 @@ sal_Bool ProviderImpl::hasByHierarchicalName( const OUString & rName )
     return sal_False;
 }
 
+// XTypeDescriptionEnumerationAccess
+//__________________________________________________________________________________________________
+// virtual
+Reference< XTypeDescriptionEnumeration > SAL_CALL
+ProviderImpl::createTypeDescriptionEnumeration(
+        const OUString & moduleName,
+        const Sequence< TypeClass > & types,
+        TypeDescriptionSearchDepth depth )
+    throw ( NoSuchTypeNameException,
+            InvalidTypeNameException,
+            RuntimeException )
+{
+    return Reference< XTypeDescriptionEnumeration >(
+        TypeDescriptionEnumerationImpl::createInstance( _xContext,
+                                                        moduleName,
+                                                        types,
+                                                        depth,
+                                                        _aLoader,
+                                                        _aBaseKeys ).get() );
+}
+
 //==================================================================================================
 static Reference< XInterface > SAL_CALL ProviderImpl_create(
     Reference< XComponentContext > const & xContext )
     throw(::com::sun::star::uno::Exception)
 {
     return Reference< XInterface >( *new ProviderImpl( xContext ) );
+}
+
+//__________________________________________________________________________________________________
+// global helper function
+Reference< XTypeDescription > createTypeDescription(
+    const RegistryTypeReaderLoader & rLoader,
+    const Sequence< sal_Int8 > & rData,
+    const Reference< XHierarchicalNameAccess > & xNameAccess,
+    bool bReturnEmptyRefForUnknownType )
+{
+    RegistryTypeReader aReader( rLoader,
+                                (const sal_uInt8 *)rData.getConstArray(),
+                                rData.getLength(),
+                                sal_False );
+
+    OUString aName( aReader.getTypeName().replace( '/', '.' ) );
+
+    switch (aReader.getTypeClass())
+    {
+        case RT_TYPE_INTERFACE:
+        {
+            RTUik aUik;
+            aReader.getUik( aUik );
+            return Reference< XTypeDescription >(
+                new InterfaceTypeDescriptionImpl( xNameAccess,
+                                                  aName,
+                                                  aReader.getSuperTypeName()
+                                                    .replace( '/', '.' ),
+                                                  aUik,
+                                                  rData ) );
+        }
+
+        case RT_TYPE_MODULE:
+            // @@@ not quite correct, XModuleTypeDescription missing.
+            return Reference< XTypeDescription >(
+                new TypeDescriptionImpl( TypeClass_MODULE, aName ) );
+
+        case RT_TYPE_STRUCT:
+            return Reference< XTypeDescription >(
+                new CompoundTypeDescriptionImpl( xNameAccess,
+                                                 TypeClass_STRUCT,
+                                                 aName,
+                                                 aReader.getSuperTypeName()
+                                                    .replace( '/', '.' ),
+                                                 rData ) );
+        case RT_TYPE_ENUM:
+            return Reference< XTypeDescription >(
+                new EnumTypeDescriptionImpl( xNameAccess,
+                                             aName,
+                                             getRTValueAsInt32(
+                                                aReader.getFieldConstValue(
+                                                    0 ) ),
+                                             rData ) );
+        case RT_TYPE_EXCEPTION:
+            return Reference< XTypeDescription >(
+                new CompoundTypeDescriptionImpl( xNameAccess,
+                                                 TypeClass_EXCEPTION,
+                                                 aName,
+                                                 aReader.getSuperTypeName()
+                                                    .replace( '/', '.' ),
+                                                 rData ) );
+        case RT_TYPE_TYPEDEF:
+            return Reference< XTypeDescription >(
+                new TypedefTypeDescriptionImpl( xNameAccess,
+                                                aName,
+                                                aReader.getSuperTypeName()
+                                                    .replace( '/', '.' ) ) );
+        case RT_TYPE_SERVICE:
+            return Reference< XTypeDescription >(
+                new ServiceTypeDescriptionImpl( xNameAccess, aName, rData ) );
+
+// @@@ X...Typedescription + TypeClass missing
+//        case RT_TYPE_CONSTANTS:
+//        case RT_TYPE_SINGLETON:
+
+//        case RT_TYPE_INVALID:
+//        case RT_TYPE_OBJECT:      // deprecated and not used
+//        case RT_TYPE_UNION:       // deprecated and not used
+        default: // existing registry node
+            break;
+    }
+
+    // Unknown type.
+
+    if ( bReturnEmptyRefForUnknownType )
+        return Reference< XTypeDescription >();
+
+    return Reference< XTypeDescription >(
+                new TypeDescriptionImpl( TypeClass_UNKNOWN, aName ) );
 }
 
 }

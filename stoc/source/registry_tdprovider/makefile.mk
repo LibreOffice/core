@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-29 16:41:48 $
+#   last change: $Author: kso $ $Date: 2002-11-11 08:35:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,10 +79,13 @@ COMP1TYPELIST=$(TARGET)
 
 SLOFILES=	\
         $(SLO)$/tdprovider.obj	\
+        $(SLO)$/td.obj		\
         $(SLO)$/tdef.obj	\
         $(SLO)$/tdenum.obj	\
         $(SLO)$/tdcomp.obj	\
-        $(SLO)$/tdiface.obj
+        $(SLO)$/tdiface.obj \
+        $(SLO)$/tdservice.obj \
+        $(SLO)$/rdbtdp_tdenumeration.obj
 
 
 SHL1TARGET=	$(TARGET)

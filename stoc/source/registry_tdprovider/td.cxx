@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: tdef.cxx,v $
+ *  $RCSfile: td.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,52 +65,23 @@
 
 namespace stoc_rdbtdp
 {
-TypedefTypeDescriptionImpl::~TypedefTypeDescriptionImpl()
+TypeDescriptionImpl::~TypeDescriptionImpl()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 // XTypeDescription
 //__________________________________________________________________________________________________
-TypeClass TypedefTypeDescriptionImpl::getTypeClass()
+TypeClass TypeDescriptionImpl::getTypeClass()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return TypeClass_TYPEDEF;
+    return _eTypeClass;
 }
 //__________________________________________________________________________________________________
-OUString TypedefTypeDescriptionImpl::getName()
+OUString TypeDescriptionImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return _aName;
-}
-
-// XIndirectTypeDescription
-//__________________________________________________________________________________________________
-Reference< XTypeDescription > TypedefTypeDescriptionImpl::getReferencedType()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (!_xRefTD.is() && _aRefName.getLength())
-    {
-        try
-        {
-            Reference< XTypeDescription > xRefTD;
-            if (_xTDMgr->getByHierarchicalName( _aRefName ) >>= xRefTD)
-            {
-                MutexGuard aGuard( _aMutex );
-                if (! _xRefTD.is())
-                {
-                    _xRefTD = xRefTD;
-                }
-                return _xRefTD;
-            }
-        }
-        catch (NoSuchElementException &)
-        {
-        }
-        // never try again, if no base td was found
-        _aRefName = OUString();
-    }
-    return _xRefTD;
 }
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdenum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
+#endif
 
 namespace stoc_rdbtdp
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-06 10:26:47 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <com/sun/star/lang/XComponent.idl>
 #endif
 
+#ifndef __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.idl>
+#endif
 
 //=============================================================================
 
@@ -109,14 +112,21 @@ service TypeDescriptionManager
         The returned values are of interface type <type>XTypeDescription</type>.
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
+
     /** You can manually add or remove a providers via this interface.
     */
     interface com::sun::star::container::XSet;
+
     /** Interface to signal shutdown to the manager.<br>
         This signals all providers to shut down, because usually each provider
         references its manager, listening for disposing events.
     */
     [optional] interface com::sun::star::lang::XComponent;
+
+    /** Interface for creating enumerations for type descriptions supported
+        by this <type>TypeDescriptionManager</type>
+    */
+    interface XTypeDescriptionEnumerationAccess;
 };
 
 //=============================================================================
@@ -126,6 +136,9 @@ service TypeDescriptionManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2002/11/06 10:26:47  dbo
+    #104560# docu
+
     Revision 1.8  2002/10/29 14:32:33  dbo
     #104560# docu
 

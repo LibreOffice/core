@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: tdef.cxx,v $
+ *  $RCSfile: tdmgr_common.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,60 +59,17 @@
  *
  ************************************************************************/
 
-#ifndef _STOC_RDBTDP_BASE_HXX
-#include "base.hxx"
+#ifndef _STOC_TDMGR_COMMON_HXX
+#define _STOC_TDMGR_COMMON_HXX
+
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
 #endif
 
-namespace stoc_rdbtdp
+namespace stoc_tdmgr
 {
-TypedefTypeDescriptionImpl::~TypedefTypeDescriptionImpl()
-{
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
+    extern rtl_StandardModuleCount g_moduleCount;
 
-// XTypeDescription
-//__________________________________________________________________________________________________
-TypeClass TypedefTypeDescriptionImpl::getTypeClass()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return TypeClass_TYPEDEF;
-}
-//__________________________________________________________________________________________________
-OUString TypedefTypeDescriptionImpl::getName()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return _aName;
-}
+} // namespace stoc_tdmgr
 
-// XIndirectTypeDescription
-//__________________________________________________________________________________________________
-Reference< XTypeDescription > TypedefTypeDescriptionImpl::getReferencedType()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (!_xRefTD.is() && _aRefName.getLength())
-    {
-        try
-        {
-            Reference< XTypeDescription > xRefTD;
-            if (_xTDMgr->getByHierarchicalName( _aRefName ) >>= xRefTD)
-            {
-                MutexGuard aGuard( _aMutex );
-                if (! _xRefTD.is())
-                {
-                    _xRefTD = xRefTD;
-                }
-                return _xRefTD;
-            }
-        }
-        catch (NoSuchElementException &)
-        {
-        }
-        // never try again, if no base td was found
-        _aRefName = OUString();
-    }
-    return _xRefTD;
-}
-
-}
-
-
+#endif /* _STOC_TDMGR_COMMON_HXX */
