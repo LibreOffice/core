@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:37:08 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,54 +385,38 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             pValue[1].Name = sFullPathProperty;
             pValue[1].Value <<= pTempEntry->sName;
 
-            Reference < XInputStream > xStream;
-            sal_Int32 nMagicalHackPos = 0, nMagicalHackSize = 0;
-            {
-                xStream = pStream->getRawStream();
-                if ( !xStream.is() )
-                {
-                    VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
-                    continue;
-                }
 
-                Sequence < sal_Int8 > aHeader ( 4 );
-                if ( xStream->readBytes ( aHeader, 4 ) == 4 )
-                {
-                    const sal_Int8 *pHeader = aHeader.getConstArray();
-                    sal_uInt32 nHeader = ( pHeader [0] & 0xFF )       |
-                                         ( pHeader [1] & 0xFF ) << 8  |
-                                         ( pHeader [2] & 0xFF ) << 16 |
-                                         ( pHeader [3] & 0xFF ) << 24;
-                    if ( nHeader == n_ConstHeader )
-                    {
-                        // this is one of our god-awful, but extremely devious hacks, everyone cheer
-                        pStream->SetToBeEncrypted ( sal_True );
-                        pStream->SetIsEncrypted ( sal_True );
-                        ZipFile::StaticFillData ( pStream->getEncryptionData(), nMagicalHackSize, xStream );
-                        // We'll want to skip the data we've just read, so calculate how much we just read
-                        // and remember it
-                        nMagicalHackPos = n_ConstHeaderSize + pStream->getSalt().getLength()
-                                                            + pStream->getInitialisationVector().getLength()
-                                                            + pStream->getDigest().getLength ();
-                        // it's already compressed and encrypted
-                        bToBeEncrypted = bToBeCompressed = sal_False;
-                    }
-                }
+            OSL_ENSURE( pStream->GetStreamMode() != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
+
+            sal_Bool bRawStream = sal_False;
+            if ( pStream->GetStreamMode() == PACKAGE_STREAM_DETECT )
+                bRawStream = pStream->ParsePackageRawStream();
+            else if ( pStream->GetStreamMode() == PACKAGE_STREAM_RAW )
+                bRawStream = sal_True;
+
+            Reference < XInputStream > xStream;
+            xStream = pStream->getRawData();
+
+            if ( !xStream.is() )
+            {
+                VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                continue;
             }
+
 
             Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
             if ( xSeek.is() )
             {
-                // If nMagicalHackPos is not zero, then we should be positioned
+                // If the stream is a raw one, then we should be positioned
                 // at the beginning of the actual data
-                if ( !bToBeCompressed || nMagicalHackPos )
+                if ( !bToBeCompressed || bRawStream )
                 {
-                    if ( !nMagicalHackPos )
-                        xSeek->seek ( 0 );
+                    xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
                     ImplSetStoredData ( *pTempEntry, xStream );
                 }
                 else if ( bToBeEncrypted )
                     pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
+
                 xSeek->seek ( 0 );
             }
             else
@@ -448,7 +432,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 }
             }
 
-            if ( bToBeEncrypted || nMagicalHackPos )
+            if ( bToBeEncrypted || bRawStream )
             {
                 if ( bToBeEncrypted )
                 {
@@ -486,9 +470,9 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 // Need to store the uncompressed size in the manifest
                 pValue[5].Name = sSizeProperty;
-                pValue[5].Value <<= nMagicalHackPos ? nMagicalHackSize : pTempEntry->nSize;
+                pValue[5].Value <<= bRawStream ? pStream->GetMagicalHackSize() : pTempEntry->nSize;
 
-                if ( nMagicalHackPos )
+                if ( bRawStream )
                 {
                     pValue[6].Name = sDigestProperty;
                     pValue[6].Value <<= pStream->getDigest();
@@ -497,7 +481,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if ( nMagicalHackPos ||
+            if ( bRawStream ||
                 ( pStream->IsPackageMember()          && !bToBeEncrypted &&
                 ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
                 ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) )
@@ -506,7 +490,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 // to get a new version of it as we can't seek backwards.
                 if ( pStream->IsPackageMember() )
                 {
-                    xStream = pStream->getRawStream();
+                    xStream = pStream->getRawData();
                     if ( !xStream.is() )
                     {
                         // Make sure that we actually _got_ a new one !
@@ -517,8 +501,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 try
                 {
-                    if ( nMagicalHackPos )
-                        xStream->skipBytes( nMagicalHackPos );
+                    if ( bRawStream )
+                        xStream->skipBytes( pStream->GetMagicalHackPos() );
 
                     rZipOut.putNextEntry ( *(pTempEntry.get()), pStream->getEncryptionData(), sal_False );
                     Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
@@ -546,6 +530,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             }
             else
             {
+                // This stream is defenitly not a raw stream
+
                 // If it's a PackageMember, then our previous reference held a 'raw' stream
                 // so we need to re-get it, unencrypted, uncompressed and positioned at the
                 // beginning of the stream
@@ -559,10 +545,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         continue;
                     }
                 }
-
-                // skip the magic header when generating the CRC and writing the stream
-                if ( nMagicalHackPos )
-                    xStream->skipBytes ( nMagicalHackPos );
 
                 if ( bToBeCompressed )
                 {
@@ -581,11 +563,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         rZipOut.write(aSeq, 0, nLength);
                     }
                     while ( nLength == n_ConstBufferSize );
-                    if ( !pStream->IsPackageMember() )
-                    {
-                        xStream->closeInput();
-                        pStream->SetPackageMember ( sal_True );
-                    }
 
                     rZipOut.closeEntry();
                 }
@@ -599,7 +576,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
-                if ( bToBeEncrypted && !nMagicalHackPos )
+
+                if ( bToBeEncrypted )
                 {
                     pValue[6].Name = sDigestProperty;
                     pValue[6].Value <<= pStream->getDigest();
@@ -607,12 +585,21 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 }
             }
 
-            // Then copy it back afterwards...
-            ZipPackageFolder::copyZipEntry ( pStream->aEntry, *pTempEntry );
-            // all the dangerous stuff has passed, so we can release pTempEntry
-            pTempEntry.release();
-            pStream->aEntry.sName = rShortName;
-            pStream->aEntry.nOffset *= -1;
+            if( !bWritingFailed )
+            {
+                if ( !pStream->IsPackageMember() )
+                {
+                    xStream->closeInput();
+                    pStream->SetPackageMember ( sal_True );
+                }
+
+                // Then copy it back afterwards...
+                ZipPackageFolder::copyZipEntry ( pStream->aEntry, *pTempEntry );
+                // all the dangerous stuff has passed, so we can release pTempEntry
+                pTempEntry.release();
+                pStream->aEntry.sName = rShortName;
+                pStream->aEntry.nOffset *= -1;
+            }
         }
         rManList.push_back (aPropSet);
     }
