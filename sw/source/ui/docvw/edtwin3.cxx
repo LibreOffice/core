@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-03-08 14:38:45 $
+ *  last change: $Author: os $ $Date: 2002-06-10 11:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,9 +247,13 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    SwWrtShell &rSh = GetView().GetWrtShell();
-    BOOL bViewWasLocked = rSh.IsViewLocked(), bUnlockPaint = FALSE;
-    rSh.LockView( TRUE );
+    SwWrtShell* pSh = GetView().GetWrtShellPtr();
+    //#99906#   DataChanged() is sometimes called prior to creating
+    //          the SwWrtShell
+    if(!pSh)
+        return;
+    BOOL bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = FALSE;
+    pSh->LockView( TRUE );
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
@@ -259,7 +263,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         // den Settings abgefragt werden.
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
-            rSh.LockPaint();
+            pSh->LockPaint();
             bUnlockPaint = TRUE;
             GetView().InvalidateBorder();               //Scrollbarbreiten
         }
@@ -269,14 +273,14 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_DISPLAY:
     case DATACHANGED_FONTS:
     case DATACHANGED_FONTSUBSTITUTION:
-        rSh.LockPaint();
+        pSh->LockPaint();
         bUnlockPaint = TRUE;
         GetView().GetDocShell()->UpdateFontList();  //z.B. Druckerwechsel
         break;
     }
-    rSh.LockView( bViewWasLocked );
+    pSh->LockView( bViewWasLocked );
     if( bUnlockPaint )
-        rSh.UnlockPaint();
+        pSh->UnlockPaint();
 }
 
 
