@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:28:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,18 +355,6 @@ SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
 
 sal_Bool SwLinePortion::Check( SvStream &, SwTxtSizeInfo & ) //$ ostream
 {
-#ifdef USED
-    SwPosSize aSize( GetTxtSize( rInfo ) );
-    if( Width() != aSize.Width() )
-    {
-        CONSTCHAR( pDbgTxt, "Error in width of SwLinePortion: " );
-        rOs << pDbgTxt << endl;
-        operator<<( rOs );
-        rOs << endl;
-        rOs << "Had: " << Width() << " And: " << aSize.Width();
-        return sal_False;
-    }
-#endif /* USED */
     return sal_True;
 }
 #endif
