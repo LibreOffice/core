@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCollator.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:43:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,19 @@
 
 module com { module sun { module star { module i18n {
 
-/** Interface for collation algorithms used in sorting.
+/** provides locale-sensitive collation algorithms for string comparison.
+
 */
 published interface XCollator: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Compare 2 substrings.
+    /** Compare 2 substrings in specific locale and algorithm.
 
         @param aStr1
             First string.
 
         @param nOff1
-            Offset (from 0) of the first substring.
+            Offset (from 0) of the first string.
 
         @param nLen1
             Length (from offset) of the first substring.
@@ -88,7 +89,7 @@ published interface XCollator: com::sun::star::uno::XInterface
             Second string
 
         @param nOff2
-            Offset (from 0) of the second substring.
+            Offset (from 0) of the second string.
 
         @param nLen2
             Length (from offset) of the second substring.
@@ -102,7 +103,7 @@ published interface XCollator: com::sun::star::uno::XInterface
                             [in] string aStr2, [in] long nOff2, [in] long nLen2 );
 
     //-------------------------------------------------------------------------
-    /** Compare 2 strings.
+    /** Compare 2 strings in specific locale and algorithm.
 
         @param aStr1
             First string.
@@ -118,7 +119,8 @@ published interface XCollator: com::sun::star::uno::XInterface
     long compareString( [in] string aStr1, [in] string aStr2 );
 
     //-------------------------------------------------------------------------
-    /** Load the default collator.
+    /** Load the collator with default algorithm defined in
+        locale data.
 
         @param aLocale
             The locale for this collator.
@@ -127,16 +129,18 @@ published interface XCollator: com::sun::star::uno::XInterface
             A mask of <type>CollatorOptions</type>.
 
         @returns
-            TODO
+            Returns 0 when loading was successful,
+            otherwise throws runtime exception. In fact the return value
+            should be ignored and the exception be caught instead.
     */
     long loadDefaultCollator(   [in] ::com::sun::star::lang::Locale aLocale,
                                 [in] long nCollatorOptions );
 
     //-------------------------------------------------------------------------
-    /** Load a particular collator algorithm.
+    /** Load a particular collator algorithm for the locale.
 
         @param aAlgorithmName
-            Fhe algorithm to load.
+            The algorithm to load.
 
         @param aLocale
             The locale for this collator.
@@ -145,7 +149,8 @@ published interface XCollator: com::sun::star::uno::XInterface
             A mask of <type>CollatorOptions</type>.
 
         @returns
-            TODO
+            Returns 0 when loading was successful,
+            otherwise throws runtime exception.
     */
     long loadCollatorAlgorithm( [in] string aAlgorithmName,
                                 [in] ::com::sun::star::lang::Locale aLocale,
