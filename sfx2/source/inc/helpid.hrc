@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: pb $ $Date: 2000-10-11 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,8 +329,16 @@
 #define HID_CNT_SENT_VIEW_SENT_ARTICLES             (HID_SFX_START + 263)
 #define HID_CNT_SENT_VIEW_UNSENT_ARTICLES           (HID_SFX_START + 264)
 #define HID_CNT_SENT_VIEW_MARKED_ARTICLES           (HID_SFX_START + 265)
+#define HID_MAILWIN_SEND_BUTTON                     (HID_SFX_START + 266)
+#define HID_MAILWIN_CLOSE_BUTTON                    (HID_SFX_START + 267)
+#define HID_MAILWIN_ROLE_BOX                        (HID_SFX_START + 268)
+#define HID_MAILWIN_ADDRESS_EDIT                    (HID_SFX_START + 269)
+#define HID_MAILWIN_ADDRESS_BOX                     (HID_SFX_START + 270)
+#define HID_MAILWIN_SUBJECT_EDIT                    (HID_SFX_START + 271)
+#define HID_MAILWIN_FROM_EDIT                       (HID_SFX_START + 272)
+#define HID_MAILWIN_PRIO_BOX                        (HID_SFX_START + 273)
 
-#define ACT_SFX_HID_END     HID_CNT_SENT_VIEW_MARKED_ARTICLES
+#define ACT_SFX_HID_END     HID_MAILWIN_PRIO_BOX
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 

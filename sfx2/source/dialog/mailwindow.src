@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:03:48 $
+ *  last change: $Author: pb $ $Date: 2000-10-11 13:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "dialog.hrc"
+#include "helpid.hrc"
 #include "mailwindow.hrc"
 
 Window RID_MAIL_WINDOW
@@ -70,6 +71,7 @@ Window RID_MAIL_WINDOW
     DialogControl = TRUE ;
     PushButton PB_MAILWIN_SEND
     {
+        HelpId = HID_MAILWIN_SEND_BUTTON;
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Senden";
@@ -96,6 +98,7 @@ Window RID_MAIL_WINDOW
     };
     PushButton PB_MAILWIN_CLOSE
     {
+        HelpId = HID_MAILWIN_CLOSE_BUTTON;
         Pos = MAP_APPFONT( 6, 23 );
         Size = MAP_APPFONT( 50, 14 );
         Text = "S~chlieﬂen";
@@ -122,6 +125,7 @@ Window RID_MAIL_WINDOW
     };
     ListBox LB_MAILWIN_ROLE
     {
+        HelpId = HID_MAILWIN_ROLE_BOX;
         Border = TRUE ;
         Pos = MAP_APPFONT( 62, 6 );
         Size = MAP_APPFONT( 42, 30 );
@@ -138,129 +142,131 @@ Window RID_MAIL_WINDOW
             < "Copy" ; 2 ; > ;
             < "Blind copy" ; 3 ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "An" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blindkopie" ; 3 ; > ;
-    };
-    StringList [ english_us ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "To" ; 1 ; > ;
-        < "Copy" ; 2 ; > ;
-        < "Blind Copy" ; 3 ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Copy" ; 2 ; > ;
+            < "Blind Copy" ; 3 ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Para" ; 1 ; > ;
-        < "CÛpia" ; 2 ; > ;
-        < "Cco." ; 3 ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "CÛpia" ; 2 ; > ;
+            < "Cco." ; 3 ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "An" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blindkopie" ; 3 ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "–ÒÔÚ" ; 1 ; > ;
-        < "¡ÌÙﬂ„Ò·ˆÔ" ; 2 ; > ;
-        < "…‰È·ﬂÙÂÒÁ ÍÔÈÌÔÔﬂÁÛÁ" ; 3 ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "¡ÌÙﬂ„Ò·ˆÔ" ; 2 ; > ;
+            < "…‰È·ﬂÙÂÒÁ ÍÔÈÌÔÔﬂÁÛÁ" ; 3 ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Aan" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blinde kopie" ; 3 ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blinde kopie" ; 3 ; > ;
+        };
+        StringList [ french ] =
+        {
             < "¿" ; 1 ; > ;
-        < "Copie" ; 2 ; > ;
-        < "Copie cachÈe" ; 3 ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Copie" ; 2 ; > ;
+            < "Copie cachÈe" ; 3 ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "A" ; 1 ; > ;
-        < "Copia" ; 2 ; > ;
-        < "CCC" ; 3 ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Copia" ; 2 ; > ;
+            < "CCC" ; 3 ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "An" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blindkopie" ; 3 ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Til" ; 1 ; > ;
-        < "Kopi" ; 2 ; > ;
-        < "Blindkopi" ; 3 ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "Kopi" ; 2 ; > ;
+            < "Blindkopi" ; 3 ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Till" ; 1 ; > ;
-        < "Kopia" ; 2 ; > ;
-        < "Blindkopia" ; 3 ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Kopia" ; 2 ; > ;
+            < "Blindkopia" ; 3 ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "An" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blindkopie" ; 3 ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "An" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blindkopie" ; 3 ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "à∂êÊ" ; 1 ; > ;
-        < "CC" ; 2 ; > ;
-        < "BCC" ; 3 ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "CC" ; 2 ; > ;
+            < "BCC" ; 3 ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "An" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blindkopie" ; 3 ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < " ’º˛»À" ; 1 ; > ;
-        < "≥≠ÀÕ" ; 2 ; > ;
-        < "√‹≥≠" ; 3 ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "≥≠ÀÕ" ; 2 ; > ;
+            < "√‹≥≠" ; 3 ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "¶¨•Û™Ã" ; 1 ; > ;
-        < "ß€∞e" ; 2 ; > ;
-        < "±Kß€" ; 3 ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "ß€∞e" ; 2 ; > ;
+            < "±Kß€" ; 3 ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "An" ; 1 ; > ;
-        < "Kopie" ; 2 ; > ;
-        < "Blindkopie" ; 3 ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "≈·Ï" ; 1 ; > ;
-        < "‰”Œ…" ; 2 ; > ;
-        < "‰”Œ… ⁄„Ì«¡" ; 3 ; > ;
-    };
+            < "‰”Œ…" ; 2 ; > ;
+            < "‰”Œ… ⁄„Ì«¡" ; 3 ; > ;
+        };
     };
     Edit ED_MAILWIN_ROLE
     {
+        HelpId = HID_MAILWIN_ADDRESS_EDIT;
         Border = TRUE;
         Pos = MAP_APPFONT( 107, 6 );
         Size = MAP_APPFONT( 210, 12 );
     };
     ListBox LB_MAILWIN_ADDRESS
     {
+        HelpId = HID_MAILWIN_ADDRESS_BOX;
         Border = TRUE ;
         Pos = MAP_APPFONT( 107, 21 );
         Size = MAP_APPFONT( 210, 30 );
@@ -293,6 +299,7 @@ Window RID_MAIL_WINDOW
     };
     Edit ED_MAILWIN_SUBJECT
     {
+        HelpId = HID_MAILWIN_SUBJECT_EDIT;
         Border = TRUE;
         Pos = MAP_APPFONT( 107, 54 );
         Size = MAP_APPFONT( 210, 12 );
@@ -324,6 +331,7 @@ Window RID_MAIL_WINDOW
     };
     Edit ED_MAILWIN_FROM
     {
+        HelpId = HID_MAILWIN_FROM_EDIT;
         Border = TRUE;
         Pos = MAP_APPFONT( 107, 69 );
         Size = MAP_APPFONT( 120, 12 );
@@ -356,6 +364,7 @@ Window RID_MAIL_WINDOW
     };
     ListBox LB_MAILWIN_PRIO
     {
+        HelpId = HID_MAILWIN_PRIO_BOX;
         Border = TRUE;
         Pos = MAP_APPFONT( 266, 69 );
         Size = MAP_APPFONT( 51, 48 );
@@ -376,158 +385,158 @@ Window RID_MAIL_WINDOW
             < "Low" ; 4 ; > ;
             < "Lowest" ; 5 ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Sehr hoch" ; 1 ; > ;
-        < "Hoch" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Niedrig" ; 4 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
-    };
-    StringList [ english_us ] =
-    {
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "Urgent" ; 1 ; > ;
-        < "Important" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Low" ; 4 ; > ;
-        < "Lowest" ; 5 ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Important" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Low" ; 4 ; > ;
+            < "Lowest" ; 5 ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "Urgente" ; 1 ; > ;
-        < "Importante" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Baixa" ; 4 ; > ;
-        < "Muito baixa" ; 5 ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Importante" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Baixa" ; 4 ; > ;
+            < "Muito baixa" ; 5 ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "Sehr hoch" ; 1 ; > ;
-        < "Hoch" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Niedrig" ; 4 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "–ÔÎ˝ ı¯ÁÎﬁ" ; 1 ; > ;
-        < "’¯ÁÎﬁ" ; 2 ; > ;
-        < " ·ÌÔÌÈÍﬁ" ; 3 ; > ;
-        < "◊·ÏÁÎﬁ" ; 4 ; > ;
-        < "–ÔÎ˝ ˜·ÏÁÎﬁ" ; 5 ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "’¯ÁÎﬁ" ; 2 ; > ;
+            < " ·ÌÔÌÈÍﬁ" ; 3 ; > ;
+            < "◊·ÏÁÎﬁ" ; 4 ; > ;
+            < "–ÔÎ˝ ˜·ÏÁÎﬁ" ; 5 ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "dringend" ; 1 ; > ;
-        < "belangrijk" ; 2 ; > ;
-        < "normaal" ; 3 ; > ;
-        < "laag" ; 4 ; > ;
-        < "zeer laag" ; 5 ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "belangrijk" ; 2 ; > ;
+            < "normaal" ; 3 ; > ;
+            < "laag" ; 4 ; > ;
+            < "zeer laag" ; 5 ; > ;
+        };
+        StringList [ french ] =
+        {
             < "TrËs ÈlevÈe" ; 1 ; > ;
-        < "…levÈe" ; 2 ; > ;
-        < "Normale" ; 3 ; > ;
-        < "Faible" ; 4 ; > ;
-        < "TrËs faible" ; 5 ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "…levÈe" ; 2 ; > ;
+            < "Normale" ; 3 ; > ;
+            < "Faible" ; 4 ; > ;
+            < "TrËs faible" ; 5 ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "Muy alta" ; 1 ; > ;
-        < "Alta" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Baja" ; 4 ; > ;
-        < "Muy baja" ; 5 ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "Alta" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Baja" ; 4 ; > ;
+            < "Muy baja" ; 5 ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Sehr hoch" ; 1 ; > ;
-        < "Hoch" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Niedrig" ; 4 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Meget h¯j" ; 1 ; > ;
-        < "H¯j" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Lav" ; 4 ; > ;
-        < "Meget lav" ; 5 ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "H¯j" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Lav" ; 4 ; > ;
+            < "Meget lav" ; 5 ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Mycket hˆg" ; 1 ; > ;
-        < "Hˆg" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "LÂg" ; 4 ; > ;
-        < "Mycket lÂg" ; 5 ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Hˆg" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "LÂg" ; 4 ; > ;
+            < "Mycket lÂg" ; 5 ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Sehr hoch" ; 1 ; > ;
-        < "Hoch" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Niedrig" ; 4 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "Sehr hoch" ; 1 ; > ;
-        < "Hoch" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Niedrig" ; 4 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "çÇÇ¢" ; 1 ; > ;
-        < "Ç‚Ç‚çÇÇ¢" ; 2 ; > ;
-        < "ïWèÄ" ; 3 ; > ;
-        < "Ç‚Ç‚í·Ç¢" ; 4 ; > ;
-        < "í·Ç¢" ; 5 ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "Ç‚Ç‚çÇÇ¢" ; 2 ; > ;
+            < "ïWèÄ" ; 3 ; > ;
+            < "Ç‚Ç‚í·Ç¢" ; 4 ; > ;
+            < "í·Ç¢" ; 5 ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "Sehr hoch" ; 1 ; > ;
-        < "Hoch" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Niedrig" ; 4 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "∫‹∏ﬂ" ; 1 ; > ;
-        < "∏ﬂ" ; 2 ; > ;
-        < "∆’Õ®" ; 3 ; > ;
-        < "µÕ" ; 4 ; > ;
-        < "∫‹µ◊" ; 5 ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "∏ﬂ" ; 2 ; > ;
+            < "∆’Õ®" ; 3 ; > ;
+            < "µÕ" ; 4 ; > ;
+            < "∫‹µ◊" ; 5 ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "´‹∞™" ; 1 ; > ;
-        < "∞™" ; 2 ; > ;
-        < "§@ØÎ" ; 3 ; > ;
-        < "ßC" ; 4 ; > ;
-        < "´‹ßC" ; 5 ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "∞™" ; 2 ; > ;
+            < "§@ØÎ" ; 3 ; > ;
+            < "ßC" ; 4 ; > ;
+            < "´‹ßC" ; 5 ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Sehr hoch" ; 1 ; > ;
-        < "Hoch" ; 2 ; > ;
-        < "Normal" ; 3 ; > ;
-        < "Niedrig" ; 4 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "«·√⁄·Ï" ; 1 ; > ;
-        < "⁄«·Ì" ; 2 ; > ;
-        < "⁄«œÌ" ; 3 ; > ;
-        < "„‰Œ›÷" ; 4 ; > ;
-        < "«·√œ‰Ï" ; 5 ; > ;
-    };
+            < "⁄«·Ì" ; 2 ; > ;
+            < "⁄«œÌ" ; 3 ; > ;
+            < "„‰Œ›÷" ; 4 ; > ;
+            < "«·√œ‰Ï" ; 5 ; > ;
+        };
     };
     Image IMG_MAILWIN_SEND
     {
