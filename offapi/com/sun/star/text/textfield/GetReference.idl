@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GetReference.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of a reference field.
     @see com::sun::star::text::TextField
 */
-service GetReference
+published service GetReference
 {
     service  com::sun::star::text::TextField;
 
