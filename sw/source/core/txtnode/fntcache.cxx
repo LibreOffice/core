@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 10:14:26 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 12:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     const BOOL bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
 
 #ifdef BIDI
-    const BOOL bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft();
+    const BOOL bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
+                            ! rInf.IsIgnoreFrmRTL();
     const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
     const BOOL bBidiPor = ( bSwitchL2R == ( TEXT_LAYOUT_COMPLEX_DISABLED == nMode ) );
 
