@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-28 14:07:00 $
+ *  last change: $Author: ama $ $Date: 2000-09-29 13:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,17 +243,19 @@ USHORT lcl_Script( const xub_Unicode aChar )
         nRet = ScriptType::LATIN;
     else if( 'a' <= aChar && aChar <= 'z' )
         nRet = ScriptType::ASIAN;
+    else if( '0' <= aChar && aChar <= '9' )
+        nRet = ScriptType::COMPLEX;
     return nRet;
 }
 #endif
 
-BOOL SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
+BYTE SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
 {
-    BOOL bRet = FALSE;
+    BYTE nRet = 0;
     const String& rTxt = rInf.GetTxt();
     rFull += rInf.GetIdx();
 #ifdef DEBUG
-    static BOOL bTest = FALSE;
+    static BOOL bTestCJK = FALSE;
 #endif
     if( rFull > rTxt.Len() )
         rFull = rTxt.Len();
@@ -261,12 +263,13 @@ BOOL SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
     {
         BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         xub_StrLen nChg = rInf.GetIdx();
+        USHORT nScript;
 #ifdef DEBUG
-        if( bTest )
+        if( bTestCJK )
         {
             while( ++nChg < rFull )
             {
-                USHORT nScript = lcl_Script( rTxt.GetChar( nChg ) );
+                nScript = lcl_Script( rTxt.GetChar( nChg ) );
                 BYTE nScr = nActual;
                 switch ( nScript ) {
                     case ScriptType::LATIN : nScr = SW_LATIN; break;
@@ -280,19 +283,27 @@ BOOL SwFldPortion::ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull )
         else
 #endif
         {
-            USHORT nScript = ScriptType::LATIN;
+            nScript = ScriptType::LATIN;
             if( nActual )
                 nScript = nActual==SW_CJK ? ScriptType::ASIAN : ScriptType::COMPLEX;
             nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
         }
         if( rFull > nChg )
         {
-            bRet = TRUE;
+            nRet = nActual;
+#ifdef DEBUG
+            if( !bTestCJK )
+#endif
+            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+            if( ScriptType::ASIAN == nScript )
+                nRet += SW_CJK;
+            else if( ScriptType::COMPLEX == nScript )
+                nRet += SW_CTL;
             rFull = nChg;
         }
     }
     rFull -= rInf.GetIdx();
-    return bRet;
+    return nRet;
 }
 
 void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
@@ -303,8 +314,8 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         USHORT nScript;
 #ifdef DEBUG
-        static BOOL bTest = FALSE;
-        if( bTest )
+        static BOOL bTestCJK = FALSE;
+        if( bTestCJK )
         {
             nScript = lcl_Script( aTxt.GetChar(0) );
             xub_StrLen nChg = 0;
@@ -370,7 +381,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
                 --nFullLen;
         }
-        BOOL bScriptChg = ScriptChange( rInf, nFullLen );
+        BYTE nScriptChg = ScriptChange( rInf, nFullLen );
         rInf.SetLen( nFullLen );
         if( pFnt )
             pFnt->GoMagic( rInf.GetVsh(), pFnt->GetActual() );
@@ -450,8 +461,19 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 nNextOffset += nNextOfst;
                 pFld->SetNextOffset( nNextOffset );
                 rInf.SetRest( pFld );
-                if( bScriptChg )
-                    new SwKernPortion( *this, 284 );
+                if( nScriptChg )
+                {
+                    const SwDoc *pDoc = rInf.GetTxtFrm()->GetTxtNode()->GetDoc();
+                    USHORT nDist;
+                    if( SW_CJK == nScriptChg )
+                        nDist = pDoc->GetLatin_CJK();
+                    else if( SW_CTL == nScriptChg )
+                        nDist = pDoc->GetLatin_CTL();
+                    else
+                        nDist = pDoc->GetCJK_CTL();
+                    if( nDist )
+                        new SwKernPortion( *this, nDist );
+                }
             }
         }
         // 7634 mit ASSERT: bad ascent

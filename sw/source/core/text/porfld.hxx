@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-28 14:06:11 $
+ *  last change: $Author: ama $ $Date: 2000-09-29 13:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ protected:
 
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     inline const SwFont *GetFont() const { return pFnt; }
-    BOOL ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull );
+    BYTE ScriptChange( const SwTxtSizeInfo &rInf, xub_StrLen& rFull );
 public:
     SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0 );
     ~SwFldPortion();

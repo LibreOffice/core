@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-27 11:53:31 $
+ *  last change: $Author: ama $ $Date: 2000-09-29 13:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
     }
 
 #ifdef DEBUG
-    static BOOL bTest = TRUE;
-    if( bTest )
+    static BOOL bTestCJK = FALSE;
+    if( bTestCJK )
     {
         const String& rTxt = rTxtNode.GetTxt();
         xub_StrLen nCnt = 0;
@@ -163,6 +163,8 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
                 nNxt = ScriptType::LATIN;
             else if( 'a' <= aChar && aChar <= 'z' )
                 nNxt = ScriptType::ASIAN;
+            else if( '0' <= aChar && aChar <= '9' )
+                nNxt = ScriptType::COMPLEX;
             if( nNxt != nScript )
             {
                 aScriptChg.Insert( nI, nCnt );

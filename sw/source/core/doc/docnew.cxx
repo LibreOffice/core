@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: ama $ $Date: 2000-09-29 13:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ SwDoc::SwDoc() :
     pAutoFmtRedlnComment( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
     nAutoFmtRedlnCommentNo( 0 ),
+    nLatin_CJK( 0 ), nLatin_CTL( 0 ), nCJK_CTL( 0 ),
     n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0 ), n8Dummy2( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
     nFldUpdMode( AUTOUPD_GLOBALSETTING )

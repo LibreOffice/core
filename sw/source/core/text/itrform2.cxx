@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-28 13:55:03 $
+ *  last change: $Author: ama $ $Date: 2000-09-29 13:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
+#endif
 #ifndef _LAYFRM_HXX
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
 #endif
@@ -131,6 +134,9 @@
 #ifndef _REDLNITR_HXX
 #include <redlnitr.hxx>     // SwRedlineItr
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>          // SwDoc
+#endif
 
 #ifdef DEBUG
 #ifndef _NDTXT_HXX
@@ -138,7 +144,7 @@
 #endif
 #endif
 
-
+using namespace ::com::sun::star::text;
 
 #define MAX_TXTPORLEN 300
 
@@ -719,9 +725,24 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 nLstActual = rInf.GetFont()->GetActual();
             if( nNxtActual != nLstActual )
             {
-                SwKernPortion* pKrn = new SwKernPortion( *rInf.GetLast(), 284 );
-                rInf.GetLast()->SetPortion( NULL );
-                InsertPortion( rInf, pKrn );
+                const SwDoc *pDoc = GetTxtFrm()->GetTxtNode()->GetDoc();
+                USHORT nDist;
+                if( SW_LATIN == nNxtActual || SW_LATIN == nLstActual )
+                {
+                    if( SW_CJK == nNxtActual || SW_CJK == nLstActual )
+                        nDist = pDoc->GetLatin_CJK();
+                    else
+                        nDist = pDoc->GetLatin_CTL();
+                }
+                else
+                    nDist = pDoc->GetCJK_CTL();
+                if( nDist )
+                {
+                    SwKernPortion* pKrn =
+                        new SwKernPortion(*rInf.GetLast(), nDist);
+                    rInf.GetLast()->SetPortion( NULL );
+                    InsertPortion( rInf, pKrn );
+                }
             }
         }
 
@@ -754,7 +775,22 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 // two different scripts. This value must be replaced by
                 // the right document setting, perhaps depending on both scripts
                 if( nTmp == NextScriptChg( nTmp - 1 ) )
-                    new SwKernPortion( *pPor, 284 );
+                {
+                    const SwDoc *pDoc = GetTxtFrm()->GetTxtNode()->GetDoc();
+                    USHORT nDist;
+                    USHORT nScript = ScriptType( nTmp );
+                    if( SW_LATIN == nNxtActual || ScriptType::LATIN == nScript )
+                    {
+                        if( SW_CJK == nNxtActual || ScriptType::ASIAN==nScript )
+                            nDist = pDoc->GetLatin_CJK();
+                        else
+                            nDist = pDoc->GetLatin_CTL();
+                    }
+                    else
+                        nDist = pDoc->GetCJK_CTL();
+                    if( nDist )
+                        new SwKernPortion( *pPor, nDist );
+                }
             }
         }
 

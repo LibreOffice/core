@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-27 11:49:07 $
+ *  last change: $Author: ama $ $Date: 2000-09-29 13:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ private:
     xub_StrLen nStartIndex, nEndIndex, nPos;
     MSHORT nChgCnt;
     void SeekFwd( const xub_StrLen nPos );
-    USHORT ScriptType( const xub_StrLen nPos );
 
 protected:
     void Chg( SwTxtAttr *pHt );
@@ -112,6 +111,7 @@ protected:
     inline SwAttrIter() : pFnt(0), pLastOut(0), nChgCnt(0), pShell(0), pRedln(0)
         { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
           aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; }
+    USHORT ScriptType( const xub_StrLen nPos );
 
 public:
     // Konstruktor, Destruktor

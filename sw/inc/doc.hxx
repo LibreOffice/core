@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: ama $ $Date: 2000-09-29 13:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,9 @@ class SwDoc
                                     // verwaltet!
     sal_uInt16  nLinkUpdMode;           // UpdateMode fuer Links
     sal_uInt16  nFldUpdMode;            // Mode fuer Felder/Charts automatisch aktualisieren
+    sal_uInt16  nLatin_CJK;         // distance between Latin- and CJK-script
+    sal_uInt16  nLatin_CTL;         // distance between Latin- and CTL-script
+    sal_uInt16  nCJK_CTL;           // distance between CJK- and CTL-script
 
     SwRedlineMode eRedlineMode;     // aktueller Redline Modus
 
@@ -597,6 +600,10 @@ public:
     void SetLinkUpdMode( sal_uInt16 nMode )             { nLinkUpdMode = nMode; }
     // nur fuer den Writer, weil dieser das richtige Enum schreiben muss!
     sal_uInt16 _GetLinkUpdMode() const                  { return nLinkUpdMode; }
+
+    sal_uInt16  GetLatin_CJK() const { return nLatin_CJK; }
+    sal_uInt16  GetLatin_CTL() const { return nLatin_CTL; }
+    sal_uInt16  GetCJK_CTL() const { return nCJK_CTL; }
 
     inline sal_Bool IsInDtor() const { return bDtor; }
 
