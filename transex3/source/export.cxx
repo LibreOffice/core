@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-01 11:33:30 $
+ *  last change: $Author: nf $ $Date: 2001-06-06 08:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,9 @@ extern FILE *GetNextFile()
             sActFileName.ToLowerAscii();
 
             fprintf( stdout, "\nProcessing File %s ...\n", sFileName.GetBuffer());
+
+            sActFileName.SearchAndReplaceAll( "/", "\\" );
+
             if ( pExport ) {
                 // create instance of class export
                 pExport->Init();
