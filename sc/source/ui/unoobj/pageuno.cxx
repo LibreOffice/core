@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-27 11:11:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ScPageObj::~ScPageObj() throw()
 
 uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) const throw()
 {
-    uno::Reference<drawing::XShape> xShape = SvxFmDrawPage::_CreateShape( pObj );
+    uno::Reference<drawing::XShape> xShape(SvxFmDrawPage::_CreateShape( pObj ));
 
     new ScShapeObj( xShape );       // aggregates object and modifies xShape
 
@@ -99,7 +99,7 @@ uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) cons
 sal_Bool SAL_CALL ScPageObj::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr = rServiceName;
+    String aServiceStr(rServiceName);
     return aServiceStr.EqualsAscii( "com.sun.star.sheet.SpreadsheetDrawPage" );
 }
 
