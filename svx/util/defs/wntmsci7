@@ -23938,3 +23938,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?release@SvxShowCharSetVirtualAcc@svx@@WEI@AAXXZ
 ?release@SvxShowCharSetVirtualAcc@svx@@WEM@AAXXZ
 ?s_pType_drafts_com_sun_star_accessibility_XAccessibleTable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXAccessibleTable@accessibility@star@sun@com@drafts@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx2904625766@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx1010814556@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
