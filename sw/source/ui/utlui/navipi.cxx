@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 08:29:05 $
+ *  last change: $Author: os $ $Date: 2000-11-21 16:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,7 +1261,7 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
 {
     SwNavigationPI* pNavi  = new SwNavigationPI( pBindings, this, pParent );
     SetWindow( pNavi );
-    ::GetActiveView()->GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
+    pBindings->Invalidate(SID_NAVIGATOR);
     String sExtra = pInfo->aExtraString;
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
