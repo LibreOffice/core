@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:58:28 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,6 @@ namespace connectivity
             ::std::vector< ::rtl::OUString> m_aColumnRawNames;
             sal_Bool    setColumnAliases();
             void        fillColumns();
-            BOOL        CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
-            BOOL        WriteBuffer();
-            BOOL        UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
-            void        AllocBuffer();
             sal_Bool checkHeaderLine();
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> isUniqueByColumnName(const ::rtl::OUString& _rColName);
 
@@ -140,7 +136,7 @@ namespace connectivity
             void construct(); // can throw any exception
 
             virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
-            virtual sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool bIsTable,sal_Bool bRetrieveData);
+            virtual sal_Bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, sal_Bool bIsTable,sal_Bool bRetrieveData);
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
@@ -151,13 +147,7 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            BOOL DropImpl();
-            BOOL CreateImpl();
             String getEntry();
-
-            virtual BOOL InsertRow(OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
-            virtual BOOL DeleteRow(const OSQLColumns& _rCols);
-            virtual BOOL UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
         };
     }
 }
