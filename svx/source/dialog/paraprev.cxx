@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
+ *  last change: $Author: dr $ $Date: 2001-07-02 10:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,15 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
 
         aPnt.Y() += nH;
 
-        if ( 5 == i )
+        if ( (3 <= i) && (5 >= i) )
         {
-            long nLW = aLineSiz.Width() / 2;
+            long nLW;
+            switch( i )
+            {
+                case 3: nLW = aLineSiz.Width() * 8 / 10;    break;
+                case 4: nLW = aLineSiz.Width() * 9 / 10;    break;
+                case 5: nLW = aLineSiz.Width() / 2;         break;
+            }
 
             if ( nLW > aSiz.Width() )
                 nLW = aSiz.Width();
@@ -193,12 +199,30 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
                 case SVX_ADJUST_CENTER:
                     aPnt.X() += ( aSiz.Width() - nLW ) / 2;
                     break;
-                case SVX_ADJUST_BLOCK:
-                    break;
             }
-
-            if ( SVX_ADJUST_BLOCK != eAdjust )
-                aSiz.Width() = nLW;
+            if( SVX_ADJUST_BLOCK == eAdjust )
+            {
+                if( 5 == i )
+                {
+                    switch( eLastLine )
+                    {
+                        case SVX_ADJUST_LEFT:
+                            break;
+                        case SVX_ADJUST_RIGHT:
+                            aPnt.X() += ( aSiz.Width() - nLW );
+                            break;
+                        case SVX_ADJUST_CENTER:
+                            aPnt.X() += ( aSiz.Width() - nLW ) / 2;
+                            break;
+                        case SVX_ADJUST_BLOCK:
+                            nLW = aLineSiz.Width();
+                            break;
+                    }
+                }
+                else
+                    nLW = aLineSiz.Width();
+            }
+            aSiz.Width() = nLW;
         }
 
         Rectangle aRect( aPnt, aSiz );

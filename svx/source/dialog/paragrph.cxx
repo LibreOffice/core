@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: dr $ $Date: 2001-07-02 10:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,6 +1053,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aRight.SetClickHdl( aLink );
     aCenter.SetClickHdl( aLink );
     aJustify.SetClickHdl( aLink );
+    aLastLineLB.SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
 }
 
 /*-----------------16.01.97 19.33-------------------
@@ -1259,6 +1260,12 @@ IMPL_LINK( SvxParaAlignTabPage, AlignHdl_Impl, RadioButton*, pBtn )
     aLastLineFT.Enable(bJustify);
     aLastLineLB.Enable(bJustify);
     aExpandCB.Enable(bJustify);
+    UpdateExample_Impl(FALSE);
+    return 0;
+}
+
+IMPL_LINK( SvxParaAlignTabPage, LastLineHdl_Impl, ListBox*, pListBox )
+{
     UpdateExample_Impl(FALSE);
     return 0;
 }
