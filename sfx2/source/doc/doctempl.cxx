@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-21 15:53:28 $
+ *  last change: $Author: dv $ $Date: 2001-02-26 08:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ using namespace ucb;
 
 //========================================================================
 
-#define DONT_USE_HIERARCHY
+// #define DONT_USE_HIERARCHY
 
 #define HIERARCHIE_ROOT_URL     "vnd.sun.star.hier:/"
 #define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
