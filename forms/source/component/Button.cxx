@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 16:54:50 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 11:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,13 +156,13 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OButtonModel::getServiceName()
+::rtl::OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_COMMANDBUTTON; // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OImageModel::write(_rxOutStream);
 
@@ -176,7 +176,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 }
 
 //------------------------------------------------------------------------------
-void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OImageModel::read(_rxInStream);
 
@@ -282,7 +282,7 @@ Any SAL_CALL OButtonControl::queryAggregation(const Type& _rType) throw (Runtime
 
 // ActionListener
 //------------------------------------------------------------------------------
-void OButtonControl::actionPerformed(const ActionEvent& rEvent)
+void OButtonControl::actionPerformed(const ActionEvent& rEvent) throw ( ::com::sun::star::uno::RuntimeException)
 {
     // Asynchron fuer starutil::URL-Button
     sal_uInt32 n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
