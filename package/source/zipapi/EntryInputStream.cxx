@@ -1,11 +1,10 @@
-
 /*************************************************************************
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2001-03-08 16:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +69,7 @@
 using namespace rtl;
 using namespace com::sun::star;
 
-/** Provides access to the compressed data in a zipfile. Decompresses on the fly, but
- * does not currently support XSeekable into the compressed data stream.
+/** Provides access to the compressed data in a zipfile.
  *
  * 04/12/00 - uncompresses the stream into memory and seeks on it 'in memory'
  * This is a "temporary" fix which will be changed ASAP (read 2001)
@@ -90,7 +88,7 @@ EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInpu
 , nBegin( 0 )
 , nCurrent( 0 )
 , nEnd(nUncompressedSize)
-, aSequence ( static_cast < sal_Int32 > (nNewEnd - nNewBegin) )
+, aSequence ( 0 )
 , bReachEOF ( sal_False )
 , aInflater( sal_True )
 , aBuffer( static_cast < sal_Int32 > (nUncompressedSize) )
@@ -98,11 +96,13 @@ EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInpu
 {
     if (bDeflated)
     {
+        aSequence.realloc( static_cast < sal_Int32 > (nNewEnd - nNewBegin) );
         xSeek->seek(nNewBegin);
         xStream->readBytes(aSequence, static_cast < sal_Int32 > (nNewEnd - nNewBegin));
         aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32 > (nNewEnd - nNewBegin) );
         aInflater.doInflate(aBuffer);
         aInflater.end();
+        aSequence.realloc( 0 );
     }
     else
     {
@@ -114,6 +114,7 @@ EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInpu
 EntryInputStream::~EntryInputStream( void )
 {
 }
+/*
 void EntryInputStream::fill(void)
 {
     sal_Int64 nLength, nBytesToRead = aSequence.getLength();
@@ -126,6 +127,7 @@ void EntryInputStream::fill(void)
     nLength = xStream->readBytes(aSequence, static_cast < sal_Int32> (nBytesToRead));
     aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32> (nLength));
 }
+*/
 sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData,
                                         sal_Int32 nBytesToRead )
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
