@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 10:03:52 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 12:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,20 +66,9 @@
 #include "InlineContainer.hxx"
 #include "PropertyMapper.hxx"
 
-/*
-#ifndef _E3D_EXTRUD3D_HXX
-#include <svx/extrud3d.hxx>
-#endif
-*/
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-/*
-#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
-#include <com/sun/star/drawing/CameraGeometry.hpp>
-#endif
-*/
 #ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
 #endif
@@ -122,27 +111,6 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
-/*
-#ifndef _COM_SUN_STAR_DRAWING_TEXTUREMODE_HPP_
-#include <com/sun/star/drawing/TextureMode.hpp>
-#endif
-*/
-
-//only test
-/*
-#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
-#include <com/sun/star/awt/FontStrikeout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
-#include <com/sun/star/text/FontEmphasis.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
-#include <com/sun/star/container/XEnumeration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-*/
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -1329,19 +1297,36 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
+enum SymbolType { SYMBOL_SQUARE=0
+                 , SYMBOL_DIAMOND
+                 , SYMBOL_ARROW_DOWN
+                 , SYMBOL_ARROW_UP
+                 , SYMBOL_ARROW_RIGHT
+                 , SYMBOL_ARROW_LEFT
+                 , SYMBOL_BOWTIE
+                 , SYMBOL_SANDGLASS
+                 , SYMBOL_COUNT
+                  };
+
+sal_Int32 ShapeFactory::getSymbolCount()
+{
+    return SYMBOL_COUNT;
+}
+
 drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D& rPos
                                  , const drawing::Direction3D& rSize
-                                 , SymbolType eSymbolType )
+                                 , sal_Int32 nStandardSymbol )
 {
+    if(nStandardSymbol<0)
+        nStandardSymbol*=-1;
+    nStandardSymbol = nStandardSymbol%ShapeFactory::getSymbolCount();
+    SymbolType eSymbolType=static_cast<SymbolType>(nStandardSymbol);
+
     const double& fX = rPos.PositionX;
     const double& fY = rPos.PositionY;
 
     const double fWidthH  = rSize.DirectionX/2.0; //fWidthH stands for Half Width
     const double fHeightH = rSize.DirectionY/2.0; //fHeightH stands for Half Height
-
-    DBG_ASSERT(eSymbolType!=SYMBOL_NONE, "do not create a symbol with type SYMBOL_NONE");
-    if(eSymbolType==SYMBOL_NONE)
-        eSymbolType=SYMBOL_SQUARE;
 
     sal_Int32 nPointCount = 4; //all arrow symbols only need 4 points
     switch( eSymbolType )
@@ -1523,7 +1508,7 @@ uno::Reference< drawing::XShape >
                       const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
-                    , const SymbolType& eSymbolType )
+                    , sal_Int32 nStandardSymbol )
 {
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1539,7 +1524,7 @@ uno::Reference< drawing::XShape >
         try
         {
             drawing::PointSequenceSequence aPoints( PolyToPointSequence(
-                createPolyPolygon_Symbol( rPosition, rSize, eSymbolType ) ));
+                createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ));
 
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
@@ -1557,7 +1542,7 @@ uno::Reference< drawing::XShape >
         ShapeFactory::createSymbol3D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
-                    , const SymbolType& eSymbolType )
+                    , sal_Int32 nStandardSymbol )
 {
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1583,7 +1568,7 @@ uno::Reference< drawing::XShape >
 
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
-                , uno::makeAny( createPolyPolygon_Symbol( rPosition, rSize, eSymbolType ) ) );
+                , uno::makeAny( createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ) );
         }
         catch( uno::Exception& e )
         {

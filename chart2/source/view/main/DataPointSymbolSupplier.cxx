@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointSymbolSupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 17:53:58 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 12:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,9 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
 
     ShapeFactory aShapeFactory(xShapeFactory);
     drawing::Position3D  aPos(0,0,0);
-    for(sal_Int32 nS=1;nS<=8;nS++)
+    for(sal_Int32 nS=0;nS<ShapeFactory::getSymbolCount();nS++)
     {
-        SymbolType eSymbolType(static_cast<SymbolType>(nS));
-        aShapeFactory.createSymbol2D( xGroupShapes, aPos, rSize, eSymbolType );
+        aShapeFactory.createSymbol2D( xGroupShapes, aPos, rSize, nS );
     }
     return xGroupShapes;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 10:03:02 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 12:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,18 +88,6 @@ namespace chart
 //.............................................................................
 
 class Stripe;
-
-enum SymbolType { SYMBOL_NONE
-                 , SYMBOL_SQUARE
-                 , SYMBOL_DIAMOND
-                 , SYMBOL_ARROW_DOWN
-                 , SYMBOL_ARROW_UP
-                 , SYMBOL_ARROW_RIGHT
-                 , SYMBOL_ARROW_LEFT
-                 , SYMBOL_BOWTIE
-                 , SYMBOL_SANDGLASS
-                  };
-
 class ShapeFactory
 {
 public:
@@ -172,17 +160,19 @@ public:
         createArea2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygon);
 
+    static sal_Int32 getSymbolCount();
+
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createSymbol2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize
-                    , const SymbolType& eSymbolType );
+                    , sal_Int32 nStandardSymbol );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createSymbol3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize
-                    , const SymbolType& eSymbolType );
+                    , sal_Int32 nStandardSymbol );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget

@@ -654,7 +654,7 @@ void AreaChart::createShapes()
                                 {
                                     m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
                                             , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
-                                            , SymbolType(pSymbolProperties->nStandardSymbol) );
+                                            , pSymbolProperties->nStandardSymbol );
                                 }
                             }
                         }
