@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 06:32:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabPage TP_PRINT_OPTIONS
     Text [ ENGLISH ] = "Options" ;
     Text [ norwegian ] = "Options" ;
     Text [ italian ] = "Opzioni" ;
-    Text [ portuguese_brazilian ] = "Opções" ;
+    Text [ portuguese_brazilian ] = "Op??s" ;
     Text [ portuguese ] = "Opções" ;
     Text [ french ] = "Options" ;
     Text [ dutch ] = "Opties" ;
@@ -88,7 +88,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
         Text [ italian ] = "Contenuto" ;
-        Text [ portuguese_brazilian ] = "Conteúdo" ;
+        Text [ portuguese_brazilian ] = "Conte?o" ;
         Text [ portuguese ] = "Conteúdo" ;
         Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indhold" ;
@@ -99,7 +99,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ english_us ] = "Contents" ;
         Text[ chinese_simplified ] = "ÄÚÈİ";
         Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawartoœæ";
+        Text[ polish ] = "Zawarto?æ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -237,7 +237,7 @@ TabPage TP_PRINT_OPTIONS
         Text = "Ausgabequalität" ;
         Text [ ENGLISH ] = "Output quality" ;
         Text [ english_us ] = "Quality" ;
-        Text [ portuguese_brazilian ] = "Ausgabequalität" ;
+        Text [ portuguese_brazilian ] = "Ausgabequalit?t" ;
         Text [ swedish ] = "Utmatningskvalitet" ;
         Text [ danish ] = "Outputkvalitet" ;
         Text [ italian ] = "Qualità stampa" ;
@@ -247,7 +247,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Qualidade" ;
         Text[ chinese_simplified ] = "´òÓ¡µÄÖÊÁ¿";
         Text[ russian ] = "Êà÷åñòâî";
-        Text[ polish ] = "Jakoœæ";
+        Text[ polish ] = "Jako?æ";
         Text[ japanese ] = "ˆóü‰æ‘œ•i¿";
         Text[ chinese_traditional ] = "¦C¦L«~½è";
         Text[ arabic ] = "ÇáäæÚíÉ";
@@ -276,7 +276,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "•W€";
         Text[ chinese_traditional ] = "¼Ğ·Ç";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -305,7 +305,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Tons de cinzento" ;
         Text[ chinese_simplified ] = "»Ò¶È";
         Text[ russian ] = "Îòòåíêè ñåğîãî";
-        Text[ polish ] = "Odcienie szaroœci";
+        Text[ polish ] = "Odcienie szaro?ci";
         Text[ japanese ] = "¸ŞÚ°½¹°Ù";
         Text[ chinese_traditional ] = "¦Ç¶¥";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
@@ -324,7 +324,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Black & White" ;
         Text [ english_us ] = "Black & White" ;
         TabStop = TRUE ;
-        Text [ portuguese_brazilian ] = "Schwarzweiß" ;
+        Text [ portuguese_brazilian ] = "Schwarzwei?" ;
         Text [ swedish ] = "Svartvitt" ;
         Text [ danish ] = "Sort-hvid" ;
         Text [ italian ] = "Bianco e nero" ;
@@ -382,7 +382,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Page~name" ;
         Text [ norwegian ] = "Side~navn" ;
         Text [ italian ] = "Nome pagina" ;
-        Text [ portuguese_brazilian ] = "Nome da ~página" ;
+        Text [ portuguese_brazilian ] = "Nome da ~p?gina" ;
         Text [ portuguese ] = "Nome da ~página" ;
         Text [ finnish ] = "~Sivun nimi" ;
         Text [ danish ] = "Sidenavn" ;
@@ -507,7 +507,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Page options" ;
         Text [ norwegian ] = "Side valg" ;
         Text [ italian ] = "Opzioni pagina" ;
-        Text [ portuguese_brazilian ] = "Opções da página" ;
+        Text [ portuguese_brazilian ] = "Op??s da p?gina" ;
         Text [ portuguese ] = "Opções da página" ;
         Text [ finnish ] = "Sivuasetukset" ;
         Text [ danish ] = "Sideindstillinger" ;
@@ -546,7 +546,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese_brazilian ] = "St~andard" ;
         Text[ chinese_simplified ] = "±ê×¼(~S)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy~œlnie";
+        Text[ polish ] = "Domy~?lnie";
         Text[ japanese ] = "Šù’è(~S)";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~S)";
         Text[ arabic ] = "ŞíÇÓí";
@@ -565,7 +565,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "~Fit to page size" ;
         Text [ norwegian ] = "~Tilpass sidestørrelse" ;
         Text [ italian ] = "Dimensione pagina" ;
-        Text [ portuguese_brazilian ] = "~Encaixar no tamanho da página" ;
+        Text [ portuguese_brazilian ] = "~Encaixar no tamanho da p?gina" ;
         Text [ portuguese ] = "~Adaptar ao tamanho da página" ;
         Text [ finnish ] = "~Sovita sivulle" ;
         Text [ danish ] = "Tilpas til siden" ;
@@ -689,7 +689,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ swedish ] = "~Baksida" ;
         Text [ danish ] = "Bagside" ;
         Text [ portuguese ] = "~Verso página" ;
-        Text [ portuguese_brazilian ] = "~Rückseite" ;
+        Text [ portuguese_brazilian ] = "~R?kseite" ;
         Text[ chinese_simplified ] = "·´Ãæ(~C)";
         Text[ russian ] = "Îáğàòíàÿ ñòîğîíà";
         Text[ polish ] = "Tylna strona";
