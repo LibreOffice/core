@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-29 17:59:43 $
+ *  last change: $Author: pb $ $Date: 2000-12-19 12:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,10 @@ static sal_Int32           nRefCount = 0;
 
 #define EXTENDEDHELP 0
 #define HELPTIPS 1
-#define AUTOSTART 2
-#define WELCOMESCREEN 3
+//#define AUTOSTART 2
+//#define WELCOMESCREEN 3
+#define LOCALE 2
+#define SYSTEM 3
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {
@@ -100,6 +102,8 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     sal_Bool        bHelpTips;
     sal_Bool        bHelpAgentAutoStartMode;
     sal_Bool        bWelcomeScreen;
+    String          aLocale;
+    String          aSystem;
 
 public:
                     SvtHelpOptions_Impl();
@@ -118,6 +122,8 @@ public:
     IdList*         GetPIStarterList()                      { return pList; }
     void            AddToPIStarterList( sal_Int32 nId );
     void            RemoveFromPIStarterList( sal_Int32 nId );
+    String          GetLocale() const                       { return aLocale; }
+    String          GetSystem() const                       { return aSystem; }
 };
 
 static Sequence< OUString > GetPropertyNames()
@@ -126,7 +132,9 @@ static Sequence< OUString > GetPropertyNames()
     {
         "ExtendedTip",
         "Tip",
-//        "Agent/AutoStart",
+        "Locale",
+        "System"
+//        ,"Agent/AutoStart",
 //        "HowTo/Show"
     };
 
@@ -179,6 +187,7 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
             if ( pValues[nProp].hasValue() )
             {
                 sal_Bool bTmp;
+                ::rtl::OUString aTmpStr;
                 if ( pValues[nProp] >>= bTmp )
                 {
                     switch ( nProp )
@@ -189,19 +198,36 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
                         case HELPTIPS :
                             bHelpTips = bTmp;
                             break;
-                        case AUTOSTART :
+/*!                        case AUTOSTART :
                             bHelpAgentAutoStartMode = bTmp;
                             break;
                         case WELCOMESCREEN :
                             bWelcomeScreen = bTmp;
-                            break;
+                            break;*/
                         default:
-                            DBG_ERROR( "Wrong Member!" );
+                            DBG_ERRORFILE( "Wrong Member!" );
+                            break;
+                    }
+                }
+                else if ( pValues[nProp] >>= aTmpStr )
+                {
+                    switch ( nProp )
+                    {
+                        case LOCALE:
+                            aLocale = aTmpStr;
+                            break;
+
+                        case SYSTEM:
+                            aSystem = aTmpStr;
+                            break;
+
+                        default:
+                            DBG_ERRORFILE( "Wrong Member!" );
                             break;
                     }
                 }
                 else
-                    DBG_ERROR( "Wrong Type!" );
+                    DBG_ERRORFILE( "Wrong Type!" );
             }
         }
     }
@@ -223,12 +249,12 @@ void SvtHelpOptions_Impl::Commit()
             case HELPTIPS :
                 pValues[nProp] <<= bHelpTips;
                 break;
-            case AUTOSTART :
+/*!            case AUTOSTART :
                 pValues[nProp] <<= bHelpAgentAutoStartMode;
                 break;
             case WELCOMESCREEN :
                 pValues[nProp] <<= bWelcomeScreen;
-                break;
+                break;*/
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
@@ -319,5 +345,15 @@ void SvtHelpOptions::AddToPIStarterList( sal_Int32 nId )
 
 void SvtHelpOptions::RemoveFromPIStarterList( sal_Int32 nId )
 {
+}
+
+String SvtHelpOptions::GetLocale() const
+{
+    return pImp->GetLocale();
+}
+
+String SvtHelpOptions::GetSystem() const
+{
+    return pImp->GetSystem();
 }
 
