@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 11:00:04 $
+ *  last change: $Author: sj $ $Date: 2001-10-16 09:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,16 +225,19 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet )
         SfxObjectShell* pSh = NULL;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
-        SfxModule* pModule = pSh ? pSh->GetModule() : NULL;
-        if ( pModule )
+        if ( pSh )  // #93209# the object shell is not always available during reload
         {
-            const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-            if ( pItem )
-                eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
-        }
-        else
-        {
-            DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+            SfxModule* pModule = pSh->GetModule();
+            if ( pModule )
+            {
+                const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
+                if ( pItem )
+                    eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+            }
+            else
+            {
+                DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+            }
         }
     }
     return eUnit;
