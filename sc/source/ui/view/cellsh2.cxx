@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,8 @@
 #include <svtools/sbxcore.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/zforlist.hxx>
-#include <offmgr/sbaitems.hxx>
-#include <offmgr/sbasltid.hrc>
 #include <vcl/msgbox.hxx>
+#include <svtools/stritem.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -333,38 +332,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_SBA_BRW_INSERT:
             {
-                if (pReqArgs)
-                {
-                    const SfxStringItem &rDBNameItem = (const SfxStringItem&)
-                                                        pReqArgs->Get(SID_ATTR_SBA_DATABASE);
-                    const SfxStringItem &rStatementItem = (const SfxStringItem&)
-                                                        pReqArgs->Get(SID_ATTR_SBA_STATEMENT);
-                    const SbaSelectionItem &rSelectionItem = (const SbaSelectionItem&)
-                                                        pReqArgs->Get(SID_ATTR_SBA_SELECTION);
-
-                    DBG_ASSERT( rDBNameItem.ISA(SfxStringItem), "invalid argument type" );
-                    DBG_ASSERT( rStatementItem.ISA(SfxStringItem), "invalid argument type" );
-                    DBG_ASSERT( rSelectionItem.ISA(SbaSelectionItem), "invalid argument type" );
-
-                    ScViewData* pViewData   = GetViewData();
-                    ScImportParam aImParam;
-                    aImParam.nCol1 = aImParam.nCol2 = pViewData->GetCurX();
-                    aImParam.nRow1 = aImParam.nRow2 = pViewData->GetCurY();
-                    aImParam.bImport = TRUE;
-                    aImParam.aDBName = rDBNameItem.GetValue();
-                    aImParam.aStatement = rStatementItem.GetValue();
-
-                    ::com::sun::star::uno::Reference<
-                        ::com::sun::star::sdbc::XResultSet > xResultSet;
-
-                    ScDBDocFunc( *pViewData->GetDocShell() ).DoImport(
-                            pViewData->GetTabNo(), aImParam, xResultSet,
-                            rSelectionItem.GetSelectionList(), TRUE, TRUE );
-
-                    rReq.Done();
-                }
-                else
-                    DBG_ERROR( "arguments expected" );
+                DBG_ERROR( "Deprecated Slot" );
             }
             break;
 
