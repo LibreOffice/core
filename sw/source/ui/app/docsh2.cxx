@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 20:32:32 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 10:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,6 @@
 #ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
 #endif
-
 #ifndef _SWEVENT_HXX //autogen
 #include <swevent.hxx>
 #endif
@@ -254,13 +253,15 @@
 #ifndef _UNOTXDOC_HXX
 #include <unotxdoc.hxx>
 #endif
-#ifndef _ACMPLWRD_HXX //autogen
+#ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -283,6 +284,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+
 extern FASTBOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
 
@@ -856,65 +858,17 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if( nRet == RET_OK )
                         aFileName = pNewDlg->GetTemplateFileName();
                 }
-                bText       = pDlg->IsTextStyle();
-                bFrame      = pDlg->IsFrameStyle();
-                bPage       = pDlg->IsPageStyle();
-                bOverwrite  = pDlg->IsOverwrite();
-                bNumbering  = pDlg->IsNumbering();
-                USHORT nFlags = (USHORT)bText +
-                                ((USHORT)bFrame << 1) +
-                                ((USHORT)bPage << 2) +
-                                ((USHORT)bOverwrite << 3) +
-                                ((USHORT)bNumbering << 4);
+
+                SwgReaderOption aOpt;
+                aOpt.SetFrmFmts( pDlg->IsFrameStyle() );
+                aOpt.SetTxtFmts( pDlg->IsTextStyle() );
+                aOpt.SetPageDescs( pDlg->IsPageStyle() );
+                aOpt.SetNumRules( pDlg->IsNumbering() );
+                aOpt.SetMerge( !pDlg->IsOverwrite() );
+
                 delete pDlg;
                 if( aFileName.Len() )
-                {
-                    // Create a URL from filename
-                    INetURLObject aURLObj( aFileName );
-                    String sURL( aURLObj.GetMainURL() );
-
-                    String sBaseURL( INetURLObject::GetBaseURL() );
-                    INetURLObject::SetBaseURL( sURL );
-
-                    SwRead pRead = 0;
-
-                    // Filter bestimmen:
-                    const SfxFilter* pFlt = SwIoSystem::GetFileFilter(
-                                                    aFileName, aEmptyStr );
-                    SfxMedium aMed( aFileName, STREAM_STD_READ, FALSE );
-                    if( aMed.IsStorage() )
-                    {
-                        if( pFlt && pFlt->GetVersion() )
-                            aMed.GetStorage()->SetVersion(
-                                                (long)pFlt->GetVersion() );
-                        pRead = ReadSw3;
-                    }
-                    else if( pFlt )
-                    {
-                        if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
-                            pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
-                            pRead = ReadSwg;
-                        else if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
-                            pRead = ReadXML;
-                    }
-
-                    ASSERT( pRead, "no reader found" );
-                    if( pRead )
-                    {
-                        pRead->GetReaderOpt().SetAllFmtsOnly();
-                        pRead->GetReaderOpt().SetTxtFmts(bText);
-                        pRead->GetReaderOpt().SetFrmFmts(bFrame);
-                        pRead->GetReaderOpt().SetPageDescs(bPage);
-                        pRead->GetReaderOpt().SetNumRules(bNumbering);
-                        pRead->GetReaderOpt().SetMerge(!bOverwrite);
-
-                        pWrtShell->StartAllAction();
-                        SwReader aReader( aMed, sURL, pDoc );
-                        SetError( aReader.Read( *pRead ));
-                        pWrtShell->EndAllAction();
-                    }
-                    INetURLObject::SetBaseURL( sBaseURL );
-                }
+                    SetError( LoadStylesFromFile( aFileName, aOpt, FALSE ));
             }
             break;
             case SID_SOURCEVIEW:
@@ -1664,8 +1618,83 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
     }
 }
 
+ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
+                    SwgReaderOption& rOpt, BOOL bUnoCall )
+{
+    ULONG nErr = 0;
+
+    // Create a URL from filename
+    INetURLObject aURLObj( rURL );
+    String sURL( aURLObj.GetMainURL() );
+
+    String sBaseURL( INetURLObject::GetBaseURL() );
+    INetURLObject::SetBaseURL( sURL );
+
+    SwRead pRead = 0;
+    SwReader* pReader;
+    SwPaM* pPam = 0;
+
+    // Filter bestimmen:
+    const SfxFilter* pFlt = SwIoSystem::GetFileFilter( rURL, aEmptyStr );
+    SfxMedium aMed( rURL, STREAM_STD_READ, FALSE );
+    if( aMed.IsStorage() )
+    {
+        if( pFlt && pFlt->GetVersion() )
+            aMed.GetStorage()->SetVersion( (long)pFlt->GetVersion() );
+        pRead = ReadSw3;
+        // the SW3IO - Reader need the pam/wrtshell, because only then he
+        // insert the styles!
+        if( bUnoCall )
+        {
+            SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfContent(), -1 );
+            pPam = new SwPaM( aIdx );
+            pReader = new SwReader( aMed, rURL, *pPam );
+        }
+        else
+            pReader = new SwReader( aMed, rURL, *pWrtShell->GetCrsr() );
+    }
+    else if( pFlt )
+    {
+        if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
+            pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
+            pRead = ReadSwg;
+        else if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
+            pRead = ReadXML;
+        pReader = new SwReader( aMed, rURL, pDoc );
+    }
+
+    ASSERT( pRead, "no reader found" );
+    if( pRead )
+    {
+        pRead->GetReaderOpt().SetTxtFmts( rOpt.IsTxtFmts() );
+        pRead->GetReaderOpt().SetFrmFmts( rOpt.IsFrmFmts() );
+        pRead->GetReaderOpt().SetPageDescs( rOpt.IsPageDescs() );
+        pRead->GetReaderOpt().SetNumRules( rOpt.IsNumRules() );
+        pRead->GetReaderOpt().SetMerge( rOpt.IsMerge() );
+
+        if( bUnoCall )
+        {
+            UnoActionContext aAction( pDoc );
+            nErr = pReader->Read( *pRead );
+        }
+        else
+        {
+            pWrtShell->StartAllAction();
+            nErr = pReader->Read( *pRead );
+            pWrtShell->EndAllAction();
+        }
+    }
+    delete pPam;
+    delete pReader;
+    INetURLObject::SetBaseURL( sBaseURL );
+    return nErr;
+}
+
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/10/31 20:32:32  jp
+    change usage of filestream to medium
+
     Revision 1.6  2000/10/26 11:23:10  jp
     Bug #75694#: use replace instead close & open
 
@@ -1683,319 +1712,6 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
-
-    Revision 1.277  2000/09/18 16:05:10  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.276  2000/09/08 08:33:26  os
-    check GetView()
-
-    Revision 1.275  2000/09/08 08:12:50  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.274  2000/09/07 15:59:20  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.273  2000/08/30 16:12:40  os
-    #78341# save document before switching to source view
-
-    Revision 1.272  2000/08/14 17:27:15  jp
-    Task #77422#: PrintPreView in the same window
-
-    Revision 1.271  2000/08/07 11:48:36  jp
-    PagePreView replace the current view
-
-    Revision 1.270  2000/06/09 08:10:13  os
-    using tools/tempfile
-
-    Revision 1.269  2000/05/30 13:39:55  os
-    #70840# HTML source view: for saved documents only, call save as dialog if needed
-
-    Revision 1.268  2000/05/26 07:21:27  os
-    old SW Basic API Slots removed
-
-    Revision 1.267  2000/04/19 12:56:33  os
-    include sfx2/filedlg.hxx removed
-
-    Revision 1.266  2000/04/11 08:01:30  os
-    UNICODE
-
-    Revision 1.265  2000/03/21 15:47:50  os
-    UNOIII
-
-    Revision 1.264  2000/03/08 17:26:34  os
-    GetAppWindow() - misuse as parent window eliminated
-
-    Revision 1.263  2000/03/03 16:16:32  pl
-    #73771# workaround for c50 intel compiler
-
-    Revision 1.262  2000/03/03 15:16:58  os
-    StarView remainders removed
-
-    Revision 1.261  2000/03/03 12:27:49  mib
-    Removed JavaScript
-
-    Revision 1.260  2000/02/24 17:01:58  hr
-    #73447#: removed temporaries
-
-    Revision 1.259  2000/02/11 14:43:03  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.258  2000/02/02 17:00:33  jp
-    Task #72579#: interface of SwReader is changed
-
-    Revision 1.257  2000/01/14 16:29:50  jp
-    Task #71894#: new Options for SW-AutoComplete
-
-    Revision 1.256  2000/01/13 21:27:22  jp
-    Task #71894#: new Options for SW-AutoComplete
-
-    Revision 1.255  2000/01/11 10:22:04  tl
-    #70735# CheckSpellChanges moved to SwModule and called from there
-
-    Revision 1.254  1999/12/14 16:11:08  os
-    #70234# Set Browser Mode via API
-
-    Revision 1.253  1999/11/26 10:58:35  mib
-    Loading of styles from XML documents
-
-    Revision 1.252  1999/11/11 10:40:03  jp
-    SetModified: broadcast the hint DOCCHANGED
-
-    Revision 1.251  1999/11/09 09:44:04  jp
-    SetModified: do nothing if EnableSetModified is not set
-
-    Revision 1.250  1999/10/29 11:31:31  os
-    support XModifiable
-
-    Revision 1.249  1999/10/25 19:37:25  tl
-    ongoing ONE_LINGU implementation
-
-    Revision 1.248  1999/10/21 17:45:27  jp
-    have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-    Revision 1.247  1999/10/19 14:30:57  hr
-    #65293#: sfxecode.hxx now in svtools
-
-    Revision 1.246  1999/08/31 08:33:36  TL
-    #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-
-      Rev 1.245   31 Aug 1999 10:33:36   TL
-   #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-      Rev 1.244   22 Jun 1999 17:20:30   KZ
-   Anpass. fuer Linux
-
-      Rev 1.243   10 Jun 1999 10:52:10   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.242   04 May 1999 14:58:44   JP
-   FilterExportklasse Writer von SvRef abgeleitet, damit sie immer zerstoert wird
-
-      Rev 1.241   20 Apr 1999 17:14:34   MA
-   #63638# API-Aenderung PrepareClose
-
-      Rev 1.240   16 Apr 1999 17:22:10   JP
-   Bug #64928#: erfrage an der Vorlage, ob sie an einem Node gesetzt ist
-
-      Rev 1.239   07 Apr 1999 14:13:18   OS
-   #59615# ReleaseDocument aufrufen
-
-      Rev 1.238   29 Mar 1999 15:57:42   OS
-   #59615# InsertDocument am SfxJS rufen
-
-      Rev 1.237   15 Mar 1999 15:07:30   JP
-   Task #61405#: AutoCompleteList wurde statisch
-
-      Rev 1.236   11 Mar 1999 23:59:42   JP
-   Task #61405#: Optionen setzen
-
-      Rev 1.235   09 Mar 1999 14:10:12   OS
-   #62286# SetY2KState an die FormShell weiterleiten
-
-      Rev 1.234   03 Mar 1999 09:44:46   MIB
-   #60932#: Indizes vom Organizer nun richtig
-
-      Rev 1.233   02 Mar 1999 16:01:48   AMA
-   Fix #62568#: Invalidierungen so sparsam wie moeglich, so gruendlich wie noetig
-
-      Rev 1.232   03 Feb 1999 11:46:48   JP
-   Bug #61401#: am Storage die VersionsNummer vom Filter setzen
-
-      Rev 1.231   02 Feb 1999 08:42:44   OS
-   #61027# zweistellige Jahreszahlen
-
-      Rev 1.230   01 Feb 1999 08:23:36   OS
-   #56371# unnoetigen include wieder raus
-
-      Rev 1.229   27 Jan 1999 09:51:50   OS
-   #56371# TF_ONE51
-
-      Rev 1.228   19 Jan 1999 12:05:00   OS
-   #59620 vor GetBasicManager mit HasBasic pruefen
-
-      Rev 1.227   14 Jan 1999 10:18:56   MIB
-   #47231#: Organizer: Ersetzen von Vorlagen ohne Loeschen
-
-      Rev 1.226   12 Jan 1999 12:49:24   OS
-   #60705# AutoFormat-Dialog nicht asynchron aufrufen!
-
-      Rev 1.225   18 Dec 1998 17:18:10   MIB
-   #60483#: Poolvorlagen beim D&D im Organizer, Parents und Follows richtig setzen
-
-      Rev 1.224   09 Dec 1998 16:37:54   OM
-   #59628# Warnung anzeigen, wenn Dok nicht angelegt werden konnt
-
-      Rev 1.223   09 Dec 1998 14:31:10   OS
-   #56371# TF_ONE51
-
-      Rev 1.222   25 Nov 1998 12:42:52   OS
-   #59826# temp. Datei in der DocShell loeschen
-
-      Rev 1.221   25 Nov 1998 11:26:56   OS
-   #59240##59637# SubInitNew vor dem Import, kein TabStop fuer HTML
-
-      Rev 1.220   17 Nov 1998 22:18:02   JP
-   Task #59398#: ClipboardFormatId Umstellungen
-
-      Rev 1.219   05 Nov 1998 10:08:50   OS
-   #58996# SourceView: Flag fuers speichern
-
-      Rev 1.218   22 Sep 1998 12:34:00   JP
-   Bug #55959#: SetBase mit einer URL und keinem FileNamen - der Dialog liefert keine URL (ist eig. der Bug!)
-
-      Rev 1.217   21 Sep 1998 11:57:36   JP
-   Bug #55959#: beim Laden von Vorlagen, muss die BaseURL richtig gesetzt sein
-
-      Rev 1.216   03 Sep 1998 13:27:44   OS
-   #55662# AddControl mit NewLine
-
-      Rev 1.215   23 Jul 1998 11:14:36   JP
-   Task #52654#: Einfuegen Doc nicht mit einer CrsrShell sondern mit einen PaM
-
-      Rev 1.214   09 Jul 1998 09:52:44   JP
-   EmptyStr benutzen
-
-      Rev 1.213   08 Jul 1998 16:21:00   JP
-   Bug #52411#: ReturnWert vom Convert korrekt auswerten
-
-      Rev 1.212   02 Jul 1998 14:34:40   MIB
-   Fix #52035#: Beim Unschalten aus der Source-View View vor dem Import umschalten
-
-      Rev 1.211   25 Jun 1998 11:52:22   OM
-   #51665# Language fuer Zahlenformate
-
-      Rev 1.210   23 Jun 1998 18:13:50   OS
-   InitNewDoc - Member des XTextDocuments zuruecksetzen #51535#
-
-      Rev 1.209   18 Jun 1998 11:02:40   OS
-   FN_NEW_GLOBAL_DOC: ohne Vorlagennamen Null uebergeben
-
-      Rev 1.208   18 Jun 1998 10:08:08   OS
-   Global-Doc erzeugen: Ueberschrift 1 als default #51263#
-
-      Rev 1.207   15 Jun 1998 09:54:50   MIB
-   fix #51032#: HTML-Vorlage beim Umsch. aus der Source-View laden und Seitenvorlage setzen
-
-      Rev 1.206   12 Jun 1998 09:45:58   OS
-   Appear statt ToTop #50485#
-
-      Rev 1.205   28 May 1998 17:40:52   OM
-   Zahlenformat per Basic ermitteln
-
-      Rev 1.204   19 May 1998 12:45:22   OM
-   SvxMacro-Umstellung
-
-      Rev 1.203   15 May 1998 17:26:12   OM
-   #50043# DirectCursor nicht im OnlineLayout
-
-      Rev 1.202   13 May 1998 14:52:34   OM
-   Autokorrektur/Autoformat umgestaltet und zusammengefasst
-
-      Rev 1.201   24 Apr 1998 16:01:04   OM
-   Seitenvorschau auch im Html-Mode
-
-      Rev 1.200   23 Apr 1998 15:35:36   OM
-   #49689 Aenderung der Seitenanzahl per Basic konfigurierbar
-
-      Rev 1.199   02 Apr 1998 10:09:52   MIB
-   Beim Erzeugen eines Global-Dokuments nur noch den 5.0-Filter anbieten
-
-      Rev 1.198   27 Mar 1998 14:12:32   OM
-   ChildWindows im Modified-Hdl updaten
-
-      Rev 1.197   20 Mar 1998 14:57:52   OM
-   Vorlagentext verbreitert
-
-      Rev 1.196   20 Mar 1998 14:42:42   OM
-   Fehlender Include
-
-      Rev 1.195   20 Mar 1998 12:41:58   OM
-   Helpid fuer Template-Button
-
-      Rev 1.194   20 Mar 1998 12:36:32   OM
-   Globaldokument: Vorlage auswaehlen
-
-      Rev 1.193   19 Mar 1998 17:40:56   OM
-   Vorlage auswehlen
-
-      Rev 1.192   17 Mar 1998 13:04:38   JP
-   fuers GenerateHTMLDoc: nur den HTML-Filter anbieten
-
-      Rev 1.191   17 Mar 1998 12:23:04   JP
-   neu: GenerateHTMLDoc - aquivalent zu GenerateGlobalDoc
-
-      Rev 1.190   12 Mar 1998 13:01:54   OS
-   SID_NEWWINDOW nicht mehr ueberladen
-
-      Rev 1.189   02 Feb 1998 13:53:26   OS
-   SID_VIEWSH* am eigenen Dispatcher rufen #46862#
-
-      Rev 1.188   19 Jan 1998 11:52:34   MBA
-   CreateViewFrame verwenden
-
-      Rev 1.187   07 Jan 1998 18:42:08   MIB
-   5.0 Fileformat
-
-      Rev 1.186   09 Dec 1997 08:19:06   OS
-   Vorlagen laden: auch Numerierung
-
-      Rev 1.185   29 Nov 1997 15:25:40   MA
-   includes
-
-      Rev 1.184   24 Nov 1997 14:22:48   MA
-   includes
-
-      Rev 1.183   11 Nov 1997 11:37:22   AMA
-   Fix #44514#: Fuer die Druckvorschau braucht man einen Drucker
-
-      Rev 1.182   30 Oct 1997 18:24:44   JP
-   Options am Reader nicht mehr public
-
-      Rev 1.181   28 Oct 1997 14:52:34   OS
-   SetPool an der SourceView sofort nach AddLink rufen
-
-      Rev 1.180   24 Oct 1997 15:18:58   OS
-   ReloadFromHtml nur noch rufen, wenn das Doc im SourceMode veraendert wurde #44971#
-
-      Rev 1.179   13 Oct 1997 17:23:22   MA
-   #44630# Keine SwDokInfo fuer SrcView
-
-      Rev 1.178   08 Oct 1997 14:28:20   OS
-   PrintLayout funktioniert jetzt auch aus dem Basic
-
-      Rev 1.177   15 Sep 1997 13:26:06   OS
-   Events am Doc vor Reload loeschen #42231#
-
-      Rev 1.176   12 Sep 1997 16:04:50   OS
-   Vorlagen laden: EAs uebergeben, SW4-Filter als Standard #43699#
-
-      Rev 1.175   01 Sep 1997 13:06:34   OS
-   DLL-Umstellung
-
-      Rev 1.174   14 Aug 1997 15:23:36   MA
-   fix: DocShell ohne Doc bei OLE-Registration
 
 ------------------------------------------------------------------------*/
 

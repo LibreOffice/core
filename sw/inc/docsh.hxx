@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 10:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,15 @@
 #ifndef _SFX_INTERNO_HXX //autogen
 #include <sfx2/interno.hxx>
 #endif
-
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef SW_SWDLL_HXX
 #include <swdll.hxx>
 #endif
-#include "shellid.hxx"
+#ifndef _SHELLID_HXX
+#include <shellid.hxx>
+#endif
 
 class   SwDoc;
 class   Sw3Io;
@@ -95,6 +96,7 @@ class   SfxFileDialog;
 class   PushButton;
 class   FixedText;
 class   SwPaM;
+class   SwgReaderOption;
 
 class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
                   public SfxListener
@@ -297,7 +299,10 @@ public:
     void EnterWait( BOOL bLockDispatcher );
     void LeaveWait( BOOL bLockDispatcher );
 
-    void    ToggleBrowserMode(BOOL bOn, SwView* pView = 0);
+    void ToggleBrowserMode(BOOL bOn, SwView* pView = 0);
+
+    ULONG LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,
+                                BOOL bUnoCall );
 };
 
 #endif

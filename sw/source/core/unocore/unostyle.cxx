@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 20:33:20 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 10:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
-#include <sfx2/docfile.hxx>
 #endif
 
 #ifndef _SVX_PAGEITEM_HXX //autogen
@@ -642,48 +639,37 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid() && rURL.len())
     {
+        const Any* pVal;
         int nCount = aOptions.getLength();
         const PropertyValue* pArray = aOptions.getConstArray();
         for(int i = 0; i < nCount; i++)
-        {
-            String sName = pArray[i].Name;
-            const Any& rVal = pArray[i].Value;
-            if(rVal.getValueType() != ::getBooleanCppuType())
-                continue;
-            sal_Bool bVal = *(sal_Bool*)rVal.getValue();
-            if( sName.EqualsAscii(UNO_NAME_OVERWRITE_STYLES     ))
-                bLoadStyleOverwrite = bVal;
-            else if( sName.EqualsAscii(UNO_NAME_LOAD_NUMBERING_STYLES ))
-                bLoadStyleNumbering = bVal;
-            else if( sName.EqualsAscii(UNO_NAME_LOAD_PAGE_STYLES   ))
-                bLoadStylePage = bVal;
-            else if( sName.EqualsAscii(UNO_NAME_LOAD_FRAME_STYLES     ))
-                bLoadStyleFrame = bVal;
-            else if( sName.EqualsAscii(UNO_NAME_LOAD_TEXT_STYLES      ))
-                bLoadStyleText = bVal;
-        }
+            if( ( pVal = &pArray[i].Value)->getValueType() ==
+                    ::getBooleanCppuType() )
+            {
+                String sName = pArray[i].Name;
+                sal_Bool bVal = *(sal_Bool*)pVal->getValue();
+                if( sName.EqualsAscii(UNO_NAME_OVERWRITE_STYLES     ))
+                    bLoadStyleOverwrite = bVal;
+                else if( sName.EqualsAscii(UNO_NAME_LOAD_NUMBERING_STYLES ))
+                    bLoadStyleNumbering = bVal;
+                else if( sName.EqualsAscii(UNO_NAME_LOAD_PAGE_STYLES   ))
+                    bLoadStylePage = bVal;
+                else if( sName.EqualsAscii(UNO_NAME_LOAD_FRAME_STYLES     ))
+                    bLoadStyleFrame = bVal;
+                else if( sName.EqualsAscii(UNO_NAME_LOAD_TEXT_STYLES      ))
+                    bLoadStyleText = bVal;
+            }
 
-        String aFileName(rURL);
-        INetURLObject aObj(aFileName);
-        aFileName = aObj.GetFull();
-        //bug SB -- JP: why???
-        aFileName.SearchAndReplace('|', ':');
+        SwgReaderOption aOpt;
+        aOpt.SetFrmFmts( bLoadStyleFrame );
+        aOpt.SetTxtFmts( bLoadStyleText );
+        aOpt.SetPageDescs( bLoadStylePage );
+        aOpt.SetNumRules( bLoadStyleNumbering );
+        aOpt.SetMerge( !bLoadStyleOverwrite );
 
-        SfxMedium aMedium( aFileName, STREAM_STD_READ, FALSE );
-        SwRead pRead = aMedium.IsStorage() ? ReadSw3 : ReadSwg;
-        pRead->GetReaderOpt().SetAllFmtsOnly();
-        pRead->GetReaderOpt().SetTxtFmts(bLoadStyleText);
-        pRead->GetReaderOpt().SetFrmFmts(bLoadStyleFrame);
-        pRead->GetReaderOpt().SetPageDescs(bLoadStylePage);
-        pRead->GetReaderOpt().SetNumRules(bLoadStyleNumbering);
-        pRead->GetReaderOpt().SetMerge(!bLoadStyleOverwrite);
-
-        SwReader aReader( aMedium, aFileName, GetDoc() );
-        {
-            UnoActionContext aAction( GetDoc() );
-            if( 0 != aReader.Read( *pRead ))
-                throw io::IOException();
-        }
+        ULONG nErr = pDocShell->LoadStylesFromFile( rURL, aOpt, TRUE );
+        if( nErr )
+            throw io::IOException();
     }
     else
         throw RuntimeException();
