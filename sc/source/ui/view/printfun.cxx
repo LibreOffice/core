@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:17:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1979,8 +1979,8 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
             const ScPostIt* pNote = pCell->GetNotePtr();
             if (pNote)
             {
-                String aString = pNote->GetText();
-                pEditEngine->SetText(aString);
+                if(const EditTextObject *pEditText = pNote->GetEditTextObject())
+                    pEditEngine->SetText(*pEditText);
                 long nTextHeight = pEditEngine->GetTextHeight();
                 if ( nPosY + nTextHeight < aPageRect.Bottom() )
                 {
