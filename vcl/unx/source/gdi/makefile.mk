@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
+#   last change: $Author: hr $ $Date: 2002-08-27 14:52:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,12 +73,12 @@ TARGET=salgdi
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(GUIBASE)"!="unx"
 
 dummy:
-    @echo "Nothing to build for Mac OS X"
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
-.ELSE		# "$(OS)"=="MACOSX"
+.ELSE		# "$(GUIBASE)"!="unx"
 
 .IF "$(remote)"==""
 SLOFILES=	\
@@ -117,7 +117,7 @@ SLOFILES+=	$(SLO)$/gcach_xpeer.obj
 
 .ENDIF
 
-.ENDIF	# "$(OS)"=="MACOSX"
+.ENDIF	# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
 
@@ -125,7 +125,7 @@ SLOFILES+=	$(SLO)$/gcach_xpeer.obj
 
 .INCLUDE :  $(PRJ)$/util$/target.pmk
 
-XSALSETLIBNAME=libspa$(UPD)$(DLLPOSTFIX).so
+XSALSETLIBNAME=$(DLLPRE)spa$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
 $(INCCOM)$/rtsname.hxx:
     rm -f $(INCCOM)$/rtsname.hxx ; \
