@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyuri.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:13:55 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 07:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ private:
     static ::rtl::OUString decodeSegment( const ::rtl::OUString& rSource );
 
 public:
-    HierarchyUri() {}
+    HierarchyUri() : m_bValid( false ) {}
     HierarchyUri( const ::rtl::OUString & rUri )
     : m_aUri( rUri ), m_bValid( false ) {}
 
