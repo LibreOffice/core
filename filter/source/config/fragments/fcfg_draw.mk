@@ -1,3 +1,5 @@
+all_fragments+=draw
+
 # -----------------------------------------------
 # count = 9
 T4_DRAW = \
@@ -42,6 +44,6 @@ CONTENTHANDLERS_4fcfg_draw = $(foreach,i,$(C4_DRAW) contenthandlers$/$i.xcu)
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_draw = \
     $(TYPES_4fcfg_draw) \
-    $(FILTERS_4fcfg_draw) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_draw) \
     $(CONTENTHANDLERS_4fcfg_draw)
