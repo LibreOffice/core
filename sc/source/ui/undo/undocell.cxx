@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:56:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,13 +970,14 @@ void __EXPORT ScUndoEditNote::Undo()
     // This repaint should not be neccessary but it solves a problem
     // where following a removal of all the text the undo would only
     // refresh the note to the source cell position.
-    ScRange aDrawRange;
-    aDrawRange.aStart.SetCol(0);
-    aDrawRange.aStart.SetRow(0);
-    aDrawRange.aStart.SetTab(aPos.Tab());
-    aDrawRange.aEnd.SetCol(MAXCOL);
-    aDrawRange.aEnd.SetRow(MAXROW);
-    aDrawRange.aStart.SetTab(aPos.Tab());
+        ScRange aDrawRange(pDoc->GetRange(aPos.Tab(), aOldNote.GetRectangle()));
+        // Set Start/End Row to previous/next row to allow for handles.
+        SCROW aStartRow = aDrawRange.aStart.Row();
+        if(aStartRow > 0)
+            aDrawRange.aStart.SetRow(aStartRow - 1);
+        SCROW aEndRow = aDrawRange.aEnd.Row();
+        if(aEndRow < MAXROW)
+            aDrawRange.aEnd.SetRow(aEndRow + 1);
     pDocShell->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
 
     EndUndo();
