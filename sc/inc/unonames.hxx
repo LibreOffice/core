@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-18 19:40:20 $
+ *  last change: $Author: nn $ $Date: 2001-05-23 17:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,8 @@
 #define SC_UNONAME_PISCHDIST        "ParaIsCharacterDistance"
 #define SC_UNONAME_PISFORBID        "ParaIsForbiddenRules"
 #define SC_UNONAME_PISHYPHEN        "ParaIsHyphenation"
+#define SC_UNONAME_PADJUST          "ParaAdjust"
+#define SC_UNONAME_PLASTADJ         "ParaLastLineAdjust"
 
 //  Styles
 #define SC_UNONAME_DISPNAME         "DisplayName"
