@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:24:36 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
 #endif
+#ifndef _SVDOTEXT_HXX
+#include <svx/svdotext.hxx>
+#endif
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
+#endif
 
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
@@ -144,12 +150,6 @@ const XclStrFlags nAllowedFlags27 = EXC_STR_8BITLENGTH | EXC_STR_KEEPZEROCHARS;
 const XclStrFlags nAllowedFlags = nAllowedFlags27 | EXC_STR_FORCEUNICODE | EXC_STR_SMARTFLAGS;
 
 
-inline XclExpStream& operator<<( XclExpStream& rStrm, const XclFormatRun& rRun )
-{
-    return rStrm << rRun.mnChar << rRun.mnFontIx;
-}
-
-
 // ----------------------------------------------------------------------------
 
 XclExpString::XclExpString( XclStrFlags nFlags )
@@ -179,10 +179,6 @@ XclExpString::XclExpString(
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     Assign( rString, rFormats, nFlags, nMaxLen );
-}
-
-XclExpString::~XclExpString()
-{
 }
 
 void XclExpString::Assign( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -237,6 +233,26 @@ void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
         DBG_ASSERT( aPrev->mnChar <= mnLen, "XclExpString::SetFormats - invalid char index" );
     }
 #endif
+    LimitFormatCount( 0xFFFF );
+}
+
+void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIx )
+{
+    DBG_ASSERT( mbIsBiff8, "XclExpString::AppendFormat - not allowed for old byte strings" );
+    DBG_ASSERT( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
+    if( maFormats.size() < 0xFFFF )
+        maFormats.push_back( XclFormatRun( nChar, nFontIx ) );
+}
+
+void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
+{
+    if( maFormats.size() > nMaxCount )
+        maFormats.erase( maFormats.begin() + nMaxCount, maFormats.end() );
+}
+
+sal_uInt16 XclExpString::GetFormatsCount() const
+{
+    return static_cast< sal_uInt16 >( mbIsBiff8 ? maFormats.size() : 0 );
 }
 
 sal_uInt8 XclExpString::GetFlagField() const
@@ -255,7 +271,7 @@ sal_uInt32 XclExpString::GetSize() const
         (mb8BitLen ? 1 : 2) +                           // length field
         (IsWriteFlags() ? 1 : 0) +                      // flag field
         GetBufferSize() +                               // character buffer
-        (IsRich() ? (4 * maFormats.size() + 2) : 0);    // richtext formattting
+        (IsRich() ? (4 * GetFormatsCount() + 2) : 0);   // richtext formattting
 }
 
 void XclExpString::WriteFlagField( XclExpStream& rStrm ) const
@@ -285,7 +301,7 @@ void XclExpString::WriteHeader( XclExpStream& rStrm ) const
         rStrm << GetFlagField();
     // format run count
     if( IsRich() )
-        rStrm << static_cast< sal_uInt16 >( maFormats.size() );
+        rStrm << GetFormatsCount();
 
     rStrm.SetSliceSize( 0 );
 }
@@ -404,44 +420,117 @@ void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const
 
 // EditEngine->String conversion ==============================================
 
-XclExpString* XclExpStringHelper::CreateString(
-        const XclExpRoot& rRoot,
-        const EditTextObject& rTextObj,
-        const ScPatternAttr* pCellAttr,
-        XclStrFlags nFlags,
-        sal_uInt16 nMaxLen )
+/** Helper to create HLINK records during creation of formatted cell strings.
+    @descr  In Excel it is not possible to have more than one hyperlink in a cell.
+    This helper detects multiple occurences of hyperlinks and fills a string which
+    is used to create a cell note containing all URLs. Only cells containing one
+    hyperlink are exported as hyperlink cells. */
+class XclExpHlinkHelper : protected XclExpRoot
 {
-    String aText;               // complete edit object text
-    String aNoteText;           // cell note text for multiple hyperlinks
+public:
+    /** @param bCreateHlinkRecs  Controls the behaviour of ProcessUrlField():
+        true = Create the HLINK records, false = Only return URL representation. */
+    explicit                    XclExpHlinkHelper( const XclExpRoot& rRoot, bool bCreateHlinkRecs );
+    /** Appends the note text for multiple hyperlinks to the root data. */
+                                ~XclExpHlinkHelper();
+
+    /** Processes the passed URL field (tries to create a HLINK record).
+        @return  The representation string of the URL field. */
+    String                      ProcessUrlField( const SvxURLField& rUrlField );
+
+private:
+    String                      maNoteText;         /// Alternative note text for multiple hyperlinks.
+    XclExpHyperlink*&           mrpLastHlink;       /// Reference to last HLINK record.
+    bool                        mbCreateHlinkRecs;  /// true = Create HLINKs; false = Just return URL text.
+    bool                        mbMultipleHlink;    /// true = Tried to create multiple HLINKs.
+};
+
+XclExpHlinkHelper::XclExpHlinkHelper( const XclExpRoot& rRoot, bool bCreateHlinkRecs ) :
+    XclExpRoot( rRoot ),
+    mrpLastHlink( rRoot.mpRD->pLastHlink ),
+    mbCreateHlinkRecs( bCreateHlinkRecs ),
+    mbMultipleHlink( false )
+{
+    DELETEZ( mrpLastHlink );
+}
+
+XclExpHlinkHelper::~XclExpHlinkHelper()
+{
+    if( mbCreateHlinkRecs && mbMultipleHlink && maNoteText.Len() )
+    {
+        /*  Append the note text to 'mpRD->sAddNoteText'. This string will be appended
+            to the note of the cell currently exported and cleared afterwards. */
+        if( mpRD->sAddNoteText.Len() )
+            mpRD->sAddNoteText.Append( EXC_NEWLINE ).Append( EXC_NEWLINE );
+        mpRD->sAddNoteText.Append( maNoteText );
+    }
+}
+
+String XclExpHlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
+{
+    String aRepr;
+    if( mbCreateHlinkRecs )
+    {
+        XclExpHyperlink* pNewHlink = new XclExpHyperlink( GetRoot(), rUrlField );
+        if( const String* pReprString = pNewHlink->GetRepr() )
+            aRepr = *pReprString;
+
+        if( mrpLastHlink )
+        {
+            // there was already a hyperlink -> delete it, set multiple flag
+            mbMultipleHlink = true;
+            DELETEZ( mrpLastHlink );
+        }
+        if( mbMultipleHlink )
+            delete pNewHlink;               // multiple -> delete new hyperlink
+        else
+            mrpLastHlink = pNewHlink;       // pNewHlink was first hyperlink
+
+        // add URL to note text
+        ScfTools::AddToken( maNoteText, rUrlField.GetURL(), EXC_NEWLINE );
+    }
+    // no hyperlink representation from Excel HLINK record -> use it from text field
+    if( !aRepr.Len() )
+        aRepr = rUrlField.GetRepresentation();
+    // no representation at all -> use URL
+    if( !aRepr.Len() )
+        aRepr = rUrlField.GetURL();
+
+    return aRepr;
+}
+
+
+// ----------------------------------------------------------------------------
+
+/** Creates a new formatted string from an edit engine text object.
+    @param rEE  The edit engine in use. The text object must already be set.
+    @param nFlags  Modifiers for string export.
+    @param nMaxLen  The maximum number of characters to store in this string.
+    @param bCreateHlinkRecs  true = Creates HLINK records for hyperlink fields.
+    @return  The new string object. */
+XclExpString* lcl_xehelper_CreateString(
+        const XclExpRoot& rRoot, EditEngine& rEE,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bCreateHlinkRecs )
+{
+    String aXclText;            // complete edit object text
     XclFormatRunVec aFormats;   // the formatting runs
 
+    // helper item set for edit engine -> Calc item conversion
+    SfxItemSet aItemSet( *rRoot.GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
+
+    // font handling
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
-    ScPatternAttr aAttr( rRoot.GetDoc().GetPool() );
+    sal_uInt16 nLastFontIx = 0;
 
-    ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-    BOOL bOldUpdateMode = rEE.GetUpdateMode();
-    rEE.SetUpdateMode( TRUE );
-    // set default item set on edit engine
-    const ScPatternAttr& rAttr = pCellAttr ? *pCellAttr : *rRoot.GetDoc().GetDefPattern();
-    SfxItemSet* pDefaultSet = new SfxItemSet( rEE.GetEmptyItemSet() );
-    rAttr.FillEditItemSet( pDefaultSet );
-    rEE.SetDefaults( pDefaultSet );     // edit engine takes ownership
+    // hyperlink handling - local class, see above
+    XclExpHlinkHelper aHlinkHelper( rRoot, bCreateHlinkRecs );
 
-    rEE.SetText( rTextObj );
-
-    // hyperlink handling
-    XclExpHyperlink*& rpLastHlink = rRoot.mpRD->pLastHlink;
-    DELETEZ( rpLastHlink );
-    bool bMultipleHlink = false;
-
-    // first font is the cell font, following font changes are stored in richstring
-    sal_uInt16 nLastFontIx = rFontBuffer.Insert( rAttr );
-
+    // process all paragraphs
     sal_uInt16 nParaCount = rEE.GetParagraphCount();
     for( sal_uInt16 nPara = 0; nPara < nParaCount; ++nPara )
     {
         ESelection aSel( nPara, 0 );
-        xub_StrLen nParaStartPos = aText.Len();
+        xub_StrLen nXclParaStart = aXclText.Len();
         String aParaText( rEE.GetText( nPara ) );
         if( aParaText.Len() )
         {
@@ -449,107 +538,130 @@ XclExpString* XclExpStringHelper::CreateString(
             SvUShorts aPosList;
             rEE.GetPortions( nPara, aPosList );
 
+            // process all portions in the paragraph
             sal_uInt16 nPosCount = aPosList.Count();
             for( sal_uInt16 nPos = 0; nPos < nPosCount; ++nPos )
             {
                 aSel.nEndPos = static_cast< xub_StrLen >( aPosList.GetObject( nPos ) );
-                xub_StrLen nXclStartPos = nParaStartPos + aXclParaText.Len();
-                aXclParaText += aParaText.Copy( aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
+                String aXclPortionText( aParaText, aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
                 // construct font from current edit engine text portion
-                SfxItemSet aItemSet( rEE.GetAttribs( aSel ) );
-                aAttr.GetItemSet().ClearItem();
-                aAttr.GetFromEditItemSet( &aItemSet );
                 Font aFont;
-                aAttr.GetFont( aFont, SC_AUTOCOL_RAW );
+                aItemSet.ClearItem();
+                SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
+                ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
+                ScPatternAttr::GetFont( aFont, aItemSet, SC_AUTOCOL_RAW );
 
-                // detect hyperlinks, export single hyperlink, create note if multiple
-                // hyperlinks are present, but always export hyperlink text
+                // process text fields
                 if( aSel.nStartPos + 1 == aSel.nEndPos )
                 {
+                    // test if the character is a text field
                     const SfxPoolItem* pItem;
-                    if( aItemSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_SET )
+                    if( aEditSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_SET )
                     {
                         const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
-                        if( pField && pField->ISA( SvxURLField ) )
+                        if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
                         {
-                            // create new Excel hyperlink and add URL to cell text
-                            const SvxURLField& rURLField = static_cast< const SvxURLField& >( *pField );
-                            XclExpHyperlink* pNewHlink = new XclExpHyperlink( rRoot, rURLField );
-                            const String* pReprString = pNewHlink->GetRepr();
-                            if( pReprString )
-                            {
-                                aXclParaText.Erase( aXclParaText.Len() - 1 );
-                                aXclParaText += *pReprString;
-                            }
-
-                            if( rpLastHlink )
-                            {
-                                bMultipleHlink = true;
-                                DELETEZ( rpLastHlink );
-                            }
-                            if( bMultipleHlink )
-                                delete pNewHlink;
-                            else
-                                rpLastHlink = pNewHlink;
-
-                            // add URL to note text
-                            ScfTools::AddToken( aNoteText, rURLField.GetURL(), EXC_NEWLINE );
-
+                            aXclPortionText = aHlinkHelper.ProcessUrlField( *pUrlField );
                             // modify font (TODO: correct font attributes?)
                             aFont.SetColor( Color( COL_LIGHTBLUE ) );
                             aFont.SetUnderline( UNDERLINE_SINGLE );
                         }
+                        else
+                        {
+                            DBG_ERRORFILE( "lcl_xehelper_CreateString - unknown text field" );
+                            aXclPortionText.Erase();
+                        }
                     }
                 }
 
-                // insert font into buffer and formatting run vector
+                // Excel start position of this portion
+                xub_StrLen nXclPortionStart = nXclParaStart + aXclParaText.Len();
+                // add portion text to Excel string
+                aXclParaText.Append( aXclPortionText );
+
+                // insert font into buffer
                 sal_uInt16 nFontIx = rFontBuffer.Insert( aFont );
-                if( (nFontIx != nLastFontIx) && (nXclStartPos <= nMaxLen) )
+                // current portion font differs from last? -> insert into format run vector
+                if( (nXclPortionStart == 0) || ((nFontIx != nLastFontIx) && (nXclPortionStart <= nMaxLen)) )
                 {
-                    aFormats.push_back( XclFormatRun( static_cast< sal_uInt16 >( nXclStartPos ), nFontIx ) );
+                    aFormats.push_back( XclFormatRun( static_cast< sal_uInt16 >( nXclPortionStart ), nFontIx ) );
                     nLastFontIx = nFontIx;
                 }
 
                 aSel.nStartPos = aSel.nEndPos;
             }
 
-            // add current paragraph and trailing newline
-            // (important for correct character index calculation)
-            aText += aXclParaText;
-            if( nPara + 1 < nParaCount )
-                aText += EXC_NEWLINE;
+            aXclText.Append( aXclParaText );
         }
+        // add trailing newline (important for correct character index calculation)
+        if( nPara + 1 < nParaCount )
+            aXclText.Append( EXC_NEWLINE );
     }
 
-    rEE.SetUpdateMode( bOldUpdateMode );
+    return new XclExpString( aXclText, aFormats, nFlags, nMaxLen );
+}
 
-    // multiple hyperlinks: append all URLs to note text
-    if( bMultipleHlink && aNoteText.Len() )
+
+// ----------------------------------------------------------------------------
+
+XclExpString* XclExpStringHelper::CreateString(
+        const XclExpRoot& rRoot, const ScEditCell& rEditCell, const ScPatternAttr* pCellAttr,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    XclExpString* pString = NULL;
+    if( const EditTextObject* pEditObj = rEditCell.GetData() )
     {
-        if( rRoot.mpRD->sAddNoteText.Len() )
-            rRoot.mpRD->sAddNoteText.Append( EXC_NEWLINE ).Append( EXC_NEWLINE );
-        rRoot.mpRD->sAddNoteText += aNoteText;
+        // formatted string
+        ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
+        BOOL bOldUpdateMode = rEE.GetUpdateMode();
+        rEE.SetUpdateMode( TRUE );
+        // default items
+        const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
+        SfxItemSet* pEEItemSet = new SfxItemSet( rEE.GetEmptyItemSet() );
+        ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
+        rEE.SetDefaults( pEEItemSet );      // edit engine takes ownership
+        // create the string
+        rEE.SetText( *pEditObj );
+        pString = lcl_xehelper_CreateString( rRoot, rEE, nFlags, nMaxLen, true );
+        rEE.SetUpdateMode( bOldUpdateMode );
     }
-
-    return new XclExpString( aText, aFormats, nFlags, nMaxLen );
+    else
+    {
+        // unformatted string
+        String aCellText;
+        rEditCell.GetString( aCellText );
+        pString = new XclExpString( aCellText, nFlags, nMaxLen );
+    }
+    return pString;
 }
 
 XclExpString* XclExpStringHelper::CreateString(
-        const XclExpRoot& rRoot,
-        const ScEditCell& rEditCell,
-        const ScPatternAttr* pCellAttr,
-        XclStrFlags nFlags,
-        sal_uInt16 nMaxLen )
+        const XclExpRoot& rRoot, const SdrTextObj& rTextObj,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    const EditTextObject* pEditObj = rEditCell.GetData();
-    if( pEditObj )
-        return CreateString( rRoot, *pEditObj, pCellAttr, nFlags, nMaxLen );
-
-    // create unformatted string
-    String aCellText;
-    rEditCell.GetString( aCellText );
-    return new XclExpString( aCellText, nFlags, nMaxLen );
+    XclExpString* pString = NULL;
+    if( const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject() )
+    {
+        EditEngine& rEE = rRoot.GetDrawEditEngine();
+        BOOL bOldUpdateMode = rEE.GetUpdateMode();
+        rEE.SetUpdateMode( TRUE );
+        // create the string
+        rEE.SetText( pParaObj->GetTextObject() );
+        pString = lcl_xehelper_CreateString( rRoot, rEE, nFlags, nMaxLen, false );
+        rEE.SetUpdateMode( bOldUpdateMode );
+        if( !pString->IsEmpty() )
+        {
+            pString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
+            pString->AppendFormat( pString->Len(), EXC_FONT_APP );
+        }
+    }
+    else
+    {
+        DBG_ERRORFILE( "XclExpStringHelper::CreateString - textbox without para object" );
+        pString = new XclExpString;
+    }
+    return pString;
 }
 
 
@@ -578,7 +690,7 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
     if( !pTextObj ) return;
 
     String aText;
-    ScPatternAttr aAttr( GetDoc().GetPool() );
+    SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
     // edit engine
     BOOL bOldUpdateMode = mrEE.GetUpdateMode();
@@ -618,11 +730,11 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
 
 // --- font attributes ---
 
-                SfxItemSet aItemSet( mrEE.GetAttribs( aSel ) );
-                aAttr.GetItemSet().ClearItem();
-                aAttr.GetFromEditItemSet( &aItemSet );
                 Font aFont;
-                aAttr.GetFont( aFont, SC_AUTOCOL_RAW );
+                aItemSet.ClearItem();
+                SfxItemSet aEditSet( mrEE.GetAttribs( aSel ) );
+                ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
+                ScPatternAttr::GetFont( aFont, aItemSet, SC_AUTOCOL_RAW );
 
                 // font name and style
                 aNewData.maName = XclTools::GetXclFontName( aFont.GetName() );
@@ -648,8 +760,10 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                 }
 
                 // height
+                // is calculated wrong in ScPatternAttr::GetFromEditItemSet, because already in twips and not 100thmm
+                // -> get it directly from edit engine item set
                 aNewData.mnHeight = static_cast< sal_uInt16 >(
-                    static_cast< const SvxFontHeightItem& >( aItemSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() );
+                    static_cast< const SvxFontHeightItem& >( aEditSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() );
                 (aNewData.mnHeight += 10) /= 20;
                 if( aFontData.mnHeight != aNewData.mnHeight )
                     aParaText.Append( '&' ).Append( String::CreateFromInt32( aNewData.mnHeight ) );
@@ -683,8 +797,7 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                 if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
                     (aItemSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET) )
                 {
-                    const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField();
-                    if( pFieldData )
+                    if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
                         if( pFieldData->ISA( SvxPageField ) )
                             aParaText.AppendAscii( "&P" );
@@ -698,9 +811,8 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                             aParaText.AppendAscii( "&A" );
                         else if( pFieldData->ISA( SvxFileField ) )  // title -> file name
                             aParaText.AppendAscii( "&F" );
-                        else if( pFieldData->ISA( SvxExtFileField ) )
+                        else if( const SvxExtFileField* pFileField = PTR_CAST( SvxExtFileField, pFieldData ) )
                         {
-                            const SvxExtFileField* pFileField = static_cast< const SvxExtFileField* >( pFieldData );
                             switch( pFileField->GetFormat() )
                             {
                                 case SVXFILEFORMAT_NAME_EXT:
