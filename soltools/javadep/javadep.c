@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-23 11:38:42 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ usage()
  * it's to sad that getopt() is not available everywhere
  * note: this is not a full POSIX conforming getopt()
  */
-simple_getopt(int nargc, char *pargv[], const char *poptstring)
+int simple_getopt(int nargc, char *pargv[], const char *poptstring)
 {
     char *parg = pargv[optind];
 
