@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:36:53 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 19:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ String STR_HTML_TITLE
     Text[ chinese_traditional ] = "½Æ»s HTML ªí®æ";
     Text[ arabic ] = "äÓÎ ÌÏæá HTML";
     Text[ turkish ] = "HTML tablosunu kopyala";
+    Text[ catalan ] = "Copiar tabla HTML";
 };
 
 String STR_RTF_TITLE
@@ -125,6 +126,7 @@ String STR_RTF_TITLE
     Text[ chinese_traditional ] = "½Æ»sRTFªí®æ";
     Text[ arabic ] = "äÓÎ ÌÏæá RTF";
     Text[ turkish ] = "RTF tablosunu kopyala";
+    Text[ catalan ] = "Copiar tabla RTF";
 };
 
 String STR_WIZ_COLUMN_SELECT_TITEL
@@ -149,6 +151,7 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ chinese_traditional ] = "®M¥ÎÄæ";
     Text[ arabic ] = "ÊØÈíÞ ÇáÃÚãÏÉ";
     Text[ turkish ] = "Sütunlarý kullan";
+    Text[ catalan ] = "Aceptar columnas";
 };
 
 String STR_WIZ_TYPE_SELECT_TITEL
@@ -173,6 +176,7 @@ String STR_WIZ_TYPE_SELECT_TITEL
     Text[ chinese_traditional ] = "Ãþ«¬®æ¦¡";
     Text[ arabic ] = "ÊäÓíÞÇÊ ÇáäæÚ";
     Text[ turkish ] = "Tip formatlamasý";
+    Text[ catalan ] = "Formateado de tipos";
 };
 
 String STR_WIZ_PKEY_ALREADY_DEFINED
@@ -197,6 +201,7 @@ String STR_WIZ_PKEY_ALREADY_DEFINED
     Text[ chinese_traditional ] = "¥H¤UªºÄæ¦ì¤w¸g«ü©w¦¨¥DÃöÁä¦r¡G\n";
     Text[ arabic ] = "Êã ÊÚííä ÇáÍÞæá ÇáÊÇáíÉ ãÓÈÞÇð ßãÝÊÇÍ ÃÓÇÓí:\n";
     Text[ turkish ] = "Þu alanlar birinci anahtar olarak belirlenmiþ durumda:\n";
+    Text[ catalan ] = "Ya se han definido los siguientes campos como llaves primarias:\n";
 };
 
 String STR_WIZ_NAME_MATCHING_TITEL
@@ -221,6 +226,7 @@ String STR_WIZ_NAME_MATCHING_TITEL
     Text[ chinese_traditional ] = "½s±ÆÄæ";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ";
     Text[ turkish ] = "Sütunlarý ata";
+    Text[ catalan ] = "Asignar columnas";
 };
 
 ModalDialog WIZ_RTFCOPYTABLE
@@ -274,6 +280,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ chinese_traditional ] = "§¹¦¨(~R)";
         Text[ arabic ] = "ÅäÔÇÁ";
         Text[ turkish ] = "Oluþtur";
+        Text[ catalan ] = "~Crear";
     };
 
     CancelButton PB_CANCEL
@@ -300,6 +307,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ chinese_traditional ] = "¨ú®ø(~C)";
         Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
         Text[ turkish ] = "Ýptal";
+        Text[ catalan ] = "~Cancelar";
     };
 
     PushButton PB_NEXT
@@ -326,6 +334,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ chinese_traditional ] = "Ä~Äò >";
         Text[ arabic ] = "ÇáÊÇáí>";
         Text[ turkish ] = "Devam>";
+        Text[ catalan ] = "~Siguiente>";
     };
 
     PushButton PB_PREV
@@ -352,12 +361,14 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ chinese_traditional ] = "< ªð¦^(~B)";
         Text[ arabic ] = "<ÇáÓÇÈÞ";
         Text[ turkish ] = "<Geri";
+        Text[ catalan ] = "< ~Regresar";
     };
     Text[ greek ] = "ÁíôéãñáöÞ ðßíáêá RTF";
     Text[ korean ] = "RTF Å×ÀÌºí º¹»ç";
     Text[ chinese_traditional ] = "½Æ»sRTFªí®æ";
     Text[ arabic ] = "äÓÎ ÌÏæá RTF";
     Text[ turkish ] = "RTF tablosunu kopyala";
+    Text[ catalan ] = "Copiar tabla RTF";
 };
 
 //==================================================================
@@ -395,6 +406,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ chinese_traditional ] = "²{¦sªºÄæ";
         Text[ arabic ] = "ÇáÃÚãÏÉ ÇáãæÌæÏÉ";
         Text[ turkish ] = "Mevcut sütunlar";
+        Text[ catalan ] = "Columnas existentes";
     };
 
     MultiListBox LB_ORG_COLUMN_NAMES
@@ -435,6 +447,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ chinese_traditional ] = "->";
         Text[ arabic ] = "->";
         Text[ turkish ] = "->";
+        Text[ catalan ] = "->";
     };
 
     PushButton PB_COLUMNS_RH
@@ -463,6 +476,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ chinese_traditional ] = "=>>";
         Text[ arabic ] = "=>>";
         Text[ turkish ] = "=>>";
+        Text[ catalan ] = "=>>";
     };
 
     PushButton PB_COLUMN_LH
@@ -490,6 +504,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ chinese_traditional ] = "<-";
         Text[ arabic ] = "<-";
         Text[ turkish ] = "<-";
+        Text[ catalan ] = "<-";
     };
 
     PushButton PB_COLUMNS_LH
@@ -517,6 +532,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ chinese_traditional ] = "<<=";
         Text[ arabic ] = "<<=";
         Text[ turkish ] = "<<=";
+        Text[ catalan ] = "<<=";
     };
 
     MultiListBox LB_NEW_COLUMN_NAMES
@@ -580,6 +596,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ chinese_traditional ] = "Äæ¸ê°T";
         Text[ arabic ] = "ãÚáæãÇÊ ÇáÚãæÏ";
         Text[ turkish ] = "Sütun bilgileri";
+        Text[ catalan ] = "Información sobre columnas";
     };
 
     TabPage CONTROL_CONTAINER
@@ -614,6 +631,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ chinese_traditional ] = "¦Û°ÊÃÑ§OÃþ«¬";
         Text[ arabic ] = "ÇáÊÚÑÝ Úáì ÇáäãØ ÊáÞÇÆíÇð";
         Text[ turkish ] = "Otomatik tip tanýma";
+        Text[ catalan ] = "Autoreconocimiento de tipo";
     };
 
     FixedText FT_AUTO
@@ -640,6 +658,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ chinese_traditional ] = "(³Ì¦h)¦C(~X)¡G";
         Text[ arabic ] = "(ÇáÍÏ ÇáÃÞÕì) ááÕÝæÝ:";
         Text[ turkish ] = "Satýrlar (azami):";
+        Text[ catalan ] = "~Líneas (máx.):";
     };
 
     NumericField ET_AUTO
@@ -689,6 +708,7 @@ Menu RID_SBA_RTF_PKEYPOPUP
             Text[ korean ] = "±âº» Å°";
             Text[ arabic ] = "ãÝÊÇÍ ÃÓÇÓí";
             Text[ turkish ] = "Birinci anahtar";
+            Text[ catalan ] = "Llave primaria";
         };
     };
 };
@@ -726,6 +746,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "·½ªí®æ¡G\n";
         Text[ arabic ] = "ÌÏæá ÇáãÕÏÑ: \n";
         Text[ turkish ] = "Kaynak tablo: \n";
+        Text[ catalan ] = "Tabla fuente: \n";
     };
 
     FixedText FT_TABLE_RIGHT
@@ -752,6 +773,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "¥Ø¼Ðªí®æ¡G\n";
         Text[ arabic ] = "ÌÏæá ÇáæÌåÉ: \n";
         Text[ turkish ] = "Hedef tablo: \n";
+        Text[ catalan ] = "Tabla destino: \n";
     };
 
     Control CTRL_LEFT
@@ -800,6 +822,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "¦V¤W(~U)";
         Text[ arabic ] = "áÃÚáì";
         Text[ turkish ] = "Yukarý";
+        Text[ catalan ] = "~arriba";
     };
 
     PushButton PB_COLUMN_DOWN
@@ -827,6 +850,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "¦V¤U(~D)";
         Text[ arabic ] = "áÃÓÝá";
         Text[ turkish ] = "Aþaðý";
+        Text[ catalan ] = "a~bajo";
     };
 
     PushButton PB_COLUMN_UP_RIGHT
@@ -855,6 +879,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "¦V¤W(~P)";
         Text[ arabic ] = "áÃÚáì";
         Text[ turkish ] = "Yukarý";
+        Text[ catalan ] = "~arriba";
     };
 
     PushButton PB_COLUMN_DOWN_RIGHT
@@ -882,6 +907,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "¦V¤U(~O)";
         Text[ arabic ] = "áÃÓÝá";
         Text[ turkish ] = "Aþaðý";
+        Text[ catalan ] = "a~bajo";
     };
 
     PushButton PB_ALL
@@ -909,6 +935,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "¥þ³¡(~A)";
         Text[ arabic ] = "Çáßá";
         Text[ turkish ] = "Tümü";
+        Text[ catalan ] = "to~dos";
     };
 
     PushButton PB_NONE
@@ -936,6 +963,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ chinese_traditional ] = "µL(~E)";
         Text[ arabic ] = "ÈÏæä";
         Text[ turkish ] = "Hiçbiri";
+        Text[ catalan ] = "~ninguno";
     };
 };
 TabPage TAB_WIZ_COPYTABLE
@@ -985,6 +1013,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~B)¡G";
         Text[ arabic ] = "ÇÓã ÇáÌÏæá:";
         Text[ turkish ] = "Tablo adý:";
+        Text[ catalan ] = "Nombre de la ta~bla:";
     };
 
     Edit ET_TABLENAME
@@ -1020,6 +1049,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ greek ] = "ÅðéëïãÝò";
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
+        Text[ catalan ] = "Opciones";
     };
     RadioButton RB_DEFDATA
     {
@@ -1045,6 +1075,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ greek ] = "Ïñéóìüò êáé äåäïìÝí~á";
         Text[ korean ] = "Á¤ÀÇ ±×¸®°í µ¥ÀÌÅÍ(~F)";
         Text[ turkish ] = "Taným ve veriler";
+        Text[ catalan ] = "~Definición y datos";
     };
     RadioButton RB_DEF
     {
@@ -1070,6 +1101,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ greek ] = "Ïñéóìüò";
         Text[ korean ] = "Á¤ÀÇ(~I)";
         Text[ turkish ] = "Taným";
+        Text[ catalan ] = "Defi~nición";
     };
 
     RadioButton RB_VIEW
@@ -1096,6 +1128,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ chinese_traditional ] = "·í§@ªí®æÀËµø(~S)";
         Text[ arabic ] = "ãËá ØÑíÞÉ ÚÑÖ ÇáÌÏæá";
         Text[ turkish ] = "Tablo görünümü olarak";
+        Text[ catalan ] = "Como visualización de t~abla";
     };
 
     RadioButton RB_APPENDDATA
@@ -1122,6 +1155,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ greek ] = "Ðñïóêüëëçóç äåäïìÝ~íùí";
         Text[ korean ] = "µ¥ÀÌÅÍ Ã·ºÎ(~D)";
         Text[ turkish ] = "Verileri ekle";
+        Text[ catalan ] = "~Adjuntar datos";
     };
 
     CheckBox CB_PRIMARY_COLUMN
@@ -1148,6 +1182,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ chinese_traditional ] = "¥Í¦¨¥DÃöÁä¦r(~T)";
         Text[ arabic ] = "ÅäÔÇÁ ãÝÊÇÍ ÃÓÇÓí";
         Text[ turkish ] = "Birincil anahtar oluþtur";
+        Text[ catalan ] = "~Crear llave primaria";
     };
     FixedText FT_KEYNAME
     {
@@ -1173,6 +1208,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ chinese_traditional ] = "¦WºÙ¡G";
         Text[ arabic ] = "ÇáÇÓã:";
         Text[ turkish ] = "Ad:";
+        Text[ catalan ] = "Nombre:";
     };
 
     Edit ET_KEYNAME
@@ -1206,6 +1242,7 @@ String STR_WIZ_TABLE_COPY
     Text[ chinese_traditional ] = "½Æ»sªí®æ";
     Text[ arabic ] = "äÓÎ ÇáÌÏæá";
     Text[ turkish ] = "Tabloyu kopyala";
+    Text[ catalan ] = "Copiar tabla";
 };
 
 String STR_COPYTABLE_TITLE_COPY
@@ -1230,6 +1267,7 @@ String STR_COPYTABLE_TITLE_COPY
     Text[ greek ] = "ÁíôéãñáöÞ ðßíáêá";
     Text[ korean ] = "Å×ÀÌºí º¹»ç";
     Text[ turkish ] = "Tabloyu kopyala";
+    Text[ catalan ] = "Copiar tabla";
 };
 
 String STR_COPYTABLE_TITLE_MOVE
@@ -1254,6 +1292,7 @@ String STR_COPYTABLE_TITLE_MOVE
     Text[ greek ] = "Ìåôáêßíçóç ðßíáêá";
     Text[ korean ] = "Å×ÀÌºí ÀÌµ¿";
     Text[ turkish ] = "Tabloyu taþý";
+    Text[ catalan ] = "Desplazar tabla";
 };
 String STR_DUPL_FIELDNAME
 {
@@ -1277,6 +1316,7 @@ String STR_DUPL_FIELDNAME
     Text[ greek ] = "Ôï üíïìá \'$Name: not supported by cvs2svn $\' õðÜñ÷åé Þäç.\nÐáñáêáëþ åðéëÝîôå Üëëï üíïìá.";
     Text[ korean ] = "ÀÌ¸§\'$Name: not supported by cvs2svn $\'Àº ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Ad \'$Name: not supported by cvs2svn $\' mevcut durumda.\nLütfen baþka bir ad girin.";
+    Text[ catalan ] = "El nombre \'$Name: not supported by cvs2svn $\' ya existe.\nEscriba otro nombre.";
 };
 ErrorBox ERROR_INVALID_TABLE_NAME
 {
@@ -1301,6 +1341,7 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Message[ greek ] = "Áõôü ôï üíïìá ôïõ ðßíáêá äåí åßíáé Ýãêõñï óôçí ôñÝ÷ïõóá âÜóç äåäïìÝíùí.";
     Message[ korean ] = "ÀÌ°ÍÀº ÇöÀç µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ À¯È¿ÇÏÁö ¾ÊÀº Å×ÀÌºí ÀÌ¸§ÀÔ´Ï´Ù.";
     Message[ turkish ] = "Bu veritabanýnda bu ad geçerli deðil.";
+    Message[ catalan ] = "Este nombre de tabla no es válido en la base de datos actual.";
 };
 String STR_ERR_DUPL_TABLENAME
 {
@@ -1325,6 +1366,7 @@ String STR_ERR_DUPL_TABLENAME
     Text[ korean ] = "Å×ÀÌºí ÀÌ¸§ \'$name$\'´Â ÀÌ¹Ì ÀÖ½À´Ï´Ù. \n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ°Å³ª\nµ¥ÀÌÅÍ¸¦ ±âÁ¸ Å×ÀÌºí¿¡ Ã·ºÎÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Tablo adý \'$name$\' mevcut durumda.\nBaþka bir ad girebilir ya da verileri mevcut tabloya ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El nombre de tabla \'$name$\' ya existe.\nPuede escribir otro nombre\no adjuntar los datos a la tabla existente.";
 };
 
 
