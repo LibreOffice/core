@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-17 09:50:50 $
+ *  last change: $Author: mt $ $Date: 2002-10-17 17:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
+#include <unotools/localedatawrapper.hxx>
+#include <vcl/unohelp.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/metric.hxx>
@@ -121,7 +124,7 @@ SV_IMPL_VARARR_SORT( TESortedPositions, ULONG );
 // -------------------------------------------------------------------------
 // (-) class TextEngine
 // -------------------------------------------------------------------------
-TextEngine::TextEngine() : maWordDelimiters( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( " .=+-*/()[]<>{};,:\"\t" ) ) )
+TextEngine::TextEngine()
 {
     mpDoc = 0;
     mpTEParaPortions = 0;
@@ -146,6 +149,7 @@ TextEngine::TextEngine() : maWordDelimiters( String::CreateFromAscii( RTL_CONSTA
 
     mpUndoManager   = NULL;
        mpIMEInfos       = NULL;
+    mpLocaleDataWrapper = NULL;
 
     mpIdleFormatter = new IdleFormatter;
 
@@ -174,6 +178,7 @@ TextEngine::~TextEngine()
     delete mpRefDev;
     delete mpUndoManager;
     delete mpIMEInfos;
+    delete mpLocaleDataWrapper;
 }
 
 void TextEngine::InsertView( TextView* pTextView )
@@ -378,11 +383,8 @@ void TextEngine::SetUpdateMode( BOOL bUpdate )
 
 void TextEngine::SetWordDelimiters( const String& rDelimiters )
 {
-    maWordDelimiters = rDelimiters;
-    if ( maWordDelimiters.Search( ' ' ) == STRING_NOTFOUND )
-        maWordDelimiters += ' ';
-    if ( maWordDelimiters.Search( '\t' ) == STRING_NOTFOUND )
-        maWordDelimiters += '\t';
+    // Only used in basic project, should be removed (I18N)
+    DBG_ERROR( "TextEngine::SetWordDelimiters is not longer supported, since we have I18N" );
 }
 
 BOOL TextEngine::DoesKeyMoveCursor( const KeyEvent& rKeyEvent )
@@ -1671,7 +1673,14 @@ void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TETextPortion* pPor
 
     uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
     i18n::LineBreakHyphenationOptions aHyphOptions( NULL, uno::Sequence< beans::PropertyValue >(), 1 );
+
     i18n::LineBreakUserOptions aUserOptions;
+    aUserOptions.forbiddenBeginCharacters = ImpGetLocaleDataWrapper()->getForbiddenCharacters().beginLine;
+    aUserOptions.forbiddenEndCharacters = ImpGetLocaleDataWrapper()->getForbiddenCharacters().endLine;
+    aUserOptions.applyForbiddenRules = sal_True;
+    aUserOptions.allowPunctuationOutsideMargin = sal_False;
+    aUserOptions.allowHyphenateEnglish = sal_False;
+
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, GetLocale(), pLine->GetStart(), aHyphOptions, aUserOptions );
     USHORT nBreakPos = (USHORT)aLBR.breakIndex;
     if ( nBreakPos <= pLine->GetStart() )
@@ -2850,18 +2859,25 @@ uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
 void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
     maLocale = rLocale;
+    delete mpLocaleDataWrapper;
+    mpLocaleDataWrapper = NULL;
 }
 
 ::com::sun::star::lang::Locale TextEngine::GetLocale()
 {
     if ( !maLocale.Language.getLength() )
     {
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames( LANGUAGE_ENGLISH, aLanguage, aCountry );
-        maLocale.Language = aLanguage;
-        maLocale.Country = aCountry;
+        maLocale = Application::GetSettings().GetUILocale();
     }
     return maLocale;
+}
+
+LocaleDataWrapper* TextEngine::ImpGetLocaleDataWrapper()
+{
+    if ( !mpLocaleDataWrapper )
+        mpLocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+
+    return mpLocaleDataWrapper;
 }
 
 void TextEngine::SetRightToLeft( BOOL bR2L )
