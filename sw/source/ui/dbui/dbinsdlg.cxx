@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:32:12 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef __SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
@@ -642,7 +645,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
     BOOL bShowTbl = pButton == &aRbAsTable;
 
     String sTxt( pButton->GetText() );
-    aFlHead.SetText( sTxt.EraseAllChars( '~' ) );
+    aFlHead.SetText( MnemonicGenerator::EraseAllMnemonicChars( sTxt ) );
 
     aLbTxtDbColumn.Show( !bShowTbl );
     aIbDbcolToEdit.Show( !bShowTbl );
