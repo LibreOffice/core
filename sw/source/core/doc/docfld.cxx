@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: od $ $Date: 2002-08-09 12:57:30 $
+ *  last change: $Author: od $ $Date: 2002-10-10 09:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,9 +1223,12 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, USHORT nLastCnt )
     pMgr->CloseAll(FALSE);
 
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
+
     for( USHORT n = pUpdtFlds->GetSortLst()->Count();
-        n && ((*ppSortLst)->GetNode() < nLastNd || ((*ppSortLst)->GetNode()
-            == nLastNd && (*ppSortLst)->GetCntnt() <= nLastCnt ));
+        n &&
+        ( (*ppSortLst)->GetNode() < nLastNd ||
+          ( (*ppSortLst)->GetNode() == nLastNd && (*ppSortLst)->GetCntnt() <= nLastCnt )
+        );
         --n, ++ppSortLst )
         lcl_CalcFld( *this, rCalc, **ppSortLst, pMgr );
 
@@ -2488,7 +2491,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     USHORT nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = rDoc.GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) ))
+        if( 0 == (pItem = rDoc.GetAttrPool().GetItem( RES_TXTATR_FIELD, n )) )
             continue;
 
         const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
@@ -2511,10 +2514,23 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 break;
 
             case RES_SETEXPFLD:
+                /// OD 04.10.2002 #102894#
+                /// fields of subtype <string> have also been add
+                /// for calculation (eGetMode == GETFLD_CALC).
+                /// Thus, add fields of subtype <string> in all modes
+                ///     (eGetMode == GETFLD_EXPAND||GETFLD_CALC||GETFLD_ALL)
+                /// and fields of other subtypes only in the modes
+                ///     (eGetMode == GETFLD_CALC||GETFLD_ALL)
+                /* "old" if construct - not deleted for history and code review
                 if( ( GSE_STRING & pFld->GetSubType()
                         ? GETFLD_EXPAND : GETFLD_CALC )
                         & eGetMode )
+                */
+                if ( !(eGetMode == GETFLD_EXPAND) ||
+                     (GSE_STRING & pFld->GetSubType()) )
+                {
                     pFormel = &sTrue;
+                }
                 break;
 
             case RES_HIDDENPARAFLD:
