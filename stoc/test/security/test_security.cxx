@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_security.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-19 15:17:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 
+#include <sal/main.h>
 #include <osl/diagnose.h>
 #include <osl/socket.hxx>
 #include <rtl/string.hxx>
@@ -484,8 +485,7 @@ static void check_dbo_dynamic( AccessControl & ac )
         new acc_Restr() );
 }
 
-//==================================================================================================
-int SAL_CALL main( int argc, char * argv [] )
+SAL_IMPLEMENT_MAIN()
 {
     try
     {
