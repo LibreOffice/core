@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:35:44 $
+ *  last change: $Author: ama $ $Date: 2000-11-27 13:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
 {
     if( RES_CHRATR_TWO_LINES == rAttr.Which() )
     {
-        rValue = /* rAttr.Get2Lines().GetValue() */ sal_True;
+        rValue = rAttr.Get2Lines().GetValue();
         if( !rpRef )
             rpRef = &rAttr.Get2Lines();
         else if( rAttr.Get2Lines().GetEndBracket() != rpRef->GetEndBracket() ||
@@ -676,7 +676,7 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
         if( SFX_ITEM_SET == pFmt->GetAttrSet().
             GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
         {
-            rValue = /* ((SvxTwoLinesItem*)pItem)->GetValue(); */ sal_True;
+            rValue = ((SvxTwoLinesItem*)pItem)->GetValue();
             if( !rpRef )
                 rpRef = (SvxTwoLinesItem*)pItem;
             else if( ((SvxTwoLinesItem*)pItem)->GetEndBracket() !=
