@@ -2,9 +2,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: nn $ $Date: 2001-05-23 17:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _COM_SUN_STAR_TABLE_CELLHORIJUSTIFY_HPP_
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_PARAGRAPHADJUST_HPP_
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_SORTFIELD_HPP_
 #include <com/sun/star/util/SortField.hpp>
 #endif
@@ -167,41 +170,93 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
 
 sal_Bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    table::CellHoriJustify eUno = table::CellHoriJustify_STANDARD;
-    switch ( (SvxCellHorJustify)GetValue() )
+    switch ( nMemberId )
     {
-        case SVX_HOR_JUSTIFY_STANDARD: eUno = table::CellHoriJustify_STANDARD; break;
-        case SVX_HOR_JUSTIFY_LEFT:     eUno = table::CellHoriJustify_LEFT;      break;
-        case SVX_HOR_JUSTIFY_CENTER:   eUno = table::CellHoriJustify_CENTER;    break;
-        case SVX_HOR_JUSTIFY_RIGHT:    eUno = table::CellHoriJustify_RIGHT; break;
-        case SVX_HOR_JUSTIFY_BLOCK:    eUno = table::CellHoriJustify_BLOCK; break;
-        case SVX_HOR_JUSTIFY_REPEAT:   eUno = table::CellHoriJustify_REPEAT;    break;
+        case MID_HORJUST_HORJUST:
+            {
+                table::CellHoriJustify eUno = table::CellHoriJustify_STANDARD;
+                switch ( (SvxCellHorJustify)GetValue() )
+                {
+                    case SVX_HOR_JUSTIFY_STANDARD: eUno = table::CellHoriJustify_STANDARD; break;
+                    case SVX_HOR_JUSTIFY_LEFT:     eUno = table::CellHoriJustify_LEFT;     break;
+                    case SVX_HOR_JUSTIFY_CENTER:   eUno = table::CellHoriJustify_CENTER;   break;
+                    case SVX_HOR_JUSTIFY_RIGHT:    eUno = table::CellHoriJustify_RIGHT;    break;
+                    case SVX_HOR_JUSTIFY_BLOCK:    eUno = table::CellHoriJustify_BLOCK;    break;
+                    case SVX_HOR_JUSTIFY_REPEAT:   eUno = table::CellHoriJustify_REPEAT;   break;
+                }
+                rVal <<= eUno;
+            }
+            break;
+        case MID_HORJUST_ADJUST:
+            {
+                //  ParagraphAdjust values, as in SvxAdjustItem
+                //  (same value for ParaAdjust and ParaLastLineAdjust)
+
+                sal_Int16 nAdjust = style::ParagraphAdjust_LEFT;
+                switch ( (SvxCellHorJustify)GetValue() )
+                {
+                    // ParagraphAdjust_LEFT is used for STANDARD and REPEAT
+                    case SVX_HOR_JUSTIFY_STANDARD:
+                    case SVX_HOR_JUSTIFY_REPEAT:
+                    case SVX_HOR_JUSTIFY_LEFT:   nAdjust = style::ParagraphAdjust_LEFT;   break;
+                    case SVX_HOR_JUSTIFY_CENTER: nAdjust = style::ParagraphAdjust_CENTER; break;
+                    case SVX_HOR_JUSTIFY_RIGHT:  nAdjust = style::ParagraphAdjust_RIGHT;  break;
+                    case SVX_HOR_JUSTIFY_BLOCK:  nAdjust = style::ParagraphAdjust_BLOCK;  break;
+                }
+                rVal <<= nAdjust;       // as sal_Int16
+            }
+            break;
     }
-    rVal <<= eUno;
     return sal_True;
 }
 
 sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    table::CellHoriJustify eUno;
-    if(!(rVal >>= eUno))
+    switch ( nMemberId )
     {
-        sal_Int32 nValue;
-        if(!(rVal >>= nValue))
-            return sal_False;
-        eUno = (table::CellHoriJustify)nValue;
+        case MID_HORJUST_HORJUST:
+            {
+                table::CellHoriJustify eUno;
+                if(!(rVal >>= eUno))
+                {
+                    sal_Int32 nValue;
+                    if(!(rVal >>= nValue))
+                        return sal_False;
+                    eUno = (table::CellHoriJustify)nValue;
+                }
+                SvxCellHorJustify eSvx = SVX_HOR_JUSTIFY_STANDARD;
+                switch (eUno)
+                {
+                    case table::CellHoriJustify_STANDARD: eSvx = SVX_HOR_JUSTIFY_STANDARD; break;
+                    case table::CellHoriJustify_LEFT:     eSvx = SVX_HOR_JUSTIFY_LEFT;     break;
+                    case table::CellHoriJustify_CENTER:   eSvx = SVX_HOR_JUSTIFY_CENTER;   break;
+                    case table::CellHoriJustify_RIGHT:    eSvx = SVX_HOR_JUSTIFY_RIGHT;    break;
+                    case table::CellHoriJustify_BLOCK:    eSvx = SVX_HOR_JUSTIFY_BLOCK;    break;
+                    case table::CellHoriJustify_REPEAT:   eSvx = SVX_HOR_JUSTIFY_REPEAT;   break;
+                }
+                SetValue( eSvx );
+            }
+            break;
+        case MID_HORJUST_ADJUST:
+            {
+                //  property contains ParagraphAdjust values as sal_Int16
+                sal_Int16 nVal;
+                if(!(rVal >>= nVal))
+                    return sal_False;
+
+                SvxCellHorJustify eSvx = SVX_HOR_JUSTIFY_STANDARD;
+                switch (nVal)
+                {
+                    //  STRETCH is treated as BLOCK
+                    case style::ParagraphAdjust_LEFT:    eSvx = SVX_HOR_JUSTIFY_LEFT;   break;
+                    case style::ParagraphAdjust_RIGHT:   eSvx = SVX_HOR_JUSTIFY_RIGHT;  break;
+                    case style::ParagraphAdjust_STRETCH:
+                    case style::ParagraphAdjust_BLOCK:   eSvx = SVX_HOR_JUSTIFY_BLOCK;  break;
+                    case style::ParagraphAdjust_CENTER:  eSvx = SVX_HOR_JUSTIFY_CENTER; break;
+                }
+                SetValue( eSvx );
+            }
     }
-    SvxCellHorJustify eSvx = SVX_HOR_JUSTIFY_STANDARD;
-    switch (eUno)
-    {
-        case table::CellHoriJustify_STANDARD: eSvx = SVX_HOR_JUSTIFY_STANDARD; break;
-        case table::CellHoriJustify_LEFT:     eSvx = SVX_HOR_JUSTIFY_LEFT;      break;
-        case table::CellHoriJustify_CENTER:   eSvx = SVX_HOR_JUSTIFY_CENTER;    break;
-        case table::CellHoriJustify_RIGHT:    eSvx = SVX_HOR_JUSTIFY_RIGHT; break;
-        case table::CellHoriJustify_BLOCK:    eSvx = SVX_HOR_JUSTIFY_BLOCK; break;
-        case table::CellHoriJustify_REPEAT:   eSvx = SVX_HOR_JUSTIFY_REPEAT;    break;
-    }
-    SetValue( eSvx );
     return sal_True;
 }
 
