@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-09 17:14:56 $
+ *  last change: $Author: ka $ $Date: 2001-03-12 12:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
+#ifndef _RTL_MEMORY_H_
+#include <rtl/memory.h>
 #endif
 #ifndef DEBUG_HXX
 #include <tools/debug.hxx>
@@ -410,7 +413,22 @@ sal_Bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& rFlavor 
 
 sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const DataFlavor& rFlavor )
 {
-    maAny <<= rString;
+    DataFlavor aFileFlavor;
+
+    if( rString.getLength() &&
+        SotExchange::GetFormatDataFlavor( FORMAT_FILE, aFileFlavor ) &&
+        TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
+    {
+        const ByteString        aByteStr( String( rString ), gsl_getSystemTextEncoding() );
+        Sequence< sal_Int8 >    aSeq( aByteStr.Len() + 1 );
+
+        rtl_copyMemory( aSeq.getArray(), aByteStr.GetBuffer(), aByteStr.Len() );
+        aSeq[ aByteStr.Len() ] = 0;
+        maAny <<= aSeq;
+    }
+    else
+        maAny <<= rString;
+
     return( maAny.hasValue() );
 }
 

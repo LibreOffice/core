@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:12:47 $
+ *  last change: $Author: ka $ $Date: 2001-03-12 12:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /*  2 SOT_FORMAT_BITMAP*/                       { "application/x-openoffice;windows_formatname=\"Bitmap\"", "Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  3 SOT_FORMAT_GDIMETAFILE*/                  { "application/x-openoffice;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  4 SOT_FORMAT_PRIVATE*/                      { "application/x-openoffice;windows_formatname=\"Private\"", "Private", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/*  5 SOT_FORMAT_FILE*/                         { "application/x-openoffice;windows_formatname=\"FileName\"", "FileName", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*  5 SOT_FORMAT_FILE*/                         { "application/x-openoffice;windows_formatname=\"FileName\"", "FileName", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  6 SOT_FORMAT_FILE_LIST*/                    { "application/x-openoffice;windows_formatname=\"FileList\"", "FileList", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  7 EMPTY*/                                   { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  8 EMPTY*/                                   { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
