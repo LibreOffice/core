@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pumptest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-25 14:06:36 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <stl/list>
+#include <list>
 
 
 

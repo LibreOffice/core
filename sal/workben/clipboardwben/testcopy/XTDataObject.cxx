@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2000-11-13 08:34:09 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 #include <windows.h>
 #include <ole2.h>
-#include <stl/memory>
+#include <memory>
 
 //------------------------------------------------------------------------
 // namespace directives
