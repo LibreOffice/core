@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-12 10:30:46 $
+ *  last change: $Author: mba $ $Date: 2001-08-16 15:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,7 +1360,8 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
 
     // Damit ::com::sun::star::script::JavaScript Objekte das ::com::sun::star::script::JavaScript ueber
     // Frame->ViewFrame->DocShell->Medium bei CloseEvents besorgen koennen
-    if ( 1 == xObjSh->GetOwnerLockCount() && pImp->bObjLocked )
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( xObjSh, TYPE(SfxInPlaceFrame ) );
+    if ( 1 == xObjSh->GetOwnerLockCount() && pImp->bObjLocked && !pFrame )
         xObjSh->DoClose();
     SfxObjectShellRef xDyingObjSh = xObjSh;
     xObjSh.Clear();
