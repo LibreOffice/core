@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notesuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_NOTESUNO_HXX
 #define SC_NOTESUNO_HXX
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"           // ScRange, ScAddress
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _SFXLSTNER_HXX //autogen
