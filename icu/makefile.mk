@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2003-06-17 15:31:15 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:26:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,23 +107,22 @@ CONFIGURE_FLAGS=
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE)
-
 OUT2LIB= \
-    $(BUILD_DIR)$/data$/out$/libicudata.so.22.0 \
-    $(BUILD_DIR)$/data$/out$/libicudata.so.22 \
-    $(BUILD_DIR)$/data$/out$/libicudata.so \
+    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).22.0 \
+    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST).22 \
+    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST) \
     $(BUILD_DIR)$/common$/libicuuc.a \
-    $(BUILD_DIR)$/common$/libicuuc.so.22.0 \
-    $(BUILD_DIR)$/common$/libicuuc.so.22 \
-    $(BUILD_DIR)$/common$/libicuuc.so \
+    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).22.0 \
+    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST).22 \
+    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST) \
     $(BUILD_DIR)$/i18n$/libicui18n.a \
-    $(BUILD_DIR)$/i18n$/libicui18n.so.22.0 \
-    $(BUILD_DIR)$/i18n$/libicui18n.so.22 \
-    $(BUILD_DIR)$/i18n$/libicui18n.so \
+    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).22.0 \
+    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST).22 \
+    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST) \
     $(BUILD_DIR)$/layout$/libicule.a \
-    $(BUILD_DIR)$/layout$/libicule.so.22.0 \
-    $(BUILD_DIR)$/layout$/libicule.so.22 \
-    $(BUILD_DIR)$/layout$/libicule.so
+    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).22.0 \
+    $(BUILD_DIR)$/layout$/libicule$(DLLPOST).22 \
+    $(BUILD_DIR)$/layout$/libicule$(DLLPOST)
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
