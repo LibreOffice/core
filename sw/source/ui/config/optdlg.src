@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:24:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,11 +1289,11 @@ TabPage TP_OPTPRINT_PAGE
         Text [ dutch ] = "~Documenteinde" ;
         Text [ spanish ] = "~Fin del documento" ;
         Text [ english_us ] = "End of docu~ment" ;
-        Text[ chinese_simplified ] = "ÎÄµµÎ²¶Ë(~M)";
+        Text[ chinese_simplified ] = "ÎÄµµµÄ½áÊøÎ»ÖÃ(~M)";
         Text[ russian ] = "Â êîíöå äîêóìåíòà";
         Text[ polish ] = "Koniec dokumentu";
         Text[ japanese ] = "ÄŞ·­ÒİÄ––(~M)";
-        Text[ chinese_traditional ] = "¤å¥ó§Àºİ(~M)";
+        Text[ chinese_traditional ] = "¤å¥óªºµ²§ô¦ì¸m(~M)";
         Text[ arabic ] = "äåÇíÉ ÇáãÓÊäÏ";
         Text[ greek ] = "Ôİëïò êåéìİíïõ";
         Text[ korean ] = "¹®¼­ÀÇ ³¡(~M)";
@@ -1318,11 +1318,11 @@ TabPage TP_OPTPRINT_PAGE
         Text [ dutch ] = "Pag~ina-einde" ;
         Text [ spanish ] = "Fi~n de página" ;
         Text [ english_us ] = "~End of page" ;
-        Text[ chinese_simplified ] = "Ò³Î²(~E)";
+        Text[ chinese_simplified ] = "Ò³µÄ½áÊøÎ»ÖÃ(~E)";
         Text[ russian ] = "Â êîíöå ñòğàíèöû";
         Text[ polish ] = "Konie~c strony";
         Text[ japanese ] = "Íß°¼Ş––(~E)";
-        Text[ chinese_traditional ] = "­¶§À(~E)";
+        Text[ chinese_traditional ] = "­¶ªºµ²§ô¦ì¸m(~E)";
         Text[ arabic ] = "äåÇíÉ ÇáÕİÍÉ";
         Text[ greek ] = "Ôİëïò óåëßäáò";
         Text[ korean ] = "ÆäÀÌÁö ³¡(~E)";
@@ -1559,7 +1559,7 @@ TabPage TP_STD_FONT
         Text = "~Standard" ;
         Text [ English ] = "~Standard" ;
         Left = TRUE ;
-        Text [ english_us ] = "~Standard" ;
+        Text [ english_us ] = "De~fault" ;
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
@@ -1751,7 +1751,7 @@ TabPage TP_STD_FONT
         Text [ english_us ] = "C~urrent document only" ;
         Text [ italian ] = "Solo per il documento corrente" ;
         Text [ spanish ] = "Solo para el documento ~actual" ;
-        Text [ french ] = "~Uniquement pour le document actif" ;
+        Text [ french ] = "Uniquement pour le document actif" ;
         Text [ swedish ] = "Bara för det ~aktuella dokumentet" ;
         Text [ danish ] = "Kun det aktuelle dokument" ;
         Text [ portuguese ] = "~Apenas para documento actual" ;
@@ -1759,7 +1759,7 @@ TabPage TP_STD_FONT
         Text[ chinese_simplified ] = "Ö»ÓÃÓÚµ±Ç°µÄÎÄµµ(~U)";
         Text[ russian ] = "Òîëüêî äëÿ òåêóùåãî äîêóìåíòà";
         Text[ polish ] = "Tylko w bie¿¹cym dokumencie";
-        Text[ japanese ] = "Œ»İì‹Æ’†‚ÌÄŞ·­ÒİÄ‚Ì‚İ(~U)";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Ì‚İ(~U)";
         Text[ chinese_traditional ] = "¶È¾A¥Î©ó·í«eªº¤å¥ó(~U)";
         Text[ arabic ] = "ááãÓÊäÏ ÇáÍÇáí İŞØ";
         Text[ greek ] = "Ìüíï ãéá ôï ôñİ÷ùí İããñáöï";
@@ -2817,11 +2817,11 @@ TabPage TP_OPTSHDWCRSR
         Text [ english_us ] = "Pa~ragraph end" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "¶ÎÂäÎ²¶Ë(~R)";
+        Text[ chinese_simplified ] = "¶ÎÂäµÄ½áÊøÎ»ÖÃ(~R)";
         Text[ russian ] = "Êîíåö àáçàöà";
         Text[ polish ] = "Koniec akapitu";
         Text[ japanese ] = "’i—––(~R)";
-        Text[ chinese_traditional ] = "¬q¸¨§Àºİ(~R)";
+        Text[ chinese_traditional ] = "¬q¸¨ªºµ²§ô¦ì¸m(~R)";
         Text[ arabic ] = "äåÇíÉ İŞÑÉ";
         Text[ greek ] = "Ôİëïò ğáñáãñÜöïõ";
         Text[ korean ] = "´Ü¶ô ¸¶Áö¸·(~R)";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
