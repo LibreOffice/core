@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:39:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,11 +333,7 @@ sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQ
 
     // First, convert the statement to upper case
 
-#if SUPD > 631
     ::rtl::OUString sqlStatement = sql.toAsciiUpperCase ();
-#else
-    ::rtl::OUString sqlStatement = sql.toUpperCase ();
-#endif
 
     // Now, look for the FOR UPDATE keywords.  If there is any extra white
     // space between the FOR and UPDATE, this will fail.
