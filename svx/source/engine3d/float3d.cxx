@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: ka $ $Date: 2000-09-26 11:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX //autogen
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -416,8 +419,8 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
     // Initiierung der Initialisierung der ColorLBs
     SfxBoolItem aItem( SID_3D_INIT, TRUE );
-    SFX_DISPATCHER().Execute( SID_3D_INIT, SFX_CALLMODE_ASYNCHRON |
-                                SFX_CALLMODE_RECORD, &aItem, 0L );
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+        SID_3D_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     Reset();
 }
@@ -2391,8 +2394,8 @@ IMPL_LINK( Svx3DWin, ClickUpdateHdl, void *, EMPTYARG )
     if( bUpdate )
     {
         SfxBoolItem aItem( SID_3D_STATE, TRUE );
-        SFX_DISPATCHER().Execute( SID_3D_STATE, SFX_CALLMODE_ASYNCHRON |
-                                    SFX_CALLMODE_RECORD, &aItem, 0L );
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+            SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
     }
     else
     {
@@ -2411,8 +2414,8 @@ IMPL_LINK( Svx3DWin, ClickUpdateHdl, void *, EMPTYARG )
 IMPL_LINK( Svx3DWin, ClickAssignHdl, void *, EMPTYARG )
 {
     SfxBoolItem aItem( SID_3D_ASSIGN, TRUE );
-    SFX_DISPATCHER().Execute( SID_3D_ASSIGN, SFX_CALLMODE_ASYNCHRON |
-                                    SFX_CALLMODE_RECORD, &aItem, 0L );
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+        SID_3D_ASSIGN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     return( 0L );
 }
@@ -2872,8 +2875,8 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
         if( nSId > 0 )
         {
             SfxBoolItem aItem( nSId, TRUE );
-            SFX_DISPATCHER().Execute( nSId, SFX_CALLMODE_ASYNCHRON |
-                                        SFX_CALLMODE_RECORD, &aItem, 0L );
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+                nSId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
         else if( bUpdatePreview == TRUE )
             UpdatePreview();
@@ -3165,8 +3168,8 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
 
             // Status der Selektion am Preview setzen, SYNCHRON
             SfxBoolItem aItem( SID_3D_STATE, TRUE );
-            SFX_DISPATCHER().Execute( SID_3D_STATE, SFX_CALLMODE_SYNCHRON |
-                                        SFX_CALLMODE_RECORD, &aItem, 0L );
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+                SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
             // Attribute des Favoriten holen und setzen
             SfxItemSet* pSet;
@@ -3375,8 +3378,8 @@ void Svx3DWin::UpdatePreview()
     {
         // slot executen
         SfxBoolItem aItem( SID_3D_STATE, TRUE );
-        SFX_DISPATCHER().Execute( SID_3D_STATE, SFX_CALLMODE_SYNCHRON |
-                                    SFX_CALLMODE_RECORD, &aItem, 0L );
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+            SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         // Flag zuruecksetzen
         bOnly3DChanged = FALSE;
 
@@ -3587,7 +3590,8 @@ void SvxConvertTo3DItem::StateChanged(UINT16 nId, SfxItemState eState, const Sfx
     {
         bState = bNewState;
         SfxBoolItem aItem( SID_3D_STATE, TRUE );
-        SFX_DISPATCHER().Execute(SID_3D_STATE, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, &aItem, 0L);
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+            SID_3D_STATE, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, &aItem, 0L);
     }
 }
 
