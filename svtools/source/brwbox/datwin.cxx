@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-08 14:20:02 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 11:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 
 BrowserDataWin::BrowserDataWin( BrowseBox* pParent ) :
     Control( pParent, WinBits(WB_CLIPCHILDREN) ),
+    DragSourceHelper( this ),
     pHeaderBar( 0 ),
     pEventWin( pParent ),
     pCornerWin( 0 ),
@@ -413,6 +414,16 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 
     // assemble and return the BrowseEvent
     return BrowseEvent( this, nRow, nCol, nColId, aFieldRect );
+}
+
+//-------------------------------------------------------------------
+void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+{
+    Point aEventPos( _rPosPixel );
+    aEventPos.Y() += GetParent()->GetTitleHeight();
+#if SUPD>626 || FS_PRIV_DEBUG
+    GetParent()->StartDrag( _nAction, aEventPos );
+#endif
 }
 
 //-------------------------------------------------------------------

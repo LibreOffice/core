@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-08 14:19:29 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 11:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+
 //===================================================================
 
 #define MIN_COLUMNWIDTH  2
@@ -155,7 +159,9 @@ public:
 
 //===================================================================
 
-class BrowserDataWin: public Control
+class BrowserDataWin
+            :public Control
+            ,public DragSourceHelper
 {
 friend class BrowseBox;
     BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
@@ -203,6 +209,10 @@ public:
 
     virtual BOOL    QueryDrop( DropEvent& rEvt );
     virtual BOOL    Drop( const DropEvent& rEvt );
+
+    // DragSourceHelper overridables
+    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+
 
     BrowseEvent     CreateBrowseEvent( const Point& rPosPixel );
     void            Repaint();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-03 18:24:29 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 11:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,9 +165,10 @@ void BrowseBox::Construct( BrowserMode nMode )
 
 //-------------------------------------------------------------------
 
-BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode ) :
-    Control( pParent, nBits | WB_3DLOOK ),
-    aHScroll( this, WinBits( WB_HSCROLL ) )
+BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
+    :Control( pParent, nBits | WB_3DLOOK )
+    ,DragSourceHelper( this )
+    ,aHScroll( this, WinBits( WB_HSCROLL ) )
 {
     DBG_CTOR( BrowseBox, NULL );
     Construct( nMode );
@@ -175,9 +176,10 @@ BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode ) :
 
 //-------------------------------------------------------------------
 
-BrowseBox::BrowseBox( Window* pParent, const ResId& rId, BrowserMode nMode ):
-    Control( pParent, rId ),
-    aHScroll( this, WinBits(WB_HSCROLL) )
+BrowseBox::BrowseBox( Window* pParent, const ResId& rId, BrowserMode nMode )
+    :Control( pParent, rId )
+    ,DragSourceHelper( this )
+    ,aHScroll( this, WinBits(WB_HSCROLL) )
 {
     DBG_CTOR( BrowseBox, NULL );
     Construct(nMode);

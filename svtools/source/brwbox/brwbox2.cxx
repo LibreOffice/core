@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-08 14:21:48 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 11:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,16 @@ DBG_NAMEEX(BrowseBox);
 extern const char* BrowseBoxCheckInvariants( const void * pVoid );
 
 DECLARE_LIST( BrowserColumns, BrowserColumn* );
+
+#if SUPD>626 || FS_PRIV_DEBUG
+//===================================================================
+
+void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel */ )
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+    // not interested in this event
+}
+#endif
 
 //===================================================================
 
