@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-06 08:38:29 $
+ *  last change: $Author: nn $ $Date: 2001-04-17 19:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,9 +292,17 @@ private:
                                         com::sun::star::util::XSearchDescriptor>& xDesc,
                                     const ScAddress* pLastPos);
 
-    ::com::sun::star::beans::PropertyState SAL_CALL GetPropertyState(
-                                    USHORT nWhich,
-                                    const String& PropertyName );
+protected:
+    // GetItemPropertyMap for derived classes must contain all entries, including base class
+    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
+                                USHORT nItemWhich, const SfxItemPropertyMap* pMap );
+    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                                const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
 
 public:
                             ScCellRangesBase();     // fuer SMART_REFLECTION Krempel
@@ -638,6 +646,13 @@ private:
 
 protected:
     const ScRange&          GetRange() const    { return aRange; }
+    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                                const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
@@ -771,18 +786,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
-                                    const ::com::sun::star::uno::Any& aValue )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::beans::PropertyVetoException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-                                    const ::rtl::OUString& PropertyName )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -822,6 +825,15 @@ private:
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
     com::sun::star::table::CellContentType GetResultType_Impl();
+
+protected:
+    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                                const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
 
 public:
     static const SfxItemPropertyMap* GetEditPropertyMap();
@@ -923,19 +935,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
-                                    const ::com::sun::star::uno::Any& aValue )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::beans::PropertyVetoException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-                                    const ::rtl::OUString& PropertyName )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-                            //! Listener-Krempel ??!?
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -977,6 +976,15 @@ private:
 
     USHORT                  GetTab_Impl() const;
     void                    PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges );
+
+protected:
+    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                                const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
 
 public:
                             ScTableSheetObj(ScDocShell* pDocSh, USHORT nTab);
@@ -1155,18 +1163,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
-                                    const ::com::sun::star::uno::Any& aValue )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::beans::PropertyVetoException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-                                    const ::rtl::OUString& PropertyName )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -1199,6 +1195,15 @@ class ScTableColumnObj : public ScCellRangeObj,
 private:
     SfxItemPropertySet      aColPropSet;
 
+protected:
+    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                                const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
+
 public:
                             ScTableColumnObj(ScDocShell* pDocSh, USHORT nCol, USHORT nTab);
     virtual                 ~ScTableColumnObj();
@@ -1218,19 +1223,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
-                                    const ::com::sun::star::uno::Any& aValue )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::beans::PropertyVetoException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-                                    const ::rtl::OUString& PropertyName )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-                            //! Listener-Krempel ??!?
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -1253,6 +1245,15 @@ class ScTableRowObj : public ScCellRangeObj
 private:
     SfxItemPropertySet      aRowPropSet;
 
+protected:
+    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual ::com::sun::star::uno::Any GetOnePropertyValue( const SfxItemPropertyMap* pMap )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                                const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
+
 public:
                             ScTableRowObj(ScDocShell* pDocSh, USHORT nRow, USHORT nTab);
     virtual                 ~ScTableRowObj();
@@ -1261,19 +1262,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
-                                    const ::com::sun::star::uno::Any& aValue )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::beans::PropertyVetoException,
-                                    ::com::sun::star::lang::IllegalArgumentException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-                                    const ::rtl::OUString& PropertyName )
-                                throw(::com::sun::star::beans::UnknownPropertyException,
-                                    ::com::sun::star::lang::WrappedTargetException,
-                                    ::com::sun::star::uno::RuntimeException);
-                            //! Listener-Krempel ??!?
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
