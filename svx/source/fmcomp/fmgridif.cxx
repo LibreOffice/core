@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:50:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@
 // keep it that way!
 
 using namespace ::svxform;
-#ifndef MACOSX
+#if ! (defined(MACOSX) && ( __GNUC__ < 3 ) )
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
 #endif
@@ -187,13 +187,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-#ifndef MACOSX
+#if ! (defined(MACOSX) && ( __GNUC__ < 3 ) )
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star;
 #endif
 using namespace ::com::sun::star::util;
 
-#ifdef MACOSX
+#if  (defined(MACOSX) && ( __GNUC__ < 3 ) )
     #define XContainerListener ::com::sun::star::container::XContainerListener
     #define ContainerEvent ::com::sun::star::container::ContainerEvent
     #define XIndexContainer ::com::sun::star::container::XIndexContainer
@@ -354,11 +354,11 @@ sal_Bool FmXUpdateMultiplexer::approveUpdate(const EventObject &e) throw( Runtim
     aMulti.Source = &m_rParent;
 
     sal_Bool bResult = sal_True;
-    if (getLength())                                            \
-    {                                                                   \
-        ::cppu::OInterfaceIteratorHelper aIter(*this);              \
-        while (bResult && aIter.hasMoreElements())                                  \
-            bResult = reinterpret_cast< XUpdateListener*>(aIter.next())->approveUpdate(aMulti);     \
+    if (getLength())
+    {
+        ::cppu::OInterfaceIteratorHelper aIter(*this);
+        while (bResult && aIter.hasMoreElements())
+            bResult = reinterpret_cast< XUpdateListener*>(aIter.next())->approveUpdate(aMulti);
     }
 
     return bResult;
