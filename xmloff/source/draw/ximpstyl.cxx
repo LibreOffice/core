@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-09 13:28:06 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 15:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1396,8 +1396,14 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
 
                     if(xStyle.is())
                     {
-                        // set parent style name
-                        xStyle->setParentStyle(pStyle->GetParent());
+                        try
+                        {
+                            // set parent style name
+                            xStyle->setParentStyle(pStyle->GetParent());
+                        }
+                        catch( container::NoSuchElementException e )
+                        {
+                        }
                     }
                 }
             }
