@@ -27,7 +27,6 @@ in this Software without prior written authorization from the X Consortium.
 */
 
 #include "def.h"
-#include <string.h>
 
 #ifdef  CPP
 /*
@@ -60,7 +59,7 @@ extern char slotab[];
 struct filepointer  *currentfile;
 struct inclist      *currentinc;
 
-int cppsetup(line, filep, inc)
+cppsetup(line, filep, inc)
     register char   *line;
     register struct filepointer *filep;
     register struct inclist     *inc;
@@ -218,7 +217,7 @@ _my_eval_variable (ip, var, len)
 }
 
 
-int cppsetup(line, filep, inc)
+cppsetup(line, filep, inc)
     register char   *line;
     register struct filepointer *filep;
     register struct inclist     *inc;
