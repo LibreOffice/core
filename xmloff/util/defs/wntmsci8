@@ -11401,3 +11401,15 @@ _TI2?AVbad_alloc@std@@
 ?setBinding@FormCellBindingHelper@xmloff@@QAEXABV?$Reference@VXValueBinding@form@star@sun@com@drafts@@@uno@star@sun@com@@@Z
 ?setListSource@FormCellBindingHelper@xmloff@@QAEXABV?$Reference@VXListEntrySource@form@star@sun@com@drafts@@@uno@star@sun@com@@@Z
 ?toUpperAscii@?A0x8efd0761@xmloff@@YAGG@Z
+??0StringCompare@?A0x724a5cff@xmloff@@QAE@ABU012@@Z
+??0StringCompare@?A0x724a5cff@xmloff@@QAE@ABVOUString@rtl@@@Z
+??1StringCompare@?A0x724a5cff@xmloff@@QAE@XZ
+??RStringCompare@?A0x724a5cff@xmloff@@QAE_NABVOUString@rtl@@@Z
+?__find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0x724a5cff@xmloff@@ABUrandom_access_iterator_tag@1@@Z
+?find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0x724a5cff@xmloff@@@Z
+?getDocument@?A0x724a5cff@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getDrawPage@?A0x724a5cff@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXDrawPage@drawing@star@sun@com@@@?A0x724a5cff@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXModel@frame@star@sun@com@@@?A0x724a5cff@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?isAsciiLetter@?A0x724a5cff@xmloff@@YA_NG@Z
+?toUpperAscii@?A0x724a5cff@xmloff@@YAGG@Z
