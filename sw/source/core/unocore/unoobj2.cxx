@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-29 12:46:36 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,9 @@ BOOL lcl_IsNumeric(const String&);
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                             SwDependArr& rFrameArr, BOOL bSort )
 {
+    // bSortFlag says: TRUE - search AutoContent Flys,
+    //                 else search AtContent Flys
+
     // alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // gebunden sind
     SvXub_StrLens aSortArr( 8, 8 );
@@ -360,7 +363,8 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 const SdrObject *pO = (*pObjs)[ i ];
                 const SwFlyFrm *pFly;
                 if( pO->IsWriterFlyFrame() && (pFly =
-                    ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())->IsAutoPos() )
+                    ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())->IsFlyAtCntFrm() &&
+                     (bSort ? pFly->IsAutoPos() : !pFly->IsAutoPos() ) )
                 {
                     //jetzt einen SwDepend anlegen und in das Array einfuegen
                     SwDepend* pNewDepend = new SwDepend( &rClnt,
@@ -386,12 +390,13 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     {
         const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
         USHORT nSize = rFmts.Count();
+        USHORT nChkType = bSort ? FLY_AUTO_CNTNT : FLY_AT_CNTNT;
         for ( USHORT i = 0; i < nSize; i++)
         {
             const SwFrmFmt* pFmt = rFmts[ i ];
             const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
             const SwPosition* pAnchorPos;
-            if( rAnchor.GetAnchorId() == FLY_AT_CNTNT &&
+            if( rAnchor.GetAnchorId() == nChkType &&
                 0 != (pAnchorPos = rAnchor.GetCntntAnchor()) &&
                     pAnchorPos->nNode == rIdx )
             {
