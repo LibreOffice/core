@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-09 11:06:14 $
+ *  last change: $Author: dr $ $Date: 2001-10-10 10:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13608,8 +13608,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Oddfprice
         {
-            Text = "Liefert den Kurs pro 100 DM Nennwert eines Wertpapiers mit einem unregelmäßigen ersten Zinstermin.";
-            Text[ english ] = "Returns the price of $100 face value of a security with an odd first period";
+            Text = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers mit einem unregelmäßigen ersten Zinstermin.";
+            Text[ english ] = "Returns the price per 100 currency units face value of a security with an odd first period";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the price per $100 face value of a security with an odd first period";
             Text[ portuguese ] = "Devolve o preço por 100 euros do valor nominal de um título com um primeiro período (curto ou longo) irregular.";
@@ -14640,8 +14640,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Oddlprice
         {
-            Text = "Liefert den Kurs pro 100 DM Nennwert eines Wertpapiers mit einem unregelmäßigen letzten Zinstermin.";
-            Text[ english ] = "Returns the price of $100 face value of a security with an odd last period";
+            Text = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers mit einem unregelmäßigen letzten Zinstermin.";
+            Text[ english ] = "Returns the price per 100 curreny units face value of a security with an odd last period";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the price per $100 face value of a security with an odd last period";
             Text[ portuguese ] = "Devolve o preço por 100 euros do valor nominal de um título com um último período de juros irregular.";
