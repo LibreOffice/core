@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:43:05 $
+#   last change: $Author: hr $ $Date: 2004-03-08 11:49:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,7 +135,8 @@ SLOFILES =  \
         $(SLO)$/addinlis.obj \
         $(SLO)$/addinhelpid.obj \
         $(SLO)$/rangeseq.obj \
-        $(SLO)$/refreshtimer.obj
+        $(SLO)$/refreshtimer.obj \
+        $(SLO)$/parclass.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj
