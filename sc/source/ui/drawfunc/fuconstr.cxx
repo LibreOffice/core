@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:53:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ BOOL __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
             pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, 1);
             bReturn = TRUE;
         }
-        else if ( pView->HasMarkedObj() )
+        else if ( pView->AreObjectsMarked() )
         {
             pView->UnmarkAll();
             bReturn = TRUE;
@@ -384,9 +384,9 @@ BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     USHORT nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
-        if ( pView->HasMarkedObj() )
+        if ( pView->AreObjectsMarked() )
         {
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
@@ -446,12 +446,12 @@ BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     {
         pWindow->ReleaseMouse();
 
-        if ( !pView->HasMarkedObj() && rMEvt.GetClicks() < 2 )
+        if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
         {
             pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
-            if ( pView->HasMarkedObj() )
+            if ( pView->AreObjectsMarked() )
                 rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             else
                 rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
