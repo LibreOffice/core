@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwhead.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 11:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
 :   HeaderBar( pParent, nWinBits ),
     _pBrowseBox( pParent )
 {
-    long nHeight = pParent->IsZoom() ? pParent->CalcZoom(nHeight) : pParent->GetTitleHeight();
+    long nHeight = pParent->IsZoom() ? pParent->CalcZoom(pParent->GetTitleHeight()) : pParent->GetTitleHeight();
 
     SetPosSizePixel( Point( 0, 0),
                      Size( pParent->GetOutputSizePixel().Width(),
