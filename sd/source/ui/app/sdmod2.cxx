@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-12 14:50:32 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@
 #include "tpoption.hxx"
 #include "tpscale.hxx"
 #include "prntopts.hxx"
+#include "sdxfer.hxx"
 
 
 /*************************************************************************
@@ -368,18 +369,18 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
 BOOL SdModule::QueryUnload()
 {
-    if (pClipboardData)
+    if( pTransferClip )
     {
         /**********************************************************************
         * Sind viele Daten im Clipboard?
         **********************************************************************/
-        BOOL bQuery = FALSE;
-        SdDrawDocument* pDrDoc = ( (SdDataObject*) pClipboardData )->pSdDrawDocument;
-        USHORT nPageCount = pDrDoc->GetPageCount();
-        SdrPage* pPage = pDrDoc->GetPage(0);
-        SdrObject* pObj = NULL;
-        SdrObjKind eObjKind;
-        ULONG nObjCount = pPage->GetObjCount();
+        BOOL            bQuery = FALSE;
+        SdDrawDocument* pDrDoc = (SdDrawDocument*) pTransferClip->GetWorkDocument();
+        USHORT          nPageCount = pDrDoc->GetPageCount();
+        SdrPage*        pPage = pDrDoc->GetPage(0);
+        SdrObject*      pObj = NULL;
+        SdrObjKind      eObjKind;
+        ULONG           nObjCount = pPage->GetObjCount();
 
         if ( nObjCount < 10 )
         {
@@ -406,15 +407,13 @@ BOOL SdModule::QueryUnload()
             bQuery = TRUE;
         }
 
-        if (bQuery)
+        if( bQuery )
         {
             QueryBox aBox( NULL, WinBits( WB_YES_NO | WB_DEF_NO ), String(SdResId(STR_CLPBRD_CLEAR)) );
 
-            if ( RET_YES != aBox.Execute() )
+            if( RET_YES != aBox.Execute() )
             {
-                // Objekte nicht ins Clipboard stellen: loeschen
-                SvDataObjectRef aRef = new SvDataObject();
-                aRef->CopyClipboard();
+                // !!!Clipboard loeschen
             }
         }
     }

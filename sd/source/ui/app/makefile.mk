@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+#   last change: $Author: ka $ $Date: 2001-01-19 19:10:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,31 +87,32 @@ RSCUPDVER=$(RSCREVISION)SV$(UPD)$(UPDMINOR)
 # --- Files --------------------------------------------------------
 
 SRCFILES =	\
-        app.src 		\
-        toolbox.src		\
-        strings.src 	\
-        res_bmp.src 	\
-        tbx_ww.src		\
-        popup.src		\
-        sdstring.src	\
+        app.src 			\
+        toolbox.src			\
+        strings.src 		\
+        res_bmp.src 		\
+        tbx_ww.src			\
+        popup.src			\
+        sdstring.src		\
         pseudo.src
 
 OBJFILES = \
         $(OBJ)$/sdlib.obj	\
-        $(OBJ)$/sdresid.obj  \
+        $(OBJ)$/sdresid.obj	\
 
 SLOFILES =	\
-        $(SLO)$/sdmod.obj      \
-        $(SLO)$/sdmod1.obj      \
-        $(SLO)$/sdmod2.obj      \
-        $(SLO)$/sddll.obj      \
+        $(SLO)$/sdmod.obj		\
+        $(SLO)$/sdmod1.obj		\
+        $(SLO)$/sdmod2.obj		\
+        $(SLO)$/sddll.obj		\
         $(SLO)$/sddll1.obj      \
         $(SLO)$/sddll2.obj      \
-        $(SLO)$/tbxww.obj	\
-        $(SLO)$/dragserv.obj \
-        $(SLO)$/optsitem.obj \
-        $(SLO)$/sdresid.obj \
-        $(SLO)$/sdpopup.obj
+        $(SLO)$/tbxww.obj		\
+        $(SLO)$/dragserv.obj	\
+        $(SLO)$/optsitem.obj	\
+        $(SLO)$/sdresid.obj		\
+        $(SLO)$/sdpopup.obj		\
+        $(SLO)$/sdxfer.obj		
 
 .IF "$(GUI)" == "WNT"
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-13 11:25:54 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
     bWaterCan(FALSE),
     pDragData(NULL),
     pClipboardData(NULL),
+    pTransferClip(NULL),
+    pTransferDrag(NULL),
     pImpressOptions(NULL),
     pDrawOptions(NULL),
     pSearchItem(NULL)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:50:07 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include "sdpage.hxx"
 #include "sdview.hxx"
 #include "clview.hxx"
-#include "dragserv.hxx"
 #include "sdwindow.hxx"
 #include "strings.hrc"
 #include "res_bmp.hrc"
@@ -419,13 +418,13 @@ SvDataMemberObjectRef __EXPORT SdDrawDocShell::CreateSnapshot()
         pObj->NbcMove(aVector);
     }
 
-    SdDataObjectRef xDataObject = pSdViewIntern->CreateDataObject();
-
+    pSdViewIntern->CreateDataObject();
     delete pSdViewIntern;
     delete pVDev;
 
-    // DataObject aufbauen und uebergeben
-    return SvDataMemberObjectRef((SvObject*)&xDataObject);
+    // Dummy DataObject aufbauen und uebergeben
+    SvDataObjectRef xDataObject;
+    return SvDataMemberObjectRef( (SvObject*) &xDataObject );
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@ class SbxArray;
 #include "anminfo.hxx"
 #include "fupoor.hxx"
 #include "unoaprms.hxx"
-#include "dragserv.hxx"
 
 using namespace ::com::sun::star;
 
@@ -124,10 +123,6 @@ SO2_DECL_REF(SvInPlaceObject)
 #define SO2_DECL_SVSTORAGE_DEFINED
 SO2_DECL_REF(SvStorage)
 #endif
-
-// statisches Flag, das anzeigt, ob momentan gedropt
-// werden darf
-extern BOOL bIsDropAllowed;
 
 /*************************************************************************
 |*
@@ -189,7 +184,7 @@ BOOL __EXPORT SdView::Drop(const DropEvent& rMEvt, SdWindow* pWin,
             if (pWin)
                 aPos = pWin->PixelToLogic( rMEvt.GetPosPixel() );
 
-            aDataObj = SD_MOD()->pDragData;
+            aDataObj = (SvDataObject*) SD_MOD()->pDragData;
 
             if ( !aDataObj.Is() )
                 aDataObj = SvDataObject::PasteDragServer(rMEvt);

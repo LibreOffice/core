@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-12 14:49:52 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,18 @@
 #pragma hdrstop
 
 
+#ifndef _REF_HXX
 #include <tools/ref.hxx>
-
+#endif
+#ifndef _URLOBJ_HXX //autogen
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _SV_EXCHANGE_HXX //autogen
 #include <vcl/exchange.hxx>
 #endif
-
-
 #ifndef _SV_DRAG_HXX //autogen
 #include <vcl/drag.hxx>
 #endif
-
 #ifndef _SVDETC_HXX //autogen
 #include <svx/svdetc.hxx>
 #endif
@@ -118,9 +119,9 @@
 #endif
 
 #include "strings.hrc"
-
 #include "sdview.hxx"
 #include "dragserv.hxx"
+#include "sdxfer.hxx"
 #include "sdresid.hxx"
 #include "sdmod.hxx"
 #include "drviewsh.hxx"
@@ -132,8 +133,6 @@
 #include "drawview.hxx"
 #include "slidview.hxx"
 
-
-
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
 SO2_DECL_REF(SvInPlaceObject)
@@ -143,10 +142,105 @@ SO2_DECL_REF(SvInPlaceObject)
 SO2_DECL_REF(SvStorage)
 #endif
 
-// statisches Flag, das anzeigt, ob momentan gedropt
-// werden darf
+/*************************************************************************
+|*
+|* DataObject fuer Drag&Drop erzeugen
+|*
+\************************************************************************/
 
-extern BOOL bIsDropAllowed;
+SvDataObjectRef SdView::CreateDataObject( SdView* pWorkView, const Point& rDragPos )
+{
+    SdDataObjectRef     xDataObject( new SdDataObject( pDoc, pWorkView ) );
+    SvObjectDescriptor* pObjDesc;
+    String              aDisplayName;
+    SdrOle2Obj*         pSdrOleObj = NULL;
+
+    SD_MOD()->pDragData = xDataObject;
+
+    if( aMark.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = aMark.GetMark(0)->GetObj();
+
+        if( pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().Is() )
+            pSdrOleObj = (SdrOle2Obj*) pObj;
+    }
+
+    if( pDocSh )
+        aDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+
+    if( pSdrOleObj )
+        pObjDesc = new SvObjectDescriptor( pSdrOleObj->GetObjRef(), rDragPos );
+    else
+        pObjDesc = new SvObjectDescriptor( pDocSh, rDragPos );
+
+    pObjDesc->SetSize( GetAllMarkedRect().GetSize() );
+    pObjDesc->SetDisplayName(aDisplayName);
+    pObjDesc->SetCanLink(FALSE);
+
+    xDataObject->SetStartPos( rDragPos );
+    xDataObject->SetObjectDescriptor( *pObjDesc );
+
+    delete pObjDesc;
+
+    return xDataObject;
+}
+
+
+/*************************************************************************
+|*
+|* DataObject fuers Clipboard erzeugen
+|*
+\************************************************************************/
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateDataObject()
+{
+    // since SdTransferable::CopyToClipboard is called, this
+    // dynamically created object ist destroyed automatically
+    SdTransferable* pTransferable = new SdTransferable( pDoc );
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
+
+    SD_MOD()->pTransferClip = pTransferable;
+
+    pDoc->CreatingDataObj( TRUE );
+    pTransferable->SetWorkDocument( (SdDrawDocument*) GetAllMarkedModel() );
+    pDoc->CreatingDataObj( FALSE );
+
+    const Rectangle                 aMarkRect( GetAllMarkedRect() );
+    TransferableObjectDescriptor    aObjDesc;
+    String                          aDisplayName;
+    SdrOle2Obj*                     pSdrOleObj = NULL;
+    SdrPageView*                    pPgView = GetPageViewPvNum( 0 );
+    SdPage*                         pPage = (SdPage*) pPgView->GetPage();
+    SdPage*                         pNewPage = (SdPage*) pTransferable->GetWorkDocument()->GetPage(0);
+
+    pNewPage->SetSize( pPage->GetSize() );
+    pNewPage->SetLayoutName( pPage->GetLayoutName() );
+
+    if( aMark.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = aMark.GetMark(0)->GetObj();
+
+        if( pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().Is() )
+            pSdrOleObj = (SdrOle2Obj*) pObj;
+    }
+
+    if( pSdrOleObj )
+        pSdrOleObj->GetObjRef()->FillTransferableObjectDescriptor( aObjDesc );
+    else
+        pTransferable->GetWorkDocument()->GetDocSh()->FillTransferableObjectDescriptor( aObjDesc );
+
+    if( pDocSh )
+        aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+
+    aObjDesc.maSize = aMarkRect.GetSize();
+
+    pTransferable->SetStartPos( aMarkRect.TopLeft() );
+    pTransferable->SetObjectDescriptor( aObjDesc );
+    pTransferable->CopyToClipboard();
+
+    return xRet;
+}
+
 
 /*************************************************************************
 |*
@@ -158,20 +252,14 @@ void __EXPORT SdView::DoCut(Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
-    if (pOLV)
-    {
+    if( pOLV )
         ( (OutlinerView*) pOLV)->Cut();
-    }
-    else if ( HasMarkedObj() )
+    else if( HasMarkedObj() )
     {
-        BrkAction();
-
-        SdDataObjectRef pDataObject = CreateDataObject();
-
         String aStr( SdResId(STR_UNDO_CUT) );
-        aStr += sal_Unicode(' ');
-        aStr += aMark.GetMarkDescription();
-        BegUndo(aStr);
+
+        DoCopy();
+        BegUndo( ( aStr += sal_Unicode(' ') ) += aMark.GetMarkDescription() );
         DeleteMarked();
         EndUndo();
     }
@@ -187,15 +275,12 @@ void __EXPORT SdView::DoCopy(Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
-    if (pOLV)
-    {
+    if( pOLV )
         ( (OutlinerView*) pOLV)->Copy();
-    }
-    else if ( HasMarkedObj() )
+    else if( HasMarkedObj() )
     {
         BrkAction();
-
-        SdDataObjectRef pDataObject = CreateDataObject();
+        CreateDataObject();
     }
 }
 
@@ -205,28 +290,28 @@ void __EXPORT SdView::DoCopy(Window* pWindow)
 |*
 \************************************************************************/
 
-void __EXPORT SdView::DoPaste(Window* pWindow)
+void __EXPORT SdView::DoPaste( Window* pWindow )
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
-    if (pOLV)
+    if( pOLV )
     {
         ( (OutlinerView*) pOLV)->PasteSpecial();
 
-        SdrObject* pObj = GetTextEditObject();
-        SdPage* pPage = (SdPage*)(pObj?pObj->GetPage():NULL);
-        Outliner* pOutliner = pOLV->GetOutliner();
+        SdrObject*  pObj = GetTextEditObject();
+        SdPage*     pPage = (SdPage*)( pObj ? pObj->GetPage() : NULL );
+        Outliner*   pOutliner = pOLV->GetOutliner();
 
         if( pOutliner)
         {
             if( pObj && pPage && pPage->GetPresObjKind(pObj) == PRESOBJ_TITLE )
             {
                 // remove all hard linebreaks from the title
-
-                if(pOutliner && pOutliner->GetParagraphCount() > 1)
+                if( pOutliner && pOutliner->GetParagraphCount() > 1 )
                 {
                     BOOL bOldUpdateMode = pOutliner->GetUpdateMode();
-                    pOutliner->SetUpdateMode(FALSE);
+
+                    pOutliner->SetUpdateMode( FALSE );
 
                     const EditEngine& rEdit = pOutliner->GetEditEngine();
                     const int nParaCount = rEdit.GetParagraphCount();
@@ -239,7 +324,6 @@ void __EXPORT SdView::DoPaste(Window* pWindow)
                     }
 
                     DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titelobjekt contains hard line breaks" );
-
                     pOutliner->SetUpdateMode(bOldUpdateMode);
                 }
             }
@@ -253,103 +337,90 @@ void __EXPORT SdView::DoPaste(Window* pWindow)
     }
     else
     {
-        Point aPos;
+        Point           aPos;
+        BOOL            bPagesInserted = FALSE;
+        SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
 
-        if (pWindow)
-        {
-            Size aSize = pWindow->GetOutputSizePixel();
-            Rectangle aRect(aPos, aSize);
-            aPos = aRect.Center();
-            aPos = pWindow->PixelToLogic(aPos);
-        }
+        if( pWindow )
+            aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
 
-        BOOL bPagesInserted = FALSE;
-        SvDataObjectRef aDataObj = SD_MOD()->pClipboardData;
-
-        if ( aDataObj.Is() && ( (SdDataObject*) SD_MOD()->pClipboardData )->aDocShellRef )
+        if( pTransferClip && pTransferClip->GetDocShell() )
         {
             // Eigenes Format: Ganze Seiten einfuegen?
-            SvEmbeddedObject* pObj = ( (SdDataObject*) SD_MOD()->pClipboardData )->aDocShellRef;
-            SdDrawDocShell* pDataDocSh = (SdDrawDocShell*) pObj;
-            SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
+            SvEmbeddedObject*   pObj = pTransferClip->GetDocShell();
+            SdDrawDocShell*     pDataDocSh = (SdDrawDocShell*) pObj;
+            SdDrawDocument*     pDataDoc = pDataDocSh->GetDoc();
 
-            if ( pDataDoc && pDataDoc->GetPageCount() > 1 )
+            if( pDataDoc && pDataDoc->GetPageCount() > 1 )
             {
                 // Dokument hat mehrere Seiten -> Seiten einfuegen
                 bPagesInserted = TRUE;
-                USHORT nInsertPgCnt = pDataDoc->GetSdPageCount(PK_STANDARD);
-                USHORT nInsertPos = pDoc->GetSdPageCount(PK_STANDARD) * 2 + 1;
-                USHORT nPgCnt = pDoc->GetSdPageCount(PK_STANDARD);
 
-                for (USHORT nPage = 0; nPage < nPgCnt; nPage++)
+                USHORT  nInsertPgCnt = pDataDoc->GetSdPageCount(PK_STANDARD);
+                USHORT  nInsertPos = pDoc->GetSdPageCount(PK_STANDARD) * 2 + 1;
+                USHORT  nPgCnt = pDoc->GetSdPageCount(PK_STANDARD);
+                BOOL    bMergeMasterPages = TRUE;
+
+                for( USHORT nPage = 0; nPage < nPgCnt; nPage++ )
                 {
-                    SdPage* pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
+                    SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
 
-                    if (pPage->IsSelected())
-                    {
+                    if( pPage->IsSelected() )
                         nInsertPos = nPage * 2 + 3;
-                    }
                 }
 
-                BOOL bMergeMasterPages = TRUE;
-                if( ( (SdDataObject*) SD_MOD()->pClipboardData )->GetSourceDoc() == pDoc )
+                if( pTransferClip->HasSourceDoc( pDoc ) )
                     bMergeMasterPages = FALSE;
 
-                pDoc->InsertBookmarkAsPage(NULL, NULL, FALSE, FALSE, nInsertPos,
-                                           FALSE, pDataDocSh, TRUE, bMergeMasterPages);
+                pDoc->InsertBookmarkAsPage( NULL, NULL, FALSE, FALSE, nInsertPos,
+                                            FALSE, pDataDocSh, TRUE, bMergeMasterPages );
 
-                if (this->ISA(SdSlideView))
+                if( this->ISA( SdSlideView ) )
                 {
                     // Alle Seiten deselektieren
-                    USHORT nPgCnt = pDoc->GetSdPageCount(PK_STANDARD);
-
-                    for (USHORT nPage = 0; nPage < nPgCnt; nPage++)
-                    {
-                        SdPage* pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
-                        pPage->SetSelected(FALSE);
-                    }
+                    for( USHORT nPage = 0, nPgCnt = pDoc->GetSdPageCount( PK_STANDARD ); nPage < nPgCnt; nPage++ )
+                        pDoc->GetSdPage( nPage, PK_STANDARD )->SetSelected( FALSE );
 
                     // Die letzte eingefuegte Seite selektieren
-                    USHORT nPgToSelect = nInsertPos / 2;
-                    nPgToSelect += nInsertPgCnt - 1;
-                    SdPage* pPage = pDoc->GetSdPage(nPgToSelect, PK_STANDARD);
+                    SdPage* pPage = pDoc->GetSdPage( nInsertPos / 2 + nInsertPgCnt - 1, PK_STANDARD );
 
-                    if (pPage)
-                        pPage->SetSelected(TRUE);
+                    if( pPage )
+                        pPage->SetSelected( TRUE );
                 }
             }
         }
-        else
-        {
-            aDataObj = SvDataObject::PasteClipboard();
-        }
 
-        if (aDataObj.Is() && !bPagesInserted && this->ISA(SdDrawView))
+        if( !bPagesInserted && this->ISA( SdDrawView ) )
         {
-            // Dokument hat nur eine Seite -> Objekte einfuegen
-            DropAction eAction = DROP_COPY;
-            if ( !InsertData( aDataObj, aPos, eAction, FALSE ) )
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+
+            if( aDataHelper.GetTransferable().is() )
             {
-                SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
+                DropAction eAction = DROP_COPY;
 
-                if ( pDrViewSh )
+                if( !InsertData( aDataHelper.GetTransferable(), aPos, eAction, FALSE ) )
                 {
-                    BOOL bPasted = FALSE;
-                    INetBookmark aINetBookmark( (const String &) String(), (const String &) String() );
+                    DBG_ERROR( "INetBookmark not supported" );
+/* !!!
+                    SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
 
-                    if ( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
-                        bPasted = TRUE;
-                    else if ( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) )
-                        bPasted = TRUE;
-                    else if( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) )
-                        bPasted = TRUE;
-
-                    if( bPasted )
+                    if( pDrViewSh )
                     {
-                        pDrViewSh->InsertURLField(aINetBookmark.GetURL(),
-                                                  aINetBookmark.GetDescription(),
-                                                  String(), NULL);
+                        String          aEmptyStr;
+                        INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+                        BOOL            bPasted = FALSE;
+
+                        if( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
+                            bPasted = TRUE;
+                        else if ( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) )
+                            bPasted = TRUE;
+                        else if( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) )
+                            bPasted = TRUE;
+
+                        if( bPasted )
+                            pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
                     }
+*/
                 }
             }
         }
@@ -406,15 +477,14 @@ BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
                                                nDragMode, &aRegion);
 
         bDragActive = FALSE;
-
-        pDataObject->pSdView = NULL; // Source-View nicht mehr vorhanden
+        pDataObject->SetView( NULL );
 
         switch (eDropAction)
         {
             case DROP_MOVE:
             case DROP_DISCARD:
             {
-                if (!pDataObject->bInternalMove && !bPresObjSelected)
+                if (!pDataObject->IsInternalMove() && !bPresObjSelected)
                 {
                     // Objekte loeschen
 
@@ -462,7 +532,7 @@ BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
             bReturn = TRUE;
         }
 
-        pDataObject->bInternalMove = FALSE;
+        pDataObject->SetInternalMove( FALSE );
 
         EndUndo();
 
@@ -493,7 +563,7 @@ BOOL SdView::QueryDrop(DropEvent& rDEvt, SdWindow* pWin,
         aLayerName = rLayerAdmin.GetLayerPerID(nLayer)->GetName();
     }
 
-    bReturn = !pPV->IsLayerLocked( aLayerName ) && pPV->IsLayerVisible( aLayerName );
+    bReturn = bIsDropAllowed && !pPV->IsLayerLocked( aLayerName ) && pPV->IsLayerVisible( aLayerName );
 
     if( !bReturn )
         return bReturn;                 // Layer gesperrt oder unsichtbar
@@ -521,28 +591,24 @@ BOOL SdView::QueryDrop(DropEvent& rDEvt, SdWindow* pWin,
         }
     }
 
-    if (!bIsInsideOutlinerView)
+    if( !bIsInsideOutlinerView )
     {
         SdDataObjectRef pDataObject = SD_MOD()->pDragData;
 
-        if (pDataObject)
+        if( pDataObject )
         {
-            // Pointer auf Source-View
-            SdView* pSourceView = pDataObject->pSdView;
+            const SdView* pSourceView = pDataObject->GetView();
 
-            if (pSourceView)
+            if( pSourceView )
             {
                 /**********************************************************
                 * Eigenes Format innerhalb einer View immer
                 **********************************************************/
                 bReturn = TRUE;
 
-                if (rDEvt.GetAction() == DROP_LINK &&
-                    pSourceView->GetDocSh()->GetMedium()->GetName().Len() == 0)
-                {
-                    // Dokument hat keinen Namen: Link nicht zulassen
+                // Dokument hat keinen Namen: Link nicht zulassen
+                if (rDEvt.GetAction() == DROP_LINK && pSourceView->GetDocSh()->GetMedium()->GetName().Len() == 0)
                     bReturn = FALSE;
-                }
             }
         }
         else
@@ -651,7 +717,7 @@ BOOL SdView::QueryDrop(DropEvent& rDEvt, SdWindow* pWin,
         }
     }
 
-    return (bReturn && bIsDropAllowed);
+    return bReturn;
 }
 
 

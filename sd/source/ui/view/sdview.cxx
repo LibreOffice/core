@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,9 @@
 #ifndef _SVX_FMVIEW_HXX
 #include <svx/fmview.hxx>
 #endif
-
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
 #endif
-
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -88,27 +86,18 @@
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
 #endif
-
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
-
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
-
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-
 #ifndef _SVDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
 #endif
@@ -122,7 +111,6 @@
 #include "drawdoc.hxx"
 #include "docshell.hxx"
 #include "app.hxx"
-#include "dragserv.hxx"
 #include "sdpage.hxx"
 #include "glob.hrc"
 #include "sdresid.hxx"
@@ -140,10 +128,6 @@
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
 SO2_DECL_REF(SvInPlaceObject)
 #endif
-
-// statisches Flag, das anzeigt, ob momentan gedropt
-// werden darf
-BOOL bIsDropAllowed;
 
 TYPEINIT1( SdView, FmFormView );
 
@@ -166,13 +150,13 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     pDropMarker(NULL),
     pLockedRedraws(NULL),
     nLockRedrawSmph(0),
-    eAction(DROP_NONE)
+    eAction(DROP_NONE),
+    bIsDropAllowed(TRUE)
 {
     EnableExtendedKeyInputDispatcher(FALSE);
     EnableExtendedMouseEventDispatcher(FALSE);
     EnableExtendedCommandEventDispatcher(FALSE);
 
-    bIsDropAllowed = TRUE;
     SetUseIncompatiblePathCreateInterface(FALSE);
     SetMarkHdlWhenTextEdit(TRUE);
     EnableTextEditOnObjectsWithoutTextIfTextTool(TRUE);
@@ -311,7 +295,7 @@ BOOL SdView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 |*
 \************************************************************************/
 
-BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage)
+BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage) const
 {
     /**************************************************************************
     * Ist ein Presentationsobjekt selektiert?
@@ -370,147 +354,6 @@ BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage)
 
     return (bSelected);
 }
-
-/*************************************************************************
-|*
-|* DataObject fuer Drag&Drop erzeugen
-|*
-\************************************************************************/
-
-SdDataObjectRef SdView::CreateDataObject(SdView* pView, const Point& rDragPos)
-{
-    SdDataObjectRef pDataObject = new SdDataObject(pDoc, pView);
-    SD_MOD()->pDragData = pDataObject;
-
-    SdrOle2Obj* pSdrOleObj = NULL;
-
-    if (aMark.GetMarkCount() == 1)
-    {
-        // Genau ein OLE-Objekt vorhanden
-        SdrObject* pObj = aMark.GetMark(0)->GetObj();
-
-        if (pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().Is())
-        {
-            pSdrOleObj = (SdrOle2Obj*) pObj;
-        }
-    }
-    // ObjectDescriptor aufbauen
-    SvObjectDescriptor* pObjDesc = NULL;
-
-    if (pSdrOleObj)
-    {
-        // ObjectDescriptor fuer das OLE-Objekt erzeugen
-        pObjDesc = new SvObjectDescriptor(pSdrOleObj->GetObjRef(), rDragPos);
-    }
-    else
-    {
-        // Standard-ObjectDescriptor erzeugen
-        pObjDesc = new SvObjectDescriptor(pDocSh, rDragPos);
-    }
-
-    pObjDesc->SetSize( GetAllMarkedRect().GetSize() );
-
-    String aDisplayName;
-
-    if (pDocSh)
-    {
-        const INetURLObject& rURLObj =  pDocSh->GetMedium()->GetURLObject();
-        aDisplayName = rURLObj.GetURLNoPass();
-    }
-
-    pObjDesc->SetDisplayName(aDisplayName);
-
-    // Wenn das Dokument, nicht aber der selektierte Bereich gelinkt werden kann
-    pObjDesc->SetCanLink(FALSE);
-
-    // Eigentuemeruebergang
-    pDataObject->SetObjectDescriptor(pObjDesc);
-
-    pDataObject->pSdView = pView;
-    pDataObject->aStartPos = rDragPos;
-
-    return (pDataObject);
-}
-
-
-/*************************************************************************
-|*
-|* DataObject fuers Clipboard erzeugen
-|*
-\************************************************************************/
-
-SdDataObjectRef SdView::CreateDataObject()
-{
-    // DataObject aufbauen
-    SdDataObjectRef pDataObject = new SdDataObject(pDoc);
-    SD_MOD()->pClipboardData = pDataObject;
-    pDoc->CreatingDataObj(TRUE);
-    SdDrawDocument* pDocument = (SdDrawDocument*) GetAllMarkedModel();
-    pDoc->CreatingDataObj(FALSE);
-    pDataObject->SetDocument(pDocument);
-
-    // Groesse der Source-Seite uebernehmen
-    SdrPageView* pPgView = GetPageViewPvNum(0);
-    SdPage* pPage = (SdPage*) pPgView->GetPage();
-    SdPage* pNewPage = (SdPage*) pDocument->GetPage(0);
-    pNewPage->SetSize( pPage->GetSize() );
-    pNewPage->SetLayoutName( pPage->GetLayoutName() );
-
-    // ObjectDescriptor aufbauen
-    SdrOle2Obj* pSdrOleObj = NULL;
-
-    if (aMark.GetMarkCount() == 1)
-    {
-        // Genau ein OLE-Objekt vorhanden
-        SdrObject* pObj = aMark.GetMark(0)->GetObj();
-
-        if (pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().Is())
-        {
-            pSdrOleObj = (SdrOle2Obj*) pObj;
-        }
-    }
-    // ObjectDescriptor aufbauen
-    SvObjectDescriptor* pObjDesc = NULL;
-
-    if (pSdrOleObj)
-    {
-        // ObjectDescriptor fuer das OLE-Objekt erzeugen
-        pObjDesc = new SvObjectDescriptor(pSdrOleObj->GetObjRef(), Point());
-    }
-    else
-    {
-        // Standard-ObjectDescriptor erzeugen
-        SdDrawDocShell* pDocShell = pDocument->GetDocSh();
-        pObjDesc = new SvObjectDescriptor(pDocShell, Point() );
-    }
-
-    Rectangle aMarkRect(GetAllMarkedRect());
-    pObjDesc->SetSize(aMarkRect.GetSize());
-
-    // Position des MarkRects
-    pDataObject->aStartPos = aMarkRect.TopLeft();
-
-    String aDisplayName;
-
-    if (pDocSh)
-    {
-        const INetURLObject& rURLObj =  pDocSh->GetMedium()->GetURLObject();
-        aDisplayName = rURLObj.GetURLNoPass();
-    }
-
-    pObjDesc->SetDisplayName(aDisplayName);
-
-    // Wenn das Dokument, nicht aber der selektierte Bereich gelinkt werden kann
-    pObjDesc->SetCanLink(FALSE);
-
-    // Eigentuemeruebergang
-    pDataObject->SetObjectDescriptor(pObjDesc);
-
-    pDataObject->CopyClipboard();
-
-    return (pDataObject);
-}
-
 
 /*************************************************************************
 |*

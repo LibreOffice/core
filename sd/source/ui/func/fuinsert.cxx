@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:52:00 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,18 @@
 #ifndef _SCH_DLL_HXX //autogen
 #include <sch/schdll.hxx>
 #endif
+#ifndef _FRAMEOBJ_HXX //autogen
+#include <sfx2/frameobj.hxx>
+#endif
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
 
 #include "app.hrc"
-
 #include "misc.hxx"
 #include "sdresid.hxx"
 #include "sdview.hxx"
 #include "app.hxx"
-#include "dragserv.hxx"
 #include "sdwindow.hxx"
 #include "drawview.hxx"
 #include "drviewsh.hxx"
@@ -130,13 +134,7 @@
 #include "strings.hrc"
 #include "graphpro.hxx"
 #include "drawdoc.hxx"
-
-#ifndef _FRAMEOBJ_HXX //autogen
-#include <sfx2/frameobj.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
+#include "sdxfer.hxx"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -279,35 +277,36 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
                  SdDrawDocument* pDoc, SfxRequest& rReq)
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    SvDataObjectRef aDataObj = SD_MOD()->pClipboardData;
+    // !!!Clipboard: SvPasteObjectDialog() has to be redesigned
+    SvDataObjectRef         aDataObj( SvDataObject::PasteClipboard() );
+    const String            aEmptyStr;
+    SvPasteObjectDialog*    pDlg = new SvPasteObjectDialog();
 
-    if ( !aDataObj.Is() )
-        aDataObj = SvDataObject::PasteClipboard();
-
-    String aEmptyStr;
-    SvPasteObjectDialog* pDlg = new SvPasteObjectDialog();
     pDlg->Insert(SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyStr );
     pDlg->Insert(SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyStr );
-    pDlg->Insert( SvDataType(SOT_FORMATSTR_ID_DRAWING, MEDIUM_STREAM | MEDIUM_MEMORY), Clipboard::GetFormatName(SOT_FORMATSTR_ID_DRAWING));
-    pDlg->Insert( SvDataType(SOT_FORMATSTR_ID_SVXB, MEDIUM_STREAM | MEDIUM_MEMORY), Clipboard::GetFormatName(SOT_FORMATSTR_ID_SVXB));
-    pDlg->Insert( SvDataType(FORMAT_GDIMETAFILE), Clipboard::GetFormatName(FORMAT_GDIMETAFILE) );
-    pDlg->Insert( SvDataType(FORMAT_BITMAP), Clipboard::GetFormatName(FORMAT_BITMAP)  );
-    pDlg->Insert( SvDataType(FORMAT_STRING), String( SdResId(STR_FORMAT_STRING) ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, Clipboard::GetFormatName(SOT_FORMATSTR_ID_DRAWING));
+    pDlg->Insert( SOT_FORMATSTR_ID_SVXB, Clipboard::GetFormatName(SOT_FORMATSTR_ID_SVXB));
+    pDlg->Insert( FORMAT_GDIMETAFILE, Clipboard::GetFormatName(FORMAT_GDIMETAFILE) );
+    pDlg->Insert( FORMAT_BITMAP, Clipboard::GetFormatName(FORMAT_BITMAP)  );
+    pDlg->Insert( FORMAT_STRING, String( SdResId(STR_FORMAT_STRING) ) );
     pDlg->Insert( SOT_FORMATSTR_ID_HTML, Clipboard::GetFormatName(SOT_FORMATSTR_ID_HTML) );
-    pDlg->Insert( SvDataType(FORMAT_RTF), String( SdResId(STR_FORMAT_RTF) ) );
-    pDlg->Insert( SvDataType( EditEngine::RegisterClipboardFormatName() ), String() );
+    pDlg->Insert( FORMAT_RTF, String( SdResId(STR_FORMAT_RTF) ) );
+    pDlg->Insert( EditEngine::RegisterClipboardFormatName(), String() );
 
-    ULONG nFormatId = pDlg->Execute(pWindow, aDataObj);
+    const ULONG nFormatId = pDlg->Execute(pWindow, aDataObj);
 
-    if (nFormatId != 0)
+    if( nFormatId )
     {
-        BOOL bCopy = TRUE;
-        Point aPos;
-        Rectangle aRect(aPos, pWindow->GetOutputSizePixel() );
-        aPos = aRect.Center();
-        aPos = pWindow->PixelToLogic(aPos);
-        DropAction eAction = DROP_COPY;
-        pView->InsertData(&aDataObj, aPos, eAction, FALSE, nFormatId);
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+
+        if( aDataHelper.GetTransferable().is() )
+        {
+            DropAction eAction = DROP_COPY;
+
+            pView->InsertData( aDataHelper.GetTransferable(),
+                               pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
+                               eAction, FALSE, nFormatId );
+        }
     }
 
     delete pDlg;

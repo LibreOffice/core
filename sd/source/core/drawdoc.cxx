@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-12 14:46:07 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@
 #include "../ui/inc/docshell.hxx"
 #include "../ui/inc/grdocsh.hxx"
 #include "../ui/inc/dragserv.hxx"
+#include "../ui/inc/sdxfer.hxx"
 #include "../ui/inc/viewshel.hxx"
 #include "../ui/inc/grdocsh.hxx"
 #include "../ui/inc/optsitem.hxx"
@@ -188,6 +189,7 @@
 #include "grdocsh.hxx"
 #include "sdresid.hxx"
 #include "dragserv.hxx"
+#include "sdxfer.hxx"
 #include "viewshel.hxx"
 #include "grdocsh.hxx"
 #include "optsitem.hxx"
@@ -592,50 +594,34 @@ SdrModel* __EXPORT SdDrawDocument::AllocModel() const
     SdDrawDocument* pNewModel = NULL;
 
 #ifndef SVX_LIGHT
-    if (bSdDataObj)
+    if( bSdDataObj )
     {
-        // Dokument wird fuer Drag&Drop erzeugt, dafuer muss dem Dokument
-        // eine DocShell (SvPersist) bekannt sein
+        // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
+        SvEmbeddedObject*   pObj = NULL;
+        SdDrawDocShell*     pNewDocSh = NULL;
+        SdDataObject*       pTransferDrag = (SdDataObject*) SD_MOD()->pDragData;
+        SdTransferable*     pTransferClip = SD_MOD()->pTransferClip;
 
-        SvEmbeddedObject* pObj = NULL;
-        SdDrawDocShell* pNewDocSh = NULL;
-        SdDataObject* pClipboardData = (SdDataObject*) SD_MOD()->pClipboardData;
-        SdDataObject* pDragData = (SdDataObject*) SD_MOD()->pDragData;
-
-        if (pDragData)
+        if( pTransferDrag )
         {
-            if( eDocType == DOCUMENT_TYPE_IMPRESS)
-            {
-                pDragData->aDocShellRef = new SdDrawDocShell(SFX_CREATE_MODE_EMBEDDED,
-                                                             TRUE, eDocType);
-            }
+            if( eDocType == DOCUMENT_TYPE_IMPRESS )
+                pTransferDrag->SetDocShell( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
             else
-            {
-                pDragData->aDocShellRef = new SdGraphicDocShell(SFX_CREATE_MODE_EMBEDDED,
-                                                             TRUE, eDocType);
-            }
+                pTransferDrag->SetDocShell( new SdGraphicDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
 
-            pObj = pDragData->aDocShellRef;
-            pNewDocSh = (SdDrawDocShell*) pObj;
+            pNewDocSh = (SdDrawDocShell*) ( pObj = pTransferDrag->GetDocShell() );
         }
-        else if (pClipboardData)
+        else if( pTransferClip )
         {
-            if( eDocType == DOCUMENT_TYPE_IMPRESS)
-            {
-                pClipboardData->aDocShellRef = new SdDrawDocShell(SFX_CREATE_MODE_EMBEDDED,
-                                                                  TRUE, eDocType);
-            }
+            if( eDocType == DOCUMENT_TYPE_IMPRESS )
+                pTransferClip->SetDocShell( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
             else
-            {
-                pClipboardData->aDocShellRef = new SdGraphicDocShell(SFX_CREATE_MODE_EMBEDDED,
-                                                                  TRUE, eDocType);
-            }
+                pTransferClip->SetDocShell( new SdGraphicDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
 
-            pObj = pClipboardData->aDocShellRef;
-            pNewDocSh = (SdDrawDocShell*) pObj;
+            pNewDocSh = (SdDrawDocShell*) ( pObj = pTransferClip->GetDocShell() );
         }
 
-        pNewDocSh->DoInitNew(NULL);
+        pNewDocSh->DoInitNew( NULL );
         pNewModel = pNewDocSh->GetDoc();
 
         // Nur fuer Clipboard notwendig,
@@ -654,16 +640,12 @@ SdrModel* __EXPORT SdDrawDocument::AllocModel() const
 
         pNewModel->NewOrLoadCompleted( DOC_LOADED );  // loaded from source document
     }
-    else if (bAllocDocSh)
+    else if( bAllocDocSh )
     {
-        // Es wird eine DocShell erzeugt, welche mit GetAllocedDocSh()
-        // zurueckgegeben wird
-
-        // const as const can... (geht z.Z. nicht anders)
+        // Es wird eine DocShell erzeugt, welche mit GetAllocedDocSh() zurueckgegeben wird
         SdDrawDocument* pDoc = (SdDrawDocument*) this;
         pDoc->SetAllocDocSh(FALSE);
-        pDoc->xAllocedDocShRef = new SdDrawDocShell(SFX_CREATE_MODE_EMBEDDED,
-                                                    TRUE, eDocType);
+        pDoc->xAllocedDocShRef = new SdDrawDocShell(SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType);
         pDoc->xAllocedDocShRef->DoInitNew(NULL);
         pNewModel = pDoc->xAllocedDocShRef->GetDoc();
     }
@@ -673,7 +655,7 @@ SdrModel* __EXPORT SdDrawDocument::AllocModel() const
         pNewModel = new SdDrawDocument(eDocType, NULL);
     }
 
-    return(pNewModel);
+    return pNewModel;
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:53:19 $
+ *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,6 @@
 #include "sdpage.hxx"
 #include "sdview.hxx"
 #include "slidview.hxx"
-
-// statisches Flag, das anzeigt, ob momentan gedropt
-// werden darf
-extern BOOL bIsDropAllowed;
 
 /*************************************************************************
 |*
