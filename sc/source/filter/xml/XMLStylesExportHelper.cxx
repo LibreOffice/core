@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-06 11:49:46 $
+ *  last change: $Author: sab $ $Date: 2001-09-06 14:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,19 +644,41 @@ void ScRowFormatRanges::Clear()
 void ScRowFormatRanges::AddRange(const sal_Int32 nPrevStartCol, const sal_Int32 nRepeat, const sal_Int32 nPrevIndex,
     const sal_Bool bPrevAutoStyle, const ScMyRowFormatRange& rFormatRange)
 {
-    ScMyRowFormatRange aRange;
-    aRange.nStartColumn = nPrevStartCol;
-    aRange.nRepeatColumns = nRepeat;
-    aRange.nRepeatRows = rFormatRange.nRepeatRows;
-    aRange.nValidationIndex = rFormatRange.nValidationIndex;
-    aRange.bIsAutoStyle = rFormatRange.bIsAutoStyle;
-    if ((nPrevIndex == rFormatRange.nIndex) &&
-        (bPrevAutoStyle == rFormatRange.bIsAutoStyle))
-        aRange.nIndex = -1;
-    else
-        aRange.nIndex = rFormatRange.nIndex;
-    aRowFormatRanges.push_back(aRange);
-    nSize++;
+    sal_Int32 nIndex(-1);
+    if ((nPrevIndex != rFormatRange.nIndex) ||
+        (bPrevAutoStyle != rFormatRange.bIsAutoStyle))
+        nIndex = rFormatRange.nIndex;
+
+    sal_Bool bInserted(sal_False);
+    if (!aRowFormatRanges.empty())
+    {
+        ScMyRowFormatRange* pRange = &aRowFormatRanges.back();
+        if (pRange)
+        {
+            if ((nPrevStartCol == (pRange->nStartColumn + pRange->nRepeatColumns)) &&
+                (pRange->bIsAutoStyle == rFormatRange.bIsAutoStyle) &&
+                (pRange->nIndex == nIndex) &&
+                (pRange->nValidationIndex == rFormatRange.nValidationIndex))
+            {
+                if (rFormatRange.nRepeatRows < pRange->nRepeatRows)
+                    pRange->nRepeatRows = rFormatRange.nRepeatRows;
+                pRange->nRepeatColumns += nRepeat;
+                bInserted = sal_True;
+            }
+        }
+    }
+    if (!bInserted)
+    {
+        ScMyRowFormatRange aRange;
+        aRange.nStartColumn = nPrevStartCol;
+        aRange.nRepeatColumns = nRepeat;
+        aRange.nRepeatRows = rFormatRange.nRepeatRows;
+        aRange.nValidationIndex = rFormatRange.nValidationIndex;
+        aRange.bIsAutoStyle = rFormatRange.bIsAutoStyle;
+        aRange.nIndex = nIndex;
+        aRowFormatRanges.push_back(aRange);
+        nSize++;
+    }
 }
 
 void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
@@ -685,10 +707,10 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
     {
         nPrevIndex = (*pColDefaults)[rFormatRange.nStartColumn].nIndex;
         bPrevAutoStyle = (*pColDefaults)[rFormatRange.nStartColumn].bIsAutoStyle;
-        sal_Int32 nPrevStartCol(rFormatRange.nStartColumn);
-        sal_Int32 nRepeat(1);
+        sal_uInt32 nPrevStartCol(rFormatRange.nStartColumn);
+        sal_uInt32 nRepeat((*pColDefaults)[rFormatRange.nStartColumn].nRepeat);
         nEnd = rFormatRange.nStartColumn + rFormatRange.nRepeatColumns;
-        for(i = sal_uInt32(rFormatRange.nStartColumn + 1); i < nEnd; i += (*pColDefaults)[i].nRepeat)
+        for(i = nPrevStartCol + nRepeat; i < nEnd; i += (*pColDefaults)[i].nRepeat)
         {
             DBG_ASSERT(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
             if ((nPrevIndex != (*pColDefaults)[i].nIndex) ||
