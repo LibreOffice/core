@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:07:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@ namespace pcr
                                                 //  (note that this includes PROP_FLAG_ENUM)
 #define PROP_FLAG_COMPOSEABLE       0x00000080  // the property is "composeable", i.e. an intersection of property
                                                 //  sets should expose it, if all elements do
+#define PROP_FLAG_EXPERIMENTAL      0x00000100  // the property is experimental, i.e. should not appear in the
+                                                // UI, unless experimental properties are enabled by a configuraiton
+                                                // option
 
     //========================================================================
     //= property ids (for all browseable properties)
@@ -336,6 +339,7 @@ namespace pcr
     #define PROPERTY_ID_SUBMISSION_ID        167
     #define PROPERTY_ID_XFORMS_BUTTONTYPE    168
     #define PROPERTY_ID_LIST_BINDING         169
+    #define PROPERTY_ID_VERTICAL_ALIGN       170
 
 //............................................................................
 } // namespace pcr
