@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TableWizard.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:39:01 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:01:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,14 +57,18 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.table;
 
 import java.util.Hashtable;
 
+import com.sun.star.awt.TextEvent;
+import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.CommandType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.task.XJobExecutor;
 import com.sun.star.uno.UnoRuntime;
@@ -73,7 +77,7 @@ import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.*;
 
 
-public class TableWizard extends WizardDialog{
+public class TableWizard extends WizardDialog implements XTextListener, XCompletion{
 
     static String slblFields;
     static String slblSelFields;
@@ -85,6 +89,9 @@ public class TableWizard extends WizardDialog{
     public Hashtable fielditems;
     int wizardmode;
     String tablename;
+    String serrToManyFields;
+    String serrTableNameexists;
+    String scomposedtablename;
     TableDescriptor curTableDescriptor;
     public static final int SONULLPAGE = 0;
     public static final int SOMAINPAGE = 1;
@@ -96,7 +103,7 @@ public class TableWizard extends WizardDialog{
     String WizardHeaderText[] = new String[8];
 
     public TableWizard(XMultiServiceFactory xMSF) {
-        super(xMSF, 41000);
+        super(xMSF, 41200);
         super.addResourceHandler("TableWizard", "dbw");
         String sTitle = oResource.getResText(UIConsts.RID_TABLE + 1);
         Helper.setUnoPropertyValues(xDialogModel,
@@ -110,25 +117,6 @@ public class TableWizard extends WizardDialog{
     }
 
 
-    protected void enterStep(int nOldStep, int nNewStep) {
-        switch (nNewStep){
-            case SOMAINPAGE:
-                break;
-            case SOFIELDSFORMATPAGE:
-                curFieldFormatter.initialize(curTableDescriptor, this.curScenarioSelector.getSelectedFieldNames());
-                break;
-            case SOPRIMARYKEYPAGE:
-                curPrimaryKeyHandler.initialize(curTableDescriptor);
-                break;
-            case SOFINALPAGE:
-                curFinalizer.initialize(curScenarioSelector.getFirstTableName());
-                break;
-             default:
-                break;
-        }
-    }
-
-
     protected void leaveStep(int nOldStep, int nNewStep){
          switch (nOldStep){
             case SOMAINPAGE:
@@ -136,7 +124,9 @@ public class TableWizard extends WizardDialog{
                 break;
             case SOFIELDSFORMATPAGE:
                 curFieldFormatter.updateColumnofColumnDescriptor();
-                curScenarioSelector.setSelectedFieldNames(curFieldFormatter.getFieldNames());
+                String[] sfieldnames = curFieldFormatter.getFieldNames();
+                super.setStepEnabled(this.SOFIELDSFORMATPAGE, sfieldnames.length > 0);
+                curScenarioSelector.setSelectedFieldNames(sfieldnames);
                 break;
             case SOPRIMARYKEYPAGE:
                 break;
@@ -148,8 +138,87 @@ public class TableWizard extends WizardDialog{
     }
 
 
+    protected void enterStep(int nOldStep, int nNewStep) {
+        switch (nNewStep){
+            case SOMAINPAGE:
+                break;
+            case SOFIELDSFORMATPAGE:
+                curFieldFormatter.initialize(curTableDescriptor, this.curScenarioSelector.getSelectedFieldNames());
+                break;
+            case SOPRIMARYKEYPAGE:
+                curPrimaryKeyHandler.initialize();
+                break;
+            case SOFINALPAGE:
+                curFinalizer.initialize(curScenarioSelector.getFirstTableName());
+                break;
+             default:
+                break;
+        }
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
+     */
+    public boolean iscompleted(int _ndialogpage) {
+        switch (_ndialogpage){
+            case SOMAINPAGE:
+                return curScenarioSelector.iscompleted();
+            case SOFIELDSFORMATPAGE:
+                return this.curFieldFormatter.iscompleted();
+            case SOPRIMARYKEYPAGE:
+                if (curPrimaryKeyHandler != null)
+                    return this.curPrimaryKeyHandler.iscompleted();
+            case SOFINALPAGE:
+                return this.curFinalizer.iscompleted();
+            default:
+                return false;
+        }
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
+     */
+    public void setcompleted(int _ndialogpage, boolean _biscompleted) {
+        boolean bScenarioiscompleted = _biscompleted;
+        boolean bFieldFormatsiscompleted = _biscompleted;
+        boolean bPrimaryKeysiscompleted = _biscompleted;
+        boolean bFinalPageiscompleted = _biscompleted;
+
+        if (_ndialogpage == SOMAINPAGE)
+            curFinalizer.initialize(curScenarioSelector.getFirstTableName());
+        else
+            bScenarioiscompleted = iscompleted(SOMAINPAGE);
+
+        if (_ndialogpage != TableWizard.SOFIELDSFORMATPAGE){
+            bFieldFormatsiscompleted = iscompleted(SOFIELDSFORMATPAGE);
+            if (!bFieldFormatsiscompleted)                              // it might be that the Fieldformatter has not yet been initialized
+                bFieldFormatsiscompleted = bScenarioiscompleted;        // in this case query the scenarioselector
+        }
+        if (_ndialogpage != TableWizard.SOPRIMARYKEYPAGE && (this.curPrimaryKeyHandler != null))
+            bPrimaryKeysiscompleted = iscompleted(SOPRIMARYKEYPAGE);
+        if (_ndialogpage != TableWizard.SOFINALPAGE)
+            bFinalPageiscompleted = iscompleted(SOFINALPAGE);           // Basically the finalpage is always enabled
+        if (bScenarioiscompleted){
+            super.setStepEnabled(SOFIELDSFORMATPAGE, true);
+            super.setStepEnabled(SOPRIMARYKEYPAGE, true);
+            if (bPrimaryKeysiscompleted){
+                super.enablefromStep(SOFINALPAGE, bFinalPageiscompleted);
+            }
+            else
+                super.enablefromStep(SOFINALPAGE, false);
+        }
+        else
+            if (_ndialogpage == SOFIELDSFORMATPAGE)
+                super.enablefromStep(super.getCurrentStep()+1, iscompleted(SOFIELDSFORMATPAGE));
+            else
+                super.enablefromStep(super.getCurrentStep()+1, false);
+    }
+
+
     public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+    String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
     PropertyValue[] curproperties = null;
     try {
         XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
@@ -157,8 +226,12 @@ public class TableWizard extends WizardDialog{
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/Myverynewdbase.odb"); // NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography
+            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+//          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+//          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDBase.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+//          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/New Database3.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+
+            //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography
             CurTableWizard.startTableWizard(xLocMSF, curproperties);
         }
     }
@@ -171,45 +244,62 @@ public class TableWizard extends WizardDialog{
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
         curFieldFormatter = new FieldFormatter(this, curTableDescriptor );
         if (this.curTableDescriptor.supportsCoreSQLGrammar())
-            curPrimaryKeyHandler = new PrimaryKeyHandler(this);
+            curPrimaryKeyHandler = new PrimaryKeyHandler(this, curTableDescriptor);
         curFinalizer = new Finalizer(this, curTableDescriptor);
         enableNavigationButtons(false, false, false);
     }
 
 
     public boolean createTable(){
-    tablename = curFinalizer.getTableName(curScenarioSelector.getFirstTableName());
-    if (curTableDescriptor.supportsCoreSQLGrammar()){
-        String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields(curTableDescriptor);
-        if (keyfieldnames != null){
-            if (keyfieldnames.length > 0){
-                boolean bIsAutoIncrement = curPrimaryKeyHandler.IsAutoIncrement();
-                return curTableDescriptor.createTable(tablename, keyfieldnames, bIsAutoIncrement, curScenarioSelector.getSelectedFieldNames());
+        String schemaname = curFinalizer.getSchemaName();
+        String catalogname = curFinalizer.getCatalogName();
+        if (curTableDescriptor.supportsCoreSQLGrammar()){
+            String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields(curTableDescriptor);
+            if (keyfieldnames != null){
+                if (keyfieldnames.length > 0){
+                    boolean bIsAutoIncrement = curPrimaryKeyHandler.isAutoIncremented();
+                    return curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement, curScenarioSelector.getSelectedFieldNames());
+                }
             }
         }
-    }
-        return curTableDescriptor.createTable(tablename, curScenarioSelector.getSelectedFieldNames());
+        return curTableDescriptor.createTable(catalogname, schemaname, tablename, curScenarioSelector.getSelectedFieldNames());
     }
 
 
     public void finishWizard(){
         super.switchToStep(super.getCurrentStep(), SOFINALPAGE);
-        wizardmode = curFinalizer.finish();
-        if (createTable()){
-            if (wizardmode == Finalizer.MODIFYTABLEMODE)
-                curTableDescriptor.switchtoDesignmode(tablename, com.sun.star.sdb.CommandType.TABLE);
-            else if (wizardmode == Finalizer.WORKWITHTABLEMODE)
-                curTableDescriptor.switchtoDataViewmode(tablename, com.sun.star.sdb.CommandType.TABLE);
-            super.xDialog.endExecute();
+        tablename = curFinalizer.getTableName(curScenarioSelector.getFirstTableName());
+        scomposedtablename = curFinalizer.getComposedTableName(tablename);
+        if (this.curTableDescriptor.isSQL92CheckEnabled())
+            Desktop.removeSpecialCharacters(curTableDescriptor.xMSF, Configuration.getOfficeLocale(this.curTableDescriptor.xMSF), tablename);
+        if (tablename != ""){
+            if (!curTableDescriptor.hasTableByName(scomposedtablename)){
+                wizardmode = curFinalizer.finish();
+                if (createTable()){
+                    if (wizardmode == Finalizer.MODIFYTABLEMODE)
+                        curTableDescriptor.switchtoDesignmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE);
+                    else if (wizardmode == Finalizer.WORKWITHTABLEMODE)
+                        curTableDescriptor.switchtoDataViewmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE);
+                    super.xDialog.endExecute();
+                }
+            }
+            else{
+                String smessage = JavaTools.replaceSubString(serrTableNameexists, tablename, "%TABLENAME");
+                super.showMessageBox("WarningBox", com.sun.star.awt.VclWindowPeerAttribute.OK, smessage );
+                curFinalizer.setFocusToTableNameControl();
+            }
         }
     }
+
 
     private void callFormWizard(){
     try {
         Object oFormWizard = this.xMSF.createInstance("com.sun.star.wizards.form.CallFormWizard");
-        PropertyValue[] aProperties  = new PropertyValue[2];
+        PropertyValue[] aProperties  = new PropertyValue[4];
         aProperties[0] = Properties.createProperty("ActiveConnection", curTableDescriptor.DBConnection);
         aProperties[1] = Properties.createProperty("DataSource", curTableDescriptor.xDataSource);
+        aProperties[2] = Properties.createProperty("CommandType", new Integer(CommandType.TABLE));
+        aProperties[3] = Properties.createProperty("Command", scomposedtablename);
         XInitialization xInitialization = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oFormWizard);
         xInitialization.initialize(aProperties);
         XJobExecutor xJobExecutor = (XJobExecutor) UnoRuntime.queryInterface(XJobExecutor.class, oFormWizard);
@@ -242,7 +332,6 @@ public class TableWizard extends WizardDialog{
     try{
         curTableDescriptor = new TableDescriptor(xMSF);
         if (curTableDescriptor.getConnection(CurPropertyValue)){
-            int[] nDataTypes  = curTableDescriptor.getsupportedDataTypes();
             buildSteps();
             createWindowPeer();
             curTableDescriptor.setWindowPeer(this.xControl.getPeer());
@@ -271,14 +360,11 @@ public class TableWizard extends WizardDialog{
         sMsgWizardName = super.oResource.getResText(UIConsts.RID_TABLE+1);
         slblFields = oResource.getResText(UIConsts.RID_TABLE + 19);
         slblSelFields =  oResource.getResText(UIConsts.RID_TABLE + 25);
-//      sMsgSavingImpossible = oResource.getResText(UIConsts.RID_DB_COMMON + 30);
-        // TODO the following message also has to show up when saving failed: sLinkCreationImpossible
-//          sMsgLinkCreationImpossible = oResource.getResText(UIConsts.RID_DB_COMMON + 31);
-//      sMsgFilePathInvalid = oResource.getResText(UIConsts.RID_DB_COMMON + 36);
-//      slblColumnTitles = oResource.getResText(UIConsts.RID_REPORT + 70);
-//      slblColumnNames = oResource.getResText(UIConsts.RID_REPORT + 71);
+        serrToManyFields = oResource.getResText(UIConsts.RID_TABLE + 47);
+        serrTableNameexists = oResource.getResText(UIConsts.RID_TABLE + 48);
         return true;
     }
+
 
     private void toggleWizardSteps(int _startStep, boolean _benable){
         super.setStepEnabled(SOFIELDSFORMATPAGE, _benable);
@@ -287,4 +373,34 @@ public class TableWizard extends WizardDialog{
         setControlProperty("btnWizardNext", "Enabled", new Boolean(_benable));
         setControlProperty("btnWizardFinish", "Enabled", new Boolean(_benable));
     }
+
+
+    public boolean verifyfieldcount( int _icount ){
+    try{
+        int maxfieldcount = curTableDescriptor.getMaxColumnsInTable();
+        if (_icount >=  (maxfieldcount - 1)){   // keep one column as reserve for the automaticcally created key
+            String smessage = serrToManyFields;
+            smessage = JavaTools.replaceSubString(smessage, String.valueOf(maxfieldcount), "%COUNT");
+            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, smessage);
+            return false;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(System.out);
+    }
+    return true;
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.sun.star.awt.XTextListener#textChanged(com.sun.star.awt.TextEvent)
+     */
+    public void textChanged(TextEvent aTextEvent) {
+        if (this.curTableDescriptor.isSQL92CheckEnabled()){
+            Object otextcomponent = UnoDialog.getModel(aTextEvent.Source);
+            String sName = (String) Helper.getUnoPropertyValue(otextcomponent, "Text");
+            sName = Desktop.removeSpecialCharacters(curTableDescriptor.xMSF, Configuration.getOfficeLocale(curTableDescriptor.xMSF), sName);
+            Helper.setUnoPropertyValue(otextcomponent, "Text", sName);
+        }
+    }
+
 }
