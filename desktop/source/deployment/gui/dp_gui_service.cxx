@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:05:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ ServiceImpl::ServiceImpl(
     : m_xComponentContext( xComponentContext )
 {
     if (args.getLength() > 0) {
-        extract_throw( &m_xParent, args[ 0 ] );
+        m_xParent.set( args[ 0 ], UNO_QUERY_THROW );
         if (args.getLength() > 1)
-            extract_throw( &m_view, args[ 1 ] );
+            m_view = args[ 1 ].get<OUString>();
     }
 }
 
