@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 14:23:57 $
+ *  last change: $Author: rt $ $Date: 2001-02-06 12:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,7 +953,7 @@ namespace dbaccess
         const ::rtl::OUString* pTableBegin  = aTableNames.getConstArray();
         const ::rtl::OUString* pTableEnd    = pTableBegin + aTableNames.getLength();
 
-        ::comphelper::UStringMixEqual bCase(static_cast<::comphelper::UStringMixLess*>(&_rColumnNames.key_comp())->isCaseSensitive());
+        ::comphelper::UStringMixEqual bCase(static_cast< ::comphelper::UStringMixLess*>(&_rColumnNames.key_comp())->isCaseSensitive());
 
         for(sal_Int32 nPos = 1;pSelBegin != pSelEnd;++pSelBegin,++nPos)
         {
@@ -982,6 +982,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/02/01 14:23:57  oj
+    change for insert , delete and update rows
+
     Revision 1.10  2001/01/31 12:35:35  oj
     use of qouteName
 

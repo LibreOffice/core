@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 14:21:01 $
+ *  last change: $Author: rt $ $Date: 2001-02-06 12:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1139,7 +1139,7 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
 
             if(!m_pTables->hasByName(aComposedName))
             {
-                ::comphelper::UStringMixEqual aComp(static_cast<::comphelper::UStringMixLess*>(&m_aSqlIterator.getTables().key_comp())->isCaseSensitive());
+                ::comphelper::UStringMixEqual aComp(static_cast< ::comphelper::UStringMixLess*>(&m_aSqlIterator.getTables().key_comp())->isCaseSensitive());
                 for(;pBegin != pEnd;++pBegin)
                 {
                     Reference<XPropertySet> xTableProp;
