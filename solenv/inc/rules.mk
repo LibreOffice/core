@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-08 17:07:13 $
+#   last change: $Author: hjs $ $Date: 2002-08-21 13:04:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -565,29 +565,23 @@ $(MISC)$/%.dpw : $(CFILES) $(CXXFILES) $(RCFILES)
 
 $(MISC)$/%.dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
     @echo ------------------------------ 
+.IF "$(nodep)"==""
     @echo Making: $@
-.IF "$(GUI)"=="WNT"  || "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
     @+-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
     dmake $(MFLAGS) $(CALLMACROS) make_srs_deps=true SRCALLTARGET -u
     +-$(TYPE) $(SRS)$/$(PWD:f).*.dpr >> $@
-.ELSE
-    @+echo "#" > $@
-.ENDIF
+.ENDIF			# "$(nodep)"==""
 
 $(MISC)$/%.dpz :
     @echo ------------------------------
+.IF "$(nodep)"==""
     @echo Making: $@
-.IF "$(GUI)"=="WNT"  || "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
     +dmake $(MFLAGS) $(CALLMACROS) make_zip_deps=true ZIPALLTARGET -u
     $(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz | grep -v "CVS" >> $@
-# remove grep for zipdep.pl	
-#	$(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >> $@
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
-.ELSE
-    @+echo "#" > $@
-.ENDIF
+.ENDIF			# "$(nodep)"==""
 
 # Dependencies fuer java - Files
 

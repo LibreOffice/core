@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.120 $
+#   $Revision: 1.121 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-21 11:39:56 $
+#   last change: $Author: hjs $ $Date: 2002-08-21 13:04:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2394,13 +2394,17 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 
 .IF "$(make_srs_deps)"==""
 .IF "$(SRCFILES)" != "" || "$(SRC1FILES)" != "" || "$(SRC2FILES)" != ""
+.IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpr
+.ENDIF			# "$(nodep)"==""
 .ENDIF
 .ENDIF
 
 .IF "$(make_zip_deps)"==""
 .IF "$(ZIP1TARGET)" != "" || "$(ZIP2TARGET)" != "" || "$(ZIP3TARGET)" != ""
+.IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpz
+.ENDIF			# "$(nodep)"==""
 .ENDIF
 .ENDIF
 
