@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-29 13:31:44 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 08:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,13 @@
 #include <so3/persist.hxx>
 #endif
 
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -338,6 +345,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     pHatchList=NULL;
     pGradientList=NULL;
     pBitmapList=NULL;
+    mpNumberFormatter = NULL;
     bTransparentTextFrames=FALSE;
     bStarDrawPreviewMode = FALSE;
     nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
@@ -486,6 +494,21 @@ SdrModel::~SdrModel()
     delete pGradientList;
     delete pBitmapList;
 #endif
+
+    if(mpNumberFormatter)
+        delete mpNumberFormatter;
+}
+
+const SvNumberFormatter& SdrModel::GetNumberFormatter() const
+{
+    if(!mpNumberFormatter)
+    {
+        // use cast here since from outside view this IS a const method
+        ((SdrModel*)this)->mpNumberFormatter = new SvNumberFormatter(
+            ::comphelper::getProcessServiceFactory(), LANGUAGE_SYSTEM);
+    }
+
+    return *mpNumberFormatter;
 }
 
 // noch nicht implementiert:
