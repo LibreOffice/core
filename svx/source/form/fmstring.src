@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:35:58 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ String RID_STR_CURSORTYPE
     Text[ russian ] = "Òèï êóğñîğà";
     Text[ polish ] = "Typ kursora";
     Text[ japanese ] = "ã‚«ãƒ¼ã‚½ãƒ«ã®ç¨®é¡";
-    Text[ chinese_traditional ] = "å…‰æ¨™é¡å‹";
+    Text[ chinese_traditional ] = "æ¸¸æ¨™é¡å‹";
     Text[ greek ] = "Ôığïò äåßêôç";
     Text[ korean ] = "ì»¤ì„œ ìœ í˜•";
     Text[ arabic ] = "äæÚ ÇáãÄÔÑ";
@@ -1780,9 +1780,9 @@ String RID_STR_FIELDSELECTION
     Text[ polish ] = "Wybór pola:";
     Text[ portuguese_brazilian ] = "Feldauswahl:";
     Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é¸æŠ:";
-    Text[ korean ] = "í•„ë“œ ì„ íƒ:";
+    Text[ korean ] = "í•„ë“œ ì¶”ê°€:";
     Text[ chinese_simplified ] = "é€‰æ‹©å­—æ®µï¼š";
-    Text[ chinese_traditional ] = "é¸æ“‡æ¬„ä½ï¼š";
+    Text[ chinese_traditional ] = "æ–°å¢æ¬„ä½ï¼š";
     Text[ turkish ] = "Alan seçimi:";
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍŞá:";
     Text[ catalan ] = "Selecció de camp:";
