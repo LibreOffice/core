@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:39:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 14:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include "cmdlineargs.hxx"
 #include "desktopresid.hxx"
 #include "dispatchwatcher.hxx"
-#include "ssoinit.hxx"
 #include "configinit.hxx"
 #include "lockfile.hxx"
 #include "checkinstall.hxx"
@@ -1328,7 +1327,6 @@ void Desktop::Main()
         }
 #endif
 
-
         ResMgr::SetReadStringHook( ReplaceStringHookProc );
         SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
@@ -1357,9 +1355,6 @@ void Desktop::Main()
                 if( bQuitApp )
                     return;
         }
-
-        //  Initialise Single Signon
-        if ( !InitSSO() ) return;
 
         //    The only step that should be done if terminate flag was specified
         //    Typically called by the plugin only
