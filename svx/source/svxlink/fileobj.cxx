@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:55:34 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,8 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 
     if( !pStream )
         nRes = xMed.Is() ? GRFILTER_OPENERROR
-                         : pGF->ImportGraphic( rGrf, sFileNm, nFilter );
+                         : pGF->ImportGraphic( rGrf, INetURLObject(sFileNm),
+                            nFilter );
     else if( !pDownLoadData )
     {
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
