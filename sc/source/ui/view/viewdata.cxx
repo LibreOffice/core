@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-06 14:27:59 $
+ *  last change: $Author: sab $ $Date: 2001-04-12 14:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include "patattr.hxx"
 #include "editutil.hxx"
 #include "scextopt.hxx"
+#include "miscuno.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -2145,13 +2146,15 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_HORIZONTALSCROLLBARWIDTH));
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
         sal_Int32 nZoomValue ((aZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
-        sal_Int32 nPageZoomValue ((aPageZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
+        sal_Int32 nPageZoomValue ((aPageZoomY.GetNumerator() * 100) / aPageZoomY.GetDenominator());
         pSettings[SC_ZOOM_TYPE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ZOOMTYPE));
         pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pView->GetZoomType());
         pSettings[SC_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ZOOMVALUE));
         pSettings[SC_ZOOM_VALUE].Value <<= nZoomValue;
         pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_PAGEVIEWZOOMVALUE));
         pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
+        pSettings[SC_PAGE_BREAK_PREVIEW].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SHOWPAGEBREAKPREVIEW));
+        ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_PAGE_BREAK_PREVIEW].Value, bPagebreak);
 
         sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
         pSettings[SC_VIEWSETTINGS_COUNT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
@@ -2166,6 +2169,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     sal_Int32 nCount(rSettings.getLength());
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
+    sal_Bool bPageMode(sal_False);
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         rtl::OUString sName(rSettings[i].Name);
@@ -2229,10 +2233,12 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 aPageZoomX = aPageZoomY = aZoom;
             }
         }
+        else if (sName.compareToAscii(SC_SHOWPAGEBREAKPREVIEW) == 0)
+            bPageMode = ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value );
         // SC_VIEWID has to parse and use by mba
     }
     if (nCount)
-        RecalcPixPos();
+        SetPagebreakMode( bPageMode );
 }
 
 void ScViewData::SetOptions( const ScViewOptions& rOpt )

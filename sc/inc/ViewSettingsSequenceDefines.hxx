@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettingsSequenceDefines.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 08:30:47 $
+ *  last change: $Author: sab $ $Date: 2001-04-12 14:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
 
-#define SC_VIEWSETTINGS_COUNT               6
+#define SC_VIEWSETTINGS_COUNT               7
 
 #define SC_TABLE_VIEWSETTINGS               0
 #define SC_ACTIVE_TABLE                     1
@@ -73,6 +73,7 @@
 #define SC_ZOOM_TYPE                        3
 #define SC_ZOOM_VALUE                       4
 #define SC_PAGE_VIEW_ZOOM_VALUE             5
+#define SC_PAGE_BREAK_PREVIEW               6
 
 
 // this are the defines for the position of the settings in the
@@ -110,6 +111,7 @@
 #define SC_ZOOMTYPE                         "ZoomType"
 #define SC_ZOOMVALUE                        "ZoomValue"
 #define SC_PAGEVIEWZOOMVALUE                "PageViewZoomValue"
+#define SC_SHOWPAGEBREAKPREVIEW                 "ShowPageBreakPreview"
 #define SC_VIEWID                           "ViewId"
 #define SC_VIEW                             "View"
 
