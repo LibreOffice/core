@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2002-12-12 16:48:04 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ static Methods aMethods[] = {
   { "IsoDate",      SbxSTRING },
 { "CDateToIso",     SbxSTRING,    1 | _FUNCTION, RTLNAME(CDateToIso)        },
   { "Date",         SbxDATE },
+{ "CDec",           SbxDECIMAL,   1 | _FUNCTION, RTLNAME(CDec)              },
+  { "expression",   SbxVARIANT },
 { "CDbl",           SbxDOUBLE,    1 | _FUNCTION, RTLNAME(CDbl)              },
   { "expression",   SbxVARIANT },
 { "CF_BITMAP",      SbxINTEGER,       _CPROP,    RTLNAME(CF_BITMAP)         },
@@ -160,6 +162,8 @@ static Methods aMethods[] = {
 
 { "CLng",           SbxLONG,      1 | _FUNCTION, RTLNAME(CLng)              },
   { "expression",   SbxVARIANT },
+{ "CompatibilityMode",  SbxNULL,  1 | _FUNCTION, RTLNAME(CompatibilityMode)  },
+  { "bEnable",      SbxBOOL  },
 { "ConvertFromUrl", SbxSTRING,    1 | _FUNCTION, RTLNAME(ConvertFromUrl)    },
   { "Url",          SbxSTRING },
 { "ConvertToUrl",   SbxSTRING,    1 | _FUNCTION, RTLNAME(ConvertToUrl)      },
