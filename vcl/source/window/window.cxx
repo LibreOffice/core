@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:55:00 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,21 @@ struct ImplAccessibleInfos
 
 // -----------------------------------------------------------------------
 
+// define dtor for ImplDelData
+ImplDelData::~ImplDelData()
+{
+    // #112873# auto remove of ImplDelData
+    // due to this code actively calling ImplRemoveDel() is not mandatory anymore
+    if( !mbDel && mpWindow )
+    {
+        // the window still exists but we were not removed
+        mpWindow->ImplRemoveDel( this );
+        mpWindow = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 #ifdef DBG_UTIL
 const char* ImplDbgCheckWindow( const void* pObj )
 {
@@ -372,16 +387,29 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 
     if( 1 )
     {
-        // #97047: Force all fonts except Mneu and Help to a fixed height
-        // to avoid UI scaling due to large fonts
         StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+        // #97047: Force all fonts except Menu and Help to a fixed height
+        // to avoid UI scaling due to large fonts
+        // - but allow bigger fonts on bigger screens (i16682, i21238)
+        //   dialogs were designed to fit 800x600 with an 8pt font, so scale accordingly
+        int maxFontheight = 9; // #107886#: 9 is default for some asian systems, so always allow if requested
+        if( GetDesktopRectPixel().getHeight() > 600 )
+            maxFontheight = (int) ((( 8 * (double) GetDesktopRectPixel().getHeight()) / 600.) + 0.5);
 
-        // #107886# allow scaling of the UI if the menu font is
-        //  slightly larger/smaller than the 8pt default
-        int defFontheight = 8;
         Font aFont = aStyleSettings.GetMenuFont();
-        if( abs(aFont.GetHeight() - defFontheight) == 1 )
-            defFontheight = aFont.GetHeight();
+        int defFontheight = aFont.GetHeight();
+        if( defFontheight > maxFontheight )
+            defFontheight = maxFontheight;
+
+        // if the UI is korean, always use 9pt
+        LanguageType aLang = Application::GetSettings().GetUILanguage();
+        if( aLang == LANGUAGE_KOREAN || aLang == LANGUAGE_KOREAN_JOHAB )
+            defFontheight = Max(9, defFontheight);
+
+        // i22098, toolfont will be scaled differently to avoid bloated rulers and status bars for big fonts
+        int toolfontheight = defFontheight;
+        if( toolfontheight > 9 )
+            toolfontheight = (defFontheight+8) / 2;
 
         aFont = aStyleSettings.GetAppFont();
         aFont.SetHeight( defFontheight );
@@ -398,9 +426,12 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         //aFont = aStyleSettings.GetMenuFont();
         //aFont.SetHeight( defFontheight );
         //aStyleSettings.SetMenuFont( aFont );
+
+        // use different height for toolfont
         aFont = aStyleSettings.GetToolFont();
-        aFont.SetHeight( defFontheight );
+        aFont.SetHeight( toolfontheight );
         aStyleSettings.SetToolFont( aFont );
+
         aFont = aStyleSettings.GetLabelFont();
         aFont.SetHeight( defFontheight );
         aStyleSettings.SetLabelFont( aFont );
@@ -1202,6 +1233,7 @@ ImplWinData* Window::ImplGetWinData() const
         mpWinData->mpFocusRect      = NULL;
         mpWinData->mpTrackRect      = NULL;
         mpWinData->mnTrackFlags     = 0;
+        mpWinData->mnIsTopWindow    = (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
     }
 
     return mpWinData;
@@ -1496,14 +1528,20 @@ void Window::ImplCallInitShow()
 
 void Window::ImplAddDel( ImplDelData* pDel )
 {
-    pDel->mpNext = mpFirstDel;
-    mpFirstDel = pDel;
+    DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
+    if( !pDel->mpWindow )
+    {
+        pDel->mpWindow = this;  // #112873# store ref to this window, so pDel can remove itself
+        pDel->mpNext = mpFirstDel;
+        mpFirstDel = pDel;
+    }
 }
 
 // -----------------------------------------------------------------------
 
 void Window::ImplRemoveDel( ImplDelData* pDel )
 {
+    pDel->mpWindow = NULL;      // #112873# pDel is not associated with a Window anymore
     if ( mpFirstDel == pDel )
         mpFirstDel = pDel->mpNext;
     else
@@ -4344,6 +4382,7 @@ Window::~Window()
     while ( pDelData )
     {
         pDelData->mbDel = TRUE;
+        pDelData->mpWindow = NULL;  // #112873# pDel is not associated with a Window anymore
         pDelData = pDelData->mpNext;
     }
 
@@ -8486,8 +8525,15 @@ BOOL Window::IsTopWindow() const
     if( !mbFrame && (!mpBorderWindow || (mpBorderWindow && !mpBorderWindow->mbFrame) ) )
         return FALSE;
 
-    Reference< XTopWindow > xTopWindow( ((Window*)this)->GetComponentInterface(), UNO_QUERY );
-    return xTopWindow.is() ? TRUE : FALSE;
+    ImplGetWinData();
+    if( mpWinData->mnIsTopWindow == (USHORT)~0)    // still uninitialized
+    {
+        // #113722#, cache result of expensive queryInterface call
+        Window *pThisWin = (Window*)this;
+        Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
+        pThisWin->mpWinData->mnIsTopWindow = xTopWindow.is() ? 1 : 0;
+    }
+    return mpWinData->mnIsTopWindow == 1 ? TRUE : FALSE;
 }
 
 void Window::ImplMirrorFramePos( Point &pt ) const
