@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-11-12 18:23:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
+#endif
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #include "expbase.hxx"
@@ -149,7 +152,7 @@ class ScHTMLExport : public ScExportBase
     SvStringsSortDtor*  pDestArr;
     String              aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding    eDestEnc;
-    USHORT              nUsedTables;
+    SCTAB               nUsedTables;
     short               nIndent;
     sal_Char            sIndent[nIndentMax+1];
     BOOL                bAll;           // ganzes Dokument
@@ -160,13 +163,13 @@ class ScHTMLExport : public ScExportBase
     BOOL                bTableDataWidth;
     BOOL                bTableDataHeight;
 
-    const SfxItemSet&   PageDefaults( USHORT nTab );
+    const SfxItemSet&   PageDefaults( SCTAB nTab );
 
     void                WriteBody();
     void                WriteHeader();
     void                WriteOverview();
     void                WriteTables();
-    void                WriteCell( USHORT nCol, USHORT nRow, USHORT nTab );
+    void                WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void                WriteGraphEntry( ScHTMLGraphEntry* );
     void                WriteImage( String& rLinkName,
                                     const Graphic&, const ByteString& rImgOptions,
@@ -182,21 +185,21 @@ class ScHTMLExport : public ScExportBase
     BOOL                HasCId() { return aCId.Len() > 0; }
     void                MakeCIdURL( String& rURL );
 
-    void                PrepareGraphics( ScDrawLayer*, USHORT nTab,
-                                        USHORT nStartCol, USHORT nStartRow,
-                                        USHORT nEndCol, USHORT nEndRow );
-    void                FillGraphList( const SdrPage*, USHORT nTab,
-                                        USHORT nStartCol, USHORT nStartRow,
-                                        USHORT nEndCol, USHORT nEndRow );
+    void                PrepareGraphics( ScDrawLayer*, SCTAB nTab,
+                                        SCCOL nStartCol, SCROW nStartRow,
+                                        SCCOL nEndCol, SCROW nEndRow );
+    void                FillGraphList( const SdrPage*, SCTAB nTab,
+                                        SCCOL nStartCol, SCROW nStartRow,
+                                        SCCOL nEndCol, SCROW nEndRow );
 
-    BOOL                HasBottomBorder( USHORT nRow, USHORT nTab,
-                                        USHORT nStartCol, USHORT nEndCol );
-    BOOL                HasLeftBorder( USHORT nCol, USHORT nTab,
-                                        USHORT nStartRow, USHORT nEndRow );
-    BOOL                HasTopBorder( USHORT nRow, USHORT nTab,
-                                        USHORT nStartCol, USHORT nEndCol );
-    BOOL                HasRightBorder( USHORT nCol, USHORT nTab,
-                                        USHORT nStartRow, USHORT nEndRow );
+    BOOL                HasBottomBorder( SCROW nRow, SCTAB nTab,
+                                        SCCOL nStartCol, SCCOL nEndCol );
+    BOOL                HasLeftBorder( SCCOL nCol, SCTAB nTab,
+                                        SCROW nStartRow, SCROW nEndRow );
+    BOOL                HasTopBorder( SCROW nRow, SCTAB nTab,
+                                        SCCOL nStartCol, SCCOL nEndCol );
+    BOOL                HasRightBorder( SCCOL nCol, SCTAB nTab,
+                                        SCROW nStartRow, SCROW nEndRow );
 
     USHORT              GetFontSizeNumber( USHORT nHeight );
     const char*         GetFontSizeCss( USHORT nHeight );
