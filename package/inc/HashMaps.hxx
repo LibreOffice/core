@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HashMaps.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-30 13:52:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@ struct eqFunc
 };
 
 class ZipPackageFolder;
+namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo;
+} } } };
 
 typedef std::hash_map < rtl::OUString,
                         ZipPackageFolder *,
@@ -87,7 +89,7 @@ typedef std::hash_map < rtl::OUString,
                         eqFunc > FolderHash;
 
 typedef std::hash_map < rtl::OUString,
-                        vos::ORef < ContentInfo >,
+                        vos::ORef < com::sun::star::packages::ContentInfo >,
                         ::rtl::OUStringHash,
                         eqFunc > ContentHash;
 
