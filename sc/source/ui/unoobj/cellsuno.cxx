@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:20:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7783,18 +7783,21 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const
             if ( pDoc->GetPageStyle( nTab ) != aNewStr )
             {
                 pDoc->SetPageStyle( nTab, aNewStr );
-                ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
-                pDocSh->SetDocumentModified();
-
-                SfxBindings* pBindings = pDocSh->GetViewBindings();
-                if (pBindings)
+                if (!pDoc->IsImportingXML())
                 {
-                    pBindings->Invalidate( SID_STYLE_FAMILY4 );
-                    pBindings->Invalidate( SID_STATUS_PAGESTYLE );
-                    pBindings->Invalidate( FID_RESET_PRINTZOOM );
-                    pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
-                    pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
+                    ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
+
+                    SfxBindings* pBindings = pDocSh->GetViewBindings();
+                    if (pBindings)
+                    {
+                        pBindings->Invalidate( SID_STYLE_FAMILY4 );
+                        pBindings->Invalidate( SID_STATUS_PAGESTYLE );
+                        pBindings->Invalidate( FID_RESET_PRINTZOOM );
+                        pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
+                        pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
+                    }
                 }
+                pDocSh->SetDocumentModified();
             }
         }
         else if ( pMap->nWID == SC_WID_UNO_CELLVIS )
