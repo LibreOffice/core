@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:25:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1701,11 +1701,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 case KEY_RIGHT:
                     {
-                        if( rSh.IsEndPara() && rSh.DontExpandFmt() && !rSh.HasReadonlySel())
+                        SwPaM * pCrsr = rSh.GetCrsr(); // #i27615#
+                        if( rSh.IsEndPara() && rSh.DontExpandFmt() &&
+                                 !rSh.HasReadonlySel())
                             eKeyState = KS_DontExpand;
                         else
                         {
-                            BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                            BOOL bMod1 = 0 !=
+                                (rKeyCode.GetModifier() & KEY_MOD1);
                             eFlyState = KS_Fly_Change;
                             nDir = MOVE_RIGHT_BIG;
                             eTblChgMode = WH_FLAG_INSDEL | WH_COL_RIGHT;
