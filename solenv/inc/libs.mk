@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-20 14:55:19 $
+#   last change: $Author: kz $ $Date: 2001-02-26 13:20:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,7 @@ LIBPRE=libr
 
 .IF "$(OS)"=="S390"
 
+XMLSCRIPTLIB =$(L)$/libxcr$(UPD)$(DLLPOSTFIX).x
 CONNECTIVITYLIB=$(L)$/libconnectivity.x
 LDAPBERLIB=$(L)$/libldapber.x
 TOOLSLIB=$(L)$/libtl$(UPD)$(DLLPOSTFIX).x
@@ -154,6 +155,7 @@ SWLIB=$(L)$/libswlib.x
 
 .ELSE				# "$(OS)"=="S390"
 
+XMLSCRIPTLIB =-lxcr$(UPD)$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp2
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
@@ -349,6 +351,7 @@ SETUPLIB=
 SSCLIB=
 SSLLIB=
 .ELSE				# "$(make_xl)"!=""
+XMLSCRIPTLIB=ixcr.lib
 COMPHELPERLIB=icomphelp2.lib
 CONNECTIVITYLIB=connectivity.lib
 LDAPBERLIB=ldapber.lib
