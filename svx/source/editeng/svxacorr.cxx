@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:53:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2254,7 +2254,7 @@ const SvxAutocorrWordList* SvxAutoCorrectLanguageLists::GetAutocorrWordList()
 /* -----------------18.11.98 11:26-------------------
  *
  * --------------------------------------------------*/
-const SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
+SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 {
     if( !( CplSttLstLoad & nFlags ) || IsFileChanged_Imp() )
         SetCplSttExceptList( LoadCplSttExceptList() );
@@ -2266,7 +2266,7 @@ const SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
-    if( rNew.Len() && LoadCplSttExceptList()->Insert( pNew ) )
+    if( rNew.Len() && GetCplSttExceptList()->Insert( pNew ) )
     {
         MakeUserStorage_Impl();
         SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
@@ -2289,7 +2289,7 @@ BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
-    if( rNew.Len() && LoadWrdSttExceptList()->Insert( pNew ) )
+    if( rNew.Len() && GetWrdSttExceptList()->Insert( pNew ) )
     {
         MakeUserStorage_Impl();
         SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
@@ -2399,7 +2399,7 @@ void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList
 /* -----------------18.11.98 11:26-------------------
  *
  * --------------------------------------------------*/
-const SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetWrdSttExceptList()
+SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetWrdSttExceptList()
 {
     if( !( WrdSttLstLoad & nFlags ) || IsFileChanged_Imp() )
         SetWrdSttExceptList( LoadWrdSttExceptList() );
