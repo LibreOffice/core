@@ -129,7 +129,7 @@ public class AccessibilityWorkBench
     */
     public void Layout  ()
     {
-        setSize (new Dimension (1024,768));
+        setSize (new Dimension (875,720));
         maMainPanel = new JPanel();
         this.getContentPane().add (maMainPanel);
         GridBagLayout aLayout = new GridBagLayout ();
@@ -150,19 +150,6 @@ public class AccessibilityWorkBench
         constraints.fill = GridBagConstraints.BOTH;
         aLayout.addLayoutComponent (maScrollPane, constraints);
         maMainPanel.add (maScrollPane);
-
-        //  Message output area.
-        maMessageArea = new JTextArea (5,20);
-        constraints = new GridBagConstraints ();
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 2;
-        constraints.gridheight = 1;
-        constraints.weightx = 3;
-        constraints.weighty = 0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        aLayout.addLayoutComponent (maMessageArea, constraints);
-        maMainPanel.add (maMessageArea);
 
         //  Canvas.
         maCanvas = new Canvas (this);
@@ -197,6 +184,19 @@ public class AccessibilityWorkBench
         constraints.fill = GridBagConstraints.BOTH;
         aLayout.addLayoutComponent (aScrollPane, constraints);
         maMainPanel.add (aScrollPane);
+
+        //  Message output area.
+        maMessageArea = new JTextArea (5,20);
+        constraints = new GridBagConstraints ();
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 2;
+        constraints.gridheight = 1;
+        constraints.weightx = 3;
+        constraints.weighty = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        aLayout.addLayoutComponent (maMessageArea, constraints);
+        maMainPanel.add (maMessageArea);
 
         // Button bar.
         maButtonBar = new JPanel();
