@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:37:58 $
+ *  last change: $Author: mib $ $Date: 2002-08-13 15:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,8 +848,7 @@ sal_Bool SAL_CALL SwAccessibleContext::contains(
         {
             Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
             Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
-            aPixBounds.Left() -= aParentPixPos.X();
-            aPixBounds.Top() -= aParentPixPos.Y();
+            aPixBounds.Move( -aParentPixPos.X(), -aParentPixPos.Y() );
         }
     }
 
@@ -866,20 +865,18 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-    const SwFrm *pParent = GetParent();
-
     Reference< XAccessible > xAcc;
 
     Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
-    if( pParent && !pParent->IsRootFrm() )
+    if( !GetFrm()->IsRootFrm() )
     {
-        Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-        Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
-        aPixPoint.X() += aParentPixPos.X();
-        aPixPoint.Y() += aParentPixPos.Y();
+        Point aLogPos( GetBounds( GetFrm() ).Pos() ); // twip rel to doc root
+        Point aPixPos( GetMap()->CoreToPixel( aLogPos ) );
+        aPixPoint.X() += aPixPos.X();
+        aPixPoint.Y() += aPixPos.Y();
     }
 
     const SwFrmOrObj aChild( GetChildAtPixel( aPixPoint, GetMap() ) );
@@ -925,8 +922,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
         {
             Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
             Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
-            aPixBounds.Left() -= aParentPixPos.X();
-            aPixBounds.Top() -= aParentPixPos.Y();
+            aPixBounds.Move( -aParentPixPos.X(), -aParentPixPos.Y() );
         }
     }
 
