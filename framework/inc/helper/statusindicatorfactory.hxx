@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:43 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,6 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
-                                   public  css::awt::XWindowListener           , // => XEventListener
                                    private ThreadHelpBase                      ,
                                    private TransactionBase                     ,
                                    public  ::cppu::OWeakObject                   // => XInterface
@@ -253,7 +252,7 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
         StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory      ,
-                                const css::uno::Reference< css::awt::XWindow >&               xParentWindow ,
+                                const css::uno::Reference< css::frame::XFrame >&              xFrame        ,
                                       sal_Bool                                                bShowStatusBar);
 
         //---------------------------------------------------------------------------------------------------------
@@ -265,19 +264,6 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
         //  XStatusIndicatorFactory
         //---------------------------------------------------------------------------------------------------------
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator() throw( css::uno::RuntimeException );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XWindowListener
-        //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL windowResized (   const   css::awt::WindowEvent&  aEvent  ) throw( css::uno::RuntimeException );
-        virtual void SAL_CALL windowMoved   (   const   css::awt::WindowEvent&  aEvent  ) throw( css::uno::RuntimeException );
-        virtual void SAL_CALL windowShown   (   const   css::lang::EventObject& aEvent  ) throw( css::uno::RuntimeException );
-        virtual void SAL_CALL windowHidden  (   const   css::lang::EventObject& aEvent  ) throw( css::uno::RuntimeException );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XEventListener
-        //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  public shared method!
@@ -302,10 +288,10 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
-        void implts_recalcLayout();
         void impl_reschedule();
         sal_uInt32 impl_get10ThSec();
         void impl_createStatusBar();
+        css::uno::Reference< css::awt::XWindow > implts_getParentWindow();
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
@@ -314,12 +300,12 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
     private:
         static sal_Int32                                        m_nInReschedule             ;   /// static counter for rescheduling
         IndicatorStack                                          m_aStack                    ;   /// stack with all current indicator childs
-        StatusBar*                                              m_pStatusBar                ;   /// status bar as progress bar
         css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory                  ;   /// uno service manager to create new services
         sal_Bool                                                m_bProgressMode             ;
 
         css::uno::Reference< css::task::XStatusIndicator >      m_xActiveIndicator          ;   /// most active indicator child, which could work with our shared indicator window only
-        css::uno::Reference< css::awt::XWindow >                m_xParentWindow             ;   /// we are listener on this window to resize shared statrus indicator
+        css::uno::Reference< css::task::XStatusIndicator >      m_xProgress                 ;   /// status indicator from layout manager
+        css::uno::WeakReference< css::frame::XFrame >           m_xFrame                    ;
         long                                                    m_nStartTime                ;   /// time where there last start call was made
 
 };      //  class StatusIndicatorFactory
