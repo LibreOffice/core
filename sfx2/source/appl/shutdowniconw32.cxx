@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-20 14:44:01 $
+ *  last change: $Author: hro $ $Date: 2001-08-20 15:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,9 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
     ncm.cbSize = sizeof(ncm);
 
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, (PVOID) &ncm, 0);
+
+    // Assume every menu item can be default and printed bold
+    ncm.lfMenuFont.lfWeight = FW_BOLD;
 
     HFONT hfntOld = (HFONT) SelectObject(hdc, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 

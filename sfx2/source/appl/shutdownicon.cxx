@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-30 16:36:31 $
+ *  last change: $Author: hro $ $Date: 2001-08-20 15:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
 #ifndef _FILEDLGHELPER_HXX
 #include <filedlghelper.hxx>
 #endif
@@ -98,6 +101,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::vos;
 using namespace ::rtl;
 using namespace ::sfx2;
@@ -200,7 +204,40 @@ void ShutdownIcon::FileOpen()
         // use ctor for filling up filters automatically! #89169#
         FileDialogHelper dlg( WB_OPEN | SFXWB_MULTISELECTION, *(SfxObjectFactory*) NULL );
         if ( ERRCODE_NONE == dlg.Execute() )
-            OpenURL( OUString( dlg.GetPath() ) );
+        {
+            Reference< XFilePicker >    xPicker = dlg.GetFilePicker();
+
+            try
+            {
+                if ( xPicker.is() )
+                {
+                    Sequence< OUString >    sFiles = xPicker->getFiles();
+                    int                     nFiles = sFiles.getLength();
+
+                    if ( 1 == nFiles )
+                        OpenURL( sFiles[0] );
+                    else
+                    {
+                        OUString    aBaseDirURL = sFiles[0];
+                        if ( aBaseDirURL.getLength() > 0 && aBaseDirURL[aBaseDirURL.getLength()-1] != '/' )
+                            aBaseDirURL += OUString::createFromAscii("/");
+
+                        int iFiles;
+                        for ( iFiles = 1; iFiles < nFiles; iFiles++ )
+                        {
+                            OUString    aURL = aBaseDirURL;
+                            aURL += sFiles[iFiles];
+                            OpenURL( aURL );
+                        }
+                    }
+                }
+
+//              OpenURL( OUString( dlg.GetPath() ) );
+            }
+            catch ( ... )
+            {
+            }
+        }
     }
 }
 
