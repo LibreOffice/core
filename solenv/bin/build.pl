@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.117 $
+#   $Revision: 1.118 $
 #
-#   last change: $Author: vg $ $Date: 2004-10-01 14:07:31 $
+#   last change: $Author: hr $ $Date: 2004-10-11 13:44:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.117 $ ';
+    $id_str = ' $Revision: 1.118 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1408,6 +1408,7 @@ sub get_cvs_root
         }
     };
     my ($dummy1, $method, $user_at_server, $repository) = split(/:/, $cvsroot);
+    $repository =~ s/^\d*//;
     my ($dummy2, $server) = split(/@/, $user_at_server);
 
     if ( ! ($method && $server && $repository ) ) {
