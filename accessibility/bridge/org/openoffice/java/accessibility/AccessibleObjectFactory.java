@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-19 09:36:21 $
+ *  last change: $Author: obr $ $Date: 2002-09-18 11:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ public class AccessibleObjectFactory {
                     o = new AccessibleComboBox(xAccessibleContext);
                     break;
                 case AccessibleRole.LIST:
+                    o = new AccessibleList(xAccessibleContext);
+                    break;
                 case AccessibleRole.MENUBAR:
                 case AccessibleRole.POPUPMENU:
                     o = new AccessibleContainer(
