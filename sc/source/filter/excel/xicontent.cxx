@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:45:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,17 +147,14 @@
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
 #endif
-#ifndef SC_XISTREAM_HXX
-#include "xistream.hxx"
-#endif
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
 #endif
-#ifndef SC_XILINK_HXX
-#include "xilink.hxx"
+#ifndef SC_XINAME_HXX
+#include "xiname.hxx"
 #endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
@@ -930,7 +927,7 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
         String aXclName( rStrm.ReadUniString() );
 
         // #101529# find the defined name used in Calc
-        if( const XclImpName* pName = GetNameBuffer().FindName( aXclName, GetCurrScTab() ) )
+        if( const XclImpName* pName = GetNameManager().FindName( aXclName, GetCurrScTab() ) )
         {
             if( const ScRangeData* pRangeData = pName->GetScRangeData() )
             {
@@ -946,29 +943,25 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
 
 void XclImpWebQueryBuffer::ReadParamqry( XclImpStream& rStrm )
 {
-    XclImpWebQuery* pQuery = maWQList.Last();
-    if( pQuery )
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
         pQuery->ReadParamqry( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqstring( XclImpStream& rStrm )
 {
-    XclImpWebQuery* pQuery = maWQList.Last();
-    if( pQuery )
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
         pQuery->ReadWqstring( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqsettings( XclImpStream& rStrm )
 {
-    XclImpWebQuery* pQuery = maWQList.Last();
-    if( pQuery )
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
         pQuery->ReadWqsettings( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqtables( XclImpStream& rStrm )
 {
-    XclImpWebQuery* pQuery = maWQList.Last();
-    if( pQuery )
+    if( XclImpWebQuery* pQuery = maWQList.Last() )
         pQuery->ReadWqtables( rStrm );
 }
 
