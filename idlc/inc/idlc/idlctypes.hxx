@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlctypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:43:47 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ struct EqualString
 
 struct HashString
 {
-    size_t operator()(const ::rtl::OString& str) const
+    sal_Int32 operator()(const ::rtl::OString& str) const
     {
         return str.hashCode();
     }
