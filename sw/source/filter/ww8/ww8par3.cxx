@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-18 12:34:22 $
+ *  last change: $Author: jp $ $Date: 2001-07-26 19:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,10 +788,10 @@ sal_Bool WW8ListManager::ReadLVL( sal_uInt8 nLevel,
 
     if( SVX_NUM_CHAR_SPECIAL == eType )
     {
-        cBullet = sNumString.Len() ? sNumString.GetChar( 0 ) : 0xF0B7;
+        cBullet = sNumString.Len() ? sNumString.GetChar( 0 ) : 0x2190;
 
         if( !cBullet )  // unsave control code?
-            cBullet = 0xF0B7;
+            cBullet = 0x2190;
 
         aPrefix  = aEmptyStr;
         aPostfix = aEmptyStr;
@@ -2136,12 +2136,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.8 2001-07-18 12:34:22 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.9 2001-07-26 19:23:34 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/07/18 12:34:22  cmc
+      #89743# non explictly numbered paragraph needs to have numbering reset if following explicitly numbered para, regardless of 2nd para being in a numbering style
+
       Revision 1.7  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 

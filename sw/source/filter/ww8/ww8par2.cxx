@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-26 15:56:47 $
+ *  last change: $Author: jp $ $Date: 2001-07-26 19:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ void SwWW8ImplReader::SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV,
                 if( pAV->cbTextBefore || pAV->cbTextAfter)
                     pNum->SetBulletChar( sTxt.GetChar( 0 ) );
                 else
-                    pNum->SetBulletChar( 0xF000 + 183 );
+                    pNum->SetBulletChar( 0x2190 );
             }
         }
     }
@@ -3267,11 +3267,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.18 2001-07-26 15:56:47 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.19 2001-07-26 19:23:34 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/07/26 15:56:47  cmc
+      #i1154# Merge Cells after table is complete
+
       Revision 1.17  2001/07/20 10:11:34  mtg
       #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
 
