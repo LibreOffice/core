@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implementationreference.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:54:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,22 @@ namespace comphelper
         bool operator==( const ImplementationReference& rhs ) const
         {
             return mpImpl == rhs.mpImpl;
+        }
+
+        /** less-than operator
+
+            Object order is defined to be the ordering of the
+            implementation pointers. This is in general invalid when
+            comparing pointers to UNO objects (ambiguous class
+            hierarchies, optimizations in the bridges, etc.), but okay
+            for raw C++ pointers (which is what's used herein).
+
+            This ordering complies with STL's strict weak ordering
+            concept.
+        */
+        bool operator<( const ImplementationReference& rhs ) const
+        {
+            return mpImpl < rhs.mpImpl;
         }
 
     private:
