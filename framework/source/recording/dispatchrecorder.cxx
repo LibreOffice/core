@@ -105,11 +105,14 @@ Sequence< Any > make_seq_out_of_struct(
 struct DispatchStatement
 {
     ::rtl::OUString aCommand;
+    ::rtl::OUString aTarget;
     css::uno::Sequence < css::beans::PropertyValue > aArgs;
+    sal_Int32 nFlags;
     sal_Bool bIsComment;
 
     DispatchStatement( const ::rtl::OUString& rCmd, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, sal_Bool bComment )
         : aCommand( rCmd )
+        , nFlags(0)
         , bIsComment( bComment )
         {
             aArgs = rArgs;
@@ -186,6 +189,10 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
 {
     /* SAFE{ */
     WriteGuard aWriteLock(m_aLock);
+
+    if ( !m_aStatements.size() )
+        return ::rtl::OUString();
+
     ::rtl::OUStringBuffer aScriptBuffer;
     aScriptBuffer.ensureCapacity(10000);
     m_nRecordingID = 1;
