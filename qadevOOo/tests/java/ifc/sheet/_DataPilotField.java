@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _DataPilotField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:39 $
+ *  last change:$Date: 2005-01-13 17:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.sheet;
 
+import com.sun.star.sheet.DataPilotFieldSortInfo;
 import lib.MultiPropertyTest;
 
 /**
@@ -74,6 +75,35 @@ import lib.MultiPropertyTest;
 * @see com.sun.star.sheet.DataPilotField
 */
 public class _DataPilotField extends MultiPropertyTest {
+
+    /**
+     *This class is destined to custom test of property <code>PageStyle</code>.
+     */
+    protected PropertyTester infoTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            DataPilotFieldSortInfo sortInfo = new DataPilotFieldSortInfo();
+        sortInfo.Mode = com.sun.star.sheet.DataPilotFieldSortMode.MANUAL;
+            sortInfo.IsAscending = false;
+            sortInfo.Field = "COL1";
+            System.out.println("Having Value and returning a new one");
+            return sortInfo.equals(oldValue) ? null : sortInfo;
+        }
+    };
+
+    /**
+     * Test property <code>PageStyle</code> using custom <code>PropertyTest</code>.
+     */
+    public void _SortInfo() {
+        System.out.println("first trying to get it");
+        Object getting = null;
+        try {
+            oObj.getPropertyValue ("SortInfo");
+        } catch (Exception e) {
+            System.out.println("FAILED");
+        }
+        System.out.println("Getting: "+getting.getClass ().getName ());
+        testProperty("SortInfo", infoTester);
+    }
 }
 
 
