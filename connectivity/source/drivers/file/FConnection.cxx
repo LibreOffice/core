@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-09-20 06:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
-    aURL.SetURL(aDSN, INetURLObject::ENCODE_ALL);
+    aURL.SetSmartURL(aDSN);
 
 
     //  String aFileName = aURL.PathToFileName();
@@ -178,7 +178,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         Reference< ::com::sun::star::frame::XConfigManager > xSofficeIni(
                 m_pDriver->getFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY);
 
-        aFileName = xSofficeIni->substituteVariables(aDSN);
+        aFileName = xSofficeIni->substituteVariables(aFileName);
     }
 
     ::rtl::OUString aExt;
@@ -190,9 +190,18 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             pBegin->Value >>= aExt;
     }
 
-    m_aFilenameExtension = aExt;
+    if(aExt.len())
+        m_aFilenameExtension = aExt;
 
-    ::ucb::Content aFile(aFileName,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+    ::ucb::Content aFile;
+    try
+    {
+        aFile = ::ucb::Content(aFileName,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+    }
+    catch(::ucb::ContentCreationException &e)
+    {
+        e;
+    }
 
 //  if (aFileStat.IsKind(FSYS_KIND_WILD))
 //  {
@@ -211,7 +220,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     if (aFile.isFolder())
     {
-        m_xDir = aFile.createCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+        m_xDir = aFile.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
         m_xContent = aFile.get();
     }
     else if (aFile.isDocument())
@@ -221,7 +230,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         m_xContent = xParent;
 
         ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
-        m_xDir = aParent.createCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+        m_xDir = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
     }
     else
         throw SQLException();

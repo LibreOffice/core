@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-09-20 06:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
 #define _CONNECTIVITY_FILE_OCONNECTION_HXX_
 
@@ -100,6 +99,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XDYNAMICRESULTSET_HPP_
+#include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #endif
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include "connectivity/sqlparse.hxx"
@@ -150,7 +152,7 @@ namespace connectivity
             String                      m_aFilenameExtension;
             OFileDriver*                m_pDriver;      //  Pointer to the owning
                                                         //  driver object
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  m_xDir;
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >    m_xDir;
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>      m_xContent;
 
             sal_Bool                    m_bClosed;
@@ -201,11 +203,14 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // no interface methods
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getDir() const { return m_xDir; }
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet > getDir() const { return m_xDir; }
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>  getContent() const { return m_xContent; }
             // create a catalog or return the catalog already created
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
             String getExtension() const { return m_aFilenameExtension;}
+
+            OFileDriver*    getDriver() const { return m_pDriver; }
+
         };
     }
 }

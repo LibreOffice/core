@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-09-20 06:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,7 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 
 #ifndef _CONNECTIVITY_DBASE_ODATABASEMETADATA_HXX_
 #include "dbase/DDatabaseMetaData.hxx"
@@ -86,9 +87,6 @@
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
-//#ifndef _FSYS_HXX //autogen
-//#include <tools/fsys.hxx>
-//#endif
 #ifndef _CONNECTIVITY_FILE_ADATABASEMETADATARESULTSET_HXX_
 #include "file/FDatabaseMetaDataResultSet.hxx"
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-09-20 06:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,7 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
@@ -83,9 +83,6 @@
 #ifndef _CONNECTIVITY_DBASE_INDEXITER_HXX_
 #include "dbase/DIndexIter.hxx"
 #endif
-//#ifndef _FSYS_HXX //autogen
-//#include <tools/fsys.hxx>
-//#endif
 #ifndef _CONFIG_HXX //autogen
 #include <vcl/config.hxx>
 #endif
@@ -210,6 +207,7 @@ sal_Bool ODbaseIndex::openIndexFile()
     if(!m_aFileStream.IsOpen())
     {
         INetURLObject aURL;
+
         aURL.SetSmartProtocol(INET_PROT_FILE);
         aURL.SetSmartURL(m_pTable->getEntry(), INetURLObject::ENCODE_ALL);
 
@@ -221,7 +219,7 @@ sal_Bool ODbaseIndex::openIndexFile()
         //  aPath += m_Name.getStr();
         //  DirEntry aEntry(aPath);
         //  aEntry.setExtension(String::CreateFromAscii("ndx"));
-        m_aFileStream.Open(aURL.GetMainURL(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+        m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
 
         m_aFileStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
         m_aFileStream.SetBufferSize(512);
@@ -445,7 +443,7 @@ void ODbaseIndex::createINFEntry()
     INetURLObject aInfEntry(m_pTable->getEntry());
     aInfEntry.setExtension(String::CreateFromAscii("inf"));
 
-    Config aInfFile(aInfEntry.GetMainURL());
+    Config aInfFile(aInfEntry.getFSysPath(INetURLObject::FSYS_DETECT));
     aInfFile.SetGroup(dBASE_III_GROUP);
 
     USHORT nSuffix = aInfFile.GetKeyCount();
@@ -491,7 +489,7 @@ BOOL ODbaseIndex::DropImpl()
     INetURLObject aEntry( m_pTable->getEntry());
     aEntry.setExtension(String::CreateFromAscii("inf"));
 
-    Config aInfFile(aEntry.GetMainURL());
+    Config aInfFile(aEntry.getFSysPath(INetURLObject::FSYS_DETECT));
     aInfFile.SetGroup(dBASE_III_GROUP);
     USHORT nKeyCnt = aInfFile.GetKeyCount();
     ByteString aKeyName;
@@ -566,7 +564,7 @@ BOOL ODbaseIndex::CreateImpl()
 //  }
 
     // Anlegen des Indexfiles
-    m_aFileStream.Open(aEntry.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+    m_aFileStream.Open(aEntry.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
     if (!m_aFileStream.IsOpen())
         return FALSE;
 

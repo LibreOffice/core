@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-09-20 06:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,7 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
@@ -323,9 +323,9 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
 
     //  Content aContent(aURL.GetMainURL());
 
-    m_aFileStream.Open(aURL.GetMainURL(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+    m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
     if(!m_aFileStream.IsOpen())
-        m_aFileStream.Open(aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+        m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
 
     if(m_aFileStream.IsOpen())
     {
@@ -344,7 +344,7 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
             // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
             // allerdings koennen keine Updates durchgefuehrt werden
             // jedoch die Operation wird ausgefuehrt
-            m_aMemoStream.Open(aURL.GetMainURL(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            m_aMemoStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
             if (m_aMemoStream.IsOpen())
                 ReadMemoHeader();
 
@@ -439,14 +439,19 @@ BOOL ODbaseTable::ReadMemoHeader()
     return TRUE;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODbaseTable::getEntry()
+String ODbaseTable::getEntry()
 {
     ::rtl::OUString aURL;
-    Reference< XResultSet > xDir = m_pConnection->getDir();
+    Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
     Reference< XRow> xRow(xDir,UNO_QUERY);
+    ::rtl::OUString aName;
+    sal_Int32 nLen = m_pConnection->getExtension().Len()+1;
+    xDir->beforeFirst();
     while(xDir->next())
     {
-        if(xRow->getString(1) == m_Name)
+        aName = xRow->getString(1);
+        aName = aName.replaceAt(aName.getLength()-nLen,nLen,::rtl::OUString());
+        if(aName == m_Name)
         {
             Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
             aURL = xContentAccess->queryContentIdentfierString();
@@ -454,7 +459,7 @@ BOOL ODbaseTable::ReadMemoHeader()
         }
     }
     xDir->beforeFirst(); // move back to before first record
-    return aURL;
+    return aURL.getStr();
 }
 // -------------------------------------------------------------------------
 void ODbaseTable::refreshColumns()
@@ -482,7 +487,7 @@ void ODbaseTable::refreshIndexes()
 
     aURL.setExtension(String::CreateFromAscii("inf"));
 
-    Config aInfFile(aURL.GetMainURL());
+    Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
     aInfFile.SetGroup(dBASE_III_GROUP);
     sal_Int32 nKeyCnt = aInfFile.GetKeyCount();
     ByteString aKeyName;
@@ -950,7 +955,7 @@ BOOL ODbaseTable::CreateImpl()
     {
         // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
         SvFileStream m_aFileStream;
-        m_aFileStream.Open(aURL.GetMainURL(),STREAM_STD_READ);
+        m_aFileStream.Open(aURL.getFSysPath(INetURLObject::FSYS_DETECT),STREAM_STD_READ);
 
         if (m_aFileStream.IsOpen() && m_aFileStream.Seek(STREAM_SEEK_TO_END))
         {
@@ -1015,7 +1020,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     bCreateMemo = FALSE;
     Date aDate;                                     // aktuelles Datum
 
-    m_aFileStream.Open(aFile.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+    m_aFileStream.Open(aFile.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
     if (!m_aFileStream.IsOpen())
         return FALSE;
 
@@ -1200,7 +1205,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     // Makro zum Filehandling fürs Erzeugen von Tabellen
-    m_aMemoStream.Open(aFile.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
+    m_aMemoStream.Open(aFile.getFSysPath(INetURLObject::FSYS_DETECT), STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
     if (!m_aMemoStream.IsOpen())
         return FALSE;
 
@@ -1857,5 +1862,3 @@ BOOL ODbaseTable::WriteBuffer()
     m_aFileStream.Seek(nPos);
     return m_aFileStream.Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
 }
-
-

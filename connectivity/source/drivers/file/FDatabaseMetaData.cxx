@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-09-20 06:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,14 @@
 #ifndef _COM_SUN_STAR_UCB_SEARCHCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/SearchCommandArgument.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XSORTEDDYNAMICRESULTSETFACTORY_HPP_
+#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#endif
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _CONNECTIVITY_FILE_ODRIVER_HXX_
+#include "file/FDriver.hxx"
 #endif
 
 using namespace com::sun::star::ucb;
@@ -184,70 +190,66 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
     Reference< XResultSet > xRef = pResult;
     pResult->setTablesMap();
-#if 0
+
     ORows aRows;
 
-    Reference<XContent> xContent = m_pConnection->getContent();
+    Reference<XDynamicResultSet> xContent = m_pConnection->getDir();
+    Reference < XSortedDynamicResultSetFactory > xSRSFac(
+                m_pConnection->getDriver()->getFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
 
-    Sequence<RuleTerm> aRules(1);
-    aRules[0].Property = OUString::createFromAscii( "Title" );
-    aRules[0].Operand <<= tableNamePattern;
-    aRules[0].Operator =
-    aRules[0].CaseSensitive
-    aRules[0].RegularExpression = sal_False;
+    Sequence< com::sun::star::ucb::NumberedSortingInfo > aSortInfo( 1 );
+    com::sun::star::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
+    pInfo[ 0 ].ColumnIndex = 1;
+    pInfo[ 0 ].Ascending   = sal_True;
 
-    SearchCriterium aCrit(aRules);
+    Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
+    Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
+    xDynamicResultSet = xSRSFac->createSortedDynamicResultSet( xContent, aSortInfo, xFactory );
+    Reference<XResultSet> xResultSet = xDynamicResultSet->getStaticResultSet();
 
-    SearchInfo aInfo;
-    aInfo.Recursion                     = 0;
-    aInfo.IncludeBase                   = sal_False;
-    aInfo.RespectFolderViewRestrictions = sal_False;
-    aInfo.RespectDocViewRestrictions    = sal_False;
-    aInfo.FollowIndirections            = sal_False;
-
-    Sequence<Property> aProps(1);
-    aProps[0].Name = OUString::createFromAscii( "Title" );
-    aProps[0].Type = ::getCppuType((OUString*)0);
-
-    SearchCommandArgument aArg(aInfo,aProps);
+    Reference<XRow> xRow(xResultSet,UNO_QUERY);
 
     String aFilenameExtension = m_pConnection->getExtension();
 
-
-    pDir->SetSort(FSYS_SORT_NAME | FSYS_SORT_ASCENDING | FSYS_SORT_END);
-    pDir->Update();
-
     ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
-    for (sal_uInt16 nDirPos = 0;    nDirPos < pDir->Count(); nDirPos++)
+    ::rtl::OUString aName;
+    xResultSet->beforeFirst();
+    while(xResultSet->next())
     {
+        aName = xRow->getString(1);
         ORow aRow(3);
         if (aFilenameExtension.Len())
         {
-            if(match(tableNamePattern,(*pDir)[nDirPos].GetBase().GetBuffer(),'\0'))
-                                aRow.push_back(makeAny(::rtl::OUString((*pDir)[nDirPos].GetBase())));
+            aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
+            if(match(tableNamePattern,aName.getStr(),'\0'))
+                aRow.push_back(makeAny(aName));
         }
         else // keine extension, dann selbst filtern
         {
+            sal_Bool bErg = sal_False;
             do
             {
-                DirEntry aEntry = (*pDir)[nDirPos];
-                if (!(*pDir)[nDirPos].GetExtension().Len())
+                INetURLObject aURL;
+                aURL.SetSmartProtocol(INET_PROT_FILE);
+                aURL.SetSmartURL(aName);
+
+                if (!aURL.getExtension().Len())
                 {
-                    if(match(tableNamePattern,(*pDir)[nDirPos].GetBase().GetBuffer(),'\0'))
-                                                aRow.push_back(makeAny(::rtl::OUString((*pDir)[nDirPos].GetBase())));
+                    if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0'))
+                        aRow.push_back(makeAny(::rtl::OUString(aURL.getBase())));
                     break;
                 }
-                else
-                    nDirPos++;
-            } while ((unsigned int)nDirPos < pDir->Count());
+                else if(bErg = xResultSet->next())
+                    aName = xRow->getString(1);
+            } while (bErg);
         }
-                aRow.push_back(makeAny(aTable));
-                aRow.push_back(Any());
+        aRow.push_back(makeAny(aTable));
+        aRow.push_back(Any());
         aRows.push_back(aRow);
     }
 
     pResult->setRows(aRows);
-#endif
+
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -1320,7 +1322,7 @@ Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection(  ) throw(SQL
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-        return (Reference< XConnection >)m_pConnection;//new OConnection(m_aConnectionHandle);
+    return (Reference< XConnection >)m_pConnection;//new OConnection(m_aConnectionHandle);
 }
 // -------------------------------------------------------------------------
 

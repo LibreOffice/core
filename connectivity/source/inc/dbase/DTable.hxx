@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: oj $ $Date: 2000-09-20 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
-#ifndef _FSYS_HXX //autogen
-#include <tools/fsys.hxx>
+#ifndef _URLOBJ_HXX //autogen wg. INetURLObject
+#include <tools/urlobj.hxx>
 #endif
 
 
@@ -136,8 +136,8 @@ namespace connectivity
 
             void readHeader();
             void fillColumns();
-            BOOL CreateFile(const DirEntry& aFile, BOOL& bCreateMemo);
-            BOOL CreateMemoFile(const DirEntry& aFile);
+            BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
+            BOOL CreateMemoFile(const INetURLObject& aFile);
             BOOL HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
             BOOL ReadMemoHeader();
             BOOL ReadMemo(ULONG nBlockNo, file::OFileValue& aVariable);
@@ -179,7 +179,7 @@ namespace connectivity
 
             BOOL DropImpl();
             BOOL CreateImpl();
-            DirEntry getEntry();
+            String getEntry();
 
             virtual BOOL InsertRow(file::ORefAssignValues& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
