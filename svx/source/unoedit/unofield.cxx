@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-31 18:11:01 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,7 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextField::getImplementationName() throw(uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextField2"));
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextField"));
 }
 
 static const sal_Char* pServiceNames[] =

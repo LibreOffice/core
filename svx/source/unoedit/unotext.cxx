@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-03 14:02:41 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,7 +1099,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames
     throw(uno::RuntimeException)
 {
     uno::Sequence< OUString >   aSeq;
-    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.style.CharacterProperties" );
+    SvxServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.style.CharacterProperties",
+                                                  "com.sun.star.style.CharacterPropertiesComplex",
+                                                  "com.sun.star.style.CharacterPropertiesAsian");
     return aSeq;
 }
 

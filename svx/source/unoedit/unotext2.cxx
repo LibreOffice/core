@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 09:23:12 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,8 @@ sal_Bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName
 uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSeq( SvxUnoTextRangeBase::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 1,"com.sun.star.text.TextCursor");
+    SvxServiceInfoHelper::addToSequence( aSeq, 2,"com.sun.star.style.ParagraphProperties",
+                                                 "com.sun.star.text.TextCursor");
     return aSeq;
 }
 
