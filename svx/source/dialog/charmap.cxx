@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 12:23:19 $
+ *  last change: $Author: pb $ $Date: 2001-07-12 06:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,20 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
 #ifndef _SV_SOUND_HXX
 #include <vcl/sound.hxx>
 #endif
-#ifndef _SV_METRIC_HXX
-#include <vcl/metric.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
+#ifndef _SV_LSTBOX_HXX
+#include <vcl/lstbox.hxx>
 #endif
 #pragma hdrstop
 
@@ -1136,3 +1141,4 @@ void SubsetMap::InitList( void)
     DBG_ASSERT( (nSubsets < RID_SUBSET_COUNT), "RID_SUBSET_COUNT too small");
     DBG_ASSERT( (2*nSubsets > RID_SUBSET_COUNT), "RID_SUBSET_COUNT way to big");
 }
+
