@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-12 12:17:21 $
+ *  last change: $Author: er $ $Date: 2001-02-16 17:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,11 +439,6 @@ public:
                                         return eType == SC_CAT_DELETE_COLS ||
                                             eType == SC_CAT_DELETE_ROWS ||
                                             eType == SC_CAT_DELETE_TABS;
-                                    }
-            BOOL                IsMasterType() const
-                                    {   // alles was echte Abhaengige haben kann
-                                        return IsInsertType() ||
-                                            eType == SC_CAT_MOVE;
                                     }
             BOOL                IsVirgin() const
                                     { return eState == SC_CAS_VIRGIN; }
