@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mh $ $Date: 2001-08-15 03:35:15 $
+ *  last change: $Author: dbo $ $Date: 2001-11-08 16:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,9 @@ typedef unsigned long       sal_Size;
 #   error("unknown platform")
 #endif
 
-/** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
-    This hinders the compiler from setting a generic vtable stating that
-    a pure virtual function was called and thus slightly reduces code size.
+/* Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
+   This hinders the compiler from setting a generic vtable stating that
+   a pure virtual function was called and thus slightly reduces code size.
 */
 #ifdef _MSC_VER
 #define SAL_NO_VTABLE __declspec(novtable)
@@ -148,21 +148,21 @@ typedef unsigned long       sal_Size;
 #endif
 
 /** This is the binary specification of a SAL sequence.
-    <br>
 */
 typedef struct _sal_Sequence
 {
-    /** reference count of sequence<br>
+    /** reference count of sequence
     */
     sal_Int32           nRefCount;
-    /** element count<br>
+    /** element count
     */
     sal_Int32           nElements;
-    /** elements array<br>
+    /** elements array
     */
     char                elements[1];
 } sal_Sequence;
-
+/** calculated header size excluding elements array
+*/
 #define SAL_SEQUENCE_HEADER_SIZE ((sal_Size)&((sal_Sequence *)0)->elements)
 
 #ifdef SAL_W32
@@ -172,10 +172,10 @@ typedef struct _sal_Sequence
 #endif
 
 
-/** Wrap C++ const_cast, reinterpret_cast and static_cast expressions in
-    macros to keep code portable to old compilers (since most compilers still
-    lack RTTI support, dynamic_cast is not included here).
- */
+/* Wrap C++ const_cast, reinterpret_cast and static_cast expressions in
+   macros to keep code portable to old compilers (since most compilers still
+   lack RTTI support, dynamic_cast is not included here).
+*/
 #ifdef __cplusplus
 #if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
@@ -188,15 +188,15 @@ typedef struct _sal_Sequence
 #endif /* SAL_W32, SOLARIS, LINUX */
 #endif /* __cplusplus */
 
-/** Definition of function throw clause macros.  These have been introduced
-    to reduce code size by balancing out compiler bugs.
+/* Definition of function throw clause macros.  These have been introduced
+   to reduce code size by balancing out compiler bugs.
 
-    These macros are ONLY for function declarations,
-    use common C++ throw statement for throwing exceptions, e.g.
-    throw RuntimeException();
+   These macros are ONLY for function declarations,
+   use common C++ throw statement for throwing exceptions, e.g.
+   throw RuntimeException();
 
-    SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW( () )
-    SAL_THROW_EXTERN_C() should be used for all C functions
+   SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW( () )
+   SAL_THROW_EXTERN_C() should be used for all C functions
 */
 #ifdef __cplusplus
 #if defined(__GNUC__) || defined(__SUNPRO_CC) || defined(__sgi)
@@ -211,8 +211,9 @@ typedef struct _sal_Sequence
 #endif
 
 
-
 #ifdef __cplusplus
+/** definition of a no acquire enum for ctors
+*/
 enum __sal_NoAcquire
 {
     /** definition of a no acquire enum for ctors

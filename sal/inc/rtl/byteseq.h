@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-09 07:19:27 $
+ *  last change: $Author: dbo $ $Date: 2001-11-08 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
 #endif
 
 #ifdef __cplusplus
@@ -200,10 +203,25 @@ enum __ByteSequence_NoAcquire
 class ByteSequence
 {
     /** sequence handle
+        @internal
     */
     sal_Sequence * _pSequence;
 
 public:
+    // these are here to force memory de/allocation to sal lib.
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
+        { return ::rtl_allocateMemory( nSize ); }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
+        { ::rtl_freeMemory( pMem ); }
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
+        {}
+
     /** Default constructor: Creates an empty sequence.
     */
     inline ByteSequence() SAL_THROW( () );
@@ -235,10 +253,11 @@ public:
         @param nodefault dummy parameter forcing explicit BYTESEQ_NODEFAULT
     */
     inline ByteSequence( sal_Int32 len , enum __ByteSequence_NoDefault nodefault ) SAL_THROW( () );
-    /** Constructor: Creates a sequence from a C-Handle without acquiring the handle, thus taking
-                     over owenership. Eitherway the handle is release by the destructor.
-                     This ctor is useful, when working with a c-interface (it safes a pair of
-                     acquire and release call and is thus a performance optimization only).
+    /** Constructor:
+        Creates a sequence from a C-Handle without acquiring the handle, thus taking
+        over owenership. Eitherway the handle is release by the destructor.
+        This ctor is useful, when working with a c-interface (it safes a pair of
+        acquire and release call and is thus a performance optimization only).
 
         @param pSequence sequence handle to be taken over
         @param noacquire dummy parameter forcing explicit BYTESEQ_NOACQUIRE
@@ -278,11 +297,14 @@ public:
     */
     inline sal_Int8 * SAL_CALL getArray() SAL_THROW( () );
 
-    /** Non-const index operator: Obtains a reference to byte indexed at given position.
-                                  The implementation does NOT check for array bounds!
-                                  In general if the sequence has a handle acquired by other
-                                  sequences (reference count > 1), then a new sequence is created
-                                  copying all bytes to keep value semantics!
+    /** Non-const index operator:
+        Obtains a reference to byte indexed at given position.
+        In general if the sequence has a handle acquired by other
+        sequences (reference count > 1), then a new sequence is created
+        copying all bytes to keep value semantics!
+
+        @attention
+        The implementation does NOT check for array bounds!
 
         @param nIndex index
         @return non-const C++ reference to element at index nIndex
