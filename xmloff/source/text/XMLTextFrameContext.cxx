@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-10 17:06:40 $
+ *  last change: $Author: mib $ $Date: 2001-10-16 10:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
+#include <com/sun/star/text/HoriOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
+#include <com/sun/star/text/VertOrientation.hpp>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -531,10 +537,23 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
 
 
     // x and y
-    aAny <<= nX;
-    xPropSet->setPropertyValue( sHoriOrientPosition, aAny );
-    aAny <<= nY;
-    xPropSet->setPropertyValue( sVertOrientPosition, aAny );
+    sal_Int16 nHoriOrient =  HoriOrientation::NONE;
+    aAny = xPropSet->getPropertyValue( sHoriOrient );
+    aAny >>= nHoriOrient;
+    if( HoriOrientation::NONE == nHoriOrient )
+    {
+        aAny <<= nX;
+        xPropSet->setPropertyValue( sHoriOrientPosition, aAny );
+    }
+
+    sal_Int16 nVertOrient =  VertOrientation::NONE;
+    aAny = xPropSet->getPropertyValue( sVertOrient );
+    aAny >>= nVertOrient;
+    if( VertOrientation::NONE == nVertOrient )
+    {
+        aAny <<= nY;
+        xPropSet->setPropertyValue( sVertOrientPosition, aAny );
+    }
 
     // width
     if( nWidth > 0 )
@@ -667,7 +686,9 @@ XMLTextFrameContext::XMLTextFrameContext(
     sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType")),
     sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight")),
     sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth")),
+    sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
     sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")),
+    sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient")),
     sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")),
     sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName")),
     sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
