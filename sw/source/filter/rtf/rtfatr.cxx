@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:43:24 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,9 @@
 #endif
 #ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -3480,6 +3483,35 @@ static Writer& OutRTF_SvxFmtKeep( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutRTF_SvxFrmDir( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    // write it only for pasgedesc's - not for frames
+    SwRTFWriter& rRTFWrt = ((SwRTFWriter&)rWrt);
+    const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
+    USHORT nVal = 0;
+    const sal_Char* pStr = 0;
+
+    switch( rItem.GetValue() )
+    {
+    case FRMDIR_VERT_TOP_RIGHT:     nVal = 1; pStr = sRTF_FRMTXTBRLV; break;
+    case FRMDIR_HORI_RIGHT_TOP:     nVal = 3; pStr = sRTF_FRMTXTBRL; break;
+    case FRMDIR_VERT_TOP_LEFT:      nVal = 4; pStr = sRTF_FRMTXLRTBV; break;
+    }
+
+    if( rRTFWrt.pFlyFmt && rRTFWrt.bRTFFlySyntax && pStr )
+    {
+        rWrt.Strm() << pStr;
+        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
+    }
+    else if( rRTFWrt.bOutPageDesc && nVal )
+    {
+        rWrt.Strm() << sRTF_STEXTFLOW;
+        rWrt.OutULong( nVal );
+        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
+    }
+    return rWrt;
+}
+
 /* File GRFATR.HXX */
 
 static Writer& OutRTF_SwMirrorGrf( Writer& rWrt, const SfxPoolItem& rHt )
@@ -3871,7 +3903,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 /* RES_FRMATR_DUMMY6 */             0, // Dummy:
-/* RES_FRMATR_DUMMY7 */             0, // Dummy:
+/* RES_FRMDIR */                    OutRTF_SvxFrmDir, // Dummy:
 /* RES_FRMATR_DUMMY8 */             0, // Dummy:
 /* RES_FRMATR_DUMMY9 */             0, // Dummy:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-07 13:02:13 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _FMTPDSC_HXX //autogen
@@ -1079,6 +1082,7 @@ void SwRTFParser::ReadDocControls( int nToken )
     SwEndNoteInfo aEndInfo;
     UseOnPage eUseOn;
     USHORT nPgStart = USHRT_MAX;
+
     if( bFirstDocControl )
     {
         // RTF-Defaults setzen
@@ -1208,7 +1212,6 @@ void SwRTFParser::ReadDocControls( int nToken )
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNCHI:
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL); bEndInfoChgd = TRUE; break;
-
 
         case '{':
             {
@@ -1382,6 +1385,7 @@ BOOL lcl_CompareRTFPageDesc( const SwPageDesc& rOld, const SwPageDesc& rAkt )
         // dann ein paar Attribute vergleichen
         USHORT __READONLY_DATA aIdArr[] = { RES_FRM_SIZE, RES_UL_SPACE,
                                             RES_BACKGROUND, RES_SHADOW,
+                                            RES_FRAMEDIR, RES_FRAMEDIR,
                                             0 };
         const SfxPoolItem* pOldItem, *pAktItem;
         for( USHORT n = 0; aIdArr[ n ] && bRet; n += 2 )
@@ -1527,8 +1531,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             pFirst = &pDoc->_GetPageDesc( nAktFirstPageDesc );
     }
 
-    SwFmtFrmSize aSz( pAkt->GetMaster().GetFrmSize() ),
-                aHSz( ATT_MIN_SIZE );
+    SwFmtFrmSize aSz( pAkt->GetMaster().GetFrmSize() ), aHSz( ATT_MIN_SIZE );
     SvxULSpaceItem aUL( pAkt->GetMaster().GetULSpace() ), aHUL, aFUL;
     SvxLRSpaceItem aLR( pAkt->GetMaster().GetLRSpace() ), aHLR, aFLR;
     BOOL    bPgWiChgd = FALSE, bPgHeChgd = FALSE,
@@ -1536,6 +1539,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             bPgLeChgd = FALSE, bPgRiChgd = FALSE,
             bPgFcChgd = FALSE,
             bNoBalancedCols = FALSE;
+
 
     USHORT nRestoreUpper = USHRT_MAX, nRestoreLower = USHRT_MAX;
     SwFrmFmt* pFmt = (SwFrmFmt*)pAkt->GetMaster().GetHeader().GetHeaderFmt();
@@ -1573,6 +1577,8 @@ void SwRTFParser::ReadSectControls( int nToken )
     USHORT nPgStart = USHRT_MAX;
     SvxNumberType aNumType;
 
+    SvxFrameDirectionItem aFrmDir( pAkt->GetMaster().GetFrmDir() );
+
     do {
         BOOL bIsSectToken = FALSE;
         USHORT nValue = USHORT( nTokenValue );
@@ -1597,6 +1603,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                 aFLR.SetLeft( 0 );      aFLR.SetRight( 0 );
                 pAkt->WriteUseOn( UseOnPage(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE) );
                 pAkt->SetLandscape( FALSE );
+                aFrmDir.SetValue( FRMDIR_HORI_LEFT_TOP );
 
                 // remove Columns/Header/Footer
                 pAkt->GetMaster().ResetAttr( RES_COL );
@@ -1613,7 +1620,7 @@ void SwRTFParser::ReadSectControls( int nToken )
 
                 bPgWiChgd = bPgHeChgd = bPgUpChgd = bPgLoChgd = bPgLeChgd =
                     bPgRiChgd = bPgFcChgd = TRUE;
-            bPgDescChgd = TRUE;
+                bPgDescChgd = TRUE;
             }
             break;
 
@@ -1823,6 +1830,30 @@ void SwRTFParser::ReadSectControls( int nToken )
             bPgDescChgd = TRUE;
             break;
 
+        case RTF_STEXTFLOW:
+            switch( nValue )
+            {
+            case 0:     // Text flows left to right and top to bottom
+                aFrmDir.SetValue( FRMDIR_HORI_LEFT_TOP );
+                bPgDescChgd = TRUE;
+                break;
+            case 1:     // Text flows top to bottom and right to left, vertical
+            case 5:     // Text flows vertically, non-vertical font
+                aFrmDir.SetValue( FRMDIR_VERT_TOP_RIGHT );
+                bPgDescChgd = TRUE;
+                break;
+//          case 2:     // Text flows left to right and bottom to top
+//              aFrmDir.SetValue( ?? ); break;
+            case 3:     // Text flows right to left and top to bottom
+                aFrmDir.SetValue( FRMDIR_HORI_RIGHT_TOP );
+                bPgDescChgd = TRUE;
+                break;
+            case 4:     // Text flows left to right and top to bottom, vertical
+                aFrmDir.SetValue( FRMDIR_VERT_TOP_LEFT );
+                bPgDescChgd = TRUE;
+                break;
+            }
+            break;
 
         case '{':
             {
@@ -2011,6 +2042,9 @@ void SwRTFParser::ReadSectControls( int nToken )
         pFmt->SetAttr( aLR );
         pFmt->SetAttr( aUL );
 
+        if( !( aFrmDir == pFmt->GetAttr( RES_FRAMEDIR )) )
+            pFmt->SetAttr( aFrmDir );
+
         pAkt->SetNumType( aNumType );
         if( pFirst )
             pFirst->SetNumType( aNumType );
@@ -2080,6 +2114,8 @@ void SwRTFParser::ReadSectControls( int nToken )
         pFmt->SetAttr( aSz );
         pFmt->SetAttr( aLR );
         pFmt->SetAttr( aUL );
+        if( !( aFrmDir == pFmt->GetAttr( RES_FRAMEDIR )) )
+            pFmt->SetAttr( aFrmDir );
 
         if( ( bHeaderUL || bHeaderLR ) &&
             0 != (pFmt = (SwFrmFmt*)pFirst->GetMaster().GetHeader().GetHeaderFmt()) )

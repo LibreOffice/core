@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-30 18:20:24 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen wg. SvxBoxItem
 #include <svx/boxitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
@@ -602,6 +605,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     SwFmtAnchor aAnchor( FLY_PAGE, 1 );
     SwFmtHoriOrient aHori( 0, HORI_LEFT, /*FRAME*/REL_PG_PRTAREA );
     SwFmtVertOrient aVert( 0, VERT_TOP, REL_PG_PRTAREA );
+    SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP );
 
     USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
@@ -724,6 +728,19 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         case RTF_POSYIL:
         case RTF_ABSLOCK:
                                 break;
+
+        case RTF_FRMTXLRTB:
+            aFrmDir.SetValue( FRMDIR_HORI_LEFT_TOP );
+            break;
+        case RTF_FRMTXTBRL:
+            aFrmDir.SetValue( FRMDIR_HORI_RIGHT_TOP );
+            break;
+        case RTF_FRMTXLRTBV:
+            aFrmDir.SetValue( FRMDIR_VERT_TOP_LEFT );
+            break;
+        case RTF_FRMTXTBRLV:
+            aFrmDir.SetValue( FRMDIR_VERT_TOP_RIGHT );
+            break;
 
         case RTF_DROPCAPLI:                         // Dropcaps !!
                 if( bChkDropCap )
@@ -967,6 +984,9 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     pSet->Put( aAnchor );
     pSet->Put( aHori );
     pSet->Put( aVert );
+
+    if( !( aFrmDir == pSet->Get( RES_FRAMEDIR )) )
+        pSet->Put( aFrmDir );
 
     if( nCols && USHRT_MAX != nCols )
     {
