@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2001-07-25 13:30:58 $
+#   last change: $Author: fs $ $Date: 2001-08-13 14:56:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ TARGET=simpledbt
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
+        $(SLO)$/charset_s.obj			\
         $(SLO)$/refbase.obj				\
         $(SLO)$/staticdbtools_s.obj	\
         $(SLO)$/parsenode_s.obj			\
