@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conform.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2002-04-29 11:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ public:
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate(const USHORT nSlotId);    // Function aktivieren
+    virtual void CreateDefaultObject();
 };
 
 

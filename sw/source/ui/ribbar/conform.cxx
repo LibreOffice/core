@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conform.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2002-04-29 11:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,27 +167,21 @@ void ConstFormControl::Activate(const USHORT nSlotId)
 
     pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
 }
+/* -----------------------------19.04.2002 12:42------------------------------
 
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.4  2000/09/18 16:06:00  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.3  1998/03/16 11:03:42  MA
-      Verbindung FormShell->DrawView immer herstellen
-
-
-      Rev 1.2   16 Mar 1998 12:03:42   MA
-   Verbindung FormShell->DrawView immer herstellen
-
-      Rev 1.1   11 Mar 1998 17:12:08   OM
-   DB-FormShell
-
-      Rev 1.0   10 Mar 1998 14:15:20   OM
-   Initial revision.
-
-*************************************************************************/
+ ---------------------------------------------------------------------------*/
+void ConstFormControl::CreateDefaultObject()
+{
+    Size aWinSize = pWin->GetSizePixel();
+    Point aStartPos(aWinSize.Width()/2, aWinSize.Height() / 2);
+    aStartPos = pWin->PixelToLogic(aStartPos);
+    Point aEndPos(aStartPos);
+    aStartPos.X() -= 2 * MM50;
+    aStartPos.Y() -= MM50;
+    aEndPos.X() += 2 * MM50;
+    aEndPos.Y() += MM50;
+    pSh->BeginCreate(pWin->GetDrawMode(), FmFormInventor, aStartPos);
+    pSh->MoveCreate(aEndPos);
+    pSh->EndCreate(SDRCREATE_FORCEEND);
+}
 
