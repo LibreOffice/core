@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 13:52:24 $
+ *  last change: $Author: os $ $Date: 2001-06-20 09:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,11 +869,11 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
 
 #define     _PROP_DIFF_FONTHEIGHT \
                     { SW_PROP_NMID(UNO_NAME_CHAR_PROP_HEIGHT), RES_CHRATR_FONTSIZE ,            CPPU_E2T(CPPUTYPE_FLOAT),                                           PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
-                    { SW_PROP_NMID(UNO_NAME_CHAR_DIFF_HEIGHT), RES_CHRATR_FONTSIZE ,            CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},\
+                    { SW_PROP_NMID(UNO_NAME_CHAR_DIFF_HEIGHT), RES_CHRATR_FONTSIZE ,            CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF|CONVERT_TWIPS},\
                     { SW_PROP_NMID(UNO_NAME_CHAR_PROP_HEIGHT_ASIAN), RES_CHRATR_CJK_FONTSIZE ,          CPPU_E2T(CPPUTYPE_FLOAT),                                           PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
-                    { SW_PROP_NMID(UNO_NAME_CHAR_DIFF_HEIGHT_ASIAN), RES_CHRATR_CJK_FONTSIZE ,          CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},\
+                    { SW_PROP_NMID(UNO_NAME_CHAR_DIFF_HEIGHT_ASIAN), RES_CHRATR_CJK_FONTSIZE ,          CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF|CONVERT_TWIPS},\
                     { SW_PROP_NMID(UNO_NAME_CHAR_PROP_HEIGHT_COMPLEX), RES_CHRATR_CTL_FONTSIZE ,            CPPU_E2T(CPPUTYPE_FLOAT),                                           PROPERTY_NONE , MID_FONTHEIGHT_PROP},\
-                    { SW_PROP_NMID(UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX), RES_CHRATR_CTL_FONTSIZE ,            CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_DIFF_HEIGHT_COMPLEX), RES_CHRATR_CTL_FONTSIZE ,            CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE , MID_FONTHEIGHT_DIFF|CONVERT_TWIPS},
 
 
 
