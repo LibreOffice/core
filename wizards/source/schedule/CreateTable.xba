@@ -95,7 +95,7 @@ Dim iStartDay as Integer
 	Select Case iSelMonth
 		Case 2,4,6,9,11
 			oSheet.RemoveRange(oAddress, com.sun.star.sheet.CellDeleteMode.ROWS) 
-			If TargetMonth = 2 Then
+			If iSelMonth = 2 Then
 				oAddress.StartRow = oAddress.StartRow - 1	
 				oAddress.EndRow = oAddress.StartRow
 				oSheet.RemoveRange(oAddress, com.sun.star.sheet.CellDeleteMode.ROWS)
