@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int16 nColumn, sal_Int16 nRow)
     SwXCell* pXCell = 0;
     String sCellName = lcl_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable( pFmt );
-    SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName.ToUpperAscii() );
+    SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
     if(pBox)
     {
         pXCell = SwXCell::CreateXCell(pFmt, pBox, &sCellName, pTable );
@@ -1001,7 +1001,6 @@ void SwXCell::setValue(double rValue) throw( uno::RuntimeException )
   -----------------------------------------------------------------------*/
 table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     DBG_WARNING("not implemented")
     return  (table::CellContentType)0;
 }
@@ -1143,7 +1142,6 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
   -----------------------------------------------------------------------*/
 void SwXCell::addPropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 10:56:35---------------------------------------------------
@@ -1151,7 +1149,6 @@ void SwXCell::addPropertyChangeListener(const OUString& PropertyName, const uno:
   -----------------------------------------------------------------------*/
 void SwXCell::removePropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 10:56:36---------------------------------------------------
@@ -1159,7 +1156,6 @@ void SwXCell::removePropertyChangeListener(const OUString& PropertyName, const u
   -----------------------------------------------------------------------*/
 void SwXCell::addVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 10:56:36---------------------------------------------------
@@ -1167,7 +1163,6 @@ void SwXCell::addVetoableChangeListener(const OUString& PropertyName, const uno:
   -----------------------------------------------------------------------*/
 void SwXCell::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 10:56:37---------------------------------------------------
@@ -1525,6 +1520,14 @@ BOOL SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( Ru
 {
     return C2U("com.sun.star.text.TextTableCursor") == rServiceName;
 }
+// -----------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XINTERFACE2(SwXTextTableCursor,SwXTextTableCursor_Base,OTextCursorHelper)
+const SwPaM*        SwXTextTableCursor::GetPaM() const  { return GetCrsr(); }
+SwPaM*              SwXTextTableCursor::GetPaM()        { return GetCrsr(); }
+const SwDoc*        SwXTextTableCursor::GetDoc() const  { return GetFrmFmt()->GetDoc(); }
+SwDoc*              SwXTextTableCursor::GetDoc()        { return GetFrmFmt()->GetDoc(); }
+const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
+SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 /* -----------------------------19.04.00 15:21--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1630,7 +1633,6 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool E
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         lcl_CrsrSelect( pTblCrsr, Expand );
         String sCellName(CellName);
-        sCellName.ToUpperAscii();
         bRet = pTblCrsr->GotoTblBox(sCellName);
     }
     return bRet;
@@ -2366,7 +2368,7 @@ uno::Reference< table::XCell >  SwXTextTable::getCellByName(const OUString& Cell
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
         String sCellName(CellName);
-        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName.ToUpperAscii() );
+        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
         if(pBox)
         {
             xRet = SwXCell::CreateXCell(pFmt, pBox, &sCellName);
@@ -2416,7 +2418,7 @@ uno::Reference< XTextTableCursor >  SwXTextTable::createCursorByCellName(const O
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
         String sCellName(CellName);
-        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName.ToUpperAscii() );
+        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
         if(pBox)
         {
             xRet = new SwXTextTableCursor(pFmt, pBox);
@@ -2438,13 +2440,13 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
 
     uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
-    SwXTextCursor* pCursor = 0;
+    OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                 SwXTextRange::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                OTextCursorHelper::getUnoTunnelId());
     }
     SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
     if(pDoc && nRows && nColumns)
@@ -2619,7 +2621,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
     uno::Reference< table::XCellRange >  aRef;
     String sTLName(rTLName);
     String sBRName(rBRName);
-    const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
+    const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
     if(pTLBox)
     {
         // hier muessen die Actions aufgehoben werden
@@ -2630,7 +2632,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
         SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
         pUnoCrsr->SetRemainInSection( sal_False );
-        const SwTableBox* pBRBox = pTable->GetTblBox( sBRName.ToUpperAscii() );
+        const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
         if(pBRBox)
         {
             pUnoCrsr->SetMark();
@@ -2819,8 +2821,7 @@ void SAL_CALL SwXTextTable::setDataArray(
                     else
                     {
                         double d;
-                        bool bSuccess = (rAny >>= d);
-                        if( !bSuccess )
+                        if( !(rAny >>= d) )
                             throw uno::RuntimeException();
                         lcl_setValue( *pXCell, d );
                     }
@@ -3886,7 +3887,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             aNewDesc.nRight  = nRight + aRgDesc.nLeft;
             String sTLName = lcl_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
             String sBRName = lcl_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
                 // hier muessen die Actions aufgehoben
@@ -3897,7 +3898,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                 SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                const SwTableBox* pBRBox = pTable->GetTblBox( sBRName.ToUpperAscii() );
+                const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
                 if(pBRBox)
                 {
                     pUnoCrsr->SetMark();
@@ -4238,8 +4239,7 @@ void SAL_CALL SwXCellRange::setDataArray(
                     else
                     {
                         double d;
-                        bool bSuccess = (rAny >>= d);
-                        if( !bSuccess )
+                        if( !(rAny >>= d) )
                             throw uno::RuntimeException();
                         lcl_setValue( *pXCell, d );
                     }
@@ -4729,7 +4729,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName(0, (sal_Int16)nIndex);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
             {
@@ -4770,7 +4770,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName(0, (sal_Int16)nIndex);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
                 {
@@ -4784,7 +4784,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
                 String sBLName = lcl_GetCellName(0, (sal_Int16)nIndex + nCount - 1);
-                const SwTableBox* pBLBox = pTable->GetTblBox( sBLName.ToUpperAscii() );
+                const SwTableBox* pBLBox = pTable->GetTblBox( sBLName );
                 if(pBLBox)
                 {
                     pUnoCrsr->SetMark();
@@ -4944,7 +4944,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName((sal_Int16)nIndex, 0);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
             {
@@ -4990,7 +4990,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName((sal_Int16)nIndex, 0);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
                 {
@@ -5004,7 +5004,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
                 String sTRName = lcl_GetCellName((sal_Int16)nIndex + nCount - 1, 0);
-                const SwTableBox* pTRBox = pTable->GetTblBox( sTRName.ToUpperAscii() );
+                const SwTableBox* pTRBox = pTable->GetTblBox( sTRName );
                 if(pTRBox)
                 {
                     pUnoCrsr->SetMark();
