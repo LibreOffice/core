@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatritr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 14:26:06 $
+ *  last change: $Author: fme $ $Date: 2002-08-02 09:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,11 +101,17 @@
 using namespace ::com::sun::star::i18n;
 
 
-SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt )
-    : rText( rStr ), nChgPos( rStr.Len() ), nCurScript( ScriptType::WEAK )
+SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, sal_Bool bFrwrd )
+    : rText( rStr ),
+      nChgPos( rStr.Len() ),
+      nCurScript( ScriptType::WEAK ),
+      bForward( bFrwrd )
 {
     if( pBreakIt->xBreak.is() )
     {
+        if ( ! bFrwrd && nStt )
+            --nStt;
+
         xub_StrLen nPos = nStt;
         nCurScript = pBreakIt->xBreak->getScriptType( rText, nPos );
         if( ScriptType::WEAK == nCurScript )
@@ -122,20 +128,32 @@ SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt )
             }
         }
 
-        nChgPos = (xub_StrLen)pBreakIt->xBreak->endOfScript(
-                                                rText, nStt, nCurScript );
+        nChgPos = bForward ?
+                  (xub_StrLen)pBreakIt->xBreak->endOfScript( rText, nStt, nCurScript ) :
+                  (xub_StrLen)pBreakIt->xBreak->beginOfScript( rText, nStt, nCurScript );
     }
 }
 
 sal_Bool SwScriptIterator::Next()
 {
     sal_Bool bRet = sal_False;
-    if( pBreakIt->xBreak.is() && nChgPos < rText.Len() )
+    if( pBreakIt->xBreak.is() )
     {
-        nCurScript = pBreakIt->xBreak->getScriptType( rText, nChgPos );
-        nChgPos = (xub_StrLen)pBreakIt->xBreak->endOfScript(
-                                            rText, nChgPos, nCurScript );
-        bRet = sal_True;
+        if ( bForward && nChgPos < rText.Len() )
+        {
+            nCurScript = pBreakIt->xBreak->getScriptType( rText, nChgPos );
+            nChgPos = (xub_StrLen)pBreakIt->xBreak->endOfScript(
+                                                rText, nChgPos, nCurScript );
+            bRet = sal_True;
+        }
+        else if ( ! bForward && nChgPos )
+        {
+            --nChgPos;
+            nCurScript = pBreakIt->xBreak->getScriptType( rText, nChgPos );
+            nChgPos = (xub_StrLen)pBreakIt->xBreak->beginOfScript(
+                                                rText, nChgPos, nCurScript );
+            bRet = sal_True;
+        }
     }
     else
         nChgPos = rText.Len();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatritr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 12:47:58 $
+ *  last change: $Author: fme $ $Date: 2002-08-02 09:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,11 @@ class SwScriptIterator
     const String& rText;
     xub_StrLen nChgPos;
     sal_uInt16 nCurScript;
+    sal_Bool bForward;
 
 public:
-    SwScriptIterator( const String& rStr, xub_StrLen nStart = 0 );
+    SwScriptIterator( const String& rStr, xub_StrLen nStart = 0,
+                      sal_Bool bFrwrd = sal_True );
 
     sal_Bool Next();
 
