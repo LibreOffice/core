@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: pl $ $Date: 2001-08-07 13:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #ifndef _SANE_HXX
 #define _SANE_HXX
 
+#include <osl/thread.h>
 #include <tools/string.hxx>
 #include <vcl/bitmap.hxx>
 #include <sane/sane.h>
@@ -77,8 +78,8 @@ class BitmapTransporter : public OWeakObject, AWT::XBitmap
 
 public:
 
-                                        BitmapTransporter() {}
-    virtual                             ~BitmapTransporter() {}
+                                        BitmapTransporter();
+    virtual                             ~BitmapTransporter();
 
 
     // XInterface
@@ -159,18 +160,18 @@ public:
     static int              CountDevices()
         { return nDevices; }
     static String           GetName( int n )
-        { return String( ppDevices[n]->name, gsl_getSystemTextEncoding() ); }
+        { return String( ppDevices[n]->name ? ppDevices[n]->name : "", osl_getThreadTextEncoding() ); }
     static String           GetVendor( int n )
-        { return String( ppDevices[n]->vendor, gsl_getSystemTextEncoding() ); }
+        { return String( ppDevices[n]->vendor ? ppDevices[n]->vendor : "", osl_getThreadTextEncoding() ); }
     static String           GetModel( int n )
-        { return String( ppDevices[n]->model, gsl_getSystemTextEncoding() ); }
+        { return String( ppDevices[n]->model ? ppDevices[n]->model : "", osl_getThreadTextEncoding() ); }
     static String           GetType( int n )
-        { return String( ppDevices[n]->type, gsl_getSystemTextEncoding() ); }
+        { return String( ppDevices[n]->type ? ppDevices[n]->type : "", osl_getThreadTextEncoding() ); }
 
     String          GetOptionName( int n )
-        { return String( (char*)mppOptions[n]->name, gsl_getSystemTextEncoding() ); }
+        { return String( mppOptions[n]->name ? (char*)mppOptions[n]->name : "", osl_getThreadTextEncoding() ); }
     String          GetOptionTitle( int n )
-        { return String( (char*)mppOptions[n]->title, gsl_getSystemTextEncoding() ); }
+        { return String( mppOptions[n]->title ? (char*)mppOptions[n]->title : "", osl_getThreadTextEncoding() ); }
     SANE_Value_Type GetOptionType( int n )
         { return mppOptions[n]->type; }
     SANE_Unit       GetOptionUnit( int n )

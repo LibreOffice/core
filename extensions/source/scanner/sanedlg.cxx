@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: pl $ $Date: 2001-08-07 13:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
     {
         if( pListBox == &maQuantumRangeBox )
         {
-            ByteString aValue( maQuantumRangeBox.GetSelectEntry(), gsl_getSystemTextEncoding() );
+            ByteString aValue( maQuantumRangeBox.GetSelectEntry(), osl_getThreadTextEncoding() );
             double fValue = atof( aValue.GetBuffer() );
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
@@ -481,7 +481,7 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
     {
         String aOption =
             maOptionBox.GetEntryText( maOptionBox.FirstSelected() );
-        int nOption = mrSane.GetOptionByName( ByteString( aOption, gsl_getSystemTextEncoding() ).GetBuffer() );
+        int nOption = mrSane.GetOptionByName( ByteString( aOption, osl_getThreadTextEncoding() ).GetBuffer() );
         if( nOption != -1 && nOption != mnCurrentOption )
         {
             DisableOption();
@@ -595,7 +595,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
         {
             double fValue;
             char pBuf[256];
-            ByteString aContents( maNumericEdit.GetText(), gsl_getSystemTextEncoding() );
+            ByteString aContents( maNumericEdit.GetText(), osl_getThreadTextEncoding() );
             fValue = atof( aContents.GetBuffer() );
             if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
             {
@@ -604,7 +604,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
                 else if( fValue > mfMax )
                 fValue = mfMax;
                 sprintf( pBuf, "%g", fValue );
-                maNumericEdit.SetText( String( pBuf, gsl_getSystemTextEncoding() ) );
+                maNumericEdit.SetText( String( pBuf, osl_getThreadTextEncoding() ) );
             }
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
@@ -615,7 +615,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
             double fValue;
             mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
             sprintf( pBuf, "%g", fValue );
-            String aValue( pBuf, gsl_getSystemTextEncoding() );
+            String aValue( pBuf, osl_getThreadTextEncoding() );
             maNumericEdit.SetText( aValue );
             maQuantumRangeBox.SelectEntry( aValue );
         }
@@ -765,7 +765,7 @@ void SaneDlg::EstablishStringOption()
     {
         maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
         maOptionDescTxt.Show( TRUE );
-        maStringEdit.SetText( String( aValue, gsl_getSystemTextEncoding() ) );
+        maStringEdit.SetText( String( aValue, osl_getThreadTextEncoding() ) );
         maStringEdit.Show( TRUE );
     }
 }
@@ -775,10 +775,10 @@ void SaneDlg::EstablishStringRange()
     const char** ppStrings = mrSane.GetStringConstraint( mnCurrentOption );
     maStringRangeBox.Clear();
     for( int i = 0; ppStrings[i] != 0; i++ )
-        maStringRangeBox.InsertEntry( String( ppStrings[i], gsl_getSystemTextEncoding() ) );
+        maStringRangeBox.InsertEntry( String( ppStrings[i], osl_getThreadTextEncoding() ) );
     ByteString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
-    maStringRangeBox.SelectEntry( String( aValue, gsl_getSystemTextEncoding() ) );
+    maStringRangeBox.SelectEntry( String( aValue, osl_getThreadTextEncoding() ) );
     maStringRangeBox.Show( TRUE );
     maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
     maOptionDescTxt.Show( TRUE );
@@ -809,13 +809,13 @@ void SaneDlg::EstablishQuantumRange()
         for( int i = 0; i < nValues; i++ )
         {
             sprintf( pBuf, "%g", mpRange[ i ] );
-            maQuantumRangeBox.InsertEntry( String( pBuf, gsl_getSystemTextEncoding() ) );
+            maQuantumRangeBox.InsertEntry( String( pBuf, osl_getThreadTextEncoding() ) );
         }
         double fValue;
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ) )
         {
             sprintf( pBuf, "%g", fValue );
-            maQuantumRangeBox.SelectEntry( String( pBuf, gsl_getSystemTextEncoding() ) );
+            maQuantumRangeBox.SelectEntry( String( pBuf, osl_getThreadTextEncoding() ) );
         }
         maQuantumRangeBox.Show( TRUE );
         String aText( mrSane.GetOptionName( mnCurrentOption ) );
@@ -842,12 +842,12 @@ void SaneDlg::EstablishNumericOption()
     if( mfMin != mfMax )
     {
         sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
-        aText += String( pBuf, gsl_getSystemTextEncoding() );
+        aText += String( pBuf, osl_getThreadTextEncoding() );
     }
     maOptionDescTxt.SetText( aText );
     maOptionDescTxt.Show( TRUE );
     sprintf( pBuf, "%g", fValue );
-    maNumericEdit.SetText( String( pBuf, gsl_getSystemTextEncoding() ) );
+    maNumericEdit.SetText( String( pBuf, osl_getThreadTextEncoding() ) );
     maNumericEdit.Show( TRUE );
 }
 
@@ -1110,7 +1110,7 @@ BOOL SaneDlg::LoadState()
         return FALSE;
 
     const char* pEnv = getenv("HOME");
-    String aFileName( pEnv ? pEnv : "", gsl_getSystemTextEncoding() );
+    String aFileName( pEnv ? pEnv : "", osl_getThreadTextEncoding() );
     aFileName += String( RTL_CONSTASCII_USTRINGPARAM( "/.so_sane_state" ) );
     Config aConfig( aFileName );
     if( ! aConfig.HasGroup( "SANE" ) )
@@ -1118,7 +1118,7 @@ BOOL SaneDlg::LoadState()
 
     aConfig.SetGroup( "SANE" );
     ByteString aString = aConfig.ReadKey( "SO_LastSaneDevice" );
-    for( i = 0; i < Sane::CountDevices() && ! aString.Equals( ByteString( Sane::GetName( i ), gsl_getSystemTextEncoding() ) ); i++ ) ;
+    for( i = 0; i < Sane::CountDevices() && ! aString.Equals( ByteString( Sane::GetName( i ), osl_getThreadTextEncoding() ) ); i++ ) ;
     if( i == Sane::CountDevices() )
         return FALSE;
 
@@ -1147,7 +1147,7 @@ BOOL SaneDlg::LoadState()
                 else if( aValue.CompareTo( "STRING=", 7 ) == COMPARE_EQUAL )
                 {
                     aValue.Erase( 0, 7 );
-                    mrSane.SetOptionValue( nOption, String( aValue, gsl_getSystemTextEncoding() ) );
+                    mrSane.SetOptionValue( nOption, String( aValue, osl_getThreadTextEncoding() ) );
                 }
                 else if( aValue.CompareTo( "NUMERIC=", 8 ) == COMPARE_EQUAL )
                 {
@@ -1181,7 +1181,7 @@ void SaneDlg::SaveState()
         return;
 
     const char* pEnv = getenv( "HOME" );
-    String aFileName( pEnv ? pEnv : "", gsl_getSystemTextEncoding() );
+    String aFileName( pEnv ? pEnv : "", osl_getThreadTextEncoding() );
     aFileName.AppendAscii( "/.so_sane_state" );
 
     Config aConfig( aFileName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanunx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: pl $ $Date: 2001-08-07 13:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,24 @@
 #include <sanedlg.hxx>
 #include <vos/thread.hxx>
 #include <tools/list.hxx>
+
+#ifdef DEBUG
+#include <stdio.h>
+#endif
+
+BitmapTransporter::BitmapTransporter()
+{
+#ifdef DEBUG
+    fprintf( stderr, "BitmapTransporter\n" );
+#endif
+}
+
+BitmapTransporter::~BitmapTransporter()
+{
+#ifdef DEBUG
+    fprintf( stderr, "~BitmapTransporter\n" );
+#endif
+}
 
 // -----------------------------------------------------------------------------
 
@@ -142,22 +160,41 @@ class ScannerThread : public vos::OThread
     REF( com::sun::star::lang::XEventListener ) m_xListener;
     ScannerManager*                             m_pManager; // just for the disposing call
 
+public:
     virtual void run();
     virtual void onTerminated() { delete this; }
 public:
     ScannerThread( SaneHolder* pHolder,
                    const REF( com::sun::star::lang::XEventListener )& listener,
-                   ScannerManager* pManager )
-            : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager ) {}
-    virtual ~ScannerThread() {}
+                   ScannerManager* pManager );
+    virtual ~ScannerThread();
 };
 
 // -----------------------------------------------------------------------------
 
+ScannerThread::ScannerThread(
+                             SaneHolder* pHolder,
+                             const REF( com::sun::star::lang::XEventListener )& listener,
+                             ScannerManager* pManager )
+        : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
+{
+#ifdef DEBUG
+    fprintf( stderr, "ScannerThread\n" );
+#endif
+}
+
+ScannerThread::~ScannerThread()
+{
+#ifdef DEBUG
+    fprintf( stderr, "~ScannerThread\n" );
+#endif
+}
+
 void ScannerThread::run()
 {
     vos::OGuard         aGuard( m_pHolder->m_aProtector );
-    REF( XInterface )   aIf( static_cast< OWeakObject* >( new BitmapTransporter ) );
+    BitmapTransporter*  pTransporter = new BitmapTransporter;
+    REF( XInterface )   aIf( static_cast< OWeakObject* >( pTransporter ) );
 
     m_pHolder->m_xBitmap = REF( AWT::XBitmap )( aIf, UNO_QUERY );
 
@@ -168,7 +205,7 @@ void ScannerThread::run()
             m_pHolder->m_aSane.SetOptionValue( nOption, (BOOL)FALSE );
 
         m_pHolder->m_nError =
-            m_pHolder->m_aSane.Start( *(BitmapTransporter*)&m_pHolder->m_xBitmap ) ?
+            m_pHolder->m_aSane.Start( *pTransporter ) ?
             ScanError_ScanErrorNone : ScanError_ScanCanceled;
     }
     else
@@ -235,6 +272,10 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
 {
     vos::OGuard aGuard( aSaneProtector );
 
+#ifdef DEBUG
+    fprintf( stderr, "ScannerManager::configureScanner\n" );
+#endif
+
     if( scanner_context.InternalData < 0 || scanner_context.InternalData >= allSanes.Count() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
@@ -251,6 +292,10 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
                                 const REF( com::sun::star::lang::XEventListener )& listener ) throw( ScannerException )
 {
     vos::OGuard aGuard( aSaneProtector );
+
+#ifdef DEBUG
+    fprintf( stderr, "ScannerManager::startScan\n" );
+#endif
 
     if( scanner_context.InternalData < 0 || scanner_context.InternalData >= allSanes.Count() )
         throw ScannerException(
