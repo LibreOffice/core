@@ -37,7 +37,6 @@ $(RSC_MULTI1) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC1HEADER) $(RESLIB1SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -53,7 +52,6 @@ $(RSC_MULTI1) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC1HEADER) $(RESLIB1SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -117,7 +115,6 @@ $(RSC_MULTI2) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC2HEADER) $(RESLIB2SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -133,7 +130,6 @@ $(RSC_MULTI2) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC2HEADER) $(RESLIB2SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -197,7 +193,6 @@ $(RSC_MULTI3) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC3HEADER) $(RESLIB3SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -213,7 +208,6 @@ $(RSC_MULTI3) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC3HEADER) $(RESLIB3SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -277,7 +271,6 @@ $(RSC_MULTI4) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC4HEADER) $(RESLIB4SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -293,7 +286,6 @@ $(RSC_MULTI4) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC4HEADER) $(RESLIB4SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -357,7 +349,6 @@ $(RSC_MULTI5) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC5HEADER) $(RESLIB5SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -373,7 +364,6 @@ $(RSC_MULTI5) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC5HEADER) $(RESLIB5SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -437,7 +427,6 @@ $(RSC_MULTI6) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC6HEADER) $(RESLIB6SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -453,7 +442,6 @@ $(RSC_MULTI6) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC6HEADER) $(RESLIB6SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -517,7 +505,6 @@ $(RSC_MULTI7) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC7HEADER) $(RESLIB7SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -533,7 +520,6 @@ $(RSC_MULTI7) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC7HEADER) $(RESLIB7SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -597,7 +583,6 @@ $(RSC_MULTI8) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC8HEADER) $(RESLIB8SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -613,7 +598,6 @@ $(RSC_MULTI8) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC8HEADER) $(RESLIB8SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -677,7 +661,6 @@ $(RSC_MULTI9) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC9HEADER) $(RESLIB9SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -693,7 +676,6 @@ $(RSC_MULTI9) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC9HEADER) $(RESLIB9SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
@@ -757,7 +739,6 @@ $(RSC_MULTI10) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC10HEADER) $(RESLIB10SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -773,7 +754,6 @@ $(RSC_MULTI10) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC10HEADER) $(RESLIB10SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
