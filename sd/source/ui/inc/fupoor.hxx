@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-08-02 12:02:36 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,15 @@ protected:
 
     // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
+    /** is called when the currenct function should be aborted. <p>
+        This is used when a function gets a KEY_ESCAPE but can also
+        be called directly.
+
+        @returns true if a active function was aborted
+    */
+    virtual bool cancel();
+
 protected:
     void ImpForceQuadratic(Rectangle& rRect);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-28 18:00:15 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 #include "strmname.h"
+#include "fupoor.hxx"
 
 /*************************************************************************
 |*
@@ -445,12 +446,9 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
         if( pViewShell )
             aNameDlg.SetCheckNameHdl( LINK( this, SdDrawDocShell, RenameSlideHdl ) );
 
-        if( pViewShell->GetActualFunction() )
-         {
-            KeyCode aKeyCode( KEY_ESCAPE );
-            KeyEvent aKeyEvent( 27, aKeyCode );
-            pViewShell->KeyInput( aKeyEvent, (SdWindow*)pWin );
-        }
+        FuPoor* pFunc = pViewShell->GetActualFunction();
+        if( pFunc )
+            pFunc->cancel();
 
         if( aNameDlg.Execute() == RET_OK )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-15 14:46:44 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,17 +983,7 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
     }
     else if (aKeyCode == KEY_ESCAPE)
     {
-        if ( pView->IsTextEdit() )
-        {
-            if (pView->EndTextEdit() == SDRENDTEXTEDIT_DELETED)
-            {
-                pTextObj = NULL;
-            }
-
-            pView->SetCurrentObj(OBJ_TEXT);
-            pView->SetEditMode(SDREDITMODE_EDIT);
-            bReturn = TRUE;
-        }
+        bReturn = cancel();
     }
 
     if( bPermanent )
@@ -1564,3 +1554,27 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
     return pObj;
 }
 
+/** is called when the currenct function should be aborted. <p>
+    This is used when a function gets a KEY_ESCAPE but can also
+    be called directly.
+
+    @returns true if a active function was aborted
+*/
+bool FuText::cancel()
+{
+    if ( pView->IsTextEdit() )
+    {
+        if (pView->EndTextEdit() == SDRENDTEXTEDIT_DELETED)
+        {
+            pTextObj = NULL;
+        }
+
+        pView->SetCurrentObj(OBJ_TEXT);
+        pView->SetEditMode(SDREDITMODE_EDIT);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

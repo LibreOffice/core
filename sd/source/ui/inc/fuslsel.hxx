@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuslsel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-26 12:36:13 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,14 @@ public:
     virtual void                ScrollEnd();
 
     BOOL                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
+
+    /** is called when the currenct function should be aborted. <p>
+        This is used when a function gets a KEY_ESCAPE but can also
+        be called directly.
+
+        @returns true if a active function was aborted
+    */
+    virtual bool cancel();
 };
 
 

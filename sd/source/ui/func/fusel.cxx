@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-24 09:57:46 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,11 +903,7 @@ BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
     {
         case KEY_ESCAPE:
         {
-            if (pView->IsCreationActive())
-            {
-                bSwitchToSelection = TRUE;
-                bReturn = TRUE;
-            }
+            bReturn = cancel();
         }
         break;
     }
@@ -915,14 +911,14 @@ BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
     if (!bReturn)
     {
         bReturn = FuDraw::KeyInput(rKEvt);
-    }
 
-    if (bSwitchToSelection || pView->GetMarkList().GetMarkCount() == 0)
-    {
-        pView->ShowMirrored();
-        pView->ResetCreationActive();
+        if(pView->GetMarkList().GetMarkCount() == 0)
+        {
+            pView->ShowMirrored();
+            pView->ResetCreationActive();
 
-        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        }
     }
 
     return(bReturn);
@@ -1437,3 +1433,24 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
 
 
+/** is called when the currenct function should be aborted. <p>
+    This is used when a function gets a KEY_ESCAPE but can also
+    be called directly.
+
+    @returns true if a active function was aborted
+*/
+bool FuSelection::cancel()
+{
+    if (pView->IsCreationActive())
+    {
+        pView->ShowMirrored();
+        pView->ResetCreationActive();
+
+        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

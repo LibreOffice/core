@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:20:01 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,14 @@ class FuDraw : public FuPoor
     BOOL    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
 
     void    SetPermanent(BOOL bSet) { bPermanent = bSet; }
+
+    /** is called when the currenct function should be aborted. <p>
+        This is used when a function gets a KEY_ESCAPE but can also
+        be called directly.
+
+        @returns true if a active function was aborted
+    */
+    virtual bool cancel();
 };
 
 

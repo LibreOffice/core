@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,14 @@ class FuText : public FuConstruct
 
     // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
+    /** is called when the currenct function should be aborted. <p>
+        This is used when a function gets a KEY_ESCAPE but can also
+        be called directly.
+
+        @returns true if a active function was aborted
+    */
+    virtual bool cancel();
 };
 
 
