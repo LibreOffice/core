@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bc $ $Date: 2001-06-27 14:44:17 $
+ *  last change: $Author: bc $ $Date: 2001-07-11 13:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,7 @@
 #define sSummaryFrame   1032
 #define sTextImportLabel 1033
 #define sTextExportLabel 1034
-#define sTextGroupnameDefault   1036
-#define sSpeadGroupnameDefault  1037
-#define sPresGroupnameDefault   1038
+#define sGroupnameDefault   1036
 #define sProgressDesc1  1039
 #define sProgressOneDoc 1040
 #define sProgressMoreDocs   1041
@@ -713,11 +711,11 @@ String sTextExportLabel
 };
 
 
-String sTextGroupnameDefault
+String sGroupnameDefault
 {
-    Text = "Importierte_Textvorlagen";
-    Text[English] = "Imported text templates";
-    Text[ English_us ] = "Imported_text_templates";
+    Text = "Importierte_Vorlagen";
+    Text[English] = "Imported_Templates";
+    Text[ English_us ] = "Imported_Templates";
     Text[ french ] = "Modèles_texte_importés";
     Text[ italian ] = "Modelli di testo importati";
     Text[ spanish ] = "Plantillas de texto importadas";
@@ -738,64 +736,10 @@ String sTextGroupnameDefault
     Text[ arabic ] = "ŞæÇáÈ_äÕ_ãÓÊæÑÏÉ";
     Text[ turkish ] = "İçe aktarılan metin şablonları";
     Text[ catalan ] = "Imported_text_templates";
+    Text[ language_user1 ] = "Bezeichnet einen Verzeichnis, dass zur Laufzeit angelegt wird";
     Text[ finnish ] = "Tuodut_tekstimallipohjat";
 };
 
-String sSpeadGroupnameDefault
-{
-    Text = "Importierte_Kalkulationsvorlagen";
-    Text[English] = "Imported calculation templates";
-    Text[ English_us ] = "Imported_calculation_templates";
-    Text[ french ] = "Modèles_classeur_importés";
-    Text[ italian ] = "Modelli_di_calcolo_importati";
-    Text[ spanish ] = "Plantillas de cálculo importadas";
-    Text[ portuguese ] = "Modelos_folhas_cálculo_importados";
-    Text[ dutch ] = "Geïmporteerde_werkbladsjablonen";
-    Text[ swedish ] = "Importerade_kalkyleringsmallar";
-    Text[ greek ] = "Åéóáãüìåíá_õğïëïãéóôéêÜ_ğñüôõğá";
-    Text[ dutch ] = "Geïmporteerde_werkbladsjablonen";
-    Text[ swedish ] = "Importerade_kalkyleringsmallar";
-    Text[ russian ] = "Èìïîğòèğîâàííûå_øàáëîíû_âû÷èñëåíèé";
-    Text[ danish ] = "Importerede regnearksskabeloner";
-    Text[ polish ] = "Importowane_szablony_kalkulacyjne";
-    Text[ portuguese_brazilian ] = "Imported calculation templates";
-    Text[ japanese ] = "²İÎß°Ä‚µ‚½•\\ŒvZÃİÌßÚ°Ä";
-    Text[ korean ] = "°¡Á®¿Â °è»ê ¼­½ÄÆÄÀÏ";
-    Text[ chinese_simplified ] = "ÊäÈëµÄ¹¤×÷±íÑùÊ½";
-    Text[ chinese_traditional ] = "¶×¤Jªº¤u§@ªí¼Ë¦¡";
-    Text[ arabic ] = "ŞæÇáÈ ÍÓÇÈ ãÓÊæÑÏÉ";
-    Text[ turkish ] = "İçe aktarılan hesap şablonları";
-    Text[ catalan ] = "Imported_calculation_templates";
-    Text[ finnish ] = "Tuodut_laskentamallipohjat";
-};
-
-String sPresGroupnameDefault
-{
-    Text = "Importierte_Präsentationsvorlagen";
-    Text[English] = "Imported presentation templates";
-    Text[ English_us ] = "Imported_presentation_templates";
-    Text[ french ] = "Modèles_présentation_importés";
-    Text[ italian ] = "Modelli_di_presentazione_importati";
-    Text[ spanish ] = "Plantillas de presentación importadas";
-    Text[ portuguese ] = "Modelos_apresentações_importados";
-    Text[ dutch ] = "Geïmporteerde_presentatiesjablonen";
-    Text[ swedish ] = "Importerade_presentationsmallar";
-    Text[ greek ] = "Åéóáãüìåíá_ğñüôõğá_ğáñïõóßáóçò";
-    Text[ dutch ] = "Geïmporteerde_presentatiesjablonen";
-    Text[ swedish ] = "Importerade_presentationsmallar";
-    Text[ russian ] = "Èìïîğòèğîâàííûå_øàáëîíû_ïğåçåíòàöèé";
-    Text[ danish ] = "Importerede præsentationsskabeloner";
-    Text[ polish ] = "Importowane_szablony_prezentacyjne";
-    Text[ portuguese_brazilian ] = "Imported presentation templates";
-    Text[ japanese ] = "²İÎß°Ä‚µ‚½ÌßÚ¾ŞİÃ°¼®İÃİÌßÚ°Ä";
-    Text[ korean ] = "°¡Á®¿Â ÇÁ¸®Á¨Å×ÀÌ¼Ç ¼­½ÄÆÄÀÏ";
-    Text[ chinese_simplified ] = "ÊäÈëµÄÑİÊ¾ÎÄ¸åÑùÊ½";
-    Text[ chinese_traditional ] = "¶×¤JªºÂ²³ø¼Ë¦¡";
-    Text[ arabic ] = "ŞæÇáÈ ÚÑæÖ ÊŞÏíãíÉ ãÓÊæÑÏÉ";
-    Text[ turkish ] = "İçe aktarılan sunu şablonları";
-    Text[ catalan ] = "Imported_presentation_templates";
-    Text[ finnish ] = "Tuodut_esityspohjat";
-};
 
 String sProgressDesc1
 {
