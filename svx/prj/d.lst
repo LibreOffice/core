@@ -374,6 +374,8 @@ hedabu: ..\inc\thesdlg.hxx %_DEST%\inc%_EXT%\svx\thesdlg.hxx
 hedabu: ..\inc\tp3dattr.hxx %_DEST%\inc%_EXT%\svx\tp3dattr.hxx
 hedabu: ..\inc\transfrm.hxx %_DEST%\inc%_EXT%\svx\transfrm.hxx
 hedabu: ..\inc\tstpitem.hxx %_DEST%\inc%_EXT%\svx\tstpitem.hxx
+hedabu: ..\inc\txencbox.hxx %_DEST%\inc%_EXT%\svx\txencbox.hxx
+hedabu: ..\inc\txenctab.hxx %_DEST%\inc%_EXT%\svx\txenctab.hxx
 hedabu: ..\inc\udlnitem.hxx %_DEST%\inc%_EXT%\svx\udlnitem.hxx
 hedabu: ..\inc\ulspitem.hxx %_DEST%\inc%_EXT%\svx\ulspitem.hxx
 hedabu: ..\inc\unolingu.hxx %_DEST%\inc%_EXT%\svx\unolingu.hxx
