@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessControlException.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ module com {  module sun {  module star {  module security {
 
 /** Exception notifying a lacking permission to access data or execute code
     thus it is thrown if permission ought to be denied.
+
+    @since #107627#
 */
 exception AccessControlException : com::sun::star::uno::SecurityException
 {
