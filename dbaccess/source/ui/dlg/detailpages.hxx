@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:45:39 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
+#ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
+#include "TextConnectionHelper.hxx"
+#endif
+
 
 //.........................................................................
 namespace dbaui
@@ -379,36 +383,22 @@ namespace dbaui
         virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+        OTextConnectionHelper*  m_pTextConnectionHelper;
+
     private:
-        FixedLine   m_aLineFormat;
-        CheckBox    m_aHeader;
-        FixedText   m_aFieldSeparatorLabel;
-        ComboBox    m_aFieldSeparator;
-        FixedText   m_aTextSeparatorLabel;
-        ComboBox    m_aTextSeparator;
-        FixedText   m_aDecimalSeparatorLabel;
-        ComboBox    m_aDecimalSeparator;
-        FixedText   m_aThousandsSeparatorLabel;
-        ComboBox    m_aThousandsSeparator;
-        FixedLine   m_aSeparator1;
-        FixedText   m_aExtensionLabel;
-        ComboBox    m_aExtension;
 
         String      m_aFieldSeparatorList;
         String      m_aTextSeparatorList;
         String      m_aTextNone;
     protected:
         virtual ~OTextDetailsPage();
+        virtual sal_Bool checkItems();
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
 
     private:
-        String      GetSeparator( const ComboBox& rBox, const String& rList );
-        void        SetSeparator( ComboBox& rBox, const String& rList, const String& rVal );
-
-        virtual sal_Bool checkItems();
     };
 
 //.........................................................................
