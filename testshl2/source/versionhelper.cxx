@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versionhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-20 11:10:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "versionhelper.hxx"
 
 #include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
 // -----------------------------------------------------------------------------
 VersionHelper::VersionHelper(rtl::OUString const& _sDLLName, GetOpt & _aOptions)
@@ -79,24 +80,97 @@ VersionHelper::VersionHelper(rtl::OUString const& _sDLLName, GetOpt & _aOptions)
     }
 }
 
-void VersionHelper::print(std::ostream &stream)
+//# void VersionHelper::print(std::ostream &stream)
+//# {
+//#     stream << "  Time:" << getTime()   << std::endl;
+//#     stream << "  Date:" << getDate()   << std::endl;
+//#     stream << "   Upd:" << getUpd()    << std::endl;
+//#     stream << " Minor:" << getMinor()  << std::endl;
+//#     stream << " Build:" << getBuild()  << std::endl;
+//#     stream << "Inpath:" << getInpath() << std::endl;
+//# }
+//#
+//# std::ostream & operator <<( std::ostream &stream, VersionHelper &_aVersion )
+//# {
+//#     _aVersion.print (stream);
+//#     return stream;
+//# }
+//#
+// -----------------------------------------------------------------------------
+
+bool VersionHelper::isOk() const
 {
-    stream << "  Time:" << m_pInfo->aTime   << std::endl;
-    stream << "  Date:" << m_pInfo->aDate   << std::endl;
-    stream << "   Upd:" << m_pInfo->aUpd    << std::endl;
-    stream << " Minor:" << m_pInfo->aMinor  << std::endl;
-    stream << " Build:" << m_pInfo->aBuild  << std::endl;
-    stream << "Inpath:" << m_pInfo->aInpath << std::endl;
+    if (m_pInfo != NULL) return true;
+    return false;
 }
 
-std::ostream &
-operator <<( std::ostream &stream,
-             VersionHelper &_aVersion )
+rtl::OString VersionHelper::getTime() const
 {
-    _aVersion.print (stream);
-    return stream;
+#if SUPD < 669
+    return m_pInfo->pTime;
+#else
+    return m_pInfo->aTime;
+#endif
+}
+rtl::OString VersionHelper::getDate() const
+{
+#if SUPD < 669
+    return m_pInfo->pDate;
+#else
+    return m_pInfo->aDate;
+#endif
+}
+rtl::OString VersionHelper::getUpd() const
+{
+#if SUPD < 669
+    return m_pInfo->pUpd;
+#else
+    return m_pInfo->aUpd;
+#endif
+}
+rtl::OString VersionHelper::getMinor() const
+{
+#if SUPD < 669
+    return m_pInfo->pMinor;
+#else
+    return m_pInfo->aMinor;
+#endif
+}
+rtl::OString VersionHelper::getBuild() const
+{
+#if SUPD < 669
+    return m_pInfo->pBuild;
+#else
+    return m_pInfo->aBuild;
+#endif
+}
+rtl::OString VersionHelper::getInpath() const
+{
+#if SUPD < 669
+    return m_pInfo->pInpath;
+#else
+    return m_pInfo->aInpath;
+#endif
 }
 
 
-// versioner gpf zu haeufig.
-// perl script um alles herum
+
+void VersionHelper::printall(FILE * out)
+{
+    if (isOk())
+    {
+        fprintf(out, "  Time:%s\n", getTime().getStr()  );
+        fprintf(out, "  Date:%s\n", getDate().getStr()  );
+        fprintf(out, "   Upd:%s\n", getUpd().getStr()   );
+        fprintf(out, " Minor:%s\n", getMinor().getStr() );
+        fprintf(out, " Build:%s\n", getBuild().getStr() );
+        fprintf(out, "Inpath:%s\n", getInpath().getStr());
+
+        fflush(out);
+    }
+    else
+    {
+        fprintf(stderr, "error: No version info found.\n");
+    }
+}
+
