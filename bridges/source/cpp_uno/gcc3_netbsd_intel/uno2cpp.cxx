@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:12:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,21 @@ namespace CPPU_CURRENT_NAMESPACE
 void dummy_can_throw_anything( char const * );
 
 //==================================================================================================
-static void callVirtualMethod(
+// The call instruction within the asm section of callVirtualMethod may throw
+// exceptions.  So that the compiler handles this correctly, it is important
+// that (a) callVirtualMethod might call dummy_can_throw_anything (although this
+// never happens at runtime), which in turn can throw exceptions, and (b)
+// callVirtualMethod is not inlined at its call site (so that any exceptions are
+// caught which are thrown from the instruction calling callVirtualMethod):
+void callVirtualMethod(
+    void * pThis,
+    sal_Int32 nVtableIndex,
+    void * pRegisterReturn,
+    typelib_TypeClass eReturnType,
+    sal_Int32 * pStackLongs,
+    sal_Int32 nStackLongs ) __attribute__((noinline));
+
+void callVirtualMethod(
     void * pThis,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
