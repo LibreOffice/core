@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:16:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,13 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         {
             sCategoryVal = rValue;
         }
+        else if( IsXMLToken( rLocalName, XML_DEFAULT_OUTLINE_LEVEL ) )
+        {
+            sal_Int32 nTmp;
+            if( SvXMLUnitConverter::convertNumber( nTmp, rValue ) &&
+                nTmp > 0 && nTmp < 256 )
+                nOutlineLevel = static_cast< sal_Int8 >( nTmp );
+        }
         else
         {
             XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
@@ -203,6 +210,7 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
     bAutoUpdate( sal_False ),
     bHasMasterPageName( sal_False ),
     bHasCombinedCharactersLetter( sal_False ),
+    nOutlineLevel( 0 ),
     pEventContext( NULL ),
     sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) ),
@@ -300,6 +308,10 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         pEventContext->SetEvents(xEventsSupplier);
         pEventContext->ReleaseRef();
     }
+
+    if( nOutlineLevel > 0 )
+        GetImport().GetTextImport()->SetOutlineStyle( nOutlineLevel,
+                                                      GetDisplayName() );
 }
 
 void XMLTextStyleContext::SetDefaults( )
