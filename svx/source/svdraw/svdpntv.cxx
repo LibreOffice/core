@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 13:20:48 $
+ *  last change: $Author: thb $ $Date: 2002-03-14 13:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,15 @@ USHORT SdrViewWinList::Find(OutputDevice* pW) const
         if (GetObject(nNum)->pWin==pW) nRet=nNum;
     }
     return nRet;
+}
+
+//------------------------------------------------------------------------
+
+TYPEINIT1( SvxViewHint, SfxSimpleHint );
+
+SvxViewHint::SvxViewHint( ULONG _nId ) :
+    SfxSimpleHint( _nId )
+{
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2062,6 +2071,10 @@ void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
 
 void SdrPaintView::VisAreaChanged(const SdrPageViewWinRec& rPVWR)
 {
+    // notify SfxListener
+    Broadcast( SvxViewHint(SVX_HINT_VIEWCHANGED) );
+
+    // notify UNO objects
     if (rPVWR.GetControlContainerRef().is())
     {
         const SdrUnoControlList& rCList = rPVWR.GetControlList();

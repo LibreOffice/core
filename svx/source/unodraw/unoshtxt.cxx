@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:43:39 $
+ *  last change: $Author: thb $ $Date: 2002-03-14 13:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
 {
     if( mpModel )
         StartListening( *mpModel );
+    if( mpView )
+        StartListening( *mpView );
 }
 
 //------------------------------------------------------------------------
@@ -269,6 +271,8 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 
     if( mpModel )
         EndListening( *mpModel );
+    if( mpView )
+        EndListening( *mpView );
 
     delete mpTextForwarder;
     delete mpViewForwarder;
@@ -383,9 +387,13 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             EndListening( *mpModel );
             mpModel = NULL;
         }
+        if( mpView )
+        {
+            EndListening( *mpView );
+            mpView = NULL;
+        }
 
         mpObject = NULL;
-        mpView = NULL;
         mpWindow = NULL;
 
         Broadcast( TextHint( SFX_HINT_DYING ) );
