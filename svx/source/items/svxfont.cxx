@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 06:05:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,10 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     USHORT nPos = 0;
     USHORT nOldPos = nPos;
 
+    // #108210#
+    // Test if string length differ between original and CaseMapped
+    sal_Bool bCaseMapLengthDiffers(aTxt.Len() != rTxt.Len());
+
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
 
@@ -325,7 +329,21 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         }
         if( nOldPos != nPos )
         {
-            rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, TRUE );
+            if(bCaseMapLengthDiffers)
+            {
+                // #108210#
+                // If strings differ work preparing the necessary snippet to address that
+                // potential difference
+                const XubString aSnippet(rTxt, nIdx + nOldPos, nPos-nOldPos);
+                XubString aNewText = CalcCaseMap(aSnippet);
+
+                rDo.Do( aNewText, 0, aNewText.Len(), TRUE );
+            }
+            else
+            {
+                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, TRUE );
+            }
+
             nOldPos = nPos;
         }
         // Nun werden die Lower-Chars verarbeitet (ohne Blanks)
@@ -341,7 +359,21 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         }
         if( nOldPos != nPos )
         {
-            rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, FALSE );
+            if(bCaseMapLengthDiffers)
+            {
+                // #108210#
+                // If strings differ work preparing the necessary snippet to address that
+                // potential difference
+                const XubString aSnippet(rTxt, nIdx + nOldPos, nPos - nOldPos);
+                XubString aNewText = CalcCaseMap(aSnippet);
+
+                rDo.Do( aNewText, 0, aNewText.Len(), FALSE );
+            }
+            else
+            {
+                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, FALSE );
+            }
+
             nOldPos = nPos;
         }
         // Nun werden die Blanks verarbeitet
@@ -351,7 +383,22 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         if( nOldPos != nPos )
         {
             rDo.DoSpace( FALSE );
-            rDo.Do( aTxt, nIdx + nOldPos, nPos - nOldPos, FALSE );
+
+            if(bCaseMapLengthDiffers)
+            {
+                // #108210#
+                // If strings differ work preparing the necessary snippet to address that
+                // potential difference
+                const XubString aSnippet(rTxt, nIdx + nOldPos, nPos - nOldPos);
+                XubString aNewText = CalcCaseMap(aSnippet);
+
+                rDo.Do( aNewText, 0, aNewText.Len(), FALSE );
+            }
+            else
+            {
+                rDo.Do( aTxt, nIdx + nOldPos, nPos - nOldPos, FALSE );
+            }
+
             nOldPos = nPos;
             rDo.SetSpace();
         }
@@ -409,7 +456,27 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt,
     if ( !IsCaseMap() )
         aTxtSize.setWidth( pOut->GetTextWidth( rTxt, nIdx, nLen ) );
     else
-        aTxtSize.setWidth(pOut->GetTextWidth( CalcCaseMap(rTxt), nIdx, nLen ));
+    {
+        // #108210#
+        const XubString aNewText = CalcCaseMap(rTxt);
+        sal_Bool bCaseMapLengthDiffers(aNewText.Len() != rTxt.Len());
+        sal_Int32 nWidth(0L);
+
+        if(bCaseMapLengthDiffers)
+        {
+            // If strings differ work preparing the necessary snippet to address that
+            // potential difference
+            const XubString aSnippet(rTxt, nIdx, nLen);
+            XubString aNewText = CalcCaseMap(aSnippet);
+            nWidth = pOut->GetTextWidth( aNewText, 0, aNewText.Len() );
+        }
+        else
+        {
+            nWidth = pOut->GetTextWidth( aNewText, nIdx, nLen );
+        }
+
+        aTxtSize.setWidth(nWidth);
+    }
 
     if( IsKern() && ( nLen > 1 ) )
         aTxtSize.Width() += ( ( nLen-1 ) * long( nKern ) );
@@ -610,8 +677,25 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         if ( !IsCaseMap() )
             pOut->DrawStretchText( aPos, aSize.Width(), rTxt, nIdx, nTmp );
         else
-            pOut->DrawStretchText( aPos, aSize.Width(), CalcCaseMap( rTxt ),
-                                   nIdx, nTmp );
+        {
+            // #108210#
+            const XubString aNewText = CalcCaseMap(rTxt);
+            sal_Bool bCaseMapLengthDiffers(aNewText.Len() != rTxt.Len());
+
+            if(bCaseMapLengthDiffers)
+            {
+                // If strings differ work preparing the necessary snippet to address that
+                // potential difference
+                const XubString aSnippet(rTxt, nIdx, nTmp);
+                XubString aNewText = CalcCaseMap(aSnippet);
+
+                pOut->DrawStretchText( aPos, aSize.Width(), aNewText, 0, aNewText.Len() );
+            }
+            else
+            {
+                pOut->DrawStretchText( aPos, aSize.Width(), CalcCaseMap( rTxt ), nIdx, nTmp );
+            }
+        }
     }
     pOut->SetFont(aOldFont);
     pPrinter->SetFont( aOldPrnFont );
