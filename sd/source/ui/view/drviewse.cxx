@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-13 18:10:33 $
+ *  last change: $Author: dl $ $Date: 2001-11-16 14:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1469,6 +1469,10 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if(nNumber && pUndoManager)
             {
+                List* pList = pDoc->GetDeletedPresObjList();
+                if( pList )
+                    pList->Clear();
+
                 sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
                 if(nCount >= nNumber)
                 {
