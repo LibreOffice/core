@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:41:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,8 +222,8 @@ public:
 
     /** Reads a PARAMQRY record and sets data to the web query. */
     void                        ReadParamqry( XclImpStream& rStrm );
-    /** Reads a SXSTRING record and sets URL. */
-    void                        ReadSxstring( XclImpStream& rStrm );
+    /** Reads a WQSTRING record and sets URL. */
+    void                        ReadWqstring( XclImpStream& rStrm );
     /** Reads a WEBQRYSETTINGS record and sets refresh rate. */
     void                        ReadWqsettings( XclImpStream& rStrm );
     /** Reads a WEBQRYTABLES record and sets source range list. */
@@ -262,8 +262,8 @@ public:
     void                        ReadQsi( XclImpStream& rStrm );
     /** Reads a PARAMQRY record and sets data to the current web query. */
     void                        ReadParamqry( XclImpStream& rStrm );
-    /** Reads a SXSTRING record and sets URL to the current web query. */
-    void                        ReadSxstring( XclImpStream& rStrm );
+    /** Reads a WQSTRING record and sets URL to the current web query. */
+    void                        ReadWqstring( XclImpStream& rStrm );
     /** Reads a WEBQRYSETTINGS record and sets refresh rate to the current web query. */
     void                        ReadWqsettings( XclImpStream& rStrm );
     /** Reads a WEBQRYTABLES record and sets source range list to the current web query. */
