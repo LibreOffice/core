@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-21 10:28:29 $
+ *  last change: $Author: ssa $ $Date: 2002-11-22 08:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3740,6 +3740,9 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
 
 void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
 {
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
     bKeyInput = TRUE;
     switch ( nCode )
@@ -3875,7 +3878,12 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             }
         }
     }
-    bKeyInput = FALSE;
+    // #105474# check if menu window was not destroyed
+    if ( !aDelData.IsDelete() )
+    {
+        ImplRemoveDel( &aDelData );
+        bKeyInput = FALSE;
+    }
 }
 
 void MenuFloatingWindow::Paint( const Rectangle& rRect )
