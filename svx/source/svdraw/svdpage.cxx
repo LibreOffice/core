@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:49:49 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,19 @@
 #include <vcl/salbtype.hxx>     // FRound
 #endif
 
+// #110094#
+#ifndef _SDR_CONTACT_VIEWCONTACTOFSDRPAGE_HXX
+#include <svx/sdr/contact/viewcontactofsdrpage.hxx>
+#endif
+
+// #110094#
+#ifndef _SDR_CONTACT_VIEWCONTACTOFMASTERPAGE_HXX
+#include <svx/sdr/contact/viewcontactofmasterpage.hxx>
+#endif
+
+// #111111#
+#include <algorithm>
+
 using namespace ::com::sun::star;
 
 DBG_NAME(SdrObjList);
@@ -125,7 +138,7 @@ DBG_NAME(SdrObjList);
 TYPEINIT0(SdrObjList);
 
 SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList):
-    aList(1024,64,64)
+    maList(1024,64,64)
 {
     DBG_CTOR(SdrObjList,NULL);
     pModel=pNewModel;
@@ -138,7 +151,7 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
 }
 
 SdrObjList::SdrObjList(const SdrObjList& rSrcList):
-    aList(1024,64,64)
+    maList(1024,64,64)
 {
     DBG_CTOR(SdrObjList,NULL);
     pModel=NULL;
@@ -154,6 +167,13 @@ SdrObjList::SdrObjList(const SdrObjList& rSrcList):
 SdrObjList::~SdrObjList()
 {
     DBG_DTOR(SdrObjList,NULL);
+
+    // #111111#
+    // To avoid that the Clear() method will broadcast changes when in destruction
+    // which would call virtual methos (not allowed in destructor), the model is set
+    // to NULL here.
+    pModel = 0L;
+
     Clear(); // Containerinhalt loeschen!
 }
 
@@ -251,29 +271,60 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 
 void SdrObjList::Clear()
 {
-    ULONG nAnz=GetObjCount();
+    // #110094#-9
+    sal_Bool bObjectsRemoved(sal_False);
 
-    if(pModel!=NULL && nAnz!=0)
+    while(maList.Count())
     {
-        SdrHint aHint(HINT_OBJLISTCLEAR);
-        aHint.SetPage(pPage);
-        aHint.SetObjList(this);
-        pModel->Broadcast(aHint);
-    }
+        // remove last object from list
+        SdrObject* pObj = (SdrObject*)maList.Remove(maList.Count() - 1L);
 
-    for (ULONG no=0; no<nAnz; no++) {
-        SdrObject* pObj=GetObj(no);
+        // #110094#
+        pObj->ActionRemoved();
+
+        bObjectsRemoved = sal_True;
+
+        // sent remove hint (after removal, see RemoveObject())
+        if(pModel)
+        {
+            SdrHint aHint(*pObj);
+            aHint.SetKind(HINT_OBJREMOVED);
+            aHint.SetPage(pPage);
+            pModel->Broadcast(aHint);
+        }
+
+        // delete the object itself
         delete pObj;
     }
-    aList.Clear();
-    if (pModel!=NULL && nAnz!=0)
+
+    if(pModel && bObjectsRemoved)
     {
         pModel->SetChanged();
-        SdrHint aHint(HINT_OBJLISTCLEARED);
-        aHint.SetPage(pPage);
-        aHint.SetObjList(this);
-        pModel->Broadcast(aHint);
     }
+
+//  ULONG nAnz=GetObjCount();
+//
+//  if(pModel!=NULL && nAnz!=0)
+//  {
+//      SdrHint aHint(HINT_OBJLISTCLEAR);
+//      aHint.SetPage(pPage);
+//      aHint.SetObjList(this);
+//      pModel->Broadcast(aHint);
+//  }
+//
+//  for (ULONG no=0; no<nAnz; no++) {
+//      SdrObject* pObj=GetObj(no);
+//      delete pObj;
+//  }
+//  maList.Clear();
+//  if (pModel!=NULL && nAnz!=0)
+//  {
+//      pModel->SetChanged();
+//      SdrHint aHint(HINT_OBJLISTCLEARED);
+//      aHint.SetPage(pPage);
+//      aHint.SetObjList(this);
+//      pModel->Broadcast(aHint);
+//  }
 }
 
 SdrPage* SdrObjList::GetPage() const
@@ -329,10 +380,10 @@ void SdrObjList::RecalcRects()
     for (i=0; i<nAnz; i++) {
         SdrObject* pObj=GetObj(i);
         if (i==0) {
-            aOutRect=pObj->GetBoundRect();
+            aOutRect=pObj->GetCurrentBoundRect();
             aSnapRect=pObj->GetSnapRect();
         } else {
-            aOutRect.Union(pObj->GetBoundRect());
+            aOutRect.Union(pObj->GetCurrentBoundRect());
             aSnapRect.Union(pObj->GetSnapRect());
         }
     }
@@ -351,13 +402,17 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRea
         DBG_ASSERT(!pObj->IsInserted(),"ZObjekt hat bereits Inserted-Status");
         ULONG nAnz=GetObjCount();
         if (nPos>nAnz) nPos=nAnz;
-        aList.Insert(pObj,nPos);
+        maList.Insert(pObj,nPos);
         if (nPos<nAnz) bObjOrdNumsDirty=TRUE;
         pObj->SetOrdNum(nPos);
         pObj->SetObjList(this);
         pObj->SetPage(pPage);
+
+        // #110094#
+        pObj->ActionInserted();
+
         if (!bRectsDirty) {
-            aOutRect.Union(pObj->GetBoundRect());
+            aOutRect.Union(pObj->GetCurrentBoundRect());
             aSnapRect.Union(pObj->GetSnapRect());
         }
         pObj->SetInserted(TRUE); // Ruft u.a. den UserCall
@@ -370,11 +425,13 @@ void SdrObjList::InsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason
 
     if(pObj)
     {
-        if(pOwnerObj && !GetObjCount())
-        {
-            // damit der graue Rahmen des leeren Gruppenobjekts korrekt weggemalt wird
-            pOwnerObj->SendRepaintBroadcast();
-        }
+        //if(pOwnerObj && !GetObjCount())
+        //{
+        //  // only repaint here to get rid of the grey border at empty
+        //  // group objects
+        //  pOwnerObj->ActionChanged();
+        //  // pOwnerObj->BroadcastObjectChange();
+        //}
 
         // #69055# if anchor is used, reset it before grouping
         if(GetOwnerObj())
@@ -392,7 +449,9 @@ void SdrObjList::InsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason
         // einen eigenen Redraw bekommen
         if(pOwnerObj)
         {
-            pOwnerObj->SendRepaintBroadcast();
+            // only repaint here
+            pOwnerObj->ActionChanged();
+            // pOwnerObj->BroadcastObjectChange();
         }
 
         if(pModel)
@@ -415,7 +474,11 @@ void SdrObjList::InsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason
 SdrObject* SdrObjList::NbcRemoveObject(ULONG nObjNum)
 {
     ULONG nAnz=GetObjCount();
-    SdrObject* pObj=(SdrObject*)aList.Remove(nObjNum);
+    SdrObject* pObj=(SdrObject*)maList.Remove(nObjNum);
+
+    // #110094#
+    pObj->ActionRemoved();
+
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt hat keinen Inserted-Status");
@@ -435,7 +498,11 @@ SdrObject* SdrObjList::NbcRemoveObject(ULONG nObjNum)
 SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
 {
     ULONG nAnz=GetObjCount();
-    SdrObject* pObj=(SdrObject*)aList.Remove(nObjNum);
+    SdrObject* pObj=(SdrObject*)maList.Remove(nObjNum);
+
+    // #110094#
+    pObj->ActionRemoved();
+
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt hat keinen Inserted-Status");
@@ -457,9 +524,11 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
             }
         }
         SetRectsDirty();
-        if (pOwnerObj!=NULL && GetObjCount()==0) {
-            // damit der graue Rahmen des leeren Gruppenobjekts korrekt gemalt wird
-            pOwnerObj->SendRepaintBroadcast();
+        if (pOwnerObj!=NULL && GetObjCount()==0)
+        {
+            // only repaint here
+            pOwnerObj->ActionChanged();
+            // pOwnerObj->BroadcastObjectChange();
         }
     }
     return pObj;
@@ -467,17 +536,25 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
 
 SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
-    SdrObject* pObj=(SdrObject*)aList.GetObject(nObjNum);
+    SdrObject* pObj=(SdrObject*)maList.GetObject(nObjNum);
     DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt hat keinen Inserted-Status");
         pObj->SetInserted(FALSE);
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
-        aList.Replace(pNewObj,nObjNum);
+        maList.Replace(pNewObj,nObjNum);
+
+        // #110094#
+        pObj->ActionRemoved();
+
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
         pNewObj->SetPage(pPage);
+
+        // #110094#
+        pNewObj->ActionInserted();
+
         pNewObj->SetInserted(TRUE);
         SetRectsDirty();
     }
@@ -487,7 +564,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
     //ULONG nAnz=GetObjCount();
-    SdrObject* pObj=(SdrObject*)aList.GetObject(nObjNum);
+    SdrObject* pObj=(SdrObject*)maList.GetObject(nObjNum);
     DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt hat keinen Inserted-Status");
@@ -502,10 +579,18 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
         pObj->SetInserted(FALSE);
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
-        aList.Replace(pNewObj,nObjNum);
+        maList.Replace(pNewObj,nObjNum);
+
+        // #110094#
+        pObj->ActionRemoved();
+
         pNewObj->SetOrdNum(nObjNum);
         pNewObj->SetObjList(this);
         pNewObj->SetPage(pPage);
+
+        // #110094#
+        pNewObj->ActionInserted();
+
         pNewObj->SetInserted(TRUE);
         if (pModel!=NULL) {
             // Hier muss ein anderer Broadcast her!
@@ -523,13 +608,21 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 
 SdrObject* SdrObjList::NbcSetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 {
-    SdrObject* pObj=(SdrObject*)aList.GetObject(nOldObjNum);
+    SdrObject* pObj=(SdrObject*)maList.GetObject(nOldObjNum);
     if (nOldObjNum==nNewObjNum) return pObj;
     DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcSetObjectOrdNum: Object nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::NbcSetObjectOrdNum: ZObjekt hat keinen Inserted-Status");
-        aList.Remove(nOldObjNum);
-        aList.Insert(pObj,nNewObjNum);
+        maList.Remove(nOldObjNum);
+
+        // #110094#
+        pObj->ActionRemoved();
+
+        maList.Insert(pObj,nNewObjNum);
+
+        // #110094#
+        pObj->ActionInserted();
+
         pObj->SetOrdNum(nNewObjNum);
         bObjOrdNumsDirty=TRUE;
     }
@@ -538,17 +631,21 @@ SdrObject* SdrObjList::NbcSetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 
 SdrObject* SdrObjList::SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 {
-    SdrObject* pObj=(SdrObject*)aList.GetObject(nOldObjNum);
+    SdrObject* pObj=(SdrObject*)maList.GetObject(nOldObjNum);
     if (nOldObjNum==nNewObjNum) return pObj;
     DBG_ASSERT(pObj!=NULL,"SdrObjList::SetObjectOrdNum: Object nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: ZObjekt hat keinen Inserted-Status");
-        /*if (pModel!=NULL) {
-            // Hier muss ein anderer Broadcast her!
-            if (pObj->GetPage()!=NULL) pModel->Broadcast(SdrHint(*pObj));
-        }*/
-        aList.Remove(nOldObjNum);
-        aList.Insert(pObj,nNewObjNum);
+        maList.Remove(nOldObjNum);
+
+        // #110094#
+        pObj->ActionRemoved();
+
+        maList.Insert(pObj,nNewObjNum);
+
+        // #110094#
+        pObj->ActionInserted();
+
         pObj->SetOrdNum(nNewObjNum);
         bObjOrdNumsDirty=TRUE;
         if (pModel!=NULL) {
@@ -578,305 +675,398 @@ const Rectangle& SdrObjList::GetAllObjBoundRect() const
     return aOutRect;
 }
 
-FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec, FASTBOOL bRestoreColors) const
-{
-    BOOL bOk(TRUE);
-    BOOL bWasNotActive = rInfoRec.bNotActive;
-    BOOL bIsEnteredGroup(FALSE);
-    UINT32 nWasDrawMode = rXOut.GetOutDev()->GetDrawMode();
-
-    if(!rInfoRec.bOriginalDrawModeSet)
-    {
-        // Original-Paintmode retten
-        ((SdrPaintInfoRec&)rInfoRec).bOriginalDrawModeSet = TRUE;
-        ((SdrPaintInfoRec&)rInfoRec).nOriginalDrawMode = rXOut.GetOutDev()->GetDrawMode();
-    }
-
-    if((rInfoRec.pPV && rInfoRec.pPV->GetObjList() == this)
-        || (rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE))
-    {
-        bIsEnteredGroup = TRUE;
-    }
-
-    if(bIsEnteredGroup && bWasNotActive)
-    {
-        // auf aktive Elemente schalten
-        ((SdrPaintInfoRec&)rInfoRec).bNotActive = FALSE;
-    }
-
-    if(rInfoRec.pPV && rInfoRec.bNotActive)
-    {
-        if(rInfoRec.pPV->GetView().DoVisualizeEnteredGroup())
-        {
-            // Darstellung schmal
-            rXOut.GetOutDev()->SetDrawMode(nWasDrawMode | (
-                DRAWMODE_GHOSTEDLINE|DRAWMODE_GHOSTEDFILL|DRAWMODE_GHOSTEDTEXT|DRAWMODE_GHOSTEDBITMAP|DRAWMODE_GHOSTEDGRADIENT));
-        }
-    }
-    else
-    {
-        // Darstellung normal
-        rXOut.GetOutDev()->SetDrawMode(rInfoRec.nOriginalDrawMode);
-    }
-
-    bOk = Paint(rXOut, rInfoRec, bRestoreColors, IMP_PAGEPAINT_NORMAL);
-
-    if(bIsEnteredGroup && bWasNotActive)
-    {
-        // Zurueck auf Ursprung, Zustand wieder verlassen
-        ((SdrPaintInfoRec&)rInfoRec).bNotActive = TRUE;
-    }
-
-    // Darstellung restaurieren
-    rXOut.GetOutDev()->SetDrawMode(nWasDrawMode);
-
-    return bOk;
-}
-
-FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec, FASTBOOL bRestoreColors, USHORT nImpMode) const
-{
-    FASTBOOL bOk=TRUE;
-    FASTBOOL bBrk=FALSE;
-    ULONG nObjAnz=GetObjCount();
-    if (nObjAnz==0) return TRUE;
-    USHORT nEvent=rInfoRec.nBrkEvent;
-    const SetOfByte* pVisiLayer=&rInfoRec.aPaintLayer;
-    FASTBOOL bPrinter=rInfoRec.bPrinter;
-    OutputDevice* pOut=rXOut.GetOutDev();
-    Rectangle aCheckRect(rInfoRec.aCheckRect);
-    FASTBOOL bDrawAll=aCheckRect.IsEmpty();
-    ImpSdrHdcMerk aHDCMerk(*pOut,SDRHDC_SAVEPENANDBRUSHANDFONT,bRestoreColors);
-    FASTBOOL bColorsDirty=FALSE;
-    if (bDrawAll || aCheckRect.IsOver(GetAllObjBoundRect())) {
-        Application* pAppPtr=NULL;
-        if (nEvent!=0) pAppPtr=GetpApp();
-        SetOfByte aPaintLayer(*pVisiLayer);
-        USHORT nPaintCycles = 1;
-        SdrLayerID nLayerId = 0;
-
-        // #85670# if pModel is NULL, try to get model of list owner
-        SdrModel *pLocalModel = pModel;
-        if(!pLocalModel && GetOwnerObj())
-            pLocalModel = GetOwnerObj()->GetModel();
-
-        // #85670# use correct model to get layer ID
-        if(pLocalModel)
-        {
-            const SdrLayerAdmin& rLayerAdmin = pLocalModel->GetLayerAdmin();
-            nLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), FALSE);
-        }
-
-        if( pPage == NULL || ( !pPage->IsMasterPage() && aPaintLayer.IsSet( nLayerId ) ) )
-        {
-            // Der ControlLayer soll gezeichnet werden
-            // Wenn Controls existieren, wird der ControlLayer als letztes gezeichnet
-            SetOfByte aTestLayerSet = aPaintLayer;
-            aTestLayerSet.Clear(nLayerId);
-
-            if (!aTestLayerSet.IsEmpty())
-            {
-                // Es soll nicht nur der ControlLayer gezeichnet werden
-                ULONG nObjNum=0;
-                while (nObjNum<nObjAnz && nPaintCycles < 2)
-                {
-                    if (GetObj(nObjNum)->GetLayer() == nLayerId)
-                    {
-                        // Objekt auf ControlLayer gefunden
-                        // Der ControlLayer wird ersteinmal unsichtbar geschaltet
-                        nPaintCycles = 2;
-                        aPaintLayer.Clear(nLayerId);
-                    }
-
-                    nObjNum++;
-                }
-            }
-        }
-
-        for (USHORT nCycle = 1; nCycle <= nPaintCycles; nCycle++)
-        {
-            USHORT      nPaintImpMode = nImpMode;
-            FASTBOOL    bNormal = ( nPaintImpMode == IMP_PAGEPAINT_NORMAL );
-            FASTBOOL    bCachePrepare = ( nPaintImpMode == IMP_PAGEPAINT_PREPARE_CACHE );
-            FASTBOOL    bBGCachePrepare = ( nPaintImpMode == IMP_PAGEPAINT_PREPARE_BG_CACHE );
-            FASTBOOL    bCachePaint = ( nPaintImpMode == IMP_PAGEPAINT_PAINT_CACHE );
-            FASTBOOL    bBGCachePaint = ( nPaintImpMode == IMP_PAGEPAINT_PAINT_BG_CACHE );
-            FASTBOOL    bPaintFlag = ( bNormal || bCachePrepare || bBGCachePrepare );
-
-            if( nCycle == 2 )
-            {
-                // Im zweiten Durchgang nur den ControlLayer zeichnen
-                aPaintLayer.ClearAll();
-                aPaintLayer.Set(nLayerId);
-            }
-
-            ULONG nObjNum = 0UL;
-
-            while( ( nObjNum < nObjAnz ) && !bBrk )
-            {
-                SdrObject* pObj = GetObj( nObjNum );
-
-                if( nObjNum == 0 && eListKind == SDROBJLIST_MASTERPAGE &&
-                    pPage && pPage->IsMasterPage() && rInfoRec.pPV )
-                {
-                    // painting pages background obj instead of masterpages background obj
-                    SdrPage* pPg = rInfoRec.pPV->GetPage();
-                    SdrObject* pBackgroundObj = pPg ? pPg->GetBackgroundObj() : NULL;
-                    if( pBackgroundObj )
-                    {
-                        if( rXOut.GetOutDev()->GetDrawMode() == DRAWMODE_DEFAULT )
-                        {
-                            pObj = pBackgroundObj;
-                            Point aPos ( pPage->GetLftBorder(), pPage->GetUppBorder() );
-                            Size aSize ( pPage->GetSize() );
-                            aSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder() - 1;
-                            aSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder() - 1;
-                            Rectangle aLogicRect( aPos, aSize );
-
-                            if( pBackgroundObj->GetLogicRect() != aLogicRect )
-                            {
-                                pBackgroundObj->SetLogicRect( aLogicRect );
-                                pBackgroundObj->RecalcBoundRect();
-                            }
-                        }
-                        else
-                            pObj = NULL;
-
-                    }
-                }
-
-                if( pObj && ( bDrawAll || aCheckRect.IsOver( pObj->GetBoundRect() ) ) )
-                {
-                    SdrObjList* pSubList = pObj->GetSubList();
-
-                    // Gruppenobjekte beruecksichtigen sichtbare Layer selbst (Ansonsten nur Painten, wenn Layer sichtbar)
-                    if( pSubList!=NULL || ((!bPrinter || pObj->IsPrintable()) && aPaintLayer.IsSet(pObj->GetLayer())) )
-                    {
-                        // #108937#
-                        // IsMasterCachable() does not visit groups automatically. Since
-                        // this mechanism should be changed to set information at the page
-                        // (counter?) later, i will fix that with a SdrObjListIter here.
-                        sal_Bool bHierarchyIsMasterPageCachable(pObj->IsMasterCachable());
-
-                        if(bHierarchyIsMasterPageCachable && pObj->IsGroupObject())
-                        {
-                            SdrObjListIter aIter(*pObj, IM_DEEPNOGROUPS);
-
-                            while(bHierarchyIsMasterPageCachable && aIter.IsMore())
-                            {
-                                SdrObject* pNestedObj = aIter.Next();
-
-                                if(!pNestedObj->IsMasterCachable())
-                                {
-                                    bHierarchyIsMasterPageCachable = sal_False;
-                                }
-                            }
-                        }
-
-                        if( !bNormal && !bHierarchyIsMasterPageCachable)
-                        {
-                            if( bCachePrepare || bBGCachePrepare )
-                                bBrk = TRUE, bPaintFlag = FALSE;
-                            else if( bCachePaint || bBGCachePaint )
-                            {
-                                bPaintFlag = bNormal = TRUE;
-                            }
-                        }
-
-                        if( bPaintFlag )
-                        {
-                            if( pObj->IsNeedColorRestore() )
-                            {
-                                if (bColorsDirty && bRestoreColors)
-                                    aHDCMerk.Restore(*pOut);
-
-                                bColorsDirty=FALSE;
-                            }
-                            else
-                                bColorsDirty=TRUE; // andere aendern die Farben
-
-                            if( rInfoRec.pPaintProc!=NULL )
-                            {
-                                SdrPaintProcRec aRec(pObj,rXOut,rInfoRec);
-                                Link aLink(*rInfoRec.pPaintProc);
-                                aLink.Call(&aRec); // sollte mal 'nen ReturnCode liefern
-                            }
-                            else
-                            {
-                                bOk=pObj->Paint(rXOut,rInfoRec);
-
-//////////////////////////////////////////////////////////////////////////////
+//#110094#
+// Paint() in SdrObjList is no longer used - try to remove it
+//FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec, FASTBOOL bRestoreColors) const
+//{
+//  BOOL bOk(TRUE);
+//  BOOL bWasNotActive = rInfoRec.bNotActive;
+//  BOOL bIsEnteredGroup(FALSE);
+//  UINT32 nWasDrawMode = rXOut.GetOutDev()->GetDrawMode();
 //
-//  Vector2D aTRScale;
-//  double fTRShear;
-//  double fTRRotate;
-//  Vector2D aTRTranslate;
-//  Matrix3D aOrigMat;
-//  XPolyPolygon aTRPolyPolygon;
-//
-//  BOOL bIsPath = pObj->TRGetBaseGeometry(aOrigMat, aTRPolyPolygon);
-//  aOrigMat.DecomposeAndCorrect(aTRScale, fTRShear, fTRRotate, aTRTranslate);
-//  Vector2D aVectorTranslate;
-//  aVectorTranslate.X() = FRound(aTRTranslate.X());
-//  aVectorTranslate.Y() = FRound(aTRTranslate.Y());
-//
-//  Point aPoint(aVectorTranslate.X(), aVectorTranslate.Y());
-//  Rectangle aTRBaseRect(
-//      aPoint,
-//      Size(FRound(aTRScale.X()), FRound(aTRScale.Y())));
-//
-//  Color aLineColorMerk(rXOut.GetOutDev()->GetLineColor());
-//  Color aFillColorMerk(rXOut.GetOutDev()->GetFillColor());
-//  rXOut.GetOutDev()->SetFillColor();
-//
-//  rXOut.GetOutDev()->SetLineColor(COL_BLACK);
-//  rXOut.GetOutDev()->DrawRect(aTRBaseRect);
-//
-//  if(bIsPath)
+//  if(!rInfoRec.bOriginalDrawModeSet)
 //  {
-//      rXOut.GetOutDev()->SetLineColor(COL_LIGHTRED);
-//      XPolyPolygon aTRPoPo(aTRPolyPolygon);
-//      aTRPoPo.Move(aTRBaseRect.Left(), aTRBaseRect.Top());
-//      sal_uInt16 nCount(aTRPoPo.Count());
-//      for(sal_uInt16 a(0); a < nCount; a++)
-//          rXOut.GetOutDev()->DrawPolygon(XOutCreatePolygon(aTRPoPo[a], rXOut.GetOutDev()));
+//      // Original-Paintmode retten
+//      ((SdrPaintInfoRec&)rInfoRec).bOriginalDrawModeSet = TRUE;
+//      ((SdrPaintInfoRec&)rInfoRec).nOriginalDrawMode = rXOut.GetOutDev()->GetDrawMode();
 //  }
 //
-//  rXOut.GetOutDev()->SetLineColor(aLineColorMerk);
-//  rXOut.GetOutDev()->SetFillColor(aFillColorMerk);
+//  if((rInfoRec.pPV && rInfoRec.pPV->GetObjList() == this)
+//      || (rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE))
+//  {
+//      bIsEnteredGroup = TRUE;
+//  }
 //
-//  static BOOL bDoTestSetAllGeometry(FALSE);
-//  if(bDoTestSetAllGeometry)
-//      pObj->TRSetBaseGeometry(aOrigMat, aTRPolyPolygon);
+//  if(bIsEnteredGroup && bWasNotActive)
+//  {
+//      // auf aktive Elemente schalten
+//      ((SdrPaintInfoRec&)rInfoRec).bNotActive = FALSE;
+//  }
 //
+//  if(rInfoRec.pPV && rInfoRec.bNotActive)
+//  {
+//      if(rInfoRec.pPV->GetView().DoVisualizeEnteredGroup())
+//      {
+//          // Darstellung schmal
+//          rXOut.GetOutDev()->SetDrawMode(nWasDrawMode | (
+//              DRAWMODE_GHOSTEDLINE|DRAWMODE_GHOSTEDFILL|DRAWMODE_GHOSTEDTEXT|DRAWMODE_GHOSTEDBITMAP|DRAWMODE_GHOSTEDGRADIENT));
+//      }
+//  }
+//  else
+//  {
+//      // Darstellung normal
+//      rXOut.GetOutDev()->SetDrawMode(rInfoRec.nOriginalDrawMode);
+//  }
 //
-//////////////////////////////////////////////////////////////////////////////
-                            }
+//  bOk = Paint(rXOut, rInfoRec, bRestoreColors, IMP_PAGEPAINT_NORMAL);
+//
+//  if(bIsEnteredGroup && bWasNotActive)
+//  {
+//      // Zurueck auf Ursprung, Zustand wieder verlassen
+//      ((SdrPaintInfoRec&)rInfoRec).bNotActive = TRUE;
+//  }
+//
+//  // Darstellung restaurieren
+//  rXOut.GetOutDev()->SetDrawMode(nWasDrawMode);
+//
+//  return bOk;
+//}
 
-                            // nach dem ersten Objekt bei reinem Hintergrundcache
-                            // sollen die folgenden Objekte natuerlich nicht gezeichnet werden
-                            if( bBGCachePrepare )
-                                bPaintFlag = FALSE;
-                        }
-                        else if( bBGCachePaint )
-                            bPaintFlag = TRUE;
-                    }
-
-                    if( bOk && nEvent != 0 )
-                        bOk = !pAppPtr->AnyInput( nEvent );
-
-                    if( !bOk )
-                        bBrk = TRUE;
-                }
-                nObjNum++;
-            }
-        }
-    }
-
-    if (bColorsDirty && bRestoreColors)
-        aHDCMerk.Restore(*pOut);
-
-    return bOk;
-}
+//FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec, FASTBOOL bRestoreColors, USHORT nImpMode) const
+//{
+//  FASTBOOL bOk=TRUE;
+//  FASTBOOL bBrk=FALSE;
+//  ULONG nObjAnz=GetObjCount();
+//  if (nObjAnz==0) return TRUE;
+//
+//  // #110094#-5
+//  // USHORT nEvent=rInfoRec.nBrkEvent;
+//
+//  const SetOfByte* pVisiLayer=&rInfoRec.aPaintLayer;
+//  FASTBOOL bPrinter=rInfoRec.bPrinter;
+//  OutputDevice* pOut=rXOut.GetOutDev();
+//  Rectangle aCheckRect(rInfoRec.aCheckRect);
+//  FASTBOOL bDrawAll=aCheckRect.IsEmpty();
+//  ImpSdrHdcMerk aHDCMerk(*pOut,SDRHDC_SAVEPENANDBRUSHANDFONT,bRestoreColors);
+//  FASTBOOL bColorsDirty=FALSE;
+//  if (bDrawAll || aCheckRect.IsOver(GetAllObjBoundRect()))
+//  {
+//      // #110094#-5
+//      //Application* pAppPtr=NULL;
+//      //if (nEvent!=0) pAppPtr=GetpApp();
+//
+//      SetOfByte aPaintLayer(*pVisiLayer);
+//      USHORT nPaintCycles = 1;
+//      SdrLayerID nLayerId = 0;
+//
+//      // #85670# if pModel is NULL, try to get model of list owner
+//      SdrModel *pLocalModel = pModel;
+//      if(!pLocalModel && GetOwnerObj())
+//          pLocalModel = GetOwnerObj()->GetModel();
+//
+//      // #85670# use correct model to get layer ID
+//      if(pLocalModel)
+//      {
+//          const SdrLayerAdmin& rLayerAdmin = pLocalModel->GetLayerAdmin();
+//          nLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), FALSE);
+//      }
+//
+//      if( pPage == NULL || ( !pPage->IsMasterPage() && aPaintLayer.IsSet( nLayerId ) ) )
+//      {
+//          // Der ControlLayer soll gezeichnet werden
+//          // Wenn Controls existieren, wird der ControlLayer als letztes gezeichnet
+//          SetOfByte aTestLayerSet = aPaintLayer;
+//          aTestLayerSet.Clear(nLayerId);
+//
+//          if (!aTestLayerSet.IsEmpty())
+//          {
+//              // Es soll nicht nur der ControlLayer gezeichnet werden
+//              ULONG nObjNum=0;
+//              while (nObjNum<nObjAnz && nPaintCycles < 2)
+//              {
+//                  if (GetObj(nObjNum)->GetLayer() == nLayerId)
+//                  {
+//                      // Objekt auf ControlLayer gefunden
+//                      // Der ControlLayer wird ersteinmal unsichtbar geschaltet
+//                      nPaintCycles = 2;
+//                      aPaintLayer.Clear(nLayerId);
+//                  }
+//
+//                  nObjNum++;
+//              }
+//          }
+//      }
+//
+//      for (USHORT nCycle = 1; nCycle <= nPaintCycles; nCycle++)
+//      {
+//          USHORT      nPaintImpMode = nImpMode;
+//          FASTBOOL    bNormal = ( nPaintImpMode == IMP_PAGEPAINT_NORMAL );
+//          FASTBOOL    bCachePrepare = ( nPaintImpMode == IMP_PAGEPAINT_PREPARE_CACHE );
+//          FASTBOOL    bBGCachePrepare = ( nPaintImpMode == IMP_PAGEPAINT_PREPARE_BG_CACHE );
+//          FASTBOOL    bCachePaint = ( nPaintImpMode == IMP_PAGEPAINT_PAINT_CACHE );
+//          FASTBOOL    bBGCachePaint = ( nPaintImpMode == IMP_PAGEPAINT_PAINT_BG_CACHE );
+//          FASTBOOL    bPaintFlag = ( bNormal || bCachePrepare || bBGCachePrepare );
+//
+//          if( nCycle == 2 )
+//          {
+//              // Im zweiten Durchgang nur den ControlLayer zeichnen
+//              aPaintLayer.ClearAll();
+//              aPaintLayer.Set(nLayerId);
+//          }
+//
+//          ULONG nObjNum = 0UL;
+//
+//          while( ( nObjNum < nObjAnz ) && !bBrk )
+//          {
+//              SdrObject* pObj = GetObj( nObjNum );
+//
+//              if( nObjNum == 0 && eListKind == SDROBJLIST_MASTERPAGE &&
+//                  pPage && pPage->IsMasterPage() && rInfoRec.pPV )
+//              {
+//                  // painting pages background obj instead of masterpages background obj
+//                  SdrPage* pPg = rInfoRec.pPV->GetPage();
+//                  SdrObject* pBackgroundObj = pPg ? pPg->GetBackgroundObj() : NULL;
+//                  if( pBackgroundObj )
+//                  {
+//                      if( rXOut.GetOutDev()->GetDrawMode() == DRAWMODE_DEFAULT )
+//                      {
+//                          pObj = pBackgroundObj;
+//                          Point aPos ( pPage->GetLftBorder(), pPage->GetUppBorder() );
+//                          Size aSize ( pPage->GetSize() );
+//                          aSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder() - 1;
+//                          aSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder() - 1;
+//                          Rectangle aLogicRect( aPos, aSize );
+//
+//                          if( pBackgroundObj->GetLogicRect() != aLogicRect )
+//                          {
+//                              pBackgroundObj->SetLogicRect( aLogicRect );
+//                              pBackgroundObj->RecalcBoundRect();
+//                          }
+//                      }
+//                      else
+//                          pObj = NULL;
+//
+//                  }
+//              }
+//
+//              if( pObj && ( bDrawAll || aCheckRect.IsOver( pObj->GetBoundRect() ) ) )
+//              {
+//                  SdrObjList* pSubList = pObj->GetSubList();
+//
+//                  // Gruppenobjekte beruecksichtigen sichtbare Layer selbst (Ansonsten nur Painten, wenn Layer sichtbar)
+//                  if( pSubList!=NULL || ((!bPrinter || pObj->IsPrintable()) && aPaintLayer.IsSet(pObj->GetLayer())) )
+//                  {
+//                      // #108937#
+//                      // IsMasterCachable() does not visit groups automatically. Since
+//                      // this mechanism should be changed to set information at the page
+//                      // (counter?) later, i will fix that with a SdrObjListIter here.
+//                      sal_Bool bHierarchyIsMasterPageCachable(pObj->IsMasterCachable());
+//
+//                      if(bHierarchyIsMasterPageCachable && pObj->IsGroupObject())
+//                      {
+//                          SdrObjListIter aIter(*pObj, IM_DEEPNOGROUPS);
+//
+//                          while(bHierarchyIsMasterPageCachable && aIter.IsMore())
+//                          {
+//                              SdrObject* pNestedObj = aIter.Next();
+//
+//                              if(!pNestedObj->IsMasterCachable())
+//                              {
+//                                  bHierarchyIsMasterPageCachable = sal_False;
+//                              }
+//                          }
+//                      }
+//
+//                      if( !bNormal && !bHierarchyIsMasterPageCachable)
+//                      {
+//                          if( bCachePrepare || bBGCachePrepare )
+//                              bBrk = TRUE, bPaintFlag = FALSE;
+//                          else if( bCachePaint || bBGCachePaint )
+//                          {
+//                              bPaintFlag = bNormal = TRUE;
+//                          }
+//                      }
+//
+//                      if( bPaintFlag )
+//                      {
+//                          if( pObj->IsNeedColorRestore() )
+//                          {
+//                              if (bColorsDirty && bRestoreColors)
+//                                  aHDCMerk.Restore(*pOut);
+//
+//                              bColorsDirty=FALSE;
+//                          }
+//                          else
+//                              bColorsDirty=TRUE; // andere aendern die Farben
+//
+//                          if( rInfoRec.pPaintProc!=NULL )
+//                          {
+//                              SdrPaintProcRec aRec(pObj,rXOut,rInfoRec);
+//                              Link aLink(*rInfoRec.pPaintProc);
+//                              aLink.Call(&aRec); // sollte mal 'nen ReturnCode liefern
+//                          }
+//                          else
+//                          {
+//                              // #109985#
+//                              // New methodology to test for the new SC drawing flags (SDRPAINTMODE_SC_)
+//                              sal_Bool bDoPaint(sal_True);
+//                              sal_Bool bDoDraft(sal_False);
+//
+//                              // #109985#
+//                              // Something to evaluate at all?
+//                              if(rInfoRec.nPaintMode & (SDRPAINTMODE_SC_ALL_HIDE|SDRPAINTMODE_SC_ALL_DRAFT))
+//                              {
+//                                  if(OBJ_OLE2 == pObj->GetObjIdentifier())
+//                                  {
+//                                      if(((SdrOle2Obj*)pObj)->IsChart())
+//                                      {
+//                                          // chart
+//                                          if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_HIDE_CHART)
+//                                          {
+//                                              bDoPaint = sal_False;
+//                                          }
+//                                          else if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_DRAFT_CHART)
+//                                          {
+//                                              bDoPaint = sal_False;
+//                                              bDoDraft = sal_True;
+//                                          }
+//                                      }
+//                                      else
+//                                      {
+//                                          // OLE
+//                                          if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_HIDE_OLE)
+//                                          {
+//                                              bDoPaint = sal_False;
+//                                          }
+//                                          else if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_DRAFT_OLE)
+//                                          {
+//                                              bDoPaint = sal_False;
+//                                              bDoDraft = sal_True;
+//                                          }
+//                                      }
+//                                  }
+//                                  else if(OBJ_GRAF == pObj->GetObjIdentifier())
+//                                  {
+//                                      // graphic (like OLE)
+//                                      if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_HIDE_OLE)
+//                                      {
+//                                          bDoPaint = sal_False;
+//                                      }
+//                                      else if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_DRAFT_OLE)
+//                                      {
+//                                          bDoPaint = sal_False;
+//                                          bDoDraft = sal_True;
+//                                      }
+//                                  }
+//                                  else
+//                                  {
+//                                      // any other draw object
+//                                      if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_HIDE_DRAW)
+//                                      {
+//                                          bDoPaint = sal_False;
+//                                      }
+//                                      else if(rInfoRec.nPaintMode & SDRPAINTMODE_SC_DRAFT_DRAW)
+//                                      {
+//                                          bDoPaint = sal_False;
+//                                          bDoDraft = sal_True;
+//                                      }
+//                                  }
+//                              }
+//
+//                              // #109985#
+//                              if(bDoPaint)
+//                              {
+//                                  // as usual
+//                                  bOk = pObj->Paint(rXOut, rInfoRec);
+//                              }
+//                              else
+//                              {
+//                                  if(bDoDraft)
+//                                  {
+//                                      Rectangle aObjRect = pObj->GetBoundRect();
+//
+//                                      pOut->SetFillColor(COL_LIGHTGRAY);
+//                                      pOut->SetLineColor(COL_BLACK);
+//                                      pOut->DrawRect( aObjRect );
+//                                  }
+//
+//                                  bOk = TRUE;
+//                              }
+//
+////////////////////////////////////////////////////////////////////////////////
+////
+////    Vector2D aTRScale;
+////    double fTRShear;
+////    double fTRRotate;
+////    Vector2D aTRTranslate;
+////    Matrix3D aOrigMat;
+////    XPolyPolygon aTRPolyPolygon;
+////
+////    BOOL bIsPath = pObj->TRGetBaseGeometry(aOrigMat, aTRPolyPolygon);
+////    aOrigMat.DecomposeAndCorrect(aTRScale, fTRShear, fTRRotate, aTRTranslate);
+////    Vector2D aVectorTranslate;
+////    aVectorTranslate.X() = FRound(aTRTranslate.X());
+////    aVectorTranslate.Y() = FRound(aTRTranslate.Y());
+////
+////    Point aPoint(aVectorTranslate.X(), aVectorTranslate.Y());
+////    Rectangle aTRBaseRect(
+////        aPoint,
+////        Size(FRound(aTRScale.X()), FRound(aTRScale.Y())));
+////
+////    Color aLineColorMerk(rXOut.GetOutDev()->GetLineColor());
+////    Color aFillColorMerk(rXOut.GetOutDev()->GetFillColor());
+////    rXOut.GetOutDev()->SetFillColor();
+////
+////    rXOut.GetOutDev()->SetLineColor(COL_BLACK);
+////    rXOut.GetOutDev()->DrawRect(aTRBaseRect);
+////
+////    if(bIsPath)
+////    {
+////        rXOut.GetOutDev()->SetLineColor(COL_LIGHTRED);
+////        XPolyPolygon aTRPoPo(aTRPolyPolygon);
+////        aTRPoPo.Move(aTRBaseRect.Left(), aTRBaseRect.Top());
+////        sal_uInt16 nCount(aTRPoPo.Count());
+////        for(sal_uInt16 a(0); a < nCount; a++)
+////            rXOut.GetOutDev()->DrawPolygon(XOutCreatePolygon(aTRPoPo[a], rXOut.GetOutDev()));
+////    }
+////
+////    rXOut.GetOutDev()->SetLineColor(aLineColorMerk);
+////    rXOut.GetOutDev()->SetFillColor(aFillColorMerk);
+////
+////    static BOOL bDoTestSetAllGeometry(FALSE);
+////    if(bDoTestSetAllGeometry)
+////        pObj->TRSetBaseGeometry(aOrigMat, aTRPolyPolygon);
+////
+////
+////////////////////////////////////////////////////////////////////////////////
+//                          }
+//
+//                          // nach dem ersten Objekt bei reinem Hintergrundcache
+//                          // sollen die folgenden Objekte natuerlich nicht gezeichnet werden
+//                          if( bBGCachePrepare )
+//                              bPaintFlag = FALSE;
+//                      }
+//                      else if( bBGCachePaint )
+//                          bPaintFlag = TRUE;
+//                  }
+//
+//                  // #110094#-5
+//                  //if( bOk && nEvent != 0 )
+//                  //  bOk = !pAppPtr->AnyInput( nEvent );
+//
+//                  if( !bOk )
+//                      bBrk = TRUE;
+//              }
+//              nObjNum++;
+//          }
+//      }
+//  }
+//
+//  if (bColorsDirty && bRestoreColors)
+//      aHDCMerk.Restore(*pOut);
+//
+//  return bOk;
+//}
 
 SdrObject* SdrObjList::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bBackward) const
 {
@@ -888,7 +1078,7 @@ SdrObject* SdrObjList::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
         while (pHit==NULL && (bBackward ? nObjNum<nObjAnz : nObjNum>0)) {
             if (!bBackward) nObjNum--;
             SdrObject* pObj=GetObj(nObjNum);
-            if (R.IsOver(pObj->GetBoundRect())) {
+            if (R.IsOver(pObj->GetCurrentBoundRect())) {
                 SdrObjList* pSubList=pObj->GetSubList();
                 if (pSubList!=NULL || pVisiLayer==NULL) { // Gruppenobjekte beruecksichtigen sichtbare Layer selbst
                     pHit=pObj->CheckHit(rPnt,nTol,pVisiLayer/*,bBackward*/);
@@ -1003,17 +1193,9 @@ void SdrObjList::ReformatAllEdgeObjects()
 
 void SdrObjList::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
-    ULONG nAnz=GetObjCount();
-    ULONG nNum=0;
-    while (nNum<nAnz)
+    for(sal_uInt32 a(0L); a < GetObjCount(); a++)
     {
-        SdrObject* pObj = GetObj(nNum);
-        if( pObj->ISA( SdrAttrObj ) && !pObj->ISA( E3dPolyScene ) )
-            ( (SdrAttrObj*) pObj )->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
-        else if( pObj->ISA( SdrObjGroup ) )
-            ( (SdrObjGroup*) pObj )->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
-
-        nNum++;
+        GetObj(a)->BurnInStyleSheetAttributes(bPseudoSheetsOnly);
     }
 }
 
@@ -1040,23 +1222,13 @@ void SdrObjList::RemoveNotPersistentObjects(FASTBOOL bNoBroadcast)
     }
 }
 
-void SdrObjList::RestartAllAnimations(SdrPageView* pPageView) const
-{
-    ULONG nAnz=GetObjCount();
-    ULONG nNum=0;
-    while (nNum<nAnz) {
-        GetObj(nNum)->RestartAnimation(pPageView);
-        nNum++;
-    }
-}
-
 FASTBOOL SdrObjList::ImpGetFillColor(SdrObject* pObj, Color& rCol) const
 {
-    return GetDraftFillColor(pObj->GetItemSet(),rCol);
+    return GetDraftFillColor(pObj->GetMergedItemSet(), rCol);
 }
 
 FASTBOOL SdrObjList::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-                                  FASTBOOL bLayerSorted, Color& rCol) const
+    /*FASTBOOL bLayerSorted,*/ Color& rCol) const
 {
     if (pModel==NULL) return FALSE;
     FASTBOOL bRet=FALSE;
@@ -1066,7 +1238,7 @@ FASTBOOL SdrObjList::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers
         SdrObject* pObj=GetObj(no);
         SdrObjList* pOL=pObj->GetSubList();
         if (pOL!=NULL) { // Aha, Gruppenobjekt
-            bRet=pOL->GetFillColor(rPnt,rVisLayers,bLayerSorted,rCol);
+            bRet=pOL->GetFillColor(rPnt,rVisLayers,/*bLayerSorted,*/rCol);
         } else {
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj);
             // #108867# Exclude zero master page object (i.e. background
@@ -1074,7 +1246,7 @@ FASTBOOL SdrObjList::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers
             if (pTextObj!=NULL &&
                 pObj->IsClosedObj() && rVisLayers.IsSet(pObj->GetLayer()) &&
                 (!bMaster || (!pObj->IsNotVisibleAsMaster() && no!=0)) &&
-                pObj->GetBoundRect().IsInside(rPnt) &&
+                pObj->GetCurrentBoundRect().IsInside(rPnt) &&
                 !pTextObj->IsHideContour() && pObj->IsHit(rPnt,0,NULL))
             {   // Nachfolgend extra Funktion um Stack zu sparen,
                 // da diese Methode hier rekursiv ist.
@@ -1431,13 +1603,57 @@ void SdrPageGridFrameList::Clear()
     aList.Clear();
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// #111111# PageUser section
+
+void SdrPage::AddPageUser(SdrPageUser& rNewUser)
+{
+    maPageUsers.push_back(&rNewUser);
+}
+
+void SdrPage::RemovePageUser(SdrPageUser& rOldUser)
+{
+    const PageUserVector::iterator aFindResult = ::std::find(maPageUsers.begin(), maPageUsers.end(), &rOldUser);
+    if(aFindResult != maPageUsers.end())
+    {
+        maPageUsers.erase(aFindResult);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #110094# DrawContact section
+
+sdr::contact::ViewContact* SdrPage::CreateObjectSpecificViewContact()
+{
+    if(IsMasterPage())
+    {
+        return new sdr::contact::ViewContactOfMasterPage(*this);
+    }
+    else
+    {
+        return new sdr::contact::ViewContactOfSdrPage(*this);
+    }
+}
+
+sdr::contact::ViewContact& SdrPage::GetViewContact() const
+{
+    if(!mpViewContact)
+    {
+        ((SdrPage*)this)->mpViewContact = ((SdrPage*)this)->CreateObjectSpecificViewContact();
+    }
+
+    return *mpViewContact;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrPage,SdrObjList);
 
 SdrPage::SdrPage(SdrModel& rNewModel, FASTBOOL bMasterPage):
     SdrObjList(&rNewModel,this),
-    pBackgroundObj( NULL )
+    pBackgroundObj( NULL ),
+    // #110094#
+    mpViewContact(0L)
 {
     pLayerAdmin=new SdrLayerAdmin(&rNewModel.GetLayerAdmin());
     bMaster=bMasterPage;
@@ -1457,7 +1673,9 @@ SdrPage::SdrPage(SdrModel& rNewModel, FASTBOOL bMasterPage):
 
 SdrPage::SdrPage(const SdrPage& rSrcPage):
     SdrObjList(rSrcPage.pModel,this),
-    pBackgroundObj( NULL )
+    pBackgroundObj( NULL ),
+    // #110094#
+    mpViewContact(0L)
 {
     pLayerAdmin=new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin());
     *this=rSrcPage;
@@ -1466,12 +1684,41 @@ SdrPage::SdrPage(const SdrPage& rSrcPage):
 
 SdrPage::~SdrPage()
 {
+    // #111111#
+    // tell all the registered PageUsers that the page is in destruction
+    for(PageUserVector::iterator aIterator = maPageUsers.begin(); aIterator != maPageUsers.end(); aIterator++)
+    {
+        SdrPageUser* pPageUser = *aIterator;
+        DBG_ASSERT(pPageUser, "SdrPage::~SdrPage: corrupt PageUser list (!)");
+        pPageUser->PageInDestruction(*this);
+    }
+
+    // #111111#
+    // Clear the vector. This means that user do not need to call RemovePageUser()
+    // when they get called from PageInDestruction().
+    maPageUsers.clear();
+
     delete pBackgroundObj;
     delete pLayerAdmin;
+
+    // #110094#
+    if(mpViewContact)
+    {
+        mpViewContact->PrepareDelete();
+        delete mpViewContact;
+        mpViewContact = 0L;
+    }
 }
 
 void SdrPage::operator=(const SdrPage& rSrcPage)
 {
+    // #110094#
+    if(mpViewContact)
+    {
+        delete mpViewContact;
+        mpViewContact = 0L;
+    }
+
     SdrObjList::operator=(rSrcPage);
     pPage=this;
     bMaster        =rSrcPage.bMaster        ;
@@ -1517,8 +1764,7 @@ void SdrPage::SetSize(const Size& aSiz)
 {
     nWdt=aSiz.Width();
     nHgt=aSiz.Height();
-    if( pModel )
-        pModel->SetChanged();
+    SetChanged();
 }
 
 Size SdrPage::GetSize() const
@@ -1562,36 +1808,31 @@ void  SdrPage::SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 nLwr)
     nBordUpp=nUpp;
     nBordRgt=nRgt;
     nBordLwr=nLwr;
-    if( pModel )
-        pModel->SetChanged();
+    SetChanged();
 }
 
 void  SdrPage::SetLftBorder(INT32 nBorder)
 {
     nBordLft=nBorder;
-    if( pModel )
-        pModel->SetChanged();
+    SetChanged();
 }
 
 void  SdrPage::SetUppBorder(INT32 nBorder)
 {
     nBordUpp=nBorder;
-    if( pModel )
-        pModel->SetChanged();
+    SetChanged();
 }
 
 void  SdrPage::SetRgtBorder(INT32 nBorder)
 {
     nBordRgt=nBorder;
-    if( pModel )
-        pModel->SetChanged();
+    SetChanged();
 }
 
 void  SdrPage::SetLwrBorder(INT32 nBorder)
 {
     nBordLwr=nBorder;
-    if( pModel )
-        pModel->SetChanged();
+    SetChanged();
 }
 
 INT32 SdrPage::GetLftBorder() const
@@ -1656,16 +1897,31 @@ USHORT SdrPage::GetPageNum() const
 
 void SdrPage::SetChanged()
 {
+    // #110094#-11
+    // For test purposes, use the new ViewContact for change
+    // notification now.
+    ActionChanged();
+
     if( pModel )
+    {
         pModel->SetChanged();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPage::SendRepaintBroadcast() const
+void SdrPage::BroadcastPageChange() const
 {
-    if (bInserted && pModel!=NULL) pModel->Broadcast(SdrHint(*this));
+    if(bInserted && pModel)
+    {
+        pModel->Broadcast(SdrHint(*this));
+    }
 }
+
+//void SdrPage::SendRepaintBroadcast() const
+//{
+//  if (bInserted && pModel!=NULL) pModel->Broadcast(SdrHint(*this));
+//}
 
 USHORT SdrPage::GetMasterPagePos(USHORT nPgNum) const
 {
@@ -1681,14 +1937,17 @@ void SdrPage::InsertMasterPage(USHORT nPgNum, USHORT nPos)
 {
     aMasters.Insert(nPgNum,nPos);
     SetChanged();
-    SendRepaintBroadcast();
+
+    GetViewContact().ActionInserted();
+
+    BroadcastPageChange();
 }
 
 void SdrPage::InsertMasterPage(const SdrMasterPageDescriptor& rMPD, USHORT nPos)
 {
     aMasters.Insert(rMPD,nPos);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastPageChange();
 }
 
 void SdrPage::RemoveMasterPage(USHORT nPos)
@@ -1696,15 +1955,19 @@ void SdrPage::RemoveMasterPage(USHORT nPos)
     if (nPos<aMasters.GetCount()) {
         aMasters.Remove(nPos);
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastPageChange();
     }
 }
 
 void SdrPage::MoveMasterPage(USHORT nPos, USHORT nNewPos)
 {
-    if (nPos<aMasters.GetCount()) {
+    if(nPos < aMasters.GetCount())
+    {
         aMasters.Move(nPos,nNewPos);
-        SendRepaintBroadcast();
+
+        // Do necessary ViewContact actions
+        ActionChanged();
+        // BroadcastPageChange();
     }
 }
 
@@ -1720,25 +1983,37 @@ SdrPage* SdrPage::GetMasterPage(USHORT nPos) const
 void SdrPage::SetMasterPageNum(USHORT nPgNum, USHORT nPos)
 {
     aMasters[nPos].SetPageNum(nPgNum);
-    SendRepaintBroadcast();
+
+    // Do necessary ViewContact actions
+    ActionChanged();
+    // BroadcastPageChange();
 }
 
 void SdrPage::SetMasterPageVisibleLayers(const SetOfByte& rVL, USHORT nPos)
 {
     aMasters[nPos].SetVisibleLayers(rVL);
-    SendRepaintBroadcast();
+
+    // Do necessary ViewContact actions
+    ActionChanged();
+    // BroadcastPageChange();
 }
 
 void SdrPage::SetMasterPageDescriptor(const SdrMasterPageDescriptor& rMPD, USHORT nPos)
 {
     aMasters[nPos]=rMPD;
-    SendRepaintBroadcast();
+
+    // Do necessary ViewContact actions
+    ActionChanged();
+    // BroadcastPageChange();
 }
 
 void SdrPage::SetMasterPageDescriptorList(const SdrMasterPageDescriptorList& rMPDL)
 {
     aMasters=rMPDL;
-    SendRepaintBroadcast();
+
+    // Do necessary ViewContact actions
+    ActionChanged();
+    // BroadcastPageChange();
 }
 
 void SdrPage::ImpMasterPageRemoved(USHORT nMasterPageNum)
@@ -1747,7 +2022,14 @@ void SdrPage::ImpMasterPageRemoved(USHORT nMasterPageNum)
     for (USHORT nm=nMasterAnz; nm>0;) {
         nm--;
         USHORT nNum=aMasters[nm].GetPageNum();
-        if (nNum==nMasterPageNum) { RemoveMasterPage(nm); SendRepaintBroadcast(); }
+        if (nNum==nMasterPageNum)
+        {
+            RemoveMasterPage(nm);
+
+            // Do necessary ViewContact actions
+            ActionChanged();
+            //BroadcastPageChange();
+        }
         if (nNum>nMasterPageNum) {
             // Hintere anpassen wegen Verschiebung durch entfernen
             aMasters[nm].SetPageNum(USHORT(nNum-1));
@@ -1789,10 +2071,10 @@ void SdrPage::ImpMasterPageMoved(USHORT nMasterPageNum, USHORT nNewMasterPageNum
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 FASTBOOL SdrPage::ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-                                   FASTBOOL bLayerSorted, Color& rCol, FASTBOOL bSkipBackgroundShape) const
+    /* FASTBOOL bLayerSorted,*/ Color& rCol, FASTBOOL bSkipBackgroundShape) const
 {
     if (pModel==NULL) return FALSE;
-    FASTBOOL bRet=SdrObjList::GetFillColor(rPnt,rVisLayers,bLayerSorted,rCol);
+    FASTBOOL bRet=SdrObjList::GetFillColor(rPnt,rVisLayers,/*bLayerSorted,*/rCol);
     if (!bRet && !bMaster) {
         // nun zu den Masterpages
         USHORT nMasterAnz=GetMasterPageCount();
@@ -1810,7 +2092,7 @@ FASTBOOL SdrPage::ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayer
                 // the silly ordering: 1. shapes, 2. master page
                 // shapes, 3. page background, 4. master page
                 // background.
-                bRet=pMaster->ImplGetFillColor(rPnt,aSet,bLayerSorted,rCol,TRUE);
+                bRet=pMaster->ImplGetFillColor(rPnt,aSet,/*bLayerSorted,*/rCol,TRUE);
             }
         }
     }
@@ -1827,12 +2109,12 @@ FASTBOOL SdrPage::ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayer
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 FASTBOOL SdrPage::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-                               FASTBOOL bLayerSorted, Color& rCol) const
+    /*FASTBOOL bLayerSorted,*/ Color& rCol) const
 {
     // #108867# Wrapper for ImplGetFillColor. Used to properly set the
     // bSkipBackgroundShape parameter. Never skip background shape on
     // first level of recursion
-    return ImplGetFillColor(rPnt,rVisLayers,bLayerSorted,rCol,FALSE);
+    return ImplGetFillColor(rPnt,rVisLayers,/*bLayerSorted,*/rCol,FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1889,12 +2171,15 @@ void SdrPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
             SdrLayer* pLay=new SdrLayer;       // Layerdefinition lesen
             rIn>>*pLay;
             pLayerAdmin->InsertLayer(pLay);
-        } else
-        if (aHead.IsID(SdrIOLSetID)) {
-            SdrLayerSet* pSet=new SdrLayerSet; // Layersetdefinition lesen
-            rIn>>*pSet;
-            pLayerAdmin->InsertLayerSet(pSet);
-        } else
+        }
+        //#110094#-10
+        //else if (aHead.IsID(SdrIOLSetID))
+        //{
+        //  SdrLayerSet* pSet=new SdrLayerSet; // Layersetdefinition lesen
+        //  rIn>>*pSet;
+        //  pLayerAdmin->InsertLayerSet(pSet);
+        //}
+        else
         // Fuer den Fall der Faelle kann hier ww. MPgDscr oder MPgDscrList stehen
         if (aHead.IsID(SdrIOMPgDID)) { // Masterpagedescriptor
             SdrMasterPageDescriptor aDscr;
@@ -1985,9 +2270,10 @@ void SdrPage::WriteData(SvStream& rOut) const
     for (i=0; i<pLayerAdmin->GetLayerCount(); i++) {
         rOut<<*pLayerAdmin->GetLayer(i);
     }
-    for (i=0; i<pLayerAdmin->GetLayerSetCount(); i++) {
-        rOut<<*pLayerAdmin->GetLayerSet(i);
-    }
+    //#110094#-10
+    //for (i=0; i<pLayerAdmin->GetLayerSetCount(); i++) {
+    //  rOut<<*pLayerAdmin->GetLayerSet(i);
+    //}
 
     rOut<<aMasters;
     SdrObjList::Save(rOut);
@@ -2137,7 +2423,7 @@ Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
 
     if( pBackgroundObj )
     {
-        const SfxItemSet& rSet = pBackgroundObj->GetItemSet();
+        const SfxItemSet& rSet = pBackgroundObj->GetMergedItemSet();
         GetDraftFillColor( rSet, aColor );
     }
 
@@ -2148,6 +2434,13 @@ Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
 Color SdrPage::GetBackgroundColor() const
 {
     return GetBackgroundColor( NULL );
+}
+
+// #110094# DrawContact support: Methods for handling Page changes
+void SdrPage::ActionChanged() const
+{
+    // Do necessary ViewContact actions
+    GetViewContact().ActionChanged();
 }
 
 #ifdef GCC
