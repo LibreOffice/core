@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycomposer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:10:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYCOMPOSER_HXX
 #include "propertycomposer.hxx"
 #endif
@@ -280,7 +279,7 @@ namespace pcr
             MapStringToBoolPair::iterator aPos = m_EnabledButtons.find( _rPropertyName );
             if ( aPos == m_EnabledButtons.end() )
             {
-                m_EnabledButtons[ _rPropertyName ] = MapStringToBoolPair::data_type( _bEnablePrimary, _bEnableSecondary );
+                m_EnabledButtons[ _rPropertyName ] = MapStringToBoolPair::mapped_type( _bEnablePrimary, _bEnableSecondary );
             }
             else
             {

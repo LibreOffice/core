@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:11:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
 #include "propertyhandler.hxx"
 #endif
@@ -255,7 +254,7 @@ namespace pcr
             FindPropertyByHandle( _nPropId )
         );
         if ( pFound != m_aSupportedProperties.end() )
-            return pFound;
+            return &(*pFound);
         return NULL;
     }
 
@@ -270,8 +269,8 @@ namespace pcr
             m_aSupportedProperties.end(),
             FindPropertyByHandle( _nPropId )
         );
-        OSL_ENSURE( pProp, "PropertyHandler::changeTypeOfSupportedProperty: This property is not known!" );
-        if ( pProp )
+        OSL_ENSURE( pProp != m_aSupportedProperties.end(), "PropertyHandler::changeTypeOfSupportedProperty: This property is not known!" );
+        if ( pProp != m_aSupportedProperties.end() )
             pProp->Type = _rNewType;
     }
 
