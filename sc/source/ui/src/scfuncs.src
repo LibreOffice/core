@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:56:11 $
+ *  last change: $Author: er $ $Date: 2001-07-13 12:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -39608,7 +39608,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text = "D" ;
+            Text = "Dezimalstellen" ;
             Text [ english ] = "decimals" ;
             Text [ norwegian ] = "D" ;
             Text [ italian ] = "decimali" ;
@@ -39666,8 +39666,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text = "T" ;
-            Text [ english ] = "no_commas" ;
+            Text = "Keine Tausenderseparatoren" ;
+            Text [ english ] = "no thousand separators" ;
             Text [ norwegian ] = "T" ;
             Text [ italian ] = "Nessun_separatore" ;
             Text [ portuguese_brazilian ] = "T" ;
@@ -39678,7 +39678,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ swedish ] = "T" ;
             Text [ dutch ] = "D" ;
             Text [ spanish ] = "no_separar_millares" ;
-            Text [ english_us ] = "T" ;
+            Text [ english_us ] = "no thousand separators" ;
             Text[ chinese_simplified ] = "T";
             Text[ russian ] = "Ïðîáåë";
             Text[ polish ] = "bez_przecinka";
@@ -39695,8 +39695,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
-            Text [ english ] = "is a logical value that, if TRUE, prevents FIXED from including commas in the returned text." ;
+            Text = "Keine Tausenderseparatoren. Wahrheitswert, wenn vorhanden und WAHR (ungleich 0) werden keine Tausenderseparatoren gesetzt." ;
+            Text [ english ] = "No thousand separators. Logical value, if present and TRUE (not 0) no thousand separators are set." ;
             Text [ norwegian ] = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
             Text [ italian ] = "è una valore logico che, se VERO, non consente a FISSO di includere i separatori delle migliaia nel testo restituito." ;
             Text [ portuguese_brazilian ] = "Tausenderpunkte. Gibt an, ob Tausenderpunkte gesetzt werden." ;
@@ -39707,7 +39707,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ swedish ] = "anger om tusentalsavgränsare skall användas." ;
             Text [ dutch ] = "Duizendtallen. Geeft aan of punten als scheidingsteken voor duizendtallen moeten worden weergegeven." ;
             Text [ spanish ] = "es un valor lógico que especifica si el signo de separador de millares debe ser mostrado en número o no." ;
-            Text [ english_us ] = "Thousand delimiter. Defines if thousand delimitersare to be set." ;
+            Text [ english_us ] = "No thousand separators. Logical value, if present and TRUE (not 0) no thousand separators are set." ;
             Text[ chinese_simplified ] = "Ç§Î»µã¡£¸ø¶¨ÊÇ·ñÊ¹ÓÃÇ§Î»µã¡£";
             Text[ russian ] = "Îïðåäåëÿåò, äîëæåí ëè ïîÿâèòüñÿ ïðîáåë â êà÷åñòâå ðàçäåëèòåëÿ ãðóïï ðàçðÿäîâ.";
             Text[ polish ] = "Znak tysiêczny. Okreœla, czy znak tysiêczny ma zostaæ wstawiony.";
