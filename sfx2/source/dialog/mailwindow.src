@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,19 @@ Window RID_MAIL_WINDOW
         Text[ danish ] = "~Send";
         Text[ swedish ] = "~Skicka";
         Text[ polish ] = "Wy�lij";
-        Text[ portuguese_brazilian ] = "Send";
+        Text[ portuguese_brazilian ] = "E~nviar";
         Text[ japanese ] = "送信";
         Text[ korean ] = "보내기";
         Text[ chinese_simplified ] = "寄发";
         Text[ chinese_traditional ] = "發送";
-        Text[ turkish ] = "Send";
+        Text[ turkish ] = "Yolla";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Envia";
         Text[ finnish ] = "L�het�";
         Text[ thai ] = "ส่ง";
+        Text[ czech ] = "Odeslat";
+        Text[ hebrew ] = "‮שליחה‬";
+        Text[ hindi ] = "भेजो";
     };
     PushButton PB_MAILWIN_CLOSE
     {
@@ -118,16 +121,19 @@ Window RID_MAIL_WINDOW
         Text[ danish ] = "L~uk";
         Text[ swedish ] = "S~t�ng";
         Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "Close";
+        Text[ portuguese_brazilian ] = "~Fechar";
         Text[ japanese ] = "閉じる";
         Text[ korean ] = "닫기";
         Text[ chinese_simplified ] = "关闭";
         Text[ chinese_traditional ] = "關閉";
-        Text[ turkish ] = "Close";
+        Text[ turkish ] = "Kapat";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Tanca";
         Text[ finnish ] = "Sulje";
         Text[ thai ] = "ปิด";
+        Text[ czech ] = "Zavřít";
+        Text[ hebrew ] = "‮סגירה‬";
+        Text[ hindi ] = "बन्द करो";
     };
     ListBox LB_MAILWIN_ROLE
     {
@@ -222,9 +228,9 @@ Window RID_MAIL_WINDOW
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "An" ; 1 ; > ;
-            < "Kopie" ; 2 ; > ;
-            < "Blindkopie" ; 3 ; > ;
+            < "Para" ; 1 ; > ;
+            < "Copiar" ; 2 ; > ;
+            < "C�pia oculta" ; 3 ; > ;
         };
         StringList [ japanese ] =
         {
@@ -252,9 +258,9 @@ Window RID_MAIL_WINDOW
         };
         StringList [ turkish ] =
         {
-            < "Al�c�" ; 1 ; > ;
-            < "Kopya" ; 2 ; > ;
-            < "Gizli kopya" ; 3 ; > ;
+            < "Buraya" ; 1 ; > ;
+            < "Kopyala" ; 2 ; > ;
+            < "BC" ; 3 ; > ;
         };
         StringList [ arabic ] =
         {
@@ -280,6 +286,24 @@ Window RID_MAIL_WINDOW
         < "คัดลอก" ; 2 ; > ;
         < "คัดลอกแบบไม่เห็น" ; 3 ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Komu" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
+            < "Slepá kopie" ; 3 ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "‮ל...‬" ; 1 ; > ;
+        < "‮העתקה‬" ; 2 ; > ;
+            < "‮העתק ללא ידיעת אחרים‬" ; 3 ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "केलिए" ; 1 ; > ;
+        < "प्रतिलिपि" ; 2 ; > ;
+            < "ब्लइन्ड प्रतिलिपि" ; 3 ; > ;
+        };
     };
     Edit ED_MAILWIN_ROLE
     {
@@ -312,17 +336,20 @@ Window RID_MAIL_WINDOW
         Text[ italian ] = "~Oggetto:";
         Text[ danish ] = "Emne:";
         Text[ swedish ] = "~Ang�ende:";
-        Text[ polish ] = "Dotyczy:";
-        Text[ portuguese_brazilian ] = "Subject:";
+        Text[ polish ] = "Temat:";
+        Text[ portuguese_brazilian ] = "A~ssunto:";
         Text[ japanese ] = "件名:";
         Text[ korean ] = "제목:";
         Text[ chinese_simplified ] = "事由：";
         Text[ chinese_traditional ] = "主旨：";
-        Text[ turkish ] = "Subject:";
+        Text[ turkish ] = "Konu:";
         Text[ arabic ] = "�������:";
         Text[ catalan ] = "Tema:";
         Text[ finnish ] = "Aihe:";
         Text[ thai ] = "ชื่อเรื่อง:";
+        Text[ czech ] = "Předmět:";
+        Text[ hebrew ] = ":‮נושא‬";
+        Text[ hindi ] = "विषय:";
     };
     Edit ED_MAILWIN_SUBJECT
     {
@@ -348,16 +375,19 @@ Window RID_MAIL_WINDOW
         Text[ danish ] = "Fra:";
         Text[ swedish ] = "~Fr�n:";
         Text[ polish ] = "Od:";
-        Text[ portuguese_brazilian ] = "From:";
+        Text[ portuguese_brazilian ] = "~De:";
         Text[ japanese ] = "差出人:";
         Text[ korean ] = "보낸 사람:";
         Text[ chinese_simplified ] = "发件人：";
         Text[ chinese_traditional ] = "寄件者：";
-        Text[ turkish ] = "From:";
+        Text[ turkish ] = "Kimden:";
         Text[ arabic ] = "��:";
         Text[ catalan ] = "De:";
         Text[ finnish ] = "L�hett�j�:";
         Text[ thai ] = "จาก:";
+        Text[ czech ] = "Od:";
+        Text[ hebrew ] = "‮מאת: ‬";
+        Text[ hindi ] = "से:";
     };
     Edit ED_MAILWIN_FROM
     {
@@ -384,16 +414,19 @@ Window RID_MAIL_WINDOW
         Text[ danish ] = "Prioritet:";
         Text[ swedish ] = "~Prioritet:";
         Text[ polish ] = "Priorytet:";
-        Text[ portuguese_brazilian ] = "Priority:";
+        Text[ portuguese_brazilian ] = "~Prioridade:";
         Text[ japanese ] = "重要度:";
         Text[ korean ] = "우선 순위:";
         Text[ chinese_simplified ] = "重要性：";
         Text[ chinese_traditional ] = "重要性：";
-        Text[ turkish ] = "Priority:";
+        Text[ turkish ] = "�ncelik:";
         Text[ arabic ] = "��������:";
         Text[ catalan ] = "Prioritat:";
         Text[ finnish ] = "Prioriteetti:";
         Text[ thai ] = "ลำดับก่อน-หลัง:";
+        Text[ czech ] = "Priorita:";
+        Text[ hebrew ] = "‮עדיפות:‬";
+        Text[ hindi ] = "प्रधान्य:";
     };
     ListBox LB_MAILWIN_PRIO
     {
@@ -509,18 +542,18 @@ Window RID_MAIL_WINDOW
         StringList [ polish ] =
         {
             < "Bardzo wysoki" ; 1 ; > ;
-            < "Wysoki" ; 2 ; > ;
+            < "Wa�ne" ; 2 ; > ;
             < "Normalny" ; 3 ; > ;
             < "Niski" ; 4 ; > ;
             < "Bardzo niski" ; 5 ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Sehr hoch" ; 1 ; > ;
-            < "Hoch" ; 2 ; > ;
+            < "Urgente" ; 1 ; > ;
+            < "Importante" ; 2 ; > ;
             < "Normal" ; 3 ; > ;
-            < "Niedrig" ; 4 ; > ;
-            < "Sehr niedrig" ; 5 ; > ;
+            < "Baixo" ; 4 ; > ;
+            < "A mais baixa" ; 5 ; > ;
         };
         StringList [ japanese ] =
         {
@@ -556,11 +589,11 @@ Window RID_MAIL_WINDOW
         };
         StringList [ turkish ] =
         {
-            < "�ok y�ksek" ; 1 ; > ;
-            < "Y�ksek" ; 2 ; > ;
-            < ", standart" ; 3 ; > ;
+            < "Acil" ; 1 ; > ;
+            < "�nemli" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
             < "D���k" ; 4 ; > ;
-            < "�ok d���k" ; 5 ; > ;
+            < "�nemsiz" ; 5 ; > ;
         };
         StringList [ arabic ] =
         {
@@ -594,6 +627,30 @@ Window RID_MAIL_WINDOW
         < "ต่ำ" ; 4 ; > ;
         < "ต่ำสุด" ; 5 ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Urgentní" ; 1 ; > ;
+        < "Důležité" ; 2 ; > ;
+        < "Normální" ; 3 ; > ;
+        < "Nízká" ; 4 ; > ;
+        < "Nejnižší" ; 5 ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮דחוף‬" ; 1 ; > ;
+        < "‮חשוב‬" ; 2 ; > ;
+        < "‮רגיל‬" ; 3 ; > ;
+        < "‮נמוך‬" ; 4 ; > ;
+        < "‮נמוכה ביותר‬" ; 5 ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "अत्यावश्यक" ; 1 ; > ;
+        < "महत्वपूर्ण" ; 2 ; > ;
+        < "सामान्य" ; 3 ; > ;
+        < "कम" ; 4 ; > ;
+        < "सबसे कम" ; 5 ; > ;
+    };
     };
     Image IMG_MAILWIN_SEND
     {
@@ -617,30 +674,58 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ English ] = "Error while sending mail. Possible errors are a missing account or an incorrect setup.\nPlease check your settings within %PRODUCTNAME or within your e-mail client." ;
     MESSAGE [ norwegian ] = "Feil ved sending av mail." ;
     MESSAGE [ italian ] = "Errore durante l'invio del messaggio. I possibili errori sono: conto dell'utente errato oppure setup errato.\nVerificate le impostazioni di %PRODUCTNAME oppure il programma di eMail." ;
-    MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
+    MESSAGE [ portuguese_brazilian ] = "Ocorreu um erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
     MESSAGE [ finnish ] = "Virhe viesti� l�hetett�ess�. Syit� voivat olla puuttuva k�ytt�j�tili tai virheelliset asetukset.\nTarkista %PRODUCTNAMEn tai s�hk�postiohjelmasi asetukset." ;
     MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejl er en manglende brugerkonto eller en forkert ops�tning.\nKontroller indstillingerne i %PRODUCTNAME eller i dit e-mail-program." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message. Erreurs possibles : compte d'utilisateur manquant ou Setup erron�.\nV�rifiez les param�tres de %PRODUCTNAME ou ceux du logiciel de messagerie." ;
     MESSAGE [ swedish ] = "Fel vid s�ndning av meddelande. M�jliga fel �r att ett anv�ndarkonto saknas eller en felaktig installation.\nKontrollera inst�llningarna i %PRODUCTNAME eller i ditt e-postprogram." ;
     MESSAGE [ dutch ] = "Fout bij verzenden van bericht. Het is mogelijk dat de gebruikersaccount ontbreekt of dat de installatie fouten bevat.\nControleer de instellingen van %PRODUCTNAME of van het e-mailprogramma." ;
-    MESSAGE [ spanish ] = "Error al enviar el mensaje. La raz�n puede ser una cuenta de usuario o una instalaci�n defectuosa.\nCompruebe la configuraci�n de %PRODUCTNAME o la de su programa de correo electr�nico." ;
+    MESSAGE [ spanish ] = "Error al enviar el mensaje. La raz�n puede ser una cuenta de usuario o una instalaci�n defectuosa.\nCompruebe la configuraci�n de %PRODUCTNAME o la de su programa mensajer�a." ;
     MESSAGE [ english_us ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
     MESSAGE[ chinese_simplified ] = "在寄发电子邮件时发生一个错误。可能缺少一个用户帐号或者安装程序有误。\n请检查 %PRODUCTNAME 的设定或者电子邮件程序的设定。";
     MESSAGE[ russian ] = "������ �������� ���������. ��������, ������ �������� ��-�� �������� ������� ������ ������������ ��� ������������ �������� �������� ���������.\n��������� ��������� %PRODUCTNAME � ��������� ����������� �����.";
-    MESSAGE[ polish ] = "B��d w przesy�aniu wiadomo�ci: brak konta u�ytkownika lub nieprawid�owa instalacja.\nNale�y sprawdzi� ustawienia programu %PRODUCTNAME lub programu poczty elektronicznej.";
+    MESSAGE[ polish ] = "Wyst�pi� b��d podczas przesy�ania wiadomo�ci: brak konta u�ytkownika lub nieprawid�owa instalacja.\nSprawd� ustawienia programu %PRODUCTNAME lub programu do poczty elektronicznej.";
     MESSAGE[ japanese ] = "メッセージ送信時のエラー。エラーの原因としては、ユーザーアカウントがないか、あるいはセットアップが正しくないかが考えられます。\n%PRODUCTNAME、またはお使いの E-mail プログラムの設定を確認してください。";
     MESSAGE[ chinese_traditional ] = "在傳送這個文件時發生一個錯誤。可能缺少一個使用者賬號或程式安裝有問題。\n請檢查 %PRODUCTNAME 的設定和電子郵件程式的設定。";
     MESSAGE[ greek ] = "������ ���� ��� �������� ���������.";
     MESSAGE[ korean ] = "메시지를 보내는 중 오류가 발생했습니다. 아마도 사용자 계정이 없거나 잘못 설치되어 오류가 발생했을 것입니다.\n%PRODUCTNAME 설정이나 전자 메일 프로그램 설정을 확인하십시오.";
     MESSAGE[ arabic ] = "��� ��� ����� ����� ������� ";
-    MESSAGE[ turkish ] = "Posta g�nderirken hata olu�tu.";
+    MESSAGE[ turkish ] = "Posta g�nderirken hata olu�tu. Muhtemel hatalar, hatal� kullan�c� hesab�ndan veya hatal� kurlumdan , ge�ekle�mi� olabilir.\nL�tfen, %PRODUCTNAME i�erisinde yer alan e-posta ayarlar�n�z� kontrol edin.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "Error a l'enviar el mensaje.";
     MESSAGE[ thai ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.";
+    MESSAGE[ czech ] = "Během posílání zprávy nastala chyba. Možnou příčinou této chyby by mohlo být chybějící uživatelské konto nebo chyba v nastavení.\nProsím zkontrolujte nastavení %PRODUCTNAME nebo nastavení svého programu pro posílání e-mailů.";
+    MESSAGE[ hebrew ] = "‮ארעה שגיאה בשילוח ההודעה. יתכן שחסר הגדרת חשבון המשתמש או שההתקנה פגומה.\nנא לבדוק את הקביעות של %PRODUCTNAME ושל תוכנית הדואר.‬";
+    MESSAGE[ hindi ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.";
 };
 
 // ------------------------------------------------------------------- EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
