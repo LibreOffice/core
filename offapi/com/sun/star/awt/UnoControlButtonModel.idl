@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlButtonModel.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:38 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,14 @@ service UnoControlButtonModel
      */
     [property] long TextLineColor;
 
+    /** specifies whether the control should show repeating behaviour
+
+        <p>Normally, when you click a button with the mouse, you need to
+        release the mouse button, and press it again. With this property
+        set to <TRUE/>, the button is repeatedly pressed while you hold
+        down the mouse button.</p>
+    */
+    [optional, property] boolean Repeat;
 };
 
 //=============================================================================
