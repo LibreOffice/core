@@ -2,9 +2,9 @@
 #
 #   $RCSfile: assembly.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:56:16 $
+#   last change: $Author: obo $ $Date: 2004-09-16 13:47:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -362,6 +362,8 @@ sub add_assembly_condition_into_component_table
 
         # my $onefile = get_msiassembly_file($filesref, $libraryname);
         my $onefile = get_msiassembly_file_by_gid($filesref, $librarygid);
+
+        if ( $onefile eq "" ) { next; } # library not part of this product
 
         my $filecomponent = get_msiassembly_component($onefile);
 
