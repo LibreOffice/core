@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: od $ $Date: 2002-10-24 09:37:07 $
+ *  last change: $Author: fme $ $Date: 2002-11-13 09:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,6 +691,9 @@ void SwTabFrm::MakeAll()
 
     LockJoin(); //Ich lass mich nicht unterwegs vernichten.
     SwLayNotify aNotify( this );    //uebernimmt im DTor die Benachrichtigung
+    // If pos is invalid, we have to call a SetInvaKeep at aNotify.
+    // Otherwise the keep atribute would not work in front of a table.
+    const BOOL bOldValidPos = GetValidPosFlag();
 
     //Wenn mein direkter Nachbar gleichzeitig mein Follow ist
     //verleibe ich mir das Teil ein.
@@ -1229,7 +1232,7 @@ void SwTabFrm::MakeAll()
     bCalcLowers = bONECalcLowers = FALSE;
     delete pAccess;
     UnlockJoin();
-    if ( bMovedFwd || bMovedBwd )
+    if ( bMovedFwd || bMovedBwd || ! bOldValidPos )
         aNotify.SetInvaKeep();
 }
 
