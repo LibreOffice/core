@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 11:49:31 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,25 @@ sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength( const sal_Unicode*
     }
 
     return nStr1Len - nStr2Len;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength( const sal_Unicode* pStr1,
+                                                              const sal_Char* pStr2,
+                                                              sal_Int32 nStrLen )
+{
+    const sal_Unicode*  pStr1Run = pStr1+nStrLen;
+    const sal_Char*     pStr2Run = pStr2+nStrLen;
+    while ( pStr1 < pStr1Run )
+    {
+        pStr1Run--;
+        pStr2Run--;
+        if( *pStr1Run != (sal_Unicode)*pStr2Run )
+            return sal_False;
+    }
+
+    return sal_True;
 }
 
 /* ----------------------------------------------------------------------- */
