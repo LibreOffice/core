@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:24:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2075,23 +2075,23 @@ String RID_SVXSTR_GALLERY_ICONVIEW
 {
     Text = "Symbolansicht" ;
     Text [ English ] = "Symbol view" ;
-    Text[ english_us ] = "Symbol view";
+    Text[ english_us ] = "Icon View";
     Text[ portuguese ] = "Ver ícones";
-    Text[ russian ] = "Symbol view";
+    Text[ russian ] = "Âèä ñèìâîëîâ";
     Text[ greek ] = "Symbol view";
     Text[ dutch ] = "Symbol view";
     Text[ french ] = "Affichage des icônes";
-    Text[ spanish ] = "Symbol view";
+    Text[ spanish ] = "Ver símbolos";
     Text[ finnish ] = "Symbol view";
-    Text[ italian ] = "Symbol view";
+    Text[ italian ] = "Vista simboli";
     Text[ danish ] = "Symbol view";
     Text[ swedish ] = "Symbol view";
     Text[ polish ] = "Symbol view";
     Text[ portuguese_brazilian ] = "Symbol view";
     Text[ japanese ] = "ï½±ï½²ï½ºï¾è¡¨ç¤º";
     Text[ korean ] = "Symbol view";
-    Text[ chinese_simplified ] = "Symbol view";
-    Text[ chinese_traditional ] = "Symbol view";
+    Text[ chinese_simplified ] = "å›¾æ ‡è§†å›¾";
+    Text[ chinese_traditional ] = "åœ–ç¤ºæª¢è¦–";
     Text[ turkish ] = "Symbol view";
     Text[ arabic ] = "Symbol view";
     Text[ catalan ] = "Symbol view";
@@ -2100,23 +2100,23 @@ String RID_SVXSTR_GALLERY_LISTVIEW
 {
     Text = "Detailansicht" ;
     Text [ English ] = "Detail view" ;
-    Text[ english_us ] = "Detail view";
+    Text[ english_us ] = "Detailed View";
     Text[ portuguese ] = "Ver detalhes";
-    Text[ russian ] = "Detail view";
+    Text[ russian ] = "Âèä äåòàëåé";
     Text[ greek ] = "Detail view";
     Text[ dutch ] = "Detail view";
     Text[ french ] = "Liste détaillée";
-    Text[ spanish ] = "Detail view";
+    Text[ spanish ] = "Ver detalles";
     Text[ finnish ] = "Detail view";
-    Text[ italian ] = "Detail view";
+    Text[ italian ] = "Vista dettagli";
     Text[ danish ] = "Detail view";
     Text[ swedish ] = "Detail view";
     Text[ polish ] = "Detail view";
     Text[ portuguese_brazilian ] = "Detail view";
     Text[ japanese ] = "è©³ç´°è¡¨ç¤º";
     Text[ korean ] = "Detail view";
-    Text[ chinese_simplified ] = "Detail view";
-    Text[ chinese_traditional ] = "Detail view";
+    Text[ chinese_simplified ] = "ç»†èŠ‚è§†å›¾";
+    Text[ chinese_traditional ] = "ç´°ç¯€æª¢è¦–";
     Text[ turkish ] = "Detail view";
     Text[ arabic ] = "Detail view";
     Text[ catalan ] = "Detail view";
@@ -2701,6 +2701,7 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
 
 
