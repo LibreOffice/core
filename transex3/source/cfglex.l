@@ -1,6 +1,6 @@
 %{
 /*
- * lexer for parsing cfg source files 
+ * lexer for parsing cfg source files
  *
  */
 
@@ -81,7 +81,7 @@ int bText=0;
 		c2 = c3;
 		c3 = input();
 		pChar[0] = c3;
-		WorkOnTokenSet( COMMEND, pChar );                          
+		WorkOnTokenSet( COMMEND, pChar );
 	}
 }
 
@@ -156,7 +156,7 @@ main( int argc, char* argv[])
 
 	pOutput = GetOutputFile( argc, argv );
 	if ( !pOutput ) {
-		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-d DoneFile][-g[:dtd]][-NOUTF8][-L l1,l2,...][-ISO99 IsoCode]\n" );
+		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd]][-NOUTF8][-L l1,l2,...][-ISO99 IsoCode]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
@@ -165,6 +165,7 @@ main( int argc, char* argv[])
 		fprintf( stdout, " -e: Disable writing errorlog\n" );
 		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
+		fprintf( stdout, " -f: force extraction and merge even if only one language is existent\n" );
 		fprintf( stdout, " -g[:dtd]: enables generation of properties (dtds if :dtd is set) - in this case FileOut is the output path\n" );
 		fprintf( stdout, " -d: enables generation of *.don if work is done\n" );
 		fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );

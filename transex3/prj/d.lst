@@ -10,6 +10,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\localize %_DEST%\bin%_EXT%\localize
 ..\%__SRC%\bin\xrmex.exe %_DEST%\bin%_EXT%\xrmex.exe
 ..\%__SRC%\bin\xrmex %_DEST%\bin%_EXT%\xrmex
+..\%__SRC%\bin\gsicheck.exe %_DEST%\bin%_EXT%\gsicheck.exe
+..\%__SRC%\bin\gsicheck %_DEST%\bin%_EXT%\gsicheck
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

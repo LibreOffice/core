@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nf $ $Date: 2002-11-18 11:49:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ USHORT Export::LangId[ LANGUAGES ] =
     CATALAN,
     THAI,
     HINDI,
+    ESTONIAN,
     EXTERN
 };
 
@@ -236,6 +237,8 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
         return THAI;
     else if ( sLang == ByteString( HINDI_ISO ).ToUpperAscii())
         return HINDI;
+    else if ( sLang == ByteString( ESTONIAN_ISO ).ToUpperAscii())
+        return ESTONIAN;
     else if ( sLang == ByteString( sIsoCode99 ).ToUpperAscii())
         return EXTERN;
 
@@ -277,6 +280,7 @@ ByteString Export::GetIsoLangByIndex( USHORT nIndex )
         case CATALAN_INDEX: return CATALAN_ISO;
         case THAI_INDEX: return THAI_ISO;
         case HINDI_INDEX: return HINDI_ISO;
+        case ESTONIAN_INDEX: return ESTONIAN_ISO;
         case EXTERN_INDEX: return sIsoCode99;
     }
     return "";
@@ -404,6 +408,7 @@ const ByteString Export::LangName[ LANGUAGES ] =
     "catalan",
     "thai",
     "hindi",
+    "estonian",
     "extern"
 };
 

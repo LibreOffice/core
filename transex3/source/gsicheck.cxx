@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gh $ $Date: 2003-02-05 16:12:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,21 +69,36 @@
 //
 // class GSILine
 //
+enum LineFormat { FORMAT_GSI1, FORMAT_SDF, FORMAT_UNKNOWN };
 
 class GSILine : public ByteString
 {
 private:
-    ByteString aUniqId;
+    LineFormat aFormat;
     ULONG nLineNumber;
+
+    ByteString aUniqId;
+    ByteString aLineType;
+    USHORT nLangId;
+    ByteString aStatus;
+    ByteString aText;
+
     BOOL bOK;
+
 
 public:
     GSILine( const ByteString &rLine, ULONG nLine );
 
-    ByteString GetUniqId() { return aUniqId; }
-    ULONG GetLineNumber() { return nLineNumber; }
+    LineFormat  const GetLineFormat()     { return aFormat; }
+    ULONG       const GetLineNumber()     { return nLineNumber; }
 
-    BOOL IsOK() { return bOK; }
+    ByteString  const GetUniqId()         { return aUniqId; }
+    ByteString  const GetLineType()       { return aLineType; }
+    USHORT      const GetLanguageId()     { return nLangId; }
+    ByteString  const GetLineStatus()     { return aStatus; }
+    ByteString  const GetText()           { return aText; }
+
+    BOOL const IsOK() { return bOK; }
     void NotOK() { bOK = FALSE; }
 };
 
@@ -97,20 +112,44 @@ class GSIBlock : public GSIBlock_Impl
 {
 private:
     GSILine *pSourceLine;
+    GSILine *pReferenceLine;
     void PrintList( ParserMessageList &rList, ByteString aPrefix, GSILine *pLine );
     BOOL bPrintContext;
     BOOL bInternal;
+    BOOL bReference;
+
+    BOOL TestUTF8( GSILine* pTestee );
 
 public:
-    GSIBlock( BOOL PbPrintContext, BOOL bInt ) : pSourceLine( NULL ), bPrintContext( PbPrintContext ), bInternal( bInt ) {};
+    GSIBlock( BOOL PbPrintContext, BOOL bInt, BOOL bRef ) : pSourceLine( NULL ), pReferenceLine( NULL ), bPrintContext( PbPrintContext ), bInternal( bInt ), bReference( bRef ) {};
     ~GSIBlock();
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
-    void InsertLine( const ByteString &rLine, ULONG nLine , const USHORT nSourceLang);
+    void InsertLine( GSILine* pLine, const USHORT nSourceLang);
+    void SetReferenceLine( GSILine* pLine );
     BOOL CheckSyntax( ULONG nLine );
 
     void WriteError( SvStream &aErrOut );
     void WriteCorrect( SvStream &aOkOut );
 };
+
+
+
+/*****************************************************************************/
+void PrintError( ByteString aMsg, ByteString aPrefix,
+    ByteString aContext, BOOL bPrintContext, ULONG nLine, ByteString aUniqueId = ByteString() )
+/*****************************************************************************/
+{
+    fprintf( stdout, "Error: %s, Line %lu", aPrefix.GetBuffer(), nLine );
+    if ( aUniqueId.Len() )
+        fprintf( stdout, ", UniqueID %s", aUniqueId.GetBuffer() );
+    fprintf( stdout, ": %s", aMsg.GetBuffer() );
+
+    if ( bPrintContext )
+        fprintf( stdout, "  \"%s\"", aContext.GetBuffer() );
+    fprintf( stdout, "\n" );
+}
+
+
 
 //
 // class GSILine
@@ -123,10 +162,36 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
                 , nLineNumber( nLine )
                 , bOK( TRUE )
 {
-    ByteString sTmp( rLine );
-    sTmp.SearchAndReplaceAll( "($$)", "\t" );
+       if ( rLine.GetTokenCount( '\t' ) == 1 )
+    {
+        ByteString sTmp( rLine );
+        sTmp.SearchAndReplaceAll( "($$)", "\t" );
+        if ( sTmp.GetTokenCount( '\t' ) == 5 )
+        {
+            aFormat = FORMAT_GSI1;
+            aUniqId = sTmp.GetToken( 0, '\t' );
+            aLineType = sTmp.GetToken( 1, '\t' );
+            nLangId = sTmp.GetToken( 2, '\t' ).ToInt32();
+            aStatus = sTmp.GetToken( 3, '\t' );     // ext int ...
+            aText = sTmp.GetToken( 4, '\t' );
+        }
+        else
+            aFormat = FORMAT_UNKNOWN;
+    }
+    else if ( rLine.GetTokenCount( '\t' ) == 15 )
+    {
+        aFormat = FORMAT_SDF;
+        aUniqId = rLine.GetToken( 4, '\t' ).Append("/").Append( rLine.GetToken( 3, '\t' ) ).Append("/").Append( rLine.GetToken( 5, '\t' ) );
+        aLineType = "";
+        nLangId = rLine.GetToken( 9, '\t' ).ToInt32();
+        aStatus = "";
+        aText = rLine.GetToken( 10, '\t' );
+    }
+    else
+        aFormat = FORMAT_UNKNOWN;
 
-    aUniqId = sTmp.GetToken( 0, '\t' );
+    if ( FORMAT_UNKNOWN == GetLineFormat() )
+        NotOK();
 }
 
 //
@@ -137,43 +202,47 @@ GSIBlock::~GSIBlock()
 /*****************************************************************************/
 {
     delete pSourceLine;
+    delete pReferenceLine;
 
     for ( ULONG i = 0; i < Count(); i++ )
         delete ( GetObject( i ));
 }
 
 /*****************************************************************************/
-void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine , const USHORT nSourceLang)
+void GSIBlock::InsertLine( GSILine* pLine, const USHORT nSourceLang)
 /*****************************************************************************/
 {
-    GSILine *pLine = new GSILine( rLine, nLine );
-
-    ByteString sTmp( rLine );
-    sTmp.SearchAndReplaceAll( "($$)", "\t" );
-
-    if ( sTmp.GetTokenCount( '\t' ) < 5 )
+    if ( pLine->GetLanguageId() == nSourceLang )
     {
-        PrintError( "Unable to determin language and/or state", "Line format", rLine.Copy( 0,100 ), nLine );
-        pLine->NotOK();
-    }
-
-    USHORT nLangId = sTmp.GetToken( 2, '\t' ).ToInt32();
-    if ( nLangId == nSourceLang )
+        if ( pSourceLine && bInternal )
+            PrintError( "Source Language entry double. Ignoring.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
         pSourceLine = pLine;
+    }
     else {
         ULONG nPos = 0;
 
-        BOOL bLineIsInternal = sTmp.GetToken( 3, '\t' ).EqualsIgnoreCaseAscii( "int" );
+        BOOL bLineIsInternal = pLine->GetLineStatus().EqualsIgnoreCaseAscii( "int" );
         if ( (  bLineIsInternal &&  bInternal )
-           ||( !bLineIsInternal && !bInternal ) )
+           ||( !bLineIsInternal && !bInternal )
+           ||( pLine->GetLineFormat() == FORMAT_SDF ))  // in sdf files check it all
         {
-            while (( nPos < Count()) &&
-                    ( GetObject( nPos )->GetLineNumber() < pLine->GetLineNumber()))
+            while ( nPos < Count() )
+            {
+                if ( GetObject( nPos )->GetLanguageId() == pLine->GetLanguageId() )
+                    PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
                 nPos++;
+            }
 
-            Insert( pLine, nPos );
+            Insert( pLine, LIST_APPEND );
         }
     }
+}
+
+/*****************************************************************************/
+void GSIBlock::SetReferenceLine( GSILine* pLine )
+/*****************************************************************************/
+{
+    pReferenceLine = pLine;
 }
 
 /*****************************************************************************/
@@ -181,15 +250,7 @@ void GSIBlock::PrintError( ByteString aMsg, ByteString aPrefix,
     ByteString aContext, ULONG nLine, ByteString aUniqueId )
 /*****************************************************************************/
 {
-    fprintf( stdout, "Error: %s, Line %lu", aPrefix.GetBuffer(),
-        nLine );
-    if ( aUniqueId.Len() )
-        fprintf( stdout, ", UniqueID %s", aUniqueId.GetBuffer() );
-    fprintf( stdout, ": %s", aMsg.GetBuffer() );
-
-    if ( bPrintContext )
-        fprintf( stdout, "  \"%s\"", aContext.GetBuffer() );
-    fprintf( stdout, "\n" );
+    ::PrintError( aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
 }
 
 /*****************************************************************************/
@@ -205,7 +266,7 @@ void GSIBlock::PrintList( ParserMessageList &rList, ByteString aPrefix,
         if ( bPrintContext )
         {
             if ( pMsg->GetTagBegin() == STRING_NOTFOUND )
-                aContext = pLine->Copy( 0, 300 );
+                aContext = pLine->GetText().Copy( 0, 300 );
             else
                 aContext = pLine->Copy( pMsg->GetTagBegin()-150, 300 );
             aContext.EraseTrailingChars(' ');
@@ -217,6 +278,20 @@ void GSIBlock::PrintList( ParserMessageList &rList, ByteString aPrefix,
 }
 
 /*****************************************************************************/
+BOOL GSIBlock::TestUTF8( GSILine* pTestee )
+/*****************************************************************************/
+{
+    String aUTF8Tester( pTestee->GetText(), RTL_TEXTENCODING_UTF8 );
+    if ( !ByteString( aUTF8Tester, RTL_TEXTENCODING_UTF8 ).Equals( pTestee->GetText() ) )
+    {
+        PrintError( "UTF8 Encoding seems to be broken", "File format", "", pTestee->GetLineNumber(), pTestee->GetUniqId() );
+        pTestee->NotOK();
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/*****************************************************************************/
 BOOL GSIBlock::CheckSyntax( ULONG nLine )
 /*****************************************************************************/
 {
@@ -224,7 +299,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
 
     if ( !pSourceLine )
     {
-        PrintError( "No source languages reference defined!", "File format", "", nLine );
+        PrintError( "No source language entry defined!", "File format", "", nLine );
         aTester.ReferenceOK( "" );
     }
     else
@@ -236,6 +311,33 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
             pSourceLine->NotOK();
         }
     }
+    if ( bReference )
+    {
+        if ( !pReferenceLine )
+        {
+            GSILine *pSource;
+            if ( pSourceLine )
+                pSource = pSourceLine;
+            else
+                pSource = GetObject( 0 );   // get some other line
+            if ( pSource )
+                PrintError( "No reference line found. Entry is new in source file", "File format", "", pSource->GetLineNumber(), pSource->GetUniqId() );
+            else
+                PrintError( "No reference line found. Entry is new in source file", "File format", "", nLine );
+        }
+        else
+        {
+            if ( pSourceLine && !pSourceLine->Equals( *pReferenceLine ) )
+            {
+                xub_StrLen nPos = pSourceLine->Match( *pReferenceLine );
+                PrintError( "Source Language has changed.", "File format", pReferenceLine->Copy( nPos - 5, 15).Append( "\" --> \"" ). Append( pSourceLine->Copy( nPos - 5, 15) ), pSourceLine->GetLineNumber(), pSourceLine->GetUniqId() );
+                pSourceLine->NotOK();
+            }
+        }
+    }
+
+    if ( bInternal && pSourceLine )
+        TestUTF8( pSourceLine );
 
     ULONG i;
     for ( i = 0; i < Count(); i++ )
@@ -245,9 +347,10 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
             GetObject( i )->NotOK();
             if ( aTester.HasTesteeErrors() )
                 PrintList( aTester.GetTesteeErrors(), "Translation", GetObject( i ) );
-            if ( aTester.HasCompareWarnings() )
+            if ( pSourceLine && aTester.HasCompareWarnings() )
                 PrintList( aTester.GetCompareWarnings(), "Translation Tag Missmatch", GetObject( i ) );
         }
+        TestUTF8( GetObject( i ) );
     }
 
     return TRUE;
@@ -304,39 +407,22 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.5.3 (c)1999 - 2001 by SUN Microsystems\n" );
-    fprintf( stdout, "================================================\n" );
+    fprintf( stdout, "gsicheck Version 1.6.0 (c)1999 - 2001 by SUN Microsystems\n" );
+    fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files (Gutschmitt-Interface)\n" );
+    fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
+    fprintf( stdout, "         checks for inconsistencies and malicious UTF8 encoding\n" );
     fprintf( stdout, "\n" );
-    fprintf( stdout, "Syntax: gsicheck [ -c ] [ -we ] [ -wc ] [ -i ] [ -l ISO-code ] filename\n" );
+    fprintf( stdout, "Syntax: gsicheck [ -c ] [ -we ] [ -wc ] [ -i ] [ -l LanguageID ]\n" );
+    fprintf( stdout, "                 [ -r ReferenceFile ] filename\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "-c    Add context to error message (Print the line containing the error)\n" );
     fprintf( stdout, "-we   Write GSI-File containing all errors\n" );
     fprintf( stdout, "-wc   Write GSI-File containing all correct parts\n" );
     fprintf( stdout, "-i    Check records marked 'int' rather than marked 'ext' or similar\n" );
-    fprintf( stdout, "-l    Numerical 2 digits ISO-code of the source language. Default = 49 \n" );
+    fprintf( stdout, "-l    Numerical 2 digits Identifier of the source language. Default = 49\n" );
+    fprintf( stdout, "-r    Reference filename to check that source language has not been changed\n" );
        fprintf( stdout, "\n" );
-}
-
-/*****************************************************************************/
-ByteString GetLineType( const ByteString &rLine )
-/*****************************************************************************/
-{
-    ByteString sTmp( rLine );
-    sTmp.SearchAndReplaceAll( "($$)", "\t" );
-
-    return sTmp.GetToken( 1, '\t' );
-}
-
-/*****************************************************************************/
-ByteString GetUniqId( const ByteString &rLine )
-/*****************************************************************************/
-{
-    ByteString sTmp( rLine );
-    sTmp.SearchAndReplaceAll( "($$)", "\t" );
-
-    return sTmp.GetToken( 0, '\t' );
 }
 
 /*****************************************************************************/
@@ -355,6 +441,8 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bWriteCorrect = FALSE;
     USHORT nSourceLang = 49;     // German is default
     ByteString aFilename;
+    ByteString aReferenceFilename;
+    BOOL bReferenceFile = FALSE;
     for ( USHORT i = 1 ; i < argc ; i++ )
     {
         if ( *argv[ i ] == '-' )
@@ -383,6 +471,21 @@ int _cdecl main( int argc, char *argv[] )
                         if ( (i+1) < argc )
                         {
                             nSourceLang = ByteString( argv[ i+1 ] ).ToInt32();
+                            i++;
+                        }
+                        else
+                        {
+                            fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
+                            bError = TRUE;
+                        }
+                    }
+                    break;
+                case 'r':
+                    {
+                        if ( (i+1) < argc )
+                        {
+                            aReferenceFilename = argv[ i+1 ];
+                            bReferenceFile = TRUE;
                             i++;
                         }
                         else
@@ -428,6 +531,22 @@ int _cdecl main( int argc, char *argv[] )
         exit ( 3 );
     }
 
+    SvFileStream aReferenceGSI;
+    if ( bReferenceFile )
+    {
+        DirEntry aReferenceSource = DirEntry( String( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ));
+        if ( !aReferenceSource.Exists()) {
+            fprintf( stderr, "\nERROR: GSI-File %s not found!\n\n", aFilename.GetBuffer() );
+            exit ( 2 );
+        }
+
+        aReferenceGSI.Open( String( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
+        if ( !aReferenceGSI.IsOpen()) {
+            fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", aFilename.GetBuffer() );
+            exit ( 3 );
+        }
+    }
+
     SvFileStream aOkOut;
     String aBaseName = aSource.GetBase();
     if ( bWriteCorrect )
@@ -458,27 +577,40 @@ int _cdecl main( int argc, char *argv[] )
     }
 
 
-    ByteString sGSILine;
+    ByteString sReferenceLine;
+    GSILine* pReferenceLine = NULL;
+    ByteString aOldReferenceId("No Valid ID");   // just set to something which can never be an ID
+    ULONG nReferenceLine = 0;
 
-    ByteString aOldId;
+    ByteString sGSILine;
+    GSILine* pGSILine = NULL;
+    ByteString aOldId("No Valid ID");   // just set to something which can never be an ID
     GSIBlock *pBlock = NULL;
     ULONG nLine = 0;
 
-    while ( !aGSI.IsEof())
+    while ( !aGSI.IsEof() )
     {
         aGSI.ReadLine( sGSILine );
         nLine++;
+        pGSILine = new GSILine( sGSILine, nLine );
+        BOOL bDelete = TRUE;
 
-        if ( sGSILine.Len())
+
+        if ( pGSILine->Len() )
         {
-            if ( GetLineType( sGSILine ).CompareIgnoreCaseToAscii("res-comment") == COMPARE_EQUAL )
+            if ( FORMAT_UNKNOWN == pGSILine->GetLineFormat() )
+            {
+                PrintError( "Format of line is unknown. Ignoring!", "Line format", pGSILine->Copy( 0,40 ), bPrintContext, pGSILine->GetLineNumber() );
+                pGSILine->NotOK();
+            }
+            else if ( pGSILine->GetLineType().EqualsIgnoreCaseAscii("res-comment") )
             {   // ignore comment lines, but write them to Correct Items File
                 if ( bWriteCorrect )
-                       aOkOut.WriteLine( sGSILine );
+                       aOkOut.WriteLine( *pGSILine );
             }
             else
             {
-                ByteString aId = GetUniqId( sGSILine );
+                ByteString aId = pGSILine->GetUniqId();
                 if ( aId != aOldId )
                 {
                     if ( pBlock )
@@ -492,14 +624,62 @@ int _cdecl main( int argc, char *argv[] )
 
                         delete pBlock;
                     }
-                    pBlock = new GSIBlock( bPrintContext, bInternal );
+                    pBlock = new GSIBlock( bPrintContext, bInternal, bReferenceFile );
 
                     aOldId = aId;
+
+
+                    // find corrosponding line in reference file
+                    if ( bReferenceFile )
+                    {
+                        BOOL bContinueSearching = TRUE;
+                        while ( ( !aReferenceGSI.IsEof() || pReferenceLine ) && bContinueSearching )
+                        {
+                            if ( !pReferenceLine )
+                            {
+                                aReferenceGSI.ReadLine( sReferenceLine );
+                                nReferenceLine++;
+                                pReferenceLine = new GSILine( sReferenceLine, nReferenceLine );
+                            }
+                            if ( pReferenceLine->GetLineFormat() != FORMAT_UNKNOWN )
+                            {
+                                if ( pReferenceLine->GetUniqId() == aId && pReferenceLine->GetLanguageId() == nSourceLang )
+                                {
+                                    pBlock->SetReferenceLine( pReferenceLine );
+                                    pReferenceLine = NULL;
+                                }
+                                else if ( pReferenceLine->GetUniqId() > aId )
+                                {
+//                                    if ( pGSILine->GetLanguageId() == nSourceLang )
+//                                      PrintError( "No reference line found. Entry is new in source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), aId );
+                                    bContinueSearching = FALSE;
+                                }
+                                else
+                                {
+                                    if ( pReferenceLine->GetUniqId() < aId  && pReferenceLine->GetLanguageId() == nSourceLang )
+                                        PrintError( "No Entry in source file found. Entry has been removed from source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), pReferenceLine->GetUniqId() );
+                                    delete pReferenceLine;
+                                    pReferenceLine = NULL;
+                                }
+                            }
+                            else
+                            {
+                                delete pReferenceLine;
+                                pReferenceLine = NULL;
+                            }
+
+                        }
+                    }
+
                 }
 
-                pBlock->InsertLine( sGSILine, nLine , nSourceLang);
+                pBlock->InsertLine( pGSILine, nSourceLang );
+                bDelete = FALSE;
             }
         }
+        if ( bDelete )
+            delete pGSILine;
+
     }
     if ( pBlock )
     {

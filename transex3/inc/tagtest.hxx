@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2003-03-14 13:13:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2002-11-18 11:49:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,11 +195,15 @@
 #define HINDI_ISO               "hi-IN"
 #define HINDI_INDEX                 30
 
+#define ESTONIAN                    77
+#define ESTONIAN_ISO                "et"
+#define ESTONIAN_INDEX                  31
+
 // special language for l10n framework
 #define EXTERN                  99
-#define EXTERN_INDEX                31
+#define EXTERN_INDEX                32
 
-#define LANGUAGES                   32
+#define LANGUAGES                   33
 
 #define LANGUAGE_ALLOWED( n )  (( n != 0xFFFF ) && ( Export::LanguageAllowed( Export::LangId[ n ] )) &&                                         \
                                (( Export::LangId[ n ] == 01 ) || ( Export::LangId[ n ] == 03 ) || ( Export::LangId[ n ] == 07 ) ||  \
@@ -209,8 +213,9 @@
                                 ( Export::LangId[ n ] == 48 ) || ( Export::LangId[ n ] == 49 ) || ( Export::LangId[ n ] == 55 ) ||  \
                                 ( Export::LangId[ n ] == 81 ) || ( Export::LangId[ n ] == 82 ) || ( Export::LangId[ n ] == 86 ) ||  \
                                 ( Export::LangId[ n ] == 88 ) || ( Export::LangId[ n ] == 90 ) || ( Export::LangId[ n ] == 96 ) ||  \
+                                ( Export::LangId[ n ] == 42 ) || ( Export::LangId[ n ] == 43 ) || ( Export::LangId[ n ] == 97 ) ||  \
                                 ( Export::LangId[ n ] == 66 ) || ( Export::LangId[ n ] == 91 ) || ( Export::LangId[ n ] == 00 ) ||  \
-                                ( Export::LangId[ n ] == 99 )))
+                                ( Export::LangId[ n ] == 99 ) || ( Export::LangId[ n ] == 77 )))
 
 #define GERMAN_LIST_LINE_INDEX  LANGUAGES
 #define LIST_REFID              (GERMAN_LIST_LINE_INDEX+1)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2002-12-12 17:00:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,13 @@ extern "C" { YYWarning( char * ); }
 #define STATE_UTF8      0x0008
 #define STATE_LANGUAGES 0X0009
 #define STATE_ISOCODE99 0x000A
+#define STATE_FORCE     0x000B
 
 // set of global variables
 BOOL bEnableExport;
 BOOL bMergeMode;
 BOOL bErrorLog;
+BOOL bForce;
 BOOL bUTF8;
 ByteString sPrj;
 ByteString sPrjRoot;
@@ -107,6 +109,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     bEnableExport = FALSE;
     bMergeMode = FALSE;
     bErrorLog = TRUE;
+    bForce = FALSE;
     bUTF8 = TRUE;
     sPrj = "";
     sPrjRoot = "";
@@ -145,6 +148,10 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-NOUTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = FALSE;
+        }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-F" ) {
+            nState = STATE_FORCE;
+            bForce = TRUE;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -478,6 +485,12 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         bLocalize = TRUE;
                     break;
                     case CFG_TEXT_START: {
+                        if ( sCurrentResTyp != sTokenName ) {
+                            WorkOnRessourceEnd();
+                            for ( ULONG i = 0; i < LANGUAGES; i++ )
+                                if ( LANGUAGE_ALLOWED( i ))
+                                    pStackData->sText[ i ] = "";
+                        }
                         sCurrentResTyp = sTokenName;
 
                         ByteString sTemp = sToken.Copy( sToken.Search( "xml:lang=" ));
@@ -639,9 +652,14 @@ void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream && bLocalize ) {
-        if ( pStackData->sText[ GERMAN_INDEX ].Len() &&
+        if (( pStackData->sText[ GERMAN_INDEX ].Len() &&
             ( pStackData->sText[ ENGLISH_US_INDEX ].Len() ||
-                pStackData->sText[ ENGLISH_INDEX ].Len())
+                pStackData->sText[ ENGLISH_INDEX ].Len())) ||
+            ( bForce &&
+                ( pStackData->sText[ GERMAN_INDEX ].Len() ||
+                    pStackData->sText[ ENGLISH_INDEX ].Len() ||
+                    pStackData->sText[ ENGLISH_US_INDEX ].Len())
+                )
             )
         {
             pStackData->FillInFallbacks();
@@ -795,7 +813,7 @@ void CfgMerge::Output( const ByteString& rOutput )
 void CfgMerge::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
-    if ( pMergeDataFile && pResData && bLocalize && bGerman && bEnglish ) {
+    if ( pMergeDataFile && pResData && bLocalize && (( bGerman && bEnglish ) || bForce )) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
             for ( ULONG nIndex = 0; nIndex < LANGUAGES; nIndex++ ) {
