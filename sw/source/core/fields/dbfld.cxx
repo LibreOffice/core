@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -351,7 +348,10 @@ String SwDBField::GetOldContent()
 
 String SwDBField::Expand() const
 {
-    return lcl_DBTrennConv(aContent);
+    String sRet;
+    if(0 ==(GetSubType() & SUB_INVISIBLE))
+        sRet = lcl_DBTrennConv(aContent);
+    return sRet;
 }
 
 //------------------------------------------------------------------------------
@@ -519,6 +519,12 @@ BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
             rAny.setValue(&bTemp, ::getBooleanCppuType());
         }
         break;
+    case FIELD_PROP_BOOL2:
+    {
+        sal_Bool bVal = 0 == (GetSubType() & SUB_INVISIBLE);
+        rAny.setValue(&bVal, ::getBooleanCppuType());
+    }
+    break;
     case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
         break;
@@ -545,6 +551,19 @@ BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
         else
             SetSubType(GetSubType()|SUB_OWN_FMT);
         break;
+    case FIELD_PROP_BOOL2:
+    {
+        USHORT nSubType = GetSubType();
+        sal_Bool bVisible;
+        if(!(rAny >>= bVisible))
+            return FALSE;
+        if(bVisible)
+            nSubType &= ~SUB_INVISIBLE;
+        else
+            nSubType |= SUB_INVISIBLE;
+        SetSubType(nSubType);
+    }
+    break;
     case FIELD_PROP_FORMAT:
         {
             sal_Int32 nTemp;
@@ -567,7 +586,8 @@ BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 
 SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, ULONG nFmt) :
     SwField(pTyp, nFmt),
-    aDBData(rDBData)
+    aDBData(rDBData),
+    nSubType(0)
 {
 }
 
@@ -619,6 +639,12 @@ BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) c
     case FIELD_PROP_SHORT1:
         rAny <<= aDBData.nCommandType;
         break;
+    case FIELD_PROP_BOOL2:
+    {
+        sal_Bool bVal = 0 == (GetSubType() & SUB_INVISIBLE);
+        rAny.setValue(&bVal, ::getBooleanCppuType());
+    }
+    break;
     default:
         DBG_ERROR("illegal property");
     }
@@ -641,10 +667,37 @@ BOOL SwDBNameInfField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId
     case FIELD_PROP_SHORT1:
         rAny >>= aDBData.nCommandType;
         break;
+    case FIELD_PROP_BOOL2:
+    {
+        USHORT nSubType = GetSubType();
+        sal_Bool bVisible;
+        if(!(rAny >>= bVisible))
+            return FALSE;
+        if(bVisible)
+            nSubType &= ~SUB_INVISIBLE;
+        else
+            nSubType |= SUB_INVISIBLE;
+        SetSubType(nSubType);
+    }
+    break;
     default:
         DBG_ERROR("illegal property");
     }
     return TRUE;
+}
+/* -----------------4/10/2003 15:03------------------
+
+ --------------------------------------------------*/
+USHORT SwDBNameInfField::GetSubType() const
+{
+    return nSubType;
+}
+/* -----------------4/10/2003 15:03------------------
+
+ --------------------------------------------------*/
+void SwDBNameInfField::SetSubType(USHORT nType)
+{
+    nSubType = nType;
 }
 
 /*--------------------------------------------------------------------
@@ -663,7 +716,6 @@ SwFieldType* SwDBNextSetFieldType::Copy() const
     SwDBNextSetFieldType* pTmp = new SwDBNextSetFieldType();
     return pTmp;
 }
-
 /*--------------------------------------------------------------------
     Beschreibung: SwDBSetField
  --------------------------------------------------------------------*/
@@ -688,6 +740,7 @@ SwField* SwDBNextSetField::Copy() const
 {
     SwDBNextSetField *pTmp = new SwDBNextSetField((SwDBNextSetFieldType*)GetTyp(),
                                          aCond, aEmptyStr, GetDBData());
+    pTmp->SetSubType(GetSubType());
     pTmp->bCondValid = bCondValid;
     return pTmp;
 }
@@ -811,6 +864,7 @@ SwField* SwDBNumSetField::Copy() const
     SwDBNumSetField *pTmp = new SwDBNumSetField((SwDBNumSetFieldType*)GetTyp(),
                                          aCond, aPar2, GetDBData());
     pTmp->bCondValid = bCondValid;
+    pTmp->SetSubType(GetSubType());
     return pTmp;
 }
 
@@ -940,7 +994,10 @@ SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, U
 
 String SwDBNameField::Expand() const
 {
-    return((SwDBNameFieldType*)GetTyp())->Expand(GetFormat());
+    String sRet;
+    if(0 ==(GetSubType() & SUB_INVISIBLE))
+        sRet = ((SwDBNameFieldType*)GetTyp())->Expand(GetFormat());
+    return sRet;
 }
 
 //------------------------------------------------------------------------------
@@ -950,6 +1007,7 @@ SwField* SwDBNameField::Copy() const
     SwDBNameField *pTmp = new SwDBNameField((SwDBNameFieldType*)GetTyp(), GetDBData());
     pTmp->ChangeFormat(GetFormat());
     pTmp->SetLanguage(GetLanguage());
+    pTmp->SetSubType(GetSubType());
     return pTmp;
 }
 
@@ -1000,7 +1058,7 @@ SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
 
 String SwDBSetNumberField::Expand() const
 {
-    if (nNumber == 0)
+    if(0 !=(GetSubType() & SUB_INVISIBLE) || nNumber == 0)
         return aEmptyStr;
     else
         return FormatNumber((USHORT)nNumber, GetFormat());
@@ -1034,6 +1092,7 @@ SwField* SwDBSetNumberField::Copy() const
         new SwDBSetNumberField((SwDBSetNumberFieldType*)GetTyp(), GetDBData(), GetFormat());
     pTmp->SetLanguage(GetLanguage());
     pTmp->SetSetNumber(nNumber);
+    pTmp->SetSubType(GetSubType());
     return pTmp;
 }
 /*-----------------06.03.98 16:15-------------------
