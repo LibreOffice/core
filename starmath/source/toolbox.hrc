@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:47:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,6 @@
 
 #ifndef _TOOLBOX_HRC_
 #define _TOOLBOX_HRC_
-
-
-// defines for ImageList's
-//! order and numbering is important
-#define IL_UNOP         1
-#define ILH_UNOP        2
-#define IL_BIOP         3
-#define ILH_BIOP        4
-#define IL_OPER         5
-#define ILH_OPER        6
-#define IL_FUNC         7
-#define ILH_FUNC        8
-#define IL_FORM         9
-#define ILH_FORM       10
-#define IL_ATTR        11
-#define ILH_ATTR       12
-#define IL_ALGN        13
-#define ILH_ALGN       14
-#define IL_COLR        15
-#define ILH_COLR       16
-#define IL_MISC        17
-#define ILH_MISC       18
-#define IL_IMG         19
-#define ILH_IMG        20
 
 #define FL_TOOLBOX_CAT_DELIM    21
 
