@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoRegister.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:26:26 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
