@@ -2,9 +2,9 @@
  *
  *  $RCSfile: omark.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
+ *  last change: $Author: jbu $ $Date: 2002-07-09 15:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <cppuhelper/implbase5.hxx>
 
 #include <osl/mutex.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <assert.h>
 #include <string.h>
@@ -295,7 +296,11 @@ void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
-        throw IllegalArgumentException( );
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( "MarkableOutputStream::deleteMark unknown mark (" );
+        buf.append( Mark );
+        buf.appendAscii( ")");
+        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 0);
     }
     else {
         m_mapMarks.erase( ii );
@@ -312,7 +317,11 @@ void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() ) {
-        throw IllegalArgumentException(  );
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( "MarkableOutputStream::jumpToMark unknown mark (" );
+        buf.append( nMark );
+        buf.appendAscii( ")");
+        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 0);
     }
     else {
         m_nCurrentPos = (*ii).second;
@@ -339,7 +348,11 @@ sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
 
     if( ii == m_mapMarks.end() )
     {
-        throw IllegalArgumentException( );
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( "MarkableOutputStream::offsetToMark unknown mark (" );
+        buf.append( nMark );
+        buf.appendAscii( ")");
+        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 0);
     }
     return m_nCurrentPos - (*ii).second;
 }
@@ -542,7 +555,7 @@ public: // XMarkable
     virtual sal_Int32 SAL_CALL createMark(void)
         throw (IOException, RuntimeException);
     virtual void SAL_CALL deleteMark(sal_Int32 Mark)
-        throw (IOException, RuntimeException);
+        throw (IOException, IllegalArgumentException, RuntimeException);
     virtual void SAL_CALL jumpToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException, RuntimeException);
     virtual void SAL_CALL jumpToFurthest(void)
@@ -658,8 +671,9 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
         }
     }
     else {
-        throw IOException( OUString( RTL_CONSTASCII_USTRINGPARAM("not chained")) ,
-                           Reference < XInterface > () );
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("MarkableInputStream::readBytes NotConnectedException")) ,
+            *this );
     }
     return nBytesRead;
 }
@@ -719,7 +733,9 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
     }
     else
     {
-        throw NotConnectedException();
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("MarkableInputStream::readSomeBytes NotConnectedException")) ,
+            *this );
     }
     return nBytesRead;
 
@@ -748,8 +764,9 @@ sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, Ru
     }
     else
     {
-        throw IOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Not chained" ) ) ,
-                           Reference< XInterface > ());
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "MarkableInputStream::available NotConnectedException" ) ) ,
+            *this );
     }
 
     return nAvail;
@@ -773,9 +790,9 @@ void OMarkableInputStream::closeInput(void) throw (NotConnectedException, Runtim
         m_nCurrentMark = 0;
     }
     else {
-        throw IOException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Not chained" ) ),
-            Reference< XInterface > () );
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "MarkableInputStream::closeInput NotConnectedException" ) ) ,
+            *this );
     }
 }
 
@@ -792,14 +809,17 @@ sal_Int32 OMarkableInputStream::createMark(void)            throw (IOException, 
     return nMark;
 }
 
-void OMarkableInputStream::deleteMark(sal_Int32 Mark)       throw (IOException, RuntimeException)
+void OMarkableInputStream::deleteMark(sal_Int32 Mark)       throw (IOException, IllegalArgumentException, RuntimeException)
 {
     MutexGuard guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
-        throw IOException( OUString( RTL_CONSTASCII_USTRINGPARAM("Mark does not exist") ),
-                           Reference < XInterface > () );
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( "MarkableInputStream::deleteMark unknown mark (" );
+        buf.append( Mark );
+        buf.appendAscii( ")");
+        throw IllegalArgumentException( buf.makeStringAndClear(), *this , 0 );
     }
     else {
         m_mapMarks.erase( ii );
@@ -817,7 +837,11 @@ void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
 
     if( ii == m_mapMarks.end() )
     {
-        throw IllegalArgumentException(  );
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( "MarkableInputStream::jumpToMark unknown mark (" );
+        buf.append( nMark );
+        buf.appendAscii( ")");
+        throw IllegalArgumentException( buf.makeStringAndClear(), *this , 0 );
     }
     else
     {
@@ -842,7 +866,11 @@ sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
 
     if( ii == m_mapMarks.end() )
     {
-        throw IllegalArgumentException( );
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( "MarkableInputStream::offsetToMark unknown mark (" );
+        buf.append( nMark );
+        buf.appendAscii( ")");
+        throw IllegalArgumentException( buf.makeStringAndClear(), *this , 0 );
     }
     return m_nCurrentPos - (*ii).second;
 }

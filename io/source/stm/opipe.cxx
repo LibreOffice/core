@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opipe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
+ *  last change: $Author: jbu $ $Date: 2002-07-09 15:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,9 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
             MutexGuard guard( m_mutexAccess );
             if( m_bInputStreamClosed )
             {
-                throw NotConnectedException();
+                throw NotConnectedException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::readBytes NotConnectedException" )),
+                    *this );
             }
             sal_Int32 nOccupiedBufferLen = m_pFIFO->getSize();
 
@@ -247,7 +249,9 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
             MutexGuard guard( m_mutexAccess );
             if( m_bInputStreamClosed )
             {
-                throw NotConnectedException();
+                throw NotConnectedException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::readSomeBytes NotConnectedException" )),
+                    *this );
             }
             if( m_pFIFO->getSize() )
             {
@@ -280,7 +284,9 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
     MutexGuard guard( m_mutexAccess );
     if( nBytesToSkip + m_nBytesToSkip > MAX_BUFFER_SIZE || 0 > nBytesToSkip + m_nBytesToSkip )
     {
-        throw BufferSizeExceededException();
+        throw BufferSizeExceededException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::skipBytes BufferSizeExceededException" )),
+            *this );
     }
     m_nBytesToSkip += nBytesToSkip;
 
@@ -328,12 +334,16 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
 
     if( m_bOutputStreamClosed )
     {
-        throw NotConnectedException();
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes NotConnectedException (outputstream)" )),
+            *this );
     }
 
     if( m_bInputStreamClosed )
     {
-        throw NotConnectedException();
+        throw NotConnectedException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes NotConnectedException (inputstream)" )),
+            *this );
     }
 
     // check skipping
@@ -362,11 +372,15 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     }
     catch ( IFIFO_OutOfBoundsException & )
     {
-        throw BufferSizeExceededException();
+        throw BufferSizeExceededException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
+            *this );
     }
     catch ( IFIFO_OutOfMemoryException & )
     {
-        throw BufferSizeExceededException();
+        throw BufferSizeExceededException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
+            *this );
     }
 
     // readBytes may check again if enough bytes are available
