@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-09 14:57:30 $
+ *  last change: $Author: jp $ $Date: 2000-11-09 19:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     int bNewParent = FALSE;
     SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
-    SvxFontHeightItem *pNewFSize = 0, *pNewCJKFSize = 0, *pNewCTLFSize = 0;
+    SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
+
     SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
 
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
@@ -135,12 +136,12 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             RES_LR_SPACE, FALSE, (const SfxPoolItem**)&pNewLRSpace );
         pNewChgSet->GetChgSet()->GetItemState(
             RES_UL_SPACE, FALSE, (const SfxPoolItem**)&pNewULSpace );
-        pNewChgSet->GetChgSet()->GetItemState(
-            RES_CHRATR_FONTSIZE, FALSE, (const SfxPoolItem**)&pNewFSize );
-        pNewChgSet->GetChgSet()->GetItemState(
-            RES_CHRATR_CJK_FONTSIZE, FALSE, (const SfxPoolItem**)&pNewCJKFSize );
-        pNewChgSet->GetChgSet()->GetItemState(
-            RES_CHRATR_CTL_FONTSIZE, FALSE, (const SfxPoolItem**)&pNewCTLFSize );
+        pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_FONTSIZE,
+                        FALSE, (const SfxPoolItem**)&(aFontSizeArr[0]) );
+        pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CJK_FONTSIZE,
+                        FALSE, (const SfxPoolItem**)&(aFontSizeArr[1]) );
+        pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
+                        FALSE, (const SfxPoolItem**)&(aFontSizeArr[2]) );
         break;
 
     case RES_FMT_CHG:
@@ -149,9 +150,9 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             const SfxItemSet* pParent = GetAttrSet().GetParent();
             pNewLRSpace = (SvxLRSpaceItem*)&pParent->Get( RES_LR_SPACE );
             pNewULSpace = (SvxULSpaceItem*)&pParent->Get( RES_UL_SPACE );
-            pNewFSize = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_FONTSIZE );
-            pNewCJKFSize = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CJK_FONTSIZE );
-            pNewCTLFSize = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CTL_FONTSIZE );
+            aFontSizeArr[0] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_FONTSIZE );
+            aFontSizeArr[1] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CJK_FONTSIZE );
+            aFontSizeArr[2] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CTL_FONTSIZE );
         }
         break;
 
@@ -162,13 +163,13 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         pNewULSpace = (SvxULSpaceItem*)pNew;
         break;
     case RES_CHRATR_FONTSIZE:
-        pNewFSize = (SvxFontHeightItem*)pNew;
+        aFontSizeArr[0] = (SvxFontHeightItem*)pNew;
         break;
     case RES_CHRATR_CJK_FONTSIZE:
-        pNewCJKFSize = (SvxFontHeightItem*)pNew;
+        aFontSizeArr[1] = (SvxFontHeightItem*)pNew;
         break;
     case RES_CHRATR_CTL_FONTSIZE:
-        pNewCTLFSize = (SvxFontHeightItem*)pNew;
+        aFontSizeArr[2] = (SvxFontHeightItem*)pNew;
         break;
     }
 
@@ -259,16 +260,11 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
 
-    static SvxFontHeightItem** aFontSizeArr[]  = {
-        &pNewFSize,
-        &pNewCJKFSize,
-        &pNewCTLFSize,
-        0
-    };
 
-    for( int nC = 0; aFontSizeArr[ nC ]; ++nC )
+    for( int nC = 0, nArrLen = sizeof(aFontSizeArr) / sizeof( aFontSizeArr[0]);
+            nC < nArrLen; ++nC )
     {
-        SvxFontHeightItem *pFSize = *aFontSizeArr[ nC ], *pOldFSize;
+        SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SFX_ITEM_SET == GetItemState(
             pFSize->Which(), FALSE, (const SfxPoolItem**)&pOldFSize ) &&
             // verhinder Rekursion (SetAttr!!)
