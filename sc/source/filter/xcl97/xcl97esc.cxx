@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-20 11:10:56 $
+ *  last change: $Author: dr $ $Date: 2001-01-24 10:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,10 @@
 #include "document.hxx"
 #include "xcl97esc.hxx"
 #include "xcl97rec.hxx"
-#include "xcl97rch.hxx"
+
+#ifndef _XCLEXPCHARTS_HXX
+#include "XclExpCharts.hxx"
+#endif
 
 
 // --- class XclEscherEx ---------------------------------------------
