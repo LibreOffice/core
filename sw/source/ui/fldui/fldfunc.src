@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:56:01 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,29 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Eintrag" ;
         Text [ english_us ] = "Ite~m" ;
+        Text[ portuguese ] = "Ite~m";
+        Text[ russian ] = "Ite~m";
+        Text[ greek ] = "Ite~m";
+        Text[ dutch ] = "Ite~m";
+        Text[ french ] = "�l�ment";
+        Text[ spanish ] = "~Elemento";
+        Text[ finnish ] = "Ite~m";
+        Text[ italian ] = "Elemento";
+        Text[ czech ] = "Ite~m";
+        Text[ slovak ] = "Ite~m";
+        Text[ danish ] = "Ite~m";
+        Text[ swedish ] = "~Post";
+        Text[ polish ] = "Ite~m";
+        Text[ portuguese_brazilian ] = "Ite~m";
+        Text[ japanese ] = "項目(~M)";
+        Text[ korean ] = "항목(~M)";
+        Text[ chinese_simplified ] = "条目(~M)";
+        Text[ chinese_traditional ] = "項目(~M)";
+        Text[ turkish ] = "Ite~m";
+        Text[ arabic ] = "Ite~m";
+        Text[ hebrew ] = "Ite~m";
+        Text[ catalan ] = "Ite~m";
+        Text[ thai ] = "Ite~m";
     };
     Edit ED_LISTITEM
     {
@@ -434,6 +457,29 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Hi~nzuf�gen" ;
         Text [ english_us ] = "~Add" ;
+        Text[ portuguese ] = "~Add";
+        Text[ russian ] = "~Add";
+        Text[ greek ] = "~Add";
+        Text[ dutch ] = "~Add";
+        Text[ french ] = "Ajouter";
+        Text[ spanish ] = "~A�adir";
+        Text[ finnish ] = "~Add";
+        Text[ italian ] = "Aggiungi";
+        Text[ czech ] = "~Add";
+        Text[ slovak ] = "~Add";
+        Text[ danish ] = "~Add";
+        Text[ swedish ] = "L�gg ~till";
+        Text[ polish ] = "~Add";
+        Text[ portuguese_brazilian ] = "~Add";
+        Text[ japanese ] = "追加(~A)";
+        Text[ korean ] = "추가(~A)";
+        Text[ chinese_simplified ] = "增加(~A)";
+        Text[ chinese_traditional ] = "增加(~A)";
+        Text[ turkish ] = "~Add";
+        Text[ arabic ] = "~Add";
+        Text[ hebrew ] = "~Add";
+        Text[ catalan ] = "~Add";
+        Text[ thai ] = "~Add";
     };
     FixedText FT_LISTITEMS
     {
@@ -442,6 +488,29 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Listeneintr�ge" ;
         Text [ english_us ] = "Items on ~list" ;
+        Text[ portuguese ] = "Items on ~list";
+        Text[ russian ] = "Items on ~list";
+        Text[ greek ] = "Items on ~list";
+        Text[ dutch ] = "Items on ~list";
+        Text[ french ] = "�l�ments de la liste";
+        Text[ spanish ] = "Elementos de la ~lista";
+        Text[ finnish ] = "Items on ~list";
+        Text[ italian ] = "Elemento nell'elenco";
+        Text[ czech ] = "Items on ~list";
+        Text[ slovak ] = "Items on ~list";
+        Text[ danish ] = "Items on ~list";
+        Text[ swedish ] = "Poster i ~lista";
+        Text[ polish ] = "Items on ~list";
+        Text[ portuguese_brazilian ] = "Items on ~list";
+        Text[ japanese ] = "リストの項目(~L)";
+        Text[ korean ] = "목록에 있는 항목(~L)";
+        Text[ chinese_simplified ] = "列单上的条目(~L)";
+        Text[ chinese_traditional ] = "清單上的項目(~L)";
+        Text[ turkish ] = "Items on ~list";
+        Text[ arabic ] = "Items on ~list";
+        Text[ hebrew ] = "Items on ~list";
+        Text[ catalan ] = "Items on ~list";
+        Text[ thai ] = "Items on ~list";
     };
     ListBox LB_LISTITEMS
     {
@@ -459,6 +528,29 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Entfernen" ;
         Text [ english_us ] = "~Remove" ;
+        Text[ portuguese ] = "~Remove";
+        Text[ russian ] = "~Remove";
+        Text[ greek ] = "~Remove";
+        Text[ dutch ] = "~Remove";
+        Text[ french ] = "Supprimer";
+        Text[ spanish ] = "~Borrar";
+        Text[ finnish ] = "~Remove";
+        Text[ italian ] = "~Elimina";
+        Text[ czech ] = "~Remove";
+        Text[ slovak ] = "~Remove";
+        Text[ danish ] = "~Remove";
+        Text[ swedish ] = "Ta ~bort";
+        Text[ polish ] = "~Remove";
+        Text[ portuguese_brazilian ] = "~Remove";
+        Text[ japanese ] = "削除(~R)";
+        Text[ korean ] = "제거(~R)";
+        Text[ chinese_simplified ] = "删除(~R)";
+        Text[ chinese_traditional ] = "刪除(~R)";
+        Text[ turkish ] = "~Remove";
+        Text[ arabic ] = "~Remove";
+        Text[ hebrew ] = "~Remove";
+        Text[ catalan ] = "~Remove";
+        Text[ thai ] = "~Remove";
     };
     PushButton PB_LISTUP
     {
@@ -467,6 +559,29 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Nach ~oben" ;
         Text [ english_us ] = "Move ~Up" ;
+        Text[ portuguese ] = "Move ~Up";
+        Text[ russian ] = "Move ~Up";
+        Text[ greek ] = "Move ~Up";
+        Text[ dutch ] = "Move ~Up";
+        Text[ french ] = "Vers le haut";
+        Text[ spanish ] = "Desplazar hacia ~arriba";
+        Text[ finnish ] = "Move ~Up";
+        Text[ italian ] = "In alto";
+        Text[ czech ] = "Move ~Up";
+        Text[ slovak ] = "Move ~Up";
+        Text[ danish ] = "Move ~Up";
+        Text[ swedish ] = "Flytta ~upp�t";
+        Text[ polish ] = "Move ~Up";
+        Text[ portuguese_brazilian ] = "Move ~Up";
+        Text[ japanese ] = "上へ(~U)";
+        Text[ korean ] = "위로(~U)";
+        Text[ chinese_simplified ] = "向上(~U)";
+        Text[ chinese_traditional ] = "向上(~U)";
+        Text[ turkish ] = "Move ~Up";
+        Text[ arabic ] = "Move ~Up";
+        Text[ hebrew ] = "Move ~Up";
+        Text[ catalan ] = "Move ~Up";
+        Text[ thai ] = "Move ~Up";
     };
     PushButton PB_LISTDOWN
     {
@@ -475,6 +590,29 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Nach ~unten" ;
         Text [ english_us ] = "Move Do~wn" ;
+        Text[ portuguese ] = "Move Do~wn";
+        Text[ russian ] = "Move Do~wn";
+        Text[ greek ] = "Move Do~wn";
+        Text[ dutch ] = "Move Do~wn";
+        Text[ french ] = "Vers le bas";
+        Text[ spanish ] = "Desplazar hacia ~abajo";
+        Text[ finnish ] = "Move Do~wn";
+        Text[ italian ] = "In basso";
+        Text[ czech ] = "Move Do~wn";
+        Text[ slovak ] = "Move Do~wn";
+        Text[ danish ] = "Move Do~wn";
+        Text[ swedish ] = "Fl~ytta ned�t";
+        Text[ polish ] = "Move Do~wn";
+        Text[ portuguese_brazilian ] = "Move Do~wn";
+        Text[ japanese ] = "下へ(~W)";
+        Text[ korean ] = "아래로(~W)";
+        Text[ chinese_simplified ] = "向下(~W)";
+        Text[ chinese_traditional ] = "向下(~W)";
+        Text[ turkish ] = "Move Do~wn";
+        Text[ arabic ] = "Move Do~wn";
+        Text[ hebrew ] = "Move Do~wn";
+        Text[ catalan ] = "Move Do~wn";
+        Text[ thai ] = "Move Do~wn";
     };
     FixedText FT_LISTNAME
     {
@@ -483,6 +621,29 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Name" ;
         Text [ english_us ] = "Na~me" ;
+        Text[ portuguese ] = "Na~me";
+        Text[ russian ] = "Na~me";
+        Text[ greek ] = "Na~me";
+        Text[ dutch ] = "Na~me";
+        Text[ french ] = "Nom";
+        Text[ spanish ] = "~Nombre";
+        Text[ finnish ] = "Na~me";
+        Text[ italian ] = "Nome";
+        Text[ czech ] = "Na~me";
+        Text[ slovak ] = "Na~me";
+        Text[ danish ] = "Na~me";
+        Text[ swedish ] = "Namn";
+        Text[ polish ] = "Na~me";
+        Text[ portuguese_brazilian ] = "Na~me";
+        Text[ japanese ] = "名前(~M)";
+        Text[ korean ] = "이름(~M)";
+        Text[ chinese_simplified ] = "名称(~M)";
+        Text[ chinese_traditional ] = "名稱(~M)";
+        Text[ turkish ] = "Na~me";
+        Text[ arabic ] = "Na~me";
+        Text[ hebrew ] = "Na~me";
+        Text[ catalan ] = "Na~me";
+        Text[ thai ] = "Na~me";
     };
     Edit ED_LISTNAME
     {
@@ -520,6 +681,7 @@ TabPage TP_FLD_FUNC
     Text[ hindi ] = "फंक्शन्स";
     Text[ slovak ] = "Funkcie";
 };
+
 
 
 
