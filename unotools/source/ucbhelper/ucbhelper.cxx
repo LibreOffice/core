@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-11 15:01:22 $
+ *  last change: $Author: vg $ $Date: 2001-12-13 18:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
+
+#include "unotools/localfilehelper.hxx"
 
 using namespace ::ucb;
 using namespace com::sun::star::beans;
@@ -364,10 +366,11 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
     {
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(2);
+        Sequence< OUString > aProps( bSorted ? 2 : 1 );
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
-        pProps[1] = OUString::createFromAscii( "IsFolder" );
+        if ( bSorted )
+            pProps[1] = OUString::createFromAscii( "IsFolder" );
 
         try
         {
@@ -780,6 +783,32 @@ sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, Str
 // -----------------------------------------------------------------------
 sal_Bool UCBContentHelper::Exists( const String& rURL )
 {
+
+    String sObjectPhysicalName;
+    sal_Bool bIsLocalFile = ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, sObjectPhysicalName );
+    // try to create a directory entry for the URL given
+    if ( bIsLocalFile )
+    {
+        ::rtl::OUString sIn( sObjectPhysicalName ), sOut;
+        if ( osl_File_E_None == osl_getFileURLFromSystemPath( sIn.pData, &sOut.pData ) )
+        {
+            ::osl::FileBase::RC eResult = FileBase::E_None;
+
+            DirectoryItem aItem;
+            if ( FileBase::E_None == DirectoryItem::get( sOut, aItem ) )
+            {
+                FileStatus aStatus( FileStatusMask_FileName );
+                eResult = aItem.getFileStatus( aStatus );
+                if ( FileBase::E_NOENT == eResult )
+                {   // there is no such entry
+                    return sal_False;
+                }
+                return sal_True;
+            }
+        }
+        return sal_False;
+    }
+
     // divide URL into folder and name part
     sal_Bool bRet = sal_False;
     INetURLObject aObj( rURL );
@@ -789,7 +818,7 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
     aObj.removeFinalSlash();
 
     // get a list of URLs for all children of rFolder
-    Sequence< ::rtl::OUString > aFiles = GetFolderContents( aObj.GetMainURL( INetURLObject::NO_DECODE ), sal_True );
+    Sequence< ::rtl::OUString > aFiles = GetFolderContents( aObj.GetMainURL( INetURLObject::NO_DECODE ), sal_True, sal_False );
 
     const ::rtl::OUString* pFiles  = aFiles.getConstArray();
     UINT32 i, nCount = aFiles.getLength();
