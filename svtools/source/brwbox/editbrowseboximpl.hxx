@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowseboximpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:47:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,16 @@
 
 namespace svt
 {
-    class EditBrowseBoxTableCell;
+    class EditBrowseBoxTableCellAccess;
     // impl class for the class EditBrowseBox
     class EditBrowseBoxImpl
     {
     public:
-        EditBrowseBoxTableCell*                                                                  m_pFocusCell;
+        EditBrowseBoxTableCellAccess*                                                               m_pActiveCell;
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xActiveCell;
         sal_Bool m_bHiContrast;
-        void disposeCell();
+
+        void clearActiveCell();
     };
 }
 #endif // SVTOOLS_EDITBROWSEBOX_IMPL_HXX
