@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.64 $
+*  $Revision: 1.65 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-07 10:23:26 $
+*  last change: $Author: kz $ $Date: 2005-01-13 19:11:54 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1175,6 +1175,13 @@ File gid_File_Oo_Office_Common_Xcu
     Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Common.xcu";
+End
+
+File gid_File_Oo_Office_Views_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Views.xcu";
 End
 
 File gid_File_Oo_Office_Compatibility_Xcs
