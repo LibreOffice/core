@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:24:13 $
+ *  last change: $Author: os $ $Date: 2002-06-10 12:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
 {
     String sRet;
 
-    FileDialogHelper aDlgHelper( bOpen ? FILEOPEN_SIMPLE : FILESAVE_SIMPLE, 0 );
+    FileDialogHelper aDlgHelper( bOpen ? FILEOPEN_SIMPLE : FILESAVE_AUTOEXTENSION, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
