@@ -1,4 +1,4 @@
-t2  testshl2   :  sal NULL
+t2  testshl2   :  sal tools NULL
 t2  testshl2						usr1    -   all t2_mkout NULL
 t2  testshl2\source\cppunit            nmake   -   all t2_tss NULL
 t2  testshl2\source\result             nmake   -   all t2_tsr t2_tss NULL
