@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2002-07-01 13:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,21 +196,34 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             aGeo.nDrehWink=18000;
             aGeo.RecalcSinCos();
         }
-    } else {
-        Polygon aPol(Rect2Poly(aRect,aGeo));
-        for (USHORT i=0; i<aPol.GetSize(); i++) {
-             ResizePoint(aPol[i],rRef,xFact,yFact);
+    }
+    else
+    {
+        // #100663# aRect is NOT initialized for lines (polgon objects with two
+        // exceptionally handled points). Thus, after this call the text rotaion is
+        // gone. This error must be present since day one of this old drawing layer.
+        // It's astonishing that noone discovered it earlier.
+        // Polygon aPol(Rect2Poly(aRect,aGeo));
+        Polygon aPol(Rect2Poly(GetSnapRect(), aGeo));
+
+        for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
+        {
+             ResizePoint(aPol[a], rRef, xFact, yFact);
         }
-        if (bXMirr!=bYMirr) {
+
+        if(bXMirr != bYMirr)
+        {
             // Polygon wenden und etwas schieben
             Polygon aPol0(aPol);
-            aPol[0]=aPol0[1];
-            aPol[1]=aPol0[0];
-            aPol[2]=aPol0[3];
-            aPol[3]=aPol0[2];
-            aPol[4]=aPol0[1];
+
+            aPol[0] = aPol0[1];
+            aPol[1] = aPol0[0];
+            aPol[2] = aPol0[3];
+            aPol[3] = aPol0[2];
+            aPol[4] = aPol0[1];
         }
-        Poly2Rect(aPol,aRect,aGeo);
+
+        Poly2Rect(aPol, aRect, aGeo);
     }
 
     if (bRota90Merk) {
