@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2002-07-25 09:40:49 $
+ *  last change: $Author: ka $ $Date: 2002-08-14 10:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -74,7 +77,9 @@
 #include "viewshel.hxx"
 #include "drviewsh.hxx"
 #include "sdview.hxx"
+#include "frmview.hxx"
 #include "outlnvsh.hxx"
+#include "drawdoc.hxx"
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
 #endif
@@ -812,41 +817,33 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             // haben kann.
             if( pViewShell )
             {
-                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-                USHORT nOutputSlot, nPreviewSlot;
-
+                const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
                 SvtAccessibilityOptions aAccOptions;
+                ULONG                   nOutputMode;
+                USHORT                  nPreviewSlot;
 
-                if( pViewShell->GetViewFrame() && pViewShell->GetViewFrame()->GetDispatcher() )
+                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+                    nOutputMode = OUTPUT_DRAWMODE_CONTRAST;
+                else
+                    nOutputMode = OUTPUT_DRAWMODE_COLOR;
+
+                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+                    nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+                else
+                    nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+
+                if( pViewShell->ISA( SdDrawViewShell ) )
                 {
-                    if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
-                    {
-                        nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
-                    }
-                    else
-                    {
-                        nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
-                    }
-
-                    if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
-                    {
-                        nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
-                    }
-                    else
-                    {
-                        nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
-                    }
-
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
+                    SetDrawMode( nOutputMode );
+                    pViewShell->GetFrameView()->SetDrawMode( nOutputMode );
+                    pViewShell->GetView()->ReleaseMasterPagePaintCache();
+                    Invalidate();
                 }
 
+                SfxRequest aReq( nPreviewSlot, 0, pViewShell->GetDocSh()->GetDoc()->GetItemPool() );
+                pViewShell->ExecReq( aReq );
                 pViewShell->Invalidate();
-
-                // Rearrange the UI elements of the view to reflect changes
-                // in the style settings.
-                pViewShell->ArrangeGUIElements ();
+                pViewShell->ArrangeGUIElements();
             }
         }
 
