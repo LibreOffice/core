@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 12:53:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@ class SwFlyCntPortion;
 class SwInterHyphInfo;
 class SwDropPortion;
 class SwFmtDrop;
-class SwDrawObjs;
 class SwTxtAttr;
 class SwNumberPortion;
 class SwErgoSumPortion;
