@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
+ *  last change: $Author: cmc $ $Date: 2001-02-01 16:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,9 @@
 #include <fmtline.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#endif
 
 class WW8_WrFkp
 {
@@ -2250,11 +2253,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.6 2001-01-30 20:11:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.7 2001-02-01 16:11:30 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/01/30 20:11:06  cmc
+      #83362# CJK Forbidden Character {Im|Ex}port
+
       Revision 1.5  2001/01/23 10:14:33  os
       update of filter configuration
 

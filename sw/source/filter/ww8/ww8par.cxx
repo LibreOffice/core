@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
+ *  last change: $Author: cmc $ $Date: 2001-02-01 16:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,9 @@
 #include <swerror.h>            // ERR_WW8_...
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#endif
 using namespace ::com::sun::star;
 
 
@@ -3035,11 +3038,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.9 2001-01-30 20:11:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.10 2001-02-01 16:11:30 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/01/30 20:11:06  cmc
+      #83362# CJK Forbidden Character {Im|Ex}port
+
       Revision 1.8  2001/01/26 15:43:22  jp
       Bug #77951#: MakePageDesc - create I18N names
 
