@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
 {
     if( pCertContext != NULL )
     {
-        DWORD cbData;
+        DWORD cbData = 20;
         unsigned char fingerprint[20];
         if (CertGetCertificateContextProperty(pCertContext, dwPropId, (void*)fingerprint, &cbData))
         {
@@ -425,6 +425,11 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
             }
 
             return thumbprint;
+        }
+        else
+        {
+            DWORD e = GetLastError();
+            cbData = e;
         }
     }
 
