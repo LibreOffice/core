@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:35:32 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
 #include <com/sun/star/form/ListSourceType.hpp>
@@ -266,6 +269,10 @@ namespace xmloff
             OAttributeMetaData::getFormAttributeName(faEscapeProcessing), PROPERTY_ESCAPEPROCESSING, sal_True);
         m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getFormAttributeName(faIgnoreResult), PROPERTY_IGNORERESULT, sal_False);
+        m_aAttributeMetaData.addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName( SCA_TOGGLE ), PROPERTY_TOGGLE, sal_False );
+        m_aAttributeMetaData.addBooleanProperty(
+            OAttributeMetaData::getSpecialAttributeName( SCA_FOCUS_ON_CLICK ), PROPERTY_FOCUS_ON_CLICK, sal_True );
 
         // the int16 attributes
         m_aAttributeMetaData.addInt16Property(
@@ -284,6 +291,10 @@ namespace xmloff
             OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY ), PROPERTY_REPEAT_DELAY, 50 );
 
         // the enum attributes
+        m_aAttributeMetaData.addEnumProperty(
+            OAttributeMetaData::getCommonControlAttributeName( CCA_VISUAL_EFFECT ), PROPERTY_VISUAL_EFFECT,
+            VisualEffect::LOOK3D, OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
+            &::getCppuType( static_cast< sal_Int16* >( NULL ) ) );
         m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getCommonControlAttributeName( CCA_ORIENTATION ), PROPERTY_ORIENTATION,
             ScrollBarOrientation::HORIZONTAL, OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
