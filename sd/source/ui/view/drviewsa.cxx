@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:37:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,21 +153,6 @@
 #endif
 #ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
-#endif
-#ifndef SD_BEZIER_OBJECT_BAR_HXX
-#include "BezierObjectBar.hxx"
-#endif
-#ifndef SD_GLUE_POINTS_OBJECT_BAR_HXX
-#include "GluePointsObjectBar.hxx"
-#endif
-#ifndef SD_TEXT_OBJECT_BAR_HXX
-#include "TextObjectBar.hxx"
-#endif
-#ifndef SD_IMPRESS_OBJECT_BAR_HXX
-#include "ImpressObjectBar.hxx"
-#endif
-#ifndef SD_DRAW_OBJECT_BAR_HXX
-#include "DrawObjectBar.hxx"
 #endif
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
