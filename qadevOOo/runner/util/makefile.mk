@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2003-10-06 12:42:51 $
+#   last change: $Date: 2003-11-18 16:18:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,9 @@ JAVAFILES =	AccessibilityTools.java	\
             SysUtils.java           \
             TableDsc.java			\
             TextSectionDsc.java		\
+            XLayerImpl.java 		\
+            XLayerHandlerImpl.java 	\
+            XSchemaHandlerImpl.java \
             UITools.java            \
             utils.java              \
             ValueChanger.java		\
