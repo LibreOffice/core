@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-13 14:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@
 #define WID_CREATE_FROM_GRAPHIC_OBJECTS         1028
 #define WID_CREATE_FROM_EMBEDDED_OBJECTS        1029
 #define WID_CREATE_FROM_STAR_MATH               1030
-#define WID_CREATE_FROM_STAR_IMAGE              1031
+
 #define WID_CREATE_FROM_STAR_CHART              1032
 #define WID_CREATE_FROM_STAR_CALC               1033
 #define WID_CREATE_FROM_STAR_DRAW               1034

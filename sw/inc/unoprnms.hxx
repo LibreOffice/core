@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-13 14:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,6 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_TEXT_FRAMES          
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_GRAPHIC_OBJECTS        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_EMBEDDED_OBJECTS       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_STAR_MATH              ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_STAR_IMAGE             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_STAR_CHART             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_STAR_CALC              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_STAR_DRAW              ;
@@ -531,6 +530,17 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_COLLAPSED;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_START;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEQUENCE_NUMBER;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REFERENCE_ID;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_LEFT_BORDER_DISTANCE          ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE         ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_TOP_BORDER_DISTANCE           ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE            ;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE          ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE         ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TOP_BORDER_DISTANCE           ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE            ;
+
 #endif
 
 
