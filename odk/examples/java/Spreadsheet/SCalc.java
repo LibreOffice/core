@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SCalc.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:33:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -39,7 +39,7 @@
  *************************************************************************/
 
 //***************************************************************************
-// comment: Step 1: connect to the office an get the MSF
+// comment: Step 1: get the remote component context from the office
 //          Step 2: open an empty calc document
 //          Step 3: create cell styles
 //          Step 4: get the sheet an insert some data
@@ -47,92 +47,80 @@
 //          Step 6: insert a 3D Chart
 //***************************************************************************
 
-// base interface
-import com.sun.star.uno.XInterface;
+import com.sun.star.awt.Rectangle;
 
-// access the implementations via names
-import com.sun.star.comp.servicemanager.ServiceManager;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 
+import com.sun.star.chart.XDiagram;
+import com.sun.star.chart.XChartDocument;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.connection.XConnector;
-import com.sun.star.connection.XConnection;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameContainer;
 
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.uno.XComponentContext;
+import com.sun.star.document.XEmbeddedObjectSupplier;
 
-
-// staroffice interfaces to provide desktop and componentloader
-// and components i.e. spreadsheets, writerdocs etc.
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XComponentLoader;
 
-// additional classes required
-import com.sun.star.sheet.*;
-import com.sun.star.container.*;
-import com.sun.star.table.*;
-import com.sun.star.beans.*;
-import com.sun.star.style.*;
-import com.sun.star.lang.*;
-import com.sun.star.text.*;
-import com.sun.star.chart.*;
-import com.sun.star.document.*;
-import com.sun.star.awt.Rectangle;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.uno.XComponentContext;
+
+import com.sun.star.sheet.XCellRangeAddressable;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.sheet.XSpreadsheetDocument;
+
+import com.sun.star.style.XStyleFamiliesSupplier;
+
+import com.sun.star.table.CellRangeAddress;
+import com.sun.star.table.XCell;
+import com.sun.star.table.XCellRange;
+import com.sun.star.table.XTableChart;
+import com.sun.star.table.XTableCharts;
+import com.sun.star.table.XTableChartsSupplier;
+
 
 public class SCalc  {
 
     public static void main(String args[]) {
 
         //oooooooooooooooooooooooooooStep 1oooooooooooooooooooooooooooooooooooooooooo
-        // connect to the office an get the MultiServiceFactory
-        // this is necessary to create instances of Services
+        // call UNO bootstrap method and get the remote component context form
+        // the a running office (office will be started if necessary)
         //***************************************************************************
-        String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.NamingService";
+        XComponentContext xContext = null;
 
-        // It is possible to use a different connection string, passed as argument
-        if ( args.length == 1 ) {
-            sConnectionString = args[0];
-        }
-
-        XMultiServiceFactory xMSF = null;
-        XSpreadsheetDocument myDoc = null;
-        XCell oCell = null;
-
-
-        // create connection(s) and get multiservicefactory
-
-
-        // create connection(s) and get multiservicefactory
-        System.out.println( "getting MultiServiceFactory" );
-
+        // get the remote office component context
         try {
-            xMSF = connect( sConnectionString );
-        } catch( com.sun.star.uno.RuntimeException Ex ) {
-            System.out.println( "Couldn't get MSF"+ Ex.getMessage() );
-            return;
-        } catch( Exception Ex ) {
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
+        } catch( Exception e) {
+            e.printStackTrace(System.err);
+            System.exit(1);
         }
-
-        //***************************************************************************
 
         //oooooooooooooooooooooooooooStep 2oooooooooooooooooooooooooooooooooooooooooo
         // open an empty document. In this case it's a calc document.
         // For this purpose an instance of com.sun.star.frame.Desktop
-        // is created. It's interface XDesktop provides the XComponentLoader,
+        // is created. The desktop provides the XComponentLoader interface,
         // which is used to open the document via loadComponentFromURL
         //***************************************************************************
-
 
         //Open document
 
         //Calc
+        XSpreadsheetDocument myDoc = null;
+//        XCell oCell = null;
 
         System.out.println("Opening an empty Calc document");
-        myDoc = openCalc(xMSF);
+        myDoc = openCalc(xContext);
 
         //***************************************************************************
 
@@ -145,26 +133,33 @@ public class SCalc  {
         //***************************************************************************
 
         try {
-            XStyleFamiliesSupplier xSFS = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, myDoc);
+            XStyleFamiliesSupplier xSFS = (XStyleFamiliesSupplier)
+                UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, myDoc);
             XNameAccess xSF = (XNameAccess) xSFS.getStyleFamilies();
             XNameAccess xCS = (XNameAccess) UnoRuntime.queryInterface(
                 XNameAccess.class, xSF.getByName("CellStyles"));
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, myDoc );
-            XNameContainer oStyleFamilyNameContainer = (XNameContainer) UnoRuntime.queryInterface(
+            XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
+                UnoRuntime.queryInterface(XMultiServiceFactory.class, myDoc );
+            XNameContainer oStyleFamilyNameContainer = (XNameContainer)
+                UnoRuntime.queryInterface(
                 XNameContainer.class, xCS);
-            XInterface oInt1 = (XInterface) oDocMSF.createInstance("com.sun.star.style.CellStyle");
+            XInterface oInt1 = (XInterface) oDocMSF.createInstance(
+                "com.sun.star.style.CellStyle");
             oStyleFamilyNameContainer.insertByName("My Style", oInt1);
-            XPropertySet oCPS1 = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, oInt1 );
+            XPropertySet oCPS1 = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, oInt1 );
             oCPS1.setPropertyValue("IsCellBackgroundTransparent", new Boolean(false));
             oCPS1.setPropertyValue("CellBackColor",new Integer(6710932));
             oCPS1.setPropertyValue("CharColor",new Integer(16777215));
-            XInterface oInt2 = (XInterface) oDocMSF.createInstance("com.sun.star.style.CellStyle");
+            XInterface oInt2 = (XInterface) oDocMSF.createInstance(
+                "com.sun.star.style.CellStyle");
             oStyleFamilyNameContainer.insertByName("My Style2", oInt2);
-            XPropertySet oCPS2 = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, oInt2 );
+            XPropertySet oCPS2 = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, oInt2 );
             oCPS2.setPropertyValue("IsCellBackgroundTransparent", new Boolean(false));
             oCPS2.setPropertyValue("CellBackColor",new Integer(13421823));
         } catch (Exception e) {
+            e.printStackTrace(System.err);
         }
 
         //***************************************************************************
@@ -178,86 +173,87 @@ public class SCalc  {
         //***************************************************************************
 
 
-        XSpreadsheet oSheet=null;
+        XSpreadsheet xSheet=null;
 
         try {
             System.out.println("Getting spreadsheet") ;
-            XSpreadsheets oSheets = myDoc.getSheets() ;
+            XSpreadsheets xSheets = myDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess) UnoRuntime.queryInterface(
-                XIndexAccess.class, oSheets);
-            oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+                XIndexAccess.class, xSheets);
+            xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
                 XSpreadsheet.class, oIndexSheets.getByIndex(0));
 
         } catch (Exception e) {
             System.out.println("Couldn't get Sheet " +e);
+            e.printStackTrace(System.err);
         }
 
 
 
         System.out.println("Creating the Header") ;
 
-        insertIntoCell(1,0,"JAN",oSheet,"");
-        insertIntoCell(2,0,"FEB",oSheet,"");
-        insertIntoCell(3,0,"MAR",oSheet,"");
-        insertIntoCell(4,0,"APR",oSheet,"");
-        insertIntoCell(5,0,"MAI",oSheet,"");
-        insertIntoCell(6,0,"JUN",oSheet,"");
-        insertIntoCell(7,0,"JUL",oSheet,"");
-        insertIntoCell(8,0,"AUG",oSheet,"");
-        insertIntoCell(9,0,"SEP",oSheet,"");
-        insertIntoCell(10,0,"OCT",oSheet,"");
-        insertIntoCell(11,0,"NOV",oSheet,"");
-        insertIntoCell(12,0,"DEC",oSheet,"");
-        insertIntoCell(13,0,"SUM",oSheet,"");
+        insertIntoCell(1,0,"JAN",xSheet,"");
+        insertIntoCell(2,0,"FEB",xSheet,"");
+        insertIntoCell(3,0,"MAR",xSheet,"");
+        insertIntoCell(4,0,"APR",xSheet,"");
+        insertIntoCell(5,0,"MAI",xSheet,"");
+        insertIntoCell(6,0,"JUN",xSheet,"");
+        insertIntoCell(7,0,"JUL",xSheet,"");
+        insertIntoCell(8,0,"AUG",xSheet,"");
+        insertIntoCell(9,0,"SEP",xSheet,"");
+        insertIntoCell(10,0,"OCT",xSheet,"");
+        insertIntoCell(11,0,"NOV",xSheet,"");
+        insertIntoCell(12,0,"DEC",xSheet,"");
+        insertIntoCell(13,0,"SUM",xSheet,"");
 
 
         System.out.println("Fill the lines");
 
-        insertIntoCell(0,1,"Smith",oSheet,"");
-        insertIntoCell(1,1,"42",oSheet,"V");
-        insertIntoCell(2,1,"58.9",oSheet,"V");
-        insertIntoCell(3,1,"-66.5",oSheet,"V");
-        insertIntoCell(4,1,"43.4",oSheet,"V");
-        insertIntoCell(5,1,"44.5",oSheet,"V");
-        insertIntoCell(6,1,"45.3",oSheet,"V");
-        insertIntoCell(7,1,"-67.3",oSheet,"V");
-        insertIntoCell(8,1,"30.5",oSheet,"V");
-        insertIntoCell(9,1,"23.2",oSheet,"V");
-        insertIntoCell(10,1,"-97.3",oSheet,"V");
-        insertIntoCell(11,1,"22.4",oSheet,"V");
-        insertIntoCell(12,1,"23.5",oSheet,"V");
-        insertIntoCell(13,1,"=SUM(B2:M2)",oSheet,"");
+        insertIntoCell(0,1,"Smith",xSheet,"");
+        insertIntoCell(1,1,"42",xSheet,"V");
+        insertIntoCell(2,1,"58.9",xSheet,"V");
+        insertIntoCell(3,1,"-66.5",xSheet,"V");
+        insertIntoCell(4,1,"43.4",xSheet,"V");
+        insertIntoCell(5,1,"44.5",xSheet,"V");
+        insertIntoCell(6,1,"45.3",xSheet,"V");
+        insertIntoCell(7,1,"-67.3",xSheet,"V");
+        insertIntoCell(8,1,"30.5",xSheet,"V");
+        insertIntoCell(9,1,"23.2",xSheet,"V");
+        insertIntoCell(10,1,"-97.3",xSheet,"V");
+        insertIntoCell(11,1,"22.4",xSheet,"V");
+        insertIntoCell(12,1,"23.5",xSheet,"V");
+        insertIntoCell(13,1,"=SUM(B2:M2)",xSheet,"");
 
 
-        insertIntoCell(0,2,"Jones",oSheet,"");
-        insertIntoCell(1,2,"21",oSheet,"V");
-        insertIntoCell(2,2,"40.9",oSheet,"V");
-        insertIntoCell(3,2,"-57.5",oSheet,"V");
-        insertIntoCell(4,2,"-23.4",oSheet,"V");
-        insertIntoCell(5,2,"34.5",oSheet,"V");
-        insertIntoCell(6,2,"59.3",oSheet,"V");
-        insertIntoCell(7,2,"27.3",oSheet,"V");
-        insertIntoCell(8,2,"-38.5",oSheet,"V");
-        insertIntoCell(9,2,"43.2",oSheet,"V");
-        insertIntoCell(10,2,"57.3",oSheet,"V");
-        insertIntoCell(11,2,"25.4",oSheet,"V");
-        insertIntoCell(12,2,"28.5",oSheet,"V");
-        insertIntoCell(13,2,"=SUM(B3:M3)",oSheet,"");
+        insertIntoCell(0,2,"Jones",xSheet,"");
+        insertIntoCell(1,2,"21",xSheet,"V");
+        insertIntoCell(2,2,"40.9",xSheet,"V");
+        insertIntoCell(3,2,"-57.5",xSheet,"V");
+        insertIntoCell(4,2,"-23.4",xSheet,"V");
+        insertIntoCell(5,2,"34.5",xSheet,"V");
+        insertIntoCell(6,2,"59.3",xSheet,"V");
+        insertIntoCell(7,2,"27.3",xSheet,"V");
+        insertIntoCell(8,2,"-38.5",xSheet,"V");
+        insertIntoCell(9,2,"43.2",xSheet,"V");
+        insertIntoCell(10,2,"57.3",xSheet,"V");
+        insertIntoCell(11,2,"25.4",xSheet,"V");
+        insertIntoCell(12,2,"28.5",xSheet,"V");
+        insertIntoCell(13,2,"=SUM(B3:M3)",xSheet,"");
 
-        insertIntoCell(0,3,"Brown",oSheet,"");
-        insertIntoCell(1,3,"31.45",oSheet,"V");
-        insertIntoCell(2,3,"-20.9",oSheet,"V");
-        insertIntoCell(3,3,"-117.5",oSheet,"V");
-        insertIntoCell(4,3,"23.4",oSheet,"V");
-        insertIntoCell(5,3,"-114.5",oSheet,"V");
-        insertIntoCell(6,3,"115.3",oSheet,"V");
-        insertIntoCell(7,3,"-171.3",oSheet,"V");
-        insertIntoCell(8,3,"89.5",oSheet,"V");
-        insertIntoCell(9,3,"41.2",oSheet,"V");
-        insertIntoCell(10,3,"71.3",oSheet,"V");
-        insertIntoCell(11,3,"25.4",oSheet,"V");
-        insertIntoCell(12,3,"38.5",oSheet,"V");
-        insertIntoCell(13,3,"=SUM(A4:L4)",oSheet,"");
+        insertIntoCell(0,3,"Brown",xSheet,"");
+        insertIntoCell(1,3,"31.45",xSheet,"V");
+        insertIntoCell(2,3,"-20.9",xSheet,"V");
+        insertIntoCell(3,3,"-117.5",xSheet,"V");
+        insertIntoCell(4,3,"23.4",xSheet,"V");
+        insertIntoCell(5,3,"-114.5",xSheet,"V");
+        insertIntoCell(6,3,"115.3",xSheet,"V");
+        insertIntoCell(7,3,"-171.3",xSheet,"V");
+        insertIntoCell(8,3,"89.5",xSheet,"V");
+        insertIntoCell(9,3,"41.2",xSheet,"V");
+        insertIntoCell(10,3,"71.3",xSheet,"V");
+        insertIntoCell(11,3,"25.4",xSheet,"V");
+        insertIntoCell(12,3,"38.5",xSheet,"V");
+        insertIntoCell(13,3,"=SUM(A4:L4)",xSheet,"");
 
         //***************************************************************************
 
@@ -268,9 +264,9 @@ public class SCalc  {
         //***************************************************************************
 
         // change backcolor
-        chgbColor( 1 , 0, 13, 0, "My Style", oSheet );
-        chgbColor( 0 , 1, 0, 3, "My Style", oSheet );
-        chgbColor( 1 , 1, 13, 3, "My Style2", oSheet );
+        chgbColor( 1 , 0, 13, 0, "My Style", xSheet );
+        chgbColor( 0 , 1, 0, 3, "My Style", xSheet );
+        chgbColor( 1 , 1, 13, 3, "My Style2", xSheet );
 
         //***************************************************************************
 
@@ -291,16 +287,17 @@ public class SCalc  {
         oRect.Width = 25000;
         oRect.Height = 11000;
 
-        XCellRange oRange = (XCellRange)UnoRuntime.queryInterface(XCellRange.class, oSheet);
+        XCellRange oRange = (XCellRange)UnoRuntime.queryInterface(
+            XCellRange.class, xSheet);
         XCellRange myRange = oRange.getCellRangeByName("A1:N4");
-        XCellRangeAddressable oRangeAddr = (XCellRangeAddressable)UnoRuntime.queryInterface(
-            XCellRangeAddressable.class, myRange);
+        XCellRangeAddressable oRangeAddr = (XCellRangeAddressable)
+            UnoRuntime.queryInterface(XCellRangeAddressable.class, myRange);
         CellRangeAddress myAddr = oRangeAddr.getRangeAddress();
 
         CellRangeAddress[] oAddr = new CellRangeAddress[1];
         oAddr[0] = myAddr;
         XTableChartsSupplier oSupp = (XTableChartsSupplier)UnoRuntime.queryInterface(
-            XTableChartsSupplier.class, oSheet);
+            XTableChartsSupplier.class, xSheet);
 
         XTableChart oChart = null;
 
@@ -313,15 +310,17 @@ public class SCalc  {
 
         try {
             oChart = (XTableChart) (UnoRuntime.queryInterface(
-                XTableChart.class, ((XNameAccess) UnoRuntime.queryInterface(
-                                        XNameAccess.class, oCharts)).getByName("Example")));
-            XEmbeddedObjectSupplier oEOS = (XEmbeddedObjectSupplier) UnoRuntime.queryInterface(
-                XEmbeddedObjectSupplier.class, oChart);
+                XTableChart.class, ((XNameAccess)UnoRuntime.queryInterface(
+                            XNameAccess.class, oCharts)).getByName("Example")));
+            XEmbeddedObjectSupplier oEOS = (XEmbeddedObjectSupplier)
+                UnoRuntime.queryInterface(XEmbeddedObjectSupplier.class, oChart);
             XInterface oInt = oEOS.getEmbeddedObject();
-            XChartDocument xChart = (XChartDocument) UnoRuntime.queryInterface(XChartDocument.class,oInt);
+            XChartDocument xChart = (XChartDocument) UnoRuntime.queryInterface(
+                XChartDocument.class,oInt);
             XDiagram oDiag = (XDiagram) xChart.getDiagram();
             System.out.println("Change Diagramm to 3D");
-            XPropertySet oCPS = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, oDiag );
+            XPropertySet oCPS = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet.class, oDiag );
             oCPS.setPropertyValue("Dim3D", new Boolean(true));
             System.out.println("Change the title");
             Thread.sleep(200);
@@ -330,119 +329,90 @@ public class SCalc  {
             oTPS.setPropertyValue("String","The new title");
             //oDiag.Dim3D();
         } catch (Exception e){
-            System.out.println("Changin Properties failed "+e);
+            System.err.println("Changin Properties failed "+e);
+            e.printStackTrace(System.err);
         }
-
-
 
         System.out.println("done");
-
         System.exit(0);
+    }
 
+    public static XSpreadsheetDocument openCalc(XComponentContext xContext)
+    {
+        //define variables
+        XMultiComponentFactory xMCF = null;
+        XComponentLoader xCLoader;
+        XSpreadsheetDocument xSpreadSheetDoc = null;
+        XComponent xComp = null;
 
-    } // finish method main
+        try {
+            // get the servie manager rom the office
+            xMCF = xContext.getServiceManager();
 
-    public static XMultiServiceFactory connect( String connectStr )
-    throws com.sun.star.uno.Exception,
-    com.sun.star.uno.RuntimeException, Exception {
+            // create a new instance of the the desktop
+            Object oDesktop = xMCF.createInstanceWithContext(
+                "com.sun.star.frame.Desktop", xContext );
 
-        // Get component context
-        XComponentContext xcomponentcontext =
-        com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-        null );
+            // query the desktop object for the XComponentLoader
+            xCLoader = ( XComponentLoader ) UnoRuntime.queryInterface(
+                XComponentLoader.class, oDesktop );
 
-        // initial serviceManager
-        XMultiComponentFactory xLocalServiceManager =
-        xcomponentcontext.getServiceManager();
+            PropertyValue [] szEmptyArgs = new PropertyValue [0];
+            String strDoc = "private:factory/scalc";
 
-        // create a connector, so that it can contact the office
-        Object  xUrlResolver  = xLocalServiceManager.createInstanceWithContext(
-        "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, xUrlResolver );
+            xComp = xCLoader.loadComponentFromURL(strDoc, "_blank", 0, szEmptyArgs );
+            xSpreadSheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
+                XSpreadsheetDocument.class, xComp);
 
-        Object rInitialObject = urlResolver.resolve( connectStr );
-
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(
-            XNamingService.class, rInitialObject );
-
-        XMultiServiceFactory xMSF = null;
-        if( rName != null ) {
-            System.err.println( "got the remote naming service !" );
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
-
-            xMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
+        } catch(Exception e){
+            System.err.println(" Exception " + e);
+            e.printStackTrace(System.err);
         }
 
-        return ( xMSF );
+        return xSpreadSheetDoc;
     }
 
 
-    public static XSpreadsheetDocument openCalc(XMultiServiceFactory oMSF) {
-
-        //define variables
-        XInterface oInterface;
-        XDesktop oDesktop;
-        XComponentLoader oCLoader;
-        XSpreadsheetDocument oDoc = null;
-        XComponent aDoc = null;
+    public static void insertIntoCell(int CellX, int CellY, String theValue,
+                                      XSpreadsheet TT1, String flag)
+    {
+        XCell xCell = null;
 
         try {
-
-            oInterface = (XInterface) oMSF.createInstance( "com.sun.star.frame.Desktop" );
-            oDesktop = ( XDesktop ) UnoRuntime.queryInterface( XDesktop.class, oInterface );
-            oCLoader = ( XComponentLoader ) UnoRuntime.queryInterface( XComponentLoader.class, oDesktop );
-            PropertyValue [] szEmptyArgs = new PropertyValue [0];
-            String doc = "private:factory/scalc";
-            aDoc = oCLoader.loadComponentFromURL(doc, "_blank", 0, szEmptyArgs );
-            oDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, aDoc);
-
-        } // end of try
-
-        catch(Exception e){
-
-            System.out.println(" Exception " + e);
-
-        } // end of catch
-
-
-        return oDoc;
-    }//end of openCalc
-
-
-    public static void insertIntoCell(int CellX, int CellY, String theValue, XSpreadsheet TT1, String flag) {
-
-        XCell oCell = null;
-
-        try {
-            oCell = TT1.getCellByPosition(CellX, CellY);
+            xCell = TT1.getCellByPosition(CellX, CellY);
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
-            System.out.println("Could not get Cell");
+            System.err.println("Could not get Cell");
+            ex.printStackTrace(System.err);
         }
-        if (flag.equals("V")) {oCell.setValue((new Float(theValue)).floatValue());}
-        else {oCell.setFormula(theValue);}
 
-    } // end of insertIntoCell
+        if (flag.equals("V")) {
+            xCell.setValue((new Float(theValue)).floatValue());
+        } else {
+            xCell.setFormula(theValue);
+        }
 
-    public static void chgbColor( int x1, int y1, int x2, int y2, String template, XSpreadsheet TT ) {
+    }
+
+    public static void chgbColor( int x1, int y1, int x2, int y2,
+                                  String template, XSpreadsheet TT )
+    {
         XCellRange xCR = null;
         try {
             xCR = TT.getCellRangeByPosition(x1,y1,x2,y2);
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
-            System.out.println("Could not get CellRange");
+            System.err.println("Could not get CellRange");
+            ex.printStackTrace(System.err);
         }
-        XPropertySet oCPS = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xCR );
+
+        XPropertySet xCPS = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet.class, xCR );
 
         try {
-            oCPS.setPropertyValue("CellStyle", template);
+            xCPS.setPropertyValue("CellStyle", template);
         } catch (Exception e) {
-
-            System.out.println("Can't change colors chgbColor" + e);
-
+            System.err.println("Can't change colors chgbColor" + e);
+            e.printStackTrace(System.err);
         }
-
-
     }
 
-} // finish class SCalc
+}

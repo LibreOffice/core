@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkInsertion.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:12:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -39,7 +39,7 @@
  *************************************************************************/
 
 //***************************************************************************
-// comment: Step 1: connect to the office an get the MSF
+// comment: Step 1: get the Desktop object from the office
 //          Step 2: open an empty text document
 //          Step 3: enter a example text
 //          Step 4: insert some bookmarks
@@ -47,80 +47,42 @@
 //          Chapter 5.1.1.4 Inserting bookmarks
 //***************************************************************************
 
-import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
-
-// access the implementations via names
-import com.sun.star.comp.servicemanager.ServiceManager;
-
-import com.sun.star.connection.XConnector;
-import com.sun.star.connection.XConnection;
-
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.uno.XComponentContext;
-
-// access the implementations via names
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.text.ControlCharacter.*;
-
-import com.sun.star.text.XText;
-
 
 public class BookmarkInsertion {
 
     public static void main(String args[]) {
-        String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.NamingService";
-
-        // It is possible to use a different connection string, passed as argument
-        if ( args.length == 1 ) {
-            sConnectionString = args[0];
-        }
-
-        XMultiServiceFactory xMSF = null;
-        try {
-            xMSF = connect( sConnectionString );
-        }
-        catch( Exception e) {
-            e.printStackTrace(System.out);
-            System.exit( 0 );
-        }
-
-        if( xMSF != null )  System.out.println("Connected to " + sConnectionString );
-
         // You need the desktop to create a document
+        // The getDesktop method does the UNO bootstrapping, gets the
+        // remote servie manager and the desktop object.
         com.sun.star.frame.XDesktop xDesktop = null;
-        xDesktop = getDesktop( xMSF );
+        xDesktop = getDesktop();
 
         // create text document
         com.sun.star.text.XTextDocument xTextDocument = null;
-        xTextDocument = createTextdocument( xDesktop );
+        xTextDocument = createTextdocument(xDesktop);
 
         // put example text in document
-        createExampleData( xTextDocument );
+        createExampleData(xTextDocument);
 
 
-        String mOffending[] = { "negro(e|es)?","bor(ed|ing)?", "bloody?", "bleed(ing)?" };
+        String mOffending[] = { "negro(e|es)?","bor(ed|ing)?",
+                                "bloody?", "bleed(ing)?" };
         String mBad[] = { "possib(le|ilit(y|ies))", "real(ly)+", "brilliant" };
 
         String sOffendPrefix = "Offending";
         String sBadPrefix = "BadStyle";
 
-        markList( xTextDocument, mOffending, sOffendPrefix );
-        markList( xTextDocument, mBad, sBadPrefix );
+        markList(xTextDocument, mOffending, sOffendPrefix);
+        markList(xTextDocument, mBad, sBadPrefix);
 
         System.out.println("Done");
 
         System.exit(0);
-
     }
 
-    public static void markList( com.sun.star.text.XTextDocument xTextDocument, String mList[], String sPrefix ) {
+    public static void markList(com.sun.star.text.XTextDocument xTextDocument,
+                                String mList[], String sPrefix) {
         int iCounter=0;
         com.sun.star.uno.XInterface xSearchInterface = null;
         com.sun.star.text.XTextRange xSearchTextRange = null;
@@ -128,87 +90,109 @@ public class BookmarkInsertion {
         try {
             for( iCounter = 0; iCounter < mList.length; iCounter++ ) {
                 // the findfirst returns a XInterface
-                xSearchInterface = ( com.sun.star.uno.XInterface ) FindFirst( xTextDocument, mList[ iCounter ] );
+                xSearchInterface = (com.sun.star.uno.XInterface)FindFirst(
+                    xTextDocument, mList[ iCounter ] );
 
                 if( xSearchInterface != null ) {
                     // get the TextRange form the XInterface
-                    xSearchTextRange = (com.sun.star.text.XTextRange) UnoRuntime.queryInterface(
-                        com.sun.star.text.XTextRange.class, xSearchInterface );
+                    xSearchTextRange = (com.sun.star.text.XTextRange)
+                        UnoRuntime.queryInterface(
+                            com.sun.star.text.XTextRange.class, xSearchInterface);
 
-                    InsertBookmark( xTextDocument, xSearchTextRange, sPrefix + iCounter );
+                    InsertBookmark(xTextDocument, xSearchTextRange,
+                                   sPrefix + iCounter);
                 }
             }
         }
         catch( Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
+            System.exit(1);
         }
-
-
     }
 
 
-    public static void InsertBookmark( com.sun.star.text.XTextDocument xTextDocument, com.sun.star.text.XTextRange xTextRange, String sBookName ) {
+    public static void InsertBookmark(com.sun.star.text.XTextDocument xTextDocument,
+                                      com.sun.star.text.XTextRange xTextRange,
+                                      String sBookName) {
         // create a bookmark on a TextRange
         try {
             // get the MultiServiceFactory from the text document
-            XMultiServiceFactory xDocMSF;
-            xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface( XMultiServiceFactory.class, xTextDocument );
+            com.sun.star.lang.XMultiServiceFactory xDocMSF;
+            xDocMSF = (com.sun.star.lang.XMultiServiceFactory)
+                UnoRuntime.queryInterface(
+                    com.sun.star.lang.XMultiServiceFactory.class, xTextDocument);
 
-            // the bookmark service is a context dependend service, you need the MultiServiceFactory from the document
-            Object xObject = xDocMSF.createInstance( "com.sun.star.text.Bookmark" );
+            // the bookmark service is a context dependend service, you need
+            // the MultiServiceFactory from the document
+            Object xObject = xDocMSF.createInstance("com.sun.star.text.Bookmark");
 
             // set the name from the bookmark
             com.sun.star.container.XNamed xNameAccess = null;
-            xNameAccess = (com.sun.star.container.XNamed) UnoRuntime.queryInterface( com.sun.star.container.XNamed.class, xObject );
+            xNameAccess = (com.sun.star.container.XNamed)
+                UnoRuntime.queryInterface(
+                    com.sun.star.container.XNamed.class, xObject);
 
-            xNameAccess.setName( sBookName );
+            xNameAccess.setName(sBookName);
 
             // create a XTextContent, for the method 'insertTextContent'
             com.sun.star.text.XTextContent xTextContent = null;
-            xTextContent = ( com.sun.star.text.XTextContent ) UnoRuntime.queryInterface(
-                com.sun.star.text.XTextContent.class, xNameAccess );
+            xTextContent = (com.sun.star.text.XTextContent)
+                UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextContent.class, xNameAccess);
 
-            // insertTextContent need a TextRange not a cursor to specify the position from the bookmark
-            xTextDocument.getText().insertTextContent( xTextRange, xTextContent, true );
+            // insertTextContent need a TextRange not a cursor to specify the
+            // position from the bookmark
+            xTextDocument.getText().insertTextContent(xTextRange, xTextContent, true);
 
+            System.out.println("Insert bookmark: " + sBookName);
         }
         catch( Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
-    protected static com.sun.star.uno.XInterface FindFirst( com.sun.star.text.XTextDocument xTextDocument, String sSearchString ) {
+    protected static com.sun.star.uno.XInterface FindFirst(
+        com.sun.star.text.XTextDocument xTextDocument, String sSearchString)
+    {
         com.sun.star.util.XSearchDescriptor xSearchDescriptor = null;
         com.sun.star.util.XSearchable xSearchable = null;
         com.sun.star.uno.XInterface xSearchInterface = null;
 
         try {
-            xSearchable = ( com.sun.star.util.XSearchable ) UnoRuntime.queryInterface(
-                com.sun.star.util.XSearchable.class, xTextDocument );
-            xSearchDescriptor = ( com.sun.star.util.XSearchDescriptor) xSearchable.createSearchDescriptor();
+            xSearchable = (com.sun.star.util.XSearchable)
+                UnoRuntime.queryInterface(
+                    com.sun.star.util.XSearchable.class, xTextDocument);
+            xSearchDescriptor = (com.sun.star.util.XSearchDescriptor)
+                xSearchable.createSearchDescriptor();
 
-            xSearchDescriptor.setSearchString( sSearchString );
+            xSearchDescriptor.setSearchString(sSearchString);
 
             com.sun.star.beans.XPropertySet xPropertySet = null;
-            xPropertySet = (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
-                com.sun.star.beans.XPropertySet.class, xSearchDescriptor );
+            xPropertySet = (com.sun.star.beans.XPropertySet)
+                UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class, xSearchDescriptor);
 
-            xPropertySet.setPropertyValue("SearchRegularExpression", new Boolean( true ) );
+            xPropertySet.setPropertyValue("SearchRegularExpression",
+                                          new Boolean( true ) );
 
-            xSearchInterface = ( com.sun.star.uno.XInterface ) xSearchable.findFirst( xSearchDescriptor );
+            xSearchInterface = (com.sun.star.uno.XInterface)
+                xSearchable.findFirst(xSearchDescriptor);
         }
         catch( Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         return xSearchInterface;
     }
 
-    protected static void createExampleData( com.sun.star.text.XTextDocument xTextDocument ) {
+    protected static void createExampleData(
+        com.sun.star.text.XTextDocument xTextDocument )
+    {
         com.sun.star.text.XTextCursor xTextCursor = null;
 
         try {
-            xTextCursor = (com.sun.star.text.XTextCursor) xTextDocument.getText().createTextCursor();
+            xTextCursor = (com.sun.star.text.XTextCursor)
+                xTextDocument.getText().createTextCursor();
 
             xTextCursor.setString( "He heard quiet steps behind him. That didn't bode well. Who could be following him this late at night and in this deadbeat part of town? And at this particular moment, just after he pulled off the big time and was making off with the greenbacks. Was there another crook who'd had the same idea, and was now watching him and waiting for a chance to grab the fruit of his labor?" );
             xTextCursor.collapseToEnd();
@@ -219,100 +203,83 @@ public class BookmarkInsertion {
             xTextCursor.gotoStart(false);
         }
         catch( Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
     }
-    public static XMultiServiceFactory connect( String connectStr )
-    throws com.sun.star.uno.Exception,
-    com.sun.star.uno.RuntimeException, Exception {
-        // Get component context
-        XComponentContext xcomponentcontext =
-        com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-        null );
 
-        // initial serviceManager
-        XMultiComponentFactory xLocalServiceManager =
-        xcomponentcontext.getServiceManager();
-
-        // create a connector, so that it can contact the office
-        Object  xUrlResolver  = xLocalServiceManager.createInstanceWithContext(
-        "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, xUrlResolver );
-
-        Object rInitialObject = urlResolver.resolve( connectStr );
-
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(
-            XNamingService.class, rInitialObject );
-
-        XMultiServiceFactory xMSF = null;
-        if( rName != null ) {
-            System.err.println( "got the remote naming service !" );
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
-
-            xMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
-        }
-
-        return ( xMSF );
-    }
-
-
-    public static com.sun.star.frame.XDesktop getDesktop( XMultiServiceFactory xMSF ) {
-        XInterface xInterface = null;
+    public static com.sun.star.frame.XDesktop getDesktop() {
         com.sun.star.frame.XDesktop xDesktop = null;
+        com.sun.star.lang.XMultiComponentFactory xMCF = null;
 
-        if( xMSF != null ) {
-            try {
-                xInterface = (XInterface) xMSF.createInstance("com.sun.star.frame.Desktop");
+        try {
+            com.sun.star.uno.XComponentContext xContext = null;
+
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+
+            // get the remote office service manager
+            xMCF = xContext.getServiceManager();
+            if( xMCF != null ) {
+                System.out.println("Connected to a running office ...");
+
+                Object oDesktop = xMCF.createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", xContext);
                 xDesktop = (com.sun.star.frame.XDesktop) UnoRuntime.queryInterface(
-                    com.sun.star.frame.XDesktop.class, xInterface);
+                    com.sun.star.frame.XDesktop.class, oDesktop);
             }
-            catch( Exception e) {
-                e.printStackTrace(System.out);
-            }
+            else
+                System.out.println( "Can't create a desktop. No connection, no remote office servicemanager available!" );
         }
-        else
-            System.out.println( "Can't create a desktop. null pointer !" );
+        catch( Exception e) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
+
 
         return xDesktop;
     }
 
-    public static com.sun.star.text.XTextDocument createTextdocument( com.sun.star.frame.XDesktop xDesktop ) {
+    public static com.sun.star.text.XTextDocument createTextdocument(
+        com.sun.star.frame.XDesktop xDesktop )
+    {
         com.sun.star.text.XTextDocument aTextDocument = null;
 
         try {
-            com.sun.star.lang.XComponent xComponent = null;
-            xComponent = CreateNewDocument( xDesktop, "swriter" );
-
-            aTextDocument = (com.sun.star.text.XTextDocument) UnoRuntime.queryInterface(
-                com.sun.star.text.XTextDocument.class, xComponent );
+            com.sun.star.lang.XComponent xComponent = CreateNewDocument(xDesktop,
+                                                                        "swriter");
+            aTextDocument = (com.sun.star.text.XTextDocument)
+                UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextDocument.class, xComponent);
         }
         catch( Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         return aTextDocument;
     }
 
 
-    protected static com.sun.star.lang.XComponent CreateNewDocument( com.sun.star.frame.XDesktop xDesktop, String sDocumentType ) {
+    protected static com.sun.star.lang.XComponent CreateNewDocument(
+        com.sun.star.frame.XDesktop xDesktop,
+        String sDocumentType )
+    {
         String sURL = "private:factory/" + sDocumentType;
 
         com.sun.star.lang.XComponent xComponent = null;
-        PropertyValue xValues[] = new PropertyValue[1];
-
         com.sun.star.frame.XComponentLoader xComponentLoader = null;
-        XInterface xInterface = null;
-
-        PropertyValue[] xEmptyArgs = new PropertyValue[0];
-
-        xComponentLoader = (com.sun.star.frame.XComponentLoader) UnoRuntime.queryInterface(
-            com.sun.star.frame.XComponentLoader.class, xDesktop );
+        com.sun.star.beans.PropertyValue xValues[] =
+            new com.sun.star.beans.PropertyValue[1];
+        com.sun.star.beans.PropertyValue xEmptyArgs[] =
+            new com.sun.star.beans.PropertyValue[0];
 
         try {
-            xComponent  = xComponentLoader.loadComponentFromURL( sURL, "_blank", 0, xEmptyArgs);
+            xComponentLoader = (com.sun.star.frame.XComponentLoader)
+                UnoRuntime.queryInterface(
+                    com.sun.star.frame.XComponentLoader.class, xDesktop);
+
+            xComponent  = xComponentLoader.loadComponentFromURL(
+                sURL, "_blank", 0, xEmptyArgs);
         }
         catch( Exception e) {
             e.printStackTrace(System.out);
@@ -320,5 +287,4 @@ public class BookmarkInsertion {
 
         return xComponent ;
     }
-
 }
