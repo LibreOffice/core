@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clientTest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 10:59:56 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,6 @@
 //#include <tchar.h>
 #include <windef.h>
 #include <atlbase.h>
-
-// actually defined in windef.h but after altbase.h it is undefined
-// it is used in atlcom.h
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
 
 extern CComModule _Module;
 
