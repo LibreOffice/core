@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:46:43 $
+ *  last change: $Author: sj $ $Date: 2001-08-22 09:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,35 @@ SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
 {
 }
 
+static INetProtocol ImplGetProtocol( const String& aStrURL, String& aStrScheme )
+{
+    INetURLObject aURL( aStrURL );
+    INetProtocol aProtocol = aURL.GetProtocol();
+
+    // #77696#
+    // our new INetUrlObject now has the ability
+    // to detect if an Url is valid or not :-(
+    if ( aProtocol == INET_PROT_NOT_VALID )
+    {
+        if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTP_SCHEME, 0, 7 ) )
+        {
+            aProtocol = INET_PROT_HTTP;
+            aStrScheme = String( RTL_CONSTASCII_STRINGPARAM( sHTTPScheme ) );
+        }
+        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTPS_SCHEME, 0, 8 ) )
+        {
+            aProtocol = INET_PROT_HTTPS;
+            aStrScheme = String( RTL_CONSTASCII_STRINGPARAM( sHTTPSScheme ) );
+        }
+        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_FTP_SCHEME, 0, 6 ) )
+        {
+            aProtocol = INET_PROT_FTP;
+            aStrScheme = String( RTL_CONSTASCII_STRINGPARAM( sFTPScheme ) );
+        }
+    }
+    return aProtocol;
+}
+
 /*************************************************************************
 |*
 |* Fill the all dialog-controls except controls in groupbox "more..."
@@ -176,14 +205,16 @@ SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
 
 void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
 {
-    INetURLObject aURL ( aStrURL );
+    INetURLObject aURL( aStrURL );
     String aStrScheme;
 
     // set protocoll-radiobuttons
-    INetProtocol aProtocol = aURL.GetProtocol ();
+
+    INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
     switch ( aProtocol )
     {
         case INET_PROT_HTTP :
+        {
             maRbtLinktypInternet.Check ();
             maRbtLinktypFTP.Check (FALSE);
             maRbtLinktypTelnet.Check (FALSE);
@@ -198,13 +229,12 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
 
             if ( mbMarkWndOpen )
                 ShowMarkWnd ();
-
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( sHTTPScheme ) );
-
             maCbbTarget.SetSmartProtocol( INET_PROT_HTTP );
+        }
+        break;
 
-            break;
         case INET_PROT_HTTPS :
+        {
             maRbtLinktypInternet.Check ();
             maRbtLinktypFTP.Check (FALSE);
             maRbtLinktypTelnet.Check (FALSE);
@@ -219,13 +249,12 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
 
             if ( mbMarkWndOpen )
                 HideMarkWnd ();
-
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( sHTTPSScheme ) );
-
             maCbbTarget.SetSmartProtocol( INET_PROT_HTTP );
+        }
+        break;
 
-            break;
         case INET_PROT_FTP :
+        {
             maRbtLinktypInternet.Check (FALSE);
             maRbtLinktypFTP.Check ();
             maRbtLinktypTelnet.Check (FALSE);
@@ -240,12 +269,10 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
 
             if ( mbMarkWndOpen )
                 HideMarkWnd ();
-
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM( sFTPScheme ) );
-
             maCbbTarget.SetSmartProtocol( INET_PROT_FTP );
+        }
+        break;
 
-            break;
         default :
             String aStrTmp ( aStrURL );
             if ( aStrTmp.ToLowerAscii().SearchAscii( sTelnet ) == 0 )
@@ -306,7 +333,10 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     if ( aStrScheme != aEmptyStr )
     {
         // Show the scheme, #72740
-        maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+        else
+            maCbbTarget.SetText( aStrURL ); // #77696#
     }
     else
         maCbbTarget.SetText ( aEmptyStr );
@@ -369,10 +399,11 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( String& aStrURL, String& aStrNa
     aStrName    = mpEdIndication->GetText();
     aStrFrame   = mpCbbFrame->GetText();
     eMode       = (SvxLinkInsertMode) (mpLbForm->GetSelectEntryPos()+1);
+
     if( IsHTMLDoc() )
         eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
 
-    if( aStrURL != aEmptyStr )
+    if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         aStrURL = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
     if( aStrName == aEmptyStr )
@@ -647,31 +678,25 @@ void SvxHyperlinkInternetTp::ChangeScheme ( String& aStrURL, String aStrNewSchem
 {
     if ( aStrURL != aEmptyStr )
     {
-        INetURLObject aURL ( aStrURL );
         String aStrScheme;
 
         // set protocoll-radiobuttons
-        INetProtocol aProtocol = aURL.GetProtocol ();
+        INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
         switch ( aProtocol )
         {
             case INET_PROT_HTTP :
-                aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sHTTPScheme ) );
-                break;
             case INET_PROT_HTTPS :
-                aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM (sHTTPSScheme ) );
-                break;
             case INET_PROT_FTP :
-                aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sFTPScheme ) );
-                break;
+            break;
             default :
+            {
                 String aStrTmp ( aStrURL );
-
                 if ( aStrTmp.ToLowerAscii().SearchAscii( sTelnet ) == 0 )
                 {
                     aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sTelnetScheme ) );
                 }
+            }
         }
-
         if ( aStrScheme != aEmptyStr )
         {
             String aStrTmp( aStrURL.Erase ( 0, aStrScheme.Len() ) );
