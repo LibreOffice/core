@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-25 06:32:48 $
+ *  last change: $Author: kso $ $Date: 2000-10-26 12:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,90 +556,92 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
     throw( RuntimeException )
 {
-    if ( key.getLength() )
-    {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    if ( !key.getLength() )
+        return;
 
-        Reference< XHierarchicalNameAccess > xRootHierNameAccess(
+    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+
+    Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
-        if ( xRootHierNameAccess.is() )
+    if ( xRootHierNameAccess.is() )
+    {
+        Reference< XStringEscape > xEsc( xRootHierNameAccess, UNO_QUERY );
+
+        OSL_ENSURE( xEsc.is(),
+                    "PropertySetRegistry::removePropertySet - "
+                    "No string escape!" );
+
+        OUString aEscapedKey;
+        if ( xEsc.is() )
         {
-            Reference< XStringEscape > xEsc( xRootHierNameAccess, UNO_QUERY );
-
-            OSL_ENSURE( xEsc.is(),
-                        "PropertySetRegistry::removePropertySet - "
-                        "No string escape!" );
-
-            OUString aEscapedKey;
-            if ( xEsc.is() )
+            try
             {
-                try
-                {
-                    aEscapedKey = xEsc->escapeString( key );
-                }
-                catch ( IllegalArgumentException& )
-                {
-                    // escapeString
-
-                    OSL_ENSURE( xEsc.is(),
-                                "PropertySetRegistry::removePropertySet - "
-                                "caught IllegalArgumentException!" );
-
-                    aEscapedKey = key;
-                }
+                aEscapedKey = xEsc->escapeString( key );
             }
-            else
-                aEscapedKey = key;
-
-            // Propertyset in registry?
-            if ( xRootHierNameAccess->hasByHierarchicalName( aEscapedKey ) )
+            catch ( IllegalArgumentException& )
             {
-                Reference< XChangesBatch > xBatch(
-                            getConfigWriteAccess( OUString() ), UNO_QUERY );
-                Reference< XNameContainer > xContainer( xBatch, UNO_QUERY );
+                // escapeString
 
-                OSL_ENSURE( xBatch.is(),
+                OSL_ENSURE( xEsc.is(),
                             "PropertySetRegistry::removePropertySet - "
-                            "No batch!" );
+                            "caught IllegalArgumentException!" );
 
-                OSL_ENSURE( xContainer.is(),
-                            "PropertySetRegistry::removePropertySet - "
-                            "No conteiner!" );
-
-                if ( xBatch.is() && xContainer.is() )
-                {
-                    try
-                    {
-                        // Remove item.
-                        xContainer->removeByName( aEscapedKey );
-
-                        // Commit changes.
-                        xBatch->commitChanges();
-
-                        // Success.
-                        return;
-                    }
-                    catch ( NoSuchElementException& )
-                    {
-                        // removeByName
-
-                        OSL_ENSURE( sal_False,
-                                    "PropertySetRegistry::removePropertySet - "
-                                    "caught NoSuchElementException!" );
-                        return;
-                    }
-                    catch ( WrappedTargetException& )
-                    {
-                        // commitChanges
-
-                        OSL_ENSURE( sal_False,
-                                    "PropertySetRegistry::removePropertySet - "
-                                    "caught WrappedTargetException!" );
-                        return;
-                    }
-                }
+                aEscapedKey = key;
             }
         }
+        else
+            aEscapedKey = key;
+
+        // Propertyset in registry?
+        if ( !xRootHierNameAccess->hasByHierarchicalName( aEscapedKey ) )
+            return;
+
+        Reference< XChangesBatch > xBatch(
+                            getConfigWriteAccess( OUString() ), UNO_QUERY );
+        Reference< XNameContainer > xContainer( xBatch, UNO_QUERY );
+
+        OSL_ENSURE( xBatch.is(),
+                    "PropertySetRegistry::removePropertySet - "
+                    "No batch!" );
+
+        OSL_ENSURE( xContainer.is(),
+                    "PropertySetRegistry::removePropertySet - "
+                    "No conteiner!" );
+
+        if ( xBatch.is() && xContainer.is() )
+        {
+            try
+            {
+                // Remove item.
+                xContainer->removeByName( aEscapedKey );
+
+                // Commit changes.
+                xBatch->commitChanges();
+
+                // Success.
+                return;
+            }
+            catch ( NoSuchElementException& )
+            {
+                // removeByName
+
+                OSL_ENSURE( sal_False,
+                            "PropertySetRegistry::removePropertySet - "
+                            "caught NoSuchElementException!" );
+                return;
+            }
+            catch ( WrappedTargetException& )
+            {
+                // commitChanges
+
+                OSL_ENSURE( sal_False,
+                            "PropertySetRegistry::removePropertySet - "
+                            "caught WrappedTargetException!" );
+                return;
+            }
+        }
+
+        return;
     }
 
     OSL_ENSURE( sal_False, "PropertySetRegistry::removePropertySet - Error!" );
