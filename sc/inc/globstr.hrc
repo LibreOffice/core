@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-05-29 18:39:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,9 @@
 #define STR_NO_MACRO                384
 #define STR_LONG_ERR_NO_MACRO       385
 
-#define STR_COUNT                   385
+#define STR_UNDO_TAB_RTL            386
+
+#define STR_COUNT                   386
 
 
 
