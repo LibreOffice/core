@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2000-10-25 09:02:38 $
+#   last change: $Author: ka $ $Date: 2000-11-30 07:35:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -232,7 +232,8 @@ LIBEXTRAFILES=\
         $(LIBPRE) $(SLB)$/fmcomp.lib \
         $(LIBPRE) $(SLB)$/engine3d.lib \
         $(LIBPRE) $(SLB)$/msfilter.lib \
-        $(LIBPRE) $(SLB)$/xout.lib
+        $(LIBPRE) $(SLB)$/xout.lib \
+        $(LIBPRE) $(SLB)$/xml.lib
 
 LIB1TARGET      =$(SLB)$/svx.lib
 LIB1FILES       = \
