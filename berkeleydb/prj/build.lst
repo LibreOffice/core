@@ -1,2 +1,2 @@
-db	so_berkeleydb	:	external NULL
-db	so_berkeleydb						nmake	-	all	as_mkout NULL
+db	berkeleydb	:	external NULL
+db	berkeleydb						nmake	-	all	as_mkout NULL
