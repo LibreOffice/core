@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 09:14:15 $
+ *  last change: $Author: as $ $Date: 2001-11-08 12:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,6 +606,8 @@ public:
     WeakReference < XActiveDataSource > wSource;
     WeakReference < XOutputStream > wSink;
     ::utl::UcbLockBytesRef     xLockBytes;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
     SfxPoolCancelManager* GetCancelManager();
 
@@ -1517,12 +1519,22 @@ void SfxMedium::GetMedium_Impl()
     {
         pImp->bDownloadDone = sal_False;
         pImp->bStreamReady = sal_False;
-
+/*AS
         Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+*/
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
         if ( pImp->bUseInteractionHandler )
-            xInteractionHandler = Reference< ::com::sun::star::task::XInteractionHandler > (
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        {
+            xInteractionHandler = pImp->xInteraction;
+            if( xInteractionHandler.is() == sal_False )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+                if( xFactory.is() == sal_True )
+                {
+                    xInteractionHandler = ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >( xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), ::com::sun::star::uno::UNO_QUERY );
+                }
+            }
+        }
 
         ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
         INetProtocol eProt = GetURLObject().GetProtocol();
@@ -1845,9 +1857,18 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
         GetEaMgr();
 }
 
+//------------------------------------------------------------------
+
 void SfxMedium::UseInteractionHandler( BOOL bUse )
 {
     pImp->bUseInteractionHandler = bUse;
+}
+
+//------------------------------------------------------------------
+
+void SfxMedium::SetInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+{
+    pImp->xInteraction = xHandler;
 }
 
 //------------------------------------------------------------------
