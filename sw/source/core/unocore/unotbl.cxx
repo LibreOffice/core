@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,6 +814,16 @@ uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
 /*-- 11.12.98 10:56:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+const SwStartNode *SwXCell::GetStartNode() const
+{
+    const SwStartNode *pSttNd = 0;
+
+    if( pStartNode || ((SwXCell *)this)->IsValid() )
+        pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
+
+    return pSttNd;
+}
+
 uno::Reference< XTextCursor >   SwXCell::createCursor()
 {
     return createTextCursor();
@@ -832,7 +842,7 @@ sal_Bool    SwXCell::IsValid()
         String sTmpCell(sCellName);
         sTmpCell.ToUpperAscii();
         const SwTableBox* pFoundBox = sTmpCell.Len() ?
-                        pTable->GetTblBox( sTmpCell.ToUpperAscii() ) : SwXCell::FindBox(pTable, pBox);
+                        pTable->GetTblBox( sTmpCell ) : SwXCell::FindBox(pTable, pBox);
         if(pFoundBox != pBox)
             pBox = 0;
     }

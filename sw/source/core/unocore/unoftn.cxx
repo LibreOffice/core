@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 13:33:54 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,19 @@ void SwXFootnote::removeEventListener(const uno::Reference< lang::XEventListener
 /* -----------------06.05.99 15:31-------------------
  *
  * --------------------------------------------------*/
+const SwStartNode *SwXFootnote::GetStartNode() const
+{
+    const SwStartNode *pSttNd = 0;
+    const SwFmtFtn*  pFmt = FindFmt();
+    if(pFmt)
+    {
+        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
+        if( pTxtFtn )
+            pSttNd = pTxtFtn->GetStartNode()->GetNode().GetStartNode();
+    }
+    return pSttNd;
+}
+
 uno::Reference< text::XTextCursor >   SwXFootnote::createCursor()
 {
     return createTextCursor();
@@ -610,6 +623,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/04/05 13:33:54  os
+    #85785# property map corrected
+
     Revision 1.7  2001/03/08 09:48:45  os
     getAnco corrected
 

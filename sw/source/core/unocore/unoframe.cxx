@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 13:31:31 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2319,6 +2319,21 @@ uno::Reference< XText >  SwXTextFrame::getText(void) throw( RuntimeException )
 /*-- 11.12.98 15:23:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+const SwStartNode *SwXTextFrame::GetStartNode() const
+{
+    const SwStartNode *pSttNd = 0;
+
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pFmt)
+    {
+        const SwFmtCntnt& rFlyCntnt = pFmt->GetCntnt();
+        if( rFlyCntnt.GetCntntIdx() )
+            pSttNd = rFlyCntnt.GetCntntIdx()->GetNode().GetStartNode();
+    }
+
+    return pSttNd;
+}
+
 uno::Reference< XTextCursor >   SwXTextFrame::createCursor()
 {
     return createTextCursor();

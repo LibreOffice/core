@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-04 12:19:14 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,12 @@ const sal_Char cInvalidObject[] = "this object is invalid";
 /*-- 09.12.98 12:44:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
+const SwStartNode *SwXText::GetStartNode() const
+{
+    return GetDoc()->GetNodes().GetEndOfContent().StartOfSectionNode();
+}
+
 uno::Reference< XTextCursor >   SwXText::createCursor()
 {
     uno::Reference< XTextCursor >  xRet;
@@ -250,24 +256,15 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
         if(pRange && pRange->GetDoc()  == GetDoc() ||
             pCursor && pCursor->GetDoc()  == GetDoc())
         {
-            uno::Reference< XTextCursor >  xOwnCursor = createCursor();
-            uno::Reference<lang::XUnoTunnel> xOwnTunnel( xTextRange, uno::UNO_QUERY);
-            SwXTextCursor* pOwnCursor = (SwXTextCursor*)xOwnTunnel->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
-
-            const SwStartNode* pOwnStartNode = pOwnCursor->GetCrsr()->GetNode()->FindStartNode();
+            const SwStartNode* pOwnStartNode = GetStartNode();
             if(pCursor)
             {
                 const SwStartNode* pTmp = pCursor->GetCrsr()->GetNode()->FindStartNode();
-                while(pOwnStartNode->IsSectionNode())
-                {
-                    pOwnStartNode = pOwnStartNode->FindStartNode();
-                }
                 while(pTmp && pTmp->IsSectionNode())
                 {
                     pTmp = pTmp->FindStartNode();
                 }
-                if(pOwnStartNode != pTmp)
+                if( !pOwnStartNode || pOwnStartNode != pTmp)
                 {
                     throw uno::RuntimeException();
                 }
@@ -280,12 +277,7 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
                 {
                     pTmp = pTmp->FindStartNode();
                 }
-                //if the document starts with a section
-                while(pOwnStartNode->IsSectionNode())
-                {
-                    pOwnStartNode = pOwnStartNode->FindStartNode();
-                }
-                if(pOwnStartNode != pTmp)
+                if( !pOwnStartNode || pOwnStartNode != pTmp)
                 {
                     throw uno::RuntimeException();
                 }
@@ -1432,6 +1424,19 @@ SwXHeadFootText::~SwXHeadFootText()
 /*-- 11.12.98 10:14:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+const SwStartNode *SwXHeadFootText::GetStartNode() const
+{
+    const SwStartNode *pSttNd = 0;
+    SwFrmFmt* pHeadFootFmt = GetFmt();
+    if(pHeadFootFmt)
+    {
+        const SwFmtCntnt& rFlyCntnt = pHeadFootFmt->GetCntnt();
+        if( rFlyCntnt.GetCntntIdx() )
+            pSttNd = rFlyCntnt.GetCntntIdx()->GetNode().GetStartNode();
+    }
+    return pSttNd;
+}
+
 uno::Reference< XTextCursor >   SwXHeadFootText::createCursor()
 {
     return createTextCursor();
