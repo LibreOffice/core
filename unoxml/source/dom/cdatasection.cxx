@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdatasection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:30:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
