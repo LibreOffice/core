@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:11:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ french ] = "Type";
         Text[ spanish ] = "Tipo";
         Text[ italian ] = "Tipo";
-        Text[ danish ] = "Type";
+        Text[ danish ] = "V�RDITYPE";
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Tipo";
@@ -788,6 +788,8 @@ ModalDialog DLG_START_PRESENTATION
     Text[ hindi ] = "स्लइड दिखाओ";
     Text[ slovak ] = "Prezentácia";
 };
+
+
 
 
 
