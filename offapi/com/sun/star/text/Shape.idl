@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:52:34 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,28 @@ published service Shape
             @since #i28701#
          */
         [optional, property] short WrapInfluenceOnPosition;
+
+    //-------------------------------------------------------------------------
+    /** determines the transformation of the shape in horizontal left-to-right
+        layout
+
+        <p>This property is needed for the export of the OASIS Open Office
+        file format to the OpenOffice.org file format. It provides the
+        transformation property of the included service com::sun::star::drawing::Shape
+        converted to the horizontal left-to-right layout.</p>
+
+        @since #i28749#
+    */
+    [optional, readonly, property] com::sun::star::drawing::HomogenMatrix3 TransformationInHoriL2R;
+    //-------------------------------------------------------------------------
+    /** determines layout direction the position attributes of the shape
+        is given
+
+        <p>Valid values are given by <member>PositionLayoutDir</member></p>
+
+        @since #i28749#
+     */
+    [optional, property] short PositionLayoutDir;
 };
 
 //=============================================================================
