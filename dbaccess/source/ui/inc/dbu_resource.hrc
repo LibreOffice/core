@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 13:01:27 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 14:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,18 @@
 #define ERR_COULDNOTRESTOREDS           1001
 
 //========================================================================
+// query boxes
+
+#define QUERY_BRW_DELETE_ROWS           1000
+#define QUERY_BRW_SAVEMODIFIED          1001
+
+//========================================================================
+// toolboxes
+
+#define RID_BRW_TAB_TOOLBOX             1000
+#define RID_BRW_QRY_TOOLBOX             1001
+
+//========================================================================
 // bitmaps
 
 #define BMP_PLUSBUTTON                  1000
@@ -99,10 +111,6 @@
 #define BMP_CHECKBUTTON_HIUNCHECKED     1005
 #define BMP_CHECKBUTTON_TRISTATE        1006
 #define BMP_CHECKBUTTON_HITRISTATE      1007
-#define BMP_DATABASE                    1008
-#define BMP_DATABASE_MODIFIED           1009
-#define BMP_DATABASE_NEW                1010
-#define BMP_DATABASE_DELETED            1011
 
 //========================================================================
 // images
@@ -113,6 +121,12 @@
 #define BMP_EXCEPTION_ERROR             1003
 #define BMP_EXCEPTION_WARNING           1004
 #define BMP_EXCEPTION_INFO              1005
+#define QUERYFOLDER_TREE_ICON           1006
+#define QUERY_TREE_ICON                 1007
+#define IMG_DATABASE                    1008
+#define IMG_DATABASE_MODIFIED           1009
+#define IMG_DATABASE_NEW                1010
+#define IMG_DATABASE_DELETED            1011
 
 //========================================================================
 // image lists
@@ -122,6 +136,8 @@
 
 #define MENU_TABLETREE_POPUP            256
 #define MENU_DATASOURCELIST_POPUP       257
+#define RID_SBA_GRID_COLCTXMENU         258
+#define RID_SBA_GRID_ROWCTXMENU         259
 
 //========================================================================
 // strings
@@ -135,8 +151,17 @@
 #define STR_GENERAL_SDB_ERROR               262
 #define STR_ENTER_CONNECTION_PASSWORD       263
 #define STR_DATASOURCE_DEFAULTNAME          264
-#define STR_REMEMBERPASSWORD_SESSION        265
-#define STR_REMEMBERPASSWORD_PERSISTENT     266
+#define STR_TBL_TITLE                       265
+#define STR_QRY_TITLE                       266
+#define RID_STR_CONNECTION_LOST             267
+#define RID_STR_LOADING_DATASOURCE          268
+#define RID_STR_SAVE_CURRENT_RECORD         269
+#define RID_STR_UNDO_MODIFY_RECORD          270
+#define SBA_BROWSER_SETTING_ORDER           271
+#define SBA_BROWSER_SETTING_FILTER          272
+#define RID_STR_DATABROWSER_FILTERED        273
+#define STR_REMEMBERPASSWORD_SESSION        274
+#define STR_REMEMBERPASSWORD_PERSISTENT     275
 
 //========================================================================
 // untyped resources
@@ -149,6 +174,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/10/25 13:01:27  fs
+ *  STR_REMEMBERPASSWORD*
+ *
  *  Revision 1.5  2000/10/24 12:07:49  fs
  *  DLG_DATASOURCE_SELECTION
  *
