@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:19:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6929,7 +6929,7 @@ XLineDashItem LineDash SID_ATTR_LINE_DASH
 
 //--------------------------------------------------------------------------
 SfxBoolItem LineEndStyle SID_ATTR_LINEEND_STYLE
-(XLineStartItem LineStart SID_ATTR_LINEEND_STYLE,XLineEndItem LineEnd FN_PARAM_2,SfxUInt32Item StartWidth FN_PARAM_3,SfxUInt32Item EndWidth FN_PARAM_4)
+(XLineStartItem LineStart SID_ATTR_LINE_START,XLineEndItem LineEnd SID_ATTR_LINE_END,SfxUInt32Item StartWidth SID_ATTR_LINE_STARTWIDTH,SfxUInt32Item EndWidth SID_ATTR_LINE_ENDWIDTH)
 [
     /* flags: */
     AutoUpdate = FALSE,
