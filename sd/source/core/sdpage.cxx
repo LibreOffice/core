@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:36:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,13 +393,13 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
     {
         //Erste Standardseite am SdrPageObj vermerken
         SdrPage* pPage = ( (SdDrawDocument*) pModel )->GetSdPage(0, PK_STANDARD);
-        pSdrObj = new SdrPageObj( pPage->GetPageNum() );
+        pSdrObj = new SdrPageObj( pPage );
         pSdrObj->SetResizeProtect(TRUE);
     }
     else if (eObjKind == PRESOBJ_PAGE)
     {
         //Notizseite am SdrPageObj vermerken
-        pSdrObj = new SdrPageObj( GetPageNum() - 1 );
+        pSdrObj = new SdrPageObj(pModel->GetPage(GetPageNum() - 1));
         pSdrObj->SetResizeProtect(TRUE);
     }
 
@@ -450,7 +450,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
                     aTempAttr.Put(SdrTextAutoGrowHeightItem(FALSE));
             }
 
-            pSdrObj->SetItemSet(aTempAttr);
+            pSdrObj->SetMergedItemSet(aTempAttr);
         }
 
         String aString = GetPresObjText(eObjKind);
@@ -527,7 +527,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             aSet.Put( SdrTextContourFrameItem( TRUE ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
 
-            pSdrObj->SetItemSet(aSet);
+            pSdrObj->SetMergedItemSet(aSet);
         }
     }
 
@@ -883,9 +883,9 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bAPICall )
             {
                 Rectangle aRect(aPos, aSize);
                 SdrPageObj* pPageObj = (SdrPageObj*) pMasterPage->
-                CreatePresObj(PRESOBJ_HANDOUT, FALSE, aRect, TRUE);
+                    CreatePresObj(PRESOBJ_HANDOUT, FALSE, aRect, TRUE);
 
-                pPageObj->SetPageNum( 2 * nPgNum + 1);
+                pPageObj->SetReferencedPage(pModel->GetPage(2 * nPgNum + 1));
 
                 nPgNum++;
                 aPos.X() += aPartArea.Width() + nGapW;
@@ -1663,8 +1663,10 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             pObj = GetPresObj(nObjKind[0]);
             if ( pObj )
             {
-                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+                SfxItemSet aNewSet(pObj->GetMergedItemSet());
+                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
+                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
+                pObj->SetMergedItemSet(aNewSet);
             }
             Size aLayoutSize ( GetSize() );
             aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
@@ -1678,13 +1680,16 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             pObj = GetPresObj(nObjKind[1]);
             if ( pObj )
             {
-                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+                SfxItemSet aNewSet(pObj->GetMergedItemSet());
+
+                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
+                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
 
                 // #90790#
-                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
-//              pObj->SetLogicRect( aRect1 );   // sj: #98326#
+                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+
+                pObj->SetMergedItemSet(aNewSet);
             }
             aSize.Height() = aRect0.GetSize().Height();
             Point aPos( aTitleRect.TopLeft() );
@@ -1709,8 +1714,10 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             pObj = GetPresObj(nObjKind[0]);
             if ( pObj )
             {
-                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+                SfxItemSet aNewSet(pObj->GetMergedItemSet());
+                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
+                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
+                pObj->SetMergedItemSet(aNewSet);
             }
             Size aLayoutSize ( GetSize() );
             aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
@@ -1724,12 +1731,16 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             pObj = GetPresObj(nObjKind[1]);
             if ( pObj )
             {
-                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+                SfxItemSet aNewSet(pObj->GetMergedItemSet());
+
+                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
+                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
 
                 // #90790#
-                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+
+                pObj->SetMergedItemSet(aNewSet);
             }
         }
         break;
@@ -1746,12 +1757,16 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             pObj = GetPresObj(nObjKind[1]);
             if ( pObj )
             {
-                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+                SfxItemSet aNewSet(pObj->GetMergedItemSet());
+
+                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
+                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
 
                 // #90790#
-                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+
+                pObj->SetMergedItemSet(aNewSet);
             }
         }
         break;
@@ -1778,12 +1793,16 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             pObj = GetPresObj(nObjKind[2]);
             if ( pObj )
             {
-                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+                SfxItemSet aNewSet(pObj->GetMergedItemSet());
+
+                aNewSet.Put( SdrTextAutoGrowWidthItem(TRUE) );
+                aNewSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
 
                 // #90790#
-                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
-                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+                aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                aNewSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+
+                pObj->SetMergedItemSet(aNewSet);
             }
         }
         break;
@@ -1854,7 +1873,7 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
     {
         // Objekt hat keinen UserCall auf diese Seite, es ist jedoch noch in
         // der PresObjList eingetragen -> austragen
-        Changed(*pObj, SDRUSERCALL_REMOVED, pObj->GetBoundRect());
+        Changed(*pObj, SDRUSERCALL_REMOVED, pObj->GetLastBoundRect());
     }
 
     ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
@@ -1877,7 +1896,7 @@ SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
     {
         // Objekt hat keinen UserCall auf diese Seite, es ist jedoch noch in
         // der PresObjList eingetragen -> austragen
-        Changed(*pObj, SDRUSERCALL_REMOVED, pObj->GetBoundRect());
+        Changed(*pObj, SDRUSERCALL_REMOVED, pObj->GetLastBoundRect());
     }
 
     ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
@@ -1897,7 +1916,7 @@ SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
     SdrObject* pOldObj = FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
     if(pOldObj && pOldObj->GetUserCall()!=this && aPresObjList.GetPos(pOldObj) != LIST_ENTRY_NOTFOUND)
-        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetBoundRect());
+        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetLastBoundRect());
     return pOldObj;
 }
 
@@ -1907,7 +1926,7 @@ SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
     SdrObject* pOldObj = FmFormPage::ReplaceObject(pNewObj, nObjNum);
     if(pOldObj && pOldObj->GetUserCall()!=this && aPresObjList.GetPos(pOldObj) != LIST_ENTRY_NOTFOUND)
-        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetBoundRect());
+        Changed(*pOldObj, SDRUSERCALL_REMOVED, pOldObj->GetLastBoundRect());
     return pOldObj;
 }
 
@@ -2139,7 +2158,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
         {
             USHORT nIndexBackground = 0;
             // #88084# remember aTopLeft as original TopLeft
-            Point aTopLeft(pObj->GetBoundRect().TopLeft());
+            Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
 
             if (bIsPresObjOnMaster &&
                 (ePageKind == PK_HANDOUT ||
@@ -2305,9 +2324,10 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                             nWhich = EE_CHAR_FONTHEIGHT_CTL;
 
                         // #88084# use more modern method to scale the text height
-                        sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetItem(nWhich)).GetHeight();
+                        sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetMergedItem(nWhich)).GetHeight();
                         sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * (double)aFractY);
-                        pObj->SetItem(SvxFontHeightItem(nNewFontHeight, 100, nWhich));
+
+                        pObj->SetMergedItem(SvxFontHeightItem(nNewFontHeight, 100, nWhich));
                     }
                 }
             }
@@ -2331,7 +2351,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                     pObj->NbcMove(aVec);
                 }
 
-                Rectangle aBoundRect = pObj->GetBoundRect();
+                Rectangle aBoundRect = pObj->GetCurrentBoundRect();
 
                 if (!aBorderRect.IsInside(aBoundRect))
                 {
@@ -2365,7 +2385,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                     }
                 }
 
-                pObj->SendRepaintBroadcast();
+                pObj->SetChanged();
+                pObj->BroadcastObjectChange();
             }
         }
     }
@@ -2410,12 +2431,12 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     if(bVertical)
                     {
                         // vertical activated on once horizontal outline object
-                        ((SdrTextObj*) pObj)->SetItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                        ((SdrTextObj*) pObj)->SetMergedItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
                     }
                     else
                     {
                         // horizontal activated on once vertical outline object
-                        ((SdrTextObj*) pObj)->SetItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
+                        ((SdrTextObj*) pObj)->SetMergedItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
                     }
                 }
             }
@@ -2429,14 +2450,14 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
                     aTempAttr.Put( aMinHeight );
                     aTempAttr.Put( SdrTextAutoGrowHeightItem(FALSE) );
-                    pObj->SetItemSet(aTempAttr);
+                    pObj->SetMergedItemSet(aTempAttr);
                     pObj->SetLogicRect(aRect);
 
                     // switch on AutoGrowHeight
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     aAttr.Put( SdrTextAutoGrowHeightItem(TRUE) );
 
-                    pObj->SetItemSet(aAttr);
+                    pObj->SetMergedItemSet(aAttr);
                 }
 
                 if ( ((SdrTextObj*) pObj)->IsAutoGrowWidth() )
@@ -2446,13 +2467,13 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     SdrTextMinFrameWidthItem aMinWidth( aRect.GetSize().Width() );
                     aTempAttr.Put( aMinWidth );
                     aTempAttr.Put( SdrTextAutoGrowWidthItem(FALSE) );
-                    pObj->SetItemSet(aTempAttr);
+                    pObj->SetMergedItemSet(aTempAttr);
                     pObj->SetLogicRect(aRect);
 
                     // switch on AutoGrowWidth
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     aAttr.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                    pObj->SetItemSet(aAttr);
+                    pObj->SetMergedItemSet(aAttr);
                 }
             }
         }
@@ -2514,11 +2535,11 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     // LRSpace-Item loeschen
                     SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
-                    aSet.Put(pObj->GetItemSet());
+                    aSet.Put(pObj->GetMergedItemSet());
 
                     aSet.ClearItem(EE_PARA_LRSPACE);
 
-                    pObj->SetItemSet(aSet);
+                    pObj->SetMergedItemSet(aSet);
 
                     // Untertitel loeschen
                     aPresObjList.Remove(pSubtitle);
@@ -2557,14 +2578,14 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     // Linken Einzug zuruecksetzen
                     SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
-                    aSet.Put(pObj->GetItemSet());
+                    aSet.Put(pObj->GetMergedItemSet());
 
                     const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
                     SvxLRSpaceItem aNewLRItem(rLRItem);
                     aNewLRItem.SetTxtLeft(0);
                     aSet.Put(aNewLRItem);
 
-                    pObj->SetItemSet(aSet);
+                    pObj->SetMergedItemSet(aSet);
 
                     SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TEXT);
 
