@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:03:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         }
 
         // Jetzt das Dokument normal speichern
-        BOOL bRet = SaveAs( rMedium.GetStorage() );
+        BOOL bRet = SaveAs( rMedium.GetOutputStorage() );
 
         if( nMyType != nSaveType )
         {
@@ -974,7 +974,7 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
         uno::Sequence < rtl::OUString > aNames = pOLEChildList->GetObjectNames();
         for( sal_Int32 n = aNames.getLength(); n; n-- )
         {
-            if ( !pOLEChildList->MoveEmbeddedObject( aNames[n], GetEmbeddedObjectContainer() ) )
+            if ( !pOLEChildList->MoveEmbeddedObject( aNames[n-1], GetEmbeddedObjectContainer() ) )
                 DBG_ERROR( "Copying of objects didn't work!" );
 
             //SvPersist* pPersist = this;
