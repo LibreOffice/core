@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-10 12:07:19 $
+ *  last change: $Author: cl $ $Date: 2001-05-03 12:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,8 @@ struct XML_SERVICEMAP
 // - SdXMLWrapper -
 // ----------------
 
-SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress ) :
-    SdFilter( rMedium, rDocShell, bShowProgress )
+SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode ) :
+    SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode )
 {
 }
 
@@ -291,17 +291,26 @@ sal_Bool SdXMLFilter::Import()
                 }
                 else
                 {
-                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service;
-                    aServices[i++].mpStream  = sXML_metaStreamName;
+                    if( (mrDocShell.GetCreateMode() != SFX_CREATE_MODE_EMBEDDED) && (meFilterMode != SDXMLMODE_Organizer) )
+                    {
+                        aServices[i  ].mpService = IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service;
+                        aServices[i++].mpStream  = sXML_metaStreamName;
+                    }
 
                     aServices[i  ].mpService = IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service;
                     aServices[i++].mpStream  = sXML_styleStreamName;
 
-                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
-                    aServices[i++].mpStream  = sXML_contentStreamName;
+                    if( meFilterMode != SDXMLMODE_Organizer )
+                    {
+                        aServices[i  ].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
+                        aServices[i++].mpStream  = sXML_contentStreamName;
+                    }
 
-                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service;
-                    aServices[i++].mpStream  = sXML_settingsStreamName;
+                    if( meFilterMode != SDXMLMODE_Organizer )
+                    {
+                        aServices[i  ].mpService = IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service;
+                        aServices[i++].mpStream  = sXML_settingsStreamName;
+                    }
                 }
 
                 aServices[i].mpService = NULL;
@@ -513,21 +522,24 @@ sal_Bool SdXMLFilter::Export()
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
-            XML_SERVICEMAP aServices[5];
-            aServices[0].mpService = IsDraw() ? sXML_export_draw_meta_service : sXML_export_impress_meta_service;
-            aServices[0].mpStream  = sXML_metaStreamName;
+            XML_SERVICEMAP aServices[5]; sal_uInt16 i = 0;
+            aServices[i  ].mpService = IsDraw() ? sXML_export_draw_styles_service : sXML_export_impress_styles_service;
+            aServices[i++].mpStream  = sXML_styleStreamName;
 
-            aServices[1].mpService = IsDraw() ? sXML_export_draw_styles_service : sXML_export_impress_styles_service;
-            aServices[1].mpStream  = sXML_styleStreamName;
+            aServices[i  ].mpService = IsDraw() ? sXML_export_draw_content_service : sXML_export_impress_content_service;
+            aServices[i++].mpStream  = sXML_contentStreamName;
 
-            aServices[2].mpService = IsDraw() ? sXML_export_draw_content_service : sXML_export_impress_content_service;
-            aServices[2].mpStream  = sXML_contentStreamName;
+            aServices[i  ].mpService = IsDraw() ? sXML_export_draw_settings_service : sXML_export_impress_settings_service;
+            aServices[i++].mpStream  = sXML_settingsStreamName;
 
-            aServices[3].mpService = IsDraw() ? sXML_export_draw_settings_service : sXML_export_impress_settings_service;
-            aServices[3].mpStream  = sXML_settingsStreamName;
+            if( mrDocShell.GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            {
+                aServices[i  ].mpService = IsDraw() ? sXML_export_draw_meta_service : sXML_export_impress_meta_service;
+                aServices[i++].mpStream  = sXML_metaStreamName;
+            };
 
-            aServices[4].mpService = NULL;
-            aServices[4].mpStream  = NULL;
+            aServices[i].mpService = NULL;
+            aServices[i].mpStream  = NULL;
 
             XML_SERVICEMAP* pServices = aServices;
 

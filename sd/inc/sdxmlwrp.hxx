@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:02:55 $
+ *  last change: $Author: cl $ $Date: 2001-05-03 12:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,21 @@
 // - SdXMLFilter -
 // ---------------
 
+enum SdXMLFilterMode
+{
+    SDXMLMODE_Normal,           // standard load and save of the complete document
+    SDXMLMODE_Preview,          // only for import, only the first draw page and its master page is loaded
+    SDXMLMODE_Organizer         // only for import, only the styles are loaded
+};
+
 class SdXMLFilter : public SdFilter
 {
+private:
+    SdXMLFilterMode meFilterMode;
+
 public:
 
-                            SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
+                            SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode = SDXMLMODE_Normal );
                             ~SdXMLFilter();
 
     virtual sal_Bool        Import();

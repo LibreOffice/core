@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: cl $ $Date: 2001-05-03 12:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,44 +427,65 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
 
 BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
 {
-    BOOL bRet = FALSE;
+    const ULONG nStoreVer = pStor->GetVersion();
+    const BOOL bBinary = ( nStoreVer < SOFFICE_FILEFORMAT_60 );
 
-    BOOL bRet1 = SfxObjectShell::LoadFrom(pStor);
-    BOOL bRet2 = TRUE;
     WaitObject* pWait = NULL;
-
     if( pViewShell )
         pWait = new WaitObject( (Window*) pViewShell->GetActiveWindow() );
 
-    // da trotz eines erfolgten InitNew() noch LoadFrom() gerufen werden kann,
-    // muessen die Vorlagen hier geloescht werden
-    GetStyleSheetPool()->Clear();
-
-    // Pool und StyleSheet Pool laden
-    SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets);
-    aPoolStm->SetVersion(pStor->GetVersion());
-    aPoolStm->SetKey(pStor->GetKey());
-    bRet2 = aPoolStm->GetError() == 0;
-    if (bRet2)
+    BOOL bRet = FALSE;
+    if( bBinary )
     {
-        aPoolStm->SetBufferSize( 32768 );
-        GetPool().SetFileFormatVersion((USHORT)pStor->GetVersion());
-        GetPool().Load(*aPoolStm);
+
+        BOOL bRet1 = SfxObjectShell::LoadFrom(pStor);
+        BOOL bRet2 = TRUE;
+
+        // da trotz eines erfolgten InitNew() noch LoadFrom() gerufen werden kann,
+        // muessen die Vorlagen hier geloescht werden
+        GetStyleSheetPool()->Clear();
+
+        // Pool und StyleSheet Pool laden
+        SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets);
+        aPoolStm->SetVersion(pStor->GetVersion());
+        aPoolStm->SetKey(pStor->GetKey());
         bRet2 = aPoolStm->GetError() == 0;
-        DBG_ASSERT(bRet2, "Fehler beim Laden des Item-Pools");
+        if (bRet2)
+        {
+            aPoolStm->SetBufferSize( 32768 );
+            GetPool().SetFileFormatVersion((USHORT)pStor->GetVersion());
+            GetPool().Load(*aPoolStm);
+            bRet2 = aPoolStm->GetError() == 0;
+            DBG_ASSERT(bRet2, "Fehler beim Laden des Item-Pools");
+        }
+
+        if (bRet2)
+        {
+            GetStyleSheetPool()->Load(*aPoolStm);
+            bRet2 = aPoolStm->GetError() == 0;
+            aPoolStm->SetBufferSize(0);
+            DBG_ASSERT(bRet2, "Fehler beim Laden des StyleSheet-Pools");
+        }
+
+        bRet = bRet1 || bRet2;
     }
-
-    if (bRet2)
+    else
     {
-        GetStyleSheetPool()->Load(*aPoolStm);
-        bRet2 = aPoolStm->GetError() == 0;
-        aPoolStm->SetBufferSize(0);
-        DBG_ASSERT(bRet2, "Fehler beim Laden des StyleSheet-Pools");
+        SfxMedium   aMedium( pStor );
+
+        pDoc->NewOrLoadCompleted( NEW_DOC );
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
+
+        SdFilter*   pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer );
+
+        bRet = pFilter ? pFilter->Import() : FALSE;
+        delete pFilter;
+
     }
 
     delete pWait;
 
-    bRet = bRet1 || bRet2;
     return bRet;
 }
 
