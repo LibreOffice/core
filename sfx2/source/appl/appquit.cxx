@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: ab $ $Date: 2001-02-26 12:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #include "viewfrm.hxx"
 #include "bmkmenu.hxx"
 #include "objsh.hxx"
+#include "dlgcont.hxx"
 
 #ifndef PRODUCT
 DECLARE_LIST( SfxFrameWindowFactoryArray_Impl, SfxFrameWindowFactory* )
@@ -306,6 +307,8 @@ void SfxApplication::Deinitialize()
     DELETEZ(pMenuMgr);
     DELETEZ(pAcceleratorMgr);
     DELETEZ( pImp->pBasicMgr );
+    if( pImp->pDialogContainer )
+        pImp->pDialogContainer->release();
 
     SvFactory::ClearDemandObjects();
     bInExit = FALSE;
