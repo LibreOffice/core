@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:36:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "¸ê®Æ®wÀÉ®×";
         Text[ arabic ] = "ãáİÇÊ ŞÇÚÏÉ ÈíÇäÇÊ";
         Text[ turkish ] = "Veritabanı dosyaları";
+        Text[ catalan ] = "Archivos de base de datos";
     };
 
     FixedText FT_SYSDEVSPACE
@@ -127,6 +128,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "SYSDEVSPACE¡G";
         Text[ arabic ] = "S~YSDEVSPACE:";
         Text[ turkish ] = "S~YSDEVSPACE:";
+        Text[ catalan ] = "S~YSDEVSPACE:";
     };
 
     Edit ET_SYSDEVSPACE
@@ -162,6 +164,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "TRANSACTIONLOG:";
         Text[ arabic ] = "~TRANSACTIONLOG:";
         Text[ turkish ] = "~TRANSACTIONLOG:";
+        Text[ catalan ] = "~TRANSACTIONLOG:";
     };
 
     Edit ET_TRANSACTIONLOG
@@ -197,6 +200,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "DATADEVSPACE:";
         Text[ arabic ] = "DATAD~EVSPACE:";
         Text[ turkish ] = "DATAD~EVSPACE:";
+        Text[ catalan ] = "DATAD~EVSPACE:";
     };
 
     ListBox LB_DATADEVS
@@ -233,6 +237,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "¸ê®Æ®w¤j¤p";
         Text[ arabic ] = "ÃÍÌÇã ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ turkish ] = "Veritabanı büyüklükleri";
+        Text[ catalan ] = "Tamaños de base de datos";
     };
 
     FixedText FT_SIZE
@@ -259,6 +264,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "¤j¤p(MB)¡G";
         Text[ arabic ] = "ÇáÍÌã ÇáÅÌãÇáí (ÈÇáãíÌÇÈÇíÊ):";
         Text[ turkish ] = "Toplam büyüklük (MB):";
+        Text[ catalan ] = "Tamaño ~total (MB):";
     };
 
     Edit ET_SIZE
@@ -294,6 +300,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "¥i¥ÎªÅ¶¡(MB)¡G";
         Text[ arabic ] = "ÇáãÓÇÍÉ ÇáÍÑÉ (ÈÇáãíÌÇÈÇíÊ):";
         Text[ turkish ] = "Boş bellek (MB):";
+        Text[ catalan ] = "~Memoria libre (MB):";
     };
 
     Edit ET_FREESIZE
@@ -329,6 +336,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ chinese_traditional ] = "¥D°O¾ĞÅé¥e¥Î(%)¡G";
         Text[ arabic ] = "ÇáĞÇßÑÉ ÇáãÓÊÎÏãÉ (ÇáäÓÈÉ ÇáãÆæíÉ):";
         Text[ turkish ] = "Bellek kullanımı (% olarak):";
+        Text[ catalan ] = "~Memoria usada (en %):";
     };
 
     NumericField ET_MEMORYUSING
@@ -368,6 +376,7 @@ ModalDialog DLG_ADABASSTAT
     Text[ chinese_traditional ] = "¸ê®Æ®w²Î­p";
     Text[ arabic ] = "ÅÍÕÇÆíÇÊ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veritabanı istatistikleri";
+    Text[ catalan ] = "Estadísticas de base de datos";
 };
 
 String STR_ADABAS_HELP_SYSDEVSPACE
@@ -392,6 +401,7 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text[ chinese_traditional ] = "§t¦³¨t²Îªí®æ";
     Text[ turkish ] = "Contains the system tables";
     Text[ arabic ] = "íÍÊæí Úáì ÌÏÇæá ÇáäÙÇã";
+    Text[ catalan ] = "Contains the system tables";
 };
 
 String STR_ADABAS_HELP_TRANSACT
@@ -416,6 +426,7 @@ String STR_ADABAS_HELP_TRANSACT
     Text[ chinese_traditional ] = "§t¦³¶Ç»¼ªº¸ê°T";
     Text[ turkish ] = "Contains information about transactions";
     Text[ arabic ] = "íÍÊæí Úáì ãÚáæãÇÊ Íæá ÇáÚãáíÉ";
+    Text[ catalan ] = "Contains information about transactions";
 };
 
 String STR_ADABAS_HELP_DATADEVSPACES
@@ -440,6 +451,7 @@ String STR_ADABAS_HELP_DATADEVSPACES
     Text[ chinese_traditional ] = "§t¦³¥ş³¡ªº¸ê®ÆÀÉ®×";
     Text[ turkish ] = "Contains all data files";
     Text[ arabic ] = "íÍÊæí Úáì ßÇİÉ ãáİÇÊ ÇáÈíÇäÇÊ";
+    Text[ catalan ] = "Contains all data files";
 };
 
 String STR_ADABAS_HELP_SIZE
@@ -464,6 +476,7 @@ String STR_ADABAS_HELP_SIZE
     Text[ chinese_traditional ] = "¸ê®Æ®wÀÉ®×ªºÁ`¤j¤p";
     Text[ turkish ] = "Overall Size of the database files";
     Text[ arabic ] = "ÇáÍÌã ÇáÅÌãÇáí áãáİÇÊ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
+    Text[ catalan ] = "Overall Size of the database files";
 };
 
 String STR_ADABAS_HELP_FREESIZE
@@ -474,8 +487,8 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ portuguese ] = "Memória ainda disponível antes de criar um novo ficheiro Datadev.";
     Text[ russian ] = "Äîñòóïíî ïàìÿòè ïåğåä ñîçäàíèåì íîâîãî ôàéëà datadev.";
     Text[ greek ] = "Áğïìİíïõóá ìíŞìç ğñéí ôçí äçìéïõñãßá åíüò íİïõ áñ÷åßïõ Datadev.";
-    Text[ dutch ] = "Noch beschikbare vrije ruimte voordat een nieuwe Datadev-bestand moet worden aangelegd.";
-    Text[ french ] = "Mémoire encore disponible avant génération d'un fichier Datadev.";
+    Text[ dutch ] = "Noch beschikbare vrije ruimte voordat een nieuw Datadev-bestand wordt aangelegd.";
+    Text[ french ] = "Mémoire encore disponible avant génération d'un nouveau fichier Datadev.";
     Text[ spanish ] = "Memoria existente actualmente antes de crear un nuevo archivo datadev.";
     Text[ italian ] = "Memoria ancora disponibile prima di creare un nuovo file Datadev.";
     Text[ danish ] = "Currently free avaliable space bevor a new datadev must be created.";
@@ -488,6 +501,7 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ chinese_traditional ] = "¦b·s¼W¤@­Ó datadev ÀÉ®×¤§«eªº¥i¥ÎªÅ¶¡¡C";
     Text[ turkish ] = "Currently free avaliable space bevor a new datadev must be created.";
     Text[ arabic ] = "ÇáãÓÇÍÉ ÇáÍÑÉ ÇáãÊæİÑÉ ÍÇáíÇğ ŞÈá ÅäÔÇÁ ãáİ datadev ÌÏíÏ.";
+    Text[ catalan ] = "Currently free avaliable space bevor a new datadev must be created.";
 };
 
 String STR_ADABAS_HELP_MEMORYUSING
@@ -512,6 +526,7 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ chinese_traditional ] = "·í«e¥e¥Î°O¾ĞÅé";
     Text[ turkish ] = "Currently used memory";
     Text[ arabic ] = "ÇáĞÇßÑÉ ÇáãÓÊÎÏãÉ ÍÇáíÇğ";
+    Text[ catalan ] = "Currently used memory";
 };
 
 
