@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:23:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,33 +263,6 @@ class OfaHelperProgramsTabPage : public SfxTabPage
     ListBox         aProfilesLB;
     Edit            aMailerURLED;
     PushButton      aMailerURLPB;
-
-    FixedLine       aLinkFL;
-    ReadOnlyImage   aHTTPFI;
-    FixedText       aHTTPFT;
-    Edit            aHTTPED;
-    PushButton      aHTTPPB;
-
-    ReadOnlyImage   aHTTPSFI;
-    FixedText       aHTTPSFT;
-    Edit            aHTTPSED;
-    PushButton      aHTTPSPB;
-
-    ReadOnlyImage   aFTPFI;
-    FixedText       aFTPFT;
-    Edit            aFTPED;
-    PushButton      aFTPPB;
-
-    ReadOnlyImage   aMailerFI;
-    FixedText       aMailerFT;
-    Edit            aMailerED;
-    PushButton      aMailerPB;
-
-    ReadOnlyImage   aDocManagerFI;
-    FixedLine       aDocManagerFL;
-    FixedText       aDocManagerFT;
-    Edit            aDocManagerED;
-    PushButton      aDocManagerPB;
 
     String          m_sMozilla;
     String          m_sNetscape;
