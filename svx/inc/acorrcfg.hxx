@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:17:16 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,11 @@ public:
                 {
                     aBaseConfig.SetModified();
                     aSwConfig.SetModified();
+                }
+    void        Commit()
+                {
+                    aBaseConfig.Commit();
+                    aSwConfig.Commit();
                 }
 
           SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect; }
