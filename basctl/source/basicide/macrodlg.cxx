@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:57:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,7 +962,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     {
         StoreMacroDescription();
 
-        OrganizeDialog* pDlg = new OrganizeDialog( this );
+        OrganizeDialog* pDlg = new OrganizeDialog( this, 0 );
         String aMacroDescr = CreateEntryDescription( aBasicBox, aBasicBox.FirstSelected() );
         pDlg->SetCurrentModule( aMacroDescr );
         USHORT nRet = pDlg->Execute();
