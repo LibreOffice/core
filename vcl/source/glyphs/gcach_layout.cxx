@@ -4,8 +4,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.3 $
- *  last change: $Author: hdu $ $Date: 2002-04-18 16:39:31 $
+ *  $Revision: 1.4 $
+ *  last change: $Author: hdu $ $Date: 2002-04-23 12:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALUNX_HXX
+#if !defined(_SV_SALUNX_HXX) && !defined(WIN32)
 #include <salunx.h>
 #endif
 
@@ -72,7 +72,10 @@
 #include <sallayout.hxx>
 #endif
 
-#if !( defined(FREEBSD) || defined(NETBSD) )
+#ifdef WIN32
+#include <malloc.h>
+#define alloca _alloca
+#elif !defined(FREEBSD) && !defined(NETBSD)
 #include <alloca.h>
 #endif
 
