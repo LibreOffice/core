@@ -116,7 +116,7 @@ Dim oNullObject as Object
 	With ImportDialog
 		.chkTemplatePath.Label = sTemplateCheckbox(Index)
     	.chkDocumentPath.State = Abs(Applications(CurOffice,SBDOCCONVERT))
-    	.chkDocumentSearchSubDir.State = Abs(Applications(CurOffice,SBDOCRECURSIVE))
+ 	  	.chkDocumentSearchSubDir.State = Abs(Applications(CurOffice,SBDOCRECURSIVE))
 		.txtDocumentImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCSOURCE))
 		.txtDocumentExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCTARGET))
 		.hlnDocuments.Label = sProgressMoreDocs
@@ -149,6 +149,7 @@ Dim oNullObject as Object
 		.cmdBack.Enabled = True
 		ImportDialog.Step = 2
 	End With
+	ImportDialogArea.GetControl(&quot;chkTemplatePath&quot;).SetFocus()
 	ToggleNextButton()
 End Sub
 
@@ -297,6 +298,7 @@ Sub FillStep_Summary()
 		.SummaryHeaderLabel.Label = sSummaryHeader
 		.Step = 3
 	End With
+	ImportDialogArea.GetControl(&quot;SummaryHeaderLabel&quot;).SetFocus()					
 End Sub
 
 
