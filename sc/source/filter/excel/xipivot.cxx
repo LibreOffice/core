@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:02:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,8 +621,7 @@ void XclImpPivotCache::ReadDconref( XclImpStream& rStrm )
 
     // Sheet index will be found later in XclImpPivotTable::Apply() (sheet may not exist yet).
     // Do not convert maTabName to Calc sheet name -> original name is used to find the sheet.
-    maSrcRange.aStart.Set( static_cast< SCCOL >( nStartCol ), static_cast< SCROW >( nStartRow ), 0 );
-    maSrcRange.aEnd.Set( static_cast< SCCOL >( nEndCol ), static_cast< SCROW >( nEndRow ), 0 );
+    maSrcRange = XclTools::MakeScRange( nStartCol, nStartRow, 0, nEndCol, nEndRow, 0 );
     CheckCellRange( maSrcRange );
 }
 
@@ -1073,8 +1072,9 @@ void XclImpPivotTable::ReadSxview( XclImpStream& rStrm )
 {
     rStrm >> maPTInfo;
 
-    maOutputRange.aStart.Set( static_cast< SCCOL >( maPTInfo.mnFirstCol ), static_cast< SCROW >( maPTInfo.mnFirstRow ), GetCurrScTab() );
-    maOutputRange.aEnd.Set( static_cast< SCCOL >( maPTInfo.mnLastCol ), static_cast< SCROW >( maPTInfo.mnLastRow ), GetCurrScTab() );
+    maOutputRange = XclTools::MakeScRange(
+        maPTInfo.mnFirstCol, maPTInfo.mnFirstRow, GetCurrScTab(),
+        maPTInfo.mnLastCol, maPTInfo.mnLastRow, GetCurrScTab() );
     CheckCellRange( maOutputRange );
 
     mpPCache = GetPivotTableManager().GetPivotCache( maPTInfo.mnCacheIdx );
@@ -1125,7 +1125,7 @@ void XclImpPivotTable::ReadSxivd( XclImpStream& rStrm )
     // fill the vector from record data
     if( pFieldVec )
     {
-        sal_uInt16 nSize = ::ulimit< sal_uInt16 >( rStrm.GetRecSize() / 2, EXC_PT_MAXROWCOLCOUNT );
+        sal_uInt16 nSize = ulimit_cast< sal_uInt16 >( rStrm.GetRecSize() / 2, EXC_PT_MAXROWCOLCOUNT );
         pFieldVec->reserve( nSize );
         for( sal_uInt16 nIdx = 0; nIdx < nSize; ++nIdx )
         {
@@ -1147,7 +1147,7 @@ void XclImpPivotTable::ReadSxpi( XclImpStream& rStrm )
 {
     mpCurrField = 0;
 
-    sal_uInt16 nSize = ::ulimit< sal_uInt16 >( rStrm.GetRecSize() / 6 );
+    sal_uInt16 nSize = ulimit_cast< sal_uInt16 >( rStrm.GetRecSize() / 6 );
     for( sal_uInt16 nEntry = 0; nEntry < nSize; ++nEntry )
     {
         XclPTPageFieldInfo aPageInfo;
@@ -1191,7 +1191,7 @@ void XclImpPivotTable::Apply() const
 
     ScRange aSrcRange( mpPCache->GetSourceRange() );
     SCTAB nScTab = GetTabInfo().GetScTabFromXclName( mpPCache->GetTabName() );
-    if( nScTab == SCNOTAB )
+    if( nScTab == SCTAB_MAX )
         return;
 
     ScDPSaveData aSaveData;
