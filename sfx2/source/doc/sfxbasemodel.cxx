@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-10-19 17:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,27 +744,7 @@ REFERENCE< XCONTROLLER > SAL_CALL SfxBaseModel::getCurrentController()
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    // is the active controller a controller of this model?
-    SfxViewFrame *pCurViewFrame = SfxViewFrame::Current();
-
-//ASDBG XCONTROLLER *pController = pCurViewFrame &&
-//ASDBG             pCurViewFrame->GetObjectShell()->GetModel() == (XMODEL*) this
-//ASDBG         ? pCurViewFrame->GetFrame()->GetController()
-//ASDBG         : 0;
-
-    REFERENCE< XMODEL >         xShellModel = pCurViewFrame->GetObjectShell()->GetModel() ;
-    REFERENCE< XMODEL >         xMyModel    (SAL_STATIC_CAST(XMODEL*,this)) ;
-    REFERENCE< XCONTROLLER >    xController ;
-
-    if ( pCurViewFrame && ( xShellModel == xMyModel ) )
-    {
-        xController = pCurViewFrame->GetFrame()->GetController() ;
-    }
-
-    if ( xController.is() )
-        return xController;
-
-    // get the least active controller of this model
+    // get the last active controller of this model
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pData->m_xCurrent.is() )
         return m_pData->m_xCurrent;
