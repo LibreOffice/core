@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:34:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,6 +1344,11 @@ static void FindCmap(TrueTypeFont *ttf)
         eID = GetUInt16(table, 6 + i * 8, 1);
         offset = GetUInt32(table, 8 + i * 8, 1);
 
+        /* Unicode tables in Apple fonts */
+        if (pID == 0) {
+            ThreeOne   = offset; break;
+        }
+
         if (pID == 3) {
             switch (eID) {
                 case 0: ThreeZero  = offset; break;
@@ -1593,7 +1598,17 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
 
     t->fsize = st.st_size;
 
+    /* On Mac OS, most likely will happen if a Mac user renames a font file
+     * to be .ttf when its really a Mac resource-based font.
+     * Size will be 0, but fonts smaller than 4 bytes would be broken anyway.
+     */
     if (t->fsize == 0) {
+#ifdef MACOSX
+        fprintf( stderr, "WARNING: Font file %s\nhad a data-fork size of 0, it is either:\n", t->fname );
+        fprintf( stderr, "   1) A Resource-Based font that has a .ttf at the end of its name\n" );
+        fprintf( stderr, "       (in which case '/usr/local/bin/fondu <font-file-name>' should be run to convert it instead)\n" );
+        fprintf( stderr, "   2) A bad font\n\n" );
+#endif
         ret = SF_BADFILE;
         goto cleanup;
     }
@@ -1658,7 +1673,13 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
          *  tables, but this would be quite time intensive
          */
         if( (offset < t->ptr) || (offset+length > t->ptr+t->fsize) )
+        {
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "font file %s has bad table %4s\n", t->fname, (char*)&tag );
+#endif
             continue;
+        }
+
 
         if (tag == T_maxp) { t->tables[O_maxp] = offset; t->tlens[O_maxp] = length; continue; }
         if (tag == T_glyf) { t->tables[O_glyf] = offset; t->tlens[O_glyf] = length; continue; }
