@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-01 11:05:23 $
+ *  last change: $Author: af $ $Date: 2002-11-04 16:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,6 +875,7 @@ void SdOutlineViewShell::FuSupport(SfxRequest &rReq)
             }
 
             rReq.Done();
+            bPreviewState = TRUE;
         }
         break;
 
