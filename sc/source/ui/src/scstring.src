@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 16:14:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1970,7 +1970,7 @@ String SCSTR_CLIP_DDE
     Text [ spanish ] = "Vνnculo DDE" ;
     Text [ english_us ] = "DDE link" ;
     Text[ chinese_simplified ] = "DDE Α΄½Σ";
-    Text[ russian ] = "Ρρϋλκΰ DDE";
+    Text[ russian ] = "Ρβÿηό DDE";
     Text[ polish ] = "£Ήcze DDE";
     Text[ japanese ] = "DDEΨέΈ";
     Text[ chinese_traditional ] = "DDE ±¶®|";
@@ -2676,7 +2676,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ japanese ] = "StarOffice Calc‚Ν“ό—Ν‚³‚κ‚½”®‚Ι΄Χ°‚π©‚Β‚―‚ά‚µ‚½B\n‚ΜC³σ•β‚π“K—p‚µ‚ά‚·‚©?\n\n";
     Text[ chinese_traditional ] = "StarOffice Calc µo²{Ώι¤JªΊ¤½¦΅§t¦³¤@­ΣΏω»~΅C\n±z±µ¨ό¤U­±ªΊ­Χ§ο«ΨΔ³΅H\n\n";
     Text[ arabic ] = "StarOffice Calc ζΜΟ ΞΨΓ έν ΗαΥνΫΙ ΗαΚν ήγΚ ΘΕΟΞΗαεΗ.\nεα ΚΡνΟ ήΘζα ΗαΚΥΝνΝ ΗαγρήΚΡΝ ΓΟδΗεΏ\n\n";
-    Text[ greek ] = "Το StarOffice Calc εντόπισε ένα σφάλμα στον τύπο που εισάγατε.\nΘέλετε να γίνει αποδοχή της προτεινόμενης διόρθωσης στο κάτω μέρος;\n\n";
+    Text[ greek ] = "Το StarOffice Calc εντόπισε ένα σφάλμα στον τύπο που εισάγατε.\nΘέλετε να γίνει η αποδοχή της προτεινόμενης διόρθωσης που αναφέρεται παρακάτω;\n\n";
     Text[ korean ] = "StarOffice Calc°΅ ΐΤ·ΒµΘ Όφ½ΔΏ΅Ό­ Ώΐ·ωΈ¦ Γ£ΎΖ³Β½ΐ΄Ο΄Ω.\n΄Ωΐ½ΐΗ Α¦ΎΘµΘ Έπΐ½ΐ» ΉήΎΖµιΐΜ½Γ°Ϊ½ΐ΄Ο±ξ ?\n\n";
     Text[ turkish ] = "StarOffice Calc, girilen formόlde bir hata buldu.\nAώaπύda φnerilen dόzeltmeyi kabul etmek istiyor musunuz?\n\n";
     Text[ language_user1 ] = " ";
