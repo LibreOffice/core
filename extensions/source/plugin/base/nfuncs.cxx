@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:37:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,12 @@ extern "C" {
 
         PluginStream* pStream = pImpl->getStreamFromNPStream( stream );
         if( pStream )
-            delete pStream;
+        {
+            if( pStream->getStreamType() == InputStream )
+                static_cast<PluginInputStream*>(pStream)->releaseSelf();
+            else
+                delete pStream;
+        }
 
         return NPERR_NO_ERROR;
     }
@@ -455,7 +460,7 @@ extern "C" {
                 nNow = pPlugin->getPluginComm()->
                     NPP_WriteReady( pPlugin->getNPPInstance(),
                                     stream );
-                pPlugin->getPluginComm()->
+                nNow = pPlugin->getPluginComm()->
                     NPP_Write( pPlugin->getNPPInstance(),
                                stream,
                                rangeList->offset + nPos,
