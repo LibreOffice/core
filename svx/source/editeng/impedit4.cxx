@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-22 10:44:19 $
+ *  last change: $Author: mt $ $Date: 2002-10-07 14:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1368,7 +1368,8 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
         {
             bParaAttribs = sal_False;
             // #101512# Don't overwrite level/style from existing paragraph in OutlineView
-            if ( !aStatus.IsOutliner() || n )
+            // MT 10/2002: Removed because of #103874#, handled in Outliner::EndPasteOrDropHdl now.
+//            if ( !aStatus.IsOutliner() || n )
             {
                 // nur dann Style und ParaAttribs, wenn neuer Absatz, oder
                 // komplett inneliegender...

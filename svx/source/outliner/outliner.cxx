@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-05 14:52:26 $
+ *  last change: $Author: mt $ $Date: 2002-10-07 14:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2074,6 +2074,29 @@ IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
     {
         bPasting = FALSE;
         ImpTextPasted( pInfos->nStartPara, pInfos->nEndPara - pInfos->nStartPara + 1 );
+    }
+    else
+    {
+        for ( USHORT nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+        {
+            USHORT nOutlLevel = nMinDepth;
+            if ( nPara )
+            {
+                const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+                nOutlLevel = rLevel.GetValue();
+            }
+            ImplCheckDepth( nOutlLevel );
+
+            Paragraph* pPara = GetParagraph( nPara );
+            if ( nOutlLevel != pPara->GetDepth() )
+            {
+                pHdlParagraph = pPara;
+                nDepthChangedHdlPrevDepth = pPara->GetDepth();
+                ImplInitDepth( nPara, nOutlLevel, FALSE );
+                pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
+                DepthChangedHdl();
+            }
+        }
     }
 
     BOOL bCheckStyles = ( ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT ) || ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW ) );
