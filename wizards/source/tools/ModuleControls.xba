@@ -214,7 +214,7 @@ Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
 Dim oStoreDialog as Object
 Dim iAccept as Integer
 Dim sPath as String
-Dim ListAny(0)
+Dim ListAny(0) as Long
 Dim UIFilterName as String
 Dim FilterName as String
 Dim FilterIndex as Integer
