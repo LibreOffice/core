@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSheetFilterDescriptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:17 $
+ *  last change:$Date: 2003-09-08 11:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.sheet;
 
-import com.sun.star.sheet.TableFilterField;
-import com.sun.star.sheet.XSheetFilterDescriptor;
 import lib.MultiMethodTest;
 import util.ValueComparer;
+
+import com.sun.star.sheet.TableFilterField;
+import com.sun.star.sheet.XSheetFilterDescriptor;
 
 /**
 * Testing <code>com.sun.star.sheet.XSheetFilterDescriptor</code>
