@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-03 18:07:12 $
+ *  last change: $Author: pb $ $Date: 2001-08-10 06:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,11 +434,33 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
             const SfxSlot *pSfxSlot = SFX_SLOTPOOL().FirstSlot();
             if ( pSfxSlot )
             {
-                // Wenn Gruppe nicht leer
-                SvLBoxEntry *pEntry = InsertEntry( aName, NULL );
-                SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_FUNCTION, i );
-                aArr.Insert( pInfo, aArr.Count() );
-                pEntry->SetUserData( pInfo );
+                // Check if all entries are not useable. Don't
+                // insert a group without any useable function.
+                sal_Bool bActiveEntries = sal_False;
+                while ( pSfxSlot )
+                {
+                    USHORT nId = pSfxSlot->GetSlotId();
+#ifdef UNX
+                    if ( nId != SID_DESKTOPMODE && ( pSfxSlot->GetMode() & nMode ) )
+#else
+                    if ( pSfxSlot->GetMode() & nMode )
+#endif
+                    {
+                        bActiveEntries = sal_True;
+                        break;
+                    }
+
+                    pSfxSlot = SFX_SLOTPOOL().NextSlot();
+                }
+
+                if ( bActiveEntries )
+                {
+                    // Wenn Gruppe nicht leer
+                    SvLBoxEntry *pEntry = InsertEntry( aName, NULL );
+                    SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_FUNCTION, i );
+                    aArr.Insert( pInfo, aArr.Count() );
+                    pEntry->SetUserData( pInfo );
+                }
             }
         }
     }
