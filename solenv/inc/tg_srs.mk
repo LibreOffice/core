@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 16:42:37 $
+#   last change: $Author: rt $ $Date: 2004-07-14 07:33:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -184,7 +184,7 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(subst,$(OUTPATH),$
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC$(TNR)FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
