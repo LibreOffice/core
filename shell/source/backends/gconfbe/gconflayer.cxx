@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gconflayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:01:14 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
             aError = NULL;
             aGconfValue = gconf_client_get(aClient, "/system/proxy/mode" , &aError);
 
-            if( aError == NULL )
+            if( aError == NULL && aGconfValue != NULL )
             {
                 rtl::OString aMode(gconf_value_get_string(aGconfValue));
 
@@ -229,7 +229,7 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
                     aError = NULL;
                     aGconfValue = gconf_client_get(aClient, "/system/http_proxy/host" , &aError);
 
-                    if( aError == NULL ) {
+                    if( aError == NULL && aGconfValue != NULL ) {
                         aPropInfoList[nProperties].Name = rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPProxyName") );
                         aPropInfoList[nProperties].Type = rtl::OUString(
@@ -243,7 +243,7 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
                     aError = NULL;
                     aGconfValue = gconf_client_get(aClient, "/system/http_proxy/port" , &aError);
 
-                    if( aError == NULL ) {
+                    if( aError == NULL && aGconfValue != NULL ) {
                         aPropInfoList[nProperties].Name = rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPProxyPort") );
                         aPropInfoList[nProperties].Type = rtl::OUString(
@@ -256,7 +256,7 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
                     aError = NULL;
                     aGconfValue = gconf_client_get(aClient, "/system/proxy/ftp_host" , &aError);
 
-                    if( aError == NULL ) {
+                    if( aError == NULL && aGconfValue != NULL ) {
                         aPropInfoList[nProperties].Name = rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetFTPProxyName") );
                         aPropInfoList[nProperties].Type = rtl::OUString(
@@ -270,7 +270,7 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
                     aError = NULL;
                     aGconfValue = gconf_client_get(aClient, "/system/proxy/ftp_port" , &aError);
 
-                    if( aError == NULL ) {
+                    if( aError == NULL && aGconfValue != NULL ) {
                         aPropInfoList[nProperties].Name = rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetFTPProxyPort") );
                         aPropInfoList[nProperties].Type = rtl::OUString(
@@ -296,7 +296,7 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
             aError = NULL;
             aGconfValue = gconf_client_get(aClient, "/desktop/gnome/url-handlers/mailto/command" , &aError);
 
-            if( aError == NULL ) {
+            if( aError == NULL && aGconfValue != NULL ) {
                 sal_Int32 nIndex = 0;
                 aPropInfoList[nProperties].Name = rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/ExternalMailer/Program") );
@@ -309,9 +309,11 @@ void SAL_CALL GconfLayer::readData( const uno::Reference<backend::XLayerHandler>
             }
         }
 
-        aPropInfoList.realloc(nProperties);
-
-        m_xLayerContentDescriber->describeLayer(xHandler, aPropInfoList);
+        if( nProperties > 0 )
+        {
+            aPropInfoList.realloc(nProperties);
+            m_xLayerContentDescriber->describeLayer(xHandler, aPropInfoList);
+        }
     }
     else
     {
