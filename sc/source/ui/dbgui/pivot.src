@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-28 20:16:55 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,15 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ russian ] = "Column";
         Text[ greek ] = "Column";
         Text[ dutch ] = "Column";
-        Text[ french ] = "Column";
+        Text[ french ] = "Colonne";
         Text[ spanish ] = "Columna";
         Text[ finnish ] = "Column";
-        Text[ italian ] = "Column";
+        Text[ italian ] = "Colonna";
         Text[ danish ] = "Column";
         Text[ swedish ] = "Kolumn";
         Text[ polish ] = "Column";
         Text[ portuguese_brazilian ] = "Column";
-        Text[ japanese ] = "Column";
+        Text[ japanese ] = "åˆ—";
         Text[ korean ] = "ì—´";
         Text[ chinese_simplified ] = "åˆ—";
         Text[ chinese_traditional ] = "æ¬„";
@@ -146,15 +146,15 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ russian ] = "Row";
         Text[ greek ] = "Row";
         Text[ dutch ] = "Row";
-        Text[ french ] = "Row";
+        Text[ french ] = "Ligne";
         Text[ spanish ] = "Fila";
         Text[ finnish ] = "Row";
-        Text[ italian ] = "Row";
+        Text[ italian ] = "Riga";
         Text[ danish ] = "Row";
         Text[ swedish ] = "Rad";
         Text[ polish ] = "Row";
         Text[ portuguese_brazilian ] = "Row";
-        Text[ japanese ] = "Row";
+        Text[ japanese ] = "è¡Œ";
         Text[ korean ] = "í–‰";
         Text[ chinese_simplified ] = "è¡Œ";
         Text[ chinese_traditional ] = "åˆ—";
@@ -180,15 +180,15 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ russian ] = "Data";
         Text[ greek ] = "Data";
         Text[ dutch ] = "Data";
-        Text[ french ] = "Data";
+        Text[ french ] = "Données";
         Text[ spanish ] = "Datos";
         Text[ finnish ] = "Data";
-        Text[ italian ] = "Data";
+        Text[ italian ] = "Dati";
         Text[ danish ] = "Data";
         Text[ swedish ] = "Data";
         Text[ polish ] = "Data";
         Text[ portuguese_brazilian ] = "Data";
-        Text[ japanese ] = "Data";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿";
         Text[ korean ] = "ë°ì´í„°";
         Text[ chinese_simplified ] = "æ•°æ®";
         Text[ chinese_traditional ] = "è³‡æ–™";
@@ -306,15 +306,15 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ russian ] = "Remove";
         Text[ greek ] = "Remove";
         Text[ dutch ] = "Remove";
-        Text[ french ] = "Remove";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "Eliminar";
         Text[ finnish ] = "Remove";
-        Text[ italian ] = "Remove";
+        Text[ italian ] = "Deinstallazione";
         Text[ danish ] = "Remove";
         Text[ swedish ] = "Ta bort";
         Text[ polish ] = "Remove";
         Text[ portuguese_brazilian ] = "Remove";
-        Text[ japanese ] = "Remove";
+        Text[ japanese ] = "å‰Šé™¤";
         Text[ korean ] = "ì‚­ì œ";
         Text[ chinese_simplified ] = "ç§»é™¤";
         Text[ chinese_traditional ] = "ç§»é™¤";
@@ -338,12 +338,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ french ] = "Options...";
         Text[ spanish ] = "Opciones...";
         Text[ finnish ] = "Options...";
-        Text[ italian ] = "Options...";
+        Text[ italian ] = "Opzioni...";
         Text[ danish ] = "Options...";
         Text[ swedish ] = "Alternativ...";
         Text[ polish ] = "Options...";
         Text[ portuguese_brazilian ] = "Options...";
-        Text[ japanese ] = "Options...";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³(O)...";
         Text[ korean ] = "ì˜µì…˜...";
         Text[ chinese_simplified ] = "é€‰é¡¹...";
         Text[ chinese_traditional ] = "é¸é …...";
@@ -557,19 +557,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese ] = "Soma total - ~colunas" ;
         Text [ swedish ] = "Totalresultat kolumner" ;
         Text [ danish ] = "Total kolonner" ;
-        Text [ italian ] = "Risultato complessivo ~colonne" ;
+        Text [ italian ] = "Risultato complessivo colonne" ;
         Text [ spanish ] = "Columnas de totales" ;
-        Text [ french ] = "Total - ~colonnes" ;
+        Text [ french ] = "Total - colonnes" ;
         Text [ dutch ] = "Saldo ~kolommen" ;
         Text [ portuguese_brazilian ] = "Gesamtergebnis-~Spalten" ;
         Text[ chinese_simplified ] = "æ€»è®¡çš„åˆ—";
         Text[ russian ] = "Âñåãî ñòîëáöîâ";
         Text[ polish ] = "~Podsumowanie kolumn";
-        Text[ japanese ] = "åˆ—ã®ç·è¨ˆ(~C)";
+        Text[ japanese ] = "åˆ—ã®ç·è¨ˆ";
         Text[ chinese_traditional ] = "ç¸½è¨ˆçš„æ¬„";
         Text[ arabic ] = "ÃÚãÏÉ ÇáãÌãæÚ";
         Text[ greek ] = "Óõíïëéêü Üèñïéóìá óôçëşí";
-        Text[ korean ] = "ëª¨ë“  ì—´(~C)";
+        Text[ korean ] = "ì—´ì˜ í•©ê³„";
         Text[ turkish ] = "Sütun ~toplamı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Total de ~columnes";
