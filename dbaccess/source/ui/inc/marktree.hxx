@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:08:43 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ namespace dbaui
 class OMarkableTreeListBox : public SvTreeListBox
 {
     SvLBoxButtonData*   m_pCheckButton;
+    Link                m_aCheckButtonHandler;
+
 public:
     OMarkableTreeListBox( Window* pParent, WinBits nWinStyle=0 );
     OMarkableTreeListBox( Window* pParent, const ResId& rResId );
@@ -90,6 +92,12 @@ public:
     virtual void    CheckButtonHdl();
     void            CheckButtons();
     SvLBoxEntry*    GetEntryPosByName(const String& aName,SvLBoxEntry* pStart=NULL) const;
+
+    /// the handler given is called whenever the check state of one or more items changed
+    void SetCheckHandler(const Link& _rHdl) { m_aCheckButtonHandler = _rHdl; }
+
+protected:
+    void Paint(const Rectangle& _rRect);
 
 private:
     void InitButtonData();
@@ -104,6 +112,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:08:43  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 28.09.00 13:19:31  fs
  ************************************************************************/
