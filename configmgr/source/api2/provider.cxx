@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 23:02:35 $
+ *  last change: $Author: fs $ $Date: 2000-11-22 19:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@ namespace configmgr
         if (isConnected() || m_aSecurityOverride.size())
         {
             if (0 == _rArguments.getLength())
-                // allow initialize without arguments ....
-                return; //? Should this not ensureConnection() ?
+                // allow initialize without arguments, if already connected .....
+                return;
 
             throw uno::Exception(::rtl::OUString::createFromAscii("The configuration OProvider has already been initialized."), THISREF());
         }
@@ -154,11 +154,7 @@ namespace configmgr
         for (sal_Int32 i=0; i<_rArguments.getLength(); ++i, ++pArguments)
         {
             if (!((*pArguments) >>= aCurrentArg))
-            {
-                throw uno::Exception(::rtl::OUString::createFromAscii("The configuration OProvider has already been initialized."), THISREF());
-//throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), THISREF());
-            }
-
+                throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), THISREF(), i);
 
             // no check if the argument is known and valid. This would require to much testing
             m_aSecurityOverride[aCurrentArg.Name] = aCurrentArg.Value;

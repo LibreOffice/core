@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:13:34 $
+ *  last change: $Author: fs $ $Date: 2000-11-22 19:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@ namespace configmgr
 
     class ConnectionSettings
     {
-        OUString m_sSettingsFile;
-
     public:
         ConnectionSettings();
         explicit
