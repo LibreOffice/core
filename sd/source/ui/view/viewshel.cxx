@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:46:11 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#include "ViewShell.hxx"
+
+#ifndef SD_VIEW_SHELL_BASE
+#include "ViewShellBase.hxx"
+#endif
+
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
@@ -89,25 +95,48 @@
 #ifndef _SD_SDXFER_HXX
 #include <sdxfer.hxx>
 #endif
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef _SFX_CHILDWIN_HXX
+#include <sfx2/childwin.hxx>
+#endif
 
 #include "app.hrc"
 #include "helpids.h"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdclient.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
 #include "sdresid.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "zoomlist.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "optsitem.hxx"
-#include "grviewsh.hxx"
-#include "prevchld.hxx"
-#include "preview.hxx"
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
+#ifndef SD_DRAW_SUB_CONTROLLER_HXX
+#include "DrawSubController.hxx"
+#endif
+
 
 // #96090#
 #ifndef _SFXSLSTITM_HXX
@@ -122,7 +151,12 @@
 SO2_DECL_REF(SvInPlaceObject)
 #endif
 
-#define DELTA_ZOOM  10
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+namespace sd {
+
+static const int DELTA_ZOOM = 10;
 
 // Use magenta as transparency color instead of the standard gray that is
 // imported from vcl/image.hxx
@@ -131,137 +165,20 @@ SO2_DECL_REF(SvInPlaceObject)
 #define IMAGE_STDBTN_COLOR Color(0xff,0x00,0xff)
 #define IMAGE_STDBTN_COLOR_HC Color(0xff,0x00,0xff)
 
+
+SfxViewFrame* ViewShell::GetViewFrame (void) const
+{
+    OSL_ASSERT (GetViewShell()!=NULL);
+    return GetViewShell()->GetViewFrame();
+}
+
+
 /*************************************************************************
 |*
 |* SFX-Slotmap und Standardinterface deklarieren
 |*
 \************************************************************************/
-TYPEINIT1( SdViewShell, SfxViewShell);
-
-/*************************************************************************
-|*
-|* gemeinsamer Initialiserungsanteil der beiden Konstruktoren
-|*
-\************************************************************************/
-
-void SdViewShell::Construct(void)
-{
-    pDocSh->Connect(this);
-
-    pZoomList = new ZoomList( this );
-
-    pWindow = NULL;
-    SetActiveWindow(new SdWindow(&GetViewFrame()->GetWindow()));
-//    pWindow->GrabFocus();
-
-    // alle Zeiger mit NULL initialisieren
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
-    {
-        pHScrlArray[nX] = NULL;
-        pHRulerArray[nX] = NULL;
-
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            pVScrlArray[nY] = NULL;
-            pVRulerArray[nY] = NULL;
-            pWinArray[nX][nY] = NULL;
-        }
-    }
-    // Splitter zu Anfang aus
-    bIsHSplit = bIsVSplit = FALSE;
-    // Lineal an
-    bHasRuler = TRUE;
-
-    pWindow->SetCenterAllowed(bCenterAllowed);
-
-    pWinArray[0][0] = pWindow;
-    pWinArray[0][0]->SetViewShell(this);
-
-    pHScrlArray[0] = new ScrollBar(&GetViewFrame()->GetWindow(),
-                                    WinBits(WB_HSCROLL | WB_DRAG));
-    pHScrlArray[0]->EnableRTL (FALSE);
-    pHScrlArray[0]->SetRange(Range(0, 32000));
-    pHScrlArray[0]->SetScrollHdl(LINK(this, SdViewShell, HScrollHdl));
-    pHScrlArray[0]->Show();
-
-    pVScrlArray[0] = new ScrollBar(&GetViewFrame()->GetWindow(),
-                                    WinBits(WB_VSCROLL | WB_DRAG));
-    pVScrlArray[0]->SetRange(Range(0, 32000));
-    pVScrlArray[0]->SetScrollHdl(LINK(this, SdViewShell, VScrollHdl));
-    pVScrlArray[0]->Show();
-    aScrBarWH = Size(pVScrlArray[0]->GetSizePixel().Width(),
-                     pHScrlArray[0]->GetSizePixel().Height());
-
-    aHSplit.SetSplitHdl(LINK(this, SdViewShell, SplitHdl));
-    aVSplit.SetSplitHdl(LINK(this, SdViewShell, SplitHdl));
-    aHSplit.Show();
-    aVSplit.Show();
-
-    if (pScrlBox)
-        pScrlBox->Show();
-
-    if( !this->ISA( SdGraphicViewShell ) )
-    {
-        aDrawBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_DRAW ) ), IMAGE_STDBTN_COLOR ) );
-        aDrawBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_DRAW_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-        aDrawBtn.SetClickHdl(LINK(this, SdViewShell, ModeBtnHdl));
-        aDrawBtn.SetQuickHelpText( String( SdResId( STR_DRAW_MODE ) ) );
-        aDrawBtn.SetHelpId( HID_SD_BTN_DRAW );
-        aDrawBtn.Show();
-
-        aSlideBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_SLIDE ) ), IMAGE_STDBTN_COLOR ) );
-        aSlideBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_SLIDE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-        aSlideBtn.SetClickHdl(LINK(this, SdViewShell, ModeBtnHdl));
-        aSlideBtn.SetQuickHelpText( String( SdResId( STR_SLIDE_MODE ) ) );
-        aSlideBtn.SetHelpId( HID_SD_BTN_SLIDE );
-        aSlideBtn.Show();
-
-        aOutlineBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_OUTLINE ) ), IMAGE_STDBTN_COLOR ) );
-        aOutlineBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_OUTLINE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-        aOutlineBtn.SetClickHdl(LINK(this, SdViewShell, ModeBtnHdl));
-        aOutlineBtn.SetQuickHelpText( String( SdResId( STR_OUTLINE_MODE ) ) );
-        aOutlineBtn.SetHelpId( HID_SD_BTN_OUTLINE );
-        aOutlineBtn.Show();
-
-        aNotesBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_NOTES ) ), IMAGE_STDBTN_COLOR ) );
-        aNotesBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_NOTES_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-        aNotesBtn.SetClickHdl(LINK(this, SdViewShell, ModeBtnHdl));
-        aNotesBtn.SetQuickHelpText( String( SdResId( STR_NOTES_MODE ) ) );
-        aNotesBtn.SetHelpId( HID_SD_BTN_NOTES );
-        aNotesBtn.Show();
-
-        aHandoutBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_HANDOUT ) ), IMAGE_STDBTN_COLOR ) );
-        aHandoutBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_HANDOUT_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-        aHandoutBtn.SetClickHdl(LINK(this, SdViewShell, ModeBtnHdl));
-        aHandoutBtn.SetQuickHelpText( String( SdResId( STR_HANDOUT_MODE ) ) );
-        aHandoutBtn.SetHelpId( HID_SD_BTN_HANDOUT );
-        aHandoutBtn.Show();
-
-        aPresentationBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_PRESENTATION ) ), IMAGE_STDBTN_COLOR ) );
-        aPresentationBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_PRESENTATION_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-        aPresentationBtn.SetClickHdl(LINK(this, SdViewShell, ModeBtnHdl));
-        aPresentationBtn.SetQuickHelpText( String( SdResId( STR_START_PRESENTATION ) ) );
-        aPresentationBtn.SetHelpId( HID_SD_BTN_PRESENTATION );
-        aPresentationBtn.Show();
-
-        if (pDocSh->IsPreview())
-        {
-            aPresentationBtn.Disable();
-        }
-        else
-        {
-            aPresentationBtn.Enable();
-        }
-    }
-
-    String aName( RTL_CONSTASCII_USTRINGPARAM( "ViewShell" ));
-    SetName (aName);
-
-    pDoc->StartOnlineSpelling(FALSE);
-
-    mpWindowUpdater->SetViewShell (*this);
-    mpWindowUpdater->SetDocument (pDoc);
-}
+TYPEINIT1(ViewShell, SfxShell);
 
 /*************************************************************************
 |*
@@ -269,39 +186,39 @@ void SdViewShell::Construct(void)
 |*
 \************************************************************************/
 
-SdViewShell::SdViewShell(SfxViewFrame* pFrame, Window *pParent,
-                         BOOL bAllowCenter) :
-    SfxViewShell(pFrame, SFX_VIEW_MAXIMIZE_FIRST      |
-                         SFX_VIEW_OPTIMIZE_EACH       |
-                         SFX_VIEW_DISABLE_ACCELS      |
-                         SFX_VIEW_OBJECTSIZE_EMBEDDED |
-                         SFX_VIEW_CAN_PRINT           |
-                         SFX_VIEW_HAS_PRINTOPTIONS),
-    mpWindowUpdater (new ::sd::WindowUpdater()),
-    aHSplit(&pFrame->GetWindow(), WB_HSCROLL),
-    aVSplit(&pFrame->GetWindow(), WB_VSCROLL),
-    aDrawBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aSlideBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aOutlineBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aNotesBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aHandoutBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aPresentationBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    pDocSh( (SdDrawDocShell*) GetViewFrame()->GetObjectShell() ),
-    pDoc( pDocSh->GetDoc() ),
+ViewShell::ViewShell (
+    SfxViewFrame* pFrame,
+    ViewShellBase& rViewShellBase,
+    bool bAllowCenter)
+    : SfxShell (&rViewShellBase),
+      mpWindowUpdater (new ::sd::WindowUpdater()),
+      aHSplit(&pFrame->GetWindow(), WB_HSCROLL),
+      aVSplit(&pFrame->GetWindow(), WB_VSCROLL),
+    aDrawBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aSlideBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aOutlineBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aNotesBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aHandoutBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aPresentationBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
     pFuActual(NULL),
     pFuOld(NULL),
     pFuSearch(NULL),
     pFuSlideShow(NULL),
     pZoomList(NULL),
-    nCurrentObjectBar(0),
-    bObjectBarSwitchEnabled(TRUE),
     pFrameView(NULL),
     bCenterAllowed(bAllowCenter),
     bStartShowWithDialog( FALSE ),
     pScrlBox(NULL),
     pView(NULL),
     nPrintedHandoutPageNum(1),
-    bPrintDirectSelected( FALSE )
+//  mbPrintDirectSelected( FALSE ),
+    meShellType (ST_NONE)
 {
     pScrlBox = new ScrollBarBox(&pFrame->GetWindow(), WB_3DLOOK | WB_SIZEABLE );
     Construct();
@@ -313,35 +230,36 @@ SdViewShell::SdViewShell(SfxViewFrame* pFrame, Window *pParent,
 |*
 \************************************************************************/
 
-SdViewShell::SdViewShell(SfxViewFrame* pFrame, const SdViewShell& rShell) :
-    SfxViewShell(pFrame, SFX_VIEW_MAXIMIZE_FIRST      |
-                         SFX_VIEW_OPTIMIZE_EACH       |
-                         SFX_VIEW_DISABLE_ACCELS      |
-                         SFX_VIEW_OBJECTSIZE_EMBEDDED |
-                         SFX_VIEW_HAS_PRINTOPTIONS),
+ViewShell::ViewShell(SfxViewFrame* pFrame, const ViewShell& rShell)
+    : SfxShell (rShell.GetViewShell()),
     aHSplit(&pFrame->GetWindow(), WB_HSCROLL),
     aVSplit(&pFrame->GetWindow(), WB_VSCROLL),
-    aDrawBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aSlideBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aOutlineBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aNotesBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aHandoutBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    aPresentationBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-    pDocSh( (SdDrawDocShell*) GetViewFrame()->GetObjectShell() ),
-    pDoc( pDocSh->GetDoc() ),
+    aDrawBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aSlideBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aOutlineBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aNotesBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aHandoutBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    aPresentationBtn(&pFrame->GetWindow(),
+        WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
     pFuActual(NULL),
     pFuOld(NULL),
     pFuSearch(NULL),
     pFuSlideShow(NULL),
     pZoomList(NULL),
-    nCurrentObjectBar(0),
-    bObjectBarSwitchEnabled(TRUE),
+//  nCurrentObjectBar(0),
+//  bObjectBarSwitchEnabled(TRUE),
     pFrameView(NULL),
     bCenterAllowed(rShell.bCenterAllowed),
     pScrlBox(NULL),
     pView(NULL),
     nPrintedHandoutPageNum(1),
-    bPrintDirectSelected( FALSE )
+//  mbPrintDirectSelected( FALSE ),
+    meShellType (ST_NONE)
 {
     pScrlBox = new ScrollBarBox(&pFrame->GetWindow(), WB_3DLOOK | WB_SIZEABLE );
     Construct();
@@ -353,13 +271,27 @@ SdViewShell::SdViewShell(SfxViewFrame* pFrame, const SdViewShell& rShell) :
 |*
 \************************************************************************/
 
-SdViewShell::~SdViewShell()
+ViewShell::~ViewShell()
 {
+    // Dispose the sub-controller of this sub-shell.  The disposing
+    // event sent to the main controller will result in it asking the
+    // sub shell manager for the sub-controller of the new main
+    // sub-shell.
+    Reference<lang::XComponent> xComponent (mxSubController, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+
+    SfxViewShell* pViewShell = GetViewShell();
+    OSL_ASSERT (pViewShell!=NULL);
     CancelSearching();
 
-    pDocSh->Disconnect(this);
+    // Stop listening for window events.
+    pViewShell->GetViewFrame()->GetWindow().RemoveEventListener (
+        LINK(this,ViewShell,FrameWindowEventListener));
 
-    SetWindow(NULL);
+    GetDocSh()->Disconnect(this);
+
+    pViewShell->SetWindow(NULL);
 
     delete pZoomList;
 
@@ -386,19 +318,177 @@ SdViewShell::~SdViewShell()
         }
     }
 
+    /*af
     // Shells fuer Object Bars loeschen
     // vorm Zerstoeren der ObjectBarShells den Dispatcher flushen
-    GetViewFrame()->GetDispatcher()->Flush();
+    GetDispatcher()->Flush();
 
-    SfxShell* pObjBarShell = (SfxShell*)aShellTable.First();
+    SfxShell* pObjBarShell = static_cast<SfxShell*>(aShellTable.First());
     while (pObjBarShell)
     {
         delete pObjBarShell;
-        pObjBarShell = (SfxShell*)aShellTable.Next();
+        pObjBarShell = static_cast<SfxShell*>(aShellTable.Next());
     }
-
+    */
     delete pScrlBox;
 }
+
+
+/*************************************************************************
+|*
+|* gemeinsamer Initialiserungsanteil der beiden Konstruktoren
+|*
+\************************************************************************/
+
+void ViewShell::Construct(void)
+{
+    SfxViewShell* pViewShell = GetViewShell();
+    OSL_ASSERT (pViewShell!=NULL);
+
+    GetDocSh()->Connect (this);
+
+    pZoomList = new ZoomList( this );
+
+    // Remove all currently active object bars.
+    GetObjectBarManager().Clear ();
+    GetObjectBarManager().EnableObjectBarSwitching();
+
+    pWindow = NULL;
+    SetActiveWindow(new ::sd::Window(&pViewShell->GetViewFrame()->GetWindow()));
+//    pWindow->GrabFocus();
+
+    // alle Zeiger mit NULL initialisieren
+    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    {
+        pHScrlArray[nX] = NULL;
+        pHRulerArray[nX] = NULL;
+
+        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
+        {
+            pVScrlArray[nY] = NULL;
+            pVRulerArray[nY] = NULL;
+            pWinArray[nX][nY] = NULL;
+        }
+    }
+    // Splitter zu Anfang aus
+    bIsHSplit = bIsVSplit = FALSE;
+    // Lineal an
+    bHasRuler = TRUE;
+
+    pWindow->SetCenterAllowed(bCenterAllowed);
+
+    pWinArray[0][0] = pWindow;
+    pWinArray[0][0]->SetViewShell(this);
+
+    pHScrlArray[0] = new ScrollBar(&pViewShell->GetViewFrame()->GetWindow(),
+                                    WinBits(WB_HSCROLL | WB_DRAG));
+    pHScrlArray[0]->EnableRTL (FALSE);
+    pHScrlArray[0]->SetRange(Range(0, 32000));
+    pHScrlArray[0]->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
+    pHScrlArray[0]->Show();
+
+    pVScrlArray[0] = new ScrollBar(&pViewShell->GetViewFrame()->GetWindow(),
+                                    WinBits(WB_VSCROLL | WB_DRAG));
+    pVScrlArray[0]->SetRange(Range(0, 32000));
+    pVScrlArray[0]->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
+    pVScrlArray[0]->Show();
+    aScrBarWH = Size(pVScrlArray[0]->GetSizePixel().Width(),
+                     pHScrlArray[0]->GetSizePixel().Height());
+
+    aHSplit.SetSplitHdl(LINK(this, ViewShell, SplitHdl));
+    aVSplit.SetSplitHdl(LINK(this, ViewShell, SplitHdl));
+    aHSplit.Show();
+    aVSplit.Show();
+
+    if (pScrlBox)
+        pScrlBox->Show();
+
+    if( !this->ISA(GraphicViewShell ) )
+    {
+        aDrawBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_DRAW ) ), IMAGE_STDBTN_COLOR ) );
+        aDrawBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_DRAW_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
+        aDrawBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
+        aDrawBtn.SetQuickHelpText( String( SdResId( STR_DRAW_MODE ) ) );
+        aDrawBtn.SetHelpId( HID_SD_BTN_DRAW );
+        aDrawBtn.Show();
+
+        aSlideBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_SLIDE ) ), IMAGE_STDBTN_COLOR ) );
+        aSlideBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_SLIDE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
+        aSlideBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
+        aSlideBtn.SetQuickHelpText( String( SdResId( STR_SLIDE_MODE ) ) );
+        aSlideBtn.SetHelpId( HID_SD_BTN_SLIDE );
+        aSlideBtn.Show();
+
+        aOutlineBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_OUTLINE ) ), IMAGE_STDBTN_COLOR ) );
+        aOutlineBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_OUTLINE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
+        aOutlineBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
+        aOutlineBtn.SetQuickHelpText( String( SdResId( STR_OUTLINE_MODE ) ) );
+        aOutlineBtn.SetHelpId( HID_SD_BTN_OUTLINE );
+        aOutlineBtn.Show();
+
+        aNotesBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_NOTES ) ), IMAGE_STDBTN_COLOR ) );
+        aNotesBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_NOTES_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
+        aNotesBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
+        aNotesBtn.SetQuickHelpText( String( SdResId( STR_NOTES_MODE ) ) );
+        aNotesBtn.SetHelpId( HID_SD_BTN_NOTES );
+        aNotesBtn.Show();
+
+        aHandoutBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_HANDOUT ) ), IMAGE_STDBTN_COLOR ) );
+        aHandoutBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_HANDOUT_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
+        aHandoutBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
+        aHandoutBtn.SetQuickHelpText( String( SdResId( STR_HANDOUT_MODE ) ) );
+        aHandoutBtn.SetHelpId( HID_SD_BTN_HANDOUT );
+        aHandoutBtn.Show();
+
+        aPresentationBtn.SetImage( Image( Bitmap( SdResId( BMP_SW_PRESENTATION ) ), IMAGE_STDBTN_COLOR ) );
+        aPresentationBtn.SetModeImage( Image( Bitmap( SdResId( BMP_SW_PRESENTATION_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
+        aPresentationBtn.SetClickHdl(LINK(this, ViewShell, ModeBtnHdl));
+        aPresentationBtn.SetQuickHelpText( String( SdResId( STR_START_PRESENTATION ) ) );
+        aPresentationBtn.SetHelpId( HID_SD_BTN_PRESENTATION );
+        aPresentationBtn.Show();
+
+        if (GetDocSh()->IsPreview())
+        {
+            aPresentationBtn.Disable();
+        }
+        else
+        {
+            aPresentationBtn.Enable();
+        }
+    }
+
+    String aName( RTL_CONSTASCII_USTRINGPARAM( "ViewShell" ));
+    SetName (aName);
+
+    GetDoc()->StartOnlineSpelling(FALSE);
+
+    mpWindowUpdater->SetViewShell (*this);
+    mpWindowUpdater->SetDocument (GetDoc());
+}
+
+
+
+
+void ViewShell::Init (void)
+{
+    SfxViewShell* pViewShell = GetViewShell();
+    OSL_ASSERT (pViewShell!=NULL);
+
+    // Listen for events from the frame window so that we can layout
+    // the controls when the size of the window changes.  Do this only
+    // when not in in-place mode which is handled differently.
+    if ( ! GetDocSh()->GetProtocol().IsInPlaceActive())
+    {
+        pViewShell->GetViewFrame()->GetWindow().AddEventListener (
+            LINK(this,ViewShell,FrameWindowEventListener));
+
+        // Initiate a re-arragangement of the window controls.
+        OuterResizePixel (Point(),
+            pViewShell->GetViewFrame()->GetWindow().GetOutputSizePixel());
+    }
+}
+
+
 
 /*************************************************************************
 |*
@@ -408,7 +498,7 @@ SdViewShell::~SdViewShell()
 |*
 \************************************************************************/
 
-void SdViewShell::Cancel()
+void ViewShell::Cancel()
 {
     if (pFuActual && pFuActual != pFuOld)
     {
@@ -431,9 +521,11 @@ void SdViewShell::Cancel()
 |*
 \************************************************************************/
 
-void SdViewShell::Activate(BOOL bIsMDIActivate)
+void ViewShell::Activate(BOOL bIsMDIActivate)
 {
-    SfxViewShell::Activate(bIsMDIActivate);
+    SfxShell::Activate (bIsMDIActivate);
+    SfxViewShell* pViewShell = GetViewShell();
+    OSL_ASSERT (pViewShell!=NULL);
 
     // Laut MI darf keiner GrabFocus rufen, der nicht genau weiss von
     // welchem Window der Focus gegrabt wird. Da Activate() vom SFX teilweise
@@ -452,10 +544,11 @@ void SdViewShell::Activate(BOOL bIsMDIActivate)
     {
         // Damit der Navigator auch einen aktuellen Status bekommt
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
-        GetViewFrame()->GetDispatcher()->Execute(
-            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetDispatcher()->Execute(
+            SID_NAVIGATOR_INIT,
+            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_EFFECT_STATE, TRUE, FALSE );
         rBindings.Invalidate( SID_3D_STATE, TRUE, FALSE );
 
@@ -468,10 +561,10 @@ void SdViewShell::Activate(BOOL bIsMDIActivate)
             pFuActual->Activate();
         }
 
-        if(!pDocSh->IsUIActive())
+        if(!GetDocSh()->IsUIActive())
             UpdatePreview( GetActualPage(), TRUE );
 
-        SdView* pView = GetView();
+        ::sd::View* pView = GetView();
 
         if (pView)
         {
@@ -481,12 +574,13 @@ void SdViewShell::Activate(BOOL bIsMDIActivate)
 
     ReadFrameViewData( pFrameView );
 
-    pDocSh->Connect(this);
+    GetDocSh()->Connect(this);
 }
 
-void SdViewShell::UIActivate( SvInPlaceObject *pIPObj )
+void ViewShell::UIActivate( SvInPlaceObject *pIPObj )
 {
-    SfxViewShell::UIActivate(pIPObj);
+    OSL_ASSERT (GetViewShell()!=NULL);
+    GetViewShell()->UIActivate(pIPObj);
 
     // #94252# Disable draw view controls when going inactive
     aDrawBtn.Disable();
@@ -497,7 +591,7 @@ void SdViewShell::UIActivate( SvInPlaceObject *pIPObj )
     aPresentationBtn.Disable();
 }
 
-void SdViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
+void ViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
 {
     // #94252# Enable draw view controls when going active
     aDrawBtn.Enable();
@@ -507,7 +601,8 @@ void SdViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
     aHandoutBtn.Enable();
     aPresentationBtn.Enable();
 
-    SfxViewShell::UIDeactivate(pIPObj);
+    OSL_ASSERT (GetViewShell()!=NULL);
+    GetViewShell()->UIDeactivate(pIPObj);
 }
 
 /*************************************************************************
@@ -516,13 +611,16 @@ void SdViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
 |*
 \************************************************************************/
 
-void SdViewShell::Deactivate(BOOL bIsMDIActivate)
+void ViewShell::Deactivate(BOOL bIsMDIActivate)
 {
     // remove view from a still active drag'n'drop session
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
     if( pDragTransferable )
         pDragTransferable->SetView( NULL );
+
+    SfxViewShell* pViewShell = GetViewShell();
+    OSL_ASSERT (pViewShell!=NULL);
 
     // View-Attribute an der FrameView merken
     WriteFrameViewData();
@@ -540,18 +638,19 @@ void SdViewShell::Deactivate(BOOL bIsMDIActivate)
 
         // ggfs. Preview vom Kontext loesen
         SfxChildWindow* pPreviewChildWindow =
-            GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+            pViewShell->GetViewFrame()->GetChildWindow(
+                PreviewChildWindow::GetChildWindowId());
         if (pPreviewChildWindow)
         {
-            SdPreviewWin* pPreviewWin =
-                (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-            if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
+            PreviewWindow* pPreviewWin =
+                static_cast<PreviewWindow*>(pPreviewChildWindow->GetWindow());
+            if (pPreviewWin && pPreviewWin->GetDoc() == GetDoc())
             {
                 pPreviewWin->SetContext(NULL, 0, NULL);
             }
         }
 
-        SdView* pView = GetView();
+        ::sd::View* pView = GetView();
 
         if (pView)
         {
@@ -566,7 +665,7 @@ void SdViewShell::Deactivate(BOOL bIsMDIActivate)
         if ( pVRulerArray[nY] )
             pVRulerArray[nY]->SetActive(FALSE);
 
-    SfxViewShell::Deactivate(bIsMDIActivate);
+    SfxShell::Deactivate (bIsMDIActivate);
 }
 
 /*************************************************************************
@@ -575,7 +674,7 @@ void SdViewShell::Deactivate(BOOL bIsMDIActivate)
 |*
 \************************************************************************/
 
-BOOL SdViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
+BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
     BOOL bReturn(FALSE);
 
@@ -589,7 +688,8 @@ BOOL SdViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
         // #76008#
         // give key input first to SfxViewShell to give CTRL+Key
         // (e.g. CTRL+SHIFT+'+', to front) priority.
-        bReturn = SfxViewShell::KeyInput(rKEvt);
+        OSL_ASSERT (GetViewShell()!=NULL);
+        bReturn = GetViewShell()->KeyInput(rKEvt);
     }
 
     if(!bReturn)
@@ -633,7 +733,7 @@ BOOL SdViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdViewShell::MouseButtonDown(const MouseEvent& rMEvt, SdWindow* pWin)
+void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( pWin && !pWin->HasFocus() )
     {
@@ -661,7 +761,7 @@ void SdViewShell::MouseButtonDown(const MouseEvent& rMEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
+void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( pWin )
     {
@@ -687,7 +787,7 @@ void SdViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
+void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( pWin )
     {
@@ -714,7 +814,7 @@ void SdViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
+void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
     BOOL bDone = FALSE;
 
@@ -728,7 +828,7 @@ void SdViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
 
             if( pData && pData->IsMod1() )
             {
-                if( !pDocSh->IsUIActive() )
+                if( !GetDocSh()->IsUIActive() )
                 {
                     const long  nOldZoom = pWindow->GetZoom();
                     long        nNewZoom;
@@ -739,7 +839,7 @@ void SdViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                         nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
 
                     SetZoom( nNewZoom );
-                    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+                    Invalidate( SID_ATTR_ZOOM );
                     bDone = TRUE;
                 }
             }
@@ -789,7 +889,7 @@ void SdViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
+void ViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 {
     Point rP = rPos;
     Size rS = rSize;
@@ -836,7 +936,7 @@ void SdViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 |*
 \************************************************************************/
 
-void SdViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
+void ViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 {
     long nHRulerOfs = 0;
 
@@ -870,14 +970,14 @@ void SdViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
     Size aVisSizePixel = pWindow->GetOutputSizePixel();
     Rectangle aVisArea = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
 
-    if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+    if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        pDocSh->SetVisArea(aVisArea);
+        GetDocSh()->SetVisArea(aVisArea);
     }
 
     VisAreaChanged(aVisArea);
 
-    SdView* pView = GetView();
+    ::sd::View* pView = GetView();
 
     if (pView)
     {
@@ -891,7 +991,7 @@ void SdViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
     which is finally called and performs the actual adjustment of sizes and
     positions of the GUI elements.
 */
-void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
+void ViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
 {
     // Make sure that the new size is not degenerate.
     if ( !rNewSize.Width() || !rNewSize.Height() )
@@ -905,61 +1005,89 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
     ArrangeGUIElements ();
 }
 
-void SdViewShell::ArrangeGUIElements (void)
+
+
+
+void ViewShell::ArrangeGUIElements (void)
 {
+    static bool bFunctionIsRunning = false;
+    if (bFunctionIsRunning)
+        return;
+    bFunctionIsRunning = true;
+    // Some shortcuts to the outer rectangle that will include all
+    // controls and windows.
+    const long nPosX = aViewPos.X();
+    const long nPosY = aViewPos.Y();
+    const long nSizeX = aViewSize.Width();
+    const long nSizeY = aViewSize.Height();
 
-    // Rahmen fuer InPlace-Editing berechnen
-    long nLeft = 0;
-    long nTop  = 0;
-
-    if ( bHasRuler )
+    // Calculate border for in-place editing.
+    long nLeft = nPosX;
+    long nTop  = nPosY;
+    const long nRight = nPosX + nSizeX - aScrBarWH.Width();
+    const long nBottom = nPosY + nSizeY - aScrBarWH.Height();
+    if (bHasRuler)
     {
-        if ( pVRulerArray[0] )
+        if (pVRulerArray[0])
             nLeft = pVRulerArray[0]->GetSizePixel().Width();
-        if ( pHRulerArray[0] )
+        if (pHRulerArray[0])
             nTop  = pHRulerArray[0]->GetSizePixel().Height();
     }
 
-    long nRight = aScrBarWH.Width();
-    long nBottom = aScrBarWH.Height();
-    BOOL bSlideShowActive = pFuSlideShow != NULL &&
-                            !pFuSlideShow->IsTerminated() &&
-                            !pFuSlideShow->IsFullScreen() &&
-                            pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW;
-
+    BOOL bSlideShowActive =
+        pFuSlideShow != NULL
+        && ! pFuSlideShow->IsTerminated()
+        && ! pFuSlideShow->IsFullScreen()
+        && pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW;
     if( !bSlideShowActive )
     {
-        SvBorder aSvBorder(nLeft, nTop, nRight, nBottom);
         // der Sfx darf immer nur das erste Fenster setzen
         SetActiveWindow(pWinArray[0][0]);
         // Sfx loest ein Resize fuer die Gesamtgroesse aus; bei aktiven Splittern
         // darf dann nicht der minimale Zoom neu berechnet werden. Falls kein
         // Splitter aktiv ist, wird die Berechnung am Ende der Methode nachgeholt
-    //  pWinArray[0][0]->SetMinZoomAutoCalc(FALSE);
-        SetBorderPixel(aSvBorder);
-    //  pWinArray[0][0]->SetMinZoomAutoCalc(TRUE);
+        SfxViewShell* pViewShell = GetViewShell();
+        OSL_ASSERT (pViewShell!=NULL);
+
+        // Not being a true view shell anymore we manage the border ourselves.
+        /*        aViewPos = Point(nLeft,nTop);
+        aViewSize = Size(
+            aViewSize.Width() - nLeft - nRight,
+            aViewSize.Height() - nTop - nBottom);
+        */
+
+        // Call SetBorderPixel() to set the size of the window of the
+        // frame and/or the size of the main document window.  In
+        // in-place mode the outer (frame) window is enlarged, in
+        // out-place mode the inner (document) window is made smaller.
+        SvBorder aBorder (
+            bHasRuler && pVRulerArray[0]!=NULL
+            ? pVRulerArray[0]->GetSizePixel().Width()
+            : 0,
+            bHasRuler && pHRulerArray[0]!=NULL
+            ? pHRulerArray[0]->GetSizePixel().Height()
+            : 0,
+            aScrBarWH.Width(),
+            aScrBarWH.Height());
+        GetViewShellBase().SetBorderPixel (aBorder);
+
         SetActiveWindow(pWindow);
     }
 
-    Size    aHBarSize;
-    Size    aVBarSize;
-    Size    aHSplitSize = aHSplit.GetSizePixel();
-    Size    aVSplitSize = aVSplit.GetSizePixel();
-    Size    aBtnSize(aScrBarWH);
-    Point   aHSplitPos, aVSplitPos;
-    long    nPosX = aViewPos.X();
-    long    nPosY = aViewPos.Y();
-    long    nSizeX = aViewSize.Width();
-    long    nSizeY = aViewSize.Height();
-    long    nSplitSize = aScrBarWH.Width() / 4;
+    // Buttons in the border have the same width as vertical
+    // scrollbars and have the same height as horizontal scrollbars.
+    const Size aBtnSize(aScrBarWH);
+
+
+    const long nSplitSize = aScrBarWH.Width() / 4;
     // TabControl oder aehnliches vorhanden?
     long    aHCtrlWidth = GetHCtrlWidth();
-    nSizeX -= aScrBarWH.Width();
-    nSizeY -= aScrBarWH.Height();
 
-    // Horizontaler Splitter
-    aHSplitPos = aHSplit.GetPosPixel();
-    aHSplitPos.Y() = nPosY + nSizeY;
+
+    // Horizontal splitter (sits between the horizontal scrollbars.)
+    Size aHSplitSize = aHSplit.GetSizePixel();
+    Point aHSplitPos = aHSplit.GetPosPixel();
+    aHSplitPos.Y() = nBottom;
     aHSplit.SetDragRectPixel(
             Rectangle(Point(nPosX, nPosY), Size(nSizeX, nSizeY)),
             &GetViewFrame()->GetWindow());
@@ -967,7 +1095,7 @@ void SdViewShell::ArrangeGUIElements (void)
         (aHSplitPos.X() < nPosX + MIN_SCROLLBAR_SIZE ||
          aHSplitPos.X() > nPosX + nSizeX - MIN_SCROLLBAR_SIZE)) )
     {
-        aHSplitPos.X() = nPosX + nSizeX - nSplitSize;
+        aHSplitPos.X() = nRight - nSplitSize;
         bIsHSplit = FALSE;
     }
     CreateHSplitElems(aHSplitPos.X() + nSplitSize);
@@ -982,8 +1110,10 @@ void SdViewShell::ArrangeGUIElements (void)
     aHSplit.SetPosPixel(aHSplitPos);
     aHSplit.SetSizePixel(aHSplitSize);
 
-    // Horizontale Scrollbars
-    Point aHPos(nPosX + aHCtrlWidth, nPosY + nSizeY );
+
+    // Horizontal scrollbars.
+    Size aHBarSize;
+    Point aHPos(nPosX + aHCtrlWidth, nPosY + nSizeY - aScrBarWH.Height());
     aHBarSize.Width() = aHSplitPos.X() - aHPos.X();
     aHBarSize.Height() = aScrBarWH.Height();
     if ( aHBarSize.Width() < MIN_SCROLLBAR_SIZE )
@@ -992,18 +1122,20 @@ void SdViewShell::ArrangeGUIElements (void)
         aHBarSize.Width() = MIN_SCROLLBAR_SIZE;
     }
     pHScrlArray[0]->SetPosSizePixel(aHPos, aHBarSize);
-    aHPos.X() += aHBarSize.Width() + nSplitSize;
 
-    if ( pHScrlArray[1] )
+    aHPos.X() += aHBarSize.Width() + nSplitSize;
+    if (pHScrlArray[1] != NULL)
     {
         aHBarSize = pHScrlArray[1]->GetSizePixel();
-        aHBarSize.Width() = nSizeX - aHPos.X();
+        aHBarSize.Width() = nRight - aHPos.X();
         pHScrlArray[1]->SetPosSizePixel(aHPos, aHBarSize);
     }
 
-    // Modus-Buttons
-    Point aVPos(nPosX + nSizeX, nPosY);
-    if( !this->ISA( SdGraphicViewShell ) )
+
+    // Buttons for switching the view shells (located above the
+    // vertical scrollbars.)
+    Point aVPos(nPosX + nSizeX - aBtnSize.Width(), nPosY);
+    if ( ! ISA(GraphicViewShell))
     {
         aDrawBtn.SetPosSizePixel(aVPos, aBtnSize);
         aVPos.Y() += aBtnSize.Height();
@@ -1030,9 +1162,11 @@ void SdViewShell::ArrangeGUIElements (void)
         aPresentationBtn.Hide();
     }
 
-    // Vertikaler Splitter
-    aVSplitPos = aVSplit.GetPosPixel();
-    aVSplitPos.X() = nPosX + nSizeX;
+
+    // Vertical splitter (sits between vertical scrollbars.)
+    Size aVSplitSize = aVSplit.GetSizePixel();
+    Point aVSplitPos = aVSplit.GetPosPixel();
+    aVSplitPos.X() = nRight;
     aVSplit.SetDragRectPixel(
             Rectangle(Point(nPosX, nPosY), Size(nSizeX, nSizeY)),
             &GetViewFrame()->GetWindow());
@@ -1041,7 +1175,7 @@ void SdViewShell::ArrangeGUIElements (void)
         (aVSplitPos.Y() < nPosY + MIN_SCROLLBAR_SIZE ||
          aVSplitPos.Y() > nPosY + nSizeY - MIN_SCROLLBAR_SIZE)) )
     {
-        aVSplitPos.Y() = nPosY + nSizeY - nSplitSize;
+        aVSplitPos.Y() = nBottom - nSplitSize;
         bIsVSplit = FALSE;
     }
 
@@ -1057,7 +1191,9 @@ void SdViewShell::ArrangeGUIElements (void)
     aVSplit.SetPosPixel(aVSplitPos);
     aVSplit.SetSizePixel(aVSplitSize);
 
-    // Vertikaler Scrollbar
+
+    // Vertical scrollbars.
+    Size aVBarSize;
     aVBarSize.Width() = aScrBarWH.Width();
     aVBarSize.Height() = aVSplitPos.Y() - aVPos.Y();
 /*
@@ -1073,7 +1209,7 @@ void SdViewShell::ArrangeGUIElements (void)
     if ( pVScrlArray[1] )
     {
         aVBarSize = pVScrlArray[1]->GetSizePixel();
-        aVBarSize.Height() = nSizeY - aVPos.Y();
+        aVBarSize.Height() = nBottom - aVPos.Y();
         pVScrlArray[1]->SetPosSizePixel(aVPos, aVBarSize);
         aVPos.Y() += aVBarSize.Height();
     }
@@ -1081,8 +1217,11 @@ void SdViewShell::ArrangeGUIElements (void)
     if (pScrlBox)
         pScrlBox->SetPosSizePixel(aVPos, aBtnSize);
 
-    aAllWindowRect = Rectangle(pWinArray[0][0]->GetPosPixel(),
-                               pWinArray[0][0]->GetSizePixel());
+
+    // Windows in the center and rulers at the left and top side.
+    aAllWindowRect = Rectangle(
+        aViewPos,
+        Size(nSizeX-aScrBarWH.Width(), nSizeY-aScrBarWH.Height()));
 
     for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
     {
@@ -1098,7 +1237,7 @@ void SdViewShell::ArrangeGUIElements (void)
                     aPos.X() = nPosX;
                     aSize.Width() = aHSplitPos.X() - nPosX;
                     if ( !bIsHSplit )
-                        aSize.Width() = nSizeX;
+                        aSize.Width() = nSizeX - aScrBarWH.Width();
                 }
                 else
                 {
@@ -1111,7 +1250,7 @@ void SdViewShell::ArrangeGUIElements (void)
                     aPos.Y() = nPosY;
                     aSize.Height() = aVSplitPos.Y() - nPosY;
                     if ( !bIsVSplit )
-                        aSize.Height() = nSizeY;
+                        aSize.Height() = nSizeY - aScrBarWH.Height();
                 }
                 else
                 {
@@ -1152,13 +1291,15 @@ void SdViewShell::ArrangeGUIElements (void)
                 }
                 else    // hier wird die oben verhinderte MinZoom-Berechnung
                 {       // nachgeholt
-//                  pWinArray[0][0]->CalcMinZoom();
+                    // pWinArray[nX][nY]->SetPosSizePixel(aPos, aSize);
+                    // pWinArray[0][0]->CalcMinZoom();
                 }
                 pWinArray[nX][nY]->UpdateMapOrigin();
             }
         }
     }
     UpdateScrollBars();
+    bFunctionIsRunning = false;
 }
 
 /*************************************************************************
@@ -1167,7 +1308,7 @@ void SdViewShell::ArrangeGUIElements (void)
 |*
 \************************************************************************/
 
-IMPL_LINK( SdViewShell, SplitHdl, Splitter *, pSplit )
+IMPL_LINK( ViewShell, SplitHdl, Splitter *, pSplit )
 {
     Point   aSplitPos = pSplit->GetPosPixel();
     long    nNewSplit = pSplit->GetSplitPosPixel();
@@ -1184,7 +1325,8 @@ IMPL_LINK( SdViewShell, SplitHdl, Splitter *, pSplit )
     }
 
     // Wenn IP aktiv, wird der IP-Modus abgebrochen
-    SdClient* pIPClient = (SdClient*)GetIPClient();
+    OSL_ASSERT (GetViewShell()!=NULL);
+    Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
     if (pIPClient)
     {
         pIPClient->GetProtocol().Reset2Open();
@@ -1202,7 +1344,7 @@ IMPL_LINK( SdViewShell, SplitHdl, Splitter *, pSplit )
 |*
 \************************************************************************/
 
-void SdViewShell::CreateHSplitElems(long nSplitXPixel)
+void ViewShell::CreateHSplitElems(long nSplitXPixel)
 {
     if ( bIsHSplit )
     {   // ggf. ScrollBars und Fenster erzeugen
@@ -1211,10 +1353,10 @@ void SdViewShell::CreateHSplitElems(long nSplitXPixel)
             pHScrlArray[1] = new ScrollBar(&GetViewFrame()->GetWindow(),
                                             WinBits(WB_HSCROLL | WB_DRAG));
             pHScrlArray[1]->SetRange(Range(0, 32000));
-            pHScrlArray[1]->SetScrollHdl(LINK(this, SdViewShell, HScrollHdl));
+            pHScrlArray[1]->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
             pHScrlArray[1]->Show();
 
-            pWinArray[1][0] = new SdWindow(&GetViewFrame()->GetWindow());
+            pWinArray[1][0] = new ::sd::Window(&GetViewFrame()->GetWindow());
             pWinArray[1][0]->SetCenterAllowed(bCenterAllowed);
             pWinArray[1][0]->SetViewShell(this);
             Point aPos = pWinArray[0][0]->GetWinViewPos();
@@ -1232,7 +1374,7 @@ void SdViewShell::CreateHSplitElems(long nSplitXPixel)
             }
             if ( bIsVSplit )
             {
-                pWinArray[1][1] = new SdWindow(&GetViewFrame()->GetWindow());
+                pWinArray[1][1] = new ::sd::Window(&GetViewFrame()->GetWindow());
                 pWinArray[1][1]->SetCenterAllowed(bCenterAllowed);
                 pWinArray[1][1]->SetViewShell(this);
                 aPos.Y() = pWinArray[0][1]->GetWinViewPos().Y();
@@ -1274,7 +1416,7 @@ void SdViewShell::CreateHSplitElems(long nSplitXPixel)
 |*
 \************************************************************************/
 
-void SdViewShell::CreateVSplitElems(long nSplitYPixel)
+void ViewShell::CreateVSplitElems(long nSplitYPixel)
 {
     if ( bIsVSplit )
     {   // ggf. ScrollBars und Fenster erzeugen
@@ -1283,10 +1425,10 @@ void SdViewShell::CreateVSplitElems(long nSplitYPixel)
             pVScrlArray[1] = new ScrollBar(&GetViewFrame()->GetWindow(),
                                             WinBits(WB_VSCROLL | WB_DRAG));
             pVScrlArray[1]->SetRange(Range(0, 32000));
-            pVScrlArray[1]->SetScrollHdl(LINK(this, SdViewShell, VScrollHdl));
+            pVScrlArray[1]->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
             pVScrlArray[1]->Show();
 
-            pWinArray[0][1] = new SdWindow(&GetViewFrame()->GetWindow());
+            pWinArray[0][1] = new ::sd::Window(&GetViewFrame()->GetWindow());
             pWinArray[0][1]->SetCenterAllowed(bCenterAllowed);
             pWinArray[0][1]->SetViewShell(this);
             Point aPos = pWinArray[0][0]->GetWinViewPos();
@@ -1304,7 +1446,7 @@ void SdViewShell::CreateVSplitElems(long nSplitYPixel)
             }
             if ( bIsHSplit )
             {
-                pWinArray[1][1] = new SdWindow(&GetViewFrame()->GetWindow());
+                pWinArray[1][1] = new ::sd::Window(&GetViewFrame()->GetWindow());
                 pWinArray[1][1]->SetCenterAllowed(bCenterAllowed);
                 pWinArray[1][1]->SetViewShell(this);
                 aPos.X() = pWinArray[1][0]->GetWinViewPos().X();
@@ -1345,7 +1487,7 @@ void SdViewShell::CreateVSplitElems(long nSplitYPixel)
 |*
 \************************************************************************/
 
-void SdViewShell::SetUIUnit(FieldUnit eUnit)
+void ViewShell::SetUIUnit(FieldUnit eUnit)
 {
     for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
     {
@@ -1370,7 +1512,7 @@ void SdViewShell::SetUIUnit(FieldUnit eUnit)
 |* DefTab an den horizontalen Linealen setzen
 |*
 \************************************************************************/
-void SdViewShell::SetDefTabHRuler( UINT16 nDefTab )
+void ViewShell::SetDefTabHRuler( UINT16 nDefTab )
 {
     for (USHORT nIndex=0; nIndex<MAX_HSPLIT_CNT; nIndex++)
     {
@@ -1387,15 +1529,16 @@ void SdViewShell::SetDefTabHRuler( UINT16 nDefTab )
 |* speichern kann.
 |*
 \************************************************************************/
-USHORT SdViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
+USHORT ViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
-    USHORT nRet = SfxViewShell::PrepareClose( bUI, bForBrowsing );
+    OSL_ASSERT (GetViewShell()!=NULL);
+    USHORT nRet = GetViewShell()->PrepareClose (bUI, bForBrowsing);
 
     if( nRet == TRUE )
     {
-        FmFormShell* pShell = (FmFormShell*)aShellTable.Get( RID_FORMLAYER_TOOLBOX );
-        if( pShell )
-            nRet = pShell->PrepareClose( bUI, bForBrowsing );
+        FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+        if (pFormShell != NULL)
+            nRet = pFormShell->PrepareClose (bUI, bForBrowsing);
     }
 
     return nRet;
@@ -1406,28 +1549,41 @@ USHORT SdViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 |* Update preview context
 |*
 \************************************************************************/
-void SdViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
+void ViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 {
-    SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow( SdPreviewChildWindow::GetChildWindowId() );
+    SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(
+        PreviewChildWindow::GetChildWindowId() );
     if ( pPreviewChildWindow )
     {
-        SdPreviewWin* pPreviewWin = (SdPreviewWin*) pPreviewChildWindow->GetWindow();
-        if ( pPreviewWin && ( bInit || pPreviewWin->GetDoc() == pDoc ) )
+        PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
+            pPreviewChildWindow->GetWindow());
+        if ( pPreviewWin && ( bInit || pPreviewWin->GetDoc() == GetDoc() ) )
         {
             USHORT nSdPageNo = ( pPage->GetPageNum() - 1 ) / 2;
-            pPreviewWin->SetContext(pDoc, nSdPageNo, pFrameView);
+            pPreviewWin->SetContext(GetDoc(), nSdPageNo, pFrameView);
         }
     }
 }
 
-// -----------------------------------------------------------------------------
 
-SfxUndoManager* SdViewShell::ImpGetUndoManager() const
+
+
+SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
 {
-    return GetViewFrame()->GetDispatcher()->GetShell(0)->GetUndoManager();
+    // Return the undo manager of the currently active object bar.
+    SfxShell* pObjectBar = GetObjectBarManager().GetTopObjectBar();
+    // The object bar may be temporarily missing, i.e. when one is
+    // replaced by another.  Return a NULL pointer in this case.
+    if (pObjectBar != NULL)
+        return pObjectBar->GetUndoManager();
+    else
+        return NULL;
 }
 
-void SdViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
+
+
+
+void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
@@ -1462,7 +1618,7 @@ void SdViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 
 // -----------------------------------------------------------------------------
 
-void SdViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
+void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
@@ -1497,7 +1653,7 @@ void SdViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 
 // -----------------------------------------------------------------------------
 
-void SdViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
+void ViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
@@ -1513,7 +1669,7 @@ void SdViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
     {
         if(bDrawViewShell)
         {
-            List* pList = pDoc->GetDeletedPresObjList();
+            List* pList = GetDoc()->GetDeletedPresObjList();
             if( pList )
                 pList->Clear();
         }
@@ -1545,7 +1701,7 @@ void SdViewShell::ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq)
 
 // -----------------------------------------------------------------------------
 
-void SdViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
+void ViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
 {
     SfxUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
@@ -1586,7 +1742,7 @@ void SdViewShell::ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq)
 
 // -----------------------------------------------------------------------------
 
-void SdViewShell::ExecReq( SfxRequest& rReq )
+void ViewShell::ExecReq( SfxRequest& rReq )
 {
     USHORT nSlot = rReq.GetSlot();
     switch( nSlot )
@@ -1639,16 +1795,30 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
 
             switch( nSlot )
             {
-                case SID_PREVIEW_QUALITY_COLOR: nMode = PREVIEW_DRAWMODE_COLOR; break;
-                case SID_PREVIEW_QUALITY_GRAYSCALE: nMode = PREVIEW_DRAWMODE_GRAYSCALE; break;
-                case SID_PREVIEW_QUALITY_BLACKWHITE: nMode = PREVIEW_DRAWMODE_BLACKWHITE; break;
-                case SID_PREVIEW_QUALITY_CONTRAST: nMode = PREVIEW_DRAWMODE_CONTRAST; break;
+                case SID_PREVIEW_QUALITY_COLOR:
+                    nMode = PREVIEW_DRAWMODE_COLOR;
+                    break;
+                case SID_PREVIEW_QUALITY_GRAYSCALE:
+                    nMode = PREVIEW_DRAWMODE_GRAYSCALE;
+                    break;
+                case SID_PREVIEW_QUALITY_BLACKWHITE:
+                    nMode = PREVIEW_DRAWMODE_BLACKWHITE;
+                    break;
+                case SID_PREVIEW_QUALITY_CONTRAST:
+                    nMode = PREVIEW_DRAWMODE_CONTRAST;
+                    break;
             }
 
-            SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-            SdPreviewWin*   pPreviewWin = (SdPreviewWin*) ( pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
-            FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
-            SdShowWindow*   pShowWindow = const_cast< SdShowWindow* >( pShow ? pShow->GetShowWindow() : NULL );
+            SfxChildWindow* pPreviewChildWindow =
+                GetViewFrame()->GetChildWindow(
+                    PreviewChildWindow::GetChildWindowId());
+            PreviewWindow* pPreviewWindow = static_cast<PreviewWindow*>(
+                pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL);
+            FuSlideShow* pShow = pPreviewWindow!=NULL
+                ? pPreviewWindow->GetSlideShow()
+                : NULL;
+            ShowWindow* pShowWindow = const_cast<ShowWindow*>(
+                pShow!=NULL ? pShow->GetShowWindow() : NULL);
 
             if( pShowWindow )
             {
@@ -1658,7 +1828,8 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
             }
 
             pFrameView->SetPreviewDrawMode( nMode );
-            SdOptions* pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
+            SdOptions* pOptions = SD_MOD()->GetSdOptions (
+                GetDoc()->GetDocumentType() );
             pOptions->SetPreviewQuality( nMode );
 
             Invalidate();
@@ -1676,7 +1847,7 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
 */
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
-SdViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
+ViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
     return ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> ();
@@ -1684,7 +1855,109 @@ SdViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
 
 
 
-::sd::WindowUpdater* SdViewShell::GetWindowUpdater (void) const
+::sd::WindowUpdater* ViewShell::GetWindowUpdater (void) const
 {
     return mpWindowUpdater.get();
 }
+
+
+
+
+/** The implementation has to change in order to take care of at least
+    one current/main/default window per ViewShell object.  Of these
+    there will usually be more than one for every ViewShellBase object.
+*/
+::Window* ViewShell::GetWindow (void) const
+{
+    OSL_ASSERT(GetViewShell()!=NULL);
+    return GetViewShell()->GetWindow();
+}
+
+
+
+
+ViewShellBase& ViewShell::GetViewShellBase (void) const
+{
+    return *static_cast<ViewShellBase*>(GetViewShell());
+}
+
+
+
+
+ObjectBarManager& ViewShell::GetObjectBarManager (void) const
+{
+    return static_cast<ViewShellBase*>(GetViewShell())->GetObjectBarManager();
+}
+
+
+
+
+DrawSubController* ViewShell::GetSubController (void)
+{
+    return static_cast<DrawSubController*>(
+        static_cast< ::com::sun::star::uno::XWeak*>(mxSubController.get()));
+}
+
+
+
+
+ViewShell::ShellType ViewShell::GetShellType (void) const
+{
+    return meShellType;
+}
+
+
+
+
+IMPL_LINK(ViewShell, FrameWindowEventListener,  VclSimpleEvent*, pEvent )
+{
+    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
+    {
+        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
+        switch (pWindowEvent->GetId())
+        {
+            case VCLEVENT_WINDOW_SHOW:
+            case VCLEVENT_WINDOW_ACTIVATE:
+            case VCLEVENT_WINDOW_RESIZE:
+            {
+                if ( ! GetDocSh()->GetProtocol().IsInPlaceActive())
+                {
+                    // Forward the event only when in in-place mode
+                    // which is handled differently (InnerResize from
+                    // the ViewShellBase class is forwarded).
+                    ::Window* pWindow = pWindowEvent->GetWindow();
+                    if (pWindow != NULL)
+                        OuterResizePixel (Point(),
+                            pWindow->GetOutputSizePixel());
+                }
+            }
+            break;
+        }
+    }
+    return 0;
+}
+
+
+DrawDocShell* ViewShell::GetDocSh (void) const
+{
+    return GetViewShellBase().GetDocShell();
+}
+
+
+
+
+SdDrawDocument* ViewShell::GetDoc (void) const
+{
+    return GetViewShellBase().GetDocument();
+}
+
+
+
+
+ErrCode ViewShell::DoVerb (long nVerb)
+{
+    return ERRCODE_NONE;
+}
+
+
+} // end of namespace sd
