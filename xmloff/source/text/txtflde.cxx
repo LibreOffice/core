@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 12:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
 // property accessor helper functions
 inline sal_Bool const GetBoolProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-inline Double const GetDoubleProperty(const OUString&,
+inline double const GetDoubleProperty(const OUString&,
                                       const Reference<XPropertySet> &);
 inline OUString const GetStringProperty(const OUString&,
                                         const Reference<XPropertySet> &);
@@ -3151,12 +3151,12 @@ inline sal_Bool const GetBoolProperty(
     return bBool;
 }
 
-inline Double const GetDoubleProperty(
+inline double const GetDoubleProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    Double fDouble = 0.0;
+    double fDouble = 0.0;
     aAny >>= fDouble;
     return fDouble;
 }
