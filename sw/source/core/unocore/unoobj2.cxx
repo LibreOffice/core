@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 12:37:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,32 +1244,27 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        // check for end of iteration
-        if(!bFirstParagraph)
+        // check for exceeding selections
+        if(!bFirstParagraph &&
+            CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
         {
-            sal_Bool bNext;     // true if there is another paragraph
-                                // to travel through
             SwPosition* pStart = pUnoCrsr->Start();
-            SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False);
+            ::std::auto_ptr<SwUnoCrsr> aNewCrsr( pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False) );
             //man soll hier auch in Tabellen landen duerfen
             if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
-                pNewCrsr->SetRemainInSection( sal_False );
+                aNewCrsr->SetRemainInSection( sal_False );
 
-            //was mache ich, wenn ich schon in einer Tabelle stehe?
-            SwTableNode* pTblNode = pNewCrsr->GetNode()->FindTableNode();
+            // os 2005-01-14: This part is only necessary to detect movements out of a selection
+            // if there is no selection we don't have to care
+            SwTableNode* pTblNode = aNewCrsr->GetNode()->FindTableNode();
             if((CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType) && pTblNode)
             {
-                pNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
-                bNext = pNewCrsr->Move(fnMoveForward, fnGoNode);
+                aNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
+                aNewCrsr->Move(fnMoveForward, fnGoNode);
             }
             else
-                bNext = pNewCrsr->MovePara(fnParaNext, fnParaStart);
-            if((CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
-                        && nEndIndex < pNewCrsr->Start()->nNode.GetIndex())
-                bNext = FALSE;
-            delete pNewCrsr;
-
-            if (!bNext)
+                aNewCrsr->MovePara(fnParaNext, fnParaStart);
+            if(nEndIndex < aNewCrsr->Start()->nNode.GetIndex())
                 return aRef;    // empty reference
         }
 
@@ -1309,7 +1304,6 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
             SwPosition* pStart = pUnoCrsr->Start();
             sal_Int32 nFirstContent = bFirstParagraph ? nFirstParaStart : -1;
             sal_Int32 nLastContent = nEndIndex ==  pStart->nNode.GetIndex() ? nLastParaEnd : -1;
-//            bFirstParagraph = sal_False;
             //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
 
             SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
@@ -1317,7 +1311,6 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
             if(/*CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && */
                 pTblNode  &&  &pTblNode->GetTable() != pOwnTable)
             {
-
                 // wir haben es mit einer fremden Tabelle zu tun
                 SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
                 XTextTable* pTable = SwXTextTables::GetObject( *pTableFmt );
@@ -1329,9 +1322,6 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
                 aRef =  (XTextContent*)new SwXParagraph((SwXText*)pText, pNewCrsr, nFirstContent, nLastContent);
             }
         }
-//        else
-//            throw container::NoSuchElementException();
-
     }
     else
         throw uno::RuntimeException();
