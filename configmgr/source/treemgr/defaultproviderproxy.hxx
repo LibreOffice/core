@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
+ *  last change: $Author: vg $ $Date: 2001-10-02 13:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 #ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/SimpleReferenceObject.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #endif
 
 #ifndef _VOS_REF_HXX_
