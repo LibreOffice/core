@@ -254,7 +254,7 @@ Sub TakeOverPathSettings()
 			Applications(CurOffice,SBTEMPLTARGET) = Applications(CurOffice,SBDOCTARGET)											
 		Else
 			Applications(CurOffice,SBTEMPLSOURCE) = Applications(0,SBTEMPLSOURCE)
-			Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)					
+			Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)
 		End If
 	End If
 End Sub
