@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 09:35:26 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 06:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,12 @@ namespace dbtools
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::sdbc;
+//  using namespace cppu;
+//  using namespace osl;
+
 //==============================================================================
 //==============================================================================
 sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
@@ -338,6 +344,55 @@ Reference< XDataSource> getDataSource(
 }
 
 //------------------------------------------------------------------------------
+Reference< XConnection > getConnection_allowException(
+            const ::rtl::OUString& _rsTitleOrPath,
+            const ::rtl::OUString& _rsUser,
+            const ::rtl::OUString& _rsPwd,
+            const Reference< XMultiServiceFactory>& _rxFactory)
+{
+    Reference< XDataSource> xDataSource( getDataSource(_rsTitleOrPath, _rxFactory) );
+    Reference<XConnection> xConnection;
+    if (xDataSource.is())
+    {
+        // do it with interaction handler
+        if(!_rsUser.getLength() || !_rsPwd.getLength())
+        {
+            Reference<XPropertySet> xProp(xDataSource,UNO_QUERY);
+            ::rtl::OUString sPwd, sUser;
+            sal_Bool bPwdReq = sal_False;
+            try
+            {
+                xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+                bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString::createFromAscii("IsPasswordRequired")));
+                xProp->getPropertyValue(::rtl::OUString::createFromAscii("User")) >>= sUser;
+            }
+            catch(Exception&)
+            {
+                OSL_ENSURE(sal_False, "dbtools::getConnection: error while retrieving data source properties!");
+            }
+            if(bPwdReq && !sPwd.getLength())
+            {   // password required, but empty -> connect using an interaction handler
+                Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
+                if (xConnectionCompletion.is())
+                {   // instantiate the default SDB interaction handler
+                    Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
+                    OSL_ENSURE(xHandler.is(), "dbtools::getConnection service com.sun.star.sdb.InteractionHandler not available!");
+                    if (xHandler.is())
+                    {
+                        xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
+                    }
+                }
+            }
+            else
+                xConnection = xDataSource->getConnection(sUser, sPwd);
+        }
+        if(!xConnection.is()) // try to get one if not already have one, just to make sure
+            xConnection = xDataSource->getConnection(_rsUser, _rsPwd);
+    }
+    return xConnection;
+}
+
+//------------------------------------------------------------------------------
 Reference< XConnection> getConnection(
             const ::rtl::OUString& _rsTitleOrPath,
             const ::rtl::OUString& _rsUser,
@@ -346,54 +401,14 @@ Reference< XConnection> getConnection(
 {
     try
     {
-        Reference< XDataSource> xDataSource( getDataSource(_rsTitleOrPath, _rxFactory) );
-        if (xDataSource.is())
-        {
-            Reference<XConnection> xConnection;  // supports the service sdb::connection
-            // do it with interaction handler
-            if(!_rsUser.getLength() || !_rsPwd.getLength())
-            {
-                Reference<XPropertySet> xProp(xDataSource,UNO_QUERY);
-                ::rtl::OUString sPwd, sUser;
-                sal_Bool bPwdReq = sal_False;
-                try
-                {
-                    xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
-                    bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString::createFromAscii("IsPasswordRequired")));
-                    xProp->getPropertyValue(::rtl::OUString::createFromAscii("User")) >>= sUser;
-                }
-                catch(Exception&)
-                {
-                    OSL_ENSURE(0,"dbtools::calcConnection: error while retrieving data source properties!");
-                }
-                if(bPwdReq && !sPwd.getLength())
-                {   // password required, but empty -> connect using an interaction handler
-                    Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
-                    if (xConnectionCompletion.is())
-                    {   // instantiate the default SDB interaction handler
-                        Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
-                        if (!xHandler.is())
-                        {
-                            OSL_ENSURE(0,"dbtools::getConnection service com.sun.star.sdb.InteractionHandler not available!");
-                                // TODO: a real parent!
-                        }
-                        else
-                        {
-                            xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
-                        }
-                    }
-                }
-                else
-                    xConnection = xDataSource->getConnection(sUser, sPwd);
-            }
-            if(!xConnection.is()) // try to get one if not already have one, just to make sure
-                xConnection = xDataSource->getConnection(_rsUser, _rsPwd);
-            return xConnection;
-        }
+        getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxFactory);
     }
     catch(Exception&)
     {
     }
+
+    // TODO: if there were not dozens of places which rely on getConnection not throwing an exception ....
+    // I would change this ...
 
     return Reference< XConnection>();
 }
@@ -421,7 +436,6 @@ Reference< XConnection> calcConnection(
         Any aConn( xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) );
         aConn >>= xReturn;
 
-
         if (!xReturn.is())
         {
             // first look if there is a connection in the parent hierarchy
@@ -443,7 +457,7 @@ Reference< XConnection> calcConnection(
                         xRowSetProps->getPropertyValue(s_sUserProp) >>= sUser;
                     if (hasProperty(PROPERTY_PASSWORD, xRowSetProps))
                         xRowSetProps->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
-                    xReturn = getConnection(sDataSourceName, sUser, sPwd, _rxFactory);
+                    xReturn = getConnection_allowException(sDataSourceName, sUser, sPwd, _rxFactory);
                 }
                 else if (sURL.getLength())
                 {   // the row set has no data source, but a connection url set
@@ -943,9 +957,9 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
 {
     Reference< XSQLQueryComposer> xReturn;
     Reference< XRowSet> xRowSet(_rxRowSetProps, UNO_QUERY);
-    Reference< XConnection> xConn( calcConnection(xRowSet, _rxFactory));
     try
     {
+        Reference< XConnection> xConn( calcConnection(xRowSet, _rxFactory));
         if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
@@ -1078,11 +1092,6 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
 
     return xReturn;
 }
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sdbc;
-using namespace cppu;
-using namespace osl;
 
 //--------------------------------------------------------------------------
 void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
@@ -1249,6 +1258,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/03/19 09:35:26  oj
+ *  new dir for unotypes
+ *
  *  Revision 1.17  2001/03/15 08:45:56  fs
  *  cppuhelper/extract -> comphelper/extract
  *
