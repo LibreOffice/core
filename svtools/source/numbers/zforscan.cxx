@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
+ *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,19 +770,18 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
     nAnzStrings = 0;
     BOOL bStar = FALSE;                 // wird bei '*'Detektion gesetzt
     Reset();
-    const International* pIntl = pFormatter->GetInternational();
-    cOldDecSep =      pIntl->GetNumDecimalSep();
-    cOldThousandSep = pIntl->GetNumThousandSep();
-    cOldDateSep =     pIntl->GetDateSep();
-    cOldTimeSep =     pIntl->GetTimeSep();
+    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+    sOldDecSep =      pLoc->getNumDecimalSep();
+    sOldThousandSep = pLoc->getNumThousandSep();
+    sOldDateSep =     pLoc->getDateSep();
+    sOldTimeSep =     pLoc->getTimeSep();
 
-    //  Wenn der Tausender-Trenner ein Non-Breaking Space ist (franzoesisch), mit
-    //  einfachem Space weiterarbeiten, damit die Abfragen auf Space funktionieren.
-    //  Der Format-String wird angepasst, so dass beides erlaubt ist.
-    //  Fuer die Ausgabe des Format-Strings wird das Zeichen vom International genommen.
-
-    if ( cOldThousandSep == 0xA0 )
-        cOldThousandSep = ' ';
+    // If the group separator is a Non-Breaking Space (French) continue with a
+    // normal space instead so queries on space work correctly.
+    // The format string is adjusted to allow both.
+    // For output of the format code string the LocaleData characters are used.
+    if ( sOldThousandSep.GetChar(0) == 0xA0 && sOldThousandSep.Len() == 1 )
+        sOldThousandSep = ' ';
 
     xub_StrLen nPos = 0;
     const xub_StrLen nLen = rString.Len();
@@ -1122,7 +1121,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                         {
                             if (nCurrPos != STRING_NOTFOUND)
                                 eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if ( sStrArray[i].GetChar(0) != cOldDateSep )
+                            else if ( sStrArray[i] != sOldDateSep )
                                 return nPos;
                         }
                     }
@@ -1141,7 +1140,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                         {
                             if (nCurrPos != STRING_NOTFOUND)
                                 eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if ( sStrArray[i].GetChar(0) != cOldTimeSep )
+                            else if ( sStrArray[i] != sOldTimeSep )
                                 return nPos;
                         }
                     }
@@ -1160,8 +1159,8 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                         {
                             if (nCurrPos != STRING_NOTFOUND)
                                 eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if ( sStrArray[i].GetChar(0) != cOldDateSep
-                                   && sStrArray[i].GetChar(0) != cOldTimeSep )
+                            else if ( sStrArray[i] != sOldDateSep
+                                   && sStrArray[i] != sOldTimeSep )
                                 return nPos;
                         }
                     }
@@ -1265,6 +1264,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
 xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
 {
     const International* pIntl = pFormatter->GetInternational();
+    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
     xub_StrLen nPos = 0;                    // Korrekturposition
     USHORT i = 0;                           // durchlaeuft die Symbole
@@ -1318,10 +1318,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
             sal_Unicode cThousandFill = ' ';
             while (i < nAnzStrings)
             {
-                if (eScannedType == NUMBERFORMAT_FRACTION &&    // Sonderfall
+                if (eScannedType == NUMBERFORMAT_FRACTION &&    // special case
                     nTypeArray[i] == SYMBOLTYPE_DEL &&          // # ### #/#
-                    cOldThousandSep == ' '          &&          // Frankreich
-                    sStrArray[i].GetChar(0) == ' '  &&          // Schweden
+                    StringEqualsChar( sOldThousandSep, ' ' ) && // e.g. France or Sweden
+                    StringEqualsChar( sStrArray[i], ' ' ) &&
                     !bFrac                          &&
                     IsLastBlankBeforeFrac(i) )
                 {
@@ -1446,25 +1446,24 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         case '\'':
                         case ' ':
                         {
-                            sal_Unicode cSep = cHere;   // merken
-                            if ( cSep == cOldThousandSep)
+                            sal_Unicode cSep = cHere;   // remember
+                            if ( StringEqualsChar( sOldThousandSep, cSep ) )
                             {
                                 if (bConvertMode)
                                 {
-                                    cSep = pIntl->GetNumThousandSep();
-                                    sStrArray[i].SetChar( 0, cSep );
+                                    sStrArray[i].Replace( 0, 1, pLoc->getNumThousandSep() );
                                 }
-                                sal_Unicode cPre = PreviousChar(i); // letzter Buchst.
-                                                        // vorher (skipt empty)
+                                // previous char with skip empty
+                                sal_Unicode cPre = PreviousChar(i);
                                 sal_Unicode cNext;
                                 if (bExp || bBlank || bFrac)
-                                {   // hinter E, / oder ' '
-                                    if (cOldThousandSep != ' ')
+                                {   // after E, / or ' '
+                                    if ( !StringEqualsChar( sOldThousandSep, ' ' ) )
                                     {
                                         nPos += sStrArray[i].Len();
                                         nTypeArray[i] = SYMBOLTYPE_EMPTY;
                                         nAnzResStrings--;
-                                        i++;                // weg damit
+                                        i++;                // eat it
                                     }
                                     else
                                         nTypeArray[i] = SYMBOLTYPE_STRING;
@@ -1475,15 +1474,14 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     )                   // #.#
                                 {
                                     nPos += sStrArray[i].Len();
-                                    if (!bThousand)                 // nur einmal
-                                    {
-                                        //  hart setzen, falls Non-Breaking Space
-                                        sStrArray[i].Replace( 0, 1, pIntl->GetNumThousandSep() );
+                                    if (!bThousand)                 // only once
+                                    {   // set hard, in case of Non-Breaking Space
+                                        sStrArray[i].Replace( 0, 1, pLoc->getNumThousandSep() );
                                         nTypeArray[i] = SYMBOLTYPE_THSEP;
                                         bThousand = TRUE;
                                         cThousandFill = sStrArray[i+1].GetChar(0);
                                     }
-                                    else                            // weg damit
+                                    else                            // eat it
                                     {
                                         nTypeArray[i] = SYMBOLTYPE_EMPTY;
                                         nAnzResStrings--;
@@ -1494,28 +1492,27 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     && PreviousType(i) == SYMBOLTYPE_DIGIT
                                     && nThousand < FLAG_STANDARD_IN_FORMAT )
                                 {                                   // #....
-                                    if ( cOldThousandSep == ' ' )
-                                    {   // die spinnen, die Franzosen..
+                                    if ( StringEqualsChar( sOldThousandSep, ' ' ) )
+                                    {   // strange, those French..
                                         BOOL bFirst = TRUE;
                                         String& rStr = sStrArray[i];
-                                        //  hart setzen, Non-Breaking Space
-                                        sal_Unicode cSepF = pIntl->GetNumThousandSep();
+                                        //  set a hard Non-Breaking Space
+                                        const String& rSepF = pLoc->getNumThousandSep();
                                         while ( i < nAnzStrings
-                                            && sStrArray[i].GetChar(0) ==
-                                                cOldThousandSep
-                                            && NextChar(i) == cOldThousandSep )
-                                        {   // letzter ist Space oder es folgt
-                                            // noch ein Space => TausenderSep
+                                            && sStrArray[i] == sOldThousandSep
+                                            && StringEqualsChar( sOldThousandSep, NextChar(i) ) )
+                                        {   // last was a space or another space
+                                            // is following => separator
                                             nPos += sStrArray[i].Len();
                                             if ( bFirst )
                                             {
                                                 bFirst = FALSE;
-                                                rStr.Replace( 0, 1, cSepF );
+                                                rStr.Replace( 0, 1, rSepF );
                                                 nTypeArray[i] = SYMBOLTYPE_THSEP;
                                             }
                                             else
                                             {
-                                                rStr += cSepF;
+                                                rStr += rSepF;
                                                 nTypeArray[i] = SYMBOLTYPE_EMPTY;
                                                 nAnzResStrings--;
                                             }
@@ -1523,11 +1520,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                             i++;
                                         }
                                         if ( i < nAnzStrings-1
-                                            && sStrArray[i].GetChar(0) ==
-                                                cOldThousandSep )
-                                        {   // hinter letztem Space ist was
-                                            // => Space wenn Waehrung enthalten,
-                                            // sonst TausenderSep
+                                            && sStrArray[i] == sOldThousandSep )
+                                        {   // something following last space
+                                            // => space if currency contained,
+                                            // else separator
                                             nPos += sStrArray[i].Len();
                                             if ( (nPos <= nCurrPos &&
                                                     nCurrPos < nPos + sStrArray[i+1].Len())
@@ -1543,12 +1539,12 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                                 if ( bFirst )
                                                 {
                                                     bFirst = FALSE;
-                                                    rStr.Replace( 0, 1, cSepF );
+                                                    rStr.Replace( 0, 1, rSepF );
                                                     nTypeArray[i] = SYMBOLTYPE_THSEP;
                                                 }
                                                 else
                                                 {
-                                                    rStr += cSepF;
+                                                    rStr += rSepF;
                                                     nTypeArray[i] = SYMBOLTYPE_EMPTY;
                                                     nAnzResStrings--;
                                                 }
@@ -1564,9 +1560,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                         nPos += rStr.Len();
                                         i++;
                                         nThousand++;
-                                        while (i < nAnzStrings &&
-                                            sStrArray[i].GetChar(0) ==
-                                                        cOldThousandSep)
+                                        while ( i < nAnzStrings &&
+                                            sStrArray[i] == sOldThousandSep )
                                         {
                                             nThousand++;
                                             rStr += cSep;
@@ -1577,15 +1572,14 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                         }
                                     }
                                 }
-                                else                    // irgendwelche .
+                                else                    // any grsep
                                 {
                                     nTypeArray[i] = SYMBOLTYPE_STRING;
                                     String& rStr = sStrArray[i];
                                     nPos += rStr.Len();
                                     i++;
-                                    while (i < nAnzStrings &&
-                                           sStrArray[i].GetChar(0) ==
-                                                         cOldThousandSep)
+                                    while ( i < nAnzStrings &&
+                                        sStrArray[i] == sOldThousandSep )
                                     {
                                         rStr += sStrArray[i];
                                         nPos += sStrArray[i].Len();
@@ -1595,31 +1589,29 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     }
                                 }
                             }
-                            else if ( cSep == cOldDecSep)
-                            {                           // Dezimalzeichen
+                            else if ( StringEqualsChar( sOldDecSep, cSep ) )
+                            {
                                 if (bConvertMode)
                                 {
-                                    cSep = pIntl->GetNumDecimalSep();
-                                    sStrArray[i].Replace( 0, 1, cSep );
+                                    sStrArray[i].Replace( 0, 1, pLoc->getNumDecimalSep() );
                                 }
-                                if (bBlank || bFrac)    // , hinter /, ' '
-                                    return nPos;        // Fehler
-                                else if (bExp)          // hinter dem E
+                                if (bBlank || bFrac)    // , behind /, ' '
+                                    return nPos;        // error
+                                else if (bExp)          // behind E
                                 {
                                     nPos += sStrArray[i].Len();
                                     nTypeArray[i] = SYMBOLTYPE_EMPTY;
                                     nAnzResStrings--;
-                                    i++;                // weg damit
+                                    i++;                // eat it
                                 }
-                                else if (bDecSep)           // irgendwelche ,
+                                else if (bDecSep)       // any ,
                                 {
                                     nTypeArray[i] = SYMBOLTYPE_STRING;
                                     String& rStr = sStrArray[i];
                                     nPos += rStr.Len();
                                     i++;
-                                    while (i < nAnzStrings &&
-                                           sStrArray[i].GetChar(0) ==
-                                                         cOldDecSep)
+                                    while ( i < nAnzStrings &&
+                                        sStrArray[i] == sOldDecSep )
                                     {
                                         rStr += sStrArray[i];
                                         nPos += sStrArray[i].Len();
@@ -1639,16 +1631,16 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     i++;
                                 }
                             }                           // of else = DecSep
-                            else                        // . ohne Bedeutung
+                            else                        // . without meaning
                             {
                                 if (cSep == ' ' &&
                                     eScannedType == NUMBERFORMAT_FRACTION &&
-                                    sStrArray[i].GetChar(0) == ' ')
+                                    StringEqualsChar( sStrArray[i], ' ' ) )
                                 {
-                                    if (!bBlank && !bFrac)  // nicht doppelt
-                                    {                       // oder hinter /
-                                        if (bDecSep && nCounter > 0)// Nachkom.
-                                            return nPos;            // Fehler
+                                    if (!bBlank && !bFrac)  // no dups
+                                    {                       // or behind /
+                                        if (bDecSep && nCounter > 0)// dec.
+                                            return nPos;            // error
                                         bBlank = TRUE;
                                         nBlankPos = i;
                                         nCntPre = nCounter;
@@ -1664,7 +1656,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     nPos += rStr.Len();
                                     i++;
                                     while (i < nAnzStrings &&
-                                            sStrArray[i].GetChar(0) == cSep)
+                                        StringEqualsChar( sStrArray[i], cSep ) )
                                     {
                                         rStr += sStrArray[i];
                                         nPos += sStrArray[i].Len();
@@ -1865,7 +1857,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             for (xub_StrLen k = 0; k < nAnz; k++)
                             {
                                 sStrArray[i].Insert(
-                                        pIntl->GetNumThousandSep(),InPos);
+                                        pLoc->getNumThousandSep(),InPos);
                                 InPos += 4;
                             }
                             nCount = sStrArray[i].Len() - InPos + 3;
@@ -1890,7 +1882,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             for (xub_StrLen k = 0; k < nAnz; k++)
                             {
                                 sStrArray[i].Insert(
-                                    pIntl->GetNumThousandSep(),InPos);
+                                    pLoc->getNumThousandSep(),InPos);
                                 InPos -= 3;
                             }
                             nCount = InPos + 3;
@@ -1924,8 +1916,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     break;
                     case SYMBOLTYPE_DEL:
                     {
-                        if (bConvertMode && sStrArray[i].GetChar(0) == cOldDateSep)
-                            sStrArray[i].Replace( 0, 1, pIntl->GetDateSep() );
+                        if (bConvertMode && sStrArray[i] == sOldDateSep)
+                            sStrArray[i].Replace( 0, 1, pLoc->getDateSep() );
                         nTypeArray[i] = SYMBOLTYPE_STRING;
                     }
                     break;
@@ -2038,8 +2030,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             default:
                             {
                                 if (bConvertMode &&
-                                    sStrArray[i].GetChar(0) == cOldTimeSep)
-                                    sStrArray[i].Replace( 0, 1, pIntl->GetTimeSep() );
+                                    sStrArray[i] == sOldTimeSep)
+                                    sStrArray[i].Replace( 0, 1, pLoc->getTimeSep() );
                                 nTypeArray[i] = SYMBOLTYPE_STRING;
                                 nPos += sStrArray[i].Len();
                                 i++;
@@ -2122,10 +2114,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     break;
                     case SYMBOLTYPE_DEL:
                     {
-                        if (bConvertMode && sStrArray[i].GetChar(0) == cOldDateSep)
-                            sStrArray[i].Replace( 0, 1, pIntl->GetDateSep() );
-                        if (bConvertMode && sStrArray[i].GetChar(0) == cOldTimeSep)
-                            sStrArray[i].Replace( 0, 1, pIntl->GetTimeSep() );
+                        if (bConvertMode && sStrArray[i] == sOldDateSep)
+                            sStrArray[i].Replace( 0, 1, pLoc->getDateSep() );
+                        if (bConvertMode && sStrArray[i] == sOldTimeSep)
+                            sStrArray[i].Replace( 0, 1, pLoc->getTimeSep() );
                         nTypeArray[i] = SYMBOLTYPE_STRING;
                     }
                     break;

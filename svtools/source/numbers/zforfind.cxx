@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
+ *  last change: $Author: er $ $Date: 2000-10-17 18:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #include "zforlist.hxx"         // NUMBERFORMAT_XXX
@@ -288,9 +291,10 @@ BOOL ImpSvNumberInputScan::SkipThousands(
 {
     BOOL res = FALSE;
     sal_Unicode cToken;
+    const String& rThSep = pFormatter->GetLocaleData()->getNumThousandSep();
     register const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
-    xub_StrLen nCounter;                                // zaehlt 3er Paare
+    xub_StrLen nCounter;                                // counts 3 digits
 
     while ( ((cToken = *pHere) != 0) && eState != SsStop)
     {
@@ -298,10 +302,11 @@ BOOL ImpSvNumberInputScan::SkipThousands(
         switch (eState)
         {
             case SsStart:
-                if (cToken == pFormatter->GetInternational()->GetNumThousandSep())
+                if ( StringPtrContains( rThSep, pHere-1, 0 ) )
                 {
                     nCounter = 0;
                     eState = SsGetValue;
+                    pHere += rThSep.Len()-1;
                 }
                 else
                 {
@@ -317,7 +322,7 @@ BOOL ImpSvNumberInputScan::SkipThousands(
                     if (nCounter == 3)
                     {
                         eState = SsStart;
-                        res = TRUE;                 // .000 Kombination gef.
+                        res = TRUE;                 // .000 combination found
                     }
                 }
                 else
@@ -331,11 +336,11 @@ BOOL ImpSvNumberInputScan::SkipThousands(
         }   // switch
     }   // while
 
-    if (eState == SsGetValue)               // Abbruch mit weniger als 3 St.
+    if (eState == SsGetValue)               // break witth less than 3 digits
     {
         if ( nCounter )
             rSymbol.Erase( rSymbol.Len() - nCounter, nCounter );
-        pHere -= nCounter + 1;               // auch . mit zurueck
+        pHere -= nCounter + rThSep.Len();       // put back ThSep also
     }
     pStr = pHere;
 
@@ -372,9 +377,9 @@ void ImpSvNumberInputScan::NumberStringDivision( const String& rString )
 
 
 //---------------------------------------------------------------------------
-// if rString contains rWhat at nPos
+// Whether rString contains rWhat at nPos
 
-BOOL ImpSvNumberInputScan::StringContains( const String& rWhat,
+BOOL ImpSvNumberInputScan::StringContainsImpl( const String& rWhat,
             const String& rString, xub_StrLen nPos )
 {
     if ( nPos + rWhat.Len() <= rString.Len() )
@@ -392,6 +397,28 @@ BOOL ImpSvNumberInputScan::StringContains( const String& rWhat,
         return TRUE;
     }
     return FALSE;
+}
+
+
+//---------------------------------------------------------------------------
+// Whether pString contains rWhat at nPos
+
+BOOL ImpSvNumberInputScan::StringPtrContainsImpl( const String& rWhat,
+            const sal_Unicode* pString, xub_StrLen nPos )
+{
+    if ( rWhat.Len() == 0 )
+        return FALSE;
+    register const sal_Unicode* pWhat = rWhat.GetBuffer();
+    register const sal_Unicode* const pEnd = pWhat + rWhat.Len();
+    register const sal_Unicode* pStr = pString + nPos;
+    while ( pWhat < pEnd )
+    {
+        if ( *pWhat != *pStr )
+            return FALSE;
+        pWhat++;
+        pStr++;
+    }
+    return TRUE;
 }
 
 
@@ -459,15 +486,14 @@ inline BOOL ImpSvNumberInputScan::GetThousandSep(
         xub_StrLen& nPos,
         USHORT nStringPos )
 {
-    if (   rString.Len() == 1                               // keine Blanks
-        && nPos == 0                                        // safety first!
-        && rString.GetChar(nPos) == pFormatter->GetInternational()->GetNumThousandSep() // '.'
+    const String& rSep = pFormatter->GetLocaleData()->getNumThousandSep();
+    if (   rString == rSep                                  // nothing else
         && nStringPos < nAnzStrings - 1                     // safety first!
-        && IsNum[nStringPos+1]                              // Zahl folgt
-        && (   sStrArray[nStringPos+1].Len() == 3           // mit 3 Stellen
-            || nPosThousandString == nStringPos+1 ) )       // oder bereits zusammengefasst
+        && IsNum[nStringPos+1]                              // number follows
+        && (   sStrArray[nStringPos+1].Len() == 3           // with 3 digits
+            || nPosThousandString == nStringPos+1 ) )       // or concatenated
     {
-        nPos++;
+        nPos += rSep.Len();
         return TRUE;
     }
     return FALSE;
@@ -1222,22 +1248,21 @@ BOOL ImpSvNumberInputScan::ScanMidString(
         const String& rString,
         USHORT nStringPos )
 {
-    const International* pIntl = pFormatter->GetInternational();
     xub_StrLen nPos = 0;
 
     SkipBlanks(rString, nPos);
-    if (GetDecSep(rString, nPos))                   // Dezimaltrenner?
+    if (GetDecSep(rString, nPos))                   // decimal separator?
     {
-        if (nDecPos == 1 || nDecPos == 3)           // ,12,4 oder 1,E2,1
+        if (nDecPos == 1 || nDecPos == 3)           // ,12,4 or 1,E2,1
             return FALSE;
-        else if (nDecPos == 2)                      // , doppelt 12,4,
+        else if (nDecPos == 2)                      // , dup: 12,4,
         {
-            if (bDecSepInDateSeps)                  // , auch Date Sep
+            if (bDecSepInDateSeps)                  // , also date separator
             {
                 if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-                    eScannedType != NUMBERFORMAT_DATE)  // schon anderer Typ
+                    eScannedType != NUMBERFORMAT_DATE)  // already another type
                     return FALSE;
-                eScannedType = NUMBERFORMAT_DATE;   // !!! Es ist ein Datum !!!
+                eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
                 SkipBlanks(rString, nPos);
             }
             else
@@ -1245,76 +1270,79 @@ BOOL ImpSvNumberInputScan::ScanMidString(
         }
         else
         {
-            nDecPos = 2;                            // , im Mittelstring
+            nDecPos = 2;                            // , in mid string
             SkipBlanks(rString, nPos);
         }
     }
 
-    if (SkipChar('/', rString, nPos))               // Bruch?
+    if (SkipChar('/', rString, nPos))               // fraction?
     {
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // schon anderes Format
-            && eScannedType != NUMBERFORMAT_DATE)       // ausser Datum
-            return FALSE;                           // => jan/31/1994
-        else if (    eScannedType != NUMBERFORMAT_DATE      // bisher als Datum analysiert
-                 && (    eSetType == NUMBERFORMAT_FRACTION  // und Vorgabe war Bruch
-                     || (nAnzNums == 3                      //  oder 3 Zahlen
-                         && nStringPos > 2) ) )             //   und ???
+        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
+            && eScannedType != NUMBERFORMAT_DATE)       // except date
+            return FALSE;                               // => jan/31/1994
+        else if (    eScannedType != NUMBERFORMAT_DATE      // analyzed date until now
+                 && (    eSetType == NUMBERFORMAT_FRACTION  // and preset was fraction
+                     || (nAnzNums == 3                      // or 3 numbers
+                         && nStringPos > 2) ) )             // and what ???
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_FRACTION;   // !!! es ist ein Bruch
+            eScannedType = NUMBERFORMAT_FRACTION;   // !!! it IS a fraction
         }
         else
-            nPos--;                                 // '/' zurueck
+            nPos--;                                 // put '/' back
     }
 
-    if (GetThousandSep(rString, nPos, nStringPos))  // 1.000
+    if (GetThousandSep(rString, nPos, nStringPos))  // 1,000
     {
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // schon anderes Format
-            && eScannedType != NUMBERFORMAT_CURRENCY)   // ausser Waehrung
+        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
+            && eScannedType != NUMBERFORMAT_CURRENCY)   // except currency
             return FALSE;
         nThousand++;
     }
 
+    const International* pIntl = pFormatter->GetInternational();
+    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+    const String& rDate = pLoc->getDateSep();
+    const String& rTime = pLoc->getTimeSep();
+    sal_Unicode cTime = rTime.GetChar(0);
     SkipBlanks(rString, nPos);
-    sal_Unicode cDate = pIntl->GetDateSep();
-    sal_Unicode cTime = pIntl->GetTimeSep();
-    if (                      SkipChar(cDate, rString, nPos)    // 10., 10-, 10/
+    if (                      SkipString(rDate, rString, nPos)  // 10., 10-, 10/
         || ((cTime != '.') && SkipChar('.',   rString, nPos))   // TRICKY:
         || ((cTime != '/') && SkipChar('/',   rString, nPos))   // short boolean
         || ((cTime != '-') && SkipChar('-',   rString, nPos)) ) // evaluation!
     {
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // schon anderes Format
-            && eScannedType != NUMBERFORMAT_DATE)       // ausser Datum
+        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
+            && eScannedType != NUMBERFORMAT_DATE)       // except date
             return FALSE;
         SkipBlanks(rString, nPos);
-        eScannedType = NUMBERFORMAT_DATE;           // !!! es ist ein Datum
+        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date
         short nTmpMonth = GetMonth(rString, nPos);  // 10. Jan 94
-        if (nMonth && nTmpMonth)                    // Monat doppelt
+        if (nMonth && nTmpMonth)                    // month dup
             return FALSE;
         if (nTmpMonth)
         {
             nMonth = nTmpMonth;
-            nMonthPos = 2;                          // Monat in der Mitte
+            nMonthPos = 2;                          // month in the middle
             if ( nMonth < 0 )
-                SkipChar( '.', rString, nPos );     // abgekuerzt
+                SkipChar( '.', rString, nPos );     // abbreviated
             SkipString( pIntl->GetLongDateMonthSep(), rString, nPos );
             SkipBlanks(rString, nPos);
         }
     }
 
-    short nTempMonth = GetMonth(rString, nPos);     // Monat in der Mitte (10 Jan 94)
+    short nTempMonth = GetMonth(rString, nPos);     // month in the middle (10 Jan 94)
     if (nTempMonth)
     {
-        if (nMonth != 0)                            // Monat doppelt
+        if (nMonth != 0)                            // month dup
             return FALSE;
-        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // schon anderes Format
-            && eScannedType != NUMBERFORMAT_DATE)       // ausser Datum
+        if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
+            && eScannedType != NUMBERFORMAT_DATE)       // except date
             return FALSE;
-        eScannedType = NUMBERFORMAT_DATE;           // !!! es ist ein Datum
+        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date
         nMonth = nTempMonth;
-        nMonthPos = 2;                              // Monat in der Mitte
+        nMonthPos = 2;                              // month in the middle
         if ( nMonth < 0 )
-            SkipChar( '.', rString, nPos );         // abgekuerzt
+            SkipChar( '.', rString, nPos );         // abbreviated
         SkipString( pIntl->GetLongDateMonthSep(), rString, nPos );
         SkipBlanks(rString, nPos);
     }
@@ -1322,38 +1350,38 @@ BOOL ImpSvNumberInputScan::ScanMidString(
     if (    SkipChar('E', rString, nPos)            // 10E, 10e, 10,Ee
          || SkipChar('e', rString, nPos) )
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED) // schon anderes Format
+        if (eScannedType != NUMBERFORMAT_UNDEFINED) // already another type
             return FALSE;
         else
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_SCIENTIFIC; // !!! es ist eine Zahl im E-Format
-            if (    nThousand+2 == nAnzNums         // Sonderfall 1,E2
+            eScannedType = NUMBERFORMAT_SCIENTIFIC; // !!! it IS scientific
+            if (    nThousand+2 == nAnzNums         // special case 1.E2
                  && nDecPos == 2 )
-                nDecPos = 3;                        // 1.100,E2 1.100.100,E3
+                nDecPos = 3;                        // 1,100.E2 1,100,100.E3
         }
-        nESign = GetESign(rString, nPos);           // Vorzeichen vom Exponent?
+        nESign = GetESign(rString, nPos);           // signed exponent?
         SkipBlanks(rString, nPos);
     }
 
-    if ( SkipChar(cTime, rString, nPos) )           // Zeittrenner?
+    if ( SkipString(rTime, rString, nPos) )         // time separator?
     {
-        if (nDecPos)                                // schon , => Fehler
+        if (nDecPos)                                // already , => error
             return FALSE;
-        if (   (   eScannedType == NUMBERFORMAT_DATE        // bereits Datumsformat
-                || eScannedType == NUMBERFORMAT_DATETIME)   // erkannt und
-            && nAnzNums > 3)                                // mehr als 3 Zahlen? (31.Dez.94 8:23)
+        if (   (   eScannedType == NUMBERFORMAT_DATE        // already date type
+                || eScannedType == NUMBERFORMAT_DATETIME)   // or date time
+            && nAnzNums > 3)                                // and more than 3 numbers? (31.Dez.94 8:23)
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_DATETIME;   // !!! es ist Datum mit Uhrzeit
+            eScannedType = NUMBERFORMAT_DATETIME;   // !!! it IS date with time
         }
-        else if (   eScannedType != NUMBERFORMAT_UNDEFINED  // schon anderes Format
-                 && eScannedType != NUMBERFORMAT_TIME)      // ausser Zeit
+        else if (   eScannedType != NUMBERFORMAT_UNDEFINED  // already another type
+                 && eScannedType != NUMBERFORMAT_TIME)      // except time
             return FALSE;
         else
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_TIME;       // !!! es ist eine Zeit
+            eScannedType = NUMBERFORMAT_TIME;       // !!! it IS a time
         }
         if ( !nTimePos )
             nTimePos = nStringPos + 1;
@@ -1367,7 +1395,7 @@ BOOL ImpSvNumberInputScan::ScanMidString(
             SkipBlanks( rString, nPos );
     }
 
-    if (nPos < rString.Len())                       // noch nicht alles weg?
+    if (nPos < rString.Len())                       // not everything consumed?
         return FALSE;
 
     return TRUE;
@@ -1384,22 +1412,21 @@ BOOL ImpSvNumberInputScan::ScanMidString(
 BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         const SvNumberformat* pFormat )
 {
-    const International* pIntl = pFormatter->GetInternational();
     xub_StrLen nPos = 0;
 
     SkipBlanks(rString, nPos);
-    if (GetDecSep(rString, nPos))                   // Dezimaltrenner?
+    if (GetDecSep(rString, nPos))                   // decimal separator?
     {
-        if (nDecPos == 1 || nDecPos == 3)           // ,12,4 oder 12,E4,
+        if (nDecPos == 1 || nDecPos == 3)           // ,12,4 or 12,E4,
             return FALSE;
-        else if (nDecPos == 2)                      // , doppelt 12,4,
+        else if (nDecPos == 2)                      // , dup: 12,4,
         {
-            if (bDecSepInDateSeps)                  // , auch Date Sep
+            if (bDecSepInDateSeps)                  // , also date sep
             {
                 if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-                    eScannedType != NUMBERFORMAT_DATE)  // schon anderer Typ
+                    eScannedType != NUMBERFORMAT_DATE)  // already another type
                     return FALSE;
-                eScannedType = NUMBERFORMAT_DATE;   // !!! es ist ein Datum
+                eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
                 SkipBlanks(rString, nPos);
             }
             else
@@ -1407,37 +1434,37 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         }
         else
         {
-            nDecPos = 3;                            // , im Endstring
+            nDecPos = 3;                            // , in end string
             SkipBlanks(rString, nPos);
         }
     }
 
-    if (   nSign == 0                               // Konflikt - kein Vorzeichen
-        && eScannedType != NUMBERFORMAT_DATE)       // und nicht Datum
-//? Uhrzeit auch abfangen ?
-    {                                               // noch kein Vorzeichen
+    if (   nSign == 0                               // conflict - not signed
+        && eScannedType != NUMBERFORMAT_DATE)       // and not date
+//!? catch time too?
+    {                                               // not signed yet
         nSign = GetSign(rString, nPos);             // 1- DM
-        if (nNegCheck)                              // '(' als Vorzeichen
+        if (nNegCheck)                              // '(' as sign
             return FALSE;
     }
 
     SkipBlanks(rString, nPos);
-    if (nNegCheck && SkipChar(')', rString, nPos))  // ggf. ')' ueberlesen
+    if (nNegCheck && SkipChar(')', rString, nPos))  // skip ')' if appropriate
     {
         nNegCheck = 0;
         SkipBlanks(rString, nPos);
     }
 
-    if ( GetCurrency(rString, nPos, pFormat) )      // Waehrungssymbol?
+    if ( GetCurrency(rString, nPos, pFormat) )      // currency symbol?
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED) // DM doppelt oder
+        if (eScannedType != NUMBERFORMAT_UNDEFINED) // currency dup
             return FALSE;
         else
         {
             SkipBlanks(rString, nPos);
             eScannedType = NUMBERFORMAT_CURRENCY;
-        }                                           // hinter DM - erlaubt
-        if (nSign == 0)                             // noch kein Vorzeichen
+        }                                           // behind currency a '-' is allowed
+        if (nSign == 0)                             // not signed yet
         {
             nSign = GetSign(rString, nPos);         // DM -
             SkipBlanks(rString, nPos);
@@ -1447,23 +1474,25 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         if ( nNegCheck && eScannedType == NUMBERFORMAT_CURRENCY
                        && SkipChar(')', rString, nPos) )
         {
-            nNegCheck = 0;                          // ggf. ')' ueberlesen
-            SkipBlanks(rString, nPos);              // nur bei Waehrung
+            nNegCheck = 0;                          // ')' skipped
+            SkipBlanks(rString, nPos);              // only if currency
         }
     }
 
     if ( SkipChar('%', rString, nPos) )             // 1 %
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED) // schon anderes Format
+        if (eScannedType != NUMBERFORMAT_UNDEFINED) // already another type
             return FALSE;
         SkipBlanks(rString, nPos);
         eScannedType = NUMBERFORMAT_PERCENT;
     }
 
-    sal_Unicode cTime = pIntl->GetTimeSep();
-    if ( SkipChar(cTime, rString, nPos) )           // 10:
+    const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
+    const String& rDate = pLoc->getDateSep();
+    const String& rTime = pLoc->getTimeSep();
+    if ( SkipString(rTime, rString, nPos) )         // 10:
     {
-        if (nDecPos)                                // schon , => Fehler
+        if (nDecPos)                                // already , => error
             return FALSE;
         if (eScannedType == NUMBERFORMAT_DATE && nAnzNums > 2) // 31.Dez.94 8:
         {
@@ -1471,7 +1500,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             eScannedType = NUMBERFORMAT_DATETIME;
         }
         else if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-                 eScannedType != NUMBERFORMAT_TIME) // schon anderes Format
+                 eScannedType != NUMBERFORMAT_TIME) // already another type
             return FALSE;
         else
         {
@@ -1480,14 +1509,14 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         }
     }
 
-    sal_Unicode cDate = pIntl->GetDateSep();
-    if (                      SkipChar(cDate, rString, nPos)    // 10., 10-, 10/
+    sal_Unicode cTime = rTime.GetChar(0);
+    if (                      SkipString(rDate, rString, nPos)  // 10., 10-, 10/
         || ((cTime != '.') && SkipChar('.',   rString, nPos))   // TRICKY:
         || ((cTime != '/') && SkipChar('/',   rString, nPos))   // short boolean
         || ((cTime != '-') && SkipChar('-',   rString, nPos)) ) // evaluation!
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-            eScannedType != NUMBERFORMAT_DATE)          // schon anderes Format
+            eScannedType != NUMBERFORMAT_DATE)          // already another type
             return FALSE;
         else
         {
@@ -1495,14 +1524,14 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             eScannedType = NUMBERFORMAT_DATE;
         }
         short nTmpMonth = GetMonth(rString, nPos);  // 10. Jan
-        if (nMonth && nTmpMonth)                    // Monat doppelt
+        if (nMonth && nTmpMonth)                    // month dup
             return FALSE;
         if (nTmpMonth)
         {
             nMonth = nTmpMonth;
-            nMonthPos = 3;                          // Monat hinten
+            nMonthPos = 3;                          // month at end
             if ( nMonth < 0 )
-                SkipChar( '.', rString, nPos );     // abgekuerzt
+                SkipChar( '.', rString, nPos );     // abbreviated
             SkipBlanks(rString, nPos);
         }
     }
@@ -1510,16 +1539,16 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
     short nTempMonth = GetMonth(rString, nPos);     // 10 Jan
     if (nTempMonth)
     {
-        if (nMonth)                                 // Monat doppelt
+        if (nMonth)                                 // month dup
             return FALSE;
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-            eScannedType != NUMBERFORMAT_DATE)          // schon anderes Format
+            eScannedType != NUMBERFORMAT_DATE)      // already another type
             return FALSE;
         eScannedType = NUMBERFORMAT_DATE;
         nMonth = nTempMonth;
-        nMonthPos = 3;                              // Monat hinten
+        nMonthPos = 3;                              // month at end
         if ( nMonth < 0 )
-            SkipChar( '.', rString, nPos );         // abgekuerzt
+            SkipChar( '.', rString, nPos );         // abbreviated
         SkipBlanks(rString, nPos);
     }
 
@@ -1527,7 +1556,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
             eScannedType != NUMBERFORMAT_TIME &&
-            eScannedType != NUMBERFORMAT_DATETIME)  // schon anderes Format
+            eScannedType != NUMBERFORMAT_DATETIME)  // already another type
             return FALSE;
         else
         {
@@ -1539,9 +1568,9 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
 
     if ( nNegCheck && SkipChar(')', rString, nPos) )
     {
-        if (eScannedType == NUMBERFORMAT_CURRENCY)  // nur bei Waehrung
+        if (eScannedType == NUMBERFORMAT_CURRENCY)  // only if currency
         {
-            nNegCheck = 0;                          // ggf. ')' ueberlesen
+            nNegCheck = 0;                          // skip ')'
             SkipBlanks(rString, nPos);
         }
         else
@@ -1551,8 +1580,9 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
     if ( nPos < rString.Len() &&
             (eScannedType == NUMBERFORMAT_DATE
             || eScannedType == NUMBERFORMAT_DATETIME) )
-    {   // Wochentag wird nur weggeparst
+    {   // day of week is just parsed away
         xub_StrLen nOldPos = nPos;
+        const International* pIntl = pFormatter->GetInternational();
         const String& rSep = pIntl->GetLongDateDayOfWeekSep();
         if ( StringContains( rSep, rString, nPos ) )
         {
@@ -1565,7 +1595,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             if ( nPos < rString.Len() )
             {
                 if ( nDayOfWeek < 0 )
-                {   // kurz
+                {   // short
                     if ( rString.GetChar( nPos ) == '.' )
                         ++nPos;
                 }
@@ -1576,9 +1606,9 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             nPos = nOldPos;
     }
 
-    if (nPos < rString.Len())                       // alles weg?
+    if (nPos < rString.Len())                       // everything consumed?
     {
-        // eingegebener EndString gleich EndString im Format?
+        // does input EndString equal EndString in Format?
         if ( !ScanStringNumFor( rString, nPos, pFormat, 0xFFFF ) )
             return FALSE;
     }
@@ -1929,7 +1959,7 @@ void ImpSvNumberInputScan::ChangeIntl()
     bDecSepInDateSeps = ( cDecSep == '-' ||
                           cDecSep == '/' ||
                           cDecSep == '.' ||
-                          cDecSep == pFormatter->GetInternational()->GetDateSep());
+                          cDecSep == pFormatter->GetLocaleData()->getDateSep().GetChar(0) );
     bTextInitialized = FALSE;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-16 18:18:27 $
+ *  last change: $Author: er $ $Date: 2000-10-17 18:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,10 +168,37 @@ private:
                                                 // Leading blanks and blanks
                                                 // after numbers are thrown away
 
-    static BOOL StringContains(                 // Whether rString contains rWhat at nPos
+
+                                                // optimized substring versions
+
+    static inline BOOL StringContains(          // Whether rString contains rWhat at nPos
+            const String& rWhat,
+            const String& rString,
+            xub_StrLen nPos )
+                {   // mostly used with one character
+                    if ( rWhat.GetChar(0) != rString.GetChar(0) )
+                        return FALSE;
+                    return StringContainsImpl( rWhat, rString, nPos );
+                }
+    static inline BOOL StringPtrContains(       // Whether pString contains rWhat at nPos
+            const String& rWhat,
+            const sal_Unicode* pString,
+            xub_StrLen nPos )                   // nPos MUST be a valid offset from pString
+                {   // mostly used with one character
+                    if ( rWhat.GetChar(0) != *(pString+nPos) )
+                        return FALSE;
+                    return StringPtrContainsImpl( rWhat, pString, nPos );
+                }
+    static BOOL StringContainsImpl(             //! DO NOT use directly
             const String& rWhat,
             const String& rString,
             xub_StrLen nPos );
+    static BOOL StringPtrContainsImpl(          //! DO NOT use directly
+            const String& rWhat,
+            const sal_Unicode* pString,
+            xub_StrLen nPos );
+
+
     static inline BOOL SkipChar(                // Skip a special character
             sal_Unicode c,
             const String& rString,

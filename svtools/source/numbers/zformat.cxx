@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
+ *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,12 +411,12 @@ SvNumberformat::SvNumberformat(String& rString,
         bStarFlag( FALSE ),
         nNewStandardDefined(0)
 {
-    //  Wenn der Tausender-Trenner ein Non-Breaking Space ist (franzoesisch),
-    //  alle Vorkommen auf einfaches Space aendern:
-    //  (Die Tokens werden hinterher wieder auf das Zeichen vom International gesetzt)
-
+    // If the group (AKA thousand) separator is a Non-Breaking Space (French)
+    // replace all occurences by a simple space.
+    // The tokens will be changed to the LocaleData separator again later on.
     const sal_Unicode cNBSp = 0xA0;
-    if ( pSc->GetIntl().GetNumThousandSep() == cNBSp )
+    const String& rThSep = pSc->GetLoc().getNumThousandSep();
+    if ( rThSep.GetChar(0) == cNBSp && rThSep.Len() == 1 )
     {
         xub_StrLen nIndex = 0;
         do
@@ -1468,12 +1468,12 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 if (nHour < 10)
                     OutString += '0';
                 OutString += String::CreateFromInt32(nHour);
-                OutString += rIntl().GetTimeSep();
+                OutString += rLoc().getTimeSep();
                 ULONG nMin = (nTime%3600) / 60;
                 if (nMin < 10)
                      OutString += '0';
                 OutString += String::CreateFromInt32(nMin);
-                OutString += rIntl().GetTimeSep();
+                OutString += rLoc().getTimeSep();
                 ULONG nSec = (nTime%60);
                 if (nSec < 10)
                      OutString += '0';
@@ -1498,7 +1498,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 if (nHour < 10)
                     OutString += '0';
                 OutString += String::CreateFromInt32(nHour);
-                OutString += rIntl().GetTimeSep();
+                OutString += rLoc().getTimeSep();
                 ULONG nMin = (nTime%3600) / 60;
                 if (nMin < 10)
                      OutString += '0';
@@ -2725,7 +2725,7 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
     USHORT nDigitCount = 0;             // Zaehlt Vorkommaziffern
     BOOL bStop = FALSE;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const sal_Unicode cThousandSep = rIntl().GetNumThousandSep();
+    const String& rThousandSep = rLoc().getNumThousandSep();
     while (!bStop)                                      // rueckwaerts
     {
         if (j == 0)
@@ -2768,7 +2768,8 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                 {
                     nDigitCount++;
                     const sal_Unicode c = *p;
-                    if (c == cThousandSep)
+//! TODO: what if rThousandSep is more than one charater? => change this damned backward loop
+                    if ( c == rThousandSep.GetChar(0) && rThousandSep.Len() == 1 )
                     {
                         nDigitCount--;
                         if (k > 0)
@@ -2824,22 +2825,6 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
     k += nLeadingStringChars + nAnzLeadingChars;
     if (k > nLeadingStringChars)
         ImpDigitFill(sStr, nLeadingStringChars, k, nIx, nThousandCnt);
-/*
-    if (k > 0 && rInfo.bThousand)              // noch Ziffern da
-    {                                                       // Aufuellen mit .
-        while (k > 0)
-        {
-            if (nThousandCnt > 2)
-            {                                       // hier muss . dazwischen
-                sStr.Insert(rIntl().GetNumThousandSep(),k);
-                nThousandCnt = 1;
-            }
-            else
-                nThousandCnt++;
-            k--;
-        }
-    }
-*/
     return bRes;
 }
 
@@ -2852,11 +2837,12 @@ void SvNumberformat::ImpDigitFill(
 {
     if (NumFor[nIx].Info().bThousand)                       // noch Ziffern da
     {                                                       // Aufuellen mit .
+        const String& rThousandSep = rLoc().getNumThousandSep();
         while (k > nStart)
         {
             if (nThousandCnt > 2)
             {                                       // hier muss . dazwischen
-                sStr.Insert(rIntl().GetNumThousandSep(),k);
+                sStr.Insert( rThousandSep, k );
                 nThousandCnt = 1;
             }
             else
@@ -2879,7 +2865,7 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
     k = sStr.Len();                         // hinter letzter Ziffer
     BOOL bLeading = FALSE;                  // fuehrende ? oder 0
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const sal_Unicode cThousandSep = rIntl().GetNumThousandSep();
+    const String& rThousandSep = rLoc().getNumThousandSep();
     short nType;
     while (j > 0 && (nType = rInfo.nTypeArray[j]) != eSymbolType )
     {                                       // rueckwaerts:
@@ -2904,7 +2890,8 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
                 while ( p1 < p-- )
                 {
                     const sal_Unicode c = *p;
-                    if (c == cThousandSep)
+//! TODO: what if rThousandSep is more than one charater? => change this damned backward loop
+                    if ( c == rThousandSep.GetChar(0) && rThousandSep.Len() == 1 )
                     {
                         if (k > 0)
                             sStr.Insert(c,k);

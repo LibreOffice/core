@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
+ *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,9 +1509,6 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
             pNewFormat))
         delete pNewFormat;
 
-    sal_Unicode cDecSep = pIntl->GetNumDecimalSep();
-    sal_Unicode cThousandSep = pIntl->GetNumThousandSep();
-
 
 
     // Number
@@ -1890,6 +1887,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
                                     // formate anlegen
     sString.Erase();
 
+    const String& rThSep = pLocaleData->getNumThousandSep();
     if (nAnzLeading == 0)
     {
         if (!bThousand)
@@ -1897,7 +1895,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
         else
         {
             sString += '#';
-            sString += pIntl->GetNumThousandSep();
+            sString += rThSep;
             sString += '#';
             sString += '#';
             sString += '#';
@@ -1908,7 +1906,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
         for (i = 0; i < nAnzLeading; i++)
         {
             if (bThousand && i%3 == 0 && i > 0)
-                sString.Insert(pIntl->GetNumThousandSep(),0);
+                sString.Insert( rThSep, 0 );
             sString.Insert('0',0);
         }
         if (bThousand && nAnzLeading < 4)
@@ -1916,14 +1914,14 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             for (i = nAnzLeading; i < 4; i++)
             {
                 if (bThousand && i%3 == 0)
-                    sString.Insert(pIntl->GetNumThousandSep(),0);
+                    sString.Insert( rThSep, 0 );
                 sString.Insert('#',0);
             }
         }
     }
     if (nPrecision > 0)
     {
-                sString += pIntl->GetNumDecimalSep();
+                sString += pLocaleData->getNumDecimalSep();
                 for (i = 0; i < nPrecision; i++)
                     sString += '0';
     }

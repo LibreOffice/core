@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
+ *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ public:
 
     const International& GetIntl() const        { return *pFormatter->GetInternational(); }
     const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
+    const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
 
     const String& GetQuartalString() const  { return sKeyword[NF_KEY_QUARTER]; }
     const String& GetTrueString() const     { return sKeyword[NF_KEY_TRUE]; }
@@ -210,10 +211,10 @@ private:                            // ---- privater Teil
                                                 // Land/Sprache, aus der der
     LanguageType eTmpLnge;                      // gescannte String konvertiert
                                                 // wird (fuer Excel Filter)
-    sal_Unicode cOldDecSep;                     // Dezimalsymbol der Ausgangs-
-    sal_Unicode cOldThousandSep;                // spr., analog Tausenderpunkt
-    sal_Unicode cOldDateSep;                    // Datums- und Zeitsymbol
-    sal_Unicode cOldTimeSep;
+    String sOldDecSep;                          // Dezimalsymbol der Ausgangs-
+    String sOldThousandSep;                     // spr., analog Tausenderpunkt
+    String sOldDateSep;                         // Datums- und Zeitsymbol
+    String sOldTimeSep;
     xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
 
 #ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
@@ -243,6 +244,11 @@ private:                            // ---- privater Teil
     xub_StrLen ScanType(const String& rString); // Analyse des Formattyps
     xub_StrLen FinalScan( String& rString, String& rComment );  // Endanalyse mit Vorgabe
                                                 // des Typs
+
+    static inline BOOL StringEqualsChar( const String& rStr, sal_Unicode ch )
+        { return rStr.GetChar(0) == ch && rStr.Len() == 1; }
+        // Yes, for efficiency get the character first and then compare length
+        // because in most places where this is used the string is one char.
 
 #endif //_ZFORSCAN_CXX
 };
