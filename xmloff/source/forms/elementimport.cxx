@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:14:15 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 10:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,6 +704,22 @@ namespace xmloff
         }
     }
 
+    //---------------------------------------------------------------------
+    //added by BerryJia for fixing bug102407 2002-11-5
+    Reference< XPropertySet > OControlImport::createElement()
+    {
+        Reference<XPropertySet> xPropSet = OElementImport::createElement();
+        if(xPropSet.is())
+        {
+            Reference<XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+            if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_ALIGN))
+            {
+                Any aValue;
+                xPropSet->setPropertyValue(PROPERTY_ALIGN,aValue);
+            }
+        }
+        return xPropSet;
+    }
     //=====================================================================
     //= OReferredControlImport
     //=====================================================================
@@ -1413,6 +1429,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2002/10/25 13:14:15  fs
+ *  #104402# importing grid column styles now
+ *
  *  Revision 1.30  2002/10/02 14:31:10  fs
  *  #103388# some performance logging
  *

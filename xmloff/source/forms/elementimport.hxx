@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:14:15 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 10:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,16 @@ namespace xmloff
         void implTranslateValueProperty(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             ::com::sun::star::beans::PropertyValue& /* [in/out] */ _rPropValue);
+
+    protected:
+            //added by BerryJia for fixing bug102407 2002-11-5
+            /** create the (uninitialized) element which is to represent the read data
+
+                <p>The default implementation uses <member>m_xORB</member> to create a object with <member>m_sServiceName</member>.
+            */
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                            createElement();
+
     };
 
     //=====================================================================
@@ -651,6 +661,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2002/10/25 13:14:15  fs
+ *  #104402# importing grid column styles now
+ *
  *  Revision 1.15  2002/10/02 14:31:09  fs
  *  #103388# some performance logging
  *
