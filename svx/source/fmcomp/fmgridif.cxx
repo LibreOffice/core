@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 16:43:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 11:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,8 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::dispose() throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     ::com::sun::star::lang::EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >(this);
     m_aModifyListeners.disposeAndClear(aEvt);
@@ -890,9 +892,12 @@ sal_Int16 SAL_CALL FmXGridControl::getCurrentColumnPosition() throw( ::com::sun:
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XGrid >  xGrid(mxPeer, ::com::sun::star::uno::UNO_QUERY);
-    if (xGrid.is())
-        xGrid->setCurrentColumnPosition(nPos);
+    Reference< XGrid >  xGrid( mxPeer, UNO_QUERY );
+    if ( xGrid.is() )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        xGrid->setCurrentColumnPosition( nPos );
+    }
 }
 
 // ::com::sun::star::container::XElementAccess
@@ -2756,7 +2761,10 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
         {
             if (m_pDispatchers[i].is())
             {
-                m_pDispatchers[i]->dispatch(*pUrls, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>());
+                // commit any changes done so far
+                if ( commit() )
+                    m_pDispatchers[i]->dispatch(*pUrls, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>());
+
                 return 1;   // handled
             }
         }
