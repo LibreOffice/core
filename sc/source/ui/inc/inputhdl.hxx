@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 19:42:58 $
+ *  last change: $Author: nn $ $Date: 2002-08-16 17:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ private:
     BOOL                    bParenthesisShown;
     BOOL                    bCreatingFuncView;
     BOOL                    bInEnterHandler;
+    BOOL                    bCommandErrorShown;
 
     BOOL                    bProtected;
     BOOL                    bCellHasPercentFormat;
@@ -160,7 +161,7 @@ private:
     void            UpdateActiveView();
     void            SetAllUpdateMode( BOOL bUpdate );
     void            SyncViews( EditView* pSourceView = NULL );
-    BOOL            StartTable( sal_Unicode cTyped );
+    BOOL            StartTable( sal_Unicode cTyped, BOOL bFromCommand );
     void            RemoveSelection();
     void            UpdateFormulaMode();
     void            InvalidateAttribs();
@@ -236,7 +237,7 @@ public:
     EditView*       GetTableView()      { return pTableView; }
     EditView*       GetTopView()        { return pTopView; }
 
-    BOOL            DataChanging( sal_Unicode cTyped = 0 );
+    BOOL            DataChanging( sal_Unicode cTyped = 0, BOOL bFromCommand = FALSE );
     void            DataChanged();
 
     BOOL            TakesReturn() const     { return ( nTipVisible != 0 ); }

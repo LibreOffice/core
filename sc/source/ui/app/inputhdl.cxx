@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-17 11:55:30 $
+ *  last change: $Author: nn $ $Date: 2002-08-16 17:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,8 @@ ScInputHandler::ScInputHandler()
         pRangeFindList( NULL ),
         bParenthesisShown( FALSE ),
         bCreatingFuncView( FALSE ),
-        bInEnterHandler( FALSE )
+        bInEnterHandler( FALSE ),
+        bCommandErrorShown( FALSE )
 {
     pActiveViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
 
@@ -1454,8 +1455,10 @@ void ScInputHandler::RemoveRangeFinder()
     DeleteRangeFinder();        // loescht die Liste und die Markierungen auf der Tabelle
 }
 
-BOOL ScInputHandler::StartTable( sal_Unicode cTyped )               // TRUE = neu angelegt
+BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
 {
+    // returns TRUE if a new edit mode was started
+
     BOOL bNewTable = FALSE;
 
     if (!bModified && aCursorPos.Col()<=MAXCOL)
@@ -1575,8 +1578,15 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped )               // TRUE = ne
                 eMode = SC_INPUT_NONE;
                 StopInputWinEngine( TRUE );
                 UpdateFormulaMode();
-                if (pActiveViewSh)
+                if ( pActiveViewSh && ( !bFromCommand || !bCommandErrorShown ) )
                 {
+                    //  #97673# Prevent repeated error messages for the same cell from command events
+                    //  (for keyboard events, multiple messages are wanted).
+                    //  Set the flag before showing the error message because the command handler
+                    //  for the next IME command may be called when showing the dialog.
+                    if ( bFromCommand )
+                        bCommandErrorShown = TRUE;
+
                     pActiveViewSh->GetActiveWin()->GrabFocus();
                     pActiveViewSh->ErrorMessage(STR_PROTECTIONERR);
                 }
@@ -1645,10 +1655,10 @@ void ScInputHandler::SetAllUpdateMode( BOOL bUpdate )
     pEngine->SetUpdateMode( bUpdate );
 }
 
-BOOL ScInputHandler::DataChanging( sal_Unicode cTyped )             // TRUE = IP-View neu angelegt
+BOOL ScInputHandler::DataChanging( sal_Unicode cTyped, BOOL bFromCommand )      // return TRUE = new view created
 {
     if ( eMode == SC_INPUT_NONE )
-        return StartTable( cTyped );
+        return StartTable( cTyped, bFromCommand );
     else
         return FALSE;
 }
@@ -1843,7 +1853,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
     {
         if (eOldMode == SC_INPUT_NONE)      // not when switching between modes
         {
-            if (StartTable(0))      // 0 = im Dokument schauen, ob Zahl oder Text
+            if (StartTable(0, FALSE))       // 0 = look at existing document content for text or number
             {
                 if (pActiveViewSh)
                     pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
@@ -2697,7 +2707,7 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
             }
 
             UpdateActiveView();
-            BOOL bNewView = DataChanging();
+            BOOL bNewView = DataChanging( 0, TRUE );
 
             if (bProtected)                             // cell protected
                 bUsed = TRUE;                           // event is used
@@ -2897,6 +2907,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     bModified = FALSE;
                     bSelIsRef = FALSE;
                     bProtected = FALSE;
+                    bCommandErrorShown = FALSE;
                 }
             }
         }
