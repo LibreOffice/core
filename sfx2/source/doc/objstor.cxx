@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:19:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,7 +939,28 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             pImp->nLoadedFlags = 0;
             if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
             {
+                uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
+                ::rtl::OUString sLockUpdates(::rtl::OUString::createFromAscii("LockUpdates"));
+                bool bSetProperty = true;
+                try
+                {
+                    xSet->setPropertyValue( sLockUpdates, makeAny( (sal_Bool) sal_True ) );
+                }
+                catch(const beans::UnknownPropertyException& )
+                {
+                    bSetProperty = false;
+                }
                 bOk = ImportFrom(*pMedium);
+                if(bSetProperty)
+                {
+                    try
+                    {
+                        xSet->setPropertyValue( sLockUpdates, makeAny( (sal_Bool) sal_False ) );
+                    }
+                    catch(const beans::UnknownPropertyException& )
+                    {}
+                }
+                UpdateLinks();
                 FinishedLoading( SFX_LOADED_ALL );
             }
             else
@@ -3613,5 +3634,9 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
     }
 
     return bResult;
+}
+
+void SfxObjectShell::UpdateLinks()
+{
 }
 
