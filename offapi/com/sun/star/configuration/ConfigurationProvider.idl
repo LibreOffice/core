@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationProvider.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,20 @@ module com { module sun { module star { module configuration {
  <p>An implementation is usually obtained from a
  <type scope="com::sun::star::lang">ServiceManager</type>. The arguments passed to
  <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
- select the configuration data source. Missing parameters may also be taken
+ select the configuration data source. Arguments must be provided as
+ <type scope="com::sun::star::beans">NamedValue</type>
+ or <type scope="com::sun::star::beans">PropertyValue</type>.
+ If the parameters given are incomplete missing values are taken
  from the context or the environment. If an instance already exists for the
  given set of arguments, the existing instance may be reused.
  In particular, instantiating a provider without explicit arguments to access
  the default configuration data will always yield the same
- <code>com.sun.star.configuration.ConfigurationProvider</code> object.
+ <type scope="com::sun::star::configuration">DefaultProvider</type> object.
+ </p>
+ <p>Some arguments for
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ may be given default values during creation of this service. In particular
+ this applies to the parameters <code>"Locale"</code> and <code>"EnableAsync"</code>.
  </p>
  */
 service ConfigurationProvider
@@ -208,7 +216,7 @@ service ConfigurationProvider
        <strong>Controlling cache behavior:</strong> (with providers that
         cache configuration data)
        <dl>
-         <dt><code>"lazywrite"</code> : <atom>boolean</atom></dt>
+         <dt><code>"enableasync"</code> : <atom>boolean</atom></dt>
          <dd>controls how updates are handled in the cache. If <TRUE/>, the
           cache may operate in <em>write-back</em> mode, where updates at
           first only affect the cache and are written to persistent storage
@@ -217,14 +225,21 @@ service ConfigurationProvider
           storage at once - that is before
           <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
           returns.
+          <p><em>This parameter was formerly called <code>"lazywrite"</code>.
+            The old name should still be supported for compatibility.
+          </em></p>
          </dd>
 
          <dt><code>"nocache"</code> : <atom>boolean</atom></dt>
-         <dd>specifies that data for the view is not taken from the cache, but
+         <dd>This deprecated parameter
+          specifies that data for the view is not taken from the cache, but
           read directly from storage. This may entail that future changes that
           become visible in the cache are not reflected in this view and that
           changes done through this view are not reflected in the cache.
           <BR /><strong>Use with caution !</strong>
+          <p><em>This parameter is not supported by all implementations and may be
+          silently ignored !
+          </em></p>
          </dd>
        </dl>
     </li>
