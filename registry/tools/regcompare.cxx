@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jsc $ $Date: 2001-12-07 15:54:12 $
+ *  last change: $Author: jsc $ $Date: 2001-12-10 14:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,10 +170,11 @@ public:
         { return (m_startKey.getLength() > 0); };
     const OString& getStartKey()
         { return m_startKey; }
-    sal_Bool isExcludeKeyValid()
-        { return (m_excludeKey.getLength() > 0); };
-    const OString& getExcludeKey()
-        { return m_excludeKey; }
+    sal_Bool existsExcludeKeys()
+        { return !m_excludeKeys.empty(); };
+    StringSet& getExcludeKeys()
+        { return m_excludeKeys; }
+    sal_Bool matchedWithExcludeKey( const OUString& keyName);
     sal_Bool fullCheck()
         { return m_bFullCheck; }
     sal_Bool forceOutput()
@@ -185,7 +186,7 @@ protected:
     OString     m_regName1;
     OString     m_regName2;
     OString     m_startKey;
-    OString     m_excludeKey;
+    StringSet   m_excludeKeys;
     sal_Bool    m_bFullCheck;
     sal_Bool    m_bForceOutput;
     sal_Bool    m_bUnoTypeCheck;
@@ -296,7 +297,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     {
                         s = av[i] + 2;
                     }
-                    m_excludeKey = OString(s);
+                    m_excludeKeys.insert(S2U(s));
                     break;
                 case 'c':
                 case 'C':
@@ -404,8 +405,8 @@ OString Options::prepareHelp()
     help += "Options:\n";
     help += "    -s<name>  = name specifies the name of a start key. If no start key\n";
     help += "     |S<name>   is specified the comparison starts with the root key.\n";
-    help += "    -x<name>  = name specifies the name of a key which won't be compared.\n";
-    help += "     |X<name>\n";
+    help += "    -x<name>  = name specifies the name of a key which won't be compared. All\n";
+    help += "     |X<name>   subkeys won't be compared also. This option can be used more than once.\n";
     help += "    -f|F      = force the detailed output of any diffenrences. Default\n";
     help += "                is that only the number of differences is returned.\n";
     help += "    -c|C      = make a complete check, that means any differences will be\n";
@@ -427,6 +428,25 @@ OString Options::prepareVersion()
     OString version("\nSun Microsystems (R) ");
     version += m_program + " Version 1.0\n\n";
     return version;
+}
+
+sal_Bool Options::matchedWithExcludeKey( const OUString& keyName)
+{
+    if ( m_excludeKeys.empty() )
+        return sal_False;
+
+    StringSet::const_iterator iter = m_excludeKeys.begin();
+    StringSet::const_iterator end = m_excludeKeys.end();
+
+    while ( iter != end )
+    {
+        if ( keyName.indexOf(*iter) == 0)
+            return sal_True;
+
+        ++iter;
+    }
+
+    return sal_False;
 }
 
 static Options options;
@@ -2028,10 +2048,9 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
     while ( iter !=  end )
     {
         keyName = OUString(*iter);
-        if ( options.isExcludeKeyValid() &&
-             (keyName == S2U(options.getExcludeKey())) )
+        if ( options.matchedWithExcludeKey(keyName) )
         {
-            iter++;
+            ++iter;
             continue;
         }
 
@@ -2061,7 +2080,7 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
         }
         subKey1.closeKey();
         subKey2.closeKey();
-        iter++;
+        ++iter;
     }
 
     return nError;
@@ -2114,10 +2133,9 @@ void _cdecl main( int argc, char * argv[] )
     }
     if ( options.isStartKeyValid() )
     {
-        if ( options.isExcludeKeyValid() &&
-             (options.getStartKey() == options.getExcludeKey()) )
+        if ( options.matchedWithExcludeKey( S2U(options.getStartKey()) ) )
         {
-            fprintf(stderr, "%s: start key is equal to exclude key\n",
+            fprintf(stderr, "%s: start key is equal to one of the exclude keys\n",
                     options.getProgramName().getStr());
             exit(6);
         }
