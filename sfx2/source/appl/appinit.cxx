@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 15:58:45 $
+ *  last change: $Author: cd $ $Date: 2001-07-10 06:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+#include <rtl/logfile.hxx>
 
 #pragma hdrstop
 
@@ -239,6 +240,8 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 FASTBOOL SfxApplication::Initialize_Impl()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::Initialize_Impl()" );
+
 #ifdef TLX_VALIDATE
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
 #endif
