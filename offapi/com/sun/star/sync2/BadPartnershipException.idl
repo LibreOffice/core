@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BadPartnershipException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-13 13:07:51 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ module com { module sun { module star { module sync2 {
 //============================================================================
 /** indicates that a partnership does not exist, or that there are problems
     accessing the partnership state.
+
+    @deprecated
  */
 exception BadPartnershipException: com::sun::star::uno::Exception
 {
