@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapuserprofilebe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:49:54 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,17 @@
 
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX_
 #define EXTENSIONS_CONFIG_LDAP_LDAPUSERPROFILEBE_HXX_
+
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPUSERPROF_HXX_
 #include "ldapuserprof.hxx"
 #endif
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 #include "ldapaccess.hxx"
 #endif
+#ifndef EXTENSIONS_CONFIG_LDAP_LADPUSERPROFILELAYER_HXX_
+#include "ldapuserprofilelayer.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSINGLELAYERSTRATUM_HPP_
 #include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
 #endif
@@ -103,11 +108,6 @@
 #include <cppuhelper/compbase2.hxx>
 #endif // _CPPUHELPER_COMPBASE3_HXX_
 
-#ifndef INCLUDED_MAP
-#include <map>
-#define INCLUDED_MAP
-#endif
-
 
 #define CONTEXT_ITEM_PREFIX_                "/modules/com.sun.star.configuration/bootstrap/"
 namespace extensions { namespace config { namespace ldap {
@@ -124,18 +124,18 @@ namespace container = css::container;
 typedef cppu::WeakComponentImplHelper2<backend::XSingleLayerStratum,
                                        lang::XServiceInfo> BackendBase ;
 
+struct LdapProfileMutexHolder { osl::Mutex mMutex; };
 /**
   Implements the PlatformBackend service, a specialization of the
   SingleLayerStratum service for retreiving LDAP user profile
   configuration settings from a LDAP repsoitory.
   */
-class LdapUserProfileBe : public BackendBase
+class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 {
     public :
 
-        LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext)
-            throw(backend::BackendAccessException,
-                  backend::BackendSetupException);
+        LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext);
+        // throw(backend::BackendAccessException, backend::BackendSetupException, RuntimeException);
         ~LdapUserProfileBe(void) ;
 
         // XServiceInfo
@@ -155,13 +155,15 @@ class LdapUserProfileBe : public BackendBase
         virtual uno::Reference<backend::XLayer> SAL_CALL
         getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
             throw (backend::BackendAccessException,
-                   lang::IllegalArgumentException) ;
+                   lang::IllegalArgumentException,
+                   uno::RuntimeException) ;
 
         virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
         getUpdatableLayer( const rtl::OUString& aLayerId )
             throw (backend::BackendAccessException,
                    lang::NoSupportException,
-                   lang::IllegalArgumentException) ;
+                   lang::IllegalArgumentException,
+                   uno::RuntimeException) ;
          /**
           Provides the implementation name.
           @return   implementation name
@@ -178,7 +180,7 @@ class LdapUserProfileBe : public BackendBase
         /** Build OO/LDAP attribute mapping table */
         void  initializeMappingTable (const rtl::OUString& aFileMapName);
         /** Check if LDAP is configured */
-        bool isLdapConfigured(LdapDefinition& aDefinition);
+        bool readLdapConfiguration(LdapDefinition& aDefinition);
 
         bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,
                                 const rtl::OUString& aLdapSetting,
@@ -191,36 +193,19 @@ class LdapUserProfileBe : public BackendBase
         /** Connect to LDAP server */
         void connectToLdapServer(const LdapDefinition& aDefinition );
         /** Get URL of OO-to-LDAP Mapping File */
-        void getMappingFileUrl(rtl::OUString& aFileUrl,
-                               const rtl::OUString& aFileMapName)const;
+        rtl::OUString getMappingFileUrl(const rtl::OUString& aFileMapName) const;
 
         /** Service Factory object */
         uno::Reference<lang::XMultiServiceFactory> mFactory;
         /** Component Context */
         uno::Reference<uno::XComponentContext> mContext ;
-        /** Mutex for resource protection */
-        osl::Mutex mMutex ;
-        /** Maping LDAP->00o */
-        LdapUserProfileMap mUserProfileMap;
         /** Object for LDAP functionality */
-        LdapConnection mLdapConnection;
+        LdapUserProfileSourceRef mLdapSource;
         /**Currently logged in user */
         rtl::OUString mLoggedOnUser ;
         /** DN of currently logged in user */
         rtl::OString mUserDN;
 
-
-        /**
-          Because initialising the backend requires to read some configuration,
-          there's a risk of infinite recursion (the backend initialisation
-          taking place inside the configuration initialisation).
-          To prevent this, the following members ensure access to the LDAP
-          server details cannot recurse.
-          */
-        /** Whether we're in the constructor already. */
-        static bool mCanReadConfiguration ;
-        /** Access protection for mCanReadConfiguration. */
-        static osl::Mutex mReadConfigurationLock ;
 } ;
 //------------------------------------------------------------------------------
 }}}
