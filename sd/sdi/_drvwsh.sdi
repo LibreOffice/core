@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:14:25 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ item BOOL SdrShadowItem ;
 item SdrFitToSizeType SdrTextFitToSizeTypeItem ;
 
 
-interface DrawView : View
+interface DrawView
 {
     SID_JUMPTOMARK // ole : no, status : ?
     [
