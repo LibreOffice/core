@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 14:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ public:
 #define SETBASE_QUICK   1
 #define SETBASE_ULSPACE 2
 #define SETBASE_INIT    4
+#define SETBASE_ROTATE  8
+#define SETBASE_REVERSE 16
 
 class SwFlyCntPortion : public SwLinePortion
 {
@@ -107,10 +109,10 @@ class SwFlyCntPortion : public SwLinePortion
 
 public:
     SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase, long nAscent,
-        long nDescent, long nFlyAsc, long nFlyDesc, sal_Bool bQuick = sal_False );
+        long nDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags );
     SwFlyCntPortion( SwDrawContact *pDrawContact, const Point &rBase,
         long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
-        sal_Bool bQuick = sal_False );
+        sal_uInt8 nFlags );
     inline const Point& GetRefPoint() const { return aRef; }
     inline SwFlyInCntFrm *GetFlyFrm() { return (SwFlyInCntFrm*)pContact; }
     inline const SwFlyInCntFrm *GetFlyFrm() const
