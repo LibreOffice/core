@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-22 12:02:22 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,18 @@
 #define DECLARE_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
+// for CreateInstance functions implemented elsewhere, while the function is within a namespace
+#define DECLARE_CREATEINSTANCE_NAMESPACE( nmspe, ImplName ) \
+    namespace nmspe {   \
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );    \
+    }
+
 // -------------------------------------------------------------------------------------
 IMPL_CREATEINSTANCE( PathService )
 IMPL_CREATEINSTANCE( SvtTextLoader )
 IMPL_CREATEINSTANCE( ExtVCLXToolkit )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
+DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 
 extern "C"
 {
@@ -127,6 +134,9 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" ) );
+
+        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/org.openoffice.comp.svt.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" ) );
 
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.comp.svtools.PathService/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) );
@@ -177,6 +187,12 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" );
             xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvNumberFormatsSupplierServiceObject_CreateInstance, aServiceNames );
+        }
+        if ( rtl_str_compare( sImplementationName, "org.openoffice.comp.svt.OAddressBookSourceDialogUno") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
+            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), svt::OAddressBookSourceDialogUno_CreateInstance, aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "com.sun.star.comp.svtools.PathService" ) == 0 )
         {
