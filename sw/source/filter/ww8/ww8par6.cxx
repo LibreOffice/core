@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:02:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,9 @@
 #ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
 #endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
 
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>   //For CalculateFlySize
@@ -314,10 +317,14 @@ ColorData SwWW8ImplReader::GetCol(BYTE nIco)
 
 inline short MSRoundTweak(short x)
 {
+#if 0
+    //keep this around in case it turns out to be true. But I don't think so.
+    //I think its a tab compatability issue
     if (x < 0)
         ++x;
     else if (x > 0)
         --x;
+#endif
     return x;
 }
 
@@ -1171,10 +1178,6 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
 
     maSegments.push_back(aNewSection);
 
-    // Kopf / Fuss - Index Updaten
-    // Damit der Index auch spaeter noch stimmt
-    if (mrReader.pHdFt)
-        mrReader.pHdFt->UpdateIndex(aNewSection.maSep.grpfIhdt);
 }
 
 void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
@@ -2273,9 +2276,10 @@ void SwWW8ImplReader::MoveInsideFly(const SwFrmFmt *pFlyFmt)
     aDup.Insert(*pPaM->GetPoint());
 }
 
-void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
+sal_uInt16 SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
     const SwPosition &rPos, bool bTableJoin)
 {
+    sal_uInt16 nRetWidth = 0;
     // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
     // die aus Flys rausragen
     WW8DupProperties aDup(rDoc,pCtrlStck);
@@ -2301,6 +2305,7 @@ void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
             {
                 if(aIdx.GetNode().IsTableNode())
                 {
+                    SwTableNode *pTable = aIdx.GetNode().GetTableNode();
                     aIdx = *aIdx.GetNode().EndOfSectionNode();
                     aIdx++;
                     if ( (aIdx < aEnd) && aIdx.GetNode().IsTxtNode() )
@@ -2308,7 +2313,22 @@ void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
                         SwTxtNode *pNd = aIdx.GetNode().GetTxtNode();
                         aIdx++;
                         if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
+                        {
                             rDoc.DelFullPara( *pPaM );
+
+                            SwTable& rTable = pTable->GetTable();
+                            SwFrmFmt* pTblFmt = rTable.GetFrmFmt();
+
+                            if (pTblFmt)
+                            {
+                                SwFmtFrmSize aSize = pTblFmt->GetFrmSize();
+                                aSize.SetSizeType(ATT_MIN_SIZE);
+                                aSize.SetHeight(MINLAY);
+                                pFlyFmt->SetAttr(aSize);
+                                pTblFmt->SetAttr(SwFmtHoriOrient(0,HORI_FULL));
+                                nRetWidth = aSize.GetWidth();
+                            }
+                        }
                     }
                 }
             }
@@ -2317,6 +2337,7 @@ void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
 
     *pPaM->GetPoint() = rPos;
     aDup.Insert(*pPaM->GetPoint());
+    return nRetWidth;
 }
 
 bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
@@ -2470,7 +2491,10 @@ void SwWW8ImplReader::StopApo()
         */
         SwNodeIndex aPref(pPaM->GetPoint()->nNode, -1);
 
-        MoveOutsideFly(pSFlyPara->pFlyFmt,*pSFlyPara->pMainTextPos);
+        sal_uInt16 nNewWidth =
+            MoveOutsideFly(pSFlyPara->pFlyFmt, *pSFlyPara->pMainTextPos);
+        if (nNewWidth)
+            pSFlyPara->BoxUpWidth(nNewWidth);
 
         if (SwTxtNode* pNode = aPref.GetNode().GetTxtNode())
             pNode->JoinNext();
@@ -4011,14 +4035,33 @@ void SwWW8ImplReader::Read_Justify( USHORT, const BYTE* pData, short nLen )
         return;
     }
 
-    static const SvxAdjust aAdjArr[] =
+    SvxAdjust eAdjust(SVX_ADJUST_LEFT);
+    bool bDistributed = false;
+    switch (*pData)
     {
-        SVX_ADJUST_LEFT,  SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK
-    };
+        default:
+        case 0:
+            break;
+        case 1:
+            eAdjust = SVX_ADJUST_CENTER;
+            break;
+        case 2:
+            eAdjust = SVX_ADJUST_RIGHT;
+            break;
+        case 3:
+            eAdjust = SVX_ADJUST_BLOCK;
+            break;
+        case 4:
+            eAdjust = SVX_ADJUST_BLOCK;
+            bDistributed = true;
+            break;
+    }
+    SvxAdjustItem aAdjust(eAdjust);
+    if (bDistributed)
+        aAdjust.SetLastBlock(SVX_ADJUST_BLOCK);
 
-    BYTE b = *pData;
-    NewAttr( SvxAdjustItem( aAdjArr[b&0x3] ) ); // "&0x3 gegen Tabellenueberlauf
-}                                               // bei Stuss-Werten
+    NewAttr(aAdjust);
+}
 
 void SwWW8ImplReader::Read_RTLJustify( USHORT, const BYTE* pData, short nLen )
 {
@@ -4044,17 +4087,35 @@ void SwWW8ImplReader::Read_RTLJustify( USHORT, const BYTE* pData, short nLen )
     }
 
     if (!bRTL)
-        Read_Justify(0 /*dummy*/, pData, nLen);
+        Read_Justify(0x2403 /*dummy*/, pData, nLen);
     else
     {
-        static const SvxAdjust aAdjArr[] =
+        SvxAdjust eAdjust(SVX_ADJUST_RIGHT);
+        bool bDistributed = false;
+        switch (*pData)
         {
-            SVX_ADJUST_RIGHT, SVX_ADJUST_CENTER,
-            SVX_ADJUST_LEFT, SVX_ADJUST_BLOCK
-        };
+            default:
+            case 0:
+                break;
+            case 1:
+                eAdjust = SVX_ADJUST_CENTER;
+                break;
+            case 2:
+                eAdjust = SVX_ADJUST_LEFT;
+                break;
+            case 3:
+                eAdjust = SVX_ADJUST_BLOCK;
+                break;
+            case 4:
+                eAdjust = SVX_ADJUST_BLOCK;
+                bDistributed = true;
+                break;
+        }
+        SvxAdjustItem aAdjust(eAdjust);
+        if (bDistributed)
+            aAdjust.SetLastBlock(SVX_ADJUST_BLOCK);
 
-        BYTE b = *pData;
-        NewAttr( SvxAdjustItem( aAdjArr[b&0x3] ) );
+        NewAttr(aAdjust);
     }
 }
 
@@ -4647,7 +4708,7 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 
 void SwWW8ImplReader::EndExtSprm(USHORT nSprmId)
 {
-    typedef void (SwWW8ImplReader:: *FNReadRecordExt)();
+    typedef sal_uInt16 (SwWW8ImplReader:: *FNReadRecordExt)();
 
     static const FNReadRecordExt aWwSprmTab[] =
     {
