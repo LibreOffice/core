@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:23:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
         bVerticalCallOut=bSet;
 
         SetModified();
+        Commit();
     }
 }
 /*-- 10.04.01 12:41:56---------------------------------------------------
