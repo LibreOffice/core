@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-08 18:23:44 $
+ *  last change: $Author: sj $ $Date: 2001-01-23 09:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #ifndef _SVX_ESCHEREX_HXX
 #include "escherex.hxx"
 #endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-
 #ifndef _SVX_UNOWPAGE_HXX //autogen wg. SvxDrawPage
 #include "unopage.hxx"
 #endif
@@ -80,38 +76,6 @@
 // fractions of Draw PPTWriter etc.
 
 enum ImplEESdrPageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
-
-struct ImplEESdrSOParagraph
-{
-    BOOL                bDepth;
-    BOOL                bExtendedParameters;
-    UINT32              nParaFlags;
-    INT16               nBulletFlags;
-    String              sPrefix;
-    String              sSuffix;
-    String              sGraphicUrl;    // String auf eine Graphic
-    UINT32              nNumberingType; // in wirlichkeit ist dies ein SvxEnum
-    UINT32              nHorzAdjust;
-    UINT32              nBulletColor;
-    INT32               nFirstOffset;
-    INT16               nStartWith;     // Start der nummerierung
-    INT16               nLeftMargin;
-    INT16               nBulletRealSize;// GroessenVerhaeltnis in Proz
-    INT16               nDepth;         // aktuelle tiefe
-    sal_Unicode             cBulletId;      // wenn Numbering Type == CharSpecial
-    ::com::sun::star::awt::FontDescriptor       aFontDesc;
-
-    ImplEESdrSOParagraph()
-    {
-        nDepth = 0;
-        bDepth = TRUE;
-        bExtendedParameters = FALSE;
-        nParaFlags = 0;
-        nBulletFlags = 0;
-    };
-};
-
-// -------------------------------------------------------------------
 
 class ImplEESdrWriter;
 class ImplEscherExSdr;
