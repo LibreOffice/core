@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScChartObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:36 $
+ *  last change:$Date: 2003-01-31 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.table.TableChart</code>. <p>
@@ -145,8 +148,7 @@ public class ScChartObj extends TestCase {
     * </ul>
     * @see com.sun.star.container.XNamed
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XSpreadsheet oSheet=null;
 
@@ -155,12 +157,17 @@ public class ScChartObj extends TestCase {
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                         UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't get Sheet ");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get sheet", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Couldn't get Sheet ");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get sheet", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Couldn't get Sheet ");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get sheet", e);
@@ -253,14 +260,22 @@ public class ScChartObj extends TestCase {
         // get the TableChart
         XTableChart oChart = null;
         try {
-            oChart = (XTableChart) ((XNameAccess)UnoRuntime.queryInterface(
-                XNameAccess.class, oCharts)).getByName("ScChartObj");
+            XNameAccess names = (XNameAccess) AnyConverter.toObject(
+                new Type(XNameAccess.class),UnoRuntime.queryInterface(
+                    XNameAccess.class, oCharts));
+
+            oChart = (XTableChart) AnyConverter.toObject(
+                new Type(XTableChart.class),names.getByName("ScChartObj"));
 
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't get TableChart");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get TableChart", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
+            log.println("Couldn't get TableChart");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get TableChart", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Couldn't get TableChart");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get TableChart", e);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScChartsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:35 $
+ *  last change:$Date: 2003-01-31 15:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.table.TableCharts</code>. <p>
@@ -154,8 +157,7 @@ public class ScChartsObj extends TestCase {
     * @see com.sun.star.container.XNamed
     * @see com.sun.star.table.XTableChartsSupplier
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XSpreadsheet oSheet=null;
 
@@ -164,12 +166,17 @@ public class ScChartsObj extends TestCase {
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                         UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Couldn't get Sheet ");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get sheet", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Couldn't get Sheet ");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get sheet", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Couldn't get Sheet ");
             e.printStackTrace(log);
             throw new StatusException("Couldn't get sheet", e);
