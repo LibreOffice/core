@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:10:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ SdrCaptionObj::~SdrCaptionObj()
 {
 }
 
-sal_Bool SdrCaptionObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrCaptionObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     // special shadow paint for calc
     if(mbSpecialTextBoxShadow)
@@ -381,7 +381,7 @@ void SdrCaptionObj::RecalcBoundRect()
 SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     if (pVisiLayer!=NULL && !pVisiLayer->IsSet(nLayerId)) return NULL;
-    FASTBOOL bHit=SdrRectObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
+    sal_Bool bHit(SdrRectObj::CheckHit(rPnt,nTol,pVisiLayer) != NULL);
     if (!bHit) {
         INT32 nMyTol=nTol;
         INT32 nWdt = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
@@ -394,7 +394,7 @@ SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
         aR.Right() +=nMyTol;
         aR.Top()   -=nMyTol;
         aR.Bottom()+=nMyTol;
-        bHit=IsRectTouchesLine(aTailPoly,aR);
+        bHit = IsRectTouchesLine(aTailPoly,aR);
     }
     return bHit ? (SdrObject*)this : NULL;
 }
@@ -936,59 +936,59 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrCaptionObj::WriteData(SvStream& rOut) const
-{
-    SdrRectObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrCaptionObj");
-#endif
+//BFS01void SdrCaptionObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrRectObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrCaptionObj");
+//BFS01#endif
+//BFS01
+//BFS01 rOut << aTailPoly;
+//BFS01 SfxItemPool* pPool = GetItemPool();
+//BFS01
+//BFS01 if(pPool)
+//BFS01 {
+//BFS01     const SfxItemSet& rSet = GetObjectItemSet();
+//BFS01
+//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CAPTION));
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     rOut << UINT16(SFX_ITEMS_NULL);
+//BFS01 }
+//BFS01}
 
-    rOut << aTailPoly;
-    SfxItemPool* pPool = GetItemPool();
-
-    if(pPool)
-    {
-        const SfxItemSet& rSet = GetObjectItemSet();
-
-        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CAPTION));
-    }
-    else
-    {
-        rOut << UINT16(SFX_ITEMS_NULL);
-    }
-}
-
-void SdrCaptionObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if(rIn.GetError())
-        return;
-
-    SdrRectObj::ReadData(rHead,rIn);
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrCaptionObj");
-#endif
-
-    rIn >> aTailPoly;
-
-    if(rHead.GetVersion() < 11) { sal_uInt16 nWhichDum; rIn >> nWhichDum; } // ab V11 keine WhichId mehr
-
-    SfxItemPool* pPool = GetItemPool();
-
-    if(pPool)
-    {
-        sal_uInt16 nSetID = SDRATTRSET_CAPTION;
-        const SdrCaptionSetItem* pCaptAttr = (const SdrCaptionSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-        if(pCaptAttr)
-            SetObjectItemSet(pCaptAttr->GetItemSet());
-    }
-    else
-    {
-        sal_uInt16 nSuroDum;
-        rIn >> nSuroDum;
-    }
-}
+//BFS01void SdrCaptionObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if(rIn.GetError())
+//BFS01     return;
+//BFS01
+//BFS01 SdrRectObj::ReadData(rHead,rIn);
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrCaptionObj");
+//BFS01#endif
+//BFS01
+//BFS01 rIn >> aTailPoly;
+//BFS01
+//BFS01 if(rHead.GetVersion() < 11) { sal_uInt16 nWhichDum; rIn >> nWhichDum; } // ab V11 keine WhichId mehr
+//BFS01
+//BFS01 SfxItemPool* pPool = GetItemPool();
+//BFS01
+//BFS01 if(pPool)
+//BFS01 {
+//BFS01     sal_uInt16 nSetID = SDRATTRSET_CAPTION;
+//BFS01     const SdrCaptionSetItem* pCaptAttr = (const SdrCaptionSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+//BFS01     if(pCaptAttr)
+//BFS01         SetObjectItemSet(pCaptAttr->GetItemSet());
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     sal_uInt16 nSuroDum;
+//BFS01     rIn >> nSuroDum;
+//BFS01 }
+//BFS01}
 
 // #i32599#
 // Add own implementation for TRSetBaseGeometry to handle TailPos over changes.
