@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-28 20:13:50 $
+ *  last change: $Author: vg $ $Date: 2002-06-10 15:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,18 +368,18 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     Message[ russian ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ greek ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ dutch ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
-    Message[ french ] = "Erreur lors du lancement du navigateur Web.\nV�rifiez le param�trage de %PRODUCTNAME et du navigateur Web.";
+    Message[ french ] = "Erreur lors du lancement du navigateur Web. V�rifiez les param�tres de %PRODUCTNAME sous 'Outils - Options - %PRODUCTNAME - Programmes auxiliaires', ainsi que ceux du navigateur Web.";
     Message[ spanish ] = "Se ha producido un error al iniciar el navegador web. Compruebe la configuraci�n de %PRODUCTNAME en 'Herramientas - Opciones - %PRODUCTNAME - Programas de ayuda' as� como la del navegador web. ";
     Message[ finnish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
-    Message[ italian ] = "Si � verificato un errore durante l'avvio del browser Web.\nVerificate le impostazioni di %PRODUCTNAME e del browser Web.";
+    Message[ italian ] = "Si � verificato un errore durante l'avvio del browser Web. Verificate le impostazioni di %PRODUCTNAME al menu 'Strumenti - Opzioni - %PRODUCTNAME - Programmi ausiliari' e le impostazioni del browser Web.";
     Message[ danish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ swedish ] = "Det uppstod ett fel n�r webbl�saren skulle startas. Kontrollera inst�llningarna i %PRODUCTNAME under 'Verktyg - Alternativ - %PRODUCTNAME - Hj�lpprogram' och inst�llningarna i din webbl�sare.";
     Message[ polish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ portuguese_brazilian ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
-    Message[ japanese ] = "webブラウザを開始する際のエラー。\n%PRODUCTNAME および webブラウザの設定をもう一度確認してください。";
-    Message[ korean ] = "웹 브라우저를 시작하는 동안 오류가 발생했습니다.\n%PRODUCTNAME 및 웹 브라우저 설정을 확인하십시오.";
-    Message[ chinese_simplified ] = "启动浏览器时发生一个错误。\n请您检查 %PRODUCTNAME 和浏览器的设定。";
-    Message[ chinese_traditional ] = "啟動 Web 瀏覽器時發生一個錯誤。\n請透過「工具」-「選項」-「%PRODUCTNAME 輔助程式」來檢查您的瀏覽器的設定。";
+    Message[ japanese ] = "webブラウザの起動時にエラーが発生しました。ツール → オプション → %PRODUCTNAME → ヘルププログラムで %PRODUCTNAME の設定とお使いの webブラウザの設定を確認してください。";
+    Message[ korean ] = "웹 브라우저를 시작하는 동안 오류가 발생했습니다. %PRODUCTNAME 의 '도구 - 옵션 - %PRODUCTNAME - 보조 프로그램의 설정 및 웹 브라우저 설정을 재검해보십시오.";
+    Message[ chinese_simplified ] = "启动浏览器时发生一个错误。\n请通过菜单\"工具\"-\"选项\"-\"%PRODUCTNAME -辅助程序\"来检查 %PRODUCTNAME 的设定及浏览器的设定。";
+    Message[ chinese_traditional ] = "啟動 Web 瀏覽器時發生一個錯誤。\n請透過「工具」-「選項」-「%PRODUCTNAME 輔助程式」來檢查 %PRODUCTNAME 的設定及瀏覽器的設定。";
     Message[ turkish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ arabic ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ catalan ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
@@ -4165,7 +4165,7 @@ String STR_QUICKSTART_EXIT
     Text[ russian ] = "����� �� �������� �������";
     Text[ greek ] = "Exit %PRODUCTNAME QuickStart";
     Text[ dutch ] = "QuickStart be�indigen";
-    Text[ french ] = "Quitter le d�marrage rapide de %PRODUCTNAME";
+    Text[ french ] = "Quitter le d�marrage rapide";
     Text[ spanish ] = "Terminar Inicio r�pido";
     Text[ finnish ] = "Lopeta pikak�ynnistys";
     Text[ italian ] = "Termina QuickStart";
@@ -4191,8 +4191,8 @@ String STR_QUICKSTART_TIP
     Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION ������� ������";
     Text[ greek ] = "%PRODUCTNAME QuickStart active";
     Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION QuickStart   ";
-    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION : D�marrage rapide";
-    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION Inicio r�pido";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION D�marrage rapide";
+    Text[ spanish ] = "Inicio r�pido de %PRODUCTNAME %PRODUCTVERSION ";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME %PRODUCTVERSION pikak�ynnistys";
     Text[ italian ] = "QuickStart %PRODUCTNAME %PRODUCTVERSION";
     Text[ danish ] = "%PRODUCTNAME QuickStart active";
