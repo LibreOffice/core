@@ -432,4 +432,5 @@ Sub ToggleDialogControls(ByVal bDoEnable as Boolean, Optional FocusControlName a
 			MainDialog.GetControl(FocusControlName).SetFocus()
 		End If
 	End If
-End Sub</script:module>
+End Sub
+</script:module>
