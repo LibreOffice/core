@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.21 $
-# Date:        $Date: 2004-09-08 15:24:19 $
+# Version:     $Revision: 1.22 $
+# Date:        $Date: 2004-09-09 11:22:23 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1725,6 +1725,8 @@ ToFile( "SYSTEM_MOZILLA",    "@SYSTEM_MOZILLA@",   "e" );
 ToFile( "MOZILLA_CFLAGS",    "@MOZILLA_CFLAGS@",   "e" );
 ToFile( "MOZILLA_LIBS",      "@MOZILLA_LIBS@",     "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
+ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
+ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 if ($platform ne "$Winnt")
