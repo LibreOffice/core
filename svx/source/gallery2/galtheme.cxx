@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:53:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <vcl/virdev.hxx>
@@ -616,7 +616,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 if ( aSvDrawStorageRef.Is() )
                 {
                     const String        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
-                    SvStorageStreamRef  pIStm = aSvDrawStorageRef->OpenStream( aStmName, STREAM_READ );
+                    SvStorageStreamRef  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, STREAM_READ );
 
                     if( pIStm && !pIStm->GetError() )
                     {
@@ -987,7 +987,7 @@ BOOL GalleryTheme::GetModel( ULONG nPos, FmFormModel& rModel, BOOL bProgress )
         if( xStor.Is() )
         {
             const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            SvStorageStreamRef  xIStm( xStor->OpenStream( aStmName, STREAM_READ ) );
+            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, STREAM_READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
             {
@@ -1012,7 +1012,7 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
     if( xStor.Is() )
     {
         const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        SvStorageStreamRef  xOStm( xStor->OpenStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
+        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
         {
@@ -1066,7 +1066,7 @@ BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStrea
         if( xStor.Is() )
         {
             const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            SvStorageStreamRef  xIStm( xStor->OpenStream( aStmName, STREAM_READ ) );
+            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, STREAM_READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
             {
@@ -1126,7 +1126,7 @@ BOOL GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, 
     if( xStor.Is() )
     {
         const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        SvStorageStreamRef  xOStm( xStor->OpenStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
+        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
         {
