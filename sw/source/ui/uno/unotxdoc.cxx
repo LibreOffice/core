@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:14:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,36 +1165,15 @@ sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
     TypeClass eType = rValue.getValueType().getTypeClass();
 
     sal_uInt32 nRet = 0;
-    if( eType == TypeClass_LONG )
-    {
-         sal_Int32 nVal;
-         rValue >>= nVal;
-         if(nVal >=0 )
-            nRet = (sal_uInt32)nVal;
-    }
-    else if( eType == TypeClass_UNSIGNED_SHORT )
-    {
-        sal_uInt16 nVal;
-        rValue >>= nVal;
-        nRet = nVal;
-    }
-    else if( eType == TypeClass_SHORT )
-    {
-        sal_Int16 nVal;
-        rValue >>= nVal;
-        if(nVal >=0)
-            nRet = (sal_uInt32)nVal;
-    }
-    else if( eType == TypeClass_BYTE )
-    {
-        BYTE nVal;
-        rValue >>= nVal;
-        nRet = nVal;
-    }
-    else if( eType == TypeClass_UNSIGNED_LONG )
+    if( eType == TypeClass_UNSIGNED_LONG )
         rValue >>= nRet;
     else
-        bException = sal_True;
+    {
+         sal_Int32 nVal=0;
+         bException = !(rValue >>= nVal);
+         if( !bException )
+            nRet = (sal_uInt32)nVal;
+    }
 
     return nRet;
 }
