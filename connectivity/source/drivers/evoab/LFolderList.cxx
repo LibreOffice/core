@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LFolderList.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-02 07:50:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ void OEvoabFolderList::fillColumns()
                     }
                 }
 
-                // jetzt könnte es noch ein Datumsfeld sein
+                // jetzt koennte es noch ein Datumsfeld sein
                 if (!bNumeric)
                 {
                     try
