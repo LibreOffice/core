@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 13:25:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,45 +908,50 @@ BasicManagerEntry::~BasicManagerEntry()
 }
 
 
-
-
-void CutLines( String& rStr, USHORT nStartLine, USHORT nLines, BOOL bEraseTrailingEmptyLines )
+void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BOOL bEraseTrailingEmptyLines )
 {
-    rStr.ConvertLineEnd( LINEEND_LF );
-
-    USHORT nStartPos = 0;
-    USHORT nEndPos = 0;
-    USHORT nLine = 0;
+    sal_Int32 nStartPos = 0;
+    sal_Int32 nEndPos = 0;
+    sal_Int32 nLine = 0;
     while ( nLine < nStartLine )
     {
-        nStartPos = rStr.Search( LINE_SEP, nStartPos );
+        nStartPos = rStr.indexOf( LINE_SEP, nStartPos );
+        if( nStartPos == -1 )
+            break;
         nStartPos++;    // nicht das \n.
         nLine++;
     }
 
-    DBG_ASSERTWARNING( nStartPos != STRING_NOTFOUND, "CutLines: Startzeile nicht gefunden!" );
+    DBG_ASSERTWARNING( nStartPos != -1, "CutLines: Startzeile nicht gefunden!" );
 
-    if ( nStartPos != STRING_NOTFOUND )
+    if ( nStartPos != -1 )
     {
         nEndPos = nStartPos;
-        for ( USHORT i = 0; i < nLines; i++ )
-            nEndPos = rStr.Search( LINE_SEP, nEndPos+1 );
+        for ( sal_Int32 i = 0; i < nLines; i++ )
+            nEndPos = rStr.indexOf( LINE_SEP, nEndPos+1 );
 
-        if ( nEndPos != STRING_NOTFOUND ) // kann bei letzter Zeile passieren
+        if ( nEndPos == -1 ) // kann bei letzter Zeile passieren
+            nEndPos = rStr.getLength();
+        else
             nEndPos++;
-        if ( nEndPos > rStr.Len() )
-            nEndPos = rStr.Len();
 
-        rStr.Erase( nStartPos, nEndPos-nStartPos );
+        ::rtl::OUString aEndStr = rStr.copy( nEndPos );
+        rStr = rStr.copy( 0, nStartPos );
+        rStr += aEndStr;
     }
     if ( bEraseTrailingEmptyLines )
     {
-        USHORT n = nStartPos;
-        while ( ( n < rStr.Len() ) && ( rStr.GetChar( n ) == LINE_SEP ) )
+        sal_Int32 n = nStartPos;
+        sal_Int32 nLen = rStr.getLength();
+        while ( ( n < nLen ) && ( rStr.getStr()[ n ] == LINE_SEP ) )
             n++;
 
         if ( n > nStartPos )
-            rStr.Erase( nStartPos, n-nStartPos );
+        {
+            ::rtl::OUString aEndStr = rStr.copy( n );
+            rStr = rStr.copy( 0, nStartPos );
+            rStr += aEndStr;
+        }
     }
 }
 
