@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:09:29 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ void SwRTFWriter::MakeHeader()
             }
         }
         const SwPageDesc& rPageDesc = pSttPgDsc ? *pSttPgDsc->GetPageDesc()
-                                                : pDoc->GetPageDesc( 0 );
+            : const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
         const SwFrmFmt &rFmtPage = rPageDesc.GetMaster();
 
         {
@@ -1329,7 +1329,8 @@ void SwRTFWriter::OutPageDesc()
     OutComment( *this, sRTF_PGDSCTBL );
     for( USHORT n = 0; n < nSize; ++n )
     {
-        const SwPageDesc& rPageDesc = pDoc->GetPageDesc( n );
+        const SwPageDesc& rPageDesc =
+            const_cast<const SwDoc*>(pDoc)->GetPageDesc( n );
 
         Strm() << SwRTFWriter::sNewLine << '{' << sRTF_PGDSC;
         OutULong( n ) << sRTF_PGDSCUSE;
@@ -1340,7 +1341,8 @@ void SwRTFWriter::OutPageDesc()
         // suche den Folge-PageDescriptor:
         USHORT i = nSize;
         while( i  )
-            if( rPageDesc.GetFollow() == &pDoc->GetPageDesc( --i ) )
+            if( rPageDesc.GetFollow() ==
+                &const_cast<const SwDoc *>(pDoc)->GetPageDesc( --i ) )
                 break;
         Strm() << sRTF_PGDSCNXT;
         OutULong( i ) << ' ';
@@ -1495,7 +1497,8 @@ BOOL SwRTFWriter::OutBreaks( const SfxItemSet& rSet )
         {
             const SwFmtPageDesc& rPgDsc = *(SwFmtPageDesc*)pItem;
             for( USHORT nPos = pDoc->GetPageDescCnt(); nPos; )
-                if( &pDoc->GetPageDesc( --nPos ) == rPgDsc.GetPageDesc() )
+                if( &const_cast<const SwDoc *>(pDoc)
+                    ->GetPageDesc( --nPos ) == rPgDsc.GetPageDesc() )
                 {
                     pAktPageDesc = ((SwFmtPageDesc*)pItem)->GetPageDesc();
                                                 // FALSE wegen schliessender Klammer !!
@@ -1580,8 +1583,9 @@ void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
             {
                 Strm() << sRTF_SECT << sRTF_SECTD << sRTF_SBKNONE;
                 OutRTFPageDescription( ( pAktPageDesc
-                                    ? *pAktPageDesc
-                                    : pDoc->GetPageDesc(0) ),
+                                         ? *pAktPageDesc
+                                         : const_cast<const SwDoc *>(pDoc)
+                                         ->GetPageDesc(0) ),
                                 FALSE, TRUE );
                 Strm() << SwRTFWriter::sNewLine;
             }
@@ -1647,8 +1651,9 @@ void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 short SwRTFWriter::GetCurrentPageDirection() const
 {
     const SwFrmFmt  &rFmt = pAktPageDesc
-                    ? pAktPageDesc->GetMaster()
-                    : pDoc->GetPageDesc(0).GetMaster();
+        ? pAktPageDesc->GetMaster()
+        : const_cast<const SwDoc *>(pDoc)
+        ->GetPageDesc(0).GetMaster();
     const SvxFrameDirectionItem* pItem = &rFmt.GetFrmDir();
 
     if (!pItem)
