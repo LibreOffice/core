@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 08:29:39 $
+ *  last change: $Author: pb $ $Date: 2001-05-15 06:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ public:
     void                SetNewFolderHdl( const Link& rLink ) { aNewFolderHdl = rLink; }
 
     sal_Bool            IsFileSelected() const;
+    sal_Bool            IsTemplateFolderOpen() const { return pFileWin->IsTemplateFolder(); }
     void                OpenFile( sal_Bool bNotAsTemplate );
     String              GetFolderTitle() const;
 };
