@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
+ *  last change: $Author: mtg $ $Date: 2001-01-11 15:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropert
         // compression method based on mime type. Obviously, if it's an existing
         // member, we can't change the compression type without Bad Things
         // Happening (tm)
-        if ( !bPackageMember)
+        if ( !bPackageMember && sMediaType.getLength() > 0 )
         {
             if ( sMediaType.indexOf (OUString::createFromAscii("text")) != -1)
                 aEntry.nMethod = DEFLATED;
