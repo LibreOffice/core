@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-14 10:02:27 $
+ *  last change: $Author: jb $ $Date: 2001-06-22 12:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,14 @@ namespace configmgr
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
 
-        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
+        if (!xOptions->canUseCache())
+        {
+            CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
+            OSL_ENSURE( !xOptions->getLazyWrite(), "WARNING: Async writing is enabled for non-cached node. Results may be unexpected.");
+            if (xOptions->getLazyWrite())
+                CFG_TRACE_WARNING_NI("config provider: Async writing is enabled for non-cached node. Results may be unexpected.");
+        }
+
 
         OUString sUser = xOptions->getUser();
         if (sUser.getLength())
