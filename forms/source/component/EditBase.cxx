@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:51:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) thro
         readCommonEditProperties(_rxInStream);
 
     // Nach dem Lesen die Defaultwerte anzeigen
-    if (m_aControlSource.getLength())
+    if ( getControlSource().getLength() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then)
         resetNoBroadcast();
 };
