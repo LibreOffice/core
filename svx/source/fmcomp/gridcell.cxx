@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:07:31 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 12:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@
 
 using namespace ::connectivity;
 using namespace ::svxform;
+using namespace ::com::sun::star::uno;
+
 // An irgendeiner Stelle dieser include-Orgie hier gehen die defines fuer WB_LEFT und WB_RIGHT verloren, und ich habe einfach
 // nicht herausgefunden, wo. Also eben ein Hack.
 #define WB_LEFT                 ((WinBits)0x00004000)
@@ -662,17 +664,23 @@ double DbCellControl::GetValue(const ::com::sun::star::uno::Reference< ::com::su
             fValue = _xVariant->getDouble();
             bSuccess = sal_True;
         }
-        catch(...) { }
+        catch(const Exception&) { }
         if (!bSuccess)
         {
             try
             {
                 fValue = xFormatter->convertStringToNumber(m_rColumn.GetKey(), _xVariant->getString());
             }
-            catch(...) { }
+            catch(const Exception&) { }
         }
     }
     return fValue;
+}
+
+//------------------------------------------------------------------------------
+void DbCellControl::invalidatedController()
+{
+    m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantCellControlAccess());
 }
 
 /*************************************************************************/
@@ -1722,6 +1730,9 @@ void DbComboBox::SetList(const ::com::sun::star::uno::Any& rItems)
         sal_Int32 nItems = aTest.getLength();
         for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
              pField->InsertEntry(*pStrings, LISTBOX_APPEND);
+
+        // tell the grid control that this controller is invalid and has to be re-initialized
+        invalidatedController();
     }
 }
 
@@ -1833,6 +1844,9 @@ void DbListBox::SetList(const ::com::sun::star::uno::Any& rItems)
 
             m_rColumn.getModel()->getPropertyValue(FM_PROP_VALUE_SEQ) >>= m_aValueList;
             m_bBound = m_aValueList.getLength() > 0;
+
+            // tell the grid control that this controller is invalid and has to be re-initialized
+            invalidatedController();
         }
     }
 }
@@ -2249,7 +2263,7 @@ void DbFilterField::Update()
             xFormAsSet->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sStatement;
             xComposer->setQuery(sStatement);
         }
-        catch(...)
+        catch(const Exception&)
         {
             ::comphelper::disposeComponent(xComposer);
             return;
@@ -2322,7 +2336,7 @@ void DbFilterField::Update()
                 if (!xDataField.is())
                     return;
             }
-            catch(...)
+            catch(const Exception&)
             {
                 ::comphelper::disposeComponent(xStatement);
                 return;
