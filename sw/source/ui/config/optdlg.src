@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-20 21:20:12 $
+ *  last change: $Author: kz $ $Date: 2002-01-09 21:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2455,7 +2455,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "�ndringar p�verkar bara den omedelbara omgivningen";
         Text[ polish ] = "Zmiany maj� wp�yw tylko na obszary przyleg�e.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich nur auf den direkten Nachbarn aus";
-        Text[ japanese ] = "変更は隣接範囲だけに作用します";
+        Text[ japanese ] = "変更は隣接範囲だけに作用する";
         Text[ korean ] = "변경 사항은 직접적으로 인접한 영역에만 영향을 미칩니다.";
         Text[ chinese_simplified ] = "行列的更改只会影响到直接连接的区域。";
         Text[ chinese_traditional ] = "欄列的變更僅僅會影響到直接連結的區域。";
@@ -2512,7 +2512,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "�ndringar p�verkar hela tabellen";
         Text[ polish ] = "Zmiany maj� wp�yw na ca�� tabel�.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich auf die gesamte Tabelle aus";
-        Text[ japanese ] = "変更は表全体に作用します";
+        Text[ japanese ] = "変更は表全体に作用する";
         Text[ korean ] = "변경 사항이 전체 시트에 적용됩니다.";
         Text[ chinese_simplified ] = "行列的更改会影响到整个表格。";
         Text[ chinese_traditional ] = "欄列的變更會影響到整個表格";
@@ -2569,7 +2569,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ swedish ] = "�ndringar p�verkar tabellstorleken";
         Text[ polish ] = "Zmiany maj� wp�yw na rozmiar tabeli.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengr?e aus";
-        Text[ japanese ] = "変更は表のサイズに作用します";
+        Text[ japanese ] = "変更は表のサイズに作用する";
         Text[ korean ] = "변경 사항이 시트 크기에 적용됩니다.";
         Text[ chinese_simplified ] = "一行和列的更改会影响表格的大小。";
         Text[ chinese_traditional ] = "一個欄列的變更會影響表格的大小";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
