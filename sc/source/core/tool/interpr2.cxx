@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:51 $
+ *  last change: $Author: nn $ $Date: 2000-10-06 17:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,6 +1684,16 @@ void ScInterpreter::ScDde()
         if (nMode < SC_DDE_DEFAULT || nMode > SC_DDE_TEXT)
             nMode = SC_DDE_DEFAULT;
 
+        //  temporary documents (ScFunctionAccess) have no DocShell
+        //  and no LinkManager -> abort
+
+        SvLinkManager* pLinkMgr = pDok->GetLinkManager();
+        if (!pLinkMgr)
+        {
+            SetNoValue();
+            return;
+        }
+
             //  Nach dem Laden muss neu interpretiert werden (Verknuepfungen aufbauen)
 
         if ( pMyFormulaCell->GetCode()->IsRecalcModeNormal() )
@@ -1697,7 +1707,6 @@ void ScInterpreter::ScDde()
 
             //  Link-Objekt holen / anlegen
 
-        SvLinkManager* pLinkMgr = pDok->GetLinkManager();
         ScDdeLink* pLink = lcl_GetDdeLink( pLinkMgr, aAppl, aTopic, aItem, nMode );
 
         //! Dde-Links (zusaetzlich) effizienter am Dokument speichern !!!!!
