@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:35 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,9 @@ public:
                 const ::com::sun::star::uno::Sequence<
                     rtl::OUString > &rSvcImplNames );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString >
-        GetServiceList( const ::com::sun::star::lang::Locale &rLocale );
+        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
+    virtual DspType
+        GetDspType() const;
 };
 
 

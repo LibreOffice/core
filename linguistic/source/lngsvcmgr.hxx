@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-30 14:39:16 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,9 @@ class LngSvcMgr :
 
     LngSvcMgrListenerHelper *                           pListenerHelper;
 
-    SvcInfoArray *                                      pSpellSvcs;
-    SvcInfoArray *                                      pHyphSvcs;
-    SvcInfoArray *                                      pThesSvcs;
+    SvcInfoArray *                                      pAvailSpellSvcs;
+    SvcInfoArray *                                      pAvailHyphSvcs;
+    SvcInfoArray *                                      pAvailThesSvcs;
 
     Timer aSaveTimer;
 

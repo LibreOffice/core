@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:46:12 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 
 
 Sequence< OUString >
-    HyphenatorDispatcher::GetServiceList( const Locale &rLocale )
+    HyphenatorDispatcher::GetServiceList( const Locale &rLocale ) const
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -638,13 +638,21 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    LangSvcEntry_Hyph *pEntry = aSvcList.Seek( nLanguage );
+    HyphenatorDispatcher    *pThis = (HyphenatorDispatcher *) this;
+    const LangSvcEntry_Hyph *pEntry = pThis->aSvcList.Seek( nLanguage );
     if (pEntry)
         aRes.getArray()[0] = pEntry->aSvcImplName;
     else
         aRes.realloc(0);
 
     return aRes;
+}
+
+
+HyphenatorDispatcher::DspType
+    HyphenatorDispatcher::GetDspType() const
+{
+    return DSP_HYPH;
 }
 
 

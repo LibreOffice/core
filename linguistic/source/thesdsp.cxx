@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:46:33 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 
 
 Sequence< OUString >
-    ThesaurusDispatcher::GetServiceList( const Locale &rLocale )
+    ThesaurusDispatcher::GetServiceList( const Locale &rLocale ) const
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -285,11 +285,19 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    SeqLangSvcEntry_Thes *pEntry = aSvcList.Seek( nLanguage );
+    ThesaurusDispatcher         *pThis = (ThesaurusDispatcher *) this;
+    const SeqLangSvcEntry_Thes  *pEntry = pThis->aSvcList.Seek( nLanguage );
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
 
     return aRes;
+}
+
+
+ThesaurusDispatcher::DspType
+    ThesaurusDispatcher::GetDspType() const
+{
+    return DSP_THES;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-24 10:16:08 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,12 @@ public:
         {
             return ConfigItem::SetSetProperties( rNode, rValues );
         }
+
+    com::sun::star::uno::Sequence< rtl::OUString >
+        GetNodeNames( const rtl::OUString& rNode )
+        {
+            return ConfigItem::GetNodeNames( rNode );
+        }
 };
 
 
@@ -213,7 +219,8 @@ struct LinguOptionsData
     BOOL    SaveConfig();
 
     DECL_LINK( TimeOut, Timer* );
-/*      virtual void        Notify( const com::sun::star::uno::Sequence<
+/*
+     virtual void       Notify( const com::sun::star::uno::Sequence<
                                     rtl::OUString >& rPropertyNames );
     virtual void        Commit();
 */

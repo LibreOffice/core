@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:30 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,16 @@ struct SvcFlags
 class LinguDispatcher
 {
 public:
+    enum DspType    { DSP_SPELL, DSP_HYPH, DSP_THES };
+
     virtual void
         SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
                 const ::com::sun::star::uno::Sequence<
                     rtl::OUString > &rSvcImplNames ) = 0;
     virtual ::com::sun::star::uno::Sequence< rtl::OUString >
-        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) = 0;
+        GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const = 0;
+    virtual DspType
+        GetDspType() const = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////

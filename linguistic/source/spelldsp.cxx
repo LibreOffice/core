@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:46:23 $
+ *  last change: $Author: tl $ $Date: 2001-01-25 10:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,7 @@ void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
 
 
 Sequence< OUString >
-    SpellCheckerDispatcher::GetServiceList( const Locale &rLocale )
+    SpellCheckerDispatcher::GetServiceList( const Locale &rLocale ) const
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -734,11 +734,19 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    SeqLangSvcEntry_Spell *pEntry = aSvcList.Seek( nLanguage );
+    SpellCheckerDispatcher      *pThis = (SpellCheckerDispatcher *) this;
+    const SeqLangSvcEntry_Spell *pEntry = pThis->aSvcList.Seek( nLanguage );
     if (pEntry)
         aRes = pEntry->aSvcImplNames;
 
     return aRes;
+}
+
+
+SpellCheckerDispatcher::DspType
+    SpellCheckerDispatcher::GetDspType() const
+{
+    return DSP_SPELL;
 }
 
 
