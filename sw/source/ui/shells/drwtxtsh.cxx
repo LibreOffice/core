@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-09-09 13:18:12 $
+ *  last change: $Author: os $ $Date: 2002-10-11 12:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,10 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             {
                 // Shellwechsel!
                 rSh.EndTextEdit();
-                rSh.GetView().AttrChangedNotify(&rSh);
+                SwView& rView = rSh.GetView();
+                rView.ExitDraw();
+                rSh.Edit();
+                rView.AttrChangedNotify(&rSh);
                 return;
             }
             break;
