@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.19 $
+*  $Revision: 1.20 $
 *
-*  last change: $Author: rt $ $Date: 2004-06-14 10:33:20 $
+*  last change: $Author: kz $ $Date: 2004-06-14 13:25:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -216,15 +216,6 @@ File gid_File_Bin_Unopkg
     Name = "unopkg.exe";
   #endif
 End
-
-#ifdef WNT
-File gid_File_Bin_MsiPkgchk
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "msi-pkgchk.exe";
-End
-#endif
 
 #ifdef UNX
 
