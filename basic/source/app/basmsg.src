@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:50:08 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String S_PROG_START
     Text[ polish ] = "Uruchomienie programu: ($Arg1); ($Arg2)";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ korean ] = "프로그램　종류: ($Arg1); ($Arg2)";
+    Text[ korean ] = "프로그램 시작: ($Arg1); ($Arg2)";
     Text[ chinese_simplified ] = "Program start: ($Arg1); ($Arg2)";
     Text[ chinese_traditional ] = "Program start: ($Arg1); ($Arg2)";
     Text[ arabic ] = "Program start: ($Arg1); ($Arg2)";
@@ -146,5 +146,6 @@ String S_WARNING_PREFIX
     Text[ catalan ] = "Advertencia: ";
     Text[ finnish ] = "Varoitus: ";
 };
+
 
 
