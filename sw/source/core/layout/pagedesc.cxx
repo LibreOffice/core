@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 12:28:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,15 @@ const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
     Point aNullPt;
     return pMod ? ::GetFrmOfModify( *pMod, nFrmType, &aNullPt, 0, FALSE )
                 : 0;
+}
+
+const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
+{
+    const SwPageDesc* pRet = 0;
+    const SwFrm* pChkFrm = ::lcl_GetFrmOfNode( rNd );
+    if (pChkFrm && (pChkFrm = pChkFrm->FindPageFrm()))
+        pRet = ((const SwPageFrm*)pChkFrm)->GetPageDesc();
+    return pRet;
 }
 
 const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
