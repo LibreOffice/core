@@ -1,4 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\mozilla
+mkdir: %COMMON_DEST%\inc%_EXT%\mozilla
 mkdir: %_DEST%\inc%_EXT%\mozilla\absync
 mkdir: %_DEST%\inc%_EXT%\mozilla\accessibility
 mkdir: %_DEST%\inc%_EXT%\mozilla\AcctIdl
