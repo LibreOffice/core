@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:58:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,40 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Kleiner</value>
                     <value xml:lang="en-US">Zoom Out</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ZoomMinus" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Kleiner</value>
+                    <value xml:lang="en-US">Zoom Out</value>
+                    <value xml:lang="ar">أصغر</value>
+                    <value xml:lang="no">Zoom Out</value>
+                    <value xml:lang="ca">Redueix el zoom</value>
+                    <value xml:lang="zh-TW">縮小</value>
+                    <value xml:lang="cs">Zmenšit</value>
+                    <value xml:lang="da">Formindsk</value>
+                    <value xml:lang="el">Σμίκρυνση</value>
+                    <value xml:lang="es">Reducir</value>
+                    <value xml:lang="fi">Loitonna</value>
+                    <value xml:lang="fr">Réduire</value>
+                    <value xml:lang="he">‮זום אחורה‬</value>
+                    <value xml:lang="it">Riduci</value>
+                    <value xml:lang="ja">縮小</value>
+                    <value xml:lang="ko">축소</value>
+                    <value xml:lang="nl">Uitzoomen</value>
+                    <value xml:lang="pl">Pomniejsz</value>
+                    <value xml:lang="pt-BR">Afastar</value>
+                    <value xml:lang="ru">Уменьшить</value>
+                    <value xml:lang="sk">Zmenšiť</value>
+                    <value xml:lang="sv">Förminska</value>
+                    <value xml:lang="th">ขยายออก</value>
+                    <value xml:lang="tr">Küçült</value>
+                    <value xml:lang="hi">झूम बाहर</value>
+                    <value xml:lang="zh-CN">缩小</value>
+                    <value xml:lang="pt">Afastar</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
