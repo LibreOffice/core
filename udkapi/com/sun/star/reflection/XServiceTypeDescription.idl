@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceTypeDescription.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:56:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 
     @since #107627#
   */
-interface XServiceTypeDescription : com::sun::star::reflection::XTypeDescription
+published interface XServiceTypeDescription : com::sun::star::reflection::XTypeDescription
 {
     /** Returns the type descriptions of the mandatory services
         defined for this service.
