@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>StarCalc 3.0</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">StarCalc 3.0</value>
+            <value>StarCalc 3.0</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>StarCalcDocument</value></prop>
     </node>
