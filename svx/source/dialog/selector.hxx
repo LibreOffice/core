@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:53:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
@@ -202,7 +206,7 @@ public:
         { m_pImageProvider = provider; }
 };
 
-class SvxScriptSelectorDialog :
+class SVX_DLLPUBLIC SvxScriptSelectorDialog :
     public ModelessDialog
 {
     FixedText                       aDialogDescription;
