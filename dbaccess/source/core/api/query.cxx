@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 11:28:26 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ void OQuery::implCollectColumns( )
         {
             xComposer->setQuery(m_sCommand);
 
-            xComposer->setFilter(::rtl::OUString::createFromAscii("0=1"));
+            //  xComposer->setFilter(::rtl::OUString::createFromAscii("0=1")); // i21125
             //  aFilterStatement = m_xComposer->getComposedQuery();
             Reference<XColumnsSupplier> xCols(xComposer,UNO_QUERY);
             Reference< XNameAccess > xColumns = xCols->getColumns();
