@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-26 08:56:32 $
+ *  last change: $Author: tbe $ $Date: 2001-07-04 12:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,12 +921,24 @@ SbxItem::SbxItem(USHORT nWhich, SfxObjectShell* pShell, const String& aLibName, 
 {
 }
 
+SbxItem::SbxItem(USHORT nWhich, SfxObjectShell* pShell, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType )
+    :SfxPoolItem( nWhich )
+    ,pSbx(NULL)
+    ,m_pShell(pShell)
+    ,m_aLibName(aLibName)
+    ,m_aName(aName)
+    ,m_aMethodName(aMethodName)
+    ,m_nType(nType)
+{
+}
+
 SbxItem::SbxItem(const SbxItem& rCopy) : SfxPoolItem( rCopy )
 {
     pSbx = rCopy.pSbx;
     m_pShell = rCopy.m_pShell;
     m_aLibName = rCopy.m_aLibName;
     m_aName = rCopy.m_aName;
+    m_aMethodName = rCopy.m_aMethodName;
     m_nType = rCopy.m_nType;
 }
 
@@ -937,6 +949,7 @@ int SbxItem::operator==( const SfxPoolItem& rCmp) const
                                              && ( m_pShell == ((const SbxItem&)rCmp).m_pShell )
                                              && ( m_aLibName == ((const SbxItem&)rCmp).m_aLibName )
                                              && ( m_aName == ((const SbxItem&)rCmp).m_aName )
+                                             && ( m_aMethodName == ((const SbxItem&)rCmp).m_aMethodName )
                                              && ( m_nType == ((const SbxItem&)rCmp).m_nType ) );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
+ *  last change: $Author: tbe $ $Date: 2001-07-04 12:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,14 +455,20 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
     }
 
     DBG_ASSERT( pBasMgr, "Fuer den Eintrag keinen BasicManager gefunden!" );
-    SfxObjectShell* pShell;
-    if ( pBasMgr )
-        pShell = BasicIDE::FindDocShell( pBasMgr );
 
     SbxVariable* pVar = 0;
+    SfxObjectShell* pShell = 0;
     String aLibName;
     String aName;
-    USHORT nType;
+    String aMethodName;
+    USHORT nType = BASICIDE_TYPE_UNKNOWN;
+
+    if ( pBasMgr )
+    {
+        pShell = BasicIDE::FindDocShell( pBasMgr );
+        nType = BASICIDE_TYPE_SHELL;
+    }
+
     if ( pBasMgr && aEntries.Count() )
     {
         for ( USHORT n = 0; n < aEntries.Count(); n++ )
@@ -471,33 +477,39 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
             DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
             BasicEntry* pBE = (BasicEntry*)pLE->GetUserData();
             DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
-            aName = GetEntryText( pLE );
 
             switch ( pBE->GetType() )
             {
                 case OBJTYPE_LIB:
                 {
-                    aLibName = aName;
-                    pVar = pBasMgr->GetLib( aName );
+                    aLibName = GetEntryText( pLE );
+                    nType = BASICIDE_TYPE_LIBRARY;
+
+                    pVar = pBasMgr->GetLib( aLibName );
                 }
                 break;
                 case OBJTYPE_MODULE:
                 {
+                    aName = GetEntryText( pLE );
+                    nType = BASICIDE_TYPE_MODULE;
+
                     DBG_ASSERT( pVar && pVar->IsA( TYPE(StarBASIC) ), "FindVariable: Ungueltiges Basic" );
                     pVar = ((StarBASIC*)pVar)->FindModule( aName );
-
-                    nType = BASICIDE_TYPE_MODULE;
                 }
                 break;
                 case OBJTYPE_METHOD:
                 //case OBJTYPE_METHODINOBJ:     // sbx dialogs removed
                 {
+                    aMethodName = GetEntryText( pLE );
+                    nType = BASICIDE_TYPE_METHOD;
+
                     DBG_ASSERT( pVar && ( (pVar->IsA( TYPE(SbModule) )) || (pVar->IsA( TYPE(SbxObject) )) ), "FindVariable: Ungueltiges Modul/Objekt" );
-                    pVar = ((SbxObject*)pVar)->GetMethods()->Find( aName, SbxCLASS_METHOD );
+                    pVar = ((SbxObject*)pVar)->GetMethods()->Find( aMethodName, SbxCLASS_METHOD );
                 }
                 break;
                 case OBJTYPE_OBJECT:
                 {
+                    aName = GetEntryText( pLE );
                     nType = BASICIDE_TYPE_DIALOG;
                 }
                 break;
@@ -520,10 +532,14 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
                 }
                 break;
                 default:    DBG_ERROR( "GetSbxItem: Unbekannter Typ!" );
+                            nType = BASICIDE_TYPE_UNKNOWN;
                             pVar = 0;
             }
-            if ( !pVar )
+
+            if ( nType == BASICIDE_TYPE_UNKNOWN )
                 break;
+            //if ( !pVar )
+            //  break;
         }
     }
 
@@ -533,6 +549,7 @@ SbxItem BasicTreeListBox::GetSbxItem( SvLBoxEntry* pEntry )
         aSbxItem.SetShell( pShell );
         aSbxItem.SetLibName( aLibName );
         aSbxItem.SetName( aName );
+        aSbxItem.SetMethodName( aMethodName );
         aSbxItem.SetType( nType );
         return aSbxItem;
         //return SbxItem( SID_BASICIDE_ARG_SBX, pVar );

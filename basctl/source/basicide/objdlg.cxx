@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-26 09:03:22 $
+ *  last change: $Author: tbe $ $Date: 2001-07-04 12:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,8 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) )
     {
         SbxItem aSbxItem = GetSbxItem( GetCurEntry() );
-        SbxVariable* pSbx = (SbxVariable*)aSbxItem.GetSbx();
 
-        if ( pSbx && pSbx->ISA( SbMethod ) )
+        if ( aSbxItem.GetType() == BASICIDE_TYPE_METHOD )
         {
             SfxViewFrame* pCurFrame = SfxViewFrame::Current();
             DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
@@ -266,8 +265,9 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
             DBG_ASSERT( pCurEntry, "Entry?!" );
             SbxItem aSbxItem = aMacroTreeList.GetSbxItem( pCurEntry );
-            SbxVariable* pSbx = (SbxVariable*)aSbxItem.GetSbx();
-            if ( pSbx || aSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
+            if ( aSbxItem.GetType() == BASICIDE_TYPE_MODULE ||
+                 aSbxItem.GetType() == BASICIDE_TYPE_DIALOG ||
+                 aSbxItem.GetType() == BASICIDE_TYPE_METHOD )
             {
                 if( pDispatcher )
                 {

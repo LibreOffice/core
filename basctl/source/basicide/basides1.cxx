@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
+ *  last change: $Author: tbe $ $Date: 2001-07-04 12:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,36 +676,34 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
-            SbxVariable* pSbx = (SbxVariable*)rSbxItem.GetSbx();
-            StarBASIC* pBasic;
-            if ( pSbx )
-            {
-                pBasic = BasicIDE::FindBasic( pSbx );
-            }
+            BasicManager* pBasMgr;
+            SfxObjectShell* pShell = rSbxItem.GetShell();
+            if ( pShell )
+                pBasMgr = pShell->GetBasicManager();
             else
-            {
-                BasicManager* pBasMgr;
-                SfxObjectShell* pShell = rSbxItem.GetShell();
-                if ( pShell )
-                    pBasMgr = pShell->GetBasicManager();
-                else
-                    pBasMgr = SFX_APP()->GetBasicManager();
+                pBasMgr = SFX_APP()->GetBasicManager();
 
-                if ( pBasMgr )
-                    pBasic = pBasMgr->GetLib( rSbxItem.GetLibName() );
-            }
+            StarBASIC* pBasic = 0;
+            if ( pBasMgr )
+                pBasic = pBasMgr->GetLib( rSbxItem.GetLibName() );
             DBG_ASSERT( pBasic, "Basic nicht gefunden!" );
+
             if ( pCurBasic && ( pCurBasic != pBasic ) )
                 SetCurBasic( pBasic );
+
             IDEBaseWindow* pWin = 0;
             if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
-                pWin = FindDlgWin( pBasic, rSbxItem.GetName(), TRUE );
-            else if ( pSbx->ISA( SbModule ) )
-                pWin = FindBasWin( pBasic, pSbx->GetName(), TRUE );
-            else if ( pSbx->ISA( SbMethod ) )
             {
-                pWin = FindBasWin( pBasic, pSbx->GetParent()->GetName(), TRUE );
-                ((ModulWindow*)pWin)->EditMacro( pSbx->GetName() );
+                pWin = FindDlgWin( pBasic, rSbxItem.GetName(), TRUE );
+            }
+            else if ( rSbxItem.GetType() == BASICIDE_TYPE_MODULE )
+            {
+                pWin = FindBasWin( pBasic, rSbxItem.GetName(), TRUE );
+            }
+            else if ( rSbxItem.GetType() == BASICIDE_TYPE_METHOD )
+            {
+                pWin = FindBasWin( pBasic, rSbxItem.GetName(), TRUE );
+                ((ModulWindow*)pWin)->EditMacro( rSbxItem.GetMethodName() );
             }
             DBG_ASSERT( pWin, "Fenster wurde nicht erzeugt!" );
             SetCurWindow( pWin, TRUE );
