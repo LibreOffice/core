@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 10:12:19 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 15:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
             nHyphPos = rInf.GetIdx() - 1;
     }
     else
+    {
         nCutPos = rInf.GetTxtBreak( nLineWidth, rInf.GetIdx(), nMaxLen );
+#ifndef PRODUCT
+//        xub_StrLen nDebugVal = rInf.GetTxtSize( rInf.GetIdx(), nCutPos - rInf.GetIdx() ).Width();
+//        ASSERT( nDebugVal < nLineWidth, "Wrong break!!!" );
+#endif
+    }
 
     if( nCutPos > rInf.GetIdx() + nMaxLen )
     {
@@ -367,6 +373,9 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
         WordType::DICTIONARY_WORD, sal_True );
     nBreakStart = (xub_StrLen)aBound.startPos;
     nWordLen = aBound.endPos - nBreakStart;
+
+    // if everything else fails, we want to cut at nPos
+    nCutPos = nPos;
 
     XubString aTxt( rInf.GetTxt().Copy( nBreakStart, nWordLen ) );
 
