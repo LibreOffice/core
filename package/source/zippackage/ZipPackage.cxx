@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-18 16:54:37 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 13:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,16 +358,21 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     {
         if (pContent->openStream ( xSink ) )
             xContentStream = xSink->getInputStream();
-        xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
-        Sequence < sal_Int8 > aSequence ( 4 );
-        xContentStream->readBytes( aSequence, 4 );
-        xContentSeek->seek ( 0 );
-        const sal_Int8 *pSeq = aSequence.getConstArray();
-        if (pSeq[0] == 'P' &&
-            pSeq[1] == 'K' &&
-            pSeq[2] == '7' &&
-            pSeq[3] == '8' )
-            bSpanned = sal_True;
+        if (xContentStream.is())
+        {
+            xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
+            Sequence < sal_Int8 > aSequence ( 4 );
+            xContentStream->readBytes( aSequence, 4 );
+            xContentSeek->seek ( 0 );
+            const sal_Int8 *pSeq = aSequence.getConstArray();
+            if (pSeq[0] == 'P' &&
+                pSeq[1] == 'K' &&
+                pSeq[2] == '7' &&
+                pSeq[3] == '8' )
+                bSpanned = sal_True;
+        }
+        else
+            bHaveZipFile = sal_False;
     }
     catch (com::sun::star::uno::Exception&)
     {
