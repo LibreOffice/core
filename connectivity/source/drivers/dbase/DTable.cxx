@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:18:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,6 +1452,13 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 {
                     // es existiert kein eindeutiger Wert
                     ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("Duplicate value found in column \"");
+                    if ( !aColName.getLength() )
+                    {
+                        m_pColumns->getByIndex(i) >>= xCol;
+                        OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
+                        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
+                        xCol = NULL;
+                    }
                     sMessage += aColName;
                     sMessage += ::rtl::OUString::createFromAscii( "\"!");
                     throw SQLException(sMessage,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
