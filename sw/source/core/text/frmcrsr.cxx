@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-07 10:05:08 $
+ *  last change: $Author: fme $ $Date: 2002-01-17 15:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,8 +364,20 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 bRet = bRightMargin ? aLine.GetEndCharRect( &rOrig, nOffset, pCMS, nMaxY )
                                 : aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
             }
+
+#ifdef VERTICAL_LAYOUT
+            if ( bVert )
+                pFrm->SwitchHorizontalToVertical( rOrig );
+#endif
+
             if( pFrm->IsUndersized() && pCMS && !pFrm->GetNext() &&
+
+#ifdef VERTICAL_LAYOUT
+                (rOrig.*fnRect->fnGetBottom)() == nUpperMaxY &&
+                pFrm->GetOfst() < nOffset &&
+#else
                 rOrig.Bottom() == nUpperMaxY && pFrm->GetOfst() < nOffset &&
+#endif
                 !pFrm->IsFollow() && !bNoScroll &&
                 pFrm->GetTxtNode()->GetTxt().Len() != nNextOfst )
                 bGoOn = lcl_ChangeOffset( pFrm, nNextOfst );
@@ -376,8 +388,6 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 #ifdef VERTICAL_LAYOUT
         if ( bVert )
         {
-            pFrm->SwitchHorizontalToVertical( rOrig );
-
             if ( pCMS )
             {
                 if ( pCMS->bRealHeight )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-07 13:25:09 $
+ *  last change: $Author: fme $ $Date: 2002-01-17 15:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     aDrawInf.SetRight( LONG_MAX );
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pTxtFrm );
+    aDrawInf.SetFont( pFnt );
 #endif
     sal_Bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, pSh->GetOut() ) > nMax;
@@ -347,6 +348,15 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
 {
     Point aStart( nRedX, nY );
     Point aEnd( nRedX, nY + nMax );
+
+#ifdef VERTICAL_LAYOUT
+    if ( pTxtFrm->IsVertical() )
+    {
+        pTxtFrm->SwitchHorizontalToVertical( aStart );
+        pTxtFrm->SwitchHorizontalToVertical( aEnd );
+    }
+#endif
+
     if( !IsClipChg() )
     {
         SwRect aRct( aStart, aEnd );
@@ -623,6 +633,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 
 #ifdef VERTICAL_LAYOUT
                 aDrawInf.SetFrm( this );
+                aDrawInf.SetFont( pFnt );
 #endif
 
                 pFnt->_DrawText( aDrawInf );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
+ *  last change: $Author: fme $ $Date: 2002-01-17 15:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,11 @@ void SwArrowPortion::Paint( const SwTxtPaintInfo &rInf ) const
     ((SwArrowPortion*)this)->aPos = rInf.GetPos();
 }
 
+#ifdef VERTICAL_LAYOUT
+void SwArrowPortion::PaintIt( OutputDevice *pOut, SwTxtFrm* pFrm ) const
+#else
 void SwArrowPortion::PaintIt( OutputDevice *pOut ) const
+#endif
 {
     Size aSize( 6, 12 );
     aSize = pOut->PixelToLogic( aSize );
@@ -384,7 +388,18 @@ void SwArrowPortion::PaintIt( OutputDevice *pOut ) const
     }
 
     Color aCol( COL_LIGHTRED );
+
+#ifdef VERTICAL_LAYOUT
+    if ( pFrm->IsVertical() )
+    {
+        pFrm->SwitchHorizontalToVertical( aRect );
+        SvxFont::DrawArrow( *pOut, aRect.SVRect(), aSize, aCol, ! bLeft );
+    }
+    else
+        SvxFont::DrawArrow( *pOut, aRect.SVRect(), aSize, aCol, bLeft );
+#else
     SvxFont::DrawArrow( *pOut, aRect.SVRect(), aSize, aCol, bLeft );
+#endif
 }
 
 SwLinePortion *SwArrowPortion::Compress() { return this; }

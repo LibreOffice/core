@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-09 08:58:00 $
+ *  last change: $Author: fme $ $Date: 2002-01-17 15:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,11 +881,20 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
     if( nMax )
     {
+
+#ifdef VERTICAL_LAYOUT
+        if( pOrig->Top() + pOrig->Height() > nMax )
+        {
+            if( pOrig->Top() > nMax )
+                pOrig->Top( nMax );
+            pOrig->Height( nMax - pOrig->Top() );
+#else
         if( pOrig->Bottom() > nMax )
         {
             if( pOrig->Top() > nMax )
                 pOrig->Top( nMax );
             pOrig->Bottom( nMax );
+#endif
         }
         if ( pCMS && pCMS->bRealHeight && pCMS->aRealHeight.Y() >= 0 )
         {
