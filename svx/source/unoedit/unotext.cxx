@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-28 12:56:05 $
+ *  last change: $Author: cl $ $Date: 2000-09-29 12:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,6 +1278,8 @@ void SAL_CALL SvxUnoText::insertString( const uno::Reference< text::XTextRange >
             pRange->CollapseToEnd();
 
         pRange->setString( aString );
+
+        pRange->CollapseToEnd();
     }
 }
 
