@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-22 17:42:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,6 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBitCount, 
             }
 
             pDIB->mpBits = new BYTE[ pDIB->mnScanlineSize * pDIB->mnHeight ];
-            rtl_zeroMemory( pDIB->mpBits, pDIB->mnScanlineSize * pDIB->mnHeight );
         }
     }
     else
@@ -338,7 +337,9 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
                 }
             }
 
-            pDIB = StretchAndConvert( aSrcBuf, aTwoRect, nDstFormat, const_cast<BitmapPalette*>(pDstPal) );
+            nDstFormat = aSrcBuf.mnFormat;
+            pDIB = StretchAndConvert( aSrcBuf, aTwoRect, nDstFormat,
+                const_cast<BitmapPalette*>(pDstPal), &aSrcBuf.maColorMask );
             XDestroyImage( pImage );
         }
     }
@@ -843,6 +844,13 @@ void X11SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
         if( mpCache )
             mpCache->ImplRemove( this );
     }
+}
+
+// -----------------------------------------------------------------------------
+
+bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
+{
+    return false;
 }
 
 // --------------
