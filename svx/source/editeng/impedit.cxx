@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:51:05 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,6 +906,15 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
                 aCursorSz.Width() = nCursorSz;
             if ( !aCursorSz.Height() )
                 aCursorSz.Height() = nCursorSz;
+        }
+        // #111036# Let VCL do orientation for cursor, otherwise problem when cursor has direction flag
+        if ( IsVertical() )
+        {
+            Size aOldSz( aCursorSz );
+            aCursorSz.Width() = aOldSz.Height();
+            aCursorSz.Height() = aOldSz.Width();
+            GetCursor()->SetPos( aCursorRect.TopRight() );
+            GetCursor()->SetOrientation( 2700 );
         }
         GetCursor()->SetSize( aCursorSz );
 
