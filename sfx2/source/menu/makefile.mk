@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:29:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,14 +67,10 @@ PRJNAME=sfx2
 TARGET=menu
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- ImageList ----------------------------------------------------
 
@@ -83,14 +79,8 @@ BMP_IN=$(PRJ)$/win/res
 
 # --- Files --------------------------------------------------------
 
-CXXFILES =  \
-        mnumgr.cxx \
-        virtmenu.cxx \
-        mnuitem.cxx \
-        objmnctl.cxx \
-        $(PROJECTPCHSOURCE).cxx
-
-SRCFILES = menu.src
+SRS1NAME=$(TARGET)
+SRC1FILES = menu.src
 
 SLOFILES =	\
         $(SLO)$/mnumgr.obj \
