@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
+ *  last change: $Author: er $ $Date: 2001-07-19 16:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <unotools/charclass.hxx>
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
+#endif
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
 #endif
 
 #include "document.hxx"
@@ -3699,7 +3702,8 @@ BOOL ScDocument::LoadPool( SvStream& rStream, BOOL bLoadRefCounts )
                         BYTE cSet, cGUI;    // cGUI is dummy, old GUIType
                         rStream >> cGUI >> cSet;
                         eSrcSet = (CharSet) cSet;
-                        rStream.SetStreamCharSet( eSrcSet );
+                        rStream.SetStreamCharSet( ::GetSOLoadTextEncoding(
+                            eSrcSet, (USHORT)rStream.GetVersion() ) );
                     }
                     break;
                 case SCID_DOCPOOL:
@@ -3753,7 +3757,9 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
     USHORT nOldBufSize = rStream.GetBufferSize();
     rStream.SetBufferSize( 32768 );
     CharSet eOldSet = rStream.GetStreamCharSet();
-    rStream.SetStreamCharSet( gsl_getSystemTextEncoding() );
+    CharSet eStoreCharSet = ::GetSOStoreTextEncoding(
+        gsl_getSystemTextEncoding(), (USHORT)rStream.GetVersion() );
+    rStream.SetStreamCharSet( eStoreCharSet );
 
     //  Compress-Mode fuer Grafiken in Brush-Items (Hintergrund im Seitenformat)
 
@@ -3777,7 +3783,7 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
             rStream << (USHORT) SCID_CHARSET;
             ScWriteHeader aSetHdr( rStream, 2 );
             rStream << (BYTE) 0     // dummy, old System::GetGUIType()
-                    << (BYTE) ::GetStoreCharSet( gsl_getSystemTextEncoding() );
+                    << (BYTE) eStoreCharSet;
         }
 
         //  Force the default style's name to be "Standard" for all languages in the file.

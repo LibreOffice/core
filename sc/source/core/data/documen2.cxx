@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 07:59:35 $
+ *  last change: $Author: er $ $Date: 2001-07-19 16:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,9 @@
 #include <comphelper/processfactory.hxx>
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
+#endif
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
 #endif
 
 #include "document.hxx"
@@ -789,7 +792,8 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                         BYTE cSet, cGUI;    // cGUI is dummy, old GUIType
                         rStream >> cGUI >> cSet;
                         eSrcSet = (CharSet) cSet;
-                        rStream.SetStreamCharSet( eSrcSet );
+                        rStream.SetStreamCharSet( ::GetSOLoadTextEncoding(
+                            eSrcSet, (USHORT)rStream.GetVersion() ) );
                     }
                     break;
                 case SCID_LINKUPMODE: //    Link Update Mode
@@ -1071,7 +1075,10 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
     rStream.SetBufferSize( 32768 );
 
     CharSet eOldSet = rStream.GetStreamCharSet();
-    rStream.SetStreamCharSet( gsl_getSystemTextEncoding() );
+    CharSet eStoreCharSet = ::GetSOStoreTextEncoding(
+        gsl_getSystemTextEncoding(), (USHORT)rStream.GetVersion() );
+    rStream.SetStreamCharSet( eStoreCharSet );
+
 
         //  Progress-Bar
 
@@ -1123,7 +1130,7 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
             rStream << (USHORT) SCID_CHARSET;
             ScWriteHeader aSetHdr( rStream, 2 );
             rStream << (BYTE) 0     // dummy, old System::GetGUIType()
-                    << (BYTE) ::GetStoreCharSet( gsl_getSystemTextEncoding() );
+                    << (BYTE) eStoreCharSet;
         }
 
         //  Link Update Mode

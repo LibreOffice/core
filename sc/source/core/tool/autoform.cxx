@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-12 10:46:41 $
+ *  last change: $Author: er $ $Date: 2001-07-19 16:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,6 @@
  *
  ************************************************************************/
 
-
-/*------------------------------------------------------------------------
-
-    $Author: nn $ $Date: 2001-07-12 10:46:41 $ $Revision: 1.7 $
-    $Logfile:   T:/sc/source/core/tool/autoform.cxv  $ $Workfile:   autoform.cxx  $
-    (c) Copyright 1989 - 1994, Star Division GmbH, Hamburg
-
-------------------------------------------------------------------------*/
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -103,6 +94,9 @@
 #include <sfx2/docfile.hxx>
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
+#endif
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
 #endif
 
 #include "autoform.hxx"
@@ -1074,7 +1068,7 @@ BOOL ScAutoFormat::Load()
                     DBG_ERRORFILE( "Der Header enthaelt mehr/neuere Daten" );
                     rStream.Seek( nPos + nCnt );
                 }
-                rStream.SetStreamCharSet( (CharSet)nChrSet );
+                rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet, nFileVers ) );
                 rStream.SetVersion( nFileVers );
             }
 
@@ -1163,7 +1157,8 @@ BOOL ScAutoFormat::Save()
         USHORT nVal = AUTOFORMAT_ID;
         rStream << nVal
                 << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
-                << (BYTE)::GetStoreCharSet( gsl_getSystemTextEncoding() );
+                << (BYTE)::GetSOStoreTextEncoding(
+                    gsl_getSystemTextEncoding(), rStream.GetVersion() );
 //              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
 //              << (BYTE)::GetStoreCharSet(::GetSystemCharSet())
 //              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
