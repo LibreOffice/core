@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OEditModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:09 $
+ *  last change:$Date: 2003-05-27 12:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.form.XBoundComponent;
@@ -162,7 +163,7 @@ public class OEditModel extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
@@ -214,7 +215,7 @@ public class OEditModel extends TestCase {
 
         XLoadable formLoader = null ;
         try {
-            DBTools dbTools = new DBTools(Param.getMSF()) ;
+            DBTools dbTools = new DBTools((XMultiServiceFactory)Param.getMSF()) ;
             dbTools.registerTestDB((String) Param.get("DOCPTH")) ;
 
             formLoader = FormTools.bindForm(xTextDoc,
