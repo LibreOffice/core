@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:27:45 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 15:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1959,14 +1959,14 @@ XML_CONSTASCII_ACTION( sXML_slant_x, "slant-x" );
 XML_CONSTASCII_ACTION( sXML_slant_y, "slant-y" );
 XML_CONSTASCII_ACTION( sXML_autosize, "autosize" );
 XML_CONSTASCII_ACTION( sXML_slant, "slant" );
-XML_CONSTASCII_ACTION( sXML_topcircle, "topcircle" );
-XML_CONSTASCII_ACTION( sXML_bottomcircle, "bottomcircle" );
-XML_CONSTASCII_ACTION( sXML_leftcircle, "leftcircle" );
-XML_CONSTASCII_ACTION( sXML_rightcircle, "rightcircle" );
-XML_CONSTASCII_ACTION( sXML_toparc, "toparc" );
-XML_CONSTASCII_ACTION( sXML_bottomarc, "bottomarc" );
-XML_CONSTASCII_ACTION( sXML_leftarc, "leftarc" );
-XML_CONSTASCII_ACTION( sXML_rightarc, "rightarc" );
+XML_CONSTASCII_ACTION( sXML_topcircle, "top-circle" );
+XML_CONSTASCII_ACTION( sXML_bottomcircle, "bottom-circle" );
+XML_CONSTASCII_ACTION( sXML_leftcircle, "left-circle" );
+XML_CONSTASCII_ACTION( sXML_rightcircle, "right-circle" );
+XML_CONSTASCII_ACTION( sXML_toparc, "top-arc" );
+XML_CONSTASCII_ACTION( sXML_bottomarc, "bottom-arc" );
+XML_CONSTASCII_ACTION( sXML_leftarc, "left-arc" );
+XML_CONSTASCII_ACTION( sXML_rightarc, "right-arc" );
 XML_CONSTASCII_ACTION( sXML_button1, "button1" );
 XML_CONSTASCII_ACTION( sXML_button2, "button2" );
 XML_CONSTASCII_ACTION( sXML_button3, "button3" );
