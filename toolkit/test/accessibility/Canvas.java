@@ -154,15 +154,18 @@ class Canvas
         else
             mnScaleFactor = nYScale;
 
-        int nCount = maObjectList.size();
-        for (int i=0; i<nCount; i++)
-        {
-            AccessibleObject aAccessibleObject = (AccessibleObject)maObjectList.elementAt(i);
-            aAccessibleObject.paint (
-                g,
-                mnXOffset, mnYOffset, mnScaleFactor,
-                mbShowDescriptions, mbShowNames);
-        }
+        //        synchronized (maObjectList)
+        //        {
+            int nCount = maObjectList.size();
+            for (int i=0; i<nCount; i++)
+            {
+                AccessibleObject aAccessibleObject = (AccessibleObject)maObjectList.elementAt(i);
+                aAccessibleObject.paint (
+                    g,
+                    mnXOffset, mnYOffset, mnScaleFactor,
+                    mbShowDescriptions, mbShowNames);
+            }
+            //        }
 
         // Paint highlighted frame around active object as the last thing.
         if (maActiveObject != null)
@@ -223,7 +226,7 @@ class Canvas
         // Deselect currently active object.
         if (maActiveObject != null)
         {
-            maActiveObject.deselect ();
+            maActiveObject.unhighlight ();
             maActiveObject = null;
             repaint ();
         }
@@ -254,7 +257,7 @@ class Canvas
                     break;
                 }
         }
-        if (selectObject (aNewActiveObject))
+        if (highlightObject (aNewActiveObject))
         {
             if (maActiveObject != null && maTree != null)
             {
@@ -267,17 +270,17 @@ class Canvas
         }
     }
 
-    protected boolean selectObject (AccessibleObject aNewActiveObject)
+    protected boolean highlightObject (AccessibleObject aNewActiveObject)
     {
         if (aNewActiveObject != maActiveObject)
         {
             if (maActiveObject != null)
-                maActiveObject.deselect();
+                maActiveObject.unhighlight();
 
             maActiveObject = aNewActiveObject;
             if (maActiveObject != null)
             {
-                maActiveObject.select ();
+                maActiveObject.highlight ();
             }
             return true;
         }
@@ -295,7 +298,7 @@ class Canvas
         if (aObject instanceof AccTreeNode)
         {
             AccessibleObject aAccessibleObject = (AccessibleObject)maObjects.get ((AccTreeNode)aObject);
-            if (selectObject (aAccessibleObject))
+            if (highlightObject (aAccessibleObject))
                 repaint();
         }
     }
