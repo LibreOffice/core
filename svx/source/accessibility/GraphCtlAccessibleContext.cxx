@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-09-12 09:54:31 $
+ *  last change: $Author: af $ $Date: 2002-10-17 12:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,7 +765,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectSelectedAccessibleChild( sa
     {
         const SdrMarkList& rList = mpView->GetMarkList();
 
-        SdrObject* pObj = rList.GetMark(nIndex)->GetObj();
+        SdrObject* pObj = getSdrObject( nIndex );
         if( pObj )
         {
             SdrMarkList aRefList( rList );
