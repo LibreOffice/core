@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:31:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 08:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,11 +151,9 @@ typedef ::std::list < Int32Pair_Impl > Int32PairList_Impl;
 class SwAccTableSelHander_Impl
 {
 public:
-    virtual ~SwAccTableSelHander_Impl() = 0;
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) = 0;
 };
 
-SwAccTableSelHander_Impl::~SwAccTableSelHander_Impl() {}
 
 //------------------------------------------------------------------------------
 
