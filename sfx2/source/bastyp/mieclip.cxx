@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 13:41:23 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
     delete pStrm;
 }
 
+#ifndef TF_SVDATA
 BOOL MSE40HTMLClipFormatObj::GetData( SotDataObject& rObj )
 {
     SvData aData( SOT_FORMATSTR_ID_HTML_SIMPLE );
@@ -105,6 +106,7 @@ BOOL MSE40HTMLClipFormatObj::GetData( SvData& rData )
         IsValid( *xStrm );
     return 0 != pStrm;
 }
+#endif
 
 SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {
@@ -162,6 +164,9 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 ////////////////////////////////////////////////////////////////////////////////
 //
 /* $Log: not supported by cvs2svn $
+/* Revision 1.2  2001/02/02 13:41:23  jp
+/* new: IsValid - checks if the stream contains the correct headerdata
+/*
 /* Revision 1.1.1.1  2000/09/18 16:52:28  hr
 /* initial import
 /*

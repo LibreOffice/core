@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: ssa $ $Date: 2001-05-11 16:40:38 $
+#   last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,6 @@ SLOFILES =  \
         $(SLO)$/sfxdll.obj \
         $(SLO)$/module.obj \
         $(SLO)$/picklist.obj \
-        $(SLO)$/exchobj.obj \
         $(SLO)$/appsys.obj \
         $(SLO)$/loadenv.obj \
         $(SLO)$/basmgr.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:44:39 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,10 @@
 #ifndef _CONFIG_HXX //autogen
 #include <vcl/config.hxx>
 #endif
+#ifndef TF_SVDATA
 #ifndef _DRAG_HXX //autogen
 #include <vcl/drag.hxx>
+#endif
 #endif
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
@@ -1036,7 +1038,7 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool bAutoSave )
 }
 
 //--------------------------------------------------------------------
-
+#ifndef TF_SVDATA
 sal_Bool Drop1_Impl( sal_uInt16 nSID, const String &rFile, sal_Bool bHidden,
                  SfxExecuteItem *&rpExecItem, SfxExecuteItem *&rpPrintItem )
 {
@@ -1218,7 +1220,7 @@ sal_Bool SfxApplication::QueryDrop( DropEvent& rEvt )
 {
     return QueryDrop_Impl( SID_OPENDOC, rEvt );
 }
-
+#endif
 //--------------------------------------------------------------------
 
 sal_Bool SfxApplication::IsInException() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:50:12 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,13 +218,7 @@ BOOL SfxApplication::QueryExit_Impl()
     {
         // Jetzt zur Sicherheit auch hidden Frames abr"aumen
         SfxViewFrame::CloseHiddenFrames_Impl();
-
         pLastDocSh = SfxObjectShell::GetFirst();
-        // nur dann auch die externen beseitigen
-        SvFactory::CloseExtConObj( TRUE );
-
-        // Alle externen Verbindungen zu eigenen Objekten terminieren
-        SvFactory::CloseExtConObj( FALSE );
     }
 
     // will trotzdem noch jemand, den man nicht abschiessen kann, die App haben?

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 13:52:09 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,7 +777,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         BOOL bReset = ((const SfxBoolItem *)pItem)->GetValue();
         Help* pHelp = Application::GetHelp();
 //        if ( bReset && pHelp )
-//            ((SfxHelp_Impl*)pHelp)->ResetPIStarterList();
+//            ((SfxHelp*)pHelp)->ResetPIStarterList();
     }
 
     // WelcomeScreen
@@ -1506,6 +1506,7 @@ void SfxApplicationClass::Property( ApplicationProperty& rProp )
                 }
             }
             break;
+/*
             case TT_PR_IMG:
             {
                 SvDataMemberObjectRef aDataObject = new SvDataMemberObject();
@@ -1516,6 +1517,7 @@ void SfxApplicationClass::Property( ApplicationProperty& rProp )
                 pTTProperties->nActualPR = 0;
             }
             break;
+*/
             default:
             {
                 pTTProperties->nPropertyVersion = 0;
