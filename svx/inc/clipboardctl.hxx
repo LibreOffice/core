@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 14:13:43 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,10 @@ class SvxClipboardFmtItem;
 
 class SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {
-//    SfxStatusForwarder      aForwarder;
     SfxPoolItem*            pClipboardFmtItem;
     PopupMenu*              pPopup;
     USHORT                  nItemId;
+    BOOL                    bDisabled;
 
     void                    DelPopup();
 
