@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:23:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,12 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
                     // SvtCJKOptions is ref-counted - can be constructed every time
                     SvtCJKOptions aCJKOptions;
                     if (!aCJKOptions.IsChangeCaseMapEnabled())
+                    {
+                        pViewData->GetBindings().SetVisibleState( nWhich, sal_False );
                         rSet.DisableItem( nWhich );
+                    }
+                    else
+                        pViewData->GetBindings().SetVisibleState( nWhich, sal_True );
                 }
                 break;
         }
