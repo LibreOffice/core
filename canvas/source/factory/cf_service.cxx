@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cf_service.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:18:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,12 @@ namespace {
 
 OUString SAL_CALL getImplName()
 {
-    return OUSTR("drafts.com.sun.star.comp.rendering.CanvasFactory");
+    return OUSTR("com.sun.star.comp.rendering.CanvasFactory");
 }
 
 Sequence<OUString> SAL_CALL getSuppServices()
 {
-    OUString name = OUSTR("drafts.com.sun.star.rendering.CanvasFactory");
+    OUString name = OUSTR("com.sun.star.rendering.CanvasFactory");
     return Sequence<OUString>(&name, 1);
 }
 
@@ -177,6 +177,7 @@ CanvasFactory::CanvasFactory(
     catch (Exception & exc) {
         (void) exc;
     }
+
     ::std::vector< ::rtl::OUString > services;
     sal_Int32 tokenPos = 0;
     do
@@ -193,12 +194,12 @@ CanvasFactory::CanvasFactory(
     sal_Int32 pos = m_services.getLength();
 #if defined WNT
     m_services.realloc( pos + 3 );
-    m_services[ pos++ ] = OUSTR("drafts.com.sun.star.rendering.DXCanvas");
+    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.DXCanvas");
 #else
     m_services.realloc( pos + 2 );
 #endif
-    m_services[ pos++ ] = OUSTR("drafts.com.sun.star.rendering.JavaCanvas");
-    m_services[ pos   ] = OUSTR("drafts.com.sun.star.rendering.VCLCanvas");
+    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.JavaCanvas");
+    m_services[ pos   ] = OUSTR("com.sun.star.rendering.VCLCanvas");
 }
 
 CanvasFactory::~CanvasFactory()
