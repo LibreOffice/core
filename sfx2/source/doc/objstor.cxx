@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:53:22 $
+ *  last change: $Author: mtg $ $Date: 2001-11-07 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_ADDXMLTOSTORAGEOPTIONS_HXX
 #include <svtools/addxmltostorageoptions.hxx>
+#endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
 #endif
 
 #include <svtools/saveopt.hxx>
@@ -1269,7 +1272,27 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > lDescriptor;
         rMedium.GetItemSet()->Put( SfxStringItem( SID_OPENURL, rMedium.GetName() ) );
         TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
-        xLoader->filter( lDescriptor );
+
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( lDescriptor.getLength() + 1);
+        com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
+        const com::sun::star::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
+        const OUString sInputStream ( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
+
+        sal_Bool bHasInputStream = sal_False;
+        for ( sal_Int32 i = 0, nEnd = lDescriptor.getLength(); i < nEnd; i++ )
+        {
+            pNewValue[i] = pOldValue[i];
+            if ( pOldValue [i].Name == sInputStream )
+                bHasInputStream = sal_True;
+        }
+        if ( !bHasInputStream )
+        {
+            pNewValue[i].Name = sInputStream;
+            pNewValue[i].Value <<= Reference < com::sun::star::io::XInputStream > ( new utl::OInputStreamWrapper ( *rMedium.GetInStream() ) );
+        }
+        else
+            aArgs.realloc ( i-1 );
+        xLoader->filter( aArgs );
         return sal_True;
     }
 
@@ -1278,8 +1301,8 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
 
 sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
 {
-    ::rtl::OUString aTypeName( GetMedium()->GetFilter()->GetTypeName() );
-    ::rtl::OUString aFilterName( GetMedium()->GetFilter()->GetFilterName() );
+    ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
+    ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > xExporter;
 
     {
@@ -1316,7 +1339,20 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp( GetModel(), ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xFilter( xExporter, ::com::sun::star::uno::UNO_QUERY );
         xExporter->setSourceDocument( xComp );
-        xFilter->filter( GetModel()->getArgs() );
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOldArgs ( GetModel()->getArgs() );
+        const com::sun::star::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() + 1 );
+        com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
+        // put in the REAL file name, and copy all PropertyValues
+        for ( sal_Int32 i = 0, nEnd = aOldArgs.getLength(); i < nEnd; i++ )
+        {
+            pNewValue[i] = pOldValue[i];
+            if ( pOldValue [i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FileName" ) ) )
+                pNewValue[i].Value <<= OUString ( rMedium.GetName() );
+        }
+        pNewValue[i].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
+        pNewValue[i].Value <<= Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+        xFilter->filter( aArgs );
         return sal_True;
     }
 
