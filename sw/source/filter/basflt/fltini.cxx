@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-24 17:23:53 $
+ *  last change: $Author: cmc $ $Date: 2002-10-31 12:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,7 @@ void _InitFilter()
     _SetFltPtr( nCnt, ReadSwg, FILTER_SWGV );
     _SetFltPtr( nCnt, (ReadRtf = new RtfReader), FILTER_RTF );
     _SetFltPtr( nCnt, new Sw6Reader, sSwDos );
-    _SetFltPtr( nCnt, (ReadAscii = new AsciiReader), FILTER_TEXT );
-    _SetFltPtr( nCnt, ReadAscii, FILTER_BAS );
+    _SetFltPtr( nCnt, (ReadAscii = new AsciiReader), FILTER_BAS );
     _SetFltPtr( nCnt, pWW8Rd, sWW6 );
     _SetFltPtr( nCnt, pWW8Rd, FILTER_WW8 );
     _SetFltPtr( nCnt, new W4WReader, FILTER_W4W );
@@ -241,8 +240,8 @@ void _InitFilter()
     _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_XML );
 
 #ifdef NEW_WW97_EXPORT
-    aReaderWriter[ 9 ].fnGetWriter =  &::GetWW8Writer;
-    aReaderWriter[ 10 ].fnGetWriter = &::GetWW8Writer;
+    aReaderWriter[ 8 ].fnGetWriter =  &::GetWW8Writer;
+    aReaderWriter[ 9 ].fnGetWriter = &::GetWW8Writer;
 #endif
 
 #ifdef DEBUG_SH
@@ -252,6 +251,8 @@ void _InitFilter()
 #if !( defined(PRODUCT) || defined(MAC) || defined(PM2))
     nCnt += 2;      // haben keine Reader sind nur EXPORT!
 #endif
+
+    _SetFltPtr( nCnt, ReadAscii, FILTER_TEXT );
 
     ASSERT( MAXFILTER == nCnt, "Anzahl Filter ungleich der Definierten" );
 }
