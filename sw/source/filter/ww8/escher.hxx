@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:06 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ protected:
     SvStream* QueryPicStream();
 
     virtual void SetPicId(const SdrObject &, UINT32, EscherPropertyContainer &);
+    SdrLayerID GetInvisibleHellId() const
+        {return rWrt.pDoc->GetInvisibleHellId();}
 public:
     SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
@@ -130,7 +132,8 @@ private:
     WW8_WrPlcTxtBoxes *pTxtBxs;
 
     UINT32 GetFlyShapeId( const SwFrmFmt& rFmt );
-    void MakeZOrderArrAndFollowIds( const ::std::vector<DrawObj>& rSrcArr );
+    void MakeZOrderArrAndFollowIds(std::vector<DrawObj>& rSrcArr,
+        std::vector<DrawObj*>& rDstArr);
 
     INT32 WriteFlyFrm(const SwFrmFmt& rFmt,UINT32 &rShapeId, short nDirection);
     INT32 WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
