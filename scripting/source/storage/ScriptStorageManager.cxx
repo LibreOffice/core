@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.20 $
+*  $Revision: 1.21 $
 *
-*  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
+*  last change: $Author: npower $ $Date: 2003-02-13 13:52:06 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -258,6 +258,15 @@ throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorageWithURI\n" );
     validateXRef( xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
+   sal_Int32 returnedID = getScriptStorageID(stringURI);
+
+   if (returnedID != -1)
+   {
+       OSL_TRACE("Using existing storage for %s",
+           ::rtl::OUStringToOString( stringURI,
+               RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+       return returnedID;
+   }
 
     // convert file:///... url to vnd... syntax
     ::rtl::OUString canonicalURI(
@@ -266,7 +275,7 @@ throw ( RuntimeException )
                                         rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
                                         RTL_TEXTENCODING_ASCII_US ) );
 
-    sal_Int32 returnedID = setupAnyStorage( xSFA, canonicalURI, stringURI );
+    returnedID = setupAnyStorage( xSFA, canonicalURI, stringURI );
     m_securityMgr.addScriptStorage( stringURI, returnedID );
     return returnedID;
 }
