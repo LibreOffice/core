@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-13 14:04:46 $
+ *  last change: $Author: ssa $ $Date: 2002-10-09 11:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,6 +1145,25 @@ BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
             bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
 
     return bProcessed;
+}
+
+// -----------------------------------------------------------------------
+
+void Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
+{
+    switch( nEvent )
+    {
+        case VCLEVENT_WINDOW_KEYINPUT:
+            nEvent = SALEVENT_EXTERNALKEYINPUT;
+            break;
+        case VCLEVENT_WINDOW_KEYUP:
+            nEvent = SALEVENT_EXTERNALKEYUP;
+            break;
+        default:
+            // unknown key event
+            return;
+    };
+    ImplWindowFrameProc( (void*) pWin, NULL, nEvent, (const void*) pKeyEvent );
 }
 
 // -----------------------------------------------------------------------

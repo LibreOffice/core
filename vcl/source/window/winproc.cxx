@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-11 16:53:07 $
+ *  last change: $Author: ssa $ $Date: 2002-10-09 11:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,30 +967,34 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
 // -----------------------------------------------------------------------
 
 static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
-                           USHORT nKeyCode, USHORT nCharCode, USHORT nRepeat )
+                           USHORT nKeyCode, USHORT nCharCode, USHORT nRepeat, BOOL bForward )
 {
     ImplSVData* pSVData = ImplGetSVData();
     KeyCode     aKeyCode( nKeyCode, nKeyCode );
     USHORT      nCode = aKeyCode.GetCode();
 
     // allow application key listeners to remove the key event
+    // but make sure we're not forwarding external KeyEvents, (ie where bForward is FALSE)
+    // becasue those are coming back from the listener itself and MUST be processed
     KeyEvent aKeyEvent( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
-    USHORT nVCLEvent;
-    switch( nSVEvent )
+    if( bForward )
     {
-    case EVENT_KEYINPUT:
-        nVCLEvent = VCLEVENT_WINDOW_KEYINPUT;
-        break;
-    case EVENT_KEYUP:
-        nVCLEvent = VCLEVENT_WINDOW_KEYUP;
-        break;
-    default:
-        DBG_ASSERT( 0 , "ImplHandleKey: Unknown event !");
-        nVCLEvent = 0;
-        break;
+        USHORT nVCLEvent;
+        switch( nSVEvent )
+        {
+            case EVENT_KEYINPUT:
+                nVCLEvent = VCLEVENT_WINDOW_KEYINPUT;
+                break;
+            case EVENT_KEYUP:
+                nVCLEvent = VCLEVENT_WINDOW_KEYUP;
+                break;
+            default:
+                nVCLEvent = 0;
+                break;
+        }
+        if( nVCLEvent && pSVData->mpApp->HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
+            return 1;
     }
-    if( nVCLEvent && pSVData->mpApp->HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
-        return 1;
 
     BOOL bCtrlF6 = (aKeyCode.GetCode() == KEY_F6) && aKeyCode.IsMod1();
 
@@ -2019,17 +2023,19 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             break;
 
         case SALEVENT_KEYINPUT:
+        case SALEVENT_EXTERNALKEYINPUT:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
             nRet = ImplHandleKey( (Window*)pInst, EVENT_KEYINPUT,
-                                  pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat );
+                pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, SALEVENT_KEYINPUT ? TRUE : FALSE );
             }
             break;
         case SALEVENT_KEYUP:
+        case SALEVENT_EXTERNALKEYUP:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
             nRet = ImplHandleKey( (Window*)pInst, EVENT_KEYUP,
-                                  pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat );
+                pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, SALEVENT_KEYUP ? TRUE : FALSE );
             }
             break;
         case SALEVENT_KEYMODCHANGE:
@@ -2231,14 +2237,14 @@ void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
         {
             RmKeyEventData* pData = (RmKeyEventData*)pEvent->GetData();
             ImplHandleKey( pEvent->GetWindow(), EVENT_KEYINPUT,
-                           pData->nKeyCode, pData->nChar, pData->nCount );
+                           pData->nKeyCode, pData->nChar, pData->nCount, TRUE );
         }
         break;
         case RMEVENT_KEYUP:
         {
             RmKeyEventData* pData = (RmKeyEventData*)pEvent->GetData();
             ImplHandleKey( pEvent->GetWindow(), EVENT_KEYUP,
-                           pData->nKeyCode, pData->nChar, 0 );
+                           pData->nKeyCode, pData->nChar, 0, TRUE );
         }
         break;
         case RMEVENT_MOUSEBUTTONDOWN:
