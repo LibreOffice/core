@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFieldMaster.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:43 $
+ *  last change: $Author: os $ $Date: 2001-04-20 11:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
-
+#ifndef __com_sun_star_text_XDependentTextField_idl__
+#include <com/sun/star/text/XDependentTextField.idl>
+#endif
 
 //=============================================================================
 
@@ -72,20 +74,28 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextFieldMaster
 /** A <type>TextFieldMaster</type> specifies important data for its
     <type>DependentTextField</type>s.
  */
 service TextFieldMaster
 {
-
-
-    // DocMerge from xml: service com::sun::star::text::TextFieldMaster: interface com::sun::star::beans::XPropertySet
     /** This optional interface makes it possible to access properties of
                 this field master, if any.
-                /* [optional]
      */
     [optional] interface com::sun::star::beans::XPropertySet;
+    //------------------------------------------------------------------------
+    /** determins the name of the field master.
+     */
+    [property]  string Name;
+        //------------------------------------------------------------------------
+    /** contains a sequence of all fields that depend on this master.
+     */
+    [property]  sequence< XDependentTextField> DependentTextFields;
+    //------------------------------------------------------------------------
+    /** contains the instance name as it is used in the <type scope="::com::sun::star::text">
+        XTextFieldsSupplier</type>.
+     */
+    [property]  string InstanceName;
 };
 
 //=============================================================================
