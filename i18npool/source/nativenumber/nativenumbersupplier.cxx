@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-20 02:28:47 $
+ *  last change: $Author: er $ $Date: 2002-06-26 16:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,9 +595,9 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
         numberChar[i] = NumberChar[i][1];
     OUString number(numberChar, NumberChar_Count);
 
-    sal_Int16 num = number.indexOf(aAttr.Number);
+    sal_Int16 num = number.indexOf(aAttr.Format);
 
-    if (aAttr.Type.equalsAscii("short")) {
+    if (aAttr.Style.equalsAscii("short")) {
         if (num == NumberChar_FullWidth)
         return NativeNumberMode::NATNUM3;
         else if (num == NumberChar_Hangul_ko)
@@ -606,14 +606,14 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
         return NativeNumberMode::NATNUM1;
         else if (natNumIn(num, natnum2, sizeof_natnum2))
         return NativeNumberMode::NATNUM2;
-    } else if (aAttr.Type.equalsAscii("medium")) {
+    } else if (aAttr.Style.equalsAscii("medium")) {
         if (num == NumberChar_Hangul_ko)
         return NativeNumberMode::NATNUM11;
         else if (natNumIn(num, natnum1, sizeof_natnum1))
         return NativeNumberMode::NATNUM7;
         else if (natNumIn(num, natnum2, sizeof_natnum2))
         return NativeNumberMode::NATNUM8;
-    } else if (aAttr.Type.equalsAscii("long")) {
+    } else if (aAttr.Style.equalsAscii("long")) {
         if (num == NumberChar_FullWidth)
         return NativeNumberMode::NATNUM6;
         else if (num == NumberChar_Hangul_ko)
