@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:34:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,8 @@ protected:
     virtual void    ReadUserData(const String &, BOOL bBrowse = FALSE);
     virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
+
+    virtual void    UIDeactivated( SfxInPlaceClient* pClient );
 
     virtual FASTBOOL KeyInput( const KeyEvent &rKeyEvent );
     virtual SdrView* GetDrawView() const;
