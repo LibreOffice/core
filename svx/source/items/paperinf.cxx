@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paperinf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 11:15:54 $
+ *  last change: $Author: pb $ $Date: 2001-11-16 12:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,19 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#pragma hdrstop
+#endif
 
+#ifndef _SVX_DIALOGS_HRC
 #include "dialogs.hrc"
-
+#endif
+#ifndef _SVX_PAPERINF_HXX
 #include "paperinf.hxx"
+#endif
+#ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
+#endif
 
 #define SVX_PAPER_OFFSET    3   // Anfang: enum Paper A3 - SvxPaper A0; Diff=3
 
@@ -119,7 +124,10 @@ static Size __FAR_DATA aDinTab[] =
     Size(lCom12Width, lCom12Height),    // COM-12
     Size(lKai16Width, lKai16Height),    // 16 kai
     Size(lKai32Width, lKai32Height),    // 32 kai
-    Size(lKai32BigWidth, lKai32BigHeight) // 32 kai gross
+    Size(lKai32BigWidth, lKai32BigHeight), // 32 kai gross
+    Size(lJISB4Width, lJISB4Height),       // B4 (JIS)
+    Size(lJISB5Width, lJISB5Height),       // B5 (JIS)
+    Size(lJISB6Width, lJISB6Height)        // B6 (JIS)
 };
 
 static const int nTabSize = sizeof(aDinTab) / sizeof(aDinTab[0]);
@@ -202,7 +210,7 @@ SvxPaper GetPaper_Impl( const Size &rSize, MapUnit eUnit, BOOL bSloppy )
     Beschreibung:   Ist der Printer gueltig
  --------------------------------------------------------------------*/
 
-inline BOOL IsValidPrinter(const Printer *pPtr)
+inline BOOL IsValidPrinter( const Printer* pPtr )
 {
     return pPtr->GetName().Len() ? TRUE : FALSE;
 }
@@ -270,16 +278,14 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
                 verglichen.
 ------------------------------------------------------------------------*/
 
-SvxPaper SvxPaperInfo::GetPaper( const Size &rSize, MapUnit eUnit,
-                                 BOOL bSloppy )
+SvxPaper SvxPaperInfo::GetPaper( const Size &rSize, MapUnit eUnit, BOOL bSloppy )
 {
     return GetPaper_Impl( rSize, eUnit, bSloppy );
 }
 
 // -----------------------------------------------------------------------
 
-SvxPaper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit,
-                                    BOOL bSloppy )
+SvxPaper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit, BOOL bSloppy )
 {
     return GetPaper_Impl( rSize, eUnit, bSloppy );
 }
@@ -289,20 +295,22 @@ SvxPaper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit,
 Paper SvxPaperInfo::GetSvPaper( const Size &rSize, MapUnit eUnit,
                                 BOOL bSloppy )
 {
+    Paper eRet = PAPER_USER;
     SvxPaper ePaper = GetPaper_Impl( rSize, eUnit, bSloppy );
 
     switch ( ePaper )
     {
-        case SVX_PAPER_A3:      return PAPER_A3;
-        case SVX_PAPER_A4:      return PAPER_A4;
-        case SVX_PAPER_A5:      return PAPER_A5;
-        case SVX_PAPER_B4:      return PAPER_B4;
-        case SVX_PAPER_B5:      return PAPER_B5;
-        case SVX_PAPER_LETTER:  return PAPER_LETTER;
-        case SVX_PAPER_LEGAL:   return PAPER_LEGAL;
-        case SVX_PAPER_TABLOID: return PAPER_TABLOID;
-        default:                return PAPER_USER;
+        case SVX_PAPER_A3:      eRet = PAPER_A3;
+        case SVX_PAPER_A4:      eRet = PAPER_A4;
+        case SVX_PAPER_A5:      eRet = PAPER_A5;
+        case SVX_PAPER_B4:      eRet = PAPER_B4;
+        case SVX_PAPER_B5:      eRet = PAPER_B5;
+        case SVX_PAPER_LETTER:  eRet = PAPER_LETTER;
+        case SVX_PAPER_LEGAL:   eRet = PAPER_LEGAL;
+        case SVX_PAPER_TABLOID: eRet = PAPER_TABLOID;
     }
+
+    return eRet;
 }
 
 /*------------------------------------------------------------------------
@@ -352,13 +360,14 @@ String SvxPaperInfo::GetName( SvxPaper ePaper )
         case SVX_PAPER_KAI16:       nResId = RID_SVXSTR_PAPER_KAI16;    break;
         case SVX_PAPER_KAI32:       nResId = RID_SVXSTR_PAPER_KAI32;    break;
         case SVX_PAPER_KAI32BIG:    nResId = RID_SVXSTR_PAPER_KAI32BIG; break;
+        case SVX_PAPER_B4_JIS:      nResId = RID_SVXSTR_PAPER_B4_JIS;   break;
+        case SVX_PAPER_B5_JIS:      nResId = RID_SVXSTR_PAPER_B5_JIS;   break;
+        case SVX_PAPER_B6_JIS:      nResId = RID_SVXSTR_PAPER_B6_JIS;   break;
 
-        default: DBG_ERROR( "unknown papersize" );
+        default: DBG_ERRORFILE( "unknown papersize" );
     }
 
-    if ( nResId )
-        return String( SVX_RES( nResId ) );
-    return String();
+    return ( nResId > 0 ) ? String( SVX_RES( nResId ) ) : String();
 }
 
 

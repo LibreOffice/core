@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: pb $ $Date: 2001-11-16 12:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 #ifndef _SVX_PAGE_H
 #define _SVX_PAGE_H
 
-// include ---------------------------------------------------------------
-
 // define ----------------------------------------------------------------
 
 #define PAPERSIZE_A0            0
@@ -101,7 +99,9 @@
 #define PAPERSIZE_KAI16         33
 #define PAPERSIZE_KAI32         34
 #define PAPERSIZE_KAI32BIG      35
-
+#define PAPERSIZE_B4_JIS        36
+#define PAPERSIZE_B5_JIS        37
+#define PAPERSIZE_B6_JIS        38
 
 #endif
 
