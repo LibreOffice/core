@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dsphereproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:49:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _SDR_PROPERTIES_E3DSPHEREPROPERTIES_HXX
 #include <svx/sdr/properties/e3dsphereproperties.hxx>
+#endif
+
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
