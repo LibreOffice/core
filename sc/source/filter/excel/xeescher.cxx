@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:02:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
         case FormCompType::SCROLLBAR:
         {
-            sal_uInt32 nApiValue;
+            sal_Int32 nApiValue;
             if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMin" ) ) )
                 mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
             if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMax" ) ) )
@@ -525,7 +525,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
         case FormCompType::SPINBUTTON:
         {
-            sal_uInt32 nApiValue;
+            sal_Int32 nApiValue;
             if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMin" ) ) )
                 mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
             if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMax" ) ) )
@@ -728,7 +728,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         const ScPostIt* pScNote, const String& rAddText ) :
     XclExpRecord( EXC_ID_NOTE ),
     maScPos( rScPos ),
-    mnObjId( 0 ),
+    mnObjId( EXC_OBJ_INVALID_ID ),
     mbVisible( pScNote && pScNote->IsShown() )
 {
     // get the main note text
@@ -741,13 +741,12 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     // initialize record dependent on BIFF type
     switch( rRoot.GetBiff() )
     {
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
             maNoteText = ByteString( aNoteText, rRoot.GetCharSet() );
         break;
 
-        case xlBiff8:
-{
+        case EXC_BIFF8:
+        {
             ::std::auto_ptr <EditTextObject> pObj; ;
             const EditTextObject* pEditObj;
             Rectangle aRect;
@@ -784,13 +783,13 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
 
             // create the Escher object
             if(pObj.get())
-                mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, aRect, *pObj, pCaption.get(), mbVisible ) );
+                mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, aRect, *pObj, pCaption.get(), mbVisible ) );
 
             if( pScNote )
                 pScNote->RemoveObject(pCaption.get(), rDoc, rScPos.Tab());
 
             SetRecSize( 9 + maAuthor.GetSize() );
-}
+        }
         break;
 
         default:    DBG_ERROR_BIFF();
@@ -801,8 +800,7 @@ void XclExpNote::Save( XclExpStream& rStrm )
 {
     switch( rStrm.GetRoot().GetBiff() )
     {
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
         {
             // write the NOTE record directly, there may be the need to create more than one
             const sal_Char* pcBuffer = maNoteText.GetBuffer();
@@ -836,8 +834,8 @@ void XclExpNote::Save( XclExpStream& rStrm )
         }
         break;
 
-        case xlBiff8:
-            if( mnObjId != 0 )
+        case EXC_BIFF8:
+            if( mnObjId != EXC_OBJ_INVALID_ID )
                 XclExpRecord::Save( rStrm );
         break;
 
@@ -848,7 +846,7 @@ void XclExpNote::Save( XclExpStream& rStrm )
 void XclExpNote::WriteBody( XclExpStream& rStrm )
 {
     // BIFF5/BIFF7 is written separately
-    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= xlBiff8 );
+    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
 
     sal_uInt16 nFlags = 0;
     ::set_flag( nFlags, EXC_NOTE_VISIBLE, mbVisible );
