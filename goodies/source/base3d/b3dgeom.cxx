@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dgeom.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: aw $ $Date: 2001-10-15 15:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@ void B3dGeometry::Reset()
     if(pComplexPolygon)
         delete pComplexPolygon;
     pComplexPolygon = NULL;
+
+    // #93136# since #92030# uses bOutline flag now as indication
+    // if the filled object is to be drawn, it MUST be initialized now.
+    bOutline = FALSE;
 }
 
 /*************************************************************************
