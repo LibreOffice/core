@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:02:18 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     ::Size aActSize( pToolBar->GetSizePixel() );
                     ::Size aSize( pToolBar->CalcWindowSizePixel() );
                     aSize.Width() = aActSize.Width();
-                    pToolBar->SetSizePixel( aSize );
+                    pToolBar->SetOutputSizePixel( aSize );
                 }
             }
             catch ( NoSuchElementException& )
@@ -350,7 +350,7 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::c
         if ( pToolBarManager )
         {
             Window* pWindow = (Window *)pToolBarManager->GetToolBar();
-            return VCLUnoHelper::GetInterface( pWindow );
+            return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
         }
     }
 
