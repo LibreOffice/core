@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-05 13:50:43 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 14:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@
 #ifndef _SFX_DOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
+#ifndef _SFX_HELP_HXX
+#include <sfx2/sfxhelp.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 // fuer die Sort-String-Arrays aus dem SVMEM.HXX
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
@@ -170,9 +176,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
 #endif
 
 using namespace ::com::sun::star::ucb;
@@ -296,14 +299,7 @@ static ::com::sun::star::uno::Reference<
 
 static USHORT GetAppLang()
 {
-    static USHORT nLang = USHRT_MAX;
-    if( USHRT_MAX == nLang )
-    {
-        if( LANGUAGE_SYSTEM == ( nLang =
-            Application::GetAppInternational().GetLanguage()))
-            nLang = System::GetLanguage();
-    }
-    return nLang;
+    return Application::GetSettings().GetLanguage();
 }
 static ::com::sun::star::lang::Locale& GetAppLocale()
 {
@@ -1360,6 +1356,48 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
     } while( FALSE );
 
+    SfxViewFrame* pVFrame;
+    if( nRet && 0 != (pVFrame = SfxViewFrame::Current()) &&
+        pVFrame->GetFrame() )
+    {
+        ULONG nHelpId = 0;
+//      if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd|ChgToEnEmDash ) )
+        if( nRet & ( Autocorrect|CptlSttSntnc|CptlSttWrd) )
+        {
+            // von 0 - 15
+//          if( nRet & ChgToEnEmDash )
+//              nHelpId += 8;
+            if( nRet & Autocorrect )
+                nHelpId += 4;
+            if( nRet & CptlSttSntnc )
+                nHelpId += 2;
+            if( nRet & CptlSttWrd )
+                nHelpId += 1;
+        }
+        else
+        {
+                 if( nRet & ChgQuotes)          nHelpId =  8;
+            else if( nRet & ChgSglQuotes)       nHelpId =  9;
+            else if( nRet & SetINetAttr)        nHelpId = 10;
+            else if( nRet & IngnoreDoubleSpace) nHelpId = 11;
+            else if( nRet & ChgWeightUnderl)    nHelpId = 12;
+            else if( nRet & ChgFractionSymbol ) nHelpId = 13;
+            else if( nRet & ChgToEnEmDash )     nHelpId = 14;
+            else if( nRet & ChgOrdinalNumber)   nHelpId = 15;
+        }
+
+        DBG_ASSERT( nHelpId && nHelpId < (HID_AUTOCORR_HELP_END -
+                                          HID_AUTOCORR_HELP_START + 1),
+                    "wrong HelpId Range" );
+
+        if( nHelpId )
+        {
+            nHelpId += HID_AUTOCORR_HELP_START - 1;
+            SfxHelp::OpenHelpAgent( pVFrame->GetFrame(), nHelpId );
+        }
+    }
+
+
     return nRet;
 }
 
@@ -2163,7 +2201,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                     uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
                     SvXMLExceptionListExport aExp(rLst, sStrmName, xHandler);
-                aExp.exportDoc( xmloff::token::XML_BLOCK_LIST );
+                aExp.exportDoc( sXML_block_list );
 
                 xStrm->Commit();
                 if( xStrm->GetError() == SVSTREAM_OK )
@@ -2788,7 +2826,7 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
                 uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
                 SvXMLAutoCorrectExport aExp(pAutocorr_List, sStrmName, xHandler);
-            aExp.exportDoc( xmloff::token::XML_BLOCK_LIST );
+            aExp.exportDoc( sXML_block_list );
 
             refList->Commit();
             bRet = SVSTREAM_OK == refList->GetError();

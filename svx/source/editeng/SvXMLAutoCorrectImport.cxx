@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-05 13:54:07 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 14:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,9 @@ SvXMLWordContext::SvXMLWordContext(
     if (!sWrong.Len() || !sRight.Len() )
         return;
 
-    const International& rInter = Application::GetAppInternational();
-    BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
+//  const International& rInter = Application::GetAppInternational();
+//  BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
+    BOOL bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
         String sLongSave( sRight );
