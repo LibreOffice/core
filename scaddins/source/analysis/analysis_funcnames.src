@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:57:50 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 00:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "WORKDAY";
         Text[ russian ] = "пюадемэ";
         Text[ greek ] = "WORKDAY";
-        Text[ dutch ] = "WORKDAY";
+        Text[ dutch ] = "WERKDAG";
         Text[ french ] = "SERIE.JOUR.OUVRE";
         Text[ spanish ] = "DIA.LAB";
         Text[ finnish ] = "WORKDAY";
@@ -152,7 +152,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "WEEKNUM";
         Text[ russian ] = "мнлмедекх";
         Text[ greek ] = "WEEKNUM";
-        Text[ dutch ] = "WEEKNUM";
+        Text[ dutch ] = "WEEKNUMMER";
         Text[ french ] = "NO.SEMAINE";
         Text[ spanish ] = "NUM.DE.SEMANA";
         Text[ finnish ] = "WEEKNUM";
@@ -308,7 +308,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "ACCRINTM";
         Text[ russian ] = "мюйноднундонцюь";
         Text[ greek ] = "ACCRINTM";
-        Text[ dutch ] = "ACCRINTM";
+        Text[ dutch ] = "SAMENG.RENTE.V";
         Text[ french ] = "INTERET.ACC.MAT";
         Text[ spanish ] = "INT.ACUM.V";
         Text[ finnish ] = "ACCRINTM";
@@ -386,7 +386,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "DURATION";
         Text[ russian ] = "дкхр";
         Text[ greek ] = "DURATION";
-        Text[ dutch ] = "DURATION";
+        Text[ dutch ] = "DUUR";
         Text[ french ] = "DUREE";
         Text[ spanish ] = "DURACION";
         Text[ finnish ] = "DURATION";
@@ -412,7 +412,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "EFFECT";
         Text[ russian ] = "щттейр";
         Text[ greek ] = "EFFECT";
-        Text[ dutch ] = "EFFECT";
+        Text[ dutch ] = "EFFECT.RENTE";
         Text[ french ] = "TAUX.EFFECTIF";
         Text[ spanish ] = "INT.EFECTIVO";
         Text[ finnish ] = "EFFECT";
@@ -490,7 +490,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "PRICE";
         Text[ russian ] = "жемю";
         Text[ greek ] = "PRICE";
-        Text[ dutch ] = "PRICE";
+        Text[ dutch ] = "PRIJS.NOM";
         Text[ french ] = "PRIX.TITRE";
         Text[ spanish ] = "PRECIO";
         Text[ finnish ] = "PRICE";
@@ -542,7 +542,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "PRICEMAT";
         Text[ russian ] = "жемюонцюь";
         Text[ greek ] = "PRICEMAT";
-        Text[ dutch ] = "PRICEMAT";
+        Text[ dutch ] = "PRIJS.VERVALDAG";
         Text[ french ] = "PRIX.TITRE.ECHEANCE";
         Text[ spanish ] = "PRECIO.VENCIMIENTO";
         Text[ finnish ] = "PRICEMAT";
@@ -568,7 +568,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "MDURATION";
         Text[ russian ] = "лдкхр";
         Text[ greek ] = "MDURATION";
-        Text[ dutch ] = "MDURATION";
+        Text[ dutch ] = "AANG.DUUR";
         Text[ french ] = "DUREE.MODIFIEE";
         Text[ spanish ] = "DURACION.MODIF";
         Text[ finnish ] = "MDURATION";
@@ -646,7 +646,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "DOLLARDE";
         Text[ russian ] = "псакэ.дея";
         Text[ greek ] = "DOLLARDE";
-        Text[ dutch ] = "DOLLARDE";
+        Text[ dutch ] = "GULDEN.DE";
         Text[ french ] = "PRIX.DEC";
         Text[ spanish ] = "MONEDA.DEC";
         Text[ finnish ] = "DOLLARDE";
@@ -698,7 +698,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "YIELDDISC";
         Text[ russian ] = "днундяйхдйю";
         Text[ greek ] = "YIELDDISC";
-        Text[ dutch ] = "YIELDDISC";
+        Text[ dutch ] = "REND.DISCONTO";
         Text[ french ] = "RENDEMENT.SIMPLE";
         Text[ spanish ] = "RENDTO.DESC";
         Text[ finnish ] = "YIELDDISC";
@@ -748,9 +748,9 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text [ english ] = "TBILLEQ";
         Text[ english_us ] = "TBILLEQ";
         Text[ portuguese ] = "TBILLEQ";
-        Text[ russian ] = "TBILLEQ";
+        Text[ russian ] = "пюбмнйвей";
         Text[ greek ] = "TBILLEQ";
-        Text[ dutch ] = "TBILLEQ";
+        Text[ dutch ] = "SCHATKIST.OBL";
         Text[ french ] = "TAUX.ESCOMPTE.R";
         Text[ spanish ] = "LETRA.DE.TES.EQV.A.BONO";
         Text[ finnish ] = "TBILLEQ";
@@ -802,7 +802,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "TBILLYIELD";
         Text[ russian ] = "днундйвей";
         Text[ greek ] = "TBILLYIELD";
-        Text[ dutch ] = "TBILLYIELD";
+        Text[ dutch ] = "SCHATK.REND";
         Text[ french ] = "RENDEMENT.BON.TRESOR";
         Text[ spanish ] = "LETRA.DE.TES.RENDTO";
         Text[ finnish ] = "TBILLYIELD";
@@ -854,7 +854,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text[ portuguese ] = "ODDFYIELD";
         Text[ russian ] = "днундоепбмепец";
         Text[ greek ] = "ODDFYIELD";
-        Text[ dutch ] = "ODDFYIELD";
+        Text[ dutch ] = "AFW.ET.REND";
         Text[ french ] = "REND.PCOUPON.IRREG";
         Text[ spanish ] = "RENDTO.PER.IRREGULAR.1";
         Text[ finnish ] = "ODDFYIELD";
@@ -2485,4 +2485,5 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
     };
 
 };
+
 
