@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:14:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@
 #endif
 #ifndef _XMLOFF_XMLEMBEDDEDOBJECTEXPORTFILTER_HXX
 #include "XMLEmbeddedObjectExportFilter.hxx"
+#endif
+#ifndef _XMLOFF_XMLBASICEXPORTFILTER_HXX
+#include "XMLBasicExportFilter.hxx"
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -1345,16 +1348,56 @@ void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rS
 
 void SvXMLExport::_ExportScripts()
 {
-    // <office:script>
-    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS,
-                            sal_True, sal_True );
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, sal_True, sal_True );
 
-    // embedded scripts are not implemented, but would have to go here.
+    // export Basic macros (only for FlatXML)
+    if ( mnExportFlags & EXPORT_EMBEDDED )
+    {
+        ::rtl::OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
+        aValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":Basic" ) );
+        AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, aValue );
 
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, sal_True, sal_True );
+
+        // initialize Basic
+        if ( xModel.is() )
+        {
+            Reference< beans::XPropertySet > xPSet( xModel, UNO_QUERY );
+            if ( xPSet.is() )
+                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) );
+        }
+
+        Reference< document::XExporter > xExporter;
+        Reference< lang::XMultiServiceFactory > xMSF( getServiceFactory() );
+        if ( xMSF.is() )
+        {
+            Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( xHandler ) );
+            Sequence < Any > aArgs( 1 );
+            aArgs[0] <<= xHdl;
+            xExporter.set( xMSF->createInstanceWithArguments(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLOasisBasicExporter" ) ), aArgs ),
+                UNO_QUERY );
+        }
+
+        OSL_ENSURE( xExporter.is(),
+            "SvXMLExport::_ExportScripts: can't instantiate export filter component for Basic macros" );
+
+        if ( xExporter.is() )
+        {
+            Reference< XComponent > xComp( xModel, UNO_QUERY );
+            xExporter->setSourceDocument( xComp );
+            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
+            if ( xFilter.is() )
+            {
+                Sequence < PropertyValue > aMediaDesc( 0 );
+                xFilter->filter( aMediaDesc );
+            }
+        }
+    }
 
     // export document events
-    Reference<document::XEventsSupplier> xEvents(GetModel(), UNO_QUERY);
-    GetEventExport().Export(xEvents, sal_True);
+    Reference< document::XEventsSupplier > xEvents( GetModel(), UNO_QUERY );
+    GetEventExport().Export( xEvents, sal_True );
 }
 
 void SvXMLExport::_ExportFontDecls()
