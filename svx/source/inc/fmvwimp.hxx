@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:11:47 $
+ *  last change: $Author: fs $ $Date: 2001-08-09 09:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,18 @@
 
 class SdrPageViewWinRec;
 class SdrPageView;
+class SdrObject;
+class FmFormObj;
 class Window;
-//FORWARD_DECLARE_INTERFACE(uno,Reference)
+class OutputDevice;
 FORWARD_DECLARE_INTERFACE(awt,XControl)
+FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
+FORWARD_DECLARE_INTERFACE(util,XNumberFormats)
 class FmXFormController;
+
+namespace svx {
+    class ODataAccessDescriptor;
+}
 
 //==================================================================
 // FmXPageViewWinRec
@@ -220,6 +228,7 @@ public:
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xORB; }
+
 protected:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
     void addWindow(const SdrPageViewWinRec*);
@@ -228,6 +237,19 @@ protected:
     void Deactivate(SdrPageView* pPageView, BOOL bDeactivateController = TRUE);
 
     void smartControlReset( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxModels );
+
+    SdrObject* implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
+
+    void createControlLabelPair(
+        OutputDevice* _pOutDev,
+        sal_Int32 _nYOffsetMM,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
+        sal_uInt16 _nObjID,
+        const ::rtl::OUString& _rFieldPostfix,
+        FmFormObj*& _rpLabel,
+        FmFormObj*& _rpControl
+    ) const;
 
     /// the the auto focus to the first (in terms of the tab order) control
     void AutoFocus();
