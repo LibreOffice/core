@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 13:54:21 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 13:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,11 +307,32 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
 */
             rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
             sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
+            int nLen;
             ByteString sData;
 
+/*
+            rIStm >> nLen;
+            rIStm.SeekRel( -sizeof( int ));
+            sal_Char* pBuf = new sal_Char[ nLen ];
+            rIStm.Read( pBuf, nLen );
+            ImageData_Impl* pImgData = (ImageData_Impl*)pBuf;
+
+            const sal_Char* pStart = (const sal_Char*)pImgData;
+            aImageURL = String( (const sal_Char*)&(pImgData->pImageURL[0]),
+                                eSysCSet );
+            if( pImgData->iAltOffset )
+                aAlternateText = String( (pStart + pImgData->iAltOffset), eSysCSet );
+            if( pImgData->iAnchorOffset )
+                aTargetURL = String( (pStart + pImgData->iAnchorOffset), eSysCSet );
+
+            aSizePixel.Width() = pImgData->iWidth;
+            aSizePixel.Height() = pImgData->iHeight;
+            delete pBuf;
+*/
+
             nFilePos = rIStm.Tell();
-            // skip over iSize, bIsMao
-            rIStm.SeekRel( sizeof( int ) + sizeof( BOOL ) );
+            // skip over iSize (int), bIsMao ( BOOL ) alignment of 4 !!!!
+            rIStm.SeekRel( 8 );
             rIStm >> nVal;  aSizePixel.Width() = nVal;
             rIStm >> nVal;  aSizePixel.Height() = nVal;
             // skip over iHSpace, iVSpace, iBorder, iLowResOffset
@@ -337,7 +358,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
             }
             else if( aTargetURL.Len() )
                 aTargetURL.Erase();
-
+/**/
             bRet = 0 == rIStm.GetError();
         }
         break;
