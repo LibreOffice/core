@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConversionDictionaryType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:19:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@ constants ConversionDictionaryType
     */
     const short HANGUL_HANJA        = 1;
 
+    /** Dictionary type for the conversion between Simplified and Traditionary Chinese
+
+        @since #i29300#
+    */
+    const short SCHINESE_TCHINESE   = 2;
 };
 
 //=============================================================================
