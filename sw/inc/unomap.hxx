@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 12:38:49 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@
 #define WID_DOC_CURRENT_DATABASE_DATA_SOURCE    1023
 #define WID_DOC_CURRENT_DATABASE_COMMAND        1024
 #define WID_DOC_CURRENT_DATABASE_COMMAND_TYPE   1025
+#define WID_DOC_CHANGES_PASSWORD                1026
 
 //AutoText
 #define WID_GROUP_PATH                          0
