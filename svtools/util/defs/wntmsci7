@@ -10228,3 +10228,17 @@ lpfnDrawStateW
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3137423074@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3137423074@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3137423074@@YAEABVString@@AAV2@@Z
+?UseVariable@SvtPathOptions@@QAE?AVString@@ABV2@@Z
+?IsConfirmationEnabled@SvtSecurityOptions@@QBEEXZ
+?IsWarningEnabled@SvtSecurityOptions@@QBEEXZ
+?SetConfirmationEnabled@SvtSecurityOptions@@QAEXE@Z
+?SetWarningEnabled@SvtSecurityOptions@@QAEXE@Z
+??0?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAE@J@Z
+??0MenuEntry@@QAE@ABU0@@Z
+??1MenuEntry@@QAE@XZ
+??4?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAAAV01234@ABV01234@@Z
+??RCountWithPrefixSort@@QBEHABVOUString@rtl@@0@Z
+?AppendSetupEntry@Menu@@QAEXABUMenuEntry@@@Z
+?GetList@Menu@@QBE?AV?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?impl_getNextUserEntryNr@Menu@@ABEJXZ
+?indexOf@OUString@rtl@@QBEJABV12@J@Z
