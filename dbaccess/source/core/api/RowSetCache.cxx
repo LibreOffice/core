@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-26 15:18:17 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #endif
@@ -156,16 +159,22 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
 
+    ::rtl::OUString aUpdateTableName = _rUpdateTableName;
+    Reference< XConnection> xConnection;
     if(_xComposer.is())
     {
         Reference<XTablesSupplier> xTabSup(_xComposer,UNO_QUERY);
         OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
         Reference<XNameAccess> xTables = xTabSup->getTables();
 
-        if(_rUpdateTableName.getLength())
+
+        if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
             xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
         else
-            xTables->getByName(xTables->getElementNames()[0]) >>= m_aUpdateTable;
+        {
+            aUpdateTableName = xTables->getElementNames()[0];
+            xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
+        }
 
         if(m_aUpdateTable.is())
         {
@@ -190,19 +199,24 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
                 if(xColumnsSupplier.is())
                 {
+                    // first we need a connection
+                    Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
+                    if(xStmt.is())
+                        xConnection = xStmt->getConnection();
+                    else
+                    {
+                        Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
+                        xConnection = xPrepStmt->getConnection();
+                    }
+                    OSL_ENSURE(xConnection.is(),"No connection!");
+
                     Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-
-                    Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
-                    const ::rtl::OUString* pBegin = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-
                     Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
                     Reference<XNameAccess> xSelColumns = xColSup->getColumns();
-                    for(;pBegin != pEnd ;++pBegin)
-                    {
-                        if(!(bAllKeysFound = xSelColumns->hasByName(*pBegin))) // found a column which is not refetched
-                            break;
-                    }
+
+                    OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                    ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+                    bAllKeysFound = aColumnNames.size() == xColumns->getElementNames().getLength();
                 }
             }
         }
@@ -242,9 +256,38 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         }
         else
         {
-            m_pCacheSet = new OKeySet(_xRs,m_aUpdateTable,_xComposer);
+            OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+            Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+            Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
+            Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();
+            ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+
             // check privileges
             m_nPrivileges = Privilege::SELECT;
+            sal_Bool bNoInsert = sal_False;
+
+            Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
+            const ::rtl::OUString* pBegin   = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+            for(;pBegin != pEnd;++pBegin)
+            {
+                Reference<XPropertySet> xColumn;
+                xColumns->getByName(*pBegin) >>= xColumn;
+                OSL_ENSURE(xColumn.is(),"Column in table is null!");
+                if(xColumn.is())
+                {
+                    sal_Int32 nNullable = 0;
+                    xColumn->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullable;
+                    if(nNullable == ColumnValue::NO_NULLS && aColumnNames.find(*pBegin) == aColumnNames.end())
+                    { // we found a column where null is not allowed so we can't insert new values
+                        bNoInsert = sal_True;
+                        break; // one column is enough
+                    }
+                }
+            }
+
+            m_pCacheSet = new OKeySet(_xRs,m_aUpdateTable,aUpdateTableName ,_xComposer);
+
             if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
             {
                 Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
@@ -256,6 +299,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                         m_nPrivileges = Privilege::SELECT;
                 }
             }
+            if(bNoInsert)
+                m_nPrivileges |= ~Privilege::INSERT; // remove the insert privilege
         }
 
     }
@@ -282,7 +327,7 @@ ORowSetCache::~ORowSetCache()
         delete m_pInsertMatrix;
     }
     m_xStatement    = NULL;
-    m_xSet          = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>();
+    m_xSet          = WeakReference< XResultSet>();
     m_xMetaData     = NULL;
     m_aUpdateTable  = NULL;
 }
@@ -1714,9 +1759,13 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
     for(;aIter != (*m_aInsertRow)->end();++aIter)
         aIter->setModified(sal_False);
 }
+// -----------------------------------------------------------------------------
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.23  2001/01/26 15:18:17  oj
+    #83216# check if we stands after the last row after a next
+
     Revision 1.22  2001/01/24 09:52:19  oj
     #82628# rowset modifications
 

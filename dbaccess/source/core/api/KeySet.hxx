@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 14:27:47 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,33 +78,48 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 namespace dbaccess
 {
-    typedef ::std::map<sal_Int32,ORowSetRow> OKeySetMatrix;
+    DECLARE_STL_MAP(::rtl::OUString,sal_Int32,::comphelper::UStringMixLess,OColumnNamePos);
+
+    // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
+    void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns,
+                            const ::rtl::OUString& _rsUpdateTableName,
+                            OColumnNamePos& _rColumnNames /* out */);
+
+    typedef ::std::pair<ORowSetRow,sal_Int32> OKeySetValue;
+    typedef ::std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
     // is used when the source supports keys
     class OKeySet : public OCacheSet
     {
         OKeySetMatrix m_aKeyMap;
         OKeySetMatrix::iterator m_aKeyIter;
-        ::std::vector< sal_Int32> m_aColumnPos;
-        ::std::vector< ::rtl::OUString> m_aColumnNames;
+        OColumnNamePos m_aKeyColumnNames;   // contains all key column names
+        OColumnNamePos m_aColumnNames;      // contains all column names
 
         connectivity::OSQLTable m_xTable; // reference to our table
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement> m_xStatement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
+        ::rtl::OUString                                                                 m_sUpdateTableName;
 
 //      ::std::vector< OKeySetMatrix::iterator> m_aKeyPosition;
 //      ::std::vector< OKeySetMatrix::iterator>::iterator m_aKeyIter;
         sal_Bool m_bRowCountFinal;
 
-        ::std::vector< ::rtl::OUString> getColumnNames();
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
         void fillAllRows();
         sal_Bool fetchRow();
     public:
         OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,
                 const connectivity::OSQLTable& _xTable,
+                const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer);
         ~OKeySet();
 
@@ -230,17 +245,17 @@ namespace dbaccess
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL rowUpdated(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
-            return m_bUpdated;
+            return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 2;
         }
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL rowInserted(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
-            return m_bInserted;
+            return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second == 1;
         }
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL rowDeleted(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
-            return m_bDeleted;
+            return sal_False;
         }
 
         // ::com::sun::star::sdbc::XResultSet
@@ -286,6 +301,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/30 14:27:47  oj
+    new member which holds the column names
+
     Revision 1.5  2001/01/24 09:50:49  oj
     #82628# rowset modifications
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:24 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/22 07:38:24  oj
+    #82632# change member
+
     Revision 1.5  2000/10/17 10:18:12  oj
     some changes for the rowset
 
