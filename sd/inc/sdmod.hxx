@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,11 @@ protected:
     BOOL                    bAutoSave;
     BOOL                    bWaterCan;
     SfxErrorHandler*        mpErrorHdl;
-    OutputDevice*           mpRefDevice;
+    /** This device is used for printer independent layout.  It is virtual
+        in the sense that it does not represent a printer.  The pointer may
+        be NULL when the virtual device could not be created.
+    */
+    OutputDevice*           mpVirtualRefDevice;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -166,8 +170,19 @@ public:
     SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
     void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
 
-    OutputDevice*           GetRefDevice( SdDrawDocShell& rDocShell );
-    sal_Bool                IsPrinterRefDevice() const;
+    /** Return the virtual device that can be used for printer independent
+        layout.
+        @return
+            The returned pointer is NULL when the device could not be
+            created when this modules was instantiated.
+    */
+    OutputDevice* GetVirtualRefDevice (void);
+
+    /** Deprecated alias to <member>GetVirtualRefDevice</member>.
+        @param rDocShell
+            Unused dummy parameter.
+    */
+    OutputDevice* GetRefDevice (SdDrawDocShell& rDocShell);
 
     SvNumberFormatter*      GetNumberFormatter();
 
