@@ -2,9 +2,9 @@
  *
  *  $RCSfile: discreteactivitybase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:59:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ namespace presentation
 #endif
         }
 
-        void DiscreteActivityBase::start()
+        void DiscreteActivityBase::startAnimation()
         {
             // start timer on wakeup event
             mpWakeupEvent->start();
@@ -114,7 +114,7 @@ namespace presentation
         sal_uInt32 DiscreteActivityBase::calcFrameIndex( sal_uInt32     nCurrCalls,
                                                          ::std::size_t  nVectorSize ) const
         {
-            if( mbAutoReverse )
+            if( isAutoReverse() )
             {
                 // every full repeat run consists of one
                 // forward and one backward traversal.
@@ -136,7 +136,7 @@ namespace presentation
         sal_uInt32 DiscreteActivityBase::calcRepeatCount( sal_uInt32    nCurrCalls,
                                                           ::std::size_t nVectorSize ) const
         {
-            if( mbAutoReverse )
+            if( isAutoReverse() )
                 return nCurrCalls / (2*nVectorSize); // we've got 2 cycles per repeat
             else
                 return nCurrCalls / nVectorSize;
@@ -169,14 +169,14 @@ namespace presentation
             // if auto-reverse is specified, halve the
             // effective repeat count, since we pass every
             // repeat run twice: once forward, once backward.
-            if( mbAutoReverse )
+            if( isAutoReverse() )
                 nCurrRepeat /= 2.0;
 
             // schedule next frame, if either repeat is indefinite
             // (repeat forever), or we've not yet reached the requested
             // repeat count
-            if( !maRepeats.isValid() ||
-                nCurrRepeat < maRepeats.getValue() )
+            if( !isRepeatCountValid() ||
+                nCurrRepeat < getRepeatCount() )
             {
                 // add wake-up event to queue (modulo
                 // vector size, to cope with repeats).
@@ -206,12 +206,16 @@ namespace presentation
                                     mnCurrPerformCalls,
                                     nVectorSize ) ] ) ) );
 
-                mrEventQueue.addEvent( mpWakeupEvent );
+                getEventQueue().addEvent( mpWakeupEvent );
             }
             else
             {
-                // done
-                end();
+                // release event reference (relation to wakeup event
+                // is circular!)
+                mpWakeupEvent.reset();
+
+                // done with this activity
+                endActivity();
             }
 
             return false; // remove from queue, will be added back by the wakeup event.
@@ -229,12 +233,15 @@ namespace presentation
             ActivityBase::dispose();
         }
 
-        void DiscreteActivityBase::end()
+        void DiscreteActivityBase::dequeued()
         {
-            // release references
-            mpWakeupEvent.reset();
-
-            ActivityBase::end();
+            // ignored here, if we're still active. Discrete
+            // activities are dequeued after every perform() call,
+            // thus, the call is only significant when isActive() ==
+            // false.
+            if( !isActive() )
+                endAnimation();
         }
+
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: continuouskeytimeactivitybase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:59:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ namespace presentation
             virtual void simplePerform( double      nSimpleTime,
                                         sal_uInt32  nRepeatCount ) const;
 
-        protected:
+        private:
             const ::std::vector< double >   maKeyTimes;
 
             /// last active index in maKeyTimes (to avoid frequent searching)

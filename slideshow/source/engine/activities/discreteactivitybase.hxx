@@ -2,9 +2,9 @@
  *
  *  $RCSfile: discreteactivitybase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:59:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,16 +99,20 @@ namespace presentation
             virtual void dispose();
 
             virtual bool perform();
-            virtual void start();
-            virtual void end();
+            virtual void dequeued();
 
         protected:
+            virtual void startAnimation();
+
             sal_uInt32 calcFrameIndex( sal_uInt32       nCurrCalls,
                                        ::std::size_t    nVectorSize ) const;
 
             sal_uInt32 calcRepeatCount( sal_uInt32      nCurrCalls,
                                         ::std::size_t   nVectorSize ) const;
 
+            ::std::size_t getNumberOfKeyTimes() const { return maDiscreteTimes.size(); }
+
+        private:
             WakeupEventSharedPtr            mpWakeupEvent;
             const ::std::vector< double >   maDiscreteTimes;
             const double                    mnSimpleDuration;
