@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-28 12:58:59 $
+ *  last change: $Author: tl $ $Date: 2001-05-08 13:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XOTHERLINGU_HPP_
-#include <com/sun/star/linguistic2/XOtherLingu.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
