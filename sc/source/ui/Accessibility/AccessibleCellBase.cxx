@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
+ *  last change: $Author: sab $ $Date: 2002-02-21 17:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,18 @@
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
+#ifndef SC_DOCFUNC_HXX
+#include "docfunc.hxx"
+#endif
+#ifndef SC_CELL_HXX
+#include "cell.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -220,10 +229,20 @@ sal_Bool SAL_CALL
      ::osl::MutexGuard aGuard (maMutex);
     double fValue;
     sal_Bool bResult(sal_False);
-    if((aNumber >>= fValue) && mpDoc)
+    if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
     {
-        mpDoc->SetValue(maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), fValue);
-        bResult = sal_True;
+        uno::Reference<XAccessibleStateSet> xParentStates;
+        if (getAccessibleParent().is())
+        {
+            uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
+            xParentStates = xParentContext->getAccessibleStateSet();
+        }
+        if (IsEditable(xParentStates))
+        {
+            ScDocShell* pDocShell = (ScDocShell*) mpDoc->GetDocumentShell();
+            ScDocFunc aFunc(*pDocShell);
+            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), TRUE );
+        }
     }
     return bResult;
 }
@@ -274,4 +293,13 @@ uno::Sequence< uno::Type> SAL_CALL ScAccessibleCellBase::getTypes (void)
     return aTypeSequence;
 }
 
+
+sal_Bool ScAccessibleCellBase::IsEditable(
+    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+{
+    sal_Bool bEditable(sal_False);
+    if (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE))
+        bEditable = sal_True;
+    return bEditable;
+}
 

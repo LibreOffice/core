@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
+ *  last change: $Author: sab $ $Date: 2002-02-21 17:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ protected:
         createAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+public:
     //=====  XAccessibleValue  ================================================
 
     /** Returns the value of this object as a number.
@@ -232,6 +233,11 @@ protected:
     ScDocument* mpDoc;
 
     sal_Int32 mnIndex;
+
+private:
+    virtual sal_Bool IsEditable(
+        const com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 };
 
 
