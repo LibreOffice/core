@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-28 16:30:24 $
+#   last change: $Author: obo $ $Date: 2004-11-15 15:52:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,12 @@ TARGETOBJS=	\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
             $(OBJ)$/userinstall.obj         \
-            $(OBJ)$/desktopcontext.obj 
+            $(OBJ)$/desktopcontext.obj      \
+            $(OBJ)$/migration.obj           \
+            $(OBJ)$/cfgfilter.obj           \
+            $(OBJ)$/wizard.obj              \
+            $(OBJ)$/pages.obj
+            
 
 
 # --- Resourcen ----------------------------------------------------
@@ -123,7 +128,8 @@ APP1_STDPOST=
 
 RESLIB1NAME=		dkt
 RESLIB1IMAGES=		$(PRJ)$/res
-RESLIB1SRSFILES=	$(SRS)$/desktop.srs
+RESLIB1SRSFILES=	$(SRS)$/desktop.srs \
+                    $(SRS)$/wizard.srs
 
 APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
