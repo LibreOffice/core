@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: aw $ $Date: 2001-11-13 18:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,26 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 |*
 \************************************************************************/
 
+#ifndef _SVDVITER_HXX
+#include <svx/svdviter.hxx>
+#endif
+#ifndef _SVDVIEW_HXX
+#include <svx/svdview.hxx>
+#endif
 void ModifyPageUndoAction::Undo()
 {
+    // #94637# invalidate Selection, there could be objects deleted in tis UNDO
+    // which are no longer allowed to be selected then.
+      SdrViewIter aIter(pPage);
+    SdrView* pView = aIter.FirstView();
+
+    while(pView)
+    {
+        if(pView->HasMarked())
+            pView->UnmarkAll();
+        pView = aIter.NextView();
+    }
+
     pPage->SetAutoLayout(eOldAutoLayout, TRUE);
 
     if (!pPage->IsMasterPage())
@@ -183,6 +201,18 @@ void ModifyPageUndoAction::Undo()
 
 void ModifyPageUndoAction::Redo()
 {
+    // #94637# invalidate Selection, there could be objects deleted in tis UNDO
+    // which are no longer allowed to be selected then.
+      SdrViewIter aIter(pPage);
+    SdrView* pView = aIter.FirstView();
+
+    while(pView)
+    {
+        if(pView->HasMarked())
+            pView->UnmarkAll();
+        pView = aIter.NextView();
+    }
+
     pPage->SetAutoLayout(eNewAutoLayout, TRUE);
 
     if (!pPage->IsMasterPage())
