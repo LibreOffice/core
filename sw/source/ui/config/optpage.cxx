@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
+ *  last change: $Author: os $ $Date: 2001-02-09 15:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,16 +874,11 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 
     if(bNotDocOnly)
     {
-        if(sStandard != sStandardBak)
-            pFontConfig->SetFontStandard(sStandard);
-        if(sTitle != sTitleBak )
-            pFontConfig->SetFontOutline(sTitle);
-        if(sList != sListBak )
-            pFontConfig->SetFontList(sList);
-        if(sLabel != sLabelBak )
-            pFontConfig->SetFontCaption(sLabel);
-        if(sIdx != sIdxBak )
-            pFontConfig->SetFontIndex(sIdx);
+        pFontConfig->SetFontStandard(sStandard);
+        pFontConfig->SetFontOutline(sTitle);
+        pFontConfig->SetFontList(sList);
+        pFontConfig->SetFontCaption(sLabel);
+        pFontConfig->SetFontIndex(sIdx);
     }
     if(pWrtShell)
     {

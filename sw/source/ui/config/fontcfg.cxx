@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: os $ $Date: 2001-02-09 15:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,31 +114,33 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer/DefaultFont"))
 {
-    String sDefFont = C2S("Times");
+#if defined(UNX)
+    const String sDefFont(C2S("times"));
+#else
+    const String sDefFont(C2S("Times New Roman"));
+#endif
     sFontStandard = sFontList = sFontCaption = sFontIndex = sDefFont;
     sFontOutline = SwStdFontConfig::GetDefaultFor(FONT_OUTLINE);
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-//  EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
             if(pValues[nProp].hasValue())
             {
                 OUString sVal;
                 pValues[nProp] >>= sVal;
                 switch(nProp)
                 {
-                    case 0: sFontStandard= sVal;  break;
-                    case 1: sFontOutline = sVal;  break;
-                    case 2: sFontList    = sVal;  break;
-                    case 3: sFontCaption = sVal;  break;
-                    case 4: sFontIndex   = sVal;  break;
+                    case FONT_STANDARD:  sFontStandard= sVal;  break;
+                    case FONT_OUTLINE :  sFontOutline = sVal;  break;
+                    case FONT_LIST    :  sFontList   = sVal;  break;
+                    case FONT_CAPTION :  sFontCaption = sVal;  break;
+                    case FONT_INDEX   :  sFontIndex  = sVal;  break;
                 }
             }
         }
@@ -157,11 +159,26 @@ void    SwStdFontConfig::Commit()
     {
         switch(nProp)
         {
-            case 0: pValues[nProp] <<= OUString(sFontStandard);  break;
-            case 1: pValues[nProp] <<= OUString(sFontOutline );  break;
-            case 2: pValues[nProp] <<= OUString(sFontList    );  break;
-            case 3: pValues[nProp] <<= OUString(sFontCaption );  break;
-            case 4: pValues[nProp] <<= OUString(sFontIndex   );  break;
+            case FONT_STANDARD:
+                if(GetDefaultFor(nProp) != sFontStandard)
+                    pValues[nProp] <<= OUString(sFontStandard);
+            break;
+            case FONT_OUTLINE :
+                if(GetDefaultFor(nProp) != sFontOutline)
+                    pValues[nProp] <<= OUString(sFontOutline);
+            break;
+            case FONT_LIST    :
+                if(GetDefaultFor(nProp) != sFontList)
+                    pValues[nProp] <<= OUString(sFontList);
+            break;
+            case FONT_CAPTION :
+                if(GetDefaultFor(nProp) != sFontCaption)
+                    pValues[nProp] <<= OUString(sFontCaption);
+            break;
+            case FONT_INDEX   :
+                if(GetDefaultFor(nProp) != sFontIndex)
+                    pValues[nProp] <<= OUString(sFontIndex);
+            break;
         }
     }
     PutProperties(aNames, aValues);
@@ -177,7 +194,11 @@ SwStdFontConfig::~SwStdFontConfig()
 BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
-    const String rStd(C2S("Times"));
+#if defined(UNX)
+    const String rStd(C2S("times"));
+#else
+    const String rStd(C2S("Times New Roman"));
+#endif
     switch( nFontType )
     {
         case FONT_STANDARD:
@@ -214,7 +235,11 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
  * --------------------------------------------------*/
 String  SwStdFontConfig::GetDefaultFor(USHORT nFontType)
 {
-    String sRet(C2S("Times"));
+#if defined(UNX)
+    String sRet(C2S("times"));
+#else
+    String sRet(C2S("Times New Roman"));
+#endif
     switch( nFontType )
     {
         case FONT_STANDARD:
