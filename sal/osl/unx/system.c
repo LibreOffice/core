@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-28 13:08:45 $
+ *  last change: $Author: mh $ $Date: 2002-04-09 10:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,75 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
 
       return res;
 }
+
+#if defined(NETBSD)
+int getpwuid_r(uid_t uid, struct passwd *pwd, char *buffer,
+           size_t buflen, struct passwd **result)
+{
+  struct passwd* res;
+
+  pthread_mutex_lock(&getrtl_mutex);
+
+  if ( res = getpwuid(uid) )
+  {
+    size_t pw_name, pw_passwd, pw_class, pw_gecos, pw_dir, pw_shell;
+
+    pw_name = strlen(res->pw_name)+1;
+    pw_passwd = strlen(res->pw_passwd)+1;
+    pw_class = strlen(res->pw_class)+1;
+    pw_gecos = strlen(res->pw_gecos)+1;
+    pw_dir = strlen(res->pw_dir)+1;
+    pw_shell = strlen(res->pw_shell)+1;
+
+    if (pw_name+pw_passwd+pw_class+pw_gecos
+                                 +pw_dir+pw_shell < buflen)
+    {
+      memcpy(pwd, res, sizeof(struct passwd));
+
+      strncpy(buffer, res->pw_name, pw_name);
+      pwd->pw_name = buffer;
+      buffer += pw_name;
+
+      strncpy(buffer, res->pw_passwd, pw_passwd);
+      pwd->pw_passwd = buffer;
+      buffer += pw_passwd;
+
+      strncpy(buffer, res->pw_class, pw_class);
+      pwd->pw_class = buffer;
+      buffer += pw_class;
+
+      strncpy(buffer, res->pw_gecos, pw_gecos);
+      pwd->pw_gecos = buffer;
+      buffer += pw_gecos;
+
+      strncpy(buffer, res->pw_dir, pw_dir);
+      pwd->pw_dir = buffer;
+      buffer += pw_dir;
+
+      strncpy(buffer, res->pw_shell, pw_shell);
+      pwd->pw_shell = buffer;
+      buffer += pw_shell;
+
+      *result = pwd ;
+      res = 0 ;
+
+    } else {
+
+      res = ENOMEM ;
+
+    }
+
+  } else {
+
+    res = errno ;
+
+  }
+
+  pthread_mutex_unlock(&getrtl_mutex);
+
+  return res;
+}
+#endif
 
 struct tm *localtime_r(const time_t *timep, struct tm *buffer)
 {
