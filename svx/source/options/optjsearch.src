@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:46:29 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,6 +787,20 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     Text[ slovak ] = "Hľadanie v japončine";
 };
 // end TabPage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
