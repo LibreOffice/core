@@ -2,9 +2,9 @@
 #
 #   $RCSfile: fullcpp.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 20:24:58 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:38:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,13 +76,13 @@ CFLAGS+= -GR
 
 # Precompiled Headers
 PCH_NAME=  autodoc
-.IF "$(DEBUG)"==""
+.IF "$(debug)"==""
 CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pch
 .ELSE
 CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBUILD
 .ENDIF
 
-.ENDIF                      
+.ENDIF
 
 .ENDIF
 
