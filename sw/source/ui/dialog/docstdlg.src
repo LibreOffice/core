@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:32:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "ÂÊ ¼ö:";
         Text[ turkish ] = "Sayfa:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de páginas:";
     };
     FixedText FT_TABLE
     {
@@ -125,6 +126,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "Ç¥ °³¼ö:";
         Text[ turkish ] = "Tablo:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de tablas:";
     };
     FixedText FT_GRF
     {
@@ -154,6 +156,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "±×·¡ÇÈ °³¼ö:";
         Text[ turkish ] = "Grafik:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de imágenes:";
     };
     FixedText FT_OLE
     {
@@ -183,6 +186,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "OLE °³Ã¼ °³¼ö:";
         Text[ turkish ] = "OLE nesneleri:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de objetos OLE:";
     };
     FixedText FT_PARA
     {
@@ -212,6 +216,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "´Ü¶ô °³¼ö:";
         Text[ turkish ] = "Paragraf:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de párrafos:";
     };
     FixedText FT_WORD
     {
@@ -241,6 +246,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "´Ü¾î ¼ö:";
         Text[ turkish ] = "Sözcük:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de palabras:";
     };
     FixedText FT_WORD_DELIM
     {
@@ -268,6 +274,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "±¸ºÐÀÚ";
         Text[ turkish ] = "~Ayýrma iþareti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sepa~rador";
     };
     Edit ED_WORD_DELIM
     {
@@ -304,6 +311,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "¹®ÀÚ ¼ö:";
         Text[ turkish ] = "Karakter:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de caracteres:";
     };
     FixedText FT_LINE
     {
@@ -330,6 +338,7 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "Çà °³¼ö:";
         Text[ turkish ] = "Satýr:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de líneas:";
     };
     FixedText FT_PAGE_COUNT
     {
@@ -405,5 +414,6 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "¾÷µ¥ÀÌÆ®(~U)";
         Text[ turkish ] = "~Güncelle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Actualizar";
     };
 };
