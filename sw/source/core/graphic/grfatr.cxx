@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 09:34:39 $
+ *  last change: $Author: os $ $Date: 2000-12-14 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,43 @@ SfxPoolItem* SwInvertGrf::Clone( SfxItemPool *pPool ) const
 SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool *pPool ) const
 {
     return new SwTransparencyGrf( *this );
+}
+// ------------------------------------------------------------------
+BOOL SwTransparencyGrf::QueryValue( com::sun::star::uno::Any& rVal,
+                                        BYTE nMemberId  ) const
+{
+    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
+    sal_Int16 nRet = GetValue();
+    //convert from 0...255 to -100 ... +100
+    nRet -= 128;
+    if(nRet >= 0 )
+    {
+        nRet = nRet * 100 / 127;
+    }
+    else
+    {
+        nRet = nRet * 100 / 128;
+    }
+    rVal <<= nRet;
+
+    return TRUE;
+}
+// ------------------------------------------------------------------
+BOOL SwTransparencyGrf::PutValue( const com::sun::star::uno::Any& rVal,
+                                        BYTE nMemberId  )
+{
+    //temporary conversion until this is a SfxInt16Item!
+    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
+    sal_Int16 nVal;
+    if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
+        return FALSE;
+    if(nVal >= 0)
+        nVal = nVal * 127 / 100;
+    else
+        nVal = nVal * 128 / 100;
+    nVal += 128;
+    SetValue(nVal);
+    return TRUE;
 }
 
 // ------------------------------------------------------------------

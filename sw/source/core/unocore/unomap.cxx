@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 10:15:25 $
+ *  last change: $Author: os $ $Date: 2000-12-14 11:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1338,8 +1338,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_GREEN),         RES_GRFATR_CHANNELG,     &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_BLUE),          RES_GRFATR_CHANNELB,     &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_GAMMA),         RES_GRFATR_GAMMA,        &::getCppuType((double*)0),        0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_INVERSION),     RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int8*)0),  0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_IS_INVERTED),       RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_COLOR_MODE),    RES_GRFATR_DRAWMODE,     &::getCppuType((drawing::ColorMode*)0),        0,   0},
                     {0,0,0,0}
                 };
