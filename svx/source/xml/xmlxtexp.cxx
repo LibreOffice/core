@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 10:45:45 $
+ *  last change: $Author: cl $ $Date: 2001-06-21 14:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
         SvXMLExport(rFileName, rHandler, NULL, MAP_100TH_MM), mxTable( xTable )
 {
     SetGraphicResolver( xGrfResolver );
+    setExportFlags( 0 );
 }
 
 SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent()
