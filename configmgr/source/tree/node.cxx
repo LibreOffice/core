@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:37:22 $
+ *  last change: $Author: obo $ $Date: 2003-04-02 07:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #ifndef CONFIGMGR_UPDATEACCESSOR_HXX
 #include "updateaccessor.hxx"
 #endif
+
 #ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
 #include "attributes.hxx"
 #endif
@@ -111,8 +112,9 @@ configmgr::node::Attributes NodeInfo::getNodeInfoAttributes() const
 {
     configmgr::node::Attributes aResult;
 
-
-    aResult.setAccess( !!(flags & Flags::readonly),!!(flags & Flags::finalized) );
+    bool help = !!(flags & Flags::readonly);
+    aResult.setAccess( help,!!(flags & Flags::finalized) );
+//    aResult.setAccess( !!(flags & Flags::readonly),!!(flags & Flags::finalized) );
 
     aResult.setNullable(!!(flags & Flags::nullable));
     aResult.setLocalized(!!(flags & Flags::localized));
