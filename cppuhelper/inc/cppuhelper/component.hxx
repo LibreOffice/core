@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,27 +84,27 @@ namespace cppu
 {
 
 /**
- * The helper implementation for a basic broadcaster. This implementation
- * supports aggregation and weak references.
- *
- * @author  Markus Meyer
- * @since   98/04/12
+   The helper implementation for a basic broadcaster. This implementation
+   supports aggregation and weak references.
+
+   @author  Markus Meyer
+   @since   98/04/12
  */
 class OComponentHelper : public ::cppu::WeakAggImplHelper1< ::com::sun::star::lang::XComponent >
 {
 public:
     /**
-     * Create an object that implements XComponent.
-     *
-     * @param rMutex    the mutex used to protect multi thread access.
-     *                  The lifetime must be longer than the lifetime
-     *                  of this object.
+       Create an object that implements XComponent.
+
+       @param rMutex    the mutex used to protect multi thread access.
+                          The lifetime must be longer than the lifetime
+                          of this object.
      */
     OComponentHelper( ::osl::Mutex & rMutex ) SAL_THROW( () );
     /**
-     * If dispose is not previous called, first acquire is called to protect against
-     * double delete and than call dispose.<BR> Note in this situation no destructor
-     * of derived classes are called.
+       If dispose is not previous called, first acquire is called to protect against
+       double delete and than call dispose.<BR> Note in this situation no destructor
+       of derived classes are called.
      */
     ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
@@ -126,15 +126,15 @@ public:
 
 protected:
     /**
-     * Called in the dispose method after the listeners are notified.
-     * In this situation rBHelper.bDisposed is false
-     * and rBHelper.bDisposing is true.
+       Called in the dispose method after the listeners are notified.
+       In this situation rBHelper.bDisposed is false
+       and rBHelper.bDisposing is true.
      */
     virtual void SAL_CALL disposing();
 
     /**
-     * Contains a mutex, a listener container and the dispose states.
-     * Subclasses should only modify the listener container.
+       Contains a mutex, a listener container and the dispose states.
+       Subclasses should only modify the listener container.
      */
     OBroadcastHelper    rBHelper;
 private:

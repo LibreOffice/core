@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-09 13:28:58 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,32 +70,32 @@
 
 
 /*
- * This bootstraps an initial service factory up to the point
- * that a dll component loader, simple and default registry and an implementation registration
- * service is registered and available.
- * All other services have to be registered somewhere else.
+   This bootstraps an initial service factory up to the point
+   that a dll component loader, simple and default registry and an implementation registration
+   service is registered and available.
+   All other services have to be registered somewhere else.
  */
 
 namespace cppu
 {
 
 /**
- * This bootstraps an initial service factory working on a registry. If the first or both
- * parameters contain a value then the service factory is initialized with a simple registry
- * or a nested registry. Otherwise the service factory must be initialized later with a valid
- * registry.
- *
- * @param rWriteRegistryFile    file name of the simple registry or the first registry file of
- *                              the nested registry which will be opened with read/write rights. This
- *                              file will be created if necessary.
- * @param rReadRegistryFile     file name of the second registry file of the nested registry
- *                              which will be opened with readonly rights.
- * @param bReadOnly             flag which specify that the first registry file will be opened with
- *                              readonly rights. Default is FALSE. If this flag is used the registry
- *                              will not be created if not exist.
- * @param rBootstrapPath        specify a path where the bootstrap components could be find. If this
- *                              parameter is an empty string the compoents will be searched in the normal
- *                              path.
+   This bootstraps an initial service factory working on a registry. If the first or both
+   parameters contain a value then the service factory is initialized with a simple registry
+   or a nested registry. Otherwise the service factory must be initialized later with a valid
+   registry.
+
+   @param rWriteRegistryFile    file name of the simple registry or the first registry file of
+                                  the nested registry which will be opened with read/write rights. This
+                                  file will be created if necessary.
+   @param rReadRegistryFile     file name of the second registry file of the nested registry
+                                  which will be opened with readonly rights.
+   @param bReadOnly             flag which specify that the first registry file will be opened with
+                                  readonly rights. Default is FALSE. If this flag is used the registry
+                                  will not be created if not exist.
+   @param rBootstrapPath        specify a path where the bootstrap components could be find. If this
+                                  parameter is an empty string the compoents will be searched in the normal
+                                  path.
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createRegistryServiceFactory(
@@ -107,13 +107,13 @@ createRegistryServiceFactory(
 
 
 /**
- * This bootstraps an initial service factory working on a registry file.
- *
- * @param rRegistryFile         file name of the registry to use/ create; if this is an empty
- *                              string, the default registry is used instead
- * @param bReadOnly             flag which specify that the registry file will be opened with
- *                              readonly rights. Default is FALSE. If this flag is used the registry
- *                              will not be created if not exist.
+   This bootstraps an initial service factory working on a registry file.
+
+   @param rRegistryFile         file name of the registry to use/ create; if this is an empty
+                                  string, the default registry is used instead
+   @param bReadOnly             flag which specify that the registry file will be opened with
+                                  readonly rights. Default is FALSE. If this flag is used the registry
+                                  will not be created if not exist.
  */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createRegistryServiceFactory(
@@ -128,7 +128,7 @@ createRegistryServiceFactory(
 
 
 /**
- * This bootstraps a service factory without initialize a registry.
+   This bootstraps a service factory without initialize a registry.
  */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createServiceFactory(

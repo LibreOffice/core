@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,32 +84,32 @@ namespace cppu
 class OWeakConnectionPoint;
 
 /**
- * The basic implementation to support weak references. The weak
- * implementation is based on interfaces, but you should use this base class to avoid
- * problems against changes in the future.
- * <BR><B>Not fully tested.</B>
- *
- * @author  Markus Meyer
- * @since   98/04/12
+   The basic implementation to support weak references. The weak
+   implementation is based on interfaces, but you should use this base class to avoid
+   problems against changes in the future.
+   <BR><B>Not fully tested.</B>
+
+   @author  Markus Meyer
+   @since   98/04/12
  */
 class OWeakObject : public ::com::sun::star::uno::XWeak
 {
     friend class OWeakConnectionPoint;
 protected:
     /**
-     * Call the destructor is only allowed if the reference count is zero.
+       Call the destructor is only allowed if the reference count is zero.
      */
     virtual ~OWeakObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
     /**
-     * The reference counter.
+       The reference counter.
      */
     oslInterlockedCount m_refCount;
 
     /**
-     * The container of all weak reference listeners and the connection point
-     * from the weak reference. Increment the reference count at m_pWeakConnectionPoint
-     * object does not affect the
+       The container of all weak reference listeners and the connection point
+       from the weak reference. Increment the reference count at m_pWeakConnectionPoint
+       object does not affect the
      */
     OWeakConnectionPoint * m_pWeakConnectionPoint;
 public:
@@ -124,22 +124,22 @@ public:
         {}
 
     /**
-     * Set the reference count to zero.
+       Set the reference count to zero.
      */
     OWeakObject() SAL_THROW( () )
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         {}
     /**
-     * Set the reference count to zero.
+       Set the reference count to zero.
      */
     OWeakObject( const OWeakObject & rObj ) SAL_THROW( () )
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         {}
     /**
-     * The assignement does not affect the reference count and the weak references
-     * of this object.
+       The assignement does not affect the reference count and the weak references
+       of this object.
      */
     inline OWeakObject & SAL_CALL operator = ( const OWeakObject & rObj) SAL_THROW( () )
         { return *this; }

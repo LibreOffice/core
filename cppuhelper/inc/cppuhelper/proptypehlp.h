@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proptypehlp.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:47:35 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,11 @@
 namespace cppu {
 
 /**
- * Convert a property value to the specified type of the property.
- * Look at the XPropertySet interface about the conversion rules.<BR>
- *
- * If a property could not be converted a IllegalArgumentException is thrown.
- *
+   Convert a property value to the specified type of the property.
+   Look at the XPropertySet interface about the conversion rules.<BR>
+
+   If a property could not be converted a IllegalArgumentException is thrown.
+
  */
 
 template < class target >
@@ -86,11 +86,11 @@ inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::un
 //      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
         ;
 
-/****
-*
-* conversion of basic types
-*
-*****/
+/*
+
+  conversion of basic types
+
+*/
 inline void SAL_CALL convertPropertyValue( sal_Int64 & target ,  const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const ::com::sun::star::uno::Any & source )

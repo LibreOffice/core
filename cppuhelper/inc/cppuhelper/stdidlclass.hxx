@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,14 @@
 
 namespace cppu {
 
-/*****
-*
-* Standardfunction to create a XIdlClass for a component.
-* This method is usually used as a helper class. ( Better use the methods below  ).
-*
-* HACK : Function returns pointer to XIdlClass instead of
-*        a reference. This is because of a MSC 4.x bug.
-*
-******/
+/**
+  Standardfunction to create a XIdlClass for a component.
+  This method is usually used as a helper class. ( Better use the methods below  ).
+
+  HACK : Function returns pointer to XIdlClass instead of
+         a reference. This is because of a MSC 4.x bug.
+
+*/
 ::com::sun::star::reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
     const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr ,
     const ::rtl::OUString & sImplementationName ,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@ class OWeakRefListener;
 
 //===================================================================
 /**
- * Hold a weak reference to an object. This object must implement the XWeak interface.
- * The implementation is thread safe. This means you can call set, assign and queryHardRef
- * multible at one time.
- *
- * @see OWeakObject
- * @see OWeakAggObject
- * @author  Markus Meyer
- * @since   12/04/98
+   Hold a weak reference to an object. This object must implement the XWeak interface.
+   The implementation is thread safe. This means you can call set, assign and queryHardRef
+   multible at one time.
+
+   @see OWeakObject
+   @see OWeakAggObject
+   @author  Markus Meyer
+   @since   12/04/98
  */
 class WeakReferenceHelper
 {
@@ -103,44 +103,43 @@ public:
     /** Initialize this reference with the same interface as in rWeakRef.*/
     WeakReferenceHelper( const WeakReferenceHelper & rWeakRef ) SAL_THROW( () );
     /**
-     * Initialize this reference with the interface xInt. If the implementation behind
-     * xInt does not support XWeak or XInt is empty then this reference is empty too.
+       Initialize this reference with the interface xInt. If the implementation behind
+       xInt does not support XWeak or XInt is empty then this reference is empty too.
      */
     WeakReferenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xInt )
         SAL_THROW( () );
     /**
-     * Release the reference.
+       Release the reference.
      */
     ~WeakReferenceHelper() SAL_THROW( () );
 
     /**
-     * Release the reference and take the from rWeakRef.
+       Release the reference and take the from rWeakRef.
      */
     WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef ) SAL_THROW( () );
 
     /**
-     * Release the reference and take the from xInt. If the implementation behind
-     * xInt does not support XWeak or XInt is empty, than this reference is empty too.
+       Release the reference and take the from xInt. If the implementation behind
+       xInt does not support XWeak or XInt is empty, than this reference is empty too.
      */
     WeakReferenceHelper & SAL_CALL operator = ( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xInt ) SAL_THROW( () )
         { return operator = ( WeakReferenceHelper( xInt ) ); }
 
     /**
-     * Return true if both OWeakRefs refer to the same object.
+       Return true if both OWeakRefs refer to the same object.
      */
     sal_Bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const SAL_THROW( () )
         { return (get() == rObj.get()); }
 
     /**
-     * Get a real reference to the object.
-     * @return Null, if the interface was not found, otherwise the
-     *          interface.
+       Get a real reference to the object.
+       @return Null, if the interface was not found, otherwise the interface.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL get() const SAL_THROW( () );
 
     /**
-     * Return the reference to the interface. It is null, if the referenced object
-     * was destroyed or the weak reference was not set.
+       Return the reference to the interface. It is null, if the referenced object
+       was destroyed or the weak reference was not set.
      */
     SAL_CALL operator Reference< XInterface > () const SAL_THROW( () )
         { return get(); }
@@ -160,14 +159,14 @@ public:
         {}
 
     /**
-     * Create a new weak reference with the given interface pInterface and acquire this one.
+       Create a new weak reference with the given interface pInterface and acquire this one.
      */
     WeakReference( const Reference<interface_type > & rRef ) SAL_THROW( () )
         : WeakReferenceHelper( rRef )
         {}
 
     /**
-     * Return the reference to the interface. May be null.
+       Return the reference to the interface. May be null.
      */
     SAL_CALL operator Reference< interface_type > () const SAL_THROW( () )
         { return Reference< interface_type >::query( get() ); }

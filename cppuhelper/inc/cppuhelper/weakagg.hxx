@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakagg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@ namespace cppu
 {
 
 /**
- * The basic implementation to support weak references and aggregation. The aggregation
- * implementation is based on interfaces, but you should use this class to avoid
- * problems against changes in the future. Overload queryAggregation() instead of queryInterface()
- * to return your interfaces.
- * <BR><B>Not tested.</B>
- *
- * @author  Markus Meyer
- * @since   98/04/12
+   The basic implementation to support weak references and aggregation. The aggregation
+   implementation is based on interfaces, but you should use this class to avoid
+   problems against changes in the future. Overload queryAggregation() instead of queryInterface()
+   to return your interfaces.
+   <BR><B>Not tested.</B>
+
+   @author  Markus Meyer
+   @since   98/04/12
  */
 class OWeakAggObject
     : public ::cppu::OWeakObject
@@ -88,57 +88,57 @@ class OWeakAggObject
 {
 public:
     /**
-     * Set the delegator to null.
+       Set the delegator to null.
      */
     OWeakAggObject() SAL_THROW( () )
         {}
 
     // XInterface
     /**
-     * Increment the reference count if no delegator is set, otherwise call
-     * acquire at the delegator.
+       Increment the reference count if no delegator is set, otherwise call
+       acquire at the delegator.
      */
     virtual void SAL_CALL acquire() throw();
     /**
-     * Decrement the reference count if no delegator is set, otherwise call
-     * acquire at the delegator. If the reference count goes to zero the
-     * virtual destructor gets called.
+       Decrement the reference count if no delegator is set, otherwise call
+       acquire at the delegator. If the reference count goes to zero the
+       virtual destructor gets called.
      */
     virtual void SAL_CALL release() throw();
     /**
-     * Delegates this call to the delegator, if one is set. Otherwise
-     * call the method queryAggregation.
-     * @see queryAggregation.
+       Delegates this call to the delegator, if one is set. Otherwise
+       call the method queryAggregation.
+       @see queryAggregation.
      */
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
         throw(::com::sun::star::uno::RuntimeException);
 
     // XAggregation
     /**
-     * Set the Delegator to the xDelegator member. This member is a weak
-     * reference.
-     * @param Delegator the object that delegate the queryInterface calls.
+       Set the Delegator to the xDelegator member. This member is a weak
+       reference.
+       @param Delegator the object that delegate the queryInterface calls.
      */
     virtual void SAL_CALL setDelegator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & Delegator )
         throw(::com::sun::star::uno::RuntimeException);
     /**
-     * Called from the delegator or queryInterface. Overload this method instead of
-     * queryInterface.
-     * @see queryInterfaces
+       Called from the delegator or queryInterface. Overload this method instead of
+       queryInterface.
+       @see queryInterfaces
      */
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType )
         throw(::com::sun::star::uno::RuntimeException);
 
 protected:
     /**
-     * Call the destructor is only allowed if the reference count is zero.
+       Call the destructor is only allowed if the reference count is zero.
      */
     virtual ~OWeakAggObject()
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
     /**
-     * The delegator set with setDelegator.
-     * @see setDelegator
+       The delegator set with setDelegator.
+       @see setDelegator
      */
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;
 private:

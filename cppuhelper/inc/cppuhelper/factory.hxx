@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-18 15:34:08 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,52 +88,52 @@
 
 typedef struct _uno_Environment uno_Environment;
 
-/***************************************************************************************************
- * Function to determine the environment of the implementation.
- * If the environment is NOT session specific (needs no additional context), then this function
- * should return the environment type name and leave ppEnv (0).
- *<BR>
- * @param       ppEnvTypeName   environment type name; string must be constant
- * @param       ppEnv           function returns its environment if the environment is
- *                              session specific, i.e. has special context
+/**
+   Function to determine the environment of the implementation.
+   If the environment is NOT session specific (needs no additional context), then this function
+   should return the environment type name and leave ppEnv (0).
+   <BR>
+   @param       ppEnvTypeName   environment type name; string must be constant
+   @param       ppEnv           function returns its environment if the environment is
+                                  session specific, i.e. has special context
  */
 typedef void (SAL_CALL * component_getImplementationEnvironmentFunc)(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv );
 
-/***************************************************************************************************
- * Optional function to retrieve a component description.
- *<BR>
- * @return                      an XML formatted string containing a short component description
+/**
+   Optional function to retrieve a component description.
+   <BR>
+   @return                      an XML formatted string containing a short component description
  */
 typedef const sal_Char * (SAL_CALL * component_getDescriptionFunc)(void);
 
-/***************************************************************************************************
- * Writes component registry info, at least writing the supported service names.
- *<BR>
- * @param       pServiceManager a service manager
- *                              (the type is XMultiServiceFactory to be used by the environment
- *                              returned by component_getImplementationEnvironment)
- * @param       pRegistryKey    a registry key
- *                              (the type is XRegistryKey to be used by the environment
- *                              returned by component_getImplementationEnvironment)
- * @return                      true if everything went fine
+/**
+   Writes component registry info, at least writing the supported service names.
+   <BR>
+   @param       pServiceManager a service manager
+                                  (the type is XMultiServiceFactory to be used by the environment
+                                  returned by component_getImplementationEnvironment)
+   @param       pRegistryKey    a registry key
+                                  (the type is XRegistryKey to be used by the environment
+                                  returned by component_getImplementationEnvironment)
+   @return                      true if everything went fine
  */
 typedef sal_Bool (SAL_CALL * component_writeInfoFunc)(
     void * pServiceManager, void * pRegistryKey );
 
-/***************************************************************************************************
- * Retrieves a factory to create component instances.
- *<BR>
- * @param       pImplName       desired implementation name
- * @param       pServiceManager a service manager
- *                              (the type is XMultiServiceFactory to be used by the environment
- *                              returned by component_getImplementationEnvironment)
- * @param       pRegistryKey    a registry key
- *                              (the type is XRegistryKey to be used by the environment
- *                              returned by component_getImplementationEnvironment)
- * @return                      acquired component factory
- *                              (the type is XSingleServiceFactory to be used by the environment
- *                              returned by component_getImplementationEnvironment)
+/**
+   Retrieves a factory to create component instances.
+   <BR>
+   @param       pImplName       desired implementation name
+   @param       pServiceManager a service manager
+                                  (the type is XMultiServiceFactory to be used by the environment
+                                  returned by component_getImplementationEnvironment)
+   @param       pRegistryKey    a registry key
+                                  (the type is XRegistryKey to be used by the environment
+                                  returned by component_getImplementationEnvironment)
+   @return                      acquired component factory
+                                  (the type is XSingleServiceFactory to be used by the environment
+                                  returned by component_getImplementationEnvironment)
  */
 typedef void * (SAL_CALL * component_getFactoryFunc)(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -144,7 +144,7 @@ typedef void * (SAL_CALL * component_getFactoryFunc)(
 #define CREATE_COMPONENT_FACTORY_FUNCTION   "createComponentFactory"
 
 /** This function pointer describes a function to write needed administrativ information
- *  about a component into the registry.
+      about a component into the registry.
  */
 typedef sal_Bool (SAL_CALL * WriteComponentInfoFunc)( uno_Interface * pXKey );
 
@@ -179,9 +179,9 @@ SAL_CALL createSingleComponentFactory(
     SAL_THROW( () );
 
 /**
- * The type of the instanciate function used as argument of the create*Fcatory functions.
- * @see createSingleFactory
- * @see createOneInstanceFactory
+   The type of the instanciate function used as argument of the create*Fcatory functions.
+   @see createSingleFactory
+   @see createOneInstanceFactory
  */
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_CALL * ComponentInstantiation)(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager );

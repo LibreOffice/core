@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryinterface.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@ namespace cppu
 {
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
  */
 template< class Interface1 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -91,10 +91,10 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
  */
 template< class Interface1, class Interface2 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -111,11 +111,11 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -134,12 +134,12 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -160,13 +160,13 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5 >
 inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -189,14 +189,14 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
+   @param       p6      a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6 >
@@ -223,15 +223,15 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
+   @param       p6      a pointer to an interface.
+   @param       p7      a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7 >
@@ -260,16 +260,16 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
+   @param       p6      a pointer to an interface.
+   @param       p7      a pointer to an interface.
+   @param       p8      a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8 >
@@ -300,17 +300,17 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
+   @param       p6      a pointer to an interface.
+   @param       p7      a pointer to an interface.
+   @param       p8      a pointer to an interface.
+   @param       p9      a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9 >
@@ -343,18 +343,18 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
- * @param       p10     a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
+   @param       p6      a pointer to an interface.
+   @param       p7      a pointer to an interface.
+   @param       p8      a pointer to an interface.
+   @param       p9      a pointer to an interface.
+   @param       p10     a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10 >
@@ -389,19 +389,19 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
- * @param       p10     a pointer to an interface.
- * @param       p11     a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
+   @param       p6      a pointer to an interface.
+   @param       p7      a pointer to an interface.
+   @param       p8      a pointer to an interface.
+   @param       p9      a pointer to an interface.
+   @param       p10     a pointer to an interface.
+   @param       p11     a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
@@ -440,20 +440,20 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 
 /**
- * Compare types and choose return proper interface.
- *<BR>
- * @param       p1      a pointer to an interface.
- * @param       p2      a pointer to an interface.
- * @param       p3      a pointer to an interface.
- * @param       p4      a pointer to an interface.
- * @param       p5      a pointer to an interface.
- * @param       p6      a pointer to an interface.
- * @param       p7      a pointer to an interface.
- * @param       p8      a pointer to an interface.
- * @param       p9      a pointer to an interface.
- * @param       p10     a pointer to an interface.
- * @param       p11     a pointer to an interface.
- * @param       p12     a pointer to an interface.
+   Compare types and choose return proper interface.
+   <BR>
+   @param       p1      a pointer to an interface.
+   @param       p2      a pointer to an interface.
+   @param       p3      a pointer to an interface.
+   @param       p4      a pointer to an interface.
+   @param       p5      a pointer to an interface.
+   @param       p6      a pointer to an interface.
+   @param       p7      a pointer to an interface.
+   @param       p8      a pointer to an interface.
+   @param       p9      a pointer to an interface.
+   @param       p10     a pointer to an interface.
+   @param       p11     a pointer to an interface.
+   @param       p12     a pointer to an interface.
  */
 template< class Interface1, class Interface2, class Interface3, class Interface4, class Interface5,
           class Interface6, class Interface7, class Interface8, class Interface9, class Interface10,
