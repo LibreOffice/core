@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:22:40 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 package com.sun.star.lib.uno.environments.java;
 
-import com.sun.star.lib.sandbox.Disposable;
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
@@ -83,7 +82,7 @@ import java.util.LinkedList;
  * @see com.sun.star.uno.IEnvironment
  * @since UDK1.0
  */
-public final class java_environment implements IEnvironment, Disposable {
+public final class java_environment implements IEnvironment {
     public java_environment(Object context) {
         this.context = context;
     }
@@ -160,16 +159,16 @@ public final class java_environment implements IEnvironment, Disposable {
 //      }
     }
 
-    // @see com.sun.star.uno.IEnvironment#dispose
-    public void dispose() {
 // TODO???
+//    // @see com.sun.star.lib.sandbox.Disposable#dispose
+//    public void dispose() {
 //       synchronized (proxies) {
 //           if (!proxies.isEmpty()) {
 //               list();
 //           }
 //           proxies.clear();
 //       }
-    }
+//    }
 
     // TODO  What's this???  java.lang.Object#equals requires reflexivity...
     //
