@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:20:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -303,8 +307,27 @@ void SdDrawDocShell::UpdateRefDevice()
 {
     if( pDoc )
     {
-        OutputDevice* pRefDevice = SD_MOD()->IsPrinterRefDevice() ? pPrinter : SD_MOD()->GetRefDevice( *this );
+        // Determine the device for which the output will be formatted.
+        OutputDevice* pRefDevice = NULL;
+        switch (pDoc->GetPrinterIndependentLayout())
+        {
+            case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
+                pRefDevice = pPrinter;
+                break;
 
+            case ::com::sun::star::document::PrinterIndependentLayout::ENABLED:
+                pRefDevice = SD_MOD()->GetVirtualRefDevice();
+                break;
+
+            default:
+                // We are confronted with an invalid or un-implemented
+                // layout mode.  Use the printer as formatting device
+                // as a fall-back.
+                DBG_ASSERT(false, "SdDrawDocShell::UpdateRefDevice(): Unexpected printer layout mode");
+
+                pRefDevice = pPrinter;
+                break;
+        }
         pDoc->SetRefDevice( pRefDevice );
 
         SdOutliner* pOutl = pDoc->GetOutliner( FALSE );
@@ -1069,4 +1092,17 @@ void SdDrawDocShell::FillClass(SvGlobalName* pClassName,
         *pShortTypeName = String(SdResId( (eDocType == DOCUMENT_TYPE_DRAW) ?
                                           STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
     }
+}
+
+
+
+
+OutputDevice* SdDrawDocShell::GetDocumentRefDev (void)
+{
+    OutputDevice* pReferenceDevice = SfxInPlaceObject::GetDocumentRefDev ();
+    // Only when our parent does not have a reference device then we return
+    // our own.
+    if (pReferenceDevice == NULL && pDoc != NULL)
+        pReferenceDevice = pDoc->GetRefDevice ();
+    return pReferenceDevice;
 }
