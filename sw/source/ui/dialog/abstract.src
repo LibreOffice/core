@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:07:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ greek ] = "Ιδιότητες";
         Text[ korean ] = "µξ·ΟΑ¤ΊΈ";
         Text[ turkish ] = "Φzellikler";
+        Text[ catalan ] = "Propiedades";
     };
     FixedText FT_LEVEL
     {
@@ -128,6 +129,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ greek ] = "Συμπεριλαμβανόμενα επίπεδα κεφαλαίων";
         Text[ korean ] = "°ό·ΓµΘ΅΅ΐεΌφΑΨ.";
         Text[ turkish ] = "Dahil edilen bφlόm dόzeyleri";
+        Text[ catalan ] = "Niveles del capνtulo incluidos";
     };
     NumericField NF_LEVEL
     {
@@ -171,6 +173,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ greek ] = "Παράγραφοι ανά κεφάλαιο";
         Text[ korean ] = "ΐε΄η ΄ά¶τ";
         Text[ turkish ] = "Beher bφlόm paragraf sayύsύ";
+        Text[ catalan ] = "Pαrrafos por capνtulo";
     };
     NumericField NF_PARA
     {
@@ -215,6 +218,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ greek ] = "Στο Abstract εμφανίζεται το επιλεγμένο πλήθος παραγράφων από τα συμπεριλαμβανόμενα επίπεδα κεφαλαίων.";
         Text[ korean ] = "Γί»σΏ΅Ό­΄Β Ώ¬°όµΘ ΐε ΌφΑΨΏ΅Ό­ Ό±ΕΓΗΡ ΄ά¶τΐΗ Όφ°΅ ³ªΕΈ³³΄Ο΄Ω.";
         Text[ turkish ] = "Φzet iηinde, dahil edilen bφlόm dόzeylerinden seηilen paragraflar bulunuyor.";
+        Text[ catalan ] = "En el extracto aparece la cantidad deseada de pαrrafos de los niveles de los capνtulos incluidos.";
     };
     OKButton PB_OK
     {
@@ -255,4 +259,5 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ greek ] = "Δημιουργία AutoAbstract";
     Text[ korean ] = "ΐΪµΏΓί»σ ΈΈµι±β";
     Text[ turkish ] = "Otomatik φzet oluώtur";
+    Text[ catalan ] = "Crear AutoAbstracto";
 };
