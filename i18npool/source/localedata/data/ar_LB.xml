@@ -93,79 +93,14 @@
 <DefaultFullName>م</DefaultFullName>
 </Era>
 </Eras>
-<StartDayOfWeek>
-<DayID>sat</DayID>
-</StartDayOfWeek>
+<StartDayOfWeek><DayID>sat</DayID></StartDayOfWeek>
 <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
 </Calendar>
 <Calendar unoid="hijri" default="false">
-<DaysOfWeek ref="ar_EG_hijri"/>
-<MonthsOfYear>
-<Month>
-<MonthID>jan</MonthID>
-<DefaultAbbrvName>محرم</DefaultAbbrvName>
-<DefaultFullName>محرم</DefaultFullName>
-</Month>
-<Month>
-<MonthID>feb</MonthID>
-<DefaultAbbrvName>صفر</DefaultAbbrvName>
-<DefaultFullName>صفر</DefaultFullName>
-</Month>
-<Month>
-<MonthID>mar</MonthID>
-<DefaultAbbrvName>ربيع الأول</DefaultAbbrvName>
-<DefaultFullName>ربيع الأول</DefaultFullName>
-</Month>
-<Month>
-<MonthID>apr</MonthID>
-<DefaultAbbrvName>ربيع الاخر</DefaultAbbrvName>
-<DefaultFullName>ربيع الاخر</DefaultFullName>
-</Month>
-<Month>
-<MonthID>may</MonthID>
-<DefaultAbbrvName>جماد الأول</DefaultAbbrvName>
-<DefaultFullName>جماد الأول</DefaultFullName>
-</Month>
-<Month>
-<MonthID>jun</MonthID>
-<DefaultAbbrvName>جماد الاخر</DefaultAbbrvName>
-<DefaultFullName>جماد الاخر</DefaultFullName>
-</Month>
-<Month>
-<MonthID>jul</MonthID>
-<DefaultAbbrvName>رجب</DefaultAbbrvName>
-<DefaultFullName>رجب</DefaultFullName>
-</Month>
-<Month>
-<MonthID>aug</MonthID>
-<DefaultAbbrvName>شعبان</DefaultAbbrvName>
-<DefaultFullName>شعبان</DefaultFullName>
-</Month>
-<Month>
-<MonthID>sep</MonthID>
-<DefaultAbbrvName>رمضان</DefaultAbbrvName>
-<DefaultFullName>رمضان</DefaultFullName>
-</Month>
-<Month>
-<MonthID>oct</MonthID>
-<DefaultAbbrvName>شوال</DefaultAbbrvName>
-<DefaultFullName>شوال</DefaultFullName>
-</Month>
-<Month>
-<MonthID>nov</MonthID>
-<DefaultAbbrvName>ذو القعدة</DefaultAbbrvName>
-<DefaultFullName>ذو القعدة</DefaultFullName>
-</Month>
-<Month>
-<MonthID>dec</MonthID>
-<DefaultAbbrvName>ذو الحجة</DefaultAbbrvName>
-<DefaultFullName>ذو الحجة</DefaultFullName>
-</Month>
-</MonthsOfYear>
+<DaysOfWeek ref="ar_EG_gregorian"/>
+<MonthsOfYear ref="ar_EG_hijri"/>
 <Eras ref="ar_EG_hijri"/>
-<StartDayOfWeek>
-<DayID>sat</DayID>
-</StartDayOfWeek>
+<StartDayOfWeek><DayID>sat</DayID></StartDayOfWeek>
 <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
 </Calendar>
 </LC_CALENDAR>
