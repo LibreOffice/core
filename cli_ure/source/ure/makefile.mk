@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 12:29:59 $
+#   last change: $Author: rt $ $Date: 2004-07-12 13:06:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,27 +80,39 @@ ECHOQUOTE=
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
+#!!! Always change version if code has changed. Provide a publisher
+#policy assembly!!!
+ASSEMBLY_VERSION="1.0.0.0"
+
+ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure.cs
+
 ALLTAR : \
+    $(ASSEMBLY_ATTRIBUTES) \
     $(OUT)$/bin$/cli_ure.dll
 
 CSFILES = \
     uno$/util$/DisposeGuard.cs					\
     uno$/util$/WeakAdapter.cs					\
     uno$/util$/WeakBase.cs						\
-    uno$/util$/WeakComponentBase.cs
+    uno$/util$/WeakComponentBase.cs	\
+    $(ASSEMBLY_ATTRIBUTES)
+
+$(ASSEMBLY_ATTRIBUTES) .PHONY :
+    $(GNUCOPY) -p assembly.cs $@
+    +echo $(ECHOQUOTE) \
+    [assembly:System.Reflection.AssemblyVersion( $(ASSEMBLY_VERSION))] \
+    [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
+    >> $@
 
 $(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
-    +echo $(ECHOQUOTE) \
-[assembly:System.Reflection.AssemblyVersion( "3.2.0.0" )] \
-[assembly:System.Reflection.AssemblyDescription( "CLI-UNO Runtime Library" )] \
-[assembly:System.Reflection.AssemblyCompany( "Sun Microsystems, Inc." )] \
-[assembly:System.Reflection.AssemblyCopyright( "2003" )]$(ECHOQUOTE) \
-    > $(OUT)$/misc$/assembly.cs
     +$(WRAPCMD) csc $(CSCFLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(OUT)$/bin$/cli_types.dll \
         -reference:System.dll \
-        $(CSFILES) $(OUT)$/misc$/assembly.cs
+        $(CSFILES)
+    @echo "If code has changed then provide a policy assembly and change the version!"
 
 .ENDIF
+    
+
