@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 10:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 
 class ScRangeList;
+class UINT16List;
 
 
 #ifdef MWERKS
@@ -140,11 +141,15 @@ class ExcelToSc8 : public ExcelToSc
 {
     void                ExcRelToScRel( UINT16 nRow, UINT16 nCol, SingleRefData&,
                             const BOOL bName );
+
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT, UINT16List* pChTrackList );
+
 public:
                         ExcelToSc8( RootData* pRD, SvStream& aStr, const UINT16& rOrgTab );
     virtual             ~ExcelToSc8();
 
-    virtual ConvErr     Convert( const ScTokenArray*&, INT32& nRest, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, UINT16List& rChTrackList );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, INT32& nRest, const FORMULA_TYPE eFT = FT_CellFormula );
 

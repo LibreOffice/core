@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-21 17:49:05 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 10:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ class PivotCacheList;
 class XtiBuffer;
 class SupbookBuffer;
 class SupbookE;
+class XclImpTabIdBuffer;
 
 class ExcETabNumBuffer;
 class ExcNameList;
@@ -162,6 +163,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XtiBuffer*          pXtiBuffer;             // Elemente der Externsheet-Records
     SupbookBuffer*      pSupbookBuffer;         // Liste Suporting External Workbooks
     SupbookE*           pCurrSupbook;           // current supbook in pSupbookBuffer
+    XclImpTabIdBuffer*  pImpTabIdBuffer;        // table id's for change tracking
 
     SvStorage*          pPivotCacheStorage;
     PivotCacheList*     pImpPivotCacheList;     // pivot caches for import

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 10:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,17 @@ class ExcStreamConsumer
         ~ExcStreamConsumer();
 };
 
+
+class XclImpTabIdBuffer : protected UINT16List
+{
+private:
+    void                        Append( UINT16 nTabId );
+public:
+    void                        Fill( SvStream& rStrm, UINT16 nCount );
+    UINT16                      GetIndex( UINT16 nTabId, UINT16 nMaxTabId = 0xFFFF ) const;
+};
+
+
 class ImportExcel8 : public ImportExcel
 {
     protected:
@@ -557,6 +568,7 @@ class ImportExcel8 : public ImportExcel
         void                    SXVdex( void );                 // 0x0100
         void                    Label( void );                  // 0x0204
 
+        void                    Tabid( void );                  // 0x013D
         void                    Supbook( void );                // 0x01AE
         void                    Condfmt( void );                // 0x01B0
         void                    Cf( void );                     // 0x01B1
