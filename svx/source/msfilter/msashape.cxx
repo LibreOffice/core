@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-13 11:26:58 $
+ *  last change: $Author: sj $ $Date: 2000-11-14 15:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2761,7 +2761,7 @@ static const sal_Int32 mso_sptDonutVert[] =                     // adj value 0 -
 };
 static const sal_uInt16 mso_sptDonutSegm[] =
 {
-    0xa302, 0xa302, 0x8000
+    0xa302, 0xf8fe, 0xa302, 0x8000
 };
 static const SvxMSDffCalculationData mso_sptDonutCalc[] =
 {
@@ -2789,7 +2789,7 @@ static const sal_Int32 mso_sptNoSmokingVert[] =                     // adj value
 };
 static const sal_uInt16 mso_sptNoSmokingSegm[] =
 {
-    0xa302, 0xa404, 0xa404, 0x6000, 0x8000
+    0xa302, 0xf8fe, 0xa404, 0xf8fe, 0xa404, 0x6000, 0x8000
 };
 static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
 {
@@ -2818,6 +2818,48 @@ static const mso_AutoShape msoNoSmoking =
     (SvxMSDffCalculationData*)mso_sptNoSmokingCalc, sizeof( mso_sptNoSmokingCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptDefault2700,
     (sal_Int32*)mso_sptEllipseTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptBlockArcVert[] =      // adj value 0 (degrees)
+{                                                   // adj value 1: 0 -> 10800;
+    0,  0,  21600,  21600,
+    4 MSO_I, 3 MSO_I,
+    2 MSO_I, 3 MSO_I,
+    5 MSO_I, 5 MSO_I,
+    6 MSO_I, 6 MSO_I,
+    2 MSO_I, 3 MSO_I,
+    4 MSO_I, 3 MSO_I,
+    0,  0,  21600,  21600
+};
+static const sal_uInt16 mso_sptBlockArcSegm[] =
+{
+    0xA404, 0xa504, 0x6001, 0x8000, 0x0002, 0x8000, 0xf8ff
+};
+static const sal_Int32 mso_sptBlockArcDefault[] =
+{
+    2, 180 << 16, 5400
+};
+static const SvxMSDffCalculationData mso_sptBlockArcCalc[] =
+{
+    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
+    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
+    { 0x2000, 0x400, 10800, 0 },
+    { 0x2000, 0x401, 10800, 0 },
+    { 0x8000, 21600, 0, 0x402 },
+    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },
+    { 0x4000, 10800, DFF_Prop_adjust2Value, 0 },
+    { 0x600a, 0x405, DFF_Prop_adjustValue, 0 },
+    { 0x6009, 0x405, DFF_Prop_adjustValue, 0 }
+};
+static const mso_AutoShape msoBlockArc =
+{
+    (sal_Int32*)mso_sptBlockArcVert, sizeof( mso_sptBlockArcVert ) >> 3,
+    (sal_uInt16*)mso_sptBlockArcSegm, sizeof( mso_sptBlockArcSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBlockArcCalc, sizeof( mso_sptBlockArcCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptBlockArcDefault,
+    NULL,
     NULL,
     0x80000000, 0x80000000
 };
@@ -3488,7 +3530,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         break;
         case mso_sptDonut :                 pDefAutoShape = &msoDonut; break;
         case mso_sptNoSmoking :             pDefAutoShape = &msoNoSmoking; break;
-//      case mso_sptBlockArc :              break;
+        case mso_sptBlockArc :              pDefAutoShape = &msoBlockArc; break;
         case mso_sptHeart :                 pDefAutoShape = &msoHeart; break;
         case mso_sptLightningBolt :         pDefAutoShape = &msoLightningBold; break;
         case mso_sptSun :                   pDefAutoShape = &msoSun; break;
@@ -3868,6 +3910,7 @@ double SvxMSDffAutoShape::ImplGetValue( sal_Int16 nIndex, sal_uInt32& nGeometryF
 
         case 6 :
         {
+//          return fVal[ 1 ];
             return fVal[ 0 ];
         }
         break;
@@ -3886,7 +3929,15 @@ double SvxMSDffAutoShape::ImplGetValue( sal_Int16 nIndex, sal_uInt32& nGeometryF
 
         case 0xe :
         {
-            return fVal[ 0 ];
+            if ( nFlags & 0x2000 )
+                fVal[ 0 ] = fVal[ 0 ] / 65536;
+            if ( nFlags & 0x4000 )
+                fVal[ 1 ] = fVal[ 1 ] / 65536;
+            if ( nFlags & 0x4000 )
+                fVal[ 2 ] = fVal[ 2 ] / 65536;
+            fVal[ 0 ] += fVal[ 1 ];
+            fVal[ 0 ] -= fVal[ 2 ];
+            fVal[ 0 ] *= 65536;
         }
         break;
 
@@ -4146,7 +4197,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 else
                 {
                     SdrObjGroup*    pGrp = NULL;
-                    SdrPathObj*     pSdrPathObj = NULL;
+                    SdrObject*      pSdrPathObj = NULL;
 
                     XPolyPolygon    aPolyPoly;
                     XPolygon        aPoly;
@@ -4270,14 +4321,14 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                         case 5 :
                                         {
                                             sal_uInt16 nDstPt = aPoly.GetPointCount();
-                                            if ( nDstPt > 1 )
-                                            {
-                                                if ( bClosed )
-                                                    aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
-                                                aPolyPoly.Insert( aPoly );
-                                                aPoly = aEmptyPoly;
-                                                nDstPt = 0;
-                                            }
+//                                          if ( nDstPt > 1 )
+//                                          {
+//                                              if ( bClosed )
+//                                                  aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
+//                                              aPolyPoly.Insert( aPoly );
+//                                              aPoly = aEmptyPoly;
+//                                              nDstPt = 0;
+//                                          }
                                             if ( nPntCount == 2 )
                                             {   // create a circle
                                                 Rectangle aRect( aXP[ nSrcPt ], aXP[ nSrcPt + 1 ] );
@@ -4417,6 +4468,47 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                     aPoly[ nDstPt++ ] = aXP[ nSrcPt++ ];
                             }
                             break;
+                            case 0xf :
+                            {
+                                sal_Bool bOwn = TRUE;
+                                switch ( nPolyFlags )
+                                {
+                                    case 0xf8ff :                                                   // This value is not ms specific and is used
+                                    {                                                               // to create a dummy object that is not visible.
+                                        SdrObject* pLast = pSdrPathObj;                             // This solves the problem of autoshapes that
+                                        if ( !pLast )                                               // did not use the whole space of the boundrect.
+                                        {                                                           // eg. the BlockArc
+                                            if ( pGrp )
+                                            {
+                                                SdrObjList* pList = pGrp->GetSubList();
+                                                if ( pList && pList->GetObjCount() )
+                                                    pLast = pList->GetObj( pList->GetObjCount() - 1 );
+                                            }
+                                        }
+                                        if ( pLast )
+                                        {
+                                            pLast->SetItem( XLineStyleItem( XLINE_NONE ) );
+                                            pLast->SetItem( XFillStyleItem( XFILL_NONE ) );
+                                        }
+                                    }
+                                    break;
+                                    case 0xf8fe :                                                   // nearly the same as 0x4000
+                                    {                                                               // but the first point is ignored
+                                        if ( aPoly.GetPointCount() > 1 )
+                                        {
+                                            if ( bClosed )
+                                                aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
+                                            aPolyPoly.Insert( aPoly );
+                                        }
+                                        aPoly = aEmptyPoly;
+                                    }
+                                    break;
+                                    default :
+                                        bOwn = FALSE;
+                                }
+                                if ( bOwn )
+                                    break;
+                            }
 #ifdef DBG_AUTOSHAPE
                             default :
                             {
