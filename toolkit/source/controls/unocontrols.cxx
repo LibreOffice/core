@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-05 07:53:00 $
+ *  last change: $Author: mt $ $Date: 2002-09-05 08:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,6 +1030,26 @@ UnoEditControl::UnoEditControl()
     if ( ( aVal >>= b ) && b )
         aName= ::rtl::OUString::createFromAscii( "MultiLineEdit" );
     return aName;
+}
+
+void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+{
+    sal_Bool bDone = sal_False;
+    if ( mxPeer.is() && ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT ) )
+    {
+        // #96986# use setText(), or text listener will not be called.
+        uno::Reference < awt::XTextComponent > xTextComponent( mxPeer, uno::UNO_QUERY );
+        if ( xTextComponent.is() )
+        {
+            ::rtl::OUString aText;
+            rVal >>= aText;
+            xTextComponent->setText( aText );
+            bDone = sal_True;
+        }
+    }
+
+    if ( !bDone )
+        UnoControlBase::ImplSetPeerProperty( rPropName, rVal );
 }
 
 // uno::XInterface
@@ -4244,7 +4264,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
         }
     }
     else
-        UnoControl::ImplSetPeerProperty( rPropName, rVal );
+        UnoSpinFieldControl::ImplSetPeerProperty( rPropName, rVal );
 }
 
 
