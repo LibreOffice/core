@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-22 17:10:40 $
+#   last change: $Author: vg $ $Date: 2003-05-14 14:36:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.82 $ ';
+$id_str = ' $Revision: 1.83 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -955,23 +955,6 @@ sub build_multiprocessing {
                                 # to build
     do {
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
-            if ($build_from_opt) {
-                if ($build_from_opt ne $Prj) {
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
-                    next;
-                } else {
-                    $build_from_opt = '';
-                };
-            };
-            if ($build_since) {
-                if ($build_since ne $Prj) {
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
-                } else {
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
-                    $build_since = '';
-                };
-                next;
-            };
             my $module_type = &module_classify($Prj);
 
             if ($module_type eq 'lnk') {
@@ -1342,8 +1325,11 @@ sub prepare_incompartible_build {
     my ($prj, $deps_hash);
     $deps_hash = shift;
     foreach (keys %incompartibles) {
-        $incompartibles{$_} = $$deps_hash{$_};
-        delete $$deps_hash{$_};
+        my $incomp_prj = $_;
+        $incomp_prj .= '.lnk' if (!defined $$deps_hash{$_});
+        delete $incompartibles{$_};
+        $incompartibles{$incomp_prj} = $$deps_hash{$incomp_prj};
+        delete $$deps_hash{$incomp_prj};
     }
     while ($prj = &PickPrjToBuild($deps_hash)) {
         &RemoveFromDependencies($prj, $deps_hash);
