@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:58:31 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ korean ] = "¼ýÀÚ";
                 Text[ turkish ] = "Sayý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Números";
             };
             PageItem
             {
@@ -142,6 +143,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -166,6 +168,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Character Extension";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text[ catalan ] = "Efecto de fuente";
             };
             PageItem
             {
@@ -193,6 +196,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ korean ] = "¸ÂÃã";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alineación";
             };
             PageItem
             {
@@ -217,6 +221,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografía asiática";
             };
             PageItem
             {
@@ -244,6 +249,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ korean ] = "°æ°è¼±";
                 Text[ turkish ] = "Kenarlýk";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -271,6 +277,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
             PageItem
             {
@@ -298,6 +305,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ korean ] = "¼¿ º¸È£";
                 Text[ turkish ] = "Hücre koruma";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Protección de celda";
             };
         };
     };
@@ -311,6 +319,7 @@ TabDialog RID_SCDLG_STYLES_PAR
     Text[ korean ] = "¼¿ À¯Çü";
     Text[ turkish ] = "Hücre biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de celda";
 };
 TabDialog RID_SCDLG_STYLES_PAGE
 {
@@ -365,6 +374,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ korean ] = "ÂÊ";
                 Text[ turkish ] = "Sayfa";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Página";
             };
             PageItem
             {
@@ -392,6 +402,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ korean ] = "¿Ü°û¼±";
                 Text[ turkish ] = "Kenarlýk";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -419,6 +430,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
             PageItem
             {
@@ -446,6 +458,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ korean ] = "¸Ó¸®±Û";
                 Text[ turkish ] = "Üstbilgi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Encabezamiento";
             };
             PageItem
             {
@@ -473,6 +486,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ korean ] = "¹Ù´Ú±Û";
                 Text[ turkish ] = "Altbilgi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Pie de página";
             };
             PageItem
             {
@@ -500,6 +514,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ korean ] = "½ÃÆ®";
                 Text[ language_user1 ] = " ";
                 Text[ turkish ] = "Tablo";
+                Text[ catalan ] = "Hoja";
             };
         };
     };
@@ -513,4 +528,5 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text[ korean ] = "ÂÊ À¯Çü";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de hoja";
 };
