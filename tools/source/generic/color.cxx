@@ -2,9 +2,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-26 16:40:33 $
+ *  last change: $Author: ssa $ $Date: 2002-10-24 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,9 @@ void Color::Invert()
 
 BOOL Color::IsDark() const
 {
-    return GetLuminance() <= 25;
+    // #103729# favour compatibility to Word
+    return GetRed()+GetGreen()+GetBlue() < 154;
+    //return GetLuminance() <= 25;
 }
 
 // -----------------------------------------------------------------------
