@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: sj $ $Date: 2001-07-03 15:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ static USHORT pRanges[] =
 
 SvxTextAttrDialog::SvxTextAttrDialog( Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView ) :
-        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR, FALSE )
+        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
 {
     SvxTextAttrPage* pPage = new SvxTextAttrPage( this, rInAttrs );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
+ *  last change: $Author: sj $ $Date: 2001-07-03 15:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ SvxDistributeDialog::SvxDistributeDialog(
     const SfxItemSet& rInAttrs,
     SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SfxSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE, FALSE),
+:   SfxSingleTabDialog(pParent, rInAttrs, RID_SVXPAGE_DISTRIBUTE ),
     mpPage(0L)
 {
     mpPage = new SvxDistributePage(this, rInAttrs, eHor, eVer);

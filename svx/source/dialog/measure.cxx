@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: sj $ $Date: 2001-07-03 15:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ static USHORT pRanges[] =
 
 SvxMeasureDialog::SvxMeasureDialog( Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView ) :
-        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_MEASURE, FALSE )
+        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_MEASURE )
 {
     SvxMeasurePage* pPage = new SvxMeasurePage( this, rInAttrs );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:38:58 $
+ *  last change: $Author: sj $ $Date: 2001-07-03 15:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ static USHORT pRanges[] =
 
 SvxConnectionDialog::SvxConnectionDialog( Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView ) :
-        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_CONNECTION, FALSE )
+        SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_CONNECTION )
 {
     SvxConnectionPage* pPage = new SvxConnectionPage( this, rInAttrs );
 
