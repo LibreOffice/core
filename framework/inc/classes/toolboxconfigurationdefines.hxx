@@ -26,6 +26,8 @@
 #define ATTRIBUTE_VISIBLE           "visible"
 #define ATTRIBUTE_WIDTH             "width"
 #define ATTRIBUTE_USER              "userdefined"
+#define ATTRIBUTE_HELPID            "helpid"
+#define ATTRIBUTE_ITEMSTYLE         "style"
 
 #define ATTRIBUTE_ID                "id"
 #define ATTRIBUTE_FLOATINGPOSLEFT   "floatingposleft"
@@ -64,6 +66,14 @@
 
 #define ATTRIBUTE_STYLE_TEXT        "text"
 #define ATTRIBUTE_STYLE_SYMBOL      "symbol"
-#define ATTRIBUTE_STYLE_SYMBOLTEXT  "symbol+text"
+#define ATTRIBUTE_STYLE_SYMBOLTEXT  "symboltext"
+#define ATTRIBUTE_STYLE_SYMBOLPLUSTEXT  "symbol+text"
+
+#define ATTRIBUTE_ITEMSTYLE_RADIO       "radio"
+#define ATTRIBUTE_ITEMSTYLE_AUTO        "auto"
+#define ATTRIBUTE_ITEMSTYLE_LEFT        "left"
+#define ATTRIBUTE_ITEMSTYLE_AUTOSIZE    "autosize"
+#define ATTRIBUTE_ITEMSTYLE_DROPDOWN    "dropdown"
+#define ATTRIBUTE_ITEMSTYLE_REPEAT      "repeat"
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-09 18:28:09 $
+ *  last change: $Author: cd $ $Date: 2001-10-17 10:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
             TB_ATTRIBUTE_VISIBLE,
             TB_ATTRIBUTE_WIDTH,
             TB_ATTRIBUTE_USER,
+            TB_ATTRIBUTE_HELPID,
+            TB_ATTRIBUTE_STYLE,
             TB_XML_ENTRY_COUNT
         };
 
@@ -208,6 +210,13 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
         ToolBoxHashMap                                                              m_aToolBoxMap;
         ToolBoxDescriptor&                                                          m_aToolBoxItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
+
+        sal_Int32                                                                   m_nHashCode_Style_Radio;
+        sal_Int32                                                                   m_nHashCode_Style_Auto;
+        sal_Int32                                                                   m_nHashCode_Style_Left;
+        sal_Int32                                                                   m_nHashCode_Style_AutoSize;
+        sal_Int32                                                                   m_nHashCode_Style_DropDown;
+        sal_Int32                                                                   m_nHashCode_Style_Repeat;
 };
 
 class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.

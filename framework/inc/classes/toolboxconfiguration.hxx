@@ -36,6 +36,7 @@ struct ToolBoxItemDescriptor
     USHORT  nVisible;                   // toolbox item visible?
     USHORT  nWidth;                     // width of a toolbox window (edit field, etc.)
     USHORT  nUserDef;                   // user defined toolbox item (1=yes/0=no)
+    String  aHelpId;                    // A help id associated with this toolbox item
 
     public:
 
