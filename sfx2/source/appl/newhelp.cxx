@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-12 10:30:34 $
+ *  last change: $Author: pb $ $Date: 2001-07-14 12:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "helper.hxx"
 #include "msgpool.hxx"
 #include "app.hxx"
+#include "ucbhelp.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"
@@ -140,6 +141,7 @@
 #endif
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
+#include <svtools/cntwids.hrc> // WID_TARGET_URL
 
 using namespace ::ucb;
 using namespace ::com::sun::star::beans;
@@ -215,18 +217,165 @@ void OpenStatusListener_Impl::AddListener( Reference< XDispatch >& xDispatch,
     m_xDispatch->addStatusListener( this, aURL );
 }
 
+// struct ContentEntry_Impl ----------------------------------------------
+
+struct ContentEntry_Impl
+{
+    String      aURL;
+    sal_Bool    bIsFolder;
+
+    ContentEntry_Impl( const String& rURL, sal_Bool bFolder ) :
+        aURL( rURL ), bIsFolder( bFolder ) {}
+};
+
+// ContentListBox_Impl ---------------------------------------------------
+
+ContentListBox_Impl::ContentListBox_Impl( Window* pParent, WinBits nBits ) :
+
+    SvTreeListBox( pParent, nBits ),
+
+    aOpenBookImage      ( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN ) ),
+    aClosedBookImage    ( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED ) ),
+    aOpenChapterImage   ( SfxResId( IMG_HELP_CONTENT_CHAPTER_OPEN ) ),
+    aClosedChapterImage ( SfxResId( IMG_HELP_CONTENT_CHAPTER_CLOSED ) ),
+    aDocumentImage      ( SfxResId( IMG_HELP_CONTENT_DOC ) )
+
+{
+    SetEntryHeight( 16 );
+    SetSelectionMode( SINGLE_SELECTION );
+    SetSpaceBetweenEntries( 2 );
+    SetNodeBitmaps( aClosedBookImage, aOpenBookImage );
+
+    InitRoot();
+}
+
+// -----------------------------------------------------------------------
+
+ContentListBox_Impl::~ContentListBox_Impl()
+{
+    USHORT nPos = 0;
+    SvLBoxEntry* pEntry = GetEntry( nPos++ );
+    while ( pEntry )
+    {
+        ::rtl::OUString aTemp( GetEntryText( pEntry ) );
+        ClearChildren( pEntry );
+        delete (ContentEntry_Impl*)pEntry->GetUserData();
+        pEntry = GetEntry( nPos++ );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ContentListBox_Impl::InitRoot()
+{
+    String aHelpTreeviewURL( DEFINE_CONST_UNICODE("vnd.sun.star.hier://com.sun.star.help.TreeView/") );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
+        SfxContentHelper::GetHelpTreeViewContents( aHelpTreeviewURL );
+
+    const ::rtl::OUString* pEntries  = aList.getConstArray();
+    UINT32 i, nCount = aList.getLength();
+    for ( i = 0; i < nCount; ++i )
+    {
+        String aRow( pEntries[i] );
+        String aTitle, aURL;
+        xub_StrLen nIdx = 0;
+        aTitle = aRow.GetToken( 0, '\t', nIdx );
+        aURL = aRow.GetToken( 0, '\t', nIdx );
+        sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
+        sal_Bool bIsFolder = ( '1' == cFolder );
+        SvLBoxEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, TRUE );
+        if ( bIsFolder )
+            pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ContentListBox_Impl::ClearChildren( SvLBoxEntry* pParent )
+{
+    SvLBoxEntry* pEntry = FirstChild( pParent );
+    while ( pEntry )
+    {
+        ::rtl::OUString aTemp( GetEntryText( pEntry ) );
+        ClearChildren( pEntry );
+        delete (ContentEntry_Impl*)pEntry->GetUserData();
+        pEntry = NextSibling( pEntry );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
+{
+    if ( !pParent->HasChilds() )
+    {
+        if ( pParent->GetUserData() )
+        {
+            String aURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
+                SfxContentHelper::GetHelpTreeViewContents( aURL );
+
+            const ::rtl::OUString* pEntries  = aList.getConstArray();
+            UINT32 i, nCount = aList.getLength();
+            for ( i = 0; i < nCount; ++i )
+            {
+                String aRow( pEntries[i] );
+                String aTitle, aURL;
+                xub_StrLen nIdx = 0;
+                aTitle = aRow.GetToken( 0, '\t', nIdx );
+                aURL = aRow.GetToken( 0, '\t', nIdx );
+                sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
+                sal_Bool bIsFolder = ( '1' == cFolder );
+                SvLBoxEntry* pEntry = NULL;
+                if ( bIsFolder )
+                {
+                    pEntry = InsertEntry( aTitle, aOpenChapterImage, aClosedChapterImage, pParent, TRUE );
+                    pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
+                }
+                else
+                {
+                    pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
+                    Any aAny( UCB_Helper::GetProperty( aURL, WID_TARGET_URL ) );
+                    rtl::OUString aTargetURL;
+                    if ( aAny >>=  aTargetURL )
+                        pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ContentListBox_Impl::SelectHdl()
+{
+    SvLBoxEntry* pEntry = FirstSelected();
+    if ( pEntry && pEntry->GetUserData() &&
+         !( (ContentEntry_Impl*)pEntry->GetUserData()  )->bIsFolder )
+        aOpenLink.Call( NULL );
+}
+
+// -----------------------------------------------------------------------
+
+String ContentListBox_Impl::GetSelectEntry() const
+{
+    String aRet;
+    SvLBoxEntry* pEntry = FirstSelected();
+    if ( pEntry )
+        aRet = ( (ContentEntry_Impl*)pEntry->GetUserData()  )->aURL;
+    return aRet;
+}
+
 // class ContentTabPage_Impl ---------------------------------------------
 
 ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent ) :
 
     TabPage( pParent ),
 
-    aContentWin( this, WB_BORDER )
+    aContentBox( this, WB_BORDER )
 
 {
-    aContentWin.SetPosPixel( Point( 5, 5 ) );
-    aContentWin.SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-    aContentWin.Show();
+    aContentBox.Show();
 }
 
 // -----------------------------------------------------------------------
@@ -234,10 +383,9 @@ ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent ) :
 void ContentTabPage_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
-    Point aPnt = aContentWin.GetPosPixel();
-    aSize.Width() -= ( aPnt.X() * 2 );
-    aSize.Height() -= ( aPnt.Y() * 2 );
-    aContentWin.SetSizePixel( aSize );
+    aSize.Width() -= 8;
+    aSize.Height() -= 8;
+    aContentBox.SetPosSizePixel( Point( 4, 4 ), aSize );
 }
 
 // class IndexTabPage_Impl -----------------------------------------------
@@ -248,7 +396,9 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
 
     aExpressionFT   ( this, ResId( FT_EXPRESSION ) ),
     aIndexCB        ( this, ResId( CB_INDEX ) ),
-    aOpenBtn        ( this, ResId( PB_OPEN_INDEX ) )
+    aOpenBtn        ( this, ResId( PB_OPEN_INDEX ) ),
+
+    bIsActivated    ( sal_False )
 
 {
     FreeResource();
@@ -445,7 +595,21 @@ void IndexTabPage_Impl::Resize()
 
     aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
     aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
+    long nMinX = aIndexCB.GetPosPixel().X();
+    if ( aPnt.X() < nMinX )
+        aPnt.X() = nMinX;
     aOpenBtn.SetPosPixel( aPnt );
+}
+
+// -----------------------------------------------------------------------
+
+void IndexTabPage_Impl::ActivatePage()
+{
+    if ( !bIsActivated )
+    {
+        bIsActivated = sal_True;
+        aFactoryTimer.Start();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -463,7 +627,8 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
     {
         aFactory = rFactory;
         ClearIndex();
-        aFactoryTimer.Start();
+        if ( bIsActivated )
+            aFactoryTimer.Start();
     }
 }
 
@@ -722,12 +887,16 @@ void GetMenuEntry_Impl
     }
 }
 
+// -----------------------------------------------------------------------
+
 BookmarksBox_Impl::BookmarksBox_Impl( Window* pParent, const ResId& rResId ) :
 
     ListBox( pParent, rResId )
 
 {
 }
+
+// -----------------------------------------------------------------------
 
 BookmarksBox_Impl::~BookmarksBox_Impl()
 {
@@ -745,6 +914,8 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
         delete pURL;
     }
 }
+
+// -----------------------------------------------------------------------
 
 void BookmarksBox_Impl::DoAction( USHORT nAction )
 {
@@ -794,6 +965,8 @@ void BookmarksBox_Impl::DoAction( USHORT nAction )
     }
 }
 
+// -----------------------------------------------------------------------
+
 long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     long nRet = 0;
@@ -834,6 +1007,8 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent ) :
 
     nMinWidth = aBookmarksPB.GetSizePixel().Width();
 
+    aBookmarksPB.SetClickHdl( LINK( this, BookmarksTabPage_Impl, OpenHdl ) );
+
     // load bookmarks from configuration
     Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
     aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_HELPBOOKMARKS );
@@ -849,8 +1024,17 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent ) :
         GetMenuEntry_Impl( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageURL );
         AddBookmarks( aTitle, aURL );
     }
-
 }
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( BookmarksTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
+{
+    aBookmarksBox.GetDoubleClickHdl().Call( &aBookmarksBox );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
 
 void BookmarksTabPage_Impl::Resize()
 {
@@ -875,6 +1059,9 @@ void BookmarksTabPage_Impl::Resize()
 
     aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
     aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
+    long nMinX = aBookmarksBox.GetPosPixel().X();
+    if ( aPnt.X() < nMinX )
+        aPnt.X() = nMinX;
     aBookmarksPB.SetPosPixel( aPnt );
 }
 
@@ -934,7 +1121,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
     aTabCtrl.SetCurPageId( (USHORT)nPageId );
     ActivatePageHdl( &aTabCtrl );
     aActiveLB.SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
-    nMinWidth = aActiveLB.GetSizePixel().Width();
+    nMinWidth = ( aActiveLB.GetSizePixel().Width() / 2 );
 
     aInitTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
     aInitTimer.SetTimeout( 200 );
@@ -1104,6 +1291,9 @@ void SfxHelpIndexWindow_Impl::Resize()
 
 void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 {
+    if ( !pCPage )
+        pCPage = new ContentTabPage_Impl( &aTabCtrl );
+    pCPage->SetOpenHdl( rLink );
     if ( !pIPage )
         pIPage = new IndexTabPage_Impl( &aTabCtrl );
     pIPage->SetDoubleClickHdl( rLink );
@@ -1139,6 +1329,7 @@ String SfxHelpIndexWindow_Impl::GetSelectEntry() const
     switch ( aTabCtrl.GetCurPageId() )
     {
         case HELP_INDEX_PAGE_CONTENTS:
+            aRet = pCPage->GetSelectEntry();
             break;
 
         case HELP_INDEX_PAGE_INDEX:
@@ -1320,6 +1511,8 @@ void SfxHelpWindow_Impl::Split()
     nIndexSize = GetItemSize( INDEXWIN_ID );
     nTextSize = GetItemSize( TEXTWIN_ID );
     InitSizes();
+
+//! pIndexWin->UpdateTabControl();
 }
 
 // -----------------------------------------------------------------------

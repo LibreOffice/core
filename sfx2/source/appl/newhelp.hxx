@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-12 10:27:58 $
+ *  last change: $Author: pb $ $Date: 2001-07-14 12:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace com { namespace sun { namespace star { namespace awt { class XWindow; 
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
+#include <svtools/svtreebx.hxx>
 
 // class OpenStatusListener_Impl -----------------------------------------
 
@@ -117,17 +118,48 @@ public:
     void        SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
 };
 
+// ContentListBox_Impl ---------------------------------------------------
+
+class ContentListBox_Impl : public SvTreeListBox
+{
+private:
+    Image           aOpenBookImage;
+    Image           aClosedBookImage;
+    Image           aOpenChapterImage;
+    Image           aClosedChapterImage;
+    Image           aDocumentImage;
+
+    Link            aOpenLink;
+
+    void            InitRoot();
+    void            ClearChildren( SvLBoxEntry* pParent );
+
+public:
+    ContentListBox_Impl( Window* pParent, WinBits nBits );
+    ~ContentListBox_Impl();
+
+
+    virtual void    RequestingChilds( SvLBoxEntry* pParent );
+    virtual void    SelectHdl();
+
+    void            SetOpenHdl( const Link& rLink ) { aOpenLink = rLink; }
+    String          GetSelectEntry() const;
+};
+
 // class ContentTabPage_Impl ---------------------------------------------
 
 class ContentTabPage_Impl : public TabPage
 {
 private:
-    Window          aContentWin;
+    ContentListBox_Impl aContentBox;
 
 public:
     ContentTabPage_Impl( Window* pParent );
 
     virtual void    Resize();
+
+    void            SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
+    String          GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
 };
 
 // class IndexTabPage_Impl -----------------------------------------------
@@ -141,6 +173,7 @@ private:
     Timer               aFactoryTimer;
 
     long                nMinWidth;
+    sal_Bool            bIsActivated;
     String              aFactory;
 
     void                InitializeIndex();
@@ -154,6 +187,7 @@ public:
     ~IndexTabPage_Impl();
 
     virtual void        Resize();
+    virtual void        ActivatePage();
 
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory );
@@ -231,6 +265,8 @@ private:
 
     long                nMinWidth;
 
+    DECL_LINK(          OpenHdl, PushButton* );
+
 public:
     BookmarksTabPage_Impl( Window* pParent );
 
@@ -281,6 +317,7 @@ public:
     String              GetSelectEntry() const;
     void                AddBookmarks( const String& rTitle, const String& rURL );
     String              GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
+    void                UpdateTabControl() { aTabCtrl.Invalidate(); }
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
