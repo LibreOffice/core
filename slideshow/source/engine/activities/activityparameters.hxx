@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activityparameters.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:58:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ namespace presentation
              */
             ActivityParameters( const EventSharedPtr&                       rEndEvent,
                                 EventQueue&                                 rEventQueue,
+                                ActivitiesQueue&                            rActivitiesQueue,
                                 double                                      nMinDuration,
                                 const ::comphelper::OptionalValue<double>&  rRepeats,
                                 double                                      nAccelerationFraction,
@@ -131,6 +132,7 @@ namespace presentation
                 mrEndEvent( rEndEvent ),
                 mpWakeupEvent(),
                 mrEventQueue( rEventQueue ),
+                mrActivitiesQueue( rActivitiesQueue ),
                 mpFormula(),
                 maDiscreteTimes(),
                 mnMinDuration( nMinDuration ),
@@ -149,6 +151,9 @@ namespace presentation
 
             /// EventQueue to add events to
             EventQueue&                                 mrEventQueue;
+
+            /// ActivitiesQueue to add events to
+            ActivitiesQueue&                            mrActivitiesQueue;
 
             /// Optional formula
             ExpressionNodeSharedPtr                     mpFormula;
