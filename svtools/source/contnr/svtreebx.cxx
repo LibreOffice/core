@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:58:13 $
+ *  last change: $Author: gt $ $Date: 2001-09-14 14:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,26 @@ USHORT SvTreeListBox::IsA()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     return SV_LISTBOX_ID_TREEBOX;
+}
+
+void SvTreeListBox::SetSublistOpenWithReturn( BOOL b )
+{
+    pImp->bSubLstOpRet = b;
+}
+
+BOOL SvTreeListBox::IsSublistOpenWithReturn() const
+{
+    return pImp->bSubLstOpRet;
+}
+
+void SvTreeListBox::SetSublistOpenWithLeftRight( BOOL b )
+{
+    pImp->bSubLstOpLR = b;
+}
+
+BOOL SvTreeListBox::IsSublistOpenWithLeftRight() const
+{
+    return pImp->bSubLstOpLR;
 }
 
 void SvTreeListBox::InitAcc()

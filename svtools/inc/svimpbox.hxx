@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: gt $ $Date: 2001-09-14 14:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,12 @@ private:
     USHORT              nFlags;
 
     WinBits             nWinBits;
-    FASTBOOL            bSimpleTravel; // ist TRUE bei SINGLE_SELECTION
-    BOOL                bUpdateMode;
-    BOOL                bInVScrollHdl;
-    BOOL                bAsyncBeginDrag;
+    BOOL                bSimpleTravel : 1; // ist TRUE bei SINGLE_SELECTION
+    BOOL                bUpdateMode : 1;
+    BOOL                bInVScrollHdl : 1;
+    BOOL                bAsyncBeginDrag : 1;
+    BOOL                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with FALSE
+    BOOL                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with FALSE
 
 //#if defined (MAC) || defined(OV_DEBUG)
     Timer               aEditTimer;
@@ -230,6 +232,10 @@ private:
     void                FindMostRight_Impl( SvLBoxEntry* pParent,SvLBoxEntry* EntryToIgnore  );
     void                NotifyTabsChanged();
 
+    inline BOOL         IsExpandable() const        // if element at cursor can be expanded in general
+                            { return pCursor->HasChilds() || pCursor->HasChildsOnDemand(); }
+    inline BOOL         IsNowExpandable() const     // if element at cursor can be expanded at this moment
+                            { return IsExpandable() && !pView->IsExpanded( pCursor ); }
 public:
     SvImpLBox( SvTreeListBox* pView, SvLBoxTreeList*, WinBits nWinStyle );
     ~SvImpLBox();

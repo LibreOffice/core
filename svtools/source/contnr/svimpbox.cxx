@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-12 07:58:23 $
+ *  last change: $Author: gt $ $Date: 2001-09-14 14:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,8 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     bUpdateMode = TRUE;
     bInVScrollHdl = FALSE;
     nFlags |= F_FILLING;
+
+    bSubLstOpRet = bSubLstOpLR = FALSE;
 }
 
 SvImpLBox::~SvImpLBox()
@@ -2137,7 +2139,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
     BOOL    bMod1 = rKEvt.GetKeyCode().IsMod1();
 
     SvLBoxEntry* pNewCursor;
-    long nThumb;
+//  long nThumb;
 
     switch( aCode )
     {
@@ -2197,11 +2199,13 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_RIGHT:
-            if( pView->nWindowStyle & WB_HSCROLL )
+            if( bSubLstOpLR && IsNowExpandable() )
+                pView->Expand( pCursor );
+            else if( pView->nWindowStyle & WB_HSCROLL )
             {
-                nThumb = aHorSBar.GetThumbPos();
+                long    nThumb = aHorSBar.GetThumbPos();
                 nThumb += aHorSBar.GetLineSize();
-                long nOldThumb = aHorSBar.GetThumbPos();
+                long    nOldThumb = aHorSBar.GetThumbPos();
                 aHorSBar.SetThumbPos( nThumb );
                 nThumb = nOldThumb;
                 nThumb -= aHorSBar.GetThumbPos();
@@ -2219,9 +2223,9 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_LEFT:
             if( pView->nWindowStyle & WB_HSCROLL )
             {
-                nThumb = aHorSBar.GetThumbPos();
+                long    nThumb = aHorSBar.GetThumbPos();
                 nThumb -= aHorSBar.GetLineSize();
-                long nOldThumb = aHorSBar.GetThumbPos();
+                long    nOldThumb = aHorSBar.GetThumbPos();
                 aHorSBar.SetThumbPos( nThumb );
                 nThumb = nOldThumb;
                 nThumb -= aHorSBar.GetThumbPos();
@@ -2230,7 +2234,20 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     KeyLeftRight( -nThumb );
                     EndScroll();
                 }
+                else if( bSubLstOpLR )
+                {
+                    if( IsExpandable() && pView->IsExpanded( pCursor ) )
+                        pView->Collapse( pCursor );
+                    else
+                    {
+                        pNewCursor = pView->GetParent( pCursor );
+                        if( pNewCursor )
+                            SetCursor( pNewCursor );
+                    }
+                }
             }
+            else if( bSubLstOpLR && IsExpandable() )
+                pView->Collapse( pCursor );
             else
                 bKeyUsed = FALSE;
             break;
@@ -2298,17 +2315,20 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             }
             break;
 
-#if 0
-        // Probleme mit Default-OK-Button!
         case KEY_RETURN:
-            if( pCursor->HasChilds() || pCursor->HasChildsOnDemand() )
+            if( bSubLstOpRet )
             {
-                if( pView->IsExpanded(pCursor) )
-                    pView->Collapse( pCursor );
-                else
-                    pView->Expand( pCursor );
+                if( IsExpandable() )
+                {
+                    if( pView->IsExpanded( pCursor ) )
+                        pView->Collapse( pCursor );
+                    else
+                        pView->Expand( pCursor );
+                }
             }
-#endif
+            else
+                bKeyUsed = FALSE;
+            break;
 
         case KEY_F2:
             if( !bShift && !bMod1 )
