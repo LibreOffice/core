@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 13:40:33 $
+ *  last change: $Author: fs $ $Date: 2000-12-01 13:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 
 #define THISREF() static_cast< ::cppu::OWeakObject* >(this)
 
@@ -125,8 +128,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void SAL_CALL OProvider::disposing()
     {
-        sal_Bool bIsConnected = isConnected();
-        if (bIsConnected)
+        if (isConnected())
         {
             ::osl::MutexGuard aGuard(m_aMutex);
             if (isConnected())
@@ -135,34 +137,35 @@ namespace configmgr
         ServiceComponentImpl::disposing();
     }
 
-    // XInitialization
-    //-----------------------------------------------------------------------------
-    void SAL_CALL OProvider::initialize( const uno::Sequence< uno::Any >& _rArguments ) throw (uno::Exception, uno::RuntimeException)
+    // com::sun::star::lang::XUnoTunnel
+    //------------------------------------------------------------------
+    sal_Int64 OProvider::getSomething( const uno::Sequence< sal_Int8 > & _rId ) throw (uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        if (isConnected() || m_aSecurityOverride.size())
-        {
-            if (0 == _rArguments.getLength())
-                // allow initialize without arguments, if already connected .....
-                return;
+        if (_rId.getLength() != 16)
+            return 0;
 
-            throw uno::Exception(::rtl::OUString::createFromAscii("The configuration OProvider has already been initialized."), THISREF());
-        }
+        if (0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) )
+            return reinterpret_cast<sal_Int64>(this);
 
-        const uno::Any* pArguments = _rArguments.getConstArray();
-        beans::PropertyValue aCurrentArg;
-        for (sal_Int32 i=0; i<_rArguments.getLength(); ++i, ++pArguments)
-        {
-            if (!((*pArguments) >>= aCurrentArg))
-                throw uno::Exception(rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), THISREF());
-
-            // no check if the argument is known and valid. This would require to much testing
-            m_aSecurityOverride[aCurrentArg.Name] = aCurrentArg.Value;
-        }
-
-        // connect here and now, thus the createInstanceWithArguments fails if no connection is made
-        connect();
+        return 0;
     }
+
+    //--------------------------------------------------------------------------
+    uno::Sequence< sal_Int8 > OProvider::getUnoTunnelImplementationId() throw (uno::RuntimeException)
+    {
+        static ::cppu::OImplementationId * pId = 0;
+        if (! pId)
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if (! pId)
+            {
+                static ::cppu::OImplementationId aId;
+                pId = &aId;
+            }
+        }
+        return pId->getImplementationId();
+    }
+
 } // namespace configmgr
 
 
