@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:36:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,22 @@
 #ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
 #endif
+// OD 2004-04-01 #i26791#
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+#ifndef _FMTORNT_HXX
+#include <fmtornt.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -199,6 +215,96 @@ SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
 |*  Letzte Aenderung    JP 21.08.95
 |*
 |*************************************************************************/
+// OD 2004-04-01 #i26791# - local method to determine positioning and
+// alignment attributes for a drawing object, which is newly connected to
+// the layout. Used for a newly formed group object <SwDoc::GroupSelection(..)>
+// and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
+void lcl_AdjustPositioningAttr( SwFrmFmt* _pFrmFmt,
+                                const SdrObject& _rSdrObj )
+{
+    const SwContact* pContact = GetUserCall( &_rSdrObj );
+    ASSERT( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
+
+    // determine position of new group object relative to its anchor frame position
+    SwTwips nHoriRelPos = 0;
+    SwTwips nVertRelPos = 0;
+    {
+        const SwFrm* pAnchorFrm = pContact->GetAnchoredObj( &_rSdrObj )->GetAnchorFrm();
+        ASSERT( !pAnchorFrm ||
+                !pAnchorFrm->IsTxtFrm() ||
+                !static_cast<const SwTxtFrm*>(pAnchorFrm)->IsFollow(),
+                "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
+        bool bVert;
+        bool bR2L;
+        if ( pAnchorFrm )
+        {
+            bVert = pAnchorFrm->IsVertical();
+            bR2L = pAnchorFrm->IsRightToLeft();
+        }
+        else
+        {
+            // If no anchor frame exist - e.g. because no layout exists - the
+            // default layout direction is taken.
+            const SvxFrameDirectionItem* pDirItem =
+                static_cast<const SvxFrameDirectionItem*>(&(_pFrmFmt->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR )));
+            switch ( pDirItem->GetValue() )
+            {
+                case FRMDIR_VERT_TOP_LEFT:
+                {
+                    // vertical from left-to-right - not supported yet
+                    bVert = true;
+                    bR2L = true;
+                    ASSERT( false,
+                            "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
+                }
+                break;
+                case FRMDIR_VERT_TOP_RIGHT:
+                {
+                    // vertical from right-to-left
+                    bVert = true;
+                    bR2L = false;
+                }
+                break;
+                case FRMDIR_HORI_RIGHT_TOP:
+                {
+                    // horizontal from right-to-left
+                    bVert = false;
+                    bR2L = true;
+                }
+                break;
+                case FRMDIR_HORI_LEFT_TOP:
+                {
+                    // horizontal from left-to-right
+                    bVert = false;
+                    bR2L = false;
+                }
+                break;
+            }
+
+        }
+        Point aAnchorPos = _rSdrObj.GetAnchorPos();
+        // use geometry of drawing object
+        SwRect aObjRect = _rSdrObj.GetSnapRect();
+        if ( bVert )
+        {
+            nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
+            nVertRelPos = aAnchorPos.X() - aObjRect.Right();
+        }
+        else if ( bR2L )
+        {
+            nHoriRelPos = aAnchorPos.X() - aObjRect.Right();
+            nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
+        }
+        else
+        {
+            nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
+            nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
+        }
+    }
+
+    _pFrmFmt->SetAttr( SwFmtHoriOrient( nHoriRelPos, HORI_NONE, FRAME ) );
+    _pFrmFmt->SetAttr( SwFmtVertOrient( nVertRelPos, VERT_NONE, FRAME ) );
+}
 
 SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 {
@@ -210,13 +316,12 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     SwDrawFrmFmt *pFmt(0);
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
     BOOL bNoGroup = ( 0 == pObj->GetUpGroup() );
+    SwDrawContact* pNewContact = 0;
     if( bNoGroup )
     {
         //Ankerattribut aufheben.
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
         const SwFmtAnchor aAnch( pContact->GetFmt()->GetAnchor() );
-        //Ankerpos des ersten, um die Objekte zu synchronisieren.
-        Point aAnchPos( pObj->GetAnchorPos() );
 
         SwUndoDrawGroup* pUndo = !DoesUndo() ? 0 : new SwUndoDrawGroup(
                                                 (USHORT)rMrkList.GetMarkCount() );
@@ -227,11 +332,6 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             pObj = rMrkList.GetMark( i )->GetObj();
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
-            //Ankerpos und Relpos synchronisieren, damit die Position der
-            //Objekte erhalten bleibt.
-            const Point aAbs( pContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) ) +
-                              pObj->GetRelativePos() );
-
             pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
             //loescht sich selbst!
             pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
@@ -241,15 +341,21 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                 pUndo->AddObj( i, pFmt, pObj );
             else
                 DelFrmFmt( pFmt );
-
-            pObj->NbcSetRelativePos( aAbs - aAnchPos );
-            pObj->NbcSetAnchorPos( aAnchPos );
         }
 
         pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
                                 GetDfltFrmFmt() );
         pFmt->SetAttr( aAnch );
+
+        rDrawView.GroupMarked();
+        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
+
+        SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetObj();
+        pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
+        pNewContact->ConnectToLayout();
+        // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
+        lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
 
         if( pUndo )
         {
@@ -258,17 +364,15 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             AppendUndo( pUndo );
         }
     }
-    else if( DoesUndo() )
-        ClearRedo();
-
-    rDrawView.GroupMarked();
-    ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
-    SwDrawContact *pNewContact = 0;
-    if( bNoGroup )
+    else
     {
-        pNewContact = new SwDrawContact( pFmt, rMrkList.GetMark( 0 )->GetObj() );
-        pNewContact->ConnectToLayout();
+        if ( DoesUndo() )
+            ClearRedo();
+
+        rDrawView.GroupMarked();
+        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
     }
+
     return pNewContact;
 }
 
@@ -309,12 +413,15 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 
                     for ( USHORT i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
                     {
-                        SdrObject *pSubObj = pLst->GetObj( i2 );
+                        SdrObject* pSubObj = pLst->GetObj( i2 );
                         SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
                                                             GetDfltFrmFmt() );
                         pFmt->SetAttr( aAnch );
-                        SwDrawContact *pContact = new SwDrawContact( pFmt, pSubObj );
+                        SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
                         pContact->ConnectToLayout();
+                        // OD 2004-04-07 #i26791# - Adjust positioning and
+                        // alignment attributes.
+                        lcl_AdjustPositioningAttr( pFmt, *pSubObj );
 
                         if( bUndo )
                             pUndo->AddObj( i2, pFmt );
@@ -354,25 +461,6 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetFmt();
                 if( pFrmFmt )
                 {
-#if 0
-// JP 28.09.98: erstmal wuerde ich NEIN sagen.
-// muss das sein ????
-                    // ggfs. die CrsrPosition umsetzen
-                    SwCrsrShell* pCShell = PTR_CAST( SwCrsrShell,
-                                            rDrawView.Imp().GetShell() );
-                    if( pCShell )
-                    {
-                        SwRect& rChrRect = (SwRect&)pCShell->GetCharRect();
-                        SwFlyFrm* pFly = pFrmFmt->GetFrm( &rChrRect.Pos(), FALSE );
-
-                        if( pFly && pFly->IsFlyInCntFrm() )
-                        {
-                            rChrRect = pFly->Frm();
-                            pCShell->GetCrsrDocPos() = rChrRect.Pos();
-                        }
-                    }
-// muss das sein ????
-#endif
                     DelLayoutFmt( pFrmFmt );
                     bDelMarked = FALSE;
                 }
