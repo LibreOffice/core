@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-01-22 09:11:28 $
+ *  last change: $Author: sj $ $Date: 2001-01-25 17:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@
 #include <svx/editstat.hxx>
 #endif
 #include <svtools/pathoptions.hxx>
-
+#include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
 //////////////////////////////////////////////////////////////////////////
@@ -232,10 +232,11 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage_ ) :
-    SdrPowerPointImport( rDocStream ),
-    rStorage( rStorage_ ),
-    nFilterOptions( 0 )
+SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage_, SfxMedium& rMedium ) :
+    SdrPowerPointImport     ( rDocStream ),
+    rMed                    ( rMedium ),
+    rStorage                ( rStorage_ ),
+    nFilterOptions          ( 0 )
 {
     pDoc = pDocument;
     if ( bOk )
@@ -1039,9 +1040,18 @@ BOOL SdPPTImport::Import()
                 switch ( aUserEditAtom.eLastViewType )
                 {
                     case 7 :    // outliner view
+                    {
+                        SfxItemSet* pSet = rMed.GetItemSet();
+                        if ( pSet )
+                            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 3 ) );
+                    }
+                    break;
                     case 8 :    // slide sorter
-                    default :
-                    case 1 :    // normal
+                    {
+                        SfxItemSet* pSet = rMed.GetItemSet();
+                        if ( pSet )
+                            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 2 ) );
+                    }
                     break;
                     case 10 :   // titlemaster
                         nSelectedPage = 1;
@@ -1058,6 +1068,9 @@ BOOL SdPPTImport::Import()
                     break;
                     case 4 :    // handout
                         ePageKind = PK_HANDOUT;
+                    break;
+                    default :
+                    case 1 :    // normal
                     break;
                 }
                 pFrameView->SetPageKind( ePageKind );
