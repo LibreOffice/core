@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:32 $
+ *  last change: $Author: obo $ $Date: 2003-04-08 17:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File[ GREEK ] = "sc_out30.bmp";
         File[ JAPANESE ] = "sc_out81.bmp";
         File[ PORTUGUESE ] = "sc_out03.bmp" ;
-        File[ portuguese_brazilian ] = "sc_out03.bmp" ;
+        File[ portuguese_brazilian ] = "sc_out55.bmp" ;
         File[ turkish ] = "sc_out90.bmp" ;
         File[ chinese_simplified ] = "sc_out86.bmp" ;
         File[ chinese_traditional ] = "sc_out88.bmp" ;
@@ -454,7 +454,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File[ GREEK ] = "lc_out30.bmp";
         File[ JAPANESE ] = "lc_out81.bmp";
         File[ PORTUGUESE ] = "lc_out03.bmp" ;
-        File[ portuguese_brazilian ] = "lc_out03.bmp" ;
+        File[ portuguese_brazilian ] = "lc_out55.bmp" ;
         File[ turkish ] = "lc_out90.bmp" ;
         File[ chinese_simplified ] = "lc_out86.bmp" ;
         File[ chinese_traditional ] = "lc_out88.bmp" ;
@@ -483,7 +483,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File[ GREEK ] = "sch_out30.bmp";
         File[ JAPANESE ] = "sch_out81.bmp";
         File[ PORTUGUESE ] = "sch_out03.bmp" ;
-        File[ portuguese_brazilian ] = "sch_out03.bmp" ;
+        File[ portuguese_brazilian ] = "sch_out55.bmp" ;
         File[ turkish ] = "sch_out90.bmp" ;
         File[ chinese_simplified ] = "sch_out86.bmp" ;
         File[ chinese_traditional ] = "sch_out88.bmp" ;
@@ -513,7 +513,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File[ GREEK ] = "lch_out30.bmp";
         File[ JAPANESE ] = "lch_out81.bmp";
         File[ PORTUGUESE ] = "lch_out03.bmp" ;
-        File[ portuguese_brazilian ] = "lch_out03.bmp" ;
+        File[ portuguese_brazilian ] = "lch_out55.bmp" ;
         File[ turkish ] = "lch_out90.bmp" ;
         File[ chinese_simplified ] = "lch_out86.bmp" ;
         File[ chinese_traditional ] = "lch_out88.bmp" ;
