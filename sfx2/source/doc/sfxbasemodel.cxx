@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:36:50 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,12 +155,12 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupllier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupllier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
@@ -328,7 +328,7 @@ using namespace com::sun::star;
 #define XINDEXCONTAINER                         ::com::sun::star::container::XIndexContainer
 #define UNSUPPORTEDFLAVOREXCEPTION              ::com::sun::star::datatransfer::UnsupportedFlavorException
 #define XPRINTJOBLISTENER                       ::com::sun::star::view::XPrintJobListener
-#define XUICONFIGURATIONSTORAGE                 ::drafts::com::sun::star::ui::XUIConfigurationStorage
+#define XUICONFIGURATIONSTORAGE                 ::com::sun::star::ui::XUIConfigurationStorage
 #define XPROPERTYSET                            ::com::sun::star::beans::XPropertySet
 #define XSCRIPTPROVIDERFACTORY ::com::sun::star::script::provider::XScriptProviderFactory
 //________________________________________________________________________________________________________
@@ -3511,7 +3511,7 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
     {
         REFERENCE< XUICONFIGURATIONMANAGER > xNewUIConfMan(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii( "drafts.com.sun.star.ui.UIConfigurationManager" )),
+                ::rtl::OUString::createFromAscii( "com.sun.star.ui.UIConfigurationManager" )),
                 UNOQUERY );
 
         Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( xNewUIConfMan, UNOQUERY );
