@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: os $ $Date: 2002-05-07 11:32:54 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,9 +861,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 static BOOL bNum =   FALSE;
                 static BOOL bMerge = FALSE;
                 USHORT nRet = USHRT_MAX;
-                SvtPathOptions aPathOpt;
-                SfxNewFileDialog* pNewFileDlg =
-                    new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE);
 
                 USHORT nFlags = bFrame ? SFX_LOAD_FRAME_STYLES : 0;
                 if(bPage)
@@ -874,43 +871,67 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     nFlags|= SFX_LOAD_TEXT_STYLES;
                 if(bMerge)
                     nFlags|= SFX_MERGE_STYLES;
-                pNewFileDlg->SetTemplateFlags(nFlags);
 
-                nRet = pNewFileDlg->Execute();
-                if(RET_TEMPLATE_LOAD == nRet)
+                if ( pArgs )
                 {
-                    FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
-                    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-
-                    xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
-
-                    SfxObjectFactory &rFact = GetFactory();
-                    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-                    for( USHORT i = 0; i < rFact.GetFilterCount(); i++ )
+                    SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE );
+                    if ( pItem )
                     {
-                        const SfxFilter* pFlt = rFact.GetFilter( i );
-                        if( pFlt && pFlt->IsAllowedAsTemplate() )
+                        aFileName = pItem->GetValue();
+                        SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD, FALSE );
+                        if ( pFlagsItem )
+                            nFlags = (USHORT) pFlagsItem->GetValue();
+                    }
+                }
+
+                if ( !aFileName.Len() )
+                {
+                    SvtPathOptions aPathOpt;
+                    SfxNewFileDialog* pNewFileDlg =
+                        new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE);
+                    pNewFileDlg->SetTemplateFlags(nFlags);
+
+                    nRet = pNewFileDlg->Execute();
+                    if(RET_TEMPLATE_LOAD == nRet)
+                    {
+                        FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+                        Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
+                        xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
+
+                        SfxObjectFactory &rFact = GetFactory();
+                        Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+                        for( USHORT i = 0; i < rFact.GetFilterCount(); i++ )
                         {
-                            const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
-                            xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                            const SfxFilter* pFlt = rFact.GetFilter( i );
+                            if( pFlt && pFlt->IsAllowedAsTemplate() )
+                            {
+                                const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                                xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                            }
+
+                            if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
+                                xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+
                         }
 
-                        if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
-                            xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
-
+                        if( ERRCODE_NONE == aDlgHelper.Execute() )
+                        {
+                            aFileName = xFP->getFiles().getConstArray()[0];
+                        }
                     }
-
-                    if( ERRCODE_NONE == aDlgHelper.Execute() )
+                    else
                     {
-                        aFileName = xFP->getFiles().getConstArray()[0];
+                        aFileName = pNewFileDlg->GetTemplateFileName();
                     }
+
+                    nFlags = pNewFileDlg->GetTemplateFlags();
+                    rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aFileName ) );
+                    rReq.AppendItem( SfxInt32Item( SID_TEMPLATE_LOAD, (long) nFlags ) );
+                    delete pNewFileDlg;
                 }
-                else
-                {
-                    aFileName = pNewFileDlg->GetTemplateFileName();
-                }
+
                 SwgReaderOption aOpt;
-                nFlags = pNewFileDlg->GetTemplateFlags();
                 aOpt.SetTxtFmts(    bText = (0 != (nFlags&SFX_LOAD_TEXT_STYLES) ));
                 aOpt.SetFrmFmts(    bFrame = (0 != (nFlags&SFX_LOAD_FRAME_STYLES)));
                 aOpt.SetPageDescs(  bPage = (0 != (nFlags&SFX_LOAD_PAGE_STYLES )));
@@ -920,8 +941,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 aOpt.SetMerge( !bMerge );
 
                 if( aFileName.Len() )
+                {
                     SetError( LoadStylesFromFile( aFileName, aOpt, FALSE ));
-                delete pNewFileDlg;
+                    if ( !GetError() )
+                        rReq.Done();
+                }
             }
             break;
             case SID_SOURCEVIEW:
@@ -1106,6 +1130,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pFrame->Show();
                     pSmryDoc->SetModified();
                 }
+
             }
             delete pDlg;
         }
@@ -1611,15 +1636,18 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     }
     sal_Bool bWasBrowseMode = pDoc->IsBrowseMode();
     RemoveLink();
+
     //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();
     ((SwXTextDocument*)pxDoc)->InitNewDoc();
 
+
     AddLink();
     //has to be set to have the right setting before the view is created
     pDoc->SetBrowseMode(bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
+
 
     String sBaseURL = INetURLObject::GetBaseURL();
     const String& rMedname = GetMedium()->GetName();
