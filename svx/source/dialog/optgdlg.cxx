@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 14:20:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #define ITEMID_LANGUAGE 0
 #ifndef _SVX_LANGITEM_HXX
 #include "langitem.hxx"
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
 #endif
 
 #include "dialmgr.hxx"
@@ -1053,10 +1056,10 @@ static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, ResId( OFA_TP_LANGUAGES, DIALOG_MGR() ), rSet ),
     aUILanguageGB(this,         ResId(GB_UI_LANG        )),
-//    aUILanguageFT(this,         ResId(FT_UI_LANG        )),
-//    aUILanguageLB(this,         ResId(LB_UI_LANG        )),
     aLocaleSettingFT(this,      ResId(FT_LOCALESETTING)),
     aLocaleSettingLB(this,      ResId(LB_LOCALESETTING)),
+    aDecimalSeparatorFT(this,   ResId(FT_DECIMALSEPARATOR)),
+    aDecimalSeparatorCB(this,   ResId(CB_DECIMALSEPARATOR)),
     aCurrencyFT( this,          ResId(FT_CURRENCY       )),
     aCurrencyLB( this,          ResId(LB_CURRENCY       )),
     aLinguLanguageGB(this,      ResId(GB_LINGU_LANG     )),
@@ -1070,7 +1073,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aAsianSupportFL(this,       ResId(FL_ASIANSUPPORT    )),
     aAsianSupportCB(this,       ResId(CB_ASIANSUPPORT   )),
     aCTLSupportFL(this,         ResId(FL_CTLSUPPORT    )),
-    aCTLSupportCB(this,         ResId(CB_CTLSUPPORT   ))
+    aCTLSupportCB(this,         ResId(CB_CTLSUPPORT   )),
+    sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText())
 {
     FreeResource();
 
@@ -1252,6 +1256,10 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, TRUE ) );
     }
 
+    //
+    if(aDecimalSeparatorCB.GetSavedValue() != aDecimalSeparatorCB.IsChecked())
+        aSysLocaleOptions.SetDecimalSeparatorAsLocale(aDecimalSeparatorCB.IsChecked());
+
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for
     // locale default. This must be set _after_ the locale above in order to
     // have a valid locale for broadcasting the currency change.
@@ -1399,8 +1407,13 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         aLocaleSettingLB.SelectLanguage( LANGUAGE_SYSTEM );
     aLocaleSettingLB.Enable(!aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE));
 
+    //
+    aDecimalSeparatorCB.Check( aSysLocaleOptions.IsDecimalSeparatorAsLocale());
+    aDecimalSeparatorCB.SaveValue();
+
     // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
     // #i15812# must be done *before* the configured currency is set
+    // and update the decimal separator used for the given locale
     LocaleSettingHdl(&aLocaleSettingLB);
 
     // configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default
@@ -1567,6 +1580,15 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
         nPos = aCurrencyLB.GetEntryPos( (void*) pCurr );
     }
     aCurrencyLB.SelectEntryPos( nPos );
+
+    //update the decimal separator key of the related CheckBox
+    Locale aTempLocale;
+    lcl_LanguageToLocale( aTempLocale, eLang );
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+    String sTempLabel(sDecimalSeparatorLabel);
+    sTempLabel.SearchAndReplaceAscii("%1", aLocaleWrapper.getNumDecimalSep() );
+    aDecimalSeparatorCB.SetText(sTempLabel);
+
     return 0;
 }
 /* -----------------------------21.06.01 09:33--------------------------------
