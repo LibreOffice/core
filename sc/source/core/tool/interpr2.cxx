@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:30:24 $
+ *  last change: $Author: er $ $Date: 2001-03-15 21:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1864,13 +1864,14 @@ void ScInterpreter::ScBase()
             0
         };
         static const int nDigits = (sizeof(pDigits)/sizeof(sal_Unicode))-1;
-        const size_t nBuf = 384;
-        USHORT nMinLen;
+        xub_StrLen nMinLen;
         if ( nParamCount == 3 )
         {
             double fLen = SolarMath::ApproxFloor( GetDouble() );
-            if ( 1 <= fLen && fLen < nBuf-1 )
-                nMinLen = (USHORT) fLen;
+            if ( 1.0 <= fLen && fLen < STRING_MAXLEN )
+                nMinLen = (xub_StrLen) fLen;
+            else if ( fLen == 0.0 )
+                nMinLen = 1;
             else
                 nMinLen = 0;    // Error
         }
@@ -1878,11 +1879,22 @@ void ScInterpreter::ScBase()
             nMinLen = 1;
         double fBase = SolarMath::ApproxFloor( GetDouble() );
         double fVal = SolarMath::ApproxFloor( GetDouble() );
+        double fChars = ((fVal > 0.0 && fBase > 0.0) ?
+            (ceil( log( fVal ) / log( fBase ) ) + 2.0) :
+            2.0);
+        if ( fChars >= STRING_MAXLEN )
+            nMinLen = 0;    // Error
 
         if ( !nGlobalError && nMinLen && 2 <= fBase && fBase <= nDigits && 0 <= fVal )
         {
-            sal_Unicode pBuf[nBuf];
-            memset( pBuf, '0', nBuf );
+            const xub_StrLen nConstBuf = 128;
+            sal_Unicode aBuf[nConstBuf];
+            xub_StrLen nBuf = Max( (xub_StrLen) fChars, (xub_StrLen) (nMinLen+1) );
+            sal_Unicode* pBuf = (nBuf <= nConstBuf ? aBuf : new sal_Unicode[nBuf]);
+            for ( xub_StrLen j = 0; j < nBuf; ++j )
+            {
+                pBuf[j] = '0';
+            }
             sal_Unicode* p = pBuf + nBuf - 1;
             *p = 0;
             if ( fVal <= (ULONG)(~0) )
@@ -1958,6 +1970,8 @@ void ScInterpreter::ScBase()
                     p = pBuf + nBuf - 1 - nMinLen;
                 PushStringBuffer( p );
             }
+            if ( pBuf != aBuf )
+                delete [] pBuf;
         }
         else
             SetIllegalArgument();
