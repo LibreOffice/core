@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
+ *  last change: $Author: gt $ $Date: 2001-09-05 07:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,9 @@ sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
+//  rEvt.maDropEvent.Context->acceptDrop( DND_ACTION_NONE );
+//  rEvt.maDropEvent.Context->dropComplete( TRUE );
+
     sal_Int8 nRet = DND_ACTION_NONE;
     SfxObjectShell* pDocShell = pDialog->GetObjectShell();
     TransferableDataHelper aHelper( rEvt.maDropEvent.Transferable );
@@ -309,13 +312,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     if ( pEntry && pEntry != pPreDropEntry )
                         ShowTargetEmphasis( pEntry, FALSE );
 
-                    if ( pEntry )
-                    {
-                        pDialog->SelectStyle( GetEntryText( pEntry )  );
-                        pDialog->ActionSelect( SID_STYLE_UPDATE_BY_EXAMPLE );
-                    }
-                    else
-                        pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
+                    PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), pEntry );
 
                     bFormatFound = sal_True;
                     nRet =  rEvt.mnAction;
@@ -325,12 +322,51 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
 
         if ( !bFormatFound )
-            ErrorHandler::HandleError( ERRCODE_IO_WRONGFORMAT );
+            PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteError ) );
     }
-
 
     return nRet;
 }
+
+
+IMPL_LINK( DropListBox_Impl, OnAsyncExecuteDrop, SvLBoxEntry*, pEntry )
+{
+    if ( pEntry )
+    {
+        pDialog->SelectStyle( GetEntryText( pEntry )  );
+        pDialog->ActionSelect( SID_STYLE_UPDATE_BY_EXAMPLE );
+    }
+    else
+        pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
+
+    return 0;
+}
+
+
+IMPL_LINK( DropListBox_Impl, OnAsyncExecuteError, void*, NOTINTERESTEDIN )
+{
+    ErrorHandler::HandleError( ERRCODE_IO_WRONGFORMAT );
+
+    return 0;
+}
+
+
+long DropListBox_Impl::Notify( NotifyEvent& rNEvt )
+{
+    if( pDialog->bCanDel && rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+
+        if( KEY_DELETE == rKeyCode.GetCode() && !rKeyCode.GetModifier() )
+        {
+            pDialog->DeleteHdl( NULL );
+            return 1;
+        }
+    }
+
+    return SvTreeListBox::Notify( rNEvt );
+}
+
 
 //-------------------------------------------------------------------------
 

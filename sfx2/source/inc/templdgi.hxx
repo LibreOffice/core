@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:09:13 $
+ *  last change: $Author: gt $ $Date: 2001-09-05 07:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@ class SfxDockingWindow;
 
 class DropListBox_Impl : public SvTreeListBox
 {
+private:
+    DECL_LINK( OnAsyncExecuteDrop, SvLBoxEntry* );
+    DECL_LINK( OnAsyncExecuteError, void* );
 protected:
     SvLBoxEntry*                    pPreDropEntry;
     SfxCommonTemplateDialog_Impl*   pDialog;
@@ -120,12 +123,14 @@ public:
         SvTreeListBox( pParent, nWinBits ), pDialog( pD ), pPreDropEntry( NULL )
             {}
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    USHORT          GetModifier() const { return nModifier; }
-    SvLBoxEntry*    GetPreDropEntry() const { return pPreDropEntry; }
+    USHORT              GetModifier() const { return nModifier; }
+    SvLBoxEntry*        GetPreDropEntry() const { return pPreDropEntry; }
+
+    virtual long        Notify( NotifyEvent& rNEvt );
 };
 
 // class SfxActionListBox ------------------------------------------------
