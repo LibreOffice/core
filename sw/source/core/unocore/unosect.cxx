@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:14:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,12 +183,18 @@ struct SwTextSectionProperties_Impl
     sal_Bool    bHidden;
     sal_Bool    bCondHidden;
     sal_Bool    bProtect;
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    sal_Bool    bEditInReadonly;
+    // <--
     sal_Bool    bUpdateType;
 
     SwTextSectionProperties_Impl() :
         bDDE(0),
         bHidden(0),
         bProtect(0),
+        // --> FME 2004-06-22 #114856# edit in readonly sections
+        bEditInReadonly(0),
+        // <--
         bCondHidden(0),
         pColItem(0),
         pBrushItem(0),
@@ -400,6 +406,10 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
 
         aSect.SetHidden(pProps->bHidden);
         aSect.SetProtect(pProps->bProtect);
+        // --> FME 2004-06-22 #114856# edit in readonly sections
+        aSect.SetEditInReadonly(pProps->bEditInReadonly);
+        // <--
+
         SfxItemSet aSet(pDoc->GetAttrPool(),
                     RES_COL, RES_COL,
                     RES_BACKGROUND, RES_BACKGROUND,
@@ -721,6 +731,17 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                             aSection.SetProtect(bVal);
                     }
                     break;
+                    // --> FME 2004-06-22 #114856# edit in readonly sections
+                    case WID_SECT_EDIT_IN_READONLY:
+                    {
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProperty].getValue();
+                        if(m_bIsDescriptor)
+                            pProps->bEditInReadonly = bVal;
+                        else
+                            aSection.SetEditInReadonly(bVal);
+                    }
+                    // <--
+                    break;
                     case WID_SECT_PASSWORD:
                     {
                         uno::Sequence<sal_Int8> aSeq;
@@ -981,6 +1002,14 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                         pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
                     }
                     break;
+                    // --> FME 2004-06-22 #114856# edit in readonly sections
+                    case WID_SECT_EDIT_IN_READONLY:
+                    {
+                        sal_Bool bTemp = m_bIsDescriptor ? pProps->bEditInReadonly : pSect->IsEditInReadonly();
+                        pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
+                    }
+                    break;
+                    // <--
                     case  FN_PARAM_LINK_DISPLAY_NAME:
                     {
                         if(pFmt)
@@ -1255,6 +1284,9 @@ Sequence< PropertyState > SwXTextSection::getPropertyStates(
                 case WID_SECT_REGION :
                 case WID_SECT_VISIBLE   :
                 case WID_SECT_PROTECTED:
+                // --> FME 2004-06-22 #114856# edit in readonly sections
+                case WID_SECT_EDIT_IN_READONLY:
+                // <--
                 case  FN_PARAM_LINK_DISPLAY_NAME:
                 case  FN_UNO_ANCHOR_TYPES:
                 case  FN_UNO_TEXT_WRAP:
@@ -1346,6 +1378,17 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
                     aSection.SetProtect(FALSE);
             }
             break;
+            // --> FME 2004-06-22 #114856# edit in readonly sections
+            case WID_SECT_EDIT_IN_READONLY:
+            {
+                if(m_bIsDescriptor)
+                    pProps->bEditInReadonly = FALSE;
+                else
+                    aSection.SetEditInReadonly(FALSE);
+            }
+            break;
+            // <--
+
             case  FN_UNO_ANCHOR_TYPES:
             case  FN_UNO_TEXT_WRAP:
             case  FN_UNO_ANCHOR_TYPE:
@@ -1429,6 +1472,9 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
         }
         break;
         case WID_SECT_PROTECTED:
+        // --> FME 2004-06-22 #114856# edit in readonly sections
+        case WID_SECT_EDIT_IN_READONLY:
+        // <--
         {
             sal_Bool bTemp = FALSE;
             aRet.setValue( &bTemp, ::getCppuBooleanType());
