@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:58:49 $
+#   last change: $Author: pluby $ $Date: 2001-02-13 23:53:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,10 @@ APP1STDLIBS+= svtool.lib
 .ELSE
 APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX) 
 APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX) 
+.ENDIF
+
+.IF "$(OS)"=="MACOSX"
+ALL:	$(BIN)$/$(RES1TARGET).res ALLTAR
 .ENDIF
 
 # --- Targets ------------------------------------------------------
