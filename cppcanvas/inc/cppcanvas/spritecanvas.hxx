@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:58:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 #ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
@@ -105,12 +108,18 @@ namespace cppcanvas
     class SpriteCanvas : public virtual BitmapCanvas
     {
     public:
-        virtual bool                    updateScreen() const = 0;
+        virtual bool                    updateScreen( bool bUpdateAll ) const = 0;
 
         virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const = 0;
         virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const = 0;
 
-        virtual SpriteCanvasSharedPtr   cloneSpriteCanvas() const = 0; // shared_ptr does not allow for covariant return types
+        // shared_ptr does not allow for covariant return types
+        SpriteCanvasSharedPtr           cloneSpriteCanvas() const
+        {
+            SpriteCanvasSharedPtr p( ::boost::dynamic_pointer_cast< SpriteCanvas >(this->clone()) );
+            OSL_ENSURE(p.get(), "SpriteCanvas::cloneSpriteCanvas(): dynamic cast failed");
+            return p;
+        }
 
         virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const = 0;
