@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 08:28:01 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
-#endif
-
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "confapitypes.hxx"
 #endif
 
 //..........................................................................
@@ -277,6 +273,9 @@ struct OChangeCounter : public ChangeTreeAction
 // ===================================================================
 class CollectNames :  public NodeAction
 {
+public:
+    typedef std::vector<OUString> NameList;
+
 public:
     NameList const& list() const { return aList; }
 
