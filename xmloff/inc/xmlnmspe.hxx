@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnmspe.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 13:08:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,10 @@ XML_NAMESPACE( DLG,             26U )
 XML_NAMESPACE( XFORMS,          27U )
 XML_NAMESPACE( XSD,             28U )
 XML_NAMESPACE( XSI,             29U )
+XML_NAMESPACE( SMIL,            30U )
+XML_NAMESPACE( ANIMATION,       31U )
 
-#define _XML_OLD_NAMESPACE_BASE 30U
+#define _XML_OLD_NAMESPACE_BASE 32U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
@@ -120,7 +122,4 @@ XML_OLD_NAMESPACE( TEXT,    4U )
 XML_OLD_NAMESPACE( TABLE,   5U )
 XML_OLD_NAMESPACE( META,    6U )
 
-
-
 #endif  //  _XMLOFF_XMLNMSPE_HXX
-
