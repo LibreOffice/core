@@ -1,0 +1,949 @@
+/*************************************************************************
+ *
+ *  $RCSfile: grfflt.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2000-11-16 16:29:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+#include "grfflt.hrc"
+
+// --------------------
+// - DLG_FILTERMOSAIC -
+// --------------------
+
+ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
+{
+    HelpID = SID_GRFFILTER_MOSAIC;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 250, 100 ) ;
+
+    Text = "Mosaik" ;
+    Text[ ENGLISH ] = "Mosaic" ;
+    Text[ norwegian ] = "Mosaic" ;
+    Text[ italian ] = "Mosaico" ;
+    Text[ portuguese_brazilian ] = "Mosaico" ;
+    Text[ portuguese ] = "Mosaico" ;
+    Text[ finnish ] = "Mosaiikki" ;
+    Text[ danish ] = "Mosaik" ;
+    Text[ french ] = "MosaÔque" ;
+    Text[ swedish ] = "Mosaik" ;
+    Text[ dutch ] = "MozaÔek" ;
+    Text[ spanish ] = "Mosaico" ;
+    Text[ english_us ] = "Mosaic" ;
+    Text[ chinese_simplified ] = "œ‚«∂";
+    Text[ russian ] = "ÃÓÁ‡ËÍ‡";
+    Text[ polish ] = "Mozaika";
+    Text[ japanese ] = "”ªﬁ≤∏";
+    Text[ chinese_simplified ] = "œ‚«∂";
+    Text[ russian ] = "ÃÓÁ‡ËÍ‡";
+    Text[ polish ] = "Mozaika";
+    Text[ japanese ] = "”ªﬁ≤∏";
+    Text[ chinese_traditional ] = "∆^¥O";
+    Text[ arabic ] = "›”Ì›”«¡";
+    Text[ greek ] = "Ã˘Û·˙Í¸";
+    Text[ korean ] = "∏¿⁄¿Ã≈©";
+    Text[ turkish ] = "Mozaik";
+    Text[ language_user1 ] = " ";
+
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93, 91 ) ;
+
+        Text = "Vorschau" ;
+        Text[ ENGLISH ] = "Preview" ;
+        Text[ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "œÂ‰‚. ÔÓÒÏÓÚ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "AperÁu";
+        Text[ spanish ] = "PrevisualizaciÛn";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Fˆrhandsvisning";
+        Text[ polish ] = "Podglπd";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "„⁄«Ì‰…";
+    };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+    GroupBox GRP_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 102, 3 );
+        Size = MAP_APPFONT ( 89, 91 );
+        Text = "Parameter";
+        Text[ ENGLISH ] = "Parameter";
+        Text[ english_us ] = "Parameters";
+        Text[ portuguese ] = "Par‚metros";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚";
+        Text[ greek ] = "–·Ò‹ÏÂÙÒÔÈ";
+        Text[ dutch ] = "Parameter";
+        Text[ french ] = "ParamËtres";
+        Text[ spanish ] = "Par·metros";
+        Text[ italian ] = "Parameter";
+        Text[ danish ] = "Parametre";
+        Text[ swedish ] = "Parametrar";
+        Text[ polish ] = "Parametry";
+        Text[ portuguese_brazilian ] = "Parameter";
+        Text[ japanese ] = " ﬂ◊“∞¿";
+        Text[ korean ] = "Parameter";
+        Text[ chinese_simplified ] = "≤Œ ˝";
+        Text[ chinese_traditional ] = "∞—º∆";
+        Text[ turkish ] = "Parameter";
+        Text[ arabic ] = "«·„⁄·„« ";
+    };
+    FixedText DLG_FILTERMOSAIC_FT_WIDTH
+    {
+        Pos = MAP_APPFONT ( 108, 15 ) ;
+        Size = MAP_APPFONT ( 77, 10 ) ;
+        Text = "~Breite" ;
+        Text[ ENGLISH ] = "~Width" ;
+        Text[ norwegian ] = "~Bredde" ;
+        Text[ italian ] = "~Largh." ;
+        Text[ portuguese_brazilian ] = "~Largura" ;
+        Text[ portuguese ] = "~Largura" ;
+        Text[ finnish ] = "~Leveys" ;
+        Text[ danish ] = "Bredde" ;
+        Text[ french ] = "~Largeur" ;
+        Text[ swedish ] = "~Bredd" ;
+        Text[ dutch ] = "~Breedte" ;
+        Text[ spanish ] = "A~ncho" ;
+        Text[ english_us ] = "~Width" ;
+        Text[ chinese_simplified ] = "øÌ(~W)";
+        Text[ russian ] = "~ÿËËÌ‡";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "ïù(~W)";
+        Text[ chinese_traditional ] = "ºe´◊(~W)";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ greek ] = "–Î‹ÙÔÚ";
+        Text[ korean ] = "≥ ∫Ò(~W)";
+        Text[ turkish ] = "Geni˛lik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField DLG_FILTERMOSAIC_MTR_WIDTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 120 , 28 ) ;
+        Size = MAP_APPFONT ( 65 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 999 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " Pixel" ;
+        First = 1 ;
+        Last = 999 ;
+        SpinSize = 1 ;
+    };
+    FixedText DLG_FILTERMOSAIC_FT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 108, 43 ) ;
+        Size = MAP_APPFONT ( 77, 10 ) ;
+        Text = "~Hˆhe" ;
+        Text[ ENGLISH ] = "~Height" ;
+        Text[ norwegian ] = "~H∞yde" ;
+        Text[ italian ] = "~Altezza" ;
+        Text[ portuguese_brazilian ] = "~Altura" ;
+        Text[ portuguese ] = "~Altura" ;
+        Text[ finnish ] = "Ko~rkeus" ;
+        Text[ danish ] = "H¯jde" ;
+        Text[ french ] = "~Hauteur" ;
+        Text[ swedish ] = "~Hˆjd" ;
+        Text[ dutch ] = "~Hoogte" ;
+        Text[ spanish ] = "A~ltura" ;
+        Text[ english_us ] = "~Height" ;
+        Text[ chinese_simplified ] = "∏ﬂ(~H)";
+        Text[ russian ] = "~¬˚ÒÓÚ‡";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "çÇÇ≥(~H)";
+        Text[ chinese_traditional ] = "∞™´◊(~H)";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã(~H)";
+        Text[ turkish ] = "Y¸ksek.";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 120, 56 ) ;
+        Size = MAP_APPFONT ( 65, 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 999 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " Pixel" ;
+        First = 1 ;
+        Last = 999 ;
+        SpinSize = 1 ;
+    };
+    CheckBox DLG_FILTERMOSAIC_CBX_EDGES
+    {
+        Pos = MAP_APPFONT ( 108, 74 ) ;
+        Size = MAP_APPFONT ( 77, 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Kanten hervorheben" ;
+        Text[ ENGLISH ] = "~Enhance edges" ;
+        Text[ english_us ] = "~Enhance edges" ;
+        Text[ portuguese ] = "~Enhance edges";
+        Text[ russian ] = "~¬˚‰ÂÎËÚ¸ ÍÓÌÚÛ˚";
+        Text[ greek ] = "≈ÈÛﬁÏ·ÌÛÁ ‹~ÍÒ˘Ì";
+        Text[ dutch ] = "~Kanten accentueren";
+        Text[ french ] = "Mise en Èvidence des ~arÍtes";
+        Text[ spanish ] = "~Resaltar aristas";
+        Text[ italian ] = "~Enhance edges";
+        Text[ danish ] = "FremhÊv kanter";
+        Text[ swedish ] = "Framh‰v ~kanter";
+        Text[ polish ] = "WyrÛønij krawÍdzie";
+        Text[ portuguese_brazilian ] = "~Enhance edges";
+        Text[ japanese ] = "äpÇã≠í≤Ç∑ÇÈ(~E)";
+        Text[ korean ] = "~Enhance edges";
+        Text[ chinese_simplified ] = "Õª≥ˆœ‘ æ±ﬂΩ«(~E)";
+        Text[ chinese_traditional ] = "¨•X≈„•‹√‰®§(~E)";
+        Text[ turkish ] = "~Enhance edges";
+        Text[ arabic ] = "≈»—«“ «·ÕÊ«›";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 194, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 194, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 194, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+// ----------------------
+// - DLG_FILTERSOLARIZE -
+// ----------------------
+
+ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
+{
+    HelpID = SID_GRFFILTER_SOLARIZE;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 250, 100 ) ;
+
+    Text = "Solarisation" ;
+    Text[ ENGLISH ] = "Solarization" ;
+    Text[ norwegian ] = "Solarization" ;
+    Text[ italian ] = "Solarizzazione" ;
+    Text[ portuguese_brazilian ] = "SolarizaÁ„o" ;
+    Text[ portuguese ] = "SolarizaÁ„o" ;
+    Text[ finnish ] = "Solarisaatio" ;
+    Text[ danish ] = "Solarisering" ;
+    Text[ french ] = "Solarisation" ;
+    Text[ swedish ] = "Solarisering" ;
+    Text[ dutch ] = "Solarisatie" ;
+    Text[ spanish ] = "SolarizaciÛn" ;
+    Text[ english_us ] = "Solarization" ;
+    Text[ chinese_simplified ] = "π˝∂»∆ÿπ‚";
+    Text[ russian ] = "—ÓÎˇËÁ‡ˆËˇ";
+    Text[ polish ] = "Solaryzacja";
+    Text[ japanese ] = "ø◊ÿæﬁ∞ºÆ›";
+    Text[ chinese_traditional ] = "√n•˙";
+    Text[ arabic ] = "«· ‘„¯”";
+    Text[ greek ] = "∏ÍËÂÛÁ ÛÙÔ ˆ˘Ú";
+    Text[ korean ] = "≈¬æÁ»ø∞˙";
+    Text[ turkish ] = "Y¸ksek pozlama";
+    Text[ language_user1 ] = " ";
+
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93, 91 ) ;
+
+        Text = "Vorschau" ;
+        Text[ ENGLISH ] = "Preview" ;
+        Text[ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "œÂ‰‚. ÔÓÒÏÓÚ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "AperÁu";
+        Text[ spanish ] = "PrevisualizaciÛn";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Fˆrhandsvisning";
+        Text[ polish ] = "Podglπd";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "„⁄«Ì‰…";
+    };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+    GroupBox GRP_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 102, 3 );
+        Size = MAP_APPFONT ( 89, 91 );
+        Text = "Parameter";
+        Text[ ENGLISH ] = "Parameter";
+        Text[ english_us ] = "Parameters";
+        Text[ portuguese ] = "Par‚metros";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚";
+        Text[ greek ] = "–·Ò‹ÏÂÙÒÔÈ";
+        Text[ dutch ] = "Parameter";
+        Text[ french ] = "ParamËtres";
+        Text[ spanish ] = "Par·metros";
+        Text[ italian ] = "Parameter";
+        Text[ danish ] = "Parametre";
+        Text[ swedish ] = "Parametrar";
+        Text[ polish ] = "Parametry";
+        Text[ portuguese_brazilian ] = "Parameter";
+        Text[ japanese ] = " ﬂ◊“∞¿";
+        Text[ korean ] = "Parameter";
+        Text[ chinese_simplified ] = "≤Œ ˝";
+        Text[ chinese_traditional ] = "∞—º∆";
+        Text[ turkish ] = "Parameter";
+        Text[ arabic ] = "«·„⁄·„« ";
+    };
+    FixedText DLG_FILTERSOLARIZE_FT_THRESHOLD
+    {
+        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Size = MAP_APPFONT ( 77 , 10 ) ;
+        Text = "~Schwellenwert" ;
+        Text[ ENGLISH ] = "Threshold" ;
+        Text[ norwegian ] = "Threshold" ;
+        Text[ italian ] = "Soglia" ;
+        Text[ portuguese_brazilian ] = "Limite" ;
+        Text[ portuguese ] = "~Valor limite" ;
+        Text[ finnish ] = "Raja" ;
+        Text[ danish ] = "TÊrskelvÊrdi" ;
+        Text[ french ] = "~Valeur de seuil" ;
+        Text[ swedish ] = "~Trˆskelv‰rde" ;
+        Text[ dutch ] = "~Drempelwaarde" ;
+        Text[ spanish ] = "Valor ~umbral" ;
+        Text[ english_us ] = "Threshold ~value" ;
+        Text[ chinese_simplified ] = "≥ı º÷µ(~V)";
+        Text[ russian ] = "œÓÓ„Ó‚ÓÂ ÁÌ‡˜ÂÌËÂ";
+        Text[ polish ] = "WartoúÊ progowa";
+        Text[ japanese ] = "ÇµÇ´Ç¢íl(~V)";
+        Text[ chinese_traditional ] = "™Ï©l≠»(~V)";
+        Text[ arabic ] = "ﬁÌ„… «·»œ¡";
+        Text[ greek ] = "‘ÈÏﬁ ÔÒﬂÔı";
+        Text[ korean ] = "¿”∞Ë∞™(~V)";
+        Text[ turkish ] = "E˛ik deer";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 120 , 28 ) ;
+        Size = MAP_APPFONT ( 65 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+    CheckBox DLG_FILTERSOLARIZE_CBX_INVERT
+    {
+        Pos = MAP_APPFONT ( 108, 46 ) ;
+        Size = MAP_APPFONT ( 77, 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Invertieren" ;
+        Text[ ENGLISH ] = "Invert" ;
+        Text[ norwegian ] = "Invert" ;
+        Text[ italian ] = "Inverti" ;
+        Text[ portuguese_brazilian ] = "Inverter" ;
+        Text[ portuguese ] = "~Inverter" ;
+        Text[ finnish ] = "K‰‰nteinen" ;
+        Text[ danish ] = "Inverter" ;
+        Text[ french ] = "~Invertir" ;
+        Text[ swedish ] = "~Invertera" ;
+        Text[ dutch ] = "~Invers" ;
+        Text[ spanish ] = "I~nvertir" ;
+        Text[ english_us ] = "~Invert" ;
+        Text[ chinese_simplified ] = "ª•≤π…´◊™ªª(~I)";
+        Text[ russian ] = "»Ì‚ÂÚËÓ‚‡Ú¸";
+        Text[ polish ] = "OdwrÛÊ";
+        Text[ japanese ] = "ãtì](~I)";
+        Text[ chinese_traditional ] = "§¨∏…¶‚¬‡¥´(~I)";
+        Text[ arabic ] = "⁄ﬂ”";
+        Text[ greek ] = "¡ÌÙ~ÈÛÙÒÔˆﬁ";
+        Text[ korean ] = "µ⁄¡˝±‚(~I)";
+        Text[ turkish ] = "Tersine Áevir";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 194, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 194, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 194, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+// ----------------------
+// - DLG_FILTERSOLARIZE -
+// ----------------------
+
+ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
+{
+    HelpID = SID_GRFFILTER_SEPIA;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 250, 100 ) ;
+
+    Text = "Alterung" ;
+    Text[ ENGLISH ] = "Age" ;
+    Text[ norwegian ] = "Age" ;
+    Text[ italian ] = "Invecchiamento" ;
+    Text[ portuguese_brazilian ] = "Idade" ;
+    Text[ portuguese ] = "Envelhecimento" ;
+    Text[ finnish ] = "Vanhenna" ;
+    Text[ danish ] = "∆ldning" ;
+    Text[ french ] = "Vieillissement" ;
+    Text[ swedish ] = "≈ldrande" ;
+    Text[ dutch ] = "Veroudering" ;
+    Text[ spanish ] = "Envejecimiento" ;
+    Text[ english_us ] = "Aging" ;
+    Text[ chinese_simplified ] = " ±–ß";
+    Text[ russian ] = "—Ú‡ÂÌËÂ";
+    Text[ polish ] = "Efekt starzenia";
+    Text[ japanese ] = "¥≤ºﬁ›∏ﬁ";
+    Text[ chinese_traditional ] = "Æ…Æƒ";
+    Text[ arabic ] = "«· ﬁ«œ„";
+    Text[ dutch ] = "Veroudering";
+    Text[ chinese_simplified ] = " ±–ß";
+    Text[ greek ] = "√ﬁÒ·ÌÛÁ";
+    Text[ korean ] = "≥∞¿Ω»ø∞˙";
+    Text[ turkish ] = "Eskitme";
+
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93, 91 ) ;
+
+        Text = "Vorschau" ;
+        Text[ ENGLISH ] = "Preview" ;
+        Text[ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "œÂ‰‚. ÔÓÒÏÓÚ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "AperÁu";
+        Text[ spanish ] = "PrevisualizaciÛn";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Fˆrhandsvisning";
+        Text[ polish ] = "Podglπd";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "„⁄«Ì‰…";
+    };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+    GroupBox GRP_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 102, 3 );
+        Size = MAP_APPFONT ( 89, 91 );
+        Text = "Parameter";
+        Text[ ENGLISH ] = "Parameter";
+        Text[ english_us ] = "Parameters";
+        Text[ portuguese ] = "Par‚metro";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚";
+        Text[ greek ] = "–·Ò‹ÏÂÙÒÔÚ";
+        Text[ dutch ] = "Parameter";
+        Text[ french ] = "ParamËtre";
+        Text[ spanish ] = "Par·metros";
+        Text[ italian ] = "Parameter";
+        Text[ danish ] = "Parametre";
+        Text[ swedish ] = "Parameter";
+        Text[ polish ] = "Parametry";
+        Text[ portuguese_brazilian ] = "Parameter";
+        Text[ japanese ] = " ﬂ◊“∞¿";
+        Text[ korean ] = "Parameter";
+        Text[ chinese_simplified ] = "≤Œ ˝";
+        Text[ chinese_traditional ] = "∞—º∆";
+        Text[ turkish ] = "Parameter";
+        Text[ arabic ] = "«·„⁄·„…";
+    };
+    FixedText DLG_FILTERSEPIA_FT_SEPIA
+    {
+        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Size = MAP_APPFONT ( 77 , 10 ) ;
+        Text = "Alterungsgrad" ;
+        Text[ ENGLISH ] = "Age value" ;
+        Text[ norwegian ] = "Age value" ;
+        Text[ italian ] = "Grado di invecchiamento" ;
+        Text[ portuguese_brazilian ] = "Valor de envelhecimento" ;
+        Text[ portuguese ] = "Grau de envelhecimento" ;
+        Text[ finnish ] = "Ik‰arvo" ;
+        Text[ danish ] = "∆ldningsgrad" ;
+        Text[ french ] = "DegrÈ de vieillissement" ;
+        Text[ swedish ] = "≈ldringsgrad" ;
+        Text[ dutch ] = "Mate van veroudering" ;
+        Text[ spanish ] = "Grado de envejecim." ;
+        Text[ english_us ] = "Aging degree" ;
+        Text[ chinese_simplified ] = " ±–ß∂»";
+        Text[ russian ] = "—ÚÂÔÂÌ¸ ÒÚ‡ÂÌËˇ";
+        Text[ polish ] = "StopieÒ starzenia";
+        Text[ japanese ] = "¥≤ºﬁ›∏ﬁìxçá";
+        Text[ chinese_traditional ] = "Æ…Æƒ´◊";
+        Text[ arabic ] = "œ—Ã… «· ﬁ«œ„";
+        Text[ dutch ] = "Mate van veroudering";
+        Text[ chinese_simplified ] = " ±–ß∂»";
+        Text[ greek ] = "¬·ËÏ¸Ú „ﬁÒ·ÌÛÁÚ";
+        Text[ korean ] = "≥∞¿Ω »ø∞˙ ¡§µµ";
+        Text[ turkish ] = "Eskitme derecesi";
+    };
+    MetricField DLG_FILTERSEPIA_MTR_SEPIA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 120 , 28 ) ;
+        Size = MAP_APPFONT ( 65 , 12 ) ;
+        TabStop = TRUE ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 194, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 194, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 194, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+// --------------------
+// - DLG_FILTERPOSTER -
+// --------------------
+
+ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
+{
+    HelpID = SID_GRFFILTER_POSTER;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 250, 100 ) ;
+
+    Text = "Poster" ;
+    Text[ ENGLISH ] = "Posterize" ;
+    Text[ norwegian ] = "Posterize" ;
+    Text[ italian ] = "Posterizzazione" ;
+    Text[ portuguese_brazilian ] = "Transformar em poster" ;
+    Text[ portuguese ] = "Poster" ;
+    Text[ finnish ] = "Juliste" ;
+    Text[ danish ] = "Plakat" ;
+    Text[ french ] = "Poster" ;
+    Text[ swedish ] = "Poster" ;
+    Text[ dutch ] = "Poster" ;
+    Text[ spanish ] = "PÛster" ;
+    Text[ english_us ] = "Posterize" ;
+    Text[ chinese_simplified ] = "’–Ã˘ª≠";
+    Text[ russian ] = "œÎ‡Í‡Ú";
+    Text[ polish ] = "Plakat";
+    Text[ japanese ] = "ŒﬂΩ¿∞";
+    Text[ chinese_traditional ] = "©€∂Kµe";
+    Text[ arabic ] = "„ı·’ﬁ";
+    Text[ greek ] = "¡ˆﬂÛ·";
+    Text[ korean ] = "∆˜Ω∫≈Õ »ø∞˙";
+    Text[ turkish ] = "Afi˛";
+
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93, 91 ) ;
+
+        Text = "Vorschau" ;
+        Text[ ENGLISH ] = "Preview" ;
+        Text[ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "œÂ‰‚. ÔÓÒÏÓÚ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "AperÁu";
+        Text[ spanish ] = "PrevisualizaciÛn";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Fˆrhandsvisning";
+        Text[ polish ] = "Podglπd";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "„⁄«Ì‰…";
+    };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+    GroupBox GRP_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 102, 3 );
+        Size = MAP_APPFONT ( 89, 91 );
+        Text = "Parameter";
+        Text[ ENGLISH ] = "Parameter";
+        Text[ english_us ] = "Parameters";
+        Text[ portuguese ] = "Par‚metro";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚";
+        Text[ greek ] = "–·Ò‹ÏÂÙÒÔÚ";
+        Text[ dutch ] = "Parameter";
+        Text[ french ] = "ParamËtre";
+        Text[ spanish ] = "Par·metros";
+        Text[ italian ] = "Parameter";
+        Text[ danish ] = "Parametre";
+        Text[ swedish ] = "Parameter";
+        Text[ polish ] = "Parametr";
+        Text[ portuguese_brazilian ] = "Parameter";
+        Text[ japanese ] = " ﬂ◊“∞¿";
+        Text[ korean ] = "Parameter";
+        Text[ chinese_simplified ] = "≤Œ ˝";
+        Text[ chinese_traditional ] = "∞—º∆";
+        Text[ turkish ] = "Parameter";
+        Text[ arabic ] = "«·„⁄·„…";
+    };
+    FixedText DLG_FILTERPOSTER_FT_POSTER
+    {
+        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Size = MAP_APPFONT ( 77 , 10 ) ;
+        Text = "Posterfarben" ;
+        Text[ ENGLISH ] = "Poster colors" ;
+        Text[ norwegian ] = "Poster colors" ;
+        Text[ italian ] = "Colori posterizz." ;
+        Text[ portuguese_brazilian ] = "Cores do poster" ;
+        Text[ portuguese ] = "Cores do poster" ;
+        Text[ finnish ] = "Julistev‰rit" ;
+        Text[ danish ] = "Plakatfarver" ;
+        Text[ french ] = "Couleurs du poster" ;
+        Text[ swedish ] = "Posterf‰rger" ;
+        Text[ dutch ] = "Posterkleuren" ;
+        Text[ spanish ] = "Colores del pÛster" ;
+        Text[ english_us ] = "Poster colors" ;
+        Text[ chinese_simplified ] = "’–Ã˘ª≠—’…´";
+        Text[ russian ] = "÷‚ÂÚ‡ ÔÎ‡Í‡Ú‡";
+        Text[ polish ] = "Kolory plakatu";
+        Text[ japanese ] = "ŒﬂΩ¿∞∂◊∞";
+        Text[ chinese_traditional ] = "©€∂Kµe√C¶‚";
+        Text[ arabic ] = "√·Ê«‰ «·„ı·’ﬁ";
+        Text[ greek ] = "◊Ò˛Ï·Ù· ·ˆﬂÛ·Ú";
+        Text[ korean ] = "∆˜Ω∫≈Õ ªˆªÛ";
+        Text[ turkish ] = "Afi˛ renkleri";
+    };
+    NumericField DLG_FILTERPOSTER_NUM_POSTER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 120 , 28 ) ;
+        Size = MAP_APPFONT ( 65 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        Maximum = 64 ;
+        StrictFormat = TRUE ;
+        First = 2 ;
+        Last = 64 ;
+        SpinSize = 1 ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 194, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 194, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 194, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+// --------------------
+// - DLG_FILTEREMBOSS -
+// --------------------
+
+TabPage RID_SVX_GRFFILTER_DLG_EMBOSS_TAB
+{
+    Pos = MAP_APPFONT ( 0, 0 ) ;
+    Size = MAP_APPFONT ( 0, 0 ) ;
+};
+
+ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
+{
+    HelpID = SID_GRFFILTER_EMBOSS;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 250, 100 ) ;
+
+    Text = "Relief" ;
+    Text[ ENGLISH ] = "Emboss" ;
+    Text[ norwegian ] = "Emboss" ;
+    Text[ italian ] = "Rilievo" ;
+    Text[ portuguese_brazilian ] = "RealÁar" ;
+    Text[ portuguese ] = "Relevo" ;
+    Text[ finnish ] = "Kohopainatus" ;
+    Text[ danish ] = "Relief" ;
+    Text[ french ] = "Relief" ;
+    Text[ swedish ] = "Relief" ;
+    Text[ dutch ] = "ReliÎf" ;
+    Text[ spanish ] = "Relieve" ;
+    Text[ english_us ] = "Relief" ;
+    Text[ chinese_simplified ] = "∏°µÒ";
+    Text[ russian ] = "–ÂÎ¸ÂÙ";
+    Text[ polish ] = "Uwypuklenie";
+    Text[ japanese ] = "⁄ÿ∞Ã";
+    Text[ chinese_traditional ] = "ØB¿J";
+    Text[ arabic ] = "‰ﬁ‘";
+    Text[ greek ] = "AÌ‹„ÎıˆÔ";
+    Text[ korean ] = "º±∏Ì`µµ";
+    Text[ turkish ] = "Rˆlyef";
+    Text[ language_user1 ] = " ";
+
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93, 91 ) ;
+
+        Text = "Vorschau" ;
+        Text[ ENGLISH ] = "Preview" ;
+        Text[ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Preview";
+        Text[ russian ] = "œÂ‰‚. ÔÓÒÏÓÚ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "AperÁu";
+        Text[ spanish ] = "PrevisualizaciÛn";
+        Text[ italian ] = "Preview";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Fˆrhandsvisning";
+        Text[ polish ] = "Podglπd";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ korean ] = "Preview";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ turkish ] = "Preview";
+        Text[ arabic ] = "„⁄«Ì‰…";
+    };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+    GroupBox GRP_PARAMETER
+    {
+        Pos = MAP_APPFONT ( 102, 3 );
+        Size = MAP_APPFONT ( 89, 91 );
+        Text = "Parameter";
+        Text[ ENGLISH ] = "Parameter";
+        Text[ english_us ] = "Parameters";
+        Text[ portuguese ] = "Par‚metro";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚";
+        Text[ greek ] = "–·Ò‹ÏÂÙÒÔÚ";
+        Text[ dutch ] = "Parameter";
+        Text[ french ] = "ParamËtre";
+        Text[ spanish ] = "Par·metros";
+        Text[ italian ] = "Parameter";
+        Text[ danish ] = "Parametre";
+        Text[ swedish ] = "Parameter";
+        Text[ polish ] = "Parametr";
+        Text[ portuguese_brazilian ] = "Parameter";
+        Text[ japanese ] = " ﬂ◊“∞¿";
+        Text[ korean ] = "Parameter";
+        Text[ chinese_simplified ] = "≤Œ ˝";
+        Text[ chinese_traditional ] = "∞—º∆";
+        Text[ turkish ] = "Parameter";
+        Text[ arabic ] = "«·„⁄·„…";
+    };
+    FixedText DLG_FILTEREMBOSS_FT_LIGHT
+    {
+        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Size = MAP_APPFONT ( 77 , 10 ) ;
+        Text = "Lichtquelle" ;
+        Text[ ENGLISH ] = "Source of light" ;
+        Text[ norwegian ] = "Source of light" ;
+        Text[ italian ] = "Sorgente di luce" ;
+        Text[ portuguese_brazilian ] = "Source of light" ;
+        Text[ portuguese ] = "Fonte de luz" ;
+        Text[ finnish ] = "Source of light" ;
+        Text[ danish ] = "Lyskilde" ;
+        Text[ french ] = "Source de lumiËre" ;
+        Text[ swedish ] = "Ljusk‰lla" ;
+        Text[ dutch ] = "Lichtbron" ;
+        Text[ spanish ] = "Fuente de luz" ;
+        Text[ english_us ] = "Light source" ;
+        Text[ chinese_simplified ] = "π‚‘¥";
+        Text[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡";
+        Text[ polish ] = "èrÛd≥o úwiat≥a";
+        Text[ japanese ] = "åıåπ";
+        Text[ chinese_traditional ] = "•˙∑Ω";
+        Text[ arabic ] = "„’œ— «·÷Ê¡";
+        Text[ greek ] = "–ÒÔ›ÎÂıÛÁ ˆ˘Ù¸Ú";
+        Text[ korean ] = "±§ø¯";
+        Text[ turkish ] = "I˛˝k kayna˝";
+    };
+    Control DLG_FILTEREMBOSS_CTL_LIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 108 , 28 ) ;
+        Size = MAP_APPFONT ( 77 , 60 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 194, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 194, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 194, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+};
