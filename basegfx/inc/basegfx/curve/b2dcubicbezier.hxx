@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:04 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,14 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// predeclarations
+
+namespace basegfx
+{
+    class B2DPolygon;
+} // end of namespace basegfx
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -116,6 +124,13 @@ namespace basegfx
 
         ::basegfx::B2DPoint getControlPointB() const { return maControlPointB; }
         void setControlPointB(const ::basegfx::B2DPoint& rValue) { maControlPointB = rValue; }
+
+        // adaptive subdivide by angle criteria
+        // #i37443# allow the criteria to get unsharp in recursions
+        void adaptiveSubdivideByAngle(B2DPolygon& rTarget, double fAngleBound, bool bAddLastPoint, bool bAllowUnsharpen) const;
+
+        // #i37443# adaptive subdivide by nCount subdivisions
+        void adaptiveSubdivideByCount(B2DPolygon& rTarget, sal_uInt32 nCount, bool bAddLastPoint) const;
     };
 } // end of namespace basegfx
 
