@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:10:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,12 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY0( PRESENTATION, SHOW_SHAPE, OASIS_DATETIME_ACTIONS ),
     ENTRY0( PRESENTATION, SETTINGS, OASIS_DATETIME_ACTIONS ),
 
+    // fix <text:alphabatical-index-mark text:main-etry>
+    ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK, XML_ETACTION_PROC_ATTRS,
+            OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS ),
+    ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK_START, XML_ETACTION_PROC_ATTRS,
+            OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS ),
+
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ETACTION_EOT )
 };
 
@@ -1131,6 +1137,14 @@ static XMLTransformerActionInit aFormActionTable[] =
                        XML_NAMESPACE_FORM, XML_SERVICE_NAME,
                     XML_NAMESPACE_OOO ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_False ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS
+static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
+{
+    ENTRY1Q( TEXT, MAIN_ENTRY, XML_ATACTION_RENAME,
+                        XML_NAMESPACE_TEXT, XML_MAIN_ETRY ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1866,6 +1880,11 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
             case OASIS_FORM_ACTIONS:
                 m_aActions[OASIS_FORM_ACTIONS] =
                     new XMLTransformerActions( aFormActionTable );
+                break;
+            case OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS:
+                m_aActions[OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS] =
+                    new XMLTransformerActions(
+                        aAlphabeticalIndexMarkActionTable );
                 break;
             case OASIS_DDE_CONV_MODE_ACTIONS:
                 m_aActions[OASIS_DDE_CONV_MODE_ACTIONS] =
