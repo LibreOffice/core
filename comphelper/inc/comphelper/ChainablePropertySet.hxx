@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChainablePropertySet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 20:29:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COMPHELPER_PROPERTYINFOHASH_HXX_
 #include <comphelper/PropertyInfoHash.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace comphelper
 {
@@ -110,7 +113,7 @@ namespace vos
 
 namespace comphelper
 {
-    class ChainablePropertySet : public ::com::sun::star::beans::XPropertySet,
+    class COMPHELPER_DLLPUBLIC ChainablePropertySet : public ::com::sun::star::beans::XPropertySet,
                                  public ::com::sun::star::beans::XPropertyState,
                                  public ::com::sun::star::beans::XMultiPropertySet
     {
