@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scitems.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:05:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,70 +128,73 @@
 #define ATTR_HOR_JUSTIFY        128
 #define ATTR_INDENT             129
 #define ATTR_VER_JUSTIFY        130
-#define ATTR_ORIENTATION        131
+#define ATTR_STACKED            131
 #define ATTR_ROTATE_VALUE       132
 #define ATTR_ROTATE_MODE        133
 #define ATTR_VERTICAL_ASIAN     134
 #define ATTR_WRITINGDIR         135
 #define ATTR_LINEBREAK          136
-#define ATTR_MARGIN             137
-#define ATTR_MERGE              138
-#define ATTR_MERGE_FLAG         139
-#define ATTR_VALUE_FORMAT       140
-#define ATTR_LANGUAGE_FORMAT    141
-#define ATTR_BACKGROUND         142
-#define ATTR_PROTECTION         143
-#define ATTR_BORDER             144
-#define ATTR_BORDER_INNER       145     // innen, wg. Vorlagen-EditDialog
-#define ATTR_SHADOW             146
-#define ATTR_VALIDDATA          147
-#define ATTR_CONDITIONAL        148
+#define ATTR_SHRINKTOFIT        137
+#define ATTR_BORDER_TLBR        138
+#define ATTR_BORDER_BLTR        139
+#define ATTR_MARGIN             140
+#define ATTR_MERGE              141
+#define ATTR_MERGE_FLAG         142
+#define ATTR_VALUE_FORMAT       143
+#define ATTR_LANGUAGE_FORMAT    144
+#define ATTR_BACKGROUND         145
+#define ATTR_PROTECTION         146
+#define ATTR_BORDER             147
+#define ATTR_BORDER_INNER       148     // innen, wg. Vorlagen-EditDialog
+#define ATTR_SHADOW             149
+#define ATTR_VALIDDATA          150
+#define ATTR_CONDITIONAL        151
 
-#define ATTR_PATTERN_END        148     // Ende Zellattribut-Pattern
+#define ATTR_PATTERN_END        151     // Ende Zellattribut-Pattern
 
-#define ATTR_PATTERN            149
+#define ATTR_PATTERN            152
                                         // Seitenattribute
-#define ATTR_LRSPACE            150     // Editor: PageDesc-TabPage
-#define ATTR_ULSPACE            151
-#define ATTR_PAGE               152
-#define ATTR_PAGE_PAPERTRAY     153
-#define ATTR_PAGE_PAPERBIN      154
-#define ATTR_PAGE_SIZE          155
-#define ATTR_PAGE_MAXSIZE       156
-#define ATTR_PAGE_HORCENTER     157
-#define ATTR_PAGE_VERCENTER     158
+#define ATTR_LRSPACE            153     // Editor: PageDesc-TabPage
+#define ATTR_ULSPACE            154
+#define ATTR_PAGE               155
+#define ATTR_PAGE_PAPERTRAY     156
+#define ATTR_PAGE_PAPERBIN      157
+#define ATTR_PAGE_SIZE          158
+#define ATTR_PAGE_MAXSIZE       159
+#define ATTR_PAGE_HORCENTER     160
+#define ATTR_PAGE_VERCENTER     161
 
-#define ATTR_PAGE_ON            159     // Editor: Header/Footer-Page
-#define ATTR_PAGE_DYNAMIC       160
-#define ATTR_PAGE_SHARED        161
+#define ATTR_PAGE_ON            162     // Editor: Header/Footer-Page
+#define ATTR_PAGE_DYNAMIC       163
+#define ATTR_PAGE_SHARED        164
 
-#define ATTR_PAGE_NOTES         162     // Editor: Tabelle
-#define ATTR_PAGE_GRID          163
-#define ATTR_PAGE_HEADERS       164
-#define ATTR_PAGE_CHARTS        165
-#define ATTR_PAGE_OBJECTS       166
-#define ATTR_PAGE_DRAWINGS      167
-#define ATTR_PAGE_TOPDOWN       168
-#define ATTR_PAGE_SCALE         169
-#define ATTR_PAGE_SCALETOPAGES  170
-#define ATTR_PAGE_FIRSTPAGENO   171
+#define ATTR_PAGE_NOTES         165     // Editor: Tabelle
+#define ATTR_PAGE_GRID          166
+#define ATTR_PAGE_HEADERS       167
+#define ATTR_PAGE_CHARTS        168
+#define ATTR_PAGE_OBJECTS       169
+#define ATTR_PAGE_DRAWINGS      170
+#define ATTR_PAGE_TOPDOWN       171
+#define ATTR_PAGE_SCALE         172
+#define ATTR_PAGE_SCALETOPAGES  173
+#define ATTR_PAGE_FIRSTPAGENO   174
 
-#define ATTR_PAGE_PRINTAREA     172     // Editor: Druckbereiche
-#define ATTR_PAGE_REPEATROW     173
-#define ATTR_PAGE_REPEATCOL     174
-#define ATTR_PAGE_PRINTTABLES   175
+#define ATTR_PAGE_PRINTAREA     175     // Editor: Druckbereiche
+#define ATTR_PAGE_REPEATROW     176
+#define ATTR_PAGE_REPEATCOL     177
+#define ATTR_PAGE_PRINTTABLES   178
 
-#define ATTR_PAGE_HEADERLEFT    176     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERLEFT    177     // Fusszeilen (links)
-#define ATTR_PAGE_HEADERRIGHT   178     // Inhalte der Kopf-/
-#define ATTR_PAGE_FOOTERRIGHT   179     // Fusszeilen (rechts)
-#define ATTR_PAGE_HEADERSET     180     // die Sets dazu...
-#define ATTR_PAGE_FOOTERSET     181
+#define ATTR_PAGE_HEADERLEFT    179     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERLEFT    180     // Fusszeilen (links)
+#define ATTR_PAGE_HEADERRIGHT   181     // Inhalte der Kopf-/
+#define ATTR_PAGE_FOOTERRIGHT   182     // Fusszeilen (rechts)
+#define ATTR_PAGE_HEADERSET     183     // die Sets dazu...
+#define ATTR_PAGE_FOOTERSET     184
 
-#define ATTR_PAGE_FORMULAS      182
-#define ATTR_PAGE_NULLVALS      183
+#define ATTR_PAGE_FORMULAS      185
+#define ATTR_PAGE_NULLVALS      186
 
-#define ATTR_PAGE_SCALETO       184     // #i8868# scale printout to with/height
+#define ATTR_PAGE_SCALETO       187     // #i8868# scale printout to with/height
 
 #define ATTR_ENDINDEX           ATTR_PAGE_SCALETO        // Ende Pool-Range
 
@@ -246,7 +249,10 @@
 #define ITEMID_FORBIDDENRULE    ATTR_FORBIDDEN_RULES
 #define ITEMID_HORJUSTIFY       ATTR_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       ATTR_VER_JUSTIFY
-#define ITEMID_ORIENTATION      ATTR_ORIENTATION
+/*  SvxOrientationItem not used anymore in Calc core. Define ITEMID_ORIENTATION
+    here anyway to be able to use this item in TableAutoFormat to keep the file
+    format unchanged. */
+#define ITEMID_ORIENTATION      0 /*ATTR_ORIENTATION*/
 #define ITEMID_FRAMEDIR         ATTR_WRITINGDIR
 #define ITEMID_LINEBREAK        ATTR_LINEBREAK
 #define ITEMID_MARGIN           ATTR_MARGIN
