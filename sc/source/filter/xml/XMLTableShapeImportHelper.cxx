@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 13:58:43 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 using namespace ::com::sun::star;
 
 XMLTableShapeImportHelper::XMLTableShapeImportHelper(
-        ScXMLImport& rImp ) :
-    XMLShapeImportHelper( rImp.GetModel() ),
+        ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :
+    XMLShapeImportHelper( rImp.GetModel(), pImpMapper ),
     rImport( rImp )
 {
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,4 +679,22 @@ uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()
     return xDrawPage;
 }
 
+uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
+{
+    if( (nCurrentSheet != nCurrentDrawPage) || !xDrawPage.is() )
+    {
+        uno::Reference <drawing::XShapes > xShapes ( GetCurrentXDrawPage(), uno::UNO_QUERY );
+        rImport.GetShapeImport()->pushGroupForSorting ( xShapes );
+        return xShapes;
+    }
+    else
+    {
+        uno::Reference <drawing::XShapes > xShapes ( GetCurrentXDrawPage(), uno::UNO_QUERY );
+        return xShapes;
+    }
+}
 
+sal_Bool ScMyTables::HasDrawPage()
+{
+    return !((nCurrentSheet != nCurrentDrawPage) || !xDrawPage.is());
+}

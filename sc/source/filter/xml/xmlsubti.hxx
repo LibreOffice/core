@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:04:02 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,9 @@ public:
                                         GetCurrentXSheet()  { return xCurrentSheet; }
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                                         GetCurrentXDrawPage();
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+                                        GetCurrentXShapes();
+    sal_Bool                            HasDrawPage();
 };
 
 #endif

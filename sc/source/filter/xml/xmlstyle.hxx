@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 18:35:05 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ extern const XMLPropertyMapEntry aXMLScCellStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
+//extern const XMLPropertyMapEntry aXMLScShapeStylesProperties[];
 
 //CellStyles
 #define XML_SC_TYPE_CELLPROTECTION                  (XML_SC_TYPES_START +  1)
@@ -114,28 +115,30 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_SC_ALLPADDING                           3
 #define CTF_SC_BOTTOMPADDING                        4
 #define CTF_SC_LEFTPADDING                          5
-#define CTF_SC_RIGHTPADDING                     6
+#define CTF_SC_RIGHTPADDING                         6
 #define CTF_SC_TOPPADDING                           7
 #define CTF_SC_ALLBORDER                            8
 #define CTF_SC_LEFTBORDER                           9
 #define CTF_SC_RIGHTBORDER                          10
 #define CTF_SC_TOPBORDER                            11
-#define CTF_SC_BOTTOMBORDER                     12
+#define CTF_SC_BOTTOMBORDER                         12
 #define CTF_SC_ALLBORDERWIDTH                       13
 #define CTF_SC_LEFTBORDERWIDTH                      14
-#define CTF_SC_RIGHTBORDERWIDTH                 15
+#define CTF_SC_RIGHTBORDERWIDTH                     15
 #define CTF_SC_TOPBORDERWIDTH                       16
 #define CTF_SC_BOTTOMBORDERWIDTH                    17
-#define CTF_SC_NUMBERFORMAT                     18
+#define CTF_SC_NUMBERFORMAT                         18
 #define CTF_SC_MAP                                  19
 #define CTF_SC_PARAINDENT                           20
 #define CTF_SC_OLDTEXTBACKGROUND                    21
 
 #define CTF_SC_ROWHEIGHT                            50
-#define CTF_SC_ROWOPTIMALHEIGHT                 51
+#define CTF_SC_ROWOPTIMALHEIGHT                     51
 
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
+//ShapeStyles
+//#define XML_SC_TYPE_LAYER                         (XML_SC_TYPES_START + 51)
 
 class ScXMLExport;
 class ScXMLImport;
@@ -176,6 +179,7 @@ public:
             const UniReference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLRowExportPropertyMapper();
 };
+
 class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
     ScXMLExport& rScXMLExport;
@@ -219,61 +223,19 @@ public:
 
 class XMLScPropHdlFactory : public XMLPropertyHandlerFactory
 {
-/*  const ScXMLExport* pScXMLExport;
-    const ScXMLImport* pScXMLImport;
-    sal_Bool bIsExport;*/
 public:
-    /*XMLScPropHdlFactory(const ScXMLExport* pScXMLExport);
-    XMLScPropHdlFactory(const ScXMLImport* pScXMLImport);*/
     XMLScPropHdlFactory();
     virtual ~XMLScPropHdlFactory();
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
 };
 
-class XMLColumnStylesPropertySetMapper : public XMLPropertySetMapper
+/*class XmlScPropHdl_LayerID : public XMLPropertyHandler
 {
-protected:
-    /** Application-specific filter. By default do nothing. */
-    virtual void ContextFilter(
-            ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
 public:
-
-    XMLColumnStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory);
-    virtual ~XMLColumnStylesPropertySetMapper();
-};
-
-class XMLRowStylesPropertySetMapper : public XMLPropertySetMapper
-{
-protected:
-    /** Application-specific filter. By default do nothing. */
-    virtual void ContextFilter(
-            ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
-public:
-
-    XMLRowStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory);
-    virtual ~XMLRowStylesPropertySetMapper();
-};
-
-class XMLTableStylesPropertySetMapper : public XMLPropertySetMapper
-{
-protected:
-    /** Application-specific filter. By default do nothing. */
-    virtual void ContextFilter(
-            ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
-public:
-
-    XMLTableStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory);
-    virtual ~XMLTableStylesPropertySetMapper();
-};
+    virtual ~XmlScPropHdl_LayerID();
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};*/
 
 class XmlScPropHdl_CellProtection : public XMLPropertyHandler
 {

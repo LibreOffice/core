@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,7 +1454,10 @@ void ScXMLImport::SetStatisticAttributes( const uno::Reference<xml::sax::XAttrib
 
 XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
 {
-    return new XMLTableShapeImportHelper( *this );
+    /*UniReference < XMLPropertySetMapper > xShapeStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScShapeStylesProperties, xScPropHdlFactory);
+    SvXMLImportPropertyMapper *pShapeStylesImportPropertySetMapper = new SvXMLImportPropertyMapper( xShapeStylesPropertySetMapper );*/
+
+    return new XMLTableShapeImportHelper( *this/*, pShapeStylesImportPropertySetMapper*/ );
 }
 
 sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)

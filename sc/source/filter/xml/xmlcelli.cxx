@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,34 +415,25 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     {
         ScXMLImport& rXMLImport = GetScImport();
         com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
-        uno::Reference<sheet::XSpreadsheet> xTable = rXMLImport.GetTables().GetCurrentXSheet();
-        if (xTable.is())
+        uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
+        if (xShapes.is())
         {
-            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
-            if (xDrawPageSupplier.is())
-            {
-                uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-                uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
-                if (xShapes.is())
-                {
-                    if (aCellPos.Column > MAXCOL)
-                        aCellPos.Column = MAXCOL;
-                    if (aCellPos.Row > MAXROW)
-                        aCellPos.Row = MAXROW;
-                    ScDocument* pDoc = GetScImport().GetDocument();
-                    Rectangle aRec = pDoc->GetMMRect(aCellPos.Column, aCellPos.Row, aCellPos.Column, aCellPos.Row, aCellPos.Sheet);
-                    awt::Point aPoint;
-                    aPoint.X = aRec.Left();
-                    aPoint.Y = aRec.Top();
-                    XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
-                    pTableShapeImport->SetOnTable(sal_False);
-                    pTableShapeImport->SetPoint(aPoint);
-                    pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
-                        rXMLImport, nPrefix, rLName, xAttrList, xShapes);
-                    if (pContext)
-                        bIsEmpty = sal_False;
-                }
-            }
+            if (aCellPos.Column > MAXCOL)
+                aCellPos.Column = MAXCOL;
+            if (aCellPos.Row > MAXROW)
+                aCellPos.Row = MAXROW;
+            ScDocument* pDoc = GetScImport().GetDocument();
+            Rectangle aRec = pDoc->GetMMRect(aCellPos.Column, aCellPos.Row, aCellPos.Column, aCellPos.Row, aCellPos.Sheet);
+            awt::Point aPoint;
+            aPoint.X = aRec.Left();
+            aPoint.Y = aRec.Top();
+            XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
+            pTableShapeImport->SetOnTable(sal_False);
+            pTableShapeImport->SetPoint(aPoint);
+            pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
+                rXMLImport, nPrefix, rLName, xAttrList, xShapes);
+            if (pContext)
+                bIsEmpty = sal_False;
         }
     }
 
@@ -912,12 +903,19 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosit
     if( aDetectiveObjVec.size() )
     {
         ScDetectiveFunc aDetFunc( GetScImport().GetDocument(), rPosition.Sheet );
-        GetScImport().GetTables().GetCurrentXDrawPage();    // make draw page
+        uno::Reference < drawing::XDrawPage > xDrawPage (GetScImport().GetTables().GetCurrentXDrawPage());  // make draw page
         for( ScMyImpDetectiveObjVec::iterator aItr = aDetectiveObjVec.begin(); aItr != aDetectiveObjVec.end(); aItr++ )
         {
             ScAddress aScAddress;
             ScUnoConversion::FillScAddress( aScAddress, rPosition );
             aDetFunc.InsertObject( aItr->eObjType, aScAddress, aItr->aSourceRange, aItr->bHasError );
+            uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
+            if (xShapesIndex.is())
+            {
+                sal_Int32 nShapes = xShapesIndex->getCount();
+                uno::Reference < drawing::XShape > xShape;
+                GetScImport().GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,8 @@ void ScXMLTableContext::EndElement()
             }
         }
     }
+    if (GetScImport().GetTables().HasDrawPage())
+        GetScImport().GetShapeImport()->popGroupAndSort();
     GetScImport().GetTables().DeleteTable();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapesContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,22 +112,13 @@ SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( USHORT nPrefix,
     if (!pContext)
     {
         ScXMLImport& rXMLImport = GetScImport();
-        uno::Reference<sheet::XSpreadsheet> xTable = rXMLImport.GetTables().GetCurrentXSheet();
-        if (xTable.is())
+        uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
+        if (xShapes.is())
         {
-            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
-            if (xDrawPageSupplier.is())
-            {
-                uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-                uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
-                if (xShapes.is())
-                {
-                    XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
-                    pTableShapeImport->SetOnTable(sal_True);
-                    pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
-                        rXMLImport, nPrefix, rLName, xAttrList, xShapes);
-                }
-            }
+            XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
+            pTableShapeImport->SetOnTable(sal_True);
+            pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
+                rXMLImport, nPrefix, rLName, xAttrList, xShapes);
         }
     }
 

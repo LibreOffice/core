@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 18:35:05 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,12 @@ const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
     { "PageStyle", XML_NAMESPACE_TABLE, sXML_page_style_name, XML_TYPE_STRING, 0 },
     { 0L }
 };
+
+/*const XMLPropertyMapEntry aXMLScShapeStylesProperties[] =
+{
+    { "LayerID", XML_NAMESPACE_STYLE, sXML_run_through, XML_SC_TYPE_LAYER, 0 },
+    { 0L }
+};*/
 
 ScXMLCellExportPropertyMapper::ScXMLCellExportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper )
@@ -637,20 +643,6 @@ ScXMLStyleExport::~ScXMLStyleExport()
 {
 }
 
-/*XMLScPropHdlFactory::XMLScPropHdlFactory(const ScXMLExport* pScTempXMLExport)
-    : XMLPropertyHandlerFactory(),
-    pScXMLExport(pScTempXMLExport),
-    bIsExport(sal_True)
-{
-}
-
-XMLScPropHdlFactory::XMLScPropHdlFactory(const ScXMLImport* pScTempXMLImport)
-    : XMLPropertyHandlerFactory(),
-    pScXMLImport(pScTempXMLImport),
-    bIsExport(sal_False)
-{
-}*/
-
 XMLScPropHdlFactory::XMLScPropHdlFactory()
     : XMLPropertyHandlerFactory()
 {
@@ -669,6 +661,11 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     {
         switch(nType)
         {
+            /*case XML_SC_TYPE_LAYER :
+            {
+                pHdl = new XmlScPropHdl_LayerID;
+            }
+            break;*/
             case XML_SC_TYPE_CELLPROTECTION :
             {
                 pHdl = new XmlScPropHdl_CellProtection;
@@ -735,6 +732,51 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
     return pHdl;
 }
+
+/*XmlScPropHdl_LayerID::~XmlScPropHdl_LayerID()
+{
+}
+
+sal_Bool XmlScPropHdl_LayerID::importXML(
+    const ::rtl::OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRetval(sal_True);
+
+    sal_Int16 nLayer;
+    if (rStrImpValue.compareToAscii (sXML_foreground) == 0)
+        nLayer = SC_LAYER_FRONT;
+    else if (rStrImpValue.compareToAscii (sXML_background) == 0)
+        nLayer = SC_LAYER_BACK;
+    else
+        bRetval = sal_False;
+    rValue <<= nLayer;
+
+    return bRetval;
+}
+
+sal_Bool XmlScPropHdl_LayerID::exportXML(
+    ::rtl::OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRetval(sal_False);
+
+    sal_Int16 nLayer;
+    if (rValue >>= nLayer)
+    {
+        bRetval = sal_True;
+        if (nLayer == SC_LAYER_FRONT)
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_foreground));
+        else if (nLayer == SC_LAYER_BACK)
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_background));
+        else
+            bRetval = sal_False;
+    }
+
+    return bRetval;
+}*/
 
 XmlScPropHdl_CellProtection::~XmlScPropHdl_CellProtection()
 {

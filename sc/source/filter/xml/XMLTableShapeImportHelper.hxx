@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 13:58:43 $
+ *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class XMLTableShapeImportHelper : public XMLShapeImportHelper
     sal_Bool bOnTable;
 public:
 
-    XMLTableShapeImportHelper( ScXMLImport& rImp );
+    XMLTableShapeImportHelper( ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper=0 );
     ~XMLTableShapeImportHelper();
 
     virtual void finishShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
