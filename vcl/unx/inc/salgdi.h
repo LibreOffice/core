@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-25 16:05:35 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 13:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ typedef SalColormap        *SalColormapRef;
 
 class SalGraphicsData
 {
+
     friend  class           SalGraphics;
     friend  class           SalPrinter;
     friend  class           SalInfoPrinter;
@@ -262,6 +263,8 @@ protected:
             void            DrawServerFontString( int nX, int nY,
                                 const sal_Unicode* pStr,
                                 int nLength, const long* pDXAry );
+
+            ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 #endif
 public:
                             SalGraphicsData();
