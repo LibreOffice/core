@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-08 16:38:00 $
+#   last change: $Author: rt $ $Date: 2004-06-16 13:46:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.70 $ ';
+$id_str = ' $Revision: 1.71 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -593,6 +593,9 @@ sub parse_imagelists
         print "No image lists\n" if $is_debug;
         return;
     }
+    # collect files to deliver
+    my %files;
+    my %subdirs;
     foreach my $list (@ilst_file) {
         print "$list\n" if $is_debug;
         # read images list
@@ -601,18 +604,28 @@ sub parse_imagelists
             chomp;
             next if /^#/;
             next if ! s/$resdirvariable//;
-            # d.lst syntax uses backslashes as path delimiter
-            s:\/:\\:g;
-            my $dlst_line = "$_ $destdir$_";
-            $dlst_line =~ s/^\\?$module/\.\./;
-            next if ! /^(\\.+)\\\w/;
-            push(@action_data, ['mkdir', $destdir . $1]);
-            push(@action_data, ['copy', $dlst_line]);
+            s:\\:\/:g;
+            next if ! /^(\/.+)\/\w/;
+            $subdirs{$1} = 1;
+            $files{$_} = 1;
         }
         close(IMGLST);
     }
+    # now add them to @action_data
     push(@action_data, ['mkdir', $destdir]);
     push(@action_data, ['copy', "..\\%__SRC%\\bin\\*.$ilst_ext $destdir"]);
+    foreach ( sort keys %subdirs ) {
+        # d.lst syntax uses backslashes as path delimiter
+        s:\/:\\:g;
+        push(@action_data, ['mkdir', $destdir . $_]);
+    }
+    foreach ( sort keys %files ) {
+        # d.lst syntax uses backslashes as path delimiter
+        s:\/:\\:g;
+        my $dlst_line = "$_ $destdir$_";
+        $dlst_line =~ s/^\\$module/\.\./;
+        push(@action_data, ['copy', $dlst_line]);
+    }
     return;
 }
 
