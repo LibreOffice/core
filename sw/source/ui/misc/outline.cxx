@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:09:26 $
+ *  last change: $Author: os $ $Date: 2001-04-05 14:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,12 +521,26 @@ short SwOutlineTabDialog::Ok()
     }
 
     for( i = 0; i < MAXLEVEL; ++i )
-        if( !aCollNames[i].Len() )
+    {
+        String sHeadline;
+        ::GetDocPoolNm( RES_POOLCOLL_HEADLINE1 + i, sHeadline );
+        SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
+        if( !pColl )
         {
-            SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
-                                                RES_POOLCOLL_HEADLINE1 + i );
-            pTxtColl->SetOutlineLevel( NO_NUMBERING );
+            if( !aCollNames[i].Len() )
+            {
+                SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
+                                                    RES_POOLCOLL_HEADLINE1 + i );
+                pTxtColl->SetOutlineLevel( NO_NUMBERING );
+            }
+            else if(aCollNames[i] != sHeadline)
+            {
+                SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(aCollNames[i]);
+                if(pTxtColl)
+                    pTxtColl->SetOutlineLevel(i);
+            }
         }
+    }
 
     rWrtSh.SetOutlineNumRule( *pNumRule );
     return RET_OK;
