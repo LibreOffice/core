@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: od $ $Date: 2002-12-02 07:57:41 $
+ *  last change: $Author: os $ $Date: 2002-12-02 08:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,18 @@ USHORT lcl_GetNextZoomStep(USHORT nCurrentZoom, BOOL bZoomIn)
         }
     return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;
 };
+/* -----------------02.12.2002 09:11-----------------
+ *
+ * --------------------------------------------------*/
+void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
+{
+    static USHORT __READONLY_DATA aInval[] =
+    {
+        SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN, FN_PREVIEW_ZOOM, FN_STAT_ZOOM,
+        0
+    };
+    rBindings.Invalidate( aInval );
+}
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -949,8 +961,10 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
     // Sortierung muss eingehalten werden!!
     static USHORT __READONLY_DATA aInval[] =
     {
-        SID_ATTR_ZOOM,
+        SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN,
+        FN_PREVIEW_ZOOM,
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
+        FN_STAT_ZOOM,
         FN_SHOW_TWO_PAGES, FN_SHOW_FOUR_PAGES,
         0
     };
@@ -1266,6 +1280,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         {
             const SfxItemSet *pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
+            SvxZoomDialog* pDlg = 0;
             if(!pArgs)
             {
                 SfxItemSet aCoreSet(GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
@@ -1281,7 +1296,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                         SVX_ZOOM_ENABLE_WHOLEPAGE);
                 aCoreSet.Put( aZoom );
 
-                SvxZoomDialog* pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
+                pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
                 pDlg->SetLimits( MINZOOM, MAXZOOM );
 
                 if( pDlg->Execute() != RET_CANCEL )
@@ -1301,6 +1316,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 if(USHRT_MAX != nZoomFactor)
                     SetZoom(eType, nZoomFactor);
             }
+            delete pDlg;
         }
         break;
         case SID_ZOOM_IN:
@@ -1310,13 +1326,6 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
             const SwViewOption* pVOpt = GetViewShell().GetViewOptions();
             SetZoom(eType,
                     lcl_GetNextZoomStep(pVOpt->GetZoom(), SID_ZOOM_IN == rReq.GetSlot()));
-            static USHORT __READONLY_DATA aInval[] =
-            {
-                SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN, FN_STAT_ZOOM,
-                0
-            };
-            SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( aInval );
         }
         break;
         case FN_CHAR_LEFT:
@@ -1531,12 +1540,18 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
                 rSet.Put( aZoom );
             }
         break;
+        case FN_PREVIEW_ZOOM:
+        {
+            const SwViewOption* pVOpt = GetViewShell().GetViewOptions();
+            rSet.Put(SfxUInt16Item(nWhich, pVOpt->GetZoom()));
+        }
+        break;
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
             const SwViewOption* pVOpt = GetViewShell().GetViewOptions();
-            if((SID_ZOOM_OUT == nWhich && pVOpt->GetZoom() <= MIN_PREVIEW_ZOOM)||
-              (SID_ZOOM_IN == nWhich && pVOpt->GetZoom() >= MAX_PREVIEW_ZOOM))
+            if((SID_ZOOM_OUT == nWhich && pVOpt->GetZoom() >= MAX_PREVIEW_ZOOM)||
+              (SID_ZOOM_IN == nWhich && pVOpt->GetZoom() <= MIN_PREVIEW_ZOOM))
             {
                 rSet.DisableItem(nWhich);
             }
@@ -2498,5 +2513,6 @@ void SwPagePreView::SetZoom(SvxZoomType eType, USHORT nFactor)
     aOpt.SetZoom(nFactor);
     aOpt.SetZoomType(eType);
     rSh.ApplyViewOptions( aOpt );
+    lcl_InvalidateZoomSlots(GetViewFrame()->GetBindings());
 }
 
