@@ -1,4 +1,4 @@
-sh    shell	: offuh rdbmaker tools sal expat NULL
+sh    shell	: offuh rdbmaker tools sal expat transex3 NULL
 sh    shell\source\win32                           nmake   -   w   sh_win32 NULL
 sh    shell\source\win32\simplemail                nmake   -   w   sh_win32_simplemail NULL
 sh    shell\source\unix\exec                       nmake   -   u   sh_unix NULL
