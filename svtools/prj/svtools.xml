@@ -14,4 +14,54 @@
         <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
     </component-description>
 
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar</name>
+        <description>BrowseBoxHeaderBar...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar</name>
+        <description>BrowseBoxHeaderBar...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell</name>
+        <description>BrowseBoxHeaderCell...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxTable</name>
+        <description>BrowseBoxTable...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.svtools.AccessibleBrowseBoxTableCell</name>
+        <description>eBrowseBoxTableCell...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+
 </module-description>
