@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:00:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,13 +765,13 @@ FloatingWindow RID_SVXDLG_CONTOUR
 
     ImageList CD_IMAPDLG
     {
-        ImageBitmap = Bitmap { File = "cd_imagelist.bmp" ; };
+        Prefix = "cd";
         MASKCOLOR
         CONTOURDLG_IDLIST
     };
     ImageList CDH_IMAPDLG
     {
-        ImageBitmap = Bitmap { File = "cdh_imagelist.bmp" ; };
+        Prefix = "cdh";
         MASKCOLOR
         CONTOURDLG_IDLIST
     };
