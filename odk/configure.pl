@@ -6,13 +6,14 @@
 
 use IO::File;
 
-$main::OO_SDK_NAME=readSDKName();
-$main::currentWorkingDir = `pwd`;
-chop ($main::currentWorkingDir);
-$main::operatingSystem = `./config.guess | cut -d"-" -f3,4`;
+$currentdir=`/bin/pwd`;
+$main::sdkpath = `(cd $ARGV[0] && pwd && cd $currentdir ) | head -n 1`;
+chop ($main::sdkpath);
+$main::OO_SDK_NAME=readSDKName($main::sdkpath);
+$main::operatingSystem = `$main::sdkpath/config.guess | cut -d"-" -f3,4`;
 chop ($main::operatingSystem);
 $main::OO_SDK_HOME = "";
-$main::OO_SDK_HOME_SUGGESTION = $main::currentWorkingDir;
+$main::OO_SDK_HOME_SUGGESTION = $main::sdkpath;
 
 $main::OFFICE_HOME = "";
 $main::OFFICE_HOME_SUGGESTION = searchprog("soffice");
@@ -43,7 +44,12 @@ if ( ! $main::OFFICE_HOME_SUGGESTION eq "" )
 }
 
 $main::OO_SDK_MAKE_HOME = "";
-$main::OO_SDK_MAKE_HOME_SUGGESTION = searchprog("make");
+$main::makeName = "make";
+if ( $main::operatingSystem eq "FreeBSD" )
+{
+    $main::makeName = "gmake";
+}
+$main::OO_SDK_MAKE_HOME_SUGGESTION = searchprog($main::makeName);
 $main::makeVersion = "3.79.1";
 $main::correctVersion = 0;
 
@@ -137,7 +143,7 @@ while ( (! -d "$main::OFFICE_HOME" ) ||
 # prepare GNU make path
 while ( (!$main::correctVersion) &&
         ((! -d "$main::OO_SDK_MAKE_HOME" ) ||
-         ((-d "$main::OO_SDK_MAKE_HOME") && (! -e "$main::OO_SDK_MAKE_HOME/make"))) )
+         ((-d "$main::OO_SDK_MAKE_HOME") && (! -e "$main::OO_SDK_MAKE_HOME/$main::makeName"))) )
 {
     print " Enter GNU make ($main::makeVersion or higher) tools directory [$main::OO_SDK_MAKE_HOME_SUGGESTION]: ";
     $main::OO_SDK_MAKE_HOME = readStdIn();
@@ -147,14 +153,14 @@ while ( (!$main::correctVersion) &&
         $main::OO_SDK_MAKE_HOME = $main::OO_SDK_MAKE_HOME_SUGGESTION;
     }
     if ( (! -d "$main::OO_SDK_MAKE_HOME") ||
-         ((-d "$main::OO_SDK_MAKE_HOME") && (! -e "$main::OO_SDK_MAKE_HOME/make")) )
+         ((-d "$main::OO_SDK_MAKE_HOME") && (! -e "$main::OO_SDK_MAKE_HOME/$main::makeName")) )
     {
         $main::OO_SDK_MAKE_HOME = "";
         print " Error: GNU make is required, please specify a GNU make tools directory.\n";
     } else
     {
         #check version
-        my $testVersion = `$OO_SDK_MAKE_HOME/make --version`;
+        my $testVersion = `$OO_SDK_MAKE_HOME/$main::makeName --version`;
         if ( $testVersion eq "")
         {
             print " Set the environment variable OO_SDK_MAKE_HOME to your GNU build tools directory.\n";
@@ -165,10 +171,10 @@ while ( (!$main::correctVersion) &&
             {
                 $testVersion = $1;
             }
-            $main::correctVersion = testVersion($main::makeVersion, $testVersion, "$main::OO_SDK_MAKE_HOME/make", 1);
+            $main::correctVersion = testVersion($main::makeVersion, $testVersion, "$main::OO_SDK_MAKE_HOME/$main::makeName", 1);
             if ( !$main::correctVersion )
             {
-                print " The 'make' command found at '$main::OO_SDK_MAKE_HOME' has a wrong version\n";
+                print " The '$main::makeName' command found at '$main::OO_SDK_MAKE_HOME' has a wrong version\n";
                 $main::OO_SDK_MAKE_HOME = "";
             }
         }
@@ -418,10 +424,10 @@ while ( $main::SDK_AUTO_DEPLOYMENT eq "" ||
 }
 
 prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh", 1);
-chmod 0644, "$main::currentWorkingDir/setsdkenv_unix.sh";
+chmod 0644, "$main::sdkpath/setsdkenv_unix.sh";
 
 prepareScriptFile("setsdkenv_unix.csh.in", "setsdkenv_unix.csh", 2);
-chmod 0644, "$main::currentWorkingDir/setsdkenv_unix.csh";
+chmod 0644, "$main::sdkpath/setsdkenv_unix.csh";
 
 print "\n";
 print " *********************************************************************\n";
@@ -515,7 +521,9 @@ sub testVersion
 
 sub readSDKName
 {
-    my $mkfilename = "./settings/dk.mk";
+    my $sdkpath = shift;
+    my $mkfilename = "$sdkpath/settings/dk.mk";
+
     open ( FILEIN, $mkfilename ) || die "ERROR: could not open '$mkfilename' for reading";
 
     @lines = <FILEIN>;
@@ -551,8 +559,8 @@ sub prepareScriptFile()
     #            2 = csh
     my $shellMode = shift;
 
-    open ( FILEIN, "$main::currentWorkingDir/$inputFile" ) || die "\nERROR: could not open '$main::currentWorkingDir/$inputFile' for reading";
-    open ( FILEOUT, ">$main::currentWorkingDir/$outputFile" ) || die "\nERROR: could not open '$main::currentWorkingDir/$outputFile' for writing";
+    open ( FILEIN, "$main::sdkpath/$inputFile" ) || die "\nERROR: could not open '$main::sdkpath/$inputFile' for reading";
+    open ( FILEOUT, ">$main::sdkpath/$outputFile" ) || die "\nERROR: could not open '$main::sdkpath/$outputFile' for writing";
 
     while ( <FILEIN> )
     {
