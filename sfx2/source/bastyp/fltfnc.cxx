@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:35:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,6 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
 #ifndef _EXTATTR_HXX
 #include <svtools/extattr.hxx>
 #endif
@@ -145,6 +142,8 @@
 #ifndef _SFXRECTITEM_HXX
 #include <svtools/rectitem.hxx>
 #endif
+
+#include <sot/storage.hxx>
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
 #include <com/sun/star/document/XDocumentInfo.hpp>
