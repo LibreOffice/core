@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:53:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bCalculatingFormulaTree( FALSE ),
         bIsUndo( eMode == SCDOCMODE_UNDO ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
+        bIsVisible( FALSE ),
         bCutMode( FALSE ),
         nMaxTableNumber( 0 ),
         pCondFormList( NULL ),
@@ -430,6 +431,14 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
     aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
     aTrackTimer.SetTimeout( 100 );
+}
+
+
+void ScDocument::SetDocVisible( BOOL bSet )
+{
+    //  called from view ctor - only for a visible document,
+    //  each new sheet's RTL flag is initialized from the locale
+    bIsVisible = bSet;
 }
 
 
@@ -667,6 +676,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
                     String aString;
                     pSourceDoc->pTab[i]->GetName(aString);
                     pTab[i] = new ScTable(this, i, aString);
+                    pTab[i]->SetLayoutRTL( pSourceDoc->pTab[i]->IsLayoutRTL() );
                     nMaxTableNumber = i+1;
                 }
     }
@@ -682,6 +692,8 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, USHORT nTab )
 
         pTab[nTab] = new ScTable(this, nTab,
                             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("baeh")));
+        if (pSourceDoc->pTab[nTab])
+            pTab[nTab]->SetLayoutRTL( pSourceDoc->pTab[nTab]->IsLayoutRTL() );
         nMaxTableNumber = nTab+1;
     }
     else
