@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:20:00 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1627,7 +1627,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92EntryLevelSQL(  ) thr
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1856,7 +1856,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactions(  ) throw(SQLE
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1875,7 +1875,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::allProceduresAreCallable(  ) throw(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1894,7 +1894,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsStoredProcedures(  ) throw(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1913,7 +1913,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSelectForUpdate(  ) throw(S
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1932,7 +1932,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::allTablesAreSelectable(  ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_True);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1951,7 +1951,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::isReadOnly(  ) throw(SQLException, 
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1970,7 +1970,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::usesLocalFiles(  ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -1989,7 +1989,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::usesLocalFilePerTable(  ) throw(SQL
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2008,7 +2008,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTypeConversion(  ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2027,7 +2027,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQL
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2046,7 +2046,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsColumnAliasing(  ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2065,7 +2065,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTableCorrelationNames(  ) t
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
     jvalue args[2];
@@ -2088,7 +2088,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2107,7 +2107,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsExpressionsInOrderBy(  ) th
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2126,7 +2126,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupBy(  ) throw(SQLExcept
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2145,7 +2145,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupByBeyondSelect(  ) thr
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2164,7 +2164,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsGroupByUnrelated(  ) throw(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2183,7 +2183,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMultipleTransactions(  ) th
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2202,7 +2202,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMultipleResultSets(  ) thro
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsLikeEscapeClause(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2221,7 +2221,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsLikeEscapeClause(  ) throw(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2240,7 +2240,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsOrderByUnrelated(  ) throw(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2259,7 +2259,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsUnion(  ) throw(SQLExceptio
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2278,7 +2278,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsUnionAll(  ) throw(SQLExcep
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2297,7 +2297,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseIdentifiers(  ) th
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2316,7 +2316,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseQuotedIdentifiers(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2335,7 +2335,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLEx
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2354,7 +2354,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQL
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2373,7 +2373,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2392,7 +2392,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::nullsAreSortedLow(  ) throw(SQLExce
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2411,7 +2411,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInProcedureCalls(  )
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2430,7 +2430,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInPrivilegeDefinitio
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2449,7 +2449,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInProcedureCalls(  
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2468,7 +2468,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInPrivilegeDefiniti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2487,7 +2487,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCorrelatedSubqueries(  ) th
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInComparisons(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2506,7 +2506,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInComparisons(  )
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInExists(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2525,7 +2525,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInExists(  ) thro
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInIns(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2544,7 +2544,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInIns(  ) throw(S
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2563,7 +2563,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSubqueriesInQuantifieds(  )
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2766,7 +2766,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException)
 {
-    jint out;
+    jint out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2785,7 +2785,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMajorVersion(  ) throw(Ru
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
-    jint out;
+    jint out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2804,7 +2804,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDefaultTransactionIsolation(  )
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException)
 {
-    jint out;
+    jint out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2961,7 +2961,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2980,7 +2980,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsExtendedSQLGrammar(  ) thro
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -2999,7 +2999,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -3018,7 +3018,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -3037,7 +3037,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsFullOuterJoins(  ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLException, RuntimeException)
 {
-    jboolean out;
+    jboolean out(sal_False);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -3056,7 +3056,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsLimitedOuterJoins(  ) throw
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException)
 {
-    jint out;
+    jint out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -3075,7 +3075,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(S
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
-    jint out;
+    jint out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -3094,7 +3094,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(S
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException)
 {
-    jint out;
+    jint out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
@@ -3113,7 +3113,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)
 {
-    jint out;
+    jint out(0);
     SDBThreadAttach t;
     if( t.pEnv ){
 
