@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexDescGetter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:02:31 $
+ *  last change:$Date: 2003-11-18 16:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 package helper;
 
 import complexlib.ComplexTestCase;
-import lib.DynamicClassLoader;
+import util.DynamicClassLoader;
 import share.DescEntry;
 import share.DescGetter;
 import share.ComplexTest;
@@ -78,6 +78,7 @@ public class ComplexDescGetter extends DescGetter {
 
     /** Creates new ComplexDescGetter */
     public ComplexDescGetter() {
+        testClass = null;
     }
 
     public DescEntry[] getDescriptionFor(String entry, String DescPath,
@@ -102,7 +103,6 @@ public class ComplexDescGetter extends DescGetter {
 
     protected DescEntry getDescriptionForSingleJob(String className, String descPath, boolean debug) {
         DynamicClassLoader dcl = new DynamicClassLoader();
-        ComplexTestCase testClass = null;
         boolean returnVal = true;
 
         if (debug) {
@@ -144,7 +144,7 @@ public class ComplexDescGetter extends DescGetter {
         for (int i=0; i<dEntry.SubEntryCount; i++) {
             DescEntry aEntry = new DescEntry();
             aEntry.entryName = testMethodName[i];
-            aEntry.longName = aEntry.entryName;
+            aEntry.longName = testObjectName +"::" + aEntry.entryName;
             aEntry.isOptional = false;
             aEntry.EntryType = "method";
             aEntry.isToTest = true;
