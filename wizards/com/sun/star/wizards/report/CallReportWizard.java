@@ -30,7 +30,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.wizards.report.XCallReportWizard;
 import com.sun.star.document.*;
 import com.sun.star.comp.helper.*;
 import com.sun.star.text.*;
@@ -66,7 +65,7 @@ import java.util.*;
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2002-05-13 15:55:58 $
+ * @version $Date: 2002-05-14 12:59:41 $
  * @author Bertram Nolte
  */
 public class CallReportWizard {
