@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:25:32 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 12:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,6 +1315,12 @@
 // EditCell
 #define STR_ACC_EDITCELL_NAME       (STR_START + 176)
 #define STR_ACC_EDITCELL_DESCR      (STR_START + 177)
+
+// DataPilot
+#define STR_ACC_DATAPILOT_ROW_DESCR (STR_START + 178)
+#define STR_ACC_DATAPILOT_COL_DESCR (STR_START + 179)
+#define STR_ACC_DATAPILOT_DATA_DESCR (STR_START + 180)
+#define STR_ACC_DATAPILOT_SEL_DESCR (STR_START + 181)
 
 // --------------------------------------------------
 
