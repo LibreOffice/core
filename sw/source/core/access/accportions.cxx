@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:55:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,15 +168,15 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     const SwViewOption* pViewOpt ) :
     SwPortionHandler(),
     pTxtNode( pTxtNd ),
-    pViewOptions( pViewOpt ),
     aBuffer(),
     nModelPosition( 0 ),
     bFinished( sal_False ),
+    pViewOptions( pViewOpt ),
     sAccessibleString(),
     aLineBreaks(),
     aModelPositions(),
     aAccessiblePositions(),
-    pSentences( NULL ),
+    pSentences( 0 ),
     nBeforePortions( 0 ),
     bLastIsSpecial( sal_False )
 {
@@ -419,10 +419,8 @@ USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
     // return the portion start
     if( ! IsSpecialPortion( nPortionNo ) )
     {
-        sal_Int32 nEndPos = aModelPositions[nPortionNo+1];
-
         // 'wide' portions have to be of the same width
-        DBG_ASSERT( ( nEndPos - nStartPos ) ==
+        DBG_ASSERT( ( aModelPositions[nPortionNo+1] - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
                       aAccessiblePositions[nPortionNo] ),
                     "accesability portion disagrees with text model" );
@@ -632,15 +630,13 @@ USHORT SwAccessiblePortionData::FillSpecialPos(
 {
     size_t nPortionNo = FindLastBreak( aAccessiblePositions, nPos );
 
-    BYTE nExtend;
-    sal_Int32 nRefPos;
-    sal_Int32 nModelPos;
+    BYTE nExtend(SP_EXTEND_RANGE_NONE);
+    sal_Int32 nRefPos(0);
+    sal_Int32 nModelPos(0);
 
     if( nPortionNo < nBeforePortions )
     {
         nExtend = SP_EXTEND_RANGE_BEFORE;
-        nModelPos = 0;
-        nRefPos = 0;
         rpPos = &rPos;
     }
     else
