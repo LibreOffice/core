@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:00:58 $
+ *  last change: $Author: sj $ $Date: 2000-12-06 11:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ using namespace ::com::sun::star::drawing;
 DECLARE_LIST( SvxDrawPageList, SvxDrawPage * );
 
 extern SfxItemPropertyMap* ImplGetSvxOle2PropertyMap();
+extern SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap();
 
 /**********************************************************************
 * class SvxDrawPage                                                   *
@@ -604,7 +605,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxShapePolyPolygon( pObj , PolygonKind_PATHPLIN );
                     break;
                 case OBJ_PAGE:
-                    pRet = new SvxShape( pObj );
+                    pRet = new SvxShape( pObj, ImplGetSvxPageShapePropertyMap() );
                     break;
                 case OBJ_MEASURE:
                     pRet = new SvxShapeDimensioning( pObj );
