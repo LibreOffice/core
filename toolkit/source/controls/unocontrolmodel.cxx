@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-01 11:22:52 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 05:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ static void lcl_ImplMergeFontProperty( ::com::sun::star::awt::FontDescriptor& rF
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_CHARSET:       rValue >>= rFD.CharSet;
                                                             break;
-        case BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT:        rValue >>= nExtractFloat; rFD.Height = nExtractFloat;
+        case BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT:        rValue >>= nExtractFloat; rFD.Height = (sal_Int16)nExtractFloat;
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT:        rValue >>= rFD.Weight;
                                                             break;
@@ -466,6 +466,9 @@ void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aEvt;
     aEvt.Source = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
     maDisposeListeners.disposeAndClear( aEvt );
+
+    // let the property set helper notify our property listeners
+    OPropertySetHelper::disposing();
 }
 
 void UnoControlModel::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
@@ -720,7 +723,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 OutStream->writeShort( aFD.Slant );
                 OutStream->writeShort( aFD.Underline );
                 OutStream->writeShort( aFD.Strikeout );
-                OutStream->writeShort( aFD.Orientation * 10 );
+                OutStream->writeShort( (short)(aFD.Orientation * 10) );
                 OutStream->writeBoolean( aFD.Kerning );
                 OutStream->writeBoolean( aFD.WordLineMode );
             }
@@ -821,12 +824,12 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     aFD.Family = InStream->readShort();
                     aFD.CharSet = InStream->readShort();
                     aFD.Pitch = InStream->readShort();
-                    aFD.CharacterWidth = InStream->readDouble();
-                    aFD.Weight = InStream->readDouble();
+                    aFD.CharacterWidth = (float)InStream->readDouble();
+                    aFD.Weight = (float)InStream->readDouble();
                     aFD.Slant =  (::com::sun::star::awt::FontSlant)InStream->readShort();
                     aFD.Underline = InStream->readShort();
                     aFD.Strikeout = InStream->readShort();
-                    aFD.Orientation = InStream->readDouble();
+                    aFD.Orientation = (float)InStream->readDouble();
                     aFD.Kerning = InStream->readBoolean();
                     aFD.WordLineMode = InStream->readBoolean();
                     aFD.Type = InStream->readShort();
@@ -896,8 +899,8 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                             if ( pProp ) // wegen den Defaults...
                                 pProp->GetValue() >>= *pFD;
                         }
-                        pFD->Width = InStream->readLong();
-                        pFD->Height = InStream->readLong();
+                        pFD->Width = (sal_Int16)InStream->readLong();
+                        pFD->Height = (sal_Int16)InStream->readLong();
                         InStream->readShort();  // ::com::sun::star::awt::FontWidth ignorieren - wurde mal falsch geschrieben und wird nicht gebraucht.
                         pFD->CharacterWidth = ::com::sun::star::awt::FontWidth::DONTKNOW;
                     }
@@ -917,7 +920,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                         pFD->Slant =  (::com::sun::star::awt::FontSlant)InStream->readShort();
                         pFD->Underline = InStream->readShort();
                         pFD->Strikeout = InStream->readShort();
-                        pFD->Orientation = ( (double)InStream->readShort() ) / 10;
+                        pFD->Orientation = ( (float)(double)InStream->readShort() ) / 10;
                         pFD->Kerning = InStream->readBoolean();
                         pFD->WordLineMode = InStream->readBoolean();
                     }
@@ -954,7 +957,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     }
     if ( bInvalidEntries )
     {
-        for ( n = 0; n < aProps.getLength(); n++ )
+        for ( n = 0; n < (sal_uInt32)aProps.getLength(); n++ )
         {
             if ( !aProps.getConstArray()[n].getLength() )
             {
@@ -1036,7 +1039,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
     }
     else
     {
-        const ::com::sun::star::uno::Type* pDestType = GetPropertyType( nPropId );
+        const ::com::sun::star::uno::Type* pDestType = GetPropertyType( (sal_uInt16)nPropId );
         if ( pDestType->getTypeClass() == TypeClass_ANY )
         {
             rConvertedValue = rValue;
@@ -1074,7 +1077,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                 if (!bConvertible)
                     throw ::com::sun::star::lang::IllegalArgumentException(
                                 ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
-                            +=  GetPropertyName(nPropId),
+                            +=  GetPropertyName((sal_uInt16)nPropId),
                         static_cast< ::com::sun::star::beans::XPropertySet* >(this),
                         1);
             }
@@ -1100,8 +1103,8 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const
     {
         sal_Bool bVoid = rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
 
-        DBG_ASSERT( !bVoid || ( GetPropertyAttribs( nPropId ) & ::com::sun::star::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
-        ImplPropertyChanged( nPropId );
+        DBG_ASSERT( !bVoid || ( GetPropertyAttribs( (sal_uInt16)nPropId ) & ::com::sun::star::beans::PropertyAttribute::MAYBEVOID ), "Property darf nicht VOID sein!" );
+        ImplPropertyChanged( (sal_uInt16)nPropId );
         pProp->SetValue( rValue );
     }
     else
@@ -1187,7 +1190,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
         ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
         ::com::sun::star::awt::FontDescriptor aFD;
         pProp->GetValue() >>= aFD;
-        lcl_ImplMergeFontProperty( aFD, nPropId, rValue );
+        lcl_ImplMergeFontProperty( aFD, (sal_uInt16)nPropId, rValue );
 
         ::com::sun::star::uno::Any aFDValue;
         aFDValue <<= aFD;
@@ -1209,10 +1212,10 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    sal_uInt16 nProps = rPropertyNames.getLength();
+    sal_Int32 nProps = rPropertyNames.getLength();
     sal_Int32* pHandles = new sal_Int32[nProps];
     const ::com::sun::star::uno::Any* pValues = Values.getConstArray();
-    sal_uInt16 nValidHandles = getInfoHelper().fillHandles( pHandles, rPropertyNames );
+    sal_Int32 nValidHandles = getInfoHelper().fillHandles( pHandles, rPropertyNames );
 
     if ( nValidHandles )
     {
@@ -1228,7 +1231,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
                     pFD = new ::com::sun::star::awt::FontDescriptor;
                     pProp->GetValue() >>= *pFD;
                 }
-                lcl_ImplMergeFontProperty( *pFD, pHandles[n], pValues[n] );
+                lcl_ImplMergeFontProperty( *pFD, (sal_uInt16)pHandles[n], pValues[n] );
                 pHandles[n] = -1;
                 nValidHandles--;
             }
