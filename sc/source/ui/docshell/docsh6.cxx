@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 20:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,6 @@
 #include <svx/pageitem.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/linkmgr.hxx>
-
-#include <segmentc.hxx>
 #endif
 
 // INCLUDE ---------------------------------------------------------------
@@ -210,13 +208,9 @@
 
 //----------------------------------------------------------------------
 
-SEG_EOFGLOBALS()
-
 //
 //  Ole
 //
-
-#pragma SEG_FUNCDEF(docsh6_01)
 
 String ScDocShell::CreateObjectName( const String& rPrefix )
 {
@@ -231,8 +225,6 @@ String ScDocShell::CreateObjectName( const String& rPrefix )
     }
     return aStr;
 }
-
-#pragma SEG_FUNCDEF(docsh6_02)
 
 void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
@@ -290,14 +282,10 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
     }
 }
 
-#pragma SEG_FUNCDEF(docsh6_03)
-
 BOOL ScDocShell::IsOle()
 {
     return (eShellMode == SFX_CREATE_MODE_EMBEDDED);
 }
-
-#pragma SEG_FUNCDEF(docsh6_04)
 
 void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
 {
@@ -346,15 +334,11 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
 //  Style-Krempel fuer Organizer etc.
 //
 
-#pragma SEG_FUNCDEF(docsh6_05)
-
 SfxStyleSheetBasePool* __EXPORT ScDocShell::GetStyleSheetPool()
 {
     return (SfxStyleSheetBasePool*)aDocument.GetStyleSheetPool();
 }
 
-
-#pragma SEG_FUNCDEF(docsh6_07)
 
 //  nach dem Laden von Vorlagen aus einem anderen Dokment (LoadStyles, Insert)
 //  muessen die SetItems (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) auf den richtigen
@@ -388,8 +372,6 @@ void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
     }
 }
 
-#pragma SEG_FUNCDEF(docsh6_08)
-
 void __EXPORT ScDocShell::LoadStyles( SfxObjectShell &rSource )
 {
     aDocument.StylesToNames();
@@ -399,23 +381,12 @@ void __EXPORT ScDocShell::LoadStyles( SfxObjectShell &rSource )
 
     aDocument.UpdStlShtPtrsFrmNms();
 
-        //  Hoehen anpassen
-
-    VirtualDevice aVDev;
-    Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
-    double nPPTX = aLogic.X() / 1000.0;
-    double nPPTY = aLogic.Y() / 1000.0;
-    Fraction aZoom(1,1);
-    USHORT nTabCnt = aDocument.GetTableCount();
-    for (USHORT nTab=0; nTab<nTabCnt; nTab++)
-        aDocument.SetOptimalHeight( 0,MAXROW, nTab,0, &aVDev, nPPTX,nPPTY, aZoom,aZoom, FALSE );
+    UpdateAllRowHeights();
 
         //  Paint
 
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );
 }
-
-#pragma SEG_FUNCDEF(docsh6_0b)
 
 BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
                                 USHORT nSourceIdx1, USHORT nSourceIdx2, USHORT nSourceIdx3,
@@ -428,8 +399,6 @@ BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
 
     return bRet;
 }
-
-#pragma SEG_FUNCDEF(docsh6_09)
 
 void ScDocShell::UpdateLinks()
 {
@@ -500,8 +469,6 @@ void ScDocShell::UpdateLinks()
         }
 }
 
-#pragma SEG_FUNCDEF(docsh6_0a)
-
 BOOL ScDocShell::ReloadTabLinks()
 {
     SvxLinkManager* pLinkManager = aDocument.GetLinkManager();
@@ -535,88 +502,4 @@ BOOL ScDocShell::ReloadTabLinks()
     return TRUE;        //! Fehler erkennen
 }
 
-/*------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.25  2000/09/17 14:09:00  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.24  2000/08/31 16:38:22  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.23  2000/04/20 16:51:18  nn
-    unicode changes
-
-    Revision 1.22  2000/02/11 12:25:25  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.21  1998/08/06 08:37:38  TJ
-    include
-
-
-      Rev 1.20   06 Aug 1998 10:37:38   TJ
-   include
-
-      Rev 1.19   11 Jun 1998 11:24:18   NN
-   wenn VisArea von aussen gesetzt, Position beibehalten
-
-      Rev 1.18   27 Jan 1998 12:42:26   TJ
-   include
-
-      Rev 1.17   05 Dec 1997 19:51:28   ANK
-   Includes geaendert
-
-      Rev 1.16   22 Sep 1997 18:08:40   NN
-   #44070# ReloadTabLinks: nur 1x Paint
-
-      Rev 1.15   10 Sep 1997 21:16:32   NN
-   IsOle: Abfrage per CreateMode
-
-      Rev 1.14   17 Sep 1996 16:10:38   NN
-   Bei Link auch Filter-Options speichern
-
-      Rev 1.13   09 Aug 1996 20:36:06   NN
-   Svx-Includes aus scitems.hxx raus
-
-      Rev 1.12   08 Aug 1996 11:03:30   NF
-   includes...
-
-      Rev 1.11   22 Apr 1996 14:57:30   NN
-   UpdateOle: SetVisArea immer wenn geaendert
-
-      Rev 1.10   20 Mar 1996 14:24:50   NN
-   Zoom fuer X und Y getrennt (wegen OLE)
-
-      Rev 1.9   09 Mar 1996 18:18:56   NN
-   bei Insert und LoadStyles hinterher die Pools anpassen
-
-      Rev 1.8   06 Mar 1996 19:17:22   NN
-   ReloadTabLinks
-
-      Rev 1.7   05 Mar 1996 19:52:32   NN
-   UpdateOle: auch SetVisibleTab
-
-      Rev 1.6   01 Mar 1996 17:04:54   NN
-   UpdateLinks: unbenutzte Links loeschen
-
-      Rev 1.5   27 Feb 1996 15:01:46   NN
-   UpdateLinks
-
-      Rev 1.4   09 Jan 1996 19:25:54   NN
-   bei SetVisArea das Embedded-Rechteck (tuerkiser Rahmen) updaten
-
-      Rev 1.3   10 Dec 1995 15:20:50   TRI
-   define entfernt
-
-      Rev 1.2   23 Nov 1995 16:11:02   NN
-   DataChanged bei SetVisArea
-
-      Rev 1.1   21 Nov 1995 15:49:14   TLX
-   Insert wandert in den SFX
-
-      Rev 1.0   17 Nov 1995 15:45:44   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE

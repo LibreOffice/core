@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 10:26:00 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 20:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,20 @@ BOOL ScDocShell::AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab 
         PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID|PAINT_LEFT );
 
     return bChange;
+}
+
+void ScDocShell::UpdateAllRowHeights()
+{
+    // update automatic row heights
+
+    VirtualDevice aVDev;
+    Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
+    double nPPTX = aLogic.X() / 1000.0;
+    double nPPTY = aLogic.Y() / 1000.0;
+    Fraction aZoom(1,1);
+    USHORT nTabCnt = aDocument.GetTableCount();
+    for (USHORT nTab=0; nTab<nTabCnt; nTab++)
+        aDocument.SetOptimalHeight( 0,MAXROW, nTab,0, &aVDev, nPPTX,nPPTY, aZoom,aZoom, FALSE );
 }
 
 void ScDocShell::PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot, BOOL bRecord, BOOL bApi )
