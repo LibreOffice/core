@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-03 13:27:17 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-18 07:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,14 +305,15 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
                                                              xAttrList );
         break;
     case XML_TOK_DOC_STYLES:
-        GetSwImport().SetProgressValue( PROGRESS_BAR_STEP );
+        GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_False );
         break;
     case XML_TOK_DOC_AUTOSTYLES:
         // don't use the autostyles from the styles-document for the progress
         if ( ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
-            GetSwImport().SetProgressValue( 2 * PROGRESS_BAR_STEP );
+            GetSwImport().GetProgressBarHelper()->Increment
+                ( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_True );
         break;
@@ -331,7 +332,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         pContext = GetSwImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
-        GetSwImport().SetProgressValue( 3 * PROGRESS_BAR_STEP );
+        GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         pContext = GetSwImport().CreateBodyContext( rLocalName );
         break;
     case XML_TOK_DOC_SETTINGS:
