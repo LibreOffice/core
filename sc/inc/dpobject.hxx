@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:22:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef SC_COLLECT_HXX
@@ -200,11 +204,11 @@ public:
     BOOL                StoreNew(SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
     BOOL                LoadNew(SvStream& rStream, ScMultipleReadHeader& rHdr );
     BOOL                FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
-    BOOL                FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, USHORT nShowAllMax) const;
+    BOOL                FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, SCSIZE nShowAllMax) const;
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
-                                         const ScRange& r, short nDx, short nDy, short nDz );
+                                         const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     BOOL                RefsEqual( const ScDPObject& r ) const;
     void                WriteRefsTo( ScDPObject& r ) const;
 
@@ -218,13 +222,13 @@ public:
                         CreateSource( const ScDPServiceDesc& rDesc );
 
     static void         ConvertOrientation( ScDPSaveData& rSaveData,
-                            PivotField* pFields, USHORT nCount, USHORT nOrient,
-                            ScDocument* pDoc, USHORT nRow, USHORT nTab,
+                            PivotField* pFields, SCSIZE nCount, USHORT nOrient,
+                            ScDocument* pDoc, SCROW nRow, SCTAB nTab,
                             const com::sun::star::uno::Reference<
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource,
                             BOOL bOldDefaults,
-                            PivotField* pRefColFields = NULL, USHORT nRefColCount = 0,
-                            PivotField* pRefRowFields = NULL, USHORT nRefRowCount = 0 );
+                            PivotField* pRefColFields = NULL, SCSIZE nRefColCount = 0,
+                            PivotField* pRefRowFields = NULL, SCSIZE nRefRowCount = 0 );
 };
 
 
@@ -249,7 +253,7 @@ public:
     void        ConvertOldTables( ScPivotCollection& rOldColl );
 
     void        UpdateReference( UpdateRefMode eUpdateRefMode,
-                                 const ScRange& r, short nDx, short nDy, short nDz );
+                                 const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     BOOL        RefsEqual( const ScDPCollection& r ) const;
     void        WriteRefsTo( ScDPCollection& r ) const;
