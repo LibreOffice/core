@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 15:13:33 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,7 +1598,7 @@ void ScInterpreter::ScExternal()
     USHORT nIndex;
     BYTE nParamCount = GetByte();
     String aUnoName;
-    String aFuncName( pCur->GetExternal() );
+    String aFuncName( ScGlobal::pCharClass->upper( pCur->GetExternal() ) );
     if (ScGlobal::GetFuncCollection()->SearchFunc(aFuncName, nIndex))
     {
         FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);

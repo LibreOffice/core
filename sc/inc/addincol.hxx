@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-11-19 22:05:18 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,8 @@ public:
                 ScUnoAddInCollection();
                 ~ScUnoAddInCollection();
 
-    String              FindFunction( const String& rName, BOOL bLocalFirst );  // user entered name
+                        /// User enetered name. rUpperName MUST already be upper case!
+    String              FindFunction( const String& rUpperName, BOOL bLocalFirst );
     const ScUnoAddInFuncData*   GetFuncData( const String& rName );             // exact name
 
     void                LocalizeString( String& rName );    // modify rName - input: exact name

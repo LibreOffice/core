@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-11-19 22:08:22 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,8 +352,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
 {
     // function names are always case-insensitive
-    String aUpper( rName );
-    ScGlobal::pCharClass->toUpper( aUpper );
+    String aUpper( ScGlobal::pCharClass->upper( rName ) );
 
     // same options as in ScCompiler::IsOpCode:
     // 1. built-in function name

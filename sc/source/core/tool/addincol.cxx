@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2002-11-19 22:07:09 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,7 +782,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     }
 }
 
-String ScUnoAddInCollection::FindFunction( const String& rName, BOOL bLocalFirst )
+String ScUnoAddInCollection::FindFunction( const String& rUpperName, BOOL bLocalFirst )
 {
     if (!bInitialized)
         Initialize();
@@ -790,20 +790,18 @@ String ScUnoAddInCollection::FindFunction( const String& rName, BOOL bLocalFirst
     if (nFuncCount == 0)
         return EMPTY_STRING;
 
-    String aUpperCmp( ScGlobal::pCharClass->upper( rName ) );
-
     if ( bLocalFirst )
     {
         //  first scan all local names (used for entering formulas)
 
-        ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( aUpperCmp ) );
+        ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( rUpperName ) );
         if ( iLook != pLocalHashMap->end() )
             return iLook->second->GetOriginalName();
 
 #if 0
         //  after that, scan international names (really?)
 
-        iLook = pNameHashMap->find( aUpperCmp );
+        iLook = pNameHashMap->find( rUpperName );
         if ( iLook != pNameHashMap->end() )
             return iLook->second->GetOriginalName();
 #endif
@@ -813,13 +811,13 @@ String ScUnoAddInCollection::FindFunction( const String& rName, BOOL bLocalFirst
         //  first scan international names (used when calling a function)
         //! before that, check for exact match???
 
-        ScAddInHashMap::const_iterator iLook( pNameHashMap->find( aUpperCmp ) );
+        ScAddInHashMap::const_iterator iLook( pNameHashMap->find( rUpperName ) );
         if ( iLook != pNameHashMap->end() )
             return iLook->second->GetOriginalName();
 
         //  after that, scan all local names (to allow replacing old AddIns with Uno)
 
-        iLook = pLocalHashMap->find( aUpperCmp );
+        iLook = pLocalHashMap->find( rUpperName );
         if ( iLook != pLocalHashMap->end() )
             return iLook->second->GetOriginalName();
     }
