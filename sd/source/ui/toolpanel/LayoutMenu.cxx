@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:24:24 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include "LayoutMenu.hxx"
 
 #include "TaskPaneShellManager.hxx"
@@ -70,6 +71,7 @@
 #include "glob.hxx"
 #include "glob.hrc"
 #include "app.hrc"
+#include "helpids.h"
 #include "res_bmp.hrc"
 #include "strings.hrc"
 #ifndef SD_VIEW_SHELL_BASE_HXX
@@ -80,6 +82,9 @@
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
+#include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ScrollPanel.hxx"
+#include "tools/SlotStateListener.hxx"
 
 #include <vector>
 #include <memory>
@@ -102,14 +107,54 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+
 using namespace ::sd::toolpanel;
 #define LayoutMenu
 #include "sdslots.hxx"
 
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::sd::slidesorter;
 
 namespace sd { namespace toolpanel {
+
+/** This factory class stores references to ViewShellBase and DrawDocShell
+    and passes them to new LayoutMenu objects.
+*/
+class LayoutMenuFactory
+    : public ControlFactory
+{
+public:
+    LayoutMenuFactory (ViewShellBase& rBase, DrawDocShell& rDocShell)
+        : mrBase(rBase),
+          mrDocShell(rDocShell)
+    {}
+
+protected:
+    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    {
+        ScrollPanel* pScrollPanel = new ScrollPanel (pTreeNode);
+        ::std::auto_ptr<TreeNode> pMenu (
+            new LayoutMenu (
+                pScrollPanel,
+                mrDocShell,
+                mrBase,
+                false));
+        pScrollPanel->AddControl(pMenu);
+        return pScrollPanel;
+    }
+
+private:
+    ViewShellBase& mrBase;
+    DrawDocShell& mrDocShell;
+};
+
+
+
 
 SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
     SdResId(STR_TASKPANELAYOUTMENU))
@@ -207,6 +252,7 @@ static snewfoil_value_info standard[] =
 
 
 
+
 LayoutMenu::LayoutMenu (
     TreeNode* pParent,
     DrawDocShell& rDocumentShell,
@@ -218,7 +264,8 @@ LayoutMenu::LayoutMenu (
       DropTargetHelper(this),
       mrBase (rViewShellBase),
       mbUseOwnScrollBar (bUseOwnScrollBar),
-      mnPreferredColumnCount (3)
+      mnPreferredColumnCount(3),
+      mxListener(NULL)
 {
     SetStyle (
         GetStyle()
@@ -236,6 +283,14 @@ LayoutMenu::LayoutMenu (
 
     mrBase.GetPaneManager().AddEventListener (
         LINK(this, LayoutMenu, ViewShellChangeCallback));
+
+    SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
+
+    Link aLink (LINK(this,LayoutMenu,StateChangeHandler));
+    mxListener = new ::sd::tools::SlotStateListener(
+        aLink,
+        mrBase.GetController()->getFrame(),
+        ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
 }
 
 
@@ -243,9 +298,23 @@ LayoutMenu::LayoutMenu (
 
 LayoutMenu::~LayoutMenu (void)
 {
+    Reference<lang::XComponent> xComponent (mxListener, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+
     Clear();
     mrBase.GetPaneManager().RemoveEventListener (
         LINK(this, LayoutMenu, ViewShellChangeCallback));
+}
+
+
+
+
+::std::auto_ptr<ControlFactory> LayoutMenu::CreateControlFactory (
+    ViewShellBase& rBase,
+    DrawDocShell& rDocShell)
+{
+    return ::std::auto_ptr<ControlFactory>(new LayoutMenuFactory(rBase, rDocShell));
 }
 
 
@@ -394,6 +463,7 @@ void LayoutMenu::Resize (void)
             else if (nColumnCount > 4)
                 nColumnCount = 4;
 
+            int n = GetItemCount();
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
 
             SetColCount (nColumnCount);
@@ -453,6 +523,13 @@ void LayoutMenu::Execute (SfxRequest& rRequest)
 
 
 
+void LayoutMenu::GetState (SfxItemSet& rItemSet)
+{
+}
+
+
+
+
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell();
@@ -469,8 +546,15 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 
 
 
-void LayoutMenu::GetState (SfxItemSet& rItemSet)
+void LayoutMenu::InvalidateContent (void)
 {
+    // Throw away the current set and fill the menu anew according to the
+    // current settings (this includes the support for vertical writing.)
+    Fill();
+
+    // The number of items may have changed.  Request a resize so that the
+    // vertical size of this control can be adapted.
+    RequestResize();
 }
 
 
@@ -480,9 +564,10 @@ int LayoutMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
 {
     int nRowCount = 0;
 
-    if (GetItemCount() > 0)
+    if (GetItemCount() > 0 && nColumnCount > 0)
     {
-        nRowCount = GetOutputSizePixel().Height() / rItemSize.Height();
+        nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
+        //        nRowCount = GetOutputSizePixel().Height() / rItemSize.Height();
         if (nRowCount < 1)
             nRowCount = 1;
     }
@@ -665,6 +750,7 @@ void LayoutMenu::Fill (void)
     }
 
     Clear();
+    int n = 0;
     for (sal_uInt16 i=1; pInfo!=NULL&&pInfo->mnBmpResId!=0; i++,pInfo++)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
@@ -678,8 +764,10 @@ void LayoutMenu::Fill (void)
 
             InsertItem (i, aBmp, String (SdResId (pInfo->mnStrResId)));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
+            n++;
         }
     }
+    OSL_TRACE("added %d entries to layout menu", n);
 }
 
 
@@ -711,6 +799,15 @@ sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& rEvent)
 
 sal_Int8 LayoutMenu::ExecuteDrop (const ExecuteDropEvent& rEvent)
 {
+    return 0;
+}
+
+
+
+
+IMPL_LINK(LayoutMenu, StateChangeHandler, ::rtl::OUString*, pSlotName)
+{
+    InvalidateContent();
     return 0;
 }
 
