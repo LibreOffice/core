@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_idlco.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:07:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ const UINT16 nTok_bty_long = 100 + TokBuiltInType::bty_long;
 const UINT16 nTok_bty_short = 100 + TokBuiltInType::bty_short;
 const UINT16 nTok_bty_string = 100 + TokBuiltInType::bty_string;
 const UINT16 nTok_bty_void = 100 + TokBuiltInType::bty_void;
+const UINT16 nTok_bty_ellipse = 100 + TokBuiltInType::bty_ellipse;
 
 const UINT16 nTok_tmod_unsigned = 200 + TokTypeModifier::tmod_unsigned;
 const UINT16 nTok_tmod_sequence = 200 + TokTypeModifier::tmod_sequence;
@@ -527,6 +528,7 @@ Context_UidlCode::SetupStateMachine()
     aStateMachine.AddToken("unsigned",  nTok_tmod_unsigned,     A_nKeywordDefStatus,    finKeyw);
     aStateMachine.AddToken("virtual",   nTok_ste_virtual,       A_nKeywordDefStatus,    finKeyw);
     aStateMachine.AddToken("void",      nTok_bty_void,          A_nKeywordDefStatus,    finKeyw);
+    aStateMachine.AddToken("...",       nTok_bty_ellipse,       A_nPunctDefStatus,      finKeyw);
 
     aStateMachine.AddToken("=",         nTok_assignment,        A_nPunctDefStatus,      gotoAsg);
 
