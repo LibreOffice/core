@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 14:09:22 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
-#endif
 
 #ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 #include <xmloff/XMLTextMasterPageExport.hxx>
@@ -77,22 +74,14 @@
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #endif
 
+#include "xmlexprt.hxx"
+
 namespace com { namespace sun { namespace star {
     namespace text { class XText; }
 } } }
 
 class XMLTableMasterPageExport : public XMLTextMasterPageExport
 {
-    const ::rtl::OUString sHeaderText;
-    const ::rtl::OUString sHeaderOn;
-    const ::rtl::OUString sHeaderShareContent;
-    const ::rtl::OUString sHeaderTextLeft;
-
-    const ::rtl::OUString sFooterText;
-    const ::rtl::OUString sFooterOn;
-    const ::rtl::OUString sFooterShareContent;
-    const ::rtl::OUString sFooterTextLeft;
-
     void exportHeaderFooter(const com::sun::star::uno::Reference < com::sun::star::sheet::XHeaderFooterContent >& xHeaderFooter,
                             const sal_Char *pName,
                             const sal_Bool bDisplay);

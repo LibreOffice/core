@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 12:12:55 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SC_XMLTABLEHEADERFOOTERCONTEXT_HXX_
+#include "XMLTableHeaderFooterContext.hxx"
 #endif
 
 #include "docuno.hxx"
@@ -897,12 +900,12 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             const sal_Bool bFooter,
             const sal_Bool bLeft )
 {
-/*  Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-    return new XMLTextHeaderFooterContext( GetImport(),
+    Reference < XPropertySet > xPropSet( GetStyle(), UNO_QUERY );
+    return new XMLTableHeaderFooterContext( GetImport(),
                                                 nPrefix, rLocalName,
                                                 xAttrList,
                                                 xPropSet,
-                                                bFooter, bLeft );*/
+                                                bFooter, bLeft );
     return NULL;
 }
 

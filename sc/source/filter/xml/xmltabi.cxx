@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 16:03:33 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "xmlcoli.hxx"
 #include "xmlsceni.hxx"
 #include "document.hxx"
+#include "xmlmapch.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -136,6 +137,8 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     {
         GetScImport().GetTables().NewTable(nSpannedCols);
     }
+    uno::Reference <util::XStringMapping> aMapper = new ScImportMapper();
+    GetScImport().GetChartImport()->SetTableAddressMapper(aMapper);
 }
 
 ScXMLTableContext::~ScXMLTableContext()

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sab $ $Date: 2000-10-24 14:17:51 $
+#   last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,8 @@ CXXFILES = \
         xmlsceni.cxx \
         xmlcvali.cxx \
         XMLTableMasterPageExport.cxx \
-        xmllabri.cxx
+        xmllabri.cxx \
+        XMLTableHeaderFooterContext.cxx
 
 SLOFILES =  \
         $(SLO)$/xmlwrap.obj \
@@ -130,7 +131,8 @@ SLOFILES =  \
         $(SLO)$/xmlsceni.obj \
         $(SLO)$/xmlcvali.obj \
         $(SLO)$/XMLTableMasterPageExport.obj \
-        $(SLO)$/xmllabri.obj
+        $(SLO)$/xmllabri.obj \
+        $(SLO)$/XMLTableHeaderFooterContext.obj
 
 
 # --- Tagets -------------------------------------------------------

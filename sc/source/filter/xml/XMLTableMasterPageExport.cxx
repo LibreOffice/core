@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 15:15:41 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexprt.hxx"
-#endif
-
 #ifndef _SC_XMLTABLEMASTERPAGEEXPORT_HXX
 #include "XMLTableMasterPageExport.hxx"
 #endif
 
 #include "unonames.hxx"
-
+#include "xmlexprt.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
