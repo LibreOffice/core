@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:34:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,13 @@
 #include <vos/mutex.hxx>
 #endif
 
+#ifndef _XMLOFF_XFORMSIMPORT_HXX
+#include <xmloff/xformsimport.hxx>
+#endif
+
+#ifndef _UNOTXDOC_HXX
+#include <unotxdoc.hxx>    // for initXForms()
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -216,6 +223,7 @@ enum SwXMLDocTokens
     XML_TOK_DOC_BODY,
     XML_TOK_DOC_SCRIPT,
     XML_TOK_DOC_SETTINGS,
+    XML_TOK_DOC_XFORMS,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
 
@@ -229,6 +237,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
     { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT      },
     { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
+    { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS      },
     XML_TOKEN_MAP_END
 };
 
@@ -350,6 +359,9 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_SETTINGS:
         pContext = new XMLDocumentSettingsContext( GetImport(), nPrefix, rLocalName, xAttrList );
+        break;
+    case XML_TOK_DOC_XFORMS:
+        pContext = createXFormsModelContext(GetImport(), nPrefix, rLocalName);
         break;
     }
 
@@ -1495,4 +1507,24 @@ OUString SAL_CALL SwXMLImport::getImplementationName()
                 "com.sun.star.comp.Writer.SwXMLImport" ) );
             break;
     }
+}
+
+
+void SwXMLImport::initXForms()
+{
+    // obtain SwDoc
+    Reference<XUnoTunnel> xDocTunnel( GetModel(), UNO_QUERY );
+    if( ! xDocTunnel.is() )
+        return;
+    SwXTextDocument* pXTextDocument = reinterpret_cast<SwXTextDocument*>(
+        xDocTunnel->getSomething( SwXTextDocument::getUnoTunnelId() ) );
+    if( pXTextDocument == NULL )
+        return;
+
+    SwDoc *pDoc = pXTextDocument->GetDocShell()->GetDoc();
+
+    // init XForms (if not already done)
+    // (no default model, since we'll load the models)
+    if( ! pDoc->isXForms() )
+        pDoc->initXForms( false );
 }
