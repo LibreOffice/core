@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:53:08 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ String ERR_INET_CONNECT
     Text[ chinese_traditional ] = "µLªk©M Internet «Ψ¥ί³sµ²΅C";
     Text[ arabic ] = "ΚΪΠΡ Ϊγα ΗΚΥΗα ΕδΚΡδΚ";
     Text[ greek ] = "Δεν ήταν δυνατόν να πραγματοποιηθεί η σύνδεση με το Internet";
-    Text[ korean ] = "ΐΞΕΝ³έ ΑΆΌΣΐ»΅΅±ΈΓΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΐΞΕΝ³έ ΑΆΌΣΐ» ±ΈΓΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Internet baπlantύsύ gerηekleώtirilemedi.";
     Text[ catalan ] = "No se pudo crear la conexiσn Internet";
     Text[ finnish ] = "Internet-yhteyden muodostaminen ei onnistunut";
@@ -184,7 +184,7 @@ String ERR_INET_GENERAL
     Text[ chinese_traditional ] = "¦b Internet ³sµ²­S³ς¤Ίµo¥Ν¤@­Σ¤@―λΏω»~΅C";
     Text[ arabic ] = "ΝΟΛ ΞΨΓ ΪΗγ έν δΨΗή ΗαΕδΚΡδΚ";
     Text[ greek ] = "Γενικό σφάλμα του Internet";
-    Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­΅΅ΐΟΉέΐϋΐΞ Ώΐ·ω΅΅Ήί»ύ";
+    Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­ ΐΟΉέΐϋΐΞ Ώΐ·ω Ήί»ύ";
     Text[ turkish ] = "Genel Internet hatasύ";
     Text[ catalan ] = "Error general en Internet";
     Text[ finnish ] = "Yleinen Internet-virhe";
@@ -233,7 +233,7 @@ String ERR_ACTIVEDOWNLOADS
     Text[ chinese_traditional ] = "ΑΩ¥Ώ¦b¤UΈόΐΙ®Χ΅C\n―u­n¤¤Β_΅H\n";
     Text[ arabic ] = "γΗÒΗαΚ εδΗί ΪγανΗΚ ΚδÒνα δΤΨΙ.\nεα ΚΡνΟ ΗαΕδεΗΑ έΪαΗπΏ\n";
     Text[ greek ] = "Εκτελούνται ακόμη λήψεις δεδομένων.\nΘέλετε πραγματικά να τερματίσετε τη διαδικασία;\n";
-    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΓλΌÒΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
+    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰ ΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΓλΌÒΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "ήu an devam eden veri indirme iώleri var.\nGerηekten ηύkmak istiyor musunuz?\n";
     Text[ catalan ] = "Todavνa existen descargas activas.\nΏDesea realmente cancelar?\n";
     Text[ finnish ] = "Noutoja on yhδ kδynnissδ.\nHaluatko varmasti lopettaa?\n";
@@ -258,7 +258,7 @@ String ERR_QUEUEDDOWNLOADS
     Text[ chinese_traditional ] = "ΑΩ¥Ώ¦b¤UΈόΐΙ®Χ΅C\n―u­nµ²§τ΅H\n";
     Text[ arabic ] = "γΗÒΗαΚ εδΗί ΪγανΗΚ ΚδÒνα Ϊαμ ήΗΖγΙ ΗαΗδΚΩΗΡ.\nεα ΚΡνΟ ΗαΕδεΗΑ έΪαΗυΏ\n";
     Text[ greek ] = "Υπάρχουν ακόμη λήψεις δεδομένων στη σειρά αναμονής.\nΘέλετε σίγουρα να τερματίσετε τη διαδικασία;\n";
-    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰ ΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΑΎ·αΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
+    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΄λ±β ΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΑΎ·αΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "Bekleme sύrasύnda veri indirme iώleri var.\nGerηekten ηύkmak istiyor musunuz?\n";
     Text[ catalan ] = "Todavνa hay documentos para descargar.\nΏDesea realmente cancelar?\n";
     Text[ finnish ] = "Noutoja on vielδ suorittamatta.\nHaluatko varmasti lopettaa?\n";
@@ -283,7 +283,7 @@ String ERR_FILEISLOCAL
     Text[ chinese_traditional ] = "³o­ΣΐΙ®Χ¤wΈgΐx¦s¦bΊΟΊΠ¤W΅C\nΑΩ¬O­n½Ζ»s¥¦΅H";
     Text[ arabic ] = "εΠΗ Ηαγαέ γζΜζΟ ΘΗαέΪα έν ίγΘνζΚΡί.\nεα ΚΡνΟ δΣΞε Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
     Text[ greek ] = "Το αρχείο υπάρχει ήδη τοπικά στον υπολογιστή σας.\nΘέλετε να την αντιγράψετε παρ' όλα αυτά;";
-    Text[ korean ] = "ΖΔΐΟΐΊ ΐΜΉΜ »ηΏλΐΪΐΗ΅΅ΔΔΗ»ΕΝΏ΅΅΅ΑφΏªΐϋΐΈ·Ξ΅΅ΑΈΐηΗΥ΄Ο΄Ω.\n±Χ·΅µµ ΊΉ»ηΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "ΖΔΐΟΐΊ ΐΜΉΜ »ηΏλΐΪΐΗ ΔΔΗ»ΕΝΏ΅ ΑφΏªΐϋΐΈ·Ξ ΑΈΐηΗΥ΄Ο΄Ω.\n±Χ·΅µµ ΊΉ»ηΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Dosya bilgisayarύnύzda zaten mevcut.\nYine de kopyalansύn mύ?";
     Text[ catalan ] = "El archivo ya estα guardado localmente en su ordenador.\nΏDesea copiarlo de todas maneras?";
     Text[ finnish ] = "Tiedosto on jo tietokoneella.\nHaluatko kopioida tiedoston?";
@@ -307,8 +307,8 @@ String ERR_FILENAMECHECK83
     Text[ japanese ] = "w’θ‚µ‚½Μ§²Ω–Ό‚ª–³ψ‚Ε‚·B\nΜ§²Ω–Ό‚ΝΕ‚8•¶‚ά‚ΕA\nΜ§²Ωg’£q‚ΝΕ‚3•¶‚ά‚Ε‚Ζ§ΐ‚ª‚ ‚θ‚ά‚·B’Σ‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     Text[ chinese_traditional ] = "Ώι¤JªΊΐΙ®Χ¦WµL®Δ΅C\n½Π±z―d·NΐΙ®Χ¦W¤£±o¶WΉL8­Σ¦r¤Έ΅C\n°ΖΐΙ¦W¤£±o¶WΉL 3 ­Σ¦r¤Έ΅C";
     Text[ arabic ] = "ΗΣγ Ηαγαέ ΗαγυΟΞα ΫνΡ ΥΗαΝ.\n ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗΣγ Ηαγαέ νΜΘ ΓαΗ νÒνΟ Ϊδ\nΛγΗδνΙ ΝΡζέ ζΗγΚΟΗΟε Ϊδ ΛαΗΛΙ.";
-    Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n ? ";
-    Text[ korean ] = "ΑφΑ¤µΘ ΖΔΐΟ ΐΜΈ§ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΖΔΐΟΐΗ ΐΜΈ§ΐΜ 8Ή®ΐΪΈ¦ ΓΚ°ϊΗÒ Όφ Ύψ΄Ω΄ΒΑ΅°ϊ\nΘ®ΐεΐΪ°΅3Ή®ΐΪΈ¦ ΓΚ°ϊ ΗÒΌφ Ύψ΄Ω΄ΒΑ΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ.";
+    Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n";
+    Text[ korean ] = "ΑφΑ¤µΘ ΖΔΐΟ ΐΜΈ§ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΖΔΐΟΐΗ ΐΜΈ§ΐΜ 8Ή®ΐΪΈ¦ ΓΚ°ϊΗÒ Όφ Ύψ΄Ω΄Β Α΅°ϊ\nΘ®ΐεΐΪ°΅ 3Ή®ΐΪΈ¦ ΓΚ°ϊ ΗÒΌφ Ύψ΄Ω΄Β Α΅ΐ» ΐ―ΐΗΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Girilen dosya adύ geηerli deπil.\nDosya adύ en fazla 8 ve dosyan\\uzantύsύ en fazla 3 karakter uzunluπunda olabilir.";
     Text[ catalan ] = "El nombre del archivo especificado no es vαlido.\\Tenga en cuenta que el nombre debe tener un mαximo de 8 caracteres\ny la terminaciσn 3.";
     Text[ finnish ] = "Annettu tiedostonimi on virheellinen.\nTiedostonimi voi olla korkeintaan kahdeksan merkin pituinen\nja tunniste voi olla enintδδn kolmen merkin pituinen.";
@@ -332,7 +332,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ chinese_traditional ] = "ΐΙ®Χ %1 ©Ò»έªΕ¶΅¤j©σ²{¦sªΊ¥i¥ΞªΕ¶΅΅C\n­nΔ~Δς΅S\n";
     Text[ arabic ] = "Σζέ νΥΘΝ Ηαγαέ %1 ΓίΘΡ γδ ΗαγΣΗΝΙ ΗαγΚΗΝΙ Ϊαμ ΗαήΡΥ.\nεα ΚΡνΟ ΗαγΚΗΘΪΙΏ\n";
     Text[ greek ] = "Το αρχείο %1 υπερβαίνει τον διαθέσιμο χώρο αποθήκευσης.\nΘέλετε να συνεχίσετε;\n";
-    Text[ korean ] = "ΖΔΐΟ %1ΐΜ£¨°΅ £©»ηΏλ°΅΄ΙΗΡ µπ½ΊΕ© °ψ°£ΊΈ΄Ω΅΅Ε®΄Ο΄Ω.\n±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
+    Text[ korean ] = "ΖΔΐΟ %1ΐΜ(°΅) »ηΏλ °΅΄ΙΗΡ µπ½ΊΕ© °ψ°£ΊΈ΄Ω Ε®΄Ο΄Ω.\n°θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "%1 dosyasύ mevcut disk alanύnύ aώύyor.\nDevam etmek istiyor musunuz ?\n";
     Text[ catalan ] = "El tamaρo del archivo %1 excederα al del disponible en el disco.\nΏDesea continuar?\n";
     Text[ finnish ] = "Tiedoston %1 koko on suurempi kuin kδytettδvissδ oleva levytila.\nHaluatko jatkaa?\n";
@@ -585,6 +585,7 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
 
 
 
