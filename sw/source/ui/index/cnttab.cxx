@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 11:29:16 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 14:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame && !bExampleCreated)
         {
             bExampleCreated = sal_True;
-            const sal_Unicode  cSearch = SFX_SEARCHPATH_DELIMITER;
+            const sal_Unicode  cSearch = SVT_SEARCHPATH_DELIMITER;
             const String  sAccess = INET_PATH_TOKEN;
             SvtPathOptions aPathOpt;
 
