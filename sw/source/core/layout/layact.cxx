@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 10:53:46 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
     for ( USHORT i = 0; i < rObjs.Count() && aTmp.Count(); ++i )
     {
         SdrObject *pO = rObjs[i];
-        if ( !pO->IsWriterFlyFrame() )
+        if ( !pO->ISA(SwVirtFlyDrawObj) )
             continue;
 
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
@@ -421,11 +421,11 @@ BOOL MA_FASTCALL lcl_IsOverObj( const SwFrm *pFrm, const SwPageFrm *pPage,
     for ( USHORT j = 0; j < rObjs.Count(); ++j )
     {
         const SdrObject         *pObj = rObjs[j];
-        const SwRect aRect( pObj->GetBoundRect() );
+        const SwRect aRect( pObj->GetCurrentBoundRect() );
         if ( !rRect1.IsOver( aRect ) && !rRect2.IsOver( aRect ) )
             continue;       //Keine Ueberlappung, der naechste.
 
-        const SwVirtFlyDrawObj *pFlyObj = pObj->IsWriterFlyFrame() ?
+        const SwVirtFlyDrawObj *pFlyObj = pObj->ISA(SwVirtFlyDrawObj) ?
                                                 (SwVirtFlyDrawObj*)pObj : 0;
         const SwFlyFrm *pFly = pFlyObj ? pFlyObj->GetFlyFrm() : 0;
 
@@ -1110,7 +1110,7 @@ BOOL SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
         for ( USHORT i = 0; i < pObjs->Count(); ++i )
         {
             SdrObject *pO = (*pObjs)[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
@@ -1203,7 +1203,7 @@ const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBottom,
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 const SdrObject *pO = rObjs[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     if ( pFly->IsFlyInCntFrm() )
@@ -1237,7 +1237,7 @@ const SwFrm *lcl_FindFirstInvaFly( const SwPageFrm *pPage, long nBottom )
     for ( USHORT i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
     {
         SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
             if ( pFly->Frm().Top() <= nBottom )
@@ -1474,7 +1474,7 @@ void SwLayAction::FormatFlyLayout( const SwPageFrm *pPage )
                         i < pPage->GetSortedObjs()->Count(); ++i )
     {
         SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             const USHORT nOld = i;
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
@@ -1818,7 +1818,7 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
                 for ( USHORT i = 0; i < pLow->GetDrawObjs()->Count(); ++i )
                 {
                     SdrObject *pO = (*pLow->GetDrawObjs())[i];
-                    if ( pO->IsWriterFlyFrame() )
+                    if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if ( !bResetOnly )
@@ -2342,7 +2342,7 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
     for ( USHORT i = 0; pObjs && i < pObjs->Count(); ++i )
     {
         SdrObject *pO = (*pObjs)[i];
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
             if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
@@ -2372,7 +2372,7 @@ BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage, sal_Bool bDontShrink )
         if ( IsAgain() )
             return FALSE;
         SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
             sal_Bool bOldShrink = pFly->IsNoShrink();
@@ -2529,7 +2529,7 @@ BOOL SwLayAction::__FormatFlyCntnt( const SwCntntFrm *pCntnt )
         for ( USHORT i = 0; i < pObjs->Count(); ++i )
         {
             SdrObject *pO = (*pObjs)[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
@@ -2598,7 +2598,7 @@ BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
             SdrObject *pO = rObjs[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if ( pFly->IsFlyInCntFrm() )
@@ -2649,7 +2649,7 @@ BOOL SwLayIdle::FormatSpelling( BOOL bVisAreaOnly )
                                 i < pPage->GetSortedObjs()->Count(); ++i )
             {
                 SdrObject *pO = (*pPage->GetSortedObjs())[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
@@ -2711,7 +2711,7 @@ BOOL SwLayIdle::_CollectAutoCmplWords( const SwCntntFrm *pCnt,
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
             SdrObject *pO = rObjs[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if ( pFly->IsFlyInCntFrm() )
@@ -2766,7 +2766,7 @@ BOOL SwLayIdle::CollectAutoCmplWords( BOOL bVisAreaOnly )
                                 i < pPage->GetSortedObjs()->Count(); ++i )
             {
                 SdrObject *pO = (*pPage->GetSortedObjs())[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
