@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-09-04 09:48:32 $
+#   last change: $Author: toconnor $ $Date: 2003-09-04 17:00:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,11 +160,12 @@
         <fileset dir="${prj}/examples/java/selector">
             <include name="**/*.java"/>
             <include name="*.xml"/>
+            <include name="*.gif"/>
         </fileset>
     </copy>
 
     <jar jarfile="${out}/class/examples/java/selector/selector.jar"
-        basedir="${out}/class/examples/java/selector" includes="*.class">
+        basedir="${out}/class/examples/java/selector" includes="*.class,*.gif">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="ScriptFramework-Version" value="${sfversion}"/>
@@ -172,7 +173,7 @@
     </jar>
 
     <delete>
-        <fileset dir="${out}/class/examples/java/selector" includes="*.class"/>
+        <fileset dir="${out}/class/examples/java/selector" includes="*.class,*.gif"/>
     </delete>
 
     <mkdir dir="${out}/class/examples/java/Highlight"/>
