@@ -1,4 +1,4 @@
-au	automation	:	basic NULL
+au	automation	:	basic so3 NULL
 au	automation								usr1	-	all	au_mkout NULL
 au	automation\source\app					nmake	-	all	au_app NULL
 au	automation\source\server				nmake	-	all	au_server NULL
