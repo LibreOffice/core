@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:04:47 $
+ *  last change: $Author: od $ $Date: 2004-08-03 05:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@ class SwLayoutFrm;
 // --> OD 2004-07-14 #117380#
 class SwTxtFrm;
 // <--
+// --> OD 2004-06-30 #i28701#
+class SwPageFrm;
+class SwObjPositioningInProgress;
+// <--
 class SwFrmFmt;
 class SwFmtAnchor;
 
@@ -97,6 +101,10 @@ class SwAnchoredObject
         SdrObject* mpDrawObj;
         // frame the object is anchored at
         SwFrm* mpAnchorFrm;
+        // --> OD 2004-06-30 #i28701# - page frame the object is registered at
+        // note: no page frame for as-character anchored objects
+        SwPageFrm* mpPageFrm;
+        // <--
         // last relative position
         Point maRelPos;
 
@@ -117,6 +125,33 @@ class SwAnchoredObject
         // of the anchor frame, but it could also by the upper of a follow or
         // a following layout frame in the text flow.
         const SwLayoutFrm* mpVertPosOrientFrm;
+
+        // --> OD 2004-06-30 #i28701# - boolean, indicating that the object
+        // positioning algorithm is in progress.
+        bool mbPositioningInProgress;
+        // <--
+
+        // --> OD 2004-06-29 #i28701# - Booleans needed for the layout process.
+        // Values only of relevance for to-paragraph and to-character anchored
+        // floating screen object, which aren't in the 'hell' layer and have
+        // a wrapping style different from 'SURROUND_TRHOUGH', if document
+        // compatibility option 'Consider wrapping style on object positioning' is ON.
+        // Otherwise value of <mbConsiderForTextWrap> is treated as <true>,
+        // value of <mbPositionLocked> is treated as <false> and
+        // value of <mbRestartLayoutProcess> is treated as <false>.
+        bool mbConsiderForTextWrap;
+        bool mbPositionLocked;
+        bool mbRestartLayoutProcess;
+        // <--
+
+        /** method to indicate, that positioning of anchored object is in progress
+
+            note: method is implemented empty
+
+            @author OD
+        */
+        friend class SwObjPositioningInProgress;
+        void SetPositioningInProgress( const bool _bPosInProgress );
 
         /** check anchor character rectangle
 
@@ -167,6 +202,15 @@ class SwAnchoredObject
 
         void SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFrm );
 
+        /** method to assure that anchored object is registered at the correct
+            page frame
+
+            OD 2004-07-02 #i28701#
+
+            @author OD
+        */
+        virtual void RegisterAtCorrectPage() = 0;
+
         /** method to indicate, that anchored object is attached to a anchor frame
 
             @author OD
@@ -188,7 +232,29 @@ class SwAnchoredObject
         SwFrm* AnchorFrm();
         void ChgAnchorFrm( SwFrm* _pNewAnchorFrm );
 
-        // accessors to data of position calculation
+        // --> OD 2004-06-30 #i28701# - accessors to member <mpPageFrm>
+        SwPageFrm* GetPageFrm();
+        const SwPageFrm* GetPageFrm() const;
+        void SetPageFrm( SwPageFrm* _pNewPageFrm );
+        // <--
+
+        /** method to determine the page frame, on which the 'anchor' of
+            the given anchored object is.
+
+            OD 2004-07-02 #i28701#
+
+            @author OD
+
+            @param _rAnchoredObj
+            input parameter - anchored object, for which the page frame of its
+            'anchor' has to be determined.
+
+            @return SwPageFrm&
+            page frame, the 'anchor' of the given anchored object is on
+        */
+        SwPageFrm& GetPageFrmOfAnchor();
+
+        // accessors to data of position calculation:
         // frame vertical position is orient at
         const SwLayoutFrm* GetVertPosOrientFrm() const;
 
@@ -220,14 +286,63 @@ class SwAnchoredObject
 
         // accessor to member <nmLastTopOfLine>
         const SwTwips GetLastTopOfLine() const;
+        // OD 2004-05-18 #i28701# - follow-up of #i22341#
+        void AddLastTopOfLineY( SwTwips _nDiff );
 
-        // method to determine position for the object and set the position
-        // at the object
+        /** reset members <maLastCharRect> and <mnLastTopOfLine>
+
+            OD 2004-06-29 #i27801#
+
+            @author OD
+        */
+        void ClearCharRectAndTopOfLine();
+
+        /** method to determine position for the object and set the position
+            at the object
+
+            @author OD
+        */
         virtual void MakeObjPos() = 0;
-        // invalidation of object position
+
+        /** is positioning of anchored object in progress
+
+            @author OD
+        */
+        bool IsPositioningInProgress() const;
+
+        /** method to determine, if invalidation of position is allowed
+
+            OD 2004-07-01 #i28701#
+
+            @author OD
+        */
+        bool InvalidationOfPosAllowed() const;
+
+        /** method to invalidate position of the anchored object
+
+            @author OD
+        */
         virtual void InvalidateObjPos() = 0;
-        virtual void SetPositioningInProgress( const bool _bPosInProgress );
-        virtual bool IsPositioningInProgress() const;
+
+        /** method to perform necessary invalidations for the positioning of
+            objects, for whose the wrapping style influence has to be considered
+            on the object positioning.
+
+            OD 2004-06-30 #i28701#
+
+            @author OD
+        */
+        void InvalidateObjPosForConsiderWrapInfluence( const bool _bNotifyBackgrd );
+
+        /** method to trigger notification of 'background'
+
+            OD 2004-07-01 #i28701#
+
+            @author OD
+        */
+        virtual void NotifyBackground( SwPageFrm* _pPageFrm,
+                                       const SwRect& _rRect,
+                                       PrepareHint _eHint ) = 0;
 
         // accessors to the current relative position
         const Point GetCurrRelPos() const;
@@ -241,6 +356,75 @@ class SwAnchoredObject
         virtual const SwRect GetObjRect() const = 0;
         virtual void SetObjTop( const SwTwips _nTop) = 0;
         virtual void SetObjLeft( const SwTwips _nLeft) = 0;
+
+        /** method to determine object area inclusive its spacing
+
+            OD 2004-06-30 #i28701#
+
+            @author OD
+        */
+        const SwRect GetObjRectWithSpaces() const;
+
+        /** method to determine, if wrapping style influence of the anchored
+            object has to be considered on the object positioning
+
+            OD 2004-06-30 #i28701#
+            Note: result of this method also decides, if the boolean for the
+            layout process are of relevance.
+
+            @author OD
+        */
+        bool ConsiderObjWrapInfluenceOnObjPos() const;
+
+        // --> OD 2004-06-29 #i28701# - accessors to booleans for layout process
+        bool ConsiderForTextWrap() const;
+        void SetConsiderForTextWrap( const bool _bConsiderForTextWrap );
+        bool PositionLocked() const;
+        void LockPosition();
+        void UnlockPosition();
+        bool RestartLayoutProcess() const;
+        void SetRestartLayoutProcess( const bool _bRestartLayoutProcess );
+        // <--
+
+        /** method to update anchored object in the <SwSortedObjs> lists
+
+            OD 2004-07-01 #i28701#
+            Method is not proposed to be called during a layout process is
+            running. It has been used on the change of the anchored object
+            attributes, which belongs the sort criteria of <SwSortedObjs>.
+            If document compatibility option 'Consider wrapping style influence
+            on object positioning' is ON, additionally all anchored objects
+            at the anchor frame and all following anchored objects on the page
+            frame are invalidated.
+
+            @author OD
+        */
+        void UpdateObjInSortedList();
+
+        /** method to determine, if a format on the anchored object is possible
+
+            OD 2004-07-23 #i28701#
+            A format is possible, if anchored object is in an invisible layer.
+            Note: method is virtual to refine the conditions for the sub-classes.
+
+            @author OD
+        */
+        virtual bool IsFormatPossible() const;
+};
+
+// ============================================================================
+// OD 2004-04-13 #i26791#, #i28701#
+// helper class for notify that positioning of an anchored object is in progress
+// ============================================================================
+class SwObjPositioningInProgress
+{
+    private:
+        SwAnchoredObject* mpAnchoredObj;
+
+    public:
+        SwObjPositioningInProgress( SdrObject& _rSdrObj );
+        SwObjPositioningInProgress( SwAnchoredObject& _rAnchoredObj );
+        ~SwObjPositioningInProgress();
 };
 
 #endif

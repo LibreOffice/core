@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:37:26 $
+ *  last change: $Author: od $ $Date: 2004-08-03 06:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,14 @@
 #include <fmtornt.hxx>
 #endif
 
+enum tLayoutDir
+{
+    HORI_L2R,
+    HORI_R2L,
+    VERT_R2L,
+    VERT_L2R    // not supported yet
+};
+
 // ============================================================================
 // helper class for correct notification due to the positioning of
 // the anchored drawing object
@@ -122,21 +130,42 @@ SwPosNotify::~SwPosNotify()
     {
         if( maOldObjRect.HasArea() && mpOldPageFrm )
         {
-            ::Notify_Background( mpAnchoredDrawObj->DrawObj(),
-                                 mpOldPageFrm, maOldObjRect,
-                                 PREP_FLY_LEAVE, TRUE );
+            mpAnchoredDrawObj->NotifyBackground( mpOldPageFrm, maOldObjRect,
+                                                 PREP_FLY_LEAVE );
         }
         SwRect aNewObjRect( mpAnchoredDrawObj->GetObjRect() );
         if( aNewObjRect.HasArea() )
         {
             SwPageFrm* pNewPageFrm = mpAnchoredDrawObj->AnchorFrm()->FindPageFrm();
             if( pNewPageFrm )
-                ::Notify_Background( mpAnchoredDrawObj->DrawObj(),
-                                     pNewPageFrm, aNewObjRect,
-                                     PREP_FLY_ARRIVE, TRUE );
+                mpAnchoredDrawObj->NotifyBackground( pNewPageFrm, aNewObjRect,
+                                                     PREP_FLY_ARRIVE );
         }
 
         ::ClrContourCache( mpAnchoredDrawObj->GetDrawObj() );
+
+        // indicate a restart of the layout process
+        mpAnchoredDrawObj->SetRestartLayoutProcess( true );
+    }
+    else
+    {
+        // lock position
+        mpAnchoredDrawObj->LockPosition();
+
+        if ( !mpAnchoredDrawObj->ConsiderForTextWrap() )
+        {
+            // indicate that object has to be considered for text wrap
+            mpAnchoredDrawObj->SetConsiderForTextWrap( true );
+            // invalidate 'background' in order to allow its 'background'
+            // to wrap around it.
+            mpAnchoredDrawObj->NotifyBackground( mpAnchoredDrawObj->GetPageFrm(),
+                                    mpAnchoredDrawObj->GetObjRectWithSpaces(),
+                                    PREP_FLY_ARRIVE );
+            // invalidate position of anchor frame in order to force
+            // a re-format of the anchor frame, which also causes a
+            // re-format of the invalid previous frames of the anchor frame.
+            mpAnchoredDrawObj->AnchorFrm()->InvalidatePos();
+        }
     }
 }
 
@@ -148,7 +177,6 @@ TYPEINIT1(SwAnchoredDrawObject,SwAnchoredObject);
 SwAnchoredDrawObject::SwAnchoredDrawObject() :
     SwAnchoredObject(),
     mbValidPos( false ),
-    mbPositioningInProgress( false ),
     maLastObjRect(),
     mbNotYetAttachedToAnchorFrame( true )
 {
@@ -177,13 +205,13 @@ void SwAnchoredDrawObject::MakeObjPos()
     }
 
     // indicate that positioning is in progress
-    mbPositioningInProgress = true;
+    SwObjPositioningInProgress aObjPosInProgress( *this );
 
     // indicate that position will be valid after positioning is performed
     mbValidPos = true;
 
     SwDrawContact* pDrawContact =
-                        static_cast<SwDrawContact*>(GetUserCall( GetDrawObj() ));
+                        static_cast<SwDrawContact*>(::GetUserCall( GetDrawObj() ));
 
     // scope for created instance of <SwPosNotify>
     {
@@ -245,8 +273,6 @@ void SwAnchoredDrawObject::MakeObjPos()
     {
         pDrawContact->ChkPage();
     }
-
-    mbPositioningInProgress = false;
 }
 
 void SwAnchoredDrawObject::_SetDrawObjAnchor( const Point _aOffsetToFrmAnchorPos )
@@ -268,49 +294,61 @@ void SwAnchoredDrawObject::_SetDrawObjAnchor( const Point _aOffsetToFrmAnchorPos
     }
 }
 
-void SwAnchoredDrawObject::InvalidateObjPos()
+/** method to invalidate the given page frame
+
+    OD 2004-07-02 #i28701#
+
+    @author OD
+*/
+void SwAnchoredDrawObject::_InvalidatePage( SwPageFrm* _pPageFrm )
 {
-    if ( mbValidPos )
+    if ( _pPageFrm && !_pPageFrm->GetFmt()->GetDoc()->IsInDtor() )
     {
-        mbValidPos = false;
-
-        SwPageFrm* pPageFrm = AnchorFrm()->FindPageFrm();
-        if ( pPageFrm && !pPageFrm->GetFmt()->GetDoc()->IsInDtor() )
+        if ( _pPageFrm->GetUpper() )
         {
-            if ( pPageFrm && pPageFrm->GetUpper() )
-            {
-                pPageFrm->InvalidateFlyLayout();
+            _pPageFrm->InvalidateFlyLayout();
 
-                SwRootFrm* pRootFrm = static_cast<SwRootFrm*>(pPageFrm->GetUpper());
-                pRootFrm->DisallowTurbo();
-                if ( pRootFrm->GetTurbo() )
-                {
-                    const SwCntntFrm* pTmpFrm = pRootFrm->GetTurbo();
-                    pRootFrm->ResetTurbo();
-                    pTmpFrm->InvalidatePage();
-                }
-                pRootFrm->SetIdleFlags();
+            SwRootFrm* pRootFrm = static_cast<SwRootFrm*>(_pPageFrm->GetUpper());
+            pRootFrm->DisallowTurbo();
+            if ( pRootFrm->GetTurbo() )
+            {
+                const SwCntntFrm* pTmpFrm = pRootFrm->GetTurbo();
+                pRootFrm->ResetTurbo();
+                pTmpFrm->InvalidatePage();
             }
+            pRootFrm->SetIdleFlags();
         }
     }
 }
 
-void SwAnchoredDrawObject::SetPositioningInProgress( const bool _bPosInProgress )
+void SwAnchoredDrawObject::InvalidateObjPos()
 {
-    mbPositioningInProgress = _bPosInProgress;
-}
+    // --> OD 2004-07-01 #i28701# - check, if invalidation is allowed
+    if ( mbValidPos &&
+         InvalidationOfPosAllowed() )
+    {
+        mbValidPos = false;
 
-bool SwAnchoredDrawObject::IsPositioningInProgress() const
-{
-    return mbPositioningInProgress;
+        SwPageFrm* pPageFrm = AnchorFrm()->FindPageFrm();
+        _InvalidatePage( pPageFrm );
+        SwPageFrm* pPageFrmOfAnchor = &GetPageFrmOfAnchor();
+        if ( pPageFrmOfAnchor != pPageFrm )
+        {
+            _InvalidatePage( pPageFrmOfAnchor );
+        }
+    }
 }
 
 SwFrmFmt& SwAnchoredDrawObject::GetFrmFmt()
 {
+    ASSERT( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt(),
+            "<SwAnchoredDrawObject::GetFrmFmt()> - missing frame format -> crash." );
     return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt());
 }
 const SwFrmFmt& SwAnchoredDrawObject::GetFrmFmt() const
 {
+    ASSERT( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt(),
+            "<SwAnchoredDrawObject::GetFrmFmt()> - missing frame format -> crash." );
     return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt());
 }
 
@@ -472,4 +510,34 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
                                               rVert.GetRelationOrient() ) );
     }
 }
+
+void SwAnchoredDrawObject::NotifyBackground( SwPageFrm* _pPageFrm,
+                                             const SwRect& _rRect,
+                                             PrepareHint _eHint )
+{
+    ::Notify_Background( GetDrawObj(), _pPageFrm, _rRect, _eHint, TRUE );
+}
+
+/** method to assure that anchored object is registered at the correct
+    page frame
+
+    OD 2004-07-02 #i28701#
+
+    @author OD
+*/
+void SwAnchoredDrawObject::RegisterAtCorrectPage()
+{
+    SwPageFrm* pPageFrm( 0L );
+    if ( GetVertPosOrientFrm() )
+    {
+        pPageFrm = const_cast<SwPageFrm*>(GetVertPosOrientFrm()->FindPageFrm());
+    }
+    if ( pPageFrm && GetPageFrm() != pPageFrm )
+    {
+        if ( GetPageFrm() )
+            GetPageFrm()->RemoveDrawObjFromPage( *this );
+        pPageFrm->AppendDrawObjToPage( *this );
+    }
+}
+
 // =============================================================================
