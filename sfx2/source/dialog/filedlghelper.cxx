@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-21 15:29:25 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 06:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,14 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
                 if ( aValue >>= bShowPreview )
                 {
                     mbShowPreview = bShowPreview;
+
+                    // #97633
+                    // setShowState has currently no effect for the
+                    // OpenOffice FilePicker (see svtools/source/filepicker/iodlg.cxx)
+                    Reference< XFilePreview > xFilePreview( mxFileDlg, UNO_QUERY );
+                    if ( xFilePreview.is() )
+                        xFilePreview->setShowState( mbShowPreview );
+
                     if ( _bUpdatePreviewWindow )
                         TimeOutHdl_Impl( NULL );
                 }
@@ -751,6 +759,15 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
         if ( ERRCODE_NONE == getGraphic( aURL, maGraphic ) )
         {
+            // #89491
+            // changed the code slightly;
+            // before: the bitmap was scaled and
+            // surrounded a white frame
+            // now: the bitmap will only be scaled
+            // and the filepicker implementation
+            // is responsible for placing it at its
+            // proper position and painting a frame
+
             Bitmap aBmp = maGraphic.GetBitmap();
 
             // scale the bitmap to the correct size
@@ -767,27 +784,13 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
             else
                 aBmp.Scale( nYRatio, nYRatio );
 
-            nBmpWidth  = aBmp.GetSizePixel().Width();
-            nBmpHeight = aBmp.GetSizePixel().Height();
-
-            sal_Int32 nMidX = ( nOutWidth - nBmpWidth ) / 2;
-            sal_Int32 nMidY = ( nOutHeight - nBmpHeight ) / 2;
-
-            Rectangle aSrcRect( 0, 0, nBmpWidth, nBmpHeight );
-            Rectangle aDstRect( nMidX, nMidY, nMidX + nBmpWidth, nMidY + nBmpHeight );
-
             // #94505# Convert to true color, to allow CopyPixel
             aBmp.Convert( BMP_CONVERSION_24BIT );
-
-            // Use true color, otherwise white might not be in palette
-            Bitmap aOutputBmp( Size(nOutWidth, nOutHeight), 24 );
-            aOutputBmp.Erase( Color( COL_WHITE ) );
-            aOutputBmp.CopyPixel( aDstRect, aSrcRect, &aBmp );
 
             // and copy it into the Any
             SvMemoryStream aData;
 
-            aData << aOutputBmp;
+            aData << aBmp;
 
             Sequence < sal_Int8 > aBuffer( (sal_Int8*) aData.GetData(), aData.GetSize() );
 
