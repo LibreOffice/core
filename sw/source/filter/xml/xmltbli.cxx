@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:22:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        GetKeyByAttrName( rValue, &sTmp );
+                        _GetKeyByAttrName( rValue, &sTmp, sal_False );
                 sFormula = XML_NAMESPACE_OOOW == nPrefix ? sTmp : rValue;
             }
             break;
