@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+#   last change: $Author: svesik $ $Date: 2001-02-02 14:42:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,10 +88,8 @@ SLOFILES=\
     $(SLO)$/hierarchyurlcode.obj		\
     $(SLO)$/dynamicresultset.obj
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmbhierarchy.obj
 .ENDIF
 
