@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 20:19:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@
                     Text[ polish ] = "Przesuñ do przodu";\
                     Text[ japanese ] = "‘O–Ê‚ÖˆÚ“®(~F)";\
                     Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";\
-                    Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~ F)";\
+                    Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~F)";\
                     Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ turkish ] = "~Bir öne getir";\
