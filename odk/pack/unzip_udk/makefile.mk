@@ -30,8 +30,8 @@ all: ..$/misc$/deltree.txt
 .IF "$(GUI)"=="WNT"
     unzip -q -d . $(UDKNAME)
 .ELSE
-    gzip -df $(UDKNAME).tar.gz
-    tar -xvf $(UDKNAME).tar
+    gzip -df < $(UDKNAME).tar.gz | tar -xvf -
 .ENDIF
     +-$(RENAME) $(UDKNAME) 		$(ODKNAME)
+    +rm -f $(ODKNAME)$/settings$/dk.mk
     touch ..$/misc$/deltree.txt

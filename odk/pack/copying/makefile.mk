@@ -7,8 +7,11 @@ TARGET=copying
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
 
+IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
+
 DIRLIST = \
-    $(DESTDIREXAMPLES)$/officeclient 	
+    $(DESTDIREXAMPLES)$/officeclient 	\
+    {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
 EXAMPLESLIST= \
     $(DESTDIREXAMPLES)$/officeclient$/officeclient.cxx \
@@ -17,58 +20,34 @@ EXAMPLESLIST= \
     $(DESTDIREXAMPLES)$/officeclient$/Makefile         \
     $(DESTDIREXAMPLES)$/officeclient$/exports.dxp      \
 
+IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
+DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
-.IF "$(GUI)"=="UNX"
-all : deliver $(DIRLIST) $(EXAMPLESLIST) convertit
-.ELSE
-all : deliver $(DIRLIST) $(EXAMPLESLIST) 
-.ENDIF
+all : 	\
+    remove_dk \
+    $(DIRLIST) \
+    $(EXAMPLESLIST) \
+    $(DESTIDLLIST)  \
+    $(DESTDIRBIN)$/applicat.rdb  \
+    $(DESTDIR)$/settings$/dk.mk
 
-$(DIRLIST) : 
+$(DIRLIST) :
      -$(MKDIRHIER) 	$@
 
-$(DESTDIREXAMPLES)$/officeclient$/% : $(PRJ)$/examples$/cpp$/officeclient$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
-    $(GNUCOPY) $(PRJ)$/examples$/cpp$/officeclient$/$(@:f) $@
-    $(REMOVE_READONLY) $@
+$(DESTDIREXAMPLES)$/% : $(PRJ)$/examples$/cpp$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-deliver : 
-#------------------------------------------------------------------------------------
-#       R D B  F I L E S
-#------------------------------------------------------------------------------------
-    +-$(RM)  $(DESTDIRBIN)$/udkapi.rdb >& NUL
-    +-$(MY_COPY)  $(BINOUT)$/applicat.rdb $(DESTDIRBIN)
-# ------------------------------------------------------------------------------------
-#       I D L files
-# ------------------------------------------------------------------------------------
-    +-$(MY_COPY_RECURSIVE) $(IDLOUT) $(DESTDIR)
-#----------------------------------------------------------------------
-#       S E T T I N G S
-#----------------------------------------------------------------------
-    +-$(RM) /f $(DESTDIR)$/settings$/dk.mk
-    $(MY_COPY) $(PRJ)$/util$/dk.mk $(DESTDIR)$/settings
-    $(REMOVE_READONLY) $(DESTDIR)$/settings$/dk.mk
+$(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
+    $(GNUCOPY) $(BINOUT)$/applicat.rdb $@
 
+$(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/util$/dk.mk $(MY_TEXTCOPY_TARGETPRE) $@
 
-MKFILES_CONVERT=$(shell $(FIND) . -name "*.mk" -print)
-CXFILES_CONVERT=$(shell $(FIND) . -name "*.c*" -print)
-HXFILES_CONVERT=$(shell $(FIND) . -name "*.h*" -print)
-.IF "$(GUI)"=="UNX"
-convertit: rwit dos2unx roit
+$(DESTDIRIDL)$/% : $(IDLOUT)$/%
+    +-rm -f $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-rwit .SETDIR=$(DESTDIR):
-    +echo rwit
-    +-chmod 666 $(foreach,file,$(MKFILES_CONVERT) $(file))
-    +-chmod 666 $(foreach,file,$(CXFILES_CONVERT) $(file))
-    +-chmod 666 $(foreach,file,$(HXFILES_CONVERT) $(file))
-dos2unx .SETDIR=$(DESTDIR):
-    +echo dos2unx
-    +-any2all $(foreach,file,$(MKFILES_CONVERT) $(file)) >$(NULLDEV)
-    +-any2all $(foreach,file,$(CXFILES_CONVERT) $(file)) >$(NULLDEV)
-    +-any2all $(foreach,file,$(HXFILES_CONVERT) $(file)) >$(NULLDEV)
-roit .SETDIR=$(DESTDIR):
-    +echo roit
-    +-chmod 444 $(foreach,file,$(MKFILES_CONVERT) $(file))
-    +-chmod 444 $(foreach,file,$(CXFILES_CONVERT) $(file))
-    +-chmod 444 $(foreach,file,$(HXFILES_CONVERT) $(file))
-.ENDIF
-
+remove_dk : 
+    +-$(RM)  $(DESTDIRBIN)$/udkapi.rdb >& $(NULLDEV)
