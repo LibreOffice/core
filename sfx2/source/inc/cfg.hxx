@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:49:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ struct AccelBackup
 
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
-    friend SfxAccCfgTabListBox_Impl;
+    friend class SfxAccCfgTabListBox_Impl;
 private:
     const SfxMacroInfoItem*         m_pMacroInfoItem;
     SfxAccCfgTabListBox_Impl        aEntriesBox;
