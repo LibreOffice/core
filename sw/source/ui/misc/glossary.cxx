@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:46:41 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 13:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,9 +389,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.SetWindowBits(WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
-    Bitmap aRootClosed      (SW_RES(BMP_ROOT_CLOSED));
-    Bitmap aRootOpened      (SW_RES(BMP_ROOT_OPENED));
-    aCategoryBox.SetNodeBitmaps( aRootClosed, aRootOpened );
+    aCategoryBox.SetNodeDefaultImages( );
 
     Init();
 }

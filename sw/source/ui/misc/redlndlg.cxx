@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-22 12:45:33 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 13:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,8 +211,6 @@ class SwRedlineAcceptDlg
     PopupMenu               aPopup;
     Timer                   aDeselectTimer;
     Timer                   aSelectTimer;
-    Bitmap                  aRootOpened;
-    Bitmap                  aRootClosed;
     String                  sInserted;
     String                  sDeleted;
     String                  sFormated;
@@ -462,8 +460,6 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     pParentDlg      (pParent),
     aTabPagesCTRL   (pParent, SW_RES(CTRL_TABPAGES)),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
-    aRootClosed     (SW_RES(BMP_ROOT_CLOSED)),
-    aRootOpened     (SW_RES(BMP_ROOT_OPENED)),
     sInserted       (SW_RES(STR_REDLINE_INSERTED)),
     sDeleted        (SW_RES(STR_REDLINE_DELETED)),
     sFormated       (SW_RES(STR_REDLINE_FORMATED)),
@@ -504,7 +500,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     pActLB->SelectEntryPos(0);
 
     pTable->SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    pTable->SetNodeBitmaps( aRootClosed, aRootOpened );
+    pTable->SetNodeDefaultImages();
     pTable->SetSelectionMode(MULTIPLE_SELECTION);
     pTable->SetHighlightRange(1);
 
