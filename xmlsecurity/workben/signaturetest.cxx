@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signaturetest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #include <ucbhelper/configurationkeys.hxx>
 
 // Will be in comphelper if CWS MAV09 is integrated
-#include <storagehelper.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
