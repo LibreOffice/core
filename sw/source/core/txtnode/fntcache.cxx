@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 09:43:31 $
+ *  last change: $Author: jp $ $Date: 2001-03-21 18:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     }
     else if( COL_AUTO == pTmpFont->GetColor().GetColor() )
     {
-        nNewColor = rInf.GetDarkBack() ? COL_WHITE : COL_BLACK;
+        ViewShell* pSh = rInf.GetShell();
+        if( pSh && pSh->GetWin() )
+        {
+            const StyleSettings& rS = pSh->GetWin()->GetSettings().GetStyleSettings();
+            nNewColor = rInf.GetDarkBack()
+                ? rS.GetWindowColor().GetColor()
+                : rS.GetWindowTextColor().GetColor();
+        }
+        else
+            nNewColor = rInf.GetDarkBack() ? COL_WHITE : COL_BLACK;
+
         bChgColor = TRUE;
     }
     if( bChgColor )
