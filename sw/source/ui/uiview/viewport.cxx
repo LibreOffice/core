@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 09:25:31 $
+ *  last change: $Author: ama $ $Date: 2000-12-13 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,32 +1162,30 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         //nicht mehr zum aktuell sichtbaren Bereich passen
         pWrtShell->ResetCursorStack();
 
+        ASSERT( ( aEditSz.Width() > 0 && aEditSz.Height() > 0 )
+                || !aVisArea.IsEmpty(), "Small world, isn't it?" );
+
         //EditWin niemals einstellen!
 
         //Die VisArea muss aber natuerlich eingestellt werden.
         //jetzt ist auch der richtige Zeitpunkt den Zoom neu zu berechnen wenn
         //es kein einfacher Faktor ist.
-        if ( aEditSz.Width() > 0 && aEditSz.Height() > 0 )
-        {
-            pWrtShell->StartAction();
-            CalcVisArea( aEditSz );
+        pWrtShell->StartAction();
+        CalcVisArea( aEditSz );
 
-            //Damit auch beim outplace editing die Seitenbreite sofort
-            //angepasst wird.
-            if ( GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-                GetDocShell()->SetVisArea(
-                                GetDocShell()->SfxInPlaceObject::GetVisArea() );
-            if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
-                 !pWrtShell->IsBrowseMode() )
-                _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType() );
-            pWrtShell->EndAction();
+        //Damit auch beim outplace editing die Seitenbreite sofort
+        //angepasst wird.
+        if ( GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+            GetDocShell()->SetVisArea(
+                            GetDocShell()->SfxInPlaceObject::GetVisArea() );
+        if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
+             !pWrtShell->IsBrowseMode() )
+            _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType() );
+        pWrtShell->EndAction();
 
-            bRepeat = bScroll1 != (pVScrollbar ? pVScrollbar->IsVisible() : FALSE);
-            if ( !bRepeat )
-                bRepeat = bScroll2 != (pHScrollbar ? pHScrollbar->IsVisible() : FALSE);
-        }
-        else
-            bRepeat = FALSE;
+        bRepeat = bScroll1 != (pVScrollbar ? pVScrollbar->IsVisible() : FALSE);
+        if ( !bRepeat )
+            bRepeat = bScroll2 != (pHScrollbar ? pHScrollbar->IsVisible() : FALSE);
 
         //Nicht endlosschleifen. Moeglichst dann stoppen wenn die
         //(Auto-)Scrollbars sichtbar sind.
