@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:49:34 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,7 +1153,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ spanish ] = "~Rechazar" ;
         Text [ french ] = "~Ignorer" ;
         Text [ dutch ] = "~Verwerpen" ;
-        Text [ swedish ] = "~Avslå" ;
+        Text [ swedish ] = "A~vslå" ;
         Text [ danish ] = "Forkast" ;
         Text [ portuguese_brazilian ] = "~Verwerfen" ;
         Text [ portuguese ] = "~Rejeitar" ;
@@ -1390,7 +1390,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_traditional ] = "³Æµù¼Ğ°O(~N)";
         Text[ arabic ] = "ãõÈóíøöä ÇáãáÇÍÙÇÊ";
         Text[ greek ] = "Äåßêôçò óçìåéşóåùí";
-        Text[ korean ] = "¸Ş¸ğ ÅÂ±×(~N)";
+        Text[ korean ] = "ÁÖ  ÅÂ±×(~N)";
         Text[ turkish ] = "Not ~etiketi";
         Text[ language_user1 ] = " ";
     };
@@ -2411,7 +2411,7 @@ TabPage RID_SCPAGE_INPUT
         Text[ chinese_traditional ] = "«öÀ»¦^¨®Áä¦Û°Ê¿ï¨ú¤U¤@­ÓÀx¦s®æªº¤è¦V(~M)";
         Text[ arabic ] = "ÇÖÛØ ãİÊÇÍ ÇáÅÏÎÇá áäŞá ÇáÊÍÏíÏ Åáì";
         Text[ greek ] = "ĞáôŞóôå 'Enter' ãéá ôç ìåôáêßíç~óç ôçò åğéëïãŞò ğñïò ôá";
-        Text[ korean ] = "¼±ÅÃÀ» ÀÌµ¿½ÃÅ°±â À§ÇØ ¿£ÅÍ¸¦ ´©¸£½Ê½Ã¿À.(~M)";
+        Text[ korean ] = "¿£ÅÍ¸¦ ´­·¯ ¼±ÅÃÀ» ..·Î ÀÌµ¿.(~M)";
         Text[ turkish ] = "Enter tuşuna basıldığında seçim taşınır";
         Text[ language_user1 ] = " ";
     };
