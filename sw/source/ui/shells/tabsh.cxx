@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-20 11:06:01 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@
 #endif
 #ifndef _FMTTSPLT_HXX //autogen
 #include <fmtlsplt.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
 #endif
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
@@ -307,6 +310,7 @@ const USHORT __FAR_DATA aUITableAttrRange[] =
     RES_LAYOUT_SPLIT,               RES_LAYOUT_SPLIT,
     FN_TABLE_SET_VERT_ALIGN,        FN_TABLE_SET_VERT_ALIGN,
     RES_FRAMEDIR,                   RES_FRAMEDIR,
+    RES_ROW_SPLIT,                  RES_ROW_SPLIT,
     0
 };
 
@@ -376,6 +380,15 @@ SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 
     rSet.Put(aBoxInfo);
     rSh.GetTabBorders( rSet );
+
+    //row split
+    SwFmtRowSplit* pSplit = 0;
+    rSh.GetRowSplit(pSplit);
+    if(pSplit)
+    {
+        rSet.Put(*pSplit);
+        delete pSplit;
+    }
 
     if(!bTableSel)
     {
@@ -460,7 +473,9 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
     const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, FALSE, &pRowItem );
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, FALSE, &pTableItem );
-    if( bBackground || bBorder)
+    const SfxPoolItem* pSplit = 0;
+    BOOL bRowSplit = SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, FALSE, &pSplit );
+    if( bBackground || bBorder || bRowSplit)
     {
         /*
          Die Umrandung wird auf die vorliegende Selektion angewendet
@@ -489,14 +504,20 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
             }
         }
 
-        if(bBorder)
+        if(bBorder || bRowSplit)
         {
             rSh.Push();
             if(!bTableSel)
             {
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_TABLE_SELECT_ALL );
             }
-            rSh.SetTabBorders( rSet );
+            if(bBorder)
+                rSh.SetTabBorders( rSet );
+
+            if(bRowSplit)
+            {
+                rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pSplit));
+            }
 
             if(!bTableSel)
             {
@@ -504,6 +525,7 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
             }
             rSh.Pop(FALSE);
         }
+
         rSh.EndAllAction();
     }
 
@@ -563,7 +585,6 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, FALSE, &pItem ))
         rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
-
 
     // kopiere die ausgesuchten Attribute in den ItemSet
     static USHORT __READONLY_DATA aIds[] =
@@ -1208,6 +1229,26 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 rSh.SetTblAttr(aSet);
             }
         break;
+        case FN_TABLE_ROW_SPLIT :
+        {
+            const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(pItem);
+            SwFmtRowSplit* pSplit = 0;
+            if(!pBool)
+            {
+                rSh.GetRowSplit(pSplit);
+                if(pSplit)
+                    pSplit->SetValue(!pSplit->GetValue());
+                else
+                   pSplit = new SwFmtRowSplit(TRUE);
+            }
+            else
+            {
+                pSplit = new SwFmtRowSplit(pBool->GetValue());
+            }
+            rSh.SetRowSplit( *pSplit );
+            delete pSplit;
+        }
+        break;
 
         default:
             ASSERT( !this, "falscher Dispatcher" );
@@ -1340,27 +1381,46 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             }
             break;
 
-        case FN_TABLE_DELETE_ROW:
-            {
-                SwSelBoxes aBoxes;
-                ::GetTblSel( rSh, aBoxes, TBLSEARCH_ROW );
-                if( ::HasProtectedCells( aBoxes ))
-                    rSet.DisableItem( nSlot );
-            }
-            break;
-        case FN_TABLE_DELETE_COL:
-            {
-                SwSelBoxes aBoxes;
-                ::GetTblSel( rSh, aBoxes, TBLSEARCH_COL );
-                if( ::HasProtectedCells( aBoxes ))
-                    rSet.DisableItem( nSlot );
-            }
-            break;
+            case FN_TABLE_DELETE_ROW:
+                {
+                    SwSelBoxes aBoxes;
+                    ::GetTblSel( rSh, aBoxes, TBLSEARCH_ROW );
+                    if( ::HasProtectedCells( aBoxes ))
+                        rSet.DisableItem( nSlot );
+                }
+                break;
+            case FN_TABLE_DELETE_COL:
+                {
+                    SwSelBoxes aBoxes;
+                    ::GetTblSel( rSh, aBoxes, TBLSEARCH_COL );
+                    if( ::HasProtectedCells( aBoxes ))
+                        rSet.DisableItem( nSlot );
+                }
+                break;
 
-        case FN_TABLE_UNSET_READ_ONLY_CELLS:
-            // disable in readonly sections, but enable in protected cells
-            if( !rSh.CanUnProtectCells() )
-                rSet.DisableItem( nSlot );
+            case FN_TABLE_UNSET_READ_ONLY_CELLS:
+                // disable in readonly sections, but enable in protected cells
+                if( !rSh.CanUnProtectCells() )
+                    rSet.DisableItem( nSlot );
+                break;
+            case RES_ROW_SPLIT:
+            {
+                const SwFmtLayoutSplit& rTabSplit = pFmt->GetLayoutSplit();
+                if ( 0 == rTabSplit.GetValue() )
+                {
+                    rSet.DisableItem( nSlot );
+                }
+                else
+                {
+                    SwFmtRowSplit* pSplit = 0;
+                    rSh.GetRowSplit(pSplit);
+                    if(pSplit)
+                        rSet.Put(*pSplit);
+                    else
+                        rSet.InvalidateItem( nSlot );
+                    delete pSplit;
+                }
+            }
             break;
         }
     nSlot = aIter.NextWhich();
