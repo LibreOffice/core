@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:05:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 #include "odbc/OFunctiondefs.hxx"
 #endif
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
+#endif
 
 namespace connectivity
 {
@@ -79,6 +82,8 @@ namespace connectivity
         {
             OAdabasConnection*  m_pConnection;      // used to get the metadata
             SQLHANDLE           m_aConnectionHdl;   // used for odbc specific stuff
+
+            void fillVector(const ::rtl::OUString& _sQuery,TStringVector& _rVector);
 
         protected:
             /** builds the name which should be used to access the object later on in the collection.
