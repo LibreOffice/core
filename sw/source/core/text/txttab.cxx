@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:49:10 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -345,14 +344,20 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     // Hier lassen wir uns nieder...
     Fix( rInf.X() );
 
+    const bool bTabCompat = rInf.GetVsh()->IsTabCompat();
+
     // Die Mindestbreite eines Tabs ist immer mindestens ein Blank
+    // --> FME 2004-11-25 #i37686# In compatibility mode, the minimum width
+    // should be 1, even for non-left tab stops.
+    USHORT nMinimumTabWidth = 1;
+    // <--
+    if ( !bTabCompat )
     {
         XubString aTmp( ' ' );
         SwTxtSizeInfo aInf( rInf, aTmp );
-        PrtWidth( aInf.GetTxtSize().Width() );
+        nMinimumTabWidth = aInf.GetTxtSize().Width();
     }
-
-    const bool bTabCompat = rInf.GetVsh()->IsTabCompat();
+    PrtWidth( nMinimumTabWidth );
 
     // Break tab stop to next line if:
     // 1. Minmal width does not fit to line anymore.
