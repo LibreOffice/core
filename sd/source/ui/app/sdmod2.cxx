@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:08:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,10 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     // TP_OPTIONS_MISC:
     SdOptionsMiscItem aSdOptionsMiscItem( ATTR_OPTIONS_MISC, pOptions, pFrameView );
     if ( pFrameView )
+    {
         aSdOptionsMiscItem.SetSummationOfParagraphs( pDoc->IsSummationOfParagraphs() );
+        aSdOptionsMiscItem.SetPrinterIndependentLayout (pDoc->GetPrinterIndependentLayout());
+    }
     pRet->Put( aSdOptionsMiscItem );
 
 
@@ -690,6 +693,9 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
                 nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                 pOutl->SetControlWord( nCntrl | nSum );
             }
+
+            // Set printer independent layout mode.
+            pDoc->SetPrinterIndependentLayout (pMiscItem->GetPrinterIndependentLayout());
         }
     }
 
@@ -744,6 +750,8 @@ SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
             pRet = SdTpOptionsMisc::Create(pParent, rSet);
             if(SID_SD_TP_MISC == nId)
                 ( (SdTpOptionsMisc*) pRet )->SetDrawMode();
+            else
+                ( (SdTpOptionsMisc*) pRet )->SetImpressMode();
         break;
         case RID_OFA_TP_INTERNATIONAL_SD:
         case RID_OFA_TP_INTERNATIONAL_IMPR:
@@ -755,6 +763,3 @@ SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
 
     return pRet;
 }
-
-
-
