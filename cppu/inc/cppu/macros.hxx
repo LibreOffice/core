@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 13:04:06 $
+ *  last change: $Author: dbo $ $Date: 2001-10-26 07:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,120 +61,23 @@
 #ifndef _CPPU_MACROS_HXX_
 #define _CPPU_MACROS_HXX_
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
 #ifndef _UNO_LBNAMES_H_
 #include <uno/lbnames.h>
 #endif
 
-// Microsoft Visual C++ 4.x, 5.0, 6.0
-#if defined(_MSC_VER)
-#   if ( _MSC_VER < 1000 )
-#       error "msc version must be between 4.2 and 6.x"
-#   elif (_MSC_VER < 1100)  // MSVC 4.x
-#       pragma warning( disable: 4290 )
-#       define  CPPU_CLBN_TMP   UNO_LB_MSCI
-#       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "MSC"
-#   elif(_MSC_VER < 1200)  // MSVC 5.0
-#       define  CPPU_CLBN_TMP   UNO_LB_MSCI
-#       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "MSC"
-#   elif(_MSC_VER < 1300)  // MSVC 6.0
-#       define  CPPU_CLBN_TMP   UNO_LB_MSCI
-#       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "MSC"
-#   elif(_MSC_VER < 1400)  // MSVC 7.0
-#       define  CPPU_CLBN_TMP   UNO_LB_MSCI
-#       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "MSC"
-#   else
-#     error "msc version must be between 4.2 and 7.x"
-#   endif
+/** Namespace name for compiler/ platform, e.g. gcc3, msci */
+#define CPPU_CURRENT_NAMESPACE CPPU_ENV
 
-// AIX xlC 3.1 , 3.0.1 ==0x301
-// Visual Age C++ 3.x
-#elif ( defined (__xlC__) && __xlC__ < 0x400 ) || \
-    ( defined (  __IBMCPP__ ) && (  __IBMCPP__ < 400 ) )
-#   error "visual age on aix not supported"
-
-// Borland C++ ( 5.x )
-#elif defined (BC50)
-#   error "borland compiler not supported"
-
-#elif defined(__SUNPRO_CC)
-#   if ( __SUNPRO_CC < 0x500 )
-#       error "sunpro cc version must be 5.x"
-#   elif( __SUNPRO_CC < 0x600 )
-#       define  CPPU_CLBN_TMP   UNO_LB_SUNPRO5
-#       define  CPPU_CLBN_NS_TMP UNO_LB_SUNPRO5_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "C50"
-#   else
-#       error "sunpro cc version must be 5.x"
-#   endif
-
-// g++ 2.x.x
-#elif defined __GNUC__
-// cygnus have a lot of version, let's assume the best.
-// no specific definitions known except this one
-#   if ( __GNUC__ == 2 && __GNUC_MINOR__ == 7 )
-#       error "gcc 2.7 compiler not supported"
-#   elif ( __GNUC__ == 2 && __GNUC_MINOR__ == 91 )
-#       define  CPPU_CLBN_TMP   UNO_LB_GCC2
-#       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "GCC"
-#   elif ( __GNUC__ == 2 && __GNUC_MINOR__ == 95 )
-#       define  CPPU_CLBN_TMP   UNO_LB_GCC2
-#       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "GCC"
-#   elif ( __GNUC__ == 3 && __GNUC_MINOR__ == 0 )
-#       define  CPPU_CLBN_TMP   UNO_LB_GCC3
-#       define  CPPU_CLBN_NS_TMP UNO_LB_GCC3_NAMESPACE
-#       define  CPPU_DLL_POSTFIX "GCC"
-#   else
-#       error "unknown gcc version"
-#   endif
-
-#elif defined (__WATCOM_CPLUSPLUS__)
-#   error "watcom compiler not supported"
-
-// Symantec 7.5
-#elif defined (__SC__)
-#   error "symantec compiler not supported"
-
-// HP-UX und aCC
-#elif defined(HPUX) && !defined(__GNUC__)
-#   error "HP-UX compiler not supported"
-
-// MAC Metrowerks
-#elif defined (__MWERKS__)
-#   error "Metroworks compiler not supported"
-#else
-#   error "unknown compiler"
-#endif
-
-// patching the GNU3 incomatible alignment change for linux intel
+/** Patching the gcc 3 incomatible alignment change for linux intel.
+    This pragma macro is appended by the cppumaker tool to every first member of a struct, iff
+    the struct inherits from a base struct the first member is no double or [unsigned] long long.
+    @internal
+*/
 #if defined(__GNUC__) && defined(LINUX) && defined(INTEL) && (__GNUC__ == 3)
 #define CPPU_GCC3_ALIGN( base_struct ) __attribute__ ((aligned (__alignof__ (base_struct))))
 #else
 #define CPPU_GCC3_ALIGN( base_struct )
 #endif
 
-/**
-    The compiler and systems defines to identify compatibilities
-    use to mark an unknown system, processor or compiler
-*/
-#define CPPU_CURRENT_LANGUAGE_BINDING_NAME  CPPU_CLBN_TMP
-#define CPPU_CURRENT_NAMESPACE CPPU_CLBN_NS_TMP
-
-#ifdef SAL_DLLPREFIX
-#define CPPU_LIBRARY(name) SAL_DLLPREFIX name CPPU_DLL_POSTFIX SAL_DLLEXTENSION
-#else
-#define CPPU_LIBRARY(name) name CPPU_DLL_POSTFIX SAL_DLLEXTENSION
-#endif
-
 #endif  // _CPPU_MACROS_HXX_
-
-
 
