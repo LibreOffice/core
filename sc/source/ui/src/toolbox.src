@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:14:00 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2003-04-29 17:14:00 $ $Revision: 1.52 $
+ // $Author: vg $ $Date: 2003-05-26 08:09:27 $ $Revision: 1.53 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1758,9 +1758,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_STYLE_APPLY;                /* 5552     */  \
         SID_ATTR_CHAR_FONT;             /* 10007    */  \
         SID_ATTR_CHAR_FONTHEIGHT;       /* 10015    */  \
-        SID_ATTR_CHAR_WEIGHT;           /* 10009    */  \
-        SID_ATTR_CHAR_POSTURE;          /* 10008    */  \
-        SID_ATTR_CHAR_UNDERLINE;        /* 10014    */  \
         SID_ULINE_VAL_DOUBLE;                           \
         SID_ATTR_CHAR_COLOR;            /* 10017    */  \
         SID_ALIGNLEFT;                  /* 20371    */  \
@@ -1880,13 +1877,11 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_INSERT_LISTBOX; \
         SID_INSERT_HSCROLLBAR; \
         SID_INSERT_GROUPBOX; \
-        SID_INSERT_URLBUTTON; \
         SID_INSERT_SPINBUTTON; \
         SID_INSERT_RADIOBUTTON; \
         SID_INSERT_EDIT; \
         SID_INSERT_COMBOBOX; \
         SID_INSERT_VSCROLLBAR; \
-        SID_INSERT_PREVIEW; \
         SID_OBJECT_SELECT; \
         SID_DEC_INDENT; \
         SID_INC_INDENT; \
@@ -1903,7 +1898,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_ATTR_ZOOM; \
     };                                                  \
     IdCount = {                                         \
-        168;                                            \
+        163;                                            \
     };
 
 
@@ -1931,6 +1926,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ chinese_traditional ] = "sc_out88.bmp" ;
         File [ japanese ] = "sc_out81.bmp" ;
         File [ korean ] = "sc_out82.bmp" ;
+        File [ arabic ] = "sc_out96.bmp" ;
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -1960,6 +1956,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File [ chinese_traditional ] = "lc_out88.bmp" ;
         File [ japanese ] = "lc_out81.bmp" ;
         File [ korean ] = "lc_out82.bmp" ;
+        File [ arabic ] = "lc_out96.bmp" ;
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -1989,6 +1986,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File [ chinese_traditional ] = "sch_out88.bmp" ;
         File [ japanese ] = "sch_out81.bmp" ;
         File [ korean ] = "sch_out82.bmp" ;
+        File [ arabic ] = "sch_out96.bmp" ;
     };
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -2018,6 +2016,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File [ chinese_traditional ] = "lch_out88.bmp" ;
         File [ japanese ] = "lch_out81.bmp" ;
         File [ korean ] = "lch_out82.bmp" ;
+        File [ arabic ] = "lch_out96.bmp" ;
     };
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
