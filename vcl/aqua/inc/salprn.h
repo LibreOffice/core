@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:27 $
+ *  last change: $Author: pluby $ $Date: 2001-01-03 21:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,6 @@ struct SalPrinterData
 {
     SalGraphics*            mpGraphics;             // current Printer graphics
     SalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
-    SalPrinter*             mpNextPrinter;          // next printing printer
-    VCLVIEW                 mhDC;                   // printer hdc
-    ULONG                   mnError;                // Error Code
-    ULONG                   mnCopies;               // Kopien
-    BOOL                    mbCollate;              // Sortierte Kopien
-    BOOL                    mbAbort;                // Job Aborted
 };
 
 #endif // _SV_SALPRN_H

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:28 $
+ *  last change: $Author: pluby $ $Date: 2001-01-03 21:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,9 +305,13 @@ void SalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* SalInstance::CreateObject( SalFrame* pParent )
 {
-    SalObject *pObject = new SalObject;
+    SalObject *pObject = NULL;
 
-    pObject->maObjectData.mhWnd = pParent->maFrameData.mhWnd;
+    if ( pParent )
+    {
+        pObject = new SalObject;
+        pObject->maObjectData.mpFrame = pParent;
+    }
 
     return pObject;
 }

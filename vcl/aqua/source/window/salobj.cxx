@@ -2,15 +2,15 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-28 06:41:47 $
+ *  last change: $Author: pluby $ $Date: 2001-01-03 21:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
+ *       - GNU Lesser General Public License Version 2.1
+ *       - Sun Industry Standards Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
  *
@@ -83,10 +83,7 @@ SalObject::SalObject()
 {
     SalData* pSalData = GetSalData();
 
-    maObjectData.mhWnd              = NULL;
-    maObjectData.mhWndChild         = NULL;
-    maObjectData.mhLastFocusWnd     = NULL;
-    maObjectData.maSysData.nSize    = sizeof( SystemEnvData );
+    maObjectData.mpFrame            = NULL;
     maObjectData.mpInst             = NULL;
     maObjectData.mpProc             = ImplSalObjectCallbackDummy;
 
@@ -184,10 +181,16 @@ void SalObject::SetBackground( SalColor nSalColor )
 
 const SystemEnvData* SalObject::GetSystemData() const
 {
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
 
 void SalObject::SetCallback( void* pInst, SALOBJECTPROC pProc )
 {
+    maObjectData.mpInst = pInst;
+    if ( pProc )
+        maObjectData.mpProc = pProc;
+    else
+        maObjectData.mpProc = ImplSalObjectCallbackDummy;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-08 01:28:57 $
+ *  last change: $Author: pluby $ $Date: 2001-01-03 21:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,17 +83,14 @@
 
 #ifdef __cplusplus
 
-class AutoTimer;
 class SalInstance;
 class SalObject;
 class SalFrame;
 class SalVirtualDevice;
 class SalPrinter;
-class Font;
 
 #else // __cplusplus
 
-#define AutoTimer void
 #define SalInstance void
 #define SalVirtualDevice void
 #define SalPrinter void
@@ -106,30 +103,12 @@ class Font;
 
 struct SalData
 {
-    int                     mnCmdShow;              // default frame show style
-    // Erst hier koennen Daten kompatible eingefuegt werden, da die
-    // oberen Daten in salmain.cxx modifiziert werden
-    BYTE*                   mpDitherDIB;            // dither memory
-    BYTE*                   mpDitherDIBData;        // beginning of DIB data
-    long*                   mpDitherDiff;           // Dither mapping table
-    BYTE*                   mpDitherLow;            // Dither mapping table
-    BYTE*                   mpDitherHigh;           // Dither mapping table
     SALTIMERPROC            mpTimerProc;            // timer callback proc
-    VCLWINDOW               mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
-    AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
     SalInstance*            mpFirstInstance;        // pointer of first instance
     SalFrame*               mpFirstFrame;           // pointer of first frame
     SalObject*              mpFirstObject;          // pointer of first object window
     SalVirtualDevice*       mpFirstVD;              // first VirDev
     SalPrinter*             mpFirstPrinter;         // first printing printer
-    USHORT                  mnStockPenCount;        // Anzahl statischer Pens
-    USHORT                  mnStockBrushCount;      // Anzahl statischer Brushes
-    INT32                   mnSalObjWantKeyEvt;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
-    BOOL                    mbObjClassInit;         // Ist SALOBJECTCLASS initialised
-    BOOL                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
-    INT32                   mnAppThreadId;          // Id from Applikation-Thread
-    BOOL                    mbScrSvrEnabled;        // ScreenSaver enabled
-    int                     mnSageStatus;           // Status der Sage-DLL (DISABLE_AGENT == nicht vorhanden)
 };
 
 #ifdef __cplusplus
