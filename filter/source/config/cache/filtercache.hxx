@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:13:57 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_CHANGESEVENT_HPP_
+#include <com/sun/star/util/ChangesEvent.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -239,7 +243,8 @@ class FilterCache : public BaseLock
         {
             E_PROVIDER_TYPES = 0,
             E_PROVIDER_FILTERS = 1,
-            E_PROVIDER_OTHERS = 2
+            E_PROVIDER_OTHERS = 2,
+            E_PROVIDER_OLD = 3
         };
 
     //-------------------------------------------
@@ -362,6 +367,37 @@ class FilterCache : public BaseLock
         /** @short  standard dtor.
          */
         virtual ~FilterCache();
+
+        //---------------------------------------
+
+        /** @short  creates a copy of this container.
+
+            @descr  Such copy can be used then to modify items (add/change/remove)
+                    without the risk to damage the original container.
+                    After its changed data was flushed to the configuration it can be
+                    removed.
+
+                    The original container will get these new data automaticly
+                    because it listen for changes on the internal used configuration layer.
+                    If the new data are needed immediatly inside the original container,
+                    the method takeOver() can be used to copy all changes back.
+                    The may be following notifications of the configuration will be superflous then.
+                    But they cant be stopped ...
+
+                    All internal structures will be copied here. But the internal used
+                    configuration (update) access wont be copied. The cloned instance contains
+                    a different one.
+
+            @note   The cloned instance is created on the heap. The user of this instance
+                    has to remove it later.
+         */
+        virtual FilterCache* clone() const;
+
+        //---------------------------------------
+
+        /** @short  copy the cache content or rClone back to this instance.
+         */
+        virtual void takeOver(const FilterCache& rClone);
 
         //---------------------------------------
 
@@ -577,6 +613,55 @@ class FilterCache : public BaseLock
         virtual void setItem(      EItemType        eType ,
                              const ::rtl::OUString& sItem ,
                              const CacheItem&       aValue)
+            throw(css::uno::Exception);
+
+        //---------------------------------------
+
+        /** @short      add some implicit properties to the given
+                        cache item reference.
+
+            @descr      Such properties can e.g. finalized or mandatory.
+                        They are not persistent  and not realy part of e.g. a
+                        filter not. But they are attributes of a configuration
+                        entry and can influence our container interface.
+
+            @attention  These properties are not part of the normal CacheItem
+                        returned by the method getItem(). Because getItem() is
+                        used internaly too but these specialized properties
+                        are needed at our container services only. So these
+                        function sets are different to allow different handling.
+
+            @param      eType
+                        specify the sub container of this cache, which should be used for
+                        searching. see also EItemType.
+
+            @param      sItem
+                        specify the requested item by its key name.
+
+            @param      rItem
+                        contains already the normal properties of this item,
+                        and will be used as out parameter to add the implicit
+                        attributes there.
+
+            @throw      [css::uno::Exception]
+                        if an internal error occured.
+                        Note: If the item is missing inside the underlying configuration
+                        no exception will be thrown. In such case the item is marked as
+                        finalized/mandatory automaticly
+                        Reason: May be the item cames from the old configuration package and
+                        was not migrated to the new one. So we cant provide write access
+                        to such items ...
+         */
+        virtual void addStatePropsToItem(      EItemType        eType,
+                                         const ::rtl::OUString& sItem,
+                                               CacheItem&       rItem)
+            throw(css::uno::Exception);
+
+        //---------------------------------------
+
+        /** TODO document me
+         */
+        virtual void removeStatePropsFromItem(CacheItem& aValue)
             throw(css::uno::Exception);
 
         //---------------------------------------
@@ -955,6 +1040,40 @@ class FilterCache : public BaseLock
         void impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
                                    const CacheItem&                                           rItem)
             throw(css::uno::Exception);
+
+        //---------------------------------------
+
+        /** TODO */
+        void impl_readOldFormat()
+            throw(css::uno::Exception);
+
+        //---------------------------------------
+
+        /** TODO */
+        CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
+                                         EItemType                                           eType,
+                                   const ::rtl::OUString&                                    sItem)
+            throw(css::uno::Exception);
+
+        //---------------------------------------
+
+        /** TODO */
+        void impl_interpretDataVal4Type(const ::rtl::OUString& sValue,
+                                              sal_Int32        nProp ,
+                                              CacheItem&       rItem );
+
+        //---------------------------------------
+
+        /** TODO */
+        void impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
+                                                sal_Int32        nProp ,
+                                                CacheItem&       rItem );
+
+        //---------------------------------------
+
+        /** TODO */
+        OUStringList impl_tokenizeString(const ::rtl::OUString& sData     ,
+                                               sal_Unicode      cSeperator);
 
         //---------------------------------------
 
