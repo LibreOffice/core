@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 12:25:31 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 17:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
     double fSecsValue = SolarMath::ApproxFloor (fValue);
     fValue -= fSecsValue;
     double f100SecsValue;
-    if (fValue > 0.0)
+    if (fValue > 0.00001)
     {
         String sTemp;
         SolarMath::DoubleToString(sTemp, fValue, 'A', XML_MAXDIGITSCOUNT_TIME - 5, '.', sal_True);
@@ -899,7 +899,10 @@ sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDat
         fTempTime *= 60;
         double fSecsValue = SolarMath::ApproxFloor (fTempTime);
         fTempTime -= fSecsValue;
-        double f100SecsValue = fTempTime;
+        double f100SecsValue = 0.0;
+
+        if( fTempTime > 0.00001 )
+            f100SecsValue = fTempTime;
 
         rDateTime.Year = 0;
         rDateTime.Month = 0;
