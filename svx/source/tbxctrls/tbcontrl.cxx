@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:15:52 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #endif
 #ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen wg. System
-#include <vcl/system.hxx>
 #endif
 #ifndef _VALUESET_HXX
 #include <svtools/valueset.hxx>
@@ -595,9 +592,6 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
 
 
 // -----------------------------------------------------------------------
-
-#define BRUSH(style,name) BrushStyle(style),SVX_RESSTR(name)
-#define COLOR(color,name) Color(color),SVX_RESSTR(name)
 
 BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
@@ -1771,10 +1765,6 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
 
 // -----------------------------------------------------------------------
 
-#undef BRUSH
-#undef COLOR
-#undef GET_DOCFONTLIST
-
 //########################################################################
 // Hilfsklassen
 
@@ -1836,7 +1826,7 @@ void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
         else
             theUpdRect = Rectangle( Point(14,14), Size(11,11) );
 
-        aVirDev.SetPen( Pen( PEN_NULL ) );
+        aVirDev.SetLineColor();
         aVirDev.SetOutputSizePixel( theBmpSize );
         aVirDev.SetFillColor( Color( IMAGE_COL_TRANSPARENT ) );
         aVirDev.DrawRect( Rectangle( aNullPnt, theBmpSize ) );
@@ -1921,7 +1911,7 @@ void SvxTbxButtonColorUpdater_Impl::DrawChar( VirtualDevice& rVirDev, const Colo
     }
     else
     {
-        rVirDev.SetPen( Pen( PEN_NULL ) );
+        rVirDev.SetLineColor();
         rVirDev.SetFillColor( rCol );
         Rectangle aRect( Point(0,0), theBmpSize );
         rVirDev.DrawRect( aRect );
