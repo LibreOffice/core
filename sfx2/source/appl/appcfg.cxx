@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 13:14:41 $
+ *  last change: $Author: hr $ $Date: 2000-11-21 12:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,7 +1131,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                 ::inet::INetProxyConfig aProxyCfg (xINetConfig->getProxyConfig());
                 SvtInetOptions::ProxyType eProxy = (SvtInetOptions::ProxyType)aInetOptions.GetProxyType();
 
-                if (eProxy == SvtInetOptions::ProxyType::NONE)
+                if (eProxy == SvtInetOptions::NONE)
                     aProxyCfg.setNoProxyList(aInetOptions.GetProxyNoProxy());
                 else
                     aProxyCfg.setNoProxyList(DEFINE_CONST_UNICODE("*:*"));
