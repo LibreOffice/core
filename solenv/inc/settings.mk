@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: rt $ $Date: 2001-12-11 10:32:45 $
+#   last change: $Author: hjs $ $Date: 2001-12-12 12:34:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -977,6 +977,8 @@ SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
 SCPDEFS+=-DISO_CODE=$(L10N_framework)
 .ENDIF			# "$(L10N_framework)"!=""
 
+SCPDEFS+=-DCOMID=$(COMID)
+
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
 UNOIDLDEPFLAGS=-Mdepend=$(SOLARVER)
@@ -1433,37 +1435,46 @@ UNOUCRDEP*=$(SOLARBINDIR)$/applicat.rdb
 
 .IF "$(COMP1TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP1TYPELIST).mk
+$(COMP1TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP1TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP2TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP2TYPELIST).mk
+$(COMP2TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP2TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP3TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP3TYPELIST).mk
+$(COMP3TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP3TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP4TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP4TYPELIST).mk
+$(COMP4TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP4TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP5TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP5TYPELIST).mk
+$(COMP5TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP5TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP6TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP6TYPELIST).mk
+$(COMP6TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP6TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP7TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP7TYPELIST).mk
+$(COMP7TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP7TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP8TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP8TYPELIST).mk
+$(COMP8TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP8TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP9TYPELIST)"!=""
 .INCLUDE : $(MISC)$/$(COMP9TYPELIST).mk
+$(COMP9TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP9TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
