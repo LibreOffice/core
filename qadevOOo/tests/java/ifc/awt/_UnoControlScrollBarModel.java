@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlScrollBarModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:09:32 $
+ *  last change:$Date: 2003-12-11 12:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,34 @@ public class _UnoControlScrollBarModel extends MultiPropertyTest {
     * This property can be VOID, and in case if it is so new
     * value must defined.
     */
+    public void _BackgroundColor() {
+        testProperty("BackgroundColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object old) {
+                return utils.isVoid(old) ? new Integer(32768) : null ;
+            }
+        }) ;
+    }
+
+    /**
+    * This property can be VOID, and in case if it is so new
+    * value must defined.
+    */
+    public void _SymbolColor() {
+        testProperty("SymbolColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object old) {
+                return utils.isVoid(old) ? new Integer(65324) : null ;
+            }
+        }) ;
+    }
+
+    /**
+    * This property can be VOID, and in case if it is so new
+    * value must defined.
+    */
     public void _ScrollValue() {
         testProperty("ScrollValue", new PropertyTester() {
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Integer(10) : null ;
+                return utils.isVoid(old) ? new Integer(10) : new Integer(15) ;
             }
         }) ;
     }
