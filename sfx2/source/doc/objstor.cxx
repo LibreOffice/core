@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:52:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,6 @@
 #include "scriptcont.hxx"
 #include "event.hxx"
 #include "fltoptint.hxx"
-
-#define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
 
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell*, SfxItemPool&, SfxMedium* );
