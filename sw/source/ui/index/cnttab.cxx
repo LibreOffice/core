@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:46:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1118,12 +1118,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     FreeResource();
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
-//    Sequence< Locale > sLocaleList = pIndexEntryWrapper->GetLocaleList();
-//    const sal_Int32 nCnt = sLocaleList.getLength();
-
-//    const Locale* psLocaleList = sLocaleList.getConstArray();
-//    for ( sal_Int32 nI = 0; nI < nCnt; ++nI )
-//        aLanguageLB.InsertLanguage( SvxLocaleToLanguage( psLocaleList[ nI ] ) );
 
     aLanguageLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
                                  FALSE, FALSE, FALSE );
