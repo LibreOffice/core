@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:10:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ DATASOURCE_TYPE ODsnTypeCollection::getType(const String& _rDsn)
 }
 
 //-------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeDisplayName(DATASOURCE_TYPE _eType)
+String ODsnTypeCollection::getTypeDisplayName( DATASOURCE_TYPE _eType, sal_Bool bWizardMode)
 {
     String sDisplayName;
 
@@ -335,6 +335,70 @@ sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType)
     }
 }
 
+
+sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
+{
+    BOOL bSupportsTableCreation;
+        switch( _eType )
+        {
+            case DST_MOZILLA:
+            case DST_OUTLOOK:
+            case DST_OUTLOOKEXP:
+            case DST_FLAT:
+            case DST_EVOLUTION:
+            case DST_CALC:
+                bSupportsTableCreation = FALSE;
+                break;
+            case DST_DBASE:
+            case DST_ADABAS:
+            case DST_ADO:
+            case DST_MSACCESS:
+            case DST_MYSQL_ODBC:
+            case DST_ODBC:
+            case DST_MYSQL_JDBC:
+            case DST_ORACLE_JDBC:
+            case DST_LDAP:
+            case DST_JDBC:
+            default:
+                bSupportsTableCreation = TRUE;
+                break;
+        }
+        return bSupportsTableCreation;
+}
+
+
+
+sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
+{
+    BOOL bEnableBrowseButton;
+        switch( _eType )
+        {
+            case DST_DBASE:
+            case DST_FLAT:
+            case DST_CALC:
+            case DST_ADABAS:
+            case DST_ADO:
+            case DST_MSACCESS:
+            case DST_MYSQL_ODBC:
+            case DST_ODBC:
+                bEnableBrowseButton = TRUE;
+                break;
+            case DST_MYSQL_JDBC:
+            case DST_ORACLE_JDBC:
+            case DST_LDAP:
+            case DST_MOZILLA:
+            case DST_OUTLOOK:
+            case DST_OUTLOOKEXP:
+            case DST_JDBC:
+            case DST_EVOLUTION:
+            default:
+                bEnableBrowseButton = FALSE;
+                break;
+        }
+        return bEnableBrowseButton;
+}
+
+
 //-------------------------------------------------------------------------
 sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
 {
@@ -357,15 +421,15 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
         case DST_MYSQL_JDBC:
         case DST_ODBC:
         case DST_ADO:
-        case DST_MSACCESS:
-        case DST_MOZILLA        :
-        case DST_EVOLUTION  :
-        case DST_LDAP       :
-        case DST_OUTLOOK    :
-        case DST_OUTLOOKEXP         :
+        case DST_LDAP:
         case DST_CALC:
             return sal_True;
             break;
+        case DST_MSACCESS:
+        case DST_MOZILLA:
+        case DST_EVOLUTION:
+        case DST_OUTLOOK:
+        case DST_OUTLOOKEXP: //????
         case DST_DBASE:
         case DST_FLAT:
         default:
