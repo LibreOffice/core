@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>StarOffice XML (Impress)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Präsentation</value>
+            <value>%productname% %formatversion% Präsentation</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>Impress 6.0</value></prop>
     </node>
