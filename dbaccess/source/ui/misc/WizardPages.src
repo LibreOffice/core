@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:32:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,7 @@ Menu RID_SBA_RTF_PKEYPOPUP
             Text            = "Primärschlüssel" ;
             Text [ ENGLISH ] = "Primary key" ;
             Text [ english_us ] = "Primary Key" ;
-            Text [ portuguese_brazilian ] = "Primärschlüssel" ;
+            Text [ portuguese_brazilian ] = "Prim?rschl?sel" ;
             Text [ swedish ] = "Primärnyckel" ;
             Text [ danish ] = "Primærnøgle" ;
             Text [ italian ] = "Chiave primaria" ;
@@ -758,7 +758,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ italian ] = "Tabella sorgente: \n";
         Text[ danish ] = "Kildetabel: \n";
         Text[ swedish ] = "Källtabell: \n";
-        Text[ polish ] = "Tabela Ÿród³owa: \n";
+        Text[ polish ] = "Tabela ?ród³owa: \n";
         Text[ portuguese_brazilian ] = "Source table: \n";
         Text[ japanese ] = "¿°½Ã°ÌÞÙ: \n";
         Text[ korean ] = "¼Ò½º Å×ÀÌºí: \n";
@@ -1171,7 +1171,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text                = "Daten a~nhängen" ;
         Text [ ENGLISH ]    = "Appe~nd data" ;
         Text [ english_us ] = "Attach ~data" ;
-        Text [ portuguese_brazilian ] = "Daten anhängen" ;
+        Text [ portuguese_brazilian ] = "Daten anh?ngen" ;
         Text [ swedish ]    = "Tillfoga data" ;
         Text [ danish ]     = "Vedhæft data" ;
         Text [ italian ]    = "Al~lega i dati" ;
@@ -1323,7 +1323,7 @@ String STR_COPYTABLE_TITLE_MOVE
     Text [ dutch ] = "Tabel verplaatsen" ;
     Text[ chinese_simplified ] = "ÒÆ¶¯±íµ¥";
     Text[ russian ] = "Ïåðåìåñòèòü òàáëèöó";
-    Text[ polish ] = "Przenieœ tabelê";
+    Text[ polish ] = "Przenie? tabelê";
     Text[ japanese ] = "Ã°ÌÞÙ‚ÌˆÚ“®";
     Text[ chinese_traditional ] = "²¾°Êªí³æ";
     Text[ arabic ] = "ÊÍÑíß ÇáÌÏæá";
@@ -1390,7 +1390,7 @@ String STR_ERR_DUPL_TABLENAME
     Text [ ENGLISH ] = "The tablename \'$name$\' does already exist.\nYou may enter a new name\nor append the data to the existing table." ;
     Text [ portuguese ] = "O nome da tabela \'$name$\' já existe.\nDefina outro nome\nou anexe os dados à tabela existente." ;
     Text [ english_us ] = "The table name \'$name$\' already exists.\nYou may enter a new name\nor append the data to the existing table." ;
-    Text [ portuguese_brazilian ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen." ;
+    Text [ portuguese_brazilian ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie k?nen einen neuen Namen angeben\noder die Daten an die existierende Tabelle anh?ngen." ;
     Text [ swedish ] = "Tabellnamnet \'$name$\' finns redan.\nDu kan ange ett nytt namn\neller tillfoga data till den existerande tabellen." ;
     Text [ danish ] = "Tabelnavnet \'$name$\' eksisterer allerede.\nDu kan angive et nyt navn\neller tilføje data til den eksisterende tabel." ;
     Text [ italian ] = "Il nome della tabella \'$name$\' esiste già .\nPotete indicare un nuovo nome oppure \nallegare i dati alla tabella esistente." ;
