@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatusDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:08:51 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     private XButton btnCancel;
 
     private String[] res;
-    private Runnable runnable;
     private Renderer renderer;
     private boolean enableBreak = false;
     private boolean closeOnFinish = true;
@@ -142,8 +141,8 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
             new Object[] { new Integer(14),res[1] ,new Integer(width / 2 - 20 ),new Integer(6+25+ 7 ),new Short(tabstop++), new Integer(40)});
         }
 
-        xWindow.addWindowListener((XWindowListener)guiEventListener);
-        guiEventListener.add("StatusDialog" ,EVENT_WINDOW_SHOWN, "performRunnable",this);
+//      xWindow.addWindowListener((XWindowListener)guiEventListener);
+//      guiEventListener.add("StatusDialog" ,EVENT_WINDOW_SHOWN, "performRunnable",this);
 
     }
 
@@ -155,13 +154,13 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     private void setStatus(int status) {
         if (finished) return;
         progressBar.setValue(status);
+        xReschedule.reschedule();
     }
 
     public void setLabel(String s) {
-        Helper.setUnoPropertyValue(
-                UnoDialog.getModel(lblTaskName),
-                "Label",
-                s);
+//      lblTaskName.setText(s);
+        Helper.setUnoPropertyValue( UnoDialog.getModel(lblTaskName), "Label", s);
+        xReschedule.reschedule();
     }
 
     /**
@@ -188,16 +187,18 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     public void taskFinished(TaskEvent te) {
         finished = true;
         if (closeOnFinish) {
-              xDialog.endExecute();
-            //parent.xWindow.setEnable(true);
+//          xDialog.endExecute();
+            parent.xWindow.setEnable(true);
             try {
-               xComponent.dispose();
+                xWindow.setVisible(false);
+                xComponent.dispose();
                //System.out.println("disposed");
             }
             catch (Exception ex) {ex.printStackTrace();}
          }
          else
                Helper.setUnoPropertyValue(getModel(btnCancel),"Label",res[2]);
+
     }
 
     /**
@@ -215,43 +216,31 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      */
     public void subtaskNameChanged(TaskEvent te) {
         if (renderer != null)
-            Helper.setUnoPropertyValue(
-                UnoDialog.getModel(lblTaskName),
-                "Label",
-                renderer.render(te.getTask().getSubtaskName())
-            );
+            setLabel(renderer.render(te.getTask().getSubtaskName()));
     }
 
     /**
-     * displays the status dialog and executes a Runnable.
+     * displays the status dialog
      * @param parent the parent dialog
      * @param r what to do
      */
-    public void execute(final UnoDialog parent_, final Task task, Runnable r, String title) {
+    public void execute(final UnoDialog parent_, final Task task,  String title) {
         try {
             this.parent = parent_;
-            runnable = r;
             Helper.setUnoPropertyValue( this.xDialogModel, "Title", title );
-            //new Thread() {
-              //  public void run() {
-                    try {
-                        //TODO change this to another execute dialog method.
-                        task.addTaskListener(StatusDialog.this);
-                        setMax(10);
-                        setStatus(0);
-                        Helper.setUnoPropertyValue(
-                                UnoDialog.getModel(lblTaskName),
-                                "Label",task.getSubtaskName());
-                        executeDialog(parent);
-                        task.removeTaskListener(StatusDialog.this);
-                        if (finishedMethod != null)
-                            finishedMethod.invoke();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                //}
-            //}.start();
-
+            try {
+                //TODO change this to another execute dialog method.
+                task.addTaskListener(StatusDialog.this);
+                setMax(10);
+                setStatus(0);
+                setLabel(task.getSubtaskName());
+                parent.xWindow.setEnable(false);
+                setVisible(parent);
+                if (finishedMethod != null)
+                    finishedMethod.invoke();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -262,17 +251,9 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * not supported !
      */
     public void performCancel() {//TODO - implement a thread thing here...
-        xDialog.endExecute();
+        xWindow.setVisible(false);
     }
 
-    /**
-     * is called from the window event WINDOW_SHOWN, and
-     * executes the Runnable.
-     */
-    public void performRunnable() {
-        new Thread(runnable).start();
-        //runnable.run();
-    }
 
     /**
      * @return the subTask renderer object
