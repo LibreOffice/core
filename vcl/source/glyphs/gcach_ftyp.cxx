@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:13:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 
 #include <svapp.hxx>
 #include <outfont.hxx>
+#include <impfont.hxx>
 #include <bitmap.hxx>
 #include <bmpacc.hxx>
 
@@ -1442,78 +1443,60 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // determine unicode ranges in font
 // -----------------------------------------------------------------------
 
+// TODO: replace with GetFontCharMap()
 ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 {
-    int nRangeCount = 0;
+    CmapResult aResult;
+    aResult.mnCount     = 0;
+    aResult.mpCodes     = NULL;
+    aResult.mbSymbolic  = mpFontInfo->IsSymbolFont();
 
-    const unsigned char* pCmap = NULL;
-    ULONG nLength = 0;
     if( FT_IS_SFNT( maFaceFT ) )
-        pCmap = mpFontInfo->GetTable( "cmap", &nLength );
-    else if( mpFontInfo->IsSymbolFont() )
     {
-        // Type1 symbol font
-        nRangeCount = 1;
-        if( pCodes )
+        ULONG nLength = 0;
+        const unsigned char* pCmap = mpFontInfo->GetTable( "cmap", &nLength );
+        if( pCmap && nLength && ParseCMAP( pCmap, nLength, aResult ) )
         {
-            pCodes[ 0 ] = 0xF020;
-            pCodes[ 1 ] = 0xF100;
+            // copy the ranges into the provided array...
+            if( pCodes )
+                for( int i = 0; i < 2*aResult.mnCount; ++i )
+                    pCodes[ i ] = aResult.mpCodes[ i ];
+
+            delete[] aResult.mpCodes;
         }
     }
 
-    if( pCmap && GetUShort( pCmap )==0 )
+    if( aResult.mnCount <= 0 )
     {
-        int nSubTables  = GetUShort( pCmap + 2 );
-        const unsigned char* p = pCmap + 4;
-        int nOffset = 0;
-        int nFormat = -1;
-        for( ; --nSubTables>=0; p+=8 )
+        if( aResult.mbSymbolic )
         {
-            int nPlatform = GetUShort( p );
-            int nEncoding = GetUShort( p+2 );
-            if( nEncoding!=0 && nEncoding!=1 )  // unicode encodings?
-                continue;
-            nOffset       = GetUInt( p+4 );
-            nFormat       = GetUShort( pCmap + nOffset );
-            if( nFormat==4 )
-                break;
-        }
-
-        if( nFormat==4 && (nOffset+16)<nLength )
-        {
-            // analyze most common unicode mapping table
-            int nSegCount = GetUShort( pCmap + nOffset + 6 );
-            nRangeCount = nSegCount/2 - 1;
+            // we usually get here for Type1 symbol fonts
             if( pCodes )
             {
-                const unsigned char* pLimit = pCmap + nOffset + 14;
-                const unsigned char* pBegin = pLimit + 2 + nSegCount;
-                for( int i = 0; i < nRangeCount; ++i )
-                {
-                    *(pCodes++) = GetUShort( pBegin + 2*i );
-                    *(pCodes++) = GetUShort( pLimit + 2*i ) + 1;
-                }
+                pCodes[ 0 ] = 0xF020;
+                pCodes[ 1 ] = 0xF100;
+            }
+            aResult.mnCount = 1;
+        }
+        else
+        {
+            // we have to use the brute force method...
+            for( sal_uInt32 cCode = 0x0020;; )
+            {
+                for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode );
+                if( cCode >= 0xFFF0 )
+                    break;
+                ++aResult.mnCount;
+                if( pCodes )
+                    *(pCodes++) = cCode;
+                for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode );
+                if( pCodes )
+                    *(pCodes++) = cCode;
             }
         }
     }
 
-    if( !nRangeCount )
-    {
-        // unknown format, platform or encoding => use the brute force method
-        for( sal_uInt32 cCode = 0x0020;; )
-        {
-            for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode );
-            if( cCode >= 0xFFF0 )
-                break;
-            ++nRangeCount;
-            if( pCodes )
-                *(pCodes++) = cCode;
-            for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode );
-            if( pCodes )
-                *(pCodes++) = cCode;
-        }
-    }
-    return nRangeCount;
+    return aResult.mnCount;
 }
 // -----------------------------------------------------------------------
 // kerning stuff
