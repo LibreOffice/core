@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:08:43 $
+ *  last change: $Author: mtg $ $Date: 2001-10-18 11:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1373,7 +1373,7 @@ sal_Bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     aShadow.Location = eSet;
     aShadow.ShadowWidth =   nMemberId&CONVERT_TWIPS ? TWIP_TO_MM100(nWidth) : nWidth;
     aShadow.IsTransparent = aShadowColor.GetTransparency() > 0;
-    aShadow.Color = aShadowColor.GetColor();
+    aShadow.Color = aShadowColor.GetRGBColor();
     rVal <<= aShadow;
     return sal_True;
 }
