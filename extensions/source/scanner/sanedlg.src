@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:46:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "O\nzařízení";
         Text[ hebrew ] = "Geräte-\n~information";
         Text[ hindi ] = "सा~धन\n के बारे में";
+        Text[ slovak ] = "O\n Zar~iadení";
     };
     PushButton RID_PREVIEW_BTN
     {
@@ -146,6 +147,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Vytvořit\nnáhled";
         Text[ hebrew ] = "~Vorschau\nerstellen";
         Text[ hindi ] = "पूर्वदृश्य\nउत्पन्न करो";
+        Text[ slovak ] = "Vytvoriť\nNáhľad";
     };
     FixedLine RID_PREVIEW_BOX
     {
@@ -179,6 +181,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Náhled";
         Text[ hebrew ] = "Vorschau";
         Text[ hindi ] = "पूर्वदृश्य";
+        Text[ slovak ] = "Náhľad";
     };
     FixedLine RID_SCANAREA_BOX
     {
@@ -212,6 +215,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Skenovat oblast";
         Text[ hebrew ] = "Scanbereich";
         Text[ hindi ] = "स्कॉन क्षेत्र";
+        Text[ slovak ] = "Skenovať oblasť";
     };
     FixedText RID_SCAN_LEFT_TXT
     {
@@ -245,6 +249,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Vlevo:";
         Text[ hebrew ] = "~Links:";
         Text[ hindi ] = "बायाँ:";
+        Text[ slovak ] = "Vľavo:";
     };
     MetricField RID_SCAN_LEFT_BOX
     {
@@ -287,6 +292,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Nahoře:";
         Text[ hebrew ] = "~Oben:";
         Text[ hindi ] = "ऊपर:";
+        Text[ slovak ] = "Navrchu:";
     };
     MetricField RID_SCAN_TOP_BOX
     {
@@ -329,6 +335,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Vpravo:";
         Text[ hebrew ] = "~Rechts:";
         Text[ hindi ] = "दाहिना:";
+        Text[ slovak ] = "Vpravo:";
     };
     MetricField RID_SCAN_RIGHT_BOX
     {
@@ -370,6 +377,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Dole:";
         Text[ hebrew ] = "~Unten:";
         Text[ hindi ] = "नीचे:";
+        Text[ slovak ] = "Dole:";
     };
     MetricField RID_SCAN_BOTTOM_BOX
     {
@@ -411,6 +419,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Použité zařízení:";
         Text[ hebrew ] = "Verwendetes ~Gerät:";
         Text[ hindi ] = "उपयोग की हुयी साधन:";
+        Text[ slovak ] = "Použité zariadenie:";
     };
     ListBox RID_DEVICE_BOX
     {
@@ -450,6 +459,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Rozlišení [DPI]";
         Text[ hebrew ] = "Auflösung [~DPI]";
         Text[ hindi ] = "रसल्यूशन [~DPI]";
+        Text[ slovak ] = "Rozlíšenie [~DPI]";
     };
     NumericBox RID_SCAN_RESOLUTION_BOX
     {
@@ -489,6 +499,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Zobrazit pokročilé volby";
         Text[ hebrew ] = "Er~weiterte Optionen anzeigen";
         Text[ hindi ] = "उच्च विकल्प दिखाओ";
+        Text[ slovak ] = "Zobraziť expertné voľby";
     };
     CheckBox RID_SCAN_ADVANCED_BOX
     {
@@ -529,6 +540,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Volby:";
         Text[ hebrew ] = "‮אפשרויות:‬";
         Text[ hindi ] = "विकल्प:";
+        Text[ slovak ] = "Nastavenia:";
     };
     Control RID_SCAN_OPTION_BOX
     {
@@ -611,6 +623,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Vektorový element";
         Text[ hebrew ] = "Vektorelement";
         Text[ hindi ] = "वेक्टर वस्तु";
+        Text[ slovak ] = "Vektorový element";
     };
     NumericField RID_SCAN_NUMERIC_VECTOR_BOX
     {
@@ -652,6 +665,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ czech ] = "Nastavit";
         Text[ hebrew ] = "Setzen";
         Text[ hindi ] = "सेट्ट करो";
+        Text[ slovak ] = "Nastaviť";
     };
     Bitmap RID_SCAN_BITMAP_PLUS
     {
@@ -687,6 +701,7 @@ ModalDialog RID_SANE_DIALOG
     Text[ czech ] = "Skener";
     Text[ hebrew ] = "Scanner";
     Text[ hindi ] = "स्कॉनर";
+    Text[ slovak ] = "Skener";
 };
 String RID_SANE_DEVICEINFO_TXT
 {
@@ -718,6 +733,7 @@ String RID_SANE_DEVICEINFO_TXT
     Text[ czech ] = "Zařízení: %s\nDodavatel: %s\nModel: %s\nTyp: %s";
     Text[ hebrew ] = "Gerät: %s\nHersteller: %s\nModell: %s\nTyp: %s";
     Text[ hindi ] = "साधन: %s\nVendor: %s\nModel: %s\nवर्ग: %s";
+    Text[ slovak ] = "Zariadenie: %s\nDodávateľ: %s\nModel: %s\nTyp: %s";
 };
 String RID_SANE_SCANERROR_TXT
 {
@@ -749,6 +765,7 @@ String RID_SANE_SCANERROR_TXT
     Text[ czech ] = "Došlo k chybě během skenování.";
     Text[ hebrew ] = "Während des Scans ist ein Fehler aufgetreten.";
     Text[ hindi ] = "स्कॉनिंग करने के समय गलती घटित हुआ ।";
+    Text[ slovak ] = "Počas skenovania došlo k chybe";
 };
 String RID_SANE_NORESOLUTIONOPTION_TXT
 {
@@ -780,6 +797,7 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text[ czech ] = "Toto zařízení nenabízí možnost náhledu, tudíž bude pro náhled použito normální skenování, což může zabrat delší dobu.";
     Text[ hebrew ] = "Das Gerät ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich länger dauern.";
     Text[ hindi ] = "साधन में पूर्वदृश्य विकल्प प्रस्ताव नहीं है । इसलिए, पूर्वदृश्य के बदले में सामान्य स्कॉन को उपयोग किया जायेगा । यह शायद अधिक समय ले सकता है ।";
+    Text[ slovak ] = "Zariadenie neumožňuje náhľad. Preto bude ako náhľad použitý naskenovaný obraz. To môže chvíľu trvať.";
 };
 String RID_SANE_NOSANELIB_TXT
 {
@@ -811,7 +829,10 @@ String RID_SANE_NOSANELIB_TXT
     Text[ czech ] = "Nelze inicializovat rozhraní SANE. Skenování není dostupné.";
     Text[ hebrew ] = "Das SANE Interface konnte nicht initialisiert werden. Es kann kein Scanvorgang stattfinden.";
     Text[ hindi ] = "SANE इन्टरफेस को इनिश्यलैज़ नहीं कर सकते है । स्कॉनिंग संभव नहीं है ।";
+    Text[ slovak ] = "Nedá sa inicializovať rozhranie SANE. Skenovanie nie je dostupné.";
 };
+
+
 
 
 
