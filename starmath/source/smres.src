@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-19 15:13:43 $
+ *  last change: $Author: kz $ $Date: 2001-09-24 20:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ english ] = "~Serif" ;
         Text[ english_us ] = "~Serif";
         Text[ portuguese ] = "~Serif";
-        Text[ russian ] = "~Serif";
+        Text[ russian ] = "~Ñåğèô";
         Text[ greek ] = "~Serif";
         Text[ dutch ] = "~Serif";
         Text[ french ] = "~Serif";
@@ -857,7 +857,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ portuguese_brazilian ] = "~Serif";
         Text[ japanese ] = "~Serif";
         Text[ korean ] = "~Serif";
-        Text[ chinese_simplified ] = "~Serif";
+        Text[ chinese_simplified ] = "ç»†ä½“";
         Text[ chinese_traditional ] = "~Serif";
         Text[ turkish ] = "~Serif";
         Text[ arabic ] = "~Serif";
@@ -880,7 +880,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ english ] = "S~ans" ;
         Text[ english_us ] = "S~ans";
         Text[ portuguese ] = "S~ans";
-        Text[ russian ] = "S~ans";
+        Text[ russian ] = "Ñàíñ";
         Text[ greek ] = "S~ans";
         Text[ dutch ] = "S~ans";
         Text[ french ] = "S~ans";
@@ -893,7 +893,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ portuguese_brazilian ] = "S~ans";
         Text[ japanese ] = "S~ans";
         Text[ korean ] = "S~ans";
-        Text[ chinese_simplified ] = "S~ans";
+        Text[ chinese_simplified ] = "Sans";
         Text[ chinese_traditional ] = "S~ans";
         Text[ turkish ] = "S~ans";
         Text[ arabic ] = "S~ans";
@@ -915,11 +915,11 @@ ModalDialog RID_FONTTYPEDIALOG
         Text = "F~ixed" ;
         Text[ english ] = "F~ixed" ;
         Text[ english_us ] = "F~ixed";
-        Text[ portuguese ] = "F~ixed";
-        Text[ russian ] = "F~ixed";
+        Text[ portuguese ] = "F~ixo";
+        Text[ russian ] = "Ôèêñèğîâàííûé";
         Text[ greek ] = "F~ixed";
         Text[ dutch ] = "F~ixed";
-        Text[ french ] = "F~ixed";
+        Text[ french ] = "F~ixe";
         Text[ spanish ] = "F~ijo";
         Text[ finnish ] = "F~ixed";
         Text[ italian ] = "F~isso";
@@ -927,9 +927,9 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ swedish ] = "F~ixed";
         Text[ polish ] = "F~ixed";
         Text[ portuguese_brazilian ] = "F~ixed";
-        Text[ japanese ] = "F~ixed";
+        Text[ japanese ] = "å›ºå®š";
         Text[ korean ] = "F~ixed";
-        Text[ chinese_simplified ] = "F~ixed";
+        Text[ chinese_simplified ] = "å›ºå®šçš„";
         Text[ chinese_traditional ] = "F~ixed";
         Text[ turkish ] = "F~ixed";
         Text[ arabic ] = "F~ixed";
@@ -3583,18 +3583,18 @@ String RID_FONTREGULAR
     Text [ norwegian ] = "Standard" ;
     Text [ italian ] = "Standard" ;
     Text [ portuguese_brazilian ] = "Padr?o" ;
-    Text [ portuguese ] = ", Padrão" ;
+    Text [ portuguese ] = "Normal" ;
     Text [ finnish ] = ", Vakio" ;
     Text [ danish ] = ", Normal" ;
-    Text [ french ] = "Par défaut" ;
+    Text [ french ] = "Normal" ;
     Text [ swedish ] = "Normal" ;
-    Text [ dutch ] = ", Normaal" ;
+    Text [ dutch ] = "Normaal" ;
     Text [ spanish ] = "Normal" ;
     Text [ english_us ] = "Standard" ;
-    Text[ chinese_simplified ] = ", æ™®é€š";
-    Text[ russian ] = ", Îáû÷íûé";
+    Text[ chinese_simplified ] = "æ™®é€š";
+    Text[ russian ] = "Îáû÷íûé";
     Text[ polish ] = "Domyœlnie";
-    Text[ japanese ] = ",é€šå¸¸";
+    Text[ japanese ] = "é€šå¸¸";
     Text[ chinese_traditional ] = "ï¼Œæ™®é€š";
     Text[ arabic ] = "ÚÇÏí ,";
     Text[ greek ] = ", ÊáíïíéêÜ";
@@ -3610,18 +3610,18 @@ String RID_FONTITALIC
     Text [ norwegian ] = "Kursiv" ;
     Text [ italian ] = "Corsivo" ;
     Text [ portuguese_brazilian ] = "It?lico" ;
-    Text [ portuguese ] = ", Itálico" ;
+    Text [ portuguese ] = "Itálico" ;
     Text [ finnish ] = ", Kursivoi" ;
     Text [ danish ] = ", Kursiv" ;
     Text [ french ] = "Italique" ;
     Text [ swedish ] = "Kursiv" ;
-    Text [ dutch ] = ", Cursief" ;
+    Text [ dutch ] = "Cursief" ;
     Text [ spanish ] = "Cursiva" ;
     Text [ english_us ] = "Italic" ;
-    Text[ chinese_simplified ] = ", æ–œä½“";
-    Text[ russian ] = ", Íàêëîííûé";
+    Text[ chinese_simplified ] = "æ–œä½“";
+    Text[ russian ] = "Êóğñèâ";
     Text[ polish ] = "Kursywa";
-    Text[ japanese ] = ",æ–œä½“";
+    Text[ japanese ] = "æ–œä½“";
     Text[ chinese_traditional ] = ", æ–œé«”";
     Text[ arabic ] = "ãÇÆá";
     Text[ greek ] = ", ĞëÜãéá";
@@ -3637,18 +3637,18 @@ String RID_FONTBOLD
     Text [ norwegian ] = "Fet" ;
     Text [ italian ] = "Grassetto" ;
     Text [ portuguese_brazilian ] = "Negrito" ;
-    Text [ portuguese ] = ", Negrito" ;
+    Text [ portuguese ] = "Negrito" ;
     Text [ finnish ] = ", Lihavoi" ;
     Text [ danish ] = ", Fed" ;
     Text [ french ] = "Gras" ;
     Text [ swedish ] = "Fet" ;
-    Text [ dutch ] = ", Vet" ;
+    Text [ dutch ] = "Vet" ;
     Text [ spanish ] = "Negrita" ;
     Text [ english_us ] = "Bold" ;
-    Text[ chinese_simplified ] = ", ç²—ä½“";
-    Text[ russian ] = ", Æèğíûé";
+    Text[ chinese_simplified ] = "ç²—ä½“";
+    Text[ russian ] = "Æèğíûé";
     Text[ polish ] = "Pogrubienie";
-    Text[ japanese ] = ",å¤ªå­—";
+    Text[ japanese ] = "å¤ªå­—";
     Text[ chinese_traditional ] = ", ç²—é«”";
     Text[ arabic ] = "ÚÑíÖ";
     Text[ greek ] = ";¸íôïíï";
@@ -7560,7 +7560,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ portuguese_brazilian ] = "Accent nach rechts";
                 Text[ japanese ] = "ï½±ï½·ï½­ï½°ï¾„";
                 Text[ korean ] = "ì•¡ì„¼íŠ¸, ì˜¤ë¥¸ìª½ ìœ„ë¡œ";
-                Text[ chinese_simplified ] = "å³å‘é‡éŸ³å­—æ¯";
+                Text[ chinese_simplified ] = "å³ä¸Šæ–¹å‘é‡éŸ³";
                 Text[ chinese_traditional ] = "å³å‘é‡éŸ³å­—æ¯";
                 Text[ turkish ] = "Sağa vurgu";
                 Text[ arabic ] = "ÇáÚáÇãÉ ÇáäØŞíÉ Åáì Çáíãíä";
@@ -7587,7 +7587,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ portuguese_brazilian ] = "Accent nach links";
                 Text[ japanese ] = "ï½¸ï¾ï¾šï½°ï¾Œï¾";
                 Text[ korean ] = "ì•¡ì„¼íŠ¸, ì˜¤ë¥¸ìª½ ì•„ë˜ë¡œ";
-                Text[ chinese_simplified ] = "å·¦å‘é‡éŸ³ç¬¦å·";
+                Text[ chinese_simplified ] = "å³ä¸‹æ–¹å‘é‡éŸ³";
                 Text[ chinese_traditional ] = "å·¦å‘é‡éŸ³ç¬¦è™Ÿ";
                 Text[ turkish ] = "Sola vurgu";
                 Text[ arabic ] = "ÇáÚáÇãÉ ÇáäØŞíÉ Åáì ÇáíÓÇÑ";
@@ -9978,7 +9978,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ french ] = "Opérateurs d'ensemble" ;
                 Text [ dutch ] = "Definities" ;
                 Text [ portuguese ] = "Operações de conjuntos" ;
-                Text[ chinese_simplified ] = "æ•°é‡è¿ç®—";
+                Text[ chinese_simplified ] = "é›†åˆè¿ç®—";
                 Text[ russian ] = "Îïåğàöèè ìíîæåñòâ";
                 Text[ polish ] = "Operacje na zbiorach";
                 Text[ japanese ] = "é›†åˆæ¼”ç®—";
@@ -10349,7 +10349,7 @@ String STR_STATSTR_READING
     Text [ danish ] = "Indlæser dokument..." ;
     Text [ french ] = "Chargement du document..." ;
     Text [ swedish ] = "Dokument laddas..." ;
-    Text [ dutch ] = "Document wordt gemaakt..." ;
+    Text [ dutch ] = "Document wordt geladen..." ;
     Text [ spanish ] = "Cargando el documento..." ;
     Text [ english_us ] = "Loading document..." ;
     Text[ chinese_simplified ] = "æ­£åœ¨è£…å…¥æ–‡æ¡£...";
@@ -10359,7 +10359,7 @@ String STR_STATSTR_READING
     Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’èª­ã¿è¾¼ã‚“ã§ã„ã¾ã™...";
     Text[ chinese_traditional ] = "æ­£åœ¨è¼‰å…¥æ–‡ä»¶...";
     Text[ arabic ] = "ÌÇÑí ÊÍãíá ÇáãÓÊäÏ...";
-    Text[ dutch ] = "Document wordt gemaakt...";
+    Text[ dutch ] = "Document wordt geladen...";
     Text[ chinese_simplified ] = "æ­£åœ¨è£…å…¥æ–‡æ¡£...";
     Text[ greek ] = "Ôï İããñáöï öïñôşíåôáé...";
     Text[ korean ] = "ë¬¸ì„œ ë¡œë“œ ì¤‘...";
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
