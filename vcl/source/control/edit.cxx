@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-08 10:40:38 $
+ *  last change: $Author: mt $ $Date: 2001-08-20 11:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,6 +992,48 @@ void Edit::ImplLoadRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
+void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+{
+    if ( rxClipboard.is() )
+    {
+        TextDataObject* pDataObj = new TextDataObject( GetSelected() );
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        rxClipboard->setContents( pDataObj, NULL );
+
+        Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+        if( xFlushableClipboard.is() )
+            xFlushableClipboard->flushClipboard();
+
+        Application::AcquireSolarMutex( nRef );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+{
+    if ( rxClipboard.is() )
+    {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        uno::Reference< datatransfer::XTransferable > xDataObj = rxClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
+        if ( xDataObj.is() )
+        {
+            datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                ::rtl::OUString aText;
+                aData >>= aText;
+                ReplaceSelected( aText );
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void Edit::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( mpSubEdit )
@@ -1039,6 +1081,11 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
         ImplSetCursorPos( nChar, FALSE );
         mbClickedInSelection = FALSE;
     }
+    else if ( rMEvt.IsMiddle() && !mbReadOnly &&
+              ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
+    {
+        ImplPaste( Window::GetSelection() );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1052,6 +1099,10 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
             xub_StrLen nChar = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
             ImplSetCursorPos( nChar, FALSE );
             mbClickedInSelection = FALSE;
+        }
+        else if ( rTEvt.GetMouseEvent().IsLeft() && GetSelection().Len() )
+        {
+            ImplCopy( Window::GetSelection() );
         }
     }
     else
@@ -1176,7 +1227,12 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     if ( !rKEvt.GetKeyCode().IsShift() )
                         aSel.Min() = aSel.Max();
 
-                    ImplSetSelection( aSel );
+                    if ( aSel != GetSelection() )
+                    {
+                        ImplSetSelection( aSel );
+                        if ( aSel.Len() )
+                            ImplCopy( Window::GetSelection() );
+                    }
 
                     if ( (nCode == KEY_END) && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier() )
                     {
@@ -2064,19 +2120,7 @@ void Edit::Copy()
 {
     if ( !(GetStyle() & WB_PASSWORD ) )
     {
-        uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
-        if ( xClipboard.is() )
-        {
-            TextDataObject* pDataObj = new TextDataObject( GetSelected() );
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            xClipboard->setContents( pDataObj, NULL );
-
-            Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
-            if( xFlushableClipboard.is() )
-                 xFlushableClipboard->flushClipboard();
-
-            Application::AcquireSolarMutex( nRef );
-        }
+        ImplCopy( GetClipboard() );
     }
 }
 
@@ -2084,25 +2128,7 @@ void Edit::Copy()
 
 void Edit::Paste()
 {
-    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
-    if ( xClipboard.is() )
-    {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
-        Application::AcquireSolarMutex( nRef );
-        if ( xDataObj.is() )
-        {
-            datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
-            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
-            {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aText;
-                aData >>= aText;
-                ReplaceSelected( aText );
-            }
-        }
-    }
+    ImplPaste( GetClipboard() );
 }
 
 // -----------------------------------------------------------------------
