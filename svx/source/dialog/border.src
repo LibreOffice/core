@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:36:25 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "ÇÁ·¹ÀÓ";
         Text[ turkish ] = "Çerçeve";
         Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
+        Text[ catalan ] = "Marco";
     };
     ListBox LB_LINESTYLE
     {
@@ -178,6 +179,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "¼±";
         Text[ turkish ] = "Çizgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea";
     };
 
     FixedText FT_LEFT
@@ -205,6 +207,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "íÓÇÑ";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Izquierda";
     };
     MetricField MF_LEFT
     {
@@ -246,6 +249,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "íãíä";
         Text[ turkish ] = "S~að";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Derecha";
     };
     MetricField MF_RIGHT
     {
@@ -287,6 +291,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "ÃÚáì";
         Text[ turkish ] = "~Üst";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Arriba";
     };
     MetricField MF_TOP
     {
@@ -327,6 +332,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ chinese_traditional ] = "¤U";
         Text[ arabic ] = "ÃÓÝá";
         Text[ turkish ] = "Al~t";
+        Text[ catalan ] = "~Abajo";
     };
     MetricField MF_BOTTOM
     {
@@ -368,6 +374,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "ÊÒÇãä";
         Text[ turkish ] = "~Eþitle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sincronizar";
     };
     FixedLine FL_DISTANCE
     {
@@ -394,6 +401,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "ÇáãÓÇÝÉ ÍÊì ÇáãÍÊæíÇÊ";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Configuración";
     };
 
     FixedText FT_SHADOWPOS
@@ -423,6 +431,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "À§Ä¡(~P)";
         Text[ turkish ] = "~Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Posición";
     };
     Control WIN_SHADOWS
     {
@@ -459,6 +468,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "Å©±â(~Z)";
         Text[ turkish ] = "~Büyüklük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tamaño";
     };
     MetricField ED_SHADOWSIZE
     {
@@ -502,6 +512,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "»ö»ó(~O)";
         Text[ turkish ] = "Re~nk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~olor";
     };
     ListBox LB_SHADOWCOLOR
     {
@@ -538,6 +549,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "À½¿µ";
         Text[ turkish ] = "Gölge";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sombra";
     };
     ImageList IL_PRE_BITMAPS
     {
@@ -571,6 +583,7 @@ TabPage RID_SVXPAGE_BORDER
         };
         IdCount = { 5 ; };
     };
+    Text[ catalan ] = "Borde";
 };
  // **********************************************************************
 
