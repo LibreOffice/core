@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-07-10 09:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2554,13 +2554,20 @@ void WW8RStyle::ImportSprms( long nPosFc, short nLen, BOOL bPap )
 }
 
 
-short WW8RStyle::ImportUPX( short nLen, BOOL bPAP )
+short WW8RStyle::ImportUPX( short nLen, BOOL bPAP, BOOL bOdd )
 {
     INT16 cbUPX;
 
     if( 0 < nLen ) // Empty ?
     {
+#if 0
         nLen -= WW8SkipOdd( pStStrm );
+#else
+        if (bOdd)
+            nLen -= WW8SkipEven( pStStrm );
+        else
+            nLen -= WW8SkipOdd( pStStrm );
+#endif
 
         *pStStrm >> cbUPX;
 
@@ -2597,16 +2604,21 @@ short WW8RStyle::ImportUPX( short nLen, BOOL bPAP )
 }
 
 
-void WW8RStyle::ImportGrupx( short nLen, BOOL bPara )
+void WW8RStyle::ImportGrupx( short nLen, BOOL bPara , BOOL bOdd)
 {
     if( nLen <= 0 )
         return;
-
-//  if( rFib.nVersion < 8 )
+#if 0
+    nLen -= WW8SkipOdd( pStStrm );
+#else
+    if (bOdd)
+        nLen -= WW8SkipEven( pStStrm );
+    else
         nLen -= WW8SkipOdd( pStStrm );
+#endif
 
-    if( bPara ) nLen = ImportUPX( nLen, TRUE ); // Grupx.Papx
-    ImportUPX( nLen, FALSE );                   // Grupx.Chpx
+    if( bPara ) nLen = ImportUPX( nLen, TRUE, bOdd );   // Grupx.Papx
+    ImportUPX( nLen, FALSE, bOdd );                 // Grupx.Chpx
 }
 
 WW8RStyle::WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI )
@@ -2941,8 +2953,16 @@ void WW8RStyle::Import1Style( USHORT nNr )
     pIo->SetNAktColl( nNr );
     pIo->bStyNormal = nNr == 0;
 
-    if( pStd && ( pStd->sgc == 1 || pStd->sgc == 2 ) ){
-        ImportGrupx( nSkip, pStd->sgc == 1 ); // Import des Style-Inhalts
+    if( pStd && ( pStd->sgc == 1 || pStd->sgc == 2 ) )
+    {
+        //Variable parts of the STD start at even byte offsets, but "inside
+        //the STD", which I take to meaning even in relation to the starting
+        //position of the STD, which matches findings in #89439#, generally it
+        //doesn't matter as the STSHI starts off nearly always on an even
+        //offset
+
+        //Import of the Style Contents
+        ImportGrupx( nSkip, pStd->sgc == 1, pSI->nFilePos & 1);
                         // Alle moeglichen Attribut-Flags zuruecksetzen,
                         // da es in Styles keine Attr-Enden gibt
         pIo->bHasBorder = pIo->bTxtCol = pIo->bShdTxtCol = pIo->bCharShdTxtCol
@@ -3111,11 +3131,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.12 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.13 2001-07-10 09:31:26 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.11  2001/05/24 09:43:17  cmc
       #74387# ##949## Avoid too narrow table cells (consider distance from text in calculation)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 12:41:56 $
+ *  last change: $Author: cmc $ $Date: 2001-07-10 09:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3069,6 +3069,10 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
 
 void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 {
+    //Meaningless in a style
+    if (pAktColl)
+        return;
+
     // Vorsicht: Bei Feldnamen mit Umlauten geht das MEMICMP nicht!
     const static sal_Char *aFldNames[] = {  "\x06""INHALT", "\x02""XE", // dt.
                                             "\x02""TC"  };              // us
@@ -3155,12 +3159,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.20 2001-07-05 12:41:56 ama Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.21 2001-07-10 09:31:26 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/07/05 12:41:56  ama
+      Chg #89181#: New data exchange methods
+
       Revision 1.19  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 

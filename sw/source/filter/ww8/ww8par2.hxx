@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-07-10 09:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,8 +240,8 @@ friend class SwWW8ImplReader;
     BOOL bWidowsChanged : 1;    // Fuer Simulation Default-Widows / Orphans
 
     void ImportSprms( long nPosFc, short nLen, BOOL bPap );
-    void ImportGrupx( short nLen, BOOL bPara );
-    short ImportUPX( short nLen, BOOL bPAP );
+    void ImportGrupx( short nLen, BOOL bPara, BOOL bOdd );
+    short ImportUPX( short nLen, BOOL bPAP, BOOL bOdd );
 
 
     SwCharFmt* SearchCharFmt( const String& rName );
@@ -292,11 +292,14 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.4 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.5 2001-07-10 09:31:26 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.3  2001/04/23 11:16:23  cmc
       Enable automatic text foreground color {im|ex}port
 
