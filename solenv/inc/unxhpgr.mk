@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxhpgr.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:16 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:46:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ DISWARN=+W67,251,370,600
 #CC=/opt/ansic/bin/cc
 CXX=g++
 CC=gcc
-CFLAGS= -Wall -w -nostdinc -c $(INCLUDE) -I/nw386/dev/s/solenv/unxhpgr/lib/gcc-lib/hppa1.1-hp-hpux10.20/egcs-2.91.57/include
+CFLAGSWALL=-Wall
+CFLAGS=-nostdinc -c $(INCLUDE) -I/nw386/dev/s/solenv/unxhpgr/lib/gcc-lib/hppa1.1-hp-hpux10.20/egcs-2.91.57/include
 CFLAGSCC=-pipe -fguiding-decls
 CFLAGSCXX=-pipe -fguiding-decls
 CFLAGSOBJGUIST=
