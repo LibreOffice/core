@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-15 14:26:41 $
+ *  last change: $Author: pl $ $Date: 2001-08-17 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         setFrameTypeAndDecoration(
                                   pFrame_,
                                   mpParent ?
-                                  WMAdaptor::windowType_ModalDialogue
+                                  WMAdaptor::windowType_ModelessDialogue
                                   : WMAdaptor::windowType_Normal,
                                   nDecoFlags,
                                   mpParent );

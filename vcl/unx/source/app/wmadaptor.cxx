@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-14 17:03:45 $
+ *  last change: $Author: pl $ $Date: 2001-08-17 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,9 @@ void WMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType,
                              (unsigned char*)&m_aWMAtoms[ eWMType ],
                              1 );
         }
-        if( eType == windowType_ModalDialogue && ! pReferenceFrame )
+        if( ( eType == windowType_ModalDialogue ||
+              eType == windowType_ModelessDialogue )
+              && ! pReferenceFrame )
             XSetTransientForHint( m_pDisplay,
                                   pFrame->maFrameData.GetShellWindow(),
                                   m_pSalDisplay->GetRootWindow() );
