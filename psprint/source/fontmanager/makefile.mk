@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: pl $ $Date: 2001-05-08 11:45:34 $
+#   last change: $Author: vg $ $Date: 2001-09-18 09:43:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ dummy:
 SLOFILES=\
     $(SLO)$/fontmanager.obj		\
     $(SLO)$/parseAFM.obj
+
+.IF "$(OS)$(CPU)"=="SOLARISI"
+NOOPTFILES=$(SLO)$/fontmanager.obj
+.ENDIF
 
 .ENDIF		# "$(OS)"=="MACOSX"
 
