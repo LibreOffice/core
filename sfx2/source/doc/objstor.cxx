@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-12 10:30:52 $
+ *  last change: $Author: mav $ $Date: 2002-04-26 11:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,7 +891,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             ::utl::TempFile aTmpFile;
             aTmpFile.EnableKillingFile( sal_True );
-            SvStorageRef xTmp = new SvStorage( ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ), aTmpFile.GetURL() );
+            SvStorageRef xTmp = new SvStorage( ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ), aTmpFile.GetURL(),
+                                                    SFX_STREAM_READWRITE, STORAGE_TRANSACTED );
+
 
             // save the new version to the storage, perhaps also with password if the root storage is password protected
             if ( aPasswd.Len() )
