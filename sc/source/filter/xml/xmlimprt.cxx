@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 12:12:55 $
+ *  last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aBodyTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, sXML_content_validations,    XML_TOK_BODY_CONTENT_VALIDATIONS    },
+    { XML_NAMESPACE_TABLE, sXML_label_ranges,           XML_TOK_BODY_LABEL_RANGES           },
     { XML_NAMESPACE_TABLE, sXML_table,                  XML_TOK_BODY_TABLE                  },
     { XML_NAMESPACE_TABLE, sXML_named_expressions,      XML_TOK_BODY_NAMED_EXPRESSIONS      },
     { XML_NAMESPACE_TABLE, sXML_database_ranges,        XML_TOK_BODY_DATABASE_RANGES        },
@@ -214,6 +215,20 @@ static __FAR_DATA SvXMLTokenMapEntry aContentValidationErrorMacroAttrTokenMap[] 
 {
     { XML_NAMESPACE_TABLE, sXML_name,   XML_TOK_ERROR_MACRO_ATTR_NAME       },
     { XML_NAMESPACE_TABLE, sXML_execute,    XML_TOK_ERROR_MACRO_ATTR_EXECUTE    },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aLabelRangesElemTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_label_range,    XML_TOK_LABEL_RANGE_ELEM    },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aLabelRangeAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_label_cell_range_address,   XML_TOK_LABEL_RANGE_ATTR_LABEL_RANGE    },
+    { XML_NAMESPACE_TABLE, sXML_data_cell_range_address,    XML_TOK_LABEL_RANGE_ATTR_DATA_RANGE     },
+    { XML_NAMESPACE_TABLE, sXML_orientation,                XML_TOK_LABEL_RANGE_ATTR_ORIENTATION    },
     XML_TOKEN_MAP_END
 };
 
@@ -754,6 +769,20 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMacroAttrTokenMap()
     return *pContentValidationErrorMacroAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetLabelRangesElemTokenMap()
+{
+    if( !pLabelRangesElemTokenMap )
+        pLabelRangesElemTokenMap = new SvXMLTokenMap( aLabelRangesElemTokenMap );
+    return *pLabelRangesElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetLabelRangeAttrTokenMap()
+{
+    if( !pLabelRangeAttrTokenMap )
+        pLabelRangeAttrTokenMap = new SvXMLTokenMap( aLabelRangeAttrTokenMap );
+    return *pLabelRangeAttrTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
 {
     if( !pTableElemTokenMap )
@@ -1110,6 +1139,8 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pContentValidationHelpMessageAttrTokenMap( 0 ),
     pContentValidationErrorMessageAttrTokenMap( 0 ),
     pContentValidationErrorMacroAttrTokenMap( 0 ),
+    pLabelRangesElemTokenMap( 0 ),
+    pLabelRangeAttrTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
     pTableRowsElemTokenMap( 0 ),
     pTableColsElemTokenMap( 0 ),
@@ -1237,6 +1268,8 @@ ScXMLImport::~ScXMLImport()
     delete pContentValidationHelpMessageAttrTokenMap;
     delete pContentValidationErrorMessageAttrTokenMap;
     delete pContentValidationErrorMacroAttrTokenMap;
+    delete pLabelRangesElemTokenMap;
+    delete pLabelRangeAttrTokenMap;
     delete pTableElemTokenMap;
     delete pTableRowsElemTokenMap;
     delete pTableColsElemTokenMap;

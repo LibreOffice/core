@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:43:37 $
+ *  last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ enum ScXMLStyleTokens
 enum ScXMLBodyTokens
 {
     XML_TOK_BODY_CONTENT_VALIDATIONS,
+    XML_TOK_BODY_LABEL_RANGES,
     XML_TOK_BODY_TABLE,
     XML_TOK_BODY_NAMED_EXPRESSIONS,
     XML_TOK_BODY_DATABASE_RANGES,
@@ -187,6 +188,18 @@ enum ScXMLContentValidationErrorMacroAttrTokens
 {
     XML_TOK_ERROR_MACRO_ATTR_NAME,
     XML_TOK_ERROR_MACRO_ATTR_EXECUTE
+};
+
+enum ScXMLLabelRangesElemTokens
+{
+    XML_TOK_LABEL_RANGE_ELEM
+};
+
+enum ScXMLLabelRangeAttrTokens
+{
+    XML_TOK_LABEL_RANGE_ATTR_LABEL_RANGE,
+    XML_TOK_LABEL_RANGE_ATTR_DATA_RANGE,
+    XML_TOK_LABEL_RANGE_ATTR_ORIENTATION
 };
 
 enum ScXMLTableTokens
@@ -596,6 +609,8 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pContentValidationHelpMessageAttrTokenMap;
     SvXMLTokenMap           *pContentValidationErrorMessageAttrTokenMap;
     SvXMLTokenMap           *pContentValidationErrorMacroAttrTokenMap;
+    SvXMLTokenMap           *pLabelRangesElemTokenMap;
+    SvXMLTokenMap           *pLabelRangeAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
     SvXMLTokenMap           *pTableRowsElemTokenMap;
     SvXMLTokenMap           *pTableColsElemTokenMap;
@@ -719,6 +734,8 @@ public:
     const SvXMLTokenMap& GetContentValidationHelpMessageAttrTokenMap();
     const SvXMLTokenMap& GetContentValidationErrorMessageAttrTokenMap();
     const SvXMLTokenMap& GetContentValidationErrorMacroAttrTokenMap();
+    const SvXMLTokenMap& GetLabelRangesElemTokenMap();
+    const SvXMLTokenMap& GetLabelRangeAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
     const SvXMLTokenMap& GetTableRowsElemTokenMap();
     const SvXMLTokenMap& GetTableColsElemTokenMap();
