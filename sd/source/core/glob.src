@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-17 21:26:24 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 04:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2300,6 +2300,7 @@ Resource RID_SD_ERRHDL
         Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
     };
 };
+
 
 
 
