@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:11:31 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ namespace pcr
     //------------------------------------------------------------------
     ODateControl::ODateControl(Window* pParent, WinBits nWinStyle)
             :OCommonBehaviourControl(this)
-            ,DateField(pParent, nWinStyle)
+            ,CalendarField( pParent, nWinStyle | WB_DROPDOWN )
     {
         SetStrictFormat(sal_True);
 
@@ -238,7 +238,7 @@ namespace pcr
         if (nResult)    // handled
             return nResult;
 
-        return DateField::PreNotify(rNEvt);
+        return CalendarField::PreNotify(rNEvt);
     }
 
     //==================================================================
@@ -416,10 +416,13 @@ namespace pcr
     //= ONumericControl
     //==================================================================
     //------------------------------------------------------------------
-    ONumericControl::ONumericControl( Window* _pParent, sal_uInt16 _nDigits, WinBits _nWinStyle)
+    ONumericControl::ONumericControl( Window* _pParent, sal_uInt16 _nDigits, WinBits _nWinStyle )
             :OCommonBehaviourControl(this)
-            ,NumericField(_pParent, _nWinStyle)
+            ,MetricField(_pParent, _nWinStyle)
+            ,m_eValueUnit( FUNIT_NONE )
     {
+        SetDefaultUnit( FUNIT_NONE );
+
         SetModifyHdl(LINK( this, OCommonBehaviourControl, ModifiedHdl ));
         SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
         SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
@@ -435,25 +438,29 @@ namespace pcr
     //------------------------------------------------------------------
     void ONumericControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
     {
-        if (bIsUnknown || (rString == m_sStandardString))
+        if ( bIsUnknown || ( rString == m_sStandardString ) )
         {
             SetText(String());
             SetEmptyFieldValue();
         }
         else
         {
-            if (rString.getLength()>0)
-                SetValue(rString.toInt32());
+            if ( rString.getLength() > 0 )
+            {
+                SetValue( rString.toInt32(), m_eValueUnit );
+            }
             else
+            {
                 SetEmptyFieldValue();
+            }
         }
     }
 
     //------------------------------------------------------------------
     ::rtl::OUString ONumericControl::GetProperty() const
     {
-        if (GetText().Len() != 0)
-            return ::rtl::OUString::valueOf((sal_Int32)GetValue());
+        if ( GetText().Len() )
+            return ::rtl::OUString::valueOf( (sal_Int32)( GetValue( m_eValueUnit ) ) );
         else
             return ::rtl::OUString();
 
@@ -466,7 +473,7 @@ namespace pcr
         if (nResult)    // handled
             return nResult;
 
-        return NumericField::PreNotify(rNEvt);
+        return MetricField::PreNotify(rNEvt);
     }
 
     //==================================================================
