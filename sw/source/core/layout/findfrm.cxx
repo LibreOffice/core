@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:52:50 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1363,10 +1362,10 @@ SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
         else
         {
             SwRowFrm* pTmpRow = (SwRowFrm*)pCorrCell->Lower();
-            while ( pTmpRow->GetNext() )
+            while ( pTmpRow && pTmpRow->GetNext() )
                 pTmpRow = (SwRowFrm*)pTmpRow->GetNext();
 
-            if ( pTmpRow->GetFollowRow() == pRow )
+            if ( pTmpRow && pTmpRow->GetFollowRow() == pRow )
                 pCorrRow = pTmpRow;
         }
 
