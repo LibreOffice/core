@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-25 11:08:29 $
+ *  last change: $Author: dr $ $Date: 2002-07-09 13:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2915,138 +2915,132 @@ ConvertDataList::ConvertDataList( void )
 
     // *** are extra and not standard Excel Analysis Addin!
 
-                                                                // Gramm ->
-    NEWD( "g",      1.0000000000000000E00,  CDC_Mass        );      // Gramm
-    NEWD( "sg",     6.8522050005347800E-05, CDC_Mass        );      // Stueck
-    NEWD( "lbm",    2.2046229146913400E-03, CDC_Mass        );      // Pfund (Handelsgewicht)
-//  NEWD( "u",      6.0221700000000000E23,  CDC_Mass        );      // U (atomare Masseinheit)
-    NEWD( "u",      6.0221370000000000E23,  CDC_Mass        );      // U (atomare Masseinheit)
-    NEWD( "ozm",    3.5273971800362700E-02, CDC_Mass        );      // Unze (Handelsgewicht)
-    NEWD( "stone",  1.574730e-04,           CDC_Mass        );      // Stone                                    ***
-    NEWD( "ton",    1.102311e-06,           CDC_Mass        );      // ton                                      ***
-    NEWD( "grain",  1.543236E01,            CDC_Mass        );      // grain                                    ***
-    NEWD( "pweight",    7.054792E-01,       CDC_Mass        );      // Pennyweight                              ***
-    NEWD( "hweight",    1.968413E-05,       CDC_Mass        );      // Hundredweight                            ***
-    NEWD( "shweight",   2.204623E-05,       CDC_Mass        );      // Shorthundredweight                       ***
-    NEWD( "brton",  9.842065E-07,           CDC_Mass        );      // BRT                                      ***
+    // MASS: 1 Gram is...
+    NEWD( "g",          1.0000000000000000E00,  CDC_Mass ); // Gram
+    NEWD( "sg",         6.8522050005347800E-05, CDC_Mass ); // Pieces
+    NEWD( "lbm",        2.2046229146913400E-03, CDC_Mass ); // Pound (commercial weight)
+    NEWD( "u",          6.0221370000000000E23,  CDC_Mass ); // U (atomic mass)
+    NEWD( "ozm",        3.5273971800362700E-02, CDC_Mass ); // Ounce (commercial weight)
+    NEWD( "stone",      1.574730e-04,           CDC_Mass ); // *** Stone
+    NEWD( "ton",        1.102311e-06,           CDC_Mass ); // *** Ton
+    NEWD( "grain",      1.543236E01,            CDC_Mass ); // *** Grain
+    NEWD( "pweight",    7.054792E-01,           CDC_Mass ); // *** Pennyweight
+    NEWD( "hweight",    1.968413E-05,           CDC_Mass ); // *** Hundredweight
+    NEWD( "shweight",   2.204623E-05,           CDC_Mass ); // *** Shorthundredweight
+    NEWD( "brton",      9.842065E-07,           CDC_Mass ); // *** Gross Registered Ton
 
-                                                                // Meter ->
-    NEWD( "m",      1.0000000000000000E00,  CDC_Length      );      // Meter
-    NEWD( "mi",     6.2137119223733397E-04, CDC_Length      );      // Britsche Meile       6,21371192237333969617434184363e-4
-    NEWD( "Nmi",    5.3995680345572354E-04, CDC_Length      );      // Nautische Meile      5,39956803455723542116630669546e-4
-    NEWD( "in",     3.9370078740157480E01,  CDC_Length      );      // Zoll                 39,37007874015748031496062992126
-    NEWD( "ft",     3.2808398950131234E00,  CDC_Length      );      // Fuss                 3,2808398950131233595800524934383
-    NEWD( "yd",     1.0936132983377078E00,  CDC_Length      );      // Yard                 1,0936132983377077865266841644794
-    NEWD( "ang",    1.0000000000000000E10,  CDC_Length      );      // Angstroem
-    NEWD( "Pica",   2.8346456692913386E03,  CDC_Length      );      // Pica (1/72 Zoll)     2834,6456692913385826771653543307
-    NEWD( "ell",    8.748906E-01,           CDC_Length      );      // Elle?                                    ***
-    NEWD( "parsec", 3.240779E-17,           CDC_Length      );      // parsec                                   ***
-    NEWD( "lightyear",1.0570234557732930E-16,CDC_Length     );      // Lichtjahr                                ***
+    // LENGTH: 1 Meter is...
+    NEWD( "m",          1.0000000000000000E00,  CDC_Length ); // Meter
+    NEWD( "mi",         6.2137119223733397E-04, CDC_Length ); // Britsh Mile        6,21371192237333969617434184363e-4
+    NEWD( "Nmi",        5.3995680345572354E-04, CDC_Length ); // Nautical Mile      5,39956803455723542116630669546e-4
+    NEWD( "in",         3.9370078740157480E01,  CDC_Length ); // Inch               39,37007874015748031496062992126
+    NEWD( "ft",         3.2808398950131234E00,  CDC_Length ); // Foot               3,2808398950131233595800524934383
+    NEWD( "yd",         1.0936132983377078E00,  CDC_Length ); // Yard               1,0936132983377077865266841644794
+    NEWD( "ang",        1.0000000000000000E10,  CDC_Length ); // Angstroem
+    NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); // Pica (1/72 Inch)   2834,6456692913385826771653543307
+    NEWD( "ell",        8.748906E-01,           CDC_Length ); // *** Ell
+    NEWD( "parsec",     3.240779E-17,           CDC_Length ); // *** Parsec
+    NEWD( "lightyear",  1.0570234557732930E-16, CDC_Length ); // *** Light Year
 
-                                                                // Sekunde ->
-    NEWD( "yr",     3.1688087814028950E-08, CDC_Time        );      // Jahr
-    NEWD( "day",    1.1574074074074074E-05, CDC_Time        );      // Tag
-    NEWD( "hr",     2.7777777777777778E-04, CDC_Time        );      // Stunde
-    NEWD( "mn",     1.6666666666666667E-02, CDC_Time        );      // Minute
-    NEWD( "sec",    1.0000000000000000E00,  CDC_Time        );      // Sekunde
+    // TIME: 1 Second is...
+    NEWD( "yr",     3.1688087814028950E-08, CDC_Time ); // Year
+    NEWD( "day",    1.1574074074074074E-05, CDC_Time ); // Day
+    NEWD( "hr",     2.7777777777777778E-04, CDC_Time ); // Hour
+    NEWD( "mn",     1.6666666666666667E-02, CDC_Time ); // Minute
+    NEWD( "sec",    1.0000000000000000E00,  CDC_Time ); // Second
 
-                                                                // Pascal ->
-    NEWD( "Pa",     1.0000000000000000E00,  CDC_Pressure    );      // Pascal
-    NEWD( "atm",    9.8692329999819300E-06, CDC_Pressure    );      // Atmoshpaere
-    NEWD( "mmHg",   7.5006170799862700E-03, CDC_Pressure    );      // mm Quecksilbersaeule
-    NEWD( "Torr",   7.5006380000000000E-03, CDC_Pressure    );      // Torr                                     ***
-    NEWD( "psi",    1.4503770000000000E-04, CDC_Pressure    );      // psi                                      ***
+    // PRESSURE: 1 Pascal is...
+    NEWD( "Pa",     1.0000000000000000E00,  CDC_Pressure ); // Pascal
+    NEWD( "atm",    9.8692329999819300E-06, CDC_Pressure ); // Atmoshpere
+    NEWD( "mmHg",   7.5006170799862700E-03, CDC_Pressure ); // mm Hg (Mercury)
+    NEWD( "Torr",   7.5006380000000000E-03, CDC_Pressure ); // *** Torr
+    NEWD( "psi",    1.4503770000000000E-04, CDC_Pressure ); // *** Psi
 
-                                                                // Newton ->
-    NEWD( "N",      1.0000000000000000E00,  CDC_Force       );      // Newton
-    NEWD( "dyn",    1.0000000000000000E05,  CDC_Force       );      // Dyn
-    NEWD( "pond",   1.019716E02,            CDC_Force       );      // Pond
+    // FORCE: 1 Newton is...
+    NEWD( "N",      1.0000000000000000E00,  CDC_Force ); // Newton
+    NEWD( "dyn",    1.0000000000000000E05,  CDC_Force ); // Dyn
+    NEWD( "pond",   1.019716E02,            CDC_Force ); // Pond
 
-                                                                // Joule ->
-    NEWD( "J",      1.0000000000000000E00,  CDC_Energy      );      // Joule
-//  NEWD( "e",      9.99999519343231E06,    CDC_Energy      );      // Erg
-    NEWD( "e",      1.0000000000000000E07,  CDC_Energy      );      // Erg  -> http://www.chemie.fu-berlin.de/chemistry/general/si.html
-    NEWD( "c",      2.3900624947346700E-01, CDC_Energy      );      // Thermodynamische Kalorie
-    NEWD( "cal",    2.3884619064201700E-01, CDC_Energy      );      // Kalorie
-    NEWD( "eV",     6.2414570000000000E18,  CDC_Energy      );      // Elektronenvolt
-//  NEWD( "HPh",    3.72506430801000E-07,   CDC_Energy      );      // Pferdestaerke mal Stunde
-    NEWD( "HPh",    3.7250611111111111E-07, CDC_Energy      );      // Horsepower mal Stunde
-    NEWD( "Wh",     2.7777777777777778E-04, CDC_Energy      );      // Watt mal Stunde
-    NEWD( "BTU",    9.4781506734901500E-04, CDC_Energy      );      // BTU
+    // ENERGY: 1 Joule is...
+    NEWD( "J",      1.0000000000000000E00,  CDC_Energy ); // Joule
+    NEWD( "e",      1.0000000000000000E07,  CDC_Energy ); // Erg  -> http://www.chemie.fu-berlin.de/chemistry/general/si.html
+//  NEWD( "e",      9.99999519343231E06,    CDC_Energy ); // Erg
+    NEWD( "c",      2.3900624947346700E-01, CDC_Energy ); // Thermodynamical Calorie
+    NEWD( "cal",    2.3884619064201700E-01, CDC_Energy ); // Calorie
+    NEWD( "eV",     6.2414570000000000E18,  CDC_Energy ); // Electronvolt
+    NEWD( "HPh",    3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours
+//  NEWD( "HPh",    3.72506430801000E-07,   CDC_Energy ); // Horsepower Hours
+    NEWD( "Wh",     2.7777777777777778E-04, CDC_Energy ); // Watt Hours
+    NEWD( "BTU",    9.4781506734901500E-04, CDC_Energy ); // BTU
 
-                                                                // Watt ->
-    NEWD( "W",      1.0000000000000000E00,  CDC_Power       );      // Watt
-    NEWD( "HP",     1.341022E-03,           CDC_Power       );      // Horsepower
-    NEWD( "PS",     1.359622E-03,           CDC_Power       );      // Pferdestaerke                            ***
-//EWD( "HP",        1.4102006031908E-03,    CDC_Power       );      // PS   ->Excel seams to be a little bit wrong...
-                                                                    //  either this doesn't fit to J -> HPh....
+    // POWER: 1 Watt is...
+    NEWD( "W",      1.0000000000000000E00,  CDC_Power ); // Watt
+    NEWD( "HP",     1.341022E-03,           CDC_Power ); // Horsepower
+    NEWD( "PS",     1.359622E-03,           CDC_Power ); // *** German Pferdestaerke
+//  NEWD( "HP",     1.4102006031908E-03,    CDC_Power ); // Excel seams to be a little bit wrong... either this doesn't fit to J -> HPh
 
-                                                                // Tesla ->
-    NEWD( "T",      1.0000000000000000E00,  CDC_Magnetism   );      // Tesla
-    NEWD( "ga",     1.0000000000000000E04,  CDC_Magnetism   );      // Gauss
+    // MAGNETISM: 1 Tesla is...
+    NEWD( "T",      1.0000000000000000E00,  CDC_Magnetism ); // Tesla
+    NEWD( "ga",     1.0000000000000000E04,  CDC_Magnetism ); // Gauss
 
-                                                                // Grad Kelvin ->
-    NEWL( "C",      1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature );      // Grad Celsius
-    NEWL( "F",      1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature );      // Grad Fahrenheit
-    NEWL( "K",      1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature );      // Grad Kelvin
-    NEWL( "Reau",   8.0000000000000000E-01, -2.7315000000000000E02, CDC_Temperature );      // Grad Reaumur     ***
-    NEWL( "Rank",   1.8000000000000000E00,  +0.0000000000000000E00, CDC_Temperature );      // Grad Rankine     ***
+    // TEMERATURE: 1 Kelvin is...
+    NEWL( "C",      1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius
+    NEWL( "F",      1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); // Fahrenheit
+    NEWL( "K",      1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // Kelvin
+    NEWL( "Reau",   8.0000000000000000E-01, -2.7315000000000000E02, CDC_Temperature ); // *** Reaumur
+    NEWL( "Rank",   1.8000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // *** Rankine
 
-                                                                // Liter ->
-    NEWD( "tsp",    2.0284000000000000E02,  CDC_Volume      );      // Teeloeffel (Teaspoon)
-    NEWD( "tbs",    6.7613333333333333E01,  CDC_Volume      );      // Essloeffel (Tablespoon)
-    NEWD( "oz",     3.3806666666666667E01,  CDC_Volume      );      // Unze (Fluessigkeit)
-    NEWD( "cup",    4.2258333333333333E00,  CDC_Volume      );      // Tasse (Cup)
-    NEWD( "pt",     2.1129166666666667E00,  CDC_Volume      );      // Pint
-    NEWD( "qt",     1.0564583333333333E00,  CDC_Volume      );      // Quart
-    NEWD( "gal",    2.6411458333333333E-01, CDC_Volume      );      // Gallone
-    NEWD( "l",      1.0000000000000000E00,  CDC_Volume      );      // Liter
-    NEWD( "m3",     1.0000000000000000E03,  CDC_Volume      );      // Meter^3                                  ***
-    NEWD( "mi3",    2.3991275857892772E-10, CDC_Volume      );      // Britsche Meile^3                         ***
-    NEWD( "Nmi3",   1.5742621468581148E-10, CDC_Volume      );      // Nautische Meile^3                        ***
-    NEWD( "in3",    6.1023744094732284E04,  CDC_Volume      );      // Zoll^3                                   ***
-    NEWD( "ft3",    3.5314666721488590E01,  CDC_Volume      );      // Fuss^3                                   ***
-    NEWD( "yd3",    1.3079506193143922E00,  CDC_Volume      );      // Yard^3                                   ***
-    NEWD( "ang3",   1.0000000000000000E30,  CDC_Volume      );      // Angstroem^3                              ***
-    NEWD( "Pica3",  2.2776990435870636E10,  CDC_Volume      );      // Pica^3                                   ***
-    NEWD( "barrel", 6.289811E-03,           CDC_Volume      );      // Barrel (=42gal?)                         ***
-    NEWD( "bushel", 2.837759E-02,           CDC_Volume      );      // Bushel                                   ***
-    NEWD( "regton", 3.531467E-04,           CDC_Volume      );      // Register ton                             ***
-    NEWD( "Schooner",2.3529411764705882E00, CDC_Volume      );      // austr. Schooner                          ***
-    NEWD( "Middy",  3.5087719298245614E00,  CDC_Volume      );      // austr. Middy                             ***
-    NEWD( "Glass",  5.0000000000000000E00,  CDC_Volume      );      // austr. Glass                             ***
-    NEWD( "Sixpack",0.5,                    CDC_Volume      );      //                                          ***
-    NEWD( "Humpen", 2.0,                    CDC_Volume      );      //                                          ***
+    // VOLUMNE: 1 Liter is...
+    NEWD( "tsp",        2.0284000000000000E02,  CDC_Volume ); // Teaspoon
+    NEWD( "tbs",        6.7613333333333333E01,  CDC_Volume ); // Tablespoon
+    NEWD( "oz",         3.3806666666666667E01,  CDC_Volume ); // Ounce Liquid
+    NEWD( "cup",        4.2258333333333333E00,  CDC_Volume ); // Cup
+    NEWD( "pt",         2.1129166666666667E00,  CDC_Volume ); // Pint
+    NEWD( "qt",         1.0564583333333333E00,  CDC_Volume ); // Quart
+    NEWD( "gal",        2.6411458333333333E-01, CDC_Volume ); // Gallone
+    NEWD( "l",          1.0000000000000000E00,  CDC_Volume ); // Liter
+    NEWD( "m3",         1.0000000000000000E-03, CDC_Volume ); // *** Cubic Meter
+    NEWD( "mi3",        2.3991275857892772E-13, CDC_Volume ); // *** Cubic Britsh Mile
+    NEWD( "Nmi3",       1.5742621468581148E-13, CDC_Volume ); // *** Cubic Nautical Mile
+    NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); // *** Cubic Inch
+    NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); // *** Cubic Foot
+    NEWD( "yd3",        1.3079506193143922E00,  CDC_Volume ); // *** Cubic Yard
+    NEWD( "ang3",       1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
+    NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica
+    NEWD( "barrel",     6.289811E-03,           CDC_Volume ); // *** Barrel (=42gal?)
+    NEWD( "bushel",     2.837759E-02,           CDC_Volume ); // *** Bushel
+    NEWD( "regton",     3.531467E-04,           CDC_Volume ); // *** Register ton
+    NEWD( "Schooner",   2.3529411764705882E00,  CDC_Volume ); // *** austr. Schooner
+    NEWD( "Middy",      3.5087719298245614E00,  CDC_Volume ); // *** austr. Middy
+    NEWD( "Glass",      5.0000000000000000E00,  CDC_Volume ); // *** austr. Glass
+    NEWD( "Sixpack",    0.5,                    CDC_Volume ); // ***
+    NEWD( "Humpen",     2.0,                    CDC_Volume ); // ***
 
-                                                                // Meter^2 ->
-    NEWD( "m2",     1.0000000000000000E00,  CDC_Area        );      // Meter^2                                  ***
-    NEWD( "mi2",    3.8610215854244585E-07, CDC_Area        );      // Britsche Meile^2                         ***
-    NEWD( "Nmi2",   2.9155334959812286E-07, CDC_Area        );      // Nautische Meile^2                        ***
-    NEWD( "in2",    1.5500031000062000E03,  CDC_Area        );      // Zoll^2                                   ***
-    NEWD( "ft2",    1.0763910416709722E01,  CDC_Area        );      // Fuss^2                                   ***
-    NEWD( "yd2",    1.0936132983377078E00,  CDC_Area        );      // Yard^2                                   ***
-    NEWD( "ang2",   1.0000000000000000E20,  CDC_Area        );      // Angstroem^2                              ***
-    NEWD( "Pica2",  8.0352160704321409E06,  CDC_Area        );      // Pica^2                                   ***
-    NEWD( "Morgen", 2.553167E03,            CDC_Area        );      // Morgen                                   ***
-    NEWD( "ar",     1.000000E02,            CDC_Area        );      // Ar                                       ***
-    NEWD( "acre",   4.046856E03,            CDC_Area        );      // acre (oder auch Acker)                   ***
-    NEWD( "ha",     1.000000E04,            CDC_Area        );      // Hektar                                   ***
-    NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area  );      //                                          ***
+    // 1 Square Meter is...
+    NEWD( "m2",         1.0000000000000000E00,  CDC_Area ); // *** Square Meter
+    NEWD( "mi2",        3.8610215854244585E-07, CDC_Area ); // *** Square Britsh Mile
+    NEWD( "Nmi2",       2.9155334959812286E-07, CDC_Area ); // *** Square Nautical Mile
+    NEWD( "in2",        1.5500031000062000E03,  CDC_Area ); // *** Square Inch
+    NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); // *** Square Foot
+    NEWD( "yd2",        1.0936132983377078E00,  CDC_Area ); // *** Square Yard
+    NEWD( "ang2",       1.0000000000000000E20,  CDC_Area ); // *** Square Angstroem
+    NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); // *** Square Pica
+    NEWD( "Morgen",     2.553167E03,            CDC_Area ); // *** Morgen
+    NEWD( "ar",         1.000000E02,            CDC_Area ); // *** Ar
+    NEWD( "acre",       4.046856E03,            CDC_Area ); // *** Acre
+    NEWD( "ha",         1.000000E04,            CDC_Area ); // *** Hectare
+    NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area ); // ***
 
-                                                                // Meter/Sekunde ->
-    NEWD( "m/s",    1.0000000000000000E00,  CDC_Speed       );      // Meter/Sekunde                            ***
-    NEWD( "m/h",    3.6000000000000000E03,  CDC_Speed       );      // Meter/Stunde -> km/h                     ***
-    NEWD( "mph",    2.2369362920544023E00,  CDC_Speed       );      // (Britsche) Meilen/Stunde                 ***
-    NEWD( "kn",     1.9438444924406048E00,  CDC_Speed       );      // Knoten = (Nautische) Meilen/Stunde       ***
-    NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed       );      // Admiraltyknot                            ***
-    NEWD( "wahnsinnige Geschwindigkeit",2.0494886343432328E-14,CDC_Speed);//                                    ***
-    NEWD( "ludicrous speed",2.0494886343432328E-14,CDC_Speed);      //                                          ***
-    NEWD( "laecherliche Geschwindigkeit",4.0156958471424288E-06,CDC_Speed);//                                   ***
-    NEWD( "ridiculous speed",4.0156958471424288E-06,CDC_Speed);     //                                          ***
-
-                                                                //
-//  Append( new ConvertData( "",        ,   CDC_Length  ) );        //
-//  NEWD( "",   ,       );      //
+    // SPEED: 1 Meter per Second is...
+    NEWD( "m/s",    1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second
+    NEWD( "m/h",    3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour
+    NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); // *** Britsh Miles per Hour
+    NEWD( "kn",     1.9438444924406048E00,  CDC_Speed ); // *** Knot = Nautical Miles per Hour
+    NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed ); // *** Admiralty Knot
+    NEWD( "wahnsinnige Geschwindigkeit", 2.0494886343432328E-14, CDC_Speed ); // ***
+    NEWD( "ludicrous speed", 2.0494886343432328E-14, CDC_Speed ); // ***
+    NEWD( "laecherliche Geschwindigkeit", 4.0156958471424288E-06, CDC_Speed); // ***
+    NEWD( "ridiculous speed", 4.0156958471424288E-06, CDC_Speed); // ***
 }
 
 
