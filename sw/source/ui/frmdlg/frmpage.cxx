@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:49:58 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2718,6 +2718,7 @@ BmpWindow::BmpWindow(Window* pPar, USHORT nId,
     bGraphic(FALSE),
     bLeftAlign(FALSE)
 {
+    SetBackground();
 }
 
 void BmpWindow::Paint( const Rectangle& )
