@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
+ *  last change: $Author: mt $ $Date: 2001-03-05 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3459,15 +3459,24 @@ void ImpEditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
         if ( nY != 100 )
         {
             // Fonthoehe
-            const SvxFontHeightItem& rHeightItem =
-                (const SvxFontHeightItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTHEIGHT );
-            SvxFontHeightItem* pNewHeight = (SvxFontHeightItem*)rHeightItem.Clone();
-            sal_uInt32 nHeight = pNewHeight->GetHeight();
-            nHeight *= nY;
-            nHeight /= 100;
-            pNewHeight->SetHeightValue( nHeight );
-            aTmpSet.Put( *pNewHeight );
-            delete pNewHeight;
+            for ( int nItem = 0; nItem < 3; nItem++ )
+            {
+                USHORT nItemId = EE_CHAR_FONTHEIGHT;
+                if ( nItem == 1 )
+                    nItemId = EE_CHAR_FONTHEIGHT_CJK;
+                else if ( nItem == 2 )
+                    nItemId = EE_CHAR_FONTHEIGHT_CTL;
+
+                const SvxFontHeightItem& rHeightItem =
+                    (const SvxFontHeightItem&)pNode->GetContentAttribs().GetItem( nItemId );
+                SvxFontHeightItem* pNewHeight = (SvxFontHeightItem*)rHeightItem.Clone();
+                sal_uInt32 nHeight = pNewHeight->GetHeight();
+                nHeight *= nY;
+                nHeight /= 100;
+                pNewHeight->SetHeightValue( nHeight );
+                aTmpSet.Put( *pNewHeight );
+                delete pNewHeight;
+            }
 
             // Absatzabstaende
             const SvxULSpaceItem& rULSpaceItem =
