@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:03:09 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 14:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4950,7 +4950,7 @@ String STR_EditAlignVCenter
     Text[ dutch ] = "%O horizontaal centreren";
     Text[ chinese_simplified ] = "%O Ë®Æ½¶ÔÆë";
     Text[ greek ] = "Êåíôñáñéóìİíá ïñéæüíôéá %O";
-    Text[ korean ] = "%O ¼öÆò °¡¿îµ¥ ¸ÂÃã";
+    Text[ korean ] = "%O ¼öÆòÀ¸·Î  °¡¿îµ¥ ¸ÂÃã";
     Text[ turkish ] = "Yatay ortala: %O";
     Text[ language_user1 ] = " ";
 };
@@ -5499,7 +5499,7 @@ String STR_DragInsertPoint
     Text[ chinese_simplified ] = "ÔÚ%O ²åÈë½Óµã";
     Text[ russian ] = "Âñòàâèòü òî÷êó â %O";
     Text[ polish ] = "Wstaw punkt do %O";
-    Text[ japanese ] = "%O‚ÉÎß²İÄ‚ğ‘}“ü";
+    Text[ japanese ] = "%O ‚É“_‚ğ‘}“ü";
     Text[ chinese_traditional ] = "¦b%O ´¡¤J±µÂI";
     Text[ arabic ] = "ÅÏÑÇÌ äŞØÉ İí %O";
     Text[ dutch ] = "Punt in %O invoegen";
@@ -5527,7 +5527,7 @@ String STR_DragInsertGluePoint
     Text[ chinese_simplified ] = "ÔÚ %O ´¦²åÈëÕ³½áµã";
     Text[ russian ] = "Âñòàâèòü òî÷êó ñîåäèíåíèÿ â %O";
     Text[ polish ] = "Wstaw punkt sklejania do %O";
-    Text[ japanese ] = "%O‚ÉÚ’…“_‚ğ‘}“ü";
+    Text[ japanese ] = "%O ‚ÉÚ’…“_‚ğ‘}“ü";
     Text[ chinese_traditional ] = "¦b %O ´¡¤J±µÂI";
     Text[ arabic ] = "ÅÏÑÇÌ äŞØÉ áÕŞ İí %O";
     Text[ dutch ] = "Plakpunt in %0 invoegen";
@@ -9299,7 +9299,7 @@ String STR_ItemNam_GRAFRED
     Text[ polish ] = "Zawartoœæ czerw.";
     Text[ portuguese_brazilian ] = "Red portion";
     Text[ japanese ] = "ÔF‚ÌŠ„‡";
-    Text[ korean ] = "Àû»öºñ";
+    Text[ korean ] = "Àû»ö";
     Text[ chinese_simplified ] = "ºìÉ«±ÈÀı";
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
@@ -9322,7 +9322,7 @@ String STR_ItemNam_GRAFGREEN
     Text[ polish ] = "Zawartoœæ zielonego";
     Text[ portuguese_brazilian ] = "Green portion";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡";
-    Text[ korean ] = "³ì»öºñ";
+    Text[ korean ] = "³ì»ö";
     Text[ chinese_simplified ] = "ÂÌÉ«±ÈÀı";
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
@@ -9345,7 +9345,7 @@ String STR_ItemNam_GRAFBLUE
     Text[ polish ] = "Zawartoœæ niebiesk.";
     Text[ portuguese_brazilian ] = "Blue portion";
     Text[ japanese ] = "ÂF‚ÌŠ„‡";
-    Text[ korean ] = "Ã»»öºñ";
+    Text[ korean ] = "Ã»»ö";
     Text[ chinese_simplified ] = "À¶É«±ÈÀı";
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ";
@@ -10693,7 +10693,7 @@ String SIP_XA_FILLFLOATTRANSPARENCE
     Text [ ENGLISH ] = "Transparent gradient" ;
     Text[ english_us ] = "Transparent gradient";
     Text[ portuguese ] = "Gradação transparente";
-    Text[ greek ] = "Äéáöáíİò äéáâÜèìéóç";
+    Text[ greek ] = "ÄéáâÜèìéóç äéáöáíİò";
     Text[ dutch ] = "Transparant verloop";
     Text[ french ] = "Dégradé transparent";
     Text[ spanish ] = "Gradiente transparente";
@@ -12959,7 +12959,7 @@ String SIP_SA_TEXT_ANICOUNT
     Text[ dutch ] = "Snelheid tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÊıÄ¿";
     Text[ greek ] = "Áñéèìüò åğáíáëŞøåùí êéíïıìåíïõ êåéìİíïõ";
-    Text[ korean ] = "Æ¼Ä¿ ½ÇÇà ¼ö";
+    Text[ korean ] = "¹®ÀÚ, ¼øÈ¯ °³¼ö";
     Text[ turkish ] = "Hareketli yazı hareket sayısı";
 };
 
@@ -13058,7 +13058,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ polish ] = "Justowanie form automatycznych";
     Text[ portuguese_brazilian ] = "SvDraw Autoshape Adjustment";
     Text[ japanese ] = "µ°Ä¼ª²Ìß’²®";
-    Text[ korean ] = "SvDraw Autoshape Adjustment";
+    Text[ korean ] = "Autoshape Adjustment";
     Text[ chinese_simplified ] = "ĞÎ×´×Ô¶¯µ÷ÊÊ";
     Text[ chinese_traditional ] = "§Îª¬¦Û­q½ÕÓì";
     Text[ turkish ] = "SvDraw Autoshape Adjustment";
@@ -15538,7 +15538,7 @@ String SIP_EE_PARA_HYPHENATE
     Text[ portuguese ] = "Divisão silábica";
     Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ";
     Text[ dutch ] = "Woordafbreking";
-    Text[ french ] = "Coupure de mot";
+    Text[ french ] = "Coupure de mots";
     Text[ spanish ] = "Separación silábica";
     Text[ italian ] = "Sillabazione";
     Text[ danish ] = "Orddeling";
@@ -15978,7 +15978,7 @@ String SIP_EE_CHAR_STRIKEOUT
     Text[ arabic ] = "ÔØÈ";
     Text[ dutch ] = "Doorhalen";
     Text[ chinese_simplified ] = "ÖĞ»®Ïß";
-    Text[ greek ] = "ÄéáãñÜììéóç";
+    Text[ greek ] = "ÄéáêñéôŞ äéáãñáöŞ";
     Text[ korean ] = "Ãë¼Ò¼±";
     Text[ turkish ] = "Üstü çizili";
     Text[ language_user1 ] = " ";
@@ -16292,7 +16292,7 @@ String SIP_SA_GRAFRED
     Text[ polish ] = "Zawartoœæ czerw.";
     Text[ portuguese_brazilian ] = "Red portion";
     Text[ japanese ] = "ÔF‚ÌŠ„‡";
-    Text[ korean ] = "Àû»öºñ";
+    Text[ korean ] = "Àû»ö";
     Text[ chinese_simplified ] = "ºìÉ«±ÈÀı";
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
@@ -16315,7 +16315,7 @@ String SIP_SA_GRAFGREEN
     Text[ polish ] = "Zawartoœæ zielonego";
     Text[ portuguese_brazilian ] = "Green portion";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡";
-    Text[ korean ] = "³ì»öºñ";
+    Text[ korean ] = "³ì»ö";
     Text[ chinese_simplified ] = "ÂÌÉ«±ÈÀı";
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
@@ -16338,7 +16338,7 @@ String SIP_SA_GRAFBLUE
     Text[ polish ] = "Zawartoœæ niebiesk.";
     Text[ portuguese_brazilian ] = "Blue portion";
     Text[ japanese ] = "ÂF‚ÌŠ„‡";
-    Text[ korean ] = "Ã»»öºñ";
+    Text[ korean ] = "Ã»»ö";
     Text[ chinese_simplified ] = "À¶É«±ÈÀı";
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ";
