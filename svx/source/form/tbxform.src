@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:41:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String RID_SVXTBX_FORM_FILTER
     Text[ czech ] = "Panel filtru";
     Text[ hebrew ] = "‮סרגל מסננים‬";
     Text[ hindi ] = "फिल्टर पट्टी";
+    Text[ slovak ] = "Panel filtra";
 };
 
  //------------------------------------------------------------------------
@@ -159,6 +160,7 @@ ToolBox RID_SVXTBX_FORM_FILTER
     Text[ czech ] = "Panel filtru";
     Text[ hebrew ] = "‮סרגל מסננים‬";
     Text[ hindi ] = "फिल्टर पट्टी";
+    Text[ slovak ] = "Panel filtra";
 };
 
 String RID_SVXTBX_FORM_NAVIGATION
@@ -190,6 +192,7 @@ String RID_SVXTBX_FORM_NAVIGATION
     Text[ czech ] = "Panel databáze";
     Text[ hebrew ] = "‮סרגל מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय पट्टी";
+    Text[ slovak ] = "Panel databázy";
 };
 
  //------------------------------------------------------------------------
@@ -349,6 +352,7 @@ ToolBox RID_SVXTBX_FORM_NAVIGATION
     Text[ czech ] = "Panel databáze";
     Text[ hebrew ] = "‮סרגל מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय पट्टी";
+    Text[ slovak ] = "Panel databázy";
 };
 
  //------------------------------------------------------------------------
@@ -574,6 +578,7 @@ FloatingWindow RID_SVXTBX_FORM
     Text[ czech ] = "Funkce formuláře";
     Text[ hebrew ] = "‮פונקציות טופס‬";
     Text[ hindi ] = "फॉर्म् फंक्शन्स";
+    Text[ slovak ] = "Funkcie formulára";
 };
 
 ModalDialog RID_SVX_DLG_INPUTRECORDNO
@@ -629,6 +634,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         Text[ czech ] = "přejít na záznam";
         Text[ hebrew ] = "‮מעבר לרשומה‬";
         Text[ hindi ] = "लेखा में जाओ";
+        Text[ slovak ] = "prejsť na záznam";
     };
     NumericField 1
     {
@@ -661,7 +667,10 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text[ czech ] = "Číslo záznamu";
     Text[ hebrew ] = "‮מספר רשומה‬";
     Text[ hindi ] = "लेखा संख्या";
+    Text[ slovak ] = "Číslo záznamu";
 };
+
+
 
 
 
