@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 14:17:10 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 15:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,8 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 
                     Broadcaster aSender(m_aTreeImpl.getNotifier().makeBroadcaster(aChanges,false));
 
-                    aLocalGuard.downgrade(); // partial clear for broadcast
+        // Should be improved later. Maybe this is the wrong lock for disposeTree ?
+        //          aLocalGuard.downgrade(); // partial clear for broadcast
 
                     aSender.notifyListeners(aChanges, false);
 
