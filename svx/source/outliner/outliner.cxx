@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-19 11:11:17 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 12:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,11 +993,11 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
 
     aBulletFont.SetAlign( ALIGN_BOTTOM );
     aBulletFont.SetSize( Size( 0, nScaledLineHeight ) );
-    if( pEditEngine->IsFlatMode() || ( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
-    {
-        Color aColor( COL_BLACK );
-        aBulletFont.SetColor( aColor );
-    }
+
+    Color aColor( COL_BLACK );
+    if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
+        aColor = pFmt->GetBulletColor();
+    aBulletFont.SetColor( aColor );
     return aBulletFont;
 }
 

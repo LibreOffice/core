@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 10:45:26 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 12:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,18 @@ BOOL Outliner::ShouldCreateBigTextObject() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->ShouldCreateBigTextObject();
+}
+
+void Outliner::SetVertical( BOOL b )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetVertical( b );
+}
+
+BOOL Outliner::IsVertical() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->IsVertical();
 }
 
 // Hilfsfunktionen fuers Undo
