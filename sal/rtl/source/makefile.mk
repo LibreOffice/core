@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.2 $
+#	$Revision: 1.3 $
 #
-#	last change: $Author: th $ $Date: 2001-03-16 14:59:43 $
+#	last change: $Author: sb $ $Date: 2001-04-23 09:17:29 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -95,7 +95,8 @@ SLOFILES=	$(SLO)$/alloc.obj		\
             $(SLO)$/ustrbuf.obj 	\
             $(SLO)$/uuid.obj		\
             $(SLO)$/rtl_process.obj \
-            $(SLO)$/byteseq.obj
+            $(SLO)$/byteseq.obj		\
+            $(SLO)$/uri.obj
 
 .IF "$(GUI)" == "WIN"
 SLOFILES+=	$(SLO)$/tcwin16.obj
@@ -117,7 +118,8 @@ OBJFILES=	$(OBJ)$/alloc.obj		\
             $(OBJ)$/ustrbuf.obj 	\
             $(OBJ)$/uuid.obj		\
             $(OBJ)$/rtl_process.obj \
-            $(OBJ)$/byteseq.obj
+            $(OBJ)$/byteseq.obj		\
+            $(OBJ)$/uri.obj
 #.ENDIF
 
 .IF "$(GUI)" == "WIN"
