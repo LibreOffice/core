@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccessDataSource.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,13 @@
 
 module com { module sun { module star { module sdb {
 
-interface XCompletedConnection;
+ published interface XCompletedConnection;
 
 /**
  is a factory to create data access beans. Data access beans are shared amoung
  components, so if an already existing bean is requested, the existing one is returned.
  */
-service DatabaseAccessDataSource
+published service DatabaseAccessDataSource
 {
     interface com::sun::star::beans::XPropertySet;
     interface com::sun::star::sdbc::XDataSource;
