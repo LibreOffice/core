@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:14:46 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,23 @@ void MessBox::ImplInitButtons()
 
         AddButton( BUTTON_RETRY, BUTTONID_RETRY, nRetryFlags );
         AddButton( BUTTON_CANCEL, BUTTONID_CANCEL, nCancelFlags );
+    }
+    else if ( nStyle & WB_ABORT_RETRY_IGNORE )
+    {
+        USHORT nAbortFlags = 0;
+        USHORT nRetryFlags = 0;
+        USHORT nIgnoreFlags = 0;
 
+        if ( nStyle & WB_DEF_CANCEL )
+            nAbortFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+        else if ( nStyle & WB_DEF_RETRY )
+            nRetryFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+        else if ( nStyle & WB_DEF_IGNORE )
+            nIgnoreFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+
+        AddButton( BUTTON_ABORT, BUTTONID_CANCEL, nAbortFlags );
+        AddButton( BUTTON_RETRY, BUTTONID_RETRY, nRetryFlags );
+        AddButton( BUTTON_IGNORE, BUTTONID_IGNORE, nIgnoreFlags );
     }
     else if ( nStyle & WB_OK )
     {
