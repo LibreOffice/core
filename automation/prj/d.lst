@@ -1,5 +1,7 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\automation
 
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\sts?????.dll %_DEST%\bin%_EXT%\sts?????.dll
 ..\%__SRC%\lib\libsts* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\ists.lib %_DEST%\lib%_EXT%\ists.lib
