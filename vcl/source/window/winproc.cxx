@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sb $ $Date: 2001-12-19 13:54:21 $
+ *  last change: $Author: pl $ $Date: 2002-01-15 13:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,15 +1342,29 @@ long ImplHandleWheelEvent( Window* pWindow,
         USHORT nHitTest = IMPL_FLOATWIN_HITTEST_OUTSIDE;
         pMouseWindow = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pWindow, aMousePos, nHitTest );
     }
-    // then try the window directly beneath the mouse (use absolute screen coords!)
+    // then try the window directly beneath the mouse
     if( !pMouseWindow )
         pMouseWindow = pWindow->ImplFindWindow( aMousePos );
+    else
+        // transform coordinates to float window frame coordinates
+        pMouseWindow = pMouseWindow->ImplFindWindow(
+                 pMouseWindow->OutputToScreenPixel(
+                  pMouseWindow->AbsoluteScreenToOutputPixel(
+                   pWindow->OutputToAbsoluteScreenPixel(
+                    pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
 
     if ( pMouseWindow &&
          pMouseWindow->IsEnabled() && pMouseWindow->IsInputEnabled() )
-        bRet = ImplCallWheelCommand( pMouseWindow, aMousePos, &aWheelData );
+    {
+        // transform coordinates to float window frame coordinates
+        Point aRelMousePos( pMouseWindow->OutputToScreenPixel(
+                             pMouseWindow->AbsoluteScreenToOutputPixel(
+                              pWindow->OutputToAbsoluteScreenPixel(
+                               pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
+        bRet = ImplCallWheelCommand( pMouseWindow, aRelMousePos, &aWheelData );
+    }
 
-    // if the commad was not handeld try the focus window
+    // if the commad was not handled try the focus window
     if ( bRet )
     {
         Window* pFocusWindow = pWindow->mpFrameData->mpFocusWin;
@@ -1359,7 +1373,14 @@ long ImplHandleWheelEvent( Window* pWindow,
         {
             // no wheel-messages to disabled windows
             if ( pFocusWindow->IsEnabled() && pFocusWindow->IsInputEnabled() )
-                bRet = ImplCallWheelCommand( pFocusWindow, aMousePos, &aWheelData );
+            {
+                // transform coordinates to focus window frame coordinates
+                Point aRelMousePos( pFocusWindow->OutputToScreenPixel(
+                                     pFocusWindow->AbsoluteScreenToOutputPixel(
+                                      pWindow->OutputToAbsoluteScreenPixel(
+                                       pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
+                bRet = ImplCallWheelCommand( pFocusWindow, aRelMousePos, &aWheelData );
+            }
         }
     }
 
