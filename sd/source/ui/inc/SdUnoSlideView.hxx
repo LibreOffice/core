@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoSlideView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:54:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,11 @@ public:
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    sal_Bool            mbDisposing;
+
+    Rectangle           maLastVisArea;
 };
 
 } // end of namespace sd
