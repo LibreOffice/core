@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:33:55 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ chinese_simplified ] = "Ξή·¨Ιθ¶¨Ò³Βλ΅£ΤΪΧσÒ³ΙΟΦ»ΤΚΠν²ΙΣΓΕΌΚύÒ³Βλ£¬ΤΪΣÒÒ³ΙΟΦ»ΤΚΠν²ΙΣΓΖζΚύÒ³Βλ΅£";
     MESSAGE[ russian ] = "Νξμεπΰ ρςπΰνθφ οπξρςΰβθςό νεβξημξζνξ. Ρ λεβξι ρςξπξνϋ μξγσς αϋςό οπξρςΰβλενϋ ςξλόκξ χεςνϋε, ρ οπΰβξι - ςξλόκξ νεχεςνϋε φθτπϋ.";
     MESSAGE[ polish ] = "Nie moΏna nanieζ numeru stron. Na lewych stronach moΏna nanieζ tylko parzyste numery stron, na prawych tylko nieparzyste numery stron.";
-    MESSAGE[ japanese ] = "Νί°Όή”Τ†‚ª“K—p‚Ε‚«‚ά‚Ή‚ρB¶Νί°Όή‚Ι‚Ν‹τ”¤‰EΝί°Όή‚Ι‚Νο”‚πg—p‚µ‚Δ‰Ί‚³‚ΆB";
+    MESSAGE[ japanese ] = "Νί°Όή”Τ†‚Ν“K—p‚Ε‚«‚ά‚Ή‚ρB¶Νί°Όή‚Ι‚Ν‹τ”A‰EΝί°Όή‚Ι‚Νο”‚πg—p‚µ‚ά‚·B";
     MESSAGE[ chinese_traditional ] = "µLªk³]©w­¶½X΅C¦b¥ª­¶¥u―ΰ°χ³]©w°ΈΌΖ΅A¦b¥k­¶¥u―ΰ³]©w©_ΌΖ΅C";
     MESSAGE[ arabic ] = "αΗ νγίδ ΕΟΡΗΜ ΓΡήΗγ ΗαΥέΝΗΚ έν ΗαΥέΝΙ ΗαΝΗανΙ. Ϊαμ ΗαΥέΝΗΚ ΗανΣΡμ΅ νΣγΝ ΘΗΣΚΞΟΗγ ΓΡήΗγ ÒζΜνΙ έήΨ΅ ζΪαμ ΗαΥέΝΗΚ Ηανγδμ΅ ΓΡήΗγ έΡΟνΙ έήΨ.";
     MESSAGE[ greek ] = "Δεν είναι δυνατόν να τοποθετηθεί ο αριθμός σελίδας. Σε αριστερές σελίδες επιτρέπεται η τοποθέτηση μόνο ζυγών αριθμών σελίδας, ενώ σε δεξιές σελίδες μόνο αρτίων αριθμών.";
