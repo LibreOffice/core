@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:34:00 $
+ *  last change: $Author: mtg $ $Date: 2001-10-09 14:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
     {
     case FN_UNO_NUM_RULES:
         //wenn eine Numerierung gesetzt ist, dann hier herausreichen, sonst nichts tun
-        SwUnoCursorHelper::getNumberingProperty( rUnoCrsr, eRet );
+        SwUnoCursorHelper::getNumberingProperty( rUnoCrsr, eRet, NULL );
         break;
     case FN_UNO_ANCHOR_TYPES:
         break;
@@ -502,7 +502,8 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
         break;
     case FN_UNO_PAGE_STYLE:
         {
-            String sVal = SwUnoCursorHelper::GetCurPageStyle( rUnoCrsr );
+            String sVal;
+            SwUnoCursorHelper::GetCurPageStyle( rUnoCrsr, sVal );
             if( !sVal.Len() )
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;
         }
