@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-17 11:49:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,10 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     aBtnTile.Check();
 
     if ( pBgdAttr )
+    {
         FillControls_Impl(*pBgdAttr, aUserData);
+        aBgdColor = ( (SvxBrushItem*)pBgdAttr )->GetColor();
+    }
     else
     {
         aSelectTxt.Hide();
