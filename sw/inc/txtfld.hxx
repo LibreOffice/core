@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:59:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 14:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ public:
     inline void ExpandAlways();
 
     // erfrage und setze den TxtNode Pointer
-    const SwTxtNode* GetpTxtNode() const { return pMyTxtNd; }
-    inline const SwTxtNode& GetTxtNode() const;
+    SwTxtNode* GetpTxtNode() const { return pMyTxtNd; }
+    inline SwTxtNode& GetTxtNode() const;
     void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
     // enable notification that field content has changed and needs reformatting
     void NotifyContentChange(SwFmtFld& rFmtFld);
@@ -103,7 +103,7 @@ public:
     SwPosition * GetPosition() const;
 };
 
-inline const SwTxtNode& SwTxtFld::GetTxtNode() const
+inline SwTxtNode& SwTxtFld::GetTxtNode() const
 {
     ASSERT( pMyTxtNd, "SwTxtFld:: wo ist mein TextNode?" );
     return *pMyTxtNd;
