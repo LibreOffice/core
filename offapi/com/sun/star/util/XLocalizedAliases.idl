@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocalizedAliases.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ module com {  module sun {  module star {  module util {
 /** is the interface for binding programmatic names to aliases. Aliases
     can be provided in several locales for the same programmatic name.
  */
-interface XLocalizedAliases: com::sun::star::uno::XInterface
+published interface XLocalizedAliases: com::sun::star::uno::XInterface
 {
 
     /** registers an alias for a programmatic name.
