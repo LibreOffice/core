@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-20 13:45:26 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 11:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,7 +860,7 @@ namespace dbaui
                             // cancelled by the user
                             return 0L;
 
-                        sOldPath = xFolderPicker->getDisplayDirectory();
+                        sOldPath = xFolderPicker->getDirectory();
                         switch (checkPathExistence(sOldPath))
                         {
                             case RET_RETRY:
@@ -874,7 +874,7 @@ namespace dbaui
                     }
                     while (bDoBrowse);
 
-                    m_aConnection.SetTextNoPrefix(xFolderPicker->getDisplayDirectory());
+                    m_aConnection.SetTextNoPrefix(xFolderPicker->getDirectory());
                     callModifiedHdl();
                 }
                 catch(const Exception&)
@@ -1174,6 +1174,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/06/20 13:45:26  fs
+ *  #88447# call Select when browsing for an address book
+ *
  *  Revision 1.10  2001/06/15 09:42:43  fs
  *  #86986# moved css/ui/* to css/ui/dialogs/*
  *
