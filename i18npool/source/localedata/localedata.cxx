@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-10 09:12:40 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ static const struct {
         { "hr_HR",  lcl_DATA_EURO, "hr" },
         { "bs_BA",  lcl_DATA_EURO, "bs" },
         { "eu",     lcl_DATA_EURO, "eu" },
+        { "fo_FO",  lcl_DATA_EURO, "fo" },
+        { "ga_IE",  lcl_DATA_EURO, "ga" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -211,6 +213,7 @@ static const struct {
         { "sw_TZ",  lcl_DATA_OTHERS, "sw" },
         { "km_KH",  lcl_DATA_OTHERS, "km" },
         { "lo_LA",  lcl_DATA_OTHERS, "lo" },
+        { "rw_RW",  lcl_DATA_OTHERS, "rw" },
 
 //      { "be_BY",  lcl_DATA, "be" },
 //      { "br_AE",  lcl_DATA, "br" },
