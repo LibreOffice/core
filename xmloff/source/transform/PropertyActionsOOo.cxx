@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:08:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,7 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
           XMLTransformerActionInit::QNameParam( XML_NAMESPACE_FO, XML_TEXT_ALIGN ), 0 },
     { XML_NAMESPACE_STYLE, XML_JUSTIFY_SINGLE_WORD, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_BREAK_INSIDE, XML_ATACTION_COPY,
+    { XML_NAMESPACE_STYLE, XML_BREAK_INSIDE, XML_PTACTION_BREAK_INSIDE,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_WIDOWS, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -795,8 +795,6 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_TEXT, XML_ENABLE_NUMBERING, XML_ATACTION_COPY,
           NO_PARAMS }, /* TODO: undocumented*/
-    { XML_NAMESPACE_FO, XML_KEEP_TOGETHER, XML_ATACTION_COPY,
-          NO_PARAMS }, /* TODO: Avoid assert caused by #i32577#  */
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
