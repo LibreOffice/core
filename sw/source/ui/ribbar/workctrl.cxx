@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:58:28 $
+ *  last change: $Author: os $ $Date: 2002-12-02 08:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,16 +684,19 @@ void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
  * --------------------------------------------------*/
 class SwZoomBox_Impl : public ComboBox
 {
+    USHORT          nSlotId;
+    SfxBindings&    rBindings;
+    BOOL            bRelease;
 public:
     SwZoomBox_Impl( Window* pParent, USHORT nSlot, SfxBindings& rBind );
     ~SwZoomBox_Impl();
 
 protected:
     virtual void    Select();
+    virtual long    Notify( NotifyEvent& rNEvt );
 
-private:
-    USHORT          nSlotId;
-    SfxBindings&    rBindings;
+    void ReleaseFocus();
+
 };
 /* -----------------26.11.2002 09:29-----------------
  *
@@ -701,7 +704,8 @@ private:
 SwZoomBox_Impl::SwZoomBox_Impl( Window* pParent, USHORT nSlot, SfxBindings& rBind ):
     ComboBox(pParent, SW_RES(RID_PVIEW_ZOOM_LB)),
     nSlotId(nSlot),
-    rBindings(rBind)
+    rBindings(rBind),
+    bRelease(TRUE)
 {
     USHORT aZoomValues[] =
     {   25, 50, 75, 100, 150, 200 };
@@ -732,10 +736,70 @@ void    SwZoomBox_Impl::Select()
             SfxUInt16Item aItem( nSlotId, nZoom );
             rBindings.GetDispatcher()->Execute(
                 nSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-    //        ReleaseFocus();
+            ReleaseFocus();
         }
     }
 }
+/* -----------------02.12.2002 07:49-----------------
+ *
+ * --------------------------------------------------*/
+long SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
+{
+    long nHandled = 0;
+
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+
+        switch ( nCode )
+        {
+            case KEY_RETURN:
+            case KEY_TAB:
+            {
+                if ( KEY_TAB == nCode )
+                    bRelease = FALSE;
+                else
+                    nHandled = 1;
+                Select();
+                break;
+            }
+
+            case KEY_ESCAPE:
+                SetText( GetSavedValue() );
+                ReleaseFocus();
+                break;
+        }
+    }
+    else if ( EVENT_LOSEFOCUS == rNEvt.GetType() )
+    {
+        Window* pFocusWin = Application::GetFocusWindow();
+        if ( !HasFocus() && GetSubEdit() != pFocusWin )
+            SetText( GetSavedValue() );
+    }
+
+    return nHandled ? nHandled : ComboBox::Notify( rNEvt );
+}
+/* -----------------02.12.2002 07:51-----------------
+ *
+ * --------------------------------------------------*/
+void SwZoomBox_Impl::ReleaseFocus()
+{
+    if ( !bRelease )
+    {
+        bRelease = TRUE;
+        return;
+    }
+    SfxViewShell* pCurSh = SfxViewShell::Current();
+
+    if ( pCurSh )
+    {
+        Window* pShellWnd = pCurSh->GetWindow();
+
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
+}
+
 /* -----------------26.11.2002 09:29-----------------
  *
  * --------------------------------------------------*/
@@ -762,6 +826,14 @@ void SwPreviewZoomControl::StateChanged( USHORT nSID,
 {
     USHORT nId = GetId();
     GetToolBox().EnableItem( nId, (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
+    if(SFX_ITEM_AVAILABLE <= eState)
+    {
+        String sZoom(String::CreateFromInt32(((const SfxUInt16Item*)pState)->GetValue()));
+        sZoom += '%';
+        pBox->SetText(sZoom);
+        pBox->SaveValue();
+    }
 }
 /* -----------------26.11.2002 09:29-----------------
  *
