@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessiblePageHeader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: sw $
  *
@@ -98,6 +98,9 @@ import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XText;
 
+import com.sun.star.uno.Type;
+import com.sun.star.uno.AnyConverter;
+
 /**
  * Test for object which is represented by accessible component of
  * a printed header in 'Page Preview' mode.
@@ -140,7 +143,13 @@ public class ScAccessiblePageHeader extends TestCase {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = null;
+            try {
+                oSheet = (XSpreadsheet) AnyConverter.toObject(
+                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("couldn't get sheet",iae);
+            }
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessiblePageHeader");
         } catch(com.sun.star.lang.WrappedTargetException e) {
@@ -202,15 +211,19 @@ public class ScAccessiblePageHeader extends TestCase {
         XStyle StdStyle = null;
 
         try{
-            XNameAccess PageStyles = (XNameAccess)
-                                        StyleFamNames.getByName("PageStyles");
-            StdStyle = (XStyle)PageStyles.getByName("Default");
+            XNameAccess PageStyles = (XNameAccess) AnyConverter.toObject(
+                            new Type(XNameAccess.class),
+                                        StyleFamNames.getByName("PageStyles"));
+            StdStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class), PageStyles.getByName("Default"));
         } catch(com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by name", e);
         } catch(com.sun.star.container.NoSuchElementException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by name", e);
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+           throw new StatusException("Couldn't convert any", iae);
         }
 
         //get the property-set
@@ -222,12 +235,16 @@ public class ScAccessiblePageHeader extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
         try {
-            RPHC = (XHeaderFooterContent)
-                PropSet.getPropertyValue("RightPageHeaderContent");
+            RPHC = (XHeaderFooterContent) AnyConverter.toObject(
+                new Type(XHeaderFooterContent.class),
+                    PropSet.getPropertyValue("RightPageHeaderContent"));
         } catch(com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get HeaderContent", e);
         } catch(com.sun.star.beans.UnknownPropertyException e){
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get HeaderContent", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get HeaderContent", e);
         }
