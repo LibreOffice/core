@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSomethingA.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:14:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,18 +38,15 @@
  *
  *************************************************************************/
 
-#ifndef __com_sun_star_test_XSomethingA_idl__
-#define __com_sun_star_test_XSomethingA_idl__
+#ifndef _com_sun_star_test_XSomethingA_idl_
+#define _com_sun_star_test_XSomethingA_idl_
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 module com {  module sun {  module star {  module test {
-interface XSomethingA: com::sun::star::uno::XInterface
-{
-    string methodOne([in]string value);
-};
+    interface XSomethingA {
+        string methodOne([in]string value);
+    };
 }; }; }; };
 
 #endif
