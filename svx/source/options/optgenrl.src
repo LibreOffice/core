@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 09:36:04 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 14:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ danish ] = "~Father/First/Last/Id";
         Text[ portuguese_brazilian ] = "~Father/First/Last/Id";
         Text[ japanese ] = "~Father/First/Last/Id";
-        Text[ korean ] = "~ÀÌ¸§/¼º/ÀÌ¸§/Id";
+        Text[ korean ] = "ÀÌ¸§/¼º/ÀÌ¸§/Id";
         Text[ chinese_traditional ] = "~Father/First/Last/Id";
         Text[ turkish ] = "~Baba adı/Ad/Soyad/Başharfler";
     };
@@ -248,7 +248,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ swedish ] = "-";
         Text[ portuguese_brazilian ] = "~Street/Apartmentnumber";
         Text[ japanese ] = "~Street/Apartmentnumber";
-        Text[ korean ] = "~°Å¸® ¹øÁö¼ö/Áı È£¼ö";
+        Text[ korean ] = "°Å¸®  ¹øÁö¼ö/Áı È£¼ö";
         Text[ chinese_traditional ] = "~Street/Apartmentnumber";
         Text[ turkish ] = "Cadde/No.";
     };
@@ -419,7 +419,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_traditional ] = "¹q¸Ü(¨p¤H/¿ì¤½«Ç)(~E)";
         Text[ arabic ] = "ÇáåÇÊİ (ãäÒá/Úãá)";
         Text[ greek ] = "Ôçë. (Ïéêßá/Åñãáóßá)";
-        Text[ korean ] = "Tel. (Áı/È¸»ç)";
+        Text[ korean ] = "Tel. (ÀÚÅÃ/È¸»ç)";
         Text[ turkish ] = "Tlf. (Ev/İş)";
         Text[ language_user1 ] = " ";
     };
@@ -500,7 +500,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_traditional ] = " ¦a§} ";
         Text[ arabic ] = "ÇáÚäæÇä ";
         Text[ greek ] = " Äéåıèõíóç ";
-        Text[ korean ] = "ÁÖ¼Ò ";
+        Text[ korean ] = " ÁÖ¼Ò ";
         Text[ turkish ] = "Adres ";
         Text[ language_user1 ] = " ";
     };
@@ -570,7 +570,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ italian ] = "Vi preghiamo di osservare che il codice di registrazione si basa sull'indirizzo (via, C.A.P. e città) specificato. Fino alla registrazione questi dati non potranno essere cambiati. Volete cambiarli adesso?";
         Text[ danish ] = "Bemærk venligst, at gade, postnummer og by bruges til at beregne registreringsnøglen. Disse brugerdata kan ikke mere ændres indtil registreringen. Vil du endnu ændre dem nu?";
         Text[ swedish ] = "Observera att gatu- och postadress används för beräkningen av registreringsnyckeln. Fram till registreringen kan Du inte ändra mer på de här användardata. Vill Du ändra de här användardata nu?";
-        Text[ polish ] = "Proszê uwzglêdnij, ¿e nazwa ulicy, kod pocztowy i miejscowoœæ s¹ wymagane do utworzenia klucza rejestracyjnego. Do czasu rejestracji te dane nie mog¹ byæ zmienione. Czy chcesz zmieniæ teraz dane u¿ytkownika?";
+        Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e podanie nazwy ulicy, kodu pocztowego i miejscowoœci wymagane jest do utworzenia klucza rejestracyjnego. Do czasu rejestracji te danych nie mo¿na zmieniæ. Czy chcesz je teraz zmieniæ?";
         Text[ portuguese_brazilian ] = "Bitte beachten Sie, daß Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?";
         Text[ japanese ] = "s’¬‘º–¼‚â—X•Ö”Ô†‚âB–¼A“s“¹•{Œ§–¼‚Í“o˜^·°‚ğ”­s‚·‚éè‚ª‚©‚è‚Æ‚È‚è‚Ü‚·B“o˜^‚ªÏ‚Ş‚Ü‚Å‚ÍÕ°»Ş°ÃŞ°À‚Í•ÏX‚Å‚«‚Ü‚¹‚ñB‚±‚ÌÕ°»Ş°ÃŞ°À‚ğ‚Ü‚¾•ÏX‚µ‚Ü‚·‚©H";
         Text[ chinese_simplified ] = "Çë×¢Òâ£º½ÖµÀ£¬ÓÊ±àºÍ³ÇÊĞÊÇÓÃÀ´Éú³É×¢²áÃÜÂëµÄÊı¾İ¡£ÔÚÕıÊ½×¢²áÇ°Äú²»ÄÜÔÙ¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏ¡£ÄúÏÖÔÚÒª¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏÂğ£¿";
@@ -608,7 +608,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ danish ] = "Du har ændret brugerdataene.\nBemærk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnøgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjælp - Registrering...\nEr du sikker på, at du vil ændre brugerdataene?";
     Message[ chinese_simplified ] = "ÄúÒÑ¾­¸ü¸ÄÁËÓÃ»§×ÊÁÏ¡£\nÕâÑùÄúµÄ×¢²á¾Í»áÎŞĞ§¡£\nÄú±ØĞëÔÚ½ñºó30ÌìÖ®ÄÚÊäÈëÒ»¸öĞÂµÄ×¢²áÃÜÂë¡£\nÄúÄÜ¹»ÔÚ²Ëµ¥¡°°ïÖú - ×¢²á...¡±´¦ÕÒµ½×¢²á±íµ¥¡£\nÄúÕæÒª¸ü¸ÄÓÃ»§×ÊÁÏ£¿";
     Message[ russian ] = "Âû èçìåíèëè äàííûå ïîëüçîâàòåëÿ.\nÏîæàëóéñòà, ïîìíèòå, ÷òî èç-çà ıòîãî Âû óòğàòèòå ğåãèñòğàöèş.\nÂàì ïîíîäîáèòñÿ íîâûé ğåãèñòğàöèîííûé êëş÷, êîòîğûé íåîáõîäèìî áóäåò ââåñòè â òå÷åíèå 30 äíåé.\nĞåãèñòğàöèîííûé ôîğìóëÿğ Âû íàéäåòå â ìåíş Ñïğàâêà - Ğåãèñòğàöèÿ...\nÂû äåéñòâèòåëüíî õîòèòå èçìåíèòü äàííûå ïîëüçîâàòåëÿ?";
-    Message[ polish ] = "Zmieni³eœ dane u¿ytkownika.\nProszê uwzglêdnij, ¿e przez to traci wa¿noœæ rejestracja.\nPotrzebujesz nowego klucza rejestracyjnego, który musi byæ wpisany w ci¹gu nastêpnych 30 dni.\nFormularz rejestracji znajdziesz w menu Pomoc - Rejestracja...\nChcesz na pewno zmieniæ dane u¿ytkownika?";
+    Message[ polish ] = "Zmieniono dane u¿ytkownika.\nNale¿y uwzglêdniæ, ¿e przez to traci wa¿noœæ rejestracja.\nWymagany bêdzie nowy klucz rejestracyjny, który nale¿y wprowadziæ w ci¹gu nastêpnych 30 dni.\nFormularz rejestracyjny znajduje siê w menu Pomoc - Rejestracja...\nCzy na pewno zmieniæ dane u¿ytkownika?";
     Message[ japanese ] = "Õ°»Ş°ÃŞ°À‚ª•ÏX‚³‚ê‚Ü‚µ‚½B\n‚»‚Ì‚½‚ß“o˜^‚ª¸Œø‚·‚é‚Ì‚Í–Æ‚ê‚Ü‚¹‚ñB\nV‚µ‚¢“o˜^·°‚ª•K—v‚Æ‚È‚è¤‚»‚ê‚ğ30“úˆÈ“à‚ÉÏ‚Ü‚³‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\n“o˜^—p†‚Í[ÒÆ­°ÍÙÌß/“o˜^...]‚É‚ ‚è‚Ü‚·B\nÕ°»Ş°ÃŞ°À‚ğ–{“–‚É•ÏX‚µ‚Ü‚·‚©?";
     Message[ chinese_traditional ] = "±z¤w¸gÅÜ§ó¨Ï¥ÎªÌ¸ê®Æ¡C\n³o¼Ë±zªºµù¥U´N·|µL®Ä¡C\n±z»İ­n¤@­Ó·sªº¡M¥B¥²¶·¦b30¤Ñ¤§¤º¿é¤Jªºµù¥U±KÁä½X¡C\n±z¯à°÷¦b¥\\¯àªí»¡©ú¡Aµù¥U¤§¤U§ä¨ìµù¥Uªí®æ¡C\n¯u­n­×§ï¨Ï¥ÎªÌ¸ê®Æ¡H";
     Message[ arabic ] = "áŞÏ ŞãÊ ÈÊÚÏíá ÈíÇäÇÊ ÇáãÓÊÎÏã.\nÇáÑÌÇÁ ãáÇÍÙÉ Ãä åĞÇ ÇáÊÚÏíá Óæİ íÌÚá ÇáÊÓÌíá ÛíÑ ÕÇáÍ.\nÓæİ ÊÍÊÇÌ Åáì ãİÊÇÍ ÊÓÌíá ÌÏíÏ¡ íÌÈ ÅÏÎÇáå ÎáÇá ÇáËáÇËíä íæãÇğ ÇáŞÇÏãíä.\níãßäß ÇáÍÕæá Úáì ÇÓÊãÇÑÉ ÇáÊÓÌíá İí ŞÇÆãÉ \"ãÓÇÚÏÉ\" ÊÍÊ \"ÊÓÌíá\"...\nåá ÊÑíÏ ÈÇáÊÃßíÏ ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã¿";
