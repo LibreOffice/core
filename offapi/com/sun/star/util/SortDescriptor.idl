@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:16:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module util {
 
     @deprecated
  */
-service SortDescriptor
+published service SortDescriptor
 {
      interface com::sun::star::beans::XPropertySet;
 
