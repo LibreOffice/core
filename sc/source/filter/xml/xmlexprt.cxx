@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:33:07 $
+ *  last change: $Author: sab $ $Date: 2001-10-04 15:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,12 @@
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
 #endif
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
+#ifndef SC_SCDOCPOL_HXX
+#include "docpool.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
@@ -163,6 +169,9 @@
 #endif
 #ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
+#endif
+#ifndef _XMLOFF_XMLCNITM_HXX
+#include <xmloff/xmlcnitm.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -3225,6 +3234,44 @@ XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExp
         pNumberFormatAttributesExportHelper->SetExport(this);
     }
     return pNumberFormatAttributesExportHelper;
+}
+
+sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
+{
+    if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
+                             EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
+    {
+        const SfxPoolItem* pItem;
+        const SfxItemPool* pPool = GetDocument()->GetPool();
+        sal_uInt16 i=0, nItems = pPool->GetItemCount( ATTR_USERDEF );
+        for( i = 0; i < nItems; ++i )
+        {
+            if( 0 != (pItem = pPool->GetItem( ATTR_USERDEF, i ) ) )
+            {
+                const SvXMLAttrContainerItem *pUnknown =
+                            (const SvXMLAttrContainerItem *)pItem;
+                if( (pUnknown->GetAttrCount() > 0) )
+                {
+                    sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
+                    while( USHRT_MAX != nIdx )
+                    {
+                        if( (XML_NAMESPACE_UNKNOWN_FLAG & nIdx) != 0 )
+                        {
+                            const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
+                            // Add namespace declaration for unknown attributes if
+                            // there aren't existing ones for the prefix used by the
+                            // attibutes
+                            _GetNamespaceMap().Add( rPrefix,
+                                                    pUnknown->GetNamespace( nIdx ),
+                                                    XML_NAMESPACE_UNKNOWN );
+                        }
+                        nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
+                    }
+                }
+            }
+        }
+    }
+    return SvXMLExport::exportDoc( eClass );
 }
 
 // XExporter

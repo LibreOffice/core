@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-10-04 15:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,9 @@ public:
     void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }
     ScMySharedData* GetSharedData() { return pSharedData; }
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
+
+    // Export the document.
+    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
