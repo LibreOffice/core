@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:55:14 $
+ *  last change: $Author: dr $ $Date: 2001-04-06 09:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ private:
     USHORT                      CalcSpan( ScHTMLTableDataKey eCRKey, ULONG nIndex, USHORT nSpan ) const;
 
     void                        SetMaxCount( Table& rDataTab, ULONG nIndex, USHORT nCount );
-    inline void                 ChangeDocCoord( short nColDiff, short nRowDiff );
+    void                        ChangeDocCoord( short nColDiff, short nRowDiff );
 
     void                        RecalcSizeDim( ScHTMLTableDataKey eCRKey );
 
@@ -210,12 +210,6 @@ inline void ScHTMLTableData::SetCellCoord( USHORT nCol, USHORT nRow )
 {
     nLastCol = Max( nLastCol, nCol );
     nLastRow = Max( nLastRow, nRow );
-}
-
-inline void ScHTMLTableData::ChangeDocCoord( short nColDiff, short nRowDiff )
-{
-    nDocCol += nColDiff;
-    nDocRow += nRowDiff;
 }
 
 

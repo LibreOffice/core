@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:54:57 $
+ *  last change: $Author: dr $ $Date: 2001-04-06 09:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,14 +200,20 @@ ScHTMLTableData* ScHTMLTableData::InsertNestedTable(
     return pNestedTables->InsertTable( nTab, rTabName, _nFirstCol, _nFirstRow, _nColSpan, _nRowSpan );
 }
 
+void ScHTMLTableData::ChangeDocCoord( short nColDiff, short nRowDiff )
+{
+    nDocCol += nColDiff;
+    nDocRow += nRowDiff;
+    if( pNestedTables )
+        for( ScHTMLTableData* pTable = pNestedTables->GetFirst(); pTable; pTable = pNestedTables->GetNext() )
+            pTable->ChangeDocCoord( nColDiff, nRowDiff );
+}
+
 void ScHTMLTableData::SetDocCoord( USHORT nCol, USHORT nRow )
 {
     short nColDiff = nCol - nFirstCol;
     short nRowDiff = nRow - nFirstRow;
     ChangeDocCoord( nColDiff, nRowDiff );
-    if( pNestedTables )
-        for( ScHTMLTableData* pTable = pNestedTables->GetFirst(); pTable; pTable = pNestedTables->GetNext() )
-            pTable->ChangeDocCoord( nColDiff, nRowDiff );
 }
 
 void ScHTMLTableData::RecalcSizeDim( ScHTMLTableDataKey eCRKey )
@@ -1070,7 +1076,7 @@ void ScHTMLParser::CloseEntry( ImportInfo* pInfo )
         DBG_ERRORFILE( "CloseEntry: EditEngine ESelection Start > End" );
         rSel.nEndPara = rSel.nStartPara;
     }
-    if ( rSel.HasRange() )
+    if ( rSel.HasRange() && bCalcWidthHeight )
         pActEntry->aItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, TRUE ) );
     pList->Insert( pActEntry, LIST_APPEND );
     NewActEntry( pActEntry );   // neuer freifliegender pActEntry
