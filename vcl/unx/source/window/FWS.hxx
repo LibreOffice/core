@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FWS.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:48 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,5 +94,5 @@ AddFwsProtocols (Display *display, Window window);
 } /* extern "C" */
 #endif
 
-#endif _FOREIGN_WINDOW_SYSTEM_HXX
+#endif // _FOREIGN_WINDOW_SYSTEM_HXX
 
