@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:09:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     }
 
     SW_DLLPRIVATE void CalcHiddenCharFlags() const;
+    SwNodeNum * _GetOutlineNum() const;
 
 public:
     const String& GetTxt() const { return aText; }
@@ -425,6 +426,9 @@ public:
     BOOL IsNumbered() const;
     BOOL HasMarkedLabel() const;
     // <- #i27615#
+
+    BYTE GetOutlineLevel() const;
+    void SetOutlineLevel(BYTE nLevel);
 
     USHORT GetWidthOfLeadingTabs() const;
 
