@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:26:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ english_us ] = "Undo $(ARG1) action(s)";
     Text[ portuguese ] = "Anular operaηγo $(ARG1)";
     Text[ russian ] = "Ξςμενθςό $(ARG1)";
-    Text[ greek ] = "Undo $(ARG1) action";
+    Text[ greek ] = "Αναίρεση της(ων) ενέργειας(ών) $(ARG1)";
     Text[ dutch ] = "Ongedaan maken $(ARG1) activiteit(en)";
     Text[ french ] = "Annuler $(ARG1) opιration(s)";
     Text[ spanish ] = "Deshacer $(ARG1) acciσn(es)";
@@ -127,7 +127,7 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ english_us ] = "Redo $(ARG1) action(s)";
     Text[ portuguese ] = "Restaurar operaηγo $(ARG1)";
     Text[ russian ] = "Βεπνσςό $(ARG1)";
-    Text[ greek ] = "Επαναφορά $(ARG1) ενέργειας(ών)";
+    Text[ greek ] = "Επανεκτέλεση $(ARG1) ενέργειας(ών)";
     Text[ dutch ] = "Herhalen $(ARG1) activiteit(en)";
     Text[ french ] = "Restaurer $(ARG1) opιration(s)";
     Text[ spanish ] = "Restaurar $(ARG1) acciσn(es)";
@@ -150,6 +150,7 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ hindi ] = "$(ARG1) ΰ¤•ΰ¤Ύΰ¤°ΰ¥ΰ¤―ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤«ΰ¤Ώΰ¤° ΰ¤Έΰ¥‡ ΰ¤•ΰ¤°ΰ¥‹";
     Text[ slovak ] = "Znova akcia $(ARG1)";
 };
+
 
 
 
