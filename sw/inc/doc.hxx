@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:53:26 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1867,6 +1867,8 @@ public:
 
     void SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew );
     void GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const;
+    void SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew );
+    void GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const;
     sal_Bool BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly = sal_True );
     void SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew );
     sal_Bool GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) const;
