@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:43:37 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 17:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,9 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
 
     // disable "Thesaurus" if the language is not supported
-    const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);
+    const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
+                    GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                        GetScriptTypeOfLanguage( LANGUAGE_SYSTEM )) );
     LanguageType nLang = ((const SvxLanguageItem &) rItem).GetLanguage();
     //
     uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );

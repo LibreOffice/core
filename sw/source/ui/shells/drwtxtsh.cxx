@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 17:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,32 +64,33 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-
-
-#if defined( WIN ) || defined( WNT )
-//#include <svwin.h>
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
+
+#ifndef _OFF_APP_HXX
 #include <offmgr/app.hxx>
 #endif
-#ifndef _SVX_FONTITEM_HXX //autogen
+#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
 #endif
-#ifndef _SVX_LANGITEM_HXX //autogen
+#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-#ifndef _SVDVIEW_HXX //autogen
+#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
 #endif
-#ifndef _SV_MSGBOX_HXX //autogen
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SVX_CHARMAP_HXX //autogen
+#ifndef _SVX_CHARMAP_HXX
 #include <svx/charmap.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX //autogen
+#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFXOBJFACE_HXX
+#include <sfx2/objface.hxx>
 #endif
 #ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
@@ -106,8 +107,8 @@
 #ifndef _SVX_TEXTANIM_HXX //autogen
 #include <svx/textanim.hxx>
 #endif
-#ifndef _XDEF_HXX //autogen
-#include <xdef.hxx>
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -133,28 +134,58 @@
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
 #endif
-
-
-#include "swtypes.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "uiparam.hxx"
-#include "viewopt.hxx"
-#include "cmdid.h"
-#include "globals.hrc"
-#include "helpid.h"
-#include "shells.hrc"
-#include "initui.hxx"               // fuer SpellPointer
-#include "drwtxtsh.hxx"
-#include "swundo.hxx"
-
-#ifndef _SFXOBJFACE_HXX //autogen
-#include <sfx2/objface.hxx>
+#ifndef _XDEF_HXX //autogen
+#include <xdef.hxx>
 #endif
+
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _INITUI_HXX
+#include <initui.hxx>               // fuer SpellPointer
+#endif
+#ifndef _DRWTXTSH_HXX
+#include <drwtxtsh.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _SHELLS_HRC
+#include <shells.hrc>
+#endif
+
 #define SwDrawTextShell
-#include "itemdef.hxx"
-#include "swslots.hxx"
-#include "popup.hrc"
+#ifndef _ITEMDEF_HXX
+#include <itemdef.hxx>
+#endif
+#ifndef _SWSLOTS_HXX
+#include <swslots.hxx>
+#endif
+#ifndef _POPUP_HRC
+#include <popup.hrc>
+#endif
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
@@ -441,23 +472,22 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 
     if( rSh.GetDrawView()->GetMarkList().GetMarkCount() )
     {
-        LanguageType nLang = ((const SvxLanguageItem&)rSh.
-                               GetDefault(RES_CHRATR_LANGUAGE)).GetLanguage();
+        LanguageType nLang = ((const SvxLanguageItem&)rSh.GetDefault(
+                                   GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                                GetScriptTypeOfLanguage( LANGUAGE_SYSTEM )) )
+                                ).GetLanguage();
         switch(rReq.GetSlot())
         {
-            case FN_THESAURUS_DLG:
-            {
-                pOLV->StartThesaurus( nLang );
-                break;
-            }
-            case FN_SPELLING_DLG:
-            {
-                pOLV->StartSpeller( nLang );
-                break;
-            }
-            default:
-                ASSERT(!this, "unexpected slot-id");
-                return;
+        case FN_THESAURUS_DLG:
+            pOLV->StartThesaurus( nLang );
+            break;
+
+        case FN_SPELLING_DLG:
+            pOLV->StartSpeller( nLang );
+            break;
+
+        default:
+            ASSERT(!this, "unexpected slot-id");
         }
     }
 }
@@ -643,6 +673,9 @@ void SwDrawTextShell::InsertSymbol()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:46  hr
+      initial import
+
       Revision 1.113  2000/09/18 16:06:03  willem.vandorp
       OpenOffice header added.
 
