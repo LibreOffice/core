@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:11:08 $
+ *  last change: $Author: hr $ $Date: 2001-10-22 16:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,37 +191,7 @@ private:
 // = class FmSearchEngine - Impl-Klasse fuer FmSearchDialog
 // ===================================================================================================
 
-class FmSearchEngine
-{
-    friend class FmSearchThread;
-
-    enum SEARCH_RESULT { SR_FOUND, SR_NOTFOUND, SR_ERROR, SR_CANCELED };
-    enum SEARCHFOR_TYPE { SEARCHFOR_STRING, SEARCHFOR_NULL, SEARCHFOR_NOTNULL };
-
-    // zugrundeliegende Daten
-    CursorWrapper           m_xSearchCursor;
-    SvInt32Array            m_arrFieldMapping;
-        // da der Iterator durchaus mehr Spalten haben kann, als ich eigentlich verwalte (in meiner Feld-Listbox),
-        // muss ich mir hier ein Mapping dieser ::com::sun::star::form-Schluessel auf die Indizies der entsprechenden Spalten im Iterator halten
-
-    // der Formatter
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xFormatSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
-
-    CharClass               m_aCharacterClassficator;
-
-    // die Sammlung aller interesanten Felder (bzw. ihre ::com::sun::star::data::XDatabaseVariant-Interfaces und ihre FormatKeys)
-    struct FieldInfo
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >          xContents;
-        sal_uInt32              nFormatKey;
-        sal_Bool                bDoubleHandling;
-    };
-
-    DECLARE_STL_VECTOR(FieldInfo, FieldCollection);
-    FieldCollection             m_arrUsedFields;
-    sal_Int32                   m_nCurrentFieldIndex;   // der letzte Parameter von RebuildUsedFields, ermoeglicht mir Checks in FormatField
-
+namespace svxform {
     // We have three possible control types we may search in, determined by the supported interfaces : ::com::sun::star::awt::XTextComponent, ::com::sun::star::awt::XListBox, ::com::sun::star::awt::XCheckBox.
     // While searching we don't want to do this distinction for every control in every round. So we need some helpers.
     class ControlTextWrapper
@@ -258,7 +228,40 @@ class FmSearchEngine
         CheckBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >& _xBox);
         virtual ::rtl::OUString getCurrentText() const;
     };
-    DECLARE_STL_VECTOR(ControlTextWrapper*, ControlTextSuppliers);
+}
+
+class FmSearchEngine
+{
+    friend class FmSearchThread;
+
+    enum SEARCH_RESULT { SR_FOUND, SR_NOTFOUND, SR_ERROR, SR_CANCELED };
+    enum SEARCHFOR_TYPE { SEARCHFOR_STRING, SEARCHFOR_NULL, SEARCHFOR_NOTNULL };
+
+    // zugrundeliegende Daten
+    CursorWrapper           m_xSearchCursor;
+    SvInt32Array            m_arrFieldMapping;
+        // da der Iterator durchaus mehr Spalten haben kann, als ich eigentlich verwalte (in meiner Feld-Listbox),
+        // muss ich mir hier ein Mapping dieser ::com::sun::star::form-Schluessel auf die Indizies der entsprechenden Spalten im Iterator halten
+
+    // der Formatter
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xFormatSupplier;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
+
+    CharClass               m_aCharacterClassficator;
+
+    // die Sammlung aller interesanten Felder (bzw. ihre ::com::sun::star::data::XDatabaseVariant-Interfaces und ihre FormatKeys)
+    struct FieldInfo
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >          xContents;
+        sal_uInt32              nFormatKey;
+        sal_Bool                bDoubleHandling;
+    };
+
+    DECLARE_STL_VECTOR(FieldInfo, FieldCollection);
+    FieldCollection             m_arrUsedFields;
+    sal_Int32                   m_nCurrentFieldIndex;   // der letzte Parameter von RebuildUsedFields, ermoeglicht mir Checks in FormatField
+
+    DECLARE_STL_VECTOR(svxform::ControlTextWrapper*, ControlTextSuppliers);
     ControlTextSuppliers    m_aControlTexts;
 
     sal_Bool                m_bUsingTextComponents;
