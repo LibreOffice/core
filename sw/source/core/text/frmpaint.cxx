@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 09:39:19 $
+ *  last change: $Author: fme $ $Date: 2001-11-29 10:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,37 +803,98 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
 void SwTxtFrm::CriticalLines( const OutputDevice& rOut, SwStripes &rStripes,
     long nOffs)
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),
+        "SwTxtFrm::CriticalLines with swapped frame" );
+    SWRECTFN( this )
+    long nFrmHeight;
+#endif
+
     GetFormatted();
     if( HasPara() )
     {
+#ifdef VERTICAL_LAYOUT
+        const long nTopMargin = (this->*fnRect->fnGetTopMargin)();
+        SwStripe aStripe( (Frm().*fnRect->fnGetTop)(), nTopMargin );
+        if ( nTopMargin )
+#else
         SwStripe aStripe( Frm().Top(), Prt().Top() );
         if( Prt().Top() )
+#endif
         {
             rStripes.Insert( aStripe, rStripes.Count() );
+#ifdef VERTICAL_LAYOUT
+            aStripe.Y() -= nTopMargin;
+#else
             aStripe.Y() += Prt().Top();
+#endif
         }
         SwLineLayout* pLay = GetPara();
         do
         {
+#ifdef VERTICAL_LAYOUT
+            SwTwips nBase = aStripe.GetY() +
+                           ( bVert ? -pLay->GetAscent() : pLay->GetAscent() );
+
+            long nLogToPixBase, nLogToPixSum, nLogToPixOffs;
+
+            if ( bVert )
+            {
+                nLogToPixBase = rOut.LogicToPixel( Point( nBase, 0 ) ).X();
+                nLogToPixSum = rOut.LogicToPixel( Point( nBase + nOffs, 0 ) ).X();
+                nLogToPixOffs = -rOut.LogicToPixel( Size( nOffs, 0 ) ).Width();
+            }
+            else
+            {
+                nLogToPixBase = rOut.LogicToPixel( Point( 0, nBase ) ).Y();
+                nLogToPixSum = rOut.LogicToPixel( Point( 0, nBase - nOffs ) ).Y();
+                nLogToPixOffs = rOut.LogicToPixel( Size( 0, nOffs ) ).Height();
+            }
+
+            if( nLogToPixBase != nLogToPixSum + nLogToPixOffs )
+#else
             SwTwips nBase = aStripe.GetY() + pLay->GetAscent();
             if( rOut.LogicToPixel( Point( 0, nBase ) ).Y() !=
                 rOut.LogicToPixel( Point( 0, nBase - nOffs ) ).Y() +
                 rOut.LogicToPixel( Size( 0, nOffs ) ).Height() )
+#endif
             {
                 aStripe.Height() = pLay->GetRealHeight();
                 rStripes.Insert( aStripe, rStripes.Count() );
             }
+#ifdef VERTICAL_LAYOUT
+            aStripe.Y() += ( bVert ? -pLay->GetRealHeight() :
+                                      pLay->GetRealHeight() );
+#else
             aStripe.Y() += pLay->GetRealHeight();
+#endif
             pLay = pLay->GetNext();
         } while( pLay );
+
+#ifdef VERTICAL_LAYOUT
+        const long nBottomMargin = (this->*fnRect->fnGetBottomMargin)();
+        if( nBottomMargin )
+#else
         if( Prt().Top() + Prt().Height() < Frm().Height() )
+#endif
         {
+
+#ifdef VERTICAL_LAYOUT
+            aStripe.Height() = nBottomMargin;
+#else
             aStripe.Height() = Frm().Height() - Prt().Top() - Prt().Height();
+#endif
+
             rStripes.Insert( aStripe, rStripes.Count() );
         }
     }
+#ifdef VERTICAL_LAYOUT
+    else if( nFrmHeight = (Frm().*fnRect->fnGetHeight)() )
+        rStripes.Insert( SwStripe( (Frm().*fnRect->fnGetTop)(), nFrmHeight ),
+                         rStripes.Count() );
+#else
     else if( Frm().Height() )
         rStripes.Insert(SwStripe(Frm().Top(),Frm().Height()), rStripes.Count());
+#endif
 }
-
 
