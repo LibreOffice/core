@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,6 @@ OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     ,m_PB_DELETEUSER(   this , ResId(PB_DELETEUSER))
     ,m_FL_TABLE_GRANTS( this , ResId(FL_TABLE_GRANTS))
     ,m_TableCtrl(       this , ResId(CTRL_TABLE_GRANTS))
-    ,m_pAdminDialog(NULL)
 {
     DBG_CTOR(OUserAdmin,NULL);
     m_LB_USER.SetSelectHdl(LINK(this, OUserAdmin, ListDblClickHdl));
@@ -237,7 +236,7 @@ OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
 OUserAdmin::~OUserAdmin()
 {
     DBG_DTOR(OUserAdmin,NULL);
-    ::comphelper::disposeComponent(m_xConnection);
+    m_xConnection = NULL;
 }
 // -----------------------------------------------------------------------
 void OUserAdmin::FillUserNames()
@@ -248,30 +247,33 @@ void OUserAdmin::FillUserNames()
 
         Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
-        m_UserName = xMetaData->getUserName();
-
-        // first we need the users
-        if(m_xUsers.is())
+        if ( xMetaData.is() )
         {
-            m_LB_USER.Clear();
+            m_UserName = xMetaData->getUserName();
 
-            m_aUserNames = m_xUsers->getElementNames();
-            const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
-            const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
-            ::rtl::OUString sUserName = m_UserName;
-            for(;pBegin != pEnd;++pBegin)
-                m_LB_USER.InsertEntry(*pBegin);
-
-            m_LB_USER.SelectEntryPos(0);
-            if(m_xUsers->hasByName(m_UserName))
+            // first we need the users
+            if ( m_xUsers.is() )
             {
-                Reference<XAuthorizable> xAuth;
-                m_xUsers->getByName(m_UserName) >>= xAuth;
-                m_TableCtrl.setGrantUser(xAuth);
-            }
+                m_LB_USER.Clear();
 
-            m_TableCtrl.setUserName(GetUser());
-            m_TableCtrl.Init();
+                m_aUserNames = m_xUsers->getElementNames();
+                const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
+                const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
+                ::rtl::OUString sUserName = m_UserName;
+                for(;pBegin != pEnd;++pBegin)
+                    m_LB_USER.InsertEntry(*pBegin);
+
+                m_LB_USER.SelectEntryPos(0);
+                if(m_xUsers->hasByName(m_UserName))
+                {
+                    Reference<XAuthorizable> xAuth;
+                    m_xUsers->getByName(m_UserName) >>= xAuth;
+                    m_TableCtrl.setGrantUser(xAuth);
+                }
+
+                m_TableCtrl.setUserName(GetUser());
+                m_TableCtrl.Init();
+            }
         }
     }
 
@@ -288,25 +290,6 @@ void OUserAdmin::FillUserNames()
 SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet& _rAttrSet )
 {
     return ( new OUserAdmin( pParent, _rAttrSet ) );
-}
-// -----------------------------------------------------------------------
-sal_Bool OUserAdmin::FillItemSet( SfxItemSet& _rSet )
-{
-    return sal_True;
-}
-// -----------------------------------------------------------------------
-sal_Int32* OUserAdmin::getDetailIds()
-{
-    static sal_Int32* pRelevantIds = NULL;
-    if (!pRelevantIds)
-    {
-        static sal_Int32 nRelevantIds[] =
-        {
-            0
-        };
-        pRelevantIds = nRelevantIds;
-    }
-    return pRelevantIds;
 }
 // -----------------------------------------------------------------------
 IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
@@ -367,6 +350,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 }
             }
         }
+        FillUserNames();
     }
     catch(SQLException& e)
     {
@@ -378,7 +362,6 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
         return 0;
     }
 
-    FillUserNames();
     return 0;
 }
 // -----------------------------------------------------------------------
@@ -401,41 +384,6 @@ String OUserAdmin::GetUser()
     return m_LB_USER.GetSelectEntry();
 }
 // -----------------------------------------------------------------------------
-void OUserAdmin::ActivatePage( const SfxItemSet& rCoreAttrs )
-{
-    DBG_CHKTHIS( OUserAdmin, NULL );
-    OGenericAdministrationPage::ActivatePage(rCoreAttrs);
-
-    m_TableCtrl.setORB(m_xORB);
-
-    if(!m_xConnection.is() && m_pAdminDialog)
-    {
-        try
-        {
-            Reference< XDataDefinitionSupplier > xDriver(m_pAdminDialog->getDriver(),UNO_QUERY);
-            if(xDriver.is())
-            {
-                m_xConnection = m_pAdminDialog->createConnection();
-                if(m_xConnection.is())
-                {
-                    // now set the tables supplier at the table control
-                    Reference< XTablesSupplier > xTablesSup = xDriver->getDataDefinitionByConnection(m_xConnection);
-                    m_TableCtrl.setTablesSupplier(xTablesSup);
-
-                    Reference<XUsersSupplier> xUsersSup(xTablesSup,UNO_QUERY);
-                    if(xUsersSup.is())
-                        m_xUsers = xUsersSup->getUsers();
-                }
-            }
-        }
-        catch(SQLException& e)
-        {
-            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,m_xORB);
-        }
-    }
-    FillUserNames();
-}
-// -----------------------------------------------------------------------------
 int OUserAdmin::DeactivatePage(SfxItemSet* _pSet)
 {
     int nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
@@ -443,3 +391,45 @@ int OUserAdmin::DeactivatePage(SfxItemSet* _pSet)
     return nResult;
 }
 // -----------------------------------------------------------------------------
+void OUserAdmin::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+{
+}
+// -----------------------------------------------------------------------
+void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+{
+}
+// -----------------------------------------------------------------------------
+void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+{
+    m_TableCtrl.setORB(m_xORB);
+    try
+    {
+        if ( !m_xConnection.is() && m_pAdminDialog )
+        {
+            Reference< XDataDefinitionSupplier > xDriver(m_pAdminDialog->getDriver(),UNO_QUERY);
+            if ( xDriver.is() )
+            {
+                m_xConnection = m_pAdminDialog->createConnection();
+                if ( m_xConnection.is() )
+                {
+                    // now set the tables supplier at the table control
+                    Reference< XTablesSupplier > xTablesSup = xDriver->getDataDefinitionByConnection(m_xConnection);
+
+                    Reference<XUsersSupplier> xUsersSup(xTablesSup,UNO_QUERY);
+                    if ( xUsersSup.is() )
+                    {
+                        m_TableCtrl.setTablesSupplier(xTablesSup);
+                        m_xUsers = xUsersSup->getUsers();
+                    }
+                }
+            }
+        }
+        FillUserNames();
+    }
+    catch(SQLException& e)
+    {
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,m_xORB);
+    }
+
+    OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
+}
