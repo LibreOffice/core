@@ -6487,8 +6487,10 @@ SfxDocumentInfoItem Properties SID_DOCINFO
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
     Readonly = FALSE,
+
+    /* status: */
+    SlotType = SfxVoidItem;
 
     /* config: */
     AccelConfig = TRUE,
