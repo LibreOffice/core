@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GlobalTransferCommandArgument.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 08:18:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
 /** This struct contains information needed to transfer objects from one
     location to another.
 */
-struct GlobalTransferCommandArgument
+published struct GlobalTransferCommandArgument
 {
     //-------------------------------------------------------------------------
     /** contains the action to perform ( COPY, MOVE, LINK ).
