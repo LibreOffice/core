@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 16:45:37 $
+ *  last change: $Author: jp $ $Date: 2001-01-23 20:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@ class SwPagePreViewPrtData;
 class SwRedline;
 class SwRedlineTbl;
 class SwRootFrm;
+class SwRubyList;
+class SwRubyListEntry;
 class SwSectionFmt;
 class SwSectionFmts;
 class SwSelBoxes;
@@ -550,6 +552,9 @@ class SwDoc
 
     // Charts der angegebenen Tabelle updaten
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
+
+    BOOL _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
+                                USHORT nMode );
 
     // unser eigener 'IdlTimer' ruft folgende Methode
     DECL_LINK( DoIdleJobs, Timer * );
@@ -1750,6 +1755,12 @@ public:
     void ClearForbiddenCharacters( ULONG nLang );
     const SwForbiddenCharacterTable* GetForbiddenCharacterTbl() const
             { return pForbiddenCharsTbl; }
+
+    // Interface for the list of Ruby - texts/attributes
+    USHORT FillRubyList( const SwPaM& rPam, SwRubyList& rList,
+                        USHORT nMode );
+    USHORT SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
+                        USHORT nMode );
 
     // ------------------- Zugriff auf Dummy-Member --------------------
 
