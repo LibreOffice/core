@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:26:53 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,6 +1654,28 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             }
             DBG_ASSERT(pMaster, "MasterPage (Standard page) not found");
             DBG_ASSERT(pNotesMaster, "MasterPage (Notes page) not found");
+
+            // this should not happen, but looking at crashreports, it does
+            if( (pMaster == NULL) || (pNotesMaster == NULL) )
+            {
+                // so take the first MasterPage
+                pMaster = (SdPage*) pSourceDoc->GetMasterSdPage(0, PK_STANDARD);
+                pNotesMaster = (SdPage*) pSourceDoc->GetMasterSdPage(0, PK_NOTES);
+                aNewLayoutName = pMaster->GetName();
+            }
+        }
+
+        // we should never reach this, but one never knows....
+        if( (pMaster == NULL) || (pNotesMaster == NULL) )
+        {
+            pUndoMgr->LeaveListAction();
+
+            if( pDocSh )
+                pDocSh->SetWaitCursor( FALSE );
+
+            DBG_ERROR( "SdDrawDocument::SetMasterPage() failed!" );
+
+            return;
         }
 
         if (pSourceDoc != this)
