@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:38:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1940,7 +1940,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ turkish ] = "~Standart deрer";
         Text[ language_user1 ] = " ";
     };
-    Text[ russian ] = "Оптимальная ширина столбцов";
+    Text[ russian ] = "Оптимальная ширина колонки";
     Text[ polish ] = "Optymalna szerokoњж kolumn";
     Text[ japanese ] = "ЌЕ“K‚И—с•ќ";
     Text[ chinese_traditional ] = "іМѕAДжјe";
@@ -2181,7 +2181,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ turkish ] = "~Standart deрer";
         Text[ language_user1 ] = " ";
     };
-    Text[ russian ] = "Оптимальная высота строк";
+    Text[ russian ] = "Оптимальная высота строки";
     Text[ polish ] = "Optymalna wysokoњж wierszy";
     Text[ japanese ] = "ЌЕ“K‚ИЌs‚МЌ‚‚і";
     Text[ chinese_traditional ] = "іМѕA¦C°Є";
