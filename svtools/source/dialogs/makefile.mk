@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:41:44 $
+#   last change: $Author: kz $ $Date: 2004-05-19 14:01:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj	\
 
 
 SLOFILES=		$(SLO)$/registrationdlg.obj 	\
+                $(SLO)$/roadmapwizard.obj 	\
                 $(SLO)$/wizardmachine.obj 	\
                 $(SLO)$/addresstemplate.obj 	\
                 $(SLO)$/filedlg.obj 	\
