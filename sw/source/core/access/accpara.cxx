@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-28 17:44:10 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1469,44 +1469,52 @@ OUString SwAccessibleParagraph::getTextRange(
         throw IndexOutOfBoundsException();
 }
 
-OUString SwAccessibleParagraph::getTextAtIndex(
-    sal_Int32 nIndex, sal_Int16 nTextType )
-    throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+::com::sun::star::accessibility::TextSegment SwAccessibleParagraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleText );
 
-    const OUString rText = GetString();
+    ::com::sun::star::accessibility::TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
 
+    const OUString rText = GetString();
     // implement the silly specification that first position after
     // text must return an empty string, rather than throwing an
     // IndexOutOfBoundsException
     if( nIndex == rText.getLength() )
-        return OUString();
+        return aResult;
 
     // with error checking
     Boundary aBound;
-    sal_Bool bIsWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
+    sal_Bool bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
     DBG_ASSERT( aBound.startPos >= 0,               "illegal boundary" );
     DBG_ASSERT( aBound.startPos <= aBound.endPos,   "illegal boundary" );
 
     // return word (if present)
-    return bIsWord ?
-        rText.copy( aBound.startPos, aBound.endPos - aBound.startPos ) :
-        OUString();
+    if ( bWord )
+    {
+        aResult.SegmentText = rText.copy( aBound.startPos, aBound.endPos - aBound.startPos );
+        aResult.SegmentStart = aBound.startPos;
+        aResult.SegmentEnd = aBound.endPos;
+    }
+
+    return aResult;
 }
 
-OUString SwAccessibleParagraph::getTextBeforeIndex(
-    sal_Int32 nIndex, sal_Int16 nTextType )
-    throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+::com::sun::star::accessibility::TextSegment SwAccessibleParagraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleText );
 
     const OUString rText = GetString();
+
+    ::com::sun::star::accessibility::TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
 
     // get starting pos
     Boundary aBound;
@@ -1531,26 +1539,30 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
             break;  // exit if beginning of string is reached
     }
 
-    return bWord ?
-        rText.copy( aBound.startPos, aBound.endPos - aBound.startPos ) :
-        OUString();
+    if ( bWord )
+    {
+        aResult.SegmentText = rText.copy( aBound.startPos, aBound.endPos - aBound.startPos );
+        aResult.SegmentStart = aBound.startPos;
+        aResult.SegmentEnd = aBound.endPos;
+    }
 }
 
-OUString SwAccessibleParagraph::getTextBehindIndex(
-    sal_Int32 nIndex, sal_Int16 nTextType )
-    throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
+::com::sun::star::accessibility::TextSegment SwAccessibleParagraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleText );
 
+    ::com::sun::star::accessibility::TextSegment aResult;
+    aResult.SegmentStart = -1;
+    aResult.SegmentEnd = -1;
     const OUString rText = GetString();
 
     // implement the silly specification that first position after
     // text must return an empty string, rather than throwing an
     // IndexOutOfBoundsException
     if( nIndex == rText.getLength() )
-        return OUString();
+        return aResult;
 
 
     // get first word, then skip to next word
@@ -1566,9 +1578,12 @@ OUString SwAccessibleParagraph::getTextBehindIndex(
             break;  // exit if end of string is reached
     }
 
-    return bWord ?
-        rText.copy( aBound.startPos, aBound.endPos - aBound.startPos ) :
-        OUString();
+    if ( bWord )
+    {
+        aResult.SegmentText = rText.copy( aBound.startPos, aBound.endPos - aBound.startPos );
+        aResult.SegmentStart = aBound.startPos;
+        aResult.SegmentEnd = aBound.endPos;
+    }
 }
 
 sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
@@ -1772,12 +1787,12 @@ void SwAccessibleParagraph::clearAccessibleSelection(  )
     aSelectionHelper.clearAccessibleSelection();
 }
 
-void SwAccessibleParagraph::selectAllAccessible(  )
+void SwAccessibleParagraph::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
-    aSelectionHelper.selectAllAccessible();
+    aSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
