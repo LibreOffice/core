@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implspritecanvas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:02:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CPPCANVAS_IMPLSPRITECANVAS_HXX
 #define _CPPCANVAS_IMPLSPRITECANVAS_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP__
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #endif
 
 #ifndef _BGFX_VECTOR_B2DSIZE_HXX
@@ -93,7 +93,7 @@ namespace cppcanvas
         {
         public:
             ImplSpriteCanvas( const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XSpriteCanvas >& rCanvas );
+                                  ::com::sun::star::rendering::XSpriteCanvas >& rCanvas );
             ImplSpriteCanvas(const ImplSpriteCanvas&);
 
             virtual ~ImplSpriteCanvas();
@@ -108,13 +108,13 @@ namespace cppcanvas
             SpriteSharedPtr                 createSpriteFromBitmaps(
                 const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::uno::Reference<
-                        ::drafts::com::sun::star::rendering::XBitmap > >&   animationBitmaps,
+                        ::com::sun::star::rendering::XBitmap > >&   animationBitmaps,
                 sal_Int8                                                    interpolationMode );
 
             virtual CanvasSharedPtr         clone() const;
 
             virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const;
+                ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const;
 
             /** This class passes the view transformation
                 to child sprites
@@ -142,7 +142,7 @@ namespace cppcanvas
             // default: disabled assignment
             ImplSpriteCanvas& operator=( const ImplSpriteCanvas& );
 
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSpriteCanvas >    mxSpriteCanvas;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSpriteCanvas >    mxSpriteCanvas;
             TransformationArbiterSharedPtr                                                                  mpTransformArbiter;
         };
     }
