@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: forms_ODatabaseForm.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:57:02 $ 
+'*  last change:$Date: 2003-03-19 14:28:00 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -134,7 +134,7 @@ On Error Goto ErrHndl
     ' Copying DB file to temp location
     srcFile = utils.Path2URL(cTestDocsDir) + "TestDB/testDB.dbf"
     dstFile = utils.getTempFileURL("TestDB.dbf")
-    dbSrcURL = "sdbc:dbase:" + gsub(dstFile, "/testDB.dbf", "")
+    dbSrcURL = "sdbc:dbase:" + utils.StrReplace(dstFile, "/testDB.dbf", "")
 
     Out.Log("Copying file '" + srcFile + "' to '" + dstFile + "'")
     facc = createUnoService("com.sun.star.ucb.SimpleFileAccess")
