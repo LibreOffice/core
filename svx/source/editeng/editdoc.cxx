@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-30 08:45:07 $
+ *  last change: $Author: mt $ $Date: 2000-12-04 13:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <akrnitem.hxx>
 #include <cscoitem.hxx>
 #include <langitem.hxx>
+#include <emphitem.hxx>
 
 #include <editdoc.hxx>
 #include <editdbg.hxx>
@@ -338,6 +339,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         case EE_CHAR_UNDERLINE:
         {
             pNew = new EditCharAttribUnderline( (const SvxUnderlineItem&)rNew, nS, nE );
+        }
+        break;
+        case EE_CHAR_EMPHASISMARK:
+        {
+            pNew = new EditCharAttribEmphasisMark( (const SvxEmphasisMarkItem&)rNew, nS, nE );
         }
         break;
         case EE_CHAR_STRIKEOUT:

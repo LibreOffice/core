@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-12-04 13:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ class SvxCharSetColorItem;
 class SvxWordLineModeItem;
 class SvxFieldItem;
 class SvxLanguageItem;
+class SvxEmphasisMarkItem;
 
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
@@ -285,6 +286,17 @@ class EditCharAttribUnderline : public EditCharAttrib
 {
 public:
     EditCharAttribUnderline( const SvxUnderlineItem& rAttr, USHORT nStart, USHORT nEnd );
+
+    virtual void    SetFont( SvxFont& rFont );
+};
+
+// -------------------------------------------------------------------------
+// class EditCharAttribEmphasisMark
+// -------------------------------------------------------------------------
+class EditCharAttribEmphasisMark : public EditCharAttrib
+{
+public:
+    EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, USHORT nStart, USHORT nEnd );
 
     virtual void    SetFont( SvxFont& rFont );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-12-04 13:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,24 +68,25 @@
 
 #include <lspcitem.hxx>
 
-#include "lrspitem.hxx"
-#include "ulspitem.hxx"
-#include "cntritem.hxx"
-#include "colritem.hxx"
-#include "fhgtitem.hxx"
-#include "fontitem.hxx"
-#include "adjitem.hxx"
-#include "fwdtitem.hxx"
-#include "wghtitem.hxx"
-#include "postitem.hxx"
-#include "udlnitem.hxx"
-#include "crsditem.hxx"
-#include "shdditem.hxx"
-#include "escpitem.hxx"
-#include "kernitem.hxx"
-#include "wrlmitem.hxx"
-#include "akrnitem.hxx"
-#include "langitem.hxx"
+#include <lrspitem.hxx>
+#include <ulspitem.hxx>
+#include <cntritem.hxx>
+#include <colritem.hxx>
+#include <fhgtitem.hxx>
+#include <fontitem.hxx>
+#include <adjitem.hxx>
+#include <fwdtitem.hxx>
+#include <wghtitem.hxx>
+#include <postitem.hxx>
+#include <udlnitem.hxx>
+#include <crsditem.hxx>
+#include <shdditem.hxx>
+#include <escpitem.hxx>
+#include <kernitem.hxx>
+#include <wrlmitem.hxx>
+#include <akrnitem.hxx>
+#include <langitem.hxx>
+#include <emphitem.hxx>
 
 #include <impedit.hxx>
 #include <editeng.hxx>
@@ -198,14 +199,14 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_FONTWIDTH:
         {
             aDebStr += "Breite=";
-            aDebStr += ((SvxFontWidthItem&)rItem).GetWidth();
+            aDebStr += ByteString::CreateFromInt32( ((SvxFontWidthItem&)rItem).GetWidth() );
             Size aSz( 0, ((SvxFontWidthItem&)rItem).GetWidth() );
             SfxMapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode( (MapUnit) eUnit );
             MapMode aPntMap( MAP_POINT );
             aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
             aDebStr += " Points=";
-            aDebStr += aSz.Width();
+            aDebStr += ByteString::CreateFromInt32( aSz.Width() );
         }
         break;
         case EE_CHAR_WEIGHT:
@@ -217,6 +218,10 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_UNDERLINE:
             aDebStr += "FontUnderline=";
             aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxUnderlineItem&)rItem).GetUnderline() );
+        break;
+        case EE_CHAR_EMPHASISMARK:
+            aDebStr += "FontUnderline=";
+            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxEmphasisMarkItem&)rItem).GetEmphasisMark() );
         break;
         case EE_CHAR_STRIKEOUT:
             aDebStr += "FontStrikeout=";
@@ -488,7 +493,7 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
         n += pPortion->GetLen();
     }
     aDebStr += "\nGesamtlaenge: ";
-    aDebStr += n;
+    aDebStr += ByteString::CreateFromInt32( n );
     aDebStr += "\nSortiert nach Start:";
     for ( USHORT x = 0; x < pPPortion->GetNode()->GetCharAttribs().Count(); x++ )
     {

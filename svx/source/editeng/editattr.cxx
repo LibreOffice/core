@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-01 11:54:57 $
+ *  last change: $Author: mt $ $Date: 2000-12-04 13:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,22 +65,23 @@
 
 #include <svxfont.hxx>
 #include <flditem.hxx>
-#include "fontitem.hxx"
-#include "postitem.hxx"
-#include "wghtitem.hxx"
-#include "udlnitem.hxx"
-#include "fwdtitem.hxx"
-#include "cntritem.hxx"
-#include "shdditem.hxx"
-#include "escpitem.hxx"
-#include "colritem.hxx"
-#include "wrlmitem.hxx"
-#include "fhgtitem.hxx"
-#include "crsditem.hxx"
-#include "cscoitem.hxx"
-#include "kernitem.hxx"
-#include "akrnitem.hxx"
-#include "langitem.hxx"
+#include <fontitem.hxx>
+#include <postitem.hxx>
+#include <wghtitem.hxx>
+#include <udlnitem.hxx>
+#include <fwdtitem.hxx>
+#include <cntritem.hxx>
+#include <shdditem.hxx>
+#include <escpitem.hxx>
+#include <colritem.hxx>
+#include <wrlmitem.hxx>
+#include <fhgtitem.hxx>
+#include <crsditem.hxx>
+#include <cscoitem.hxx>
+#include <kernitem.hxx>
+#include <akrnitem.hxx>
+#include <langitem.hxx>
+#include <emphitem.hxx>
 
 
 #include <editattr.hxx>
@@ -434,8 +435,6 @@ void EditCharAttribWordLineMode::SetFont( SvxFont& rFont )
     rFont.SetWordLineMode( ((const SvxWordLineModeItem*)GetItem())->GetValue() );
 }
 
-/*
-
 // -------------------------------------------------------------------------
 // class EditCharAttribEmphasisMark
 // -------------------------------------------------------------------------
@@ -447,7 +446,5 @@ EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkIte
 
 void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont )
 {
-//  rFont.SetEmphasis( ( ((const SvxItem*)GetItem())->GetEmphasisMark() )
+    rFont.SetEmphasisMark( ((const SvxEmphasisMarkItem*)GetItem())->GetEmphasisMark() );
 }
-
-*/
