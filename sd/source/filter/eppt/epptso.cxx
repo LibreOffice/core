@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-13 16:43:53 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 15:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2446,14 +2446,16 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 nQuickIndex = 7;
                             else if ( aPropName == "StartWith" )
                                 nQuickIndex = 8;
-                            else if ( aPropName ==  "LeftMargin" )
+                            else if ( aPropName == "LeftMargin" )
                                 nQuickIndex = 9;
                             else if ( aPropName == "FirstLineOffset" )
                                 nQuickIndex = 10;
-                            else if ( aPropName == "BulletColor" )
+                            else if ( aPropName == "SymbolTextDistance" )
                                 nQuickIndex = 11;
-                            else if ( aPropName == "BulletRelSize" )
+                            else if ( aPropName == "BulletColor" )
                                 nQuickIndex = 12;
+                            else if ( aPropName == "BulletRelSize" )
+                                nQuickIndex = 13;
                             else
                             {
                                 DBG_ERROR( "Unbekanntes Property" );
@@ -2580,6 +2582,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             break;
                             case 11 :
                             {
+                                if ( aPropName == "SymbolTextDistance" )
+                                    continue;
+                            }
+                            break;
+                            case 12 :
+                            {
                                 if ( aPropName == "BulletColor" )
                                 {
                                     sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
@@ -2590,7 +2598,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 }
                             }
                             break;
-                            case 12 :
+                            case 13 :
                             {
                                 if ( aPropName == "BulletRelSize" )
                                 {
