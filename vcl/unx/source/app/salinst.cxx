@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:25:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ sal_Bool SalYieldMutex::tryToAcquire()
 // plugin factory function
 extern "C"
 {
-    SalInstance* create_SalInstance()
+    VCL_DLLPUBLIC SalInstance* create_SalInstance()
     {
         X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
 
