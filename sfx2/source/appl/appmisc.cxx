@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:22:47 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,9 +217,9 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(0))
     SFX_CHILDWINDOW_REGISTRATION( SID_CUSTOMIZETOOLBOX );
 
     // Menu ist auf dem Macintosh sowieso sichtbar
-//    SFX_OBJECTBAR_REGISTRATION(
-//            SFX_OBJECTBAR_FULLSCREEN | SFX_VISIBILITY_FULLSCREEN,
-//            SfxResId(RID_FULLSCREENTOOLBOX) );
+    SFX_OBJECTBAR_REGISTRATION(
+            SFX_OBJECTBAR_FULLSCREEN | SFX_VISIBILITY_FULLSCREEN,
+            SfxResId(RID_FULLSCREENTOOLBOX) );
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION |
             SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT,
             SfxResId(RID_ENVTOOLBOX) );
