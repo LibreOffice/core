@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:49:16 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,9 @@
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "viewsh.hxx"
 #include "viewimp.hxx"
@@ -868,16 +870,16 @@ SfxViewShell::SfxViewShell
     USHORT          nFlags          /*  siehe <SfxViewShell-Flags> */
 )
 
-:   SfxShell(this),
-    pImp( new SfxViewShell_Impl ),
+:   SfxShell(this)
+    ,pImp( new SfxViewShell_Impl )
 #if !SFX_VIEWSH_INCLUDES_CLIENTSH_HXX
-    pIPClientList( 0 ),
+    ,pIPClientList( 0 )
 #endif
-    pWindow(0),
-    pFrame(pViewFrame),
-    pSubShell(0),
-    bOptimizeEach(0 != (nFlags & SFX_VIEW_OPTIMIZE_EACH)),
-    bMaximizeFirst( 0 != (nFlags & SFX_VIEW_MAXIMIZE_FIRST) )
+    ,pFrame(pViewFrame)
+    ,pSubShell(0)
+    ,pWindow(0)
+    ,bMaximizeFirst( 0 != (nFlags & SFX_VIEW_MAXIMIZE_FIRST) )
+    ,bOptimizeEach(0 != (nFlags & SFX_VIEW_OPTIMIZE_EACH))
     ,bNoNewWindow( 0 != (nFlags & SFX_VIEW_NO_NEWWINDOW) )
 {
     DBG_CTOR(SfxViewShell, 0);
