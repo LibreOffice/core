@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _Shape.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:29:28 $
+ *  last change:$Date: 2004-03-19 15:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@ public class _Shape extends MultiPropertyTest {
     public void _LayerName() {
         if (tEnv.getTestCase().getObjectName().equals("SwXShape")) {
             log.println("There is only one Layer for SwXShape");
+            log.println("Therefore this property can't be changed");
+            tRes.tested("LayerName",true);
+        } else if (tEnv.getTestCase().getObjectName().equals("ScShapeObj")) {
+            log.println("There is only one Layer for ScShapeObj");
             log.println("Therefore this property can't be changed");
             tRes.tested("LayerName",true);
         } else {
