@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-09 14:20:37 $
+ *  last change: $Author: gt $ $Date: 2001-08-09 14:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
     }
     else
     {
-        if( GetDayOfWeek( nActDate ) == 5 )
+        if( GetDayOfWeek( nActDate ) == 6 )
             // when starting on Sunday, assuming we're starting on Saturday to get the jump over the weekend
             nActDate--;
 
