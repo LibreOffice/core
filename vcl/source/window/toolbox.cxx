@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-08 08:40:01 $
+ *  last change: $Author: ssa $ $Date: 2002-03-11 16:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2714,8 +2714,6 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
 
     ImplToolItem* pItem = mpItemList->GetObject( nPos );
 
-    ImplHideFocus();
-
     // Falls Rechteck ausserhalb des sichbaren Bereichs liegt
     if ( pItem->maRect.IsEmpty() )
         return;
@@ -3524,18 +3522,22 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     // only highlight when the focus is not inside a child window of a toolbox
     // eg, in a edit control
+    // and do not hilight when focus is in a different toolbox
     BOOL bDrawHotSpot = TRUE;
     Window *pWin = Application::GetFocusWindow();
-    if( pWin && !pWin->mbToolBox )
-        while( pWin )
-        {
-            pWin = pWin->GetParent();
-            if( pWin && pWin->mbToolBox )
+    if( pWin && pWin->mbToolBox && pWin != this )
+        bDrawHotSpot = FALSE;
+    else
+        if( pWin && !pWin->mbToolBox )
+            while( pWin )
             {
-                bDrawHotSpot = FALSE;
-                break;
+                pWin = pWin->GetParent();
+                if( pWin && pWin->mbToolBox )
+                {
+                    bDrawHotSpot = FALSE;
+                    break;
+                }
             }
-        }
 
     if ( bDrawHotSpot && ( ((eStyle == POINTER_ARROW) && (mnOutStyle & TOOLBOX_STYLE_HANDPOINTER)) ||
          (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
@@ -3557,7 +3559,10 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                             {
                                 USHORT nTempPos = (USHORT)mpItemList->GetCurPos();
                                 if ( mnHighItemId )
+                                {
+                                    ImplHideFocus();
                                     ImplDrawItem( GetItemPos( mnHighItemId ) );
+                                }
                                 mnHighItemId = pItem->mnId;
                                 ImplDrawItem( nTempPos, 2 );
                                 ImplShowFocus();
@@ -3573,11 +3578,13 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             }
         }
 
-        if ( bClearHigh && mnHighItemId )
+        // only clear highlight when focus is not in toolbar
+        if ( bClearHigh && mnHighItemId && !HasFocus() )
         {
             USHORT nClearPos = GetItemPos( mnHighItemId );
             if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
                 ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? TRUE : FALSE );
+            ImplHideFocus();
             mnHighItemId = 0;
         }
     }
@@ -3858,6 +3865,7 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
             ImplDrawItem( i, bHighlight );
         }
     }
+    ImplShowFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -4002,12 +4010,14 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_TAB:
                 {
-                // TAB cycling should not wrap at the end of a toolbox if the parent is a dialog
-                BOOL bNoCycle = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
-                if( ImplChangeHighlightUpDn( aKeyCode.IsShift() ? TRUE : FALSE , bNoCycle ) )
+                // TAB cycling only if parent is not a dialog
+                BOOL bNoTabCycling = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
+
+                if( bNoTabCycling )
+                    return DockingWindow::Notify( rNEvt );
+                else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() ? TRUE : FALSE , bNoTabCycling ) )
                     return FALSE;
                 else
-                    // pass control to the parent instead
                     return DockingWindow::Notify( rNEvt );
                 }
                 break;
@@ -4020,9 +4030,12 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
         if( rNEvt.GetWindow() == this )
         {
             // the toolbar itself got the focus
-            if( (GetGetFocusFlags() & GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL) && mnLastFocusItemId != 0 )
+            if( mnLastFocusItemId != 0 )
+            {
                 // restore last item
                 ImplChangeHighlight( ImplGetItem( mnLastFocusItemId ) );
+                mnLastFocusItemId = 0;
+            }
             else if( (GetGetFocusFlags() & (GETFOCUS_BACKWARD|GETFOCUS_TAB) ) == (GETFOCUS_BACKWARD|GETFOCUS_TAB))
                 // Shift-TAB was pressed in the parent
                 ImplChangeHighlightUpDn( FALSE );
@@ -4057,8 +4070,8 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
     else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         // deselect
-        mnHighItemId = 0;
         ImplHideFocus();
+        mnHighItemId = 0;
     }
 
     return DockingWindow::Notify( rNEvt );
@@ -4519,7 +4532,7 @@ void ToolBox::GetFocus()
 
 void ToolBox::LoseFocus()
 {
-    ImplChangeHighlight( NULL );
+    ImplChangeHighlight( NULL, TRUE );
 
     DockingWindow::LoseFocus();
 }
@@ -4529,6 +4542,7 @@ void ToolBox::LoseFocus()
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
     USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    BOOL bParentIsDialog = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
     switch ( nCode )
     {
         case KEY_UP:
@@ -4544,15 +4558,27 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         case KEY_PAGEUP:
             if ( mnCurLine > 1 )
             {
-                ShowLine( FALSE );
+                if( mnCurLine > mnVisLines )
+                    mnCurLine -= mnVisLines;
+                else
+                    mnCurLine = 1;
+                mbFormat = TRUE;
+                ImplFormat();
                 ImplDrawSpin( FALSE, FALSE );
+                ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
             }
         break;
         case KEY_PAGEDOWN:
             if ( mnCurLine+mnVisLines-1 < mnCurLines )
             {
-                ShowLine( TRUE );
+                if( mnCurLine + 2*mnVisLines-1 < mnCurLines )
+                    mnCurLine += mnVisLines;
+                else
+                    mnCurLine = mnCurLines;
+                mbFormat = TRUE;
+                ImplFormat();
                 ImplDrawSpin( FALSE, FALSE );
+                ImplChangeHighlight( ImplGetFirstValidItem( mnCurLine ) );
             }
         break;
         case KEY_END:
@@ -4569,8 +4595,13 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             break;
         case KEY_ESCAPE:
         {
-            // send focus to document pane
-            //mpFrameWindow->GrabFocus();
+            if( bParentIsDialog )
+                DockingWindow::KeyInput( rKEvt );
+            else
+            {
+                // send focus to document pane
+                mpFrameWindow->GrabFocus();
+            }
         }
         break;
         case KEY_LEFT:
@@ -4587,13 +4618,25 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         {
             if( mnHighItemId )
             {
-                mnDownItemId = mnCurItemId = mnHighItemId;
-                ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-                mbDummy2_KeyEvt = TRUE;
-                Activate();
-                Click();
-                Select();
-                mbDummy2_KeyEvt = FALSE;
+                ImplToolItem *pItem = ImplGetItem( mnHighItemId );
+                if( pItem && pItem->mpWindow && HasFocus() )
+                {
+                    ImplHideFocus();
+                    mbDummy3_ChangingHighlight = TRUE;  // avoid focus change due to loose focus
+                    pItem->mpWindow->ImplControlFocus( 0 );
+                    mbDummy3_ChangingHighlight = FALSE;
+                }
+                else
+                {
+                    mnDownItemId = mnCurItemId = mnHighItemId;
+                    ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+                    mbDummy2_KeyEvt = TRUE;
+                    Activate();
+                    Click();
+                    Select();
+                    Deactivate();
+                    mbDummy2_KeyEvt = FALSE;
+                }
             }
         }
         break;
@@ -4601,8 +4644,6 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         {
             if( mnHighItemId )
             {
-
-
                 // close last popup toolbox (see also:
                 // ImplHandleMouseFloatMode(...) in winproc.cxx )
 
@@ -4610,7 +4651,10 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 {
                     FloatingWindow* pLastLevelFloat = ImplGetSVData()->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                     if( pLastLevelFloat )
+                    {
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                        return;
+                    }
                 }
 
                 mnDownItemId = mnCurItemId = mnHighItemId;
@@ -4631,32 +4675,6 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         default:
         {
             DockingWindow::KeyInput( rKEvt );
-            /*
-            xub_Unicode nCharCode = rKEvent.GetCharCode();
-            USHORT nPos;
-            USHORT nDuplicates = 0;
-            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, nPos, nDuplicates, nHighlightedItem ) : NULL;
-            if ( pData )
-            {
-                if ( pData->pSubMenu || nDuplicates > 1 )
-                {
-                    ChangeHighlightItem( nPos, FALSE );
-                    HighlightChanged( 0 );
-                }
-                else
-                {
-                    nHighlightedItem = nPos;
-                    EndExecute();
-                }
-            }
-            else
-            {
-                // Bei ungueltigen Tasten Beepen, aber nicht bei HELP und F-Tasten
-                if ( !rKEvent.GetKeyCode().IsControlMod() && ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
-                    Sound::Beep();
-                FloatingWindow::KeyInput( rKEvent );
-            }
-            */
         }
     }
 
@@ -4664,7 +4682,89 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-void ToolBox::ImplChangeHighlight( ImplToolItem* pItem )
+// returns the current toolbox line of the item
+USHORT ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
+{
+    ImplToolItem *pItem = mpItemList->First();
+    USHORT nLine = 1;
+    while( pItem )
+    {
+        if ( pItem->meType == TOOLBOXITEM_BREAK || pItem->mbBreak )
+            nLine++;
+        if( pItem == pCurrentItem)
+            break;
+        pItem = mpItemList->Next();
+    }
+    return nLine;
+}
+
+// returns the first displayable item in the given line
+ImplToolItem* ToolBox::ImplGetFirstValidItem( USHORT nLine )
+{
+    if( !nLine || nLine > mnCurLines )
+        return NULL;
+
+    nLine--;
+    ImplToolItem *pItem = mpItemList->First();
+    while( pItem )
+    {
+        // find correct line
+        if ( pItem->meType == TOOLBOXITEM_BREAK || pItem->mbBreak )
+            nLine--;
+        if( !nLine )
+        {
+            // find first useful item
+            while( pItem && ((pItem->meType != TOOLBOXITEM_BUTTON) ||
+                !pItem->mbEnabled || !pItem->mbVisible) )
+            {
+                pItem = mpItemList->Next();
+                if( !pItem || pItem->mbBreak )
+                    return NULL;    // no valid items in this line
+            }
+            return pItem;
+        }
+        pItem = mpItemList->Next();
+    }
+
+    return pItem;
+}
+
+// returns the last displayable item in the given line
+ImplToolItem* ToolBox::ImplGetLastValidItem( USHORT nLine )
+{
+    if( !nLine || nLine > mnCurLines )
+        return NULL;
+
+    nLine--;
+    ImplToolItem *pFound = NULL;
+    ImplToolItem *pItem = mpItemList->First();
+    while( pItem )
+    {
+        // find correct line
+        if ( pItem->meType == TOOLBOXITEM_BREAK || pItem->mbBreak )
+            nLine--;
+        if( !nLine )
+        {
+            // find last useful item
+            while( pItem && ((pItem->meType == TOOLBOXITEM_BUTTON) &&
+                pItem->mbEnabled && pItem->mbVisible) )
+            {
+                pFound = pItem;
+                pItem = mpItemList->Next();
+                if( !pItem || pItem->mbBreak )
+                    return pFound;    // end of line: return last useful item
+            }
+            return pFound;
+        }
+        pItem = mpItemList->Next();
+    }
+
+    return pFound;
+}
+
+// -----------------------------------------------------------------------
+
+void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 {
     // avoid recursion due to focus change
     if( mbDummy3_ChangingHighlight )
@@ -4673,30 +4773,20 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem )
     mbDummy3_ChangingHighlight = TRUE;
 
     ImplToolItem* pOldItem = NULL;
+    USHORT        oldPos = 0;
 
     if ( mnHighItemId )
     {
+        ImplHideFocus();
         ImplDrawItem( GetItemPos( mnHighItemId ), FALSE );
         pOldItem = ImplGetItem( mnHighItemId );
+        oldPos = (USHORT) mpItemList->GetPos( pOldItem );
     }
 
-    if( pItem != pOldItem )
+    if( !bNoGrabFocus && pItem != pOldItem && pOldItem && pOldItem->mpWindow )
     {
-        // check for focus change
-        if( pOldItem && pOldItem->mpWindow )
-        {
-            // focus leaves a control
-            if( pItem && pItem->mpWindow )
-                // this is a focus change between controls
-                pItem->mpWindow->ImplControlFocus( 0 ); // what are useful flags here ?
-            else
-                // move focus into toolbox
-                GrabFocus();
-        }
-        else if( pItem && pItem->mpWindow )
-        {
-            pItem->mpWindow->ImplControlFocus( 0 ); // what are useful flags here ?
-        }
+        // move focus into toolbox
+        GrabFocus();
     }
 
     if( pItem )
@@ -4704,6 +4794,25 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem )
         USHORT aPos = (USHORT) mpItemList->GetPos( pItem );
         if( aPos != TOOLBOX_ITEM_NOTFOUND)
         {
+            // check for line breaks
+            USHORT nLine = ImplGetItemLine( pItem );
+
+            if( nLine >= mnCurLine + mnVisLines )
+            {
+                mnCurLine = nLine - mnVisLines + 1;
+                mbFormat = TRUE;
+            }
+            else if ( nLine < mnCurLine )
+            {
+                mnCurLine = nLine;
+                mbFormat = TRUE;
+            }
+
+            if( mbFormat )
+            {
+                ImplFormat();
+            }
+
             mnHighItemId = pItem->mnId;
             ImplDrawItem( aPos, 2 );
             ImplShowFocus();
@@ -4711,8 +4820,8 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem )
     }
     else
     {
-        mnHighItemId = 0;
         ImplHideFocus();
+        mnHighItemId = 0;
     }
 
     mbDummy3_ChangingHighlight = FALSE;
@@ -4808,8 +4917,8 @@ void ToolBox::ImplShowFocus()
     if( mnHighItemId && HasFocus() )
     {
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-        if( pItem->meType == TOOLBOXITEM_BUTTON && !mnOutStyle )
-            ShowFocus( pItem->maRect );
+        if( pItem->mpWindow )
+            ImplDrawSelectionBackground( pItem->maRect, 2, FALSE, TRUE );
     }
 }
 
@@ -4817,6 +4926,11 @@ void ToolBox::ImplShowFocus()
 
 void ToolBox::ImplHideFocus()
 {
-    HideFocus();
+    if( mnHighItemId )
+    {
+        ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+        if( pItem->mpWindow )
+            Invalidate( pItem->maRect, 0);
+    }
 }
 
