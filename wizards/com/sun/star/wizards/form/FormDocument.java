@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:34:14 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public class FormDocument extends TextDocument {
 
 
     public FormDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, Resource oResource) {
-    super(xMSF, bshowStatusIndicator, bgetCurrentFrame);
+    super(xMSF, bshowStatusIndicator, bgetCurrentFrame, null);
     try {
         oFormHandler = new FormHandler(xMSF, xTextDocument);
         oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
