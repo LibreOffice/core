@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emptylayer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:14 $
+ *  last change: $Author: cyrillem $ $Date: 2002-11-29 14:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,4 +83,5 @@ namespace configmgr
     // -----------------------------------------------------------------------------
 
 } // namespace configmgr
-#endif 
+#endif
+
