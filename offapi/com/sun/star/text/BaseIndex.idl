@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseIndex.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:32 $
+ *  last change: $Author: mtg $ $Date: 2001-11-20 14:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
+#endif
+#ifndef _com_sun_star_text_XTextSection_idl__
+#include <com/sun/star/text/XTextSection.idl>
 #endif
 
 
@@ -195,8 +198,13 @@ service BaseIndex
      <p> It is not available in the bibliography</p>*/
     [optional, property] boolean CreateFromChapter;
     //------------------------------------------------------------------------
-
-
+    /** the text section containing the content of the index */
+    [property] com::sun::star::text::XTextSection ContentSection;
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    /** the text section containing the header of the index */
+    [property] com::sun::star::text::XTextSection HeaderSection;
+    //------------------------------------------------------------------------
 };
 
 //=============================================================================
