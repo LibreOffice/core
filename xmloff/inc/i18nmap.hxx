@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18nmap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 16:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include <tools/solar.h>
 #endif
 
-#ifndef _RTL_MACROS_HXX_
-#include <rtl/macros.hxx>
-#endif
 
 namespace rtl
 {

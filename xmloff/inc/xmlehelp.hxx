@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:23:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 16:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef _XMLOFF_XMLEHELP_HXX
 #define _XMLOFF_XMLEHELP_HXX
 
-#ifndef _RTL_MACROS_HXX_
-#include <rtl/macros.hxx>
-#endif
 #ifndef _VCL_MAPUNIT_HXX
 #include <vcl/mapunit.hxx>
 #endif
