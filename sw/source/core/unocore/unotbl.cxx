@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-19 08:49:15 $
+ *  last change: $Author: tl $ $Date: 2002-08-20 09:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,10 +790,8 @@ TYPEINIT1(SwXCell, SwClient);
 /*-- 11.12.98 10:56:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, const String& rCellName,
-                 sal_uInt16 nPos ) :
+SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, sal_uInt16 nPos ) :
     SwXText(pTblFmt->GetDoc(), CURSOR_TBLTEXT),
-    sCellName(rCellName),
     pBox(pBx),
     pStartNode(0),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_CELL)),
@@ -936,16 +934,8 @@ sal_Bool    SwXCell::IsValid()
     {
         SwTable* pTable = SwTable::FindTable( pTblFmt );
         const SwTableBox* pFoundBox ;
-        if( sCellName.Len() )
-        {
-            String sTmpCell(sCellName);
-            sTmpCell.ToUpperAscii();
-            pFoundBox = pTable->GetTblBox( sTmpCell );
-        }
-        else
-            pFoundBox =  FindBox(pTable, pBox);
-
-        if(pFoundBox != pBox)
+        pFoundBox =  FindBox(pTable, pBox);
+        if(!pFoundBox)
             pBox = 0;
     }
     return 0 != pBox;
@@ -1262,7 +1252,7 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String*
             }
             //sonst anlegen
             if(!pXCell)
-                pXCell = new SwXCell(pTblFmt, pBox, pCellName? *pCellName : aEmptyStr, nPos );
+                pXCell = new SwXCell(pTblFmt, pBox, nPos );
             pRet = pXCell;
         }
     }
@@ -4003,7 +3993,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                             RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT);
                     lcl_setCharStyle(pDoc, aValue, aSet);
                     SwUnoTableCrsr* pCrsr = *pTblCrsr;
-                    SwXTextCursor::SetCrsrAttr(pTblCrsr->GetSelRing(), aSet, sal_True);
+                    SwXTextCursor::SetCrsrAttr(pCrsr->GetSelRing(), aSet, sal_True);
                 }
                 break;
                 default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-06 13:11:23 $
+ *  last change: $Author: tl $ $Date: 2002-08-20 09:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,6 @@ class SwXCell : public SwXCellBaseClass,
 
 
     SfxItemPropertySet      aPropSet;
-    const String            sCellName;  //kann auch leer sein!
     SwTableBox*             pBox;       // only set in non-XML import
     const SwStartNode*      pStartNode; // only set in XML import
 
@@ -146,8 +145,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
     sal_Bool                            IsValid();
 public:
-    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String& rCellName,
-            sal_uInt16 nPos=USHRT_MAX );
+    SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
     virtual ~SwXCell();
 
