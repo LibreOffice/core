@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: rt $ $Date: 2003-08-21 15:14:33 $
+#   last change: $Author: rt $ $Date: 2003-12-01 16:17:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.51 $ ';
+$id_str = ' $Revision: 1.52 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -111,6 +111,7 @@ $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
 $umask              = 22;           # default file/directory creation mask
 $dest               = 0;            # optional destination path
+$common_build       = 0;            # do we have common trees?
 $common_dest        = 0;            # common tree on solver
 
 @action_data        = ();           # LoL with all action data
@@ -130,7 +131,7 @@ $opt_link           = 0;            # hard link files into the solver to save di
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
 
 # zip is default for RE
-$opt_zip = 1 if ( defined($ENV{UPDATER}) && $ENV{UPDATER} eq 'YES' && !defined($ENV{BUILD_SOSL}) );
+$opt_zip = 1 if ( defined($ENV{UPDATER}) && $ENV{UPDATER} eq 'YES' && defined($ENV{DELIVER_TO_ZIP}) );
 
 $has_symlinks       = 0;            # system supports symlinks
 
@@ -160,11 +161,11 @@ exit(0);
 
 sub do_copy
 {
-    # We need to copy four times:
+    # We need to copy up to four times:
     # from the platform dependent output tree,
-    # from the so platform dependent tree,
+    # from the SO platform dependent tree,
     # from the common output tree,
-    # and from the so common output tree
+    # and from the SO common output tree
     # in this order.
     my ($dependent, $common, $from, $to, $file_list);
     my $line = shift;
@@ -183,20 +184,22 @@ sub do_copy
         glob_and_copy($from, $to, $touch);
     }
 
-    $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
-    if ( $line =~ /%COMMON_OUTDIR%/ ) {
-        $line =~ s/%_DEST%/%COMMON_DEST%/ig;
-        $common = expand_macros($line);
-        ($from, $to) = split(' ', $common);
-        print "copy common: from: $from, to: $to\n" if $is_debug;
-        glob_and_copy($from, $to, $touch);
-
-        my $line_so = mod_so($line);
-        if ( $line_so ) {
-            $common = expand_macros($line_so);
+    if ( $common_build ) {
+        $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
+        if ( $line =~ /%COMMON_OUTDIR%/ ) {
+            $line =~ s/%_DEST%/%COMMON_DEST%/ig;
+            $common = expand_macros($line);
             ($from, $to) = split(' ', $common);
             print "copy common: from: $from, to: $to\n" if $is_debug;
             glob_and_copy($from, $to, $touch);
+
+            my $line_so = mod_so($line);
+            if ( $line_so ) {
+                $common = expand_macros($line_so);
+                ($from, $to) = split(' ', $common);
+                print "copy common: from: $from, to: $to\n" if $is_debug;
+                glob_and_copy($from, $to, $touch);
+            }
         }
     }
 }
@@ -424,10 +427,8 @@ sub init_globals
 
     my $build_sosl    = $ENV{'BUILD_SOSL'};
     my $common_outdir = $ENV{'COMMON_OUTDIR'};
-    my $dllsuffix     = $ENV{'DLLSUFFIX'};
     my $gui           = lc($ENV{'GUI'});
     my $inpath        = $ENV{'INPATH'};
-    my $offenv        = $ENV{'OFFENV_PATH'};
     my $outpath       = $ENV{'OUTPATH'};
     my $solarversion  = $ENV{'SOLARVERSION'};
     my $updater       = $ENV{'UPDATER'};
@@ -456,11 +457,6 @@ sub init_globals
             exit(3);
     }
 
-    # product build?
-    if ($common_outdir ne "") {
-        $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
-    }
-
     $ext = "";
     if ( ($opt_minor || $updminor) && !$dest ) {
         if ( $updminor ) {
@@ -472,10 +468,19 @@ sub init_globals
         }
     }
 
-    if ($common_outdir ne "") {
-        $common_dest = "$solarversion/$common_outdir" if ( !$dest );
-        $dest = "$solarversion/$inpath" if ( !$dest );
+    # Do we have common trees?
+    if ( defined($ENV{'common_build'}) && $ENV{'common_build'} eq 'TRUE' ) {
+        $common_build = 1;
+        if ((defined $common_outdir) && ($common_outdir ne "")) {
+            $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
+            $common_dest = "$solarversion/$common_outdir" if ( !$dest );
+            $dest = "$solarversion/$inpath" if ( !$dest );
+        } else {
+            print_error("common_build defined without common_outdir", 0);
+            exit(6);
+        }
     } else {
+        $common_outdir = $inpath;
         $dest = "$solarversion/$inpath" if ( !$dest );
         $common_dest = $dest;
     }
@@ -485,17 +490,17 @@ sub init_globals
     # %GUIBASE%
     # %SDK%
     # %SOLARVER%
+    # %__OFFENV%
+    # %DLLSUFFIX%'
 
     # valid macros
     @macros = (
-                [ '%__OFFENV%',         $offenv         ],
                 [ '%__PRJROOT%',        $base_dir       ],
                 [ '%__SRC%',            $inpath         ],
                 [ '%_DEST%',            $dest           ],
                 [ '%_EXT%',             $ext            ],
                 [ '%COMMON_OUTDIR%',    $common_outdir  ],
                 [ '%COMMON_DEST%',      $common_dest    ],
-                [ '%DLLSUFFIX%',        $dllsuffix      ],
                 [ '%GUI%',              $gui            ],
                 [ '%OUTPATH%',          $outpath        ],
                 [ '%UPD%',              $upd            ],
@@ -847,8 +852,10 @@ sub push_default_actions
         foreach $subdir (@subdirs) {
             push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
         }
-        foreach $subdir (@common_subdirs) {
-            push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
+        if ( $common_build ) {
+            foreach $subdir (@common_subdirs) {
+                push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
+            }
         }
         push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
         push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
@@ -856,9 +863,11 @@ sub push_default_actions
         # deliver build.lst to $dest/inc/$module
         push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]); # might be necessary
         push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
-        # and to $common_dest/inc/$module
-        push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]); # might be necessary
-        push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
+        if ( $common_build ) {
+            # and to $common_dest/inc/$module
+            push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]); # might be necessary
+            push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
+        }
     }
 
     # need to copy libstaticmxp.dylib for Mac OS X
@@ -984,7 +993,12 @@ sub zip_files
     $list_ref{$platform_zip_file} = \@zip_list;
     $list_ref{$common_zip_file}   = \@common_zip_list;
 
-    foreach my $zip_file ( $platform_zip_file, $common_zip_file) {
+    my @zipfiles;
+    $zipfiles[0] = $platform_zip_file;
+    if ( $common_build ) {
+        push @zipfiles, ($common_zip_file);
+    }
+    foreach my $zip_file ( @zipfiles ) {
         print "ZIP: updating $zip_file\n";
         next if ( $opt_check );
         # zip content has to be relative to $dest_dir
