@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 12:11:49 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,24 +87,25 @@ interface XJavaVM: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::java::XJavaVM::getJavaVM
     /** returns the address of the Java Virtual Machine.
 
-        <p>If the VM is not already instantiated, it will be now. </p>
+        <p>If the VM is not already instantiated, it will be now.</p>
 
         <p>If the <code>processID</code> is a normal 16-byte ID, the returned
-        <code>any</code> contains a JNI <code>JavaVM</code> pointer as a
-        <code>long</code> or <code>hyper</code> integer (depending on the
+        <atom>any</atom> contains a JNI <code>JavaVM</code> pointer as a
+        <atom>long</atom> or <atom>hyper</atom> integer (depending on the
         platform).  If the <code>processID</code> does not match the current
-        process, an empty <code>any</code> is returned.</p>
+        process, an empty <atom>any</atom> is returned.</p>
 
         <p>If the <code>processID</code> has an additional 17th byte of value
-        zero, the returned <code>any</code> contains a non-reference-counted
+        zero, the returned <atom>any</atom> contains a non-reference-counted
         pointer to a (reference-counted) instance of the C++
-        <code>jvmaccess::VirtualMachine</code> class.  The pointer is guaranteed
-        to be valid as long as the reference to this
+        <code>jvmaccess::VirtualMachine</code> class, always represented as a
+        <atom>hyper</atom> integer.  The pointer is guaranteed to be valid as
+        long as the reference to this
         <type scope="com::sun::star::java">XJavaVM</type> is valid (but the
         pointer should be converted into a reference-counted reference as soon
         as possible).  Again, if the first 16 bytes of the
         <code>processID</code> do not match the current process, an empty
-        <code>any</code> is returned.</p>
+        <atom>any</atom> is returned.</p>
 
         <p>The first form (returning a JNI <code>JavaVM</code> pointer) is
         mainly for backwards compatibility, new code should use the second form
@@ -143,6 +144,9 @@ interface XJavaVM: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2002/12/06 12:11:49  sb
+    #105077# Updated documentation.
+
     Revision 1.7  2001/11/16 14:53:38  mi
     proofing by Richard Holt
 
