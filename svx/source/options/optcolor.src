@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 13:26:20 $
+ *  last change: $Author: os $ $Date: 2002-07-05 13:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             ListBox    LB_BASICKEYWORD       {Pos = MAP_APPFONT ( _LB_XPOS , 41 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICKEYWORD       {Pos = MAP_APPFONT ( _WN_XPOS , 41 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText  FT_BASICERROR         {Pos = MAP_APPFONT ( _FT_XPOS , 42 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Error" ;Text [ ENGLISH ] = "Error" ;};
+            FixedText  FT_BASICERROR         {Pos = MAP_APPFONT ( _FT_XPOS , 42 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Fehler" ;Text [ ENGLISH ] = "Error" ;};
             ListBox    LB_BASICERROR         {Pos = MAP_APPFONT ( _LB_XPOS , 42 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICERROR         {Pos = MAP_APPFONT ( _WN_XPOS , 42 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
