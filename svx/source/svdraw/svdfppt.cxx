@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-21 09:00:33 $
+ *  last change: $Author: sj $ $Date: 2001-06-21 14:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3819,6 +3819,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     DBG_ERROR( "PPTExParaProv::PPTExParaProv - unknown atom reading ppt2000 num rules (SJ)" );
                 case PPT_PST_MasterText :   // first seen in: ms-tt02.ppt
                 case PPT_PST_SrKinsoku :
+                case PPT_PST_NewlyAddedAtom4016 :
                 case PPT_PST_NewlyAddedAtomByPPT2000 :
                 case PPT_PST_NewlyAddedAtomByXP1037 :
                 case PPT_PST_NewlyAddedAtomByXP12004 :
@@ -3872,6 +3873,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     else DBG_ERROR( "PPTExParaProv::PPTExParaProv - instance out of range (SJ)" );
 #endif
                 }
+                break;
                 default :
                     DBG_ERROR( "PPTExParaProv::PPTExParaProv - unknown atom, assuming PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
                 case PPT_PST_NewlyAddedAtomByXP11008 :
@@ -4474,26 +4476,24 @@ void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
         if ( nPMask & 0x100 )
             rIn >> maParaLevel[ nLevel ].mnTextOfs;
         if ( nPMask & 0x200 )
-        {
-            // DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
             rIn >> nVal16;
-        }
         if ( nPMask & 0x400 )
             rIn >> maParaLevel[ nLevel ].mnBulletOfs;
         if ( nPMask & 0x10000 )
-        {
-            // DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
             rIn >> nVal16;
-        }
         if ( nPMask & 0x20000 )
         {
             DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
             rIn >> nVal16;
         }
-        nPMask >>= 18;
-        // wenn normaler Text obere Flags ignorieren
         if ( bSimpleText )
-            nPMask &= 1;
+            nPMask &=0x7ffff;
+        else if ( nPMask & 0x200000 )
+        {
+            rIn >> nVal16;  // #88602#
+            nPMask &=~0x200000;
+        }
+        nPMask >>= 18; // wenn normaler Text obere Flags ignorieren
         for ( UINT16 i = 18; nPMask; i++, nPMask >>= 1 )
         {
             if ( nPMask & 1 )
@@ -5154,11 +5154,11 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
     }
     if ( aString.Len() )
     {
-        UINT32  nMask;
-        UINT32  nCharCount, nCharAnzRead = 0;
-        INT32   nCharsToRead;
-        UINT16  i, j, nDummy16;
-        BOOL    bTextPropAtom = FALSE;
+        sal_uInt32  nMask;
+        sal_uInt32  nCharCount, nCharAnzRead = 0;
+        sal_Int32   nCharsToRead;
+        sal_uInt16  i, j, nDummy16;
+        sal_Bool    bTextPropAtom = sal_False;
 
         UINT16  nStringLen = aString.Len();
 
@@ -5166,7 +5166,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
 
         rTextHeader.SeekToContent( rIn );
         if ( rMan.SeekToRec( rIn, PPT_PST_StyleTextPropAtom, rTextHeader.GetRecEndFilePos(), &aTextHd ) )
-            bTextPropAtom = TRUE;
+            bTextPropAtom = sal_True;
         while ( nCharAnzRead <= nStringLen )
         {
             PPTParaPropSet aParaPropSet;
@@ -5212,33 +5212,33 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     else
                         aSet.mnAttrSet ^= 0x20;
                 }
-                nMask >>= 8;
-                if ( nMask & 0x0F )
+                if ( nMask & 0x0F00 )
                 {
-                    if ( nMask & 8 )
+                    if ( nMask & 0x800 )
                     {   // AbsJust!
                         rIn >> nDummy16;
                         aSet.mpArry[ PPT_ParaAttr_Adjust ] = nDummy16 & 3;
                     }
-                    if ( nMask & 4 )
+                    if ( nMask & 0x400 )
                         rIn >> nDummy16;
-                    if ( nMask & 2 )
+                    if ( nMask & 0x200 )
                         rIn >> nDummy16;
-                    if ( nMask & 1 )
+                    if ( nMask & 0x100 )
                         rIn >> nDummy16;
                 }
-                nMask >>= 4;
-                if ( nMask & 1 )
+                if ( nMask & 0x1000 )
                     rIn >> aSet.mpArry[ PPT_ParaAttr_LineFeed ];
-                if ( nMask & 2 )
+                if ( nMask & 0x2000 )
                     rIn >> aSet.mpArry[ PPT_ParaAttr_UpperDist ];
-                if ( nMask & 4 )
+                if ( nMask & 0x4000 )
                     rIn >> aSet.mpArry[ PPT_ParaAttr_LowerDist ];
-                if ( nMask & 8 )
+                if ( nMask & 0x8000 )
                     rIn >> nDummy16;
-                if ( nMask & 16 )
+                if ( nMask & 0x10000 )
                     rIn >> nDummy16;
-                if ( nMask & 0xe0 )
+                if ( nMask & 0xe0000 )
+                    rIn >> nDummy16;
+                if ( nMask & 0x200000 )                     // #88602#
                     rIn >> nDummy16;
                 if ( nExtParaPos )                          // if set, get the new ppt2000 numrules
                 {
@@ -5289,7 +5289,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
 
             if ( ( nCharCount > nStringLen ) || ( nStringLen - ( nCharAnzRead + nCharCount ) < 0 ) )
             {
-                bTextPropAtom = FALSE;
+                bTextPropAtom = sal_False;
                 nCharCount = nStringLen - nCharAnzRead;
                 aParaPropSet = PPTParaPropSet();
                 DBG_ERROR( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
@@ -5331,7 +5331,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     nCharCount = nStringLen - nCharAnzRead;
                     if ( nCharsToRead < -1 )
                     {
-                        bTextPropAtom = FALSE;
+                        bTextPropAtom = sal_False;
                         DBG_ERROR( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the character attributes" );
                     }
                 }
