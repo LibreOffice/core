@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:55:13 $
+#   last change: $Author: rt $ $Date: 2004-09-20 10:40:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -163,11 +163,8 @@ SLOFILES =  \
         $(SLO)$/cellsh3.obj\
         $(SLO)$/cellsh4.obj\
         $(SLO)$/formatsh.obj\
-        $(SLO)$/pgbrksh.obj
-
-EXCEPTIONSFILES=\
-        $(SLO)$/viewdata.obj    \
-        $(SLO)$/cellsh1.obj
+        $(SLO)$/pgbrksh.obj\
+        $(SLO)$/viewdata.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
     NOOPTFILES= \
