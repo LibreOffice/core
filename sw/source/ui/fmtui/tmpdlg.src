@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:34:33 $
+ *  last change: $Author: obo $ $Date: 2000-12-04 11:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ TabDialog DLG_TEMPLATE_1
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fontin tehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
-                Text [ french ] = "Effet de caractère" ;
+                Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekt" ;
                 Text [ dutch ] = "Schrifteffect" ;
                 Text [ spanish ] = "Efectos de fuente" ;
@@ -151,23 +151,23 @@ TabDialog DLG_TEMPLATE_1
                 Text = "Position" ;
                 Text [ ENGLISH ] = "Position" ;
                 Text[ english_us ] = "Position";
-                Text[ portuguese ] = "Position";
+                Text[ portuguese ] = "Posição";
                 Text[ russian ] = "Position";
-                Text[ greek ] = "Position";
+                Text[ greek ] = "ÈÝóç";
                 Text[ dutch ] = "Position";
                 Text[ french ] = "Position";
-                Text[ spanish ] = "Position";
-                Text[ italian ] = "Position";
+                Text[ spanish ] = "Posición";
+                Text[ italian ] = "Posizione";
                 Text[ danish ] = "Position";
                 Text[ swedish ] = "Position";
-                Text[ polish ] = "Position";
+                Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
                 Text[ japanese ] = "Position";
-                Text[ korean ] = "Position";
-                Text[ chinese_simplified ] = "Position";
-                Text[ chinese_traditional ] = "Position";
+                Text[ korean ] = "À§Ä¡";
+                Text[ chinese_simplified ] = "Î»ÖÃ";
+                Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
-                Text[ arabic ] = "Position";
+                Text[ arabic ] = "ÇáãæÖÚ";
             };
             PageItem
             {
@@ -175,24 +175,24 @@ TabDialog DLG_TEMPLATE_1
                 PageResID = TP_CHAR_TWOLN;
                 Text = "Asiatisches Layout" ;
                 Text [ ENGLISH ] = "Asian layout" ;
-                Text[ english_us ] = "Asian layout";
+                Text[ english_us ] = "Asian Layout";
                 Text[ portuguese ] = "Asian layout";
                 Text[ russian ] = "Asian layout";
-                Text[ greek ] = "Asian layout";
+                Text[ greek ] = "ÁóéáôéêÞ äéÜôáîç";
                 Text[ dutch ] = "Asian layout";
-                Text[ french ] = "Asian layout";
-                Text[ spanish ] = "Asian layout";
-                Text[ italian ] = "Asian layout";
+                Text[ french ] = "Mise en page asiatique";
+                Text[ spanish ] = "Diseño asiático";
+                Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Asian layout";
+                Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "Asian layout";
-                Text[ korean ] = "Asian layout";
-                Text[ chinese_simplified ] = "Asian layout";
-                Text[ chinese_traditional ] = "Asian layout";
+                Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
+                Text[ chinese_simplified ] = "ÑÇÖÞÎÄ×ÖµÄ°æÊ½";
+                Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
                 Text[ turkish ] = "Asian layout";
-                Text[ arabic ] = "Asian layout";
+                Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
             };
             PageItem
             {
@@ -387,7 +387,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fontin tehosteet" ;
                 Text [ danish ] = "Skrifteffekter" ;
-                Text [ french ] = "Effets de caractère" ;
+                Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekter" ;
                 Text [ dutch ] = "Schrifteffecten" ;
                 Text [ spanish ] = "Efectos de fuente" ;
@@ -411,23 +411,23 @@ TabDialog DLG_TEMPLATE_2
                 Text = "Position" ;
                 Text [ ENGLISH ] = "Position" ;
                 Text[ english_us ] = "Position";
-                Text[ portuguese ] = "Position";
+                Text[ portuguese ] = "Posição";
                 Text[ russian ] = "Position";
-                Text[ greek ] = "Position";
+                Text[ greek ] = "ÈÝóç";
                 Text[ dutch ] = "Position";
                 Text[ french ] = "Position";
-                Text[ spanish ] = "Position";
-                Text[ italian ] = "Position";
+                Text[ spanish ] = "Posición";
+                Text[ italian ] = "Posizione";
                 Text[ danish ] = "Position";
                 Text[ swedish ] = "Position";
-                Text[ polish ] = "Position";
+                Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
                 Text[ japanese ] = "Position";
-                Text[ korean ] = "Position";
-                Text[ chinese_simplified ] = "Position";
-                Text[ chinese_traditional ] = "Position";
+                Text[ korean ] = "À§Ä¡";
+                Text[ chinese_simplified ] = "Î»ÖÃ";
+                Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
-                Text[ arabic ] = "Position";
+                Text[ arabic ] = "ÇáãæÖÚ";
             };
             PageItem
             {
@@ -435,24 +435,24 @@ TabDialog DLG_TEMPLATE_2
                 PageResID = TP_CHAR_TWOLN;
                 Text = "Asiatisches Layout" ;
                 Text [ ENGLISH ] = "Asian layout" ;
-                Text[ english_us ] = "Asian layout";
+                Text[ english_us ] = "Asian Layout";
                 Text[ portuguese ] = "Asian layout";
                 Text[ russian ] = "Asian layout";
-                Text[ greek ] = "Asian layout";
+                Text[ greek ] = "ÁóéáôéêÞ äéÜôáîç";
                 Text[ dutch ] = "Asian layout";
-                Text[ french ] = "Asian layout";
-                Text[ spanish ] = "Asian layout";
-                Text[ italian ] = "Asian layout";
+                Text[ french ] = "Mise en page asiatique";
+                Text[ spanish ] = "Diseño asiático";
+                Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Asian layout";
+                Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "Asian layout";
-                Text[ korean ] = "Asian layout";
-                Text[ chinese_simplified ] = "Asian layout";
-                Text[ chinese_traditional ] = "Asian layout";
+                Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
+                Text[ chinese_simplified ] = "ÑÇÖÞÎÄ×ÖµÄ°æÊ½";
+                Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
                 Text[ turkish ] = "Asian layout";
-                Text[ arabic ] = "Asian layout";
+                Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
             };
             PageItem
             {
