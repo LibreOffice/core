@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: pb $ $Date: 2001-02-20 07:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <rtl/tencinfo.h>
 #endif
 
+#include <unotools/configmgr.hxx>
+
 #include "docinf.hxx"
 #include "frmhtmlw.hxx"
 #include "fsetobsh.hxx"
@@ -78,8 +80,10 @@
 #include "viewfrm.hxx"
 #include "fsetvwsh.hxx"
 #include "docfile.hxx"
+#include "sfxresid.hxx"
 
 #include "sfx.hrc"
+#include "bastyp.hrc"
 
 // -----------------------------------------------------------------------
 
@@ -195,9 +199,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm,
     }
 
     // Who we are
-    String sGenerator = String::CreateFromAscii( INET_PRODUCTNAME );
-    OutMeta( rStrm, pIndent, sHTML_META_generator, sGenerator, FALSE,
-             eDestEnc );
+    String sGenerator( SfxResId( STR_HTML_GENERATOR ) );
+    sGenerator.SearchAndReplaceAscii( "%1", String( DEFINE_CONST_UNICODE( TOOLS_INETDEF_OS ) ) );
+    OutMeta( rStrm, pIndent, sHTML_META_generator, sGenerator, FALSE, eDestEnc );
 
     if( pInfo )
     {
