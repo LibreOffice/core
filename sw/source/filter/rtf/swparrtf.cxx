@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:20:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2262,65 +2262,6 @@ void SwRTFParser::MakeStyleTab()
     }
 }
 
-SwPageDesc* SwRTFParser::_MakeNewPageDesc( int bFirst )
-{
-    USHORT* pNo = bFirst ? &nAktFirstPageDesc : &nAktPageDesc;
-    USHORT nNew = pDoc->MakePageDesc( ViewShell::GetShellRes()->
-                    GetPageDescName( pDoc->GetPageDescCnt(), bFirst ), 0,
-                                      FALSE );
-    SwPageDesc& rAkt = pDoc->_GetPageDesc( nNew );
-    SwPageDesc& rOld = pDoc->_GetPageDesc( *pNo );
-    pDoc->CopyPageDesc( rOld, rAkt, FALSE );
-
-    *pNo = nNew;
-
-    // setze den Follow-PageDesc immer auf sich selbst
-    rAkt.SetFollow( &rAkt );
-
-    // falls auf \\page ein \\setd folgt, dann muss noch ein neuer
-    // Absatz eingefuegt werden.
-    SwCntntNode* pCNd = pPam->GetCntntNode();
-    ASSERT( pCNd, "wo ist mein Content-Node" );
-    if( SFX_ITEM_SET == pCNd->GetSwAttrSet().GetItemState( RES_BREAK, FALSE )
-        // sollten nicht am NodeAnfang stehen, erzeuge einen neuen Absatz
-        || pPam->GetPoint()->nContent.GetIndex() )
-        InsertPara();
-
-    return &rAkt;
-}
-
-BOOL lcl_CompareRTFPageDesc( const SwPageDesc& rOld, const SwPageDesc& rAkt )
-{
-    BOOL bRet = /*rAkt.ReadUseOn() == rOld.ReadUseOn() && Bug 63599 */
-                rAkt.GetLandscape() == rOld.GetLandscape() &&
-                rAkt.GetNumType().GetNumberingType() == rOld.GetNumType().GetNumberingType();
-
-    if( bRet )
-    {
-        // dann ein paar Attribute vergleichen
-        USHORT __READONLY_DATA aIdArr[] = { RES_FRM_SIZE, RES_UL_SPACE,
-                                            RES_BACKGROUND, RES_SHADOW,
-                                            RES_FRAMEDIR, RES_FRAMEDIR,
-                                            0 };
-        const SfxPoolItem* pOldItem, *pAktItem;
-        for( USHORT n = 0; aIdArr[ n ] && bRet; n += 2 )
-        {
-            for( USHORT nId = aIdArr[ n ]; nId <= aIdArr[ n+1]; ++nId )
-            {
-                int eOldSt = rOld.GetMaster().GetItemState( nId, FALSE, &pOldItem ),
-                    eAktSt = rAkt.GetMaster().GetItemState( nId, FALSE, &pAktItem );
-                if( eOldSt != eAktSt ||
-                    ( SFX_ITEM_SET == eOldSt && *pOldItem != *pAktItem ))
-                {
-                    bRet = FALSE;
-                    break;
-                }
-            }
-        }
-    }
-    return bRet;
-}
-
 BOOL lcl_SetFmtCol( SwFmt& rFmt, USHORT nCols, USHORT nColSpace,
                     const SvUShorts& rColumns )
 {
@@ -2353,24 +2294,6 @@ BOOL lcl_SetFmtCol( SwFmt& rFmt, USHORT nCols, USHORT nColSpace,
         bSet = TRUE;
     }
     return bSet;
-}
-
-// MM. Test to see if the current Document pointer is
-// pointing to a pages desc and if it is return it.
-SwFmtPageDesc* SwRTFParser::GetCurrentPageDesc(SwPaM *pPam)
-{
-    const SfxPoolItem* pItem;
-    const SwCntntNode* pNd = pPam->GetCntntNode();
-    SwFmtPageDesc* aFmtPageDsc = 0;
-
-    // If the current object is a page desc.
-    if( pNd && pNd->GetpSwAttrSet() && SFX_ITEM_SET ==
-        pNd->GetpSwAttrSet()->GetItemState( RES_PAGEDESC,
-        FALSE, &pItem ) )
-    {
-        aFmtPageDsc = (SwFmtPageDesc*)pItem;
-    }
-    return aFmtPageDsc;
 }
 
 void SwRTFParser::DoHairyWriterPageDesc(int nToken)
@@ -3810,19 +3733,6 @@ sal_Char __READONLY_DATA aChkForVerNo[] = "StarWriter";
 
     SvxRTFParser::ReadInfo( pChkForVerNo );
 }
-
-
-#ifdef USED
-void SwRTFParser::SaveState( int nToken )
-{
-    SvxRTFParser::SaveState( nToken );
-}
-
-void SwRTFParser::RestoreState()
-{
-    SvxRTFParser::RestoreState();
-}
-#endif
 
 /**/
 
