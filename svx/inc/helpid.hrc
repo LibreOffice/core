@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:51:13 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,6 +701,7 @@
 #define HID_COLORPAGE_BASICOPERATOR_CB              (HID_SVX_EXT0_START + 106)
 #define HID_COLORPAGE_BASICKEYWORD_CB               (HID_SVX_EXT0_START + 107)
 #define HID_COLORPAGE_BASICERROR_CB                 (HID_SVX_EXT0_START + 108)
+#define HID_SVXPAGE_SWPOSSIZE                       (HID_SVX_EXT0_START + 109)
 
 #define HID_POPUP_EXTRUSION_DIRECTION               (HID_SVX_EXT0_START + 109)
 #define HID_POPUP_EXTRUSION_DEPTH                   (HID_SVX_EXT0_START + 110)
