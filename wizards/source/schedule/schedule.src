@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:32:47 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,7 @@ Text[ swedish ] = "Allmänna helgdagar";
     Text[ russian ] = "Îáùåñòâåííûå ïğàçäíèêè";
     Text[ danish ] = "Almindelige helligdage";
     Text[ polish ] = "Ogólne dni œwi¹teczne";
-    Text[ chinese_traditional ] = "´¶³q¸`°²¤é";
+    Text[ chinese_traditional ] = "¤@¯ë¸`°²¤é";
     Text[ arabic ] = "ÚØáÇÊ ÚÇãÉ";
     Text[ greek ] = "Ãåíéêİò áñãßåò";
     Text[ korean ] = "°øÈŞÀÏ";
@@ -1155,7 +1155,7 @@ Text[ swedish ] = "";
     Text[ japanese ] = "˜J“­T“ú";
     Text[ korean ] = "±Ù¹« ½Ã°£, ÁÖ";
     Text[ chinese_simplified ] = "¹¤×÷ÖÜ";
-    Text[ chinese_traditional ] = "¤u§@©P";
+    Text[ chinese_traditional ] = "¤u§@¶g";
     Text[ arabic ] = "ÃÓÈæÚ Úãá";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Çalışma haftası";
