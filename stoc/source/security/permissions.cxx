@@ -2,9 +2,9 @@
  *
  *  $RCSfile: permissions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-05 15:48:17 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@ SocketPermission::SocketPermission(
     , m_resolvedHost( false )
     , m_wildCardHost( perm.Host.getLength() && '*' == perm.Host.pData->buffer[ 0 ] )
 {
+    if (0xe0000000 & m_actions) // if any (except resolve) is given => resolve implied
+        m_actions |= 0x10000000;
+
     // separate host from portrange
     sal_Int32 colon = m_host.indexOf( ':' );
     if (colon >= 0) // port [range] given
@@ -290,9 +293,9 @@ OUString SocketPermission::toString() const SAL_THROW( () )
     buf.append( m_host );
     if (m_resolvedHost)
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[") );
+        buf.append( (sal_Unicode)'[' );
         buf.append( m_ip );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("]") );
+        buf.append( (sal_Unicode)']' );
     }
     // port
     if (0 != m_lowerPort || 65535 != m_upperPort)
@@ -386,6 +389,13 @@ FilePermission::FilePermission(
             oslFileError rc = ::osl_getAbsoluteFileURL(
                 getWorkingDir().pData, perm.URL.pData, &out.pData );
             m_url = (osl_File_E_None == rc ? out : perm.URL); // fallback
+        }
+        // correct win drive letters
+        if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
+        {
+            static OUString s_colon = OUSTR(":");
+            // common case in API is a ':' (sal), so convert '|' to ':'
+            m_url = m_url.replaceAt( 9, 1, s_colon );
         }
     }
 }
@@ -599,7 +609,7 @@ static void throwAccessControlException(
     OSL_ASSERT( 0 );
 }
 //==================================================================================================
-void PermissionCollection::checkPermission( Any const & perm )
+void PermissionCollection::checkPermission( Any const & perm ) const
     SAL_THROW( (RuntimeException) )
 {
     Type const & demanded_type = perm.getValueType();

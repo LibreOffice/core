@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_policy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <cppuhelper/access_control.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
@@ -127,6 +128,7 @@ class FilePolicy
     , public t_helper
 {
     Reference< XComponentContext > m_xComponentContext;
+    AccessControl m_ac;
 
     Sequence< Any > m_defaultPermissions;
     typedef hash_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
@@ -164,6 +166,7 @@ FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext
     SAL_THROW( () )
     : t_helper( m_mutex )
     , m_xComponentContext( xComponentContext )
+    , m_ac( xComponentContext )
     , m_init( false )
 {
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
@@ -235,7 +238,7 @@ class PolicyReader
         { m_back = c; }
 
     inline bool isWhiteSpace( sal_Unicode c ) SAL_THROW( () )
-        { return (' ' == c || '\t' == c || '\n' == c); }
+        { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace()
         SAL_THROW( (RuntimeException) );
 
@@ -243,7 +246,7 @@ class PolicyReader
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:
-    PolicyReader( OUString const & file )
+    PolicyReader( OUString const & file, AccessControl & ac )
         SAL_THROW( (RuntimeException) );
     ~PolicyReader()
         SAL_THROW( () );
@@ -332,12 +335,63 @@ OUString PolicyReader::getToken()
 void PolicyReader::skipWhiteSpace()
     SAL_THROW( (RuntimeException) )
 {
-    sal_Unicode c = get();
-    while (isWhiteSpace( c ))
+    sal_Unicode c;
+    do
     {
         c = get();
     }
-    back( c );
+    while (isWhiteSpace( c )); // seeking next non-whitespace char
+
+    if ('/' == c) // C/C++ like comment
+    {
+        c = get();
+        if ('/' == c) // C++ like comment
+        {
+            do
+            {
+                c = get();
+            }
+            while ('\n' != c && '\0' != c); // seek eol/eof
+            skipWhiteSpace(); // cont skip on next line
+        }
+        else if ('*' == c) // C like comment
+        {
+            bool fini = true;
+            do
+            {
+                c = get();
+                if ('*' == c)
+                {
+                    c = get();
+                    fini = ('/' == c || '\0' == c);
+                }
+                else
+                {
+                    fini = ('\0' == c);
+                }
+            }
+            while (! fini);
+            skipWhiteSpace(); // cont skip on next line
+        }
+        else
+        {
+            error( OUSTR("expected C/C++ like comment!") );
+        }
+    }
+    else if ('#' == c) // script like comment
+    {
+        do
+        {
+            c = get();
+        }
+        while ('\n' != c && '\0' != c); // seek eol/eof
+        skipWhiteSpace(); // cont skip on next line
+    }
+
+    else // is token char
+    {
+        back( c );
+    }
 }
 //__________________________________________________________________________________________________
 sal_Unicode PolicyReader::get()
@@ -392,13 +446,14 @@ void PolicyReader::error( OUString const & msg )
     throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
 }
 //__________________________________________________________________________________________________
-PolicyReader::PolicyReader( OUString const & fileName )
+PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
     SAL_THROW( (RuntimeException) )
     : m_fileName( fileName )
     , m_linepos( 0 )
     , m_pos( 1 ) // force readline
     , m_back( '\0' )
 {
+    ac.checkFilePermission( m_fileName, OUSTR("read") );
     if (osl_File_E_None != ::osl_openFile( m_fileName.pData, &m_file, osl_File_OpenFlag_Read ))
     {
         OUStringBuffer buf( 32 );
@@ -443,7 +498,7 @@ void FilePolicy::refresh()
             (OWeakObject *)this );
     }
 
-    PolicyReader reader( fileName );
+    PolicyReader reader( fileName, m_ac );
 
     // fill these two
     Sequence< Any > defaultPermissions;

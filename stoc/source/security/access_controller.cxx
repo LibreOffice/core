@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  ************************************************************************/
 
-#include <hash_set>
+#include <vector>
+#include <memory>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -348,91 +349,6 @@ public:
     inline ~cc_reset() SAL_THROW( () )
         { ::uno_setCurrentContext( m_cc, s_envType.pData, 0 ); }
 };
-//==================================================================================================
-class RecursionCheck : public ThreadData
-{
-    typedef hash_set< OUString, ::rtl::OUStringHash > t_set;
-    static void SAL_CALL destroyKeyData( void * );
-
-    inline t_set * getData() SAL_THROW( () )
-        { return reinterpret_cast< t_set * >( ThreadData::getData() ); }
-
-public:
-    inline RecursionCheck() SAL_THROW( () )
-        : ThreadData( (oslThreadKeyCallbackFunction)destroyKeyData )
-        {}
-
-    bool isRecurring( OUString const & userId ) SAL_THROW( () );
-    void mark( OUString const & userId ) SAL_THROW( () );
-    void unmark( OUString const & userId ) SAL_THROW( () );
-};
-//__________________________________________________________________________________________________
-void RecursionCheck::destroyKeyData( void * p )
-{
-    delete reinterpret_cast< t_set * >( p );
-}
-//__________________________________________________________________________________________________
-bool RecursionCheck::isRecurring( OUString const & userId ) SAL_THROW( () )
-{
-    t_set const * s = getData();
-    if (s)
-    {
-        t_set::const_iterator const iFind( s->find( userId ) );
-        bool ret= (iFind != s->end());
-#ifdef __DIAGNOSE
-        if (ret)
-        {
-            OUStringBuffer buf( 48 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> info: recurring call of user \"") );
-            buf.append( userId );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
-            OString str( ::rtl::OUStringToOString(
-                buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( str.getStr() );
-        }
-#endif
-        return ret;
-    }
-    return false;
-}
-//__________________________________________________________________________________________________
-inline void RecursionCheck::mark( OUString const & userId ) SAL_THROW( () )
-{
-    t_set * s = getData();
-    if (s)
-    {
-        s->insert( userId );
-    }
-    else
-    {
-        t_set * s = new t_set();
-        s->insert( userId );
-        setData( s );
-    }
-}
-//__________________________________________________________________________________________________
-inline void RecursionCheck::unmark( OUString const & userId ) SAL_THROW( () )
-{
-    t_set * s = getData();
-    if (s)
-    {
-        s->erase( userId );
-    }
-}
-//==================================================================================================
-class RecursionMarkGuard
-{
-    RecursionCheck & m_rec_check;
-    OUString const & m_userId;
-
-public:
-    inline RecursionMarkGuard( RecursionCheck & rec_check, OUString const & userId ) SAL_THROW( () )
-        : m_rec_check( rec_check )
-        , m_userId( userId )
-        { m_rec_check.mark( m_userId ); }
-    inline ~RecursionMarkGuard() SAL_THROW( () )
-        { m_rec_check.unmark( m_userId ); }
-};
 
 //##################################################################################################
 
@@ -450,8 +366,6 @@ class AccessController
 {
     Reference< XComponentContext > m_xComponentContext;
 
-    RecursionCheck m_rec_check;
-
     Reference< security::XPolicy > m_xPolicy;
     Reference< security::XPolicy > const & getPolicy()
         SAL_THROW( (RuntimeException) );
@@ -459,18 +373,24 @@ class AccessController
     // mode
     enum { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
 
-    PermissionCollection m_defaultUserPermissions;
+    PermissionCollection m_defaultPermissions;
     // for single-user mode
     PermissionCollection m_singleUserPermissions;
     OUString m_singleUserId;
-    bool m_defaultUser_init;
+    bool m_defaultPerm_init;
     bool m_singleUser_init;
     // for multi-user mode
     lru_cache< OUString, PermissionCollection, ::rtl::OUStringHash, equal_to< OUString > >
         m_user2permissions;
 
+    ThreadData m_rec;
+    typedef vector< pair< OUString, Any > > t_rec_vec;
+    inline void clearPostPoned() SAL_THROW( () );
+    void checkAndClearPostPoned() SAL_THROW( (RuntimeException) );
+
     PermissionCollection getEffectivePermissions(
-        Reference< XCurrentContext > const & xContext )
+        Reference< XCurrentContext > const & xContext,
+        Any const & demanded_perm )
         SAL_THROW( (RuntimeException) );
 
 protected:
@@ -516,8 +436,9 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     : t_helper( m_mutex )
     , m_xComponentContext( xComponentContext )
     , m_mode( ON ) // default
-    , m_defaultUser_init( false )
+    , m_defaultPerm_init( false )
     , m_singleUser_init( false )
+    , m_rec( 0 )
 {
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
@@ -638,19 +559,19 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
 
 #ifdef __DIAGNOSE
 static void dumpPermissions(
-    OUString const & userId, PermissionCollection const & collection ) SAL_THROW( () )
+    PermissionCollection const & collection, OUString const & userId = OUString() ) SAL_THROW( () )
 {
     OUStringBuffer buf( 48 );
     if (userId.getLength())
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> dumping effective permissions of user \"") );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> dumping permissions of user \"") );
         buf.append( userId );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\":") );
     }
     else
     {
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("> dumping permission collection of default user:") );
+            RTL_CONSTASCII_STRINGPARAM("> dumping default permissions:") );
     }
     OString str( ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( str.getStr() );
@@ -664,68 +585,104 @@ static void dumpPermissions(
     OSL_TRACE( "> permission dump done" );
 }
 #endif
-//__________________________________________________________________________________________________
-PermissionCollection AccessController::getEffectivePermissions(
-    Reference< XCurrentContext > const & xContext )
-    SAL_THROW( (RuntimeException) )
-{
-    // this is the only place calling the policy singleton taking care of recurring calls
 
-    // init default permissions
-    if (! m_defaultUser_init)
+
+//__________________________________________________________________________________________________
+inline void AccessController::clearPostPoned() SAL_THROW( () )
+{
+    delete reinterpret_cast< t_rec_vec * >( m_rec.getData() );
+    m_rec.setData( 0 );
+}
+//__________________________________________________________________________________________________
+void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
+{
+    // check postponed permissions
+    auto_ptr< t_rec_vec > rec( reinterpret_cast< t_rec_vec * >( m_rec.getData() ) );
+    m_rec.setData( 0 ); // takeover ownership
+    OSL_ASSERT( rec.get() );
+    if (rec.get())
     {
-        // call on policy
-        // iff this is a recurring call for the default user, then grant all permissions
-        if (m_rec_check.isRecurring( OUString() ))
-            return PermissionCollection( new AllPermission() );
-        RecursionMarkGuard rec_guard( m_rec_check, OUString() ); // mark possible recursion
-        PermissionCollection defaultUserPermissions(
-            getPolicy()->getDefaultPermissions() );
-#ifdef __DIAGNOSE
-        dumpPermissions( OUSTR("default"), defaultUserPermissions );
-#endif
-        // assign
-        MutexGuard guard( m_mutex );
-        if (! m_defaultUser_init)
+        t_rec_vec const & vec = *rec.get();
+        switch (m_mode)
         {
-            m_defaultUserPermissions = defaultUserPermissions;
-            m_defaultUser_init = true;
+        case SINGLE_USER:
+        {
+            OSL_ASSERT( m_singleUser_init );
+            for ( size_t nPos = 0; nPos < vec.size(); ++nPos )
+            {
+                pair< OUString, Any > const & p = vec[ nPos ];
+                OSL_ASSERT( m_singleUserId.equals( p.first ) );
+                m_singleUserPermissions.checkPermission( p.second );
+            }
+            break;
+        }
+        case SINGLE_DEFAULT_USER:
+        {
+            OSL_ASSERT( m_defaultPerm_init );
+            for ( size_t nPos = 0; nPos < vec.size(); ++nPos )
+            {
+                pair< OUString, Any > const & p = vec[ nPos ];
+                OSL_ASSERT( !p.first.getLength() ); // default-user
+                m_defaultPermissions.checkPermission( p.second );
+            }
+            break;
+        }
+        case ON:
+        {
+            for ( size_t nPos = 0; nPos < vec.size(); ++nPos )
+            {
+                pair< OUString, Any > const & p = vec[ nPos ];
+                PermissionCollection const * pPermissions;
+                // lookup policy for user
+                {
+                    MutexGuard guard( m_mutex );
+                    pPermissions = m_user2permissions.lookup( p.first );
+                }
+                OSL_ASSERT( pPermissions );
+                if (pPermissions)
+                {
+                    pPermissions->checkPermission( p.second );
+                }
+            }
+            break;
+        }
+        default:
+            OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
+            break;
         }
     }
+}
+//__________________________________________________________________________________________________
+/** this is the only function calling the policy singleton and thus has to take care
+    of recurring calls!
+
+    @param demanded_perm (if not empty) is the demanded permission of a checkPermission() call
+                         which will be postponed for recurring calls
+*/
+PermissionCollection AccessController::getEffectivePermissions(
+    Reference< XCurrentContext > const & xContext,
+    Any const & demanded_perm )
+    SAL_THROW( (RuntimeException) )
+{
+    OUString userId;
 
     switch (m_mode)
     {
     case SINGLE_USER:
     {
-        if (! m_singleUser_init)
-        {
-            // call on policy
-            // iff this is a recurring call for the same user, then grant all permissions
-            if (m_rec_check.isRecurring( m_singleUserId ))
-                return PermissionCollection( new AllPermission() );
-            RecursionMarkGuard rec_guard( m_rec_check, m_singleUserId ); // mark possible recursion
-            PermissionCollection singleUserPermissions(
-                getPolicy()->getPermissions( m_singleUserId ), m_defaultUserPermissions );
-#ifdef __DIAGNOSE
-            dumpPermissions( m_singleUserId, singleUserPermissions );
-#endif
-            // assign
-            MutexGuard guard( m_mutex );
-            if (! m_singleUser_init)
-            {
-                m_singleUserPermissions = singleUserPermissions;
-                m_singleUser_init = true;
-            }
-        }
-        return m_singleUserPermissions;
+        if (m_singleUser_init)
+            return m_singleUserPermissions;
+        userId = m_singleUserId;
+        break;
     }
     case SINGLE_DEFAULT_USER:
     {
-        return m_defaultUserPermissions;
+        if (m_defaultPerm_init)
+            return m_defaultPermissions;
+        break;
     }
     case ON:
     {
-        OUString userId;
         if (xContext.is())
         {
             xContext->getValueByName( OUSTR(USER_CREDS ".id") ) >>= userId;
@@ -737,33 +694,145 @@ PermissionCollection AccessController::getEffectivePermissions(
         }
 
         // lookup policy for user
-        {
         MutexGuard guard( m_mutex );
         PermissionCollection const * pPermissions = m_user2permissions.lookup( userId );
         if (pPermissions)
             return *pPermissions;
-        }
-
-        // call on policy
-        // iff this is a recurring call for the same user, then grant all permissions
-        if (m_rec_check.isRecurring( userId ))
-            return PermissionCollection( new AllPermission() );
-        RecursionMarkGuard rec_guard( m_rec_check, userId ); // mark possible recursion
-        PermissionCollection permissions(
-            getPolicy()->getPermissions( userId ), m_defaultUserPermissions );
-#ifdef __DIAGNOSE
-        dumpPermissions( userId, permissions );
-#endif
-        {
-        // cache
-        MutexGuard guard( m_mutex );
-        m_user2permissions.set( userId, permissions );
-        }
-        return permissions;
+        break;
     }
     default:
-        OSL_ENSURE( 0, "### this should never be called in this mode!" );
+        OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
         return PermissionCollection();
+    }
+
+    // call on policy
+    // iff this is a recurring call for the default user, then grant all permissions
+    t_rec_vec * rec = reinterpret_cast< t_rec_vec * >( m_rec.getData() );
+    if (rec) // tls entry exists => this is recursive call
+    {
+        if (demanded_perm.hasValue())
+        {
+            // enqueue
+            rec->push_back( pair< OUString, Any >( userId, demanded_perm ) );
+        }
+#ifdef __DIAGNOSE
+        OUStringBuffer buf( 48 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> info: recurring call of user \"") );
+        buf.append( userId );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
+        OString str(
+            ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+        OSL_TRACE( str.getStr() );
+#endif
+        return PermissionCollection( new AllPermission() );
+    }
+    else // no tls
+    {
+        rec = new t_rec_vec;
+        m_rec.setData( rec );
+    }
+
+    try // calls on API
+    {
+        // init default permissions
+        if (! m_defaultPerm_init)
+        {
+            PermissionCollection defaultPermissions(
+                getPolicy()->getDefaultPermissions() );
+            // assign
+            MutexGuard guard( m_mutex );
+            if (! m_defaultPerm_init)
+            {
+                m_defaultPermissions = defaultPermissions;
+                m_defaultPerm_init = true;
+            }
+#ifdef __DIAGNOSE
+            dumpPermissions( m_defaultPermissions );
+#endif
+        }
+
+        PermissionCollection ret;
+
+        // init user permissions
+        switch (m_mode)
+        {
+        case SINGLE_USER:
+        {
+            ret = PermissionCollection(
+                getPolicy()->getPermissions( userId ), m_defaultPermissions );
+            {
+            // assign
+            MutexGuard guard( m_mutex );
+            if (m_singleUser_init)
+            {
+                ret = m_singleUserPermissions;
+            }
+            else
+            {
+                m_singleUserPermissions = ret;
+                m_singleUser_init = true;
+            }
+            }
+#ifdef __DIAGNOSE
+            dumpPermissions( ret, userId );
+#endif
+            break;
+        }
+        case SINGLE_DEFAULT_USER:
+        {
+            ret = m_defaultPermissions;
+            break;
+        }
+        case ON:
+        {
+            ret = PermissionCollection(
+                getPolicy()->getPermissions( userId ), m_defaultPermissions );
+            {
+            // cache
+            MutexGuard guard( m_mutex );
+            m_user2permissions.set( userId, ret );
+            }
+#ifdef __DIAGNOSE
+            dumpPermissions( ret, userId );
+#endif
+            break;
+        }
+        }
+
+        // check postponed
+        checkAndClearPostPoned();
+        return ret;
+    }
+    catch (security::AccessControlException & exc) // wrapped into DeploymentException
+    {
+        clearPostPoned(); // safety: exception could have happened before checking postponed?
+        OUStringBuffer buf( 64 );
+        buf.appendAscii(
+            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occured): ") );
+        buf.append( exc.Message );
+        throw RuntimeException( buf.makeStringAndClear(), exc.Context );
+//         throw DeploymentException( buf.makeStringAndClear(), exc.Context );
+    }
+    catch (RuntimeException &)
+    {
+        // dont check postponed, just cleanup
+        clearPostPoned();
+        delete reinterpret_cast< t_rec_vec * >( m_rec.getData() );
+        m_rec.setData( 0 );
+        throw;
+    }
+    catch (Exception &)
+    {
+        // check postponed permissions first
+        // => AccessControlExceptions are errors, user exceptions not!
+        checkAndClearPostPoned();
+        throw;
+    }
+    catch (...)
+    {
+        // dont check postponed, just cleanup
+        clearPostPoned();
+        throw;
     }
 }
 
@@ -792,7 +861,7 @@ void AccessController::checkPermission(
         return;
 
     // then static check
-    getEffectivePermissions( xContext ).checkPermission( perm );
+    getEffectivePermissions( xContext, perm ).checkPermission( perm );
 }
 //__________________________________________________________________________________________________
 Any AccessController::doRestricted(
@@ -863,7 +932,8 @@ Reference< security::XAccessControlContext > AccessController::getContext()
         xDynamic = getDynamicRestriction( xContext );
     }
 
-    return acc_Combiner::create( xDynamic, new acc_Policy( getEffectivePermissions( xContext ) ) );
+    return acc_Combiner::create(
+        xDynamic, new acc_Policy( getEffectivePermissions( xContext, Any() ) ) );
 }
 
 // XServiceInfo impl

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: permissions.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString > toStrings() const SAL_THROW( () );
 
     bool implies( Permission const & ) const SAL_THROW( () );
-    void checkPermission( ::com::sun::star::uno::Any const & perm )
+    void checkPermission( ::com::sun::star::uno::Any const & perm ) const
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 };
 
