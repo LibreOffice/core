@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-17 10:12:47 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 15:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include "unoprov.hxx"
 #include "svdopath.hxx"
 #include "unoapi.hxx"
+#include "svdomeas.hxx"
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -321,7 +322,7 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     if(pPage == NULL)
         throw uno::RuntimeException();
 
-    if( Index < 0 || Index >= pPage->GetObjCount())
+    if( Index < 0 || Index >= (sal_Int32)pPage->GetObjCount())
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pObj = pPage->GetObj( Index );
@@ -484,11 +485,21 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
         awt::Point aPos = xShape->getPosition();
         Rectangle aRect( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) );
 
-        if( nInventor == SdrInventor && nType == OBJ_LINE )
+        // special cases
+        if( nInventor == SdrInventor )
         {
-            pNewObj = new SdrPathObj( aRect.TopLeft(), aRect.BottomRight() );
+            switch( nType )
+            {
+            case OBJ_MEASURE:
+                pNewObj = new SdrMeasureObj( aRect.TopLeft(), aRect.BottomRight() );
+                break;
+            case OBJ_LINE:
+                pNewObj = new SdrPathObj( aRect.TopLeft(), aRect.BottomRight() );
+                break;
+            }
         }
-        else
+
+        if( pNewObj == NULL )
             pNewObj = SdrObjFactory::MakeNewObject( nInventor, nType, pPage );
 
         if(pNewObj)
@@ -516,6 +527,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 pScene->SetRectsDirty();
                 pScene->InitTransformationSet();
             }
+
         }
     }
 
