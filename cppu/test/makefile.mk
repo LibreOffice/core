@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: pliao $ $Date: 2001-02-07 03:40:09 $
+#   last change: $Author: pluby $ $Date: 2001-02-13 02:49:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,14 @@ OBJFILES=	\
 #		$(OBJ)$/test_Cincludes.obj
 #		$(OBJ)$/test_sec.obj	\
 
+# gcc on Mac OS X optimizes out some temporary variables when optimization is
+# turned on for compiling 
+.IF "$(OS)"=="MACOSX"
+NOOPTFILES+=$(OBJFILES)
+.IF "$(NOOPT_FLAG)"!=""
+CFLAGSNOOPT=
+.ENDIF
+.ENDIF
 
 APP1TARGET=	testcppu
 APP1OBJS=	\
