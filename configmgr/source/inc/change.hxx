@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 12:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,10 @@ namespace configmgr
         rtl::OUString m_aName;
 
         void swap(Change& aOther);
+
     public:
         Change(rtl::OUString const& _rName) : m_aName(_rName){}
+        Change(Change const& _rChange):m_aName(_rChange.m_aName){}
         virtual ~Change() {}
 
         rtl::OUString getNodeName() const { return m_aName; }
@@ -159,7 +161,8 @@ namespace configmgr
         uno::Any        m_aOldValue;
         Mode    m_eMode;
     public:
-        ValueChange(rtl::OUString const& _rName,uno::Any aNewValue, Mode aMode = changeValue, uno::Any aOldValue = uno::Any());
+        ValueChange(rtl::OUString const& _rName, uno::Any aNewValue, Mode aMode = changeValue, uno::Any aOldValue = uno::Any());
+        ValueChange(const ValueChange&);
         ValueChange(uno::Any aNewValue, ValueNode const& aOldValue);
         ValueChange(SetToDefault,  ValueNode const& aOldValue);
 
@@ -296,6 +299,8 @@ namespace configmgr
         RTTI(RemoveNode, Change);
     };
 
+    namespace argument { struct NoChildCopy {}; }
+
     //==========================================================================
     //= SubtreeChange
     //==========================================================================
@@ -303,7 +308,7 @@ namespace configmgr
     {
     protected:
         typedef ::std::map< ::rtl::OUString,Change* > Children;
-        Children m_mChanges;
+        Children m_aChanges;
         ::rtl::OUString     m_sTemplateName;            /// path of the template for child instantiation
 
         // don't create CopyCTor automatically
@@ -321,16 +326,20 @@ namespace configmgr
 
         friend class MutatingChildIterator;
     public:
-        SubtreeChange(rtl::OUString const& _rName);
+        /// A parameter for disabling copying of children
+        typedef argument::NoChildCopy NoChildCopy;
+
+        SubtreeChange(rtl::OUString const& _rName):Change(_rName){}
+        SubtreeChange(const SubtreeChange& _rChange, NoChildCopy) :Change(_rChange),m_sTemplateName(_rChange.getChildTemplateName()){}
         ~SubtreeChange();
 
         void swap(SubtreeChange& aOther);
 
         bool            isSetNodeChange() const { return m_sTemplateName.getLength() != 0; }
-        rtl::OUString       getChildTemplateName() const { return m_sTemplateName; }
+        rtl::OUString   getChildTemplateName() const { return m_sTemplateName; }
         void            setChildTemplateName(const rtl::OUString& _rName) { m_sTemplateName = _rName; }
 
-        sal_Int32                   size() const { return m_mChanges.size(); }
+        sal_Int32                   size() const { return m_aChanges.size(); }
         uno::Sequence< rtl::OUString >  elementNames() const;
 
         void                    addChange(std::auto_ptr<Change> aChange);
@@ -458,7 +467,7 @@ namespace configmgr
     //==========================================================================
     struct TreeChangeList
     {
-        rtl::OUString pathToRoot;                    // path to the root of the whole to-be-updated subtree
+        rtl::OUString pathToRoot;                // path to the root of the whole to-be-updated subtree
         SubtreeChange root;                      // changes made within this sub tree
         TreeChangeList(): root(::rtl::OUString()){}
 
@@ -469,9 +478,11 @@ namespace configmgr
         TreeChangeList( const rtl::OUString& _rPathToRoot, const rtl::OUString& _rLocalName)
                 :pathToRoot(_rPathToRoot), root(_rLocalName){}
 
-        // OUString getPath() const {return m_sPathToRoot;}
-        // const SubtreeChange* getRoot() const {return m_pRoot;}
-        // SubtreeChange* getRoot() {return m_pRoot;}
+        /** ctor
+        @param      _rTreeList          list to initialize the path, no childs are copied
+        */
+        TreeChangeList( const TreeChangeList& _rTree, SubtreeChange::NoChildCopy _rNoCopy)
+            :pathToRoot(_rTree.pathToRoot),root(_rTree.root, _rNoCopy){}
     };
 
 } // namespace configmgr
