@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediawindow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <cstdio>
 
 #include "mediawindow.hxx"
 #include "mediawindow_impl.hxx"
@@ -518,6 +520,10 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
                             if( pPreferredSizePixel )
                             {
                                 const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
+
+#ifdef DEBUG
+                                fprintf( stderr, "Media size: %d x %d\n", aAwtSize.Width, aAwtSize.Height );
+#endif
 
                                 pPreferredSizePixel->Width() = aAwtSize.Width;
                                 pPreferredSizePixel->Height() = aAwtSize.Height;
