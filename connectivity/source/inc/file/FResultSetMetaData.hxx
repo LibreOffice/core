@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-04 13:19:36 $
+ *  last change: $Author: oj $ $Date: 2000-11-20 09:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 
 namespace connectivity
 {
@@ -85,13 +88,13 @@ namespace connectivity
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
             ::rtl::OUString     m_aTableName;
-            const connectivity::OSQLColumns&    m_rColumns;
+            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns;
             OFileTable*         m_pTable;
 
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData(const OSQLColumns& _rColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable)
-                : m_rColumns(_rColumns)
+            OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable)
+                : m_xColumns(_rxColumns)
                 , m_aTableName(_aTableName)
                 , m_pTable(_pTable)
             {}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-17 11:25:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-20 09:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,16 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#endif
+
 
 #include <algorithm>
 
@@ -158,6 +168,10 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_bRowUpdated(sal_False)
                         ,m_bRowInserted(sal_False)
                         ,m_bRowDeleted(sal_False)
+                        ,m_nFetchSize(0)
+                        ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
+                        ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
+                        ,m_nFetchDirection(FetchDirection::FORWARD)
 {
     osl_incrementInterlockedCount( &m_refCount );
 
@@ -401,7 +415,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
         throw DisposedException();
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_xColumns.getBody(),m_aSQLIterator.getTables().begin()->first,m_pTable);
+        m_xMetaData = new OResultSetMetaData(m_xColumns,m_aSQLIterator.getTables().begin()->first,m_pTable);
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------

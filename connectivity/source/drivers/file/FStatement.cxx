@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
+ *  last change: $Author: oj $ $Date: 2000-11-20 09:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -132,6 +135,13 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     ,m_pParseTree(NULL)
     ,m_aSQLIterator(_pConnection->createCatalog()->getTables(),_pConnection->getMetaData(),NULL)
     ,m_aParser(_pConnection->getDriver()->getFactory())
+    ,m_nMaxFieldSize(0)
+    ,m_nMaxRows(0)
+    ,m_nQueryTimeOut(0)
+    ,m_nFetchSize(0)
+    ,m_nResultSetType(ResultSetType::FORWARD_ONLY)
+    ,m_nFetchDirection(FetchDirection::FORWARD)
+    ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
 {
     m_pConnection->acquire();
 

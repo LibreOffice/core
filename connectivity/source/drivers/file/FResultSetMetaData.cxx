@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-20 09:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,25 +84,25 @@ OResultSetMetaData::~OResultSetMetaData()
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getINT32(m_rColumns[column-1]->getPropertyValue(PROPERTY_PRECISION));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_PRECISION));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getINT32(m_rColumns[column-1]->getPropertyValue(PROPERTY_TYPE));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPE));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
-    return m_rColumns.size();
+    return (*m_xColumns).size();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 
@@ -114,8 +114,8 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-        Any aName(m_rColumns[column-1]->getPropertyValue(PROPERTY_REALNAME));
-    return aName.hasValue() ? getString(aName) : getString(m_rColumns[column-1]->getPropertyValue(PROPERTY_NAME));
+        Any aName((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_REALNAME));
+    return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -130,12 +130,12 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getString(m_rColumns[column-1]->getPropertyValue(PROPERTY_TYPENAME));
+    return getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPENAME));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getString(m_rColumns[column-1]->getPropertyValue(PROPERTY_NAME));
+    return getString((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_NAME));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -146,13 +146,13 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getBOOL(m_rColumns[column-1]->getPropertyValue(PROPERTY_TYPE));
+    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_TYPE));
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getBOOL(m_rColumns[column-1]->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
+    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
 }
 // -------------------------------------------------------------------------
 
@@ -164,18 +164,18 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLExce
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getINT32(m_rColumns[column-1]->getPropertyValue(PROPERTY_PRECISION));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_PRECISION));
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return getINT32(m_rColumns[column-1]->getPropertyValue(PROPERTY_SCALE));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_SCALE));
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return getINT32(m_rColumns[column-1]->getPropertyValue(PROPERTY_ISNULLABLE));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_ISNULLABLE));
 }
 // -------------------------------------------------------------------------
 
