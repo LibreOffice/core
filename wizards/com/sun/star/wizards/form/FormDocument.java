@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2004-11-27 09:06:10 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,11 @@ import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -160,12 +162,6 @@ public class FormDocument extends TextDocument {
         xPropPageStyle.setPropertyValue("LeftMargin", new Integer(nMargin));
         xPropPageStyle.setPropertyValue("TopMargin", new Integer(nMargin));
         xPropPageStyle.setPropertyValue("BottomMargin", new Integer(nMargin));
-
-//      int iRightMargin = AnyConverter.toInt(xPropPageStyle.getPropertyValue("RightMargin"));
-//      int iLeftMargin = AnyConverter.toInt(xPropPageStyle.getPropertyValue("LeftMargin"));
-//      int iTopMargin = AnyConverter.toInt(xPropPageStyle.getPropertyValue("TopMargin"));
-//      int iBottomMargin = AnyConverter.toInt(xPropPageStyle.getPropertyValue("BottomMargin"));
-
         aMainFormPoint = new Point(nMargin, nMargin);
         nFormWidth = (int) (0.8 * (double) nPageWidth) - 2 * nMargin;
         nFormHeight = (int) (0.65 * (double) nPageHeight) - 2 * nMargin;
@@ -446,7 +442,7 @@ public class FormDocument extends TextDocument {
         private void setFormProperties(PropertyValue[] _aPropertySetList, CommandMetaData _oDBMetaData){
         try {
             xPropertySet.setPropertyValue("DataSourceName", getDataSourceName());
-            xPropertySet.setPropertyValue("Command", _oDBMetaData.getCommand());
+            xPropertySet.setPropertyValue("Command", _oDBMetaData.getCommandName());
             xPropertySet.setPropertyValue("CommandType", new Integer(_oDBMetaData.getCommandType()));
             for (int i = 0; i < _aPropertySetList.length; i++){
                 xPropertySet.setPropertyValue(_aPropertySetList[i].Name, _aPropertySetList[i].Value);
@@ -490,8 +486,20 @@ public class FormDocument extends TextDocument {
                             oFormHandler.removeShape(oDBControls[i].xShape);
                         }
                     }
-                    else
+                    else{
+                        String fieldname = null;
+                        try {
+                            fieldname = (String) oDBControls[i].xPropertySet.getPropertyValue("DataField");
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
+                        }
+//                      if (fieldname != null){
+//                          oLabelControls[i].insertControlInContainer(fieldname);
+//                          oDBControls[i].insertControlInContainer(fieldname);
+//                      }
                         oFormHandler.groupShapesTogether(xMSF,oLabelControls[i].xShape, oDBControls[i].xShape);
+                    }
+
                 }
             }
         }
