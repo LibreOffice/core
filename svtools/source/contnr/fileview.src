@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-17 12:51:06 $
+ *  last change: $Author: dv $ $Date: 2001-07-20 10:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,36 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ turkish ] = "~Sil";
         Text[ finnish ] = "~Poista";
         Text[ catalan ] = "~Eliminar";
+    };
+
+    PushButton BTN_ALL
+    {
+        Pos = MAP_APPFONT ( 59 , 47 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text = "~Alle löschen" ;
+        Text [ English ] = "Delete ~all" ;
+        Text [ english_us ] = "Delete ~All" ;
+        Text[ portuguese ] = "Eliminar ~tudo";
+        Text[ greek ] = "ÄéáãñáöŞ üë~á";
+        Text[ dutch ] = "~Alle wissen";
+        Text[ french ] = "Supprimer ~tout";
+        Text[ spanish ] = "~Eliminar todos";
+        Text[ swedish ] = "Radera ~alla";
+        Text[ russian ] = "Óäàëèòü âñå";
+        Text[ italian ] = "~Elimina tutti";
+        Text[ danish ] = "Slet alle";
+        Text[ polish ] = "Usuñ wszystkie";
+        Text[ portuguese_brazilian ] = "~Alle";
+        Text[ japanese ] = "‚·‚×‚Äíœ(~A)";
+        Text[ korean ] = "¸ğµÎ »èÁ¦(~A)";
+        Text[ chinese_simplified ] = "É¾³ıÈ«²¿(~A)";
+        Text[ chinese_traditional ] = "¥ş³¡§R°£(~A)";
+        Text[ arabic ] = "ÍĞİ Çáßá";
+        Text[ turkish ] = "~Tümünü sil";
+        Text[ finnish ] = "~Poista kaikki";
+        Text[ catalan ] = "~Eliminar todos";
     };
 
     PushButton BTN_NO
