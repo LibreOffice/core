@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connpooloptions.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:19:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,105 +79,24 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     {
         Pos = MAP_APPFONT( 4, 3 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 8, 8 );
-        Text = "Aufbewahrung von Verbindungen";
-        Text [ english ] = "Connection Pool";
-        Text [ english_us ] = "Connection pool";
-        Text [ language_user1 ] = "; Please don't translate the german phrase! It is an unfortunate translation of the english technical term.";
-        Text[ portuguese ] = "Agregação de ligações";
-        Text[ russian ] = "Íàêîïëåíèå ñîåäèíåíèé";
-        Text[ greek ] = "×şñïò óõãêİíôñùóçò óõíäİóåùí";
-        Text[ dutch ] = "Behouden van verbindingen";
-        Text[ french ] = "Pool de connexions";
-        Text[ spanish ] = "Pool de conexiones";
-        Text[ finnish ] = "Yhteysvaranto";
-        Text[ italian ] = "Insieme di collegamenti";
-        Text[ danish ] = "Fastholdelse af forbindelser";
-        Text[ swedish ] = "Kopplingspool";
-        Text[ polish ] = "Pula po³¹czeñ";
-        Text[ portuguese_brazilian ] = "Pool de conexões";
-        Text[ japanese ] = "ãƒ‰ãƒ©ã‚¤ãƒã‚’ä½¿ã£ãŸæ¥ç¶šä¿æŒã®è¨­å®š";
-        Text[ korean ] = "ì—°ê²° í’€";
-        Text[ chinese_simplified ] = "ä¿ç•™é©±åŠ¨ç¨‹åºçš„è®¾ç½®";
-        Text[ chinese_traditional ] = "ä¿ç•™é©…å‹•ç¨‹å¼çš„è¨­ç½®";
-        Text[ turkish ] = "Bağlantı havuzu";
-        Text[ arabic ] = "Connection pool";
-        Text[ catalan ] = "Connexió de recursos";
-        Text[ thai ] = "à¸£à¸§à¸¡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
-        Text[ czech ] = "SdÃ­lenÃ¡ pÅ™ipojenÃ­";
-        Text[ hebrew ] = "Aufbewahrung von Verbindungen";
-        Text[ hindi ] = "à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨à¥ à¤ªà¥‚à¤²";
-        Text[ slovak ] = "ZdieÄ¾anie pripojenia";
-        Text[ hungarian ] = "KapcsolatgyÅ±jtÅ‘";
-        Text[ slovenian ] = "Zaloga povezav";
+        Text [ de ] = "Aufbewahrung von Verbindungen";
+        Text [ en-US ] = "Connection pool";
+        Text [ x-comment ] = "; Please don't translate the german phrase! It is an unfortunate translation of the english technical term.";
     };
     CheckBox CB_POOL_CONNS
     {
         Pos = MAP_APPFONT( 7, 15 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 14, 8 );
-        Text = "Verbindungen aufbewahren";
-        Text [ english ] = "Connection pooling enabled";
-        Text [ english_us ] = "Connection pooling enabled";
-        Text[ portuguese ] = "Agregar ligações";
-        Text[ russian ] = "Äîïóñòèìîå íàêîïëåíèå ñîåäèíåíèé";
-        Text[ greek ] = "Ç ïìáäïğïßçóç óõíäİóåùí åíåñãïğïéŞèçêå";
-        Text[ dutch ] = "Ve~rbindingen behouden";
-        Text[ french ] = "Pool de connexions actif";
-        Text[ spanish ] = "Pool de conexiones activo";
-        Text[ finnish ] = "Yhteysvaranto käytössä";
-        Text[ italian ] = "Attiva insieme dei collegamenti";
-        Text[ danish ] = "Fasthold forbindelser";
-        Text[ swedish ] = "Poolning av kopplingar";
-        Text[ polish ] = "~Pula po³¹czeñ aktywna";
-        Text[ portuguese_brazilian ] = "Pool de conexões habilitado";
-        Text[ japanese ] = "ãƒ‰ãƒ©ã‚¤ãƒã‚’ä½¿ã£ã¦æ¥ç¶šã‚’ä¿æŒã™ã‚‹";
-        Text[ korean ] = "ì—°ê²° í’€ë§ í™œì„±í™”";
-        Text[ chinese_simplified ] = "ä¿ç•™ä½¿ç”¨é©±åŠ¨ç¨‹åº";
-        Text[ chinese_traditional ] = "ä¿ç•™ä½¿ç”¨é©…å‹•ç¨‹å¼";
-        Text[ turkish ] = "Ortayatoplama bağlantısı etkin";
-        Text[ arabic ] = "Connection pooling enabled";
-        Text[ catalan ] = "Habilita la connexió de recursos";
-        Text[ language_user1 ] = "; jc 01.08.01: der Eintrag befindet sich in Extras/Optionen/Datenquellen/Verbindungen";
-        Text[ thai ] = "à¹€à¸›à¸´à¸”à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸£à¸§à¸¡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
-        Text[ czech ] = "SdÃ­lenÃ­ pÅ™ipojenÃ­ povoleno";
-        Text[ hebrew ] = "Verbindungen aufbewahren";
-        Text[ hindi ] = "à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨à¥ à¤ªà¥‚à¤²à¤¿à¤‚à¤— à¤•à¥‹ à¤¸à¤•à¥à¤·à¤® à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ";
-        Text[ slovak ] = "ZdieÄ¾anie pripojenia umoÅ¾nenÃ©";
-        Text[ hungarian ] = "KapcsolatgyÅ±jtÅ‘ engedÃ©lyezve";
-        Text[ slovenian ] = "Zbiranje povezav je omogoÄeno";
+        Text [ de ] = "Verbindungen aufbewahren";
+        Text [ en-US ] = "Connection pooling enabled";
+        Text [ x-comment ] = "; jc 01.08.01: der Eintrag befindet sich in Extras/Optionen/Datenquellen/Verbindungen";
     };
     FixedText FT_DRIVERS
     {
         Pos = MAP_APPFONT( 17, 27 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 14 - 8, 8 );
-        Text = "In %PRODUCTNAME bekannte Treiber";
-        Text [ english ] = "Drivers known in %PRODUCTNAME";
-        Text [ english_us ] = "Drivers known in %PRODUCTNAME";
-        Text[ portuguese ] = "Controladores conhecidos de %PRODUCTNAME";
-        Text[ russian ] = "Äğàéâåğû, èçâåñòíûå %PRODUCTNAME";
-        Text[ greek ] = "ÃíùóôÜ ğñïãñÜììáôá ïäŞãçóçò óôï %PRODUCTNAME";
-        Text[ dutch ] = "Onder %PRODUCTNAME bekende drivers";
-        Text[ french ] = "Pilotes déclarés sous %PRODUCTNAME";
-        Text[ spanish ] = "Controladores conocidos en %PRODUCTNAME";
-        Text[ finnish ] = "%PRODUCTNAMEn tunnetut ohjaimet";
-        Text[ italian ] = "Driver conosciuti in %PRODUCTNAME";
-        Text[ danish ] = "Kendte drivere i %PRODUCTNAME";
-        Text[ swedish ] = "Kända drivrutiner i %PRODUCTNAME";
-        Text[ polish ] = "~Sterowniki znane w %PRODUCTNAME";
-        Text[ portuguese_brazilian ] = "Drivers conhecidos pelo %PRODUCTNAME";
-        Text[ japanese ] = "%PRODUCTNAME ã§ä½¿ãˆã‚‹ãƒ‰ãƒ©ã‚¤ãƒ";
-        Text[ korean ] = "%PRODUCTNAMEì—ì„œ ì•Œë ¤ì ¸ ìˆëŠ” ë“œë¼ì´ë²„";
-        Text[ chinese_simplified ] = "å·²ç»ä¸º %PRODUCTNAME æä¾›çš„é©±åŠ¨ç¨‹åº";
-        Text[ chinese_traditional ] = "å·²ç¶“ç‚º %PRODUCTNAME æä¾›çš„é©…å‹•ç¨‹å¼";
-        Text[ turkish ] = "%PRODUCTNAME deki bilinen sürücüler";
-        Text[ arabic ] = "Drivers known in %PRODUCTNAME";
-        Text[ catalan ] = "Controladors coneguts d'%PRODUCTNAME";
-        Text[ thai ] = "à¹„à¸”à¸£à¹‰à¸Ÿà¹Œà¹€à¸§à¸­à¸£à¹Œà¸—à¸µà¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¹ƒà¸™ %PRODUCTNAME";
-        Text[ czech ] = "OvladaÄe znÃ¡mÃ© pro %PRODUCTNAME";
-        Text[ hebrew ] = "In %PRODUCTNAME bekannte Treiber";
-        Text[ hindi ] = "%PRODUCTNAME à¤®à¥‡à¤‚ à¤¡à¥à¤°à¤‡à¤µà¤°à¥à¤¸ à¤…à¤œà¥à¤à¤¾à¤¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ";
-        Text[ slovak ] = "OvlÃ¡daÄe znÃ¡me pre %PRODUCTNAME";
-        Text[ hungarian ] = "Az %PRODUCTNAME Ã¡ltal ismert illesztÅ‘programok";
-        Text[ slovenian ] = "Znani gonilniki v %PRODUCTNAME";
+        Text [ de ] = "In %PRODUCTNAME bekannte Treiber";
+        Text [ en-US ] = "Drivers known in %PRODUCTNAME";
     };
     Control CTRL_DRIVER_LIST
     {
@@ -191,35 +110,8 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     {
         Pos = MAP_APPFONT( 17, 38 + LIST_SIZE_Y + 4 );
         Size = MAP_APPFONT( 70, 8 );
-        Text = "aktueller Treiber:";
-        Text [ english ] = "current driver:";
-        Text [ english_us ] = "Current driver:";
-        Text[ portuguese ] = "Controlador actual:";
-        Text[ russian ] = "Òåêóùèé äğàéâåğ:";
-        Text[ greek ] = "Ôñİ÷ïí ğñüãñ. ïäŞãçóçò:";
-        Text[ dutch ] = "Huidige driver:";
-        Text[ french ] = "Pilote actif :";
-        Text[ spanish ] = "Controlador actual:";
-        Text[ finnish ] = "Nykyinen ohjain:";
-        Text[ italian ] = "Driver attivo:";
-        Text[ danish ] = "Nuværende driver:";
-        Text[ swedish ] = "Aktuell drivrutin:";
-        Text[ polish ] = "Bie¿¹cy sterownik:";
-        Text[ portuguese_brazilian ] = "Driver atual:";
-        Text[ japanese ] = "ç¾åœ¨ã®ãƒ‰ãƒ©ã‚¤ãƒ:";
-        Text[ korean ] = "í˜„ì¬ ë“œë¼ì´ë²„:";
-        Text[ chinese_simplified ] = "ç°åœ¨ä½¿ç”¨ä¸­çš„é©±åŠ¨ç¨‹åºï¼š";
-        Text[ chinese_traditional ] = "ç¾åœ¨ä½¿ç”¨çš„é©…å‹•ç¨‹å¼ï¼š";
-        Text[ turkish ] = "Geçerli sürücü:";
-        Text[ arabic ] = "Current driver:";
-        Text[ catalan ] = "Controlador actual:";
-        Text[ thai ] = "à¹„à¸”à¸£à¹‰à¸Ÿà¹Œà¹€à¸§à¸­à¸£à¹Œà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™:";
-        Text[ czech ] = "SouÄasnÃ½ ovladaÄ:";
-        Text[ hebrew ] = "aktueller Treiber:";
-        Text[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤¡à¥à¤°à¤‡à¤µà¤°:";
-        Text[ slovak ] = "SÃºÄasnÃ½ ovlÃ¡daÄ:";
-        Text[ hungarian ] = "AktuÃ¡lis illesztÅ‘program:";
-        Text[ slovenian ] = "Trenutni gonilnik:";
+        Text [ de ] = "aktueller Treiber:";
+        Text [ en-US ] = "Current driver:";
     };
     FixedText FT_DRIVER
     {
@@ -230,69 +122,15 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     {
         Pos = MAP_APPFONT( 17, 38 + LIST_SIZE_Y + 4 + 8 + 3 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 23, 8 );
-        Text = "Verbindungen dieses Treibers aufbewahren";
-        Text [ english ] = "enable pooling for this driver";
-        Text [ english_us ] = "Enable pooling for this driver";
-        Text[ portuguese ] = "Agregar as ligações deste controlador";
-        Text[ russian ] = "Äîïóñòèìîå íàêîïëåíèå ıòîãî äğàéâåğà";
-        Text[ greek ] = "Åíåñãïğïßçóç ïìáäïğïßçóçò ãéá áõôü ôï ğñüãñáììá ïäŞãçóçò";
-        Text[ dutch ] = "V~erbindingen voor deze driver behouden";
-        Text[ french ] = "Pool de connexions actif pour ce pilote";
-        Text[ spanish ] = "Pool de conexiones para este controlador";
-        Text[ finnish ] = "Ota ohjaimen ~varantotoiminto käyttöön";
-        Text[ italian ] = "Mantenere il collegamento del driver";
-        Text[ danish ] = "Fasthold denne drivers forbindelser";
-        Text[ swedish ] = "Poolning av kopplingar för den här drivrutinen";
-        Text[ polish ] = "W³¹~cz pulê dla tego sterownika";
-        Text[ portuguese_brazilian ] = "Habilitar pooling de conexões para este driver";
-        Text[ japanese ] = "ã“ã®ãƒ‰ãƒ©ã‚¤ãƒã§æ¥ç¶šã‚’ä¿æŒã™ã‚‹";
-        Text[ korean ] = "ì´ ë“œë¼ì´ë²„ë¥¼ ìœ„í•´ ì—°ê²° í’€ë§ì„ í™œì„±í™”";
-        Text[ chinese_simplified ] = "ä¿ç•™ä½¿ç”¨è¿™ä¸ªé©±åŠ¨ç¨‹åº";
-        Text[ chinese_traditional ] = "ä¿ç•™ä½¿ç”¨é€™å€‹é©…å‹•ç¨‹å¼";
-        Text[ turkish ] = "Bu sürücü için havuzu etkin hale getir";
-        Text[ arabic ] = "Enable pooling for this driver";
-        Text[ catalan ] = "habilita els recursos per aquest controlador";
-        Text[ thai ] = "à¹€à¸›à¸´à¸”à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸£à¸§à¸¡à¸ªà¸³à¸«à¸£à¸±à¸šà¹„à¸”à¸£à¹‰à¸Ÿà¹Œà¹€à¸§à¸­à¸£à¹Œà¸™à¸µà¹‰";
-        Text[ czech ] = "Povolit sdÃ­lenÃ­ pro tento ovladaÄ";
-        Text[ hebrew ] = "Verbindungen dieses Treibers aufbewahren";
-        Text[ hindi ] = "à¤‡à¤¸ à¤¡à¥à¤°à¤‡à¤µà¤° à¤•à¥‡à¤²à¤¿à¤ à¤ªà¥‚à¤²à¤¿à¤‚à¤— à¤•à¥‹ à¤¸à¤•à¥à¤·à¤® à¤•à¤°à¥‹";
-        Text[ slovak ] = "AktivovaÅ¥ zdieÄ¾anie pre tento ovlÃ¡daÄ";
-        Text[ hungarian ] = "A gyÅ±jtÃ©s engedÃ©lyezÃ©se erre az illesztÅ‘programra";
-        Text[ slovenian ] = "OmogoÄi zbiranje povezav za ta gonilnik";
+        Text [ de ] = "Verbindungen dieses Treibers aufbewahren";
+        Text [ en-US ] = "Enable pooling for this driver";
     };
     FixedText FT_TIMEOUT
     {
         Pos = MAP_APPFONT( 27, 38 + LIST_SIZE_Y + 4 + 8 + 3 + 8 + 3 + 2 );
         Size = MAP_APPFONT( 70, 8 );
-        Text = "Verfallszeit (Sekunden)";
-        Text [ english ] = "Timeout (seconds)";
-        Text [ english_us ] = "Timeout (seconds)";
-        Text[ portuguese ] = "Tempo de espera excedido (segundos)";
-        Text[ russian ] = "Âğåìÿ îæèäàíèÿ (ñåêóíäû)";
-        Text[ greek ] = "~×ñïíéêü üñéï (äåõôåñüë.)";
-        Text[ dutch ] = "Time-out (seconden)";
-        Text[ french ] = "Time out (secondes)";
-        Text[ spanish ] = "Tiempo muerto (segundos)";
-        Text[ finnish ] = "Aikakatkaisu (sekunteina)";
-        Text[ italian ] = "Timeout (secondi)";
-        Text[ danish ] = "Forfaldstid (sekunder)";
-        Text[ swedish ] = "Timeout (sekunder)";
-        Text[ polish ] = "~Limit czasu (w sekundach)";
-        Text[ portuguese_brazilian ] = "Tempo de espera excedido (segundos)";
-        Text[ japanese ] = "ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ(ç§’)";
-        Text[ korean ] = "ì œí•œ ì‹œê°„(ì´ˆ)";
-        Text[ chinese_simplified ] = "è¶…è¿‡æ—¶é™(ç§’)";
-        Text[ chinese_traditional ] = "è¶…éæ™‚é™(ç§’)";
-        Text[ turkish ] = "Zamanaşımı(saniye)";
-        Text[ arabic ] = "Timeout (seconds)";
-        Text[ catalan ] = "Temps d'espera (segons)";
-        Text[ thai ] = "à¸«à¸¡à¸”à¹€à¸§à¸¥à¸² (à¸§à¸´à¸™à¸²à¸—à¸µ)";
-        Text[ czech ] = "VyprÅ¡enÃ­ Äasu (vteÅ™in)";
-        Text[ hebrew ] = "Verfallszeit (Sekunden)";
-        Text[ hindi ] = "à¤¸à¤®à¤¯ à¤•à¥€ à¤¸à¤®à¤¾à¤ªà¥à¤¤à¥€ (à¤¸à¥‡à¤•à¤¨à¥à¤¡à¥à¤¸)";
-        Text[ slovak ] = "Timeout (sekundy)";
-        Text[ hungarian ] = "IdÅ‘tÃºllÃ©pÃ©s (mÃ¡sodpercben)";
-        Text[ slovenian ] = "ÄŒasovna omejitev (sek.)";
+        Text [ de ] = "Verfallszeit (Sekunden)";
+        Text [ en-US ] = "Timeout (seconds)";
     };
     NumericField NF_TIMEOUT
     {
@@ -312,163 +150,28 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
 
     String STR_DRIVER_NAME
     {
-        Text = "Treibername";
-        Text [ english ] = "Driver name";
-        Text [ english_us ] = "Driver name";
-        Text[ portuguese ] = "Nome do controlador";
-        Text[ russian ] = "Èìÿ äğàéâåğà";
-        Text[ greek ] = "¼íïìá ğñïãñÜììáôïò ïäŞãçóçò";
-        Text[ dutch ] = "Drivernaam";
-        Text[ french ] = "Pilotes";
-        Text[ spanish ] = "Nombre del controlador";
-        Text[ finnish ] = "Ohjaimen nimi";
-        Text[ italian ] = "Nome driver";
-        Text[ danish ] = "Drivernavn";
-        Text[ swedish ] = "Drivrutinsnamn";
-        Text[ polish ] = "Nazwa sterownika";
-        Text[ portuguese_brazilian ] = "Nome do Driver";
-        Text[ japanese ] = "ãƒ‰ãƒ©ã‚¤ãƒå";
-        Text[ korean ] = "ë“œë¼ì´ë²„ ì´ë¦„";
-        Text[ chinese_simplified ] = "é©±åŠ¨ç¨‹åºçš„åç§°";
-        Text[ chinese_traditional ] = "é©…å‹•ç¨‹å¼åç¨±";
-        Text[ turkish ] = "Sürücü adı";
-        Text[ arabic ] = "Driver name";
-        Text[ catalan ] = "Nom del controlador";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹„à¸”à¸£à¹‰à¸Ÿà¹Œà¹€à¸§à¸­à¸£à¹Œ";
-        Text[ czech ] = "NÃ¡zev ovladaÄe";
-        Text[ hebrew ] = "Treibername";
-        Text[ hindi ] = "à¤¡à¥à¤°à¤‡à¤µà¤° à¤•à¤¾ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡zov ovlÃ¡daÄa";
-        Text[ hungarian ] = "IllesztÅ‘program neve";
-        Text[ slovenian ] = "Ime gonilnika";
+        Text [ de ] = "Treibername";
+        Text [ en-US ] = "Driver name";
     };
     String STR_POOLED_FLAG
     {
-        Text = "aufbewahren";
-        Text [ english ] = "pool";
-        Text [ english_us ] = "Pool";
-        Text[ portuguese ] = "Agregar";
-        Text[ russian ] = "Íàêîïèòåëü";
-        Text[ greek ] = "×şñïò óõãêİíôñùóçò";
-        Text[ dutch ] = "behouden";
-        Text[ french ] = "Pool";
-        Text[ spanish ] = "Conservar";
-        Text[ finnish ] = "Varanto";
-        Text[ italian ] = "pool";
-        Text[ danish ] = "Fasthold";
-        Text[ swedish ] = "Pool";
-        Text[ polish ] = "Pula";
-        Text[ portuguese_brazilian ] = "Pool";
-        Text[ japanese ] = "ä¿æŒ";
-        Text[ korean ] = "ì—°ê²° í’€";
-        Text[ chinese_simplified ] = "ä¿ç•™";
-        Text[ chinese_traditional ] = "ä¿ç•™";
-        Text[ turkish ] = "Havuz";
-        Text[ arabic ] = "Pool";
-        Text[ catalan ] = "recurs";
-        Text[ thai ] = "à¸£à¸§à¸¡";
-        Text[ czech ] = "SdÃ­lenÃ­";
-        Text[ hebrew ] = "aufbewahren";
-        Text[ hindi ] = "à¤ªà¥‚à¤²";
-        Text[ slovak ] = "ZdieÄ¾anie";
-        Text[ hungarian ] = "GyÅ±jtÅ‘";
-        Text[ slovenian ] = "Zaloga";
+        Text [ de ] = "aufbewahren";
+        Text [ en-US ] = "Pool";
     };
     String STR_POOL_TIMEOUT
     {
-        Text = "Verfallszeit";
-        Text [ english ] = "Timeout";
-        Text [ english_us ] = "Timeout";
-        Text[ portuguese ] = "Tempo de espera excedido";
-        Text[ russian ] = "Âğåìÿ îæèäàíèÿ";
-        Text[ greek ] = "×ñïíéêü üñéï";
-        Text[ dutch ] = "Time-out";
-        Text[ french ] = "Time out";
-        Text[ spanish ] = "Tiempo muerto";
-        Text[ finnish ] = "Aikakatkaisu";
-        Text[ italian ] = "Timeout";
-        Text[ danish ] = "Forfaldstid";
-        Text[ swedish ] = "Timeout";
-        Text[ polish ] = "Limit czasu";
-        Text[ portuguese_brazilian ] = "Tempo de espera excedido";
-        Text[ japanese ] = "ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ";
-        Text[ korean ] = "ì œí•œ ì‹œê°„";
-        Text[ chinese_simplified ] = "è¶…è¿‡æ—¶é™";
-        Text[ chinese_traditional ] = "è¶…éæ™‚é™";
-        Text[ turkish ] = "Zamanşımı";
-        Text[ arabic ] = "Timeout";
-        Text[ catalan ] = "Temps d'espera";
-        Text[ thai ] = "à¸«à¸¡à¸”à¹€à¸§à¸¥à¸²";
-        Text[ czech ] = "VyprÅ¡enÃ­ Äasu";
-        Text[ hebrew ] = "Verfallszeit";
-        Text[ hindi ] = "à¤¸à¤®à¤¯ à¤•à¥€ à¤¸à¤®à¤¾à¤ªà¥à¤¤à¥€";
-        Text[ slovak ] = "PreruÅ¡enie (timeout)";
-        Text[ hungarian ] = "IdÅ‘tÃºllÃ©pÃ©s";
-        Text[ slovenian ] = "ÄŒasovna omejitev";
+        Text [ de ] = "Verfallszeit";
+        Text [ en-US ] = "Timeout";
     };
     String STR_YES
     {
-        Text = "ja";
-        Text [ english ] = "yes";
-        Text [ english_us ] = "Yes";
-        Text[ portuguese ] = "Sim";
-        Text[ russian ] = "Äà";
-        Text[ greek ] = "Íáé";
-        Text[ dutch ] = "ja";
-        Text[ french ] = "Oui";
-        Text[ spanish ] = "Sí";
-        Text[ finnish ] = "Kyllä";
-        Text[ italian ] = "Sì";
-        Text[ danish ] = "ja";
-        Text[ swedish ] = "Ja";
-        Text[ polish ] = "Tak";
-        Text[ portuguese_brazilian ] = "Sim";
-        Text[ japanese ] = "ã¯ã„";
-        Text[ korean ] = "ì˜ˆ";
-        Text[ chinese_simplified ] = "æ˜¯";
-        Text[ chinese_traditional ] = "æ˜¯";
-        Text[ turkish ] = "Evet";
-        Text[ arabic ] = "äÚã";
-        Text[ catalan ] = "sí";
-        Text[ thai ] = "à¹ƒà¸Šà¹ˆ";
-        Text[ czech ] = "Ano";
-        Text[ hebrew ] = "â€®×›×Ÿâ€¬";
-        Text[ hindi ] = "à¤¹à¤¾à¤";
-        Text[ slovak ] = "Ãno";
-        Text[ hungarian ] = "Igen";
-        Text[ slovenian ] = "Da";
+        Text [ de ] = "ja";
+        Text [ en-US ] = "Yes";
     };
     String STR_NO
     {
-        Text = "nein";
-        Text [ english ] = "no";
-        Text [ english_us ] = "No";
-        Text[ portuguese ] = "Não";
-        Text[ russian ] = "Íåò";
-        Text[ greek ] = "¼÷é";
-        Text[ dutch ] = "nee";
-        Text[ french ] = "Non";
-        Text[ spanish ] = "No";
-        Text[ finnish ] = "Ei";
-        Text[ italian ] = "No";
-        Text[ danish ] = "nej";
-        Text[ swedish ] = "Nej";
-        Text[ polish ] = "Nie";
-        Text[ portuguese_brazilian ] = "Não";
-        Text[ japanese ] = "ã„ã„ãˆ";
-        Text[ korean ] = "ì•„ë‹ˆì˜¤";
-        Text[ chinese_simplified ] = "å¦";
-        Text[ chinese_traditional ] = "å¦";
-        Text[ turkish ] = "Hayır";
-        Text[ arabic ] = "áÇ";
-        Text[ catalan ] = "no";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¹ƒà¸Šà¹ˆ";
-        Text[ czech ] = "Ne";
-        Text[ hebrew ] = "â€®×œ×â€¬";
-        Text[ hindi ] = "à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "Nie";
-        Text[ hungarian ] = "Nem";
-        Text[ slovenian ] = "Ne";
+        Text [ de ] = "nein";
+        Text [ en-US ] = "No";
     };
 };
 
