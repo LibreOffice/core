@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 09:57:43 $
+ *  last change: $Author: ama $ $Date: 2000-11-06 09:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,35 +88,78 @@ struct SwBracket
 };
 
 /*-----------------16.10.00 12:45-------------------
- * The SwMultiPortion is line portion inside a line portion
- * to allow double line portions in a line.
+ * The SwMultiPortion is line portion inside a line portion,
+ * it's a group of portions,
+ * e.g. a double line portion in a line
+ * or phonetics (ruby)
+ * or combined characters
+ * or a rotated portion.
  * --------------------------------------------------*/
 
 class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
-    SwFldPortion *pFldRest; // A field rest from the previous line
-    SwBracket* pBracket;    // Surrounding brackets
-    SwTwips nLineDiff;      // Difference of the width of the both lines
-    xub_StrLen nBlank1;     // Number of blanks in the first line
-    xub_StrLen nBlank2;     // Number of blanks in the second line
-    sal_Bool bTabulator;    // Multiportion includes tabulator
-public:
-    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), pBracket( 0 ),
-        bTabulator( sal_False )
+    SwFldPortion *pFldRest; // Field rest from the previous line
+    sal_Bool bTabulator :1; // Multiportion includes tabulator
+    sal_Bool bDouble    :1; // Double line
+    sal_Bool bRuby      :1; // Phonetics
+    sal_Bool bTop       :1; // Phonetic position
+    sal_Bool bFormatted :1; // Already formatted
+    sal_Bool bFollowFld :1; // Field follow inside
+protected:
+    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTabulator( sal_False ),
+        bDouble( sal_False ), bRuby( sal_False ), bFormatted( sal_False ),
+        bFollowFld( sal_False )
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
+    inline void SetDouble() { bDouble = sal_True; }
+    inline void SetRuby() { bRuby = sal_True; }
+    inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
+    inline void SetTabulator( sal_Bool bNew ) { bTabulator = bNew; }
+public:
     ~SwMultiPortion();
-
     const SwLineLayout& GetRoot() const { return aRoot; }
     SwLineLayout& GetRoot() { return aRoot; }
     SwFldPortion* GetFldRest() { return pFldRest; }
     void SetFldRest( SwFldPortion* pNew ) { pFldRest = pNew; }
 
-    inline sal_Bool HasBrackets() const { return 0 != pBracket; }
+    inline sal_Bool HasTabulator() const { return bTabulator; }
+    inline sal_Bool IsFormatted() const { return bFormatted; }
+    inline void SetFormatted() { bFormatted = sal_True; }
+    inline sal_Bool IsFollowFld() const { return bFollowFld; }
+    inline void SetFollowFld() { bFollowFld = sal_True; }
+    inline sal_Bool IsDouble() const { return bDouble; }
+    inline sal_Bool IsRuby() const { return bRuby; }
+    inline sal_Bool OnTop() const { return bTop; }
+    void ActualizeTabulator();
+
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+
+    // Summarize the internal lines to calculate the (external) size
+    virtual void CalcSize( SwTxtFormatter& rLine );
+
+    inline sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
+    inline sal_Bool HasBrackets() const;
+    OUTPUT_OPERATOR
+};
+
+class SwDoubleLinePortion : public SwMultiPortion
+{
+    SwBracket* pBracket;    // Surrounding brackets
+    SwTwips nLineDiff;      // Difference of the width of the both lines
+    xub_StrLen nBlank1;     // Number of blanks in the first line
+    xub_StrLen nBlank2;     // Number of blanks in the second line
+public:
+    SwDoubleLinePortion( xub_StrLen nEnd ) : SwMultiPortion( nEnd ),
+        pBracket( 0 ) { SetDouble(); }
+    SwDoubleLinePortion( SwDoubleLinePortion& rDouble, xub_StrLen nEnd );
+    ~SwDoubleLinePortion();
+
+    inline SwBracket* GetBrackets() const { return pBracket; }
     void SetBrackets( sal_Unicode cPre, sal_Unicode cPost );
-    inline void SetBrackets( const SwMultiPortion& rMulti )
-        { SetBrackets( rMulti.pBracket->cPre, rMulti.pBracket->cPost ); }
-    void PaintBracket( const SwTxtPaintInfo& rInf, sal_Bool bOpen ) const;
+    inline void SetBrackets( const SwDoubleLinePortion& rDouble )
+        { SetBrackets( rDouble.pBracket->cPre, rDouble.pBracket->cPost ); }
+    void PaintBracket( SwTxtPaintInfo& rInf, short nSpc, sal_Bool bOpen ) const;
     void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
     inline KSHORT PreWidth() const { return pBracket->nPreWidth; };
     inline KSHORT PostWidth() const { return pBracket->nPostWidth; }
@@ -127,7 +170,6 @@ public:
     sal_Bool ChangeSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
     static void ResetSpaceAdd( SwLineLayout* pCurr );
     inline SwTwips GetLineDiff() const { return nLineDiff; }
-    inline sal_Bool HasTabulator() const { return bTabulator; }
     inline xub_StrLen GetSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank2 : nBlank1; }
     inline xub_StrLen GetSmallerSpaceCnt() const
@@ -135,14 +177,20 @@ public:
     inline xub_StrLen GetBlank1() const { return nBlank1; }
     inline xub_StrLen GetBlank2() const { return nBlank2; }
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual long CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
-
-    // Summarize the internal lines to calculate the (external) size
-    void CalcSize( SwTxtFormatter& rLine );
-
-    OUTPUT_OPERATOR
 };
+
+class SwRubyPortion : public SwMultiPortion
+{
+    USHORT nAdjustment;
+    void _Adjust();
+public:
+    SwRubyPortion( xub_StrLen nEnd, USHORT nAdj, sal_Bool bTp = sal_True ) :
+        SwMultiPortion( nEnd ), nAdjustment( nAdj ) { SetRuby(); SetTop(bTp); }
+    void Adjust() { if( nAdjustment && GetRoot().GetNext() ) _Adjust(); }
+    inline USHORT GetAdjustment() const { return nAdjustment; }
+};
+
 
 // For cursor travelling in multiportions
 
@@ -162,6 +210,14 @@ public:
 /*************************************************************************
  *                  inline - Implementations
  *************************************************************************/
+
+inline sal_Bool SwMultiPortion::ChgSpaceAdd(SwLineLayout* pCurr,short nSpaceAdd)
+    { return IsDouble() ? ((SwDoubleLinePortion*)this)->ChangeSpaceAdd( pCurr,
+                            nSpaceAdd ) : sal_False; }
+
+inline sal_Bool SwMultiPortion::HasBrackets() const
+    { return IsDouble() ? 0 != ((SwDoubleLinePortion*)this)->GetBrackets()
+      : sal_False; }
 
 CLASSIO( SwMultiPortion )
 

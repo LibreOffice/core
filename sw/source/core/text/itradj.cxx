@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 09:58:58 $
+ *  last change: $Author: ama $ $Date: 2000-11-06 09:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,10 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
         else if( pPos->IsMultiPortion() )
         {
             SwMultiPortion* pMulti = (SwMultiPortion*)pPos;
+            // a multiportion with a tabulator inside breaks the text adjustment
+            // a ruby portion will not be stretched by text adjustment
+            // a double line portion takes additional space for each blank
+            // in the wider line
             if( pMulti->HasTabulator() )
             {
                 if ( nSpaceIdx == pCurr->GetSpaceAdd().Count() )
@@ -206,8 +210,8 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
                 nGluePortion = 0;
                 nCharCnt = 0;
             }
-            else
-                nGluePortion += pMulti->GetSpaceCnt();
+            else if( pMulti->IsDouble() )
+                nGluePortion += ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
         }
 
         if( pPos->InGlueGrp() )
@@ -310,8 +314,6 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr,
 
 void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
 {
-    const SwRect aLineRect( GetLeftMargin(), Y(),
-                            ((SwFrm*)pFrm)->Prt().Width(), GetLineHeight() );
     // 1) Es wird ein linker Rand eingefuegt:
     SwMarginPortion *pLeft = pCurr->CalcLeftMargin();
     SwGluePortion *pGlue = pLeft;       // die letzte GluePortion
@@ -321,10 +323,6 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
     // CalcRightMargin berechnet auch eventuelle Ueberlappungen mit
     // FlyFrms.
     CalcRightMargin( pCurr );
-
-#ifdef USED
-    pCurr->PackFlys();
-#endif
 
     SwLinePortion *pPos = pLeft->GetPortion();
     xub_StrLen nLen = 0;
@@ -382,11 +380,6 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
 
     if( SVX_ADJUST_RIGHT == GetAdjust() )
         pLeft->AdjustRight();
-
-#ifdef DEBUG
-    // um einen Breakpoint setzen zu koennen:
-    nLen = 0;
-#endif
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:39:36 $
+ *  last change: $Author: ama $ $Date: 2000-11-06 09:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,6 +759,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         else
             bFull = pPor->Format( rInf );
 
+        if( rInf.IsRuby() && !rInf.GetRest() )
+            bFull = sal_True;
+
         // Vorsicht: ein Fly im Blocksatz, dann kann das Repaint nur komplett
         // hinter ihm oder vom Zeilenbeginn sein.
 #ifdef DEBUG
@@ -808,7 +811,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // Restportions von mehrzeiligen Feldern haben bisher noch
         // nicht den richtigen Ascent.
         if ( !pPor->GetLen() && !pPor->IsFlyPortion()
-            && !pPor->IsGrfNumPortion() )
+            && !pPor->IsGrfNumPortion() && !pPor->IsMultiPortion() )
             CalcAscent( rInf, pPor );
 
         InsertPortion( rInf, pPor );
@@ -1132,9 +1135,12 @@ sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
         return sal_False;
     const SwLinePortion *pPor = pCurr->GetNext()->GetPortion();
     sal_Bool bRet = sal_False;
-    while( pPor && !bRet && !pPor->GetLen() )
+    while( pPor && !bRet )
     {
-        bRet = pPor->InFldGrp();
+        bRet = (pPor->InFldGrp() && ((SwFldPortion*)pPor)->IsFollow()) ||
+            (pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsFollowFld());
+        if( !pPor->GetLen() )
+            break;
         pPor = pPor->GetPortion();
     }
     return bRet;
@@ -1245,9 +1251,24 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             const SwTxtAttr* pTwoLines = rInf.GetTwoLines( rInf.GetIdx() );
             if( pTwoLines )
             {
-                SwMultiPortion* pTmp = new SwMultiPortion(*pTwoLines->GetEnd());
+                SwMultiPortion* pTmp = NULL;
+                //pTmp = new SwDoubleLinePortion(*pTwoLines->GetEnd());
 #ifdef DEBUG
-                pTmp->SetBrackets( '(', ')' );
+                static BOOL bOnTop = sal_False;
+                pTmp = new SwRubyPortion(*pTwoLines->GetEnd(), 1, bOnTop );
+                SwFont *pRubyFont = new SwFont( *rInf.GetFont() );
+                pRubyFont->SetProportion( 50 );
+                String aStr( String::CreateFromAscii( "Ein Ruby Test Elch" ) );
+                SwFldPortion *pFld = new SwFldPortion( aStr, pRubyFont );
+                pFld->SetFollow( sal_True );
+                if( bOnTop )
+                    pTmp->GetRoot().SetPortion( pFld );
+                else
+                {
+                    pTmp->GetRoot().SetNext( new SwLineLayout() );
+                    pTmp->GetRoot().GetNext()->SetPortion( pFld );
+                }
+                //pTmp->SetBrackets( '(', ')' );
 #endif
                 return pTmp;
             }

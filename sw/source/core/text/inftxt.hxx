@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 10:06:45 $
+ *  last change: $Author: ama $ $Date: 2000-11-06 09:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _INFTXT_HXX
 #define _INFTXT_HXX
 
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#include <com/sun/star/linguistic/XHyphenatedWord.hpp>
 
 #include "swtypes.hxx"
 #include "txttypes.hxx"
@@ -191,6 +191,7 @@ protected:
     sal_Bool bFtnInside : 1;    // the current line contains a footnote
     sal_Bool bMulti : 1;        // inside a multiportion
     sal_Bool bFirstMulti : 1;   // the multiportion is the first lineportion
+    sal_Bool bRuby : 1;         // during the formatting of a phonetic line
 
 protected:
     void _NoteAnimation();
@@ -229,6 +230,8 @@ public:
     inline void SetMulti( const sal_Bool bNew ) { bMulti = bNew; }
     inline sal_Bool IsFirstMulti() const { return bFirstMulti; }
     inline void SetFirstMulti( const sal_Bool bNew ) { bFirstMulti = bNew; }
+    inline sal_Bool IsRuby() const { return bRuby; }
+    inline void SetRuby( const sal_Bool bNew ) { bRuby = bNew; }
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }
@@ -591,7 +594,7 @@ public:
     void        RestoreHyphOptions();
     // ruft HyphenateWord() des Hyphenators
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord >
+        ::com::sun::star::linguistic::XHyphenatedWord >
                 HyphWord( const String &rTxt, const USHORT nMinTrail );
 
     sal_Bool CheckFtnPortion( SwLineLayout* pCurr )

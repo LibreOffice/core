@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 09:59:14 $
+ *  last change: $Author: ama $ $Date: 2000-11-06 09:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 bNoTxt = sal_False;
                 nFirst = nX;
             }
-            if( pPor->IsMultiPortion() &&
+            if( pPor->IsMultiPortion() && pSpaceAdd &&
                 ((SwMultiPortion*)pPor)->HasTabulator() )
             {
                 if ( ++nSpaceIdx < pSpaceAdd->Count() )
@@ -466,7 +466,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 !pPor->GetPortion()->IsMarginPortion() ) )
                             nX += pPor->PrtWidth();
                     }
-                    if( pPor->IsMultiPortion() &&
+                    if( pPor->IsMultiPortion() && pSpaceAdd &&
                         ((SwMultiPortion*)pPor)->HasTabulator() )
                     {
                         if ( ++nSpaceIdx < pSpaceAdd->Count() )
@@ -492,16 +492,17 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         if( nStart + pCurr->GetLen() <= nOfst )
                             Next();
                         sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
-                            ChangeSpaceAdd( pCurr, nSpaceAdd );
+                                                ChgSpaceAdd( pCurr, nSpaceAdd );
                         bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
                         pOrig->Pos().X() += nX;
                         if( ((SwMultiPortion*)pPor)->HasBrackets() )
                             pOrig->Pos().X() +=
-                                ((SwMultiPortion*)pPor)->PreWidth();
+                                ((SwDoubleLinePortion*)pPor)->PreWidth();
                         if( bSpaceChg )
-                            SwMultiPortion::ResetSpaceAdd( pCurr );
+                            SwDoubleLinePortion::ResetSpaceAdd( pCurr );
                         pCurr = pOldCurr;
                         nStart = nOldStart;
+                        bPrev = sal_False;
                         return bRet;
                     }
                     if ( pPor->PrtWidth() )
@@ -593,7 +594,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 !pPor->GetPortion()->IsMarginPortion() ) )
                             nX += pPor->PrtWidth();
                     }
-                    if( pPor->IsMultiPortion() &&
+                    if( pPor->IsMultiPortion() && pSpaceAdd &&
                         ((SwMultiPortion*)pPor)->HasTabulator() )
                     {
                         if ( ++nSpaceIdx < pSpaceAdd->Count() )
@@ -926,7 +927,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 rPoint.Y(), nCurrStart, nSpaceAdd );
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
-                nX -= ((SwMultiPortion*)pPor)->PreWidth();
+                nX -= ((SwDoubleLinePortion*)pPor)->PreWidth();
             return GetCrsrOfst( pPos, Point( nLeftMargin + nX, rPoint.Y() ),
                                 nChgNode, pCMS );
         }

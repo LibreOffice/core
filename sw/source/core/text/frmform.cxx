@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:36:20 $
+ *  last change: $Author: ama $ $Date: 2000-11-06 09:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,9 +1330,10 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                 if( GetOfst() &&
                     0 != (pTwoLines = rInf.GetTwoLines( GetOfst()-1) ) )
                 {
-                    SwMultiPortion* pTmp =
-                        new SwMultiPortion( *pTwoLines->GetEnd() );
+                    SwDoubleLinePortion* pTmp =
+                        new SwDoubleLinePortion( *pTwoLines->GetEnd() );
 #ifdef DEBUG
+                    //pTmp->SetRuby( pRest );
                     pTmp->SetBrackets( 0, ']' );
 #endif
                     pTmp->SetFldRest( pRest );
