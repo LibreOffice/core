@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinguServiceManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-28 11:22:47 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 17:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,25 +85,25 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** the basic interface to be used to access linguistic functionality.
 
-    <P>This interface is used to access spellchecker, hyphenator and thesaurus
+    <P>This interface is used to access spellchecker, hyphenator, and thesaurus
     functionality.
-    Additionaly it can be queries what implementations of those services are
-    availbale (for specific languages or in general).
-    It can be selected and queried which of those implementations should
+    Additionaly, it can query what implementations of those services are
+    available (for specific languages or in general).
+    It can select and query which of those implementations should
     be used for a specific language.</P>
 
     <P>
-    For spellchecking and thesaurus the order in the list defines the order
+    For spellchecking and thesaurus, the order in the list defines the order
     of creation/usage of those services.
-    That is if if the first spellchecker implementation does not recognize
-    the given word as correct the second service implementation for that
-    language is created and gets queries. If that one fails the third one gets
+    That is, if the first spellchecker implementation does not recognize
+    the given word as correct, the second service implementation for that
+    language is created and gets queried. If that one fails, the third one gets
     created and queried and so on.
     This chain stops if an implementation reports the word as correct or the
-    end of the list is reached in which case the word is reported as incorrect.
+    end of the list is reached, in which case the word is reported as incorrect.
     </P>
 
-    <P> For the thesaurus the behaviour is the same when no meaning was found.
+    <P> For the thesaurus, the behaviour is the same when no meaning was found.
     </P>
 
     @see    com::sun::star::linguistic2::SpellChecker
@@ -142,13 +142,13 @@ interface XLinguServiceManager : com::sun::star::uno::XInterface
 
         <P>The listeners may support one or both of
         <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
-        or
+        and
         <type scope="com::sun::star::linguistic2">XLinguServiceEventListener</type>
-        interface(s).
+        interfaces.
         </P>
 
         @returns
-            </TRUE> if the listener was succesfully aded, </FALSE> otherwise.
+            <TRUE/> if the listener was succesfully added, <FALSE/> otherwise.
 
         @param xListener
             the listener to be added.
@@ -157,11 +157,10 @@ interface XLinguServiceManager : com::sun::star::uno::XInterface
         [in] com::sun::star::lang::XEventListener xListener );
 
     //-------------------------------------------------------------------------
-    /** removes a listener to the list of event listeners.
+    /** removes a listener from the list of event listeners.
 
         @returns
-            </TRUE> if the listener was succesfully removed,
-            </FALSE> otherwise.
+            <TRUE/> if the listener was succesfully removed, <FALSE/> otherwise.
 
         @param xListener
             the listener to be removed.
@@ -175,30 +174,29 @@ interface XLinguServiceManager : com::sun::star::uno::XInterface
             the list of implementation names of the available services.
 
         @param aServiceName
-            the name of the service to get the list of available
-            implementations for.
+            the name of the service requesting the list of available
+            implementations.
 
         @param aLocale
-            the language for which to query the list of available
-            implementations for.
+            the language used to query the list of available implementations.
     */
     sequence< string >  getAvailableServices(
         [in] string                         aServiceName,
         [in] com::sun::star::lang::Locale   aLocale );
 
     //-------------------------------------------------------------------------
-    /** set the list of service implementations to be used for a
+    /** sets the list of service implementations to be used for a
         given service and language.
 
         @param aServiceName
             the name of the service to set the list of implementations
-            to be used for.
+            to be used.
 
         @param aLocale
-            the language to set the list for.
+            the language to set the list.
 
         @param aServiceImplNames
-            the name of the service to set the list for.
+            the name of the service to set the list.
     */
     void                setConfiguredServices(
         [in] string                         aServiceName,
@@ -206,17 +204,17 @@ interface XLinguServiceManager : com::sun::star::uno::XInterface
         [in] sequence< string >             aServiceImplNames );
 
     //-------------------------------------------------------------------------
-    /** query the list of service implementations to be used for a
+    /** queries the list of service implementations to be used for a
         given service and language.
 
         @returns
-            the list of implementation names of the services to be used
+            the list of implementation names of the services to be used.
 
         @param aServiceName
-            the name of the service to get queried for.
+            the name of the service to get queried.
 
         @param aLocale
-            the language to get queried for.
+            the language to get queried.
     */
     sequence< string >  getConfiguredServices(
         [in] string                         aServiceName,
