@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 18:58:20 $
+#   last change: $Author: kso $ $Date: 2001-02-05 15:52:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ SLOFILES=\
         $(SLO)$/content.obj		\
         $(SLO)$/contentbroker.obj	\
         $(SLO)$/commandenvironment.obj	\
-        $(SLO)$/fileidentifierconverter.obj
+                $(SLO)$/fileidentifierconverter.obj \
+        $(SLO)$/activedatasink.obj
 
 .ENDIF
 
