@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:52:50 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "ÖØĞÂ×°ÔØ¿ò¶ÔÏó";
             Text[ russian ] = "Ïåğåçàãğóçèòü ğàìêó";
             Text[ polish ] = "Za³aduj ponownie Frame";
-            Text[ japanese ] = "ÌÚ°Ñ‚ğV‚½‚É“Ç‚İ‚Ş";
+            Text[ japanese ] = "ÌÚ°Ñ‚ÌÄ“Ç‚İ‚İ(~R)";
             Text[ chinese_traditional ] = "­«·s¸Ë¸ü°T®Ø";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÍãíá ÇáÅØÇÑ";
             Text[ dutch ] = "~Frame opnieuw laden";
@@ -310,10 +310,10 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "Ïòºó(~B)";
             Text[ russian ] = "Íàçàä";
             Text[ polish ] = "Wstecz";
-            Text[ japanese ] = "Œã•û‚Ö";
+            Text[ japanese ] = "–ß‚é(~B)";
             Text[ chinese_traditional ] = "¦V«á(~B)";
             Text[ arabic ] = "ááÎáİ";
-            Text[ language_user1 ] = "Áíôßóôñïöá ;";
+            Text[ language_user1 ] = "ÁûSßóôñïöá ;";
             Text[ dutch ] = "~Achteruit";
             Text[ chinese_simplified ] = "Ïòºó(~B)";
             Text[ greek ] = "~Ğßóù";
@@ -726,7 +726,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "×°ÔØÍ¼ĞÎ";
             Text[ russian ] = "Çàãğóçèòü ğèñóíêè";
             Text[ polish ] = "Za³aduj grafiki";
-            Text[ japanese ] = "¸Ş×Ì¨¯¸½‚Ì“Ç‚İ‚İ";
+            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ(~L)";
             Text[ chinese_traditional ] = "¸Ë¸ü¹Ï¤ù";
             Text[ arabic ] = "ÊÍãíá ÇáÕæÑ";
             Text[ dutch ] = "A~fbeeldingen laden";
@@ -754,7 +754,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "ÒşÈëÍ¼ĞÎ";
             Text[ russian ] = "Îòêëş÷èòü ğèñóíêè";
             Text[ polish ] = "Wy³¹cz grafiki";
-            Text[ japanese ] = "¸Ş×Ì¨¯¸½‚Ì”ñ•\\¦";
+            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì”ñ•\\¦(~O)";
             Text[ chinese_traditional ] = "Áô¤J¹Ï¤ù";
             Text[ arabic ] = "ÅÎİÇÁ ÇáÕæÑ";
             Text[ dutch ] = "~Afbeeldingen uitschakelen";
@@ -783,7 +783,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "Ê§»î ~Plug-In";
             Text[ russian ] = "Îòêëş÷èòü Plug-Ins";
             Text[ polish ] = "Wy³¹cz dodatki PlugIn";
-            Text[ japanese ] = "Ìß×¸Ş²İ µÌ";
+            Text[ japanese ] = "Ìß×¸Ş²İ µÌ(~P)";
             Text[ chinese_traditional ] = "¥¢¬¡ ~PlugIn";
             Text[ arabic ] = "ÅíŞÇİ Plug-Ins";
             Text[ dutch ] = "~PlugIns uitschakelen";
@@ -812,7 +812,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text[ chinese_simplified ] = "Í¼ĞÎ-Êä³ö";
     Text[ russian ] = "İêñïîğò ğèñóíêà";
     Text[ polish ] = "Eksport grafiki";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸ ´¸½Îß°Ä";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸´¸½Îß°Ä";
     Text[ chinese_traditional ] = "¹Ï¤ù-¿é¥X";
     Text[ arabic ] = "ÊÕÏíÑ ÕæÑ";
     Text[ dutch ] = "Afbeelding exporteren";
@@ -968,7 +968,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text[ chinese_simplified ] = "Õâ¸öÀ´Ô´¿òÒÑ¾­ÊÇÒ»¸öÁ´½ÓµÄÀ´Ô´¿ò¡£";
     Text[ russian ] = "Èñõîäíàÿ ğàìêà óæå ÿâëÿåòñÿ èñòî÷íèêîì ñâÿçè.";
     Text[ polish ] = "Ramka Ÿród³owa jest ju¿ Ÿród³em po³¹czenia.";
-    Text[ japanese ] = "Œ³‚Ì˜g‚Í‚·‚Å‚É‚Â‚È‚¬‚ÌŒ³‚Å‚·";
+    Text[ japanese ] = "Œ³‚Ì˜g‚Í‚Â‚È‚¬‚ÌŒ³‚Å‚·";
     Text[ chinese_traditional ] = "³o­Ó¨Ó·½°T®Ø¤w¸g¬O¤@­Ó³sµ²ªº·½°T®Ø¡C";
     Text[ arabic ] = "ßÇÏÑ ÇáãÕÏÑ åæ ãÓÈŞÇğ ãÕÏÑ ÇáÊÓáÓá.";
     Text[ dutch ] = "Het bronkader is reeds basis van een koppeling.";
