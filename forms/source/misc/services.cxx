@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-22 08:01:08 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 07:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ void registerClassInfo(
         )
 {
     sal_Int32 nCurrentLength = s_aClassImplementationNames.getLength();
-    OSL_ENSHURE((nCurrentLength == s_aClassServiceNames.getLength())
+    OSL_ENSURE((nCurrentLength == s_aClassServiceNames.getLength())
         && (nCurrentLength == s_aFactories.getLength()),
         "forms::registerClassInfo : invalid class infos !");
 
@@ -467,7 +467,7 @@ void registerServiceProvider(const ::rtl::OUString& _rServiceImplName, const sta
     sMainKeyName += _rServiceImplName;
     sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
     staruno::Reference<starregistry::XRegistryKey> xNewKey = _pKey->createKey(sMainKeyName);
-    OSL_ENSHURE(xNewKey.is(), "forms::registerProvider : could not create a registry key !");
+    OSL_ENSURE(xNewKey.is(), "forms::registerProvider : could not create a registry key !");
     if (!xNewKey.is())
         return;
 
@@ -498,7 +498,7 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XReg
 
             // both our static sequences should have the same length ...
             sal_Int32 nClasses = s_aClassImplementationNames.getLength();
-            OSL_ENSHURE(s_aClassServiceNames.getLength() == nClasses,
+            OSL_ENSURE(s_aClassServiceNames.getLength() == nClasses,
                 "forms::component_writeInfo : invalid class infos !");
 
             // loop through the sequences and register the service providers
@@ -515,7 +515,7 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, starregistry::XReg
         }
         catch (starregistry::InvalidRegistryException &)
         {
-            OSL_ENSHURE(sal_False, "forms::component_writeInfo : InvalidRegistryException !");
+            OSL_ENSURE(sal_False, "forms::component_writeInfo : InvalidRegistryException !");
         }
     }
     s_aClassImplementationNames.realloc(0);
@@ -537,7 +537,7 @@ void* SAL_CALL component_getFactory(const sal_Char* _pImplName, starlang::XMulti
 
     // both our static sequences should have the same length ...
     sal_Int32 nClasses = s_aClassImplementationNames.getLength();
-    OSL_ENSHURE((s_aClassServiceNames.getLength() == nClasses) &&
+    OSL_ENSURE((s_aClassServiceNames.getLength() == nClasses) &&
         (s_aFactories.getLength() == nClasses),
         "forms::component_writeInfo : invalid class infos !");
 
