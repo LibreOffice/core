@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:11:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3005,7 +3005,8 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 //restore the ole DBMgr
                 pWorkDoc->SetNewDBMgr( pWorkDBMgr );
                 //now the temporary document should be closed
-                pWorkView->GetDocShell()->DoClose();
+                SfxObjectShellRef xDocSh(pWorkView->GetDocShell());
+                xDocSh->DoClose();
             }
             nEndRow = pImpl->pMergeData->xResultSet->getRow();
             ++nDocNo;
