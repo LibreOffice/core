@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:49 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,11 +166,15 @@
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
 #include <memory>
 #include <vector>
 
-#include <unotools/localfilehelper.hxx>
-#include <tools/debug.hxx>
+#include <ucbhelper/contentbroker.hxx>
+#include <ucbhelper/fileidentifierconverter.hxx>
 
 using namespace rtl;
 using namespace ucb;
@@ -191,6 +195,33 @@ using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 #define LOGFILE_AUTHOR "mg115289"
+
+
+sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
+{
+    ::rtl::OUString aSystemPath;
+    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    if ( !pBroker )
+    {
+        ::rtl::OUString aRet;
+        if ( FileBase::getSystemPathFromFileURL( aURL, aRet ) == FileBase::E_None )
+            aSystemPath = aRet;
+    }
+    else
+    {
+        Reference< XContentProviderManager > xManager =
+                pBroker->getContentProviderManagerInterface();
+        try
+        {
+               aSystemPath = ::ucb::getSystemPathFromFileURL( xManager, aURL );
+        }
+        catch ( Exception& )
+        {
+        }
+    }
+
+    return ( aSystemPath.getLength() != 0 );
+}
 
 //===========================================================================
 
@@ -512,14 +543,15 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     bHaveZipFile = sal_False;
                 }
             }
+            else if ( (aArguments[ind] >>= xStream ) )
+            {
+                // a writable stream can implement both XStream & XInputStream
+                eMode = e_IMode_XStream;
+                xContentStream = xStream->getInputStream();
+            }
             else if ( (aArguments[ind] >>= xContentStream) )
             {
                 eMode = e_IMode_XInputStream;
-            }
-            else if ( (aArguments[ind] >>= xStream ) )
-            {
-                eMode = e_IMode_XStream;
-                xContentStream = xStream->getInputStream();
             }
             else if ( ( aArguments[ind] >>= xProgressHandler ) )
             {
@@ -541,6 +573,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 if ( ! xContentSeek.is() )
                     throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
                         static_cast < ::cppu::OWeakObject * > ( this ) );
+
+                if ( !xContentSeek->getLength() )
+                    bHaveZipFile = sal_False;
             }
             else
                 bHaveZipFile = sal_False;
@@ -815,7 +850,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
     Reference< XActiveDataStreamer > xSink;
 
     if ( eMode == e_IMode_URL && !pZipFile
-        && ::utl::LocalFileHelper::IsLocalFile( sURL ) )
+        && isLocalFile_Impl( sURL ) )
     {
         xSink = openOriginalForOutput();
         if( xSink.is() )
@@ -984,7 +1019,8 @@ sal_Bool ZipPackage::writeFileIsTemp()
         xTempSeek->seek ( 0 );
 
         // then copy the contents of the tempfile to our output stream
-        copyInputToOutput( xTempIn, xTempOut );
+        copyInputToOutput( xTempIn, xOutputStream );
+        xOutputStream->flush();
     }
 
     // Update our References to point to the new temp file
@@ -1009,7 +1045,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
         {
         }
 
-        DBG_ASSERT( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
+        OSL_ENSURE( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
     }
 
     // seek back to the beginning of the temp file so we can read segments from it
@@ -1093,7 +1129,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
     {
         Reference< XOutputStream > aOrigFileStream;
 
-        if( ::utl::LocalFileHelper::IsLocalFile( sURL ) )
+        if( isLocalFile_Impl( sURL ) )
         {
             // write directly in case of local file
             Reference< XActiveDataStreamer > xSink = openOriginalForOutput();
