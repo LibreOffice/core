@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:15:49 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:17:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -166,9 +166,15 @@ LIB1FILES+=  \
             $(SLB)$/zcodec.lib      \
             $(SLB)$/inet.lib
 
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS += $(UCBHELPERLIB) \
+            $(CPPULIB)	 \
+            $(ZLIB3RDLIB)
+.ELSE
 SHL1STDLIBS += $(ZLIB3RDLIB) \
-               $(UCBHELPERLIB) \
-               $(CPPULIB)
+            $(UCBHELPERLIB) \
+            $(CPPULIB)
+.ENDIF
 
 LIB1FILES+=  $(SLB)$/dll.lib
 
