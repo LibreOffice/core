@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-29 12:40:51 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 16:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,7 @@
 #include <windows.h>
 #endif
 
-#if defined(SOLARIS) || defined(MACOS) || defined(IRIX) || defined(IRIX64)
 #include <string.h>
-#endif
 
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
