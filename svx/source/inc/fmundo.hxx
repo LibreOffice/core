@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:50:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,10 @@ class FmXUndoEnvironment
     friend class FmXFormView;
     FmFormModel& rModel;
 
-    void*       m_pPropertySetCache;
-    sal_uInt32  nLocks;
-    sal_Bool    bReadOnly;
+    void*               m_pPropertySetCache;
+    oslInterlockedCount m_Locks;
+    ::osl::Mutex        m_aMutex;
+    sal_Bool            bReadOnly;
 
 
     void firing_Impl( const  ::com::sun::star::script::ScriptEvent& evt, ::com::sun::star::uno::Any *pSyncRet=0 );
@@ -237,9 +238,9 @@ public:
     //  virtual sal_Bool queryInterface(UsrUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>&);
     //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass>>    getIdlClasses(void);
 
-    void Lock() {nLocks++;}
-    void UnLock() {nLocks--;}
-    sal_Bool IsLocked() const {return nLocks != 0;}
+    void Lock() { osl_incrementInterlockedCount( &m_Locks ); }
+    void UnLock() { osl_decrementInterlockedCount( &m_Locks ); }
+    sal_Bool IsLocked() const { return m_Locks != 0; }
 
 protected:
     // XEventListener
