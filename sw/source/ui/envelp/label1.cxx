@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-04-25 12:02:18 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 19:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         SetText(sBusinessCardDlg);
     }
     // Benutzer-Etikette aus writer.cfg lesen
-    SwLabItem aItem((const SwLabItem&)rSet.Get(FN_LABEL));
+    SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));
     SwLabRec* pRec = new SwLabRec;
     const String aTmp( SW_RES( STR_CUSTOM ) );
     pRec->aMake   = pRec->aType = aTmp;
@@ -921,9 +921,35 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     else
         aSheetButton.Check();
 }
+
 /*-- 08.07.99 14:00:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+//-----------------------------------------------------------------------------
+void lcl_ClearUserData( SvTreeListBox& rAutoTextLB )
+{
+    SvLBoxEntry* pEntry = rAutoTextLB.First();
+    while(pEntry)
+    {
+        delete (String*)pEntry->GetUserData();
+        pEntry = rAutoTextLB.Next(pEntry);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void lcl_SetUserData( SvTreeListBox& rAutoTextLB, sal_uInt32 nCnt,
+                    const OUString* pNames, const OUString* pValues )
+{
+    for( sal_uInt32 i = 0; i < nCnt; ++i )
+    {
+        SvLBoxEntry* pEntry = rAutoTextLB.InsertEntry( pNames[ i ] );
+        pEntry->SetUserData( new String( pValues[ i ] ));
+    }
+}
+
+//-----------------------------------------------------------------------------
+
 SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_VISITING_CARDS), rSet),
     aAutoTextLB(this,       ResId( LB_AUTO_TEXT         )),
@@ -931,14 +957,11 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) 
     aAutoTextGroupLB(this,  ResId( LB_AUTO_TEXT_GROUP   )),
     aContentGB(this,        ResId( GB_CONTENT           )),
     aExampleWIN(this,       ResId( WIN_EXAMPLE          )),
-    aHideExampleWIN(this,   ResId( WIN_EXAMPLE          )),
     aExampleGB(this,        ResId( GB_EXAMPLE           )),
     sVisCardGroup(ResId(ST_VISCARD_GROUP)),
-    pExampleFrame(0),
-    bResume(FALSE)
+    pExampleFrame(0)
 {
     FreeResource();
-    aHideExampleWIN.SetBackground( Wallpaper(Color( COL_WHITE )) );
     aAutoTextLB.SetWindowBits( WB_HSCROLL );
     aAutoTextLB.SetSpaceBetweenEntries(0);
     aAutoTextLB.SetSelectionMode( SINGLE_SELECTION );
@@ -948,12 +971,12 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) 
     aAutoTextLB.SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
     aAutoTextGroupLB.SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
 
+    aExampleWIN.Hide();
+
     aAutoTextLB.Show();
     aAutoTextGroupFT.Show();
     aAutoTextGroupLB.Show();
     InitFrameControl();
-    aExampleWIN.Hide();
-
 }
 /*-- 08.07.99 14:00:03---------------------------------------------------
 
@@ -963,13 +986,8 @@ SwVisitingCardPage::~SwVisitingCardPage()
     for(sal_uInt16 i = 0; i < aAutoTextGroupLB.GetEntryCount(); i++)
         delete (String*)aAutoTextGroupLB.GetEntryData( i );
     _xAutoText = 0;
-    SvLBoxEntry* pEntry = aAutoTextLB.First();
-    while(pEntry)
-    {
-        String * pString = (String*)pEntry->GetUserData();
-        delete pString;
-        pEntry = aAutoTextLB.Next(pEntry);
-    }
+
+    lcl_ClearUserData( aAutoTextLB );
     delete pExampleFrame;
 }
 /*-- 08.07.99 14:00:03---------------------------------------------------
@@ -1025,6 +1043,7 @@ void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
         {
             rAutoTextLB.Select(pEntry);
             rAutoTextLB.MakeVisible(pEntry);
+            break;
         }
         pEntry = rAutoTextLB.Next(pEntry);
     }
@@ -1044,6 +1063,7 @@ sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
     }
     return sal_False;
 }
+
 //-----------------------------------------------------------------------------
 void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 {
@@ -1081,9 +1101,9 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
  --------------------------------------------------*/
 void SwVisitingCardPage::InitFrameControl()
 {
-    Link aLink(LINK(
-                    this, SwVisitingCardPage, FrameControlInitializedHdl));
-    pExampleFrame = new SwOneExampleFrame(aExampleWIN, EX_SHOW_BUSINESS_CARDS, &aLink);
+    Link aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
+    pExampleFrame = new SwOneExampleFrame( aExampleWIN,
+                                    EX_SHOW_BUSINESS_CARDS, &aLink );
 
     uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
     //now the AutoText ListBoxes have to be filled
@@ -1122,17 +1142,12 @@ void SwVisitingCardPage::InitFrameControl()
             try
             {
                 uno::Reference< text::XAutoTextGroup >  xGroup = *(uno::Reference< text::XAutoTextGroup > *)aGroup.getValue();
-                uno::Sequence<OUString> aBlockNames = xGroup->getElementNames();
-                const OUString* pBlocks = aBlockNames.getConstArray();
+                uno::Sequence< OUString > aBlockNames = xGroup->getElementNames();
                 uno::Sequence< OUString > aTitles = xGroup->getTitles() ;
-                const OUString* pTitles = aTitles.getConstArray();
-                for(i = 0; i < aBlockNames.getLength();i++)
-                {
-                    String sTitle(pTitles[i]);
-                    SvLBoxEntry* pEntry = aAutoTextLB.InsertEntry(sTitle);
-                    String sBlock(pBlocks[i]);
-                    pEntry->SetUserData(new String(sBlock));
-                }
+
+                ::lcl_SetUserData( aAutoTextLB, aBlockNames.getLength(),
+                                    aTitles.getConstArray(),
+                                    aBlockNames.getConstArray() );
             }
             catch( uno::RuntimeException& )
             {
@@ -1146,102 +1161,62 @@ void SwVisitingCardPage::InitFrameControl()
  --------------------------------------------------*/
 IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
 {
-    ResumeShowAutoText();
+    SvLBoxEntry* pSel = aAutoTextLB.FirstSelected();
+    String sEntry;
+    if( pSel )
+        sEntry = *(String*)pSel->GetUserData();
+    uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
+    OUString uEntry(sEntry);
+
+    String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
+                                aAutoTextGroupLB.GetSelectEntryPos() ) );
+    uno::Any aGroup = _xAutoText->getByName(sGroup);
+    uno::Reference< text::XAutoTextGroup >  xGroup;
+    aGroup >>= xGroup;
+
+    if( sEntry.Len() && xGroup->hasByName( uEntry ) )
+    {
+        uno::Any aEntry(xGroup->getByName(uEntry));
+        uno::Reference< text::XAutoTextEntry >  xEntry = *(uno::Reference< text::XAutoTextEntry > *)aEntry.getValue();
+        if(xEntry.is())
+        {
+            uno::Reference< text::XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
+            xEntry->applyTo(xRange);
+        }
+        UpdateFields();
+    }
     return 0;
-};
+}
 /* -----------------22.07.99 11:06-------------------
 
  --------------------------------------------------*/
-void lcl_SetUserField(uno::Reference< container::XNameAccess > & xFldMasters,
-                const OUString& rFldName, const String& rContent )
-{
-    OUString uFldName( C2U("com.sun.star.text.FieldMaster.User."));
-    uFldName += rFldName;
-
-    if(xFldMasters->hasByName(uFldName))
-    {
-        uno::Any aFirstName = xFldMasters->getByName(uFldName);
-        uno::Reference< beans::XPropertySet >  xFld = *(uno::Reference< beans::XPropertySet > *)aFirstName.getValue();
-        uno::Any aContent;
-        aContent <<= rtl::OUString(rContent);
-        xFld->setPropertyValue(C2U(UNO_NAME_CONTENT), aContent);
-    }
-}
-
 IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
 {
     if(pExampleFrame->IsInitialized() && _xAutoText.is())
     {
-        sal_Bool bGroup = &aAutoTextGroupLB == pBox;
-
-        String sGroup(
-            *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
-        uno::Any aGroup = _xAutoText->getByName(sGroup);
-        uno::Reference< text::XAutoTextGroup >  xGroup;
-        aGroup >>= xGroup;
-
-        if(bGroup)
+        if( &aAutoTextGroupLB == pBox )
         {
-            SvLBoxEntry* pEntry = aAutoTextLB.First();
-            while(pEntry)
-            {
-                String * pString = (String*)pEntry->GetUserData();
-                delete pString;
-                pEntry = aAutoTextLB.Next(pEntry);
-            }
+            String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
+                                    aAutoTextGroupLB.GetSelectEntryPos()));
+            uno::Any aGroup = _xAutoText->getByName(sGroup);
+            uno::Reference< text::XAutoTextGroup >  xGroup;
+            aGroup >>= xGroup;
+
+            lcl_ClearUserData( aAutoTextLB );
             aAutoTextLB.Clear();
+
             uno::Sequence<OUString> aBlockNames = xGroup->getElementNames();
-            const OUString* pBlocks = aBlockNames.getConstArray();
             uno::Sequence< OUString > aTitles = xGroup->getTitles() ;
-            const OUString* pTitles = aTitles.getConstArray();
-            for(sal_uInt16 i = 0; i < aBlockNames.getLength();i++)
-            {
-                String sTitle(pTitles[i]);
-                SvLBoxEntry* pEntry = aAutoTextLB.InsertEntry(sTitle);
-                String sBlock(pBlocks[i]);
-                pEntry->SetUserData(new String(sBlock));
-            }
+            ::lcl_SetUserData( aAutoTextLB, aBlockNames.getLength(),
+                                aTitles.getConstArray(),
+                                aBlockNames.getConstArray() );
         }
-        SetResume();
-        aHideExampleWIN.Show();
-        pExampleFrame->ExecUndo();
+
+        pExampleFrame->ClearDocument( TRUE );
     }
     return 0;
 }
-/* -----------------------------21.12.00 12:16--------------------------------
 
- ---------------------------------------------------------------------------*/
-void SwVisitingCardPage::ResumeShowAutoText()
-{
-    if(IsResume())
-    {
-        SvLBoxEntry* pSel = aAutoTextLB.FirstSelected();
-        String sEntry;
-        if(pSel)
-            sEntry = *(String*)pSel->GetUserData();
-        uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
-        OUString uEntry(sEntry);
-
-        String sGroup(
-            *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
-        uno::Any aGroup = _xAutoText->getByName(sGroup);
-        uno::Reference< text::XAutoTextGroup >  xGroup;
-        aGroup >>= xGroup;
-
-        if(sEntry.Len() && xGroup->hasByName(uEntry))
-        {
-            uno::Any aEntry(xGroup->getByName(uEntry));
-            uno::Reference< text::XAutoTextEntry >  xEntry = *(uno::Reference< text::XAutoTextEntry > *)aEntry.getValue();
-            if(xEntry.is())
-            {
-                uno::Reference< text::XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
-                xEntry->applyTo(xRange);
-            }
-            UpdateFields();
-        }
-        aHideExampleWIN.Hide();
-    }
-}
 /* -----------------01.10.99 11:59-------------------
 
  --------------------------------------------------*/
@@ -1261,40 +1236,65 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
     uno::Reference< text::XTextFieldsSupplier >  xFlds(xModel, uno::UNO_QUERY);
     uno::Reference< container::XNameAccess >  xFldMasters = xFlds->getTextFieldMasters();
 
+    static const struct _SwLabItemMap {
+        const char* pName;
+        rtl::OUString SwLabItem:: *pValue;
+    }  aArr[] = {
+        { USER_FIELD_FIRSTNAME      , &SwLabItem::aPrivFirstName },
+        { USER_FIELD_NAME           , &SwLabItem::aPrivName },
+        { USER_FIELD_PRIVSHORTCUT   , &SwLabItem::aPrivShortCut },
+        { USER_FIELD_FIRSTNAME_2    , &SwLabItem::aPrivFirstName2 },
+        { USER_FIELD_NAME_2         , &SwLabItem::aPrivName2 },
+        { USER_FIELD_PRIVSHORTCUT_2 , &SwLabItem::aPrivShortCut2 },
+        { USER_FIELD_PRIVSTREET     , &SwLabItem::aPrivStreet },
+        { USER_FIELD_PRIVZIP        , &SwLabItem::aPrivZip },
+        { USER_FIELD_PRIVCITY       , &SwLabItem::aPrivCity },
+        { USER_FIELD_PRIVCOUNTRY    , &SwLabItem::aPrivCountry },
+        { USER_FIELD_PRIVSTATE      , &SwLabItem::aPrivState },
+        { USER_FIELD_PRIVTITLE      , &SwLabItem::aPrivTitle },
+        { USER_FIELD_PRIVPROFESSION , &SwLabItem::aPrivProfession },
+        { USER_FIELD_PRIVPHONE      , &SwLabItem::aPrivPhone },
+        { USER_FIELD_PRIVMOBILE     , &SwLabItem::aPrivMobile },
+        { USER_FIELD_PRIVFAX        , &SwLabItem::aPrivFax },
+        { USER_FIELD_PRIVWWW        , &SwLabItem::aPrivWWW },
+        { USER_FIELD_PRIVMAIL       , &SwLabItem::aPrivMail },
+        { USER_FIELD_COMPCOMPANY    , &SwLabItem::aCompCompany },
+        { USER_FIELD_COMPCOMPANYEXT , &SwLabItem::aCompCompanyExt },
+        { USER_FIELD_COMPSLOGAN     , &SwLabItem::aCompSlogan },
+        { USER_FIELD_COMPSTREET     , &SwLabItem::aCompStreet },
+        { USER_FIELD_COMPZIP        , &SwLabItem::aCompZip },
+        { USER_FIELD_COMPCITY       , &SwLabItem::aCompCity },
+        { USER_FIELD_COMPCOUNTRY    , &SwLabItem::aCompCountry },
+        { USER_FIELD_COMPSTATE      , &SwLabItem::aCompState },
+        { USER_FIELD_COMPPOSITION   , &SwLabItem::aCompPosition },
+        { USER_FIELD_COMPPHONE      , &SwLabItem::aCompPhone },
+        { USER_FIELD_COMPMOBILE     , &SwLabItem::aCompMobile },
+        { USER_FIELD_COMPFAX        , &SwLabItem::aCompFax },
+        { USER_FIELD_COMPWWW        , &SwLabItem::aCompWWW },
+        { USER_FIELD_COMPMAIL       , &SwLabItem::aCompMail },
+        { 0, 0 }
+    };
+
     try
     {
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_FIRSTNAME      ), rItem.aPrivFirstName );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_NAME           ), rItem.aPrivName               );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSHORTCUT   ), rItem.aPrivShortCut           );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_FIRSTNAME_2    ), rItem.aPrivFirstName2 );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_NAME_2         ), rItem.aPrivName2               );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSHORTCUT_2 ), rItem.aPrivShortCut2           );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSTREET     ), rItem.aPrivStreet             );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVZIP        ), rItem.aPrivZip                );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVCITY       ), rItem.aPrivCity               );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVCOUNTRY    ), rItem.aPrivCountry            );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVSTATE      ), rItem.aPrivState              );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVTITLE      ), rItem.aPrivTitle              );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVPROFESSION ), rItem.aPrivProfession         );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVPHONE      ), rItem.aPrivPhone              );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVMOBILE     ), rItem.aPrivMobile             );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVFAX        ), rItem.aPrivFax                );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVWWW        ), rItem.aPrivWWW                );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_PRIVMAIL       ), rItem.aPrivMail               );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCOMPANY    ), rItem.aCompCompany            );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCOMPANYEXT ), rItem.aCompCompanyExt         );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPSLOGAN     ), rItem.aCompSlogan             );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPSTREET     ), rItem.aCompStreet             );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPZIP        ), rItem.aCompZip                );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCITY       ), rItem.aCompCity               );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPCOUNTRY    ), rItem.aCompCountry            );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPSTATE      ), rItem.aCompState              );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPPOSITION   ), rItem.aCompPosition           );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPPHONE      ), rItem.aCompPhone              );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPMOBILE     ), rItem.aCompMobile             );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPFAX        ), rItem.aCompFax                );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPWWW        ), rItem.aCompWWW                );
-        lcl_SetUserField(xFldMasters, C2U(USER_FIELD_COMPMAIL       ), rItem.aCompMail               );
+        String sFldName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
+                            "com.sun.star.text.FieldMaster.User." )));
+        OUString uCntName( C2U( UNO_NAME_CONTENT ));
+        for( const _SwLabItemMap* p = aArr; p->pName; ++p )
+        {
+            String sCurFldName( sFldName );
+            sCurFldName.AppendAscii( p->pName );
+            OUString uFldName( sCurFldName );
+            if( xFldMasters->hasByName( uFldName ))
+            {
+                uno::Any aFirstName = xFldMasters->getByName( uFldName );
+                uno::Reference< beans::XPropertySet >  xFld =
+                    *(uno::Reference< beans::XPropertySet > *)aFirstName.getValue();
+                uno::Any aContent;
+                aContent <<= rItem.*p->pValue;
+                xFld->setPropertyValue( uCntName, aContent );
+            }
+        }
     }
     catch( uno::RuntimeException&)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 19:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,6 @@ class SwVisitingCardPage : public SfxTabPage
     GroupBox        aContentGB;
 
     Window          aExampleWIN;
-    Window          aHideExampleWIN;
     GroupBox        aExampleGB;
 
     String          sVisCardGroup;
@@ -339,14 +338,9 @@ class SwVisitingCardPage : public SfxTabPage
 
     SwLabItem       aLabItem;
 
-    BOOL            bResume;
-
     SwOneExampleFrame*  pExampleFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    _xAutoText;
 
-    void            SetResume() {bResume = TRUE;}
-    BOOL            IsResume() {return bResume;}
-    void            ResumeShowAutoText();
 
     DECL_LINK( AutoTextSelectHdl, void* );
     DECL_LINK( FrameControlInitializedHdl, void* );
