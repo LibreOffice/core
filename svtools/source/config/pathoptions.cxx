@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-19 13:52:46 $
+ *  last change: $Author: sb $ $Date: 2001-04-09 11:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,8 +380,10 @@ OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
     OUString aTmp, aPath = rPath;
     sal_Int32 nIdx = -1;
 
-    if ( FileBase::getNormalizedPathFromFileURL( aPath, aTmp )  == FileBase::E_None )
+    INetURLObject aUrl( aPath );
+    if ( !aUrl.HasError() )
     {
+        aPath = aUrl.GetMainURL(INetURLObject::NO_DECODE);
         nIdx = aPath.indexOf( m_aProgURL );
         while ( nIdx != -1 )
         {
