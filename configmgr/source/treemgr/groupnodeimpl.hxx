@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupnodeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:39:41 $
+ *  last change: $Author: jb $ $Date: 2001-07-03 12:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,18 @@
 #ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 #define CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 
+#ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #include "nodeimpl.hxx"
+#endif
 
+#ifndef CONFIGMGR_VALUEMEMBERNODE_HXX_
 #include "valuemembernode.hxx"
+#endif
+
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace configmgr
 {
