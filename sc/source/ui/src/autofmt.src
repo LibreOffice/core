@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 14:56:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_simplified ] = "å›¾æ¡ˆ(~P)";
         Text[ russian ] = "~Óçîğ";
         Text[ polish ] = "Deseñ";
-        Text[ japanese ] = "ï¾Šï¾Ÿï¾€ï½°ï¾(~P)";
+        Text[ japanese ] = "èƒŒæ™¯(~P)";
         Text[ chinese_traditional ] = "åœ–æ¡ˆ(~P)";
         Text[ arabic ] = "äãæĞÌ";
         Text[ greek ] = "Ìïôßâï";
@@ -840,6 +840,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato";
 };
+
 
 
 
