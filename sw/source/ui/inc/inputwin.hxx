@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ friend class InputEdit;
     SwFldMgr*       pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
+    SfxBindings*    pBindings;
     String          aAktTableName, sOldFml;
     USHORT          nActionCnt;
 
@@ -128,7 +129,7 @@ protected:
     void            ApplyFormula();
     void            CancelFormula();
 public:
-                    SwInputWindow( Window* pParent );
+                    SwInputWindow( Window* pParent, SfxBindings* pBindings );
     virtual         ~SwInputWindow();
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-23 07:57:09 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ SwTbxInsertCtrl::SwTbxInsertCtrl( USHORT nId,
         SfxToolBoxControl( nId, rTbx, rBind ),
         nLastSlotId(FN_INSERT_CTRL == nId ? FN_INSERT_TABLE : SID_INSERT_DIAGRAM)
 {
-    Image aImage = SFX_IMAGEMANAGER()->GetImage( nLastSlotId, SW_MOD() );
+    Image aImage = GetBindings().GetImageManager()->GetImage( nLastSlotId, SW_MOD() );
     rTbx.SetItemImage(GetId(), aImage);
 }
 /**********************************************************************
@@ -182,7 +182,7 @@ void SwTbxInsertCtrl::StateChanged( USHORT nSID,
             nLastSlotId = pItem->GetValue();
             if( nLastSlotId )
                 nId = nLastSlotId;
-            Image aImage = SFX_IMAGEMANAGER()->GetImage( nId, SW_MOD() );
+            Image aImage = GetBindings().GetImageManager()->GetImage( nId, SW_MOD() );
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }

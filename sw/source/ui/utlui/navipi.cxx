@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 09:04:37 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
 
     StartListening(*SFX_APP());
     StartListening(*pCreateView);
-    SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
+    SfxImageManager* pImgMan = pBindings->GetImageManager();
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     if(IsGlobalDoc())
@@ -1003,7 +1003,7 @@ SwNavigationPI::~SwNavigationPI()
 
     EndListening(*SFX_APP());
 
-    SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
+    SfxImageManager* pImgMan = GetBindings().GetImageManager();
     pImgMan->ReleaseToolBox(&aContentToolBox);
     pImgMan->ReleaseToolBox(&aGlobalToolBox);
     delete aContentToolBox.GetItemWindow(FN_PAGENUMBER);

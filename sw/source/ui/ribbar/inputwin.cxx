@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:32 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ SFX_IMPL_POS_CHILDWINDOW( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
 //==================================================================
 
-SwInputWindow::SwInputWindow( Window* pParent )
+SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
     aEdit(      this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION),
     aPos(       this,       SW_RES(ED_POS)),
@@ -120,13 +120,16 @@ SwInputWindow::SwInputWindow( Window* pParent )
     pMgr(0),
     pView(0),
     pWrtShell(0),
+    pBindings(pBind),
     aAktTableName(aEmptyStr)
 {
     bFirst = bDoesUndo = TRUE;
     bActive = bIsTable = bDelSel = bResetUndo = bCallUndo = FALSE;
 
     FreeResource();
-    SFX_APP()->GetImageManager()->RegisterToolBox(this);
+
+    SfxImageManager* pManager = pBindings->GetImageManager();
+    pManager->RegisterToolBox(this);
 
     pView = ::GetActiveView();
     pWrtShell = pView ? pView->GetWrtShellPtr() : 0;
@@ -137,7 +140,6 @@ SwInputWindow::SwInputWindow( Window* pParent )
     InsertWindow( ED_FORMULA, &aEdit);
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
-    SfxImageManager* pManager = SFX_IMAGEMANAGER();
     SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC ));
     SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL ));
     SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY ));
@@ -163,7 +165,8 @@ SwInputWindow::SwInputWindow( Window* pParent )
 
 __EXPORT SwInputWindow::~SwInputWindow()
 {
-    SFX_APP()->GetImageManager()->ReleaseToolBox(this);
+    pBindings->GetImageManager()->ReleaseToolBox(this);
+
     //Lineale aufwecken
     if(pView)
     {
@@ -681,16 +684,14 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
 
 SwInputChild::SwInputChild(Window* pParent,
                                 USHORT nId,
-                                SfxBindings* ,
+                                SfxBindings* pBindings,
                                 SfxChildWinInfo* ) :
                                 SfxChildWindow( pParent, nId )
 {
-    SwView* pActiveView = GetActiveView();
-    pDispatch = pActiveView ? pActiveView->GetViewFrame()->GetDispatcher() : 0;
-    pWindow = new SwInputWindow( pParent );
+    pDispatch = pBindings->GetDispatcher();
+    pWindow = new SwInputWindow( pParent, pBindings );
     ((SwInputWindow*)pWindow)->Show();
     eChildAlignment = SFX_ALIGN_LOWESTTOP;
-
 }
 
 
@@ -710,6 +711,9 @@ SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/06/08 13:47:32  os
+    #84832# #84836# use connection parameter in drag and drop, form letter, merge field and insert db as text
+
     Revision 1.1.1.1  2000/09/18 17:14:46  hr
     initial import
 
