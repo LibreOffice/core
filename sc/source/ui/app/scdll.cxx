@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:13:30 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _OBJFAC3D_HXX
 #include <svx/objfac3d.hxx>
+#endif
+#ifndef _SVX_TBXCOLOR_HXX
+#include <svx/tbxcolor.hxx>
 #endif
 
 #include <sot/clsids.hxx>
