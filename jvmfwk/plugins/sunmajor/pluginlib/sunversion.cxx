@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:52:17 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,14 @@ namespace jfw_plugin  { //stoc_javadetect
 
 //extern OUString ::Impl::usPathDelim();
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-#ifdef SUNVERSION_SELFTEST
+#if OSL_DEBUG_LEVEL >= 2
 class SelfTest
 {
 public:
     SelfTest();
 } test;
 #endif
+
 
 SunVersion::SunVersion():  m_nUpdateSpecial(0),
                            m_preRelease(Rel_NONE),
@@ -179,73 +180,56 @@ bool SunVersion::init(const char *szVersion)
     if (* (pCur - 1) == '_')
     {// _01, _02
         // update is the last part _01, _01a, part 0 is the digits parts and 1 the trailing alpha
-        int nUpdatePart = 0;
         while (1)
         {
-            if (pCur < pEnd && isdigit(*pCur))
+            if (pCur <= pEnd)
             {
+                if ( ! isdigit(*pCur))
+                {
+                    //1.4.1_01-, 1.4.1_01a, the numerical part may only be 2 chars.
+                    int len = pCur - pLast;
+                    if (len != 2)
+                        return false;
+                    //we've got the update: 01, 02 etc
+                    strncpy(buf, pLast, len);
+                    buf[len] = 0;
+                    m_arVersionParts[nPart] = atoi(buf);
+                    if (pCur == pEnd)
+                    {
+                        break;
+                    }
+                    if (*pCur == 'a' && (pCur + 1) == pEnd)
+                    {
+                        //check if it s followed by a simple "a" (not specified)
+                        m_nUpdateSpecial = *pCur;
+                        break;
+                    }
+                    else if (*pCur == '-' && pCur < pEnd)
+                    {
+                        //check 1.5.0_01-ea
+                        PreRelease pr = getPreRelease(++pCur);
+                        if (pr == Rel_NONE)
+                            return false;
+                        //just ignore -ea because its no official release
+                        break;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
                 if (pCur < pEnd)
                     pCur ++;
-                //   nPartPos ++;
-            }
-            else if (nUpdatePart == 0 && (pCur == pEnd || isalpha(*pCur)))
-            {
-                int len = pCur - pLast;
-                if (len >= 127)
-                    return false;
-
-                strncpy(buf, pLast, len);
-                buf[len] = 0;
-                m_arVersionParts[nPart] = atoi(buf);
-                nUpdatePart ++;
-
-                //_01a, only on character at last position
-                if (pCur < pEnd && isalpha(*pCur))
-                {
-                    //this must be the last char
-                    if (! (pCur + 1 == pEnd))
-                        return false;
-                    if (isupper(*pCur))
-                        m_nUpdateSpecial = *pCur + 0x20; //make lowercase
-                    else
-                        m_nUpdateSpecial = *pCur;
-
-                }
-                break;
-            }
-            else
-            {
-                return false;
+                else
+                    break;
             }
         }
     }
+    // 1.4.1-ea
     else if (*(pCur - 1) == '-')
     {
-        if( ! strcmp(pCur,"ea"))
-            m_preRelease = Rel_EA;
-        else if( ! strcmp(pCur,"ea1"))
-            m_preRelease = Rel_EA1;
-        else if( ! strcmp(pCur,"ea2"))
-            m_preRelease = Rel_EA2;
-        else if( ! strcmp(pCur,"ea3"))
-            m_preRelease = Rel_EA3;
-        else if ( ! strcmp(pCur,"beta"))
-            m_preRelease = Rel_BETA;
-        else if ( ! strcmp(pCur,"beta1"))
-            m_preRelease = Rel_BETA1;
-        else if ( ! strcmp(pCur,"beta2"))
-            m_preRelease = Rel_BETA2;
-        else if ( ! strcmp(pCur,"beta3"))
-            m_preRelease = Rel_BETA3;
-        else if (! strcmp(pCur, "rc"))
-            m_preRelease = Rel_RC;
-        else if (! strcmp(pCur, "rc1"))
-            m_preRelease = Rel_RC1;
-        else if (! strcmp(pCur, "rc2"))
-            m_preRelease = Rel_RC2;
-        else if (! strcmp(pCur, "rc3"))
-            m_preRelease = Rel_RC3;
-        else
+        m_preRelease = getPreRelease(pCur);
+        if (m_preRelease == Rel_NONE)
             return false;
     }
     else
@@ -253,6 +237,38 @@ bool SunVersion::init(const char *szVersion)
         return false;
     }
     return true;
+}
+
+SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
+{
+    if (szRelease == NULL)
+        return Rel_NONE;
+    if( ! strcmp(szRelease,"ea"))
+        return  Rel_EA;
+    else if( ! strcmp(szRelease,"ea1"))
+        return Rel_EA1;
+    else if( ! strcmp(szRelease,"ea2"))
+        return Rel_EA2;
+    else if( ! strcmp(szRelease,"ea3"))
+        return Rel_EA3;
+    else if ( ! strcmp(szRelease,"beta"))
+        return Rel_BETA;
+    else if ( ! strcmp(szRelease,"beta1"))
+        return Rel_BETA1;
+    else if ( ! strcmp(szRelease,"beta2"))
+        return Rel_BETA2;
+    else if ( ! strcmp(szRelease,"beta3"))
+        return Rel_BETA3;
+    else if (! strcmp(szRelease, "rc"))
+        return Rel_RC;
+    else if (! strcmp(szRelease, "rc1"))
+        return Rel_RC1;
+    else if (! strcmp(szRelease, "rc2"))
+        return Rel_RC2;
+    else if (! strcmp(szRelease, "rc3"))
+        return Rel_RC3;
+    else
+        return Rel_NONE;
 }
 
 SunVersion::~SunVersion()
@@ -297,7 +313,9 @@ bool SunVersion::operator > (const SunVersion& ver) const
         ||
         (m_preRelease != Rel_NONE && ver.m_preRelease == Rel_NONE))
         return false;
-    if (m_preRelease > ver.m_preRelease)
+    else if (m_preRelease == Rel_NONE && ver.m_preRelease != Rel_NONE)
+        return true;
+    else if (m_preRelease > ver.m_preRelease)
         return true;
 
     return false;
@@ -330,7 +348,7 @@ SunVersion::operator bool()
 }
 
 
-#ifdef SUNVERSION_SELFTEST
+#if OSL_DEBUG_LEVEL >= 2
 SelfTest::SelfTest()
 {
     bool bRet = true;
@@ -338,20 +356,21 @@ SelfTest::SelfTest()
     char * versions[] = {"1.4.0", "1.4.1", "1.0.0", "10.0.0", "10.10.0",
                          "10.2.2", "10.10.0", "10.10.10", "111.0.999",
                          "1.4.1_01", "9.90.99_09", "1.4.1_99",
-                         "1.4.1_00a", "1.4.0_01z", "1.4.1_99A",
-                         "1.4.1-ea", "1.4.1-beta", "1.4.1-rc1"};
+                         "1.4.1_00a",
+                         "1.4.1-ea", "1.4.1-beta", "1.4.1-rc1",
+                         "1.5.0_01-ea", "1.5.0_01-rc2"};
     char * badVersions[] = {".4.0", "..1", "", "10.0", "10.10.0.", "10.10.0-", "10.10.0.",
                             "10.2-2", "10_10.0", "10..10","10.10", "a.0.999",
                             "1.4b.1_01", "9.90.-99_09", "1.4.1_99-",
                             "1.4.1_00a2", "1.4.0_z01z", "1.4.1__99A",
-                            "1.4.1-1ea"};
+                            "1.4.1-1ea", "1.5.0_010", "1.5.0._01-", "1.5.0_01-eac"};
     char * orderedVer[] = { "1.3.1-ea", "1.3.1-beta", "1.3.1-rc1",
-                            "1.3.1", "1.3.1_00a", "1.3.1_01", "1.3.1_01a", "1.3.1_01b",
-                            "1.3.2", "1.4.0", "2.0.0"};
+                            "1.3.1", "1.3.1_00a", "1.3.1_01", "1.3.1_01a",
+                            "1.3.2", "1.4.0", "1.5.0_01-ea", "2.0.0"};
 
-    size_t num = sizeof (versions) / sizeof(char*);
-    size_t numBad = sizeof (badVersions) / sizeof(char*);
-    size_t numOrdered = sizeof (orderedVer) / sizeof(char*);
+    int num = sizeof (versions) / sizeof(char*);
+    int numBad = sizeof (badVersions) / sizeof(char*);
+    int numOrdered = sizeof (orderedVer) / sizeof(char*);
     //parsing test (positive)
     for (int i = 0; i < num; i++)
     {
@@ -364,7 +383,7 @@ SelfTest::SelfTest()
     }
     OSL_ENSURE(bRet, "SunVersion selftest failed");
     //Parsing test (negative)
-    for ( i = 0; i < numBad; i++)
+    for ( int i = 0; i < numBad; i++)
     {
         SunVersion ver(badVersions[i]);
         if (ver)
@@ -378,7 +397,7 @@ SelfTest::SelfTest()
     // Ordering test
     bRet = true;
     int j = 0;
-    for (i = 0; i < numOrdered; i ++)
+    for (int i = 0; i < numOrdered; i ++)
     {
         SunVersion curVer(orderedVer[i]);
         if ( ! curVer)
