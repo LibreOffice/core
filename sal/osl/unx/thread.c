@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 13:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,11 +1007,11 @@ void SAL_CALL osl_yieldThread()
 /*****************************************************************************/
 /* osl_createThreadKey */
 /*****************************************************************************/
-oslThreadKey SAL_CALL osl_createThreadKey(void)
+oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallback )
 {
     pthread_key_t key;
 
-    if (pthread_key_create(&key, NULL) != 0)
+    if (pthread_key_create(&key, pCallback) != 0)
         key = 0;
 
     return ((oslThreadKey)key);
