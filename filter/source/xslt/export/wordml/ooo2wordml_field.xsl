@@ -49,14 +49,14 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-   
+
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
 	<!-- the following are common used  fields -->
 	<xsl:template match="text:page-number | text:page-count | text:subject | text:initial-creator |  text:title  | text:date
-     | text:time | text:page-variable-get | text:author-name | text:author-initials | text:file-name  | text:sender-company 
+     | text:time | text:page-variable-get | text:author-name | text:author-initials | text:file-name  | text:sender-company
      | text:sender-initials | text:sender-phone-work | text:word-count  | text:paragraph-count | text:character-count
-     | text:description | text:creation-time | text:creation-date | text:editing-cycles | text:editing-duration 
+     | text:description | text:creation-time | text:creation-date | text:editing-cycles | text:editing-duration
      | text:keywords | text:print-time | text:print-date | text:creator | text:modification-time | text:modification-date
      | text:user-defined  | text:variable-get | text:user-field-get | text:sequence | text:database-name ">
 		<w:fldSimple>
@@ -260,7 +260,7 @@
 			<xsl:when test="$field_number_format_style = '一, 二, 三, ...'">
 				<xsl:text>  \* CHINESENUM3  </xsl:text>
 			</xsl:when>
-			<xsl:when test="  $field_number_format_style ='壹, 	貳, 參, ...' or $field_number_format_style ='壹, 貳, 參, ...' or 
+			<xsl:when test="  $field_number_format_style ='壹, 	貳, 參, ...' or $field_number_format_style ='壹, 貳, 參, ...' or
 $field_number_format_style ='壹, 贰, 叁, ...' ">
 				<xsl:text>  \* CHINESENUM2  </xsl:text>
 			</xsl:when>
@@ -421,7 +421,7 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
 			</xsl:if>
 		</w:docVars>
 	</xsl:template>
-	<xsl:template match="text:reference-ref | text:bookmark-ref | text:footnote-ref 
+	<xsl:template match="text:reference-ref | text:bookmark-ref | text:footnote-ref
                                 | text:endnote-ref ">
 		<!-- this template is for reference fields -->
 		<w:r>
@@ -509,14 +509,14 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
 			<w:fldChar w:fldCharType="end"/>
 		</w:r>
 	</xsl:template>
-	<xsl:template match="text:chapter | text:sender-firstname | text:sender-lastname 
+	<xsl:template match="text:chapter | text:sender-firstname | text:sender-lastname
                                     | text:sender-street | text:sender-country | text:sender-postal-code
                                     | text:sender-city | text:sender-title | text:sender-position
                                     | text:sender-phone-private | text:sender-email | text:sender-fax
                                     | text:sender-state-or-province | text:table-count | text:image-count
                                     | text:object-count | text:printed-by | text:hidden-paragraph
                                     | text:placeholder | text:drop-down | text:conditional-text
-                                    | text:variable-set | text:table-formula | text:database-display 
+                                    | text:variable-set | text:table-formula | text:database-display
                                     | text:database-next | text:database-select | text:database-row-number
                                     | text:sequence-ref | text:expression | text:sheet-name | text:dde-connection">
 		<!-- this template just export content of staroffice fields that do not have the corresponding fields in MS word  ATM -->
@@ -592,25 +592,25 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
 					<w:rStyle w:val="Hyperlink"/>
 				</w:rPr>
 				<!--apply inline-text-elements, many many many ...  -->
-				<xsl:apply-templates select="text:a | text:span | text() | text:hidden-text 
-            | text:line-break | text:tab-stop | text:s | text:page-number | text:page-count | text:subject 
-            | text:initial-creator | text:title | text:date | text:time | text:author-name 
-            | text:author-initials | text:chapter | text:file-name | text:sender-company 
+				<xsl:apply-templates select="text:a | text:span | text() | text:hidden-text
+            | text:line-break | text:tab-stop | text:s | text:page-number | text:page-count | text:subject
+            | text:initial-creator | text:title | text:date | text:time | text:author-name
+            | text:author-initials | text:chapter | text:file-name | text:sender-company
             | text:sender-firstname | text:sender-lastname | text:sender-initials | text:sender-street
-            | text:sender-country | text:sender-postal-code | text:sender-city | text:sender-title 
+            | text:sender-country | text:sender-postal-code | text:sender-city | text:sender-title
             | text:sender-position | text:sender-phone-private | text:sender-phone-work
             | text:sender-email | text:sender-fax | text:sender-state-or-province | text:word-count
-            | text:paragraph-count | text:character-count | text:table-count | text:image-count 
-            | text:object-count | text:template-name | text:description | text:creation-time 
+            | text:paragraph-count | text:character-count | text:table-count | text:image-count
+            | text:object-count | text:template-name | text:description | text:creation-time
             | text:creation-date | text:editing-cycles | text:editing-duration | text:keywords
-            | text:print-time | text:print-date | text:creator | text:modification-time 
-            | text:modification-date | text:user-defined | text:printed-by | text:hidden-paragraph  
-            | text:placeholder | text:drop-down | text:conditional-text  | text:text-input 
+            | text:print-time | text:print-date | text:creator | text:modification-time
+            | text:modification-date | text:user-defined | text:printed-by | text:hidden-paragraph
+            | text:placeholder | text:drop-down | text:conditional-text  | text:text-input
             | text:execute-macro | text:variable-set | text:variable-input
-            | text:user-field-input | text:variable-get | text:user-field-get | text:sequence 
-            | text:page-variable-set | text:page-variable-get | text:table-formula 
-            | text:database-display | text:database-next| text:database-select 
-            | text:database-row-number | text:database-name | text:reference-ref 
+            | text:user-field-input | text:variable-get | text:user-field-get | text:sequence
+            | text:page-variable-set | text:page-variable-get | text:table-formula
+            | text:database-display | text:database-next| text:database-select
+            | text:database-row-number | text:database-name | text:reference-ref
             | text:bookmark-ref | text:footnote-ref  | text:endnote-ref | text:sequence-ref
             | text:expression | text:measure | text:dde-connection | text:sheet-name
             | text:bibliography-mark | text:script | text:page-continuation | office:annotation
