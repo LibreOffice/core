@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-02 15:23:54 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ InfoBox MSG_NO_RULER
     Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
     Message[ chinese_simplified ] = "ÔÚ»­ÀÈÖ÷Ìâ'³¤ÌõĞÎ'ÄÚÎŞÈÎºÎÍ¼ĞÎ¡£";
     Message[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôç óõëëïãŞ ìå èİìá 'Rulers'.";
-    Message[ korean ] = "Gallery ÁÖÁ¦ 'Rulers'¿¡ ±×·¡ÇÈÀÌ ¾ø½À´Ï´Ù.";
+    Message[ korean ] = "°¶·¯¸®- ÁÖÁ¦ '´«±İÀÚ'¿¡ ±×·¡ÇÈÀÌ ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "'Rulers' galeri konusunda bit eşlem grafik mevcut değil.";
     Message[ language_user1 ] = " ";
 };
@@ -255,7 +255,7 @@ String STR_GRFILTER_TOOBIG
     Text[ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding";
     Text[ chinese_simplified ] = "ÄÚ´æ²»¹»£¬ÎŞ·¨²åÈëÍ¼ĞÎ";
     Text[ greek ] = "Ç ìíŞìç äåí åğáñêåß ãéá ôçí ğñïóèŞêç ôïõ ãñáöéêïı.";
-    Text[ korean ] = "±×¸²À» »ğÀÔÇÏ´Âµ¥ ¸Ş¸ğ¸®°¡ ºÎÁ· ÇÕ´Ï´Ù.";
+    Text[ korean ] = "±×·¡ÇÈÀ» »ğÀÔÇÏ±â À§ÇØ¼­´Â ¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Grafiğin eklenmesi için yeterli bellek yok";
     Text[ language_user1 ] = " ";
 };
@@ -363,7 +363,7 @@ String STR_REDLINE_COMMENT
     Text[ dutch ] = "Commentaar:  ";
     Text[ chinese_simplified ] = "ÆÀÓï£º ";
     Text[ greek ] = "Ó÷üëéï: ";
-    Text[ korean ] = "¸Ş¸ğ: ";
+    Text[ korean ] = "ÁÖ: ";
     Text[ turkish ] = "Açıklalama ekle: ";
     Text[ language_user1 ] = " ";
 };
