@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:49:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,25 +1088,28 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     {
         SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item for Brush found" ) );
         const Graphic* pGraphic = ((const SvxBrushItem *)pPoolItem)->GetGraphic();
-        if(!bIgnoreGraphic)
+        if( pGraphic )
         {
-            SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item setting Graphic" ) );
-            aSymbolGraphic=*pGraphic;
+            if(!bIgnoreGraphic)
+            {
+                SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item setting Graphic" ) );
+                aSymbolGraphic=*pGraphic;
+            }
+            if(!bIgnoreSize)
+            {
+                SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item setting Size" ) );
+                aSymbolSize=OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
+                                                        pGraphic->GetPrefMapMode(),
+                                                        MAP_100TH_MM );
+    #if OSL_DEBUG_LEVEL > 1
+                ByteString aStr( "SVX_SYMBOLTYPE_BRUSH Item setting Size: " );
+                aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Width() ) );
+                aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Height() ) );
+                SVX_TRACE( 213, aStr );
+    #endif
+            }
+            bPrevSym=TRUE;
         }
-        if(!bIgnoreSize)
-        {
-            SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item setting Size" ) );
-            aSymbolSize=OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
-                                                    pGraphic->GetPrefMapMode(),
-                                                    MAP_100TH_MM );
-#if OSL_DEBUG_LEVEL > 1
-            ByteString aStr( "SVX_SYMBOLTYPE_BRUSH Item setting Size: " );
-            aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Width() ) );
-            aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Height() ) );
-            SVX_TRACE( 213, aStr );
-#endif
-        }
-        bPrevSym=TRUE;
     }
     if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),TRUE,&pPoolItem) == SFX_ITEM_SET)
     {
