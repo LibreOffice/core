@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-12 13:43:08 $
+ *  last change: $Author: os $ $Date: 2002-08-23 13:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,8 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
     else if ( nType == FRMMGR_TYPE_NONE )
     {
         pOwnSh->GetFlyFrmAttr( aSet );
-        bIsInVertical = pOwnSh->IsFrmInVertical();
+        BOOL bRightToLeft;
+        bIsInVertical = pOwnSh->IsFrmInVertical(bRightToLeft);
     }
     ::PrepareBoxInfo( aSet, *pOwnSh );
 }
