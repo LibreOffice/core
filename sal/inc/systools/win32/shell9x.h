@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell9x.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2000-12-11 16:36:02 $
+ *  last change: $Author: tra $ $Date: 2001-04-27 13:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #pragma once
 
+#ifndef _SHELL9X_H_
+#define _SHELL9X_H_
+
 #ifndef _WINDOWS_
 #include <windows.h>
 #endif
@@ -68,6 +71,8 @@
 #ifndef _SHLOBJ_H_
 #include <shlobj.h>
 #endif
+
+#include <shellapi.h>
 
 #ifdef __cplusplus
 extern "C"{
@@ -90,6 +95,10 @@ extern "C"{
 #undef SHGetPathFromIDListW
 #endif
 
+#ifdef ShellExecuteExW
+#undef ShellExecuteExW
+#endif
+
 //------------------------------------------------------------------------
 // set the compiler directives for the function pointer we declare below
 // if we build sal or sal will be used as static library we define extern
@@ -106,6 +115,8 @@ SHELL9X_API LPWSTR *     ( WINAPI * lpfnCommandLineToArgvW ) ( LPCWSTR lpCmdLine
 SHELL9X_API LPITEMIDLIST ( WINAPI * lpfnSHBrowseForFolderW ) ( LPBROWSEINFOW lpbi );
 SHELL9X_API BOOL         ( WINAPI * lpfnSHGetPathFromIDListW ) ( LPCITEMIDLIST pidl, LPWSTR pszPath );
 
+SHELL9X_API BOOL ( WINAPI * lpfnShellExecuteExW ) ( LPSHELLEXECUTEINFOW lpExecInfo );
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -115,6 +126,10 @@ SHELL9X_API BOOL         ( WINAPI * lpfnSHGetPathFromIDListW ) ( LPCITEMIDLIST p
 #define SHBrowseForFolderW   lpfnSHBrowseForFolderW
 #define SHGetPathFromIDListW lpfnSHGetPathFromIDListW
 
+#define ShellExecuteEx lpfnShellExecuteExW
+
 #ifdef __cplusplus
 }
+#endif
+
 #endif
