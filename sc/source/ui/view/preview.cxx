@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:04:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/fmview.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/itemset.hxx>
