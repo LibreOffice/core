@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 17:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,11 +601,11 @@ SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper()
     return new XMLTextImportPropertyMapper( pPropMapper );
 }
 
-SvXMLImportPropertyMapper *XMLTextImportHelper::CreateCharExtPropMapper()
+SvXMLImportPropertyMapper *XMLTextImportHelper::CreateCharExtPropMapper(XMLFontStylesContext *pFontDecls)
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
-    return new XMLTextImportPropertyMapper( pPropMapper );
+    return new XMLTextImportPropertyMapper( pPropMapper, pFontDecls );
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
