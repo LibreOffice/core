@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 07:15:00 $
+ *  last change: $Author: os $ $Date: 2002-10-09 12:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,11 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                 SdrView* pDrawView = rSh.GetDrawView();
                 SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
                 if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                {
+                    pDrawView->EndTextEdit();
+                    pDrawView->UnmarkAll();
                     pDrawView->MarkObj( pObj, pPV );
+                }
                 return sal_True;
             }
         }
