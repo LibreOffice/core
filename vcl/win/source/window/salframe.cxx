@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2000-11-30 12:46:46 $
+ *  last change: $Author: th $ $Date: 2000-12-01 16:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,10 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     else
     {
         // Hack, because we want have a default position for our
-        // document windows. In the future we want use
-        if ( (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE)) ==
+        // document windows. In the future we want use a special flag
+        // for this
+        if ( !hWndParent &&
+             (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE)) ==
              (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE) )
             nSysStyle |= WS_OVERLAPPED;
         else
@@ -902,8 +904,50 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
 
     if ( maFrameData.mbDefPos )
     {
-        nX = (nScreenWidth-nWidth)/2 +  nScreenX;
-        nY = (nScreenHeight-nHeight)/2 +  nScreenY;
+        HWND hWndParent = ::GetParent( maFrameData.mhWnd );
+        // Search for TopLevel Frame
+        while ( hWndParent && (GetWindowStyle( hWndParent ) & WS_CHILD) )
+            hWndParent = ::GetParent( hWndParent );
+        // if the Window has a Parent, than center the window to
+        // the parent, in the other case to the screen
+        if ( hWndParent && !IsIconic( hWndParent ) &&
+             (GetWindowStyle( hWndParent ) & WS_VISIBLE) )
+        {
+            RECT aParentRect;
+            GetWindowRect( hWndParent, &aParentRect );
+            int nParentWidth    = aParentRect.right-aParentRect.left;
+            int nParentHeight   = aParentRect.bottom-aParentRect.top;
+
+            // We don't center, when Parent is smaller than our window
+            if ( (nParentWidth-GetSystemMetrics( SM_CXFIXEDFRAME ) <= nWidth) &&
+                 (nParentHeight-GetSystemMetrics( SM_CYFIXEDFRAME ) <= nHeight) )
+            {
+                int nOff = GetSystemMetrics( SM_CYSIZEFRAME ) + GetSystemMetrics( SM_CYCAPTION );
+                nX = aParentRect.left+nOff;
+                nY = aParentRect.top+nOff;
+            }
+            else
+            {
+                nX = (nParentWidth-nWidth)/2 + aParentRect.left;
+                nY = (nParentHeight-nHeight)/2 + aParentRect.top;
+            }
+        }
+        else
+        {
+            nX = (nScreenWidth-nWidth)/2 + nScreenX;
+            nY = (nScreenHeight-nHeight)/2 + nScreenY;
+        }
+
+        // Adjust Window in the screen
+        if ( nX+nWidth > nScreenX+nScreenWidth )
+            nX = (nScreenX+nScreenWidth) - nWidth;
+        if ( nY+nHeight > nScreenY+nScreenHeight )
+            nY = (nScreenY+nScreenHeight) - nHeight;
+        if ( nX < nScreenX )
+            nX = nScreenX;
+        if ( nY < nScreenY )
+            nY = nScreenY;
+
         if ( bVisible )
             maFrameData.mbDefPos = FALSE;
     }
@@ -913,14 +957,22 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
         GetWindowRect( maFrameData.mhWnd, &aWinRect );
         nX = aWinRect.left;
         nY = aWinRect.top;
-        if ( nX+nWidth > nScreenX+nScreenWidth )
-            nX = (nScreenX+nScreenWidth) - nWidth;
-        if ( nY+nHeight > nScreenY+nScreenHeight )
-            nY = (nScreenY+nScreenHeight) - nHeight;
-        if ( nX < nScreenX )
-            nX = nScreenX;
-        if ( nY < nScreenY )
-            nY = nScreenY;
+        // Window should be visible in the screen, so we adjust the window
+        // if the size would be bigger
+        if ( nWidth > aWinRect.right-aWinRect.left )
+        {
+            if ( nX+nWidth > nScreenX+nScreenWidth )
+                nX = (nScreenX+nScreenWidth) - nWidth;
+            if ( nX < nScreenX )
+                nX = nScreenX;
+        }
+        if ( nHeight > aWinRect.bottom-aWinRect.top )
+        {
+            if ( nY+nHeight > nScreenY+nScreenHeight )
+                nY = (nScreenY+nScreenHeight) - nHeight;
+            if ( nY < nScreenY )
+                nY = nScreenY;
+        }
     }
 
     SetWindowPos( maFrameData.mhWnd, 0, nX, nY, (int)nWidth, (int)nHeight, SWP_NOZORDER | SWP_NOACTIVATE );
