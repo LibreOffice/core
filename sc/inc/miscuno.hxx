@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:25:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL ClassName::supportsService( const ::rtl::OUString& ServiceName
 
 #define SC_QUERYINTERFACE(x)    \
     if (rType == getCppuType((const uno::Reference<x>*)0))  \
-    { uno::Any aR; aR <<= uno::Reference<x>(this); return aR; }
+    { return uno::makeAny(uno::Reference<x>(this)); }
 
 // SC_QUERY_MULTIPLE( XElementAccess, XIndexAccess ):
 //  use if interface is used several times in one class
