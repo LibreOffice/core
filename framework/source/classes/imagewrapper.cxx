@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagewrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 23:05:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ com::sun::star::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeExcept
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    Bitmap  aBitmap = m_aImage.GetBitmap();
-    Size    aBitmapSize = aBitmap.GetSizePixel();
+    BitmapEx    aBitmapEx( m_aImage.GetBitmapEx() );
+    Size        aBitmapSize( aBitmapEx.GetSizePixel() );
 
     return com::sun::star::awt::Size( aBitmapSize.Width(), aBitmapSize.Height() );
 }
@@ -160,25 +160,25 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException )
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
     SvMemoryStream aMem;
-    aMem << m_aImage.GetBitmap();
+    aMem << m_aImage.GetBitmapEx().GetBitmap();
     return Sequence< sal_Int8 >( (sal_Int8*) aMem.GetData(), aMem.Tell() );
 }
 
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeException )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
+    BitmapEx    aBmpEx( m_aImage.GetBitmapEx() );
 
-    if ( m_aImage.HasMaskBitmap() )
+    if ( aBmpEx.IsAlpha() )
     {
         SvMemoryStream aMem;
-        aMem << m_aImage.GetMaskBitmap();
+        aMem << aBmpEx.GetAlpha().GetBitmap();
         return Sequence< sal_Int8 >( (sal_Int8*) aMem.GetData(), aMem.Tell() );
     }
-    else if ( m_aImage.HasMaskColor() )
+    else if ( aBmpEx.IsTransparent() )
     {
-        BitmapEx aBitmapEx( m_aImage.GetBitmap(), m_aImage.GetMaskColor() );
         SvMemoryStream aMem;
-        aMem << aBitmapEx.GetMask();
+        aMem << aBmpEx.GetMask();
         return Sequence< sal_Int8 >( (sal_Int8*) aMem.GetData(), aMem.Tell() );
     }
 
