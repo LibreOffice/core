@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: salvd.h,v $
+ *  $RCSfile: salmathutils.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:48 $
  *
@@ -59,32 +59,45 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALVD_H
-#define _SV_SALVD_H
+#ifndef _SV_SALMATHUTILS_HXX
+#define _SV_SALMATHUTILS_HXX
 
-#ifndef _SV_SV_H
-#include <sv.h>
-#endif
+// --------------------
+// - Structures -
+// --------------------
 
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
-#endif
+// LRectCoor is an abreviation for rectangular coordinates
+// represented as long integers
 
-// -----------------
-// - SalVirDevData -
-// -----------------
-
-struct SalVirDevData
+struct LRectCoor
 {
-    SalGraphics  *mpGraphics;    // current VirDev graphics
-    USHORT        mnBitCount;    // GWorld pixel depth
-    long          mnWidth;       // GWorld width
-    long          mnHeight;      // GWorld height
-    BOOL          mbGraphics;    // is Graphics used?
+    long  x;
+    long  y;
+    long  z;
 };
 
-typedef struct SalVirDevData   SalVirDevData;
-typedef SalVirDevData         *SalVirDevDataPtr;
-typedef SalVirDevDataPtr      *SalVirDevDataHandle;
+// --------------------
+// - Type Definitions -
+// --------------------
 
-#endif // _SV_SALVD_H
+// LRectCoorVec is an abreviation for vectors in rectangular
+// coordinates represented as long integers
+
+typedef struct LRectCoor   LRectCoor;
+typedef LRectCoor         *LRectCoorVector;
+typedef LRectCoorVector   *LRectCoorTensor;
+
+// --------------------
+// - Function Headers -
+// --------------------
+
+void CSwap  ( char            &rX, char            &rY );
+void UCSwap ( unsigned char   &rX, unsigned char   &rY );
+void SSwap  ( short           &rX, short           &rY );
+void USSwap ( unsigned short  &rX, unsigned short  &rY );
+void LSwap  ( long            &rX, long            &rY );
+void ULSwap ( unsigned long   &rX, unsigned long   &rY );
+
+unsigned long  Euclidian2Norm ( const LRectCoorVector  pVec );
+
+#endif  // _SV_SALMATHUTILS_HXX

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: salgdi.h,v $
+ *  $RCSfile: salpixmaputils.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:47 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,78 +59,41 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALGDI_H
-#define _SV_SALGDI_H
+#ifndef _SV_SALPIXMAPUTILS_HXX
+#define _SV_SALPIXMAPUTILS_HXX
 
 #include <premac.h>
 #include <QD/QD.h>
 #include <postmac.h>
 
-#ifndef _SV_SV_H
-#include <sv.h>
+#ifndef _GEN_HXX
+#include <tools/gen.hxx>
 #endif
 
-#ifndef _SV_VCLWINDOW_H
-#include <VCLWindow.h>
+#ifndef _SV_SALBTYPE_HXX
+#include <salbtype.hxx>
 #endif
 
-// -------------------
-// - Structures -
-// -------------------
+#ifndef _SV_SALGTYPE_HXX
+#include <salgtype.hxx>
+#endif
 
-struct SalGraphicsData
-{
-    // NSView and NSWindow
+// ------------------------------------------------------------------
 
-    VCLVIEW         mhDC;                   // VCLVIEW
 
-    // QuickDraw graph port, offscreen graphic world, and graphic device handle
+PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
+                            const USHORT          nPixMapBits,
+                            const BitmapPalette  &rBitmapPalette
+                          );
 
-    CGrafPtr        mpCGrafPort;            // QD color graphics port
-    GWorldPtr       mpGWorld;               // QD offscreen GWorld
-    GDHandle        mhGDevice;              // QD GDevice
+PixMapHandle CopyPixMap ( PixMapHandle  hPixMap );
 
-    // Graph port pixels, state and flags
+PixMapHandle GetCGrafPortPixMap ( const Size           &rPixMapSize,
+                                  const USHORT          nPixMapBits,
+                                  const BitmapPalette  &rBitmapPalette,
+                                  const CGrafPtr        pCGraf
+                                );
 
-    BOOL            mbGWorldPixelsLocked;   // GWorld pixels locked?
-    GWorldFlags     mnGWorldFlags;          // GWorld pixels status flags
-    PixMapHandle    mhGWorldPixMap;         // GWorld pixels
+// ------------------------------------------------------------------
 
-    // Clip region
-
-    BOOL            mbClipRgnChanged;       // Did the clip region change?
-    RgnHandle       mhClipRgn;              // Clip Region Handle
-
-    // Font attributes
-
-    short           mnFontID;               // Mac FontFamilyId
-    short           mnFontSize;             // Mac Font Size
-    RGBColor        maFontColor;            // Text Color
-    Style           mnFontStyle;            // Mac Font Style
-
-    // Pen attributes and status
-
-    BOOL            mbPenTransparent;       // Is pen transparent?
-    short           mnPenMode;              // Pen Mode
-    short           mnPenModePort;          // Port pen Mode
-    RGBColor        maPenColor;             // Pen Color
-
-    // Brush attributes and status
-
-    BOOL            mbBrushTransparent;     // Is brush transparent?
-    RGBColor        maBrushColor;           // Brush Color
-
-    // Miscellaneous status flags
-
-    BOOL            mbPrinter;              // Is a printer available?
-    BOOL            mbVirDev;               // Is a virtual device available?
-    BOOL            mbWindow;               // Is a window availble?
-    BOOL            mbScreen;               // Is this screen compatiable?
-    OSStatus        mnOSStatus;             // The current MacOS error
-};
-
-typedef struct SalGraphicsData   SalGraphicsData;
-typedef SalGraphicsData         *SalGraphicsDataPtr;
-typedef SalGraphicsDataPtr      *SalGraphicsDataHandle;
-
-#endif // _SV_SALGDI_H
+#endif  // _SV_SALPIXMAPUTILS_HXX

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: salgdi.h,v $
+ *  $RCSfile: salconst.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:47 $
  *
@@ -59,78 +59,44 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALGDI_H
-#define _SV_SALGDI_H
-
-#include <premac.h>
-#include <QD/QD.h>
-#include <postmac.h>
-
-#ifndef _SV_SV_H
-#include <sv.h>
-#endif
-
-#ifndef _SV_VCLWINDOW_H
-#include <VCLWindow.h>
-#endif
+#ifndef _SV_SALCONST_H
+#define _SV_SALCONST_H
 
 // -------------------
-// - Structures -
+// - Constants -
 // -------------------
 
-struct SalGraphicsData
-{
-    // NSView and NSWindow
+const unsigned short kByteMask = 0xFF;
 
-    VCLVIEW         mhDC;                   // VCLVIEW
+const unsigned short kOneByte  =  8;
+const unsigned short kTwoBytes = 16;
 
-    // QuickDraw graph port, offscreen graphic world, and graphic device handle
+const unsigned short kOneBit     =  1;
+const unsigned short kFiveBits   =  5;
+const unsigned short kEightBits  =  8;
+const unsigned short kTenBits    = 10;
+const unsigned short kElevenBits = 11;
 
-    CGrafPtr        mpCGrafPort;            // QD color graphics port
-    GWorldPtr       mpGWorld;               // QD offscreen GWorld
-    GDHandle        mhGDevice;              // QD GDevice
+const unsigned short kBlackAndWhite  =  1;
+const unsigned short kFourBitColor   =  4;
+const unsigned short kEightBitColor  =  8;
+const unsigned short kThousandsColor = 16;
+const unsigned short kTrueColor      = 32;
 
-    // Graph port pixels, state and flags
+const unsigned long k16BitRedColorMask   = 0x00007c00;
+const unsigned long k16BitGreenColorMask = 0x000003e0;
+const unsigned long k16BitBlueColorMask  = 0x0000001f;
 
-    BOOL            mbGWorldPixelsLocked;   // GWorld pixels locked?
-    GWorldFlags     mnGWorldFlags;          // GWorld pixels status flags
-    PixMapHandle    mhGWorldPixMap;         // GWorld pixels
+const unsigned long k32BitRedColorMask   = 0x00ff0000;
+const unsigned long k32BitGreenColorMask = 0x0000ff00;
+const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
-    // Clip region
+const unsigned short kPixMapCmpSizeOneBit    =  1;
+const unsigned short kPixMapCmpSizeFourBits  =  4;
+const unsigned short kPixMapCmpSizeFiveBits  =  5;
+const unsigned short kPixMapCmpSizeEightBits =  8;
 
-    BOOL            mbClipRgnChanged;       // Did the clip region change?
-    RgnHandle       mhClipRgn;              // Clip Region Handle
+const long kPixMapHRes = 72;
+const long kPixMapVRes = 72;
 
-    // Font attributes
-
-    short           mnFontID;               // Mac FontFamilyId
-    short           mnFontSize;             // Mac Font Size
-    RGBColor        maFontColor;            // Text Color
-    Style           mnFontStyle;            // Mac Font Style
-
-    // Pen attributes and status
-
-    BOOL            mbPenTransparent;       // Is pen transparent?
-    short           mnPenMode;              // Pen Mode
-    short           mnPenModePort;          // Port pen Mode
-    RGBColor        maPenColor;             // Pen Color
-
-    // Brush attributes and status
-
-    BOOL            mbBrushTransparent;     // Is brush transparent?
-    RGBColor        maBrushColor;           // Brush Color
-
-    // Miscellaneous status flags
-
-    BOOL            mbPrinter;              // Is a printer available?
-    BOOL            mbVirDev;               // Is a virtual device available?
-    BOOL            mbWindow;               // Is a window availble?
-    BOOL            mbScreen;               // Is this screen compatiable?
-    OSStatus        mnOSStatus;             // The current MacOS error
-};
-
-typedef struct SalGraphicsData   SalGraphicsData;
-typedef SalGraphicsData         *SalGraphicsDataPtr;
-typedef SalGraphicsDataPtr      *SalGraphicsDataHandle;
-
-#endif // _SV_SALGDI_H
+#endif // _SV_SALCONST_H

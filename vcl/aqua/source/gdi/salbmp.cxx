@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-08 00:12:20 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,793 +61,45 @@
 
 #define _SV_SALBMP_CXX
 
+#ifndef _SV_SALCONST_H
+#include <salconst.h>
+#endif
+
 #ifndef _SV_SALBMP_HXX
 #include <salbmp.hxx>
 #endif
+
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
+
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
+
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
 #endif
+
 #ifndef _SV_SALVD_HXX
 #include <salvd.hxx>
 #endif
 
-// ==================================================================
+#ifndef _SV_SALCOLORUTILS_HXX
+#include <salcolorutils.hxx>
+#endif
 
-static inline short GetMinColorCount( const short           nPixMapColorDepth,
-                                      const BitmapPalette&  rBitmapPalette
-                                    )
-{
-    short nBitmapPaletteCount    = rBitmapPalette.GetEntryCount();
-    short nBitmapPaletteMinCount = 0;
+#ifndef _SV_SALPIXMAPUTILS_HXX
+#include <salpixmaputils.hxx>
+#endif
 
-    if ( nPixMapColorDepth < nBitmapPaletteCount )
-    {
-        nBitmapPaletteMinCount = nPixMapColorDepth;
-    } // if
-    else
-    {
-        nBitmapPaletteMinCount = nBitmapPaletteCount;
-    } // else
+#ifndef _SV_SALRECTANGLEUTILS_HXX
+#include <salrectangleutils.hxx>
+#endif
 
-    return nBitmapPaletteMinCount;
-} // GetMinColorCount
+// =======================================================================
 
-// ==================================================================
-
-// ==================================================================
-
-static inline long GetNewPixMapBitDepth( const USHORT nPixMapBits )
-{
-    long nPixMapBitDepth = 0;
-
-    if ( nPixMapBits <= kThousandsColor )
-    {
-        nPixMapBitDepth = (long)nPixMapBits;
-    } // if
-    else
-    {
-        nPixMapBitDepth = kTrueColor;
-    } // else
-
-    return nPixMapBitDepth;
-} // GetNewPixMapDepth
-
-// ------------------------------------------------------------------
-
-static inline long GetNewPixMapOffset( const long   nPixMapBitDepth,
-                                       const short  nPixMapWidth
-                                     )
-{
-    long  nPixMapImageWidth = nPixMapBitDepth * (long)nPixMapWidth;
-    long  nPixMapOffset     = ( ( nPixMapImageWidth + 15L ) >> 4L ) << 1L;
-
-    return nPixMapOffset;
-} // GetNewPixMapOffset
-
-// ------------------------------------------------------------------
-
-static inline long GetNewPixMapImageSize ( const short  nPixMapHeight,
-                                           const long   nPixMapRowOffset
-                                         )
-{
-    long nPixMapImageSize = (long)nPixMapHeight * nPixMapRowOffset;
-
-    return nPixMapImageSize;
-} // GetNewPixMapImageSize
-
-// ------------------------------------------------------------------
-
-static inline short GetNewPixMapRowBytes( const long nPixMapRowOffset )
-{
-    short nPixMapRowBytes = (short)nPixMapRowOffset + 0x8000;
-
-    return nPixMapRowBytes;
-} // GetNewPixMapRowBytes
-
-// ------------------------------------------------------------------
-
-static inline short GetNewPixMapColorDepth( const USHORT nPixMapBits )
-{
-    short nPixMapColorDepth = 0;
-
-    if ( nPixMapBits <= 8 )
-    {
-        nPixMapColorDepth = 1 << ((short)nPixMapBits);
-    }
-
-    return nPixMapColorDepth;
-} // GetNewPixMapColorDepth
-
-// ------------------------------------------------------------------
-
-static void GetNewPixMapBoudsRect( const short   nPixMapWidth,
-                                   const short   nPixMapHeight,
-                                   Rect         *rPixMapBoundsRect
-                                 )
-{
-    short  nPixMapRectLeft   = 0;
-    short  nPixMapRectTop    = 0;
-    short  nPixMapRectRight  = nPixMapWidth;
-    short  nPixMapRectBottom = nPixMapHeight;
-
-    // Set the dimensions of the PixMap
-
-    MacSetRect( rPixMapBoundsRect,
-                nPixMapRectLeft,
-                nPixMapRectTop,
-                nPixMapRectRight,
-                nPixMapRectBottom
-              );
-} // GetNewPixMapBoudsRect
-
-// ------------------------------------------------------------------
-
-static inline short GetNewPixMapCmpSize( const long nPixMapBitDepth )
-{
-    short nPixMapCmpSize = 0;
-
-    if ( nPixMapBitDepth <= kEightBitColor )
-    {
-        nPixMapCmpSize = nPixMapBitDepth;
-    } // if
-    else if ( nPixMapBitDepth == kThousandsColor )
-    {
-        nPixMapCmpSize = 5;
-    } // else if
-    else
-    {
-        nPixMapCmpSize = 8;
-    } // else
-
-    return nPixMapCmpSize;
-} // GetNewPixMapCmpSize
-
-// ------------------------------------------------------------------
-
-static inline short GetNewPixMapCmpCount( const long nPixMapBitDepth )
-{
-    short nPixMapCmpCount = 0;
-
-    if ( nPixMapBitDepth <= kEightBitColor )
-    {
-        nPixMapCmpCount = 1;
-    } // if
-    else
-    {
-        nPixMapCmpCount = 3;
-    } // else
-
-    return nPixMapCmpCount;
-} // GetNewPixMapCmpCount
-
-// ------------------------------------------------------------------
-
-static inline short GetNewPixMapPixelType( const long nPixMapBitDepth )
-{
-    short nPixMapPixelType = 0;
-
-    if ( nPixMapBitDepth <= kEightBitColor )
-    {
-        nPixMapPixelType = 0;
-    } // if
-    else
-    {
-        nPixMapPixelType = RGBDirect;
-    } // else
-
-    return nPixMapPixelType;
-} // GetNewPixMapPixelType
-
-// ------------------------------------------------------------------
-
-static inline OSType GetNewPixMapPixelFormat( )
-{
-    OSType  nPixMapPixelFormat = NULL;
-    GDPtr   pGDevice           = NULL;
-
-    pGDevice = *GetGDevice( );
-
-    if ( pGDevice != NULL )
-    {
-        PixMapPtr  pPixMap = NULL;
-
-        pPixMap = *(*pGDevice).gdPMap;
-
-        if ( pPixMap != NULL )
-        {
-            nPixMapPixelFormat = pPixMap->pixelFormat;
-        } // if
-    } // if
-
-    return nPixMapPixelFormat;
-} // GetNewPixMapPixelFormat
-
-// ------------------------------------------------------------------
-
-static CTabHandle CopyGDeviceCTab( )
-{
-    GDPtr       pGDevice = NULL;
-    CTabHandle  hCTable  = NULL;
-
-    pGDevice = *GetGDevice ( );
-
-    if ( pGDevice != NULL )
-    {
-        PixMapPtr  pPixMap = NULL;
-
-        pPixMap = *(*pGDevice).gdPMap;
-
-        if ( pPixMap != NULL )
-        {
-            CTabPtr pCTable = NULL;
-
-            pCTable = *(*pPixMap).pmTable;
-
-            if ( pCTable != NULL )
-            {
-                const short  nCTableSize       = pCTable->ctSize + 1;
-                long         nCTableHandleSize = 0;
-
-                nCTableHandleSize =   (   nCTableSize
-                                        * sizeof( ColorSpec )
-                                      )
-                                    + (   sizeof( ColorTable )
-                                        - sizeof( CSpecArray )
-                                      );
-
-                hCTable = (CTabHandle) NewHandleClear( nCTableHandleSize );
-
-                if ( ( hCTable != NULL ) && ( *hCTable != NULL ) )
-                {
-                    SInt8  nFlags = noErr;
-
-                    nFlags = HGetState( (Handle)hCTable );
-
-                    if ( nFlags == noErr )
-                    {
-                        unsigned long  nCTableIndex;
-
-                        HLock( (Handle)hCTable );
-
-                            (**hCTable).ctSize  = pCTable->ctSize;
-                            (**hCTable).ctFlags = pCTable->ctFlags;
-                            (**hCTable).ctSeed  = GetCTSeed();
-
-                            for ( nCTableIndex = 0;
-                                  nCTableIndex < nCTableSize;
-                                  nCTableIndex++
-                                )
-                            {
-                                (**hCTable).ctTable[nCTableIndex]
-                                    = pCTable->ctTable[nCTableIndex];
-                            } // for
-
-                          HSetState( (Handle)hCTable, nFlags );
-                      } // if
-                  } // if
-            } // if
-        } // if
-    } // if
-
-    return hCTable;
-} // CopyGDeviceCTab
-
-// ------------------------------------------------------------------
-
-static CTabHandle GetNewPixMapCTabCLUT( const short nPixMapBitDepth )
-{
-    CTabHandle  hPixMapCTab   = NULL;
-    short       nPixMapCLUTID = 0;
-
-    nPixMapCLUTID = nPixMapBitDepth + 64;
-
-    hPixMapCTab = GetCTable( nPixMapCLUTID );
-
-    return hPixMapCTab;
-} // GetNewPixMapCTabCLUT
-
-// ------------------------------------------------------------------
-
-static CTabHandle GetNewPixMapCTabBitmapPalette( const short           nPixMapColorDepth,
-                                                 const BitmapPalette  &rBitmapPalette
-                                               )
-{
-    CTabHandle  hPixMapCTab = NULL;
-
-    hPixMapCTab = (CTabHandle) NewHandleClear(    sizeof( ColorTable )
-                                                + sizeof( ColorSpec )
-                                                * ( nPixMapColorDepth - 1 )
-                                             );
-
-    if ( ( hPixMapCTab != NULL ) && ( *hPixMapCTab != NULL ) )
-    {
-        SInt8 nFlags = noErr;
-
-        nFlags = HGetState( (Handle)hPixMapCTab );
-
-        if ( nFlags == noErr )
-        {
-            short  nBitmapPaletteMinCount = GetMinColorCount(nPixMapColorDepth, rBitmapPalette);
-            short  nBitmapPaletteColorVal = 0;
-            short  nBitmapPaletteIndex    = 0;
-
-            HLock( (Handle)hPixMapCTab );
-
-            (**hPixMapCTab).ctSeed  = GetCTSeed();
-            (**hPixMapCTab).ctFlags = 0;
-            (**hPixMapCTab).ctSize  = nPixMapColorDepth - 1;
-
-            for ( nBitmapPaletteIndex = 0;
-                  nBitmapPaletteIndex < nBitmapPaletteMinCount;
-                  nBitmapPaletteIndex++
-                )
-            {
-                const BitmapColor  &rBitmapPaletteColor = rBitmapPalette[nBitmapPaletteIndex];
-
-                (**hPixMapCTab).ctTable[nBitmapPaletteIndex].value
-                    = nBitmapPaletteIndex;
-
-                nBitmapPaletteColorVal
-                    = rBitmapPaletteColor.GetRed();
-
-                (**hPixMapCTab).ctTable[nBitmapPaletteIndex].rgb.red
-                    = ( nBitmapPaletteColorVal << 8 ) | nBitmapPaletteColorVal;
-
-                nBitmapPaletteColorVal
-                    = rBitmapPaletteColor.GetGreen();
-
-                (**hPixMapCTab).ctTable[nBitmapPaletteIndex].rgb.green
-                    = ( nBitmapPaletteColorVal << 8 ) | nBitmapPaletteColorVal ;
-
-                nBitmapPaletteColorVal
-                    = rBitmapPaletteColor.GetBlue();
-
-                (**hPixMapCTab).ctTable[nBitmapPaletteIndex].rgb.blue
-                    = ( nBitmapPaletteColorVal << 8 ) | nBitmapPaletteColorVal;
-            } // for
-
-            HSetState( (Handle)hPixMapCTab, nFlags );
-        } // if
-    } // if
-
-    return hPixMapCTab;
-} // GetNewPixMapCTabBitmapPalette
-
-// ------------------------------------------------------------------
-
-static CTabHandle GetNewPixMapCTabRGBDirect( const short nPixMapCmpSize )
-{
-    CTabHandle  hPixMapCTab = NULL;
-
-    hPixMapCTab = (CTabHandle)NewHandleClear(   sizeof( ColorTable )
-                                              - sizeof( CSpecArray )
-                                            );
-
-    if ( ( hPixMapCTab != NULL ) && ( *hPixMapCTab != NULL ) )
-    {
-        SInt8  nFlags = noErr;
-
-        nFlags = HGetState( (Handle)hPixMapCTab );
-
-        if ( nFlags == noErr )
-        {
-            HLock( (Handle)hPixMapCTab );
-
-            (**hPixMapCTab).ctSeed  = 3 * nPixMapCmpSize;
-            (**hPixMapCTab).ctFlags = 0;
-            (**hPixMapCTab).ctSize  = 0;
-
-            HSetState( (Handle)hPixMapCTab, nFlags );
-        } // if
-    } // if
-
-    return hPixMapCTab;
-} // GetNewPixMapCTabRGBDirect
-
-// ------------------------------------------------------------------
-
-static CTabHandle GetNewPixMapCTab( const long            nPixMapBitDepth,
-                                    const short           nPixMapColorDepth,
-                                    const short           nPixMapCmpSize,
-                                    const BitmapPalette  &rBitmapPalette
-                                  )
-{
-    CTabHandle hPixMapCTab = NULL;
-
-    if ( nPixMapBitDepth <= kEightBitColor )
-    {
-        hPixMapCTab = GetNewPixMapCTabBitmapPalette( nPixMapColorDepth,
-                                                     rBitmapPalette
-                                                   );
-
-        if ( hPixMapCTab == NULL )
-        {
-            hPixMapCTab = GetNewPixMapCTabCLUT( nPixMapBitDepth );
-
-            if ( hPixMapCTab == NULL )
-            {
-                hPixMapCTab = CopyGDeviceCTab( );
-            } // if
-        } // if
-    } // if
-    else
-    {
-        hPixMapCTab = GetNewPixMapCTabRGBDirect( nPixMapCmpSize );
-    } // else
-
-    return hPixMapCTab;
-} // GetNewPixMapCTab
-
-// ------------------------------------------------------------------
-
-static PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
-                                   const USHORT          nPixMapBits,
-                                   const BitmapPalette  &rBitmapPalette,
-                                   const SalGraphics    *rSalGraphics
-                                 )
-{
-    PixMapHandle  hPixMap       = NULL;
-    short         nPixMapWidth  = rPixMapSize.Width();
-    short         nPixMapHeight = rPixMapSize.Height();
-
-    if ( ( nPixMapWidth > 0 ) && ( nPixMapHeight > 0 ) )
-    {
-        hPixMap = NewPixMap();
-
-        if ( ( hPixMap != NULL ) && ( *hPixMap != NULL ) )
-        {
-            const long  nPixMapBitDepth  = GetNewPixMapBitDepth( nPixMapBits);
-            const long  nPixMapRowOffset = GetNewPixMapOffset( nPixMapBitDepth, nPixMapWidth );
-            const long  nPixMapImageSize = GetNewPixMapImageSize( nPixMapHeight, nPixMapRowOffset );
-            Ptr         pPixMapData      = NewPtrClear( nPixMapImageSize );
-
-            if ( pPixMapData != NULL )
-            {
-                GWorldFlags  nPixMapFlags = noErr;
-
-                nPixMapFlags = GetPixelsState( hPixMap );
-
-                if ( nPixMapFlags == noErr )
-                {
-                    if ( LockPixels( hPixMap ) )
-                    {
-                        const short   nPixMapRowBytes    = GetNewPixMapRowBytes( nPixMapRowOffset );
-                        const short   nPixMapColorDepth  = GetNewPixMapColorDepth( nPixMapBits );
-                        const short   nPixMapCmpSize     = GetNewPixMapCmpSize( nPixMapBitDepth );
-                        const short   nPixMapCmpCount    = GetNewPixMapCmpCount( nPixMapBitDepth );
-                        const short   nPixMapPixelType   = GetNewPixMapPixelType( nPixMapBitDepth );
-                        const OSType  aPixMapPixelFormat = GetNewPixMapPixelFormat( );
-                        Rect          aPixMapBoundsRect;
-
-                        GetNewPixMapBoudsRect( nPixMapWidth, nPixMapHeight, &aPixMapBoundsRect );
-
-                        (**hPixMap).baseAddr    = pPixMapData;         // Pointer to pixels
-                        (**hPixMap).rowBytes    = nPixMapRowBytes;     // Offset to next line
-                        (**hPixMap).bounds      = aPixMapBoundsRect;   // Bounding bitmap rectangle
-                        (**hPixMap).pmVersion   = 0;                   // PixMap version number
-                        (**hPixMap).packType    = 0;                   // Defines packing format
-                        (**hPixMap).packSize    = 0;                   // Length of pixel data
-                        (**hPixMap).hRes        = 0x00480000;          // Horizontal resolution (ppi)
-                        (**hPixMap).vRes        = 0x00480000;          // Vertical resolution (ppi)
-                        (**hPixMap).pixelType   = nPixMapPixelType;    // Defines pixel type
-                        (**hPixMap).pixelSize   = nPixMapBitDepth;     // Number of bits in a pixel
-                        (**hPixMap).cmpCount    = nPixMapCmpCount;     // Number of components in a pixel
-                        (**hPixMap).cmpSize     = nPixMapCmpSize;      // Number of bits per component
-                        (**hPixMap).pixelFormat = aPixMapPixelFormat;  // Four character code representation
-                        (**hPixMap).pmExt       = NULL;                // Handle to PixMap extension
-
-                        // Get the color table based on the desired screen depth
-
-                        (**hPixMap).pmTable = GetNewPixMapCTab( nPixMapBitDepth,
-                                                                nPixMapColorDepth,
-                                                                nPixMapCmpSize,
-                                                                rBitmapPalette
-                                                              );
-
-                        SetPixelsState( hPixMap, nPixMapFlags );
-                    } // if
-                } // if
-            } // if
-            else
-            {
-                DisposePixMap( hPixMap );
-
-                hPixMap = NULL;
-            } // else
-        } // if
-    } // if
-
-    return hPixMap;
-} // GetNewPixMap
-
-// ==================================================================
-
-// ==================================================================
-
-static CTabHandle CopyPixMapCTab ( CTabHandle hPixMapCTab )
-{
-    CTabHandle  hPixMapCTabCopy = NULL;
-
-    if ( ( hPixMapCTab != NULL ) && ( *hPixMapCTab != NULL ) )
-    {
-        SInt8 nhPixMapCTabFlags = noErr;
-
-        nhPixMapCTabFlags = HGetState( (Handle)hPixMapCTabCopy );
-
-        if ( nhPixMapCTabFlags == noErr )
-        {
-            long  nPortPixMapCTabSize       = 0;
-            long  nPortPixMapCTabHandleSize = 0;
-
-            HLock( (Handle)hPixMapCTab );
-
-            nPortPixMapCTabSize = (**hPixMapCTab).ctSize + 1;
-
-            nPortPixMapCTabHandleSize =   (   nPortPixMapCTabSize
-                                            * sizeof( ColorSpec )
-                                          )
-                                        + (   sizeof( ColorTable )
-                                            - sizeof( CSpecArray )
-                                          );
-
-            hPixMapCTabCopy = (CTabHandle)NewHandleClear( nPortPixMapCTabHandleSize );
-
-            if ( ( hPixMapCTabCopy != NULL ) && ( *hPixMapCTabCopy != NULL ) )
-            {
-                SInt8  nPortPixMapCTabCopyFlags = noErr;
-
-                nPortPixMapCTabCopyFlags = HGetState( (Handle)hPixMapCTabCopy );
-
-                if ( nPortPixMapCTabCopyFlags == noErr )
-                {
-                    unsigned long  nPortPixMapCTabIndex;
-
-                    HLock( (Handle)hPixMapCTabCopy );
-
-                        (**hPixMapCTabCopy).ctSize  = (**hPixMapCTab).ctSize;
-                        (**hPixMapCTabCopy).ctFlags = (**hPixMapCTab).ctFlags;
-                        (**hPixMapCTabCopy).ctSeed  = GetCTSeed();
-
-                        for ( nPortPixMapCTabIndex = 0;
-                              nPortPixMapCTabIndex < nPortPixMapCTabSize;
-                              nPortPixMapCTabIndex++
-                            )
-                        {
-                            (**hPixMapCTabCopy).ctTable[nPortPixMapCTabIndex]
-                                = (**hPixMapCTab).ctTable[nPortPixMapCTabIndex];
-                        } // for
-
-                    HSetState( (Handle)hPixMapCTabCopy, nPortPixMapCTabCopyFlags );
-                } // if
-            } // if
-
-            HSetState( (Handle)hPixMapCTab, nhPixMapCTabFlags );
-        } // if
-    } // if
-    else
-    {
-        hPixMapCTabCopy = GetNewPixMapCTabCLUT( kEightBitColor );
-
-        if ( hPixMapCTabCopy == NULL )
-        {
-            hPixMapCTabCopy = CopyGDeviceCTab( );
-        } // if
-    } // else
-
-    return hPixMapCTabCopy;
-} // CopyPixMapCTab
-
-// ------------------------------------------------------------------
-
-static CTabHandle CopyPixMapCTabRGBDirect ( CTabHandle hPixMapCTab )
-{
-    CTabHandle  hPixMapCTabCopy = NULL;
-
-    if ( ( hPixMapCTab != NULL ) && ( *hPixMapCTab != NULL ) )
-    {
-        SInt8 nhPixMapCTabFlags = noErr;
-
-        nhPixMapCTabFlags = HGetState( (Handle)hPixMapCTabCopy );
-
-        if ( nhPixMapCTabFlags == noErr )
-        {
-            HLock( (Handle)hPixMapCTab );
-
-            hPixMapCTabCopy = (CTabHandle)NewHandleClear(   sizeof( ColorTable )
-                                                          - sizeof( CSpecArray )
-                                                        );
-
-            if ( ( hPixMapCTabCopy != NULL ) && ( *hPixMapCTabCopy != NULL ) )
-            {
-                SInt8  nPortPixMapCTabCopyFlags = noErr;
-
-                nPortPixMapCTabCopyFlags = HGetState( (Handle)hPixMapCTabCopy );
-
-                if ( nPortPixMapCTabCopyFlags == noErr )
-                {
-                    HLock( (Handle)hPixMapCTabCopy );
-
-                    (**hPixMapCTabCopy).ctSeed  = (**hPixMapCTab).ctSeed;
-                    (**hPixMapCTabCopy).ctFlags = (**hPixMapCTab).ctFlags;
-                    (**hPixMapCTabCopy).ctSize  = (**hPixMapCTab).ctSize;
-
-                    HSetState( (Handle)hPixMapCTabCopy, nPortPixMapCTabCopyFlags );
-                } // if
-            } // if
-
-            HSetState( (Handle)hPixMapCTab, nhPixMapCTabFlags );
-        } // if
-    } // if
-
-    return hPixMapCTabCopy;
-} // CopyPixMapCTabRGBDirect
-
-// ------------------------------------------------------------------
-
-static CTabHandle CopyPixMapCTabHandle ( PixMapHandle hPixMap )
-{
-    CTabHandle  hPixMapCTabCopy  = NULL;
-    short       nPixMapBitDepth = GetPixDepth( hPixMap );
-
-    if ( nPixMapBitDepth <= kEightBitColor )
-    {
-        hPixMapCTabCopy = CopyPixMapCTab( (**hPixMap).pmTable );
-    } // if
-    else
-    {
-        hPixMapCTabCopy = CopyPixMapCTabRGBDirect( (**hPixMap).pmTable );
-    } // else
-
-    return  hPixMapCTabCopy;
-} // CopyPixMapCTabHandle
-
-// ------------------------------------------------------------------
-
-static PixMapHandle CopyPixMap ( PixMapHandle  hPixMap )
-{
-    PixMapHandle  hPixMapCopy  = NULL;
-    GWorldFlags   nPixMapFlags = noErr;
-
-    nPixMapFlags = GetPixelsState( hPixMap );
-
-    if ( nPixMapFlags == noErr )
-    {
-        if ( LockPixels( hPixMap ) )
-        {
-            hPixMapCopy = NewPixMap();
-
-            if ( ( hPixMapCopy != NULL ) && ( *hPixMapCopy != NULL ) )
-            {
-                const Rect  aPixMapBoundsRect = (**hPixMap).bounds;
-                const long  nPixMapBitDepth   = (**hPixMap).pixelSize;
-                const long  nPixMapWidth      = aPixMapBoundsRect.right - aPixMapBoundsRect.left;
-                const long  nPixMapHeight     = aPixMapBoundsRect.bottom - aPixMapBoundsRect.top;
-                const long  nPixMapRowOffset  = GetNewPixMapOffset( nPixMapBitDepth, nPixMapWidth );
-                const long  nPixMapImageSize  = GetNewPixMapImageSize( nPixMapHeight, nPixMapRowOffset );
-                Ptr         pPixMapDataCopy   = NewPtrClear( nPixMapImageSize );
-
-                if ( pPixMapDataCopy != NULL )
-                {
-                    GWorldFlags  nPixMapCopyFlags = noErr;
-
-                    nPixMapCopyFlags = GetPixelsState( hPixMapCopy );
-
-                    if ( nPixMapCopyFlags == noErr )
-                    {
-                        if ( LockPixels( hPixMapCopy ) )
-                        {
-                            const Ptr pPixMapData = (**hPixMap).baseAddr;
-
-                            // Copy the data from the original port
-
-                            BlockMoveData( pPixMapData, pPixMapDataCopy, nPixMapImageSize );
-
-                            (**hPixMapCopy).rowBytes    = (**hPixMap).rowBytes;     // Offset to next line
-                            (**hPixMapCopy).bounds      = (**hPixMap).bounds;       // Bounding bitmap rectangle
-                            (**hPixMapCopy).pmVersion   = (**hPixMap).pmVersion;    // PixMap version number
-                            (**hPixMapCopy).packType    = (**hPixMap).packType;     // Defines packing format
-                            (**hPixMapCopy).packSize    = (**hPixMap).packSize;     // Length of pixel data
-                            (**hPixMapCopy).hRes        = (**hPixMap).hRes;         // Horizontal resolution (ppi)
-                            (**hPixMapCopy).vRes        = (**hPixMap).vRes;         // Vertical resolution (ppi)
-                            (**hPixMapCopy).pixelType   = (**hPixMap).pixelType;    // Defines pixel type
-                            (**hPixMapCopy).pixelSize   = (**hPixMap).pixelSize;    // Number of bits in a pixel
-                            (**hPixMapCopy).cmpCount    = (**hPixMap).cmpCount;     // Number of components in a pixel
-                            (**hPixMapCopy).cmpSize     = (**hPixMap).cmpSize;      // Number of bits per component
-                            (**hPixMapCopy).pixelFormat = (**hPixMap).pixelFormat;  // Four character code representation
-                            (**hPixMapCopy).pmExt       = (**hPixMap).pmExt;        // Handle to PixMap extension
-
-                            // Copy the color table from the original port
-
-                            (**hPixMapCopy).pmTable = CopyPixMapCTabHandle( hPixMap );
-
-                            SetPixelsState( hPixMapCopy, nPixMapCopyFlags );
-                        } // if
-                        else
-                        {
-                            DisposePtr( pPixMapDataCopy );
-                        } // else
-                    } // if
-                    else
-                    {
-                        DisposePtr( pPixMapDataCopy );
-                    } // else
-                } // if
-                else
-                {
-                    DisposePixMap( hPixMapCopy );
-
-                    hPixMapCopy = NULL;
-                } // else
-            } // if
-
-            SetPixelsState( hPixMap, nPixMapFlags );
-        } // if
-    } // if
-
-    return hPixMapCopy;
-} // CopyPixMap
-
-// ==================================================================
-
-// ==================================================================
-
-static PixMapHandle MallocPixMap ( const Size           &rPixMapSize,
-                                   const USHORT          nPixMapBits,
-                                   const BitmapPalette  &rBitmapPalette,
-                                   const SalGraphics    *rSalGraphics
-                                 )
-{
-    PixMapHandle hNewPixMap = GetPortPixMap( rSalGraphics->maGraphicsData.mpCGrafPort );
-
-    if ( hNewPixMap == NULL )
-    {
-        hNewPixMap = GetNewPixMap( rPixMapSize,
-                                   nPixMapBits,
-                                   rBitmapPalette,
-                                   rSalGraphics
-                                 );
-
-        if ( hNewPixMap == NULL )
-        {
-            GDHandle hGDevice = GetGDevice( );
-
-            if ( ( hGDevice != NULL ) && ( *hGDevice != NULL ) )
-            {
-                SInt8  nGDeviceFlags = noErr;
-
-                nGDeviceFlags = HGetState( (Handle)hGDevice );
-
-                if ( nGDeviceFlags == noErr )
-                {
-                    PixMapHandle hPixMap = NULL;
-
-                    HLock( (Handle)hGDevice );
-
-                        hPixMap = (**hGDevice).gdPMap;
-
-                        if ( ( hPixMap != NULL ) && ( *hPixMap != NULL ) )
-                        {
-                            hNewPixMap = CopyPixMap( hPixMap );
-                        } // if
-
-                    HSetState( (Handle)hGDevice, nGDeviceFlags );
-                } //if
-            } // if
-        } // if
-    } // if
-
-    return hNewPixMap;
-} // MallocPixMap
-
-// ==================================================================
-
-// ==================================================================
+// =======================================================================
 
 SalBitmap::SalBitmap() :
         mpVirDev( 0 ),
@@ -897,26 +149,29 @@ BOOL SalBitmap::Create( const Size&           rSize,
 
                 SalGraphics *pGraphics = GetGraphics();
 
-                if (    ( pGraphics                             != NULL )
-                     && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
-                   )
+                if ( pGraphics != NULL )
                 {
-                    mhPixMap = MallocPixMap( rSize,
-                                             nBitCount,
-                                             rBitmapPalette,
-                                             pGraphics
-                                           );
+                    const CGrafPtr  pCGraf = pGraphics->maGraphicsData.mpCGrafPort;
 
-                    if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
+                    if ( pCGraf != NULL )
                     {
-                        mnBitCount = GetPixDepth( mhPixMap);
-                        maSize     = rSize;
+                        mhPixMap = GetCGrafPortPixMap( rSize,
+                                                       nBitCount,
+                                                       rBitmapPalette,
+                                                       pCGraf
+                                                     );
 
-                        bSalBitmapCreated = TRUE;
+                        if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
+                        {
+                            mnBitCount = GetPixDepth( mhPixMap);
+                            maSize     = rSize;
+
+                            bSalBitmapCreated = TRUE;
+                        } // if
+
+                        // Release the SalGraphics so that others can get a
+                        // handle to it in future GetGraphics() calls
                     } // if
-
-                    // Release the SalGraphics so that others can get a
-                    // handle to it in future GetGraphics() calls
 
                     ReleaseGraphics( pGraphics );
                 } // if
@@ -943,19 +198,22 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp,
     USHORT nSalBmpBitCount   = 0;
     BOOL   bSalBitmapCreated = FALSE;
 
-    if (    ( pGraphics                             != NULL )
-         && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
-       )
+    if ( pGraphics != NULL )
     {
-        mhPixMap = MallocPixMap( rSalBmp.GetSize(),
-                                 rSalBmp.GetBitCount(),
-                                 BitmapPalette(),
-                                 pGraphics
-                               );
+        const CGrafPtr  pCGraf = pGraphics->maGraphicsData.mpCGrafPort;
 
-        if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
+        if ( pCGraf != NULL )
         {
-            nSalBmpBitCount = GetPixDepth( mhPixMap );
+            mhPixMap = GetCGrafPortPixMap( rSalBmp.GetSize(),
+                                           rSalBmp.GetBitCount(),
+                                           BitmapPalette(),
+                                           pCGraf
+                                         );
+
+            if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
+            {
+                nSalBmpBitCount = GetPixDepth( mhPixMap );
+            } // if
         } // if
     } // if
 
@@ -989,21 +247,11 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
                  && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
                )
             {
-                long        nWidth  = rSalBmp.GetSize().Width();
-                long        nHeight = rSalBmp.GetSize().Height();
                 SalTwoRect  aTwoRect;
 
                 // Get size of graphics to copy from
 
-                aTwoRect.mnSrcX  = 0;
-                aTwoRect.mnDestX = 0;
-                aTwoRect.mnSrcY  = 0;
-                aTwoRect.mnDestY = 0;
-
-                aTwoRect.mnSrcWidth   = nWidth;
-                aTwoRect.mnDestWidth  = nWidth;
-                aTwoRect.mnSrcHeight  = nHeight;
-                aTwoRect.mnDestHeight = nHeight;
+                GetTwoRectFromSalBmp( rSalBmp, &aTwoRect );
 
                 // Copy bits from source graphics
 
@@ -1063,48 +311,7 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
             {
                 if ( LockPixels( mhPixMap ) )
                 {
-                    const short nPixMapCmpCount = (**mhPixMap).cmpCount;
-                    const short nPixMapCmpSize  = (**mhPixMap).cmpSize;
-
-                    pBuffer->mnFormat = BMP_FORMAT_TOP_DOWN;
-
-                    if( nPixMapCmpCount == 1 )
-                    {
-                        // Indexed color mode
-
-                        switch ( nPixMapCmpSize )
-                        {
-                            case ( kPixMapCmpSizeOneBit ):
-                                pBuffer->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL;
-                                break;
-                            case ( kPixMapCmpSizeFourBits ):
-                                pBuffer->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL;
-                                break;
-                            case ( kPixMapCmpSizeEightBits ):
-                                pBuffer->mnFormat |= BMP_FORMAT_8BIT_PAL;
-                                break;
-                            default:
-                                break;
-                        } // switch
-                    } // if
-                    else
-                    {
-                        // Direct color mode
-
-                        switch ( nPixMapCmpSize )
-                        {
-                            case ( kPixMapCmpSizeFiveBits ):
-                                pBuffer->mnFormat    |= BMP_FORMAT_16BIT_TC_MASK;
-                                pBuffer->maColorMask  = ColorMask( 0x00007c00, 0x000003e0, 0x0000001f );
-                                break;
-                            case ( kPixMapCmpSizeEightBits ):
-                                pBuffer->mnFormat    |= BMP_FORMAT_32BIT_TC_ARGB;
-                                pBuffer->maColorMask  = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
-                                break;
-                            default:
-                                break;
-                        } // switch;
-                    } //else
+                    SetBitmapBufferColorFormat( mhPixMap, pBuffer );
 
                     if ( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
                     {
@@ -1136,28 +343,23 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
                                     HLock( (Handle)hCTab );
 
-                                    // Map each color in the QuickDraw color
-                                    // table to a BitmapColor
+                                        // Map each color in the QuickDraw color
+                                        // table to a BitmapColor
 
-                                    nCTabSize = (**hCTab).ctSize + 1;
+                                        nCTabSize = (**hCTab).ctSize + 1;
 
-                                    rBitmapPalette.SetEntryCount( nCTabSize );
+                                        rBitmapPalette.SetEntryCount( nCTabSize );
 
-                                    for ( nCTabIndex = 0;
-                                          nCTabIndex < nCTabSize;
-                                          nCTabIndex++
-                                        )
-                                    {
-                                        BitmapColor     &rBitmapColor = rBitmapPalette[nCTabIndex];
-                                        const RGBColor   aRGBColor    = (**hCTab).ctTable[nCTabIndex].rgb;
-                                        const BYTE       nRedColor    = (BYTE)( aRGBColor.red   >> 8 );
-                                        const BYTE       nGreenColor  = (BYTE)( aRGBColor.green >> 8 );
-                                        const BYTE       nBlueColor   = (BYTE)( aRGBColor.blue  >> 8 );
+                                        for ( nCTabIndex = 0;
+                                              nCTabIndex < nCTabSize;
+                                              nCTabIndex++
+                                            )
+                                        {
+                                            BitmapColor     &rBitmapColor = rBitmapPalette[nCTabIndex];
+                                            const RGBColor   aRGBColor    = (**hCTab).ctTable[nCTabIndex].rgb;
 
-                                        rBitmapColor.SetRed   ( nRedColor   );
-                                        rBitmapColor.SetGreen ( nGreenColor );
-                                        rBitmapColor.SetBlue  ( nBlueColor  );
-                                    } // for
+                                            RGBColor2BitmapColor( &aRGBColor, rBitmapColor );
+                                        } // for
 
                                     HSetState( (Handle)hCTab, nCTabFlags );
                                 } // if
@@ -1167,6 +369,8 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
                     else
                     {
                         delete pBuffer;
+
+                        pBuffer = NULL;
                     } // else
 
                     SetPixelsState( mhPixMap, nPixMapFlags );
@@ -1229,33 +433,29 @@ void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
                                 if ( nCTabFlags == noErr )
                                 {
                                     const BitmapPalette  &rBitmapPalette = pBuffer->maPalette;
-                                    const short           nCTabSize      = (**hCTab).ctSize + 1;
-                                    const short           nCTabMinSize   = GetMinColorCount( nCTabSize, rBitmapPalette );
+                                    short                 nCTabSize      = 0;
+                                    short                 nCTabMinSize   = 0;
                                     short                 nCTabIndex;
 
                                     HLock( (Handle)hCTab );
+
+                                        nCTabSize    = (**hCTab).ctSize + 1;
+                                        nCTabMinSize = GetMinColorCount( nCTabSize, rBitmapPalette );
 
                                         for( nCTabIndex = 0;
                                              nCTabIndex < nCTabMinSize;
                                              nCTabIndex++
                                            )
                                         {
-                                            const BitmapColor &rBitmapColor      = rBitmapPalette[nCTabIndex];
-                                            const USHORT       nBitmapRedColor   = rBitmapColor.GetRed();
-                                            const USHORT       nBitmapGreenColor = rBitmapColor.GetGreen();
-                                            const USHORT       nBitmapBlueColor  = rBitmapColor.GetBlue();
+                                            const BitmapColor &rBitmapPaletteColor = rBitmapPalette[nCTabIndex];
 
                                             (**hCTab).ctTable[nCTabIndex].value = nCTabIndex;
 
-                                            (**hCTab).ctTable[nCTabIndex].rgb.red
-                                                = (short)(( nBitmapRedColor << 8 ) | nBitmapRedColor);
-
-                                            (**hCTab).ctTable[nCTabIndex].rgb.green
-                                                = (short)(( nBitmapGreenColor << 8 ) | nBitmapGreenColor) ;
-
-                                            (**hCTab).ctTable[nCTabIndex].rgb.blue
-                                                = (short)(( nBitmapBlueColor << 8 ) | nBitmapBlueColor);
+                                            (**hCTab).ctTable[nCTabIndex].rgb
+                                                = BitmapColor2RGBColor( rBitmapPaletteColor );
                                         } // for
+
+                                        CTabChanged( hCTab );
 
                                     HSetState( (Handle)hCTab, nCTabFlags );
                                 } // if
@@ -1293,7 +493,7 @@ void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
                                                           );
 
                                                 pGDevice = *GetGDevice();
-                                                pPixMap  = *pGDevice->gdPMap;
+                                                pCTable  = *pPixMap->pmTable;
                                             } // if
                                         } // if
 
@@ -1343,6 +543,6 @@ void SalBitmap::ReleaseGraphics( SalGraphics* pGraphics )
     } // if
 } // SalBitmap::ReleaseGraphics
 
-// ==================================================================
+// =======================================================================
 
-
+// =======================================================================

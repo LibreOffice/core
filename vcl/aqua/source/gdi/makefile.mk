@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2000-11-02 06:43:26 $
+#   last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,19 +81,29 @@ dummy:
 
 .ELSE		# "$(OS)"!="MACOSX"
 
-SLOFILES=	$(SLO)$/salgdi.obj		\
-            $(SLO)$/VCLGraphics.obj	\
-            $(SLO)$/salvd.obj		\
-            $(SLO)$/salprn.obj		\
-            $(SLO)$/salbmp.obj		\
+SLOFILES=   $(SLO)$/salmathutils.obj      \
+            $(SLO)$/salrectangleutils.obj \
+            $(SLO)$/salcolorutils.obj     \
+            $(SLO)$/salpixmaputils.obj    \
+            $(SLO)$/salgdiutils.obj       \
+            $(SLO)$/salgdi.obj            \
+            $(SLO)$/VCLGraphics.obj       \
+            $(SLO)$/salvd.obj             \
+            $(SLO)$/salprn.obj            \
+            $(SLO)$/salbmp.obj            \
             $(SLO)$/salogl.obj
 
 .IF "$(UPDATER)"=="YES"
-OBJFILES=	$(OBJ)$/salgdi.obj		\
-            $(OBJ)$/VCLGraphics.obj	\
-            $(OBJ)$/salvd.obj		\
-            $(OBJ)$/salprn.obj		\
-            $(OBJ)$/salbmp.obj		\
+OBJFILES=   $(OBJ)$/salmathutils.obj      \
+            $(OBJ)$/salrectangleutils.obj \
+            $(OBJ)$/salcolorutils.obj     \
+            $(OBJ)$/salpixmaputils.obj    \
+            $(OBJ)$/salgdiutils.obj       \
+            $(OBJ)$/salgdi.obj            \
+            $(OBJ)$/VCLGraphics.obj	  \
+            $(OBJ)$/salvd.obj		  \
+            $(OBJ)$/salprn.obj		  \
+            $(OBJ)$/salbmp.obj		  \
             $(OBJ)$/salogl.obj
 .ENDIF
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-08 00:12:20 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,19 @@
 
 #define _SV_SALVD_CXX
 
+#ifndef _SV_SALCONST_H
+#include <salconst.h>
+#endif
+
+#ifndef _SV_SALCOLORUTILS_HXX
+#include <salcolorutils.hxx>
+#endif
+
 #ifndef _SV_SALVD_HXX
 #include <salvd.hxx>
 #endif
+
+// =======================================================================
 
 // =======================================================================
 
@@ -105,12 +115,6 @@ static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
              && ( pGWorld   != NULL  )
            )
         {
-            RGBColor aBlackColor;
-
-            aBlackColor.red   = 0x0000;
-            aBlackColor.green = 0x0000;
-            aBlackColor.blue  = 0x0000;
-
             // Lock the virtual GWorld's port bits
 
             rSalVirDevData->mpGraphics->maGraphicsData.mnOSStatus
@@ -144,11 +148,11 @@ static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
             // Initialize the virtual port's brush attributes
 
             rSalVirDevData->mpGraphics->maGraphicsData.mbBrushTransparent = FALSE;
-            rSalVirDevData->mpGraphics->maGraphicsData.maBrushColor       = aBlackColor;
+            rSalVirDevData->mpGraphics->maGraphicsData.maBrushColor       = GetBlackColor( );
 
             // Initialize the virtual port's font attributes
 
-            rSalVirDevData->mpGraphics->maGraphicsData.maFontColor = aBlackColor;
+            rSalVirDevData->mpGraphics->maGraphicsData.maFontColor = GetBlackColor( );
             rSalVirDevData->mpGraphics->maGraphicsData.mnFontID    = kFontIDGeneva;
             rSalVirDevData->mpGraphics->maGraphicsData.mnFontSize  = 10;
             rSalVirDevData->mpGraphics->maGraphicsData.mnFontStyle = normal;
@@ -258,6 +262,8 @@ BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
 
     return bSizeSet;
 } // SalVirtualDevice::SetSize
+
+// =======================================================================
 
 // =======================================================================
 

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: salgdi.h,v $
+ *  $RCSfile: salcolorutils.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:47 $
  *
@@ -59,78 +59,89 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALGDI_H
-#define _SV_SALGDI_H
+#ifndef _SV_SALCOLORUTILS_HXX
+#define _SV_SALCOLORUTILS_HXX
 
 #include <premac.h>
 #include <QD/QD.h>
 #include <postmac.h>
 
-#ifndef _SV_SV_H
-#include <sv.h>
+#ifndef _SV_SALBTYPE_HXX
+#include <salbtype.hxx>
 #endif
 
-#ifndef _SV_VCLWINDOW_H
-#include <VCLWindow.h>
+#ifndef _SV_SALGTYPE_HXX
+#include <salgtype.hxx>
 #endif
 
-// -------------------
-// - Structures -
-// -------------------
+// ------------------------------------------------------------------
 
-struct SalGraphicsData
-{
-    // NSView and NSWindow
+SalColor RGBColor2SALColor ( const RGBColor *pRGBColor );
 
-    VCLVIEW         mhDC;                   // VCLVIEW
+SalColor RGB8BitColor2SALColor ( const RGBColor *pRGBColor );
 
-    // QuickDraw graph port, offscreen graphic world, and graphic device handle
+SalColor RGB16BitColor2SALColor ( const RGBColor *pRGBColor );
 
-    CGrafPtr        mpCGrafPort;            // QD color graphics port
-    GWorldPtr       mpGWorld;               // QD offscreen GWorld
-    GDHandle        mhGDevice;              // QD GDevice
+SalColor RGB32BitColor2SALColor ( const RGBColor *pRGBColor );
 
-    // Graph port pixels, state and flags
+// ------------------------------------------------------------------
 
-    BOOL            mbGWorldPixelsLocked;   // GWorld pixels locked?
-    GWorldFlags     mnGWorldFlags;          // GWorld pixels status flags
-    PixMapHandle    mhGWorldPixMap;         // GWorld pixels
+RGBColor SALColor2RGBColor ( const SalColor nSalColor );
 
-    // Clip region
+RGBColor SALColor2RGB32bitColor ( const SalColor nSalColor );
 
-    BOOL            mbClipRgnChanged;       // Did the clip region change?
-    RgnHandle       mhClipRgn;              // Clip Region Handle
+RGBColor SALColor2RGB18bitColor ( const SalColor nSalColor );
 
-    // Font attributes
+RGBColor SALColor2RGB8bitColor ( const SalColor nSalColor );
 
-    short           mnFontID;               // Mac FontFamilyId
-    short           mnFontSize;             // Mac Font Size
-    RGBColor        maFontColor;            // Text Color
-    Style           mnFontStyle;            // Mac Font Style
+// ------------------------------------------------------------------
 
-    // Pen attributes and status
+SalColor GetROPSalColor ( SalROPColor nROPColor );
 
-    BOOL            mbPenTransparent;       // Is pen transparent?
-    short           mnPenMode;              // Pen Mode
-    short           mnPenModePort;          // Port pen Mode
-    RGBColor        maPenColor;             // Pen Color
+// ------------------------------------------------------------------
 
-    // Brush attributes and status
+RGBColor BitmapColor2RGBColor ( const BitmapColor &rBitmapColor );
 
-    BOOL            mbBrushTransparent;     // Is brush transparent?
-    RGBColor        maBrushColor;           // Brush Color
+void RGBColor2BitmapColor ( const RGBColor  *rRGBColor,
+                            BitmapColor     &rBitmapColor
+                          );
 
-    // Miscellaneous status flags
+// ------------------------------------------------------------------
 
-    BOOL            mbPrinter;              // Is a printer available?
-    BOOL            mbVirDev;               // Is a virtual device available?
-    BOOL            mbWindow;               // Is a window availble?
-    BOOL            mbScreen;               // Is this screen compatiable?
-    OSStatus        mnOSStatus;             // The current MacOS error
-};
+short GetMinColorCount ( const short           nPixMapColorDepth,
+                         const BitmapPalette  &rBitmapPalette
+                       );
 
-typedef struct SalGraphicsData   SalGraphicsData;
-typedef SalGraphicsData         *SalGraphicsDataPtr;
-typedef SalGraphicsDataPtr      *SalGraphicsDataHandle;
+// ------------------------------------------------------------------
 
-#endif // _SV_SALGDI_H
+void SetBlackForeColor ( );
+
+void SetWhiteBackColor ( );
+
+RGBColor GetBlackColor ( );
+
+RGBColor GetWhiteColor ( );
+
+// ------------------------------------------------------------------
+
+CTabHandle CopyGDeviceCTab ( );
+
+CTabHandle GetCTabFromStdCLUT ( const short nBitDepth );
+
+CTabHandle CopyCTabIndexed ( CTabHandle hCTab );
+
+CTabHandle CopyCTabRGBDirect ( CTabHandle hCTab );
+
+// ------------------------------------------------------------------
+
+CTabHandle CopyPixMapCTab ( PixMapHandle hPixMap );
+
+// ------------------------------------------------------------------
+
+void SetBitmapBufferColorFormat ( const PixMapHandle   mhPixMap,
+                                  BitmapBuffer        *rBuffer
+                                );
+
+// ------------------------------------------------------------------
+
+#endif  // _SV_SALCOLORUTILS_HXX
