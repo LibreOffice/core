@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:25:44 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,6 +606,9 @@ void OStatement_Base::GetAssignValues()
             m_aAssignValues->clear();
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
+        // unbound all
+        ::std::for_each(m_aAssignValues->begin()+1,m_aAssignValues->end(),TSetRefBound(sal_False));
+
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
         // Liste der Columns-Namen, die in der column_commalist vorkommen (mit ; getrennt):
@@ -708,6 +711,9 @@ void OStatement_Base::GetAssignValues()
             m_aAssignValues->clear();
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
+        // unbound all
+        ::std::for_each(m_aAssignValues->begin()+1,m_aAssignValues->end(),TSetRefBound(sal_False));
+
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
         OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
