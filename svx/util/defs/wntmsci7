@@ -23985,3 +23985,8 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?UpdateColors@SvxRubyDialog@@AAEXXZ
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx892221134@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx853816427@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?CheckLastLineMerge@ImpSdrGDIMetaFileImport@@IAEEABVXPolygon@@@Z
+?CheckLastPolyLineAndFillMerge@ImpSdrGDIMetaFileImport@@IAEEABVXPolyPolygon@@@Z
+?ImportText@ImpSdrGDIMetaFileImport@@IAEXABVPoint@@ABVString@@ABVMetaAction@@@Z
+?InsertObj@ImpSdrGDIMetaFileImport@@IAEXPAVSdrObject@@E@Z
+?DrawPaperBorder@SdrPageView@@QAEXAAVOutputDevice@@@Z
