@@ -39,8 +39,8 @@ $(SRCTARGET) : $(SRCFILES)
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
 .IF "$(CPU)"=="I"
-.IF "$(UPDATER)"=="YES"
-.IF "$(BUILD_SOSL)"==""
+#.IF "$(UPDATER)"=="YES"
+#.IF "$(BUILD_SOSL)"==""
 .IF "$(no_hids)$(NO_HIDS)"==""
 .IF "$(USE_SHELL)"=="4nt"
     @+type $(mktmp $(SRCFILES:+"\n")) > $(TMP)$/$(TARGET).tra
@@ -51,8 +51,8 @@ $(SRCTARGET) : $(SRCFILES)
     @+-del $(TMP)$/$(TARGET).art
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
-.ENDIF
-.ENDIF
+#.ENDIF
+#.ENDIF
 .ENDIF
 .ENDIF			 # "$(GUI)"=="WNT"
 .IF "$(make_srs_deps)" != ""
@@ -116,8 +116,8 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
 .IF "$(CPU)"=="I"
-.IF "$(UPDATER)"=="YES"
-.IF "$(BUILD_SOSL)"==""
+#.IF "$(UPDATER)"=="YES"
+#.IF "$(BUILD_SOSL)"==""
 .IF "$(no_hids)$(NO_HIDS)"==""
 .IF "$(USE_SHELL)"=="4nt"
     @+type $(mktmp $(SRC$(TNR)FILES:+"\n")) > $(TMP)$/$(TARGET).tra
@@ -128,8 +128,8 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
     @+del $(TMP)$/$(TARGET).tra
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
-.ENDIF
-.ENDIF
+#.ENDIF
+#.ENDIF
 .ENDIF
 .ENDIF
 .IF "$(make_srs_deps)" != ""

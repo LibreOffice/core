@@ -17,7 +17,6 @@ __.silent !:= $(.SILENT)	# Preserve user's .SILENT flag
 .SILENT   !:= yes
 .NOTABS	  !:= yes
 .ERROR :
-    @+echo found ERROR
     @echo ---* $(MKFILENAME) *---
 
 # Define the directory separator string.
@@ -100,7 +99,7 @@ MAXLINELENGTH	= 65530
    RMTARGET      *=  $<
 
 # Default recipe that is used to remove intermediate targets.
-.REMOVE :; +-echo dummy remove #$(RM) $(RMFLAGS) $(RMTARGET)
+.REMOVE :; #+-echo dummy remove #$(RM) $(RMFLAGS) $(RMTARGET)
 #.REMOVE :; echo $(RM) $(RMFLAGS) $(RMTARGET)
 
 dummy_mh:
@@ -146,7 +145,7 @@ NULLPRQ *:= __.NULLPRQ
 
    # Standard C-language command names and flags
    CPP	      *:= $/lib$/cpp	# C-preprocessor
-   CC         *:= cc		# C   compiler
+#   CC         *:= cc		# C   compiler
    CFLAGS     *=		# C   compiler flags
    "C++"      *:= CC		# C++ Compiler
    "C++FLAGS" *=                # C++ Compiler flags

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hro $ $Date: 2002-12-10 16:27:58 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,6 +146,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP$(TNR)TARGETN:b)_linkinc.ls
 $(APP$(TNR)TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP$(TNR)LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)RES) \
     $(APP$(TNR)ICON) $(APP$(TNR)DEPN) $(USE_APP$(TNR)DEF)
@@ -192,7 +195,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -208,7 +211,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP$(TNR)ICON)" != ""
-    @-+echo 1 ICON $(APP$(TNR)ICON) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+echo 1 ICON "$(APP$(TNR)ICON:s/\/\\/)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
 .IF "$(APP$(TNR)VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
@@ -216,7 +219,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP$(TNR)ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP$(TNR)ICON) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP$(TNR)ICON:s/\//\/\//)\" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
 .IF "$(APP$(TNR)VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc

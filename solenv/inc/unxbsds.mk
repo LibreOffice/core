@@ -1,11 +1,10 @@
-
 #*************************************************************************
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-24 17:21:47 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,9 +85,9 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF 
 
 # name of C++ Compiler
-CC=g++ 
+CXX=g++ 
 # name of C Compiler
-cc=gcc 
+CC=gcc 
 # flags for C and C++ Compiler
 CFLAGS=-w -c $(INCLUDE) -I$(SOLARENV)/unxbsds/usr/include
 # flags for the C++ Compiler

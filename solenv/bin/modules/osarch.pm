@@ -5,7 +5,7 @@
 # Filename:    osarch.pm
 # Autor:       EG
 # Date:        28.10.96
-# $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/bin/modules/osarch.pm,v 1.1.1.1 2000-09-20 14:43:11 hr Exp $
+# $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/bin/modules/osarch.pm,v 1.2 2003-03-27 11:47:56 hr Exp $
 # Copyright:   STAR DIVISION
 # **********************************************************************/
 
@@ -34,7 +34,6 @@ chop( $m_str, $s_str );
 %osDefTable = ("SunOS",     "-DSYSV -DSOLARIS",
                "HP-UX",     "-DSYSV -DHPUX",
                "AIX",       "-DSYSV -DAIX",
-               "OS/390",    "-DS390 -DS390_ASCII",
                "Linux",     "-DLINUX",
                "FreeBSD",   "-DFREEBSD",
                "NetBSD",    "-DNETBSD",

@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mapgen.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2002-04-10 09:59:52 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:47:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.2 $ ';
+$id_str = ' $Revision: 1.3 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -167,14 +167,8 @@ sub filter_symbols {
     while (<FLT_FILE>) {
         s/\r//;
         s/\n//;
-        if ((/^# SOLARIS #$/) && ($ENV{OS} eq 'SOLARIS')) {
-            $env_section = '1';
-            next;
-        };
-        if ((/^# LINUX #$/) && ($ENV{OS} eq 'LINUX')) {
-            $env_section = '1';
-            next;
-        };
+        $env_section = '1' and next if ((/^# SOLARIS #$/) && ($ENV{OS} eq 'SOLARIS'));
+        $env_section = '1' and next if ((/^# LINUX #$/) && ($ENV{OS} eq 'LINUX'));
         last if ($env_section && ((/^# SOLARIS #$/) || (/^# LINUX #$/)));
         next if (!$_ || /^#/);
         push(@filters, $_);

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: armin $ $Date: 2002-10-30 11:53:42 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,10 +116,6 @@ OLE2DEF=
 .INCLUDE : unxlngp.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUXX2REDHAT60"
-.INCLUDE : unxlngx4.mk
-.ENDIF
-
 .IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC295LINUXI2REDHAT60"
 .INCLUDE : unxlngi3.mk
 .ENDIF
@@ -128,14 +124,22 @@ OLE2DEF=
 .INCLUDE : unxlngi4.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC295LINUXP2REDHAT60" 
-.INCLUDE : unxlngppc.mk 
-.ENDIF 
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC322LINUXI2REDHAT60"
+.INCLUDE : unxlngi5.mk
+.ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUXP2REDHAT60" 
-.INCLUDE : unxlngppc4.mk 
-.ENDIF 
- 
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC295LINUXP2REDHAT60"
+.INCLUDE : unxlngppc.mk
+.ENDIF
+
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUXP2REDHAT60"
+.INCLUDE : unxlngppc4.mk
+.ENDIF
+
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUX32REDHAT60"
+.INCLUDE : unxlngs3904.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXR2REDHAT60"
 .INCLUDE : unxlngr.mk
 .ENDIF
@@ -150,10 +154,6 @@ OLE2DEF=
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
 .INCLUDE : unxbsda.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "ICCS390G"
-.INCLUDE : unxmvsg.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "ICCAIXP"

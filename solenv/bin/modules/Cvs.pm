@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2002-12-04 15:41:19 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:47:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ sub new
             $self->{CVS_BINARY} = "cvs.clt2";
         }
     }
+    $self->{ARCHIVE_PATH} = undef;
     $self->{REV_DATA} = {};
     $self->{REV_SORTED} = [];
     $self->{REV_TAGS} = {};
@@ -210,6 +211,17 @@ sub get_head
     return $self->{HEAD};
 }
 
+sub get_archive_path
+{
+    my $self = shift;
+
+    if( !$self->{ARCHIVE_PATH} ) {
+        # ignore return values
+        $self->status();
+    }
+    return $self->{ARCHIVE_PATH};
+}
+
 sub is_tag
 {
     my $self = shift;
@@ -225,6 +237,7 @@ sub get_branch_rev
     my $self  = shift;
     my $label = shift;
 
+    return 0 if $label eq '';
     my $tags_ref = $self->get_tags();
     my $rev = $$tags_ref{$label};
     return 0 if !defined($rev);
@@ -269,17 +282,20 @@ sub update
 
     my $file = $self->name();
     open (CVSUPDATE, "$self->{CVS_BINARY} update $options $file 2>&1 |");
-    my $conflict = 0;
-    my $notknown = 0;
+    my $conflict          = 0;
+    my $notknown          = 0;
+    my $connectionfailure = 0;
     while(<CVSUPDATE>) {
         /conflicts during merge/ && ++$conflict;
         /nothing known about/ && ++$notknown;
+        /\[update aborted\]: connect to/ && ++$connectionfailure;
     }
     close(CVSUPDATE);
-    if ( $conflict || $notknown ) {
+    if ( $conflict || $notknown || $connectionfailure) {
         my $failure = 'unkownfailure';
         $failure = 'conflict' if $conflict;
         $failure = 'notknown' if $notknown;
+        $failure = 'connectionfailure' if $connectionfailure;
         return $failure;
     }
     return 'success';
@@ -298,12 +314,13 @@ sub commit
     close(CVSCOMMIT);
 
     # already commited ?
-    return 'nothingcommited' if !@commit_message;
+    return 'nothingcommitted' if !@commit_message;
 
-    my $conflict     = 0;
-    my $uptodate     = 0;
-    my $notknown     = 0;
-    my $success      = 0;
+    my $conflict           = 0;
+    my $uptodate           = 0;
+    my $notknown           = 0;
+    my $success            = 0;
+    my $connectionfailure = 0;
     my $new_revision = undef;
     foreach (@commit_message) {
         /Up-to-date check failed/ && ++$uptodate;
@@ -311,12 +328,14 @@ sub commit
         /had a conflict and has not been modified/ && ++$conflict;
         /new revision: (delete);/ && (++$success, $new_revision = $1);
         /new revision: ([\d\.]+);/ && (++$success, $new_revision = $1);
+        /\[commit aborted\]: connect to/ && ++$connectionfailure;
     }
     if ( !$success ) {
         my $failure = 'unkownfailure';
-        $failure = 'conflict' if $conflict;
-        $failure = 'notuptodate' if $uptodate;
-        $failure = 'notknown' if $notknown;
+        $failure = 'conflict'          if $conflict;
+        $failure = 'notuptodate'       if $uptodate;
+        $failure = 'notknown'          if $notknown;
+        $failure = 'connectionfailure' if $connectionfailure;
         return $failure;
     }
     return wantarray ? ('success', $new_revision) : 'success';
@@ -347,25 +366,86 @@ sub tag
         $options = '';
     }
 
-    my $tagged     = 0;
-    my $cant_move  = 0;
-    my $unknown    = 0;
     my $file = $self->name();
     open (CVSTAG, "$self->{CVS_BINARY} tag $options $tag $file 2>&1 |");
-    while(<CVSTAG>) {
-        /^T $file/ && ++$tagged;
-        /NOT MOVING tag/ && ++$cant_move;
-        /nothing known about/ && ++$unknown;
-    }
+    my @tag_message = <CVSTAG>;
     close(CVSTAG);
 
     # no message from CVS means that tag already exists
     # and has not been moved.
-    return 'success'  if ($tagged || (!$cant_move && !$unknown));
-    return 'cantmove' if $cant_move;
-    return 'unkown'   if $unknown;
+    return 'success' if !@tag_message;
+
+    my $tagged             = 0;
+    my $cant_move          = 0;
+    my $connectionfailure = 0;
+    my $invalidfile        = 0;
+    foreach (@tag_message) {
+        /^T $file/ && ++$tagged;
+        /NOT MOVING tag/ && ++$cant_move;
+        /nothing known about/ && ++$invalidfile;
+        /\[tag aborted\]: connect to/ && ++$connectionfailure;
+    }
+    return 'success'           if $tagged;
+    return 'cantmove'          if $cant_move;
+    return 'connectionfailure' if $connectionfailure;
+    return 'invalidfile'       if $invalidfile;
     # should never happen
     return 'unkownfailure';
+}
+
+#### misc operations ####
+
+# Return status information. Note that this is somewhat redundant with
+# the information which can be retrieved from the log, but in some cases
+# we can avoid the more expansive parsing of the log by calling this method.
+# We don't save the status information between calls.
+sub status
+{
+    my $self       = shift;
+
+    my $file = $self->name();
+    my ($nofile, $unkownfailure, $connectionfailure);
+    my ($status, $working_rev, $repository_rev);
+    my ($sticky_tag, $branch, $sticky_date, $sticky_options);
+
+    open (CVSSTATUS, "$self->{CVS_BINARY} status $file 2>&1 |");
+    while(<CVSSTATUS>) {
+        chomp();
+        /File: no file/ && ++$nofile;
+        /Status:\s+([\w\-\s]+)$/ && ($status = $1);
+        /Working revision:\s+((\d|\.)+)/ && ($working_rev = $1);
+        /Repository revision:\s+((\d|\.)+)\s+(\S+)/ && ($repository_rev = $1) && ($self->{ARCHIVE_PATH} = $3);
+        /Sticky Tag:\s+(.+)/ && ($sticky_tag = $1);
+        /Sticky Date:\s+(.+)/ && ($sticky_date = $1);
+        /Sticky Options:\s+(.+)/ && ($sticky_options = $1);
+        /\[status aborted\]: connect to/ && ++$connectionfailure;
+    }
+    close(CVSSTATUS);
+
+    return 'connectionfailure' if $connectionfailure;
+    # all variables except $status will contain garbage if 'Locally Added'
+    # or 'Unknown'
+    return $status if ($status eq 'Locally Added' || $status eq 'Unknown');
+    # same if $nofile is set
+    return $status if $nofile;
+
+    if ( $sticky_tag =~ /([\w\-]+) \(branch: ([\d\.]+)\)$/ ) {
+        $sticky_tag = $1;
+        $branch = $2;
+    }
+
+    $sticky_date = '' if $sticky_date eq '(none)';
+    $sticky_options = '' if $sticky_options eq '(none)';
+
+    if ( $sticky_options =~ /\-(\w+)/ ) {
+        $sticky_options = $1;
+    }
+
+    $unkownfailure++ if !$status;
+
+    return 'unkownerror' if $unkownfailure;
+    return ($status, $working_rev, $repository_rev, $sticky_tag, $branch,
+            $sticky_date, $sticky_options);
 }
 
 #### private methods ####
@@ -415,12 +495,14 @@ sub parse_log
         }
         elsif ( $in_tags ) {
             /^keyword\ssubstitution:\s/o && do { $self->{FLAGS} = $'; $in_tags--; next; };
-            /^\t(\w+):\s((\d|\.)+)$/o && do { $self->{TAGS}->{$1} = $2; next; };
+            # tags may contain a hyphen
+            /^\t([\w|\-]+):\s((\d|\.)+)$/o && do { $self->{TAGS}->{$1} = $2; next; };
         }
         else {
             /^----------------------------$/o && do { $in_revisions++; next; };
             /^symbolic\snames:$/o && do { $in_tags++; next; };
             /^head:\s((\d|\.)+)$/o && do { $self->{HEAD} = $1; next; };
+            /^RCS file:\s((\d|\.)+)$/o && do { $self->{ARCHIVE_PATH} = $1; next; };
         }
     }
 

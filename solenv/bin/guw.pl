@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-31 13:17:56 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:47:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Text::ParseWords;
 
 # set debug mode here:
 #$debug="true";
-$debug_light="true";
+#$debug_light="true";
 
 #---------------------------------------------------------------------------
 # Define known parameter exceptions
@@ -192,10 +192,15 @@ sub replace_cyg {
           if ( defined $debug ) { print(STDERR "\nParameter:---${para}---\n");};
           # If $tmp1 is empty then $para is a parameter.
           my $is_no_para = 1;
-          foreach $i (@{$knownpara{$command}}) {
+          # remove .exe and convert to lower case
+          $shortcommand = lc $command ;
+          $shortcommand =~ s/\.exe$//;
+          $shortcommand =~ /(\w+$)/;
+          $shortcommand = $1;
+          foreach $i (@{$knownpara{$shortcommand}}) {
             if( $para =~ /$i/ ) {
               $is_no_para = 0;
-              if ( defined $debug ) { print(STDERR "Is parameter exception:${para}:\n" );};
+              if ( defined $debug ) { print(STDERR "Is parameter exception for ${shortcommand}: ${para}:\n" );};
               last;
             }
           }

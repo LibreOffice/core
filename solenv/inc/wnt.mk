@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-11 13:30:43 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,119 +75,6 @@ OLE2DEF=
 
 # --- C/C++ defines fuer nt ----------------------------------------
 
-.IF "$(HBTOOLKIT)"!=""
-CDEFS+=-DHB_DEBUG
-.ENDIF
-
-# --- Base fuer WNT setzen -----------------------------------------
-
-.IF "$(GUI)"=="WNT"
-BASE=0x1100000
-RESBASE=0x1100000
-.IF "$(PRJNAME)"=="OSL" || "$(PRJNAME)"=="osl"
-BASE=0x1c000000
-.ENDIF
-.IF "$(PRJNAME)"=="RTL" || "$(PRJNAME)"=="rtl"
-BASE=0x1c100000
-.ENDIF
-.IF "$(PRJNAME)"=="VOS" || "$(PRJNAME)"=="vos"
-BASE=0x1c200000
-.ENDIF
-.IF "$(PRJNAME)"=="UCR" || "$(PRJNAME)"=="ucr"
-BASE=0x1c300000
-.ENDIF
-.IF "$(PRJNAME)"=="USR" || "$(PRJNAME)"=="usr"
-BASE=0x1c400000
-.ENDIF
-.IF "$(PRJNAME)"=="UNO" || "$(PRJNAME)"=="uno"
-BASE=0x1c500000
-.ENDIF
-.IF "$(PRJNAME)"=="SOT" || "$(PRJNAME)"=="sot"
-BASE=0x1c900000
-.ENDIF
-.IF "$(PRJNAME)"=="TOOLS" || "$(PRJNAME)"=="tools"
-BASE=0x1c800000
-.ENDIF
-.IF "$(PRJNAME)"=="VCL" || "$(PRJNAME)"=="vcl"
-BASE=0x1c600000
-.ENDIF
-.IF "$(PRJNAME)"=="TOOLKIT" || "$(PRJNAME)"=="toolkit"
-BASE=0x1ca00000
-.ENDIF
-.IF "$(PRJNAME)"=="TKT" || "$(PRJNAME)"=="tkt"
-BASE=0x1cd00000
-.ENDIF
-.IF "$(PRJNAME)"=="SJ" || "$(PRJNAME)"=="sj"
-BASE=0x1d000000
-.ENDIF
-.IF "$(PRJNAME)"=="STARONE" || "$(PRJNAME)"=="starone" || "$(PRJNAME)"=="ONE" || "$(PRJNAME)"=="one" 
-BASE=0x1ce00000
-.ENDIF
-.IF "$(PRJNAME)"=="CHAOS" || "$(PRJNAME)"=="chaos" 
-BASE=0x1d100000
-.ENDIF
-.IF "$(PRJNAME)"=="SVTOOLS" || "$(PRJNAME)"=="svtools"
-BASE=0x1cb00000
-.ENDIF
-.IF "$(PRJNAME)"=="SO3" || "$(PRJNAME)"=="so3"
-BASE=0x1d400000
-.ENDIF
-.IF "$(PRJNAME)"=="GOODIES" || "$(PRJNAME)"=="goodies"
-BASE=0x1d290000
-.ENDIF
-.IF "$(PRJNAME)"=="BASIC" || "$(PRJNAME)"=="basic"
-BASE=0x1d380000
-.ENDIF
-.IF "$(PRJNAME)"=="HM2" || "$(PRJNAME)"=="hm2"
-BASE=0x1c700000
-.ENDIF
-.IF "$(PRJNAME)"=="SFX2" || "$(PRJNAME)"=="sfx2"
-BASE=0x1d500000
-RESBASE=0x1a00000
-.ENDIF
-.IF "$(PRJNAME)"=="SVX" || "$(PRJNAME)"=="svx"
-RESBASE=0x1d70000
-.ENDIF
-.IF "$(PRJNAME)"=="OFFMGR" || "$(PRJNAME)"=="offmgr"
-BASE=0x1dc00000
-RESBASE=0x1a20000
-.ENDIF
-.IF "$(PRJNAME)"=="SIM" || "$(PRJNAME)"=="sim" || "$(PRJNAME)"=="simage3"
-BASE=0x1cd00000
-RESBASE=0x1a30000
-.ENDIF
-.IF "$(PRJNAME)"=="SCH" || "$(PRJNAME)"=="sch" || "$(PRJNAME)"=="schart3"
-BASE=0x1ce00000
-RESBASE=0x1a40000
-.ENDIF
-.IF "$(PRJNAME)"=="SM" || "$(PRJNAME)"=="sm" || "$(PRJNAME)"=="smath3"
-BASE=0x1cf00000
-RESBASE=0x1a50000
-.ENDIF
-.IF "$(PRJNAME)"=="SDB" || "$(PRJNAME)"=="sdb"
-BASE=0x1d000000
-.ENDIF
-.IF "$(PRJNAME)"=="INET" || "$(PRJNAME)"=="inet"
-BASE=0x1d800000
-.ENDIF
-.IF "$(PRJNAME)"=="SW" || "$(PRJNAME)"=="sw" || "$(PRJNAME)"=="swriter3"
-BASE=0x1e000000
-RESBASE=0x1a60000
-.ENDIF
-.IF "$(PRJNAME)"=="SC" || "$(PRJNAME)"=="sc" || "$(PRJNAME)"=="scalc3"
-BASE=0x1e800000
-RESBASE=0x1a70000
-.ENDIF
-.IF "$(PRJNAME)"=="SD" || "$(PRJNAME)"=="sd" || "$(PRJNAME)"=="sdraw3"
-BASE=0x1eb00000
-RESBASE=0x1a80000
-.ENDIF
-.IF "$(PRJNAME)"=="OFF" || "$(PRJNAME)"=="off" || "$(PRJNAME)"=="offmgr"
-BASE=0x1b900000
-RESBASE=0x1a90000
-.ENDIF
-.ENDIF
-
 .IF "$(GUI)"=="WNT"
 .IF "$(profile)" != ""
 .IF "$(WST)"!=""
@@ -237,37 +124,37 @@ AFLAGS=/c /Cp /coff
 OLE2ANSI=TRUE
 
 .IF "$(bndchk)" != ""
-CC=nmcl
+CXX*=nmcl
 .ELSE
 .IF "$(truetime)" != ""
-CC=nmcl /NMttOn
+CXX*=nmcl /NMttOn
 .ELSE
 .IF "$(syntax)"!=""
-CC=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
+CXX*=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
 .ELSE
 .IF "$(USE_SHELL)"=="4nt"
-CC=cl
+CXX*=cl
 .ELSE			# "$(USE_SHELL)"=="4nt"
-CC=$(WRAPCMD) cl
+CXX*=$(WRAPCMD) cl
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF
 .ENDIF
 
 .IF "$(stoponerror)" != ""
-CC+= /NMstoponerror
+CXX+= /NMstoponerror
 .ENDIF
 
 .IF "$(nmpass)" != ""
-CC+= /NMpass
+CXX+= /NMpass
 .ENDIF
 
 .IF "$(ttinlines)" != ""
-CC+= /NMttInlines	
+CXX+= /NMttInlines
 .ENDIF
 
 .IF "$(ttnolines)" != ""
-CC+= /NMttNoLines
+CXX+= /NMttNoLines
 .ENDIF
 
 #.IF"$(bndchk)"==""
@@ -278,7 +165,7 @@ CFLAGS+=-Zm200
 
 #.IF"$(bndchk)"==""
 .IF "$(COMEX)"=="8"
-CFLAGS+=-Zm500
+CFLAGS+=-Zm500 /wd4290 /wd4786 /wd4800
 .ENDIF
 #.ENDIF
 
@@ -287,7 +174,7 @@ CFLAGS+=-Zm500
 .IF "$(seg)" == ""
 .IF "$(demo)" == ""
 CDEFS+= -D_X86_=1 $(OLE2DEF)
-CFLAGS+=-c -nologo -W3 -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE)
+CFLAGS+=-c -nologo -W3 -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE) -Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .IF "$(bndchk)" == ""
 CFLAGS+= -Ob1
 .ENDIF
@@ -363,11 +250,11 @@ CDEFSOBJST+=-DWIN32
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
-CFLAGSPROF=-Gh -Zd -Fd$(MISC)\$(TARGET).PDB
+CFLAGSPROF=-Gh -Zd -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .IF "$(PDBTARGET)"!=""
 CFLAGSDEBUG=-Zi -Fd$(MISC)\$(PDBTARGET).PDB
 .ELSE
-CFLAGSDEBUG=-Zi -Fd$(MISC)\$(TARGET).PDB
+CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .ENDIF
 CFLAGSDBGUTIL=
 CFLAGSOPT=-Ox
@@ -441,7 +328,7 @@ LINKFLAGS+= /NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv
 .ENDIF
 .ELSE # ist keine product...
 .IF "$(COMEX)"!="3"
-LINKFLAGS+= /RELEASE
+LINKFLAGS+= /RELEASE /DEBUG:notmapped,full
 .ENDIF
 .ENDIF
 MAPFILE=-out:$$@
@@ -567,7 +454,7 @@ CPPLCC=$(WRAPCMD) cpplcc
 ASM=
 AFLAGS=
 
-CC=gcc
+CXX*=gcc
 ### Der gcc vertraegt kein Semikolon im Include-Pfad         RT
 # old:
 #CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF) 
@@ -599,7 +486,7 @@ CDEFS+=-D_M_IX86
 STATIC= -static
 DYNAMIC= -dynamic
 
-LINK=ld
+LINK*=ld
 CYGLIB=$(LIB:s/;/ -L/)
 LINKFLAGS=-nodefaultlibs -L$(CYGLIB)
 LINKFLAGSAPPGUI=$(COMPATH)$/i386-mingw32$/lib$/crt1.o

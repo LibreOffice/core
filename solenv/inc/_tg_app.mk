@@ -51,6 +51,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP1TARGETN:b)_linkinc.ls
 $(APP1TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP1LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP1RES) \
     $(APP1ICON) $(APP1DEPN) $(USE_APP1DEF)
@@ -97,7 +100,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -113,7 +116,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+-$(RM) $(MISC)$/$(APP1LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP1ICON)" != ""
-    @-+echo 1 ICON $(APP1ICON) >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+echo 1 ICON "$(APP1ICON:s/\/\\/)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
 .IF "$(APP1VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
@@ -121,7 +124,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP1ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP1ICON) >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP1ICON:s/\//\/\//)\" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
 .IF "$(APP1VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
@@ -262,6 +265,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP2TARGETN:b)_linkinc.ls
 $(APP2TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP2LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP2RES) \
     $(APP2ICON) $(APP2DEPN) $(USE_APP2DEF)
@@ -308,7 +314,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -324,7 +330,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+-$(RM) $(MISC)$/$(APP2LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP2ICON)" != ""
-    @-+echo 1 ICON $(APP2ICON) >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+echo 1 ICON "$(APP2ICON:s/\/\\/)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
 .IF "$(APP2VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
@@ -332,7 +338,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP2ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP2ICON) >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP2ICON:s/\//\/\//)\" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
 .IF "$(APP2VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
@@ -473,6 +479,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP3TARGETN:b)_linkinc.ls
 $(APP3TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP3LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP3RES) \
     $(APP3ICON) $(APP3DEPN) $(USE_APP3DEF)
@@ -519,7 +528,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -535,7 +544,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+-$(RM) $(MISC)$/$(APP3LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP3ICON)" != ""
-    @-+echo 1 ICON $(APP3ICON) >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+echo 1 ICON "$(APP3ICON:s/\/\\/)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
 .IF "$(APP3VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
@@ -543,7 +552,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP3ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP3ICON) >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP3ICON:s/\//\/\//)\" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
 .IF "$(APP3VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
@@ -684,6 +693,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP4TARGETN:b)_linkinc.ls
 $(APP4TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP4LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP4RES) \
     $(APP4ICON) $(APP4DEPN) $(USE_APP4DEF)
@@ -730,7 +742,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -746,7 +758,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+-$(RM) $(MISC)$/$(APP4LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP4ICON)" != ""
-    @-+echo 1 ICON $(APP4ICON) >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+echo 1 ICON "$(APP4ICON:s/\/\\/)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
 .IF "$(APP4VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
@@ -754,7 +766,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP4ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP4ICON) >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP4ICON:s/\//\/\//)\" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
 .IF "$(APP4VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
@@ -895,6 +907,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP5TARGETN:b)_linkinc.ls
 $(APP5TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP5LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP5RES) \
     $(APP5ICON) $(APP5DEPN) $(USE_APP5DEF)
@@ -941,7 +956,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -957,7 +972,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+-$(RM) $(MISC)$/$(APP5LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP5ICON)" != ""
-    @-+echo 1 ICON $(APP5ICON) >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+echo 1 ICON "$(APP5ICON:s/\/\\/)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
 .IF "$(APP5VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
@@ -965,7 +980,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP5ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP5ICON) >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP5ICON:s/\//\/\//)\" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
 .IF "$(APP5VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
@@ -1106,6 +1121,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP6TARGETN:b)_linkinc.ls
 $(APP6TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP6LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP6RES) \
     $(APP6ICON) $(APP6DEPN) $(USE_APP6DEF)
@@ -1152,7 +1170,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1168,7 +1186,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+-$(RM) $(MISC)$/$(APP6LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP6ICON)" != ""
-    @-+echo 1 ICON $(APP6ICON) >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+echo 1 ICON "$(APP6ICON:s/\/\\/)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
 .IF "$(APP6VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
@@ -1176,7 +1194,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP6ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP6ICON) >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP6ICON:s/\//\/\//)\" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
 .IF "$(APP6VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
@@ -1317,6 +1335,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP7TARGETN:b)_linkinc.ls
 $(APP7TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP7LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP7RES) \
     $(APP7ICON) $(APP7DEPN) $(USE_APP7DEF)
@@ -1363,7 +1384,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1379,7 +1400,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+-$(RM) $(MISC)$/$(APP7LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP7ICON)" != ""
-    @-+echo 1 ICON $(APP7ICON) >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+echo 1 ICON "$(APP7ICON:s/\/\\/)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
 .IF "$(APP7VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
@@ -1387,7 +1408,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP7ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP7ICON) >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP7ICON:s/\//\/\//)\" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
 .IF "$(APP7VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
@@ -1528,6 +1549,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP8TARGETN:b)_linkinc.ls
 $(APP8TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP8LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP8RES) \
     $(APP8ICON) $(APP8DEPN) $(USE_APP8DEF)
@@ -1574,7 +1598,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1590,7 +1614,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+-$(RM) $(MISC)$/$(APP8LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP8ICON)" != ""
-    @-+echo 1 ICON $(APP8ICON) >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+echo 1 ICON "$(APP8ICON:s/\/\\/)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
 .IF "$(APP8VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
@@ -1598,7 +1622,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP8ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP8ICON) >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP8ICON:s/\//\/\//)\" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
 .IF "$(APP8VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
@@ -1739,6 +1763,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP9TARGETN:b)_linkinc.ls
 $(APP9TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP9LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP9RES) \
     $(APP9ICON) $(APP9DEPN) $(USE_APP9DEF)
@@ -1785,7 +1812,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -1801,7 +1828,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+-$(RM) $(MISC)$/$(APP9LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP9ICON)" != ""
-    @-+echo 1 ICON $(APP9ICON) >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+echo 1 ICON "$(APP9ICON:s/\/\\/)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
 .IF "$(APP9VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
@@ -1809,7 +1836,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP9ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP9ICON) >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP9ICON:s/\//\/\//)\" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
 .IF "$(APP9VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
@@ -1950,6 +1977,9 @@ LINKINCTARGETS+=$(MISC)$/$(APP10TARGETN:b)_linkinc.ls
 $(APP10TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
+# Allow for target specific LIBSALCPPRT override
+APP10LIBSALCPPRT*=$(LIBSALCPPRT)
+
 $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP10RES) \
     $(APP10ICON) $(APP10DEPN) $(USE_APP10DEF)
@@ -1996,7 +2026,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -2012,7 +2042,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+-$(RM) $(MISC)$/$(APP10LINKRES:b).rc >& $(NULLDEV)
 .IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP10ICON)" != ""
-    @-+echo 1 ICON $(APP10ICON) >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+echo 1 ICON "$(APP10ICON:s/\/\\/)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
 .IF "$(APP10VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
@@ -2020,7 +2050,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 .IF "$(APP10ICON)" != ""
-    @-+guw.pl echo 1 ICON $(APP10ICON) >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+guw.pl echo 1 ICON \"$(APP10ICON:s/\//\/\//)\" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
 .IF "$(APP10VERINFO)" != ""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc

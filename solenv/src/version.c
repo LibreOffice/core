@@ -2,9 +2,9 @@
  *
  *  $RCSfile: version.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-16 10:33:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,29 +60,18 @@
  ************************************************************************/
 
 
-#if 0
-#include <stdio.h>
-#include <string.h>
-#else
-#ifdef WNT
-char *  __cdecl strcpy(char *, const char *);
-#endif
-#if defined( OS2 ) || defined( UNX )
-char * strcpy(char*, const char* );
-#endif
-#endif
 
 #include <_version.h>
 
 
 struct VersionInfo
 {
-    const char  aTime[20];
-    const char  aDate[20];
-    const char  aUpd[5];
-    const char  aMinor;
-    const char  aBuild[5];
-    const char  aInpath[20];
+    const char* pTime;
+    const char* pDate;
+    const char* pUpd;
+    const char* pMinor;
+    const char* pBuild;
+    const char* pInpath;
 };
 
 static const struct VersionInfo g_aVersionInfo =
@@ -109,12 +98,14 @@ const struct VersionInfo *GetVersionInfo()
 }
 
 #if 0
+#include <stdio.h>
+
 int main( int argc, char **argv )
 {
-    VersionInfo *pInfo = GetVersionInfo();
-    fprintf( stderr, "Date : %s\n", pInfo->aDate);
-    fprintf( stderr, "Time : %s\n", pInfo->aTime);
-    fprintf( stderr, "UPD : %s\n", pInfo->aUpd);
+    const VersionInfo *pInfo = GetVersionInfo();
+    fprintf( stderr, "Date : %s\n", pInfo->pDate);
+    fprintf( stderr, "Time : %s\n", pInfo->pTime);
+    fprintf( stderr, "UPD : %s\n", pInfo->pUpd);
     delete pInfo;
     return 0;
 }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-16 16:38:00 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,8 @@ JAVAFLAGSDEBUG=-g
 JAVA_RUNTIME=-framework JavaVM
 .ENDIF
 
-CC=cc
-cc=cc
+CXX*=cc
+CC*=cc
 objc=cc
 
 # [ed] 6/15/02 Some .. bleep .. decided to make a directory within a module that has the same

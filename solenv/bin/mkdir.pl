@@ -9,15 +9,19 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # Copyright (c) 2000 Sun Microsystems, Inc.
 
+use Cwd;
+
+$currdir = cwd;
+
 $MODE = 00777 ;
 
-while ( $#ARGV > 0 ) {
+while ( $#ARGV >= 0 ) {
     if ( $ARGV[0] eq "-mode" ) {
         $MODE = oct $ARGV[1] ;
         shift @ARGV ;
-        } ;
-    shift @ARGV ;
-    } ;
+        shift @ARGV ;
+        }
+    else {
 
 $ARGV[0] =~ s?\\|:?/?g ;
 @SUBDIRS = split "/", $ARGV[0] ;
@@ -50,3 +54,8 @@ while (@SUBDIRS) {
     chdir $SUBDIRS[0] or die "Can't cd to $SUBDIRS[0]" ;
     shift @SUBDIRS ;
     } ;
+
+    shift @ARGV ;
+    } ;
+    chdir $currdir;
+}

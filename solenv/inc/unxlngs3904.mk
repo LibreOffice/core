@@ -1,10 +1,10 @@
 #*************************************************************************
 #
-#   $RCSfile: unxlngi4.mk,v $
+#   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:17 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-# mk file for unxlngi4
+# mk file for linux s390 using gcc 3.X
 ASM=
 AFLAGS=
 
@@ -72,7 +72,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=-DGLIBC=2 -DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -85,58 +85,66 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF 
 
 # name of C++ Compiler
-CXX*=g++
+CXX*=g++-3.2
 # name of C Compiler
-CC*=gcc
+CC*=gcc-3.2
+
 # flags for C and C++ Compiler
 # do not use standard header search paths
 # if installed elsewhere
 .IF "$(BUILD_SOSL)"!=""
-CFLAGS=
+CFLAGS= 
 .ENDIF
-CFLAGS+=-fmessage-length=0 -c $(INCLUDE) -g
+CFLAGS+=-fsigned-char -fmessage-length=0 -c $(INCLUDE)
+
 # flags for the C++ Compiler
-CFLAGSCC= -pipe -mcpu=pentiumpro
+CFLAGSCC= -fsigned-char -pipe 
+
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive -fno-rtti 
+#CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -fno-rtti 
+CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive
 
-# HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
-.IF "$(BUILD_SPECIAL)"==""
-CFLAGSCXX+=-include preinclude.h
-.ENDIF
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=
+CFLAGSOBJGUIST=-fPIC
 # Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=
+CFLAGSOBJCUIST=-fPIC
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
-CFLAGSOBJGUIMT=
+CFLAGSOBJGUIMT=-fPIC
 # Compiler flags for compiling static object in multi threaded environment with character user interface
-CFLAGSOBJCUIMT=
+CFLAGSOBJCUIMT=-fPIC
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
-CFLAGSSLOGUIMT=-fpic
+CFLAGSSLOGUIMT=-fPIC
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
-CFLAGSSLOCUIMT=-fpic
+CFLAGSSLOCUIMT=-fPIC
+
 # Compiler flags for profiling
 CFLAGSPROF=
+
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
+
 # Compiler flags for enabling optimazations
-# CFLAGSOPT=-O2
-# reduce to -O1 to avoid optimisation problems
-CFLAGSOPT=-O1
+#CFLAGSOPT=-O2 -fno-schedule-insns -fno-strict-aliasing -fno-schedule-insns2
+CFLAGSOPT=-O2 -fno-strict-aliasing
+
 # Compiler flags for disabling optimazations
-CFLAGSNOOPT=-O
+# don't change - require dto work around optimization bugs
+CFLAGSNOOPT=-O0
+
 # Compiler flags for discibing the output path
 CFLAGSOUTOBJ=-o
+
 # Enable all warnings
 CFLAGSWALL=-Wall
+
 # Set default warn level
 CFLAGSDFLTWARN=-w
 
@@ -145,11 +153,9 @@ STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK*=$(CC)
-
+LINK*=g++-3.2
 # default linker flags
-# LINKFLAGSRUNPATH*=-Wl,-rpath\''$$ORIGIN'\'
-LINKFLAGS=-z combreloc $(LINKFLAGSRUNPATH)
+LINKFLAGS=
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
@@ -193,10 +199,6 @@ STDLIBGUIST=-lX11 -ldl -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
-STDSHLGUIST=-lX11 -lXext -ldl -lm
-STDSHLCUIST=-ldl -lm
-
-LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
@@ -221,7 +223,6 @@ RCLINKFLAGS=
 RCSETVERSION=
 
 # platform specific identifier for shared libs
-DLLPOSTFIX=li
+DLLPOSTFIX=l3
 DLLPRE=lib
 DLLPOST=.so
-

@@ -7,18 +7,27 @@
 
 if($#ARGV == -1)
 {
-    die "No parameters were specified.\nperl converttags.pl <title> <productname> [<color1>] [<color2>] file_1 [... file_n]\n";
+    die "No parameters were specified.\nperl converttags.pl <mode> <title> <productname> [<color1>] [<color2>] file_1 [... file_n]\n";
 }
 if($#ARGV < 2)
 {
     die "No file were specified -> no file must be converted!\n";
 }
 
+# mode = 1 -> convert
+#      = 2 -> exit without conversion
+$mode = shift @ARGV;
+
 $title = shift @ARGV;
 $productname = shift @ARGV;
 
 $color1 = "";
 $color2 = "";
+
+if( $mode =~ s/2/$1/go )
+{
+    exit 0;
+}
 
 if( $ARGV[0] =~ s/(#[\w]{6})/$1/go )
 {

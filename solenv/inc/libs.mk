@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: sb $ $Date: 2002-12-06 10:58:54 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.59 $$"
+LIBSMKREV!:="$$Revision: 1.60 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -76,7 +76,8 @@ ICUI18NLIB=-licui18n -licuuc -licule -licudata
 GPC3RDLIB=-lgpc
 SALHELPERLIB=-lsalhelper$(COMID)
 XMLSCRIPTLIB =-lxcr$(OFFICEUPD)$(DLLPOSTFIX)
-COMPHELPERLIB=-lcomphelp2
+.INCLUDE .IGNORE : comphelper$/version.mk
+COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
@@ -91,7 +92,6 @@ RTLLIB=
 TECLIB=
 CPPULIB=-lcppu
 CPPUHELPERLIB=-lcppuhelper$(COMID)
-JENVLIB=-ljenv
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 REGLIB=-lreg
@@ -236,12 +236,11 @@ ICUI18NLIB=icuin.lib icuuc.lib icudata.lib icule.lib
 GPC3RDLIB=gpc.lib
 SALHELPERLIB=$(LIBPRE) isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
-COMPHELPERLIB=icomphelp2.lib
+COMPHELPERLIB=icomphelp.lib
 CONNECTIVITYLIB=connectivity.lib
 LDAPBERLIB=ldapber.lib
 CPPULIB=$(LIBPRE) icppu.lib
 CPPUHELPERLIB=$(LIBPRE) icppuhelper.lib
-JENVLIB=$(LIBPRE) ijenv.lib
 SALTLSLIB=isaltls.lib
 SALZIPLIB=isalzip.lib
 UCBHELPERLIB=$(LIBPRE) iucbhelper.lib

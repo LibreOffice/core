@@ -2,9 +2,9 @@
 #
 #   $RCSfile: set_ext.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-08 17:29:00 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,11 +70,11 @@ wrapper_use_clean_sourcecheck=TRUE
 
 #defaults
 TARFILE_ROOTDIR*=$(TARFILE_NAME)
-UNTAR_FLAG_FILE*=so_unpacked
-ADD_FILES_FLAG_FILE*=so_addfiles
-PATCH_FLAG_FILE*=so_patched
-CONFIGURE_FLAG_FILE*=so_configured
-BUILD_FLAG_FILE*=so_built
-INSTALL_FLAG_FILE*=so_installed
-PREDELIVER_FLAG_FILE*=so_predeliver
+UNTAR_FLAG_FILE*=so_unpacked_$(TARGET)
+ADD_FILES_FLAG_FILE*=so_addfiles_$(TARGET)
+PATCH_FLAG_FILE*=so_patched_$(TARGET)
+CONFIGURE_FLAG_FILE*=so_configured_$(TARGET)
+BUILD_FLAG_FILE*=so_built_$(TARGET)
+INSTALL_FLAG_FILE*=so_installed_$(TARGET)
+PREDELIVER_FLAG_FILE*=so_predeliver_$(TARGET)
 

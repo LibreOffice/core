@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-16 12:28:45 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:47:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.40 $ ';
+$id_str = ' $Revision: 1.41 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -262,6 +262,10 @@ sub do_linklib
                 print "REMOVE: $to_dir/$lib_base\n";
                 unlink "$to_dir/$lib_major";
                 unlink "$to_dir/$lib_base";
+                if ( $opt_zip ) {
+                    push_on_ziplist("$to_dir/$lib_major");
+                    push_on_ziplist("$to_dir/$lib_base");
+                }
                 return;
             }
             my $symlib;
@@ -324,7 +328,10 @@ sub do_symlink
     else {
         print "REMOVE: $to\n";
         unlink $to;
-        return if $opt_delete;
+        if ( $opt_delete ) {
+            push_on_ziplist($to) if $opt_zip;
+            return;
+        }
 
         print "SYMLIB: $from -> $to\n";
         if ( !symlink("$from", "$to") ) {
@@ -421,7 +428,9 @@ sub init_globals
     }
 
     # product build?
-    $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
+    if ($common_outdir ne "") {
+        $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
+    }
 
     $ext = "";
     if ( ($opt_minor || $updminor) && !$dest ) {
@@ -434,8 +443,13 @@ sub init_globals
         }
     }
 
-    $common_dest = "$solarversion/$common_outdir" if ( !$dest );
-    $dest = "$solarversion/$inpath" if ( !$dest );
+    if ($common_outdir ne "") {
+        $common_dest = "$solarversion/$common_outdir" if ( !$dest );
+        $dest = "$solarversion/$inpath" if ( !$dest );
+    } else {
+        $dest = "$solarversion/$inpath" if ( !$dest );
+        $common_dest = $dest;
+    }
 
     # the following macros are obsolete, will be flagged as error
     # %__WORKSTAMP%
@@ -604,6 +618,7 @@ sub copy_if_newer
     my $from_stat_ref;
 
     print "testing $from, $to\n" if $is_debug;
+    push_on_ziplist($to) if $opt_zip;
     return 0 unless ($from_stat_ref = is_newer($from, $to, $touch));
 
     if ( $opt_delete ) {
@@ -637,7 +652,10 @@ sub copy_if_newer
                 local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
                 my $rc = copy($from, $temp_file);
                 if ( $rc) {
-                    utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
+                    $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
+                    if ( !$rc ) {
+                        print_error("can't update temporary file modification time '$temp_file': $!",0);
+                    }
                     fix_file_permissions($$from_stat_ref[2], $temp_file);
                     $rc = rename($temp_file, $to);
                     if ( $rc ) {
@@ -648,7 +666,6 @@ sub copy_if_newer
                             system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
                             system("ranlib", "$to" ) if ( $to =~ /\.a/ );
                         }
-                        push_on_ziplist($to) if $opt_zip;
                         return 1;
                     }
                     else {
@@ -776,6 +793,8 @@ sub push_default_actions
     push(@subdirs, 'zip') if $opt_zip;
     my @common_subdirs = (
                     'bin',
+                    'idl',
+                    'inc',
                     'pck',
                 );
     push(@common_subdirs, 'zip') if $opt_zip;
@@ -840,6 +859,7 @@ sub hedabu_if_newer
         return 1 if $opt_check;
 
         if ( $opt_delete ) {
+            push_on_ziplist($to) if $opt_zip;
             my $rc = unlink($to);
             return 1 if $rc;
             return 0;
@@ -918,22 +938,40 @@ sub zip_files
     print "ZIP: updating $zip_file\n";
     # zip content has to be relative to $dest
     chdir($dest);
-    open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
-    foreach $file (@zip_list) {
-        print "ZIP: adding $file to $zip_file\n" if $is_debug;
-        print ZIP "$file\n";
+    if ( $opt_delete ) {
+        open(ZIP, "| $zipexe -q -d -@ $zip_file");
+        foreach $file (@zip_list) {
+            print "ZIP: removing $file from $zip_file\n" if $is_debug;
+            print ZIP "$file\n";
+        }
+        close(ZIP);
+    } else {
+        open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
+        foreach $file (@zip_list) {
+            print "ZIP: adding $file to $zip_file\n" if $is_debug;
+            print ZIP "$file\n";
+        }
+        close(ZIP);
     }
-    close(ZIP);
 
     print "ZIP: updating $common_zip_file\n" if ( @common_zip_list );
     # zip content has to be relative to $dest
     chdir($common_dest);
-    open(ZIP, "| $zipexe -q -o -u -@ $common_zip_file");
-    foreach $file (@common_zip_list) {
-        print "ZIP: adding $file to $common_zip_file\n" if $is_debug;
-        print ZIP "$file\n";
+    if ( $opt_delete ) {
+        open(ZIP, "| $zipexe -q -d -@ $common_zip_file");
+        foreach $file (@common_zip_list) {
+            print "ZIP: removing $file from $common_zip_file\n" if $is_debug;
+            print ZIP "$file\n";
+        }
+        close(ZIP);
+    } else {
+        open(ZIP, "| $zipexe -q -o -u -@ $common_zip_file");
+        foreach $file (@common_zip_list) {
+            print "ZIP: adding $file to $common_zip_file\n" if $is_debug;
+            print ZIP "$file\n";
+        }
+        close(ZIP);
     }
-    close(ZIP);
 }
 
 sub print_error

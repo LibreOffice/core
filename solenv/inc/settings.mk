@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.128 $
+#   $Revision: 1.129 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-10 17:02:03 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -179,7 +179,7 @@ CDEFSDBGUTIL=
 CDEFSOPT=
 HDEFS=
 
-CC=
+#CC=
 .IF "$(add_cflags)"!=""
 ENVCFLAGS+=$(add_cflags)
 .ENDIF
@@ -213,7 +213,7 @@ PCHSLOFLAGSU=
 
 CFLAGSINCXX=
 
-LINK=
+#LINK=
 LINKFLAGS=
 LINKFLAGSAPPGUI=
 LINKFLAGSSHLGUI=
@@ -278,7 +278,7 @@ AS=
 BC=
 COBOL=
 CPP=
-CXX=
+#CXX=
 FOR=
 PASCAL=
 
@@ -425,7 +425,7 @@ common_build*=$(COMMON_BUILD)
 use_shl_versions*=$(USE_SHL_VERSIONS)
 .ENDIF
 
-# --- env flags nicht case sensitiv --------------------------------
+# --- env flags not case sensitive --------------------------------
 
 .IF "$(envcflags)"!=""
 ENVCFLAGS*=$(envcflags)
@@ -498,6 +498,7 @@ product!=demo
 product!=compact
 .ENDIF
 .ELSE
+optimize!=true
 dbgutil!=true
 .ENDIF
 
@@ -732,8 +733,6 @@ SLB=$(OUT)$/slb
 # wir haben ein ucr verzeichnis
 UCR=$(OUT)$/ucr
 
-SOLARIDLDIR=$(SOLARVERSION)$/$(INPATH)$/idl$(EXT_UPDMINOR)
-
 # $(L) nur noch pfad ins solver\upd\...\lib
 #L:={$(LB);$(SLB);$(ILIB)}
 L=$(SOLARLIBDIR)
@@ -915,6 +914,12 @@ INCCOMX=$(LDINC)$/comp
 
 # damit gezielt Abhaengigkeiten auf s: angegeben werden koennen
 
+.IF "$(common_build)"!=""
+SOLARIDLDIR=$(SOLARVERSION)$/common$(PROEXT)$/idl$(EXT_UPDMINOR)
+.ELSE
+SOLARIDLDIR=$(SOLARVERSION)$/$(INPATH)$/idl$(EXT_UPDMINOR)
+.ENDIF
+
 .IF "$(UPDMINOR)" != ""
 EXT_UPDMINOR=.$(UPDMINOR)
 .ELSE
@@ -923,7 +928,6 @@ EXT_UPDMINOR=
 SOLARRESDIR=$(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)
 SOLARRESXDIR=$(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)
 SOLARLIBDIR=$(SOLARVERSION)$/$(INPATH)$/lib$(EXT_UPDMINOR)
-SOLARIDLDIR=$(SOLARVERSION)$/$(INPATH)$/idl$(EXT_UPDMINOR)
 SOLARJAVADIR=$(SOLARVERSION)$/$(INPATH)$/java$(EXT_UPDMINOR)
 SOLARINCDIR=$(SOLARVERSION)$/$(INPATH)$/inc$(EXT_UPDMINOR)
 SOLARINCXDIR=$(SOLARVERSION)$/$(INPATH)$/inc$(EXT_UPDMINOR)
@@ -938,7 +942,12 @@ SOLARUCRDIR=$(SOLARVERSION)$/$(INPATH)$/ucr$(EXT_UPDMINOR)
 SOLARPARDIR=$(SOLARVERSION)$/$(INPATH)$/par$(EXT_UPDMINOR)
 SOLARXMLDIR=$(SOLARVERSION)$/$(INPATH)$/xml$(EXT_UPDMINOR)
 SOLARDOCDIR=$(SOLARVERSION)$/$(INPATH)$/doc$(EXT_UPDMINOR)
+SOLARPCKDIR=$(SOLARVERSION)$/$(INPATH)$/pck$(EXT_UPDMINOR)
 SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
+.IF "$(common_build)"==""
+SOLARCOMMONBINDIR=$(SOLARBINDIR)
+.ENDIF
+
 
 # Full-Debug Pfade
 .IF "$(debug)" != ""
@@ -983,7 +992,6 @@ LIB:=$(LB);$(SLB);$(ILIB)
 CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
 
-#.IF "$(BUILD_SOSL)"!=""
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 DATESTRING:=$(shell date +%d%m%Y)
 .ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
@@ -991,7 +999,6 @@ DATESTRING:=$(shell date +%d%m%Y)
 DATESTRING:=$(shell +echo %@IF[%@LEN[%_DAY%]==1,0%_DAY%,%_DAY%]%@IF[%@LEN[%_MONTH%]==1,0%_MONTH%,%_MONTH%]%_YEAR%)
 .ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 SCPDEFS+=-DSCP_DATESTRING=$(DATESTRING)
-#.ENDIF			# "$(BUILD_SOSL)"!=""
 
 
 .IF "$(UDK_MAJOR)"!=""
@@ -1066,8 +1073,8 @@ CDEFSDBGUTIL=-DDBG_UTIL
 CDEFSOPT=-DOPTIMIZE
 HDEFS=-D:$(GUI) -D:$(COM)
 
-MKDEPFLAGS=-D_SOLAR__PRIVATE -I$(INCDEPN:s/ / -I/) $(INCPRE:^"-I":s/-I-I/-I/)
-MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
+MKDEPFLAGS=-D_SOLAR__PRIVATE -I$(INCDEPN:s/ / -I/)
+MKDEPALLINC=$(SOLARINC:s/-I/ -I/) $(INCPRE:^"-I":s/-I-I/-I/)
 MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
 MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
 MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) -I$(SOLARVERSION)$/$(INPATH)$/inc

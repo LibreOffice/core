@@ -26,7 +26,7 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB1NAME)"!=""
 
@@ -55,7 +55,7 @@ $(DEF1TARGETN) .PHONY : \
         $(DEF1DEPN) \
         $(DEF1EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(BUILD_DRIVE1)"=="O"
@@ -175,19 +175,10 @@ $(DEF1TARGETN) .PHONY : \
 $(DEF1TARGETN): \
         $(DEF1DEPN) \
         $(DEF1EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF1TARGETN): \
-        $(DEF1DEPN) \
-        $(DEF1EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF1TARGETN)"!=""
 
@@ -221,7 +212,7 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB2NAME)"!=""
 
@@ -250,7 +241,7 @@ $(DEF2TARGETN) .PHONY : \
         $(DEF2DEPN) \
         $(DEF2EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(BUILD_DRIVE2)"=="O"
@@ -370,19 +361,10 @@ $(DEF2TARGETN) .PHONY : \
 $(DEF2TARGETN): \
         $(DEF2DEPN) \
         $(DEF2EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF2TARGETN): \
-        $(DEF2DEPN) \
-        $(DEF2EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF2TARGETN)"!=""
 
@@ -416,7 +398,7 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB3NAME)"!=""
 
@@ -445,7 +427,7 @@ $(DEF3TARGETN) .PHONY : \
         $(DEF3DEPN) \
         $(DEF3EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(BUILD_DRIVE3)"=="O"
@@ -565,19 +547,10 @@ $(DEF3TARGETN) .PHONY : \
 $(DEF3TARGETN): \
         $(DEF3DEPN) \
         $(DEF3EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF3TARGETN): \
-        $(DEF3DEPN) \
-        $(DEF3EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF3TARGETN)"!=""
 
@@ -611,7 +584,7 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB4NAME)"!=""
 
@@ -640,7 +613,7 @@ $(DEF4TARGETN) .PHONY : \
         $(DEF4DEPN) \
         $(DEF4EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(BUILD_DRIVE4)"=="O"
@@ -760,19 +733,10 @@ $(DEF4TARGETN) .PHONY : \
 $(DEF4TARGETN): \
         $(DEF4DEPN) \
         $(DEF4EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF4TARGETN): \
-        $(DEF4DEPN) \
-        $(DEF4EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF4TARGETN)"!=""
 
@@ -806,7 +770,7 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB5NAME)"!=""
 
@@ -835,7 +799,7 @@ $(DEF5TARGETN) .PHONY : \
         $(DEF5DEPN) \
         $(DEF5EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(BUILD_DRIVE5)"=="O"
@@ -955,19 +919,10 @@ $(DEF5TARGETN) .PHONY : \
 $(DEF5TARGETN): \
         $(DEF5DEPN) \
         $(DEF5EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF5TARGETN): \
-        $(DEF5DEPN) \
-        $(DEF5EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF5TARGETN)"!=""
 
@@ -1001,7 +956,7 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB6NAME)"!=""
 
@@ -1030,7 +985,7 @@ $(DEF6TARGETN) .PHONY : \
         $(DEF6DEPN) \
         $(DEF6EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(BUILD_DRIVE6)"=="O"
@@ -1150,19 +1105,10 @@ $(DEF6TARGETN) .PHONY : \
 $(DEF6TARGETN): \
         $(DEF6DEPN) \
         $(DEF6EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF6TARGETN): \
-        $(DEF6DEPN) \
-        $(DEF6EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF6TARGETN)"!=""
 
@@ -1196,7 +1142,7 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB7NAME)"!=""
 
@@ -1225,7 +1171,7 @@ $(DEF7TARGETN) .PHONY : \
         $(DEF7DEPN) \
         $(DEF7EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(BUILD_DRIVE7)"=="O"
@@ -1345,19 +1291,10 @@ $(DEF7TARGETN) .PHONY : \
 $(DEF7TARGETN): \
         $(DEF7DEPN) \
         $(DEF7EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF7TARGETN): \
-        $(DEF7DEPN) \
-        $(DEF7EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF7TARGETN)"!=""
 
@@ -1391,7 +1328,7 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB8NAME)"!=""
 
@@ -1420,7 +1357,7 @@ $(DEF8TARGETN) .PHONY : \
         $(DEF8DEPN) \
         $(DEF8EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(BUILD_DRIVE8)"=="O"
@@ -1540,19 +1477,10 @@ $(DEF8TARGETN) .PHONY : \
 $(DEF8TARGETN): \
         $(DEF8DEPN) \
         $(DEF8EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF8TARGETN): \
-        $(DEF8DEPN) \
-        $(DEF8EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF8TARGETN)"!=""
 
@@ -1586,7 +1514,7 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB9NAME)"!=""
 
@@ -1615,7 +1543,7 @@ $(DEF9TARGETN) .PHONY : \
         $(DEF9DEPN) \
         $(DEF9EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(BUILD_DRIVE9)"=="O"
@@ -1735,19 +1663,10 @@ $(DEF9TARGETN) .PHONY : \
 $(DEF9TARGETN): \
         $(DEF9DEPN) \
         $(DEF9EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF9TARGETN): \
-        $(DEF9DEPN) \
-        $(DEF9EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF9TARGETN)"!=""
 
@@ -1781,7 +1700,7 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB10NAME)"!=""
 
@@ -1810,7 +1729,7 @@ $(DEF10TARGETN) .PHONY : \
         $(DEF10DEPN) \
         $(DEF10EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(BUILD_DRIVE10)"=="O"
@@ -1930,19 +1849,10 @@ $(DEF10TARGETN) .PHONY : \
 $(DEF10TARGETN): \
         $(DEF10DEPN) \
         $(DEF10EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF10TARGETN): \
-        $(DEF10DEPN) \
-        $(DEF10EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF10TARGETN)"!=""
 

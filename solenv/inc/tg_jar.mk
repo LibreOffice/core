@@ -10,27 +10,27 @@ JARCOMPRESS_FLAG=0
 XSTARJARPATH=$(strip $(STARJARPATH))
 .ENDIF			# "$(use_starjar)"!=""
 $(JARTARGETN) : $(JARMANIFEST)
-.ENDIF			# "$(NEW_JAR_PACK)"==""
+.ENDIF			# "$(NEW_JAR_PACK)"!=""
 
 .IF "$(NEW_JAR_PACK)"!=""
 .IF "$(JARMANIFEST)"!=""
 
 .IF "$(CUSTOMMANIFESTFILE)"!=""
 
-CUSTOMMANIFESTFILEDEP:=..$/misc$/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
+CUSTOMMANIFESTFILEDEP:=$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
 
-..$/misc$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(CUSTOMMANIFESTFILE)
+$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(CUSTOMMANIFESTFILE)
     +-$(RM) $@
 #>& $(NULLDEV)
     +$(COPY) $< $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 
 .IF "$(USE_EXTENDED_MANIFESTFILE)"!=""
-EXTENDEDMANIFESTFILE=..$/misc$/$(JARTARGET:b)
+EXTENDEDMANIFESTFILE=$(MISC)$/$(JARTARGET:b)
 .IF "$(JARMANIFEST)"!=""
 $(JARMANIFEST) : $(EXTENDEDMANIFESTFILE)
 .ENDIF			# "$(JARMANIFEST)"!=""
-..$/misc$/$(JARTARGET:b) : $(SOLARINCDIR)$/$(UPD)minor.mk
+$(MISC)$/$(JARTARGET:b) : $(SOLARINCDIR)$/$(UPD)minor.mk
     @+echo Specification-Title: $(SPECTITLE) > $@
     @+echo Specification-Version: $(VERSION) >> $@
     @+echo Specification-Vendor: $(VENDOR) >> $@
@@ -45,15 +45,15 @@ $(JARMANIFEST) : $(EXTENDEDMANIFESTFILE)
 
 .IF "$(EXTENDEDMANIFESTFILE)"!=""
 
-EXTENDEDMANIFESTFILEDEP:=..$/misc$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f)
+EXTENDEDMANIFESTFILEDEP:=$(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f)
 
-..$/misc$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) : $(EXTENDEDMANIFESTFILE)
+$(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) : $(EXTENDEDMANIFESTFILE)
     +-$(RM) $@
     +$(COPY) $(EXTENDEDMANIFESTFILE) $@
 .ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
 
 $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP) $(EXTENDEDMANIFESTFILEDEP)
-    +-$(MKDIR) .$/META-INF >& $(NULLDEV)
+    +-$(MKDIR) $(@:d) >& $(NULLDEV)
     +-$(RM) $@ >& $(NULLDEV)
     +echo Manifest-Version: 1.0 > $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
@@ -62,99 +62,34 @@ $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP) $(EXTENDEDMANIFESTFILEDEP)
     +echo Solar-Version: $(RSCREVISION) >> $@
 .ENDIF			# "$(GUI)"=="UNX"" || "$(USE_SHELL)"!="4nt"
 .IF "$(EXTENDEDMANIFESTFILE)"!=""
-    +$(TYPE) ..$/misc$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) >> $@
+    +$(TYPE) $(MISC)$/$(TARGET)_$(EXTENDEDMANIFESTFILE:f) >> $@
 .ENDIF			# "$(EXTENDEDMANIFESTFILE)"!=""
 .IF "$(CUSTOMMANIFESTFILE)"!=""
-    +$(TYPE) ..$/misc$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
+    +$(TYPE) $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 .ENDIF			# "$(JARMANIFEST)"!=""
-.ENDIF			# "$(NEW_JAR_PACK)"==""
-
-#
-# old jar dependencies...
-#
-.IF "$(NOJARDEP)$(NEW_JAR_PACK)"==""
-
-..$/misc$/$(JARTARGETDEP) $(MISC)$/$(JARTARGETDEP) .SETDIR=$(CLASSDIR) : # $(JARTARGETN)
-    @+echo -------------------------
-    @+echo Making $@
-    +-$(RM) ..$/misc$/$(JARTARGETDEP) >& $(NULLDEV)
-    +-$(RM) ..$/misc$/$(JARTARGETDEP).tmp >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    +echo " $(JARTARGET) : \" > ..$/misc$/$(JARTARGETDEP)
-    @+cat $(mktmp $(foreach,i,$(JARCLASSDIRS) $(shell find $i -type f -name "*.class" \! -name '*$$*' ))) >> ..$/misc$/$(JARTARGETDEP)
-.ENDIF
-.IF "$(GUI)"=="OS2"
-#	@+echo $(foreach,i,$(JARCLASSDIRS) $(shell $(FIND) $i -type f -name "*.class" ! -name "*\$$*" -print >> ..$/misc$/$(JARTARGETDEP) )) >& $(NULLDEV)
-    +echo  $(JARTARGETN) : \> ..$/misc$/$(JARTARGETDEP)
-    +echo $(foreach,i,$(JARCLASSDIRS) $(shell $(FIND) $i -type f -name "*.class" ! -name "*$$*" -print >> ..$/misc$/$(JARTARGETDEP).tmp )) >& $(NULLDEV)
-    +type ..$/misc$/$(JARTARGETDEP).tmp | sed "s#\.class#\.class \\#" >> ..$/misc$/$(JARTARGETDEP)
-    +$(ECHONL) >> ..$/misc$/$(JARTARGETDEP)
-    +-$(RM) ..$/misc$/$(JARTARGETDEP).tmp >& $(NULLDEV)
-.ENDIF
-.IF "$(GUI)"=="WNT"
-    +echo  $(JARTARGETN) : \> ..$/misc$/$(JARTARGETDEP)
-    +echo $(foreach,i,$(JARCLASSDIRS) $(shell $(FIND) $i -type f -name "*.class" ! -name "*$$*" -print >> ..$/misc$/$(JARTARGETDEP).tmp )) >& $(NULLDEV)
-    +type ..$/misc$/$(JARTARGETDEP).tmp | sed "s#\.class#\.class \\#" >> ..$/misc$/$(JARTARGETDEP)
-    +$(ECHONL) >> ..$/misc$/$(JARTARGETDEP)
-    +-$(RM) ..$/misc$/$(JARTARGETDEP).tmp >& $(NULLDEV)
-.ENDIF
-
-.IF "$(SOLAR_JAVA)"!=""
-.IF "$(depend)"==""
-.INCLUDE : $(MISC)$/$(JARTARGETN).dep
-.ENDIF
-
-# jardepfile=$(shell -cat -s $(MISC)$/$(JARTARGETN).dep )
-.ENDIF
-.ENDIF			# "$(NOJARDEP)$(NEW_JAR_PACK)"==""
+.ENDIF			# "$(NEW_JAR_PACK)"!=""
 
 #
 # build jar 
 #
 .IF "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
-$(JARTARGETN) .SETDIR=$(CLASSDIR) .PHONY :
+$(JARTARGETN) .PHONY :
 #  $(JARMANIFEST)
 .ELSE			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .DIRCACHE = no
-$(JARTARGETN) .SETDIR=$(CLASSDIR) :
+$(JARTARGETN) :
 #$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell -cat -s $(MISC)$/$(JARTARGETN).dep )
 .ENDIF			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
-.IF "$(UPDATER)"!=""
-.IF "$(GUI)"=="WNT"
-#	+tolodir .
-.IF "$(JARIMGDIRS)"!=""
-#	+toloimg $(JARIMGDIRS)
-.ENDIF
-.ENDIF
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @+-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
-.ENDIF
-.IF "$(NEW_JAR_PACK)"==""
-    +-$(RM) $@
-.IF "$(use_starjar)"!=""
-    @+-$(COPY) ..$/..$/util$/$(JARFLT) $(JARFLT) >& $(NULLDEV)
-.IF "$(JARMANIFEST)"!=""
-    $(STARJAR) $@ $(JARMANIFEST) $(JARFLT) $(PATH_SEPERATOR) $(STARJARPATH)  
-.ELSE
-    $(STARJAR) $@ - $(JARFLT) $(PATH_SEPERATOR) $(STARJARPATH)  
-.ENDIF
-.ELSE			# "$(use_starjar)"!=""
-.IF "$(JARMANIFEST)"!=""
-    jar -cvmf$(JARCOMPRESS_FLAG) $(JARMANIFEST) $@ $(JARCLASSDIRS)
-.ELSE
-    jar -cvf$(JARCOMPRESS_FLAG) $@ $(JARCLASSDIRS)
-.ENDIF
-.ENDIF			# "$(use_starjar)"!=""
-.ELSE			# "$(NEW_JAR_PACK)"==""
 .IF "$(use_starjar)"!=""
     +-$(RM) $@
     @+-$(COPY) $(DMAKE_WORK_DIR)$/$(JARFLT) $(TARGET)_$(JARFLT) >& $(NULLDEV)
-    $(STARJAR) $@ $(JARMANIFEST) $(TARGET)_$(JARFLT) + $(XSTARJARPATH:s/ /+/)
+    cd $(CLASSDIR) && $(STARJAR) $@ $(JARMANIFEST) $(TARGET)_$(JARFLT) + $(XSTARJARPATH:s/ /+/)
 .ELSE			# "$(use_starjar)"!=""
-    zip -u -r $@ $(JARMANIFEST) $(subst,\,/ $(JARCLASSDIRS))
+    +cd $(CLASSDIR) && zip -u -r $(@:f) $(subst,$(CLASSDIR)$/, $(JARMANIFEST)) $(subst,\,/ $(JARCLASSDIRS))
 .ENDIF			# "$(use_starjar)"!=""
-.ENDIF			# "$(NEW_JAR_PACK)"==""
 .ENDIF
 

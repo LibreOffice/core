@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlnxi.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-09 10:51:49 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,8 +79,8 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF                                        
 
-CC=g++
-cc=gcc
+CXX*=g++
+CC*=gcc
 .IF "$(GLIBC)"=="2"
 CFLAGS=-w -c -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC)
 .ELSE

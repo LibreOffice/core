@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preinclude.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hjs $ $Date: 2001-12-11 19:29:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,4 +68,5 @@
 #include <stdio.h>
 #include <string.h>
 #include <wchar.h>
-
+#include <features.h>
+#include <assert.h>

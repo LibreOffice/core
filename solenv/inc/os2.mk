@@ -2,9 +2,9 @@
 #
 #   $RCSfile: os2.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-02 13:18:46 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ JAVADEF=-DSOLAR_JAVA
 ASM=tasm
 AFLAGS=
 
+CXX=bcc
 CC=bcc
 CFLAGS=-c -3 -a1 -X -d -wbbf -weas -wucp -w-hid -w-par -I. $(MINUS_I)$(INCLUDE)
 CFLAGSCXX=-Pcxx -RT- -x- -V
@@ -148,6 +149,7 @@ DLLPOSTFIX=bo
 ASM=tasm
 AFLAGS=/ml /oi
 
+CXX=icc
 CC=icc
 .IF "$(COMEX)"=="3"
 CFLAGS=/C+ /Q+ /Gf+ /Sp1 /G4 /Se /Gs+ /Gt+ /Gd+ /J- /W2 /D__EXTENDED__ /Si+ /Xi+ $(MINUS_I)$(INCLUDE)  /Wvft-
@@ -283,6 +285,7 @@ ASM=wasm
 AFLAGS=/ml /4pr
 
 CC=wcl386
+CXX=wcl386
 .IF "$(e2p)" != ""
 CFLAGS=-c -W3 -Zp4 -Zld $(MINUS_I)$(INCLUDE) -bt=os2 -zq  -zm -ep -ee
 .ELSE

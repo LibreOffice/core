@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: svesik $ $Date: 2002-08-29 14:12:44 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,11 +89,11 @@ CFLAGSNUMVERSION_CMD= -V |& nawk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 
 # that's the version known by the specific
 # compiler
-CCVER:=$(shell -$(CC) $(CFLAGSVERSION_CMD))
+CCVER:=$(shell -$(CXX) $(CFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
 # each point seperated token blown up to 4 digits
-CCNUMVER:=$(shell -$(CC) $(CFLAGSNUMVERSION_CMD))
+CCNUMVER:=$(shell -$(CXX) $(CFLAGSNUMVERSION_CMD))
 
 .IF "$(COM)"=="MSC"
 .IF "$(CCNUMVER)">="001200000000"
@@ -152,6 +152,21 @@ LIBSTDCPP3="5.0.0"
 SHORTSTDCPP3="5"
 .ENDIF
 
+.IF "$(CCNUMVER)"=="000300020001"
+LIBSTDCPP3="5.0.1"
+SHORTSTDCPP3="5"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300020002"
+LIBSTDCPP3="5.0.2"
+SHORTSTDCPP3="5"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300020003"
+LIBSTDCPP3="5.0.3"
+SHORTSTDCPP3="3"
+.ENDIF
+
 .ENDIF
 .ENDIF
 
@@ -174,8 +189,8 @@ compiler_version_error:
     @+echo  Please extend tg_compv.mk in 
     @+echo  "solenv/inc".
     @+echo ++++++++++++++++++++++++++++++++++++
-    @+echo "$(CC) $(CFLAGSVERSION)" returns
-    @+$(CC) $(CFLAGSVERSION)
+    @+echo "$(CXX) $(CFLAGSVERSION)" returns
+    @+$(CXX) $(CFLAGSVERSION)
     @+echo ++++++++++++++++++++++++++++++++++++
     @+exit 255
 

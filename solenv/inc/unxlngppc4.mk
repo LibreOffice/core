@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2002-10-02 13:11:54 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,9 +85,9 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF 
 
 # name of C++ Compiler
-CC=g++
+CXX*=g++
 # name of C Compiler
-cc=gcc
+CC*=gcc
 
 # flags for C and C++ Compiler
 # do not use standard header search paths

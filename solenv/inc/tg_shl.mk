@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: hro $ $Date: 2002-12-10 16:27:58 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -319,9 +319,9 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
-            gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
@@ -353,31 +353,6 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
-.IF "$(BOTH)"!=""
-.IF "$(PRODUCT)"=="full"
-.IF "$(UPDATER)"=="YES"
-#
-#	product mit debug gelinkt
-#
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
-        $(LINKFLAGSSHL) \
-        $(SHL$(TNR)STACK) $(SHL$(TNR)BASEX)	\
-        /DEBUG /PDB:NONE \
-        -out:$(BIN)$/_$(SHL$(TNR)TARGET).dll \
-        -map:$(MISC)$/_$(@:b).map \
-        -def:$(SHL$(TNR)DEF) \
-        $(USE_$(TNR)IMPLIB) \
-        $(STDOBJ) \
-        $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) \
-        $(SHL$(TNR)LIBS) \
-        $(SHL$(TNR)STDLIBS) \
-        $(STDSHL) $(STDSHL$(TNR)) \
-        $(SHL$(TNR)LINKRES) \
-    )
-.ENDIF			# "$(UPDATER)"=="YES"
-.ENDIF			# "$(PRODUCT)"=="full"
-.ENDIF			# "$(BOTH)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
@@ -414,28 +389,6 @@ $(SHL$(TNR)TARGETN) : \
         $(STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     )
-.IF "$(BOTH)"!=""
-.IF "$(PRODUCT)"=="full"
-.IF "$(UPDATER)"=="YES"
-#
-#	product mit debug gelinkt
-#
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
-        $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
-        /DEBUG /PDB:NONE \
-        $(SHL$(TNR)STACK) -out:$(BIN)$/_$(SHL$(TNR)TARGET).dll	\
-        -map:$(MISC)$/_$(@:B).map				\
-        $(LB)$/$(SHL$(TNR)IMPLIB).exp				\
-        $(STDOBJ)							\
-        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)    \
-        $(SHL$(TNR)LIBS)                         \
-        $(SHL$(TNR)STDLIBS)                      \
-        $(STDSHL) $(STDSHL$(TNR))                           \
-        $(SHL$(TNR)LINKRES) \
-    )
-.ENDIF			# "$(UPDATER)"=="YES"
-.ENDIF			# "$(PRODUCT)"=="full"
-.ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
         +-$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
@@ -460,22 +413,22 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(UPDATER)"=="YES"
 .IF "$(OS)"=="SOLARIS"
 .IF "$(COM)"=="GCC"
-        $(cc) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE		
-        $(cc) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF		
 .ENDIF
 .IF "$(OS)"=="MACOSX"
-        $(cc) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(cc) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF
 .IF "$(OS)"=="IRIX"
-        $(cc) -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+        $(CC) -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
         @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
@@ -516,9 +469,6 @@ $(SHL$(TNR)TARGETN) : \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
     +-$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)

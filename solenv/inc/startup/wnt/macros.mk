@@ -42,7 +42,7 @@ V *:= 		# RCS suffix
 #   DIVFILE          *=  $(TMPFILE:s,/,\)
    RM               *=  del
 #   RM               *=  +-del
-   RMFLAGS          *= /y /E
+   RMFLAGS          *= /y
    MV	            *=  rename
    __.DIVSEP-sh-yes *:= \\
    __.DIVSEP-sh-no  *:= \\
@@ -66,6 +66,10 @@ V *:= 		# RCS suffix
    __.DIVSEP-sh-yes *:= \\\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR :=/
+# See IZ 11093 why PWD has to be overwritten
+   PWD:=$(shell +pwd)
+.EXPORT : PWD
+
 .ENDIF
 
 

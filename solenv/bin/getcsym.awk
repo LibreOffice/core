@@ -2,9 +2,9 @@
 #
 #   $RCSfile: getcsym.awk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2003-01-10 11:23:14 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:47:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses

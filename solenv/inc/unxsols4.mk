@@ -15,10 +15,10 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF
 
-CC=CC
-cc=cc
+CXX=CC
+CC=cc
 
-CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
+CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE) -g0
 CFLAGSCC=-xCC
 CFLAGSCXX=-features=no%altspell,no%localfor -library=no%Cstd
 
@@ -33,7 +33,7 @@ CFLAGSSLOGUIMT=-KPIC
 CFLAGSSLOCUIMT=-KPIC
 CFLAGSPROF=-xpg
 CFLAGSDEBUG=-g
-CFLAGSDBGUTIL=-norunpath 
+CFLAGSDBGUTIL=
 CFLAGSOPT=-xarch=v8 -xO3 -xspace
 CFLAGSNOOPT=
 CFLAGSOUTOBJ=-o
@@ -54,7 +54,8 @@ LINK=CC
 
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
 # -norunpath prevents the compiler from recording his own libs in the runpath
-LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=no%Cstd
+# LINKFLAGSRUNPATH*=-R\''$$ORIGIN'\'
+LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp $(LINKFLAGSRUNPATH) -norunpath -library=no%Cstd
 
 # -z text force fatal error if non PIC code is linked into shared library. Such code 
 #    would be expensive on startup
@@ -104,6 +105,8 @@ STDSHLCUIMT=-Bdynamic -lpthread -lCrun -lm -lc
 
 STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
+
+LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
 
 LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro
 LIBSTLPORTST=$(STATIC) -lstlport_sunpro $(DYNAMIC)

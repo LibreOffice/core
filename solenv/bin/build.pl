@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-13 13:14:21 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:47:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,31 +74,41 @@ use File::Path;
 #use Thread 'yield';    # Should be uncommented if you have Thread.pm (untested)
 
 if (defined $ENV{CWS_WORK_STAMP}) {
-    use lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
-    use Cws;
-    use CvsModule;
-    use GenInfoParser;
+    require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
+    require Cws; import Cws;
+    require CvsModule; import CvsModule;
+    require GenInfoParser; import GenInfoParser;
 };
 
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.79 $ ';
+$id_str = ' $Revision: 1.80 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
 print "$script_name -- version: $script_rev\n";
-
-if ($ENV{GUI} eq 'UNX') {
-    use Cwd 'chdir';
-};
 
 #########################
 #                       #
 #   Globale Variablen   #
 #                       #
 #########################
+
+$perl = "";
+$remove_commando = "";
+if ( $^O eq 'MSWin32' ) {
+    $perl = "$ENV{COMSPEC} -c perl5";
+    $remove_commando = "rmdir /S /Q";
+    $nul = '> NULL';
+} else {
+    use Cwd 'chdir';
+    $perl = 'perl';
+    $remove_commando = 'rm -rf';
+    $nul = '> /dev/null';
+};
+
 $QuantityToBuild = 0;
 # delete $pid when not needed
 %projects_deps_hash = ();   # hash of undependent projects,
@@ -133,9 +143,28 @@ $child = 0;
 %processes_hash = ();
 %module_annonced = ();
 $locked = 0; # lock for signal handler
+$prepare = ''; # prepare for following incompartible build
+%incompartibles = ();
+%force_deliver = ();
 
 &get_options;
+%deliver_env = ();
+if ($prepare) {
+    %platforms = &get_platforms;
+    @modules_built = ();
+
+    $deliver_env{'BUILD_SOSL'}++;
+    $deliver_env{'COMMON_OUTDIR'}++;
+    $deliver_env{'DLLSUFFIX'}++;
+    $deliver_env{'GUI'}++;
+    $deliver_env{'INPATH'}++;
+    $deliver_env{'OFFENV_PATH'}++;
+    $deliver_env{'OUTPATH'}++;
+    $deliver_env{'L10N_framework'}++;
+};
+
 $StandDir = &get_stand_dir();
+#&check_dir;
 &provide_consistency if (defined $ENV{CWS_WORK_STAMP});
 
 $deliver_commando = $ENV{DELIVER};
@@ -166,6 +195,7 @@ if ($cmd_file) {
 print $new_line;
 
 &BuildAll();
+&cancel_build if (scalar keys %broken_build);
 @TotenEltern = keys %DeadParents;
 if ($#TotenEltern != -1) {
     my ($DeadPrj);
@@ -208,8 +238,10 @@ sub GetParentDeps {
     while ($Prj = pop(@UnresolvedParents)) {
         $prj_link = $Prj . '.lnk';
         if (!-d $StandDir.$Prj) {
-            if (-d $StandDir.$prj_link) {
+            if (-e $StandDir.$prj_link) {
                 $Prj = $prj_link;
+            } elsif (-l $StandDir.$prj_link) {
+                &print_error("There is no target for link $StandDir$prj_link");
             } elsif (defined $ENV{CWS_WORK_STAMP}) {
                 &checkout_module($Prj, 'image');
             };
@@ -243,46 +275,33 @@ sub BuildAll {
     if ($BuildAllParents) {
         my ($Prj, $PrjDir, $orig_prj);
         &GetParentDeps( $CurrentPrj, \%ParentDepsHash);
-        if ($build_from) {
-            &remove_extra_prjs(\%ParentDepsHash);
+        &prepare_build_from(\%ParentDepsHash) if ($build_from);
+        &prepare_incompartible_build(\%ParentDepsHash) if ($incompartible);
+        if ($build_from_opt || $build_since) {
+            &prepare_build_from_opt(\%ParentDepsHash);
         };
         if ($QuantityToBuild) {
             &build_multiprocessing;
             return;
         };
         while ($Prj = &PickPrjToBuild(\%ParentDepsHash)) {
-            $orig_prj = '';
-            $orig_prj = $` if ($Prj =~ /\.lnk$/o);
-            if ($build_from_opt) {
-                if (($build_from_opt ne $Prj) &&
-                    ($build_from_opt ne $orig_prj)) {
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
-                    next;
-                } else {
-                    $build_from_opt = '';
-                };
-            };
-            if ($build_since) {
-                if (($build_since ne $Prj) &&
-                    ($build_since ne $orig_prj)) {
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
-                } else {
-                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
-                    $build_since = '';
-                };
-                next;
-            };
-            &ensure_clear_module(\$Prj) if ($incompartible);
             print $new_line;
             my $module_type = &module_classify($Prj);
 
             &print_annonce($Prj) if ($module_type eq 'lnk');
             &print_annonce($Prj . '.incomp') if ($module_type eq 'img');
             if ($module_type eq 'mod') {
+                if (scalar keys %broken_build) {
+                    print $echo.    "Skipping project $Prj because of error(s)\n";
+                    &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                    next;
+                };
                 &print_annonce($Prj);
                 $PrjDir = &CorrectPath($StandDir.$Prj);
+                &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP});
                  &get_deps_hash($PrjDir, \%LocalDepsHash);
                  &BuildDependent(\%LocalDepsHash);
+                my $deliver_commando = &get_deliver_commando($Prj);
                  if ($cmd_file) {
                      print "$deliver_commando\n";
                  } else {
@@ -303,10 +322,26 @@ sub BuildAll {
 # Start build given project
 #
 sub dmake_dir {
-    my ($folder_nick, $BuildDir, $error_code);
+    my ($folder_nick, $BuildDir, $new_BuildDir, $OldBuildDir, $error_code);
     $folder_nick = shift;
     $BuildDir = &CorrectPath($StandDir . $PathHash{$folder_nick});
-    &print_error("\n$BuildDir not found!!\n") if (!(-d $BuildDir));
+    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP})) {
+        $OldBuildDir = $BuildDir;
+        my $modified_path = $PathHash{$folder_nick};
+        $modified_path =~ s/^([^\\\/]+)/$1\.lnk/;
+        $BuildDir = &CorrectPath($StandDir . $modified_path);
+    };
+    &print_error("\n$OldBuildDir ($BuildDir) not found!!\n") if (!(-d $BuildDir));
+    if (!(-d $BuildDir)) {
+        $new_BuildDir = $BuildDir;
+        $new_BuildDir =~ s/_simple//g;
+        if ((-d $new_BuildDir)) {
+            print("\nTrying $new_BuildDir, $BuildDir not found!!\n");
+            $BuildDir = $new_BuildDir;
+        } else {
+            &print_error("\n$BuildDir not found!!\n");
+        }
+    }
     if ($cmd_file) {
         print "cd $BuildDir\n";
         print $check_error_string;
@@ -320,9 +355,15 @@ sub dmake_dir {
     if (!$cmd_file && !$show) {
         chdir $BuildDir;
         cwd();
-        $error_code = system ("$dmake");
-        if ($error_code && ($error_code != -1) && (!$child)) {
-            &print_error("Error $? occurred while making $BuildDir");
+        $error_code = system ("$dmake") if (!scalar keys %broken_build);
+        if ($error_code && ($error_code != -1)) {
+            if (!$child) {
+                if ($incompartible) {
+                    $broken_build{$error_code} = &CorrectPath($StandDir . $PathHash{$folder_nick});
+                } else {
+                    &print_error("Error $? occurred while making $BuildDir");
+                };
+            };
         };
     };
     if ($child) {
@@ -465,7 +506,7 @@ sub mark_platform {
 #
 sub CorrectPath {
     $_ = shift;
-    if (($ENV{GUI} ne 'UNX') && $cmd_file) {
+    if ( ($^O eq 'MSWin32') && (!defined $ENV{SHELL})) {
         s/\//\\/g;
     } else {;
         s/\\/\//g;
@@ -491,11 +532,10 @@ sub get_commands {
     my $arg = '';
     # Setting alias for dmake
     $dmake = 'dmake';
-    &check_dmake if ($ENV{GUI} eq 'UNX');
+#   &check_dmake if ($ENV{GUI} eq 'UNX'); # doesn't working with new aliases
 
     if ($cmd_file) {
         if ($ENV{GUI} eq 'UNX') {
-            &check_dmake;
             $check_error_string = "if \"\$?\" != \"0\" exit\n";
         } else {
             $check_error_string = "if \"\%?\" != \"0\" quit\n";
@@ -539,7 +579,7 @@ sub get_stand_dir {
     do {
         $StandDir = cwd();
         if (open(BUILD_LST, 'prj/build.lst')) {
-            $StandDir =~ /(\w+$)/;
+            $StandDir =~ /([\.\w]+$)/;
             $StandDir = $`;
             $CurrentPrj = $1;
             close(BUILD_LST);
@@ -553,27 +593,13 @@ sub get_stand_dir {
 };
 
 #
-# Removes projects which it is not necessary to build
-#
-sub remove_extra_prjs {
-    my ($prj, $deps_hash);
-    $deps_hash = shift;
-    my %from_deps_hash = ();   # hash of dependencies of the -from project
-    &GetParentDeps( $StandDir.$build_from,\%from_deps_hash);
-    foreach $prj (keys %from_deps_hash) {
-        delete $$deps_hash{$prj};
-        &RemoveFromDependencies($prj, $deps_hash);
-    };
-};
-
-#
 # Picks project which can be build now from hash and deletes it from hash
 #
 sub PickPrjToBuild {
     my ($Prj, $DepsHash);
     $DepsHash = shift;
     $Prj = &FindIndepPrj($DepsHash);
-    delete $$DepsHash{$Prj} if (defined $$DepsHash{$Prj});
+    delete $$DepsHash{$Prj};# if (defined $$DepsHash{$Prj});
     return $Prj;
 };
 
@@ -719,7 +745,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-incomp_from prj_name|-file file_name|-PP processes|-dlv[_switch] dlvswitch] \n";
+    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-incomp_from prj_name[:startprj_name] [-prepare]|-file file_name|-PP processes|-dlv[_switch] dlvswitch] \n";
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
     print STDERR "Example:  build -from_opt sfx2\n";
@@ -727,7 +753,8 @@ sub usage {
     print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
     print STDERR "      -from       - build all projects beginning from the specified till current one\n";
     print STDERR "      -from_opt   - build all projects beginning from the specified till current one (optimized version)\n";
-    print STDERR "      -incomp_from- build all projects incompartible beginning from the specified till current one (cws version)\n";
+    print STDERR "      -prepare- clear all projects for incompartible build from prj_name till current one (cws version)\n";
+    print STDERR "      -incomp_from- build all projects incompartible from prj_name beginning from the startprj_name till current one (cws version)\n";
     print STDERR "      -since      - build all projects beginning from the specified till current one (optimized version, skips specified project)\n";
     print STDERR "      -show       - show what is going to be built\n";
     print STDERR "      -file       - generate command file file_name\n";
@@ -757,9 +784,12 @@ sub get_options {
                                 and $build_from = shift @ARGV       and next;
         $arg =~ /^-from_opt$/   and $BuildAllParents = 1
                                 and $build_from_opt = shift @ARGV   and next;
-        $arg =~ /^-incomp_from$/and $BuildAllParents = 1 and $incompartible = 1
-                                and $build_from_opt = shift @ARGV   and next;
+        if ($arg =~ /^-incomp_from$/) { $BuildAllParents = 1;
+                                    &get_incomp_projects;
+                                    next;
+        };
 
+        $arg =~ /^-prepare$/    and $prepare = 1 and next;
         $arg =~ /^-since$/      and $BuildAllParents = 1
                                 and $build_since = shift @ARGV      and next;
         $arg =~ /^--help$/      and &usage                          and exit(0);
@@ -768,17 +798,21 @@ sub get_options {
     &print_error('Switches -from and -from_opt collision') if ($build_from && $build_from_opt);
 
     &print_error('Switches -from and -since collision') if ($build_from && $build_since);
-    @ARGV = @dmake_args;
     $cmd_file = '' if ($show);
     if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
         $QuantityToBuild = 0;
         &print_error('-PP switch is disabled for windows!\n');
     };
-    if ($incompartible && (!defined $ENV{CWS_WORK_STAMP})) {
-        print "-incomp_from switch is implemented for cws only!\n";
-        print "Ignored...";
-        $incompartible = '';
+    $incompartible = scalar keys %incompartibles;
+    if ($prepare && !$incompartible) {
+        &print_error("-prepare is for use with -incomp_from switch only!\n");
     };
+#    if ($incompartible && (!defined $ENV{CWS_WORK_STAMP})) {
+#       print "-incomp_from switch is implemented for cws only!\n";
+#        print "Ignored...";
+#        $incompartible = '';
+#    };
+    @ARGV = @dmake_args;
 };
 
 #
@@ -977,7 +1011,7 @@ sub build_actual_queue {
             &BuildDependent($projects_deps_hash{$Prj});
             if ($no_projects && ($running_children{$projects_deps_hash{$Prj}} == 0)) {
                 chdir(&CorrectPath($StandDir.$Prj));
-                system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj));
+                system (&get_deliver_commando($Prj)) if (!$show && ($Prj ne $CurrentPrj));
                 delete $projects_deps_hash{$Prj};
                 &RemoveFromDependencies($Prj, \%ParentDepsHash);
                 splice (@$build_queue, $i, 1);
@@ -1000,21 +1034,17 @@ sub annonce_module {
 
 sub print_annonce {
     my $Prj = shift;
+    my $text;
     if ($Prj =~ /\.lnk$/o) {
-        print $echo.    "=============\n";
-        print $echo.    "Skipping link to $`\n";
-        print $echo.    "=============\n";
-        return;
+        $text = "Skipping link to $`\n";
+    } elsif ($Prj =~ /\.incomp$/o) {
+        $text = "Skipping incomplete $`\n";
+    } else {
+        $text = "Building project $Prj\n";
     };
-    if ($Prj =~ /\.incomp$/o) {
-        print $echo.    "=============\n";
-        print $echo.    "Skipping incomplete $`\n";
-        print $echo.    "=============\n";
-        return;
-    };
-    print $echo.    "=============\n";
-    print $echo.    "Building project $Prj\n";
-    print $echo.    "=============\n";
+    print $echo . "=============\n";
+    print $echo . $text;
+    print $echo . "=============\n";
 };
 
 sub are_all_dependent {
@@ -1041,9 +1071,18 @@ sub checkout_module {
     my $parent_work_stamp = $ENV{WORK_STAMP};
     $parent_work_stamp .= '_' . $ENV{UPDMINOR} if (defined $ENV{UPDMINOR});
 
-    $cvs_module->verbose(2);
+    $cvs_module->verbose(1);
     $cvs_module->{MODULE} .= '/prj' if ($image);
+    if ($show) {
+        print "Checking out $prj_name...\n";
+        return;
+    };
     $cvs_module->checkout($StandDir, $parent_work_stamp, '');
+    # Quick hack, should not be there
+    # if Heiner's Cws has error handling
+    if (!-d &CorrectPath($StandDir.$prj_name)) {
+        &print_error ("Cannot checkout $prj_name. Check if you has login to server");
+    };
 };
 
 #
@@ -1115,37 +1154,55 @@ sub get_cvs_module
 };
 
 #
+# Try to get cvs coordinates via module link
+#
+sub get_link_cvs_root{
+    my $module = shift;
+    my $cvs_root_file = $StandDir.$module.'.lnk'.'/CVS/Root';
+    if (!open(CVS_ROOT, $cvs_root_file)) {
+        print STDERR "Attention: cannot read $cvs_root_file!!\n";
+        return '';
+    };
+    my @cvs_root = <CVS_ROOT>;
+    close CVS_ROOT;
+    $cvs_root[0] =~ s/[\r\n]+//o;
+    return $cvs_root[0] if (!($cvs_root[0] =~ /\^\s*$/));
+    return '';
+};
+
+#
 # Find out which CVS server holds the module, returns
 # the elements of CVSROOT.
-# (Heiner's proprietary :)
+# (Heiner's proprietary)
 #
 sub get_cvs_root
 {
     my $cws    = shift;
     my $module = shift;
-
-    my $master = $cws->master();
-
+    my $cvsroot = &get_link_cvs_root($module);
     my $vcsid = $ENV{VCSID};
-    if ( !$vcsid ) {
-        print_error("Can't determine VCSID. Please use setsolar.", 5);
-    }
+    if (!$cvsroot) {
+        my $master = $cws->master();
 
-    my $workspace_lst = get_workspace_lst();
-    my $workspace_db = GenInfoParser->new();
-    my $success = $workspace_db->load_list($workspace_lst);
-    if ( !$success ) {
-        print_error("Can't load workspace list '$workspace_lst'.", 4);
-    }
+        if ( !$vcsid ) {
+            print_error("Can't determine VCSID. Please use setsolar.", 5);
+        }
 
-    my $key = "$master/drives/o:/projects/$module/scs";
-    my $cvsroot = $workspace_db->get_value($key);
+        my $workspace_lst = get_workspace_lst();
+        my $workspace_db = GenInfoParser->new();
+        my $success = $workspace_db->load_list($workspace_lst);
+        if ( !$success ) {
+            print_error("Can't load workspace list '$workspace_lst'.", 4);
+        }
 
-    if ( !$cvsroot  ) {
-        print_error("No such module '$module' for '$master' in workspace database.", 0);
-        return (undef, undef, undef, undef);
-    }
+        my $key = "$master/drives/o:/projects/$module/scs";
+        $cvsroot = $workspace_db->get_value($key);
 
+        if ( !$cvsroot  ) {
+            print_error("No such module '$module' for '$master' in workspace database.", 0);
+            return (undef, undef, undef, undef);
+        }
+    };
     my ($dummy1, $method, $user_at_server, $repository) = split(/:/, $cvsroot);
     my ($dummy2, $server) = split(/@/, $user_at_server);
 
@@ -1187,22 +1244,37 @@ sub ensure_clear_module {
     my $module_type = &module_classify($$Prj);
     if ($module_type eq 'mod') {
         &clear_module($$Prj);
-        return;
+        my $lnk_name = $$Prj.'.lnk';
+        if (-e ($StandDir.$lnk_name)) {
+            print "Last checkout for $$Prj seems to be interrupted...\n";
+            print "Check it out again...\n";
+            $module_type = 'lnk';
+            $$Prj = $lnk_name;
+        } else {
+            return;
+        };
     };
     if ($module_type eq 'lnk') {
-        $$Prj =~ /\.lnk$/;
+        print "\nBreaking link $$Prj...\n";
+        return if ($show);
+        $$Prj =~ /\.lnk$/o;
+        my $new_name = $`;
+        &checkout_module($new_name);
+        my $action = '';
         if ( $^O eq 'MSWin32' ) {
-            if(!rename("$StandDir$$Prj", "$StandDir$`.backup.lnk")) {
-                &print_error("Cannot rename $StandDir$$Prj to $StandDir$`.backup.lnk");
+            if(!rename("$StandDir$$Prj", "$StandDir$new_name.backup.lnk")) {
+                $action = 'rename';
             };
         } else {
-            unlink $StandDir.$$Prj;
+            if(!unlink $StandDir.$$Prj) {
+                $action = 'remove';
+            }
         };
-        $$Prj = $`;
+        &print_error("Cannot $action $StandDir$$Prj. Please $action it manually") if ($action);
     } else {
-        rmtree($StandDir.$$Prj, 1, 1);
+        print "Checking out consistent " . $$Prj . "...\n";
+        &checkout_module ($$Prj) if (!$show);
     };
-    &checkout_module($$Prj);
 };
 
 #
@@ -1210,11 +1282,32 @@ sub ensure_clear_module {
 #
 sub clear_module {
     my $Prj = shift;
-    if (!defined $ENV{INPATH}) {
-        &print_error("\$INPATH environment variable is not set. Please use setsolar!!");
-    }
-    rmtree($StandDir.$Prj.'/'. $ENV{INPATH}, 1, 1);
-    return;
+    print "Removing module's $Prj output trees...\n";
+    print "\n" and return if ($show);
+    opendir DIRHANDLE, $StandDir.$Prj;
+    my @dir_content = readdir(DIRHANDLE);
+    closedir(DIRHANDLE);
+    foreach (@dir_content) {
+        next if (/^\.+$/);
+        my $dir = &CorrectPath($StandDir.$Prj.'/'.$_);
+        if ((!-d $dir.'/CVS') && &is_output_tree($dir)) {
+            #print "I would delete $dir\n";
+            system ("$remove_commando $dir");
+        };
+    };
+};
+
+#
+# Figure out if the directory is an output tree
+#
+sub is_output_tree {
+    my $dir = shift;
+    $dir =~ /([\w\d\.]+)$/;
+    $_ = $1;
+    return '1' if (/^common$/);
+    return '1' if (/^common\.pro$/);
+    return '1' if (defined $platforms{$_});
+    return '';
 };
 
 #
@@ -1234,3 +1327,263 @@ sub check_module_consistency {
         };
     };
 };
+
+#
+# Removes projects which it is not necessary to build
+# in incompartible build
+#
+sub prepare_incompartible_build {
+    my ($prj, $deps_hash);
+    $deps_hash = shift;
+    foreach (keys %incompartibles) {
+        $incompartibles{$_} = $$deps_hash{$_};
+        delete $$deps_hash{$_};
+    }
+    while ($prj = &PickPrjToBuild($deps_hash)) {
+        &RemoveFromDependencies($prj, $deps_hash);
+        &RemoveFromDependencies($prj, \%incompartibles);
+    };
+    foreach (keys %incompartibles) {
+        $$deps_hash{$_} = $incompartibles{$_};
+    };
+    if ($build_from_opt) {
+        &prepare_build_from_opt($deps_hash);
+        delete $$deps_hash{$build_from_opt};
+    };
+    if ($prepare) {
+        @modules_built = keys %$deps_hash;
+        &clear_delivered;
+    };
+    print "\n";
+    foreach $prj (keys %$deps_hash) {
+        my $prj_lnk = '';
+        my $module_type = &module_classify($prj);
+        $prj_lnk = $prj if ($module_type =~ /\.lnk$/o);
+        if ($prepare) {
+            &ensure_clear_module(\$prj);
+        } else {
+            my $message;
+            if ($module_type ne 'mod') {
+                $message = "$prj is not a complete module!";
+            } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
+                $message = "$prj contains old output tree!";
+            };
+                &print_error("$message Prepare workspace with -prepare switch!") if ($message);
+        };
+        if ($prj_lnk) {
+            $$deps_hash{$prj} = $$deps_hash{$prj_lnk};
+            delete $$deps_hash{$prj_lnk};
+        };
+    };
+    if ($build_from_opt) {
+        $$deps_hash{$build_from_opt} = [];
+        $build_from_opt = '';
+    };
+    print "\nPreparation finished\n\n" and  exit(0) if ($prepare);
+};
+
+#
+# Removes projects which it is not necessary to build
+# with -from switch
+#
+sub prepare_build_from {
+    my ($prj, $deps_hash);
+    $deps_hash = shift;
+    my %from_deps_hash = ();   # hash of dependencies of the -from project
+    &GetParentDeps( $StandDir.$build_from,\%from_deps_hash);
+    foreach $prj (keys %from_deps_hash) {
+        delete $$deps_hash{$prj};
+        &RemoveFromDependencies($prj, $deps_hash);
+    };
+};
+
+#
+# Removes projects which it is not necessary to build
+# with -from_opt or -since switch
+#
+sub prepare_build_from_opt {
+    my ($prj, $deps_hash, $border_prj);
+    $deps_hash = shift;
+    $border_prj = $build_from_opt if ($build_from_opt);
+    $border_prj = $build_since if ($build_since);
+    while ($prj = &PickPrjToBuild($deps_hash)) {
+        $orig_prj = '';
+        $orig_prj = $` if ($prj =~ /\.lnk$/o);
+        if (($border_prj ne $prj) &&
+            ($border_prj ne $orig_prj)) {
+            &RemoveFromDependencies($prj, $deps_hash);
+            next;
+        } else {
+            if ($build_from_opt) {
+                $$deps_hash{$prj} = [];
+            } else {
+                &RemoveFromDependencies($prj, $deps_hash);
+            };
+            return;
+        };
+    };
+};
+
+sub get_incomp_projects {
+    my $option = '';
+    while ($option = shift @ARGV) {
+        if ($option =~ /^-/) {
+            unshift(@ARGV, $option);
+            last;
+        } else {
+            if ($option =~ /(:)/) {
+                $option = $`;
+                &print_error("-incomp_from switch collision") if ($build_from_opt);
+                $build_from_opt = $';
+            };
+            $incompartibles{$option}++;
+        };
+    };
+};
+
+sub get_platforms {
+    my $solver = $ENV{SOLARVERSION};
+    my ($iserverbin, @platforms_conf, %platforms);
+    $iserverbin = "i_server -d ";
+    $iserverbin .= $ENV{SOLAR_ENV_ROOT} . '/b_server/config/stand.lst -i ';
+    my $workstamp = $ENV{WORK_STAMP};
+    @platforms_conf = `$iserverbin $workstamp/Environments -l`;
+    if ( $platforms_conf[0]  =~ /Environments/ ) {
+        shift @platforms_conf;
+    }
+    foreach (@platforms_conf) {
+        s/\s//g;
+        my $s_path = $solver . '/' .  $_;
+        $platforms{$_}++ if (-e $s_path);
+    }
+    return %platforms;
+};
+
+#
+# This procedure clears solver from delivered
+# by the modules to be build
+#
+sub clear_delivered {
+    print "Clearing up delivered\n";
+    my %backup_vars;
+    foreach my $platform (keys %platforms) {
+        print "\nremoving delivered for $platform\n";
+        my %solar_vars = ();
+        &read_ssolar_vars($platform, \%solar_vars);
+        foreach (keys %solar_vars) {
+            if (!defined $backup_vars{$_}) {
+                $backup_vars{$_} = $ENV{$_};
+            };
+            $ENV{$_} = $solar_vars{$_};
+        };
+        my $undeliver = "$deliver_commando -delete $nul";
+        foreach my $module (@modules_built) {
+            my $module_path = &CorrectPath($StandDir.$module);
+            print "Removing delivered from module $module\n";
+            next if ($show);
+            my $current_dir = cwd();
+            chdir($module_path.'.lnk') or chdir($module_path);
+            if (system($undeliver)) {
+                $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
+                &print_error("Cannot run: $undeliver");
+            }
+            chdir $current_dir;
+            cwd();
+        };
+    };
+    $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
+};
+
+#
+# Run setsolar for given platform and
+# write all variables needed in %solar_vars hash
+#
+sub read_ssolar_vars {
+    my ($setsolar, $entries_file, $tmp_file);
+    my ($platform, $solar_vars) = @_;
+    if ( $^O eq 'MSWin32' ) {
+        $setsolar = 'r:\\etools\\setsolar.pl';
+        $tmp_file = $ENV{TEMP} . "\\solar.env.$$.tmp";
+    } else {
+        $setsolar = '/develop6/update/dev/etools/setsolar.pl';
+        $tmp_file = $ENV{HOME} . "/.solar.env.$$.tmp";
+    };
+    my $pro = "";
+    if ($platform =~ /\.pro$/) {
+        $pro = "-pro";
+        $platform = $`;
+    };
+    my $param = "-$ENV{WORK_STAMP} $pro $platform";
+    my $ss_comando = "$perl $setsolar -file $tmp_file $param $nul";
+    $entries_file = '/CVS/Entries';
+    if (system($ss_comando)) {
+        unlink $tmp_file;
+        &print_error("Cannot run commando:\n$ss_comando");
+    };
+    &get_solar_vars($solar_vars, $tmp_file);
+};
+
+#
+# read variables to hash
+#
+sub get_solar_vars {
+    my ($solar_vars, $file) = @_;
+    my ($var, $value);
+    open SOLARTABLE, "<$file" or die "can´t open solarfile $file";
+    while(<SOLARTABLE>) {
+        s/\r\n//o;
+        next if(!/^\w+\s+(\w+)/o);
+        next if (!defined $deliver_env{$1});
+        $var = $1;
+        if ( $^O eq 'MSWin32' ) {
+            /$var=(\S+)$/o;
+            $value = $1;
+        } else {
+            /\'(\S+)\'$/o;
+            $value = $1;
+        };
+        $$solar_vars{$var} = $value;
+    };
+    close SOLARTABLE;
+    unlink $file;
+}
+
+#sub check_dir {
+#   return if (!defined $ENV{CWS_WORK_STAMP});
+#   my $start_dir = cwd();
+#   chdir &CorrectPath($StandDir.$CurrentPrj);
+#   my $build_dir = cwd();
+#   $build_dir =~ s/\.lnk//o; #our current module directory
+#   chdir $ENV{SRC_ROOT};
+#   my $master_build_dir = &CorrectPath(cwd() . "/$module_name");
+#
+#   if ( $^O eq 'MSWin32' ) {
+#       $master_build_dir = uc $master_root_dir;
+#       $build_dir = uc $build_dir;
+#   };
+#
+#   if ($build_dir ne $master_build_dir) {
+#       &print_error("You are trying to build on master workspace");
+#       exit(1);
+#   };
+#   chdir $start_dir;
+#   cwd();
+#};
+
+sub mark_force_deliver {
+    my ($module_name, $module_path) = @_;
+    my $cws_tag_string = 'Tcws_' . lc($ENV{WORK_STAMP}.'_'.$ENV{CWS_WORK_STAMP});
+    my $cvs_tag_file = $module_path . '/CVS/Tag';
+    return if (!open CVSTAG, "<$cvs_tag_file");
+    my @tag = <CVSTAG>;
+    close CVSTAG;
+    $tag[0] =~ /^(\S+)/o;
+    $force_deliver{$module_name}++ if ($1 eq $cws_tag_string);
+};
+
+sub get_deliver_commando {
+    my $module_name = shift;
+    return $deliver_commando if (!defined $force_deliver{$module_name});
+    return $deliver_commando . ' -force';
+};
+

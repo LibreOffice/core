@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-12 12:42:22 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 .IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(SRCFILES)$(SRC1FILES)$(SRC2FILES)$(SRC3FILES)$(RCFILES)$(HXX1TARGET)$(HDBDEPNTARGET)$(IDLFILES)$(PARFILES)$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
 ALLDEP .PHONY: 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @+if ( -e  "$(SRS)$/$(PWD:f).*.dpr" ) +-$(RM) "$(SRS)$/$(PWD:f).*.dpr" >& $(NULLDEV)
 .ELSE
     @+-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
@@ -85,11 +85,11 @@ ALLDEP .PHONY:
 .IF "$(GROUPSHELL:b:l)"=="4dos"
     @+-echo $(foreach,i,$(DEPFILES) $(shell +-del $i >& $(NULLDEV))) >& $(NULLDEV)
 .ELSE			# "$(GROUPSHELL:b)"=="4dos"
-.IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"=="4nt"
     @+-echo $(foreach,i,$(DEPFILES) $(shell +-del $i >& $(NULLDEV))) >& $(NULLDEV)
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(USE_SHELL)"=="4nt"
     @+-$(RM) $(DEPFILES) >& $(NULLDEV)
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(GROUPSHELL:b)"=="4dos"
 .ENDIF			# "$(DEPFILES)" != ""
     +@echo ---
@@ -119,7 +119,7 @@ ALLDPC: \
 .ENDIF
 .ENDIF
 .IF "$(HDBDEPNTARGET)$(OBJFILES)$(SLOFILES)$(DEPOBJFILES)$(RCFILES)$(PARFILES)"!=""
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 #	@+if ( -e  $(MISC)$/$(TARGET).dpr ) $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
     @+if ( -e  $(MISC)$/$(TARGET).dpw ) $(RM) $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
     @+if ( -e  $(MISC)$/$(TARGET).dpj ) $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
@@ -147,7 +147,7 @@ ALLDPC: \
 .ENDIF
 .IF "$(GROUP)"=="WRITER"
 .IF "$(debug)"==""
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @+-$(RM) $(MISC)$/$(TARGET).dpw
     @$(TYPE)  $(MISC)$/$(TARGET).dpc | $(SED) s\#$/slo$/\#$/dso$/\# | $(SED) s\#$/obj$/\#$/dbo$/\# > $(MISC)$/$(TARGET).dpw
 .ELSE
@@ -157,7 +157,7 @@ ALLDPC: \
     @+-$(RM) $(TEMP)$/$(TARGET).dpt >& $(NULLDEV)
 .ENDIF
 .ELSE			# "$(debug)"==""
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @+$(COPY) $(MISC)$/$(TARGET).dpc $(MISC)$/$(TARGET).dpw
     @+-$(RM) $(MISC)$/$(TARGET).dpc
     @$(TYPE)  $(MISC)$/$(TARGET).dpw | $(SED) s\#$/dso$/\#$/slo$/\# | $(SED) s\#$/dbo$/\#$/obj$/\# > $(MISC)$/$(TARGET).dpc
@@ -180,17 +180,17 @@ ALLDPC: \
 ALLDPC:
     @echo ------------------------------
     @echo No Dependencies
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @echo "#" > $(MISC)$/$(TARGET).dpc
 .IF "$(GROUP)"=="WRITER"
     @echo "#" > $(MISC)$/$(TARGET).dpw
 .ENDIF
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @echo # > $(MISC)$/$(TARGET).dpc
 .IF "$(GROUP)"=="WRITER"
     @echo # > $(MISC)$/$(TARGET).dpw
 .ENDIF
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 
 ALLDEP:
     @echo ------------------------------

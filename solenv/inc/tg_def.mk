@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-15 15:42:40 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,8 +59,6 @@
 #
 #
 #*************************************************************************
-
-
 
 # -------
 # - DEF -
@@ -129,7 +127,7 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 
@@ -158,7 +156,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(BUILD_DRIVE$(TNR))"=="O"
@@ -278,19 +276,10 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 $(DEF$(TNR)TARGETN): \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
-.ENDIF
-.IF "$(GUI)"=="MAC"
-$(DEF$(TNR)TARGETN): \
-        $(DEF$(TNR)DEPN) \
-        $(DEF$(TNR)EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo fuer MAC nur dummy
-    @echo > $@
+    @+echo ------------------------------
+    @+echo Making Module-Definitionfile : $@
+    @+echo just a dummy for UNIX
+    @+echo > $@
 .ENDIF
 .ENDIF			# "$(DEF$(TNR)TARGETN)"!=""
 

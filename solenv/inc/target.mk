@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.131 $
+#   $Revision: 1.132 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-06 14:50:21 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ INCEXT*=.
 INCPRE*=.
 INCPOST*=.
 .IF "$(PRE)"!=""
-INCPRE+=-I$(PRE)$/inc
+ENVINCPRE+=-I$(PRE)$/inc
 .ENDIF			# "$(PRE)"!=""
 .IF "$(LOCAL_SOLENV)"!=""
 SOLARINC+=$(JDKINCS)
@@ -85,9 +85,9 @@ SOLARINC+=$(DB2INC)
 SOLARINC+=$(DAOINC)
 .ENDIF "$(LOCAL_SOLENV)"!=""
 .IF "$(PRJINC)"!=""
-INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCLOCPRJ) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCLOCPRJ) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 .EXPORT : LIB
 # --- Compiler -----------------------------------------------------
@@ -185,19 +185,6 @@ something_wrong_with_objects :
 .ENDIF			# "$(TESTOBJECTS)"!=""
 
 .INCLUDE : postset.mk
-
-.IF "$(UPDATER)"!=""
-.IF "$(BUILD_SOSL)"==""
-.IF "$(PRJNAME)"=="vcl"
-.IF "$(REMOTE_BUILD_FLAG)" == ""
-.IF "$(remote)" == ""
-#REMOTE_BUILD=do_it_remote
-#REMOTE_DEPEND=do_it_remote
-.ENDIF          # "$(remote)" == ""
-.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
-.ENDIF          # "$(PRJNAME)"=="vcl"
-.ENDIF          # "$(BUILD_SOSL)"!=""
-.ENDIF          # "$(UPDATER)"!=""
 
 .IF "$(depend)" == ""
 
@@ -551,9 +538,9 @@ JAVATARGET:=$(MISC)$/$(TARGET)_dummy.java
 .IF "$(JARTARGET)"!=""
 JARCLASSDIRS*=.
 .IF "$(NEW_JAR_PACK)"!=""
-JARMANIFEST*=META-INF$/MANIFEST.MF
+JARMANIFEST*=$(CLASSDIR)$/META-INF$/MANIFEST.MF
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
-JARTARGETN=$(JARTARGET)
+JARTARGETN=$(CLASSDIR)$/$(JARTARGET)
 .IF "$(NOJARDEP)$(NEW_JAR_PACK)"==""
 JARTARGETDEP=$(JARTARGET).dep
 JARTARGETDEPN=$(MISC)$/$(JARTARGET).dep
@@ -1772,19 +1759,22 @@ TARGETDPJ=$(MISC)$/$(TARGET).dpj
 .ENDIF			# "$(L10N_framework)"==""
 .ENDIF
 
-.IF "$(UPDATER)"=="YES"
+#.IF "$(UPDATER)"=="YES"
 #.IF "$(product)"!=""
-.IF "$(GEN_HID)"!=""
-.IF "$(no_hids)"==""
-.IF "$(BUILD_SOSL)" == ""
+.IF "$(no_hids)$(NO_HIDS)"==""
+#.IF "$(BUILD_SOSL)" == ""
 .IF "$(GUI)"=="WNT"
+.IF "$(GEN_HID_OTHER)"!=""
+PRJHIDOTHERTARGET=$(SRS)$/hidother.hid
+.ENDIF
+.IF "$(GEN_HID)"!=""
 PRJHIDTARGET=$(MISC)$/$(PRJNAME).hid
-.ENDIF
-.ENDIF
-.ENDIF
 .ENDIF
 #.ENDIF
 .ENDIF
+.ENDIF
+#.ENDIF
+#.ENDIF
 
 .IF "$(OS2_SOLENV_INC)"!=""
 OS2_COPY_MK=do_copy_mk
@@ -2005,6 +1995,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN) \
+        $(PRJHIDOTHERTARGET) \
         $(PRJHIDTARGET) \
                 $(SIGNFORNETSCAPE) \
                 $(SIGNFOREXPLORER) \
@@ -2050,9 +2041,9 @@ CPPUMAKERFLAGS*=-L
 .IF "$(SINGLE_SHOT)"==""
 # makeing all in one
 .DIRCACHE=no
-.IF "$(INCPRE))"!=""
-MKDEPFLAGS+=-I:$(INCPRE)
-.ENDIF			# "$(INCPRE))"!=""
+.IF "$(ENVINCPRE))"!=""
+MKDEPFLAGS+=-I:$(ENVINCPRE)
+.ENDIF			# "$(ENVINCPRE))"!=""
 .IF "$(OBJFILES)"!=""
 $(OBJFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(OBJFILES)"!=""
@@ -2168,7 +2159,7 @@ $(SCP_PRODUCT_TYPE):
 
 .ENDIF			# "$(PARFILES)"!=""
 
-$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg :
+"$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg" :
     +$(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
@@ -2479,9 +2470,9 @@ $(PROJECTPCHTARGET) .PHONY :
 $(PROJECTPCHTARGET) : $(PROJECTPCHSOURCE).cxx
 .IF "$(COM)"=="MSC" || "(COM)"=="BLC"
 .IF "$(PROJECTPCH4DLL)" != ""
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(PCHSLOFLAGSC) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
+    $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(PCHSLOFLAGSC) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
 .ELSE
-    $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSC) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
+    $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSC) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
 .ENDIF
 .ENDIF
 .ENDIF			# "$(PROJECTPCH_FLAG)"!=""
@@ -2561,7 +2552,6 @@ $(EXCEPTIONSNOOPTFILES):
 
 .IF "$(REMOTE_BUILD)"!=""
 .IF "$(UPDATER)"!=""
-.IF "$(BUILD_SOSL)"==""
 .IF "$(PRJNAME)"=="vcl"
 .IF "$(REMOTE_BUILD_FLAG)" == ""
 .IF "$(remote)" == ""
@@ -2572,7 +2562,6 @@ $(REMOTE_BUILD):
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
 .ENDIF          # "$(PRJNAME)"=="vcl"
-.ENDIF          # "$(BUILD_SOSL)"==""
 .ENDIF          # "$(UPDATER)"!=""
 .ENDIF			# "$(REMOTE_BUILD)"!=""
 
@@ -2885,13 +2874,13 @@ $(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkch
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
         @+echo "#define" _BUILD \"$(BUILD)\"	> $@
         @+echo "#define" _UPD \"$(UPD)\"		>> $@
-        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $@
+        @+echo "#define" _LAST_MINOR \"$(LAST_MINOR)\"	>> $@
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $@
         @+echo "#define" _INPATH \"$(INPATH)\"	>> $@
 .ELSE
         @+echo #define _BUILD "$(BUILD)"	> $@
         @+echo #define _UPD "$(UPD)"		>> $@
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $@
+        @+echo #define _LAST_MINOR "$(LAST_MINOR)"	>> $@
         @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $@
         @+echo #define _RSCREVISION "$(RSCREVISION)">> $@
         @+echo #define _INPATH "$(INPATH)"	>> $@
@@ -2912,7 +2901,13 @@ warn_target_empty:
 UNOUCRDEPxxx : $(UNOUCRDEP);
 .ENDIF			# "$(UNOTYPES)" != ""
 
-$(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES)
+$(SRS)$/hidother.hid : hidother.src
+    @+echo Making $@ :
+    @+echo ---------------
+    @+mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
+    @+echo done Making $@
+
+$(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES) $(PRJHIDOTHERTARGET)
     @echo Making $@ :
     @echo ---------------
     @+if exist $@ del $@
@@ -2957,7 +2952,6 @@ ALLTAR : ALLDEP \
 
 .IF "$(REMOTE_DEPEND)"!=""
 .IF "$(UPDATER)"!=""
-.IF "$(BUILD_SOSL)"==""
 .IF "$(PRJNAME)"=="vcl"
 .IF "$(REMOTE_BUILD_FLAG)" == ""
 .IF "$(remote)" == ""
@@ -2968,7 +2962,6 @@ $(REMOTE_DEPEND):
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
 .ENDIF          # "$(PRJNAME)"=="vcl"
-.ENDIF          # "$(BUILD_SOSL)"==""
 .ENDIF          # "$(UPDATER)"!=""
 .ENDIF			# "$(REMOTE_DEPEND)"!=""
 

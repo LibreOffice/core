@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2002-11-29 12:12:31 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:48:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,11 +64,12 @@
 
 #.IF "$(RES_GER)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=49
+completelangext+=49
 deut$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_49=deut
 longlang_49=german
 langext_49=49
-rsclang_49=-lgGERMAN $(IBM_PC_437)
+rsclang_49=-lgGERMAN 
 rescharset_49=$(deut$(LANG_GUI))
 RCLANGFLAGS_49+= -d GERMAN
 iso_49=de
@@ -78,11 +79,12 @@ defaultlangext=49
 .IF "$(RES_ENUS)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=01
 .ENDIF
+completelangext+=01
 enus$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_01=enus
 longlang_01=english_us
 langext_01=01
-rsclang_01=-lgENGLISH_US $(IBM_PC_437)
+rsclang_01=-lgENGLISH_US 
 rescharset_01=$(enus$(LANG_GUI))
 RCLANGFLAGS_01+= -d ENGLISH
 iso_01=en-US
@@ -91,11 +93,12 @@ iso_01=en-US
 .IF "$(RES_ITAL)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=39
 .ENDIF
+completelangext+=39
 ital$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_39=ital
 longlang_39=italian
 langext_39=39
-rsclang_39=-lgITALIAN $(IBM_PC_850)
+rsclang_39=-lgITALIAN 
 rescharset_39=$(ital$(LANG_GUI))
 RCLANGFLAGS_39+= -d ITALY
 iso_39=it
@@ -103,11 +106,12 @@ iso_39=it
 .IF "$(RES_SPAN)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=34
 .ENDIF
+completelangext+=34
 span$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_34=span
 longlang_34=spanish
 langext_34=34
-rsclang_34=-lgSPANISH $(IBM_PC_850)
+rsclang_34=-lgSPANISH 
 rescharset_34=$(span$(LANG_GUI))
 RCLANGFLAGS_34+= -d SPAIN
 iso_34=es
@@ -115,23 +119,25 @@ iso_34=es
 .IF "$(RES_FREN)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=33
 .ENDIF
+completelangext+=33
 fren$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_33=fren
 longlang_33=french
 langext_33=33
-rsclang_33=-lgFRENCH $(IBM_PC_850)
-rescharset_33=$(enus$(LANG_GUI))
+rsclang_33=-lgFRENCH 
+rescharset_33=$(fren$(LANG_GUI))
 RCLANGFLAGS_33+= -d FRENCH
 iso_33=fr
 
 .IF "$(RES_DTCH)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=31
 .ENDIF
+completelangext+=31
 dtch$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_31=dtch
 longlang_31=dutch
 langext_31=31
-rsclang_31=-lgDUTCH $(IBM_PC_850)
+rsclang_31=-lgDUTCH 
 rescharset_31=$(dtch$(LANG_GUI))
 RCLANGFLAGS_31+= -d DTCH
 iso_31=nl
@@ -139,22 +145,24 @@ iso_31=nl
 .IF "$(RES_DAN)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=45
 .ENDIF
+completelangext+=45
 dan$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_45=dan
 longlang_45=danish
 langext_45=45
-rsclang_45=-lgDANISH $(IBM_PC_850)
+rsclang_45=-lgDANISH 
 rescharset_45=$(dan$(LANG_GUI))
 iso_45=da
 
 .IF "$(RES_SWED)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=46
 .ENDIF
+completelangext+=46
 swed$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_46=swed
 longlang_46=swedish
 langext_46=46
-rsclang_46=-lgSWEDISH $(IBM_PC_850)
+rsclang_46=-lgSWEDISH 
 rescharset_46=$(swed$(LANG_GUI))
 RCLANGFLAGS_46+= -d SWED
 iso_46=sv
@@ -162,11 +170,12 @@ iso_46=sv
 .IF "$(RES_PORT)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=03
 .ENDIF 
+completelangext+=03
 port$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_03=port
 longlang_03=portuguese
 langext_03=03
-rsclang_03=-lgPORTUGUESE $(IBM_PC_850)
+rsclang_03=-lgPORTUGUESE 
 rescharset_03=$(port$(LANG_GUI))
 RCLANGFLAGS_03+= -d PORT
 iso_03=pt
@@ -174,6 +183,7 @@ iso_03=pt
 .IF "$(RES_JAPN)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=81
 .ENDIF
+completelangext+=81
 japn$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_81=japn
 longlang_81=japanese
@@ -186,6 +196,7 @@ iso_81=ja
 .IF "$(RES_CHINSIM)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=86
 .ENDIF 
+completelangext+=86
 chinsim$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_86=chinsim
 longlang_86=chinese_simplified
@@ -198,8 +209,8 @@ iso_86=zh-CN
 .IF "$(RES_CHINTRAD)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=88
 .ENDIF 
+completelangext+=88
 chintrad$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_chintrad:=chintrad 88 -lgCHINESE_TRADITIONAL $(chintrad$(LANG_GUI))
 lang_88=chintrad
 longlang_88=chinese_traditional
 langext_88=88
@@ -210,12 +221,12 @@ iso_88=zh-TW
 .IF "$(RES_RUSS)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=07
 .ENDIF
+completelangext+=07
 russ$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_russ:=russ 07 -lgRUSSIAN $(IBM_PC_852) $(russ$(LANG_GUI))
 lang_07=russ
 longlang_07=russian
 langext_07=07
-rsclang_07=-lgRUSSIAN $(IBM_PC_852)
+rsclang_07=-lgRUSSIAN 
 rescharset_07=$(russ$(LANG_GUI))
 RCLANGFLAGS_07+= -d RUSS
 iso_07=ru
@@ -223,12 +234,12 @@ iso_07=ru
 .IF "$(RES_POL)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=48
 .ENDIF 
+completelangext+=48
 pol$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_pol:=pol 48 -lgPOLISH $(IBM_PC_852) $(pol$(LANG_GUI))
 lang_48=pol
 longlang_48=polish
 langext_48=48
-rsclang_48=-lgPOLISH $(IBM_PC_852)
+rsclang_48=-lgPOLISH 
 rescharset_48=$(pol$(LANG_GUI))
 RCLANGFLAGS_48+= -d POLISH
 iso_48=pl
@@ -236,12 +247,12 @@ iso_48=pl
 .IF "$(RES_ARAB)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=96
 .ENDIF 
+completelangext+=96
 arab$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_arab:=arab 96 -lgARABIC $(IBM_PC_852) $(arab$(LANG_GUI))
 lang_96=arab
 longlang_96=arabic
 langext_96=96
-rsclang_96=-lgARABIC $(IBM_PC_852)
+rsclang_96=-lgARABIC 
 rescharset_96=$(arab$(LANG_GUI))
 RCLANGFLAGS_96+= -d ARABIC
 iso_96=ar
@@ -249,12 +260,12 @@ iso_96=ar
 .IF "$(RES_GREEK)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=30
 .ENDIF 
+completelangext+=30
 greek$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_greek:=greek 30 -lgGREEK $(IBM_PC_852) $(greek$(LANG_GUI))
 lang_30=greek
 longlang_30=greek
 langext_30=30
-rsclang_30=-lgGREEK $(IBM_PC_852)
+rsclang_30=-lgGREEK 
 rescharset_30=$(greek$(LANG_GUI))
 RCLANGFLAGS_30+= -d GREEK
 iso_30=el
@@ -262,12 +273,12 @@ iso_30=el
 .IF "$(RES_TURK)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=90
 .ENDIF 
+completelangext+=90
 turk$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_turk:=turk 90 -lgTURKISH $(IBM_PC_857) $(turk$(LANG_GUI))
 lang_90=turk
 longlang_90=turkish
 langext_90=90
-rsclang_90=-lgTURKISH $(IBM_PC_857)
+rsclang_90=-lgTURKISH 
 rescharset_90=$(turk$(LANG_GUI))
 RCLANGFLAGS_90+= -d TURKISH
 iso_90=tr
@@ -275,8 +286,8 @@ iso_90=tr
 .IF "$(RES_KOREAN)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=82
 .ENDIF 
+completelangext+=82
 korean$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_korean:=korean 82 -lgKOREAN $(IBM_PC_852) $(korean$(LANG_GUI))
 lang_82=korean
 longlang_82=korean
 langext_82=82
@@ -288,12 +299,12 @@ iso_82=ko
 .IF "$(RES_CAT)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=37
 .ENDIF 
+completelangext+=37
 catalan$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_catalan:=catalan 37 -lgCATALAN $(IBM_PC_850) $(catalan$(LANG_GUI))
 lang_37=catalan
 longlang_37=catalan
 langext_37=37
-rsclang_37=-lgCATALAN $(IBM_PC_850)
+rsclang_37=-lgCATALAN 
 rescharset_37=$(catalan$(LANG_GUI))
 RCLANGFLAGS_37+= -d CATALAN
 iso_37=ca
@@ -301,11 +312,12 @@ iso_37=ca
 .IF "$(RES_FINN)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=35
 .ENDIF          # "$(RES_FINN)"!="" || "$(give_me_all_languages)"!=""
+completelangext+=35
 finn$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_35=finn
 longlang_35=finnish
 langext_35=35
-rsclang_35=-lgFINNiSH $(IBM_PC_437)
+rsclang_35=-lgFINNiSH 
 rescharset_35=$(finn$(LANG_GUI))
 RCLANGFLAGS_35+= -d FINNISH
 iso_35=fi
@@ -313,6 +325,7 @@ iso_35=fi
 .IF "$(RES_THAI)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=66
 .ENDIF          # "$(RES_THAI)"!="" || "$(give_me_all_languages)"!=""
+completelangext+=66
 thai$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_66=thai
 longlang_66=thai
@@ -325,6 +338,7 @@ iso_66=th
 .IF "$(RES_HINDI)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=91
 .ENDIF          # "$(RES_HINDI)"!="" || "$(give_me_all_languages)"!=""
+completelangext+=91
 hindi$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_91=hindi
 longlang_91=hindi
@@ -337,27 +351,82 @@ iso_91=hi-IN
 .IF "$(RES_PORTBR)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=55
 .ENDIF 
+completelangext+=55
 portbr$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_55=portbr
 longlang_55=portuguese_brazilian
 langext_55=55
-rsclang_55=-lgPORTUGUESE_BRAZILIAN $(IBM_PC_850)
+rsclang_55=-lgPORTUGUESE_BRAZILIAN 
 rescharset_55=$(portbr$(LANG_GUI))
 RCLANGFLAGS_55+= -d PORTBR
 iso_55=pt-BR
 
+.IF "$(RES_CZECH)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=42
+.ENDIF 
+completelangext+=42
+czech$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_42=czech
+longlang_42=czech
+langext_42=42
+rsclang_42=-lgCZECH 
+rescharset_42=$(czech$(LANG_GUI))
+RCLANGFLAGS_42+= -d CZECH
+iso_42=cs
+
+.IF "$(RES_SLOVAK)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=43
+.ENDIF 
+completelangext+=43
+slovak$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_43=slovak
+longlang_43=slovak
+langext_43=43
+rsclang_43=-lgSLOVAK 
+rescharset_43=$(slovak$(LANG_GUI))
+RCLANGFLAGS_43+= -d SLOVAK
+iso_43=sk
+
+.IF "$(RES_ESTONIAN)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=77
+.ENDIF 
+completelangext+=77
+estonian$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_77=estonian
+longlang_77=estonian
+langext_77=77
+rsclang_77=-lgESTONIAN 
+rescharset_77=$(estonian$(LANG_GUI))
+RCLANGFLAGS_77+= -d ESTONIAN
+iso_77=et
+
+.IF "$(RES_HEBREW)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=97
+.ENDIF 
+completelangext+=97
+hebrew$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_97=hebrew
+longlang_97=hebrew
+langext_97=97
+rsclang_97=-lgHEBREW 
+rescharset_97=$(hebrew$(LANG_GUI))
+RCLANGFLAGS_97+= -d HEBREW
+iso_97=he
+
 .IF "$(L10N_framework)"!=""
 .IF "$(native_lang_list)"!=""
 helplist=$(uniq $(alllangext) $(native_lang_list))
+helplist2=$(uniq $(completelangext) $(native_lang_list))
 alllangext!:=$(helplist)
+completelangext!:=$(helplist2)
 .ENDIF          # "$(native_lang_list)"!=""
+completelangext+=99
 alllangext+=99
 extern$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_extern:=extern 99 -lgEXTERN $(UTF8) $(extern$(LANG_GUI))
 lang_99=extern
 longlang_99=extern
 langext_99=99
-rsclang_99=-lgEXTERN $(UTF8)
+rsclang_99=-lgEXTERN
 rescharset_99=$(extern$(LANG_GUI))
 RCLANGFLAGS_99+= -d EXTERN
 iso_99=$(L10N_framework)
