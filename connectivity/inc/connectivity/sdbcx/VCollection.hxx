@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:04:55 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 06:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ namespace connectivity
         class SAL_NO_VTABLE OCollection : public OCollectionBase
         {
         protected:
-            typedef ::std::map< ::rtl::OUString, Object_BASE, ::comphelper::UStringMixLess> ObjectMap;
+            typedef ::std::multimap< ::rtl::OUString, Object_BASE, ::comphelper::UStringMixLess> ObjectMap;
             typedef ObjectMap::iterator ObjectIter;
 
         //  private:
@@ -161,6 +161,7 @@ namespace connectivity
         protected:
             ::cppu::OWeakObject&                    m_rParent;          // parent of the collection
             ::osl::Mutex&                           m_rMutex;           // mutex of the parent
+            sal_Bool                                m_bUseIndexOnly;    // is only TRUE when only an indexaccess is needed
 
             // the implementing class should refresh their elements
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) = 0;
@@ -179,7 +180,11 @@ namespace connectivity
             // called when XDrop was called
             virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
 
-            OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const TStringVector &_rVector);
+            OCollection(::cppu::OWeakObject& _rParent,
+                        sal_Bool _bCase,
+                        ::osl::Mutex& _rMutex,
+                        const TStringVector &_rVector,
+                        sal_Bool _bUseIndexOnly = sal_False);
 
             /** clear the name map
                 <p>Does <em>not</em> dispose the objects hold by the collection.</p>
@@ -211,6 +216,10 @@ namespace connectivity
             // dispatch the refcounting to the parent
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
+
+            // XInterface
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
 
             // ::com::sun::star::container::XElementAccess
             virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
