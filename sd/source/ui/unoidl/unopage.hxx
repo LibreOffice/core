@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 09:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,10 @@ public:
     virtual ~SdDrawPage() throw();
 
     UNO3_GETIMPLEMENTATION_DECL( SdDrawPage )
+
+    static ::rtl::OUString getPageApiName( SdPage* pPage );
+    static ::rtl::OUString getPageApiNameFromUiName( const String& rUIName );
+    static String getUiNameFromPageApiName( const ::rtl::OUString& rApiName );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

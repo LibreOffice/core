@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:31:57 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 09:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,6 +1149,62 @@ uno::Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::
     return aId;
 }
 
+OUString SdDrawPage::getPageApiName( SdPage* pPage )
+{
+    OUString aPageName;
+
+    if(pPage)
+    {
+        aPageName = pPage->GetRealName();
+
+        if( aPageName.getLength() == 0 )
+        {
+            OUStringBuffer sBuffer;
+            sBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sEmptyPageName ) );
+            const sal_Int32 nPageNum = ( ( pPage->GetPageNum() - 1 ) >> 1 ) + 1;
+            sBuffer.append( nPageNum );
+            aPageName = sBuffer.makeStringAndClear();
+        }
+    }
+
+    return aPageName;
+}
+
+OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
+{
+    OUString aApiName;
+
+    String aDefPageName(SdResId(STR_PAGE));
+    aDefPageName += sal_Unicode( ' ' );
+
+    if( rUIName.Equals( aDefPageName, 0, aDefPageName.Len() ) )
+    {
+        aApiName = OUString( RTL_CONSTASCII_USTRINGPARAM( sEmptyPageName ) );
+        aApiName += rUIName.Copy( aDefPageName.Len() );
+    }
+    else
+    {
+        aApiName = rUIName;
+    }
+
+    return aApiName;
+}
+
+String SdDrawPage::getUiNameFromPageApiName( const ::rtl::OUString& rApiName )
+{
+    const String aDefPageName(RTL_CONSTASCII_USTRINGPARAM( sEmptyPageName ));
+    if( rApiName.compareTo( aDefPageName, aDefPageName.Len() ) == 0 )
+    {
+        OUStringBuffer sBuffer;
+        sBuffer.append( String(SdResId(STR_PAGE)) );
+        sBuffer.append( sal_Unicode( ' ' ) );
+        sBuffer.append( rApiName.copy( aDefPageName.Len() ) );
+        return sBuffer.makeStringAndClear();
+    }
+
+    return rApiName;
+}
+
 // XServiceInfo
 OUString SAL_CALL SdDrawPage::getImplementationName() throw(uno::RuntimeException)
 {
@@ -1222,21 +1278,7 @@ OUString SAL_CALL SdDrawPage::getName()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    OUString aPageName;
-
-    if(mpPage)
-        aPageName = mpPage->GetRealName();
-
-    if( aPageName.getLength() == 0 )
-    {
-        OUStringBuffer sBuffer;
-        sBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sEmptyPageName ) );
-        const sal_Int32 nPageNum = ( ( mpPage->GetPageNum() - 1 ) >> 1 ) + 1;
-        sBuffer.append( nPageNum );
-        aPageName = sBuffer.makeStringAndClear();
-    }
-
-    return aPageName;
+    return getPageApiName( mpPage );
 }
 
 // XMasterPageTarget
