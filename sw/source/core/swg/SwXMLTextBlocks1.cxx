@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:14:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
 #endif
+#ifndef _SOT_FORMATS_HXX
+#include <sot/formats.hxx>
+#endif
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>
@@ -139,6 +142,11 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
     if (!IsOnlyTextBlock ( nIdx ) )
     {
         xRoot = xBlkRoot->OpenUCBStorage( aFolderName, STREAM_STGREAD );
+        sal_uInt32 nFormatId = xRoot->GetFormat();
+        if( 0 == nFormatId || SOT_FORMATSTR_ID_STARWRITER_60 == nFormatId )
+            xRoot->SetVersion( SOFFICE_FILEFORMAT_60 );
+        else
+            xRoot->SetVersion( SOFFICE_FILEFORMAT_8 );
         SwReader aReader(*xRoot, aFolderName, pDoc );
         ReadXML->SetBlockMode( sal_True );
         aReader.Read( *ReadXML );
@@ -244,6 +252,8 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
     if ( 0 == nRet )
     {
         xRoot = xBlkRoot->OpenUCBStorage( aPackageName, STREAM_STGREAD );
+        sal_uInt32 nFormatId = xRoot->GetFormat();
+        sal_Bool bOasis = SOT_FORMATSTR_ID_STARWRITER_8 == nFormatId;
 
         OUString sStreamName = OUString::createFromAscii("atevent.xml");
         SvStorageStreamRef xDocStream = xRoot->OpenStream(
@@ -285,8 +295,10 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
                     aFilterArguments[0] <<= xReplace;
 
                     // get filter
-                    OUString sFilterComponent( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
+                    OUString sFilterComponent( OUString::createFromAscii(
+                            bOasis
+                            ? "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"
+                            : "com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
                     Reference< xml::sax::XDocumentHandler > xFilter(
                         xServiceFactory->createInstanceWithArguments(
                             sFilterComponent, aFilterArguments),
@@ -659,6 +671,9 @@ ULONG SwXMLTextBlocks::SetMacroTable(
         xRoot = xBlkRoot->OpenUCBStorage( aPackageName, STREAM_STGWRITE );
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("atevent.xml") );
 
+        sal_uInt32 nFormatId = xRoot->GetFormat();
+        sal_Bool bOasis = SOT_FORMATSTR_ID_STARWRITER_8 == nFormatId;
+
         // workaround for bug: storages do not get overwritten
         // (This workaround is SLOOOOWWW! Remove this ASAP.)
         /*
@@ -713,7 +728,9 @@ ULONG SwXMLTextBlocks::SetMacroTable(
                 Reference< document::XExporter > xExporter(
                     xServiceFactory->createInstanceWithArguments(
                         OUString::createFromAscii(
-                         "com.sun.star.comp.Writer.XMLAutotextEventsExporter"),
+                         bOasis
+                             ? "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"
+                            : "com.sun.star.comp.Writer.XMLAutotextEventsExporter"),
                         aParams), UNO_QUERY);
                 ASSERT( xExporter.is(),
                         "can't instantiate export filter component" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:13:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,14 @@ using namespace ::xmloff::token;
 using namespace ::rtl;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
+sal_Char __READONLY_DATA sXML_np__office[] = "_ooffice";
+sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLBlockListImport::SwXMLBlockListImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     SwXMLTextBlocks &rBlocks )
-:   SvXMLImport( xServiceFactory ),
+:   SvXMLImport( xServiceFactory, 0 ),
     rBlockList (rBlocks)
 {
     GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
@@ -122,11 +124,17 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
     SwXMLTextBlocks &rBlocks,
     String & rNewText,
     sal_Bool bNewTextOnly )
-:   SvXMLImport(xServiceFactory),
+:   SvXMLImport(xServiceFactory, IMPORT_ALL ),
     rBlockList ( rBlocks ),
     bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )
 {
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
+                            GetXMLToken(XML_N_OFFICE_OOO),
+                            XML_NAMESPACE_OFFICE );
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text ) ),
+                            GetXMLToken(XML_N_TEXT_OOO),
+                            XML_NAMESPACE_TEXT );
 }
 
 SwXMLTextBlockImport::~SwXMLTextBlockImport ( void )
