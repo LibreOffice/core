@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:39:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,8 +877,6 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
             pCodePairs[2] = 0xF020;    // original symbols
             pCodePairs[3] = 0xF100;
         }
-        else
-            mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
     }
     else
     {
@@ -963,9 +961,12 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
             for( pCP = pCodePairs; itInt != aSupportedRanges.end(); ++itInt )
                 *(pCP++) = *itInt;
         }
-
-        mpUnicodeMap = new ImplFontCharMap( nRangeCount, pCodePairs );
     }
+
+    if( nRangeCount > 0 )
+        mpUnicodeMap = new ImplFontCharMap( nRangeCount, pCodePairs );
+    else
+        mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
 }
 
 // =======================================================================
