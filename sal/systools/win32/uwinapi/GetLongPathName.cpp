@@ -12,22 +12,22 @@
     if ( !lpLongPath )
         cchBuffer = 0;
 
-    if ( lstrlen( lpShortPath ) == 2 && lpShortPath[1] == ':' )
+    if ( _tcslen( lpShortPath ) == 2 && lpShortPath[1] == ':' )
     {
-        lstrcpy( lpLongPath, lpShortPath );
-        dwResult = lstrlen( lpLongPath );
+        _tcscpy( lpLongPath, lpShortPath );
+        dwResult = _tcslen( lpLongPath );
     }
     else
     {
         HANDLE          hFind;
         WIN32_FIND_DATA aFindFileData;
 
-        if ( lpShortPath[lstrlen(lpShortPath)-1] == '\\' )
+        if ( lpShortPath[_tcslen(lpShortPath)-1] == '\\' )
         {
             TCHAR   szFilePath[MAX_PATH];
 
-            lstrcpy( szFilePath, lpShortPath );
-            lstrcat( szFilePath, TEXT("*.*") );
+            _tcscpy( szFilePath, lpShortPath );
+            _tcscat( szFilePath, TEXT("*.*") );
             hFind = FindFirstFile( szFilePath, &aFindFileData );;
             aFindFileData.cFileName[0] = 0;
         }
@@ -38,8 +38,8 @@
             {
                 TCHAR   szFilePath[MAX_PATH];
 
-                lstrcpy( szFilePath, lpShortPath );
-                lstrcat( szFilePath, TEXT("\\*.*") );
+                _tcscpy( szFilePath, lpShortPath );
+                _tcscat( szFilePath, TEXT("\\*.*") );
                 hFind = FindFirstFile( szFilePath, &aFindFileData );;
                 aFindFileData.cFileName[0] = 0;
             }
@@ -49,7 +49,7 @@
         {
             FindClose( hFind );
 
-            LPCTSTR lpLastSlash = lstrrchr( lpShortPath, '\\' );
+            LPCTSTR lpLastSlash = _tcsrchr( lpShortPath, '\\' );
 
             if ( lpLastSlash )
             {
@@ -62,22 +62,22 @@
                 dwResult = GetLongPathName( lpParentPath, lpLongPath, cchBuffer );
 
                 if ( !dwResult )
-                    lstrcpy( lpLongPath, lpParentPath );
+                    _tcscpy( lpLongPath, lpParentPath );
             }
             else
             {
-                lstrcpy( lpLongPath, lpShortPath );
-                dwResult = lstrlen( lpLongPath );
+                _tcscpy( lpLongPath, lpShortPath );
+                dwResult = _tcslen( lpLongPath );
             }
 
             if ( dwResult < cchBuffer )
             {
-                lstrcat( lpLongPath, TEXT("\\") );
-                lstrcat( lpLongPath, aFindFileData.cFileName );
-                dwResult = lstrlen( lpLongPath );
+                _tcscat( lpLongPath, TEXT("\\") );
+                _tcscat( lpLongPath, aFindFileData.cFileName );
+                dwResult = _tcslen( lpLongPath );
             }
             else
-                dwResult += lstrlen( aFindFileData.cFileName ) + 1;
+                dwResult += _tcslen( aFindFileData.cFileName ) + 1;
         }
     }
 

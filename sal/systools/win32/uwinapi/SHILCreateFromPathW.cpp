@@ -1,4 +1,4 @@
-#include "uwinapi.h"
+#include "macros.h"
 
 EXTERN_C LPITEMIDLIST WINAPI SHSimpleIDListFromPathW_Failure( LPCWSTR lpPathW )
 {
@@ -16,7 +16,7 @@ EXTERN_C LPITEMIDLIST WINAPI SHSimpleIDListFromPathW_WINDOWS( LPCWSTR lpPathW )
 
 EXTERN_C void WINAPI ResolveThunk_SHSimpleIDListFromPathW( FARPROC *lppfn, LPCSTR lpLibFileName, LPCSTR lpFuncName )
 {
-    if ( (LONG)GetVersion < 0 )
+    if ( (LONG)GetVersion() < 0 )
         *lppfn = (FARPROC)SHSimpleIDListFromPathW_WINDOWS;
     else
     {

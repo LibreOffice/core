@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-15 09:50:32 $
+#   last change: $Author: hro $ $Date: 2002-08-26 12:56:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,6 @@ TARGET=uwinapi
 
 USE_DEFFILE=TRUE
 LIBTARGET=NO
-#USE_LDUMP2=TRUE
 
 # --- Settings ----------------------------------
 
@@ -77,43 +76,54 @@ LIBTARGET=NO
 
 .IF "$(GUI)"=="WNT"
 
+
+
 SLOFILES=\
         $(SLO)$/CommandLineToArgvW.obj\
         $(SLO)$/CopyFileExA.obj\
         $(SLO)$/CopyFileExW.obj\
-        $(SLO)$/CopyFileW.obj\
-        $(SLO)$/DeleteFileW.obj\
         $(SLO)$/DrawStateW.obj\
         $(SLO)$/GetLogicalDriveStringsW.obj\
         $(SLO)$/GetLongPathNameA.obj\
         $(SLO)$/GetLongPathNameW.obj\
-        $(SLO)$/GetVersion.obj\
-        $(SLO)$/LoadLibraryExW.obj\
-        $(SLO)$/LoadLibraryW.obj\
-        $(SLO)$/lstrchrA.obj\
-        $(SLO)$/lstrchrW.obj\
-        $(SLO)$/lstrrchrA.obj\
-        $(SLO)$/lstrrchrW.obj\
+        $(SLO)$/GetUserDomainA.obj\
+        $(SLO)$/GetUserDomainW.obj\
+        $(SLO)$/GetDiskFreeSpaceExA.obj\
+        $(SLO)$/GetDiskFreeSpaceExW.obj\
+        $(SLO)$/MCIWndCreateW.obj\
         $(SLO)$/MoveFileExA.obj\
         $(SLO)$/MoveFileExW.obj\
-        $(SLO)$/MoveFileW.obj\
-        $(SLO)$/NTRTL.obj\
+        $(SLO)$/DllGetVersion.obj\
+        $(SLO)$/DllMain.obj\
         $(SLO)$/ResolveThunk.obj
 
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
 SHL1DEF=$(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	$(SHL1TARGET).dxp
+DEF1EXPORTFILE=\
+    $(SHL1TARGET).dxp\
+    unicows.dxp
 DEF1DEPN=\
-        $(SHL1TARGET).dxp\
+        $(DEF1EXPORTFILE)\
         makefile.mk
 
 #SHL1VERINFO=$(SHL1TARGET).rc
 SHL1OBJS=$(SLOFILES)
-SHL1STDLIBS=\
-        version.lib
 
+#No default libraries
+STDSHL=
+
+SHL1STDLIBS=\
+        unicows.lib\
+        kernel32.lib\
+        user32.lib\
+        advapi32.lib\
+        version.lib\
+        vfw32.lib\
+        msvcrt.lib
+
+        
 .ENDIF
 
 .INCLUDE : target.mk

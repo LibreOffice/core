@@ -1,5 +1,4 @@
-#define _UWINAPI_
-#include "uwinapi.h"
+#include "macros.h"
 
 #ifdef __cplusplus
 #define local inline
@@ -52,7 +51,6 @@ local LPCWSTR SkipArgument( LPCWSTR lpScan )
 IMPLEMENT_THUNK( shell32, WINDOWS, LPWSTR *, WINAPI, CommandLineToArgvW, ( LPCWSTR lpCmdLineW, int *pNumArgs ) )
 {
     LPWSTR  *lpArgvW = NULL;
-
 
     if ( !lpCmdLineW || !*lpCmdLineW )
     {

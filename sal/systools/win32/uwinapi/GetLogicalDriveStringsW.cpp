@@ -1,5 +1,4 @@
-#define _UWINAPI_
-#include "uwinapi.h"
+#include "macros.h"
 
 IMPLEMENT_THUNK( kernel32, WINDOWS, DWORD, WINAPI, GetLogicalDriveStringsW, ( DWORD cchBuffer, LPWSTR lpBufferW ) )
 {

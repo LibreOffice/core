@@ -1,5 +1,4 @@
-#define _UWINAPI_
-#include "uwinapi.h"
+#include "macros.h"
 
 
 EXTERN_C void WINAPI ResolveThunk_WINDOWS( FARPROC *lppfn, LPCSTR lpLibFileName, LPCSTR lpFuncName, FARPROC lpfnEmulate, FARPROC lpfnFailure )

@@ -1,5 +1,4 @@
-#define _UWINAPI_
-#include "uwinapi.h"
+#include "macros.h"
 
 #define WININIT_FILENAME    "wininit.ini"
 #define RENAME_SECTION      "rename"
@@ -23,15 +22,15 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, MoveFileExA, ( LPCSTR lpExisti
             )
         {
             CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
-            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, bufsizeof(szBuffer), WININIT_FILENAME );
+            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, elementsof(szBuffer), WININIT_FILENAME );
 
             CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
-            lstrcpyA( szRename, szNewFileNameA );
-            lstrcatA( szRename, "=" );
-            lstrcatA( szRename, szExistingFileNameA );
-            size_t  lnRename = lstrlenA(szRename);
+            strcpy( szRename, szNewFileNameA );
+            strcat( szRename, "=" );
+            strcat( szRename, szExistingFileNameA );
+            size_t  lnRename = strlen(szRename);
 
-            if ( dwBufLen + lnRename + 2 <= bufsizeof(szBuffer) )
+            if ( dwBufLen + lnRename + 2 <= elementsof(szBuffer) )
             {
                 CopyMemory( &szBuffer[dwBufLen], szRename, lnRename );
                 szBuffer[dwBufLen + lnRename ] = 0;

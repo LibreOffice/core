@@ -1,0 +1,582 @@
+;*************************************************************************
+;
+;   $RCSfile: unicows.dxp,v $
+;
+;   $Revision: 1.1 $
+;
+;   last change: $Author: hro $ $Date: 2002-08-26 12:56:07 $
+;
+;   The Contents of this file are made available subject to the terms of
+;   either of the following licenses
+;
+;          - GNU Lesser General Public License Version 2.1
+;          - Sun Industry Standards Source License Version 1.1
+;
+;   Sun Microsystems Inc., October, 2000
+;
+;   GNU Lesser General Public License Version 2.1
+;   =============================================
+;   Copyright 2000 by Sun Microsystems, Inc.
+;   901 San Antonio Road, Palo Alto, CA 94303, USA
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Lesser General Public
+;   License version 2.1, as published by the Free Software Foundation.
+;
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Lesser General Public License for more details.
+;
+;   You should have received a copy of the GNU Lesser General Public
+;   License along with this library; if not, write to the Free Software
+;   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+;   MA  02111-1307  USA
+;
+;
+;   Sun Industry Standards Source License Version 1.1
+;   =================================================
+;   The contents of this file are subject to the Sun Industry Standards
+;   Source License Version 1.1 (the "License"); You may not use this file
+;   except in compliance with the License. You may obtain a copy of the
+;   License at http://www.openoffice.org/license.html.
+;
+;   Software provided under this License is provided on an "AS IS" basis,
+;   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+;   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+;   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+;   See the License for the specific provisions governing your rights and
+;   obligations concerning the Software.
+;
+;   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+;
+;   Copyright: 2000 by Sun Microsystems, Inc.
+;
+;   All Rights Reserved.
+;
+;   Contributor(s): _______________________________________
+;
+;
+;
+;*************************************************************************
+;
+; Functions that are exported but not implemented by unicows.dll
+; are only inserted as comment.
+;
+; In addition to MSDN Platform SDK documentation the following functions 
+; are not implemented too:
+; AddMonitorW, FreeContextBufferW, GetPrinterDriverDirectoryW,
+; MCIWndCreateW
+;
+; The following functions of unicows.dll are buggy:
+; DrawStateW, GetLogicalDriveStringsW (both implemented in uwinapi.dll)
+;
+; The following functions of unicows.dll are wrapped but the ANSI versions
+; do not exist on Win9x so the wrapper is useless:
+; MoveFileExW, CopyFileExW (both implemented in uwinapi.dll along with the 
+; ANSI versions )
+;
+; These functions do not exist on Win 95 and NT neither as Unicode
+; nor as ANSI version, so the wrapper will fail on NT4 and Win 95
+; GetLongPathNameW ( implemented in uwinapi.dll along with the 
+; ANSI version )
+;
+; These essential functions aren't implemented by unicows.dll because 
+; there's no ANSI version:
+; CommandLineToArgvW (implemented by uwinapi.dll)
+;
+;*************************************************************************
+
+;AcquireCredentialsHandleW
+AddAtomW
+AddFontResourceW
+AddJobW
+;AddMonitorW
+AddPortW
+AddPrintProcessorW
+AddPrintProvidorW
+AddPrinterDriverW
+AddPrinterW
+AdvancedDocumentPropertiesW
+AppendMenuW
+BeginUpdateResourceW
+BroadcastSystemMessageW
+BuildCommDCBAndTimeoutsW
+BuildCommDCBW
+CallMsgFilterW
+CallNamedPipeW
+CallWindowProcA
+CallWindowProcW
+ChangeDisplaySettingsExW
+ChangeDisplaySettingsW
+ChangeMenuW
+CharLowerBuffW
+CharLowerW
+CharNextW
+CharPrevW
+CharToOemBuffW
+CharToOemW
+CharUpperBuffW
+CharUpperW
+ChooseColorW
+ChooseFontW
+CommConfigDialogW
+CompareStringW
+ConfigurePortW
+CopyAcceleratorTableW
+CopyEnhMetaFileW
+CopyFileExW
+CopyFileW
+CopyMetaFileW
+CreateAcceleratorTableW
+CreateColorSpaceW
+CreateDCW
+CreateDialogIndirectParamW
+CreateDialogParamW
+CreateDirectoryExW
+CreateDirectoryW
+CreateEnhMetaFileW
+CreateEventW
+CreateFileMappingW
+CreateFileW
+CreateFontIndirectW
+CreateFontW
+CreateICW
+CreateMDIWindowW
+CreateMailslotW
+CreateMetaFileW
+CreateMutexW
+;CreateNamedPipeW
+CreateProcessW
+CreateScalableFontResourceW
+CreateSemaphoreW
+CreateStdAccessibleProxyW
+CreateWaitableTimerW
+CreateWindowExW
+DdeConnect
+DdeConnectList
+DdeCreateStringHandleW
+DdeInitializeW
+DdeQueryConvInfo
+DdeQueryStringW
+DefDlgProcW
+DefFrameProcW
+DefMDIChildProcW
+DefWindowProcW
+DeleteFileW
+DeleteMonitorW
+DeletePortW
+DeletePrintProcessorW
+DeletePrintProvidorW
+DeletePrinterDriverW
+;DeviceCapabilitiesW
+DialogBoxIndirectParamW
+DialogBoxParamW
+DispatchMessageW
+DlgDirListComboBoxW
+DlgDirListW
+DlgDirSelectComboBoxExW
+DlgDirSelectExW
+;DocumentPropertiesW
+DragQueryFileW
+DrawStateW
+DrawTextExW
+DrawTextW
+EnableWindow
+EndUpdateResourceW
+EnumCalendarInfoExW
+EnumCalendarInfoW
+EnumClipboardFormats
+EnumDateFormatsExW
+EnumDateFormatsW
+EnumDisplayDevicesW
+EnumDisplaySettingsExW
+EnumDisplaySettingsW
+EnumFontFamiliesExW
+EnumFontFamiliesW
+EnumFontsW
+EnumICMProfilesW
+;EnumMonitorsW
+;EnumPortsW
+;EnumPrintProcessorDatatypesW
+;EnumPrintProcessorsW
+;EnumPrinterDriversW
+;EnumPrintersW
+EnumPropsA
+EnumPropsExA
+EnumPropsExW
+EnumPropsW
+EnumSystemCodePagesW
+EnumSystemLocalesW
+EnumTimeFormatsW
+;EnumerateSecurityPackagesW
+ExpandEnvironmentStringsW
+ExtTextOutW
+ExtractIconExW
+ExtractIconW
+FatalAppExitW
+FillConsoleOutputCharacterW
+FindAtomW
+;FindExecutableW
+FindFirstChangeNotificationW
+FindFirstFileW
+FindNextFileW
+FindResourceExW
+FindResourceW
+FindTextW
+FindWindowExW
+FindWindowW
+FormatMessageW
+;FreeContextBufferW
+FreeEnvironmentStringsW
+GetAltTabInfoW
+GetAtomNameW
+GetCPInfo
+GetCPInfoExW
+GetCalendarInfoW
+;GetCharABCWidthsFloatW
+GetCharABCWidthsW
+GetCharWidthFloatW
+GetCharWidthW
+GetCharacterPlacementW
+GetClassInfoExW
+GetClassInfoW
+GetClassLongW
+GetClassNameW
+GetClipboardData
+GetClipboardFormatNameW
+GetComputerNameW
+GetConsoleTitleW
+GetCurrencyFormatW
+GetCurrentDirectoryW
+GetCurrentHwProfileW
+GetDateFormatW
+GetDefaultCommConfigW
+GetDiskFreeSpaceExW
+GetDiskFreeSpaceW
+GetDlgItemTextW
+GetDriveTypeW
+GetEnhMetaFileDescriptionW
+GetEnhMetaFileW
+GetEnvironmentStringsW
+GetEnvironmentVariableW
+GetFileAttributesExW
+GetFileAttributesW
+GetFileTitleW
+GetFileVersionInfoSizeW
+GetFileVersionInfoW
+GetFullPathNameW
+GetGlyphOutlineW
+GetICMProfileW
+;GetJobW
+GetKerningPairsW
+GetKeyNameTextW
+GetKeyboardLayoutNameW
+GetLocaleInfoW
+GetLogColorSpaceW
+GetLogicalDriveStringsW
+GetLongPathNameW
+GetMenuItemInfoW
+GetMenuStringW
+GetMessageW
+GetMetaFileW
+GetModuleFileNameW
+GetModuleHandleW
+GetMonitorInfoW
+GetNamedPipeHandleStateW
+GetNumberFormatW
+GetObjectW
+GetOpenFileNamePreviewW
+GetOpenFileNameW
+GetOutlineTextMetricsW
+GetPrintProcessorDirectoryW
+;GetPrinterDataW
+;GetPrinterDriverDirectoryW
+;GetPrinterDriverW
+;GetPrinterW
+GetPrivateProfileIntW
+GetPrivateProfileSectionNamesW
+GetPrivateProfileSectionW
+GetPrivateProfileStringW
+GetPrivateProfileStructW
+GetProcAddress
+GetProfileIntW
+GetProfileSectionW
+GetProfileStringW
+GetPropA
+GetPropW
+GetRoleTextW
+GetSaveFileNamePreviewW
+GetSaveFileNameW
+GetShortPathNameW
+GetStartupInfoW
+GetStateTextW
+GetStringTypeExW
+GetStringTypeW
+GetSystemDirectoryW
+GetSystemWindowsDirectoryW
+GetTabbedTextExtentW
+GetTempFileNameW
+GetTempPathW
+GetTextExtentExPointW
+GetTextExtentPoint32W
+GetTextExtentPointW
+GetTextFaceW
+GetTextMetricsW
+GetTimeFormatW
+GetUserNameW
+GetVersionExW
+GetVolumeInformationW
+GetWindowLongA
+GetWindowLongW
+GetWindowModuleFileNameW
+GetWindowTextLengthW
+GetWindowTextW
+GetWindowsDirectoryW
+GlobalAddAtomW
+GlobalFindAtomW
+GlobalGetAtomNameW
+GrayStringW
+;InitSecurityInterfaceW
+;InitializeSecurityContextW
+InsertMenuItemW
+InsertMenuW
+IsBadStringPtrW
+IsCharAlphaNumericW
+IsCharAlphaW
+IsCharLowerW
+IsCharUpperW
+IsClipboardFormatAvailable
+IsDestinationReachableW
+IsDialogMessageW
+IsTextUnicode
+IsValidCodePage
+IsWindowUnicode
+LCMapStringW
+LoadAcceleratorsW
+LoadBitmapW
+LoadCursorFromFileW
+LoadCursorW
+LoadIconW
+LoadImageW
+LoadKeyboardLayoutW
+LoadLibraryExW
+LoadLibraryW
+LoadMenuIndirectW
+LoadMenuW
+LoadStringW
+;MCIWndCreateW
+MapVirtualKeyExW
+MapVirtualKeyW
+MessageBoxExW
+MessageBoxIndirectW
+MessageBoxW
+ModifyMenuW
+MoveFileW
+MultiByteToWideChar
+MultinetGetConnectionPerformanceW
+OemToCharBuffW
+OemToCharW
+;OleUIAddVerbMenuW
+;OleUIBusyW
+;OleUIChangeIconW
+;OleUIChangeSourceW
+;OleUIConvertW
+;OleUIEditLinksW
+;OleUIInsertObjectW
+;OleUIObjectPropertiesW
+;OleUIPasteSpecialW
+;OleUIPromptUserW
+;OleUIUpdateLinksW
+OpenEventW
+OpenFileMappingW
+OpenMutexW
+OpenPrinterW
+OpenSemaphoreW
+OpenWaitableTimerW
+OutputDebugStringW
+PageSetupDlgW
+PeekConsoleInputW
+PeekMessageW
+PlaySoundW
+;PolyTextOutW
+PostMessageW
+PostThreadMessageW
+PrintDlgW
+;QueryContextAttributesW
+;QueryCredentialsAttributesW
+QueryDosDeviceW
+;QuerySecurityPackageInfoW
+RasConnectionNotificationW
+RasCreatePhonebookEntryW
+RasDeleteEntryW
+RasDeleteSubEntryW
+RasDialW
+RasEditPhonebookEntryW
+RasEnumConnectionsW
+RasEnumDevicesW
+RasEnumEntriesW
+RasGetConnectStatusW
+RasGetEntryDialParamsW
+RasGetEntryPropertiesW
+RasGetErrorStringW
+RasHangUpW
+RasRenameEntryW
+RasSetEntryDialParamsW
+RasSetEntryPropertiesW
+RasSetSubEntryPropertiesW
+RasValidateEntryNameW
+ReadConsoleInputW
+ReadConsoleOutputCharacterW
+ReadConsoleOutputW
+ReadConsoleW
+RegConnectRegistryW
+RegCreateKeyExW
+RegCreateKeyW
+RegDeleteKeyW
+RegDeleteValueW
+RegEnumKeyExW
+RegEnumKeyW
+RegEnumValueW
+RegLoadKeyW
+RegOpenKeyExW
+RegOpenKeyW
+RegQueryInfoKeyW
+RegQueryMultipleValuesW
+RegQueryValueExW
+RegQueryValueW
+RegReplaceKeyW
+RegSaveKeyW
+RegSetValueExW
+RegSetValueW
+RegUnLoadKeyW
+RegisterClassExW
+RegisterClassW
+RegisterClipboardFormatW
+RegisterDeviceNotificationW
+RegisterWindowMessageW
+RemoveDirectoryW
+RemoveFontResourceW
+RemovePropA
+RemovePropW
+ReplaceTextW
+ResetDCW
+;ResetPrinterW
+SHBrowseForFolderW
+SHChangeNotify
+SHFileOperationW
+SHGetFileInfoW
+SHGetNewLinkInfoW
+SHGetPathFromIDListW
+ScrollConsoleScreenBufferW
+SearchPathW
+SendDlgItemMessageW
+SendMessageCallbackW
+SendMessageTimeoutW
+SendMessageW
+SendNotifyMessageW
+SetCalendarInfoW
+SetClassLongW
+SetComputerNameW
+SetConsoleTitleW
+SetCurrentDirectoryW
+SetDefaultCommConfigW
+SetDlgItemTextW
+SetEnvironmentVariableW
+SetFileAttributesW
+SetICMProfileW
+SetJobW
+SetLocaleInfoW
+SetMenuItemInfoW
+SetPrinterDataW
+SetPrinterW
+SetPropA
+SetPropW
+SetVolumeLabelW
+SetWindowLongA
+SetWindowLongW
+SetWindowTextW
+SetWindowsHookExW
+SetWindowsHookW
+ShellAboutW
+ShellExecuteExW
+ShellExecuteW
+Shell_NotifyIconW
+StartDocPrinterW
+StartDocW
+SystemParametersInfoW
+TabbedTextOutW
+TextOutW
+TranslateAcceleratorW
+UnregisterClassW
+UpdateICMRegKeyW
+UpdateResourceW
+VerFindFileW
+VerInstallFileW
+VerLanguageNameW
+VerQueryValueW
+VkKeyScanExW
+VkKeyScanW
+WNetAddConnection2W
+WNetAddConnection3W
+WNetAddConnectionW
+WNetCancelConnection2W
+WNetCancelConnectionW
+WNetConnectionDialog1W
+WNetDisconnectDialog1W
+WNetEnumResourceW
+WNetGetConnectionW
+WNetGetLastErrorW
+WNetGetNetworkInformationW
+WNetGetProviderNameW
+WNetGetResourceInformationW
+WNetGetResourceParentW
+WNetGetUniversalNameW
+WNetGetUserW
+WNetOpenEnumW
+WNetUseConnectionW
+WaitNamedPipeW
+WideCharToMultiByte
+WinHelpW
+WriteConsoleInputW
+WriteConsoleOutputCharacterW
+WriteConsoleOutputW
+WriteConsoleW
+WritePrivateProfileSectionW
+WritePrivateProfileStringW
+WritePrivateProfileStructW
+WriteProfileSectionW
+WriteProfileStringW
+;auxGetDevCapsW
+capCreateCaptureWindowW
+capGetDriverDescriptionW
+;joyGetDevCapsW
+lstrcatW
+lstrcmpW
+lstrcmpiW
+lstrcpyW
+lstrcpynW
+lstrlenW
+;mciGetDeviceIDW
+;mciGetErrorStringW
+;mciSendCommandW
+;mciSendStringW
+;midiInGetDevCapsW
+;midiInGetErrorTextW
+;midiOutGetDevCapsW
+;midiOutGetErrorTextW
+;mixerGetControlDetailsW
+;mixerGetDevCapsW
+;mixerGetLineControlsW
+;mixerGetLineInfoW
+;mmioInstallIOProcW
+;mmioOpenW
+;mmioRenameW
+;mmioStringToFOURCCW
+sndPlaySoundW
+;waveInGetDevCapsW
+;waveInGetErrorTextW
+;waveOutGetDevCapsW
+;waveOutGetErrorTextW
+wsprintfW
+wvsprintfW

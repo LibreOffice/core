@@ -1,6 +1,5 @@
-#define _UWINAPI_
 #define UNICODE
-#include "uwinapi.h"
+#include "macros.h"
 
 EXTERN_C DWORD WINAPI GetLongPathNameW_NT( LPCWSTR lpShortPath, LPWSTR lpLongPath, DWORD cchBuffer )
 #include "GetLongPathName.cpp"
@@ -21,7 +20,7 @@ EXTERN_C DWORD WINAPI GetLongPathNameW_WINDOWS( LPCWSTR lpShortPathW, LPWSTR lpL
 
 EXTERN_C void WINAPI ResolveThunk_GetLongPathNameW( FARPROC *lppfn, LPCSTR lpLibFileName, LPCSTR lpFuncName )
 {
-    if ( (LONG)GetVersion < 0 )
+    if ( (LONG)GetVersion() < 0 )
         *lppfn = (FARPROC)GetLongPathNameW_WINDOWS;
     else
     {

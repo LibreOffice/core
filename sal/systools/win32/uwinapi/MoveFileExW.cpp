@@ -1,5 +1,4 @@
-#define _UWINAPI_
-#include "uwinapi.h"
+#include "macros.h"
 
 IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, MoveFileExW, ( LPCWSTR lpExistingFileNameW, LPCWSTR lpNewFileNameW, DWORD dwFlags ) )
 {

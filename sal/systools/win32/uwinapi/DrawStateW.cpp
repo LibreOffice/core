@@ -1,5 +1,4 @@
-#define _UWINAPI_
-#include "uwinapi.h"
+#include "macros.h"
 
 IMPLEMENT_THUNK( user32, WINDOWS, BOOL, WINAPI, DrawStateW,
 (
@@ -46,3 +45,4 @@ IMPLEMENT_THUNK( user32, WINDOWS, BOOL, WINAPI, DrawStateW,
         return DrawStateA( hdc, hbr, lpOutputFunc, lData, wData, x, y, cx, cy, fuFlags );
     }
 }
+

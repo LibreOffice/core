@@ -1,6 +1,5 @@
-#define _UWINAPI_
 #define _WIN32_WINNT 0x0400
-#include "uwinapi.h"
+#include "macros.h"
 
 #define BUFSIZE 16384
 
