@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-25 14:49:33 $
+ *  last change: $Author: gt $ $Date: 2002-03-06 14:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,14 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
     for ( i = 1; i < ROW_COUNT; ++i )
         DrawLine( Point( 0, nY * i ), Point( aOutputSize.Width(), nY * i ) );
 
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aWindowTextColor( rStyleSettings.GetWindowTextColor() );
+    Color aHighlightColor( rStyleSettings.GetHighlightColor() );
+    Color aHighlightTextColor( rStyleSettings.GetHighlightTextColor() );
+    Color aFaceColor( rStyleSettings.GetFaceColor() );
+    Color aLightColor( rStyleSettings.GetLightColor() );
+    Color aShadowColor( rStyleSettings.GetShadowColor() );
+
     for ( i = n1; i <= n2; ++i)
     {
         Point pix = MapIndexToPixel( i );
@@ -472,43 +480,47 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
         String aCharStr( MapIndexToUnicode( maFontCharMap, i ) );
         int tx = x + ( nX - GetTextWidth(aCharStr) ) / 2;
         int ty = y + ( nY - GetTextHeight() ) / 2;
+        Point aPointTxTy( tx, ty );
+        Color aTextCol = GetTextColor();
 
-        if ( i != nSelectedIndex /*&& HasFocus()*/ )
-            DrawText( Point( tx, ty ), aCharStr );
+        if ( i != nSelectedIndex )
+        {
+            SetTextColor( aWindowTextColor );
+            DrawText( aPointTxTy, aCharStr );
+        }
         else
         {
-            const StyleSettings& rStyleSettings =
-                Application::GetSettings().GetStyleSettings();
-
             Color aLineCol = GetLineColor();
             Color aFillCol = GetFillColor();
             SetLineColor();
+            Point aPointUL( x + 1, y + 1 );
             if( HasFocus() )
             {
-                SetFillColor( rStyleSettings.GetHighlightColor() );
-                DrawRect( Rectangle( Point(x+1,y+1), Size(nX-1,nY-1) ) );
+                SetFillColor( aHighlightColor );
+                DrawRect( Rectangle( aPointUL, Size(nX-1,nY-1) ) );
 
-                Color aTextCol = GetTextColor();
-                SetTextColor( rStyleSettings.GetHighlightTextColor() );
-                DrawText( Point( tx, ty ), aCharStr );
-                SetTextColor( aTextCol );
+                SetTextColor( aHighlightTextColor );
+                DrawText( aPointTxTy, aCharStr );
             }
             else
             {
-                SetFillColor( rStyleSettings.GetFaceColor() );
-                DrawRect( Rectangle( Point( x+1, y+1), Size( nX-1, nY-1) ) );
-                SetLineColor( rStyleSettings.GetLightColor() );
-                DrawLine( Point( x+1,y+1 ), Point( x+nX-1, y+1) );
-                DrawLine( Point( x+1,y+1 ), Point( x+1, y+nY-1) );
-                SetLineColor( rStyleSettings.GetShadowColor() );
+                SetFillColor( aFaceColor );
+                DrawRect( Rectangle( aPointUL, Size( nX-1, nY-1) ) );
+
+                SetLineColor( aLightColor );
+                DrawLine( aPointUL, Point( x+nX-1, y+1) );
+                DrawLine( aPointUL, Point( x+1, y+nY-1) );
+
+                SetLineColor( aShadowColor );
                 DrawLine( Point( x+1, y+nY-1), Point( x+nX-1, y+nY-1) );
                 DrawLine( Point( x+nX-1, y+nY-1), Point( x+nX-1, y+1) );
 
-                DrawText( Point( tx, ty ), aCharStr );
+                DrawText( aPointTxTy, aCharStr );
             }
             SetLineColor( aLineCol );
             SetFillColor( aFillCol );
         }
+        SetTextColor( aTextCol );
     }
 }
 
@@ -708,14 +720,14 @@ SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter )
 
 void SvxShowText::Paint( const Rectangle& )
 {
-    if ( bCenter )
-    {
-        String aText = GetText();
-        DrawText( Point( (GetOutputSizePixel().Width() - GetTextWidth(aText))/2, nY),
-            aText );
-    }
-    else
-        DrawText( Point( 2, nY ), GetText() );
+    Color aTextCol = GetTextColor();
+    SetTextColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+
+    String aText = GetText();
+    Point aPoint( bCenter? ( GetOutputSizePixel().Width() - GetTextWidth( aText ) ) / 2 : 2, nY );
+    DrawText( aPoint, aText );
+
+    SetTextColor( aTextCol );
 }
 
 // -----------------------------------------------------------------------
