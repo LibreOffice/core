@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 09:55:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,10 @@
 
  module com {  module sun {  module star {  module text {
 
-interface XText;
-interface XTextRangeMover;
-interface XTextRangeCompare;
-interface XRelativeTextContentInsert;
+ published interface XText;
+ published interface XTextRangeMover;
+ published interface XTextRangeCompare;
+ published interface XRelativeTextContentInsert;
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::Text
@@ -93,7 +93,7 @@ interface XRelativeTextContentInsert;
     @see com::sun::star::text::TextFrame
     @see com::sun::star::table::Cell
  */
-service Text
+published service Text
 {
 
 
