@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//W3C//DTD HTML 3.2//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>dbt</module-name>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.sdbc.ParameterSubstitution</name>
+        <description>
+            This service allows to replace named parameters if SQL statements to unnamed one.
+        </description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdbc.ParameterSubstitution</supported-service>
+    </component-description>
+    <project-build-dependency>cppuhelper</project-build-dependency>
+    <project-build-dependency>cppu</project-build-dependency>
+    <project-build-dependency>sal</project-build-dependency>
+    <project-build-dependency>vos</project-build-dependency>
+    <runtime-module-dependency>cppuhelper</runtime-module-dependency>
+    <runtime-module-dependency>cppu</runtime-module-dependency>
+    <runtime-module-dependency>sal</runtime-module-dependency>
+    <runtime-module-dependency>vos</runtime-module-dependency>
+    <runtime-module-dependency>comphelper</runtime-module-dependency>
+</module-description>
+
+
