@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-02-05 14:01:24 $
+#   last change: $Author: oj $ $Date: 2001-02-16 15:51:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,13 +81,17 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
-        $(SLO)$/propertysetitem.obj	\
+        $(SLO)$/TokenWriter.obj				\
+        $(SLO)$/HtmlReader.obj				\
+        $(SLO)$/RtfReader.obj				\
+        $(SLO)$/DExport.obj					\
+        $(SLO)$/propertysetitem.obj			\
         $(SLO)$/containermultiplexer.obj	\
-        $(SLO)$/querydesignaccess.obj	\
-        $(SLO)$/stringlistitem.obj	\
-        $(SLO)$/charsets.obj	\
-        $(SLO)$/dsntypes.obj	\
-        $(SLO)$/uiservices.obj	\
+        $(SLO)$/querydesignaccess.obj		\
+        $(SLO)$/stringlistitem.obj			\
+        $(SLO)$/charsets.obj				\
+        $(SLO)$/dsntypes.obj				\
+        $(SLO)$/uiservices.obj				\
         $(SLO)$/moduledbu.obj
 
 # --- Targets ----------------------------------
