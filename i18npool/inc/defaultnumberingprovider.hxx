@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-26 13:36:40 $
+ *  last change: $Author: khong $ $Date: 2002-07-11 00:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #endif
 
+#include <transliterationImpl.hxx>
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 class DefaultNumberingProvider : public cppu::WeakImplHelper4
@@ -135,11 +137,8 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
                 throw( com::sun::star::uno::RuntimeException );
 private:
-    void getTransliteration();
-
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xSMgr;
-        com::sun::star::uno::Reference < com::sun::star::i18n::XTransliteration > translit;
-
+    TransliterationImpl* translit;
 };
 
 } } } }
