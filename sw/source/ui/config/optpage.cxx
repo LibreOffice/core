@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:36:19 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,8 +1261,9 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aHSpacesCB    ( this,   ResId( CB_HSPACE   ) ),
     aTabCB        ( this,   ResId( CB_TAB      ) ),
     aBreakCB      ( this,   ResId( CB_BREAK        ) ),
-    aHiddenCB     ( this,   ResId( CB_HIDDEN   ) ),
-    aHiddenParaCB ( this,   ResId( CB_HIDDEN_PARA ) )
+    aCharHiddenCB     ( this,   ResId( CB_CHAR_HIDDEN   ) ),
+    aFldHiddenCB     ( this,   ResId( CB_FLD_HIDDEN   ) ),
+    aFldHiddenParaCB ( this,   ResId( CB_FLD_HIDDEN_PARA ) )
 {
     FreeResource();
     const SfxPoolItem* pItem = 0;
@@ -1283,8 +1284,9 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
         aTabCB      .Hide();
-        aHiddenCB   .Hide();
-        aHiddenParaCB.Hide();
+        aCharHiddenCB.Hide();
+        aFldHiddenCB    .Hide();
+        aFldHiddenParaCB.Hide();
         aBreakCB.SetPosPixel(aTabCB.GetPosPixel());
         aFlagFL         .Hide();
         aOnOffCB        .Hide();
@@ -1357,8 +1359,9 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     aDisp.bSpace                = aSpacesCB     .IsChecked();
     aDisp.bNonbreakingSpace     = aHSpacesCB    .IsChecked();
     aDisp.bSoftHyphen           = aSHyphCB      .IsChecked();
-    aDisp.bHiddenText           = aHiddenCB     .IsChecked();
-    aDisp.bShowHiddenPara       = aHiddenParaCB .IsChecked();
+    aDisp.bFldHiddenText        = aFldHiddenCB     .IsChecked();
+    aDisp.bCharHiddenText       = aCharHiddenCB.IsChecked();
+    aDisp.bShowHiddenPara       = aFldHiddenParaCB .IsChecked();
     aDisp.bManualBreak          = aBreakCB      .IsChecked();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
@@ -1399,8 +1402,9 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
         aSpacesCB   .Check  (pDocDisplayAttr->bSpace                );
         aHSpacesCB  .Check  (pDocDisplayAttr->bNonbreakingSpace     );
         aSHyphCB    .Check  (pDocDisplayAttr->bSoftHyphen           );
-        aHiddenCB   .Check  (pDocDisplayAttr->bHiddenText           );
-        aHiddenParaCB.Check (pDocDisplayAttr->bShowHiddenPara       );
+        aCharHiddenCB.Check (pDocDisplayAttr->bCharHiddenText );
+        aFldHiddenCB   .Check  (pDocDisplayAttr->bFldHiddenText );
+        aFldHiddenParaCB.Check (pDocDisplayAttr->bShowHiddenPara       );
         aBreakCB    .Check  (pDocDisplayAttr->bManualBreak          );
     }
 }
