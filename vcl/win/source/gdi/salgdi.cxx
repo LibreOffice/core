@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:54:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,11 @@
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
+#ifndef _RTL_STRINGBUF_HXX
+#include <rtl/strbuf.hxx>
+#endif
+
+using namespace rtl;
 
 // =======================================================================
 
@@ -1659,18 +1664,6 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
     return bRetValue;
 }
 
-inline void ImplWriteDouble( BYTE** pBuf, double nNumb )
-{
-    *pBuf += sprintf( (char*)*pBuf, "%f", nNumb );
-    *(*pBuf)++ = ' ';
-}
-
-inline void ImplWriteString( BYTE** pBuf, const char* sString )
-{
-    strcpy( (char*)*pBuf, sString );
-    *pBuf += strlen( sString );
-}
-
 BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
 {
     BOOL bRetValue = FALSE;
@@ -1681,12 +1674,11 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
         if ( Escape( mhDC, QUERYESCSUPPORT, sizeof( int ), ( LPSTR )&nEscape, 0 ) )
         {
-            BYTE* pBuf = new BYTE[ POSTSCRIPT_BUFSIZE ];
-
             double  nBoundingBox[4];
 
-            if ( pBuf && ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
+            if ( ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
             {
+                OStringBuffer aBuf( POSTSCRIPT_BUFSIZE );
                 // #107797# Write out EPS encapsulation header
                 // ----------------------------------------------------------------------------------
 
@@ -1698,43 +1690,48 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 // op_count_salWin). Currently, I have no idea on how to
                 // work around that, except from scanning and
                 // interpreting the EPS for unused identifiers.
-                BYTE*   pTemp = pBuf + 2;       // +2 because we want to insert the size later
-                ImplWriteString( &pTemp, "\n\n/b4_Inc_state_salWin save def\n" );
-                ImplWriteString( &pTemp, "/dict_count_salWin countdictstack def\n" );
-                ImplWriteString( &pTemp, "/op_count_salWin count 1 sub def\n" );
-                ImplWriteString( &pTemp, "userdict begin\n" );
-                ImplWriteString( &pTemp, "/showpage {} def\n" );
-                ImplWriteString( &pTemp, "0 setgray 0 setlinecap\n" );
-                ImplWriteString( &pTemp, "1 setlinewidth 0 setlinejoin\n" );
-                ImplWriteString( &pTemp, "10 setmiterlimit [] 0 setdash newpath\n" );
-                ImplWriteString( &pTemp, "/languagelevel where\n" );
-                ImplWriteString( &pTemp, "{\n" );
-                ImplWriteString( &pTemp, "  pop languagelevel\n" );
-                ImplWriteString( &pTemp, "  1 ne\n" );
-                ImplWriteString( &pTemp, "  {\n" );
-                ImplWriteString( &pTemp, "    false setstrokeadjust false setoverprint\n" );
-                ImplWriteString( &pTemp, "  } if\n" );
-                ImplWriteString( &pTemp, "} if\n\n" );
-                *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
-                Escape ( mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
+
+                // reserve place for a USHORT
+                aBuf.append( "aa" );
+                // append the real text
+                aBuf.append( "\n\n/b4_Inc_state_salWin save def\n"
+                             "/dict_count_salWin countdictstack def\n"
+                             "/op_count_salWin count 1 sub def\n"
+                             "userdict begin\n"
+                             "/showpage {} def\n"
+                             "0 setgray 0 setlinecap\n"
+                             "1 setlinewidth 0 setlinejoin\n"
+                             "10 setmiterlimit [] 0 setdash newpath\n"
+                             "/languagelevel where\n"
+                             "{\n"
+                             "  pop languagelevel\n"
+                             "  1 ne\n"
+                             "  {\n"
+                             "    false setstrokeadjust false setoverprint\n"
+                             "  } if\n"
+                             "} if\n\n" );
+                *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
+                Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
 
 
                 // #107797# Write out EPS transformation code
                 // ----------------------------------------------------------------------------------
                 double  dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
                 double  dM22 = nHeight / (nBoundingBox[1] - nBoundingBox[3] );
-                pTemp = pBuf + 2;       // +2 because we want to insert the size later
-                ImplWriteString( &pTemp, "\n\n[ " );
-                ImplWriteDouble( &pTemp, dM11 );
-                ImplWriteDouble( &pTemp, 0 );
-                ImplWriteDouble( &pTemp, 0 );
-                ImplWriteDouble( &pTemp, dM22 );
-                ImplWriteDouble( &pTemp, nX - ( dM11 * nBoundingBox[0] ) );
-                ImplWriteDouble( &pTemp, nY - ( dM22 * nBoundingBox[3] ) );
-                ImplWriteString( &pTemp, "] concat\n" );
-                ImplWriteString( &pTemp, "%%BeginDocument:\n" );
-                *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
-                Escape ( mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
+                // reserve a USHORT again
+                aBuf.setLength( 2 );
+                aBuf.append( "\n\n[" );
+                aBuf.append( dM11 );
+                aBuf.append( " 0 0 " );
+                aBuf.append( dM22 );
+                aBuf.append( ' ' );
+                aBuf.append( nX - ( dM11 * nBoundingBox[0] ) );
+                aBuf.append( ' ' );
+                aBuf.append( nY - ( dM22 * nBoundingBox[3] ) );
+                aBuf.append( "] concat\n"
+                             "%%BeginDocument:\n" );
+                *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
+                Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
 
 
                 // #107797# Write out actual EPS content
@@ -1746,9 +1743,11 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                     nDoNow = nToDo;
                     if ( nToDo > POSTSCRIPT_BUFSIZE - 2 )
                         nDoNow = POSTSCRIPT_BUFSIZE - 2;
-                    *((USHORT*)pBuf) = (USHORT)nDoNow;
-                    memcpy( pBuf + 2, (BYTE*)pPtr + nSize - nToDo, nDoNow );
-                    ULONG nResult = Escape ( mhDC, nEscape, nDoNow + 2, (LPTSTR)((BYTE*)pBuf), 0 );
+                    // the following is based on the string buffer allocation
+                    // of size POSTSCRIPT_BUFSIZE at construction time of aBuf
+                    *((USHORT*)aBuf.getStr()) = (USHORT)nDoNow;
+                    memcpy( (void*)(aBuf.getStr() + 2), (BYTE*)pPtr + nSize - nToDo, nDoNow );
+                    ULONG nResult = Escape ( mhDC, nEscape, nDoNow + 2, (LPTSTR)aBuf.getStr(), 0 );
                     if (!nResult )
                         break;
                     nToDo -= nResult;
@@ -1757,16 +1756,16 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
                 // #107797# Write out EPS encapsulation footer
                 // ----------------------------------------------------------------------------------
-                pTemp = pBuf + 2;
-                ImplWriteString( &pTemp, "%%EndDocument\n" );
-                ImplWriteString( &pTemp, "count op_count_salWin sub {pop} repeat\n" );
-                ImplWriteString( &pTemp, "countdictstack dict_count_salWin sub {end} repeat\n" );
-                ImplWriteString( &pTemp, "b4_Inc_state_salWin restore\n\n" );
-                *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
-                Escape ( mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
+                // reserve a USHORT again
+                aBuf.setLength( 2 );
+                aBuf.append( "%%EndDocument\n"
+                             "count op_count_salWin sub {pop} repeat\n"
+                             "countdictstack dict_count_salWin sub {end} repeat\n"
+                             "b4_Inc_state_salWin restore\n\n" );
+                *((USHORT*)aBuf.getStr()) = (USHORT)( aBuf.getLength() - 2 );
+                Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
                 bRetValue = TRUE;
             }
-            delete [] pBuf;
         }
     }
 
