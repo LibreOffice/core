@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:09 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
@@ -178,6 +181,9 @@ static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
     switch( eTypeClass )
     {
         case typelib_TypeClass_ARRAY:
+            nSize = (sal_Int32)sizeof( typelib_ArrayTypeDescription );
+        break;
+
         case typelib_TypeClass_SEQUENCE:
             nSize = (sal_Int32)sizeof( typelib_IndirectTypeDescription );
         break;
@@ -273,6 +279,7 @@ struct TypeDescriptor_Init_Impl
     sal_Int32           nCompoundTypeDescriptionCount;
     sal_Int32           nUnionTypeDescriptionCount;
     sal_Int32           nIndirectTypeDescriptionCount;
+    sal_Int32           nArrayTypeDescriptionCount;
     sal_Int32           nEnumTypeDescriptionCount;
     sal_Int32           nInterfaceMethodTypeDescriptionCount;
     sal_Int32           nInterfaceAttributeTypeDescriptionCount;
@@ -396,6 +403,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
     OSL_ASSERT( nCompoundTypeDescriptionCount == 0 );
     OSL_ASSERT( nUnionTypeDescriptionCount == 0 );
     OSL_ASSERT( nIndirectTypeDescriptionCount == 0 );
+    OSL_ASSERT( nArrayTypeDescriptionCount == 0 );
     OSL_ASSERT( nEnumTypeDescriptionCount == 0 );
     OSL_ASSERT( nInterfaceMethodTypeDescriptionCount == 0 );
     OSL_ASSERT( nInterfaceAttributeTypeDescriptionCount == 0 );
@@ -557,6 +565,20 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     switch( eTypeClass )
     {
         case typelib_TypeClass_ARRAY:
+        {
+            typelib_ArrayTypeDescription * pTmp = new typelib_ArrayTypeDescription();
+            typelib_IndirectTypeDescription * pIndirect = (typelib_IndirectTypeDescription *)pTmp;
+            pRet = (typelib_TypeDescription *)pTmp;
+#ifdef CPPU_ASSERTIONS
+            osl_incrementInterlockedCount( &aInit.nArrayTypeDescriptionCount );
+#endif
+            pIndirect->pType = 0;
+            pTmp->nDimensions = 0;
+            pTmp->nTotalElements = 0;
+            pTmp->pDimensions = 0;
+        }
+        break;
+
         case typelib_TypeClass_SEQUENCE:
         {
             typelib_IndirectTypeDescription * pTmp = new typelib_IndirectTypeDescription();
@@ -708,7 +730,6 @@ extern "C" void SAL_CALL typelib_typedescription_new(
 
     switch( eTypeClass )
     {
-        case typelib_TypeClass_ARRAY:
         case typelib_TypeClass_SEQUENCE:
         {
             OSL_ASSERT( nMembers == 0 );
@@ -846,6 +867,44 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
     (*ppRet)->pWeakRef = (typelib_TypeDescriptionReference *)*ppRet;
     // sizeof( void ) not allowed
     (*ppRet)->nSize = typelib_typedescription_getAlignedUnoSize( (*ppRet), 0, (*ppRet)->nAlignment );
+    (*ppRet)->nAlignment = adjustAlignment( (*ppRet)->nAlignment );
+}
+
+//------------------------------------------------------------------------
+extern "C" void SAL_CALL typelib_typedescription_newArray(
+    typelib_TypeDescription ** ppRet,
+    typelib_TypeDescriptionReference * pElementTypeRef,
+    sal_Int32 nDimensions,
+    sal_Int32 * pDimensions )
+    SAL_THROW_EXTERN_C ()
+{
+    OUStringBuffer aBuf( 32 );
+    aBuf.append( pElementTypeRef->pTypeName );
+    sal_Int32 nElements = 1;
+    for (sal_Int32 i=0; i < nDimensions; i++)
+    {
+        aBuf.appendAscii("[");
+        aBuf.append(pDimensions[i]);
+        aBuf.appendAscii("]");
+        nElements *= pDimensions[i];
+    }
+    OUString aTypeName( aBuf.makeStringAndClear() );
+
+
+    typelib_typedescription_newEmpty( ppRet, typelib_TypeClass_ARRAY, aTypeName.pData );
+    typelib_ArrayTypeDescription * pArray = (typelib_ArrayTypeDescription *)*ppRet;
+
+    pArray->nDimensions = nDimensions;
+    pArray->nTotalElements = nElements;
+    pArray->pDimensions = new sal_Int32[ nDimensions ];
+    ::memcpy( pArray->pDimensions, pDimensions, nDimensions * sizeof(sal_Int32) );
+
+    typelib_typedescriptionreference_acquire(pElementTypeRef);
+    ((typelib_IndirectTypeDescription*)pArray)->pType = pElementTypeRef;
+
+    (*ppRet)->pWeakRef = (typelib_TypeDescriptionReference *)*ppRet;
+    // sizeof( void ) not allowed
+    (*ppRet)->nSize = typelib_typedescription_getAlignedUnoSize( *ppRet, 0, (*ppRet)->nAlignment );
     (*ppRet)->nAlignment = adjustAlignment( (*ppRet)->nAlignment );
 }
 
@@ -1046,33 +1105,35 @@ static inline void typelib_typedescription_destructExtendedMembers(
     switch( pTD->eTypeClass )
     {
     case typelib_TypeClass_ARRAY:
+        if( ((typelib_IndirectTypeDescription*)pTD)->pType )
+            typelib_typedescriptionreference_release( ((typelib_IndirectTypeDescription*)pTD)->pType );
+        delete [] ((typelib_ArrayTypeDescription *)pTD)->pDimensions;
+        break;
     case typelib_TypeClass_SEQUENCE:
         if( ((typelib_IndirectTypeDescription*)pTD)->pType )
             typelib_typedescriptionreference_release( ((typelib_IndirectTypeDescription*)pTD)->pType );
         break;
     case typelib_TypeClass_UNION:
     {
-        typelib_UnionTypeDescription * pUTD = (typelib_UnionTypeDescription *)pTD;
-        typelib_typedescriptionreference_release( pUTD->pDiscriminantTypeRef );
-        typelib_typedescriptionreference_release( pUTD->pDefaultTypeRef );
+        typelib_UnionTypeDescription * pUnionTD = (typelib_UnionTypeDescription *)pTD;
+        typelib_typedescriptionreference_release( pUnionTD->pDiscriminantTypeRef );
+        typelib_typedescriptionreference_release( pUnionTD->pDefaultTypeRef );
 
         sal_Int32 nPos;
-
-        typelib_TypeDescriptionReference ** ppTypeRefs = pUTD->ppTypeRefs;
-        for ( nPos = pUTD->nMembers; nPos--; )
+        typelib_TypeDescriptionReference ** ppTypeRefs = pUnionTD->ppTypeRefs;
+        for ( nPos = pUnionTD->nMembers; nPos--; )
         {
             typelib_typedescriptionreference_release( ppTypeRefs[nPos] );
         }
 
-        rtl_uString ** ppMemberNames = pUTD->ppMemberNames;
-        for ( nPos = pUTD->nMembers; nPos--; )
+        rtl_uString ** ppMemberNames = pUnionTD->ppMemberNames;
+        for ( nPos = pUnionTD->nMembers; nPos--; )
         {
             rtl_uString_release( ppMemberNames[nPos] );
         }
-
-        delete [] ppTypeRefs;
-        delete [] ppMemberNames;
-        delete [] pUTD->pDiscriminants;
+        delete [] pUnionTD->ppMemberNames;
+        delete [] pUnionTD->pDiscriminants;
+        delete [] pUnionTD->ppTypeRefs;
     }
     break;
     case typelib_TypeClass_STRUCT:
@@ -1201,6 +1262,8 @@ extern "C" void SAL_CALL typelib_typedescription_release(
         switch( pTD->eTypeClass )
         {
         case typelib_TypeClass_ARRAY:
+            osl_decrementInterlockedCount( &aInit.nArrayTypeDescriptionCount );
+            break;
         case typelib_TypeClass_SEQUENCE:
             osl_decrementInterlockedCount( &aInit.nIndirectTypeDescriptionCount );
             break;
@@ -1408,7 +1471,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 nSize = rMaxIntegralTypeSize = sizeof( void * );
                 break;
             case typelib_TypeClass_UNION:
-            {
+                {
                 nSize = rMaxIntegralTypeSize = sizeof(sal_Int64);
                 for ( sal_Int32 nPos = ((typelib_UnionTypeDescription *)pTypeDescription)->nMembers; nPos--; )
                 {
@@ -1423,8 +1486,8 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                         rMaxIntegralTypeSize = nMaxIntegralTypeSize;
                 }
                 ((typelib_UnionTypeDescription *)pTypeDescription)->nValueOffset = rMaxIntegralTypeSize;
-            }
-            break;
+                }
+                break;
             case typelib_TypeClass_ENUM:
                 nSize = rMaxIntegralTypeSize = sizeof( typelib_TypeClass );
                 break;
@@ -1439,7 +1502,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                     // inherit structs extends the base struct.
                     nStructSize = pTmp->pBaseTypeDescription->aBase.nSize;
                     rMaxIntegralTypeSize = pTmp->pBaseTypeDescription->aBase.nAlignment;
-                }
+                 }
                 for( sal_Int32 i = 0; i < pTmp->nMembers; i++ )
                 {
                     typelib_TypeDescription * pMemberType = 0;
@@ -1463,7 +1526,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                         rMaxIntegralTypeSize = nMaxIntegral;
                 }
                 // Example: A { double; int; } structure has a size of 16 instead of 10. The
-                // compiler must follow this rule if it is possible to access memvers in arrays through:
+                // compiler must follow this rule if it is possible to access members in arrays through:
                 // (Element *)((char *)pArray + sizeof( Element ) * ElementPos)
                 nStructSize = (nStructSize + rMaxIntegralTypeSize -1)
                                 / rMaxIntegralTypeSize * rMaxIntegralTypeSize;
@@ -1471,7 +1534,13 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 }
                 break;
             case typelib_TypeClass_ARRAY:
-                OSL_ENSURE( sal_False, "not implemented" );
+                {
+                typelib_TypeDescription * pTD = 0;
+                TYPELIB_DANGER_GET( &pTD, ((typelib_IndirectTypeDescription *)pTypeDescription)->pType );
+                rMaxIntegralTypeSize = pTD->nSize;
+                TYPELIB_DANGER_RELEASE( pTD );
+                nSize = ((typelib_ArrayTypeDescription *)pTypeDescription)->nTotalElements * rMaxIntegralTypeSize;
+                }
                 break;
             case typelib_TypeClass_SEQUENCE:
                 nSize = rMaxIntegralTypeSize = sizeof( void * );
@@ -1500,26 +1569,21 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
             case typelib_TypeClass_DOUBLE:
                 nSize = rMaxIntegralTypeSize = sizeof( double );
                 break;
-
             case typelib_TypeClass_BYTE:
                 nSize = rMaxIntegralTypeSize = sizeof( sal_Int8 );
                 break;
-
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
                 nSize = rMaxIntegralTypeSize = sizeof( sal_Int16 );
                 break;
-
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
                 nSize = rMaxIntegralTypeSize = sizeof( sal_Int32 );
                 break;
-
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
                 nSize = rMaxIntegralTypeSize = sizeof( sal_Int64 );
                 break;
-
             case typelib_TypeClass_UNKNOWN:
             case typelib_TypeClass_SERVICE:
             case typelib_TypeClass_MODULE:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:05 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,26 @@ typedef struct _typelib_IndirectTypeDescription
     */
     typelib_TypeDescriptionReference *  pType;
 } typelib_IndirectTypeDescription;
+
+/** Type description of an array.
+    <br>
+*/
+typedef struct _typelib_ArrayTypeDescription
+{
+    /** inherits all members of typelib_IndirectTypeDescription<br>
+    */
+    typelib_IndirectTypeDescription     aBase;
+
+    /** number of dimensions<br>
+    */
+    sal_Int32                           nDimensions;
+    /** number of total array elements<br>
+    */
+    sal_Int32                           nTotalElements;
+    /** array of dimensions<br>
+    */
+    sal_Int32 *                         pDimensions;
+} typelib_ArrayTypeDescription;
 
 /** Type description of an enum.<br>
     The type class of this description is typelib_TypeClass_ENUM.
@@ -521,6 +541,20 @@ void SAL_CALL typelib_typedescription_newEnum(
     rtl_uString ** ppEnumNames,
     sal_Int32 * pEnumValues )
     SAL_THROW_EXTERN_C();
+
+/** Creates an array type description.
+    <br>
+    @param ppRet inout enum type description
+    @param pElementTypeRef element type
+    @param nDimensions number of dimensions
+    @param pDimensions dimensions
+*/
+void SAL_CALL typelib_typedescription_newArray(
+    typelib_TypeDescription ** ppRet,
+    typelib_TypeDescriptionReference * pElementTypeRef,
+    sal_Int32 nDimensions,
+    sal_Int32 * pDimensions )
+    SAL_THROW_EXTERN_C ();
 
 /** Creates a new type description.
     <br>
@@ -867,7 +901,21 @@ void SAL_CALL typelib_static_type_init(
 void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeDescriptionReference * pElementType )
-    SAL_THROW_EXTERN_C();
+    SAL_THROW_EXTERN_C ();
+
+/** Inits static array type reference.
+    Thread synchronizes on typelib init mutex.
+    <br>
+    @param ppRef pointer to type reference pointer
+    @param pElementType element type of sequence
+    @param nDimensions number of dimensions
+    @param ... additional sal_Int32 parameter for each dimension
+*/
+void SAL_CALL typelib_static_array_type_init(
+    typelib_TypeDescriptionReference ** ppRef,
+    typelib_TypeDescriptionReference * pElementType,
+    sal_Int32 nDimensions, ... )
+    SAL_THROW_EXTERN_C ();
 
 /** Inits <b>in</b>complete static compound type reference.
     Thread synchronizes on typelib init mutex.

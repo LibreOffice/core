@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:09 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+#ifdef SOLARIS
+#include <varargs.h>
+#else
+#include <stdarg.h>
+#endif
 
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>
@@ -565,6 +570,72 @@ void SAL_CALL typelib_static_enum_type_init(
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
                 OSL_ASSERT( *ppRef == pReg->pWeakRef );
             }
+#ifndef CPPU_LEAK_STATIC_DATA
+            // another static ref
+            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+#endif
+        }
+    }
+}
+
+//##################################################################################################
+void SAL_CALL typelib_static_array_type_init(
+    typelib_TypeDescriptionReference ** ppRef,
+    typelib_TypeDescriptionReference * pElementTypeRef,
+    sal_Int32 nDimensions, ... )
+    SAL_THROW_EXTERN_C()
+{
+    if (! *ppRef)
+    {
+        MutexGuard aGuard( typelib_getStaticInitMutex() );
+        if (! *ppRef)
+        {
+            OUStringBuffer aBuf( 32 );
+            aBuf.append( pElementTypeRef->pTypeName );
+
+            va_list dimArgs;
+            va_start( dimArgs, nDimensions );
+            sal_Int32 dim = 0;
+            sal_Int32 nElements = 1;
+            sal_Int32* pDimensions = new sal_Int32[nDimensions];
+            for (sal_Int32 i=0; i < nDimensions; i++)
+            {
+                dim = va_arg( dimArgs, int);
+                pDimensions[i] = dim;
+                aBuf.appendAscii("[");
+                aBuf.append(dim);
+                aBuf.appendAscii("]");
+                nElements *= dim;
+            }
+            va_end( dimArgs );
+            OUString aTypeName( aBuf.makeStringAndClear() );
+
+            OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ARRAY) );
+            if (! (*ppRef = __getTypeByName( aTypeName.pData )))
+            {
+                typelib_TypeDescription * pReg = 0;
+                ::typelib_typedescription_newEmpty(
+                    &pReg, typelib_TypeClass_ARRAY, aTypeName.pData );
+                typelib_ArrayTypeDescription * pArray = (typelib_ArrayTypeDescription *)pReg;
+
+                pArray->nDimensions = nDimensions;
+                pArray->nTotalElements = nElements;
+                pArray->pDimensions = pDimensions;
+
+                typelib_typedescriptionreference_acquire(pElementTypeRef);
+                ((typelib_IndirectTypeDescription*)pArray)->pType = pElementTypeRef;
+
+                pReg->pWeakRef = (typelib_TypeDescriptionReference *)pReg;
+                // sizeof( void ) not allowed
+                pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
+                pReg->nAlignment = ::adjustAlignment( pReg->nAlignment );
+                pReg->bComplete = sal_True;
+
+                ::typelib_typedescription_register( &pReg );
+                *ppRef = (typelib_TypeDescriptionReference *)pReg;
+                OSL_ASSERT( *ppRef == pReg->pWeakRef );
+            } else
+                delete [] pDimensions;
 #ifndef CPPU_LEAK_STATIC_DATA
             // another static ref
             ++((*ppRef)->nStaticRefCount);
