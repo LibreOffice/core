@@ -40,8 +40,8 @@
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593" toolbar:text="" toolbar:style="dropdown" toolbar:visible="false" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
- <toolbar:toolbaritem xlink:href=".uno:EffectWindow" toolbar:helpid="helpid:27328" toolbar:text="" toolbar:style="auto" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:helpid="helpid:27063" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:helpid="helpid:27328" toolbar:text="" toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:helpid="helpid:27063" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:AnimationObjects" toolbar:helpid="helpid:27062" toolbar:text="" toolbar:style="auto" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:helpid="helpid:10644" toolbar:text="" toolbar:style="auto" toolbar:visible="false" />
 </toolbar:toolbar>
