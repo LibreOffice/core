@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2005-02-02 16:03:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 #include <rtl/ustring.hxx>
 
@@ -86,7 +89,7 @@ namespace comphelper
 {
 
 struct EmbedImpl;
-class EmbeddedObjectContainer
+class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
 {
     EmbedImpl*  pImpl;
 
