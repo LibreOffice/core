@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:29:56 $
+ *  last change: $Author: nn $ $Date: 2001-02-27 18:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5137,7 +5137,7 @@ void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextCont
 uno::Reference<text::XText> SAL_CALL ScCellObj::getText() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return GetUnoText().getText();
+    return this;
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScCellObj::getStart() throw(uno::RuntimeException)
