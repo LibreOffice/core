@@ -715,4 +715,22 @@ Dim aSwitchMode as new com.sun.star.util.URL
         Dim aEmptyArgs() as New com.sun.star.bean.PropertyValue
 	oDispatch.dispatch(aSwitchMode, aEmptyArgs())
 	Erase aSwitchMode
-End Sub</script:module>
+End Sub
+
+
+Function isHighContrast(oPeer as Object)
+	Dim UIColor as Long
+	Dim myRed as Integer
+	Dim myGreen as Integer
+	Dim myBlue as Integer
+	Dim myLuminance as Double
+
+	UIColor = oPeer.getProperty( &quot;DisplayBackgroundColor&quot; )
+	myRed = Red (UIColor) 
+	myGreen = Green (UIColor)
+	myBlue = Blue (UIColor)		
+	myLuminance = (( myBlue*28 + myGreen*151 + myRed*77 ) / 256	)
+	isHighContrast = false
+	If myLuminance &lt;= 25 Then isHighContrast = true
+End Function
+</script:module>

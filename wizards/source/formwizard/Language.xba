@@ -64,6 +64,8 @@ End Sub
 Sub SetDialogLanguage ()
 	DlgFormDB = LoadDialog(&quot;FormWizard&quot;, &quot;DlgFormDB&quot;)
 	oDialogModel = DlgFormDB.Model
+	
+	Dim FNameAddOn as String
 
 	With oDialogModel
 		.cmdCancel.Label = GetResText(RID_COMMON + 1)
@@ -103,19 +105,22 @@ Sub SetDialogLanguage ()
 		.optAlign2.Label = GetResText(RID_FORM + 34)
 		.optAlign0.State = 1
 		
-		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1.gif&quot;
+		FNameAddOn = &quot;&quot;
+		If isHighContrast(DlgFormDB.getPeer) Then FNameAddOn = &quot;_hc&quot;		
+		
+		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
 		.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
 	
-		.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2.gif&quot;
+		.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
 		.cmdArrange2.HelpText = GetResText(RID_FORM + 37)
 
-		.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3.gif&quot;
+		.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
 		.cmdArrange3.HelpText = GetResText(RID_FORM + 40)
 
-		.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4.gif&quot;
+		.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
 		.cmdArrange4.HelpText = GetResText(RID_FORM + 38)
 
-		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5.gif&quot;
+		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
 		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
 
 		sWriterFilterName = GetResText(RID_FORM + 70)
