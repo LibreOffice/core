@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:53:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String STR_EVENTCONFIG
     Text[ russian ] = "��������� �������";
     Text[ polish ] = "Przypisz wydarzenia";
     Text[ japanese ] = "イベントの指定";
-    Text[ chinese_traditional ] = "設定動作";
+    Text[ chinese_traditional ] = "設定事件";
     Text[ arabic ] = "����� �������";
     Text[ dutch ] = "Gebeurtenis toewijzen";
     Text[ chinese_simplified ] = "指定事件";
@@ -92,6 +92,7 @@ String STR_EVENTCONFIG
     Text[ czech ] = "Přiřadit události";
     Text[ hebrew ] = "‮השמת אירועים‬";
     Text[ hindi ] = "घटनों को निर्दिष्ट करो";
+    Text[ slovak ] = "Priradiť udalosti";
 };
 String STR_FILTERNAME_CFG
 {
@@ -124,6 +125,7 @@ String STR_FILTERNAME_CFG
     Text[ czech ] = "Konfigurace";
     Text[ hebrew ] = "‮תצורה‬";
     Text[ hindi ] = "रूपरेखा";
+    Text[ slovak ] = "Konfigurácia";
 };
 
 QueryBox DLG_MACROQUERY
@@ -190,6 +192,7 @@ QueryBox DLG_MACROQUERY
         Text[ czech ] = "Spustit";
         Text[ hebrew ] = "‮להפעיל‬";
         Text[ hindi ] = "Run";
+        Text[ slovak ] = "Spustiť";
     };
     String BTN_CANCEL
     {
@@ -222,6 +225,7 @@ QueryBox DLG_MACROQUERY
         Text[ czech ] = "Nespouštět";
         Text[ hebrew ] = "‮לא להפעיל‬";
         Text[ hindi ] = "Do Not Run";
+        Text[ slovak ] = "Nespúšťať";
     };
     String FT_CANCEL
     {
@@ -251,6 +255,7 @@ QueryBox DLG_MACROQUERY
         Text[ czech ] = "Podle bezpečnostních nastavení toto makro nesmí být spuštěno. Přejete si jej přesto spustit?";
         Text[ hebrew ] = "‮לפי הגדרות האבטחה, אסור להפעיל מאקרו זה. האם להפעילו בכל זאת?‬";
         Text[ hindi ] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
+        Text[ slovak ] = "Podľa bezpečnostných nastavení toto makro nesmie byť spustené. Prajete si i napriek tomu spustiť?";
     };
     String FT_OK
     {
@@ -280,6 +285,7 @@ QueryBox DLG_MACROQUERY
         Text[ czech ] = "Chcete spustit makro?";
         Text[ hebrew ] = "‮?האם להפעיל את המקרו‬";
         Text[ hindi ] = "Do you want to run the macro?";
+        Text[ slovak ] = "Chcete spustiť makro?";
     };
     Message[ portuguese ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ russian ] = "��������� �������, ������������� ������� $(MACRO). $(TEXT)";
@@ -296,7 +302,7 @@ QueryBox DLG_MACROQUERY
     Message[ japanese ] = "マクロ $(MACRO) で設定されているイベントが作動しました。$(TEXT)";
     Message[ korean ] = "매크로 $(MACRO)가 구성되어 있는 이벤트가 작동되었습니다. $(TEXT)";
     Message[ chinese_simplified ] = "已经引发这个宏 $(MACRO) 设定好的事件。$(TEXT)";
-    Message[ chinese_traditional ] = "已經引發這個巨集 $(MACRO) 設置好的動作。$(TEXT)";
+    Message[ chinese_traditional ] = "已經引發這個巨集 $(MACRO) 設置好的事件。$(TEXT)";
     Message[ turkish ] = "$(MACRO) nun ba�l� oldu�u bir i�lem etkinle�ti.. $(TEXT)";
     Message[ arabic ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ catalan ] = "Es wurde ein Ereignis ausgel�st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
@@ -308,7 +314,11 @@ QueryBox DLG_MACROQUERY
     Title[ hebrew ] = "Makro ausführen";
     Message[ hindi ] = "An event was triggered to which the macro $(MACRO) belongs. $(TEXT)";
     Title[ hindi ] = "Run Macro";
+    Message[ slovak ] = "Nastala udalosť, ku ktorej je priradené makro $(MACRO). $(TEXT)";
+    Title[ slovak ] = "Spustiť makro";
 };
+
+
 
 
 
