@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:15:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ inline void SAL_CALL cppu_ext_getMapping(
 //##################################################################################################
 //##################################################################################################
 
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
 static ::rtl::OUString * s_pStaticOidPart = 0;
 #endif
 
@@ -446,7 +446,7 @@ static ::rtl::OUString * s_pStaticOidPart = 0;
 //--------------------------------------------------------------------------------------------------
 inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW( () )
 {
-#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))
+#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
     static ::rtl::OUString * s_pStaticOidPart = 0;
 #endif
     if (! s_pStaticOidPart)
@@ -463,7 +463,7 @@ inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW
             {
                 aRet.append( (sal_Int32)ar[i], 16 );
             }
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
             s_pStaticOidPart = new ::rtl::OUString( aRet.makeStringAndClear() );
 #else
             static ::rtl::OUString s_aStaticOidPart( aRet.makeStringAndClear() );
