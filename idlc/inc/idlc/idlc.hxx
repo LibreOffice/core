@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:43:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #define PATH_SEPARATOR "\\"
 #endif
 
+class AstInterface;
 class AstModule;
 class AstType;
 class Options;
@@ -155,6 +156,9 @@ public:
     StringSet* getIncludes()
         { return &m_includes; }
 
+    void setPublished(bool published) { m_published = published; }
+    bool isPublished() const { return m_published; }
+
     void reset();
 private:
     Options*            m_pOptions;
@@ -168,6 +172,7 @@ private:
     sal_Bool            m_bIsDocValid;
     sal_Bool            m_bGenerateDoc;
     sal_Bool            m_bIsInMainfile;
+    bool                m_published;
     sal_uInt32          m_errorCount;
     sal_uInt32          m_warningCount;
     sal_uInt32          m_lineNumber;
@@ -181,8 +186,6 @@ sal_Int32 produceFile(const ::rtl::OString& filenameBase);
     // filenameBase is filename without ".idl"
 void removeIfExists(const ::rtl::OString& pathname);
 
-sal_Bool SAL_CALL canBeRedefined(AstDeclaration *pDecl);
-
 ::rtl::OString makeTempName(const ::rtl::OString& prefix, const ::rtl::OString& postfix);
 sal_Bool copyFile(const ::rtl::OString* source, const ::rtl::OString& target);
     // a null source means stdin
@@ -194,7 +197,9 @@ sal_Bool isFileUrl(const ::rtl::OString& fileName);
 Idlc* SAL_CALL idlc();
 Idlc* SAL_CALL setIdlc(Options* pOptions);
 
-AstType const * resolveTypedefs(AstType const * type);
+AstDeclaration const * resolveTypedefs(AstDeclaration const * type);
+
+AstInterface const * resolveInterfaceTypedefs(AstType const * type);
 
 #endif // _IDLC_IDLC_HXX_
 
