@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.30 2001-04-26 13:20:50 dvo Exp $
+	$Id: text.mod,v 1.31 2001-05-07 12:06:55 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -1085,6 +1085,8 @@ indices, and there may be only one text:index-title element.
 <!ATTLIST text:change-end text:change-id CDATA #REQUIRED>
 
 <!ELEMENT text:tracked-changes (text:changed-region)*>
+<!ATTLIST text:tracked-changes text:track-changes %boolean; "true">
+<!ATTLIST text:tracked-changes text:protection-key CDATA #IMPLIED>
 
 <!ELEMENT text:changed-region (text:insertion | 
 							   (text:deletion, text:insertion?) | 
