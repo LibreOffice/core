@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:20:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2231,7 +2231,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         SwLinePortion* pPor = rMulti.GetRoot().GetFirstPortion();
         xub_StrLen nStart = rInf.GetIdx();
         xub_StrLen nNull = 0;
-        for( xub_StrLen nBlanks = 0; pPor; pPor = pPor->GetPortion() )
+        xub_StrLen nBlanks;
+
+        for( nBlanks = 0; pPor; pPor = pPor->GetPortion() )
         {
             if( pPor->InTxtGrp() )
                 nBlanks += ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
