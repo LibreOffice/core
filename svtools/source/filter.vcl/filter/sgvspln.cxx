@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvspln.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:17:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 
 
 /*.HL Anhang: C - Programme*/
-/*.HRGleichungssysteme fÅr Tridiagonalmatrizen*/
+/*.HRGleichungssysteme fuer Tridiagonalmatrizen*/
 
 /*.FE  P 3.7 TRIDIAGONALE GLEICHUNGSSYSTEME*/
 
@@ -495,8 +495,8 @@ USHORT ZyklTriDiagGS(BOOL rep, USHORT n, double* lower, double* diag,
 |*
 |*    NaturalSpline()
 |*
-|*    Beschreibung      Berechnet die Koeffizienten eines natÅrlichen
-|*                      kubischen Polynomsplines mit n StÅtzstellen.
+|*    Beschreibung      Berechnet die Koeffizienten eines natuerlichen
+|*                      kubischen Polynomsplines mit n Stuetzstellen.
 |*    Ersterstellung    JOE 17-08.93
 |*    Letzte Aenderung  JOE 17-08.93
 |*
@@ -605,7 +605,7 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
 |*    PeriodicSpline()
 |*
 |*    Beschreibung      Berechnet die Koeffizienten eines periodischen
-|*                      kubischen Polynomsplines mit n StÅtzstellen.
+|*                      kubischen Polynomsplines mit n Stuetzstellen.
 |*    Ersterstellung    JOE 17-08.93
 |*    Letzte Aenderung  JOE 17-08.93
 |*
@@ -614,7 +614,7 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
 
 USHORT PeriodicSpline(USHORT n, double* x, double* y,
                       double* b, double* c, double* d)
-{                     // Arrays mÅssen von [0..n] dimensioniert sein!
+{                     // Arrays muessen von [0..n] dimensioniert sein!
     USHORT  Error;
     USHORT  i,im1,nm1; //integer
     double  hr,hl;
@@ -624,8 +624,8 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
 
     if (n<2) return 4;
     nm1=n-1;
-    for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; // mu· streng nonoton fallend sein!
-    if (y[n]!=y[0]) return 3; // Anfang mu· gleich Ende sein!
+    for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; // muss streng nonoton fallend sein!
+    if (y[n]!=y[0]) return 3; // Anfang muss gleich Ende sein!
 
     a     =new double[n+1];
     lowrow=new double[n+1];
@@ -683,8 +683,8 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
 |*    ParaSpline()
 |*
 |*    Beschreibung      Berechnet die Koeffizienten eines parametrischen
-|*                      natÅrlichen oder periodischen kubischen
-|*                      Polynomsplines mit n StÅtzstellen.
+|*                      natuerlichen oder periodischen kubischen
+|*                      Polynomsplines mit n Stuetzstellen.
 |*    Ersterstellung    JOE 17-08.93
 |*    Letzte Aenderung  JOE 17-08.93
 |*
@@ -705,7 +705,7 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
 
     if (n<2) return 1;
     // FIXME -Wall Margcond is unsigned therefore can never be < zero.
-    if (MargCond<0 || MargCond>4) return 2; // ungÅltige Randbedingung
+    if (MargCond<0 || MargCond>4) return 2; // ungueltige Randbedingung
     if (CondT==FALSE) {
         T[0]=0.0;
         for (i=0;i<n;i++) {
@@ -765,14 +765,14 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
 |*    CalcSpline()
 |*
 |*    Beschreibung      Berechnet die Koeffizienten eines parametrischen
-|*                      natÅrlichen oder periodischen kubischen
-|*                      Polynomsplines. Die Eckpunkte des öbergebenen
-|*                      Polygons werden als StÅtzstellen angenommen.
+|*                      natuerlichen oder periodischen kubischen
+|*                      Polynomsplines. Die Eckpunkte des uebergebenen
+|*                      Polygons werden als Stuetzstellen angenommen.
 |*                      n liefert die Anzahl der Teilpolynome.
 |*                      Ist die Berechnung fehlerfrei verlaufen, so
 |*                      liefert die Funktion TRUE. Nur in diesem Fall
-|*                      ist Speicher fÅr die Koeffizientenarrays
-|*                      allokiert, der dann spÑter vom Aufrufer mittels
+|*                      ist Speicher fuer die Koeffizientenarrays
+|*                      allokiert, der dann spaeter vom Aufrufer mittels
 |*                      delete freizugeben ist.
 |*    Ersterstellung    JOE 17-08.93
 |*    Letzte Aenderung  JOE 17-08.93
@@ -855,13 +855,13 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
 |*    Spline2Poly()
 |*
 |*    Beschreibung      Konvertiert einen parametrichen kubischen
-|*                      Polynomspline Spline (natÅrlich oder periodisch)
-|*                      in ein angenÑhertes Polygon.
+|*                      Polynomspline Spline (natuerlich oder periodisch)
+|*                      in ein angenaehertes Polygon.
 |*                      Die Funktion liefert FALSE, wenn ein Fehler bei
 |*                      der Koeffizientenberechnung aufgetreten ist oder
-|*                      das Polygon zu gro· wird (>PolyMax=16380). Im 1.
+|*                      das Polygon zu gross wird (>PolyMax=16380). Im 1.
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
-|*                      Um KoordinatenÅberlÑufe zu vermeiden werden diese
+|*                      Um Koordinatenueberlaeufe zu vermeiden werden diese
 |*                      auf +/-32000 begrenzt.
 |*    Ersterstellung    JOE 23.06.93
 |*    Letzte Aenderung  JOE 23.06.93
@@ -870,20 +870,20 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
 BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
 {
     short  MinKoord=-32000; // zur Vermeidung
-    short  MaxKoord=32000;  // von öberlÑufen
+    short  MaxKoord=32000;  // von Ueberlaeufen
 
-    double* ax;          // ø
-    double* ay;          // ≥ Koeffizienten
-    double* bx;          // ≥ der Polynome
-    double* by;          // ≥
-    double* cx;          // ≥
-    double* cy;          // ≥
-    double* dx;          // ≥
-    double* dy;          // ≥
-    double* tv;          // Ÿ
+    double* ax;          // Koeffizienten der Polynome
+    double* ay;
+    double* bx;
+    double* by;
+    double* cx;
+    double* cy;
+    double* dx;
+    double* dy;
+    double* tv;
 
-    double  Step;        // Schrittweite fÅr t
-    double  dt1,dt2,dt3; // Delta t, ˝, ^3
+    double  Step;        // Schrittweite fuer t
+    double  dt1,dt2,dt3; // Delta t, y, ^3
     double  t;
     BOOL    bEnde;       // Teilpolynom zu Ende?
     USHORT  n;           // Anzahl der zu zeichnenden Teilpolynome
@@ -914,11 +914,11 @@ BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
                     rPoly.SetSize(rPoly.GetSize()+1);
                     rPoly.SetPoint(Point(short(x),short(y)),rPoly.GetSize()-1);
                 } else {
-                    bOk=FALSE; // Fehler: Polygon wird zu gro·
+                    bOk=FALSE; // Fehler: Polygon wird zu gross
                 }
                 t=t+Step;
             } // Ende von Teilpolynom
-            i++; // nÑchstes Teilpolynom
+            i++; // naechstes Teilpolynom
         }
         delete[] ax;
         delete[] ay;
