@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-16 14:45:25 $
+ *  last change: $Author: os $ $Date: 2001-05-30 11:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,7 +1056,7 @@ void SvxRuler::UpdateTabs()
              pTabStopItem->Count()?
               ConvertHPosPixel((*pTabStopItem)[pTabStopItem->Count()-1].GetTabPos()): 0;
         const long lPosPixel =
-            ConvertHPosPixel(lParaIndent + lLastTab);
+            ConvertHPosPixel(lParaIndent) + lLastTab;
         const long lRightIndent =
             ConvertHPosPixel(GetRightFrameMargin() - pParaItem->GetRight());
         long nDefTabDist = ConvertHPosPixel(lDefTabDist);
