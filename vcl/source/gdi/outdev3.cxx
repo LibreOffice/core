@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:21:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ using namespace ::vcl;
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
 // =======================================================================
+
+//#ifdef USE_NEW_RTL_IMPLEMENTATION
+
 
 static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
                            int nOrientation )
@@ -4515,9 +4518,15 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
                rSalLayout.DrawBase().X() = w - 1 - x;
             if( !IsRTLEnabled() )
             {
+                OutputDevice *pOutDevRef = (OutputDevice *)this;
+#ifdef USE_NEW_RTL_IMPLEMENTATION
+                if( meOutDevType == OUTDEV_WINDOW )
+                    pOutDevRef = (OutputDevice*) ((Window *) this)->mpDummy4;
+#endif
+
                 // mirror this window back
-                long devX = w-mnOutWidth-mnOutOffX;   // re-mirrored mnOutOffX
-                rSalLayout.DrawBase().X() = devX + ( mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
+                long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
+                rSalLayout.DrawBase().X() = devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
             }
         }
 
