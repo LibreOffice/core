@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: af $ $Date: 2002-04-18 16:43:40 $
+#   last change: $Author: af $ $Date: 2002-05-06 09:31:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ SLOFILES =	\
     $(SLO)$/AccessibleShape.obj					\
     $(SLO)$/AccessibleGraphicShape.obj			\
     $(SLO)$/AccessibleOLEShape.obj				\
+    $(SLO)$/AccessibleShapeInfo.obj				\
     $(SLO)$/AccessibleShapeTreeInfo.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj					\
