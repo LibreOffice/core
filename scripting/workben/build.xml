@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: npower $ $Date: 2003-02-12 09:50:28 $
+#   last change: $Author: dfoster $ $Date: 2003-02-13 14:34:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,9 +96,11 @@
       </condition>
   </target>
   <target name="nonproduct.set" if="noproext">
+      <echo message="non-product build"/>
       <property name="proext" value=""/>
   </target>
   <target name="product.set" unless="noproext">
+      <echo message="product build"/>
       <property name="proext" value="${env.PROEXT}"/>
   </target>
   <target name="build.conditions" depends="product.test,nonproduct.set,product.set">
@@ -106,13 +108,13 @@
             <available file="${prj}/wntmsci9${proext}"/>
       </condition>
       <condition property="win7.build">
-            <available file="${prj}/wntmsci9${proext}"/>
+            <available file="${prj}/wntmsci7${proext}"/>
       </condition>
       <condition property="linx86.build">
             <available file="${prj}/unxlngi4${proext}"/>
       </condition>
       <condition property="solsparc.build">
-            <available file="${prj}/unxsols3${proext}"/>
+            <available file="${prj}/unxsols4${proext}"/>
       </condition>
       <!-- <condition property="openoffice.build">
       </condition> -->
@@ -182,8 +184,15 @@
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcssscriptframework.db"/>
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfstorage.db"/>
+        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfsecurity.db"/>
     </exec>
+    <!-- <copy file="/tmp/ScriptFramework.rdb"
+        todir="${out}/class/sframework/"/>
+    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
+        todir="${out}/class/sframework/"/> -->
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <copy file="${out}/class/ScriptFramework.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
     <copy todir="${out}/class/sframework/windows.plt">
@@ -198,14 +207,21 @@
   <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <exec executable="regmerge">
-        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
+    <!-- <exec executable="regmerge">
+        <arg value="/tmp/ScriptFramework.rdb"/>
         <arg value="/"/>
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcssscriptframework.db"/>
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfstorage.db"/>
+        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfsecurity.db"/>
     </exec>
+    <copy file="/tmp/ScriptFramework.rdb"
+        todir="${out}/class/sframework/"/> -->
+    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
+        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <copy file="${out}/class/ScriptFramework.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
     <copy todir="${out}/class/sframework/windows.plt">
@@ -226,8 +242,15 @@
         <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcssscriptframework.db"/>
         <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfstorage.db"/>
+        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfsecurity.db"/>
     </exec>
+    <!-- <copy file="/tmp/ScriptFramework.rdb"
+        todir="${out}/class/sframework/"/>
+    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
+        todir="${out}/class/sframework/"/> -->
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <copy file="${out}/class/ScriptFramework.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
     <copy todir="${out}/class/sframework/linux_x86.plt">
@@ -245,20 +268,27 @@
     <exec executable="regmerge">
         <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
         <arg value="/"/>
-        <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcssscriptframework.db"/>
-        <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfprovider.db"/>
-        <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfstorage.db"/>
+        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcssscriptframework.db"/>
+        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcsssfprovider.db"/>
+        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcsssfstorage.db"/>
+        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcsssfsecurity.db"/>
     </exec>
+    <!-- <copy file="/tmp/ScriptFramework.rdb"
+        todir="${out}/class/sframework/"/>
+    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
+        todir="${out}/class/sframework/"/>-->
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <copy file="${out}/class/ScriptFramework.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/solaris_sparc.plt"/>
     <copy todir="${out}/class/sframework/solaris_sparc.plt">
-        <fileset dir="${prj}/unxsols3${proext}/lib/">
+        <fileset dir="${prj}/unxsols4${proext}/lib/">
             <include name="**/lib*.so"/>
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${prj}/../unoil/unxsols3${proext}/class/unoil.jar"
+    <copy file="${prj}/../unoil/unxsols4${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
   <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_win7,buildunopackage_linux,buildunopackage_solaris">
@@ -275,7 +305,8 @@
     <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
         todir="${out}/class/bshruntime/"/>
     <mkdir dir="${out}/class/bshruntime/skip_registration"/>
-    <copy file="${install.dir}/bsh-1.2b7.jar"
+    <!-- <copy file="${install.dir}/bsh-1.2b7.jar" -->
+    <copy file="${prj}/java/bsh-1.2b7.jar"
         todir="${out}/class/bshruntime/skip_registration"/>
     <zip zipfile="${out}/class/sframeworkinstall/sframework/bshruntime.zip"
         basedir="${out}/class/bshruntime">
