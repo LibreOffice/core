@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-04 13:14:16 $
+ *  last change: $Author: fs $ $Date: 2002-03-21 14:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,8 +480,7 @@ Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (Runtime
 {
     Sequence< Type > aTypes1 = ::comphelper::concatSequences(
         OGenericUnoController::getTypes(),
-        SbaXDataBrowserController_Base::getTypes(),
-        OPropertyContainer::getTypes()
+        SbaXDataBrowserController_Base::getTypes()
     );
     return ::comphelper::concatSequences(
         aTypes1,
@@ -520,10 +519,6 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
         if (!aRet.hasValue())
         {
             aRet = m_xFormControllerImpl->queryAggregation(_rType);
-
-            // check for the property set interfaces
-            if (!aRet.hasValue())
-                aRet = OPropertySetHelper::queryInterface(_rType);
         }
     }
 
@@ -546,7 +541,6 @@ void SAL_CALL SbaXDataBrowserController::release(  ) throw ()
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :OGenericUnoController(_rM)
-    ,::comphelper::OPropertyContainer(getBroadcastHelper())
     ,m_pLoadThread(NULL)
     ,m_bClosingKillOpen( sal_False )
     ,m_bLoadCanceled( sal_False )
@@ -559,12 +553,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_pFormControllerImpl(NULL)
 {
-    DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController: no URLTransformer!");
-    static ::rtl::OUString s_sHelpFileName(::rtl::OUString::createFromAscii("database.hlp"));
-    sal_Int32 nAttrib = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
-    registerProperty(PROPERTY_HELPFILENAME, PROPERTY_ID_HELPFILENAME,nAttrib,&s_sHelpFileName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController : could not create the url transformer !");
-
     // create the form controller aggregate
     ::comphelper::increment(m_refCount);
     {
@@ -2500,26 +2488,6 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
     return ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISNEW)) || !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ||
             (m_xParser.is() && (m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength()));
 }
-
-// -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* SbaXDataBrowserController::createArrayHelper( ) const
-{
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new cppu::OPropertyArrayHelper(aProps);
-}
-
-// -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & SbaXDataBrowserController::getInfoHelper()
-{
-    return *const_cast<SbaXDataBrowserController*>(this)->getArrayHelper();
-}
-// -----------------------------------------------------------------------------
-Reference< XPropertySetInfo > SAL_CALL SbaXDataBrowserController::getPropertySetInfo(  ) throw(RuntimeException)
-{
-    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-}
-// -----------------------------------------------------------------------------
 
 //==================================================================
 // LoadFormHelper

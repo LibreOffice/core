@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-29 12:23:06 $
+ *  last change: $Author: fs $ $Date: 2002-03-21 14:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,6 @@
 #ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #include <cppuhelper/implbase8.hxx>
 #endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
-#include <comphelper/propertycontainer.hxx>
-#endif
 #ifndef DBAUI_GENERICCONTROLLER_HXX
 #include "genericcontroller.hxx"
 #endif
@@ -152,9 +146,7 @@ namespace dbaui
     class SbaXDataBrowserController
                     :public OGenericUnoController
                     ,public SbaXDataBrowserController_Base
-                    ,public ::comphelper::OPropertyContainer
                     ,public SbaGridListener
-                    ,public ::comphelper::OPropertyArrayUsageHelper < SbaXDataBrowserController>
     {
     // ==========
     // attributes
@@ -228,11 +220,6 @@ namespace dbaui
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    getParser() const { return m_xParser; }
 
-        // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-        // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
     public:
         SbaXDataBrowserController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
@@ -296,9 +283,6 @@ namespace dbaui
         // ::com::sun::star::form::XResetListener
         virtual sal_Bool SAL_CALL approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL resetted(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
-
-        // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // SbaGridListener
         virtual void RowChanged();
