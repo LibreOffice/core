@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:48:34 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,10 +177,15 @@ void createDefaultUnoValue(
         }
 
     case typelib_TypeClass_ENUM:
-        // XXX  This does not work for a (deprecated) UNO enum type whose first
-        // element has a value other than zero:
-        *static_cast< sal_Int32 * >(uno_data) = 0;
-        break;
+        {
+            typelib_TypeDescription * td = 0;
+            TYPELIB_DANGER_GET(&td, type);
+            *static_cast< sal_Int32 * >(uno_data)
+                = (reinterpret_cast< typelib_EnumTypeDescription * >(td)->
+                   nDefaultEnumValue);
+            TYPELIB_DANGER_RELEASE(td);
+            break;
+        }
 
     case typelib_TypeClass_STRUCT:
         {
