@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:25:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 nSlotId == SID_OBJECT_CROOK_SLANT ||
                 nSlotId == SID_OBJECT_CROOK_STRETCH)
             {
-                if ( pDrView->GetMarkList().GetMarkCount() > 0 &&
+                if ( pDrView->GetMarkedObjectList().GetMarkCount() > 0 &&
                     !pDrView->IsCrookAllowed( pDrView->IsCrookNoContortion() ) )
                 {
                     if ( pDrView->IsPresObjSelected() )
@@ -458,7 +458,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             else if (nSlotId == SID_OBJECT_SHEAR)
             {
                 ULONG i = 0;
-                const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                 ULONG nMarkCnt = rMarkList.GetMarkCount();
                 BOOL b3DObjMarked = FALSE;
 
@@ -662,14 +662,14 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     // #97016# III CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
     if(SID_OBJECT_SELECT == nSId && pFuActual && (rReq.GetModifier() & KEY_MOD1))
     {
-        if(!pView->HasMarkedObj())
+        if(!pView->AreObjectsMarked())
         {
             // select first object
             pView->UnmarkAllObj();
             pView->MarkNextObj(TRUE);
 
             // ...and make it visible
-            if(pView->HasMarkedObj())
+            if(pView->AreObjectsMarked())
                 pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
         }
     }
@@ -881,7 +881,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_OBJECT_CLOSE:
         {
-            const SdrMarkList& rMarkList = pDrView->GetMarkList();
+            const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
             if ( rMarkList.GetMark(0) && !pDrView->IsAction() )
             {
                 SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetObj();
@@ -1431,7 +1431,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_SIZE_OPTIMAL:  // BASIC
         {
             bZoomOnPage = FALSE;
-            if ( pDrView->HasMarkedObj() )
+            if ( pDrView->AreObjectsMarked() )
             {
                 long nW = (long) (aMarkRect.GetWidth()  * 1.03);
                 long nH = (long) (aMarkRect.GetHeight() * 1.03);
@@ -1622,7 +1622,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
 
             pDrView->BegUndo(String(SdResId(STR_UNDO_COLORRESOLUTION)));
-            const SdrMarkList& rMarkList = pDrView->GetMarkList();
+            const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
             for (ULONG i=0; i<rMarkList.GetMarkCount(); i++)
             {
@@ -1798,9 +1798,9 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 {
     BOOL bNewObj = TRUE;
 
-    if (pDrView->GetMarkList().GetMarkCount() > 0)
+    if (pDrView->GetMarkedObjectList().GetMarkCount() > 0)
     {
-        SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkList().GetMark(0)->GetObj());
+        SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetObj());
 
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor() &&
                pUnoCtrl->GetObjIdentifier() == OBJ_FM_BUTTON)
