@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:15:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ public:
     explicit SlideTransitionPane(
         ::Window * pParent,
         ViewShellBase & rBase,
+        const Size& rMinSize,
         SdDrawDocument* pDoc );
     virtual ~SlideTransitionPane();
 
@@ -153,6 +154,7 @@ private:
 private:
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
+    Size              maMinSize;
 
     FixedLine    maFL_APPLY_TRANSITION;
     ListBox      maLB_SLIDE_TRANSITIONS;
