@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:50:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _IPENV_HXX //autogen
-#include <so3/ipenv.hxx>
-#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -111,8 +108,10 @@
 #endif
 
 #include <svx/dialogs.hrc>
+#include <sfx2/viewfrm.hxx>
 #include <svx/xoutx.hxx>
 #include <svx/svdopage.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
@@ -170,6 +169,10 @@
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
 #endif
+
+#include "ViewShellBase.hxx"
+
+using namespace com::sun::star;
 
 namespace sd {
 
@@ -525,6 +528,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::cont
     }
 }
 
+
 /*************************************************************************
 |*
 |* Selektion hat sich geaendert
@@ -815,17 +819,17 @@ void View::SetMarkedOriginalSize()
         {
             if( pObj->GetObjIdentifier() == OBJ_OLE2 )
             {
-                SvInPlaceObjectRef xIPObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-
-                if( xIPObj.Is() )
+                uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
+                if( xObj.is() )
                 {
-                    Size        aOleSize( OutputDevice::LogicToLogic( xIPObj->GetVisArea().GetSize(), xIPObj->GetMapUnit(), MAP_100TH_MM) );
+                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
+                    awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+                    Size        aOleSize( OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM) );
                     Rectangle   aDrawRect( pObj->GetLogicRect() );
 
                     pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
                     pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                        Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
-
                     bOK = TRUE;
                 }
             }
@@ -945,38 +949,34 @@ void View::DoConnect(SdrOle2Obj* pObj)
 {
     if (pViewSh)
     {
-        const SvInPlaceObjectRef& rIPObjRef = pObj->GetObjRef();
-
-        if( rIPObjRef.Is() )
+        uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
+        if( xObj.is() )
         {
-            SfxInPlaceClientRef pSdClient = (Client*) rIPObjRef->GetIPClient();
-
-            if ( !pSdClient.Is() )
+            ::sd::Window* pWindow = pViewSh->GetActiveWindow();
+            SfxInPlaceClient* pSdClient = pViewSh-> GetViewShellBase().FindIPClient( xObj, pWindow );
+            if ( !pSdClient )
             {
-                ::sd::Window* pWindow = pViewSh->GetActiveWindow();
                 pSdClient = new Client(pObj, pViewSh, pWindow);
-
-                rIPObjRef->DoConnect(pSdClient);
                 Rectangle aRect = pObj->GetLogicRect();
-                SvClientData* pClientData = pSdClient->GetEnv();
-
-                if (pClientData)
                 {
                     Size aDrawSize = aRect.GetSize();
-                    Size aObjAreaSize = rIPObjRef->GetVisArea().GetSize();
+                    awt::Size aSz = xObj->getVisualAreaSize( pSdClient->GetAspect() );
+                    Size aObjAreaSize( aSz.Width, aSz.Height );
+
+                    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pSdClient->GetAspect() ) );
                     aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
-                                                           rIPObjRef->GetMapUnit(),
+                                                           aMapUnit,
                                                            pDoc->GetScaleUnit() );
 
                     // sichtbarer Ausschnitt wird nur inplace veraendert!
                     aRect.SetSize(aObjAreaSize);
-                    pClientData->SetObjArea(aRect);
+                    pSdClient->SetObjArea(aRect);
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
                     Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
                     aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
                     aScaleHeight.ReduceInaccurate(10);
-                    pClientData->SetSizeScale(aScaleWidth, aScaleHeight);
+                    pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
                 }
             }
         }
