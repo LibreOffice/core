@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:49:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #ifndef _TOOLS_INETDEF_HXX
 #include <tools/inetdef.hxx>
 #endif
@@ -168,6 +171,8 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
+using namespace ::sfx2;
+
 //CHINA001 copy from multipat.hxx begin
 // define ----------------------------------------------------------------
 
@@ -180,6 +185,8 @@ using namespace ::rtl;
 #endif
 //CHINA001 copy from multipat.hxx end
 // static ----------------------------------------------------------------
+
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #define INET_SEARCH_TOKEN   '"'
 #define RET_ALL             ((short)200)
@@ -1577,3 +1584,203 @@ void SvxScriptingTabPage::Reset( const SfxItemSet& )
                     aJavaSecurityCB.IsEnabled() ||
                     aClassPathED.IsEnabled());
 }
+
+/* -------------------------------------------------------------------------*/
+
+class MailerProgramCfg_Impl : public utl::ConfigItem
+{
+    friend class SvxEMailTabPage;
+    // variables
+    OUString sProgram;
+    // readonly states
+    sal_Bool bROProgram;
+
+    const Sequence<OUString> GetPropertyNames();
+public:
+    MailerProgramCfg_Impl();
+    virtual ~MailerProgramCfg_Impl();
+
+    virtual void    Commit();
+
+};
+
+/* -------------------------------------------------------------------------*/
+
+MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
+    utl::ConfigItem(C2U("Office.Common/ExternalMailer")),
+    bROProgram(sal_False)
+{
+    const Sequence< OUString > aNames = GetPropertyNames();
+    const Sequence< Any > aValues = GetProperties(aNames);
+    const Sequence< sal_Bool > aROStates = GetReadOnlyStates(aNames);
+    const Any* pValues = aValues.getConstArray();
+    const sal_Bool* pROStates = aROStates.getConstArray();
+    for(sal_Int32 nProp = 0; nProp < aValues.getLength(); nProp++)
+    {
+        if(pValues[nProp].hasValue())
+        {
+            switch(nProp)
+            {
+                case 0 :
+                {
+                    pValues[nProp] >>= sProgram;
+                    bROProgram = pROStates[nProp];
+                }
+                break;
+            }
+        }
+    }
+}
+
+/* -------------------------------------------------------------------------*/
+
+MailerProgramCfg_Impl::~MailerProgramCfg_Impl()
+{
+}
+
+/* -------------------------------------------------------------------------*/
+
+const Sequence<OUString> MailerProgramCfg_Impl::GetPropertyNames()
+{
+    Sequence<OUString> aRet(1);
+    OUString* pRet = aRet.getArray();
+    pRet[0] = C2U("Program");
+    return aRet;
+}
+
+/* -------------------------------------------------------------------------*/
+
+void MailerProgramCfg_Impl::Commit()
+{
+    const Sequence< OUString > aOrgNames = GetPropertyNames();
+    sal_Int32 nOrgCount = aOrgNames.getLength();
+
+    Sequence< OUString > aNames(nOrgCount);
+    Sequence< Any > aValues(nOrgCount);
+    sal_Int32 nRealCount = 0;
+
+    for(int nProp = 0; nProp < nOrgCount; nProp++)
+    {
+    switch(nProp)
+    {
+            case  0:
+            {
+                if (!bROProgram)
+                {
+                    aNames[nRealCount] = aOrgNames[nProp];
+                    aValues[nRealCount] <<= sProgram;
+                    ++nRealCount;
+                }
+            }
+            break;
+        }
+    }
+
+    aNames.realloc(nRealCount);
+    aValues.realloc(nRealCount);
+    PutProperties(aNames, aValues);
+}
+
+/* -------------------------------------------------------------------------*/
+
+struct SvxEMailTabPage_Impl
+{
+    MailerProgramCfg_Impl aMailConfig;
+};
+
+SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet) :
+    SfxTabPage(pParent, ResId( RID_SVXPAGE_INET_MAIL, DIALOG_MGR() ), rSet),
+    aMailFL(this,           ResId(FL_MAIL           )),
+    aMailerURLFI(this,      ResId(FI_MAILERURL      )),
+    aMailerURLFT(this,      ResId(FT_MAILERURL      )),
+    aMailerURLED(this,      ResId(ED_MAILERURL      )),
+    aMailerURLPB(this,      ResId(PB_MAILERURL      )),
+    m_sDefaultFilterName(   ResId(STR_DEFAULT_FILENAME      )),
+    pImpl(new SvxEMailTabPage_Impl)
+{
+    FreeResource();
+
+    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+
+    Link aLink(LINK(this, SvxEMailTabPage, FileDialogHdl_Impl));
+    aMailerURLPB.SetClickHdl(aLink);
+}
+
+/* -------------------------------------------------------------------------*/
+
+SvxEMailTabPage::~SvxEMailTabPage()
+{
+    delete pImpl;
+}
+
+/* -------------------------------------------------------------------------*/
+
+SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+{
+    return new SvxEMailTabPage(pParent, rAttrSet);
+}
+
+/* -------------------------------------------------------------------------*/
+
+BOOL SvxEMailTabPage::FillItemSet( SfxItemSet& rSet )
+{
+    BOOL bMailModified = FALSE;
+    if(!pImpl->aMailConfig.bROProgram && aMailerURLED.GetSavedValue() != aMailerURLED.GetText())
+    {
+        pImpl->aMailConfig.sProgram = aMailerURLED.GetText();
+        bMailModified = TRUE;
+    }
+    if ( bMailModified )
+        pImpl->aMailConfig.Commit();
+
+    return FALSE;
+}
+
+/* -------------------------------------------------------------------------*/
+
+void SvxEMailTabPage::Reset( const SfxItemSet& rSet )
+{
+    aMailerURLED.Enable(TRUE );
+    aMailerURLPB.Enable(TRUE );
+
+    if(pImpl->aMailConfig.bROProgram)
+        aMailerURLFI.Show();
+
+    aMailerURLED.SetText(pImpl->aMailConfig.sProgram);
+    aMailerURLED.SaveValue();
+    aMailerURLED.Enable(!pImpl->aMailConfig.bROProgram);
+    aMailerURLPB.Enable(!pImpl->aMailConfig.bROProgram);
+    aMailerURLFT.Enable(!pImpl->aMailConfig.bROProgram);
+
+    aMailFL.Enable(aMailerURLFT.IsEnabled() ||
+                   aMailerURLED.IsEnabled() ||
+                   aMailerURLPB.IsEnabled());
+}
+
+/* -------------------------------------------------------------------------*/
+
+IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
+{
+    if ( &aMailerURLPB == pButton && !pImpl->aMailConfig.bROProgram )
+    {
+        FileDialogHelper aHelper( FILEOPEN_SIMPLE, WB_OPEN );
+        String sPath = aMailerURLED.GetText();
+        if ( !sPath.Len() )
+            sPath.AppendAscii("/usr/bin");
+
+        String sUrl;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sPath,sUrl);
+        aHelper.SetDisplayDirectory(sUrl);
+        aHelper.AddFilter( m_sDefaultFilterName, String::CreateFromAscii("*"));
+
+        if ( ERRCODE_NONE == aHelper.Execute() )
+        {
+            sUrl = aHelper.GetPath();
+            ::utl::LocalFileHelper::ConvertURLToPhysicalName(sUrl,sPath);
+            aMailerURLED.SetText(sPath);
+        }
+    }
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
