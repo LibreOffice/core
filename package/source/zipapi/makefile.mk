@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: mtg $ $Date: 2002-01-29 15:30:48 $
+#   last change: $Author: rt $ $Date: 2003-10-30 14:23:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,11 @@ INCPRE+=$(UNOUCROUT)
 
 UNOTYPES=\
     com.sun.star.packages.zip.ZipConstants \
-    com.sun.star.packages.zip.ZipException
+    com.sun.star.packages.zip.ZipException \
+    com.sun.star.io.BufferSizeExceededException \
+    com.sun.star.io.XOutputStream \
+    com.sun.star.io.XInputStream \
+    com.sun.star.io.NotConnectedException
 
 # --- Targets ------------------------------------------------------
 
