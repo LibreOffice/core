@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:26:00 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3409,10 +3409,17 @@ void SvxRuler::Command( const CommandEvent& rCEvt )
             FieldUnit eUnit = GetUnit();
             const USHORT nCount = aMenu.GetItemCount();
 
-            for ( USHORT i = 0; i < nCount; ++i )
+            BOOL bReduceMetric = 0 != (nFlags &SVXRULER_SUPPORT_REDUCED_METRIC);
+            for ( USHORT i = nCount; i; --i )
             {
-                const USHORT nId = aMenu.GetItemId(i);
+                const USHORT nId = aMenu.GetItemId(i - 1);
                 aMenu.CheckItem(nId, nId == (USHORT)eUnit);
+                if(bReduceMetric &&
+                        (nId == FUNIT_M ||
+                         nId == FUNIT_KM ||
+                         nId == FUNIT_FOOT ||
+                         nId == FUNIT_MILE ))
+                    aMenu.RemoveItem(i - 1);
             }
             aMenu.Execute( this, rCEvt.GetMousePosPixel() );
         }
