@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSubTotalDescriptor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:06:48 $
+ *  last change:$Date: 2003-12-11 11:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,14 @@
  *
  *
  ************************************************************************/
-
 package ifc.sheet;
-
-import lib.MultiMethodTest;
 
 import com.sun.star.sheet.GeneralFunction;
 import com.sun.star.sheet.SubTotalColumn;
 import com.sun.star.sheet.XSubTotalDescriptor;
+
+import lib.MultiMethodTest;
+
 
 /**
 * Testing <code>com.sun.star.sheet.XSubTotalDescriptor</code>
@@ -77,7 +77,6 @@ import com.sun.star.sheet.XSubTotalDescriptor;
 * @see com.sun.star.sheet.XSubTotalDescriptor
 */
 public class _XSubTotalDescriptor extends MultiMethodTest {
-
     public XSubTotalDescriptor oObj = null;
 
     /**
@@ -103,7 +102,10 @@ public class _XSubTotalDescriptor extends MultiMethodTest {
         tRes.tested("clear()", true);
     }
 
-
-}  // finish class _XSubTotalDescriptor
-
-
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
+} // finish class _XSubTotalDescriptor
