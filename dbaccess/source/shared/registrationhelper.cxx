@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:22:42 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 06:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ sal_Bool OModuleRegistration::writeComponentInfos(
             for (sal_uInt32 j=0; j<pServices->getLength(); ++j, ++pService)
                 xNewKey->createKey(*pService);
         }
-        catch(...)
+        catch(Exception&)
         {
             OSL_ASSERT("OModuleRegistration::writeComponentInfos : something went wrong while creating the keys !");
             return sal_False;

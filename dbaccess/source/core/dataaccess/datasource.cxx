@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:47 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 06:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,7 +1088,7 @@ void ODatabaseSource::readUIAspects(const ::vos::ORef< ::store::OStream >& _rStr
                 if (xSupplier.is())
                     m_xNumberFormatsSupplier = xSupplier;
             }
-            catch(...)
+            catch(Exception&)
             {
                 DBG_ERROR("ODatabaseSource::readUIAspects : could not read the formatter !");
             }
@@ -1148,7 +1148,7 @@ void ODatabaseSource::writeUIAspects(const ::vos::ORef< ::store::OStream >& _rSt
         {
             xOutStream->writeObject(xPersistentSupplier);
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("ODatabaseSource::writeUIAspects : could not store the formatter");
         }
