@@ -33,7 +33,6 @@ class  ctor : public CppUnit::TestFixture
         void ctor_001()
         {
             ::rtl::ByteSequence aByteSeq;
-printf("ctor001\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates an empty sequence",
@@ -46,7 +45,7 @@ printf("ctor001\n");
         {
             ::rtl::ByteSequence aByteSeq;
             ::rtl::ByteSequence aByteSeqtmp( aByteSeq );
-printf("ctor002\n");
+//printf("ctor002\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates a copy of given sequence",
@@ -58,22 +57,22 @@ printf("ctor002\n");
         void ctor_003()
         {
             ::rtl::ByteSequence aByteSeq( &kTestByteSeq1 );
-printf("ctor003 %d, the length is %d\n",aByteSeq[0],aByteSeq.getLength());
+//printf("ctor003 %d, the length is %d\n",aByteSeq[0],aByteSeq.getLength());
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Copy constructor Creates a copy from the C-Handle ",
-                aByteSeq.getLength() == kTestByteCount1
+                aByteSeq.getLength() == kTestSeqLen1
         );
         }
 
     void ctor_003_1()
         {
             ::rtl::ByteSequence aByteSeq( &kTestByteSeq2 );
-printf("ctor0031\n");
+//printf("ctor0031\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Copy constructor Creates a copy from the C-Handle: reference count > 1 ",
-                aByteSeq.getLength() == kTestByteCount1
+                aByteSeq.getLength() == kTestSeqLen2
         );
         }
 
@@ -82,7 +81,7 @@ printf("ctor0031\n");
             sal_Int8 * pElements = &kTestByte;
         sal_Int32 len = kTestByteCount1;
         ::rtl::ByteSequence aByteSeq( pElements, len);
-printf("ctor004\n");
+//printf("ctor004\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates a copy of given data bytes",
@@ -96,7 +95,7 @@ printf("ctor004\n");
         {
         sal_Int32 len = 50;
             ::rtl::ByteSequence aByteSeq( len );
-printf("ctor005\n");
+//printf("ctor005\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates sequence of given length and initializes all bytes to 0",
@@ -109,7 +108,7 @@ printf("ctor005\n");
         {
         sal_Int32 len = 39;
             ::rtl::ByteSequence aByteSeq( len , BYTESEQ_NODEFAULT );
-printf("ctor006\n");
+//printf("ctor006\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates sequence of given length and does NOT initialize data",
@@ -118,21 +117,21 @@ printf("ctor006\n");
             );
         }
 
-        /*void ctor_007()
+        void ctor_007()
         {
         //sal_Sequence *pSequence;
             //pSequence = new sal_Sequence;
         //pSequence->nRefCount = 1;
         //pSequence->nElements = kTestByteCount1;
         //pSequence->elements[1] = kTestChar;
-            ::rtl::ByteSequence aByteSeq( &kTestByteSeq1 , BYTESEQ_NOACQUIRE );
-printf("ctor007\n");
+            ::rtl::ByteSequence aByteSeq( &kTestByteSeq3 , BYTESEQ_NOACQUIRE );
+//printf("ctor007\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Creates a sequence from a C-Handle without acquiring the handle, thus taking over ownership",
-                aByteSeq.getLength() == kTestSeqLen1
+                aByteSeq.getLength() == kTestSeqLen3
             );
-        }*/
+        }
 
         CPPUNIT_TEST_SUITE(ctor);
         CPPUNIT_TEST(ctor_001);
@@ -142,7 +141,7 @@ printf("ctor007\n");
         CPPUNIT_TEST(ctor_004);
         CPPUNIT_TEST(ctor_005);
         CPPUNIT_TEST(ctor_006);
-//        CPPUNIT_TEST(ctor_007);
+        CPPUNIT_TEST(ctor_007);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -179,7 +178,7 @@ public:
     {
         sal_Int32 len = kTestByteCount1 - 1 ;
         ::rtl::ByteSequence aByteSeq1( len );
-    sal_Int8 * pElements = &kTestByte;
+    sal_Int8 * pElements = &kTestByte1;
     ::rtl::ByteSequence aByteSeq2( pElements, len + 1);
     aByteSeq2 = aByteSeq1;
         CPPUNIT_ASSERT_MESSAGE
@@ -193,16 +192,16 @@ public:
     void assign_003()
     {
         sal_Int32 len = kTestByteCount1 - 1 ;
-    const sal_Int8 * pElements = &kTestByte;
+    const sal_Int8 * pElements = &kTestByte2;
         ::rtl::ByteSequence aByteSeq1( pElements, len + 1 );
     ::rtl::ByteSequence aByteSeq2( len, BYTESEQ_NODEFAULT );
     aByteSeq2 = aByteSeq1;
-printf("assign003\n");
+//printf("assign003\n");
         CPPUNIT_ASSERT_MESSAGE
         (
             "Assignment operator: assign sequence to another sequence having no data initialized",
             aByteSeq1 == aByteSeq2 &&
-            aByteSeq2.getLength() == len
+            aByteSeq2.getLength() == kTestByteCount1
         );
     }
 
@@ -213,12 +212,12 @@ printf("assign003\n");
     const sal_Int8 * pElements = &kTestByte;
     ::rtl::ByteSequence aByteSeq2( pElements, len);
     aByteSeq2 = aByteSeq1;
-printf("assign004\n");
+//printf("assign004\n");
         CPPUNIT_ASSERT_MESSAGE
         (
             "Assignment operator: assign empty sequence to another not empty sequence",
             aByteSeq1 == aByteSeq2 &&
-            aByteSeq2.getLength() == len
+            aByteSeq2.getLength() == 0
         );
     }
 
@@ -348,10 +347,16 @@ public:
         sal_Int8 * pElements = &kTestByte;
     ::rtl::ByteSequence aByteSeq1( pElements, len);
     sal_Int8 * pArray = aByteSeq1.getArray();
+    sal_Bool res = sal_True;
+    for (sal_Int32 i = 0; i < len; i++)
+    {
+        if (pElements[i] != pArray[i])
+        res = sal_False;
+    }
     CPPUNIT_ASSERT_MESSAGE
         (
             "Gets the pointer to byte array: normal sequence",
-            pElements == pArray
+        res
         );
     }
 
@@ -362,7 +367,7 @@ public:
     CPPUNIT_ASSERT_MESSAGE
         (
             "Gets the pointer to byte array: empty sequence",
-            pArray == 0
+            pArray == 0 // how to define a null pointer?
         );
     }
 
@@ -509,7 +514,7 @@ public:
     void getData_003()
     {
         ::rtl::ByteSequence aByteSeq( &kTestByteSeq1 );
-    printf("the 3th byte in aByteSeq is %c\n", aByteSeq[3]);
+    printf("the 3th byte in aByteSeq is %d\n", aByteSeq[0]);
         CPPUNIT_ASSERT_MESSAGE
         (
             "Obtains a reference to byte indexed at given position: reference count = 1",
