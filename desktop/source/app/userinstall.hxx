@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:26:19 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,11 @@ public:
         E_Unknown               // unknown error
     };
 
-    static UserInstallError finalize( Desktop& rDesktop );
+    static UserInstallError finalize();
+
+    // configureLanguage ensures that a ooLocale is set to a valid
+    // Language every time since the Language of the base
+    // install might change
+    static UserInstallError configureLanguage();
 };
 }
