@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 19:14:24 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 16:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,8 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
             USHORT nIndex;
             if (!rUsers.Search(&aData, nIndex))
             {
-                DBG_ERROR("Autor nicht gefunden");
+                // empty string is possible if a name wasn't found while saving a 5.0 file
+                DBG_ASSERT( aLastUserName.Len() == 0, "Author not found" );
                 nIndex = 0;
             }
             nLastUserIndex = nIndex % SC_AUTHORCOLORCOUNT;
