@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:52:56 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ using namespace ::com::sun::star::frame;
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;
-const char  *OfficeIPCThread::sc_aShowSequence = "-show";
+const char  *OfficeIPCThread::sc_aShowSequence = "-tofront";
 const int OfficeIPCThread::sc_nShSeqLength = 5;
 const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";
 const int OfficeIPCThread::sc_nCSeqLength = 27;
@@ -391,7 +391,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             // Use default argument so the first office can distinguish between a real second
             // office and another program that check the existence of the the pipe!!
 
-            aArguments += ByteString( "-show" );
+            aArguments += ByteString( sc_aShowSequence );
         }
         else
         {
