@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-18 09:50:10 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
             aAttr.Put(SdrCircStartAngleItem(9000));
             aAttr.Put(SdrCircEndAngleItem(0));
 
-            pObj->SetItemSet(aAttr);
+            pObj->SetMergedItemSet(aAttr);
         }
         else
         {
