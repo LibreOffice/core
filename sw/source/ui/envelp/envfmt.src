@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ TabPage TP_ENV_FMT
         Text [ ENGLISH ] = "Addressee" ;
         Text [ norwegian ] = "Addressee" ;
         Text [ italian ] = "Destinatario" ;
-        Text [ portuguese_brazilian ] = "Endere?o" ;
+        Text [ portuguese_brazilian ] = "Destinat�rio" ;
         Text [ portuguese ] = "Destinat�rio" ;
         Text [ finnish ] = "Saaja" ;
         Text [ danish ] = "Modtager" ;
@@ -94,10 +94,13 @@ TabPage TP_ENV_FMT
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
         Text[ korean ] = "받는 사람";
-        Text[ turkish ] = "Al�c�";
+        Text[ turkish ] = "Adresler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Destinatari";
         Text[ thai ] = "ผู้รับจดหมาย";
+        Text[ czech ] = "Příjemce";
+        Text[ hebrew ] = "Empfänger";
+        Text[ hindi ] = "लेनेवाला";
     };
     FixedText TXT_ADDR_POS
     {
@@ -117,16 +120,19 @@ TabPage TP_ENV_FMT
         Text[ danish ] = "Placering";
         Text[ swedish ] = "Placering";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Posi��o";
         Text[ japanese ] = "位置";
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
-        Text[ turkish ] = "Pozisyon";
+        Text[ turkish ] = "Konum";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Posici�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "स्थान";
     };
     FixedText TXT_ADDR_LEFT
     {
@@ -148,7 +154,7 @@ TabPage TP_ENV_FMT
         Text [ english_us ] = "from left" ;
         Text[ chinese_simplified ] = "从左";
         Text[ russian ] = "�����";
-        Text[ polish ] = "z lewej";
+        Text[ polish ] = "od lewej";
         Text[ japanese ] = "左から";
         Text[ chinese_traditional ] = "從左";
         Text[ arabic ] = "�� ������";
@@ -158,6 +164,9 @@ TabPage TP_ENV_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "de l'esquerra";
         Text[ thai ] = "จากซ้าย";
+        Text[ czech ] = "zleva";
+        Text[ hebrew ] = "‮משמאל‬";
+        Text[ hindi ] = "बायाँ ओर से ";
     };
     MetricField FLD_ADDR_LEFT
     {
@@ -185,7 +194,7 @@ TabPage TP_ENV_FMT
         Text [ ENGLISH ] = "from top" ;
         Text [ norwegian ] = "from top" ;
         Text [ italian ] = "Dall'alto" ;
-        Text [ portuguese_brazilian ] = "do topo" ;
+        Text [ portuguese_brazilian ] = "de cima" ;
         Text [ portuguese ] = "a partir do topo" ;
         Text [ finnish ] = "ylh��lt�" ;
         Text [ danish ] = "fra oven" ;
@@ -196,7 +205,7 @@ TabPage TP_ENV_FMT
         Text [ english_us ] = "from top" ;
         Text[ chinese_simplified ] = "从上";
         Text[ russian ] = "������";
-        Text[ polish ] = "z g�ry";
+        Text[ polish ] = "od g�ry";
         Text[ japanese ] = "上から";
         Text[ chinese_traditional ] = "從上";
         Text[ arabic ] = "�� ����";
@@ -206,6 +215,9 @@ TabPage TP_ENV_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "des de d'alt";
         Text[ thai ] = "จากด้านบน";
+        Text[ czech ] = "shora";
+        Text[ hebrew ] = "‮מלמעלה‬";
+        Text[ hindi ] = "ऊपर से ";
     };
     MetricField FLD_ADDR_TOP
     {
@@ -242,16 +254,19 @@ TabPage TP_ENV_FMT
         Text[ danish ] = "Format";
         Text[ swedish ] = "Format";
         Text[ polish ] = "Format";
-        Text[ portuguese_brazilian ] = "Format";
+        Text[ portuguese_brazilian ] = "Formato";
         Text[ japanese ] = "書式";
         Text[ korean ] = "서식";
         Text[ chinese_simplified ] = "格式";
         Text[ chinese_traditional ] = "格式";
-        Text[ turkish ] = "Renk format�";
+        Text[ turkish ] = "Bi�im";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "Formata";
         Text[ finnish ] = "Muotoilu";
         Text[ thai ] = "จัดรูปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ hindi ] = "रचना";
     };
     MenuButton BTN_ADDR_EDIT
     {
@@ -273,7 +288,7 @@ TabPage TP_ENV_FMT
         Text [ english_us ] = "Edit" ;
         Text[ chinese_simplified ] = "编辑";
         Text[ russian ] = "��������";
-        Text[ polish ] = "E~dytuj";
+        Text[ polish ] = "Edytuj";
         Text[ japanese ] = "編集";
         Text[ chinese_traditional ] = "編輯";
         Text[ arabic ] = "�����";
@@ -283,6 +298,9 @@ TabPage TP_ENV_FMT
         Text[ turkish ] = "D�zenle";
         Text[ catalan ] = "Edita";
         Text[ thai ] = "แก้ไข";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "‮עריכה‬";
+        Text[ hindi ] = "संपादन";
     };
     FixedLine FL_SENDER
     {
@@ -313,6 +331,9 @@ TabPage TP_ENV_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Remitent";
         Text[ thai ] = "ผู้ส่ง";
+        Text[ czech ] = "Odesilatel";
+        Text[ hebrew ] = "‮שולח‬";
+        Text[ hindi ] = "भेजनेवाला";
     };
     FixedText TXT_SEND_POS
     {
@@ -332,16 +353,19 @@ TabPage TP_ENV_FMT
         Text[ danish ] = "Placering";
         Text[ swedish ] = "Placering";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Posi��o";
         Text[ japanese ] = "位置";
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
-        Text[ turkish ] = "�� unvan�";
+        Text[ turkish ] = "Konum";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Posici�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "स्थान";
     };
     FixedText TXT_SEND_LEFT
     {
@@ -363,7 +387,7 @@ TabPage TP_ENV_FMT
         Text [ english_us ] = "from left" ;
         Text[ chinese_simplified ] = "从左";
         Text[ russian ] = "�����";
-        Text[ polish ] = "z lewej";
+        Text[ polish ] = "od lewej";
         Text[ japanese ] = "左から";
         Text[ chinese_traditional ] = "從左";
         Text[ arabic ] = "�� ������";
@@ -373,6 +397,9 @@ TabPage TP_ENV_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "de l'esquerra";
         Text[ thai ] = "จากด้านซ้าย";
+        Text[ czech ] = "zleva";
+        Text[ hebrew ] = "‮משמאל‬";
+        Text[ hindi ] = "बायाँ ओर से";
     };
     MetricField FLD_SEND_LEFT
     {
@@ -400,7 +427,7 @@ TabPage TP_ENV_FMT
         Text [ ENGLISH ] = "from top" ;
         Text [ norwegian ] = "from top" ;
         Text [ italian ] = "Dall'alto" ;
-        Text [ portuguese_brazilian ] = "do topo" ;
+        Text [ portuguese_brazilian ] = "de cima" ;
         Text [ portuguese ] = "a partir do topo" ;
         Text [ finnish ] = "ylh��lt�" ;
         Text [ danish ] = "fra oven" ;
@@ -411,7 +438,7 @@ TabPage TP_ENV_FMT
         Text [ english_us ] = "from top" ;
         Text[ chinese_simplified ] = "从上";
         Text[ russian ] = "������";
-        Text[ polish ] = "z g�ry";
+        Text[ polish ] = "od g�ry";
         Text[ japanese ] = "上から";
         Text[ chinese_traditional ] = "從上";
         Text[ arabic ] = "�� ����";
@@ -421,6 +448,9 @@ TabPage TP_ENV_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "des de d'alt";
         Text[ thai ] = "จาด้านบน";
+        Text[ czech ] = "shora";
+        Text[ hebrew ] = "‮מלמעלה‬";
+        Text[ hindi ] = "ऊपर से";
     };
     MetricField FLD_SEND_TOP
     {
@@ -457,16 +487,19 @@ TabPage TP_ENV_FMT
         Text[ danish ] = "Format";
         Text[ swedish ] = "Format";
         Text[ polish ] = "Format";
-        Text[ portuguese_brazilian ] = "Format";
+        Text[ portuguese_brazilian ] = "Formato";
         Text[ japanese ] = "書式";
         Text[ korean ] = "서식";
         Text[ chinese_simplified ] = "格式";
         Text[ chinese_traditional ] = "格式";
-        Text[ turkish ] = "Renk format�";
+        Text[ turkish ] = "Bi�im";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "Formata";
         Text[ finnish ] = "Muotoilu";
         Text[ thai ] = "จัดรูปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ hindi ] = "रचना";
     };
     MenuButton BTN_SEND_EDIT
     {
@@ -488,7 +521,7 @@ TabPage TP_ENV_FMT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "编辑";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Edyt~uj";
+        Text[ polish ] = "Edytuj";
         Text[ japanese ] = "編集";
         Text[ chinese_traditional ] = "編輯";
         Text[ arabic ] = "�����";
@@ -498,6 +531,9 @@ TabPage TP_ENV_FMT
         Text[ turkish ] = "D�zenle";
         Text[ catalan ] = "Edita";
         Text[ thai ] = "แก้ไข";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "‮עריכה‬";
+        Text[ hindi ] = "संपादन";
     };
     FixedLine FL_SIZE
     {
@@ -528,6 +564,9 @@ TabPage TP_ENV_FMT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mida";
         Text[ thai ] = "ขนาด";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "परिमाण";
     };
     FixedText TXT_SIZE_FORMAT
     {
@@ -537,7 +576,7 @@ TabPage TP_ENV_FMT
         Text [ ENGLISH ] = "Format" ;
         Text [ norwegian ] = "Format" ;
         Text [ italian ] = "Formato" ;
-        Text [ portuguese_brazilian ] = "Formato" ;
+        Text [ portuguese_brazilian ] = "Fo~rmato" ;
         Text [ portuguese ] = "Fo~rmato" ;
         Text [ finnish ] = "M~uotoilu" ;
         Text [ danish ] = "~Format" ;
@@ -549,16 +588,19 @@ TabPage TP_ENV_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "格式(~O)";
         Text[ russian ] = "���~���";
-        Text[ polish ] = "Format";
+        Text[ polish ] = "~Format";
         Text[ japanese ] = "封筒サイズ(~O)";
         Text[ chinese_traditional ] = "格式(~O)";
         Text[ arabic ] = "�������";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "��������";
         Text[ korean ] = "용지 크기(~O)";
-        Text[ turkish ] = "Format";
+        Text[ turkish ] = "F~ormat";
         Text[ catalan ] = "F~ormata";
         Text[ thai ] = "จัดรู~ปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ hindi ] = "र~चना";
     };
     ListBox BOX_SIZE_FORMAT
     {
@@ -576,7 +618,7 @@ TabPage TP_ENV_FMT
         Text [ ENGLISH ] = "Width" ;
         Text [ norwegian ] = "Bredde " ;
         Text [ italian ] = "Larghezza" ;
-        Text [ portuguese_brazilian ] = "Largura" ;
+        Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "~Bredde" ;
@@ -588,16 +630,19 @@ TabPage TP_ENV_FMT
         Left = TRUE ;
         Text[ chinese_simplified ] = "宽度(~W)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "S~zeroko��";
         Text[ japanese ] = "幅(~W)";
         Text[ chinese_traditional ] = "寬度(~W)";
         Text[ arabic ] = "�����";
         Text[ greek ] = "������";
         Text[ korean ] = "너비(~W)";
-        Text[ turkish ] = "Geni�lik";
+        Text[ turkish ] = "~Geni�lik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Amplada";
         Text[ thai ] = "ความ~กว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "चौ~ड़ाई";
     };
     MetricField FLD_SIZE_WIDTH
     {
@@ -625,7 +670,7 @@ TabPage TP_ENV_FMT
         Text [ ENGLISH ] = "Height" ;
         Text [ norwegian ] = "H�yde " ;
         Text [ italian ] = "Altezza" ;
-        Text [ portuguese_brazilian ] = "Altura" ;
+        Text [ portuguese_brazilian ] = "~Altura" ;
         Text [ portuguese ] = "~Altura" ;
         Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "H~�jde" ;
@@ -636,16 +681,19 @@ TabPage TP_ENV_FMT
         Text [ english_us ] = "~Height" ;
         Text[ chinese_simplified ] = "高度(~H)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "~Wysoko��";
         Text[ japanese ] = "高さ(~H)";
         Text[ chinese_traditional ] = "高度(~H)";
         Text[ arabic ] = "��������";
         Text[ greek ] = "����";
         Text[ korean ] = "높이(~H)";
-        Text[ turkish ] = "Y�kseklik";
+        Text[ turkish ] = "~Y�kseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~l�ada";
         Text[ thai ] = "ความ~สูง";
+        Text[ czech ] = "Výška";
+        Text[ hebrew ] = "‮גובה‬";
+        Text[ hindi ] = "ऊँचा~ई";
     };
     MetricField FLD_SIZE_HEIGHT
     {
@@ -694,7 +742,7 @@ Menu MNU_EDIT
             TEXT [ english_us ] = "C~haracter..." ;
             TEXT[ chinese_simplified ] = "字符(~H)...";
             TEXT[ russian ] = "�����...";
-            TEXT[ polish ] = "Znak...";
+            TEXT[ polish ] = "Z~nak...";
             TEXT[ japanese ] = "文字(~H)...";
             TEXT[ language_user1 ] = " ";
             TEXT[ chinese_traditional ] = "字元(~H)...";
@@ -704,6 +752,9 @@ Menu MNU_EDIT
             TEXT[ turkish ] = "Karakter...";
             TEXT[ catalan ] = "~Car�cters...";
             TEXT[ thai ] = "ตัวอัก~ขระ...";
+            TEXT[ czech ] = "Znak...";
+            TEXT[ hebrew ] = "~Zeichen...";
+            TEXT[ hindi ] = "अ~क्षर...";
         };
         MenuItem
         {
@@ -712,7 +763,7 @@ Menu MNU_EDIT
             TEXT [ English ] = "~Paragraph..." ;
             TEXT [ norwegian ] = "~Paragraph..." ;
             TEXT [ italian ] = "~Paragrafo..." ;
-            TEXT [ portuguese_brazilian ] = "~Par?grafo..." ;
+            TEXT [ portuguese_brazilian ] = "~Par�grafo..." ;
             TEXT [ portuguese ] = "~Par�grafo..." ;
             TEXT [ finnish ] = "Ka~ppale..." ;
             TEXT [ danish ] = "Afsnit..." ;
@@ -723,7 +774,7 @@ Menu MNU_EDIT
             TEXT [ english_us ] = "P~aragraph..." ;
             TEXT[ chinese_simplified ] = "段落(~A)...";
             TEXT[ russian ] = "�����...";
-            TEXT[ polish ] = "Akapit...";
+            TEXT[ polish ] = "~Akapit...";
             TEXT[ japanese ] = "段落(~A)...";
             TEXT[ chinese_traditional ] = "段落(~A)...";
             TEXT[ arabic ] = "...����";
@@ -733,9 +784,21 @@ Menu MNU_EDIT
             TEXT[ language_user1 ] = " ";
             TEXT[ catalan ] = "Par�graf...";
             TEXT[ thai ] = "ย่~อหน้า...";
+            TEXT[ czech ] = "Odstavec...";
+            TEXT[ hebrew ] = "‮פסקאות...‬";
+            TEXT[ hindi ] = "प~रिच्छेद...";
         };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
