@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excscen.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:09:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,14 @@
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 
 
 struct RootData;
 class XclImpStream;
+class ScDocument;
 
 
 
