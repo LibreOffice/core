@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: mfe $ $Date: 2000-10-31 15:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,13 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString* ustrSymbolName)
 
         pszSymbolName = rtl_string_getStr(strSymbolName);
 
+
         pHandle=osl_psz_getSymbol(Module,pszSymbolName);
+
+        if ( strSymbolName != 0 )
+        {
+            rtl_string_release(strSymbolName);
+        }
     }
 
 
