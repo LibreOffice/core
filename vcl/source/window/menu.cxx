@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:49:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,6 +1385,10 @@ void Menu::SetPopupMenu( USHORT nItemId, PopupMenu* pMenu )
 
     // data exchange
     pData->pSubMenu = pMenu;
+
+    // #112023# Make sure pStartedFrom does not point to invalid (old) data
+    if ( pData->pSubMenu )
+        pData->pSubMenu->pStartedFrom = 0;
 
     // set native submenu
     if( ImplGetSalMenu() && pData->pSalMenuItem )
