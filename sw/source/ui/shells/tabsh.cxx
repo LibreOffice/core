@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 17:38:36 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 18:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,12 +776,14 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                     ((SwTblBoxNumFormat&)aBoxSet.Get(
                                     RES_BOXATR_FORMAT )).GetValue() ));
 
+                String sCurText( rSh.GetTableBoxText() );
                 aCoreSet.Put( SvxNumberInfoItem( pFormatter,
                                     ((SwTblBoxValue&)aBoxSet.Get(
                                         RES_BOXATR_VALUE)).GetValue(),
-                                    SID_ATTR_NUMBERFORMAT_INFO ));
+                                    sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
-                SwNumFmtDlg* pDlg = new SwNumFmtDlg(GetView().GetWindow(), aCoreSet);
+                SwNumFmtDlg* pDlg = new SwNumFmtDlg( GetView().GetWindow(),
+                                                     aCoreSet );
 
                 if (RET_OK == pDlg->Execute())
                 {
@@ -1410,6 +1412,9 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/02/21 17:38:36  jp
+    use GetCurLang form the EditShell
+
     Revision 1.3  2000/11/14 18:32:27  jp
     use moduleoptions
 
