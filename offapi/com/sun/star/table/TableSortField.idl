@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TableSortField.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:14:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_table_TableSortField_idl__
+#define __com_sun_star_table_TableSortField_idl__
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+#ifndef __com_sun_star_table_TableSortFieldType_idl__
+#include <com/sun/star/table/TableSortFieldType.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+/** describes how to sort a single field (row/column) in a tables
+    sort descriptor.
+
+    @see com::sun::star::table::TableSortDescriptor2
+ */
+struct TableSortField
+{
+    //-------------------------------------------------------------------------
+    /** index of the row or column in the table to be sorted; 0-based.
+     */
+    long Field;
+
+    //-------------------------------------------------------------------------
+    /** <TRUE/> if data are sorted in ascending order,
+        <FALSE/> if in descending order.
+     */
+    boolean IsAscending;
+
+    //-------------------------------------------------------------------------
+    /** specifies if the case of letters is important when comparing entries.
+     */
+    boolean IsCaseSensitive;
+
+    //-------------------------------------------------------------------------
+    /** type of contents in the field.
+
+        <p>If the value is
+        <member scope="com::sun::star::table::TableSortFieldType">AUTOMATIC<member>
+        the algorithm used for sorting is application specific.
+        Especially it may or may not use the values given by
+        'CollatorLocale' and 'CollatorAlgorithm'.</p>
+     */
+    com::sun::star::table::TableSortFieldType FieldType;
+
+    //-------------------------------------------------------------------------
+    /** the locale used by the collator when comparing/sorting text.
+
+        <p>This property will not be used when the 'FieldType' is
+        <member scope="com::sun::star::table::TableSortFieldType">NUMERIC<member></p>
+
+        @ see   com::sun::star::i18n::XCollator
+     */
+    com::sun::star::lang::Locale CollatorLocale;
+
+    //-------------------------------------------------------------------------
+    /** the algorithm used by the collator when comparing/sorting text.
+
+        <p>This property will not be used when the 'FieldType' is
+        <member scope="com::sun::star::table::TableSortFieldType">NUMERIC<member></p>
+
+        @ see   com::sun::star::i18n::XCollator
+     */
+    string CollatorAlgorithm;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
