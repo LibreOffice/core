@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 07:33:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 08:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-
+#ifndef _DBAUI_DSNTYPES_HXX_
+#include "dsntypes.hxx"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -585,9 +587,24 @@ protected:
         AR_KEEP                 // don't leave the page (e.g. because an error occured)
     };
     /** apply all changes made
-        @return sal_False if something went wrong and the user choose not to leave
     */
     ApplyResult implApplyChanges();
+
+    /** extracts the connection type from the given set<p/>
+        The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
+    */
+    DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
+
+    /** get a list of items relevant for the curently selected type.<p/>
+        The type is calculated from the DSN item in the given set.<br/>
+        The usual items such as DSN, NAME etc. are not returned, only the special ones not common to all types.
+    */
+    const sal_Int32*    getRelevantItems(const SfxItemSet& _rSet) const;
+
+    /** check if the data source described by the given set needs authentication<p/>
+        The return value depends on the data source type only.
+    */
+    sal_Bool            hasAuthentication(const SfxItemSet& _rSet) const;
 
 private:
     DECL_LINK(OnDatasourceSelected, ListBox*);
@@ -609,6 +626,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/26 07:33:19  fs
+ *  fillDatasourceInfo
+ *
  *  Revision 1.1  2000/10/25 12:49:01  fs
  *  moved herein from ..\dlg
  *
