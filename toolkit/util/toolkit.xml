@@ -423,4 +423,236 @@
         <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFixedLineModel</supported-service>
     </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleButton</name>
+        <description>specifies accessibility support for a button.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleRadioButton</name>
+        <description>specifies accessibility support for a radio button.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleCheckBox</name>
+        <description>specifies accessibility support for a check box.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleFixedText</name>
+        <description>specifies accessibility support for a fixed text.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleEdit</name>
+        <description>specifies accessibility support for an edit.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleEditableText</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleScrollBar</name>
+        <description>specifies accessibility support for a scroll bar.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleListBox</name>
+        <description>specifies accessibility support for a list box.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleListItem</name>
+        <description>specifies accessibility support for a list item.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleDropDownListBox</name>
+        <description>specifies accessibility support for a dropdown list box.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleComboBox</name>
+        <description>specifies accessibility support for a combo box.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleDropDownComboBox</name>
+        <description>specifies accessibility support for a dropdown combo box.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleToolBox</name>
+        <description>specifies accessibility support for a tool box.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleToolBoxItem</name>
+        <description>specifies accessibility support for a tool box item.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessiblePopupMenu</name>
+        <description>specifies accessibility support for a popup menu.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleMenuBar</name>
+        <description>specifies accessibility support for a menu bar.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleMenu</name>
+        <description>specifies accessibility support for a menu.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleMenuItem</name>
+        <description>specifies accessibility support for a menu item.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleAction</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <type>drafts.com.sun.star.accessibility.XAccessibleValue</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleMenuSeparator</name>
+        <description>specifies accessibility support for a menu separator.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleTabControl</name>
+        <description>specifies accessibility support for a tab control.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+        <type>drafts.com.sun.star.accessibility.XAccessibleSelection</type>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleTabPage</name>
+        <description>specifies accessibility support for a tab page.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleExtendedComponent</supported-service>
+    </component-description>
 </module-description>
