@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:44:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,15 +359,15 @@ void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 
 void ScDocument::InvalidateTextWidth( const String& rStyleName )
 {
-    const USHORT nCount = GetTableCount();
-    for ( USHORT i=0; i<nCount && pTab[i]; i++ )
+    const SCTAB nCount = GetTableCount();
+    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
         if ( pTab[i]->GetPageStyle() == rStyleName )
             InvalidateTextWidth( i );
 }
 
 //------------------------------------------------------------------------
 
-void ScDocument::InvalidateTextWidth( USHORT nTab )
+void ScDocument::InvalidateTextWidth( SCTAB nTab )
 {
     ScAddress aAdrFrom( 0,    0,        nTab );
     ScAddress aAdrTo  ( MAXCOL, MAXROW, nTab );
@@ -376,11 +376,11 @@ void ScDocument::InvalidateTextWidth( USHORT nTab )
 
 //------------------------------------------------------------------------
 
-BOOL ScDocument::IsPageStyleInUse( const String& rStrPageStyle, USHORT* pInTab )
+BOOL ScDocument::IsPageStyleInUse( const String& rStrPageStyle, SCTAB* pInTab )
 {
     BOOL         bInUse = FALSE;
-    const USHORT nCount = GetTableCount();
-    USHORT i;
+    const SCTAB nCount = GetTableCount();
+    SCTAB i;
 
     for ( i = 0; !bInUse && i < nCount && pTab[i]; i++ )
         bInUse = ( pTab[i]->GetPageStyle() == rStrPageStyle );
@@ -396,9 +396,9 @@ BOOL ScDocument::IsPageStyleInUse( const String& rStrPageStyle, USHORT* pInTab )
 BOOL ScDocument::RemovePageStyleInUse( const String& rStyle )
 {
     BOOL bWasInUse = FALSE;
-    const USHORT nCount = GetTableCount();
+    const SCTAB nCount = GetTableCount();
 
-    for ( USHORT i=0; i<nCount && pTab[i]; i++ )
+    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
         if ( pTab[i]->GetPageStyle() == rStyle )
         {
             bWasInUse = TRUE;
@@ -411,9 +411,9 @@ BOOL ScDocument::RemovePageStyleInUse( const String& rStyle )
 BOOL ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNew )
 {
     BOOL bWasInUse = FALSE;
-    const USHORT nCount = GetTableCount();
+    const SCTAB nCount = GetTableCount();
 
-    for ( USHORT i=0; i<nCount && pTab[i]; i++ )
+    for ( SCTAB i=0; i<nCount && pTab[i]; i++ )
         if ( pTab[i]->GetPageStyle() == rOld )
         {
             bWasInUse = TRUE;
@@ -425,7 +425,7 @@ BOOL ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNew )
 
 //------------------------------------------------------------------------
 
-BYTE ScDocument::GetEditTextDirection(USHORT nTab) const
+BYTE ScDocument::GetEditTextDirection(SCTAB nTab) const
 {
     EEHorizontalTextDirection eRet = EE_HTEXTDIR_DEFAULT;
 
@@ -456,17 +456,17 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom,
     bBroadcast = (bBroadcast && GetDocOptions().IsCalcAsShown() && !IsImportingXML());
     if ( pAdrFrom && !pAdrTo )
     {
-        const USHORT nTab = pAdrFrom->Tab();
+        const SCTAB nTab = pAdrFrom->Tab();
 
         if ( pTab[nTab] )
             pTab[nTab]->InvalidateTextWidth( pAdrFrom, NULL, bBroadcast );
     }
     else
     {
-        const USHORT nTabStart = pAdrFrom ? pAdrFrom->Tab() : 0;
-        const USHORT nTabEnd   = pAdrTo   ? pAdrTo->Tab()   : MAXTAB;
+        const SCTAB nTabStart = pAdrFrom ? pAdrFrom->Tab() : 0;
+        const SCTAB nTabEnd   = pAdrTo   ? pAdrTo->Tab()   : MAXTAB;
 
-        for ( USHORT nTab=nTabStart; nTab<=nTabEnd; nTab++ )
+        for ( SCTAB nTab=nTabStart; nTab<=nTabEnd; nTab++ )
             if ( pTab[nTab] )
                 pTab[nTab]->InvalidateTextWidth( pAdrFrom, pAdrTo, bBroadcast );
     }
@@ -496,18 +496,18 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
     ScTable*            pTable   = NULL;
     ScColumn*           pColumn  = NULL;
     ScBaseCell*         pCell    = NULL;
-    USHORT              nTab     = aCurTextWidthCalcPos.Tab();
-    USHORT              nRow     = aCurTextWidthCalcPos.Row();
-    short               nCol     = aCurTextWidthCalcPos.Col();
+    SCTAB               nTab     = aCurTextWidthCalcPos.Tab();
+    SCROW               nRow     = aCurTextWidthCalcPos.Row();
+    SCsCOL              nCol     = aCurTextWidthCalcPos.Col();
     USHORT              nRestart = 0;
     USHORT              nZoom    = 0;
     BOOL                bNeedMore= FALSE;
 
-    if ( nRow > MAXROW )
+    if ( !ValidRow(nRow) )
         nRow = 0, nCol--;
     if ( nCol < 0 )
         nCol = MAXCOL, nTab++;
-    if ( nTab > MAXTAB || !pTab[nTab] )
+    if ( !ValidTab(nTab) || !pTab[nTab] )
         nTab = 0;
 
 //  DBG_ERROR( String("Start = ") + String(nTab) + String(',') + String(nCol) + String(',') + String(nRow)  );
@@ -591,7 +591,7 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
                     bNewTab = TRUE;
                 }
 
-                if ( nTab > MAXTAB || !pTab[nTab] )
+                if ( !ValidTab(nTab) || !pTab[nTab] )
                 {
                     nTab = 0;
                     nRestart++;
@@ -660,7 +660,7 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
 
     aCurTextWidthCalcPos.SetTab( nTab );
     aCurTextWidthCalcPos.SetRow( nRow );
-    aCurTextWidthCalcPos.SetCol( (USHORT)nCol );
+    aCurTextWidthCalcPos.SetCol( (SCCOL)nCol );
 
 // DBG_ERROR( String(nMs) + String(" ms (") + String(nIter) + String(')') );
 
@@ -713,9 +713,9 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
     USHORT nTestCount = 0;          // Aufrufe Spelling
     BOOL bChanged = FALSE;          // Aenderungen?
 
-    USHORT nCol = rSpellRange.aStart.Col();     // iterator always starts on the left edge
-    USHORT nRow = rSpellPos.Row();
-    USHORT nTab = rSpellPos.Tab();
+    SCCOL nCol = rSpellRange.aStart.Col();      // iterator always starts on the left edge
+    SCROW nRow = rSpellPos.Row();
+    SCTAB nTab = rSpellPos.Tab();
     if ( !pTab[nTab] )                          // sheet deleted?
     {
         nTab = rSpellRange.aStart.Tab();
@@ -922,7 +922,7 @@ void ScDocument::RemoveAutoSpellObj()
 {
     //  alle Spelling-Informationen entfernen
 
-    for (USHORT nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
+    for (SCTAB nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
         pTab[nTab]->RemoveAutoSpellObj();
 }
 
@@ -1327,7 +1327,7 @@ void ScDocument::UpdateAreaLinks()
 }
 
 void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
-                             const ScRange& rRange, short nDx, short nDy, short nDz )
+                             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     if (pLinkManager)
     {
@@ -1341,12 +1341,12 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                 ScAreaLink* pLink = (ScAreaLink*) pBase;
                 ScRange aOutRange = pLink->GetDestArea();
 
-                USHORT nCol1 = aOutRange.aStart.Col();
-                USHORT nRow1 = aOutRange.aStart.Row();
-                USHORT nTab1 = aOutRange.aStart.Tab();
-                USHORT nCol2 = aOutRange.aEnd.Col();
-                USHORT nRow2 = aOutRange.aEnd.Row();
-                USHORT nTab2 = aOutRange.aEnd.Tab();
+                SCCOL nCol1 = aOutRange.aStart.Col();
+                SCROW nRow1 = aOutRange.aStart.Row();
+                SCTAB nTab1 = aOutRange.aStart.Tab();
+                SCCOL nCol2 = aOutRange.aEnd.Col();
+                SCROW nRow2 = aOutRange.aEnd.Row();
+                SCTAB nTab2 = aOutRange.aEnd.Tab();
 
                 ScRefUpdateRes eRes =
                     ScRefUpdate::Update( this, eUpdateRefMode,
@@ -1362,6 +1362,8 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
 
 void ScDocument::SaveAreaLinks(SvStream& rStream) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
 
@@ -1399,11 +1401,14 @@ void ScDocument::SaveAreaLinks(SvStream& rStream) const
             aHdr.EndEntry();
         }
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScDocument::LoadAreaLinks(SvStream& rStream)
 {
     ScMultipleReadHeader aHdr( rStream );
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
 
     if (!pShell)
     {
@@ -1438,6 +1443,7 @@ void ScDocument::LoadAreaLinks(SvStream& rStream)
         pLink->Update();
         pLink->SetInCreate( FALSE );
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 
@@ -1555,12 +1561,12 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
     ScEditEngineDefaulter* pEngine = NULL;      // not using pEditEngine member because of defaults
 
-    USHORT nCount = GetTableCount();
-    for (USHORT nTab = 0; nTab < nCount; nTab++)
+    SCTAB nCount = GetTableCount();
+    for (SCTAB nTab = 0; nTab < nCount; nTab++)
         if ( pTab[nTab] && rMultiMark.GetTableSelect(nTab) )
         {
-            USHORT nCol = 0;
-            USHORT nRow = 0;
+            SCCOL nCol = 0;
+            SCROW nRow = 0;
 
             BOOL bFound = rMultiMark.IsCellMarked( nCol, nRow );
             if (!bFound)
