@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 09:48:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,6 @@ using namespace rtl;
 
 Sequence < sal_Int8 > ZipPackageStream::aImplementationId = Sequence < sal_Int8 > ();
 
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-#include <cppuhelper/typeprovider.hxx>
-static ::cppu::OImplementationId * pId = 0;
-#endif
-
 ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 : rZipPackage(rNewPackage)
 , bToBeCompressed ( sal_True )
@@ -129,20 +124,7 @@ ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 
     if ( !aImplementationId.getLength() )
         {
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-            if (! pId)
-            {
-                    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                    if (! pId)
-                    {
-                            static ::cppu::OImplementationId aId;
-                            pId = &aId;
-                    }
-            }
-            aImplementationId=pId->getImplementationId();
-#else
             aImplementationId = getImplementationId();
-#endif
         }
 }
 
@@ -220,37 +202,6 @@ sal_Bool ZipPackageStream::ParsePackageRawStream()
 
     return sal_True;
 }
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-    //XInterface
-Any SAL_CALL ZipPackageStream::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    return ( ::cppu::queryInterface (   rType                                       ,
-                                                // OWeakObject interfaces
-                                                reinterpret_cast< XInterface*       > ( this )  ,
-                                                static_cast< XWeak*         > ( this )  ,
-                                                // ZipPackageEntry interfaces
-                                                static_cast< container::XNamed*     > ( this )  ,
-                                                static_cast< container::XChild*     > ( this )  ,
-                                                static_cast< XUnoTunnel*        > ( this )  ,
-                                                // My own interfaces
-                                                static_cast< io::XActiveDataSink*   > ( this )  ,
-                                                static_cast< beans::XPropertySet*   > ( this ) ) );
-
-}
-
-void SAL_CALL ZipPackageStream::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ZipPackageStream::release(  )
-    throw()
-{
-    OWeakObject::release();
-}
-#endif
 
 void ZipPackageStream::SetPackageMember( sal_Bool bNewValue )
 {
