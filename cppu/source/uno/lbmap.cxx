@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 14:44:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ struct MappingsData
 //__________________________________________________________________________________________________
 MappingsData::~MappingsData() SAL_THROW( () )
 {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( aName2Entry.empty() && aMapping2Entry.empty(), "### unrevoked mappings!" );
     t_OUString2Entry::const_iterator iPos( aName2Entry.begin() );
     while (iPos != aName2Entry.end())
@@ -673,7 +673,7 @@ void SAL_CALL uno_registerMapping(
     {
         OUString aMappingName(
             getMappingName( pFrom, pTo, pAddPurpose ? OUString(pAddPurpose) : OUString() ) );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OString cstr( OUStringToOString( aMappingName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "> inserting new mapping: %s", cstr.getStr() );
 #endif
@@ -713,7 +713,7 @@ void SAL_CALL uno_revokeMapping(
         rData.aMapping2Entry.erase( pEntry->pMapping );
         rData.aName2Entry.erase( pEntry->aMappingName );
         aGuard.clear();
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OString cstr( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US  ) );
         OSL_TRACE( "> revoking mapping %s", cstr.getStr() );
 #endif
