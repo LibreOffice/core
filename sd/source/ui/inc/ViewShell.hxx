@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 14:44:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,6 @@
 #ifndef SD_VIEW_SHELL_HXX
 #define SD_VIEW_SHELL_HXX
 
-#ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
-#endif
-#ifndef _SPLIT_HXX //autogen
-#include <vcl/split.hxx>
-#endif
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
@@ -83,13 +77,14 @@
 #ifndef _TRANSFER_HXX //autogen
 #include <svtools/transfer.hxx>
 #endif
+#include <comphelper/implementationreference.hxx>
 
 #ifndef _SD_GLOB_HXX
 #include "glob.hxx"
 #endif
 #include "pres.hxx"
 #include "cfgids.hxx"
-
+#include "View.hxx"
 #include <memory>
 
 class SdPage;
@@ -114,9 +109,11 @@ class FrameView;
 class FuPoor;
 class FuSearch;
 class FuSlideShow;
+class LayerTabBar;
 class ObjectBarManager;
 class View;
 class ViewShellBase;
+class ViewTabBar;
 class Window;
 class WindowUpdater;
 class ZoomList;
@@ -145,27 +142,45 @@ class ViewShell
 public:
     enum ShellType {
         ST_NONE,
-        ST_DRAW, ST_IMPRESS, ST_NOTES, ST_HANDOUT, ST_OUTLINE,
-        ST_SLIDE, ST_PREVIEW, ST_PRESENTATION };
-    static const int MAX_HSPLIT_CNT = 2;
-    static const int MAX_VSPLIT_CNT = 2;
+        ST_DRAW,         // The Draw application.
+        ST_IMPRESS,      // Main view of the Impress application.
+        ST_NOTES,
+        ST_HANDOUT,
+        ST_OUTLINE,
+        ST_SLIDE,         // Old slide view shell
+        ST_SLIDE_SORTER,  // New Slide sorter.
+        ST_PREVIEW,
+        ST_PRESENTATION,
+        ST_TASK_PANE
+    };
+    static const int MAX_HSPLIT_CNT = 1;
+    static const int MAX_VSPLIT_CNT = 1;
     static const int MIN_SCROLLBAR_SIZE = 50;
 
     static const ULONG OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
-    static const ULONG OUTPUT_DRAWMODE_GRAYSCALE =
-        DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT
-        | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
-    static const int  OUTPUT_DRAWMODE_BLACKWHITE =
-        DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL
-        | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
-    static const int OUTPUT_DRAWMODE_CONTRAST = DRAWMODE_SETTINGSLINE
-        | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT;
+    static const ULONG OUTPUT_DRAWMODE_GRAYSCALE
+        = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
+        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
+        | DRAWMODE_GRAYGRADIENT;
+    static const int  OUTPUT_DRAWMODE_BLACKWHITE
+        = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT
+        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP
+        | DRAWMODE_WHITEGRADIENT;
+    static const int OUTPUT_DRAWMODE_CONTRAST
+        = DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL
+        | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT;
 
     TYPEINFO();
 
-    ViewShell (SfxViewFrame *pFrame, ViewShellBase& rViewShellBase,
+    ViewShell (
+        SfxViewFrame *pFrame,
+        ::Window* pParentWindow,
+        ViewShellBase& rViewShellBase,
         bool bAllowCenter = true);
-    ViewShell (SfxViewFrame *pFrame, const ViewShell& rShell);
+    ViewShell (
+        SfxViewFrame *pFrame,
+        ::Window* pParentWindow,
+        const ViewShell& rShell);
     virtual ~ViewShell (void);
 
     /** The Init method has to be called from the outside directly
@@ -176,28 +191,49 @@ public:
     */
     virtual void Init (void);
 
+    /** The Exit() method has to be called before the destructor so that the
+        view shell is still a valid object and can safely call methods that
+        rely on that.
+    */
+    virtual void Exit (void);
+
     void Cancel();
     void CancelSearching();
 
-    virtual ::sd::View* GetView() const { return (pView); }
-    virtual SdrView* GetDrawView() const { return ( (SdrView*) pView); } // fuer den Sfx
+    /** Return the window that is the parent of all controls of this view
+        shell.  This may or may not be the window of the frame.
+    */
+    inline ::Window* GetParentWindow (void) const;
+
+    inline ::sd::View* GetView (void) const;
+    inline SdrView* GetDrawView (void) const;
     DrawDocShell* GetDocSh (void) const;
     SdDrawDocument*  GetDoc (void) const;
 
     SfxViewFrame* GetViewFrame (void) const;
 
-    // diese Funktionen werden gerufen, wenn Fenster gesplittet wird
-    // bzw., wenn Splitting aufgehoben wird
-    virtual void AddWindow(::sd::Window* pWin) {}
-    virtual void RemoveWindow(::sd::Window* pWin) {}
+    /** The active window is usually the mpContentWindow.  When there is a
+        show running then the active window is a ShowWindow.
+    */
+    ::sd::Window* GetActiveWindow (void) const;
 
-    ::sd::Window* GetActiveWindow() { return pWindow; }
+    /** Set the active window.  When the shell is displayed in the center
+        pane then the window of the ViewShellBase is also set to the given
+        window.
+    */
     void SetActiveWindow (::sd::Window* pWindow);
 
-    const Rectangle& GetAllWindowRect();
+    /** Return the rectangle that encloses all windows of the view.  That
+        excludes the controls in the frame like rulers, scroll bars, tab
+        bar, and buttons.
+        @return
+            The rectangle is returned in screen coordinates, i.e. pixel
+            values relative to the upper left corner of the screen?.
+    */
+    const Rectangle& GetAllWindowRect (void);
 
     // Mouse- & Key-Events
-    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) {}
+    virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
     virtual BOOL KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
@@ -205,41 +241,19 @@ public:
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
     virtual BOOL RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
 
-    virtual void Draw(OutputDevice &rDev, const Region &rReg) {}
+    virtual void Draw(OutputDevice &rDev, const Region &rReg);
 
-    /** Set the position and size of the area which contains the GUI
-        elements like rulers, sliders, and buttons as well as the document
-        view.  Both size and position are expected to be in pixel
-        coordinates.  The positions and sizes of the mentioned GUI elements
-        are updated as well.
-
-        <p> This method is implemented by first setting copying the given
-        values to internal variables and then calling the
-        <type>ArrangeGUIElements</type> method which performs the actual
-        work of sizeing and arranging the UI elements accordingly.</p>
-        @param rPos
-            The position of the enclosing window relative to the document
-            window.  This is only interesting if a Draw/Impress document
-            view is embedded as OLE object into another document view.  For
-            normal documents this position is (0,0).
-        @param rSize
-            The new size in pixel.
-    */
-    virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
-
-    /** Arrange and resize the GUI elements like rulers, sliders, and
-        buttons as well as the actual document view according to the size of
-        the enclosing window and current sizes of buttons, rulers, and
-        sliders.
-    */
-    virtual void ArrangeGUIElements (void);
     virtual void SetUIUnit(FieldUnit eUnit);
     virtual void SetDefTabHRuler( UINT16 nDefTab );
 
-    BOOL    HasRuler() { return bHasRuler; }
-    void    SetRuler(BOOL bRuler);
+    BOOL HasRuler (void);
+    void SetRuler(BOOL bRuler);
 
-    void    UpdateScrollBars();
+    /** Set internal values of all scroll bars that determine thumb size and
+        position.  The external values like size and position of the scroll
+        bar controls are not modified.
+    */
+    virtual void UpdateScrollBars (void);
     void    Scroll(long nX, long nY);
     void    ScrollLines(long nX, long nY);
     virtual void    SetZoom(long nZoom);
@@ -249,15 +263,42 @@ public:
     void    InvalidateWindows();
     void    UpdateWindows();
     virtual void    UpdatePreview( SdPage* pPage, BOOL bInit = FALSE );
+
+    ObjectBarManager& GetObjectBarManager (void) const;
+
+    /** Get a list of sub shells by appending them to the end of the given
+        list of shells.  This is restricted to the object bars that are
+        placed BELOW the called shell.  This method is typically called to
+        gather all shells that are to be taken from or pushed on the stack
+        of sub-shells.
+    */
+    virtual void GetLowerShellList (
+        ::std::vector<SfxShell*>& rShellList) const;
+
+    /** Get a list of sub shells by appending them to the end of the given
+        list of shells.  This is restricted to the object bars that are
+        placed ABOVE the called shell.  This method is typically called to
+        gather all shells that are to be taken from or pushed on the stack
+        of sub-shells.
+    */
+    virtual void GetUpperShellList (
+        ::std::vector<SfxShell*>& rShellList) const;
+
     void    DrawMarkRect(const Rectangle& rRect) const;
     void    DrawFilledRect( const Rectangle& rRect, const Color& rLColor,
                             const Color& rFColor ) const;
 
     void    ExecReq( SfxRequest &rReq );
 
-    ZoomList*     GetZoomList() { return pZoomList; }
+    ZoomList* GetZoomList (void);
 
     FrameView* GetFrameView (void);
+    /** Setting a frame view triggers ReadFrameViewData() for the new
+        frame.
+        @param pFrameView
+            The new frame view that replaces the old one.
+    */
+    void SetFrameView (FrameView* pFrameView);
     virtual void  ReadFrameViewData(FrameView* pView);
     virtual void  WriteFrameViewData();
     virtual void  WriteUserData(String& rString);
@@ -267,10 +308,16 @@ public:
 
     virtual SdPage* GetActualPage() = 0;
                     // kann auch NULL sein
+
     FuPoor* GetOldFunction() const    { return pFuOld; }
     FuPoor* GetActualFunction() const { return pFuActual; }
+    void SetCurrentFunction (FuPoor* pFunction);
+    void SetOldFunction (FuPoor* pFunction);
 
     FuSlideShow* GetSlideShow() const { return pFuSlideShow; }
+    /** Set the slide show function to the given function.
+    */
+    void SetSlideShowFunction (FuSlideShow* pFunction);
 
     void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                             long nLeft, long nRight, long nUpper, long nLower,
@@ -328,15 +375,69 @@ public:
     */
     ::sd::WindowUpdater* GetWindowUpdater (void) const;
 
-
-    /** Return the current/main window of this view shell.
-        This method exists for reasons of compatibility.
-        May change later.
+    /** Return the border that is drawn arround the actual document view.
+        The border contains typically rulers and scroll bars.
+        @param bOuterResize
+            When this flag is <TRUE/> then the border is used for an
+            OuterResizePixel(), i.e. there is a given window size and the
+            border elements are placed inside so that the document view has
+            the given window size minus the border.
+            When the flag is <FALSE/> then the border is used for an
+            InnerResizePixel(), i.e. the document view has a given size and
+            the border is placed outside.  In this scenario the parent
+            window has the size of the document view plus the border.
     */
-    ::Window* GetWindow (void) const;
+    SvBorder GetBorder (bool bOuterResize);
+
+    /** Place all UI elements that are controlled by the view shell inside
+        the specified rectangle.  This includes the border elements like
+        rulers and scroll bars as well as the document view.  It is the
+        responsibility of the caller to give an appropriate rectangle for an
+        Inner- or OuterResizePixel().
+        The rectangle is given in pixel coordinates relative to the parent
+        window.
+    */
+    virtual void Resize (const Point &rPos, const Size &rSize);
+
+    /** Set the position and size of the area which contains the GUI
+        elements like rulers, sliders, and buttons as well as the document
+        view.  Both size and position are expected to be in pixel
+        coordinates.  The positions and sizes of the mentioned GUI elements
+        are updated as well.
+
+        <p> This method is implemented by first setting copying the given
+        values to internal variables and then calling the
+        <type>ArrangeGUIElements</type> method which performs the actual
+        work of sizeing and arranging the UI elements accordingly.</p>
+        @param rPos
+            The position of the enclosing window relative to the document
+            window.  This is only interesting if a Draw/Impress document
+            view is embedded as OLE object into another document view.  For
+            normal documents this position is (0,0).
+        @param rSize
+            The new size in pixel.
+    */
+    // This is to be replaced by Resize.
+    //  virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
+
+    /** Set position and size of the GUI elements that are controllerd by
+        the view shell like rulers and scroll bars as well as the actual
+        document view according to the position and size that were given
+        with the last Resize() call.
+    */
+    virtual void ArrangeGUIElements (void);
+
+    //  virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
+    //  virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
 
     ViewShellBase& GetViewShellBase (void) const;
-    ObjectBarManager& GetObjectBarManager (void) const;
+
+    /** Return <TRUE/> when the called view shell is the main sub shell of
+        its ViewShellBase object, i.e. is display in the center pane.  This
+        convenience function is equivalent to comparing the this pointer to
+        the result of ViewShellBase::GetViewShell(PT_CENTER).
+    */
+    bool IsMainViewShell (void) const;
 
     /** Return an object that implements the necessary UNO interfaces to act
         as a controller for the ViewShellBase object.  The controller is
@@ -345,72 +446,96 @@ public:
             Returns NULL when the controller does not yet exist and can not
             be created.
     */
-    DrawController* GetController (void);
+    virtual DrawController* GetController (void);
 
     /** Return the type of the shell.
     */
     virtual ShellType GetShellType (void) const;
 
-    virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
-    virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
+    /** This method is more or less an alias to Deactivate().  It is called
+        before an object of this class is taken from the stack of view
+        shells.
+
+        <p>When this method is not called before a view shell is taken from
+        a stack then the Deactivate() call from the SFX as a response to
+        RemoveSubShell() comes to late when the view shell is not on the
+        stack anymore.  The closing of a preview window, with its
+        FuSlideShow instance calls the wrong bindings and crashes.</p>
+    */
+    virtual void Shutdown (void);
 
     /** This function is called from the underlying ViewShellBase
         object to handle a verb execution request.
     */
     virtual ErrCode DoVerb (long nVerb);
 
-    void PrintOutline(SfxPrinter& rPrinter, SfxProgress& rProgress,
-                      const MultiSelection& rSelPages,
-                      const String& rTimeDateStr, const Font& rTimeDateFont,
-                      const SdOptionsPrintItem* pPrintOpts,
-                      USHORT nPage, USHORT nPageMax,
-                      USHORT nCopies, USHORT nProgressOffset, USHORT nTotal );
-    void PrintHandout(SfxPrinter& rPrinter, SfxProgress& rProgress,
-                      const MultiSelection& rSelPages,
-                      const String& rTimeDateStr, const Font& rTimeDateFont,
-                      const SdOptionsPrintItem* pPrintOpts,
-                      USHORT nPage, USHORT nPageMax,
-                      USHORT nCopies, USHORT nProgressOffset, USHORT nTotal );
-    void PrintStdOrNotes(SfxPrinter& rPrinter, SfxProgress& rProgress,
-                         const MultiSelection& rSelPages,
-                         const String& rTimeDateStr, const Font& rTimeDateFont,
-                         const SdOptionsPrintItem* pPrintOpts,
-                         USHORT nPage, USHORT nPageMax,
-                         USHORT nCopies, USHORT nProgressOffset, USHORT nTotal,
-                         PageKind ePageKind, BOOL bPrintMarkedOnly);
+    void PrintOutline (
+        SfxPrinter& rPrinter,
+        SfxProgress& rProgress,
+        const MultiSelection& rSelPages,
+        const String& rTimeDateStr,
+        const Font& rTimeDateFont,
+        const SdOptionsPrintItem* pPrintOpts,
+        USHORT nPage,
+        USHORT nPageMax,
+        USHORT nCopies,
+        USHORT nProgressOffset,
+        USHORT nTotal );
+    void PrintHandout (
+        SfxPrinter& rPrinter,
+        SfxProgress& rProgress,
+        const MultiSelection& rSelPages,
+        const String& rTimeDateStr,
+        const Font& rTimeDateFont,
+        const SdOptionsPrintItem* pPrintOpts,
+        USHORT nPage,
+        USHORT nPageMax,
+        USHORT nCopies,
+        USHORT nProgressOffset,
+        USHORT nTotal);
+    void PrintStdOrNotes (
+        SfxPrinter& rPrinter,
+        SfxProgress& rProgress,
+        const MultiSelection& rSelPages,
+        const String& rTimeDateStr,
+        const Font& rTimeDateFont,
+        const SdOptionsPrintItem* pPrintOpts,
+        USHORT nPage,
+        USHORT nPageMax,
+        USHORT nCopies,
+        USHORT nProgressOffset,
+        USHORT nTotal,
+        PageKind ePageKind,
+        BOOL bPrintMarkedOnly);
 
 protected:
     friend class ViewShellBase;
 
-    // #96090# Support methods for centralized UNDO/REDO
-    /** Return the undo manager of the currently active object bar.
-        This is usually the one of the document.  Only the outline
-        view has its own (the one of its Outliner object.)
+    /** Window inside the rulers and scroll bars that shows a view of the
+        document.
     */
-    void CreateBorder();
-    SfxUndoManager* ImpGetUndoManager (void) const;
-    void ImpGetUndoStrings(SfxItemSet &rSet) const;
-    void ImpGetRedoStrings(SfxItemSet &rSet) const;
-    void ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq);
-    void ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq);
 
-    // zweidimensionales Zeigerarray (X/Y) mit Fensterzeigern fuer alle
-    // moeglichen Splitter-Aufteilungen
-    ::sd::Window*   pWinArray[MAX_HSPLIT_CNT][MAX_VSPLIT_CNT];
-    // Zeigerarrays fuer die ScrollBars
-    ScrollBar*  pHScrlArray[MAX_HSPLIT_CNT];
-    ScrollBar*  pVScrlArray[MAX_VSPLIT_CNT];
-    // Zeigerarrays fuer die Lineale
-    SvxRuler*   pHRulerArray[MAX_HSPLIT_CNT];
-    SvxRuler*   pVRulerArray[MAX_VSPLIT_CNT];
-    ScrollBarBox* pScrlBox;
+    ::std::auto_ptr< ::sd::Window> mpContentWindow;
 
-    BOOL        bIsHSplit;
-    BOOL        bIsVSplit;
-    BOOL        bHasRuler;
-    // aktives Fenster
-    ::sd::Window* pWindow;
-    ::sd::View* pView;
+    /// Horizontal scroll bar for the current slide is displayed when needed.
+    ::std::auto_ptr<ScrollBar> mpHorizontalScrollBar;
+    /// Vertical scroll bar for whole document is always visible.
+    ::std::auto_ptr<ScrollBar> mpVerticalScrollBar;
+    /// Horizontal ruler is not shown by default.
+    ::std::auto_ptr<SvxRuler> mpHorizontalRuler;
+    /// Vertical ruler is not shown by default.
+    ::std::auto_ptr<SvxRuler> mpVerticalRuler;
+    /// Filler of the little square enclosed by the two scroll bars.
+    ::std::auto_ptr<ScrollBarBox> mpScrollBarBox;
+    /// Layer tab bar.
+    ::std::auto_ptr<LayerTabBar> mpLayerTabBar;
+
+    /// This flag controls whether the rulers are visible.
+    bool mbHasRulers;
+
+    /// The active window.
+    ::sd::Window* mpActiveWindow;
+    ::sd::View* mpView;
     FrameView*  pFrameView;
 
     FuPoor*      pFuActual;
@@ -418,16 +543,6 @@ protected:
     FuSearch*    pFuSearch;
     FuSlideShow* pFuSlideShow;
     ZoomList*    pZoomList;
-
-    Splitter    aHSplit;
-    Splitter    aVSplit;
-
-    ImageButton aDrawBtn;
-    ImageButton aOutlineBtn;
-    ImageButton aSlideBtn;
-    ImageButton aNotesBtn;
-    ImageButton aHandoutBtn;
-    ImageButton aPresentationBtn;
 
     Point       aViewPos;
     Size        aViewSize;
@@ -438,25 +553,43 @@ protected:
     BOOL        bStartShowWithDialog;   // Praesentation wurde ueber Dialog gestartet
     USHORT      nPrintedHandoutPageNum; // Seitennummer der zu durckenden Handzettelseite
 
-    // Bereich aller Fenster, wenn Splitter aktiv sind
-    Rectangle   aAllWindowRect;
+    //af    BOOL        bPrintDirectSelected;       // Print only selected objects in direct print
+    //afString      sPageRange;                 // pagerange if selected objects in direct print
 
-    /// The sub-controller.  Returned by GetSubController.  Owned by
-    /// this base class once it has been created.
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-        mxSubController;
-    /// The controller.  Returned by GetController().
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-        mxController;
-    DrawController* mpController;
+    /** Area covered by all windows, i.e. the area of the parent window
+        without the controls at the borders like rulers, scroll bars, tab
+        bar, buttons.
+        This rectangle may be set in window coordinates (i.e. pixel values
+        relative to the parent window).  It is transformed by every call to
+        GetAllWindowRectangle() into screen coordinates (relative to the
+        upper left corner of the screen.
+    */
+    Rectangle maAllWindowRectangle;
 
     /// The type of the shell.  Returned by GetShellType().
     ShellType meShellType;
 
-    DECL_LINK( SplitHdl, Splitter * );
+    /** Main controller of the view shell.  During the switching from one
+        stacked shell to another this pointer may be NULL.
+    */
+    ::comphelper::ImplementationReference<
+        DrawController,
+        ::com::sun::star::uno::XInterface,
+        ::com::sun::star::uno::XWeak>
+            mpController;
+
+    class Implementation;
+    ::std::auto_ptr<Implementation> mpImpl;
+
+    // #96090# Support methods for centralized UNDO/REDO
+    SfxUndoManager* ImpGetUndoManager (void) const;
+    void ImpGetUndoStrings(SfxItemSet &rSet) const;
+    void ImpGetRedoStrings(SfxItemSet &rSet) const;
+    void ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq);
+    void ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq);
+
     DECL_LINK( HScrollHdl, ScrollBar * );
     DECL_LINK( VScrollHdl, ScrollBar * );
-    DECL_LINK( ModeBtnHdl, Button * );
 
     // virt. Scroll-Handler, hier koennen sich abgeleitete Klassen einklinken
     virtual long VirtHScrollHdl(ScrollBar* pHScroll);
@@ -488,24 +621,60 @@ protected:
     void PrintPage( SfxPrinter& rPrinter, ::sd::View* pPrintView,
                     SdPage* pPage, BOOL bPrintMarkedOnly );
 
-private:
-    void    CreateHSplitElems(long nSplitXPixel);
-    void    CreateVSplitElems(long nSplitYPixel);
-
-    /** Code common to all constructors.  It generally is a bad idea
-        to call this function from outside a constructor.
+    /** Depending on the given request create a new page or duplicate an
+        existing one.  A new page is created behind the given slide.
+        @param rRequest
+            The request as passed to an Execute() method.  Its arguments are
+            evaluated.  Its slot id determines whether to create or
+            duplicate a slide.
+        @param pPage
+            This page is either duplicated or becomes the predecessor of the
+            new slide.  If NULL a duplication request is ignored.  A new
+            slide is inserted as first slide.
     */
-    void Construct (void);
+    virtual void CreateOrDuplicatePage (
+        SfxRequest& rRequest,
+        PageKind ePageKind,
+        SdPage* pPage);
 
+private:
+    ::Window* mpParentWindow;
+    ::std::auto_ptr<ObjectBarManager> mpObjectBarManager;
     /** This window updater is used to keep all relevant windows up to date
         with reference to the digit langugage used to display digits in text
         shapes.
     */
     ::std::auto_ptr< ::sd::WindowUpdater> mpWindowUpdater;
 
+    /** Code common to all constructors.  It generally is a bad idea
+        to call this function from outside a constructor.
+    */
+    void Construct (void);
+
     DECL_LINK(FrameWindowEventListener, VclSimpleEvent*);
 
+    /** Create the rulers.
+    */
+    void SetupRulers (void);
 };
+
+
+
+
+::Window* ViewShell::GetParentWindow (void) const
+{
+    return mpParentWindow;
+}
+
+::sd::View* ViewShell::GetView (void) const
+{
+    return mpView;
+}
+
+SdrView* ViewShell::GetDrawView (void) const
+{
+    return static_cast<SdrView*>(mpView);
+}
 
 } // end of namespace sd
 
