@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-24 12:07:36 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 15:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ ImageList::ImageList( const ResId& rResId ) :
                 else
                 {
                     ByteString aErrorStr( "ImageList::ImageList( const ResId& rResId ): could not load image <" );
-                    DBG_ERROR( ( aErrorStr += ByteString( pStringAry[ i ], RTL_TEXTENCODING_ASCII_US ) ) += '>' );
+                    DBG_ERROR( ( ( aErrorStr += ByteString( pStringAry[ i ], RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
                 }
 #endif
             }
@@ -611,7 +611,7 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const
         else
         {
             ByteString aErrorStr( "ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector, const Color* pMaskColor  ): could not load image <" );
-            DBG_ERROR( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' );
+            DBG_ERROR( ( ( aErrorStr += ByteString( String( rNameVector[ i ] ), RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
         }
 #endif
     }

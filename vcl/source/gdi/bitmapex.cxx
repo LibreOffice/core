@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:22:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 15:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     {
 #ifdef DBG_UTIL
         ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );
-        DBG_ERROR( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' );
+        DBG_ERROR( ( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
 #endif
     }
 }

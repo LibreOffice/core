@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:24:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 15:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,7 +1119,6 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
 
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, USHORT nStyle )
 {
-    DBG_CHKOBJ( &rImage, Image, NULL );
     DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
 
     if( !rImage.mpImplData || ImplIsRecordLayout() )
@@ -1164,7 +1163,6 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, USHORT nSt
 void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
                               const Image& rImage, USHORT nStyle )
 {
-    DBG_CHKOBJ( &rImage, Image, NULL );
     DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
 
     if( rImage.mpImplData && !ImplIsRecordLayout() )
