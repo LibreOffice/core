@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+ *  last change: $Author: dl $ $Date: 2000-12-05 16:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #define GLOBALOVERFLOW
 
 // Vergleichsstrings
-sal_Unicode __FAR_DATA pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', '0' };
+sal_Unicode __FAR_DATA pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 0 };
 
 // Konvertiert in echte RGB-Farben, damit in den Listboxen
 // endlich mal richtig selektiert werden kann.
