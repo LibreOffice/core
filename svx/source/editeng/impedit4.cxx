@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-04 14:25:24 $
+ *  last change: $Author: mt $ $Date: 2001-12-07 13:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2079,7 +2079,7 @@ void ImpEditEngine::SetAutoCompleteText( const String& rStr, sal_Bool bClearTipW
 #endif // !SVX_LIGHT
 }
 
-void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
+EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
 {
     EditSelection aSel( rSelection );
     aSel.Adjust( aEditDoc );
@@ -2087,25 +2087,14 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
     if ( !aSel.HasRange() )
         aSel = SelectWord( aSel );
 
+    EditSelection aNewSel( aSel );
+
     USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
     BOOL bChanges = FALSE;
+    BOOL bLenChanged = FALSE;
     EditUndoTransliteration* pUndo = NULL;
-#ifndef SVX_LIGHT
-    if ( IsUndoEnabled() && !IsInUndo() )
-    {
-        ESelection aESel( CreateESel( aSel ) );
-        pUndo = new EditUndoTransliteration( this, aESel, nTransliterationMode );
-
-        if ( ( nStartNode == nEndNode ) && !aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() ) )
-            pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
-        else
-            pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
-    }
-#endif
-
-    EditPaM aLastPaM = aSel.Max();
 
     utl::TransliterationWrapper aTranslitarationWrapper( ::comphelper::getProcessServiceFactory(), nTransliterationMode );
     BOOL bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
@@ -2138,35 +2127,67 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
             Sequence <long> aOffsets;
             String aNewText( aTranslitarationWrapper.transliterate( *pNode, nLanguage, nCurrentStart, nLen, &aOffsets ) );
 
-            // Transliteration and Undo are prepared for 1:x transliteration, but attribs are not corrected...
-            DBG_ASSERT( nLen == aNewText.Len(), "Transliteration: Change of TextLen - Attributes not corrected!" );
             if( ( nLen != aNewText.Len() ) || !pNode->Equals( aNewText, nCurrentStart, nLen ) )
             {
                 bChanges = TRUE;
-                pNode->Erase( nCurrentStart, nLen );
-                pNode->Insert( aNewText, nCurrentStart );
+                if ( nLen != aNewText.Len() )
+                    bLenChanged = TRUE;
 
-                if ( nLen != aNewText.Len()  )
+#ifndef SVX_LIGHT
+                // Create UndoAction on Demand....
+                if ( !pUndo && IsUndoEnabled() && !IsInUndo() )
                 {
-                    short nDiff = aNewText.Len() - nLen;
-                    nCurrentEnd += nDiff;
-                    nEndPos += nDiff;
+                    ESelection aESel( CreateESel( aSel ) );
+                    pUndo = new EditUndoTransliteration( this, aESel, nTransliterationMode );
 
-                    USHORT nMaxEnd = pNode->Len();
-                    for( USHORT nAttr = pNode->GetCharAttribs().Count(); nAttr; )
-                    {
-                        EditCharAttrib* pAttr = pNode->GetCharAttribs().GetAttribs()[--nAttr];
-                        if ( pAttr->GetEnd() > nMaxEnd )
-                            pAttr->GetEnd() = nMaxEnd;
-                    }
+                    if ( ( nStartNode == nEndNode ) && !aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() ) )
+                        pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
+                    else
+                        pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
                 }
+#endif
+
+                // Change text without loosing the attributes
+                USHORT nCharsAfterTransliteration = aOffsets.getLength();
+                const long* pOffsets = aOffsets.getConstArray();
+                USHORT nCurrentPos = nCurrentStart;
+                short nDiffs = 0;
+                for ( USHORT n = 0; n < nCharsAfterTransliteration; n++ )
+                {
+                    short nDiff = (n-nDiffs) - pOffsets[n];
+
+                    if ( !nDiff )
+                    {
+                        DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
+                        pNode->SetChar( nCurrentPos, aNewText.GetChar(n) );
+                    }
+                    else if ( nDiff < 0 )
+                    {
+                        // Replace first char, delete the rest...
+                        DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
+                        pNode->SetChar( nCurrentPos, aNewText.GetChar(n) );
+
+                        DBG_ASSERT( (nCurrentPos+1) < pNode->Len(), "TransliterateText - String smaller than expected!" );
+                        GetEditDoc().RemoveChars( EditPaM( pNode, nCurrentPos+1 ), -nDiff );
+                    }
+                    else
+                    {
+                        DBG_ASSERT( nDiff == 1, "TransliterateText - Diff other than expected! But should work..." );
+                        GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), aNewText.GetChar(n) );
+
+                    }
+
+                    nDiffs += nDiff;
+                    nCurrentPos++;
+                }
+
+                if ( nNode == nEndNode )
+                    aNewSel.Max().GetIndex() += nDiffs;
 
                 ParaPortion* pParaPortion = GetParaPortions()[nNode];
                 pParaPortion->MarkSelectionInvalid( nCurrentStart, Max( nCurrentStart+nLen, nCurrentStart+aNewText.Len() ) );
-            }
-            if ( nNode == nEndNode )
-                aLastPaM.GetIndex() = nCurrentStart+aNewText.Len();
 
+            }
             nCurrentStart = nCurrentEnd;
         } while( nCurrentEnd < nEndPos );
     }
@@ -2174,26 +2195,22 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
 #ifndef SVX_LIGHT
     if ( pUndo )
     {
-        if ( bChanges )
-        {
-            EditSelection aNewSel( aSel );
-            aNewSel.Max() = aLastPaM;
-            ESelection aESel( CreateESel( aSel ) );
-            pUndo->SetNewSelection( aESel );
-            InsertUndo( pUndo );
-        }
-        else
-        {
-            delete pUndo;
-        }
+        ESelection aESel( CreateESel( aNewSel ) );
+        pUndo->SetNewSelection( aESel );
+        InsertUndo( pUndo );
     }
 #endif
 
     if ( bChanges )
     {
+        TextModified();
         SetModifyFlag( sal_True );
+        if ( bLenChanged )
+            UpdateSelections();
         FormatAndUpdate();
     }
+
+    return aNewSel;
 }
 
 void ImpEditEngine::SetAsianCompressionMode( USHORT n )
