@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsccont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,11 +542,11 @@ else
 |*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
-ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, long lValue ){
+ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, INT32 lValue ){
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
     ERRTYPE aError;
-    long    lNumber;
+    INT32   lNumber;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -618,7 +618,7 @@ ERRTYPE RscBaseCont::SetConst
 (
     const RSCINST & rInst,
     HASHID nValueId,
-    long lValue
+    INT32 lValue
 )
 {
     RscBaseContInst * pClassData;
@@ -715,8 +715,8 @@ BOOL RscBaseCont::IsConsistent( const RSCINST & rInst, RscInconsList * pList ){
     // Komplexitaet = n^2 / 2
     for( i = 0; i < pClassData->nEntries; i++ ){
         if( !bNoId ){
-            if( (long)pClassData->pEntries[ i ].aName > 0x7FFF
-              || (long)pClassData->pEntries[ i ].aName < 1 ){
+            if( (INT32)pClassData->pEntries[ i ].aName > 0x7FFF
+              || (INT32)pClassData->pEntries[ i ].aName < 1 ){
                 bRet = FALSE;
                 if( pList )
                     pList->Insert( new RscInconsistent(
