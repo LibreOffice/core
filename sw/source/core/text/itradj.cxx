@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-03 10:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include "pordrop.hxx"       // CalcFlyAdjust()
 #include "pormulti.hxx"
 
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 
 /*************************************************************************
  *                    SwTxtAdjuster::FormatBlock()
@@ -465,15 +468,21 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
     // haengend ist und wenn zentriert wird, dann ...
 
     sal_Bool bComplete = 0 == nStart;
+    const sal_Bool bTabCompat = GetTxtFrm()->GetNode()->GetDoc()->IsTabCompat();
+    sal_Bool bMultiTab = sal_False;
 
     while( pPos )
     {
-        if( pPos->InFixMargGrp() )
+        if ( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasTabulator() )
+            bMultiTab = sal_True;
+        else if( pPos->InFixMargGrp() &&
+               ( bTabCompat ? ! pPos->InTabGrp() : ! bMultiTab ) )
         {
+            // in tab compat mode we do not want to change tab portions
+            // in non tab compat mode we do not want to change margins if we
+            // found a multi portion with tabs
             if( SVX_ADJUST_RIGHT == GetAdjust() )
-            {
                 ((SwGluePortion*)pPos)->MoveAllGlue( pGlue );
-            }
             else
             {
                 // Eine schlaue Idee von MA:
@@ -483,36 +492,41 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
                 // Die erste Textportion kriegt den ganzen Glue
                 // Aber nur, wenn wir mehr als eine Zeile besitzen.
                 if( bComplete && GetInfo().GetTxt().Len() == nLen )
-                {
                     ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
-                }
                 else
                 {
-                    if( pLeft == pGlue )
+                    if ( ! bTabCompat )
                     {
-                        // Wenn es nur einen linken und rechten Rand gibt,
-                        // dann teilen sich die Raender den Glue.
-                        if( nLen + pPos->GetLen() >= pCurr->GetLen() )
-                            ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
+                        if( pLeft == pGlue )
+                        {
+                            // Wenn es nur einen linken und rechten Rand gibt,
+                            // dann teilen sich die Raender den Glue.
+                            if( nLen + pPos->GetLen() >= pCurr->GetLen() )
+                                ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
+                            else
+                                ((SwGluePortion*)pPos)->MoveAllGlue( pGlue );
+                        }
                         else
-                            ((SwGluePortion*)pPos)->MoveAllGlue( pGlue );
-                    }
-                    else
-                    {
-                        // Die letzte Textportion behaelt sein Glue
-                        if( !pPos->IsMarginPortion() )
-                            ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
-                    }
+                        {
+                            // Die letzte Textportion behaelt sein Glue
+                         if( !pPos->IsMarginPortion() )
+                              ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
+                         }
+                     }
+                     else
+                        ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
                 }
             }
+
             pGlue = (SwFlyPortion*)pPos;
             bComplete = sal_False;
         }
         nLen += pPos->GetLen();
         pPos = pPos->GetPortion();
-    }
+     }
 
-    if( SVX_ADJUST_RIGHT == GetAdjust() )
+     if( ! bTabCompat && ! bMultiTab && SVX_ADJUST_RIGHT == GetAdjust() )
+        // portions are moved to the right if possible
         pLeft->AdjustRight( pCurr );
 }
 
