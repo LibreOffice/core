@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellRange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module table {
 
 /** represents a range of of cells within a table.
  */
-service CellRange
+published service CellRange
 {
     //-------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShadowLocation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module table {
 
 /** specifies the location of the shadow in a <type>ShadowFormat</type>.
  */
-enum ShadowLocation
+published enum ShadowLocation
 {
     //-------------------------------------------------------------------------
 
