@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 09:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,21 +63,17 @@
 #include "ui_pch.hxx"
 #endif
 
-#pragma hdrstop
 
 #ifndef PCH
 #include <vcl/virdev.hxx>
-#include <segmentc.hxx>
 #endif
 
 #include "fieldwnd.hxx"
 #include "pvlaydlg.hxx"
 #include "pvglob.hxx"
 
-SEG_EOFGLOBALS()
 
 //========================================================================
-#pragma SEG_FUNCDEF(fieldwnd_01)
 
 FieldWindow::FieldWindow( ScPivotLayoutDlg* pDialog, const ResId& rResId,
                           FieldType eType )
@@ -105,7 +101,6 @@ FieldWindow::FieldWindow( ScPivotLayoutDlg* pDialog, const ResId& rResId,
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_02)
 
 __EXPORT FieldWindow::~FieldWindow()
 {
@@ -115,7 +110,6 @@ __EXPORT FieldWindow::~FieldWindow()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_05)
 
 void __EXPORT FieldWindow::Paint( const Rectangle& rRect )
 {
@@ -123,7 +117,6 @@ void __EXPORT FieldWindow::Paint( const Rectangle& rRect )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_09)
 
 void __EXPORT FieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -150,7 +143,6 @@ void __EXPORT FieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_10)
 
 void __EXPORT FieldWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -169,7 +161,6 @@ void __EXPORT FieldWindow::MouseButtonUp( const MouseEvent& rMEvt )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_0a)
 
 void __EXPORT FieldWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -183,7 +174,6 @@ void __EXPORT FieldWindow::MouseMove( const MouseEvent& rMEvt )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_03)
 
 void FieldWindow::Redraw()
 {
@@ -191,7 +181,6 @@ void FieldWindow::Redraw()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_04)
 
 void FieldWindow::DoPaint( const Rectangle& rRect )
 {
@@ -300,7 +289,6 @@ void FieldWindow::DoPaint( const Rectangle& rRect )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_11)
 
 void FieldWindow::DrawField( OutputDevice& rDev,
                              const Rectangle& rRect,
@@ -337,7 +325,6 @@ void FieldWindow::DrawField( OutputDevice& rDev,
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_06)
 
 BOOL FieldWindow::GetInsertIndex( const Point& rInsertPos, USHORT& rIndex )
 {
@@ -354,7 +341,6 @@ BOOL FieldWindow::GetInsertIndex( const Point& rInsertPos, USHORT& rIndex )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_07)
 
 BOOL FieldWindow::GetFirstEmptySlot( USHORT& rIndex )
 {
@@ -375,7 +361,6 @@ BOOL FieldWindow::GetFirstEmptySlot( USHORT& rIndex )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_08)
 
 BOOL FieldWindow::GetFieldIndex( const Point& rPos, USHORT& rIndex )
 {
@@ -429,7 +414,6 @@ BOOL FieldWindow::GetFieldIndex( const Point& rPos, USHORT& rIndex )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_0b)
 
 void FieldWindow::AddField( const String& rStr, USHORT nIndex )
 {
@@ -444,7 +428,6 @@ void FieldWindow::AddField( const String& rStr, USHORT nIndex )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_0c)
 
 BOOL FieldWindow::AddField( const String& rStr,
                             const Point& rAt,
@@ -484,7 +467,6 @@ BOOL FieldWindow::AddField( const String& rStr,
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_0d)
 
 void FieldWindow::DelField( USHORT nFieldIndex )
 {
@@ -511,7 +493,6 @@ void FieldWindow::DelField( USHORT nFieldIndex )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_0e)
 
 void FieldWindow::ClearFields()
 {
@@ -527,7 +508,6 @@ void FieldWindow::ClearFields()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(fieldwnd_0f)
 
 void FieldWindow::SetText( const String& rStr, USHORT nIndex )
 {
@@ -537,78 +517,3 @@ void FieldWindow::SetText( const String& rStr, USHORT nIndex )
         Redraw();
     }
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.21  2000/09/17 14:08:56  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.20  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.19  2000/04/28 18:07:21  nn
-    old sv calls removed
-
-    Revision 1.18  2000/04/14 17:38:02  nn
-    unicode changes
-
-    Revision 1.17  2000/02/11 12:23:20  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.16  1999/09/20 09:28:52  hr
-    #65293#: ColorEnums
-
-    Revision 1.15  1999/09/13 18:26:29  ank
-    MUSS: COL_3DFACE etc.
-
-    Revision 1.14  1998/03/27 16:33:42  NN
-    #48899# DoPaint: Font fuer VDev vom Window nehmen
-
-
-      Rev 1.13   27 Mar 1998 17:33:42   NN
-   #48899# DoPaint: Font fuer VDev vom Window nehmen
-
-      Rev 1.12   05 Dec 1997 19:56:38   ANK
-   Includes geaendert
-
-      Rev 1.11   20 Sep 1996 10:58:16   NN
-   statischen Point aPos0 raus
-
-      Rev 1.10   08 Nov 1995 13:05:48   MO
-   301-Aenderungen
-
-      Rev 1.9   15 Sep 1995 14:41:24   MO
-   GetFieldIndex()-Ergebins war nicht immer korrekt
-
-      Rev 1.8   04 Aug 1995 16:07:24   MO
-   Maus-Handling umgebaut (BugId: 16928)
-
-      Rev 1.7   24 Jul 1995 14:06:26   MO
-   EXPORT
-
-      Rev 1.6   15 Jun 1995 11:57:00   TRI
-   EXPORTS
-
-      Rev 1.5   15 Jun 1995 08:31:34   TRI
-   EXPORT
-
-      Rev 1.4   29 May 1995 16:55:56   MO
-   COL_3DFACE -> GetBackgroundBrush()
-
-      Rev 1.3   20 Apr 1995 23:24:28   MO
-   SetText
-
-      Rev 1.2   24 Mar 1995 13:16:24   TRI
-   Segmentierung
-
-      Rev 1.1   22 Mar 1995 13:46:04   TRI
-   sfxitems.hxx included
-
-      Rev 1.0   22 Mar 1995 10:48:30   MO
-   Initial revision.
-
------------------------------------------------------------------------- */
-
-#pragma SEG_EOFMODULE
-

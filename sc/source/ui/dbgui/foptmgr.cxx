@@ -2,9 +2,9 @@
  *
  *  $RCSfile: foptmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 10:10:32 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 09:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,6 @@
 #include "ui_pch.hxx"
 #endif
 
-#pragma hdrstop
-
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
 
 // INCLUDE -------------------------------------------------------------------
 
@@ -86,11 +81,7 @@
 #include "foptmgr.hxx"
 #undef _FOPTMGR_CXX
 
-SEG_EOFGLOBALS()
-
-
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(foptmgr_01)
 
 ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 Dialog*             ptrDlg,
@@ -137,7 +128,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(foptmgr_02)
 
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
@@ -150,7 +140,6 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(foptmgr_03)
 
 void ScFilterOptionsMgr::Init()
 {
@@ -281,7 +270,6 @@ void ScFilterOptionsMgr::Init()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(foptmgr_05)
 
 BOOL ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
 {
@@ -301,7 +289,6 @@ BOOL ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
 // Handler:
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(foptmgr_06)
 
 IMPL_LINK( ScFilterOptionsMgr, LbPosSelHdl, ListBox*, pLb )
 {
@@ -321,7 +308,6 @@ IMPL_LINK( ScFilterOptionsMgr, LbPosSelHdl, ListBox*, pLb )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(foptmgr_07)
 
 IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
 {
@@ -357,7 +343,6 @@ IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(foptmgr_08)
 
 IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
 {
@@ -382,93 +367,3 @@ IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
 
     return 0;
 }
-
-
-/*----------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:44:54  hr
-    initial import
-
-    Revision 1.24  2000/09/17 14:08:56  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.23  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.22  2000/04/14 17:38:02  nn
-    unicode changes
-
-    Revision 1.21  2000/02/11 12:23:37  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.20  1997/12/05 18:54:58  ANK
-    Includes geaendert
-
-
-      Rev 1.19   05 Dec 1997 19:54:58   ANK
-   Includes geaendert
-
-      Rev 1.18   12 Aug 1997 10:58:26   TRI
-   VCL: includes
-
-      Rev 1.17   15 Feb 1997 17:36:34   NN
-   Checkbox 'persistent' fuer Ausgabe-Bereich
-
-      Rev 1.16   22 Oct 1996 15:32:10   RJ
-   Buttons fuer Referenzeingabe
-
-      Rev 1.15   18 Jul 1996 16:52:48   NN
-   DB-Bereiche als Ziel, ScAreaNameIterator benutzen
-
-      Rev 1.14   18 Jan 1996 11:45:00   MO
-   neuer Link
-
-      Rev 1.13   06 Dec 1995 12:41:56   MO
-   Aufbau der Zielbereichsliste korrigiert (BugId: 22986)
-
-      Rev 1.12   27 Nov 1995 13:42:12   MO
-   RangeUtil/Area/Tripel gegen Address/Range ersetzt
-
-      Rev 1.11   08 Nov 1995 13:05:48   MO
-   301-Aenderungen
-
-      Rev 1.10   14 Sep 1995 13:05:08   MO
-   FixedInfos
-
-      Rev 1.9   28 Apr 1995 09:44:58   MO
-   RT_ABSPOS
-
-      Rev 1.8   18 Apr 1995 10:03:36   MO
-   FixedText fuer TabBereich mit Light-Font
-
-      Rev 1.7   26 Jan 1995 15:45:30   MO
-   Click auf Kopieren-CheckBox gibt dem entsprechenden Edit den Focus
-
-      Rev 1.6   25 Jan 1995 12:56:14   MO
-   * Kopierbereich ist jetzt nur noch Kopierposition
-   * Auswertung der Kopierposition im Init()
-   * VerifyAreaName() heisst jetzt VerifyPosStr()
-
-      Rev 1.5   19 Jan 1995 16:52:26   TRI
-   __EXPORT vor verschiedene LinkHandler gesetzt
-
-      Rev 1.4   18 Jan 1995 13:56:26   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.3   17 Jan 1995 12:00:34   MO
-   'unbenannt'-DB-Bereich wird erkannt
-
-      Rev 1.2   16 Jan 1995 14:23:46   MO
-   * Bereichsnamenueberpruefung jetzt mit VerifyAreaName()
-
-      Rev 1.1   13 Jan 1995 17:30:54   MO
-   VerifyAreaEdit bekommt jetzt Edit uebergeben
-
-      Rev 1.0   13 Jan 1995 10:23:52   MO
-   Initial revision.
-
-----------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-

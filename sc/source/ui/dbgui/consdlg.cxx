@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:13:35 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 09:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,7 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 #include <sfx2/dispatch.hxx>
-
 
 // INCLUDE -------------------------------------------------------------------
 
@@ -83,8 +78,6 @@
 #include "rangeutl.hxx"
 #include "reffact.hxx"
 #include "document.hxx"
-//#include "tabvwsh.hxx"
-//#include "viewdata.hxx"
 #include "scresid.hxx"
 
 #include "globstr.hrc"
@@ -98,11 +91,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-
 #define INFOBOX(id) InfoBox(this, ScGlobal::GetRscString(id)).Execute()
-
-SEG_EOFGLOBALS()
-
 
 //============================================================================
 //  class ScAreaData
@@ -694,7 +683,4 @@ USHORT ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
             return 0;
     }
 }
-
-
-
 

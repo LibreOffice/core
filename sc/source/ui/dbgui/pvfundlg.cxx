@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:05:30 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 09:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,9 @@
 #include "ui_pch.hxx"
 #endif
 
-#pragma hdrstop
 
 #ifndef PCH
 #include <vcl/msgbox.hxx>
-#include <segmentc.hxx>
 #endif
 
 #include "scresid.hxx"
@@ -75,10 +73,7 @@
 #include "pvfundlg.hrc"
 #include "pvfundlg.hxx"
 
-SEG_EOFGLOBALS()
-
 //========================================================================
-#pragma SEG_FUNCDEF(pvfundlg_01)
 
 ScPivotFunctionDlg::ScPivotFunctionDlg( Window*         pParent,
                                         BOOL            bSubTotalFunc,
@@ -109,7 +104,6 @@ ScPivotFunctionDlg::ScPivotFunctionDlg( Window*         pParent,
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pvfundlg_02)
 
 __EXPORT ScPivotFunctionDlg::~ScPivotFunctionDlg()
 {
@@ -133,7 +127,6 @@ BOOL ScPivotFunctionDlg::GetShowAll() const
 
 #define FUNC_SET(f) ( (nFunctions & (f)) == (f) )
 
-#pragma SEG_FUNCDEF(pvfundlg_03)
 
 void ScPivotFunctionDlg::InitFuncLb( USHORT nFunctions )
 {
@@ -174,7 +167,6 @@ void ScPivotFunctionDlg::InitFuncLb( USHORT nFunctions )
 #undef FUNC_SET
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pvfundlg_05)
 
 void ScPivotFunctionDlg::SetUI( BOOL bSubTotals )
 {
@@ -240,7 +232,6 @@ void ScPivotFunctionDlg::SetUI( BOOL bSubTotals )
 
 //------------------------------------------------------------------------
 // Handler:
-#pragma SEG_FUNCDEF(pvfundlg_04)
 
 IMPL_LINK( ScPivotFunctionDlg, RadioClickHdl, RadioButton *, pBtn )
 {
@@ -257,7 +248,6 @@ IMPL_LINK( ScPivotFunctionDlg, RadioClickHdl, RadioButton *, pBtn )
 
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pvfundlg_07)
 
 IMPL_LINK_INLINE_START( ScPivotFunctionDlg, DblClickHdl, MultiListBox *, EMPTYARG )
 {
@@ -267,7 +257,6 @@ IMPL_LINK_INLINE_START( ScPivotFunctionDlg, DblClickHdl, MultiListBox *, EMPTYAR
 IMPL_LINK_INLINE_END( ScPivotFunctionDlg, DblClickHdl, MultiListBox *, EMPTYARG )
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pvfundlg_06)
 
 IMPL_LINK( ScPivotFunctionDlg, ClickHdl, PushButton *, pBtn )
 {
@@ -295,63 +284,3 @@ IMPL_LINK( ScPivotFunctionDlg, ClickHdl, PushButton *, pBtn )
     }
     return 0;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:44:54  hr
-    initial import
-
-    Revision 1.15  2000/09/17 14:08:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.14  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.13  2000/02/11 12:23:45  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.12  1999/11/02 08:47:39  nn
-    show all
-
-    Revision 1.11  1997/12/05 18:55:36  ANK
-    Includes geaendert
-
-
-      Rev 1.10   05 Dec 1997 19:55:36   ANK
-   Includes geaendert
-
-      Rev 1.9   29 Oct 1996 14:03:54   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.8   29 Jan 1996 15:12:26   MO
-   neuer Link
-
-      Rev 1.7   08 Nov 1995 13:05:48   MO
-   301-Aenderungen
-
-      Rev 1.6   20 Sep 1995 14:18:52   MO
-   DoubleClick-Handler (BugId: 19541)
-
-      Rev 1.5   14 Sep 1995 13:05:08   MO
-   FixedInfos
-
-      Rev 1.4   24 Jul 1995 14:09:08   MO
-   EXPORT
-
-      Rev 1.3   05 May 1995 18:16:42   MO
-   Funktionen fuer Data
-
-      Rev 1.2   02 May 1995 18:45:42   MO
-   Teilergebnis/Datenfunktionen
-
-      Rev 1.1   26 Apr 1995 17:44:10   MO
-   Teilergebnisse/Datenfunktion
-
-      Rev 1.0   26 Apr 1995 16:43:26   MO
-   Dialog fuer Pivotfeldfunktionen
-
------------------------------------------------------------------------- */
-
-#pragma SEG_EOFMODULE
-
