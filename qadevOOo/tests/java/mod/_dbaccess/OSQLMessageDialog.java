@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSQLMessageDialog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:36 $
+ *  last change:$Date: 2003-05-27 12:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._dbaccess;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -113,7 +114,7 @@ public class OSQLMessageDialog extends TestCase {
         Object err2 = null;
 
         try {
-            oInterface = Param.getMSF().createInstance(
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                             "com.sun.star.sdb.ErrorMessageDialog" );
 
             err1 = new com.sun.star.sdbc.SQLException("err1");
