@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 10:01:41 $
+ *  last change: $Author: os $ $Date: 2001-05-29 12:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1513,34 +1513,16 @@ sal_Bool SwXTextCursor::isStartOfSentence(void) throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        // Absatzanfang?
+        // start of paragraph?
         bRet = pUnoCrsr->GetPoint()->nContent == 0;
-        // mitMarkierung ->kein Satzanfang
+        // with mark ->no sentence start
         if(!bRet && !pUnoCrsr->HasMark())
         {
             SwCursor aCrsr(*pUnoCrsr->GetPoint());
-            aCrsr.LeftRight(sal_True, 1);
-            aCrsr.SetMark();
-            if(aCrsr.LeftRight(sal_True, 1))
-            {
-                SwTxtNode* pTxtNd = aCrsr.GetNode()->GetTxtNode();
-                if( pTxtNd )
-                {
-                    xub_StrLen nStt = aCrsr.Start()->nContent.GetIndex();
-                    String aTxt = pTxtNd->GetExpandTxt( nStt,
-                        aCrsr.End()->nContent.GetIndex() - nStt );
-                    switch(aTxt.GetChar(0))
-                    {
-                        case ';':
-                        case '.':
-                        case ':':
-                        case '!':
-                        case '?':
-                            bRet = sal_True;
-                        break;
-                    }
-                }
-            }
+            aCrsr.LeftRight(sal_False, 1);
+            if(aCrsr.GoSentence(SwCursor::START_SENT) &&
+                aCrsr.GetPoint()->nContent == pUnoCrsr->GetPoint()->nContent)
+                bRet = sal_True;
         }
     }
     else
@@ -1557,34 +1539,16 @@ sal_Bool SwXTextCursor::isEndOfSentence(void) throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        //Absatzende?
+        //start of paragraph?
         bRet = pUnoCrsr->GetCntntNode() &&
                 pUnoCrsr->GetPoint()->nContent == pUnoCrsr->GetCntntNode()->Len();
-        // mitMarkierung ->kein Satzende
+        // with mark->no sentence end
         if(!bRet && !pUnoCrsr->HasMark())
         {
             SwCursor aCrsr(*pUnoCrsr->GetPoint());
-            aCrsr.SetMark();
-            if(aCrsr.LeftRight(sal_True, 1))
-            {
-                SwTxtNode* pTxtNd = aCrsr.GetNode()->GetTxtNode();
-                if( pTxtNd )
-                {
-                    xub_StrLen nStt = aCrsr.Start()->nContent.GetIndex();
-                    String aTxt = pTxtNd->GetExpandTxt( nStt,
-                        aCrsr.End()->nContent.GetIndex() - nStt );
-                    switch( aTxt.GetChar( 0 ) )
-                    {
-                        case ';':
-                        case '.':
-                        case ':':
-                        case '!':
-                        case '?':
-                            bRet = sal_True;
-                        break;
-                    }
-                }
-            }
+            aCrsr.LeftRight(sal_True, 1);
+            if(aCrsr.GoSentence(SwCursor::END_SENT) && aCrsr.GetPoint()->nContent == pUnoCrsr->GetPoint()->nContent)
+                bRet = sal_True;
         }
     }
     else
