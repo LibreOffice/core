@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/util/SortField.hpp>
+#include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -331,7 +332,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
 
 long ScSortDescriptor::GetPropertyCount()
 {
-    return 13;      // TableSortDescriptor and SheetSortDescriptor
+    return 9;       // TableSortDescriptor and SheetSortDescriptor
 }
 
 void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )
@@ -354,62 +355,55 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     while ( nSortCount < MAXSORT && rParam.bDoSort[nSortCount] )
         ++nSortCount;
 
-    uno::Sequence<util::SortField> aFields(nSortCount);
+    uno::Sequence<table::TableSortField> aFields(nSortCount);
     if (nSortCount)
     {
-        util::SortField* pFieldArray = aFields.getArray();
+        table::TableSortField* pFieldArray = aFields.getArray();
         for (USHORT i=0; i<nSortCount; i++)
         {
             pFieldArray[i].Field         = rParam.nField[i];
-            pFieldArray[i].SortAscending = rParam.bAscending[i];
-            pFieldArray[i].FieldType     = util::SortFieldType_AUTOMATIC;       // immer Automatic
+            pFieldArray[i].IsAscending   = rParam.bAscending[i];
+            pFieldArray[i].FieldType     = table::TableSortFieldType_AUTOMATIC;     // immer Automatic
+            pFieldArray[i].IsCaseSensitive = rParam.bCaseSens;
+            pFieldArray[i].CollatorLocale = rParam.aCollatorLocale;
+            pFieldArray[i].CollatorAlgorithm = rtl::OUString( rParam.aCollatorAlgorithm );
         }
     }
 
     //  Sequence fuellen
 
-    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_ORIENT );
-    pArray[0].Value <<= eOrient;
+    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISSORTCOLUMNS );
+    pArray[0].Value = ::cppu::bool2any(!rParam.bByRow);
 
-    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SORTCOLUMNS );
-    pArray[1].Value = ::cppu::bool2any(!rParam.bByRow);
+    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_CONTHDR );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, rParam.bHasHeader );
 
-    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_CONTHDR );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, rParam.bHasHeader );
+    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_MAXFLD );
+    pArray[2].Value <<= (sal_Int32) MAXSORT;
 
-    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_MAXFLD );
-    pArray[3].Value <<= (sal_Int32) MAXSORT;
+    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_SORTFLD );
+    pArray[3].Value <<= aFields;
 
-    pArray[4].Name = rtl::OUString::createFromAscii( SC_UNONAME_SORTFLD );
-    pArray[4].Value <<= aFields;
+    pArray[4].Name = rtl::OUString::createFromAscii( SC_UNONAME_BINDFMT );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[4].Value, rParam.bIncludePattern );
 
-    pArray[5].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISCASE );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[5].Value, rParam.bCaseSens );
+    pArray[5].Name = rtl::OUString::createFromAscii( SC_UNONAME_COPYOUT );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[5].Value, !rParam.bInplace );
 
-    pArray[6].Name = rtl::OUString::createFromAscii( SC_UNONAME_BINDFMT );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[6].Value, rParam.bIncludePattern );
+    pArray[6].Name = rtl::OUString::createFromAscii( SC_UNONAME_OUTPOS );
+    pArray[6].Value <<= aOutPos;
 
-    pArray[7].Name = rtl::OUString::createFromAscii( SC_UNONAME_COPYOUT );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[7].Value, !rParam.bInplace );
+    pArray[7].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISULIST );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[7].Value, rParam.bUserDef );
 
-    pArray[8].Name = rtl::OUString::createFromAscii( SC_UNONAME_OUTPOS );
-    pArray[8].Value <<= aOutPos;
-
-    pArray[9].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISULIST );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[9].Value, rParam.bUserDef );
-
-    pArray[10].Name = rtl::OUString::createFromAscii( SC_UNONAME_UINDEX );
-    pArray[10].Value <<= (sal_Int32) rParam.nUserIndex;
-
-    pArray[11].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLLOC );
-    pArray[11].Value <<= rParam.aCollatorLocale;
-
-    pArray[12].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLALG );
-    pArray[12].Value <<= rtl::OUString( rParam.aCollatorAlgorithm );
+    pArray[8].Name = rtl::OUString::createFromAscii( SC_UNONAME_UINDEX );
+    pArray[8].Value <<= (sal_Int32) rParam.nUserIndex;
 }
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
+    sal_Bool bOldSortDescriptor(sal_False);
+    sal_Bool bNewSortDescriptor(sal_False);
     const beans::PropertyValue* pPropArray = rSeq.getConstArray();
     long nPropCount = rSeq.getLength();
     for (long i = 0; i < nPropCount; i++)
@@ -419,13 +413,15 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
 
         if (aPropName.EqualsAscii( SC_UNONAME_ORIENT ))
         {
+            bOldSortDescriptor = sal_True;
             //! test for correct enum type?
             table::TableOrientation eOrient = (table::TableOrientation)
                                 ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
             rParam.bByRow = ( eOrient != table::TableOrientation_COLUMNS );
         }
-        else if (aPropName.EqualsAscii( SC_UNONAME_SORTCOLUMNS ))
+        else if (aPropName.EqualsAscii( SC_UNONAME_ISSORTCOLUMNS ))
         {
+            bNewSortDescriptor = sal_True;
             rParam.bByRow = !::cppu::any2bool(rProp.Value);
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_CONTHDR ))
@@ -442,8 +438,10 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         else if (aPropName.EqualsAscii( SC_UNONAME_SORTFLD ))
         {
             uno::Sequence<util::SortField> aSeq;
+            uno::Sequence<table::TableSortField> aNewSeq;
             if ( rProp.Value >>= aSeq )
             {
+                bOldSortDescriptor = sal_True;
                 INT32 nCount = aSeq.getLength();
                 INT32 i;
                 if ( nCount > MAXSORT )
@@ -456,6 +454,34 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 {
                     rParam.nField[i]     = (USHORT)pFieldArray[i].Field;
                     rParam.bAscending[i] = pFieldArray[i].SortAscending;
+
+                    // FieldType wird ignoriert
+                    rParam.bDoSort[i] = TRUE;
+                }
+                for (i=nCount; i<MAXSORT; i++)
+                    rParam.bDoSort[i] = FALSE;
+            }
+            else if ( rProp.Value >>= aNewSeq )
+            {
+                bNewSortDescriptor = sal_True;
+                INT32 nCount = aNewSeq.getLength();
+                INT32 i;
+                if ( nCount > MAXSORT )
+                {
+                    DBG_ERROR("Zu viele Sortierfelder");
+                    nCount = MAXSORT;
+                }
+                const table::TableSortField* pFieldArray = aNewSeq.getConstArray();
+                for (i=0; i<nCount; i++)
+                {
+                    rParam.nField[i]     = (USHORT)pFieldArray[i].Field;
+                    rParam.bAscending[i] = pFieldArray[i].IsAscending;
+
+                    // only one is possible, sometime we should make it possible to have different for every entry
+                    rParam.bCaseSens = pFieldArray[i].IsCaseSensitive;
+                    rParam.aCollatorLocale = pFieldArray[i].CollatorLocale;
+                    rParam.aCollatorAlgorithm = pFieldArray[i].CollatorAlgorithm;
+
                     // FieldType wird ignoriert
                     rParam.bDoSort[i] = TRUE;
                 }
@@ -464,7 +490,10 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             }
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_ISCASE ))
+        {
+            bOldSortDescriptor = sal_True;
             rParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        }
         else if (aPropName.EqualsAscii( SC_UNONAME_BINDFMT ))
             rParam.bIncludePattern = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         else if (aPropName.EqualsAscii( SC_UNONAME_COPYOUT ))
@@ -489,10 +518,12 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_COLLLOC ))
         {
+            bOldSortDescriptor = sal_True;
             rProp.Value >>= rParam.aCollatorLocale;
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_COLLALG ))
         {
+            bOldSortDescriptor = sal_True;
             rtl::OUString sStr;
             if ( rProp.Value >>= sStr )
                 rParam.aCollatorAlgorithm = sStr;
