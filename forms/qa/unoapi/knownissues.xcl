@@ -35,3 +35,6 @@ forms.OImageButtonModel::com::sun::star::beans::XMultiPropertySet
 forms.OFileControlModel::com::sun::star::beans::XFastPropertySet
 forms.OGroupBoxModel::com::sun::star::beans::XFastPropertySet
 forms.OImageButtonModel::com::sun::star::beans::XFastPropertySet
+
+### i26347 ###
+forms.ODatabaseForm::com::sun::star::sdbc::XResultSetUpdate
