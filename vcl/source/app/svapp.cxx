@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2000-10-26 05:38:06 $
+ *  last change: $Author: cd $ $Date: 2000-10-26 06:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -161,6 +163,7 @@
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
 #endif
+
 
 // #include <usr/refl.hxx>
 class Reflection;
@@ -1499,14 +1502,32 @@ void* Application::GetRemoteEnvironment()
         r = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
             ::comphelper::getProcessServiceFactory(), ::com::sun::star::uno::UNO_QUERY );
     }
-#ifdef DEBUG
-    else
+    else if ( sObjectName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice.NamingService" )))
     {
-        ::rtl::OString o = "unknown object name : ";
-        o += ::rtl::OUStringToOString( sObjectName, RTL_TEXTENCODING_ASCII_US );
-        OSL_TRACE( o.pData->buffer );
-    }
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
+        if ( rSMgr.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService > rNamingService(
+                rSMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.NamingService" ))),
+                ::com::sun::star::uno::UNO_QUERY );
 
+            if ( rNamingService.is() )
+            {
+                rNamingService->registerObject(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )),
+                    rSMgr );
+                r = rNamingService;
+
+                // wait for the office to start ....
+                while( !Application::IsInExecute() )
+                {
+                    TimeValue aTimeValue = { 0, 500000000L }; // 50000000ns=500mS=0.5Sec.
+                    osl_waitThread( &aTimeValue );
+                }
+            }
+        }
+    }
+#ifdef DEBUG
     ::rtl::OString tmp = ::rtl::OUStringToOString( sObjectName, RTL_TEXTENCODING_ASCII_US );
     OSL_TRACE("getInstance %s %i\n", tmp.getStr(), (int)r.is());
 #endif
