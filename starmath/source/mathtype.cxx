@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-23 12:54:04 $
+ *  last change: $Author: cmc $ $Date: 2001-10-19 11:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,6 +611,10 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         case 0x301b:
             pC = " rdbracket ";
+            break;
+        case 0xe083:
+            rRet.Append('+');
+            bRet=TRUE;
             break;
         case 0xE421:
             pC = " geslant ";
