@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:27 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 18:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,6 +1471,7 @@ XML_CONSTASCII_ACTION( sXML_y, "y" );
 XML_CONSTASCII_ACTION( sXML_y1, "y1" );
 XML_CONSTASCII_ACTION( sXML_y2, "y2" );
 XML_CONSTASCII_ACTION( sXML_year, "year" );
+XML_CONSTASCII_ACTION( sXML_zindex, "z-index" );
 XML_CONSTASCII_ACTION( sXML_zero_values, "zero-values" );
 
 
