@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 16:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,10 +258,12 @@ namespace xmloff
             &::getCppuType( static_cast<ListSourceType*>(NULL) ));
         m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, STATE_NOCHECK,
-            OEnumMapper::getEnumMap(OEnumMapper::epCheckState));
+            OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
+            &::getCppuType( static_cast< sal_Int16* >(NULL)));
         m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE), PROPERTY_STATE, STATE_NOCHECK,
-            OEnumMapper::getEnumMap(OEnumMapper::epCheckState));
+            OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
+            &::getCppuType( static_cast< sal_Int16* >(NULL)));
         m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
             FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
@@ -483,6 +485,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.7  2001/01/24 09:34:40  fs
  *  +enter-/leaveEventContext
  *
