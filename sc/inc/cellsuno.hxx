@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-17 19:35:20 $
+ *  last change: $Author: nn $ $Date: 2001-05-17 15:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,8 @@ private:
 
 private:
     void            PaintRanges_Impl( USHORT nPart );
+    ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
+    void            ForceChartListener_Impl();
     SchMemChart*    CreateMemChart_Impl() const;
 
     const ScPatternAttr*    GetCurrentAttrsFlat();

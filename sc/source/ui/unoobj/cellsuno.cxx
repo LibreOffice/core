@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-17 09:58:59 $
+ *  last change: $Author: nn $ $Date: 2001-05-17 15:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2520,11 +2520,88 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
     return uno::Sequence< uno::Sequence<double> >(0);
 }
 
+ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const
+{
+    if ( aRanges.Count() == 1 )
+    {
+        ScRange* pRange = aRanges.GetObject(0);
+        if ( pRange->aStart.Col() == 0 && pRange->aEnd.Col() == MAXCOL &&
+             pRange->aStart.Row() == 0 && pRange->aEnd.Row() == MAXROW )
+        {
+            //  if aRanges is a complete sheet, limit to given size
+
+            USHORT nTab = pRange->aStart.Tab();
+
+            long nEndColumn = nDataColumns - 1 + ( bChartColAsHdr ? 1 : 0 );
+            if ( nEndColumn < 0 )
+                nEndColumn = 0;
+            if ( nEndColumn > MAXCOL )
+                nEndColumn = MAXCOL;
+
+            long nEndRow = nDataRows - 1 + ( bChartRowAsHdr ? 1 : 0 );
+            if ( nEndRow < 0 )
+                nEndRow = 0;
+            if ( nEndRow > MAXROW )
+                nEndRow = MAXROW;
+
+            ScRangeListRef xChartRanges = new ScRangeList;
+            xChartRanges->Append( ScRange( 0, 0, nTab, (USHORT)nEndColumn, (USHORT)nEndRow, nTab ) );
+            return xChartRanges;
+        }
+    }
+
+    return new ScRangeList(aRanges);        // as-is
+}
+
 void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<double> >& aData )
                                                 throw(uno::RuntimeException)
 {
-    //! ist das ernst gemeint?
-    DBG_ERROR("not implemented");
+    ScUnoGuard aGuard;
+    BOOL bDone = FALSE;
+    long nRowCount = aData.getLength();
+    long nColCount = nRowCount ? aData[0].getLength() : 0;
+    ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( nColCount, nRowCount );
+    if ( pDocShell && xChartRanges.Is() )
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        ScChartArray aArr( pDoc, xChartRanges, String() );
+        aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
+        const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
+        if (pPosMap)
+        {
+            if ( pPosMap->GetColCount() == nColCount &&
+                 pPosMap->GetRowCount() == nRowCount )
+            {
+                for (long nRow=0; nRow<nRowCount; nRow++)
+                {
+                    const uno::Sequence<double>& rRowSeq = aData[nRow];
+                    const double* pArray = rRowSeq.getConstArray();
+                    nColCount = rRowSeq.getLength();
+                    for (long nCol=0; nCol<nColCount; nCol++)
+                    {
+                        const ScAddress* pPos = pPosMap->GetPosition( (USHORT)nCol, (USHORT)nRow );
+                        if (pPos)
+                        {
+                            double fVal = pArray[nCol];
+                            if ( fVal == DBL_MIN )
+                                pDoc->PutCell( *pPos, NULL );       // empty cell
+                            else
+                                pDoc->SetValue( pPos->Col(), pPos->Row(), pPos->Tab(), pArray[nCol] );
+                        }
+                    }
+                }
+
+                //! undo
+                PaintRanges_Impl( PAINT_GRID );
+                pDocShell->SetDocumentModified();
+                ForceChartListener_Impl();          // call listeners for this object synchronously
+                bDone = TRUE;
+            }
+        }
+    }
+
+    if (!bDone)
+        throw uno::RuntimeException();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
@@ -2550,8 +2627,48 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
                         const uno::Sequence<rtl::OUString>& aRowDescriptions )
                                                 throw(uno::RuntimeException)
 {
-    //! ist das ernst gemeint?
-    DBG_ERROR("not implemented");
+    ScUnoGuard aGuard;
+    BOOL bDone = FALSE;
+    if ( bChartColAsHdr )
+    {
+        long nRowCount = aRowDescriptions.getLength();
+        ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( 1, nRowCount );
+        if ( pDocShell && xChartRanges.Is() )
+        {
+            ScDocument* pDoc = pDocShell->GetDocument();
+            ScChartArray aArr( pDoc, xChartRanges, String() );
+            aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
+            const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
+            if (pPosMap)
+            {
+                if ( pPosMap->GetRowCount() == nRowCount )
+                {
+                    const rtl::OUString* pArray = aRowDescriptions.getConstArray();
+                    for (long nRow=0; nRow<nRowCount; nRow++)
+                    {
+                        const ScAddress* pPos = pPosMap->GetRowHeaderPosition( (USHORT)nRow );
+                        if (pPos)
+                        {
+                            String aStr = pArray[nRow];
+                            if ( aStr.Len() )
+                                pDoc->PutCell( *pPos, new ScStringCell( aStr ) );
+                            else
+                                pDoc->PutCell( *pPos, NULL );       // empty cell
+                        }
+                    }
+
+                    //! undo
+                    PaintRanges_Impl( PAINT_GRID );
+                    pDocShell->SetDocumentModified();
+                    ForceChartListener_Impl();          // call listeners for this object synchronously
+                    bDone = TRUE;
+                }
+            }
+        }
+    }
+
+    if (!bDone)
+        throw uno::RuntimeException();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
@@ -2577,8 +2694,71 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                         const uno::Sequence<rtl::OUString>& aColumnDescriptions )
                                                 throw(uno::RuntimeException)
 {
-    //! ist das ernst gemeint?
-    DBG_ERROR("not implemented");
+    ScUnoGuard aGuard;
+    BOOL bDone = FALSE;
+    if ( bChartRowAsHdr )
+    {
+        long nColCount = aColumnDescriptions.getLength();
+        ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( nColCount, 1 );
+        if ( pDocShell && xChartRanges.Is() )
+        {
+            ScDocument* pDoc = pDocShell->GetDocument();
+            ScChartArray aArr( pDoc, xChartRanges, String() );
+            aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
+            const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
+            if (pPosMap)
+            {
+                if ( pPosMap->GetColCount() == nColCount )
+                {
+                    const rtl::OUString* pArray = aColumnDescriptions.getConstArray();
+                    for (long nCol=0; nCol<nColCount; nCol++)
+                    {
+                        const ScAddress* pPos = pPosMap->GetColHeaderPosition( (USHORT)nCol );
+                        if (pPos)
+                        {
+                            String aStr = pArray[nCol];
+                            if ( aStr.Len() )
+                                pDoc->PutCell( *pPos, new ScStringCell( aStr ) );
+                            else
+                                pDoc->PutCell( *pPos, NULL );       // empty cell
+                        }
+                    }
+
+                    //! undo
+                    PaintRanges_Impl( PAINT_GRID );
+                    pDocShell->SetDocumentModified();
+                    ForceChartListener_Impl();          // call listeners for this object synchronously
+                    bDone = TRUE;
+                }
+            }
+        }
+    }
+
+    if (!bDone)
+        throw uno::RuntimeException();
+}
+
+void ScCellRangesBase::ForceChartListener_Impl()
+{
+    //  call Update immediately so the caller to setData etc. can
+    //  regognize the listener call
+
+    if ( pDocShell )
+    {
+        ScChartListenerCollection* pColl = pDocShell->GetDocument()->GetChartListenerCollection();
+        if ( pColl )
+        {
+            USHORT nCollCount = pColl->GetCount();
+            for ( USHORT nIndex = 0; nIndex < nCollCount; nIndex++ )
+            {
+                ScChartListener* pChartListener = (ScChartListener*)pColl->At(nIndex);
+                if ( pChartListener &&
+                        pChartListener->GetUnoSource() == static_cast<chart::XChartData*>(this) &&
+                        pChartListener->IsDirty() )
+                    pChartListener->Update();
+            }
+        }
+    }
 }
 
 String lcl_UniqueName( StrCollection& rColl, const String& rPrefix )
