@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-25 16:39:54 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 15:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,20 +130,10 @@ enum ValueSetItemType
 // - ValueSetItem -
 // ----------------
 
+class ValueSet;
+
 struct ValueSetItem
 {
-private:
-
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >* mpxAcc;
-
-
-                        ValueSetItem();
-                        ValueSetItem( const ValueSetItem& rItem );
-
-    ValueSetItem&       operator=( const ValueSetItem& );
-
-public:
-
     ValueSet&           mrParent;
     USHORT              mnId;
     USHORT              mnBits;
@@ -153,6 +143,7 @@ public:
     XubString           maText;
     void*               mpData;
     Rectangle           maRect;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
                         ValueSetItem( ValueSet& rParent );
                         ~ValueSetItem();
