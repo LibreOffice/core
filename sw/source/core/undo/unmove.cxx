@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmove.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:39:13 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,8 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     : SwUndo( UNDO_MOVE ), SwUndRng( rRange ),
     nMvDestNode( rMvPos.nNode.GetIndex() ),
-    nMvDestCntnt( rMvPos.nContent.GetIndex() )
+    nMvDestCntnt( rMvPos.nContent.GetIndex() ),
+    bMoveRedlines( false )
 {
     bMoveRange = bJoinNext = bJoinPrev = FALSE;
 
@@ -141,7 +142,8 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
 SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
                         const SwNodeIndex& rMvPos )
     : SwUndo( UNDO_MOVE ),
-    nMvDestNode( rMvPos.GetIndex() )
+    nMvDestNode( rMvPos.GetIndex() ),
+    bMoveRedlines( false )
 {
     bMoveRange = TRUE;
     bJoinNext = bJoinPrev = FALSE;
@@ -249,7 +251,10 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
             SwPaM aPam( aIdx.GetNode(), nDestSttCntnt,
                         *pDoc->GetNodes()[ nDestEndNode ], nDestEndCntnt );
 
-            RemoveIdxFromRange( aPam, FALSE );
+            // #i17764# if redlines are to be moved, we may not remove them before
+            //          pDoc->Move gets a chance to handle them
+            if( ! bMoveRedlines )
+                RemoveIdxFromRange( aPam, FALSE );
 
             SwPosition aPos( *pDoc->GetNodes()[ nInsPosNode] );
             SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
@@ -262,7 +267,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
                 ((SwTxtNode*)pCNd)->ClearSwpHintsArr( FALSE, FALSE );
 
             // an der InsertPos erstmal alle Attribute entfernen,
-            if( !pDoc->Move( aPam, aPos ) )
+            if( !pDoc->Move( aPam, aPos, ( bMoveRedlines ? DOC_MOVEREDLINES : DOC_MOVEDEFAULT ) ) )
                 break;
 
             aPam.Exchange();
@@ -325,7 +330,7 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
     {
         // nur ein Move mit SwRange
         SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
-        rDoc.Move( aRg, aIdx );
+        rDoc.Move( aRg, aIdx, ( bMoveRedlines ? DOC_MOVEREDLINES : DOC_MOVEDEFAULT ) );
     }
     else
     {
