@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:28:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,8 +396,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     Rectangle aRect(aPos, aSize);
     SdrGrafObj* pGrafObj = new SdrGrafObj(rGraphic, aRect);
 
-    if (rFile.Len())
-        pGrafObj->SetGraphicLink( rFile, rFilter );
+    // #118522# calling SetGraphicLink here doesn't work
 
     //  #49961# Pfad wird nicht mehr als Name der Grafik gesetzt
 
@@ -407,6 +406,13 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     // nicht markieren wenn Ole
     pDrawView->InsertObjectSafe(pGrafObj, *pDrawView->GetPageViewPvNum(0));
+
+    // #118522# SetGraphicLink has to be used after inserting the object,
+    // otherwise an empty graphic is swapped in and the contact stuff crashes.
+    // See #i37444#.
+    if (rFile.Len())
+        pGrafObj->SetGraphicLink( rFile, rFilter );
+
     return TRUE;
 }
 
