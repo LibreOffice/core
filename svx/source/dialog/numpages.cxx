@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:52:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,7 +1404,6 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
     {
         pExamplesVS->InsertItem( i + 1, i);
         String* pGrfNm = (String*) aGrfNames.GetObject(i);
-        *pGrfNm = URIHelper::SmartRelToAbs(*pGrfNm);
         INetURLObject aObj(*pGrfNm);
         if(aObj.GetProtocol() == INET_PROT_FILE)
             *pGrfNm = aObj.PathToFileName();
@@ -1573,10 +1572,8 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 
         String* pGrfName = 0;
         if(aGrfNames.Count() > nIdx)
-        {
             pGrfName = (String*)aGrfNames.GetObject(nIdx);
-            *pGrfName = URIHelper::SmartRelToAbs(*pGrfName);
-        }
+
         USHORT nMask = 1;
         String aEmptyStr;
         USHORT nSetNumberingType = SVX_NUM_BITMAP;
