@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:50:27 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,18 +282,24 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
 
                 // Resource name must be without ".xml"
                 sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
-                OUString aUIElementName;
-                if ( nIndex > 0 )
-                    aUIElementName = aUIElementNames[n].copy( 0, nIndex );
+                if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
+                {
+                    OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
+                    OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
-                aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
-                aUIElementData.aName        = aUIElementNames[n];
-                aUIElementData.bModified    = false;
-                aUIElementData.bDefault     = false;
+                    if (( aUIElementName.getLength() > 0 ) &&
+                        ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
+                    {
+                        aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
+                        aUIElementData.aName        = aUIElementNames[n];
+                        aUIElementData.bModified    = false;
+                        aUIElementData.bDefault     = false;
 
-                // Create hash_map entries for all user interface elements inside the storage. We don't load the
-                // settings to speed up the process.
-                rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
+                        // Create hash_map entries for all user interface elements inside the storage. We don't load the
+                        // settings to speed up the process.
+                        rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
+                    }
+                }
             }
         }
     }
