@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:09:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@
 #ifndef _SWSLOTS_HXX
 #include <swslots.hxx>
 #endif
+
 #include "swabstdlg.hxx" //CHINA001
 #include "dialog.hrc" //CHINA001
 #include <table.hrc> //CHINA001
@@ -306,8 +307,7 @@ TYPEINIT1(SwTableShell,SwBaseShell)
 
 /************************************************************************/
 
-
-extern const USHORT __FAR_DATA aUITableAttrRange[] =
+const USHORT __FAR_DATA aUITableAttrRange[] =
 {
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
     FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
@@ -334,10 +334,12 @@ extern const USHORT __FAR_DATA aUITableAttrRange[] =
     0
 };
 
+const USHORT* SwuiGetUITableAttrRange()
+{
+    return aUITableAttrRange;
+}
 
-
-
-void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
+static void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
 {
     SfxItemSet aSet( rSh.GetView().GetPool(), rItem.Which(), rItem.Which(), 0);
     aSet.Put( rItem );
@@ -347,7 +349,7 @@ void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
 /************************************************************************/
 
 
-SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
+static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 {
     SwFrmFmt *pFmt = rSh.GetTableFmt();
     SwTabCols aCols;
@@ -477,7 +479,7 @@ SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 /************************************************************************/
 
 
-void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
+void ItemSetToTableParam( const SfxItemSet& rSet,
                                 SwWrtShell &rSh )
 {
     rSh.StartAllAction();
@@ -657,7 +659,7 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
 /************************************************************************/
 
 
-void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
+static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
     if(pBorderLine->GetInWidth() > rBorderLine.GetInWidth())
         rBorderLine.SetInWidth(pBorderLine->GetInWidth());
@@ -835,7 +837,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     rReq.SetSlot(FN_FORMAT_TABLE_DLG);
                     rReq.Done( *pOutSet );
                 }
-                ::lcl_ItemSetToTableParam( *pOutSet, rSh );
+                ItemSetToTableParam( *pOutSet, rSh );
             }
 
             delete pDlg;
@@ -851,7 +853,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case SID_ATTR_BRUSH_ROW :
         case SID_ATTR_BRUSH_TABLE :
             if(rReq.GetArgs())
-                ::lcl_ItemSetToTableParam(*rReq.GetArgs(), rSh);
+                ItemSetToTableParam(*rReq.GetArgs(), rSh);
         break;
         case FN_NUM_FORMAT_TABLE_DLG:
         {
