@@ -645,6 +645,7 @@ SfxVoidItem BulletsAndNumberingDialog FN_NUMBER_BULLETS
     Asynchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1135,6 +1136,7 @@ SfxVoidItem DecrementLevel FN_NUM_BULLET_DOWN
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1161,6 +1163,7 @@ SfxVoidItem DecrementSubLevels FN_NUM_BULLET_OUTLINE_DOWN
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3656,6 +3659,7 @@ SfxVoidItem IncrementLevel FN_NUM_BULLET_UP
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3682,6 +3686,7 @@ SfxVoidItem IncrementSubLevels FN_NUM_BULLET_OUTLINE_UP
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4154,6 +4159,7 @@ SfxStringItem Separator FN_PARAM_3;
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
 
     /* config: */
     AccelConfig = TRUE,
@@ -4597,6 +4603,7 @@ SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5883,6 +5890,7 @@ SfxVoidItem MoveDown FN_NUM_BULLET_MOVEDOWN
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5909,6 +5917,7 @@ SfxVoidItem MoveDownSubItems FN_NUM_BULLET_OUTLINE_MOVEDOWN
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5935,6 +5944,7 @@ SfxVoidItem MoveUp FN_NUM_BULLET_MOVEUP
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5961,6 +5971,7 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6267,6 +6278,7 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
     Asynchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -6861,6 +6873,7 @@ SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8971,6 +8984,7 @@ SfxBoolItem WrapContour FN_FRAME_WRAP_CONTOUR
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9047,6 +9061,7 @@ SfxBoolItem WrapOff FN_FRAME_NOWRAP
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9073,6 +9088,7 @@ SfxBoolItem WrapOn FN_FRAME_WRAP
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9124,6 +9140,7 @@ SfxBoolItem WrapThrough FN_FRAME_WRAPTHRU
     Synchron;
 
     ImageRotation = TRUE;
+    ImageReflection = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
