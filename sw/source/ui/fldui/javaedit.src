@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_JAVAEDIT
         Text = "Script-T~yp" ;
         Text [ ENGLISH ] = "Script type" ;
         Text [ english_us ] = "Script type" ;
-        Text [ portuguese_brazilian ] = "Script-Typ" ;
+        Text [ portuguese_brazilian ] = "Tipo de script" ;
         Text [ swedish ] = "Skriptt~yp" ;
         Text [ danish ] = "Script-type" ;
         Text [ italian ] = "Tipo di script" ;
@@ -96,11 +96,14 @@ ModalDialog DLG_JAVAEDIT
         Text[ arabic ] = "äæÚ ÇáäÕ ÇáÈÑãÌí";
         Text[ greek ] = "Ôığïò ôïõ Script";
         Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ ìœ í˜•";
-        Text[ turkish ] = "Script tipi";
+        Text[ turkish ] = "Betik tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus d'script";
         Text[ finnish ] = "Komentosarjatyyppi";
         Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸ªà¸„à¸£à¸´à¸›à¸•à¹Œ";
+        Text[ czech ] = "Typ skriptu";
+        Text[ hebrew ] = "Script-T~yp";
+        Text[ hindi ] = "à¤¸à¥à¤•à¥à¤°à¤¿à¤ªà¥à¤Ÿ à¤µà¤°à¥à¤—";
     };
     Edit ED_TYPE
     {
@@ -140,6 +143,9 @@ ModalDialog DLG_JAVAEDIT
         Text[ catalan ] = "URL";
         Text[ finnish ] = "URL-osoite";
         Text[ thai ] = "URL";
+        Text[ czech ] = "URL";
+        Text[ hebrew ] = "~URL";
+        Text[ hindi ] = "URL";
     };
     Edit ED_URL
     {
@@ -176,7 +182,7 @@ ModalDialog DLG_JAVAEDIT
         Check = TRUE ;
         Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "Tekst";
+        Text[ polish ] = "~Tekst";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
         Text[ chinese_traditional ] = "æ–‡å­—(~T)";
         Text[ arabic ] = "äÕ";
@@ -186,6 +192,9 @@ ModalDialog DLG_JAVAEDIT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Text";
         Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "Text";
+        Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
+        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
     };
     MultiLineEdit ED_EDIT
     {
@@ -206,7 +215,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
         Text [ italian ] = "Contenuto" ;
-        Text [ portuguese_brazilian ] = "Conte?o" ;
+        Text [ portuguese_brazilian ] = "Conteúdo" ;
         Text [ portuguese ] = "Conteúdo" ;
         Text [ finnish ] = "Sisältö" ;
         Text [ danish ] = "Indhold" ;
@@ -223,10 +232,13 @@ ModalDialog DLG_JAVAEDIT
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğåñéå÷üìåíá";
         Text[ korean ] = "ë‚´ìš©";
-        Text[ turkish ] = "İçerik";
+        Text[ turkish ] = "İçerikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contingut";
         Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+        Text[ czech ] = "Obsah";
+        Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤·à¤¯";
     };
     OKButton BTN_POST_OK
     {
@@ -263,7 +275,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ English ] = "Edit script" ;
         Text [ portuguese ] = "Editar Script" ;
         Text [ english_us ] = "Edit Script" ;
-        Text [ portuguese_brazilian ] = "Script bearbeiten" ;
+        Text [ portuguese_brazilian ] = "Editar Script" ;
         Text [ swedish ] = "Redigera skript" ;
         Text [ danish ] = "Rediger script" ;
         Text [ italian ] = "Modifica script" ;
@@ -278,11 +290,14 @@ ModalDialog DLG_JAVAEDIT
         Text[ arabic ] = "ÊÍÑíÑ ÇáäÕ ÇáÈÑãÌí";
         Text[ greek ] = "Åğåîåñãáóßá Script";
         Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ í¸ì§‘";
-        Text[ turkish ] = "Script bearbeiten";
+        Text[ turkish ] = "Betiği Düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Edita script";
         Text[ finnish ] = "Muokkaa komentosarjaa";
         Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸ªà¸„à¸£à¸´à¸›à¸•à¹Œ";
+        Text[ czech ] = "Upravit skript";
+        Text[ hebrew ] = "Script bearbeiten";
+        Text[ hindi ] = "à¤¸à¥à¤•à¥à¤°à¤¿à¤ªà¥à¤Ÿà¥ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
     };
     String STR_JAVA_INSERT
     {
@@ -291,7 +306,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ English ] = "Insert script" ;
         Text [ portuguese ] = "Inserir Script" ;
         Text [ english_us ] = "Insert Script" ;
-        Text [ portuguese_brazilian ] = "Script einf?en" ;
+        Text [ portuguese_brazilian ] = "Inserir Script" ;
         Text [ swedish ] = "Infoga skript" ;
         Text [ danish ] = "Indsæt script" ;
         Text [ italian ] = "Inserisci script" ;
@@ -306,14 +321,17 @@ ModalDialog DLG_JAVAEDIT
         Text[ arabic ] = "ÅÏÑÇÌ äÕ ÈÑãÌí";
         Text[ greek ] = "ĞñïóèŞêç Script";
         Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ ì‚½ì…";
-        Text[ turkish ] = "Script einfügen";
+        Text[ turkish ] = "Betiği İçe Aktar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insereix script";
         Text[ finnish ] = "Lisää komentosarja";
         Text[ thai ] = "à¹à¸—à¸£à¸à¸ªà¸„à¸£à¸´à¸›à¸•à¹Œ";
+        Text[ czech ] = "VloÅ¾it skript";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×ª ×§×•×“ ×œ×‘×™×¦×•×¢â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤•à¥à¤°à¤¿à¤ªà¥à¤Ÿà¥ à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     Text [ english_us ] = "Edit Script" ;
-    Text [ portuguese_brazilian ] = "Script bearbeiten" ;
+    Text [ portuguese_brazilian ] = "Editar Script" ;
     Text [ swedish ] = "Redigera skript" ;
     Text [ danish ] = "Rediger script" ;
     Text [ italian ] = "Modifica script" ;
@@ -329,13 +347,25 @@ ModalDialog DLG_JAVAEDIT
     Text[ arabic ] = "ÊÍÑíÑ ÇáäÕ ÇáÈÑãÌí";
     Text[ greek ] = "Åğåîåñãáóßá Script";
     Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ í¸ì§‘";
-    Text[ turkish ] = "Script'i düzenle";
+    Text[ turkish ] = "Betiği düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Edita script";
     Text[ finnish ] = "Muokkaa komentosarjaa";
     Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸ªà¸„à¸£à¸´à¸›à¸•à¹Œ";
+    Text[ czech ] = "Upravit skript";
+    Text[ hebrew ] = "Script bearbeiten";
+    Text[ hindi ] = "à¤¸à¥à¤•à¥à¤°à¤¿à¤ªà¥à¤Ÿà¥ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
