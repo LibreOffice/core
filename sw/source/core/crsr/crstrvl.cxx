@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-14 12:48:13 $
+ *  last change: $Author: jp $ $Date: 2002-02-14 17:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,7 +1087,7 @@ FASTBOOL SwCrsrShell::GotoRefMark( const String& rRefMark, USHORT nSubType,
     USHORT nPos;
     SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor( GetDoc(), rRefMark,
                                                     nSubType, nSeqNo, &nPos );
-    if( pTxtNd )
+    if( pTxtNd && pTxtNd->GetNodes().IsDocNodes() )
     {
         pCurCrsr->GetPoint()->nNode = *pTxtNd;
         pCurCrsr->GetPoint()->nContent.Assign( pTxtNd, nPos );
