@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShapes.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
     @see MasterPage
     @see DrawingDocumentDrawView
  */
-interface XShapes: com::sun::star::container::XIndexAccess
+published interface XShapes: com::sun::star::container::XIndexAccess
 {
     //-------------------------------------------------------------------------
 
