@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:20:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,9 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 #include "cfgids.hxx"
 
 using namespace ::rtl;
@@ -283,7 +286,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
     {
-        ULONG   nMode = pWindow->GetDrawMode();
+        ULONG   nMode = GetActiveWindow()->GetDrawMode();
         UINT16  nQuality = 0;
 
         if( OUTPUT_DRAWMODE_COLOR == nMode )
@@ -333,7 +336,8 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ATTR_YEAR2000) )
     {
-        FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+        FmFormShell* pFormShell = static_cast<FmFormShell*>(
+            GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
         if (pFormShell != NULL)
         {
             UINT16 nState = 0;
@@ -344,7 +348,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         }
     }
 
-    if ( !pView->GetTextEditOutliner() )
+    if ( !GetView()->GetTextEditOutliner() )
     {
         rSet.DisableItem( SID_TRANSLITERATE_UPPER );
         rSet.DisableItem( SID_TRANSLITERATE_LOWER );
