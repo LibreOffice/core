@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:41:21 $
+ *  last change: $Author: hr $ $Date: 2002-08-19 16:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,9 +368,15 @@ TransactionManager& TransactionManager::getGlobalTransactionManager()
         // We must check our pointer again - because ... another instance of ouer class could be faster then these one!
         if( pManager == NULL )
         {
+// [ed] 6/16/02 Avoid static member data on OS X to work around compiler bugs
+#ifdef MACOSX
+            // Create the new manager and set it for return on static variable.
+            pManager = new TransactionManager();
+#else
             // Create the new manager and set it for return on static variable.
             static TransactionManager aManager;
             pManager = &aManager;
+#endif
         }
     }
     // Return new created or already existing object.
