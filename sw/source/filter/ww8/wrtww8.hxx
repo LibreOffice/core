@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:25 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ public:
     void WriteSepx( SvStream& rStrm ) const;
     void WritePlcSed( SwWW8Writer& rWrt ) const;
     void WritePlcHdd( SwWW8Writer& rWrt ) const;
+    sal_uInt16 CurrentNoColumns(const SwDoc &rDoc) const;
 };
 
 //--------------------------------------------------------------------------
@@ -415,7 +416,8 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     const SfxItemSet* pISet;    // fuer Doppel-Attribute
     WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
     SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules
-    ::std::map<USHORT, USHORT> aRuleDuplicates; //map to Duplicated numrules
+    std::map<USHORT, USHORT> aRuleDuplicates; //map to Duplicated numrules
+    std::stack<xub_StrLen> maCurrentCharPropStarts;
     WW8_WrtBookmarks* pBkmks;
     WW8_WrtRedlineAuthor* pRedlAuthors;
     BitmapPalette* pBmpPal;
@@ -695,6 +697,10 @@ public:
             com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
 
     static bool NoPageBreakSection(const SfxItemSet *pSet);
+    void push_charpropstart(xub_StrLen nPos);
+    void pop_charpropstart();
+    xub_StrLen top_charpropstart() const;
+    bool empty_charpropstart() const;
 private:
     //No copying
     SwWW8Writer(const SwWW8Writer&);
@@ -989,6 +995,7 @@ Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
 
 sal_uInt16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
+String BookmarkToWord(const String &rBookmark);
 #endif  //  _WRTWW8_HXX
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
