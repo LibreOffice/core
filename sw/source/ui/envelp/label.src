@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:47:31 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ TabDialog DLG_LAB
                 Text[ swedish ] = "Privat";
                 Text[ polish ] = "Prywatne";
                 Text[ portuguese_brazilian ] = "Private";
-                Text[ japanese ] = "Ãﬂ◊≤Õﬁ∞ƒ";
+                Text[ japanese ] = "éÑóp";
                 Text[ korean ] = "∞≥¿Œ";
                 Text[ chinese_simplified ] = "ÀΩ»À";
                 Text[ chinese_traditional ] = "®p§H";
@@ -904,7 +904,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "Privata data";
         Text[ polish ] = "Dane prywatne";
         Text[ portuguese_brazilian ] = "Private data";
-        Text[ japanese ] = "Ãﬂ◊≤Õﬁ∞ƒ√ﬁ∞¿";
+        Text[ japanese ] = "å¬êl√ﬁ∞¿";
         Text[ korean ] = "∞≥¿Œ µ•¿Ã≈Õ";
         Text[ chinese_simplified ] = "ÀΩ»À◊ ¡œ";
         Text[ chinese_traditional ] = "®p§Hº∆’u";
