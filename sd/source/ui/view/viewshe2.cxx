@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 14:18:01 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 11:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,6 +1120,7 @@ BOOL SdViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
                 String aObjName = pDocSh->InsertObject(aNewIPObj, String())->GetObjName();
                 pObj->SetObjRef(aNewIPObj);
                 pObj->SetName(aObjName);
+                pObj->SetPersistName(aObjName);
             }
             else
             {
