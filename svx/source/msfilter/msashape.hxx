@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-15 18:11:45 $
+ *  last change: $Author: sj $ $Date: 2002-06-25 12:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,9 @@ class SvxMSDffAutoShape
 {
         MSO_SPT                     eSpType;
 
+        sal_Int32                   nCoordWidth;
+        sal_Int32                   nCoordHeight;
         Rectangle                   aSnapRect;
-        Rectangle                   aBoundRect;
 
         double                      fXScale;
         double                      fYScale;
