@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsda.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:15 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:27:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,12 +73,13 @@ CDEFS+= 		-DNO_AUDIO -DPRINTER_DUMMY
 CFLAGS+=		$(INCLUDE)
 CFLAGSCC=		-fsigned-char
 CFLAGSCXX=		-fsigned-char
+PICSWITCH:=-fPIC
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT=	-fPIC
-CFLAGSSLOCUIMT=	-fPIC
+CFLAGSSLOGUIMT=$(PICSWITCH)
+CFLAGSSLOCUIMT=$(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=	-g
 CFLAGSDBGUTIL=
