@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: od $ $Date: 2002-11-11 09:46:51 $
+ *  last change: $Author: od $ $Date: 2002-11-15 11:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,26 +132,6 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect ) :
 
     CalcFtnAtEndFlag();
     CalcEndAtEndFlag();
-
-    const SwFmtCol &rCol = rSect.GetFmt()->GetCol();
-    if ( rCol.GetNumCols() > 1 || IsAnyNoteAtEnd() )
-    {
-        const SwNodeIndex *pCntnt = rSect.GetFmt()->GetCntnt().GetCntntIdx();
-        ASSERT( pCntnt, ":-( Kein Inhalt vorbereitet." );
-        // In Fussnoten duerfen die Bereiche nicht mehrspaltig sein
-        if( !pCntnt->GetNode().FindFootnoteStartNode() )
-        {
-            //PrtArea ersteinmal so gross wie der Frm, damit die Spalten
-            //vernuenftig eingesetzt werden koennen; das schaukelt sich dann
-            //schon zurecht.
-            Frm().Width( 9637 );    //Damit die Spalten einen brauchbaren Wert erhalten.
-                                    //Koennte fuer viele Faelle als Parameter hereinkommen!
-            Prt().Width( Frm().Width() );
-            const SwFmtCol aOld; //ChgColumns() verlaesst sich darauf, dass auch ein
-                                 //Old-Wert hereingereicht wird.
-            ChgColumns( aOld, rCol, IsAnyNoteAtEnd() );
-        }
-    }
 }
 
 SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
@@ -190,6 +170,8 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
     }
 }
 
+// NOTE: call <SwSectionFrm::Init()> directly after creation of a new section
+//       frame and its insert in the layout.
 void SwSectionFrm::Init()
 {
     ASSERT( GetUpper(), "SwSectionFrm::Init before insertion?!" );
@@ -490,6 +472,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             pParent->_InvalidateSize();
 
         InsertGroupBefore( pParent, pSibling, pSect );
+        pSect->Init();
         (pSect->*fnRect->fnMakePos)( pSect->GetUpper(), pSect->GetPrev(), TRUE);
         if( !((SwLayoutFrm*)pParent)->Lower() )
         {
@@ -647,8 +630,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
         while( pLay->Lower() && pLay->Lower()->IsLayoutFrm() )
             pLay = (SwLayoutFrm*)pLay->Lower();
         pNew->InsertBehind( pSect->GetUpper(), pSect );
-        if( pNew->IsVertical() )
-            pNew->Init();
+        pNew->Init();
         SWRECTFN( this )
         (pNew->*fnRect->fnMakePos)( NULL, pSect, TRUE );
         ::RestoreCntnt( pSav, pLay, NULL );
@@ -785,6 +767,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
                 // aufnehmen kann,also bauen wir ihn uns.
                 pPrvSct = new SwSectionFrm( *pParent->GetSection() );
                 pPrvSct->InsertBehind( pUp, pPrv );
+                pPrvSct->Init();
                 SWRECTFN( pUp )
                 (pPrvSct->*fnRect->fnMakePos)( pUp, pPrv, TRUE );
                 pUp = FIRSTLEAF( pPrvSct );
@@ -1551,7 +1534,6 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         {
             pNew = new SwSectionFrm( *pSect, FALSE );
             pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
-
             pNew->Init();
             SWRECTFN( pNew )
             (pNew->*fnRect->fnMakePos)( pLayLeaf, NULL, TRUE );
