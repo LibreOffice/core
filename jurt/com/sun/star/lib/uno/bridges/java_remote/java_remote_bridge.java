@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-09 11:31:39 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,9 @@ import com.sun.star.lib.uno.environments.remote.IMessage;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
 import com.sun.star.lib.uno.environments.remote.IReceiver;
 import com.sun.star.lib.uno.environments.remote.Job;
-import com.sun.star.lib.uno.environments.remote.ThreadID;
-import com.sun.star.lib.uno.environments.remote.ThreadPool;
+import com.sun.star.lib.uno.environments.remote.ThreadId;
+import com.sun.star.lib.uno.environments.remote.ThreadPoolFactory;
+import com.sun.star.lib.uno.environments.remote.IThreadPool;
 
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 
@@ -130,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.22 $ $ $Date: 2001-05-09 11:31:39 $
+ * @version     $Revision: 1.23 $ $ $Date: 2001-05-17 12:53:18 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -151,14 +152,14 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     public class MessageDispatcher extends Thread implements IInvokable {
         boolean _quit = false;
 
-        private ThreadID _threadID;
+        private ThreadId _threadId;
 
         MessageDispatcher() {
             super("MessageDispatcher");
         }
 
         public void run() {
-            _threadID = ThreadPool.getThreadId();
+            _threadId = ThreadPoolFactory.getThreadId();
 
             if(__MessageDispatcher_run_hook != null) {
                 try {
@@ -174,13 +175,15 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
 
         public Object invoke(Object params[]) {
+            Throwable throwable = null;
+
             try {
                 do {
                     // Use the protocol to read a job.
                     IMessage iMessage = _iProtocol.readMessage(_inputStream);
 
 
-                    if(iMessage.getThreadID().equals(_threadID)) {
+                    if(iMessage.getThreadId().equals(_threadId)) {
                         continue;
                     }
 
@@ -190,7 +193,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                         remRefHolder(new Type(iMessage.getInterface()), iMessage.getOid());
 
                         if(iMessage.mustReply())
-                            sendReply(false, iMessage.getThreadID(), null);
+                            sendReply(false, iMessage.getThreadId(), null);
                     }
                     else if(iMessage.getOperation() != null && iMessage.getOperation().equals("acquire")) {
                         String oid_o[] = new String[]{iMessage.getOid()};
@@ -233,7 +236,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                             if(xexception != null) {
                                 // an exception occurred while trying to get an instance.
                                 // propagate it.
-                                sendReply(true, iMessage.getThreadID(), xexception);
+                                sendReply(true, iMessage.getThreadId(), xexception);
                                 iMessage = null;
                             }
                         }
@@ -243,7 +246,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                                 // Give this bridge as the disposeId, needed in case of disposing this bridge
                             Job job = new Job(object, java_remote_bridge.this, iMessage);
 
-                            ThreadPool.putJob(job, java_remote_bridge.this);
+                            _iThreadPool.putJob(job);
                             job = null;
                         }
                     }
@@ -258,6 +261,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                     System.err.println(getClass() + " - reading message - exception occurred: \"" + eofException + "\"");
                     System.err.println(getClass() + " - giving up");
                 }
+
+                throwable = eofException;
             }
             catch(Exception exception) {
                 if(DEBUG) {
@@ -267,11 +272,13 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 }
                   if(DEBUG)
                     exception.printStackTrace();
+
+                throwable = exception;
             }
 
             // dispose this bridge only within an error
             if(!_quit && !java_remote_bridge.this._disposed)
-                java_remote_bridge.this.dispose();
+                java_remote_bridge.this.dispose(throwable);
 
             return null;
         }
@@ -300,6 +307,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
     protected boolean           _negotiate;
     protected boolean           _forceSynchronous;
+
+    protected IThreadPool       _iThreadPool;
 
     /**
      * This method is for testing only.
@@ -493,6 +502,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         // create the message dispatcher and start it
           _messageDispatcher  = new MessageDispatcher();
         _messageDispatcher.start();
+
+        _iThreadPool = ThreadPoolFactory.createThreadPool();
     }
 
 
@@ -595,6 +606,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                                         new Boolean[]{new Boolean(_forceSynchronous)},
                                           new Boolean[]{new Boolean(_forceSynchronous)});
                         }
+                        catch(RuntimeException runtimeException) {
+                            throw runtimeException;
+                        }
                         catch(Throwable throwable) {
                             throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".mapInterfaceFrom - unexpected:" + throwable);
                         }
@@ -604,6 +618,13 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
         else {
             String oid[] = new String[]{(String)oId};
+
+//              boolean virtual = false;
+//              if(oid[0].startsWith("virtual:")) {
+//                  oid[0] = oid[0].substring(8);
+
+//                  virtual = true;
+//              }
 
             Object proxy = Proxy.create(this, oid[0], type, false, _forceSynchronous); // this proxy sends a release, when finalized
             object = _java_environment.registerInterface(proxy, oid, type);
@@ -641,6 +662,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
      */
     public synchronized void acquire() {
         ++ _life_count;
+
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".acquire:" + _life_count);
     }
 
     /**
@@ -655,16 +678,14 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".release:" + _life_count);
 
         if(_life_count <= 0)
-            dispose();
+            dispose(new com.sun.star.uno.RuntimeException("end of life"));
     }
 
-    /**
-     * Disposes the bridge. Sends belonging threads an interrupt exception.
-     * Releases mapped objects.
-     * <p>
-     * @see com.sun.star.uno.IBridge#dispose
-     */
-    public synchronized void dispose() {
+    public void dispose() {
+        dispose(new com.sun.star.uno.RuntimeException("user dispose"));
+    }
+
+    private synchronized void dispose(Throwable throwable) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose - life count:" + _life_count);
 
         if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").dispose - is disposed");
@@ -716,7 +737,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 }
 
                 // interrupt all jobs queued by this bridge
-                ThreadPool.dispose(this);
+                _iThreadPool.dispose(throwable);
 
                 // release all outmapped objects
                 freeHolders();
@@ -773,7 +794,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                              null,
                              null);
         }
-        catch(com.sun.star.uno.RuntimeException runtimeException) {
+        catch(RuntimeException runtimeException) {
             throw runtimeException;
         }
         catch(Throwable throwable) {
@@ -804,7 +825,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     }
 
 
-    public void sendReply(boolean exception, ThreadID threadId, Object result) {
+    public void sendReply(boolean exception, ThreadId threadId, Object result) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendReply:" + exception + " " + result);
 
         if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").sendReply - is disposed");
@@ -816,7 +837,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 _outputStream.flush();
             }
             catch(IOException iOException) {
-                dispose();
+                dispose(iOException);
 
                 throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".sendReply - unexpected:" + iOException);
             }
@@ -838,40 +859,39 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
         if(operation.equals("acquire")) acquire();  // keep this bridge alife
 
+        boolean goThroughThreadPool = false;
+
         try {
-            // is this what we realy want to do, is the writing to the stream realy protected? Not that
-            // an other thread flushes the output and an reply arrives before we have added the thread queue!!!
             synchronized(_outputStream) {
-                _iProtocol.writeRequest((String)object, TypeDescription.getTypeDescription(type), operation, ThreadPool.getThreadId(), params, synchron, mustReply);
+                _iProtocol.writeRequest((String)object, TypeDescription.getTypeDescription(type), operation, ThreadPoolFactory.getThreadId(), params, synchron, mustReply);
 
-                if(synchron[0].booleanValue()  && Thread.currentThread() != _messageDispatcher) // prepare a queue for this thread in the threadpool
-                    ThreadPool.addThread(this);
+                goThroughThreadPool = synchron[0].booleanValue()  && Thread.currentThread() != _messageDispatcher;
 
-                _iProtocol.flush(new DataOutputStream(_outputStream));
-                _outputStream.flush();
+                if(goThroughThreadPool) // prepare a queue for this thread in the threadpool
+                    _iThreadPool.attach();
 
+                try {
+                    _iProtocol.flush(new DataOutputStream(_outputStream));
+                    _outputStream.flush();
+                }
+                catch(IOException iOException) {
+                    dispose(iOException);
+
+                    throw iOException;
+                }
             }
+
+            if(goThroughThreadPool)
+                result = _iThreadPool.enter();
+
         }
-          catch(IOException iOException) {
-            if(DEBUG) {
-                System.err.println("##### " + getClass().getName() + ".sendRequest - unexpected exception:" + iOException);
-                iOException.printStackTrace();
-            }
+        finally {
+            if(goThroughThreadPool)
+                _iThreadPool.detach();
 
-            ThreadPool.removeThread();
-
-            dispose();
-
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".sendRequest - unexpected:" + iOException);
+            if(operation.equals("release"))
+                release(); // kill this bridge, if this was the last proxy
         }
-
-//          _xConnection.flush();
-
-          if(synchron[0].booleanValue() && Thread.currentThread() != _messageDispatcher) // the message dispatcher must not block
-            result = ThreadPool.enter();
-
-        if(operation.equals("release"))
-            release(); // kill this bridge, if this was the last proxy
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendRequest left:" + result);
 
