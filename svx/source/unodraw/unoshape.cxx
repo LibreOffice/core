@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 12:08:19 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 13:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1620,7 +1620,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 break;
             }
             case SDRATTR_LAYERID:
-                aAny <<= pObj->GetLayer();
+                aAny <<= (sal_Int32)pObj->GetLayer();
                 break;
             case SDRATTR_LAYERNAME:
                 {
