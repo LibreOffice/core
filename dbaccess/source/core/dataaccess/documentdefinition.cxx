@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:35:30 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -220,6 +223,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
@@ -663,11 +669,13 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
                         // object is new, so we an interceptor for save
                         xModel.set(getComponent(),UNO_QUERY);
+                        Reference< XFrame > xFrame;
                         if ( xModel.is() )
                         {
+                            xFrame = xModel->getCurrentController()->getFrame();
+
                             if ( m_xListener.is() )
                             {
-                                Reference<XFrame> xFrame = xModel->getCurrentController()->getFrame();
                                 if ( xFrame.is() )
                                 {
                                     Reference<XTopWindow> xTopWindow( xFrame->getContainerWindow(),UNO_QUERY );
@@ -684,7 +692,6 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                                 // remove the frame from the desktop because we need full control of it.
                                 if ( m_xFrameLoader.is() )
                                 {
-                                    Reference<XFrame> xFrame = xModel->getCurrentController()->getFrame();
                                     Reference<XFramesSupplier> xSup(m_xFrameLoader,UNO_QUERY);
                                     if ( xSup.is() )
                                     {
@@ -704,6 +711,36 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                                     Reference<XPropertySet> xProp = xViewSup->getViewSettings();
                                     if ( xProp.is() )
                                     {
+                                        // The visual area size can be changed by the setting of the following properties
+                                        // so it should be restored later
+                                        Reference< XVisualObject > xVisObj( xModel, UNO_QUERY );
+                                        ::com::sun::star::awt::Size aOrigSize;
+                                        if ( xVisObj.is() )
+                                        {
+                                            try {
+                                                aOrigSize = xVisObj->getVisualAreaSize( Aspects::MSOLE_CONTENT );
+                                            } catch ( Exception& )
+                                            {}
+                                        }
+
+                                        // Layout manager should not layout while the size is still not restored
+                                        // so it will stay locked for this time
+                                        Reference< ::drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                                        if ( xFrame.is() )
+                                        {
+                                            try
+                                            {
+                                                Reference< XPropertySet > xPropSet( xFrame, UNO_QUERY_THROW );
+                                                xLayoutManager.set( xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ), UNO_QUERY );
+                                                if ( xLayoutManager.is() )
+                                                    xLayoutManager->lock();
+
+                                            }
+                                            catch( Exception& )
+                                            {}
+                                        }
+
+                                        // setting of the visual properties
                                         try
                                         {
                                             xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowRulers")),makeAny(sal_True));
@@ -718,10 +755,35 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                                         catch(Exception&)
                                         {
                                         }
+
+                                        // setting of the ruler changes the visual area so it should be restored
+                                        if ( xVisObj.is() && aOrigSize.Width && aOrigSize.Height )
+                                        {
+                                            try
+                                            {
+                                                xVisObj->setVisualAreaSize( Aspects::MSOLE_CONTENT, aOrigSize );
+                                            } catch ( Exception& )
+                                            {}
+                                        }
+
+                                        // setting of the visual area set the form to modified state, it should be restored
+                                        try
+                                        {
+                                            // unlock the layout manager
+                                            // and let it layout before setting of the modified state
+                                            if ( xLayoutManager.is() )
+                                                xLayoutManager->unlock();
+
+                                            Reference< XModifiable > xModif( xModel, UNO_QUERY_THROW );
+                                            xModif->setModified( sal_False );
+                                        }
+                                        catch( Exception& )
+                                        {}
                                     }
                                     Reference<XModifiable> xModifiable(xModel,UNO_QUERY_THROW);
                                     xModifiable->setModified(sal_False);
                                 }
+
                             }
                         }
                         fillReportData(!bOpenInDesign);
