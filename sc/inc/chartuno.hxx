@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-11 15:26:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_CHARTUNO_HXX
 #define SC_CHARTUNO_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
@@ -110,13 +114,13 @@ class ScChartsObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;           // Charts sind pro Sheet
+    SCTAB                   nTab;           // Charts sind pro Sheet
 
     ScChartObj*             GetObjectByIndex_Impl(long nIndex) const;
     ScChartObj*             GetObjectByName_Impl(const ::rtl::OUString& aName) const;
 
 public:
-                            ScChartsObj(ScDocShell* pDocSh, USHORT nT);
+                            ScChartsObj(ScDocShell* pDocSh, SCTAB nT);
     virtual                 ~ScChartsObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -176,14 +180,14 @@ class ScChartObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;           // Charts sind pro Sheet
+    SCTAB                   nTab;           // Charts sind pro Sheet
     String                  aChartName;
 
     void    Update_Impl( const ScRangeListRef& rRanges, BOOL bColHeaders, BOOL bRowHeaders );
     void    GetData_Impl( ScRangeListRef& rRanges, BOOL& rColHeaders, BOOL& rRowHeaders ) const;
 
 public:
-                            ScChartObj(ScDocShell* pDocSh, USHORT nT, const String& rN);
+                            ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
     virtual                 ~ScChartObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
