@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:38:21 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ class SwRTFParser : public SvxRTFParser
     bool bInPgDscTbl;       // beim PageDescTbl lesen
     bool bNewNumList;       // Word 7.0 NumList gelesen, 6.0 ueberspringen
     bool bFirstContinue;    // 1.Call ins Continue
+    bool bContainsPara;     // If there is no paragraph in the section
 
     /*
      #i9243#
