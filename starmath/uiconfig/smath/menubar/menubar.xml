@@ -25,6 +25,7 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetDocumentProperties" menu:helpid="5535" menu:label="" />
+            <menu:menuitem menu:id=".uno:Signature" menu:helpid="5508" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Print" menu:helpid="5504" menu:label="" />
             <menu:menuitem menu:id=".uno:PrinterSetup" menu:helpid="5302" menu:label="" />
