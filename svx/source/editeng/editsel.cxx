@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2001-05-14 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,24 +67,18 @@
 #include <impedit.hxx>
 #include <editview.hxx>
 
-// ----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
 //  class EditSelFunctionSet
 //  ----------------------------------------------------------------------
 EditSelFunctionSet::EditSelFunctionSet()
 {
-    pCurView = 0;
-}
-
-void __EXPORT EditSelFunctionSet::BeginDrag()
-{
-    if ( pCurView )
-        pCurView->GetImpEditEngine()->BeginDrag( pCurView );
+    pCurView = NULL;
 }
 
 void __EXPORT EditSelFunctionSet::CreateAnchor()
 {
     if ( pCurView )
-        pCurView->GetImpEditEngine()->CreateAnchor( pCurView );
+        pCurView->pImpEditView->CreateAnchor();
 }
 
 void __EXPORT EditSelFunctionSet::DestroyAnchor()
@@ -95,7 +89,7 @@ void __EXPORT EditSelFunctionSet::DestroyAnchor()
 BOOL __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
 {
     if ( pCurView )
-        return pCurView->GetImpEditEngine()->SetCursorAtPoint( rPointPixel, pCurView );
+        return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
 
     return FALSE;
 }
@@ -103,7 +97,8 @@ BOOL __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BO
 BOOL __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
-        return pCurView->GetImpEditEngine()->IsSelectionAtPoint( rPointPixel, pCurView );
+        return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
+
     return FALSE;
 }
 
@@ -114,13 +109,19 @@ void __EXPORT EditSelFunctionSet::DeselectAtPoint( const Point& )
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
+void __EXPORT EditSelFunctionSet::BeginDrag()
+{
+    // Nur bei Mehrfachselektion
+}
+
+
 void __EXPORT EditSelFunctionSet::DeselectAll()
 {
     if ( pCurView )
-        pCurView->GetImpEditEngine()->DeselectAll( pCurView );
+        pCurView->pImpEditView->DeselectAll();
 }
 
-// ----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
 //  class EditSelectionEngine
 //  ----------------------------------------------------------------------
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
