@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-07-20 18:35:16 $
+ *  last change: $Author: nn $ $Date: 2002-01-30 08:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,6 +1195,11 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
         if ( bSetFontColor )
         {
             Color   aColor = rColorItem.GetValue();
+
+            //  always export automatic text color as black
+            if ( aColor.GetColor() == COL_AUTO )
+                aColor.SetColor( COL_BLACK );
+
             ((aStr += ' ') += sHTML_O_color) += '=';
             lcl_AppendHTMLColorTripel( aStr, aColor );
         }
