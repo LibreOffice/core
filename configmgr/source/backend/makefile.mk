@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jb $ $Date: 2002-10-24 15:32:29 $
+#   last change: $Author: ssmith $ $Date: 2002-11-06 11:06:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SLOFILES=\
     $(SLO)$/importsvc.obj \
     $(SLO)$/basicimporthandler.obj \
     $(SLO)$/importmergehandler.obj \
+    $(SLO)$/layerdecorator.obj \
 
 # --- Targets ---
 
