@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 12:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #pragma hdrstop
 
 #include "svxbox.hxx"
+
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -643,12 +647,13 @@ void __EXPORT SvxComboBox::KeyInput( const KeyEvent& rKEvt )
 String SvxComboBox::GetText() const
 {
     String aTxt(ComboBox::GetText());
+    CharClass aCharClass( Application::GetSettings().GetLocale() );
 
     if(nStyle & SVX_CBS_LOWER)
-        return GetpApp()->GetAppInternational().Lower(aTxt);
+        return aCharClass.lower(aTxt);
 
     if(nStyle & SVX_CBS_UPPER)
-        return GetpApp()->GetAppInternational().Upper(aTxt);
+        return aCharClass.upper(aTxt);
 
     return aTxt;
 }
