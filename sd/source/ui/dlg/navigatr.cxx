@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:05:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@
 #ifndef _SV_MENU_HXX //autogen
 #include <vcl/menu.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SFXDOCKWIN_HXX
 #include <sfx2/dockwin.hxx>
