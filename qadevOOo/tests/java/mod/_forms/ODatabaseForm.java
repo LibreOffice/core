@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseForm.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 11:47:02 $
+ *  last change:$Date: 2003-11-18 16:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ import util.utils;
 
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
+import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
@@ -84,9 +85,13 @@ import com.sun.star.container.XNamed;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
+import com.sun.star.form.DatabaseParameterEvent;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.CommandType;
+import com.sun.star.sdb.ParametersRequest;
 import com.sun.star.sdb.RowChangeEvent;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
@@ -95,13 +100,21 @@ import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XRowUpdate;
+import com.sun.star.task.XInteractionContinuation;
+import com.sun.star.task.XInteractionRequest;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.Date;
+import com.sun.star.util.DateTime;
+import com.sun.star.util.Time;
 import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
+import ifc.form._XDatabaseParameterBroadcaster;
+import ifc.sdb._XCompletedExecution;
 
 
 /**
@@ -292,7 +305,8 @@ public class ODatabaseForm extends TestCase {
                 PropertyValue[] propInfo = new PropertyValue[1];
                 propInfo[0] = new PropertyValue();
                 propInfo[0].Name = "JavaDriverClass";
-                propInfo[0].Value = "org.gjt.mm.mysql.Driver";
+//                propInfo[0].Value = "org.gjt.mm.mysql.Driver";
+                propInfo[0].Value = "util.dddriver.Driver";
                 srcInf.Info = propInfo;
 
                 Object dbSrc = srcInf.getDataSourceService();
@@ -533,7 +547,8 @@ public class ODatabaseForm extends TestCase {
             the_set.first();
         } catch (SQLException e) {
             log.println("Cann't move cursor to the first row.");
-            throw new StatusException("Cann't move cursor to the first row.", e);
+            e.printStackTrace();
+            throw new StatusException("Can't move cursor to the first row.", e);
         }
 
         tEnv.addObjRelation("Model1", shape1.getControl());
@@ -646,7 +661,7 @@ public class ODatabaseForm extends TestCase {
 
 
         /*****  statement parameter types and their initial
-                values must be added here as relation.
+                values must be added here as relation. */
         params.add(new String("SAU99")) ;
         params.add(new Boolean(false)) ;
         params.add(new Byte((byte) 123)) ;
@@ -656,11 +671,42 @@ public class ODatabaseForm extends TestCase {
         params.add(new Float(1.234)) ;
         params.add(new Double(2.345)) ;
         params.add(new byte[] {1, 2, 3}) ;
-        params.add(new Date(26, 1, 2001)) ;
-        params.add(new Time(1, 25, 14, 12)) ;
-        params.add(new DateTime(1, 25, 14, 12, 26, 1, 2001)) ;
-        */
+        Date d = new Date();
+        d.Day = 26; d.Month = 1; d.Year = 2001;
+        params.add(d) ;
+        Time t = new Time();
+        t.Hours = 1; t.HundredthSeconds = 12; t.Minutes = 25; t.Seconds = 14;
+        params.add(t) ;
+        DateTime dt = new DateTime();
+        dt.Day = 26; dt.Month = 1; dt.Year = 2001; dt.Hours = 1;
+        dt.HundredthSeconds = 12; dt.Minutes = 25; dt.Seconds = 14;
+        params.add(dt) ;
         tEnv.addObjRelation("XParameters.ParamValues", params);
+
+        // Adding relation for XCompletedExecution
+        tEnv.addObjRelation("InteractionHandlerChecker", new InteractionHandlerImpl());
+
+        // Adding for XWarningSupplier
+        tEnv.addObjRelation("CheckWarningsSupplier", new Boolean(isMySQLDB));
+
+        // Adding relation for XDatabaseParameterBroadcaster
+        tEnv.addObjRelation("ParameterListenerChecker", new ODatabaseForm.ParameterListenerImpl());
+        XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface
+            (XPropertySet.class, oObj) ;
+        try {
+            xSetProp.setPropertyValue("DataSourceName", dbSourceName) ;
+            if(isMySQLDB) {
+                xSetProp.setPropertyValue("Command", "SELECT Column0  FROM soffice_test_table  WHERE ( (  Column0 = :param1 ) )");
+            }
+            else {
+                xSetProp.setPropertyValue("Command", "SELECT \"_TEXT\" FROM \"ODatabaseForm_tmp0\" WHERE ( ( \"_TEXT\" = :param1 ) )");
+            }
+
+            xSetProp.setPropertyValue("CommandType",
+                new Integer(CommandType.COMMAND)) ;
+        }
+        catch(Exception e) {
+        }
 
         // Adding relation for XResultSetUpdate
         final XRowUpdate xRowUpdate = (XRowUpdate) UnoRuntime.queryInterface(
@@ -748,5 +794,111 @@ public class ODatabaseForm extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Error while object test cleaning up", e);
         }
+    }
+
+    /**
+     * Implementation of interface _XDatabaseParameterBroadcaster.CheckParameterListener
+     * for the XDatabaseParameterBroadcaster test
+     * @see ifc.form._XDatabaseParameterBroadcaster
+     */
+    public class ParameterListenerImpl implements _XDatabaseParameterBroadcaster.CheckParameterListener {
+        boolean listenerWasCalled = false;
+        PrintWriter log = new PrintWriter(System.out);
+
+        /**
+         * Return true, if the listener was called, false otherwise.
+         * @return True, if any other method of the listener was called.
+         */
+        public boolean checkListener() {
+            return listenerWasCalled;
+        }
+
+        /**
+         * Take the DataBaseParameterEvent and fill it with a meaningful value.
+         * @param e The database parameter that will be filled with a value.
+         * @return True, if the value could be filled.
+         */
+        public boolean approveParameter(DatabaseParameterEvent e) {
+            log.println("### ParameterListenerImpl: approve called.");
+            XIndexAccess params = e.Parameters;
+            int count = params.getCount();
+            try {
+                for(int i=0; i<count; i++) {
+                    log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: Parameter "+i+": "+params.getByIndex(i));
+                    XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
+                    log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: Parameter Name: '"+xProp.getPropertyValue("Name") + "' is set to Value '1'");
+                    xProp.setPropertyValue("Value", new Integer(1));
+                    listenerWasCalled = true;
+                }
+            }
+            catch(Exception eI) {
+                log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: Exception!");
+                eI.printStackTrace(log);
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * Dummy implemetnation. Do nothing, just log
+         * @param o Ignore.
+         */
+        public void disposing(EventObject o) {
+            log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: disposing");
+        }
+
+        /**
+         * Set a log writer, so messages go to log instead of Standard.out
+         * @param log The log messages get printed to.
+         */
+        public void setLog(PrintWriter log) {
+            this.log = log;
+        }
+
+    }
+
+
+    /**
+     * Implementation of interface _XCompletedExecution.CheckInteractionHandler
+     * for the XCompletedExecution test
+     * @see ifc.sdb._XCompletedExecution
+     */
+    public class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
+        private boolean handlerWasUsed = false;
+        private PrintWriter log = new PrintWriter(System.out);
+
+        public boolean checkInteractionHandler() {
+            return handlerWasUsed;
+        }
+
+        public void handle(XInteractionRequest xInteractionRequest) {
+            log.println("### _XCompletedExecution.InteractionHandlerImpl: handle called.");
+            handlerWasUsed = true;
+
+            Object o = xInteractionRequest.getRequest();
+            ParametersRequest req = (ParametersRequest)o;
+            XIndexAccess params = req.Parameters;
+            int count = params.getCount();
+            try {
+                for(int i=0; i<count; i++) {
+                    Object aObject = params.getByIndex(i);
+                    Any any = (Any)aObject;
+                    log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter "+i+": "+params.getByIndex(i));
+                    XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
+                    log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter Name: '"+xProp.getPropertyValue("Name") + "' is set to Value '1'");
+                    xProp.setPropertyValue("Value", new Integer(1));
+                    handlerWasUsed = true;
+                }
+            }
+            catch(Exception eI) {
+                log.println("### _XCompletedExecution.InteractionHandlerImpl: Exception!");
+                eI.printStackTrace(log);
+            }
+        }
+
+        public void setLog(PrintWriter log) {
+            this.log = log;
+        }
+
     }
 } // finish class ODatabaseForm
