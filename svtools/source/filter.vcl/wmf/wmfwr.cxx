@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:06:32 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 14:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
 #endif
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
+
 
 #include <vcl/metric.hxx>
 
@@ -550,7 +554,7 @@ bool IsStarSymbol(const String &rStr)
 
 void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData )
 {
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     sal_uInt32 nTmp = SWAPLONG( nEsc );
     sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
 #else
