@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:06:38 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
                 Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
                 if( xInfo->hasPropertyByName( aTabStopName ) )
                     *pTabs++ = xPSet->getPropertyValue( aTabStopName );
+                else
+                    ++pTabs;
             }
         }
         else
