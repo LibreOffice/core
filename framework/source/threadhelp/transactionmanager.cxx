@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-07 08:13:13 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ TransactionManager::TransactionManager()
 }
 
 /*-****************************************************************************************************//**
+    @interface  ITransactionManager
     @short      set new working mode
     @descr      These implementation knows for states of working: E_INIT, E_WORK, E_CLOSING, E_CLOSE
                 You can step during this ones only from the left to the right side and start at left side again!
@@ -131,17 +132,17 @@ TransactionManager::TransactionManager()
                 This call will block till all current existing transactions was finished.
                 Follow results occure:
                     E_INIT        :  All requests on this implementation are refused.
-                                     It's your decision to react in a right way.
+                                        It's your decision to react in a right way.
 
                     E_WORK        :  The object can work now. The full functionality is available.
 
                     E_BEFORECLOSE :  The object start the closing mechanism ... but sometimes
-                                     e.g. the dispose() method need to call some private methods.
-                                     These some special methods should use E_SOFTEXCEPTIONS or ignore
-                                     E_INCLOSE as returned reason for E_NOEXCEPTIONS to detect this special case!
+                                        e.g. the dispose() method need to call some private methods.
+                                        These some special methods should use E_SOFTEXCEPTIONS or ignore
+                                        E_INCLOSE as returned reason for E_NOEXCEPTIONS to detect this special case!
 
-                    E_CLOSE       :   Object is already dead! All further requests will be refused.
-                                      It's your decision to react in a right way.
+                    E_CLOSE       :  Object is already dead! All further requests will be refused.
+                                        It's your decision to react in a right way.
 
     @seealso    -
 
@@ -150,11 +151,11 @@ TransactionManager::TransactionManager()
 
     @onerror    We do nothing.
 *//*-*****************************************************************************************************/
-void SAL_CALL TransactionManager::setWorkingMode( EWorkingMode eMode )
+void  TransactionManager::setWorkingMode( EWorkingMode eMode )
 {
     // Safe member access.
-    ResetableGuard  aAccessGuard( m_aAccessLock );
-    sal_Bool        bWaitFor    = sal_False      ;
+    ::osl::ClearableMutexGuard  aAccessGuard( m_aAccessLock );
+    sal_Bool                    bWaitFor    = sal_False      ;
     // Change working mode first!
     if  (
             ( m_eWorkingMode == E_INIT        && eMode == E_WORK        ) ||
@@ -175,7 +176,7 @@ void SAL_CALL TransactionManager::setWorkingMode( EWorkingMode eMode )
     // otherwise; if you wait at setting E_WORK another thrad could finish a acquire-call during our unlock() and wait() call
     // ... and we will wait forever here!!!)
     // Don't forget to release access mutex before.
-    aAccessGuard.unlock();
+    aAccessGuard.clear();
     if( bWaitFor == sal_True )
     {
         m_aBarrier.wait();
@@ -183,6 +184,7 @@ void SAL_CALL TransactionManager::setWorkingMode( EWorkingMode eMode )
 }
 
 /*-****************************************************************************************************//**
+    @interface  ITransactionManager
     @short      get current working mode
     @descr      If you stand in your close() or init() method ... but don't know
                 if you called more then ones(!) ... you can use this function to get
@@ -220,22 +222,22 @@ void SAL_CALL TransactionManager::setWorkingMode( EWorkingMode eMode )
 
     @onerror    No error should occure.
 *//*-*****************************************************************************************************/
-EWorkingMode SAL_CALL TransactionManager::getWorkingMode() const
+EWorkingMode TransactionManager::getWorkingMode() const
 {
     // Synchronize access to internal member!
-    ResetableGuard aAccessLock( m_aAccessLock );
-
+    ::osl::MutexGuard aAccessLock( m_aAccessLock );
     return m_eWorkingMode;
 }
 
 /*-****************************************************************************************************//**
+    @interface  ITransactionManager
     @short      start new transaction
     @descr      A guard should use this method to start a new transaction. He should looks for rejected
                 calls to by using parameter eMode and eReason.
                 If call was not rejected your transaction will be non breakable during releasing your transaction
                 guard! BUT ... your code isn't threadsafe then! It's a transaction manager only ....
 
-    @seealso    method release()
+    @seealso    method unregisterTransaction()
 
     @param      "eMode"     ,used to enable/disable throwing exceptions automaticly for rejected calls
     @param      "eReason"   ,reason for rejected calls if eMode=E_NOEXCEPTIONS
@@ -243,7 +245,7 @@ EWorkingMode SAL_CALL TransactionManager::getWorkingMode() const
 
     @onerror    -
 *//*-*****************************************************************************************************/
-void SAL_CALL TransactionManager::acquire( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException )
+void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException )
 {
     // Look for rejected calls first.
     // If call was refused we throw some exceptions or do nothing!
@@ -258,7 +260,7 @@ void SAL_CALL TransactionManager::acquire( EExceptionMode eMode, ERejectReason& 
     // Don't use "else" or a new scope here!!!
 
     // Safe access to internal member.
-    ResetableGuard aAccessGuard( m_aAccessLock );
+    ::osl::MutexGuard aAccessGuard( m_aAccessLock );
 
     #ifdef ENABLE_MUTEXDEBUG
     LOG_ASSERT2( m_nTransactionCount<0, "TransactionManager::acquire()", "Wrong ref count detected!" )
@@ -274,21 +276,22 @@ void SAL_CALL TransactionManager::acquire( EExceptionMode eMode, ERejectReason& 
 }
 
 /*-****************************************************************************************************//**
+    @interface  ITransactionManager
     @short      finish transaction
     @descr      A guard should call this method to release current transaction.
 
-    @seealso    method acquire()
+    @seealso    method registerTransaction()
 
     @param      -
     @return     -
 
     @onerror    -
 *//*-*****************************************************************************************************/
-void SAL_CALL TransactionManager::release()
+void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeException, css::lang::DisposedException )
 {
     // This call could not rejected!
     // Safe access to internal member.
-    ResetableGuard aAccessGuard( m_aAccessLock );
+    ::osl::MutexGuard aAccessGuard( m_aAccessLock );
 
     #ifdef ENABLE_MUTEXDEBUG
     LOG_ASSERT2( m_nTransactionCount<=0, "TransactionManager::release()", "Wrong ref count detected!" )
@@ -306,6 +309,7 @@ void SAL_CALL TransactionManager::release()
 }
 
 /*-****************************************************************************************************//**
+    @interface  ITransactionManager
     @short      look for rejected calls
     @descr      Sometimes user need a possibility to get information about rejected calls
                 without starting a transaction!
@@ -317,24 +321,60 @@ void SAL_CALL TransactionManager::release()
 
     @onerror    We return false.
 *//*-*****************************************************************************************************/
-sal_Bool SAL_CALL TransactionManager::isCallRejected( ERejectReason& eReason ) const
+sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
 {
     // This call must safe access to internal member only.
     // Set "possible reason" for return and check reject-state then!
     // User should look for return value first - reason then ...
-    ResetableGuard aAccessGuard( m_aAccessLock );
+    ::osl::MutexGuard aAccessGuard( m_aAccessLock );
     switch( m_eWorkingMode )
     {
         case E_INIT        : eReason = E_UNINITIALIZED ;
-                             break;
+                                break;
         case E_WORK        : eReason = E_NOREASON      ;
-                             break;
+                                break;
         case E_BEFORECLOSE : eReason = E_INCLOSE       ;
-                             break;
+                                break;
         case E_CLOSE       : eReason = E_CLOSED        ;
-                             break;
+                                break;
     }
     return( eReason!=E_NOREASON );
+}
+
+/*-****************************************************************************************************//**
+    @short      return a reference to a static manager
+    @descr      Sometimes we need the global member! (e.g. in our own static methods)
+                We create our own "class global static" member threadsafe.
+                It will be created at first call only!
+                All other requests use these created one then directly.
+
+    @seealso    -
+
+    @param      -
+    @return     A reference to a static member.
+
+    @onerror    No error should occure.
+*//*-*****************************************************************************************************/
+TransactionManager& TransactionManager::getGlobalTransactionManager()
+{
+    // Initialize static member only for one time!
+    static TransactionManager* pManager = NULL;
+    // If these method first called (member not already exist!) ...
+    if( pManager == NULL )
+    {
+        // ... we must create a new one. Protect follow code with the global mutex -
+        // It must be - we create a static variable!
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        // We must check our pointer again - because ... another instance of ouer class could be faster then these one!
+        if( pManager == NULL )
+        {
+            // Create the new manager and set it for return on static variable.
+            static TransactionManager aManager;
+            pManager = &aManager;
+        }
+    }
+    // Return new created or already existing object.
+    return *pManager;
 }
 
 /*-****************************************************************************************************//**
@@ -343,7 +383,7 @@ sal_Bool SAL_CALL TransactionManager::isCallRejected( ERejectReason& eReason ) c
                 We check all combinations of eReason and eExceptionMode and throw right exception with some
                 descriptions for recipient of it.
 
-    @seealso    method acquire()
+    @seealso    method registerTransaction()
     @seealso    enum ERejectReason
     @seealso    enum EExceptionMode
 
@@ -363,7 +403,8 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
                                         {
                                             // Help programmer to find out, why this exception is thrown!
                                             LOG_ERROR( "TransactionManager...", "Owner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!" )
-//                                            throw css::uno::RuntimeException( DECLARE_ASCII("TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!\n" ), css::uno::Reference< css::uno::XInterface >() );
+                                            //ATTENTION: temp. disabled - till all bad code positions are detected and changed! */
+                                            // throw css::uno::RuntimeException( DECLARE_ASCII("TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                         }
                                         break;
             case E_INCLOSE         :    if( eMode == E_HARDEXCEPTIONS )
