@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:10:09 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
@@ -306,8 +304,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
 {
     WW8FormulaCheckBox aFormula(*this);
 
-    if( !pFormImpl )
-        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
+    if (!pFormImpl)
+        pFormImpl = new SwMSConvertControls(mpDocShell, pPaM);
 
     if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
@@ -422,13 +420,11 @@ struct WW8LFOLVL
         nStartAt(1), nLevel(0), bStartAt(1), bFormat(0) {}
 };
 
-typedef std::vector<sal_uInt8> levelsprms;
-
 // in den ListenInfos zu speichernde Daten ///////////////////////////////////
 //
 struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 {
-    std::vector<levelsprms> maParaSprms;
+    std::vector<ww::bytes> maParaSprms;
     WW8aIdSty   aIdSty;          // Style Id's for each level
     WW8aISet    aItemSet;        // Zeichenattribute aus GrpprlChpx
     WW8aCFmt    aCharFmt;        // Zeichen Style Pointer
@@ -454,7 +450,7 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 //
 struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
 {
-    std::vector<levelsprms> maParaSprms;
+    std::vector<ww::bytes> maParaSprms;
     std::vector<WW8LFOLVL> maOverrides;
     SwNumRule* pNumRule;         // Zeiger auf entsprechende Listenvorlage im Writer
                                                      // entweder: Liste in LSTInfos oder eigene Liste
@@ -473,12 +469,17 @@ struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
                                                      //   oder beim Reader-Ende geloescht werden sollte
     BYTE bLSTbUIDSet    :1;// Flag, ob bUsedInDoc in maLSTInfos gesetzt wurde,
                                                      //   und nicht nochmals gesetzt zu werden braucht
-    WW8LFOInfo(const WW8LFO& rLFO)
-        : pNumRule(rLFO.pNumRule), // hier bloss die Parent NumRule
-          nIdLst(rLFO.nIdLst), nLfoLvl(rLFO.nLfoLvl),
-          bOverride(rLFO.nLfoLvl ? true : false), bSimpleList(rLFO.bSimpleList),
-          bUsedInDoc(0), bLSTbUIDSet(0) {}
+    WW8LFOInfo(const WW8LFO& rLFO);
 };
+
+WW8LFOInfo::WW8LFOInfo(const WW8LFO& rLFO)
+    : maParaSprms(WW8ListManager::nMaxLevel),
+    maOverrides(WW8ListManager::nMaxLevel), pNumRule(rLFO.pNumRule),
+    nIdLst(rLFO.nIdLst), nLfoLvl(rLFO.nLfoLvl),
+    bOverride(rLFO.nLfoLvl ? true : false), bSimpleList(rLFO.bSimpleList),
+    bUsedInDoc(0), bLSTbUIDSet(0)
+{
+}
 
 SV_IMPL_PTRARR( WW8LFOInfos, WW8LFOInfo_Ptr );
 
@@ -542,7 +543,7 @@ void lcl_CopyGreaterEight(String &rDest, String &rSrc,
 bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     sal_uInt16 nLevelStyle, bool bSetStartNo,
     std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
-    levelsprms &rParaSprms)
+    ww::bytes &rParaSprms)
 {
     sal_uInt8       aBits1;
     sal_uInt16      nStartNo    = 0;    // Start-Nr. fuer den Writer
@@ -1253,12 +1254,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 memset(&aItemSet, 0,  sizeof( aItemSet ));
                 memset(&aCharFmt, 0,  sizeof( aCharFmt ));
 
-                std::deque<bool> aNotReallyThere;
-                aNotReallyThere.resize(WW8ListManager::nMaxLevel);
-                pLFOInfo->maParaSprms.resize(WW8ListManager::nMaxLevel);
-                pLFOInfo->maOverrides.resize(pLFOInfo->nLfoLvl);
-                sal_uInt8 nLevel;
-                for ( nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
+                std::deque<bool> aNotReallyThere(WW8ListManager::nMaxLevel);
+                sal_uInt8 nLevel = 0;
+                for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     WW8LFOLVL aLFOLVL;
                     bLVLOk = false;
@@ -1474,7 +1472,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     SwNumRule *pRet = pLFOInfo->pNumRule;
 
     bool bRestart(false);
-    USHORT nStart;
+    USHORT nStart(0);
     bool bNewstart(false);
     /*
       Note: If you fiddle with this then you have to make sure that #i18322#
@@ -2100,30 +2098,29 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
     uno::Reference<beans::XPropertySet>& rPropSet)
 {
     awt::Size aRet;
-    const struct CtrlFontMapEntry
+    struct CtrlFontMapEntry
     {
         USHORT nWhichId;
         const sal_Char* pPropNm;
-    }
-    aMapTable [] =
-    {
-        RES_CHRATR_COLOR,           "TextColor",
-        RES_CHRATR_FONT,            "FontName",
-        RES_CHRATR_FONTSIZE,        "FontHeight",
-        RES_CHRATR_WEIGHT,          "FontWeight",
-        RES_CHRATR_UNDERLINE,       "FontUnderline",
-        RES_CHRATR_CROSSEDOUT,      "FontStrikeout",
-        RES_CHRATR_POSTURE,         "FontSlant",
-        0,                          0
     };
-
+    const CtrlFontMapEntry aMapTable[] =
+    {
+        { RES_CHRATR_COLOR,           "TextColor" },
+        { RES_CHRATR_FONT,            "FontName" },
+        { RES_CHRATR_FONTSIZE,        "FontHeight" },
+        { RES_CHRATR_WEIGHT,          "FontWeight" },
+        { RES_CHRATR_UNDERLINE,       "FontUnderline" },
+        { RES_CHRATR_CROSSEDOUT,      "FontStrikeout" },
+        { RES_CHRATR_POSTURE,         "FontSlant" },
+        { 0,                          0 }
+    };
 
     Font aFont;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
         rPropSet->getPropertySetInfo();
 
     uno::Any aTmp;
-    for( const CtrlFontMapEntry* pMap = aMapTable; pMap->nWhichId; ++pMap )
+    for (const CtrlFontMapEntry* pMap = aMapTable; pMap->nWhichId; ++pMap)
     {
         bool bSet = true;
         const SfxPoolItem* pItem = GetFmtAttr( pMap->nWhichId );
