@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 15:48:23 $
+#   last change: $Author: rt $ $Date: 2003-04-17 15:26:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ JAVAFILES = \
     Menu.java \
     MenuItem.java \
     NativeFrame.java \
+    Paragraph.java \
     RadioButton.java \
     ScrollBar.java \
     Separator.java \
