@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-14 11:22:34 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,30 +82,30 @@ Resource RSC_DATASOURCE_TYPES
 {
     String STR_CONNTYPES
     {
-        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:flat:" ;
+        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:" ;
     };
     String STR_CONNUINAMES
     {
-        Text = "Adabas;JDBC;ODBC;dBase;Text" ;
-        Text [ english ] = "Adabas;JDBC;ODBC;dBase;Text" ;
-        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;Text" ;
-        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;Texto";
-        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;Òåêñò";
-        Text[ greek ] = "Adabas;JDBC;ODBC;dBase;Êåßìåíï";
-        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;Tekst";
-        Text[ french ] = "Adabas;JDBC;ODBC;dBase;Texte";
-        Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;Texto";
-        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;Testo";
-        Text[ danish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
-        Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ polish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
-        Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;Ã·½Ä";
-        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ÎÄ×Ö";
-        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;¤å¦r";
-        Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;äÕ";
+        Text = "Adabas;JDBC;ODBC;dBase;ADO;Text" ;
+        Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text" ;
+        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text" ;
+        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto";
+        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò";
+        Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï";
+        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst";
+        Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte";
+        Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto";
+        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo";
+        Text[ danish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst";
+        Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
+        Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst";
+        Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
+        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;Ã·½Ä";
+        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
+        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;ÎÄ×Ö";
+        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;¤å¦r";
+        Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
+        Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;äÕ";
     };
 };
 
@@ -172,6 +172,9 @@ String STR_GENERAL_SDB_ERROR
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/12/14 11:22:34  nf
+ *  Replacement of StarPortal: Sun Webtop
+ *
  *  Revision 1.6  2000/12/14 10:52:01  fs
  *  #81961# added a comment for the translation department
  *
