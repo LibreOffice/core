@@ -8056,3 +8056,5 @@ CreateWindow
 ?SetGraphicManagerTotalCacheSize@SvtCacheOptions@@QAEXJ@Z
 ?SetWriterOLE_Objects@SvtCacheOptions@@QAEXJ@Z
 ?m_nRefCount@SvtCacheOptions@@0JA
+?ImpInsertFormat@SvNumberFormatter@@AAEPAVSvNumberformat@@ABUNumberFormatCode@i18n@star@sun@com@@KEF@Z
+?ImpInsertNewStandardFormat@SvNumberFormatter@@AAEPAVSvNumberformat@@ABUNumberFormatCode@i18n@star@sun@com@@KGEF@Z
