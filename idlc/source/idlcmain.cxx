@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:03:26 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 14:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 using namespace ::rtl;
 
-void SAL_CALL main( int argc, char** argv )
+int SAL_CALL main( int argc, char** argv )
 {
     Options options;
 
