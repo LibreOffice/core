@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforauto.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 14:14:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,21 +95,16 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
 {
 }
 
-ScNumFormatAbbrev::ScNumFormatAbbrev(SvStream& rStream)
-{
-    Load(rStream);
-}
-
 ScNumFormatAbbrev::ScNumFormatAbbrev(ULONG nFormat,
                                      SvNumberFormatter& rFormatter)
 {
     PutFormatIndex(nFormat, rFormatter);
 }
 
-void ScNumFormatAbbrev::Load( SvStream& rStream )
+void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
 {
     USHORT nSysLang, nLang;
-    rStream.ReadByteString( sFormatstring, rStream.GetStreamCharSet() );
+    rStream.ReadByteString( sFormatstring, eByteStrSet );
     rStream >> nSysLang >> nLang;
     eLnge = (LanguageType) nLang;
     eSysLnge = (LanguageType) nSysLang;
@@ -117,9 +112,9 @@ void ScNumFormatAbbrev::Load( SvStream& rStream )
         eSysLnge = Application::GetSettings().GetLanguage();
 }
 
-void ScNumFormatAbbrev::Save( SvStream& rStream ) const
+void ScNumFormatAbbrev::Save( SvStream& rStream, CharSet eByteStrSet ) const
 {
-    rStream.WriteByteString( sFormatstring, rStream.GetStreamCharSet() );
+    rStream.WriteByteString( sFormatstring, eByteStrSet );
     rStream << (USHORT) eSysLnge << (USHORT) eLnge;
 }
 
