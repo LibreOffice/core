@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara_HeaderFooter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 12:00:54 $
+ *  last change:$Date: 2004-01-05 18:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
      * <code>createTestEnvironment()</code>.
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
-        log.println("    disposing xTextDoc ");
+        log.println("    disposing xCalcDoc ");
 
         try {
             action.doAccessibleAction(0);
@@ -185,7 +185,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
             log.println("Dialog already disposed");
         }
 
-        xCalcDoc.dispose();
+        util.DesktopTools.closeDoc(xCalcDoc);
     }
 
     /**
