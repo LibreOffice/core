@@ -135,7 +135,7 @@
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharCombineIsOn#optional"
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharCombinePrefix#optional"
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharCombineSuffix#optional"
-"ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharEmphasize#optional"
+"ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharEmphasis#optional"
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"CharRelief#optional"
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"RubyText#optional"
 "ScCellTextCursor";"com::sun::star::style::CharacterProperties";"RubyAdjust#optional"

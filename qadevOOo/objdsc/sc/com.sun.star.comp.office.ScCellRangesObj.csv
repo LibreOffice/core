@@ -166,7 +166,7 @@
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharCombineIsOn#optional"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharCombinePrefix#optional"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharCombineSuffix#optional"
-"ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharEmphasize#optional"
+"ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharEmphasis#optional"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharRelief#optional"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"RubyText#optional"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"RubyAdjust#optional"
