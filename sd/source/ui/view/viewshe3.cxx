@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-26 10:59:47 $
+ *  last change: $Author: thb $ $Date: 2002-11-22 14:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,9 @@ ErrCode SdViewShell::DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, B
 
     bPrintDirectSelected = FALSE;
 
-    if ( !pPrintDialog && !bSilent && rMarkList.GetMarkCount() || sNewPageRange.Len() )
+    // #105477# Don't show query dialog if print dialog has been shown
+    if ( !pPrintDialog && !bSilent &&
+         (rMarkList.GetMarkCount() || sNewPageRange.Len()) )
     {
         SvxPrtQryBox aQuery( pWindow );
         short nBtn = aQuery.Execute();
