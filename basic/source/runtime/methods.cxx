@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 14:02:47 $
+ *  last change: $Author: ab $ $Date: 2001-05-30 10:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
 #include <osl/time.h>
 #include <unotools/charclass.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <tools/isolang.hxx>
 
 #ifdef OS2
@@ -122,6 +121,8 @@
 #ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
 #endif
+#else
+#include <osl/file.hxx>
 #endif
 
 #ifdef _USE_UNO
@@ -263,27 +264,22 @@ String getFullPath( const String& aRelPath )
     OUString aFileURL;
 
     // #80204 Try first if it already is a valid URL
-    if( utl::LocalFileHelper::IsLocalFile( aRelPath ) )
+    INetURLObject aURLObj( aRelPath );
+    aFileURL = aURLObj.GetMainURL();
+    if( !aFileURL.getLength() )
     {
-        INetURLObject aURLObj( aRelPath );
-        aFileURL = aURLObj.GetMainURL();
-    }
-    else
-    {
-#ifdef TF_FILEURL
         File::getFileURLFromSystemPath( aRelPath, aFileURL );
-#else
-        OUString aUNCStr;
-        FileBase::RC nRet = File::normalizePath( aRelPath, aUNCStr );
-        nRet = File::getFileURLFromNormalizedPath( aUNCStr, aFileURL );
-#endif
     }
+
     return aFileURL;
 }
 
 //*** OSL file access ***
 // Converts possibly relative paths to absolute paths
 // according to the setting done by ChDir/ChDrive
+// #87427 OSL need File URLs, so getFullPathUNC
+// is mapped to getFullPath (inline in runtime.hxx)
+/*
 String getFullPathUNC( const String& aRelPath )
 {
     OUString aNormPath;
@@ -298,23 +294,15 @@ String getFullPathUNC( const String& aRelPath )
     if( aURLObj.GetProtocol() == INET_PROT_FILE )
     {
         OUString aFileURL = aURLObj.GetMainURL();
-#ifdef TF_FILEURL
         aNormPath = aFileURL;
-#else
-        FileBase::RC nRet = File::getNormalizedPathFromFileURL( aFileURL, aNormPath );
-#endif
     }
     else
     {
-#ifdef TF_FILEURL
         File::getFileURLFromSystemPath( aRelPath, aNormPath );
-#else
-        FileBase::RC nRet = File::normalizePath( aRelPath, aNormPath );
-#endif
     }
     return aNormPath;
 }
-
+*/
 
 
 // Sets (virtual) current path for UCB file access
@@ -897,9 +885,9 @@ void implRemoveDirRecursive( const String& aDirPath )
             break;
 
         // Handle flags
-        FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FilePath );
+        FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
         nRet = aItem.getFileStatus( aFileStatus );
-        OUString aPath = aFileStatus.getFilePath();
+        OUString aPath = aFileStatus.getFileURL();
 
         // Directory?
         FileStatus::Type aType = aFileStatus.getFileType();
