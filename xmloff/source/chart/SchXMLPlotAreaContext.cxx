@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-22 11:57:05 $
+ *  last change: $Author: bm $ $Date: 2001-01-08 12:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTAXISASSIGN_HPP_
+#include <com/sun/star/chart/ChartAxisAssign.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
@@ -238,7 +241,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                 mrSeriesAddresses.realloc( nIndex + 1 );
 
                 pContext = new SchXMLSeriesContext( mrImportHelper, GetImport(), rLocalName,
-                                                    mxDiagram, mrSeriesAddresses[ nIndex ],
+                                                    mxDiagram, maAxes, mrSeriesAddresses[ nIndex ],
                                                     nIndex, mnDomainOffset );
             }
             break;
@@ -819,16 +822,19 @@ SchXMLSeriesContext::SchXMLSeriesContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport, const rtl::OUString& rLocalName,
     uno::Reference< chart::XDiagram >& xDiagram,
+    std::vector< SchXMLAxis >& rAxes,
     com::sun::star::chart::ChartSeriesAddress& rSeriesAddress,
     sal_Int32 nSeriesIndex,
     sal_Int32& rDomainOffset ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mxDiagram( xDiagram ),
+        mrAxes( rAxes ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddress( rSeriesAddress ),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( -1 ),
-        mrDomainOffset( rDomainOffset )
+        mrDomainOffset( rDomainOffset ),
+        mpAttachedAxis( NULL )
 {
 }
 
@@ -857,6 +863,19 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 break;
             case XML_TOK_SERIES_LABEL_ADDRESS:
                 mrSeriesAddress.LabelAddress = aValue;
+                break;
+            case XML_TOK_SERIES_ATTACHED_AXIS:
+                {
+                    sal_Int32 nNumOfAxes = mrAxes.size();
+                    for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
+                    {
+                        if( aValue.equals( mrAxes[ nCurrent ].aName ) &&
+                            mrAxes[ nCurrent ].eClass == SCH_XML_AXIS_VALUE )
+                        {
+                            mpAttachedAxis = &( mrAxes[ nCurrent ] );
+                        }
+                    }
+                }
                 break;
             case XML_TOK_SERIES_STYLE_NAME:
                 msAutoStyleName = aValue;
@@ -894,6 +913,27 @@ void SchXMLSeriesContext::EndElement()
 
         if( xProp.is())
         {
+            // attach to correct axis
+            if( mpAttachedAxis )
+            {
+                // assume attachement to primary axis
+                if( mpAttachedAxis->nIndexInCategory > 0 )
+                {
+                    // attach to secondary axis
+                    try
+                    {
+                        uno::Any aAny;
+                        aAny <<= chart::ChartAxisAssign::SECONDARY_Y;
+
+                        xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Axis" )), aAny );
+                    }
+                    catch( beans::UnknownPropertyException )
+                    {
+                        DBG_ERROR( "Couldn't set secondary axis property" );
+                    }
+                }
+            }
+
             const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
             if( pStylesCtxt )
             {
