@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-14 11:56:32 $
+ *  last change: $Author: mt $ $Date: 2001-03-20 17:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,13 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
             {
                 sal_Int16 n;
                 if ( Value >>= n )
-                    pButton->SetState( n ? sal_True : sal_False );
+                {
+                    BOOL b = n ? sal_True : sal_False;
+                    if ( pButton->IsRadioCheckEnabled() )
+                        pButton->Check( b );
+                    else
+                        pButton->SetState( b );
+                }
             }
             break;
             case BASEPROPERTY_AUTOTOGGLE:
