@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
+ *  last change: $Author: mt $ $Date: 2001-11-14 11:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ SfxItemSet ImpEditEngine::GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, 
 
         // CharAttribs...
 
-        if ( nFlags & GETATTRIBS_PARAATTRIBS )
+        if ( nFlags & GETATTRIBS_CHARATTRIBS )
         {
             // Make testing easier...
             pNode->GetCharAttribs().OptimizeRanges( ((ImpEditEngine*)this)->GetEditDoc().GetItemPool() );
