@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-02 07:31:01 $
+ *  last change: $Author: ab $ $Date: 2001-11-16 13:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,7 @@ void SfxObjectShell::InitBasicManager_Impl
     pBasMgrImpl->xScriptCont = xBasicCont;
     pBasMgrImpl->xDialogCont = xDialogCont;
     pBasicManager->SetImpl( pBasMgrImpl );
-
+    pBasicCont->setBasicManager( pBasicManager );
 
     // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen
     StarBASIC *pBas = pImp->pBasicMgr->GetLib(0);
