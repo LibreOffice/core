@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 09:59:25 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 12:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,9 +1085,6 @@ namespace dbaui
     //-------------------------------------------------------------------------
     IMPL_LINK(OGeneralPage, OnDatasourceTypeSelected, ListBox*, _pBox)
     {
-        if (_pBox->IsTravelSelect())
-            return 1L;
-
         // get the type from the entry data
         sal_Int16 nSelected = _pBox->GetSelectEntryPos();
         DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_Int32>(_pBox->GetEntryData(nSelected)));
@@ -1106,6 +1103,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/29 09:59:25  fs
+ *  initial checkin - outsourced the class from commonpages
+ *
  *
  *  Revision 1.0 29.05.01 11:33:18  fs
  ************************************************************************/
