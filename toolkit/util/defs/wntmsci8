@@ -15239,3 +15239,6 @@ _TI2?AVbad_alloc@std@@
 ?iquery@?$Reference@VXScrollBar@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXSpinValue@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXToolkit@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?lcl_getSpinButtonValue@?A0xae5b79b0@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
+?lcl_modifyStyle@?A0xae5b79b0@toolkit@@YAXPAVWindow@@_JE@Z
+?lcl_setSpinButtonValue@?A0xae5b79b0@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
