@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 13:43:00 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 21:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE[ russian ] = "Ïàğàìåòğ 'Ïîêàçàòü èìÿ ïîëÿ' îòìå÷åí.\nÂû õîòèòå íàïå÷àòàòü äîêóìåíò ñ èìåíàìè ïîëÿ?";
     MESSAGE[ polish ] = "Opcja Poka¿ nazwê pola jest uaktywiona.\nCzy chcesz wydrukowaæ ten dokument z nazw¹ pola?";
     MESSAGE[ japanese ] = "µÌß¼®İ‚ÅÌ¨°ÙÄŞ–¼‚ª±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·B\n•¶‘‚ÉÌ¨°ÙÄŞ–¼‚ğˆóü‚µ‚Ü‚·‚©H";
-    MESSAGE[ chinese_traditional ] = "Äæ¦ì¦WºÙ¿ï¶µÁÙ³B©ó¿E¬¡ª¬ºA¡C\n±z­n³s¦PÄæ¦ì¦WºÙ¤@°_¦C¦L³o­ÓÀÉ®×¡S";
+    MESSAGE[ chinese_traditional ] = "Äæ¦ì¦WºÙ¿ï¶µÁÙ³B©ó¨Ï¥Îª¬ºA¡C\n±z­n³s¦PÄæ¦ì¦WºÙ¤@°_¦C¦L³o­ÓÀÉ®×¡S";
     MESSAGE[ arabic ] = "ÇáÎíÇÑ \"ÅÙåÇÑ ÇÓã ÇáÍŞá\" äÔØ.\nåá ÊÑíÏ ØÈÇÚÉ ÇáãÓÊäÏ ÈÃÓãÇÁ ÇáÍŞæá¿";
     MESSAGE[ greek ] = "Ç åğéëïãŞ üíïìá ğåäßïõ åßíáé åíåñãïğïéçìİíç.\nÈİëåôå íá åêôõğùèåß ôï İããñáöï ìáæß ìå ôá ïíüìáôá ôùí ğåäßùí;";
     MESSAGE[ korean ] = "¿É¼Ç¡¡ÇÊµåÀÌ¸§ º¸ÀÌ±â°¡ È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.\nÇÊµå ÀÌ¸§°ú ÇÔ²² ¹®¼­¸¦ ÀÎ¼âÇÏ½Ã°Ú½À´Ï±î?";
@@ -244,7 +244,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE[ russian ] = "Ïğîâåğêà ñïåöèàëüíûõ îáëàñòåé îòêëş÷åíà, Âñå ğàâíî ïğîâåğèòü?";
     MESSAGE[ polish ] = "Sprawdzanie obszarów specjalnych jest wy³¹czone, mimo to sprawdzaæ?";
     MESSAGE[ japanese ] = "“Á•Ê”ÍˆÍ‚ÍµÌ‚É‚È‚Á‚Ä‚¢‚Ü‚·B‚»‚ê‚Å‚àÁª¯¸‚µ‚Ü‚·‚©B";
-    MESSAGE[ chinese_traditional ] = "¯S®í°Ï°ìªºÀË¬d¤w¸g³Q¥¢¬¡¡M±zÁÙ¬O­n°õ¦æ³o­Ó«ü¥O¡S";
+    MESSAGE[ chinese_traditional ] = "¯S®í°Ï°ìªºÀË¬d¤w¸gÃö³¬¡MÁÙ¬O­n°õ¦æ³o­Ó«ü¥O¡S";
     MESSAGE[ arabic ] = "ÊÏŞíŞ ÇáãäÇØŞ ÇáÎÇÕÉ ÛíÑ äÔØ. åá ÊÑíÏ ÇáÊÏŞíŞ ÈÇáÑÛã ãä Ğáß¿";
     MESSAGE[ greek ] = "Ç åğéëïãŞ \"¸ëåã÷ïò åéäéêşí ğåñéï÷şí\" åßíáé áğåíåñãïğïéçìİíç.Èİëåôå íá åëåã÷èïıí êáé áõôİò;";
     MESSAGE[ korean ] = "Æ¯Á¤ÇÑ ¿µ¿ªÀÇ °Ë»ç°¡ ÇØÁ¦µÇ¾ú½À´Ï´Ù. ±×·¡µµ¡¡°Ë»çÇÏ½Ã°Ú½À´Ï±î?";
@@ -385,28 +385,71 @@ InfoBox MSG_ERR_NO_FAX
 {
     MESSAGE = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt." ;
     MESSAGE [ English ] = "No fax printer at Settings/Options/%1/Printer configured." ;
-    Message [ dutch ] = "Geen faxprinter geconfigureerd onder: Extra/Opties/%1/Afdrukken." ;
-    Message [ english_us ] = "No fax printer has been set under Tools/Options/%1/Printing." ;
-    Message [ italian ] = "Nessuna stampante-fax installata in Strumenti/Opzioni/%1/Stampa." ;
-    Message [ spanish ] = "En Herramientas/Opciones/%1/Imprimir no se ha configurado ninguna impresora fax." ;
-    Message [ french ] = "Aucune imprimante (fax) n'a été paramétrée sous Outils/Options/%1/Imprimer" ;
-    Message [ swedish ] = "Ingen faxskrivare inställd under Verktyg/Alternativ/%1/Skriva ut." ;
-    Message [ danish ] = "Der er ingen faxprinter indstillet under Funktioner/Indstillinger/%1/Udskriv." ;
-    Message [ portuguese_brazilian ] = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt." ;
-    Message [ portuguese ] = "Não foi configurada nenhuma impressora para fax em Ferramentas/Opções/%1/Imprimir." ;
-    Message[ polish ] = "Brak ustawienia dla faksu i drukarki pod has³em Narzêdzia/Opcje/%1/Drukuj.";
-    Message[ turkish ] = "Araçlar/Seçenekler/%1/Yazdırma altında faks konfigürasyonu yapılmadı.";
+    Message [ dutch ] = "Geen faxprinter geconfigureerd onder: Extra/Opties/Afdrukken." ;
+    Message [ english_us ] = "No fax printer has been set under Tools/Options/Printing." ;
+    Message [ italian ] = "Nessuna stampante-fax installata in Strumenti/Opzioni/Stampa." ;
+    Message [ spanish ] = "En Herramientas/Opciones/Imprimir no se ha configurado ninguna impresora fax." ;
+    Message [ french ] = "Aucune imprimante (fax) n'a été paramétrée sous Outils/Options/Imprimer" ;
+    Message [ swedish ] = "Ingen faxskrivare inställd under Verktyg/Alternativ/Skriva ut." ;
+    Message [ danish ] = "Der er ingen faxprinter indstillet under Funktioner/Indstillinger/Udskriv." ;
+    Message [ portuguese_brazilian ] = "Kein Fax-Drucker unter Extras/Optionen/Drucken eingestellt." ;
+    Message [ portuguese ] = "Não foi configurada nenhuma impressora para fax em Ferramentas/Opções/Imprimir." ;
+    Message[ polish ] = "Brak ustawienia dla faksu i drukarki pod has³em Narzêdzia/Opcje/Drukuj.";
+    Message[ turkish ] = "Araçlar/Seçenekler/Yazdırma altında faks konfigürasyonu yapılmadı.";
     Message[ language_user1 ] = " ";
+    Message[ russian ] = "Â Ñåğâèñ/Ïàğàìåòğû/Ïå÷àòü ôàêñ-ïğèíòåğ íå óñòàíîâëåí.";
+    Message[ greek ] = "Äåí İ÷åé ïñéóôåß åêôõğùôŞò ãéá Fax óôç äéáäñïìŞ Åñãáëåßá/Åğéëïãİò/%1/Åêôığùóç.";
+    Message[ japanese ] = "mÂ°Ù ¨ µÌß¼®İ ¨ ˆóün‚Å Fax ÌßØİÀ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Message[ korean ] = "µµ±¸/¿É¼Ç/ÀÎ¼âÇÏ¿¡¼­  ÆÑ½º ÇÁ¸°ÅÍ°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Message[ chinese_simplified ] = "ÔÚ¹¤¾ß/Ñ¡Ïî/´òÓ¡»ú´¦Ã»ÓĞÉè¶¨´«Õæ´òÓ¡»ú¡£";
+    Message[ chinese_traditional ] = "¦b¤u¨ã/¿ï¶µ/¾÷¦Lªí¾÷³B¨S¦³³]©w¦C¦L¶Ç¯uªºÅX°Ê³n¥ó¡C";
+    Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ İÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/ØÈÇÚÉ\".";
 };
 String STR_WEBOPTIONS
 {
     TEXT = "HTML-Dokument" ;
     TEXT [ English ] = "HTML document" ;
+    TEXT[ english_us ] = "HTML document";
+    TEXT[ portuguese ] = "HTML document";
+    TEXT[ russian ] = "HTML document";
+    TEXT[ greek ] = "¸ããñáöï HTML";
+    TEXT[ dutch ] = "HTML document";
+    TEXT[ french ] = "HTML document";
+    TEXT[ spanish ] = "HTML document";
+    TEXT[ italian ] = "HTML document";
+    TEXT[ danish ] = "HTML document";
+    TEXT[ swedish ] = "HTML document";
+    TEXT[ polish ] = "HTML document";
+    TEXT[ portuguese_brazilian ] = "HTML document";
+    TEXT[ japanese ] = "HTML document";
+    TEXT[ korean ] = "HTML document";
+    TEXT[ chinese_simplified ] = "HTML document";
+    TEXT[ chinese_traditional ] = "HTML document";
+    TEXT[ turkish ] = "HTML document";
+    TEXT[ arabic ] = "HTML document";
 };
 String STR_TEXTOPTIONS
 {
     TEXT = "Textdokument" ;
     TEXT [ English ] = "Text document" ;
+    TEXT[ english_us ] = "Text document";
+    TEXT[ portuguese ] = "Text document";
+    TEXT[ russian ] = "Text document";
+    TEXT[ greek ] = "¸ããñáöï êåéìİíïõ";
+    TEXT[ dutch ] = "Text document";
+    TEXT[ french ] = "Text document";
+    TEXT[ spanish ] = "Text document";
+    TEXT[ italian ] = "Text document";
+    TEXT[ danish ] = "Text document";
+    TEXT[ swedish ] = "Text document";
+    TEXT[ polish ] = "Text document";
+    TEXT[ portuguese_brazilian ] = "Text document";
+    TEXT[ japanese ] = "Text document";
+    TEXT[ korean ] = "Text document";
+    TEXT[ chinese_simplified ] = "Text document";
+    TEXT[ chinese_traditional ] = "Text document";
+    TEXT[ turkish ] = "Text document";
+    TEXT[ arabic ] = "Text document";
 };
 InfoBox MSG_NOT_FOUND
 {
@@ -427,7 +470,7 @@ InfoBox MSG_NOT_FOUND
     Message[ russian ] = "Ñëîâî íå íàéäåíî.";
     Message[ polish ] = "Szukane has³o nie zosta³o znalezione.";
     Message[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "¨S¦³§ä¨ì©Ò­n·j´Mªº¶µ¥Ø¡C";
+    Message[ chinese_traditional ] = "¨S¦³§ä¨ì©Ò­n·j´Mªº±ø¥Ø¡C";
     Message[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÈíÇäÇÊ ÇáÊí ÊÈÍË ÚäåÇ.";
     Message[ greek ] = "Äåí âñİèçêáí ôá äåäïìİíá ğïõ áíáæçôÜôå.";
     Message[ korean ] = "°Ë»ö¿ë¾î¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
