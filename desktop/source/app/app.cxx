@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:29:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,12 @@
 #include "dispatchwatcher.hxx"
 #include "ssoinit.hxx"
 #include "configinit.hxx"
-#include "javainteractionhandler.hxx"
 #include "lockfile.hxx"
 #include "testtool.hxx"
 #include "checkinstall.hxx"
 #include "cmdlinehelp.hxx"
 #include "userinstall.hxx"
+#include "desktopcontext.hxx"
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -1294,7 +1294,7 @@ void Desktop::Main()
     com::sun::star::uno::ContextLayer layer( com::sun::star::uno::getCurrentContext() );
 
     com::sun::star::uno::setCurrentContext(
-        new JavaContext( com::sun::star::uno::getCurrentContext() ) );
+        new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
     // ----  Startup screen ----
     // OpenSplashScreen();
