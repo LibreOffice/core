@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 14:25:41 $
+ *  last change: $Author: th $ $Date: 2000-11-03 14:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,48 +484,56 @@ void SalGraphics::SetTextColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
+void ImplGetLogFontFromFontSelect( const ImplFontSelectData* pFont,
+                                   LOGFONTW& rLogFont )
+{
+    UniString   aName;
+    if ( pFont->mpFontData )
+        aName = pFont->mpFontData->maName;
+    else
+        aName = pFont->maName.GetToken( 0 );
+
+    UINT nNameLen = aName.Len();
+    if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
+        nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1;
+    memcpy( rLogFont.lfFaceName, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+    rLogFont.lfFaceName[nNameLen] = 0;
+    if ( pFont->mpFontData &&
+         ((pFont->meCharSet == RTL_TEXTENCODING_DONTKNOW) ||
+          ((WIN_BYTE)(pFont->mpFontData->mpSysData) == OEM_CHARSET)) )
+        rLogFont.lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
+    else
+        rLogFont.lfCharSet = ImplCharSetToWin( pFont->meCharSet );
+    rLogFont.lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch );
+    rLogFont.lfPitchAndFamily |= ImplFamilyToWin( pFont->meFamily );
+    rLogFont.lfWeight          = ImplWeightToWin( pFont->meWeight );
+    rLogFont.lfHeight          = (int)-pFont->mnHeight;
+    rLogFont.lfWidth           = (int)pFont->mnWidth;
+    rLogFont.lfUnderline       = 0;
+    rLogFont.lfStrikeOut       = 0;
+    rLogFont.lfItalic          = (pFont->meItalic) != ITALIC_NONE;
+    rLogFont.lfEscapement      = pFont->mnOrientation;
+    rLogFont.lfOrientation     = 0;
+    rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
+    rLogFont.lfQuality         = DEFAULT_QUALITY;
+    if ( pFont->mnOrientation )
+    {
+        rLogFont.lfOutPrecision = OUT_TT_PRECIS;
+        rLogFont.lfClipPrecision |= CLIP_LH_ANGLES;
+    }
+    else
+        rLogFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
+}
+
+// -----------------------------------------------------------------------
+
 USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
 {
     HFONT hNewFont;
     if ( aSalShlData.mbWNT )
     {
-        LOGFONTW    aLogFont;
-        UniString   aName;
-        if ( pFont->mpFontData )
-            aName = pFont->mpFontData->maName;
-        else
-            aName = pFont->maName.GetToken( 0 );
-
-        UINT nNameLen = aName.Len();
-        if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
-            nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
-        memcpy( aLogFont.lfFaceName, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-        aLogFont.lfFaceName[nNameLen] = 0;
-        if ( pFont->mpFontData &&
-             ((pFont->meCharSet == RTL_TEXTENCODING_DONTKNOW) ||
-              ((WIN_BYTE)(pFont->mpFontData->mpSysData) == OEM_CHARSET)) )
-            aLogFont.lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
-        else
-            aLogFont.lfCharSet = ImplCharSetToWin( pFont->meCharSet );
-        aLogFont.lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch );
-        aLogFont.lfPitchAndFamily |= ImplFamilyToWin( pFont->meFamily );
-        aLogFont.lfWeight          = ImplWeightToWin( pFont->meWeight );
-        aLogFont.lfHeight          = (int)-pFont->mnHeight;
-        aLogFont.lfWidth           = (int)pFont->mnWidth;
-        aLogFont.lfUnderline       = 0;
-        aLogFont.lfStrikeOut       = 0;
-        aLogFont.lfItalic          = (pFont->meItalic) != ITALIC_NONE;
-        aLogFont.lfEscapement      = pFont->mnOrientation;
-        aLogFont.lfOrientation     = 0;
-        aLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
-        aLogFont.lfQuality         = DEFAULT_QUALITY;
-        if ( pFont->mnOrientation )
-        {
-            aLogFont.lfOutPrecision = OUT_TT_PRECIS;
-            aLogFont.lfClipPrecision |= CLIP_LH_ANGLES;
-        }
-        else
-            aLogFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
+        LOGFONTW aLogFont;
+        ImplGetLogFontFromFontSelect( pFont, aLogFont );
 
         // Auf dem Bildschirm nehmen wir Courier New, wenn Courier nicht
         // skalierbar ist und wenn der Font skaliert oder rotiert werden

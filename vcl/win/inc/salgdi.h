@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: th $ $Date: 2000-11-03 14:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <sv.h>
 #endif
 
+struct ImplFontSelectData;
+
 // -----------
 // - Defines -
 // -----------
@@ -122,6 +124,8 @@ void    ImplSalInitGraphics( SalGraphicsData* mpData );
 void    ImplSalDeInitGraphics( SalGraphicsData* mpData );
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( SalColor nSalColor );
+void    ImplGetLogFontFromFontSelect( const ImplFontSelectData* pFont,
+                                      LOGFONTW& rLogFont );
 
 // -----------
 // - Defines -
