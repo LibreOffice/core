@@ -22,8 +22,8 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjCtrl" toolbar:visible="false" toolbar:helpid="52823"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false" toolbar:helpid="10593"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex" toolbar:text="Insert Index" toolbar:helpid="21420"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex" toolbar:helpid="21420"/>
  <toolbar:toolbaritem xlink:href=".uno:EditGlossary"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:text="Insert Note" toolbar:helpid="20329"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertBookmark" toolbar:helpid="20302"/>
 </toolbar:toolbar>
