@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 08:46:09 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 13:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,13 +139,21 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
-
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
@@ -166,6 +174,7 @@ namespace dbtools
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::task;
 //==============================================================================
 //==============================================================================
 //------------------------------------------------------------------
@@ -308,9 +317,56 @@ Reference< XConnection> getConnection(
             const ::rtl::OUString& _rsPwd,
             const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    Reference< XDataSource> xDataSource( getDataSource(_rsTitleOrPath, _rxFactory) );
-    if (xDataSource.is())
-        return xDataSource->getConnection(_rsUser, _rsPwd);
+    try
+    {
+        Reference< XDataSource> xDataSource( getDataSource(_rsTitleOrPath, _rxFactory) );
+        if (xDataSource.is())
+        {
+            Reference<XConnection> xConnection;  // supports the service sdb::connection
+            // do it with interaction handler
+            if(!_rsUser.getLength() || !_rsPwd.getLength())
+            {
+                Reference<XPropertySet> xProp(xDataSource,UNO_QUERY);
+                ::rtl::OUString sPwd, sUser;
+                sal_Bool bPwdReq = sal_False;
+                try
+                {
+                    xProp->getPropertyValue(::rtl::OUString::createFromAscii("Password")) >>= sPwd;
+                    bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString::createFromAscii("IsPasswordRequired")));
+                    xProp->getPropertyValue(::rtl::OUString::createFromAscii("User")) >>= sUser;
+                }
+                catch(Exception&)
+                {
+                    OSL_ENSHURE(0,"dbtools::calcConnection: error while retrieving data source properties!");
+                }
+                if(bPwdReq && !sPwd.getLength())
+                {   // password required, but empty -> connect using an interaction handler
+                    Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
+                    if (xConnectionCompletion.is())
+                    {   // instantiate the default SDB interaction handler
+                        Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
+                        if (!xHandler.is())
+                        {
+                            OSL_ENSHURE(0,"dbtools::getConnection service com.sun.star.sdb.InteractionHandler not available!");
+                                // TODO: a real parent!
+                        }
+                        else
+                        {
+                            xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
+                        }
+                    }
+                }
+                else
+                    xConnection = xDataSource->getConnection(sUser, sPwd);
+            }
+            if(!xConnection.is()) // try to get one if not already have one, just to make sure
+                xConnection = xDataSource->getConnection(_rsUser, _rsPwd);
+            return xConnection;
+        }
+    }
+    catch(Exception&)
+    {
+    }
 
     return Reference< XConnection>();
 }
@@ -1076,6 +1132,7 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     return nSearchFlag;
 }
 
+
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
@@ -1084,6 +1141,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/11/09 08:46:09  oj
+ *  some new methods for db's
+ *
  *  Revision 1.6  2000/11/08 15:34:01  fs
  *  composeTableName corrected
  *
