@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astarray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ using namespace ::rtl;
 AstArray::AstArray(const OString& name, AstType* pType, const ExprList& rDimExpr, AstScope* pScope)
     : AstType(NT_array, name, pScope)
     , m_pType(pType)
-    , m_dimension(rDimExpr.size())
+    , m_dimension((sal_uInt32)(rDimExpr.size()))
     , m_dimExpressions(rDimExpr)
 {
     if ( m_pType )
@@ -77,7 +77,7 @@ AstArray::AstArray(const OString& name, AstType* pType, const ExprList& rDimExpr
 AstArray::AstArray(AstType* pType, const ExprList& rDimExpr, AstScope* pScope)
     : AstType(NT_array, OString("arrary_"), pScope)
     , m_pType(pType)
-    , m_dimension(rDimExpr.size())
+    , m_dimension((sal_uInt32)(rDimExpr.size()))
     , m_dimExpressions(rDimExpr)
 {
     if ( m_pType )
