@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.33 2001-04-04 14:50:40 dvo Exp $
+	$Id: style.mod,v 1.34 2001-04-20 13:21:26 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -146,6 +146,7 @@
 <!ATTLIST style:properties fo:text-transform (none|lowercase|
 											  uppercase|capitalize) #IMPLIED>
 <!ATTLIST style:properties fo:color %color; #IMPLIED>
+<!ATTLIST style:properties style:use-window-color %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-outline %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-crossing-out
 						   (none|single-line|double-line|thick-line|slash|X)
@@ -193,6 +194,8 @@
 <!ATTLIST style:properties fo:font-style %fontStyle; #IMPLIED>
 <!ATTLIST style:properties style:font-style-asian %fontStyle; #IMPLIED>
 <!ATTLIST style:properties style:font-style-complex %fontStyle; #IMPLIED>
+<!ENTITY % fontRelief "(none|embossed|engraved)">
+<!ATTLIST style:properties style:font-relief %fontRelief; #IMPLIED>
 <!ATTLIST style:properties fo:text-shadow CDATA #IMPLIED>
 <!ATTLIST style:properties style:text-underline
 						   (none|single|double|dotted|dash|long-dash|dot-dash|
@@ -218,6 +221,9 @@
 <!ATTLIST style:properties style:text-combine-start-char %character; #IMPLIED>
 <!ATTLIST style:properties style:text-combine-end-char %character; #IMPLIED>
 <!ATTLIST style:properties style:text-emphasize CDATA #IMPLIED>
+<!ATTLIST style:properties style:text-scale %percentage; #IMPLIED>
+<!ATTLIST style:properties style:text-rotation-angle %integer; #IMPLIED>
+<!ATTLIST style:properties style:text-rotation-scale (fixed|line-height) #IMPLIED>
 
 <!-- paragraph properties -->
 <!ENTITY % nonNegativeLengthOrPercentageOrNormal "CDATA">

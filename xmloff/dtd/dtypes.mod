@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.12 2001-01-18 14:40:19 cl Exp $
+	$Id: dtypes.mod,v 1.13 2001-04-20 13:21:26 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -135,6 +135,9 @@
 <!-- a length or a percentage -->
 <!ENTITY % lengthOrPercentage	"CDATA">
 <!ENTITY % positiveLengthOrPercentage	"CDATA">
+
+<!-- a pixel length (i.e. 2px) -->
+<!ENTITY % nonNegativePixelLength	"CDATA">
 
 <!-- a float or a percentage -->
 <!ENTITY % floatOrPercentage	"CDATA">

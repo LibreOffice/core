@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.42 2001-03-30 14:18:59 dvo Exp $
+	$Id: drawing.mod,v 1.43 2001-04-20 13:21:26 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -394,6 +394,18 @@
 <!ATTLIST style:properties draw:show-unit %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:placing (below|above) #IMPLIED>
 <!ATTLIST style:properties draw:parallel %boolean; #IMPLIED>
+
+<!-- frame attributes -->
+<!ATTLIST style:properties draw:frame-display-scrollbar %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:frame-display-border %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:frame-margin-horizontal %nonNegativePixelLength; #IMPLIED>
+<!ATTLIST style:properties draw:frame-margin-vertical %nonNegativePixelLength; #IMPLIED>
+
+<!-- ole object attributes -->
+<!ATTLIST style:properties draw:visible-area-left %nonNegativeLength; #IMPLIED>
+<!ATTLIST style:properties draw:visible-area-top %nonNegativeLength; #IMPLIED>
+<!ATTLIST style:properties draw:visible-area-width %positiveLength; #IMPLIED>
+<!ATTLIST style:properties draw:visible-area-height %positiveLength; #IMPLIED>
 
 <!-- Animations -->
 <!ELEMENT presentation:sound EMPTY>
