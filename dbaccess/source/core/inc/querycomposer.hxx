@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:14:35 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
@@ -116,29 +113,6 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace dbaccess
 {
-    struct FilterCreator : public ::std::unary_function< ::rtl::OUString, void>
-    {
-        ::rtl::OUString m_sFilter;
-
-        FilterCreator(){}
-
-        void operator() (const ::rtl::OUString& lhs)
-        {
-            append(lhs);
-        }
-
-        void append(const ::rtl::OUString& lhs)
-        {
-            if ( lhs.getLength() )
-            {
-                if ( m_sFilter.getLength() )
-                    m_sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-                m_sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("( ")) + lhs;
-                m_sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
-            }
-        }
-    };
-
     typedef ::cppu::ImplHelper5<    ::com::sun::star::sdb::XSQLQueryComposer,
                                     ::com::sun::star::sdb::XParametersSupplier,
                                     ::com::sun::star::sdbcx::XTablesSupplier,
@@ -156,8 +130,6 @@ namespace dbaccess
         ::std::vector< ::rtl::OUString>                                                      m_aOrders;
         ::rtl::OUString m_sOrgFilter;
         ::rtl::OUString m_sOrgOrder;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer> m_xAnalyzer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer> m_xAnalyzerHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xComposerHelper;
 
