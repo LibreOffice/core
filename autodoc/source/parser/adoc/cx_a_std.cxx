@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_a_std.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:37:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ void
 Context_AdocStd::SetupStateMachine()
 {
     // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-    const INT16 bas = 0;        // Base-Status
+//  const INT16 bas = 0;        // Base-Status
     const INT16 wht = 1;        // Whitespace-Status
     const INT16 awd = 2;        // Any-Word-Read-Status
 
@@ -295,7 +295,7 @@ Context_AdocStd::SetupStateMachine()
 
     // Tokenfinish-Stati:
     const INT16 finError = 5;
-    const INT16 finIgnore = 6;
+//  const INT16 finIgnore = 6;
     const INT16 finEol = 7;
     const INT16 finEof = 8;
     const INT16 finAnyWord = 9;
@@ -305,7 +305,7 @@ Context_AdocStd::SetupStateMachine()
     const INT16 fof = finEof;
     const INT16 err = finError;
     const INT16 faw = finAnyWord;
-    const INT16 fig = finIgnore;
+//  const INT16 fig = finIgnore;
     const INT16 fwh = finWhitespace;
 
     /// The '0's  will be replaced by calls of AddToken().
