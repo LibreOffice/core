@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 07:52:52 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -1098,7 +1098,7 @@ XMLPageNumberImportContext::XMLPageNumberImportContext(
             sAPI_numbering_type)),
         sPropertyOffset(RTL_CONSTASCII_USTRINGPARAM(sAPI_offset)),
         sNumberFormat(),
-        sNumberSync(RTL_CONSTASCII_USTRINGPARAM(sXML_false)),
+        sNumberSync(GetXMLToken(XML_FALSE)),
         nPageAdjust(0),
         eSelectPage(PageNumberType_CURRENT),
         sNumberFormatOK(sal_False)
@@ -1226,17 +1226,28 @@ void XMLPlaceholderFieldImportContext::ProcessAttribute(
 
     case XML_TOK_TEXTFIELD_PLACEHOLDER_TYPE:
         bValid = sal_True;
-        if (0 == sAttrValue.compareToAscii(sXML_table)) {
+        if (IsXMLToken(sAttrValue, XML_TABLE))
+        {
             nPlaceholderType = PlaceholderType::TABLE;
-        } else if (0 == sAttrValue.compareToAscii(sXML_text)) {
+        }
+        else if (IsXMLToken(sAttrValue, XML_TEXT))
+        {
             nPlaceholderType = PlaceholderType::TEXT;
-        } else if (0 == sAttrValue.compareToAscii(sXML_text_box)) {
+        }
+        else if (IsXMLToken(sAttrValue, XML_TEXT_BOX))
+        {
             nPlaceholderType = PlaceholderType::TEXTFRAME;
-        } else if (0 == sAttrValue.compareToAscii(sXML_image)) {
+        }
+        else if (IsXMLToken(sAttrValue, XML_IMAGE))
+        {
             nPlaceholderType = PlaceholderType::GRAPHIC;
-        } else if (0 == sAttrValue.compareToAscii(sXML_object)) {
+        }
+        else if (IsXMLToken(sAttrValue, XML_OBJECT))
+        {
             nPlaceholderType = PlaceholderType::OBJECT;
-        } else {
+        }
+        else
+        {
             bValid = sal_False;
         }
         break;
@@ -1684,7 +1695,7 @@ XMLDatabaseNumberImportContext::XMLDatabaseNumberImportContext(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_numbering_type)),
         sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM(sAPI_set_number)),
         sNumberFormat('1'),
-        sNumberSync(RTL_CONSTASCII_USTRINGPARAM(sXML_false)),
+        sNumberSync(GetXMLToken(XML_FALSE)),
         nValue(0),
         bValueOK(sal_False)
 {
@@ -2974,7 +2985,7 @@ SvXMLImportContext * XMLDdeFieldDeclsImportContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (0 == rLocalName.compareToAscii(sXML_dde_connection_decl)) )
+         (IsXMLToken(rLocalName, XML_DDE_CONNECTION_DECL)) )
     {
         return new XMLDdeFieldDeclImportContext(GetImport(), nPrefix,
                                                 rLocalName, aTokenMap);
@@ -3008,8 +3019,7 @@ XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_is_automatic_update))
 {
     DBG_ASSERT(XML_NAMESPACE_TEXT == nPrfx, "wrong prefix");
-    DBG_ASSERT(0 == sLocalName.compareToAscii(sXML_dde_connection_decl),
-               "wrong name");
+    DBG_ASSERT(IsXMLToken(sLocalName, XML_DDE_CONNECTION_DECL), "wrong name");
 }
 
 void XMLDdeFieldDeclImportContext::StartElement(
@@ -3308,42 +3318,34 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
     bValid = sal_True;
 }
 
-// TODO: this is the same map as is used in XMLSectionExport; we need only one copy.
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
+// TODO: this is the same map as is used in the text field export
+SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
 {
-    { XML_ADDRESS,              BibliographyDataField::ADDRESS },
-    { XML_ANNOTE,               BibliographyDataField::ANNOTE },
-    { XML_AUTHOR,               BibliographyDataField::AUTHOR },
-    { XML_BIBILIOGRAPHIC_TYPE,  BibliographyDataField::BIBILIOGRAPHIC_TYPE },
-    { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
-    { XML_CHAPTER,              BibliographyDataField::CHAPTER },
-    { XML_CUSTOM1,              BibliographyDataField::CUSTOM1 },
-    { XML_CUSTOM2,              BibliographyDataField::CUSTOM2 },
-    { XML_CUSTOM3,              BibliographyDataField::CUSTOM3 },
-    { XML_CUSTOM4,              BibliographyDataField::CUSTOM4 },
-    { XML_CUSTOM5,              BibliographyDataField::CUSTOM5 },
-    { XML_EDITION,              BibliographyDataField::EDITION },
-    { XML_EDITOR,               BibliographyDataField::EDITOR },
-    { XML_HOWPUBLISHED,         BibliographyDataField::HOWPUBLISHED },
-    { XML_IDENTIFIER,           BibliographyDataField::IDENTIFIER },
-    { XML_INSTITUTION,          BibliographyDataField::INSTITUTION },
-    { XML_ISBN,                 BibliographyDataField::ISBN },
-    { XML_JOURNAL,              BibliographyDataField::JOURNAL },
-    { XML_MONTH,                BibliographyDataField::MONTH },
-    { XML_NOTE,                 BibliographyDataField::NOTE },
-    { XML_NUMBER,               BibliographyDataField::NUMBER },
-    { XML_ORGANIZATIONS,        BibliographyDataField::ORGANIZATIONS },
-    { XML_PAGES,                BibliographyDataField::PAGES },
-    { XML_PUBLISHER,            BibliographyDataField::PUBLISHER },
-    { XML_REPORT_TYPE,          BibliographyDataField::REPORT_TYPE },
-    { XML_SCHOOL,               BibliographyDataField::SCHOOL },
-    { XML_SERIES,               BibliographyDataField::SERIES },
-    { XML_TITLE,                BibliographyDataField::TITLE },
-    { XML_URL,                  BibliographyDataField::URL },
-    { XML_VOLUME,               BibliographyDataField::VOLUME },
-    { XML_YEAR,                 BibliographyDataField::YEAR },
+    { XML_ARTICLE,          BibliographyDataType::ARTICLE },
+    { XML_BOOK,             BibliographyDataType::BOOK },
+    { XML_BOOKLET,          BibliographyDataType::BOOKLET },
+    { XML_CONFERENCE,       BibliographyDataType::CONFERENCE },
+    { XML_CUSTOM1,          BibliographyDataType::CUSTOM1 },
+    { XML_CUSTOM2,          BibliographyDataType::CUSTOM2 },
+    { XML_CUSTOM3,          BibliographyDataType::CUSTOM3 },
+    { XML_CUSTOM4,          BibliographyDataType::CUSTOM4 },
+    { XML_CUSTOM5,          BibliographyDataType::CUSTOM5 },
+    { XML_EMAIL,            BibliographyDataType::EMAIL },
+    { XML_INBOOK,           BibliographyDataType::INBOOK },
+    { XML_INCOLLECTION,     BibliographyDataType::INCOLLECTION },
+    { XML_INPROCEEDINGS,    BibliographyDataType::INPROCEEDINGS },
+    { XML_JOURNAL,          BibliographyDataType::JOURNAL },
+    { XML_MANUAL,           BibliographyDataType::MANUAL },
+    { XML_MASTERSTHESIS,    BibliographyDataType::MASTERSTHESIS },
+    { XML_MISC,             BibliographyDataType::MISC },
+    { XML_PHDTHESIS,        BibliographyDataType::PHDTHESIS },
+    { XML_PROCEEDINGS,      BibliographyDataType::PROCEEDINGS },
+    { XML_TECHREPORT,       BibliographyDataType::TECHREPORT },
+    { XML_UNPUBLISHED,      BibliographyDataType::UNPUBLISHED },
+    { XML_WWW,              BibliographyDataType::WWW },
     { XML_TOKEN_INVALID, 0 }
 };
+
 
 // we'll process attributes on our own and forfit the standard
 // tecfield mechanism, because our attributes have zero overlp with
@@ -3367,12 +3369,12 @@ void XMLBibliographyFieldImportContext::StartElement(
             Any aAny;
 
             // special treatment for bibliographic type
-            if (sLocalName.equalsAsciiL(sXML_bibiliographic_type,
-                                        sizeof(sXML_bibiliographic_type)-1))
+            if (IsXMLToken(sLocalName, XML_BIBILIOGRAPHIC_TYPE))
             {
                 sal_uInt16 nTmp;
-                if (SvXMLUnitConverter::convertEnum(nTmp, sLocalName,
-                                                    aBibliographyDataFieldMap))
+                if (SvXMLUnitConverter::convertEnum(
+                    nTmp, xAttrList->getValueByIndex(i),
+                    aBibliographyDataTypeMap))
                 {
                     aAny <<= (sal_Int16)nTmp;
                     aValue.Value = aAny;
@@ -3423,129 +3425,127 @@ const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
 {
     sal_Char* pName = NULL;
 
-    if (sName.equalsAsciiL(sXML_identifier, sizeof(sXML_identifier)-1))
+    if (IsXMLToken(sName, XML_IDENTIFIER))
     {
         pName = "Identifier";
     }
-    else if (sName.equalsAsciiL(sXML_bibiliographic_type,
-                                sizeof(sXML_bibiliographic_type)-1))
+    else if (IsXMLToken(sName, XML_BIBILIOGRAPHIC_TYPE))
     {
         pName = "BibiliographicType";
     }
-    else if (sName.equalsAsciiL(sXML_address, sizeof(sXML_address)-1))
+    else if (IsXMLToken(sName, XML_ADDRESS))
     {
         pName = "Address";
     }
-    else if (sName.equalsAsciiL(sXML_annote, sizeof(sXML_annote)-1))
+    else if (IsXMLToken(sName, XML_ANNOTE))
     {
         pName = "Annote";
     }
-    else if (sName.equalsAsciiL(sXML_author, sizeof(sXML_author)-1))
+    else if (IsXMLToken(sName, XML_AUTHOR))
     {
         pName = "Author";
     }
-    else if (sName.equalsAsciiL(sXML_booktitle, sizeof(sXML_booktitle)-1))
+    else if (IsXMLToken(sName, XML_BOOKTITLE))
     {
         pName = "Booktitle";
     }
-    else if (sName.equalsAsciiL(sXML_chapter, sizeof(sXML_chapter)-1))
+    else if (IsXMLToken(sName, XML_CHAPTER))
     {
         pName = "Chapter";
     }
-    else if (sName.equalsAsciiL(sXML_edition, sizeof(sXML_edition)-1))
+    else if (IsXMLToken(sName, XML_EDITION))
     {
         pName = "Edition";
     }
-    else if (sName.equalsAsciiL(sXML_editor, sizeof(sXML_editor)-1))
+    else if (IsXMLToken(sName, XML_EDITOR))
     {
         pName = "Editor";
     }
-    else if (sName.equalsAsciiL(sXML_howpublished,sizeof(sXML_howpublished)-1))
+    else if (IsXMLToken(sName, XML_HOWPUBLISHED))
     {
         pName = "Howpublished";
     }
-    else if (sName.equalsAsciiL(sXML_institution, sizeof(sXML_institution)-1))
+    else if (IsXMLToken(sName, XML_INSTITUTION))
     {
         pName = "Institution";
     }
-    else if (sName.equalsAsciiL(sXML_journal, sizeof(sXML_journal)-1))
+    else if (IsXMLToken(sName, XML_JOURNAL))
     {
         pName = "Journal";
     }
-    else if (sName.equalsAsciiL(sXML_month, sizeof(sXML_month)-1))
+    else if (IsXMLToken(sName, XML_MONTH))
     {
         pName = "Month";
     }
-    else if (sName.equalsAsciiL(sXML_note, sizeof(sXML_note)-1))
+    else if (IsXMLToken(sName, XML_NOTE))
     {
         pName = "Note";
     }
-    else if (sName.equalsAsciiL(sXML_number, sizeof(sXML_number)-1))
+    else if (IsXMLToken(sName, XML_NUMBER))
     {
         pName = "Number";
     }
-    else if (sName.equalsAsciiL(sXML_organizations,
-                                sizeof(sXML_organizations)-1))
+    else if (IsXMLToken(sName, XML_ORGANIZATIONS))
     {
         pName = "Organizations";
     }
-    else if (sName.equalsAsciiL(sXML_pages, sizeof(sXML_pages)-1))
+    else if (IsXMLToken(sName, XML_PAGES))
     {
         pName = "Pages";
     }
-    else if (sName.equalsAsciiL(sXML_publisher, sizeof(sXML_publisher)-1))
+    else if (IsXMLToken(sName, XML_PUBLISHER))
     {
         pName = "Publisher";
     }
-    else if (sName.equalsAsciiL(sXML_school, sizeof(sXML_school)-1))
+    else if (IsXMLToken(sName, XML_SCHOOL))
     {
         pName = "School";
     }
-    else if (sName.equalsAsciiL(sXML_series, sizeof(sXML_series)-1))
+    else if (IsXMLToken(sName, XML_SERIES))
     {
         pName = "Series";
     }
-    else if (sName.equalsAsciiL(sXML_title, sizeof(sXML_title)-1))
+    else if (IsXMLToken(sName, XML_TITLE))
     {
         pName = "Title";
     }
-    else if (sName.equalsAsciiL(sXML_report_type, sizeof(sXML_report_type)-1))
+    else if (IsXMLToken(sName, XML_REPORT_TYPE))
     {
         pName = "Report_Type";
     }
-    else if (sName.equalsAsciiL(sXML_volume, sizeof(sXML_volume)-1))
+    else if (IsXMLToken(sName, XML_VOLUME))
     {
         pName = "Volume";
     }
-    else if (sName.equalsAsciiL(sXML_year, sizeof(sXML_year)-1))
+    else if (IsXMLToken(sName, XML_YEAR))
     {
         pName = "Year";
     }
-    else if (sName.equalsAsciiL(sXML_url, sizeof(sXML_url)-1))
+    else if (IsXMLToken(sName, XML_URL))
     {
         pName = "URL";
     }
-    else if (sName.equalsAsciiL(sXML_custom1, sizeof(sXML_custom1)-1))
+    else if (IsXMLToken(sName, XML_CUSTOM1))
     {
         pName = "Custom1";
     }
-    else if (sName.equalsAsciiL(sXML_custom2, sizeof(sXML_custom2)-1))
+    else if (IsXMLToken(sName, XML_CUSTOM2))
     {
         pName = "Custom2";
     }
-    else if (sName.equalsAsciiL(sXML_custom3, sizeof(sXML_custom3)-1))
+    else if (IsXMLToken(sName, XML_CUSTOM3))
     {
         pName = "Custom3";
     }
-    else if (sName.equalsAsciiL(sXML_custom4, sizeof(sXML_custom4)-1))
+    else if (IsXMLToken(sName, XML_CUSTOM4))
     {
         pName = "Custom4";
     }
-    else if (sName.equalsAsciiL(sXML_custom5, sizeof(sXML_custom5)-1))
+    else if (IsXMLToken(sName, XML_CUSTOM5))
     {
         pName = "Custom5";
     }
-    else if (sName.equalsAsciiL(sXML_isbn, sizeof(sXML_isbn)-1))
+    else if (IsXMLToken(sName, XML_ISBN))
     {
         pName = "ISBN";
     }
@@ -3737,15 +3737,15 @@ void XMLMeasureFieldImportContext::ProcessAttribute(
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_MEASURE_KIND:
-            if( sAttrValue.equalsAsciiL(sXML_value, sizeof(sXML_value)-1))
+            if( IsXMLToken( sAttrValue, XML_VALUE ) )
             {
                 mnKind = 0; bValid = sal_True;
             }
-            else if( sAttrValue.equalsAsciiL(sXML_unit, sizeof(sXML_unit)-1))
+            else if( IsXMLToken( sAttrValue, XML_UNIT ) )
             {
                 mnKind = 1; bValid = sal_True;
             }
-            else if( sAttrValue.equalsAsciiL(sXML_gap, sizeof(sXML_gap)-1))
+            else if( IsXMLToken( sAttrValue, XML_GAP ) )
             {
                 mnKind = 2; bValid = sal_True;
             }
