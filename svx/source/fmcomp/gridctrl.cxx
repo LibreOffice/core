@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-08 15:46:03 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 15:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,12 +569,12 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     if (aOutputFont.GetSize().Height() > nH)
     {
         Font aApplFont = OutputDevice::GetDefaultFont(
-            DEFAULTFONT_UI_FIXED,
+            DEFAULTFONT_SANS_UNICODE,
             Application::GetSettings().GetUILanguage(),
             DEFAULTFONT_FLAGS_ONLYONE,
             this
         );
-        aApplFont.SetSize(Size(0, nH-2));
+        aApplFont.SetSize(Size(0, nH-6));
         m_aAbsolute.SetFont(aApplFont);
 
         aApplFont.SetTransparent( sal_True );
