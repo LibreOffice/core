@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,11 @@
 #ifndef DBAUI_WIZ_TYPESELECT_HXX
 #include "WTypeSelect.hxx"
 #endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
+
+
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -429,6 +434,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                 sal_Bool bCheckOk = CheckColumns(nBreakPos);
                 if ( bOnFirstPage && !bCheckOk )
                 {
+                    showColumnTypeNotSupported(m_vSourceVec[nBreakPos-1]->first);
                     OWizTypeSelect* pPage = reinterpret_cast<OWizTypeSelect*>(GetPage(3));
                     if ( pPage )
                     {
@@ -1116,5 +1122,17 @@ void OCopyTableWizard::fillTypeInfo()
 void OCopyTableWizard::loadData()
 {
     loadData(m_xSourceObject,m_vSourceColumns,m_vSourceVec); // create the field description
+}
+// -----------------------------------------------------------------------------
+=======
+void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName)
+{
+    UniString sTitle(ModuleRes(STR_STAT_WARNING));
+    UniString sMessage(ModuleRes(STR_UNKNOWN_TYPE_FOUND));
+
+    sMessage.SearchAndReplaceAscii("#1",_rColumnName);
+
+    OSQLMessageBox aMsg(this,sTitle,sMessage);
+    aMsg.Execute();
 }
 // -----------------------------------------------------------------------------
