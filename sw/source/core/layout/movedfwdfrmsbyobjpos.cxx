@@ -2,9 +2,9 @@
  *
  *  $RCSfile: movedfwdfrmsbyobjpos.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:08:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,22 @@ void SwMovedFwdFrmsByObjPos::Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
         maMovedFwdFrms.push_back( pNewEntry );
     }
 }
+
+// --> OD 2005-01-12 #i40155#
+void SwMovedFwdFrmsByObjPos::Remove( const SwTxtFrm& _rTxtFrm )
+{
+    std::vector< Entry* >::iterator aIter = maMovedFwdFrms.begin();
+    for ( ; aIter != maMovedFwdFrms.end(); ++aIter )
+    {
+        const Entry* pCurrEntry = *(aIter);
+        if ( pCurrEntry->mpTxtNode == _rTxtFrm.GetTxtNode() )
+        {
+            maMovedFwdFrms.erase( aIter );
+            break;
+        }
+    }
+}
+// <--
 
 bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                                   sal_uInt32& _ornToPageNum ) const
