@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:45:56 $
+ *  last change: $Author: hr $ $Date: 2004-03-12 12:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,9 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
     OTableIndex aReturn;
 
     sal_Int32 nPos = 0;
-    for (   TableIndexListIterator aSearch = _rList.begin();
+
+    TableIndexListIterator aSearch;
+    for (   aSearch = _rList.begin();
             aSearch != _rList.end();
             ++aSearch, ++nPos
         )
