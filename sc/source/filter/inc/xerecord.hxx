@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:45:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ public:
     inline void         SetRecId( sal_uInt16 nRecId ) { mnRecId = nRecId; }
     /** Sets a new record size prediction. */
     inline void         SetRecSize( sal_uInt32 nRecSize ) { mnRecSize = nRecSize; }
+    /** Adds a size value to the record size prediction. */
+    inline void         AddRecSize( sal_uInt32 nRecSize ) { mnRecSize += nRecSize; }
     /** Sets record ID and size with one call. */
     void                SetRecHeader( sal_uInt16 nRecId, sal_uInt32 nRecSize );
 
@@ -255,26 +257,6 @@ private:
     const void*         mpData;         /// The record data.
 };
 
-// ----------------------------------------------------------------------------
-
-/** A record that stores a reference to an existing record object.
-
-    The record object does not take ownership of the passed record. This class
-    should be used to insert an existing record into another record list. This
-    prevents that the list takes ownership of the passed record.
- */
-class XclExpRefRecord : public XclExpRecordBase
-{
-public:
-    inline explicit     XclExpRefRecord( XclExpRecordBase& rRec ) : mrRec( rRec ) {}
-
-    /** Writes the entire record. */
-    virtual void        Save( XclExpStream& rStrm );
-
-protected:
-    XclExpRecordBase&   mrRec;          /// Reference to the record.
-};
-
 // List of records ============================================================
 
 /** A list of Excel record objects.
@@ -294,6 +276,10 @@ public:
     /** Returns pointer to an existing record or 0 on error. */
     inline size_t       Size() const { return maRecs.size(); }
 
+    /** Returns true, if the passed index points to an exiting record. */
+    inline bool         HasRecord( size_t nPos ) const
+                            { return (0 <= nPos) && (nPos < maRecs.size()); }
+
     /** Returns reference to an existing record or empty reference on error. */
     inline const RecordRefType GetRecord( size_t nPos ) const
                             { return (nPos < maRecs.size()) ? maRecs[ nPos ] : RecordRefType(); }
@@ -308,22 +294,31 @@ public:
     inline RecordRefType GetLastRecord()
                             { return maRecs.empty() ? RecordRefType() : maRecs.back(); }
 
-    /** Inserts a new record at the specified position into the list. */
+    /** Inserts a record at the specified position into the list. */
     inline void         InsertRecord( RecordRefType xRec, size_t nPos )
                             { if( xRec.get() ) maRecs.insert( maRecs.begin() + ::std::min( nPos, maRecs.size() ), xRec ); }
-    /** Appends a new record to the list. */
+    /** Appends a record to the list. */
     inline void         AppendRecord( RecordRefType xRec )
                             { if( xRec.get() ) maRecs.push_back( xRec ); }
+    /** Replaces the record at the specified position from the list with the passed record. */
+    inline void         ReplaceRecord( RecordRefType xRec, size_t nPos )
+                            { RemoveRecord( nPos ); InsertRecord( xRec, nPos ); }
+
+    /** Inserts a newly created record at the specified position into the list. */
+    inline void         InsertNewRecord( RecType* pRec, size_t nPos )
+                            { if( pRec ) InsertRecord( RecordRefType( pRec ), nPos ); }
+    /** Appends a newly created record to the list. */
+    inline void         AppendNewRecord( RecType* pRec )
+                            { if( pRec ) AppendRecord( RecordRefType( pRec ) ); }
+    /** Replaces the record at the specified position from the list with the passed newly created record. */
+    inline void         ReplaceNewRecord( RecType* pRec, size_t nPos )
+                            { RemoveRecord( nPos ); InsertNewRecord( pRec, nPos ); }
 
     /** Removes the record at the specified position from the list. */
     inline void         RemoveRecord( size_t nPos )
                             { if( nPos < maRecs.size() ) maRecs.erase( maRecs.begin() + nPos ); }
     /** Removes all records from the list. */
     inline void         RemoveAllRecords() { maRecs.clear(); }
-
-    /** Replaces the record at the specified position from the list with the passed record. */
-    inline void         ReplaceRecord( RecordRefType xRec, size_t nPos )
-                            { RemoveRecord( nPos ); InsertRecord( xRec, nPos ); }
 
     /** Writes the complete record list. */
     virtual void        Save( XclExpStream& rStrm );
