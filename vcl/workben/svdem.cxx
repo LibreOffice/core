@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-23 18:08:12 $
+ *  last change: $Author: th $ $Date: 2001-03-12 15:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,33 +58,21 @@
  *
  *
  ************************************************************************/
+
+#include <sal/main.h>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <event.hxx>
 #include <svapp.hxx>
 #include <wrkwin.hxx>
 #include <msgbox.hxx>
 
-#include <sal/main.h>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 // -----------------------------------------------------------------------
 
+// Forward declaration
 void Main();
-/*
-class MyApp : public Application
-{
-public:
-    void        Main()
-    {
-        ::Main();
-    }
-};
-
-MyApp aMyApp;
-*/
 
 // -----------------------------------------------------------------------
-
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -95,6 +83,7 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
+// -----------------------------------------------------------------------
 
 class MyWin : public WorkWindow
 {
@@ -111,6 +100,7 @@ public:
 };
 
 // -----------------------------------------------------------------------
+
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
