@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 23:01:08 $
+ *  last change: $Author: kz $ $Date: 2001-11-14 00:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ dutch ] = "Basispunt";
         Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
-        Text[ finnish ] = "Base point";
+        Text[ finnish ] = "Peruspiste";
         Text[ italian ] = "Punto base";
         Text[ danish ] = "Base point";
         Text[ swedish ] = "Baspunkt";
@@ -514,7 +514,7 @@ TabPage RID_SVXPAGE_POSITION
     StringList [ finnish ] =
     {
             < "Kappaleeseen" ; > ;
-        < "Merkkin?" ; > ;
+        < "Merkkinä" ; > ;
         < "Sivulle" ; > ;
         < "Kehykseen" ; > ;
     };
@@ -841,14 +841,14 @@ TabPage RID_SVXPAGE_POSITION
     };
     StringList [ finnish ] =
     {
-            < "Ylh??lt?" ; > ;
-        < "Ylh??ll?" ; > ;
+            < "Ylhäältä" ; > ;
+        < "Ylhäällä" ; > ;
         < "Keskitetty" ; > ;
         < "Alhaalla" ; > ;
-        < "Merkin yl?osa" ; > ;
+        < "Merkin yläosa" ; > ;
         < "Merkin keskiosa" ; > ;
         < "Merkin alaosa" ; > ;
-        < "Viivan yl?osa" ; > ;
+        < "Viivan yläosa" ; > ;
         < "Viivan keskiosa" ; > ;
         < "Viivan alaosa" ; > ;
     };
@@ -1014,7 +1014,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ dutch ] = "Basispunt";
         Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
-        Text[ finnish ] = "Base point";
+        Text[ finnish ] = "Peruspiste";
         Text[ italian ] = "Punto base";
         Text[ danish ] = "Base point";
         Text[ swedish ] = "Baspunkt";
@@ -1087,7 +1087,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ turkish ] = "~Eþitle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Igualar";
-        Text[ finnish ] = "~S?ilyt? suhde";
+        Text[ finnish ] = "~Säilytä suhde";
     };
     TriStateBox TSB_PROTECT
     {
@@ -1367,7 +1367,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ dutch ] = "Standaardinstellingen";
         Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
-        Text[ finnish ] = "Presets";
+        Text[ finnish ] = "Esiasetukset";
         Text[ italian ] = "Preimpostazioni";
         Text[ danish ] = "Presets";
         Text[ swedish ] = "Förinställningar";
@@ -1522,7 +1522,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ dutch ] = "Standaardinstellingen";
         Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
-        Text[ finnish ] = "Presets";
+        Text[ finnish ] = "Esiasetukset";
         Text[ italian ] = "Preimpostazioni";
         Text[ danish ] = "Presets";
         Text[ swedish ] = "Förinställningar";
@@ -1552,7 +1552,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ dutch ] = "Draaihoek";
         QuickHelpText[ french ] = "Angle de rotation";
         QuickHelpText[ spanish ] = "Ángulo de rotación";
-        QuickHelpText[ finnish ] = "Angle";
+        QuickHelpText[ finnish ] = "Kiertokulma!";
         QuickHelpText[ italian ] = "Angolo di rotazione";
         QuickHelpText[ danish ] = "Angle";
         QuickHelpText[ swedish ] = "Rotationsvinkel";
@@ -1649,7 +1649,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ turkish ] = "~Çap";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ra~dio";
-        Text[ finnish ] = "~S?de";
+        Text[ finnish ] = "~Säde";
     };
     MetricField MTR_FLD_RADIUS
     {
@@ -1773,7 +1773,7 @@ TabPage RID_SVXPAGE_SLANT
     Text[ turkish ] = "Duruþ eðimi / Köþe çapý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inclinación/Radio de ángulo";
-    Text[ finnish ] = "Kallistus- ja kulmas?de";
+    Text[ finnish ] = "Kallistus- ja kulmasäde";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 TabDialog RID_SVXDLG_TRANSFORM
@@ -1915,7 +1915,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ turkish ] = "Duruþ eðimi / Köþe çapý";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Inclinación/Radio de ángulo";
-                Text[ finnish ] = "Kallistus- ja kulmas?de";
+                Text[ finnish ] = "Kallistus- ja kulmasäde";
             };
         };
     };
@@ -1932,6 +1932,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posición y tamaño";
 };
  // ********************************************************************** EOF
+
 
 
 
