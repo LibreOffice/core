@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:35:31 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 07:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ polish ] = "Nazwa";
         Text[ portuguese_brazilian ] = "Name";
         Text[ japanese ] = "–¼‘O(~N)";
-        Text[ korean ] = "Name";
+        Text[ korean ] = "ÀÌ¸§";
         Text[ chinese_simplified ] = "Ãû³Æ(~M)";
         Text[ chinese_traditional ] = "¦WºÙ";
         Text[ turkish ] = "~Ad";
