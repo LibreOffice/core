@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:16:26 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Type";
-        Text[ japanese ] = "À²Ìß(~T)";
+        Text[ japanese ] = "Ží—Þ(~T)";
         Text[ korean ] = "Å¸ÀÔ(~T)";
         Text[ chinese_simplified ] = "ÀàÐÍ(~T)";
         Text[ chinese_traditional ] = "Ãþ«¬(~T)";
@@ -847,6 +847,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ catalan ] = "Seleccionar fuente de datos";
     Text[ finnish ] = "Valitse tietolähde";
 };
+
 
 
 
