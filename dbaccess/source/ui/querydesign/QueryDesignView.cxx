@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,6 +597,10 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
                 aTmpStr += ::dbtools::quoteName(aQuote,ConvertAlias(rAlias));
                 aTmpStr += ::rtl::OUString('.');
             }
+            // we have to look if we have alias.* here
+            String sTemp = rFieldName;
+            if(sTemp.GetTokenCount('.') == 2)
+                rFieldName = sTemp.GetToken(1,'.');
 
             if(pEntryField->GetTable().getLength() && rFieldName.toChar() != '*')
                 aTmpStr += ::dbtools::quoteName(aQuote, rFieldName).getStr();

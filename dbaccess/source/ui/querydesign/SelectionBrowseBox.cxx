@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:06:46 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,17 +617,10 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
 
                 if (!pWin && (aFieldName.GetTokenCount('.') == 2))
-                {
-                    OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                    if (pTabWinList)
-                    {
-                        OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(aFieldName.GetToken(0, '.'));
-                        if(aIter != pTabWinList->end())
-                            pWin = static_cast<OQueryTableWindow*>(aIter->second);
-                    }
-                }
+                    pWin = static_cast<OQueryTableWindow*>(getDesignView()->getTableView()->GetWindow(aFieldName.GetToken(0, '.')));
 
                 Reference<XPropertySet> xColumn;
+                sal_Bool bAsterix = sal_False;
                 if (pWin)
                 {
                     Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
@@ -635,9 +628,11 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                         ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName.GetToken(1,'.')));
                     else if(xColumns->hasByName(aFieldName))
                         ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
+                    else if(aFieldName.GetTokenCount('.') == 2 && aFieldName.GetToken(1,'.').GetChar(0) == '*')
+                        bAsterix = sal_True;
                 }
 
-                if(!xColumn.is()) // only when text not a column of the table
+                if(!xColumn.is() && !bAsterix) // only when text not a column of the table
                 {
                     ::rtl::OUString aErrorMsg;
                     bIsPredicate = sal_True; // #72670#
@@ -695,8 +690,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     if(!xConnection.is())
                         break;
                     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-                    if(xMetaData->supportsCoreSQLGrammar()
-                        && aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
+                    if(aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
                     {
                         pEntry->SetFunction(::rtl::OUString());
                         m_pFunctionCell->SelectEntryPos(0);
@@ -1896,7 +1890,8 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
             if (aField.GetChar(0) == '*')                   // * durch alias.* ersetzen
             {
                 aField = pEntry->GetAlias();
-                aField += '.';
+                if(aField.Len())
+                    aField += '.';
                 aField += '*';
             }
             aText = aField;

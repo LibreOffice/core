@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:14:35 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,14 +253,20 @@ OQueryController::~OQueryController()
 {
 }
 // -----------------------------------------------------------------------------
-void OQueryController::disposing()
+void OQueryController::deleteIterator()
 {
     if(m_pSqlIterator)
     {
         delete m_pSqlIterator->getParseTree();
         m_pSqlIterator->dispose();
         delete m_pSqlIterator;
+        m_pSqlIterator = NULL;
     }
+}
+// -----------------------------------------------------------------------------
+void OQueryController::disposing()
+{
+    deleteIterator();
 
     delete m_pSqlParser;
     delete m_pParseContext;
@@ -786,6 +792,7 @@ void OQueryController::setQueryComposer()
             }
             OSL_ENSURE(m_xComposer.is(),"No querycomposer available!");
             Reference<XTablesSupplier> xTablesSup(m_xConnection, UNO_QUERY);
+            deleteIterator();
             m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator(xTablesSup->getTables(),m_xConnection->getMetaData(),NULL,m_pSqlParser);
         }
     }
@@ -887,8 +894,7 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
 // -----------------------------------------------------------------------------
 void OQueryController::createNewConnection(sal_Bool _bUI)
 {
-    delete m_pSqlIterator;
-    m_pSqlIterator  = NULL;
+    deleteIterator();
     ::comphelper::disposeComponent(m_xComposer);
 
     OJoinController::createNewConnection(_bUI);

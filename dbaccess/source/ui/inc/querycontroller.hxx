@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 10:18:50 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getQueries();
         // creates the querycomposer
         void setQueryComposer();
+        void deleteIterator();
         void executeQuery();
 
     protected:
