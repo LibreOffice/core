@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:09:21 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,13 @@
  *
  ************************************************************************/
 
+#include "dp_package.hrc"
 #include "dp_backend.h"
 #include "dp_ucb.h"
-#include "dp_platform.h"
-#include "dp_persmap.h"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
+#include "svtools/inettype.hxx"
 #include "comphelper/anytostring.hxx"
 #include "com/sun/star/ucb/XContentAccess.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
@@ -89,80 +89,76 @@ namespace package
 //==============================================================================
 class BackendImpl : public PackageRegistryBackend
 {
-protected:
-    virtual void SAL_CALL disposing();
+    OUString m_strPackageBundle;
 
+protected:
     // PackageRegistryBackend
-    virtual Reference< deployment::XPackage > createPackage(
-        OUString const & url,
-        OUString const & mediaType, OUString const & subType,
-        INetContentTypeParameterList const & params,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+    virtual Reference<deployment::XPackage> bindPackage_(
+        OUString const & url, OUString const & mediaType,
+        Reference<XCommandEnvironment> const & xCmdEnv );
 
 public:
-    ::std::auto_ptr< ::dp_misc::PersistentMap > m_registeredPackages;
-
-    inline BackendImpl(
-        Reference< XComponentContext > const & xComponentContext,
-        OUString const & implName,
-        Sequence< OUString > const & supported_media_types )
+    inline BackendImpl( Reference<XComponentContext> const & xComponentContext,
+                        OUString const & implName,
+                        Sequence<OUString> const & supportedMediaTypes )
         : PackageRegistryBackend(
-            xComponentContext, implName, supported_media_types )
+            xComponentContext, implName, supportedMediaTypes ),
+          m_strPackageBundle( getResourceString(RID_STR_PACKAGE_BUNDLE) )
         {}
-
-    // XInitialization
-    void SAL_CALL initialize( Sequence< Any > const & args )
-        throw (Exception);
-
-    // XPackageRegistry
-    virtual OUString SAL_CALL detectMediaType( OUString const & url )
-        throw (RuntimeException);
 };
 
 //==============================================================================
 class PackageImpl : public ::dp_registry::backend::Package
 {
-    OUString m_name;
-    OUString m_scan_url;
-    bool m_legacy_package;
-    t_Registered m_registered;
+protected:
+    OUString m_scanURL;
+    bool m_legacyPackage;
 
-    Sequence< Reference< deployment::XPackage > > m_composition;
-    bool m_composition_init_success;
-    bool m_composition_init;
-    bool bindComposition(
-        Sequence< Reference< deployment::XPackage > > * pComp,
-        Reference< XCommandEnvironment > const & xCmdEnv );
-    bool bindComposition_(
-        ::std::vector< Reference< deployment::XPackage > > & comp,
-        OUString const & url, Reference< XCommandEnvironment > const & xCmdEnv,
+    Sequence< Reference<deployment::XPackage> > m_bundle;
+    bool m_bundleInit;
+
+    typedef ::std::vector< Reference<deployment::XPackage> > t_packagevec;
+    void scanBundle(
+        t_packagevec & bundle,
+        OUString const & url,
+        ::rtl::Reference<AbortChannel> const & abortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv,
         bool skip_registration = false );
 
-protected:
-    // OPropertySetHelper
-    virtual void SAL_CALL getFastPropertyValue(
-        Any & rValue, sal_Int32 nHandle ) const;
-
     // Package
-    virtual t_Registered getRegStatus(
+    virtual bool isRegistered_(
         ::osl::ResettableMutexGuard & guard,
-        Reference< XCommandEnvironment > const & xCmdEnv );
-    virtual bool processPackage(
-        bool register_package,
+        ::rtl::Reference<AbortChannel> const & abortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
+    virtual void processPackage_(
         ::osl::ResettableMutexGuard & guard,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+        bool registerPackage,
+        ::rtl::Reference<AbortChannel> const & abortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
 
     virtual void SAL_CALL disposing();
 
     inline BackendImpl * getMyBackend() const
-        { return static_cast< BackendImpl * >(m_myBackend.get()); }
+        { return static_cast<BackendImpl *>(m_myBackend.get()); }
+
 public:
-    PackageImpl(
-        ::rtl::Reference< PackageRegistryBackend > const & myBackend,
-        OUString const & url,
-        OUString const & mediaType,
-        OUString const & name,
-        bool legacy_package );
+    PackageImpl( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+                 OUString const & url,
+                 OUString const & mediaType,
+                 OUString const & name,
+                 OUString const & description,
+                 bool legacyPackage );
+
+    // XPackage
+    virtual sal_Bool SAL_CALL isBundle() throw (RuntimeException);
+    virtual Sequence< Reference<deployment::XPackage> > SAL_CALL getBundle(
+        Reference<task::XAbortChannel> const & xAbortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv )
+        throw (deployment::DeploymentException,
+               CommandFailedException, CommandAbortedException,
+               lang::IllegalArgumentException, RuntimeException);
+    virtual Any SAL_CALL getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+        throw (RuntimeException);
 };
 
 //==============================================================================
@@ -173,343 +169,300 @@ OUString SAL_CALL getImplementationName()
 }
 
 //==============================================================================
-Reference< XInterface > SAL_CALL create(
-    Reference< XComponentContext > const & xComponentContext )
+Reference<XInterface> SAL_CALL create(
+    Reference<XComponentContext> const & xComponentContext )
     SAL_THROW( (Exception) )
 {
-    OUString const media_types [] = {
+    OUString const mediaTypes [] = {
         OUSTR("application/vnd.sun.star.uno-package"),
         OUSTR("application/vnd.sun.star.uno-legacy-package")
     };
     return static_cast< ::cppu::OWeakObject * >(
-        new BackendImpl(
-            xComponentContext, getImplementationName(),
-            Sequence< OUString >( media_types, ARLEN(media_types) ) ) );
-}
-
-//______________________________________________________________________________
-void BackendImpl::disposing()
-{
-    // close db:
-    m_registeredPackages.reset(0);
-    PackageRegistryBackend::disposing();
-}
-
-// XInitialization
-//______________________________________________________________________________
-void BackendImpl::initialize( Sequence< Any > const & args )
-    throw (Exception)
-{
-    PackageRegistryBackend::initialize( args );
-    if (getCachePath().getLength() > 0)
-    {
-        m_registeredPackages.reset(
-            new PersistentMap(
-                make_url( getCachePath(), OUSTR("registered_packages.db") ),
-                getComponentContext() ) );
-    }
-}
-
-// XPackageRegistry
-//______________________________________________________________________________
-OUString BackendImpl::detectMediaType( OUString const & url )
-    throw (RuntimeException)
-{
-    ::ucb::Content ucb_content;
-    if (::ucb::Content::create( url, Reference< XCommandEnvironment >(),
-                                ucb_content ))
-    {
-        OUString title( extract_throw< OUString >(
-                            ucb_content.getPropertyValue( OUSTR("Title") ) ) );
-        if (title.endsWithIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
-            return OUSTR("application/vnd.sun.star.uno-package");
-        if (title.endsWithIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".zip") ))
-            return OUSTR("application/vnd.sun.star.uno-legacy-package");
-    }
-    return OUString();
+        new BackendImpl( xComponentContext, getImplementationName(),
+                         Sequence<OUString>(
+                             mediaTypes, ARLEN(mediaTypes) ) ) );
 }
 
 // PackageRegistryBackend
 //______________________________________________________________________________
-Reference< deployment::XPackage > BackendImpl::createPackage(
-    OUString const & url,
-    OUString const & mediaType, OUString const & subType,
-    INetContentTypeParameterList const & params,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+Reference<deployment::XPackage> BackendImpl::bindPackage_(
+    OUString const & url, OUString const & mediaType_,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    ::ucb::Content ucb_content( url, xCmdEnv );
-    OUString name( extract_throw< OUString >(
-                       ucb_content.getPropertyValue( OUSTR("Title") ) ) );
+    OUString mediaType( mediaType_ );
+    if (mediaType.getLength() == 0)
+    {
+        // detect media-type:
+        ::ucb::Content ucbContent;
+        if (create_ucb_content( &ucbContent, url, xCmdEnv ))
+        {
+            OUString title( extract_throw<OUString>(
+                                ucbContent.getPropertyValue(
+                                    OUSTR("Title") ) ) );
+            if (title.endsWithIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
+                mediaType = OUSTR("application/vnd.sun.star.uno-package");
+            else if (title.endsWithIgnoreAsciiCaseAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM(".zip") ))
+                mediaType =
+                    OUSTR("application/vnd.sun.star.uno-legacy-package");
+        }
+        if (mediaType.getLength() == 0)
+            throw lang::IllegalArgumentException(
+                m_strCannotDetectMediaType + url,
+                static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
+    }
 
-    bool legacy_package;
-    if (subType.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.uno-package") ))
+    String type, subType;
+    INetContentTypeParameterList params;
+    if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        legacy_package = false;
+        if (type.EqualsIgnoreCaseAscii("application"))
+        {
+            ::ucb::Content ucbContent( url, xCmdEnv );
+            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.uno-package"))
+            {
+                return new PackageImpl(
+                    this, url, mediaType,
+                    extract_throw<OUString>(
+                        ucbContent.getPropertyValue( OUSTR("Title") ) ),
+                    m_strPackageBundle, false );
+            }
+            else if (subType.EqualsIgnoreCaseAscii(
+                         "vnd.sun.star.uno-legacy-package"))
+            {
+                return new PackageImpl(
+                    this, url, mediaType,
+                    extract_throw<OUString>(
+                        ucbContent.getPropertyValue( OUSTR("Title") ) ),
+                    m_strPackageBundle, true );
+            }
+        }
     }
-    else if (subType.matchIgnoreAsciiCaseAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM(
-                     "vnd.sun.star.uno-legacy-package") ))
-    {
-        legacy_package = true;
-    }
-    else
-    {
-        throw lang::IllegalArgumentException(
-            OUSTR("invalid sub-type given: ") + subType,
-            static_cast< OWeakObject * >(this),
-            static_cast< sal_Int16 >(-1 /* not known */) );
-    }
-    return new PackageImpl(
-        this, url, mediaType, name, legacy_package );
+    throw lang::IllegalArgumentException(
+        m_strUnsupportedMediaType + mediaType,
+        static_cast<OWeakObject *>(this),
+        static_cast<sal_Int16>(-1) );
 }
+
+//##############################################################################
 
 //______________________________________________________________________________
 PackageImpl::PackageImpl(
-    ::rtl::Reference< PackageRegistryBackend > const & myBackend,
+    ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url,
     OUString const & mediaType,
     OUString const & name,
-    bool legacy_package )
-    : Package( myBackend, url, mediaType, name, name /* display-name */,
-               // Description:
-               legacy_package
-               ? OUSTR("Legacy UNO Package Composition")
-               : OUSTR("UNO Package Composition"),
-               true /* has package composition property */ ),
-      m_legacy_package( legacy_package ),
-      m_registered( REG_VOID ),
-      m_composition_init( false ),
-      m_composition_init_success( false )
+    OUString const & description,
+    bool legacyPackage )
+    : Package( myBackend, url, mediaType,
+               name, name /* display-name */, description ),
+      m_legacyPackage( legacyPackage ),
+      m_bundleInit( false )
 {
     ::rtl::OUStringBuffer buf;
-    buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg://") );
-    buf.append( ::rtl::Uri::encode(
-                    url, rtl_UriCharClassRegName,
-                    rtl_UriEncodeIgnoreEscapes,
-                    RTL_TEXTENCODING_UTF8 ) );
-    buf.append( static_cast< sal_Unicode >('/') );
-    m_scan_url = buf.makeStringAndClear();
-}
-
-// OPropertySetHelper
-//______________________________________________________________________________
-void PackageImpl::getFastPropertyValue( Any & rValue, sal_Int32 nHandle ) const
-{
-    // xxx todo: upon disposing() getPropertyValue( URL )...
-//     check();
-    switch (nHandle)
-    {
-    case COMPOSITION:
-    {
-        try
-        {
-            Sequence< Reference< deployment::XPackage > > comp;
-            if (const_cast< PackageImpl * >(this)->bindComposition(
-                    &comp, Reference< XCommandEnvironment >() ))
-            {
-                rValue <<= comp;
-            }
-            else
-            {
-                rValue.clear();
-            }
-        }
-        catch (RuntimeException &)
-        {
-            throw;
-        }
-        catch (Exception &)
-        {
-            Any exc( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetException(
-                OUSTR("caught exception while binding package composition!"),
-                static_cast< OWeakObject * >(
-                    const_cast< PackageImpl * >(this) ), exc );
-        }
-        break;
-    }
-    default:
-        Package::getFastPropertyValue( rValue, nHandle );
-        break;
-    }
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg://") );
+    buf.append( ::rtl::Uri::encode( url, rtl_UriCharClassRegName,
+                                    rtl_UriEncodeIgnoreEscapes,
+                                    RTL_TEXTENCODING_UTF8 ) );
+    buf.append( static_cast<sal_Unicode>('/') );
+    m_scanURL = buf.makeStringAndClear();
 }
 
 //______________________________________________________________________________
 void PackageImpl::disposing()
 {
-    sal_Int32 len = m_composition.getLength();
-    Reference< deployment::XPackage > const * p =
-        m_composition.getConstArray();
+    sal_Int32 len = m_bundle.getLength();
+    Reference<deployment::XPackage> const * p = m_bundle.getConstArray();
     for ( sal_Int32 pos = 0; pos < len; ++pos )
         try_dispose( p[ pos ] );
-    m_composition.realloc( 0 );
+    m_bundle.realloc( 0 );
 
     Package::disposing();
 }
 
 // Package
 //______________________________________________________________________________
-PackageImpl::t_Registered PackageImpl::getRegStatus(
+bool PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & guard,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+    ::rtl::Reference<AbortChannel> const & abortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    BackendImpl * that = getMyBackend();
-    if (m_registered == REG_VOID)
-    {
-        if (that->m_registeredPackages.get() == 0)
-            return REG_VOID;
-        m_registered = REG_NOT_REGISTERED;
-        if (that->m_registeredPackages->has( m_url ))
-            m_registered = REG_REGISTERED;
-    }
-    return m_registered;
-}
+    Sequence< Reference<deployment::XPackage> > bundle(
+        getBundle( abortChannel.get(), xCmdEnv ) );
+    if (bundle.getLength() == 0)
+        throw beans::UnknownPropertyException(
+            OUSTR("registration cannot bet determined: ") + m_url,
+            static_cast<OWeakObject *>(this) );
 
-//______________________________________________________________________________
-bool PackageImpl::processPackage(
-    bool register_package,
-    ::osl::ResettableMutexGuard & guard,
-    Reference< XCommandEnvironment > const & xCmdEnv )
-{
-    BackendImpl * that = getMyBackend();
-    ProgressLevel progress( xCmdEnv );
-    Sequence< Reference< deployment::XPackage > > comp;
-    bool success = bindComposition( &comp, xCmdEnv );
-    if (success)
+    Reference<deployment::XPackage> const * pbundle = bundle.getConstArray();
+    bool ret = true;
+    bool init = false;
+    for ( sal_Int32 pos = bundle.getLength(); pos--; )
     {
-        m_registered = REG_VOID;
-        if (register_package)
+        Reference<deployment::XPackage> const & xPackage = pbundle[ pos ];
+        Reference<task::XAbortChannel> xSubAbortChannel(
+            xPackage->createAbortChannel() );
+        AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
+        bool b = xPackage->isRegistered( xSubAbortChannel, xCmdEnv );
+        if (init)
         {
-            progress.update( m_url + OUSTR(": registering composition...") );
-            sal_Int32 len = comp.getLength();
-            for ( sal_Int32 pos = 0; pos < len; ++pos )
-            {
-                try
-                {
-                    success &= (comp[ pos ]->registerPackage( xCmdEnv )
-                                != sal_False);
-                }
-                catch (deployment::DeploymentException &)
-                {
-                    progress.update( OUSTR("starting rollback...") );
-                    success = true;
-                    while (pos--) // reverse order
-                    {
-                        try
-                        {
-                            comp[ pos ]->revokePackage( xCmdEnv );
-                        }
-                        catch (deployment::DeploymentException & exc)
-                        {
-                            OSL_ENSURE(
-                                0, ::rtl::OUStringToOString(
-                                    ::comphelper::anyToString( makeAny(exc) ),
-                                    RTL_TEXTENCODING_UTF8 ) );
-                            success = false;
-                        }
-                        progress.update(
-                            success
-                            ? OUSTR("rollback finished.")
-                            : OUSTR("rollback failed!") );
-                    }
-                    throw;
-                }
-            }
-            progress.update(
-                m_url + OUSTR(": finished registering composition.") );
-            if (success)
-                m_registered = REG_REGISTERED;
+            if (ret != b)
+                throw beans::UnknownPropertyException(
+                    OUSTR("registration status is ambiguous: ") + m_url,
+                    static_cast<OWeakObject *>(this) );
         }
         else
         {
-            progress.update( m_url + OUSTR(": revoking composition...") );
-            // revoke in reverse order:
-            for ( sal_Int32 pos = comp.getLength(); pos--; )
-            {
-                try
-                {
-                    success &= (comp[ pos ]->revokePackage( xCmdEnv )
-                                != sal_False);
-                }
-                catch (...)
-                {
-                    throw;
-                }
-            }
-            progress.update(
-                m_url + OUSTR(": finished revoking composition.") );
-            if (success)
-                m_registered = REG_NOT_REGISTERED;
+            ret = b;
+            init = true;
         }
     }
-
-    // update persistence:
-    if (that->m_registeredPackages.get() != 0)
-    {
-        if (m_registered == REG_REGISTERED)
-            that->m_registeredPackages->put( m_url, m_mediaType );
-        else if (m_registered == REG_NOT_REGISTERED)
-            that->m_registeredPackages->erase( m_url );
-    }
-
-    return success;
+    return ret;
 }
 
 //______________________________________________________________________________
-bool PackageImpl::bindComposition(
-    Sequence< Reference< deployment::XPackage > > * pComp,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+void PackageImpl::processPackage_(
+    ::osl::ResettableMutexGuard & guard,
+    bool registerPackage,
+    ::rtl::Reference<AbortChannel> const & abortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    if (! m_composition_init)
-    {
-        ProgressLevel progress(
-            xCmdEnv, OUSTR("binding packages composition ") + m_url );
+    Sequence< Reference<deployment::XPackage> > bundle(
+        getBundle( abortChannel.get(), xCmdEnv ) );
+    Reference<deployment::XPackage> const * pbundle = bundle.getConstArray();
 
-        typedef ::std::vector< Reference< deployment::XPackage > > t_packagevec;
-        t_packagevec comp;
-        bool success;
+    if (registerPackage)
+    {
+        sal_Int32 len = bundle.getLength();
+        for ( sal_Int32 pos = 0; pos < len; ++pos )
+        {
+            Reference<deployment::XPackage> const & xPackage = pbundle[ pos ];
+            Reference<task::XAbortChannel> xSubAbortChannel(
+                xPackage->createAbortChannel() );
+            AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
+            xPackage->registerPackage( xSubAbortChannel, xCmdEnv );
+        }
+    }
+    else
+    {
+        // revoke in reverse order:
+        for ( sal_Int32 pos = bundle.getLength(); pos--; )
+        {
+            Reference<deployment::XPackage> const & xPackage = pbundle[ pos ];
+            Reference<task::XAbortChannel> xSubAbortChannel(
+                xPackage->createAbortChannel() );
+            AbortChannel::Chain chain( abortChannel, xSubAbortChannel );
+            pbundle[ pos ]->revokePackage( xSubAbortChannel, xCmdEnv );
+        }
+    }
+}
+
+// XPackage
+//______________________________________________________________________________
+Any PackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+    throw (RuntimeException)
+{
+    OSL_ASSERT( smallIcon );
+    if (smallIcon)
+    {
+        sal_uInt16 ret = highContrast
+            ? RID_IMG_DEF_PACKAGE_BUNDLE_HC : RID_IMG_DEF_PACKAGE_BUNDLE;
+        return makeAny(ret);
+    }
+    return Package::getIcon( highContrast, smallIcon );
+}
+
+//______________________________________________________________________________
+sal_Bool PackageImpl::isBundle() throw (RuntimeException)
+{
+    return true;
+}
+
+//______________________________________________________________________________
+Sequence< Reference<deployment::XPackage> > PackageImpl::getBundle(
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+    throw (deployment::DeploymentException,
+           CommandFailedException, CommandAbortedException,
+           lang::IllegalArgumentException, RuntimeException)
+{
+    if (! m_bundleInit)
+    {
+        t_packagevec bundle;
         try
         {
-            success = bindComposition_( comp, m_scan_url, xCmdEnv );
+            if (m_legacyPackage)
+            {
+                // legacy packages allow script.xlb, dialog.xlb in bundle
+                // root folder:
+                OUString mediaType;
+                // probe for script.xlb:
+                if (create_ucb_content(
+                        0, make_url( m_scanURL, OUSTR("script.xlb") ),
+                        xCmdEnv, false /* no throw */ ))
+                    mediaType = OUSTR("application/vnd.sun.star."
+                                      "basic-script");
+                // probe for dialog.xlb:
+                else if (create_ucb_content(
+                             0, make_url( m_scanURL, OUSTR("dialog.xlb") ),
+                             xCmdEnv, false /* no throw */ ))
+                    mediaType = OUSTR("application/vnd.sun.star."
+                                      "dialog-library");
+                if (mediaType.getLength() > 0)
+                {
+                    Reference<deployment::XPackage> xPackage(
+                        getMyBackend()->getRootRegistry()->bindPackage(
+                            m_scanURL, mediaType, xCmdEnv ) );
+                    OSL_ASSERT( xPackage.is() );
+                    bundle.push_back( xPackage );
+                }
+            }
+            scanBundle( bundle, m_scanURL,
+                        AbortChannel::get(xAbortChannel), xCmdEnv );
         }
-        catch (...) // finally
+        catch (RuntimeException &)
         {
-            {
-            ::osl::MutexGuard guard( getMutex() );
-            if (! m_composition_init)
-            {
-                m_composition_init_success = false;
-                m_composition_init = true;
-            }
-            }
             throw;
+        }
+        catch (CommandFailedException &)
+        {
+            throw;
+        }
+        catch (CommandAbortedException &)
+        {
+            throw;
+        }
+        catch (deployment::DeploymentException &)
+        {
+            throw;
+        }
+        catch (Exception &)
+        {
+            Any exc( ::cppu::getCaughtException() );
+            throw deployment::DeploymentException(
+                OUSTR("error scanning bundle: ") + m_url,
+                static_cast<OWeakObject *>(this), exc );
         }
 
         // sort: schema before config data, typelibs before components:
-        Sequence< Reference< deployment::XPackage > > ret(
-            static_cast< sal_Int32 >(comp.size()) );
-        Reference< deployment::XPackage > * pret = ret.getArray();
+        Sequence< Reference<deployment::XPackage> > ret( bundle.size() );
+        Reference<deployment::XPackage> * pret = ret.getArray();
         sal_Int32 lower_end = 0;
         sal_Int32 upper_end = ret.getLength();
-        t_packagevec::const_iterator iPos( comp.begin() );
-        t_packagevec::const_iterator const iEnd( comp.end() );
-        OUString str_MediaType = OUSTR("MediaType");
+        t_packagevec::const_iterator iPos( bundle.begin() );
+        t_packagevec::const_iterator const iEnd( bundle.end() );
         for ( ; iPos != iEnd; ++iPos )
         {
-            Reference< beans::XPropertySet > xProps( *iPos, UNO_QUERY_THROW );
-            OUString mediaType( extract_throw< OUString >(
-                                    xProps->getPropertyValue(str_MediaType) ) );
-            // xxx todo: normalize media-types?
-            if (mediaType.matchIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "application/vnd.sun.star.uno-component;") ) ||
-                mediaType.matchIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "application/vnd.sun.star.configuration-data") ))
+            OUString mediaType( (*iPos)->getMediaType() );
+            String type, subType;
+            INetContentTypeParameterList params;
+            if (INetContentTypes::parse( mediaType, type, subType, &params ) &&
+                type.EqualsIgnoreCaseAscii("application") &&
+                (subType.EqualsIgnoreCaseAscii(
+                    "vnd.sun.star.uno-component") ||
+                 subType.EqualsIgnoreCaseAscii(
+                     "application/vnd.sun.star.configuration-data")))
             {
                 --upper_end;
                 pret[ upper_end ] = *iPos;
@@ -523,74 +476,100 @@ bool PackageImpl::bindComposition(
         OSL_ASSERT( lower_end == upper_end );
 
         ::osl::MutexGuard guard( getMutex() );
-        if (! m_composition_init)
+        if (! m_bundleInit)
         {
-            m_composition = ret;
-            m_composition_init_success = success;
-            m_composition_init = true;
+            m_bundle = ret;
+            m_bundleInit = true;
         }
     }
-    *pComp = m_composition;
-    return m_composition_init_success;
+    return m_bundle;
 }
 
 //______________________________________________________________________________
-bool PackageImpl::bindComposition_(
-    ::std::vector< Reference< deployment::XPackage > > & comp,
+void PackageImpl::scanBundle(
+    t_packagevec & bundle,
     OUString const & url,
-    Reference< XCommandEnvironment > const & xCmdEnv,
+    ::rtl::Reference<AbortChannel> const & abortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv,
     bool skip_registration )
 {
-    ProgressLevel progress( xCmdEnv, OUSTR("scanning folder ") + url );
-    ::ucb::Content ucb_content( url, xCmdEnv );
+    ::ucb::Content ucbContent( url, xCmdEnv );
 
-    if (m_legacy_package)
+    if (m_legacyPackage)
     {
         // check for platform pathes:
-        OUString title( extract_throw< OUString >(
-                            ucb_content.getPropertyValue( OUSTR("Title") ) ) );
+        OUString title( extract_throw<OUString>(
+                            ucbContent.getPropertyValue( OUSTR("Title") ) ) );
         if (title.endsWithIgnoreAsciiCaseAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(".plt") ))
         {
             if (! platform_fits( title.copy( 0, title.getLength() - 4 ) ))
-            {
-                progress.update( OUSTR("ignoring path ") + url );
-                return true;
-            }
+                return;
         }
 
         if (title.endsWithIgnoreAsciiCaseAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("skip_registration") ))
-        {
             skip_registration = true;
-            progress.update(
-                OUSTR("recognized skip_registration folder: ") + url );
-        }
     }
 
     OUString ar [] = { OUSTR("Title"), OUSTR("IsFolder") };
-    Reference< sdbc::XResultSet > xResultSet(
-        ucb_content.createCursor( Sequence< OUString >( ar, ARLEN(ar) ),
+    Reference<sdbc::XResultSet> xResultSet(
+        ucbContent.createCursor( Sequence<OUString>( ar, ARLEN(ar) ),
                                   ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
-    bool success = true;
     while (xResultSet->next())
     {
-        Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY_THROW );
+        checkAborted( abortChannel );
+
+        Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY_THROW );
         OUString title( xRow->getString( 1 /* Title */ ) );
         OUString path( make_url( url, ::rtl::Uri::encode(
                                      title, rtl_UriCharClassPchar,
                                      rtl_UriEncodeIgnoreEscapes,
                                      RTL_TEXTENCODING_UTF8 ) ) );
-        OUString mediaType;
-        if (m_legacy_package)
+        if (m_legacyPackage)
         {
-            mediaType =
-                m_myBackend->getPackageRegistry()->detectMediaType( path );
+            OUString mediaType;
+            try
+            {
+                Reference<deployment::XPackage> xPackage(
+                    getMyBackend()->getRootRegistry()->bindPackage(
+                        path, OUString(), xCmdEnv ) );
+                OSL_ASSERT( xPackage.is() );
+                mediaType = xPackage->getMediaType();
+
+                if (skip_registration &&
+                    // xxx todo: additional media-type parsing?
+                    mediaType.matchIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM(
+                            "application/vnd.sun.star.uno-component") ))
+                    continue;
+
+                bundle.push_back( xPackage );
+            }
+            catch (lang::IllegalArgumentException &)
+            {
+            }
+            if (mediaType.getLength() == 0 ||
+                // script.xlb, dialog.xlb can be met everywhere:
+                mediaType.matchIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "application/vnd.sun.star.basic-script") ) ||
+                mediaType.matchIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "application/vnd.sun.star.dialog-library") ))
+            {
+                if (xRow->getBoolean( 2 /* IsFolder */ ))
+                {
+                    // recurse into folder:
+                    scanBundle( bundle, path,
+                                abortChannel, xCmdEnv, skip_registration );
+                }
+            }
         }
-        else // ! m_legacy_package
+        else
         {
-            Reference< XContentAccess > xContentAccess(
-                xRow, UNO_QUERY_THROW );
+            OUString mediaType;
+            Reference<XContentAccess> xContentAccess( xRow, UNO_QUERY_THROW );
             ::ucb::Content item( xContentAccess->queryContent(), xCmdEnv );
             try
             {
@@ -599,43 +578,43 @@ bool PackageImpl::bindComposition_(
             catch (beans::UnknownPropertyException &)
             {
             }
-        }
-
-        if (mediaType.getLength() == 0)
-        {
-            if (xRow->getBoolean( 2 /* IsFolder */ ))
+            if (mediaType.getLength() > 0)
             {
-                // recurse into folder:
-                success &= bindComposition_(
-                    comp, path, xCmdEnv, skip_registration );
+                String type, subType;
+                INetContentTypeParameterList params;
+                if (INetContentTypes::parse(
+                        mediaType, type, subType, &params ))
+                {
+                    INetContentTypeParameter const * param = params.find(
+                        ByteString("platform") );
+                    if (param != 0 && !platform_fits( param->m_sValue ))
+                        continue;
+                }
+
+                Reference<deployment::XPackage> xPackage(
+                    getMyBackend()->getRootRegistry()->bindPackage(
+                        path, mediaType, xCmdEnv ) );
+                OSL_ASSERT( xPackage.is() );
+                bundle.push_back( xPackage );
             }
-            // xxx todo: discuss whether it is sensible to ignore files
-            // within .uno.pkg packages that don't have a media-type entry
             else
             {
-                // ignore this item:
-                ProgressLevel progress( xCmdEnv );
-                progress.update(
-                    OUSTR("WARNING: ignoring package item ") + path );
+                if (xRow->getBoolean( 2 /* IsFolder */ ))
+                {
+                    // recurse into folder:
+                    scanBundle( bundle, path,
+                                abortChannel, xCmdEnv, skip_registration );
+                }
+                else
+                {
+                    // ignore this item:
+                    // xxx todo: discuss whether it is sensible to ignore files
+                    // within .uno.pkg packages that don't have a media-type
+                    // entry
+                }
             }
-            continue;
         }
-
-        if (skip_registration &&
-            // xxx todo: additional media-type parsing?
-            mediaType.matchIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "application/vnd.sun.star.uno-component") ))
-            continue; // no components
-
-        Reference< deployment::XPackage > xPackage;
-        bool ret = m_myBackend->getPackageRegistry()->bindPackage(
-            xPackage, path, mediaType, xCmdEnv );
-        success &= ret;
-        if (ret && xPackage.is())
-            comp.push_back( xPackage );
     }
-    return success;
 }
 
 } // namespace package
