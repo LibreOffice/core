@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:43:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@
 #ifndef _CHPFLD_HXX
 #include <chpfld.hxx>
 #endif
+#ifndef _FLDDROPDOWN_HXX
+#include <flddropdown.hxx>
+#endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
@@ -339,6 +342,7 @@ static const ServiceIdResId aServiceToRes[] =
     {RES_HIDDENTXTFLD,  SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                 },
     {RES_AUTHORITY,     SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY                },
     {RES_COMBINED_CHARS,    SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS     },
+    {RES_DROPDOWN,  SW_SERVICE_FIELDTYPE_DROPDOWN                        },
     {RES_TABLEFLD,      SW_SERVICE_FIELDTYPE_TABLE_FORMULA              },
     {USHRT_MAX,         USHRT_MAX                                        }
 };
@@ -534,7 +538,7 @@ USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
     case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY: nRet = PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY; break;
     case SW_SERVICE_FIELDTYPE_DUMMY_0:
     case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS: nRet = PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS; break;
-    case SW_SERVICE_FIELDTYPE_DUMMY_3:
+    case SW_SERVICE_FIELDTYPE_DROPDOWN: nRet = PROPERTY_MAP_FLDTYP_DROPDOWN; break;
     case SW_SERVICE_FIELDTYPE_DUMMY_4:
     case SW_SERVICE_FIELDTYPE_DUMMY_5:
     case SW_SERVICE_FIELDTYPE_DUMMY_6:
@@ -1202,6 +1206,7 @@ struct SwFieldProperties_Impl
     Date            aDate;
     double          fDouble;
     Sequence<PropertyValue> aPropSeq;
+    Sequence<OUString> aStrings;
     util::DateTime* pDateTime;
 
     sal_Int32       nSubType;
@@ -1262,6 +1267,7 @@ sal_Int64 SAL_CALL SwXTextField::getSomething( const uno::Sequence< sal_Int8 >& 
 /*-- 14.12.98 11:37:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
 SwXTextField::SwXTextField(sal_uInt16 nServiceId) :
     pFmtFld(0),
     aLstnrCntnr( (XTextContent*)this),
@@ -1811,6 +1817,16 @@ void SwXTextField::attachToRange(
                             pDoc->GetSysFldType(RES_COMBINED_CHARS),
                             m_pProps->sPar1);
                 break;
+            case SW_SERVICE_FIELDTYPE_DROPDOWN:
+                pFld = new SwDropDownField
+                    ((SwDropDownFieldType *)
+                     pDoc->GetSysFldType(RES_DROPDOWN));
+
+                ((SwDropDownField *) pFld)->SetItems(m_pProps->aStrings);
+                ((SwDropDownField *) pFld)->SetSelectedItem(m_pProps->sPar1);
+                ((SwDropDownField *) pFld)->SetName(m_pProps->sPar2);
+                break;
+
             case SW_SERVICE_FIELDTYPE_TABLE_FORMULA :
             {
 
@@ -2066,6 +2082,9 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         case FIELD_PROP_PROP_SEQ:
             rValue >>= m_pProps->aPropSeq;
             break;
+        case FIELD_PROP_STRINGS:
+            rValue >>= m_pProps->aStrings;
+            break;
         }
         if( pStr )
             ::GetString( rValue, *pStr );
@@ -2178,6 +2197,9 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 break;
             case FIELD_PROP_PROP_SEQ:
                 aRet <<= m_pProps->aPropSeq;
+                break;
+            case FIELD_PROP_STRINGS:
+                aRet <<= m_pProps->aStrings;
                 break;
             }
         }
