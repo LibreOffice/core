@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:47:06 $
+ *  last change: $Author: vg $ $Date: 2001-02-27 14:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ void DlgEdObj::StartPropertyListening()
         if (!m_xListener.is() && xControlModel.is())
         {
             // create listener
-            m_xListener = static_cast<::com::sun::star::beans::XPropertyChangeListener*>( new DlgEdListenerImpl( (DlgEdObj*)this ) );
+            m_xListener = static_cast< ::com::sun::star::beans::XPropertyChangeListener*>( new DlgEdListenerImpl( (DlgEdObj*)this ) );
 
             // register listener to properties
             xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), m_xListener);
