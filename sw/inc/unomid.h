@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 08:51:26 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,4 +143,10 @@
 #define MID_LINE_ADJUST                         4
 #define MID_LINE_TEXT_DIST                      5
 #define MID_LINE_FOOTNOTE_DIST                  6
+
+//SwFmtRuby
+#define MID_RUBY_TEXT           0
+#define MID_RUBY_ADJUST         1
+#define MID_RUBY_CHARSTYLE      2
+
 #endif

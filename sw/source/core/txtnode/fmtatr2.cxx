@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-23 20:21:55 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _UNOEVENT_HXX
 #include <unoevent.hxx>     // SwHyperlinkEventDescriptor
+#endif
+#ifndef _COM_SUN_STAR_TEXT_RUBYADJUST_HDL_
+#include <com/sun/star/text/RubyAdjust.hdl>
 #endif
 
 #ifndef _CMDID_H
@@ -506,71 +509,48 @@ BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
                             BYTE nMemberId ) const
 {
     BOOL bRet = TRUE;
-    XubString sVal;
     switch( nMemberId )
     {
-/*  case MID_URL_URL:
-        sVal = aURL;
+        case MID_RUBY_TEXT: rVal <<= (OUString)sRubyTxt;                    break;
+         case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
+        case MID_RUBY_CHARSTYLE:
+                rVal <<= (OUString)SwXStyleFamilies::GetProgrammaticName(sCharFmtName, SFX_STYLE_FAMILY_CHAR );
         break;
-    case MID_URL_TARGET:
-        sVal = aTargetFrame;
-        break;
-    case MID_URL_HYPERLINKNAME:
-        sVal = aName;
-        break;
-    case MID_URL_VISITED_FMT:
-        sVal = SwXStyleFamilies::GetProgrammaticName( aVisitedFmt,
-                                                    SFX_STYLE_FAMILY_CHAR );
-        break;
-    case MID_URL_UNVISITED_FMT:
-        sVal = SwXStyleFamilies::GetProgrammaticName( aINetFmt,
-                                                    SFX_STYLE_FAMILY_CHAR );
-        break;
-*/
-    default:
-        bRet = FALSE;
-        break;
+        default:
+            bRet = FALSE;
     }
-    rVal <<= OUString(sVal);
     return bRet;
 }
 BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
                             BYTE nMemberId  )
 {
     BOOL bRet;
-    if( rVal.getValueType() == ::getCppuType((rtl::OUString*)0) )
+    switch( nMemberId )
     {
-        bRet = TRUE;
-
-        XubString sVal = *(rtl::OUString*)rVal.getValue();
-        switch( nMemberId )
+        case MID_RUBY_TEXT:
         {
-/*      case MID_URL_URL:
-            aURL = sVal;
-            break;
-        case MID_URL_TARGET:
-            aTargetFrame = sVal;
-            break;
-        case MID_URL_HYPERLINKNAME:
-            aName = sVal;
-            break;
-        case MID_URL_VISITED_FMT:
-            aVisitedFmt = SwXStyleFamilies::GetUIName( sVal,
-                                                    SFX_STYLE_FAMILY_CHAR );
-            nVisitedId = USHRT_MAX;
-            break;
-        case MID_URL_UNVISITED_FMT:
-            aINetFmt = SwXStyleFamilies::GetUIName( sVal,
-                                                    SFX_STYLE_FAMILY_CHAR );
-            nINetId = USHRT_MAX;
-            break;
-*/      default:
-            bRet = FALSE;
-            break;
+            OUString sTmp;
+            bRet = rVal >>= sTmp;
+            sRubyTxt = sTmp;
         }
+        break;
+         case MID_RUBY_ADJUST:
+        {
+            sal_Int16 nSet; rVal >>= nSet;
+            if(nSet >= 0 && nSet < com::sun::star::text::RubyAdjust_INDENT_BLOCK)
+                nAdjustment = nSet;
+            else
+                bRet = sal_False;
+        }
+        break;
+        case MID_RUBY_CHARSTYLE:
+            DBG_ERROR("char style name must be handled outside")
+//          bRet = rVal >>= sTmp;
+//          sCharFmtName <<= SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR );
+        //no break;
+        default:
+            bRet = FALSE;
     }
-    else
-        bRet = FALSE;
     return bRet;
 }
 
