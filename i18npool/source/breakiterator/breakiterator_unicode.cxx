@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:02:14 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <icu/ucmndata.h>
 
 U_CDECL_BEGIN
-extern const char dict_word_brk[], edit_word_brk[], count_word_brk[], line_brk[], dict_word_ca_brk[];
+extern const char dict_word_brk[], edit_word_brk[], count_word_brk[], line_brk[], dict_word_ca_brk[], dict_word_hu_brk[];
 U_CDECL_END
 
 using namespace ::com::sun::star::uno;
@@ -194,6 +194,17 @@ icu::BreakIterator* SAL_CALL BreakIterator_ca::loadICUWordBreakIterator(const la
         if (rWordType == WordType::DICTIONARY_WORD) {
             if (! dictWordBreak)
                 dictWordBreak = loadICURuleBasedBreakIterator(dict_word_ca_brk);
+            return dictWordBreak;
+        } else
+            return BreakIterator_Unicode::loadICUWordBreakIterator(rLocale, rWordType);
+}
+
+icu::BreakIterator* SAL_CALL BreakIterator_hu::loadICUWordBreakIterator(const lang::Locale& rLocale,
+        sal_Int16 rWordType) throw(RuntimeException)
+{
+        if (rWordType == WordType::DICTIONARY_WORD) {
+            if (! dictWordBreak)
+                dictWordBreak = loadICURuleBasedBreakIterator(dict_word_hu_brk);
             return dictWordBreak;
         } else
             return BreakIterator_Unicode::loadICUWordBreakIterator(rLocale, rWordType);
