@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-13 15:41:32 $
+ *  last change: $Author: jp $ $Date: 2001-03-13 15:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,11 +680,7 @@ BOOL SmDocShell::SetData( SvData *pData )
             return TRUE;
         }
     }
-#if SUPD<625
-    return SvObject::SetData( pData );
-#else
-    return FALSE;
-#endif
+    return SvPseudoObject::SetData( pData );
 }
 
 BOOL SmDocShell::SetData( const String& rData )
