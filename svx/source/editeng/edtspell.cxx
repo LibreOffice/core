@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:34:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,14 @@ void __EXPORT EditSpellWrapper::SpellStart( SvxSpellArea eArea )
 {
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
-    sal_Bool bForward = !IsSpellReverse();
+    sal_Bool bForward = sal_True;
 
     if ( eArea == SVX_SPELL_BODY_START )
     {
         // Wird gerufen, wenn
         // a) Spell-Forwad ist am Ende angekomment und soll von vorne beginnen
-        // b) Spell-Backward wird gestartet
         // IsEndDone() liefert auch sal_True, wenn Rueckwaerts-Spelling am Ende gestartet wird!
-        if ( IsEndDone() && bForward )
+        if ( IsEndDone() )
         {
             pSpellInfo->bSpellToEnd = sal_False;
             pSpellInfo->aSpellTo = pSpellInfo->aSpellStart;
@@ -129,9 +128,8 @@ void __EXPORT EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     {
         // Wird gerufen, wenn
         // a) Spell-Forwad wird gestartet
-        // b) Spell-Backward ist am Anfang angekomment und soll von hinten beginnen
         // IsStartDone() liefert auch sal_True, wenn Vorwaerts-Spelling am Anfang gestartet wird!
-        if ( !IsStartDone() || bForward )
+        if ( !IsStartDone() )
         {
             pSpellInfo->bSpellToEnd = sal_True;
             pSpellInfo->aSpellTo = pImpEE->CreateEPaM(
@@ -188,12 +186,7 @@ sal_Bool __EXPORT EditSpellWrapper::SpellMore()
             // Der Text wurde in diese Engine getreten, bei Rueckwaerts
             // muss die Selektion hinten sein.
             Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
-            sal_Bool bIsWrapReverse = IsSpellReverse();
-            if ( bIsWrapReverse )
-                pEditView->GetImpEditView()->SetEditSelection(
-                        pImpEE->GetEditDoc().GetEndPaM() );
-            else
-                pEditView->GetImpEditView()->SetEditSelection(
+            pEditView->GetImpEditView()->SetEditSelection(
                         pImpEE->GetEditDoc().GetStartPaM() );
         }
     }
@@ -253,20 +246,6 @@ void EditSpellWrapper::CheckSpellTo()
             pSpellInfo->aSpellTo.nIndex = aPaM.GetNode()->Len();
     }
 }
-
-BOOL EditSpellWrapper::IsSpellReverse()
-{
-    Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
-    sal_Bool bIsWrapReverse = sal_False;
-    if ( xProp.is() )
-    {
-        Any aVal = xProp->getPropertyValue( OUString(
-                RTL_CONSTASCII_USTRINGPARAM( UPN_IS_WRAP_REVERSE ) ) );
-        aVal >>= bIsWrapReverse;
-    }
-    return bIsWrapReverse;
-}
-
 SV_IMPL_VARARR( WrongRanges, WrongRange );
 
 WrongList::WrongList()
