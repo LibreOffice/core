@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 11:40:17 $
+#   last change: $Author: vg $ $Date: 2001-04-19 13:20:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1129,9 +1129,9 @@ SCPLINKFLAGS=-i $(PAR),$(SOLARPARDIR)
 
 .IF "$(make_srs_deps)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
-RSC=$(SOLARENV)$/$(GUI)$(CPU)$/rscdep
+RSC=rscdep
 .ELSE
-RSC=$(SOLARENV)$/$(OUTPATH)$/bin$/rscdep
+RSC=rscdep
 .ENDIF
 .ELSE
 RSC=rsc
