@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 17:11:09 $
+#   last change: $Author: obo $ $Date: 2004-03-19 12:04:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,11 +173,19 @@ SLOFILES=			$(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/pcrcommon.obj	\
                     $(SLO)$/modulepcr.obj   \
                     $(SLO)$/cellbindinghelper.obj   \
+                    $(SLO)$/taborder.obj   \
+                    $(SLO)$/pcrunodialogs.obj   \
+                    $(SLO)$/unourl.obj   \
+                    $(SLO)$/formlinkdialog.obj   \
+                    $(SLO)$/listselectiondlg.obj   \
 
 
 SRS1NAME=$(TARGET)
 SRC1FILES=			propres.src	 \
-                    formres.src
+                    formres.src \
+                    taborder.src \
+                    formlinkdialog.src \
+                    listselectiondlg.src
 
 RESLIB1NAME=pcr
 RESLIB1SRSFILES= $(SRS)$/pcr.srs
