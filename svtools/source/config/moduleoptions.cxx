@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-25 10:44:06 $
+ *  last change: $Author: dg $ $Date: 2001-06-22 13:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,15 @@ using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_MODULES                    OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office/Modules" ))
 
+#ifdef TF_CFGDATA
+#define PROPERTYNAME_PORTALMATH             OUString(RTL_CONSTASCII_USTRINGPARAM("Math"))
+#define PROPERTYNAME_PORTALCHART            OUString(RTL_CONSTASCII_USTRINGPARAM("Chart"        ))
+#define PROPERTYNAME_PORTALCALC             OUString(RTL_CONSTASCII_USTRINGPARAM("Calc"         ))
+#define PROPERTYNAME_PORTALDRAW             OUString(RTL_CONSTASCII_USTRINGPARAM("Draw"         ))
+#define PROPERTYNAME_PORTALWRITER           OUString(RTL_CONSTASCII_USTRINGPARAM("Writer"       ))
+#define PROPERTYNAME_PORTALIMPRESS          OUString(RTL_CONSTASCII_USTRINGPARAM("Impress"      ))
+#define PROPERTYNAME_PORTALBASICIDE         OUString(RTL_CONSTASCII_USTRINGPARAM("BasicIDE"     ))
+#else
 #define PROPERTYNAME_PORTALMATH             OUString(RTL_CONSTASCII_USTRINGPARAM("Math/Install"         ))
 #define PROPERTYNAME_PORTALCHART            OUString(RTL_CONSTASCII_USTRINGPARAM("Chart/Install"        ))
 #define PROPERTYNAME_PORTALCALC             OUString(RTL_CONSTASCII_USTRINGPARAM("Calc/Install"         ))
@@ -134,6 +143,7 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_PORTALWRITER           OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Install"       ))
 #define PROPERTYNAME_PORTALIMPRESS          OUString(RTL_CONSTASCII_USTRINGPARAM("Impress/Install"      ))
 #define PROPERTYNAME_PORTALBASICIDE         OUString(RTL_CONSTASCII_USTRINGPARAM("BasicIDE/Install"     ))
+#endif
 
 /*TODO:
 
@@ -353,6 +363,35 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     ,   m_nClientModules    ( DEFAULT_CLIENTMODULES )
     ,   m_nPortalModules    ( DEFAULT_PORTALMODULES )
 {
+#ifdef TF_CFGDATA
+
+    Sequence<OUString> aNodeNames = GetNodeNames(OUString());
+    const OUString* pNodeNames = aNodeNames.getConstArray();
+    for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++, pNodeNames++)
+    {
+        if (!IsMath() && PROPERTYNAME_PORTALMATH.equals(*pNodeNames))
+            m_nPortalModules |= ENABLEFEATURE_MATH;
+
+        else if (!IsChart() && PROPERTYNAME_PORTALCHART.equals(*pNodeNames))
+            m_nPortalModules |= ENABLEFEATURE_CHART;
+
+        else if (!IsCalc() && PROPERTYNAME_PORTALCALC.equals(*pNodeNames))
+            m_nPortalModules |= ENABLEFEATURE_CALC;
+
+        else if (!IsImpress() && PROPERTYNAME_PORTALIMPRESS.equals(*pNodeNames))
+            m_nPortalModules |= ENABLEFEATURE_IMPRESS;
+
+        else if (!IsDraw() && PROPERTYNAME_PORTALDRAW.equals(*pNodeNames))
+            m_nPortalModules |= ENABLEFEATURE_DRAW;
+
+        else if (!IsWriter() && PROPERTYNAME_PORTALWRITER.equals(*pNodeNames))
+            m_nPortalModules |= ENABLEFEATURE_WRITER;
+
+        else if (!IsBasicIDE() && PROPERTYNAME_PORTALBASICIDE.equals(*pNodeNames))
+            m_nPortalModules |= ENABLEFEATURE_BASICIDE;
+    }
+
+#else
     // Use our static list of configuration keys to get his values.
     const Sequence< OUString >  seqNames    = impl_GetPropertyNames (           );
     const Sequence< Any >       seqValues   = GetProperties         ( seqNames  );
@@ -368,9 +407,10 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     {
         // Safe impossible cases.
         // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False||seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtModuleOptions_Impl::SvtModuleOptions_Impl()\nInvalid property value detected!\n" );
+    DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False||seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtModuleOptions_Impl::SvtModuleOptions_Impl()\nInvalid property value detected!\n" );
         sal_Bool bState;
         seqValues[nProperty] >>= bState;
+        sal_Bool bState(sal_True);
         switch( nProperty )
         {
 /*TODO: Hack with sversion.ini
@@ -533,7 +573,7 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
             default                             :   DBG_ERRORFILE( "SvtModuleOptions_Impl::SvtModuleOptions_Impl()\nWho has changed my property order mechanism?\n" );
         }
     }
-
+#endif
 /*
  * OBR: disabled the hack with the knowledge of AS:
  *      getProfileName should not be used any more
