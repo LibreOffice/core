@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ namespace configmgr
             osl::MutexGuard     m_aViewLock;
             TreeElement&        m_rTree;
         public:
-            TreeReadGuardImpl(TreeElement& rTree) throw();
+            TreeReadGuardImpl(TreeElement& rTree);
             ~TreeReadGuardImpl() throw ();
         public:
             TreeElement&    get() const { return m_rTree; }
