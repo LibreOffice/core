@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:09 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,9 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     // (eigentlich koennte das auch per Modify am die Nodes propagiert
     // werden !! )
     ULONG nStt = GetNodes().GetEndOfContent().StartOfSectionIndex();
-    for( USHORT n = 0; n < pTxtFmtCollTbl->Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < pTxtFmtCollTbl->Count(); ++n )
     {
         SwTxtFmtColl* pColl = (*pTxtFmtCollTbl)[ n ];
         BYTE nLevel = pColl->GetOutlineLevel();
@@ -828,8 +830,9 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
     ASSERT( pOld, "ohne die alte NumRule geht gar nichts" );
 
     USHORT nChkLevel = 0, nChgFmtLevel = 0, nMask = 1;
+    BYTE n;
 
-    for( BYTE n = 0; n < MAXLEVEL; ++n, nMask <<= 1 )
+    for( n = 0; n < MAXLEVEL; ++n, nMask <<= 1 )
     {
         const SwNumFmt& rOldFmt = pOld->Get( n ),
                       & rNewFmt = rRule.Get( n );
@@ -2130,7 +2133,9 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, BOOL bAutoNum ) const
     }
 
     const SwNumRule* pNumRule;
-    for( USHORT n = 0; n < pNumRuleTbl->Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < pNumRuleTbl->Count(); ++n )
         if( 0 != ( pNumRule = (*pNumRuleTbl)[ n ] ) )
         {
             const String& rNm = pNumRule->GetName();
