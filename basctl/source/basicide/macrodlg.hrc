@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-27 15:53:26 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #define RID_STR_BTNNEW                  ( RID_BASICIDE_START + 52 )
 #define RID_STR_CHOOSE                  ( RID_BASICIDE_START + 53 )
 #define RID_STR_RUN                     ( RID_BASICIDE_START + 54 )
+#define RID_STR_RECORD                  ( RID_BASICIDE_START + 56 )
 
 #define RID_CTRL_MACRO                   1
 #define RID_CTRL_LIB                     2

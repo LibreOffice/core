@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:37:12 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ void MacroChooser::EnableButton( Button& rButton, BOOL bEnable )
 {
     if ( bEnable )
     {
-        if ( nMode == MACROCHOOSER_CHOOSEONLY )
+        if ( nMode == MACROCHOOSER_CHOOSEONLY || nMode == MACROCHOOSER_RECORDING )
         {
             // Nur der RunButton kann enabled werden
             if ( &rButton == &aRunButton )
@@ -527,11 +527,14 @@ void MacroChooser::CheckButtons()
         }
     }
 
-    // Run...
-    BOOL bEnable = pMethod ? TRUE : FALSE;
-    if ( ( nMode != MACROCHOOSER_CHOOSEONLY ) && StarBASIC::IsRunning() )
-        bEnable = FALSE;
-    EnableButton( aRunButton, bEnable );
+    if ( nMode != MACROCHOOSER_RECORDING )
+    {
+        // Run...
+        BOOL bEnable = pMethod ? TRUE : FALSE;
+        if ( ( nMode != MACROCHOOSER_CHOOSEONLY ) && StarBASIC::IsRunning() )
+            bEnable = FALSE;
+        EnableButton( aRunButton, bEnable );
+    }
 
     // Organisieren immer moeglich ?
 
@@ -549,7 +552,7 @@ void MacroChooser::CheckButtons()
         !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ) && !aBasicBox.IsEntryProtected( aBasicBox.GetCurEntry() ) && !bReadOnly );
     BOOL bPrev = bNewDelIsDel;
     bNewDelIsDel = pMethod ? TRUE : FALSE;
-    if ( ( bPrev != bNewDelIsDel ) && ( nMode != MACROCHOOSER_CHOOSEONLY ) )
+    if ( ( bPrev != bNewDelIsDel ) && ( nMode == MACROCHOOSER_ALL ) )
     {
         String aBtnText( bNewDelIsDel ? IDEResId( RID_STR_BTNDEL) : IDEResId( RID_STR_BTNNEW ) );
         aNewDelButton.SetText( aBtnText );
@@ -712,7 +715,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     if ( pButton == &aRunButton )
     {
         StoreMacroDescription();
-        EndDialog( MACRO_OK_RUN );
+        SbMethod* pMethod = GetMacro();
+        if ( !pMethod || QueryReplaceMacro( pMethod->GetName(), this ) )
+            EndDialog( MACRO_OK_RUN );
     }
     else if ( pButton == &aCloseButton )
     {
@@ -885,6 +890,14 @@ void MacroChooser::SetMode( USHORT nM )
         EnableButton( aOrganizeButton, FALSE );
         //aDescrEdit.Disable();
     }
+    else if ( nMode == MACROCHOOSER_RECORDING )
+    {
+        aRunButton.SetText( String( IDEResId( RID_STR_RECORD ) ) );
+        EnableButton( aNewDelButton, FALSE );
+        EnableButton( aOrganizeButton, FALSE );
+        //aDescrEdit.Disable();
+    }
+
     CheckButtons();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,11 @@ BOOL QueryDel( const String& rName, const ResId& rId, Window* pParent )
 BOOL QueryDelMacro( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
+}
+
+BOOL QueryReplaceMacro( const String& rName, Window* pParent )
+{
+    return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
 BOOL QueryDelDialog( const String& rName, Window* pParent )

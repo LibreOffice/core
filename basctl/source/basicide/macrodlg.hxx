@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-27 15:53:26 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,6 @@ private:
     void                UpdateFields();
 
     void                EnableButton( Button& rButton, BOOL bEnable );
-    void                DeleteMacro();
-    SbMethod*           CreateMacro();
     //DECL_LINK( EditGotFocusHdl, MultiLineEdit * );
     //DECL_LINK( EditLoseFocusHdl, MultiLineEdit * );
     //DECL_LINK( EditAccHdl, Accelerator * );
@@ -151,6 +149,8 @@ public:
 
     void                ScanBasic( BasicManager* pBasMgr, const String& rName );
     SbMethod*           GetMacro();
+    void                DeleteMacro();
+    SbMethod*           CreateMacro();
 
     virtual short       Execute();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-13 18:12:12 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@
 #define RID_STR_LINE                    ( RID_BASICIDE_START + 97 )
 #define RID_STR_COLUMN                  ( RID_BASICIDE_START + 98 )
 #define RID_STR_SOURCETOBIG             ( RID_BASICIDE_START + 99 )
+#define RID_STR_QUERYREPLACEMACRO      ( RID_BASICIDE_START + 100 )
 
 #define RID_STR_SEARCHALLMODULES        ( RID_BASICIDE_START + 1 )
 #define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START + 2 )

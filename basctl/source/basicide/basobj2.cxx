@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-12 18:11:43 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,10 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
+    if ( !bChooseOnly && !bExecute )
+        // Hack!
+        pChooser->SetMode( MACROCHOOSER_RECORDING );
+
     short nRetValue = pChooser->Execute();
 
     IDE_DLL()->GetExtraData()->ChoosingMacro() = FALSE;
@@ -641,6 +645,8 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
         case MACRO_OK_RUN:
         {
             pMethod = pChooser->GetMacro();
+            if ( !pMethod && pChooser->GetMode() == MACROCHOOSER_RECORDING )
+                pMethod = pChooser->CreateMacro();
 
             if ( pMethod )
             {

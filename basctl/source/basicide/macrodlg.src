@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:16:26 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,15 +560,28 @@ String RID_STR_RUN
     Text[ catalan ] = "Executar";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_STR_RECORD
+{
+    Text = "~Aufzeichnen" ;
+    Text [ ENGLISH ] = "~Record" ;
+    Text [ norwegian ] = "~Record" ;
+    Text [ italian ] = "Registra" ;
+    Text [ portuguese_brazilian ] = "~Gravar" ;
+    Text [ portuguese ] = "~Gravar" ;
+    Text [ finnish ] = "~Nauhoita" ;
+    Text [ danish ] = "Indspil" ;
+    Text [ french ] = "~Enregistrer" ;
+    Text [ swedish ] = "Spela ~in" ;
+    Text [ dutch ] = "~Opnemen" ;
+    Text [ spanish ] = "~Grabar" ;
+    Text [ english_us ] = "~Record" ;
+    Text[ chinese_simplified ] = "¼ÇÂ¼(~R)";
+    Text[ russian ] = "Çàïèñûâàòü";
+    Text[ polish ] = "Zarejestruj";
+    Text[ japanese ] = "‹L˜^(~R)";
+    Text[ chinese_traditional ] = "°O¿ý(~R)";
+    Text[ arabic ] = "ÊÓÌíá";
+    Text[ greek ] = "ÅããñáöÞ";
+    Text[ korean ] = "±â·Ï(~R)";
+    Text[ turkish ] = "Kaydet";
+};
