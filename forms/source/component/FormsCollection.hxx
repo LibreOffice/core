@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormsCollection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace frm
 // Implementiert den UNO-Container fuer Formulare
 // enthaelt alle zugeordneten Forms
 // dieses Container kann selbst den Context fuer Formulare darstellen
-// oder auﬂen einen Context uebergeben bekommen
+// oder aussen einen Context uebergeben bekommen
 //==================================================================
 typedef ::cppu::OComponentHelper FormsCollectionComponentBase;
 typedef ::cppu::ImplHelper2<    ::com::sun::star::container::XChild
