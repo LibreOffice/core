@@ -11705,3 +11705,11 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?StopCommunication@CommunicationLinkViaSocket@@UAEEXZ
 ?CreateCommunicationLink@CommonSocketFunctions@@MAEPAVCommunicationLink@@PAVCommunicationManager@@PAVOConnectorSocket@vos@@@Z
 ?StartCommunication@CommunicationManager@@UAEEXZ
+??0SvtCommandOptions@@QAE@XZ
+??1SvtCommandOptions@@QAE@XZ
+?AddCommand@SvtCommandOptions@@QAEXW4CmdOption@1@ABVOUString@rtl@@@Z
+?Clear@SvtCommandOptions@@QAEXW4CmdOption@1@@Z
+?GetList@SvtCommandOptions@@QBE?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@W4CmdOption@1@@Z
+?GetOwnStaticMutex@SvtCommandOptions@@SAAAVMutex@osl@@XZ
+?Lookup@SvtCommandOptions@@QBEEW4CmdOption@1@ABVOUString@rtl@@@Z
+?m_nRefCount@SvtCommandOptions@@0JA
