@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2001-06-11 16:04:51 $
+#   last change: $Author: hr $ $Date: 2001-06-13 15:11:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..
 PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
+LIBTARGET=NO
 
 
 
@@ -82,9 +83,11 @@ OBJFILES=\
     $(OBJ)$/gi_parse.obj    \
     $(OBJ)$/st_gilrw.obj
 
-
-
-
+SLOFILES=\
+    $(SLO)$/gen_info.obj	\
+    $(SLO)$/gi_list.obj	    \
+    $(SLO)$/gi_parse.obj    \
+    $(SLO)$/st_gilrw.obj
 
 # --- Targets ------------------------------------------------------
 
