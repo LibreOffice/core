@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-09 12:00:35 $
+ *  last change: $Author: er $ $Date: 2002-10-29 18:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
+#include <svtools/nfkeytab.hxx>
+#endif
+
 
 #include <vector>
 
@@ -1370,11 +1374,11 @@ private:
 
     UINT16                      nIndex;     // Excel-Index
     UINT32                      nScIndex;   // ...
-    String*                     pForm;
-    BYTE                        nFormLen;
+    String                      aFormStr;
     BiffTyp                     eBiff;
     static SvNumberFormatter*   pFormatter;
     static UINT32               nObjCnt;
+    static NfKeywordTable*      pKeywordTable;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
