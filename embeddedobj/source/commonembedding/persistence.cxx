@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:15:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 
-#include "convert.hxx"
+#include <confighelper.hxx>
+#include <convert.hxx>
 
 #define USE_STORAGEBASED_DOCUMENT
 
@@ -780,7 +781,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
 
     if ( m_pDocHolder->GetComponent().is() )
     {
-        aTempMediaDescr.realloc( 3 );
+        aTempMediaDescr.realloc( 4 );
 
         // TODO/LATER: may be private:stream should be used as target URL
         ::rtl::OUString aTempFileURL;
@@ -883,9 +884,14 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
-    OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // for now support of this interface is required to allow breaking of links and converting them to normal embedded
+    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
     if ( m_bIsLink )
+    {
+        m_aEntryName = sEntName;
         return;
+    }
 
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
     if ( !xNameAccess.is() )
@@ -1001,7 +1007,9 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // for now support of this interface is required to allow breaking of links and converting them to normal embedded
+    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
     if ( m_bIsLink )
         return;
 
@@ -1095,9 +1103,14 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // for now support of this interface is required to allow breaking of links and converting them to normal embedded
+    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
     if ( m_bIsLink )
+    {
+        m_aNewEntryName = sEntName;
         return;
+    }
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
 
@@ -1188,9 +1201,16 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
-    OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
+    // for now support of this interface is required to allow breaking of links and converting them to normal embedded
+    // objects, so the persist name must be handled correctly ( althowgh no real persist entry is used )
+    // OSL_ENSURE( !m_bIsLink, "This method implementation must not be used for links!\n" );
     if ( m_bIsLink )
+    {
+        if ( bUseNew )
+            m_aEntryName = m_aNewEntryName;
+        m_aNewEntryName = ::rtl::OUString();
         return;
+    }
 
     // it is allowed to call saveCompleted( false ) for nonstored objects
     if ( !m_bWaitSaveCompleted && !bUseNew )
@@ -1429,6 +1449,53 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
+    if ( m_bIsLink )
+    {
+        // reload of the link
+        ::rtl::OUString aOldLinkFilter = m_aLinkFilterName;
+
+        ::rtl::OUString aNewLinkFilter;
+        for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
+        {
+            if ( lArguments[nInd].Name.equalsAscii( "URL" ) )
+            {
+                // the new URL
+                lArguments[nInd].Value >>= m_aLinkURL;
+                m_aLinkFilterName = ::rtl::OUString();
+            }
+            else if ( lArguments[nInd].Name.equalsAscii( "FilterName" ) )
+            {
+                lArguments[nInd].Value >>= aNewLinkFilter;
+                m_aLinkFilterName = ::rtl::OUString();
+            }
+        }
+
+        ConfigurationHelper aHelper( m_xFactory );
+        if ( !m_aLinkFilterName.getLength() )
+        {
+            if ( aNewLinkFilter.getLength() )
+                m_aLinkFilterName = aNewLinkFilter;
+            else
+            {
+                uno::Sequence< beans::PropertyValue > aArgs( 1 );
+                aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                aArgs[0].Value <<= m_aLinkURL;
+                m_aLinkFilterName = aHelper.UpdateMediaDescriptorWithFilterName( aArgs, sal_False );
+            }
+        }
+
+        if ( !aOldLinkFilter.equals( m_aLinkFilterName ) )
+        {
+            uno::Sequence< beans::NamedValue > aObject = aHelper.GetObjectPropsByFilter( m_aLinkFilterName );
+
+            // TODO/LATER: probably the document holder could be cleaned explicitly as in the destructor
+            m_pDocHolder->release();
+            m_pDocHolder = NULL;
+
+            LinkInit_Impl( aObject, lArguments, lObjArgs );
+        }
+    }
+
     m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments, sal_True );
 
     // TODO: use lObjArgs for StoreVisualReplacement
@@ -1479,6 +1546,10 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
                 uno::Exception,
                 uno::RuntimeException )
 {
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
     if ( !m_bIsLink )
     {
         // it must be a linked initialized object
@@ -1486,17 +1557,14 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
                     ::rtl::OUString::createFromAscii( "The object is not a valid linked object!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
+#if 0
     else
     {
         // the current implementation of OOo links does not implement this method since it does not implement
         // all the set of interfaces required for OOo embedded object ( XEmbedPersist is not supported ).
         throw io::IOException(); // TODO:
     }
-
-#if 0
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+#endif
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
@@ -1554,14 +1622,17 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     OSL_ENSURE( m_pDocHolder->GetComponent().is(), "If document cant be created, an exception must be thrown!\n" );
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
+    {
+        // the state is changed and can not be switched to loaded state back without saving
         m_nObjectState = embed::EmbedStates::RUNNING;
+        StateChangeNotification_Impl( sal_False, embed::EmbedStates::LOADED, m_nObjectState, aGuard );
+    }
     else if ( m_nObjectState == embed::EmbedStates::ACTIVE )
         m_pDocHolder->Show();
 
     m_bIsLink = sal_False;
     m_aLinkFilterName = ::rtl::OUString();
     m_aLinkURL = ::rtl::OUString();
-#endif
 }
 
 //------------------------------------------------------
