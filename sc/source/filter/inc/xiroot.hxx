@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:06:31 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,9 +205,6 @@ public:
 
 protected:
     explicit                    XclImpRoot( XclImpRootData& rImpRootData );
-
-    /** Sets the BIFF version and BOF/EOF block type. */
-    void                        SetBiff( XclBiff eBiff );
 };
 
 
