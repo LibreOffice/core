@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 14:06:15 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ ModalDialog DLG_DIRECTSQL
     Text[ greek ] = "Excecute SQL statement";
     Text[ dutch ] = "SQL statement uitvoeren";
     Text[ french ] = "Exécuter l'instruction SQL";
-    Text[ spanish ] = "Ejecutar estado SQL";
+    Text[ spanish ] = "Ejecutar comando SQL";
     Text[ finnish ] = "Excecute SQL statement";
     Text[ italian ] = "Esegui SQL Statement";
     Text[ danish ] = "Excecute SQL statement";
@@ -359,6 +359,9 @@ String STR_DIRECTSQL_CONNECTIONLOST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/08/29 14:06:15  kz
+ *  Merge SRC638: 29.08.01 - 16:05:39
+ *
  *  Revision 1.8  2001/08/24 11:09:43  kz
  *  Merge SRC638: 24.08.01 - 13:08:49
  *
@@ -386,6 +389,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
 
 
 
