@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:32:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
         case 2700 :
             nDir = 1800;
             break;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         default :
             ASSERT( sal_False, "Unsupported direction" );
             break;
@@ -267,7 +267,7 @@ USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat )
         case 2700 :
             nDir = 0;
             break;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         default :
             ASSERT( sal_False, "Unsupported direction" );
             break;
@@ -790,7 +790,7 @@ USHORT SwSubFont::CalcEscHeight( const USHORT nOldHeight,
 
 short SwSubFont::_CheckKerning( )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static nTst = 6;
     short nKernx = - short( Font::GetSize().Height() / nTst );
 #else
