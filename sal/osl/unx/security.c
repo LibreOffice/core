@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:25:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,13 @@
 
 #include <osl/security.h>
 #include <osl/diagnose.h>
+
 #ifndef _OSL_MODULE_H_
 #include <osl/module.h>
 #endif
+
+#include "osl/thread.h"
+#include "osl/file.h"
 
 #ifdef SOLARIS
 #include <crypt.h>
