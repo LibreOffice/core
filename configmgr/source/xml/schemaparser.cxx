@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:21:27 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 10:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,16 +362,16 @@ void SchemaParser::endProperty()
     {
         ElementInfo const & aInfo = this->getActiveNodeInfo();
 
-        // If we are dealing with a string type, we have to ensure we get
-        // a default empty string instead of a null type.
-        if (getActivePropertyType() == getCppuType(
-                                        static_cast<rtl::OUString *>(NULL))) {
-            uno::Any value ;
-
-            value <<= rtl::OUString() ;
-            m_xHandler->addPropertyWithDefault(aInfo.name, aInfo.flags, value) ;
+        // HACK: If type is string we use an empty string as default value
+        // ('Normal' behavior would yield 'no default' aka NULL)
+        if (getActivePropertyType().getTypeClass() == uno::TypeClass_STRING)
+        {
+            m_xHandler->addPropertyWithDefault( aInfo.name,
+                                                aInfo.flags,
+                                                uno::makeAny(OUString()) );
         }
-        else {
+        else
+        {
             m_xHandler->addProperty(aInfo.name,
                                     aInfo.flags,
                                     getActivePropertyType());
@@ -398,11 +398,6 @@ void SchemaParser::endValueData()
 
     ElementInfo const & aInfo = this->getActiveNodeInfo();
 
-    if (!aValue.hasValue() &&
-            getActivePropertyType() == getCppuType(
-                                        static_cast<rtl::OUString *>(NULL))) {
-        aValue <<= rtl::OUString() ;
-    }
     if (aValue.hasValue())
         m_xHandler->addPropertyWithDefault(aInfo.name,aInfo.flags,aValue);
 

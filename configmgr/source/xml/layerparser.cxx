@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:21:06 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 10:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,21 +253,26 @@ void LayerParser::startProperty( ElementInfo const & aInfo, const uno::Reference
 }
 // -----------------------------------------------------------------------------
 
-void LayerParser::addOrReplaceCurrentProperty(const uno::Any& aValue) {
+void LayerParser::addOrReplaceCurrentProperty(const uno::Any& aValue)
+{
     const ElementInfo& currentInfo = getActiveNodeInfo() ;
 
     OSL_ASSERT(currentInfo.op == Operation::replace) ;
-    try {
-        if (aValue.hasValue()) {
+    try
+    {
+        if (aValue.hasValue())
+        {
             m_xHandler->addPropertyWithValue(currentInfo.name,
                                              currentInfo.flags, aValue) ;
         }
-        else {
+        else
+        {
             m_xHandler->addProperty(currentInfo.name, currentInfo.flags,
                                     getActivePropertyType()) ;
         }
     }
-    catch (com::sun::star::beans::PropertyExistException& exception) {
+    catch (com::sun::star::beans::PropertyExistException& exception)
+    {
         // If we're here, someone is trying to do a replace
         // on an existing property. Now that doesn't make
         // a lot of sense to be honest, but since that amounts
@@ -288,14 +293,18 @@ void LayerParser::endProperty()
 
     if (m_bNewProp)
     {
+        OSL_ASSERT(getActiveNodeInfo().op == Operation::replace);
         if (this->isInUnhandledProperty())
         {
-            uno::Any value ;
+            // No value tag is treated as NULL
+            uno::Any value;
 
-            if (getActivePropertyType() == getCppuType(
-                        static_cast<rtl::OUString *>(NULL))){
+            // HACK: except for strings (where an empty strings is used instead)
+            if (getActivePropertyType().getTypeClass() == uno::TypeClass_STRING)
+            {
                 value <<= rtl::OUString() ;
             }
+
             addOrReplaceCurrentProperty(value) ;
         }
         m_bNewProp = false;
@@ -322,10 +331,6 @@ void LayerParser::endValueData()
 {
     uno::Any aValue = this->getCurrentValue();
 
-    if (!aValue.hasValue() && getActivePropertyType() == getCppuType(
-                static_cast<rtl::OUString *>(NULL))) {
-        aValue <<= rtl::OUString() ;
-    }
     if (m_bNewProp)
     {
         OSL_ENSURE(!isValueDataLocalized(),"Layer parser: Invalid Data: 'lang' ignored for newly added property.");
