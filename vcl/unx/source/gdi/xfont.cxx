@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-05 07:59:02 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
 
     int nIdx;
 
-    // check whether there is at least one encoding allready loaded
+    // check if there is at least one encoding already loaded
     Bool bEmpty = True;
     for ( nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
         bEmpty = bEmpty && (mpXFontStruct[nIdx] == NULL);
@@ -650,39 +650,54 @@ GetVerticalClass( sal_Unicode nChar )
 
 // =======================================================================
 
-X11FontLayout::X11FontLayout( const ImplLayoutArgs& rArgs, ExtendedFontStruct& rFont )
-: GenericSalLayout( rArgs )
+X11FontLayout::X11FontLayout( ImplLayoutArgs& rArgs, ExtendedFontStruct& rFont )
+:   GenericSalLayout( rArgs ),
+    mrFont( rFont )
 {
-    int nGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-    GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
+    LayoutText( rArgs );
+}
 
-    bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
+// -----------------------------------------------------------------------
 
-    Point aNewPos( 0, 0);
-    for( int i = 0; i < nGlyphCount; ++i )
+bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
+{
+    SetOrientation( 0 ); // X11 fonts are to be rotated in upper layers
+
+    Point aNewPos( 0, 0 );
+    int nGlyphCount = 0;
+    for(;; ++nGlyphCount )
     {
-        int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharPos-1-i) : (rArgs.mnMinCharPos+i);
-        sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
+        int nCharPos;
+        bool bRightToLeft;
+        if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
+            break;
+        sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+
+#if 1
+        // TODO: find out if X font contains the char
+        // update fallback_runs if needed
+        if( IsNotdefGlyph( cChar ) )
+            rArgs.NeedFallback( nCharPos, bRightToLeft );
+#endif
 
         long nGlyphWidth;
-        rFont.GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
+        mrFont.GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
         int nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
         if( bRightToLeft )
             nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
         int nGlyphIndex = cChar | GF_ISCHAR;
-        pGlyphBuffer[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+        GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+        AppendGlyph( aGI );
 
         aNewPos.X() += nGlyphWidth;
     }
-
-    SetGlyphItems( pGlyphBuffer, nGlyphCount );
-    SetOrientation( 0 ); // X11 fonts are to be rotated in upper layers
-    SetWantFallback( false );
 
     if( rArgs.mpDXArray )
         ApplyDXArray( rArgs.mpDXArray );
     else if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
+
+    return (nGlyphCount > 0);
 }
 
 // -----------------------------------------------------------------------
@@ -704,8 +719,26 @@ void X11FontLayout::DrawText( SalGraphics& rSalGraphics ) const
         for( int i = 0; i < nGlyphCount; ++i )
             pStr[ i ] = aGlyphAry[ i ] & GF_IDXMASK;
 
-        rSalGraphics.maGraphicsData.DrawStringUCS2MB( aPos, pStr, nGlyphCount );
+        rSalGraphics.maGraphicsData.DrawStringUCS2MB( mrFont, aPos, pStr, nGlyphCount );
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool X11FontLayout::IsNotdefGlyph( long nGlyphIndex ) const
+{
+    // TODO: find less costly alternative, e.g. cache info
+    if( !(nGlyphIndex & GF_ISCHAR) )
+        return false;
+    XFontStruct* pXFontStruct = mrFont.GetFontStruct( RTL_TEXTENCODING_UNICODE );
+    if( !pXFontStruct )
+        return false;
+    sal_MultiByte nChar = nGlyphIndex & GF_IDXMASK;
+    XCharStruct* pCharStruct = ::GetCharinfo( pXFontStruct, nChar );
+    if( !pCharStruct )
+        return false;
+    Bool bRet = CharExists( pCharStruct );
+    return (bRet == 0);
 }
 
 // =======================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-29 10:51:43 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,14 +728,80 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
 
 class PDFSalLayout : public GenericSalLayout
 {
-    const String    aText;
+    const String    maText;
+    long            mnPixelPerEM;
+    const PDFWriterImpl::BuiltinFont& mrFont;
 
 public:
-                    PDFSalLayout( ImplLayoutArgs& rArgs, const String& rStr )
-                    : GenericSalLayout( rArgs ), aText( rStr ) {}
+                    PDFSalLayout( ImplLayoutArgs&, const String&,
+                        const PDFWriterImpl::BuiltinFont&, long nPixelPerEM );
 
+    virtual bool    LayoutText( ImplLayoutArgs& rArgs );
     virtual void    DrawText( SalGraphics& ) const;
 };
+
+// -----------------------------------------------------------------------
+
+PDFSalLayout::PDFSalLayout( ImplLayoutArgs& rArgs, const String& rStr,
+    const PDFWriterImpl::BuiltinFont& rFont, long nPixelPerEM )
+:   GenericSalLayout( rArgs ),
+    maText( rStr ),
+    mrFont( rFont ),
+    mnPixelPerEM( nPixelPerEM )
+{}
+
+// -----------------------------------------------------------------------
+
+bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
+{
+    SetUnitsPerPixel( 1000 );
+
+    Point aNewPos( 0, 0 );
+    for( int nGlyphCount = 0;; ++nGlyphCount )
+    {
+        int nLogicalIndex;
+        bool bRightToLeft;
+        if( !rArgs.GetNextPos( &nLogicalIndex, &bRightToLeft ) )
+            break;
+        sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
+        if( cChar & 0xff00 )
+        {
+            // some characters can be used by conversion
+            if( mrFont.m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
+                cChar -= 0xf000;
+            else
+            {
+                String aString( cChar);
+                ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
+                cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
+            }
+        }
+        DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
+        if( cChar & 0xff00 ) // not so good
+            cChar = 0;
+#if 0
+        // TODO: find out if builtin font contains the char
+        // update fallback_runs if needed
+        if( mrFont.HasGlyph( cChar ) )
+            rArgs.NeedFallback( nCharPos, bRightToLeft );
+#endif
+
+        long nGlyphWidth = (long)mrFont.m_aWidths[cChar] * mnPixelPerEM;
+        long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+        if( bRightToLeft )
+            nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+        GlyphItem aGI( nLogicalIndex, cChar, aNewPos, nGlyphFlags, nGlyphWidth );
+        AppendGlyph( aGI );
+
+        aNewPos.X() += nGlyphWidth;
+    }
+
+    if( rArgs.mpDXArray )
+        ApplyDXArray( rArgs.mpDXArray );
+    if( rArgs.mnLayoutWidth )
+        Justify( rArgs.mnLayoutWidth );
+    return false;
+}
 
 // -----------------------------------------------------------------------
 
@@ -749,64 +815,70 @@ void PDFSalLayout::DrawText( SalGraphics& rSalGraphics ) const
 
 SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayoutArgs& rArgs ) const
 {
-    PDFSalLayout* pLayout = NULL;
     for( unsigned int n = 0; n < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); n++ )
     {
-        if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[n] )
+        if( pSelect->mpFontData->mpSysData != (void*)&m_aBuiltinFonts[n] )
+            continue;
+
+        const String aText( rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos );
+        long nPixelPerEM = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
+        PDFSalLayout& rLayout = *new PDFSalLayout( rArgs, aText, m_aBuiltinFonts[n], nPixelPerEM );
+
+#if 1
+        rLayout.SetOrientation( pSelect->mnOrientation );
+        rLayout.LayoutText( rArgs );
+#else
+        Point aNewPos( 0, 0 );
+        for( int nGlyphCount = 0;; ++nGlyphCount )
         {
-            int nGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-            GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
-
-            bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
-
-            long nTextWidth = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
-
-            Point aNewPos( 0, 0 );
-            for( int i = 0; i < nGlyphCount; ++i )
+            int nLogicalIndex;
+            bool bRightToLeft;
+            if( !rArgs.GetNextPos( &nLogicalIndex, &bRightToLeft ) )
+                break;
+            sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
+            if( cChar & 0xff00 )
             {
-                int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharPos-1-i) : (rArgs.mnMinCharPos+i);
-                sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
-                if( cChar & 0xff00 )
+                // some characters can be used by conversion
+                if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
+                    cChar -= 0xf000;
+                else
                 {
-                    // some characters can be used by conversion
-                    if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
-                        cChar -= 0xf000;
-                    else
-                    {
-                        String aString( cChar);
-                        ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
-                        cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
-                    }
+                    String aString( cChar);
+                    ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
+                    cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
                 }
-                DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
-                if( cChar & 0xff00 ) // not so good
-                    cChar = 0;
-
-                long nGlyphWidth = (long)m_aBuiltinFonts[n].m_aWidths[cChar] * nTextWidth;
-                long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
-                if( bRightToLeft )
-                    nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
-                pGlyphBuffer[i] = GlyphItem( nLogicalIndex, cChar, aNewPos,
-                                             nGlyphFlags, nGlyphWidth );
-
-                aNewPos.X() += nGlyphWidth;
             }
-            const String aText( rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos );
-            pLayout = new PDFSalLayout( rArgs, aText );
-            pLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
-            pLayout->SetUnitsPerPixel( 1000 );
-            pLayout->SetOrientation( pSelect->mnOrientation );
-            pLayout->SetWantFallback( false );
-            if( rArgs.mpDXArray )
-                pLayout->ApplyDXArray( rArgs.mpDXArray );
-            if( rArgs.mnLayoutWidth )
-                pLayout->Justify( rArgs.mnLayoutWidth );
+            DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
+            if( cChar & 0xff00 ) // not so good
+                cChar = 0;
+#if 0
+            // TODO: find out if builtin font contains the char
+            // update fallback_runs if needed
+            if( m_aBuiltinFonts[n].HasGlyph( cChar ) )
+                rArgs.NeedFallback( nCharPos, bRightToLeft );
+#endif
 
-            break;
+            long nGlyphWidth = (long)m_aBuiltinFonts[n].m_aWidths[cChar] * nPixelPerEM;
+            long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+            if( bRightToLeft )
+                nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+            GlyphItem aGI( nLogicalIndex, cChar, aNewPos, nGlyphFlags, nGlyphWidth );
+            rLayout.AppendGlyph( aGI );
+
+            aNewPos.X() += nGlyphWidth;
         }
+
+        rLayout.SetUnitsPerPixel( 1000 );
+        rLayout.SetOrientation( pSelect->mnOrientation );
+        if( rArgs.mpDXArray )
+            rLayout.ApplyDXArray( rArgs.mpDXArray );
+        if( rArgs.mnLayoutWidth )
+            rLayout.Justify( rArgs.mnLayoutWidth );
+#endif
+        return &rLayout;
     }
 
-    return pLayout;
+    return NULL;
 }
 
 sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )

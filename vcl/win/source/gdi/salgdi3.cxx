@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-25 15:16:19 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,10 +778,14 @@ static HFONT ImplSelectFontA( HDC hDC, LOGFONTA& rLogFont, HFONT* pNewFont )
 
 // -----------------------------------------------------------------------
 
-USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
+USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 {
     HFONT hNewFont = 0;
     HFONT hOldFont;
+
+    // TODO: use nFallbackLevel
+    if( nFallbackLevel > 0 )
+        return 0;
 
     if ( aSalShlData.mbWNT )
     {
@@ -1930,7 +1934,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(maGraphicsData);
-    SetFont( &aIFSD );
+    SetFont( &aIFSD, 0 );
 
 #ifdef DEBUG
     // get font metrics
