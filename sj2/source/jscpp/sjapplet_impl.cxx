@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:56:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 09:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,18 +80,18 @@
 #include <vcl/sysdata.hxx>
 #include <com/sun/star/java/XJavaVM.hpp>
 
+
+
+using namespace ::rtl;
 using namespace ::osl;
 using namespace ::utl;
 #ifdef SOLAR_JAVA
 using namespace ::com::sun::star::java;
 #endif // SOLAR_JAVA
-
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-
-#define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
-
+namespace css = ::com::sun::star;
 #ifdef SOLAR_JAVA
 
 static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::RuntimeException)
@@ -115,7 +115,7 @@ static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::Runtime
             pEnv->ReleaseStringChars(jsMessage, jcMessage);
         }
 
-          throw RuntimeException(ouMessage, Reference<XInterface>());
+          throw css::uno::RuntimeException(ouMessage, css::uno::Reference<XInterface>());
     }
 }
 #else // !SOLAR_JAVA
@@ -134,43 +134,64 @@ struct EmbeddedWindow {
     void dispose(JNIEnv * pEnv);
 };
 
-EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
+EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData)
+    throw(com::sun::star::uno::RuntimeException) : _joWindow(0)
 {
-    jclass jcToolkit = pEnv->FindClass("java/awt/Toolkit");                         testJavaException(pEnv);
-    jmethodID jmToolkit_getDefaultToolkit = pEnv->GetStaticMethodID(
-                        jcToolkit, "getDefaultToolkit", "()Ljava/awt/Toolkit;" );   testJavaException(pEnv);
-    pEnv->CallStaticObjectMethod(jcToolkit, jmToolkit_getDefaultToolkit);           testJavaException(pEnv);
+    try
+    {   //java < 1.5
+        jclass jcToolkit = pEnv->FindClass("java/awt/Toolkit");                         testJavaException(pEnv);
+        jmethodID jmToolkit_getDefaultToolkit = pEnv->GetStaticMethodID(
+            jcToolkit, "getDefaultToolkit", "()Ljava/awt/Toolkit;" );   testJavaException(pEnv);
+        pEnv->CallStaticObjectMethod(jcToolkit, jmToolkit_getDefaultToolkit);           testJavaException(pEnv);
 
-    jclass jcMotifAppletViewer = pEnv->FindClass(
-                        "sun/plugin/navig/motif/MotifAppletViewer");
-    if(pEnv->ExceptionOccurred())
-    {
-        pEnv->ExceptionClear();
-        jcMotifAppletViewer = pEnv->FindClass(
-                        "sun/plugin/viewer/MNetscapePluginContext");                testJavaException(pEnv);
-    }
+        jclass jcMotifAppletViewer = pEnv->FindClass(
+            "sun/plugin/navig/motif/MotifAppletViewer");
+        if(pEnv->ExceptionOccurred())
+        {
+            pEnv->ExceptionClear();
+            jcMotifAppletViewer = pEnv->FindClass(
+                "sun/plugin/viewer/MNetscapePluginContext");                testJavaException(pEnv);
+        }
 
-    jclass jcClassLoader = pEnv->FindClass("java/lang/ClassLoader");                testJavaException(pEnv);
-    jmethodID jmClassLoader_loadLibrary = pEnv->GetStaticMethodID(
-                        jcClassLoader, "loadLibrary",
-                        "(Ljava/lang/Class;Ljava/lang/String;Z)V" );                testJavaException(pEnv);
-    jstring jsplugin = pEnv->NewStringUTF("javaplugin_jni");                        testJavaException(pEnv);
-    pEnv->CallStaticVoidMethod(jcClassLoader, jmClassLoader_loadLibrary,
-                        jcMotifAppletViewer, jsplugin, JNI_FALSE);                  testJavaException(pEnv);
+        jclass jcClassLoader = pEnv->FindClass("java/lang/ClassLoader");                testJavaException(pEnv);
+        jmethodID jmClassLoader_loadLibrary = pEnv->GetStaticMethodID(
+            jcClassLoader, "loadLibrary",
+            "(Ljava/lang/Class;Ljava/lang/String;Z)V" );                testJavaException(pEnv);
+        jstring jsplugin = pEnv->NewStringUTF("javaplugin_jni");                        testJavaException(pEnv);
+        pEnv->CallStaticVoidMethod(jcClassLoader, jmClassLoader_loadLibrary,
+                                   jcMotifAppletViewer, jsplugin, JNI_FALSE);                  testJavaException(pEnv);
 
-    jmethodID jmMotifAppletViewer_getWidget = pEnv->GetStaticMethodID(
-                        jcMotifAppletViewer, "getWidget", "(IIIII)I" );             testJavaException(pEnv);
-    jint ji_widget = pEnv->CallStaticIntMethod(jcMotifAppletViewer,
+        jmethodID jmMotifAppletViewer_getWidget = pEnv->GetStaticMethodID(
+            jcMotifAppletViewer, "getWidget", "(IIIII)I" );             testJavaException(pEnv);
+        jint ji_widget = pEnv->CallStaticIntMethod(jcMotifAppletViewer,
                         jmMotifAppletViewer_getWidget, pEnvData->aWindow,
                         0, 0, 1, 1);                                                testJavaException(pEnv);
+        jclass jcFrame  = pEnv->FindClass("sun/awt/motif/MEmbeddedFrame");              testJavaException(pEnv);
+        jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(J)V" );        testJavaException(pEnv);
+        jobject joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
+        pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong)ji_widget);                 testJavaException(pEnv);
+        _joWindow = pEnv->NewGlobalRef(joFrame);
+    }
+    catch (RuntimeException & )
+    {
+    }
 
-    jclass jcFrame  = pEnv->FindClass("sun/awt/motif/MEmbeddedFrame");              testJavaException(pEnv);
-    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(J)V" );        testJavaException(pEnv);
-
-    jobject joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
-    pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong)ji_widget);                 testJavaException(pEnv);
-
+    if (_joWindow)
+        return;
+    //try Java > 1.5
+#ifdef SOLARIS
+    jclass jcFrame  = pEnv->FindClass("sun/awt/motif/MEmbeddedFrame"); testJavaException(pEnv);
+    jobject joFrame = pEnv->AllocObject(jcFrame); testJavaException(pEnv);
+    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(JZ)V" ); testJavaException(pEnv);
+    pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong) pEnvData->aWindow, JNI_FALSE); testJavaException(pEnv);
     _joWindow = pEnv->NewGlobalRef(joFrame);
+#elif LINUX
+    jclass jcFrame  = pEnv->FindClass("sun/awt/X11/XEmbeddedFrame"); testJavaException(pEnv);
+    jobject joFrame = pEnv->AllocObject(jcFrame); testJavaException(pEnv);
+    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(J)V" ); testJavaException(pEnv);
+    pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong) pEnvData->aWindow); testJavaException(pEnv);
+    _joWindow = pEnv->NewGlobalRef(joFrame);
+#endif
 }
 
 #else
@@ -262,7 +283,7 @@ SjApplet2_Impl::~SjApplet2_Impl() throw()
 }
 
 void SjApplet2_Impl::init(Window * pParentWin,
-                          const Reference<XMultiServiceFactory> & smgr,
+                          const css::uno::Reference<XMultiServiceFactory> & smgr,
                           const INetURLObject & rDocBase,
                           const SvCommandList & rCmdList)
     throw(com::sun::star::uno::RuntimeException)
@@ -294,8 +315,9 @@ void SjApplet2_Impl::init(Window * pParentWin,
     OSL_TRACE("SjApplet2_Impl::init - mainUrl: %s\n", tmp.getStr());
 #endif
 
-    Reference<XJavaVM>_xJavaVM = Reference<XJavaVM>(smgr->createInstance(
-                                       OUSTR("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
+    css::uno::Reference<XJavaVM>_xJavaVM =
+        css::uno::Reference<XJavaVM>(smgr->createInstance(
+           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
     Sequence<sal_Int8> processID(17);
     rtl_getGlobalProcessId((sal_uInt8 *)processID.getArray());
     processID[16] = 0;
@@ -368,8 +390,9 @@ void SjApplet2_Impl::init(Window * pParentWin,
     catch(jvmaccess::VirtualMachine::AttachGuard::CreationException & )
     {
         throw RuntimeException(
-            OUSTR("sjapplet_impl.cxx: Could not create jvmaccess::"
-                  "VirtualMachine::AttachGuard!"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "sjapplet_impl.cxx: Could not create jvmaccess::"
+                              "VirtualMachine::AttachGuard!")), 0);
     }
 
 #else // !SOLAR_JAVA
@@ -401,8 +424,9 @@ void SjApplet2_Impl::setSize(const Size & rSize) throw(com::sun::star::uno::Runt
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         throw RuntimeException(
-            OUSTR("SjApplet2_Impl::setSize, Could not create jvmaccess::"
-            "VirtualMachine::AttachGuard!"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "SjApplet2_Impl::setSize, Could not create jvmaccess::"
+                              "VirtualMachine::AttachGuard!")), 0);
     }
 #else // !SOLAR_JAVA
     throwException();
@@ -427,8 +451,9 @@ void SjApplet2_Impl::restart() throw(com::sun::star::uno::RuntimeException)
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         throw RuntimeException(
-            OUSTR("SjApplet2_Impl::restart, Could not create jvmaccess::"
-            "VirtualMachine::AttachGuard!"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "SjApplet2_Impl::restart, Could not create jvmaccess::"
+                              "VirtualMachine::AttachGuard!")), 0);
     }
 #else // !SOLAR_JAVA
     throwException();
@@ -453,8 +478,9 @@ void SjApplet2_Impl::reload() throw(com::sun::star::uno::RuntimeException)
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         throw RuntimeException(
-            OUSTR("SjApplet2_Impl::reload, Could not create jvmaccess::"
-            "VirtualMachine::AttachGuard!"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "SjApplet2_Impl::reload, Could not create jvmaccess::"
+                              "VirtualMachine::AttachGuard!")), 0);
     }
 #else // !SOLAR_JAVA
     throwException();
@@ -479,8 +505,9 @@ void SjApplet2_Impl::start() throw(com::sun::star::uno::RuntimeException)
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         throw RuntimeException(
-            OUSTR("SjApplet2_Impl::restart, Could not create jvmaccess::"
-            "VirtualMachine::AttachGuard!"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "SjApplet2_Impl::restart, Could not create jvmaccess::"
+                              "VirtualMachine::AttachGuard!")), 0);
     }
 #else // !SOLAR_JAVA
     throwException();
@@ -505,8 +532,9 @@ void SjApplet2_Impl::stop() throw(com::sun::star::uno::RuntimeException)
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         throw RuntimeException(
-            OUSTR("SjApplet2_Impl::restart, Could not create jvmaccess::"
-            "VirtualMachine::AttachGuard!"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "SjApplet2_Impl::restart, Could not create jvmaccess::"
+                              "VirtualMachine::AttachGuard!")), 0);
     }
 #else // !SOLAR_JAVA
     throwException();
@@ -561,8 +589,9 @@ void SjApplet2_Impl::close() throw(com::sun::star::uno::RuntimeException)
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         throw RuntimeException(
-            OUSTR("SjApplet2_Impl::close, Could not create jvmaccess::"
-            "VirtualMachine::AttachGuard!"), 0);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                              "SjApplet2_Impl::close, Could not create jvmaccess::"
+                              "VirtualMachine::AttachGuard!")), 0);
     }
 #else // !SOLAR_JAVA
     throwException();
