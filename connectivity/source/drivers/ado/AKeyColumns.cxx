@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeyColumns.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
 using namespace connectivity::adabas;
 // -------------------------------------------------------------------------
-Reference< XNamed > OKeyColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeyColumns::createObject(const ::rtl::OUString& _rName)
 {
 
     Reference< starsdbc::XResultSet >
@@ -107,7 +107,7 @@ Reference< XNamed > OKeyColumns::createObject(const ::rtl::OUString& _rName)
      xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
         m_pTable->getSchema(),m_pTable->getName(),_rName);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
         Reference< starsdbc::XRow > xRow(xResult,UNO_QUERY);
