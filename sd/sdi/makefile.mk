@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2002-03-28 16:29:03 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:13:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,9 +71,7 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -114,7 +112,8 @@ SVSDI2DEPEND= \
     sdslots.hrc \
     $(PRJ)$/inc$/app.hrc
 
-SRCFILES= \
+SRS1NAME=$(TARGET)
+SRC1FILES= \
     sdslots.src
 
 # --- Targets -------------------------------------------------------
