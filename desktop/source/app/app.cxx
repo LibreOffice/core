@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-27 09:22:09 $
+ *  last change: $Author: pb $ $Date: 2002-08-29 06:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2157,22 +2157,15 @@ void Desktop::OpenStartupScreen()
          !pCmdLine->GetPrintToList( aTmpString ) )
     {
         String          aBmpFileName;
-        ::rtl::OUString aProductKey;
         ::rtl::OUString aIniPath;
         ::rtl::OUString aLogo( RTL_CONSTASCII_USTRINGPARAM( "1" ) );
         Bitmap          aIntroBmp;
 
-        // load bitmap depends on productname ("StarOffice", "StarSuite",...)
-        aProductKey = ::utl::Bootstrap::getProductKey( aProductKey );
-        aLogo       = ::utl::Bootstrap::getLogoData( aLogo );
-
-        sal_Bool    bLogo   = (sal_Bool)aLogo.toInt32();
+        aLogo = ::utl::Bootstrap::getLogoData( aLogo );
+        sal_Bool bLogo = (sal_Bool)aLogo.toInt32();
         if ( bLogo )
         {
             xub_StrLen nIndex = 0;
-
-            aBmpFileName = aProductKey;
-            aBmpFileName = aBmpFileName.GetToken( 0, (sal_Unicode)' ', nIndex );
             aBmpFileName += String( DEFINE_CONST_UNICODE("_intro.bmp") );
 
             // retrieve our current installation path
