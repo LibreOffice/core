@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:07:05 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 22:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ String RID_STR_SOURCETOBIG
     Text[ russian ] = "Èñõîäíûé òåêñò ñëèøêîì áîëüøîé è åãî íåâîçìîæíî íè ñîõğàíèòü, íè êîìïèëèğîâàòü.\nÓäàëèòå íåêîòîğûå êîììåíòàğèè èëè ïåğåíåñèòå íåêîòîğûå ìåòîäû â äğóãîé ìîäóëü.";
     Text[ polish ] = "Tekst Ÿród³owy jest za du¿y. Nie mo¿na go zapisaæ ani skompilowaæ.\nNale¿y usun¹æ kilka komentarzy lub przenieœæ kilka metod do innego modu³u.";
     Text[ japanese ] = "¿°½‚ª’·‚·‚¬‚ÄA•Û‘¶‚àºİÊß²Ù‚ğs‚¤‚±‚Æ‚à‚Å‚«‚Ü‚¹‚ñB\nºÒİÄ‚ğ‚¢‚­‚Â‚©íœ‚·‚é‚©AÒ¿¯ÄŞ‚Ì‚¢‚­‚Â‚©‚ğ•Ê‚ÌÓ¼Ş­°Ù‚É“]‘—‚µ‚Ü‚·B";
-    Text[ chinese_traditional ] = "­ì©lÀÉ¤Ó¤j¡MµLªkÀx¦s½sÄ¶¡C\n½Ğ±z§R°£¤@¨Çª`¸Ñ©ÎªÌ±N´X­Ó¤èªkÂà²¾¨ì¤@­Ó¨ä¥Lªº¼Ò¶ô¤§¤¤¡C";
+    Text[ chinese_traditional ] = "­ì©lÀÉ¤Ó¤j¡MµLªkÀx¦s½sÄ¶¡C\n½Ğ±z§R°£¤@¨Çµù¸Ñ©ÎªÌ±N´X­Ó¤èªkÂà²¾¨ì¤@­Ó¨ä¥Lªº¼Ò¶ô¤§¤¤¡C";
     Text[ arabic ] = "äÕ ÇáãÕÏÑ ßÈíÑ áÏÑÌÉ íÊÚĞÑ ãÚåÇ ÍİÙå¡ Ãæ ÊÑÌãÊå.\nŞã ÈÍĞİ ÈÚÖ ÇáÊÚáíŞÇÊ¡ Ãæ ÇäŞá ÈÚÖ ÇáÃÓÇáíÈ Åáì æÍÏÉ äãØíÉ ÃÎÑì.";
     Text[ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele commentaren of verplaats enkele methodes naar een andere module.";
     Text[ chinese_simplified ] = "Ô´ÎÄ±¾Ì«´ó£¬ÎŞ·¨´æÅÌºÍ±àÒë¡£\nÇëÄúÉ¾³ıÒ»Ğ©×¢½â»òÕß½«¼¸¸ö·½·¨×ªÒÆµ½Ò»¸öÆäËûµÄÄ£¿éÖ®ÖĞ¡£";
@@ -559,7 +559,7 @@ String RID_STR_SEARCHREPLACES
     Text[ chinese_simplified ] = "¸üÌæËÑÑ°ÄÚÈİ XX ´Î";
     Text[ russian ] = "Èñêîìîå ïîíÿòèå çàìåíåíî XX ğàç";
     Text[ polish ] = "Szukane has³o zast¹piono XXrazy.";
-    Text[ japanese ] = "ŒŸõ·°‚Í XX ‰ñ‚à’uŠ·‚³‚ê‚Ä‚¢‚Ü‚·B";
+    Text[ japanese ] = "XX ŒÂ‚ÌŒŸõ·°‚ª’uŠ·‚³‚ê‚Ü‚µ‚½B";
     Text[ chinese_traditional ] = "·j´M¶µ¥Ø XX ¦¸¥N´À";
     Text[ arabic ] = "Êã ÇÓÊÈÏÇá ÈíÇäÇÊ ÇáÈÍË ××× ãÑÉ";
     Text[ dutch ] = "Zoekbegrip XX keer vervangen";
