@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-05-10 10:47:19 $
+ *  last change: $Author: cd $ $Date: 2001-06-06 17:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ namespace framework{
 #define SECTION_ACTIVESERVER                    SECTION_GLOBAL
 #define SECTION_CONNECTIONTYPE                  SECTION_GLOBAL
 #define SECTION_LANGUAGE                        SECTION_GLOBAL
+#define SECTION_SECURITYPROXY                   SECTION_GLOBAL
 #define SECTION_PLAIN                           SECTION_DEFAULTPORTS
 #define SECTION_SECURE                          SECTION_DEFAULTPORTS
 #define SECTION_COMPRESSEDSECURE                SECTION_DEFAULTPORTS
@@ -250,11 +251,13 @@ namespace framework{
 #define KEY_COMPRESSEDSECURE                    "compressed_secure"
 #define KEY_COMPRESSED                          "compressed"
 #define KEY_SERVER_X                            "Server_"
+#define KEY_SECURITYPROXY                       "SecurityProxy"
 
 #define PROPERTYNAME_CONNECTIONTYPE             DECLARE_ASCII("ConnectionType"                  )
 #define PROPERTYNAME_LANGUAGE                   DECLARE_ASCII("Language"                        )
 #define PROPERTYNAME_PARENTWINDOW               DECLARE_ASCII("ParentWindow"                    )
 #define PROPERTYNAME_PASSWORD                   DECLARE_ASCII("Password"                        )
+#define PROPERTYNAME_SECURITYPROXY              DECLARE_ASCII("SecurityProxy"                   )
 #define PROPERTYNAME_SERVER                     DECLARE_ASCII("Server"                          )
 #define PROPERTYNAME_SERVERHISTORY              DECLARE_ASCII("ServerHistory"                   )
 #define PROPERTYNAME_USERNAME                   DECLARE_ASCII("UserName"                        )
@@ -274,8 +277,9 @@ namespace framework{
 #define PROPERTYHANDLE_COMPRESSEDSECURE         9
 #define PROPERTYHANDLE_PLAIN                    10
 #define PROPERTYHANDLE_SECURE                   11
+#define PROPERTYHANDLE_SECURITYPROXY            12
 
-#define PROPERTYCOUNT                           11
+#define PROPERTYCOUNT                           12
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -294,6 +298,8 @@ struct tIMPL_DialogData
     sal_Int32               nPortCompressedSecure   ;
     sal_Int32               nPortCompressed         ;
     ANY                     aParentWindow           ;
+    OUSTRING                sSecurityProxy          ;
+    sal_Bool                bProxyChanged           ;
 
     // default ctor to initialize empty structure.
     tIMPL_DialogData()
@@ -308,6 +314,8 @@ struct tIMPL_DialogData
         ,   nPortCompressedSecure   ( 0                                     )
         ,   nPortCompressed         ( 0                                     )
         ,   aParentWindow           (                                       )
+        ,   sSecurityProxy          ( OUSTRING()                            )
+        ,   bProxyChanged           ( sal_False                             )
     {
     }
 
@@ -324,6 +332,8 @@ struct tIMPL_DialogData
         ,   nPortCompressedSecure   ( aCopyDataSet.nPortCompressedSecure    )
         ,   nPortCompressed         ( aCopyDataSet.nPortCompressed          )
         ,   aParentWindow           ( aCopyDataSet.aParentWindow            )
+        ,   sSecurityProxy          ( aCopyDataSet.sSecurityProxy           )
+        ,   bProxyChanged           ( aCopyDataSet.bProxyChanged            )
     {
     }
 
@@ -341,6 +351,8 @@ struct tIMPL_DialogData
         nPortCompressedSecure   = aCopyDataSet.nPortCompressedSecure    ;
         nPortCompressed         = aCopyDataSet.nPortCompressed          ;
         aParentWindow           = aCopyDataSet.aParentWindow            ;
+        sSecurityProxy          = aCopyDataSet.sSecurityProxy           ;
+        bProxyChanged           = aCopyDataSet.bProxyChanged            ;
         return *this;
     }
 };
@@ -456,11 +468,13 @@ class cIMPL_Dialog  :   public ModalDialog
         FixedImage          m_imageHeader           ;
         FixedText           m_textLoginText         ;
         FixedText           m_textUserName          ;
-        FixedText           m_textPassword          ;
-        FixedText           m_textServer            ;
         Edit                m_editUserName          ;
+        FixedText           m_textPassword          ;
         Edit                m_editPassword          ;
+        FixedText           m_textServer            ;
         ComboBox            m_comboServer           ;
+        FixedText           m_textSecurityProxy     ;
+        Edit                m_editSecurityProxy     ;
         OKButton            m_buttonOK              ;
         CancelButton        m_buttonCancel          ;
         tIMPL_DialogData    m_aDataSet              ;
@@ -788,6 +802,19 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         void impl_closeProfile();
 
         /*-****************************************************************************************************//**
+            @short      write profile and free some member
+            @descr      This method writes current settings and deinitialize some member too.
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        void impl_writeProfile();
+
+        /*-****************************************************************************************************//**
             @short      check current server history
             @descr      Our current server history implementation can handle 10 elements as maximum.
                         If more then 10 elements exist; old ones will be deleted.
@@ -827,6 +854,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         void                    impl_writePortSecure            (           sal_Int32               nPort           );
         void                    impl_writePortCompressedSecure  (           sal_Int32               nPort           );
         void                    impl_writePortCompressed        (           sal_Int32               nPort           );
+        void                    impl_writeSecurityProxy         (   const   OUSTRING&               sSecurityProxy  );
 
         OUSTRING                impl_readUserName               (                                                   );
         sal_Int32               impl_readActiveServer           (                                                   );
@@ -837,6 +865,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         sal_Int32               impl_readPortSecure             (                                                   );
         sal_Int32               impl_readPortCompressedSecure   (                                                   );
         sal_Int32               impl_readPortCompressed         (                                                   );
+        OUSTRING                impl_readSecurityProxy          (                                                   );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
