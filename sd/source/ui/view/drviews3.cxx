@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:44:24 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include "DrawViewShell.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _EEITEMID_HXX
 #include <svx/eeitemid.hxx>
@@ -186,6 +188,9 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
+#include "sdabstdlg.hxx" //CHINA001
+
+#include <sfx2/ipclient.hxx>
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -490,7 +495,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             OSL_ASSERT (GetViewShell()!=NULL);
             SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
 
-            if ( pIPClient && pIPClient->IsInPlaceActive() )
+            if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
             {
                 const SfxRectangleItem& rRect =
                     (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
@@ -510,10 +515,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         if (pObj->GetObjInventor() == SdrInventor &&
                             pObj->GetObjIdentifier() == OBJ_OLE2)
                         {
-                            SvInPlaceObjectRef aIPObj =
-                            ( (SdrOle2Obj*) pObj)->GetObjRef();
-
-                            if ( aIPObj.Is() )
+                            if ( ( (SdrOle2Obj*) pObj)->GetObjRef().is() )
                             {
                                 pObj->SetLogicRect(aRect);
                             }
