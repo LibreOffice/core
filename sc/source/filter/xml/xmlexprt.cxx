@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-28 07:50:57 $
+ *  last change: $Author: sab $ $Date: 2001-12-04 18:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,6 +503,12 @@ ScXMLExport::~ScXMLExport()
         delete pChangeTrackingExportHelper;
     if (pChartListener)
         delete pChartListener;
+    if (pCellsItr)
+        delete pCellsItr;
+    if (pDefaults)
+        delete pDefaults;
+    if (pNumberFormatAttributesExportHelper)
+        delete pNumberFormatAttributesExportHelper;
 }
 
 sal_Bool ScXMLExport::HasDrawPages(uno::Reference <sheet::XSpreadsheetDocument>& xDoc)
@@ -1359,14 +1365,13 @@ void ScXMLExport::_ExportContent()
                 pMergedRangesContainer->Sort();
                 pSharedData->GetDetectiveObjContainer()->Sort();
 
-                ScMyNotEmptyCellsIterator aCellsItr(*this);
-                pCellsItr = &aCellsItr;
-                aCellsItr.SetShapes( pSharedData->GetShapesContainer() );
-                aCellsItr.SetMergedRanges( pMergedRangesContainer );
-                aCellsItr.SetAreaLinks( &aAreaLinks );
-                aCellsItr.SetEmptyDatabaseRanges( &aEmptyRanges );
-                aCellsItr.SetDetectiveObj( pSharedData->GetDetectiveObjContainer() );
-                aCellsItr.SetDetectiveOp( &aDetectiveOpContainer );
+                pCellsItr->Clear();
+                pCellsItr->SetShapes( pSharedData->GetShapesContainer() );
+                pCellsItr->SetMergedRanges( pMergedRangesContainer );
+                pCellsItr->SetAreaLinks( &aAreaLinks );
+                pCellsItr->SetEmptyDatabaseRanges( &aEmptyRanges );
+                pCellsItr->SetDetectiveObj( pSharedData->GetDetectiveObjContainer() );
+                pCellsItr->SetDetectiveOp( &aDetectiveOpContainer );
 
                 if (nTableCount > 0)
                     pValidationsContainer->WriteValidations(*this);
@@ -1419,7 +1424,7 @@ void ScXMLExport::_ExportContent()
                             table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
                             pSharedData->SetLastColumn(nTable, aRange.EndColumn);
                             pSharedData->SetLastRow(nTable, aRange.EndRow);
-                            aCellsItr.SetCurrentTable(nTable, xCurrentTable);
+                            pCellsItr->SetCurrentTable(nTable, xCurrentTable);
                             pGroupColumns->NewTable();
                             pGroupRows->NewTable();
                             FillColumnRowGroups();
@@ -1442,7 +1447,7 @@ void ScXMLExport::_ExportContent()
                             sal_Int32 nEqualCells(0);
                             ScMyCell aCell;
                             ScMyCell aPrevCell;
-                            while(aCellsItr.GetNext(aCell, pCellStyles))
+                            while(pCellsItr->GetNext(aCell, pCellStyles))
                             {
                                 if (bIsFirst)
                                 {
