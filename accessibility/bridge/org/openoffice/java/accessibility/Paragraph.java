@@ -60,7 +60,7 @@ package org.openoffice.java.accessibility;
 import javax.accessibility.AccessibleContext;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 /**
  */
@@ -72,7 +72,7 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
     protected Paragraph(XAccessible xAccessible, XAccessibleContext xAccessibleContext, XAccessibleStateSet xAccessibleStateSet) {
         super(javax.accessibility.AccessibleRole.TEXT, xAccessible, xAccessibleContext);
         editable = xAccessibleStateSet.contains(AccessibleStateType.EDITABLE);
-        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTILINE);
+        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTI_LINE);
     }
 
     protected class AccessibleParagraphListener extends AccessibleContainerListener {
@@ -123,7 +123,7 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
                     editable = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.EDITABLE, enable);
                     break;
-                case AccessibleStateType.MULTILINE:
+                case AccessibleStateType.MULTI_LINE:
                     multiLine = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.MULTI_LINE, enable);
                     break;
@@ -138,10 +138,10 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_TEXT_EVENT:
+                case AccessibleEventId.TEXT_CHANGED:
                     handleTextChangedEvent(event.OldValue, event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_CARET_EVENT:
+                case AccessibleEventId.CARET_CHANGED:
                     firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, Component.toNumber(event.OldValue), Component.toNumber(event.NewValue));
                     break;
                 default:

@@ -463,7 +463,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                     } catch (com.sun.star.uno.Exception e2) {
                     }
                 }
-            } catch (com.sun.star.uno.RuntimeException e) {
+            } catch (com.sun.star.uno.Exception e) {
             }
         }
         return null;
