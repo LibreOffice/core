@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:09:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
 #endif
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 /* -----------------------------27.04.01 15:38--------------------------------
     control to remove/insert cjk settings dependent vertical text toolbox item
  ---------------------------------------------------------------------------*/
@@ -82,7 +86,7 @@ public:
 /* -----------------------------12.09.2002 11:50------------------------------
 
  ---------------------------------------------------------------------------*/
-class SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
+class SVX_DLLPUBLIC SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -91,7 +95,7 @@ public:
 /* -----------------------------12.09.2002 11:50------------------------------
 
  ---------------------------------------------------------------------------*/
-class SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
+class SVX_DLLPUBLIC SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
