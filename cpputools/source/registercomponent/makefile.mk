@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mh $ $Date: 2003-03-24 16:59:14 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:07:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,20 +77,20 @@ ENABLE_EXCEPTIONS=TRUE
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
-# output directory (one dir for each project)
-UNOUCROUT=$(OUT)$/inc
-
-# adding to inludepath
-INCPRE+=$(UNOUCROUT)
+UNOUCROUT = $(OUT)$/inc$/$(TARGET)
+INCPRE += $(UNOUCROUT)
+CPPUMAKERFLAGS += -C
 
 UNOTYPES=\
              com.sun.star.uno.TypeClass \
              com.sun.star.lang.XMultiServiceFactory \
              com.sun.star.lang.XSingleServiceFactory \
-              com.sun.star.lang.XMultiComponentFactory \
-              com.sun.star.lang.XSingleComponentFactory \
+             com.sun.star.lang.XMultiComponentFactory \
+             com.sun.star.lang.XSingleComponentFactory \
              com.sun.star.lang.XComponent \
              com.sun.star.container.XContentEnumerationAccess \
+             com.sun.star.container.XSet \
+             com.sun.star.loader.CannotActivateFactoryException \
             com.sun.star.registry.XImplementationRegistration
 
 # --- Files --------------------------------------------------------
