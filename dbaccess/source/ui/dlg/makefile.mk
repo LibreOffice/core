@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.4 $
+ #  $Revision: 1.5 $
  #
- #  last change: $Author: fs $ $Date: 2000-10-25 13:01:00 $
+ #  last change: $Author: fs $ $Date: 2000-10-26 18:07:11 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        paramdialog.src	\
         dsselect.src	\
         dbadmin.src	\
         dbfindex.src	\
@@ -85,6 +86,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/paramdialog.obj	\
         $(SLO)$/odbcconfig.obj	\
         $(SLO)$/dsselect.obj	\
         $(SLO)$/dbadmin.obj	\
@@ -100,6 +102,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.4  2000/10/25 13:01:00  fs
+ #	moved three files to ..\uno
+ #	
  #	Revision 1.3  2000/10/24 13:03:00  fs
  #	some new file - added functionality for browsing system data sources
  #	
