@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:05:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,72 +74,18 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Vorgaben";
-        Text[ ENGLISH ] = "Presets";
-        Text[ english_us ] = "Settings";
-        Text[ portuguese ] = "Predefinições";
-        Text[ russian ] = "Íàñòğîéêè";
-        Text[ greek ] = "Ñõèìßóåéò";
-        Text[ dutch ] = "Standaard";
-        Text[ french ] = "Définitions";
-        Text[ spanish ] = "Predeterminaciones";
-        Text[ finnish ] = "Asetukset";
-        Text[ italian ] = "Predefiniti";
-        Text[ danish ] = "Indstillinger";
-        Text[ swedish ] = "Förinställningar";
-        Text[ polish ] = "Ustawienia";
-        Text[ portuguese_brazilian ] = "Definições";
-        Text[ japanese ] = "ãƒ—ãƒªã‚»ãƒƒãƒˆ";
-        Text[ korean ] = "ê¸°ë³¸ ì„¤ì •";
-        Text[ chinese_simplified ] = "é¢„ç½®";
-        Text[ chinese_traditional ] = "é è¨­";
-        Text[ turkish ] = "Ayarlar";
-        Text[ arabic ] = "Presets";
-        Text[ catalan ] = "Predefinits";
-        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
-        Text[ czech ] = "NastavenÃ­";
-        Text[ hebrew ] = "â€®×”×’×“×¨×•×ªâ€¬";
-        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
-        Text[ slovak ] = "Nastavenia";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "Nastavitve";
+        Text [ de ] = "Vorgaben";
+        Text [ en-US ] = "Settings";
     };
     ImageRadioButton RB_NO_WRAP
     {
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text = "~Kein" ;
-        Text [ ENGLISH ] = "~None" ;
-        Text [ english_us ] = "~None" ;
+        Text [ de ] = "~Kein" ;
+        Text [ en-US ] = "~None" ;
         TopImage = True ;
-        Text [ dutch ] = "~Geen" ;
-        Text [ italian ] = "Senza" ;
-        Text [ spanish ] = "~Ninguno" ;
-        Text [ french ] = "Aucun(e)" ;
-        Text [ swedish ] = "~Ingen" ;
-        Text [ danish ] = "Ing~en" ;
-        Text [ portuguese ] = "~Nenhum" ;
-        Text [ portuguese_brazilian ] = "~Nenhum" ;
-        Text[ chinese_simplified ] = "æ— (~N)";
-        Text[ russian ] = "Íåò";
-        Text[ polish ] = "~Brak";
-        Text[ japanese ] = "ä¸Šä¸‹(~N)";
-        Text[ language_user1 ] = "; Íåò";
-        Text[ chinese_traditional ] = "ç„¡(~N)";
-        Text[ arabic ] = "ÈÏæä";
-        Text[ greek ] = "Êáíİíá";
-        Text[ korean ] = "ì—†ìŒ(~N)";
-        Text[ turkish ] = "~Yok";
-        Text[ catalan ] = "C~ap";
-        Text[ finnish ] = "Ei mitään";
-        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
-        Text[ czech ] = "Å½Ã¡dnÃ©";
-        Text[ hebrew ] = "â€®×œ×œ×â€¬";
-        Text[ hindi ] = "~à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "Å½ia~dne";
-        Text[ hungarian ] = "~Nincs";
-        Text[ slovenian ] = "~Brez";
+        Text [ x-comment ] = "; Íåò";
     };
     ImageRadioButton RB_WRAP_LEFT
     {
@@ -147,34 +93,8 @@ TabPage TP_FRM_WRAP
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
         TopImage = True ;
-        Text = "Vor" ;
-        Text [ english_us ] = "Before" ;
-        Text[ portuguese ] = "~Esquerda";
-        Text[ russian ] = "Ñëåâà";
-        Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ dutch ] = "~Links";
-        Text[ french ] = "Avant";
-        Text[ spanish ] = "Antes";
-        Text[ finnish ] = "Vasen";
-        Text[ italian ] = "Prima";
-        Text[ danish ] = "Før";
-        Text[ swedish ] = "Före";
-        Text[ polish ] = "Z ~lewej";
-        Text[ portuguese_brazilian ] = "~Esquerda";
-        Text[ japanese ] = "å‰";
-        Text[ korean ] = "ì•";
-        Text[ chinese_simplified ] = "ä¹‹å‰";
-        Text[ chinese_traditional ] = "å‰";
-        Text[ turkish ] = "Önce";
-        Text[ arabic ] = "Åáì ÇáíÓÇÑ";
-        Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
-        Text[ catalan ] = "~Esquerra";
-        Text[ czech ] = "Vlevo";
-        Text[ hebrew ] = "â€®×œ×¤× ×™â€¬";
-        Text[ hindi ] = "~à¤¬à¤¾à¤¯à¤¾à¤";
-        Text[ slovak ] = "Pred";
-        Text[ hungarian ] = "~ElÅ‘tte";
-        Text[ slovenian ] = "Pred";
+        Text [ de ] = "Vor" ;
+        Text [ en-US ] = "Before" ;
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
@@ -182,316 +102,73 @@ TabPage TP_FRM_WRAP
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
         TopImage = True ;
-        Text = "Hinter" ;
-        Text [ english_us ] = "After" ;
-        Text[ portuguese ] = "~Direita";
-        Text[ russian ] = "Ñïğàâà";
-        Text[ greek ] = "ÄåîéÜ";
-        Text[ dutch ] = "~Rechts";
-        Text[ french ] = "Après";
-        Text[ spanish ] = "Después";
-        Text[ finnish ] = "Oikea";
-        Text[ italian ] = "Dopo";
-        Text[ danish ] = "Efter";
-        Text[ swedish ] = "Efter";
-        Text[ polish ] = "Z prawe~j";
-        Text[ portuguese_brazilian ] = "~Direita";
-        Text[ japanese ] = "å¾Œ";
-        Text[ korean ] = "ë’¤";
-        Text[ chinese_simplified ] = "ä¹‹å";
-        Text[ chinese_traditional ] = "å¾Œ";
-        Text[ turkish ] = "Sonra";
-        Text[ arabic ] = "Åáì Çáíãíä";
-        Text[ thai ] = "à¸‚~à¸§à¸²";
-        Text[ catalan ] = "~Dreta";
-        Text[ czech ] = "Vpravo";
-        Text[ hebrew ] = "â€®××—×¨×™â€¬";
-        Text[ hindi ] = "à¤¦à¤¾~à¤¹à¤¿à¤¨à¤¾";
-        Text[ slovak ] = "Za";
-        Text[ hungarian ] = "UtÃ¡na";
-        Text[ slovenian ] = "Za";
+        Text [ de ] = "Hinter" ;
+        Text [ en-US ] = "After" ;
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
         Pos = MAP_APPFONT ( 177 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text = "~Parallel" ;
-        Text [ ENGLISH ] = "~Parallel" ;
-        Text [ english_us ] = "~Parallel" ;
+        Text [ de ] = "~Parallel" ;
+        Text [ en-US ] = "~Parallel" ;
         TopImage = True ;
-        Text [ dutch ] = "~Parallel" ;
-        Text [ italian ] = "~Parallelo" ;
-        Text [ spanish ] = "~Paralelo" ;
-        Text [ french ] = "~Parallèle" ;
-        Text [ swedish ] = "~Parallell" ;
-        Text [ danish ] = "~Parallel" ;
-        Text [ portuguese ] = "~Paralelo" ;
-        Text [ portuguese_brazilian ] = "~Paralelo" ;
-        Text[ chinese_simplified ] = "å¹³è¡Œ(~P)";
-        Text[ russian ] = "Ïî êîíòóğó";
-        Text[ polish ] = "Ró~wnolegle";
-        Text[ japanese ] = "ä¸¡å´(~P)";
-        Text[ chinese_traditional ] = "å¹³è¡Œ(~P)";
-        Text[ arabic ] = "ãÊæÇÒ";
-        Text[ greek ] = "ĞáñÜëëçëá";
-        Text[ korean ] = "í‰í–‰(~P)";
-        Text[ turkish ] = "~Paralel";
-        Text[ catalan ] = "~Paral.lel";
-        Text[ finnish ] = "Ympärillä";
-        Text[ thai ] = "~à¸‚à¸™à¸²à¸™";
-        Text[ czech ] = "RovnobÄ›Å¾nÄ›";
-        Text[ hebrew ] = "~Parallel";
-        Text[ hindi ] = "~à¤¸à¤®à¤¾à¤¨à¤¾à¤¨à¥à¤¤à¤°";
-        Text[ slovak ] = "~RovnobeÅ¾ne";
-        Text[ hungarian ] = "~PÃ¡rhuzamos";
-        Text[ slovenian ] = "~Vzporedno";
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
         Pos = MAP_APPFONT ( 6 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text = "~Durchlauf" ;
-        Text [ ENGLISH ] = "Thro~ugh" ;
-        Text [ norwegian ] = "Wrap ~through" ;
-        Text [ italian ] = "Attraverso" ;
-        Text [ portuguese_brazilian ] = "Atra~vés" ;
-        Text [ portuguese ] = "~Através do objecto" ;
-        Text [ finnish ] = "Läpi" ;
-        Text [ danish ] = "Gennem" ;
-        Text [ french ] = "Continu" ;
-        Text [ swedish ] = "Genomflö~de" ;
-        Text [ dutch ] = "~Doorloop" ;
-        Text [ spanish ] = "~Continuo" ;
-        Text [ english_us ] = "Thro~ugh" ;
+        Text [ de ] = "~Durchlauf" ;
+        Text [ en-US ] = "Thro~ugh" ;
         TopImage = True ;
-        Text[ chinese_simplified ] = "è´¯ç©¿(~U)";
-        Text[ russian ] = "Ñêâîçíîå";
-        Text[ polish ] = "Przep³ywa~nie";
-        Text[ japanese ] = "æŠ˜ã‚Šè¿”ã—ãªã—(~U)";
-        Text[ chinese_traditional ] = "ä¸ç’°ç¹(~U)";
-        Text[ arabic ] = "ÚÈÑ";
-        Text[ greek ] = "Äéá ìİóïõ";
-        Text[ korean ] = "ë°°ì¹˜ ì—†ìŒ(~U)";
-        Text[ turkish ] = "~Metin arkasına gönder";
-        Text[ catalan ] = "~Continu";
-        Text[ thai ] = "~à¸œà¹ˆà¸²à¸™";
-        Text[ czech ] = "PÅ™es";
-        Text[ hebrew ] = "~Durchlauf";
-        Text[ hindi ] = "~à¤®à¥‡à¤‚";
-        Text[ slovak ] = "Ce~z";
-        Text[ hungarian ] = "~MÃ¶gÃ¶tte";
-        Text[ slovenian ] = "S~kozi";
     };
     ImageRadioButton RB_WRAP_IDEAL
     {
         Pos = MAP_APPFONT ( 65 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text = "D~ynamisch" ;
-        Text [ ENGLISH ] = "D~ynamic Wrap" ;
+        Text [ de ] = "D~ynamisch" ;
         TopImage = True ;
-        Text [ dutch ] = "D~ynamisch" ;
-        Text [ english_us ] = "~Optimal" ;
-        Text [ italian ] = "~Dinamico" ;
-        Text [ spanish ] = "Diná~mico" ;
-        Text [ french ] = "Dynamique" ;
-        Text [ swedish ] = "D~ynamisk" ;
-        Text [ danish ] = "~Optimal" ;
-        Text [ portuguese ] = "D~inâmico" ;
-        Text [ portuguese_brazilian ] = "~Otimizado" ;
-        Text[ chinese_simplified ] = "æœ€ä½³(~O)";
-        Text[ russian ] = "Îïòèìàëüíîå";
-        Text[ polish ] = "~Optymalnie";
-        Text[ japanese ] = "å·¦å³å‹•çš„(~O)";
-        Text[ chinese_traditional ] = "æœ€é©(~O)";
-        Text[ arabic ] = "ÏíäÇãíßí";
-        Text[ greek ] = "Âİëôéóôï";
-        Text[ korean ] = "ìµœì (~O)";
-        Text[ turkish ] = "D~inamik";
-        Text[ catalan ] = "Dinà~mic";
-        Text[ finnish ] = "Optimaalinen";
-        Text[ thai ] = "à¹€~à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "OptimÃ¡lnÃ­";
-        Text[ hebrew ] = "D~ynamisch";
-        Text[ hindi ] = "~à¤¯à¥‹à¤—à¥à¤¯";
-        Text[ slovak ] = "~OptimÃ¡lne";
-        Text[ hungarian ] = "~OptimÃ¡lis";
-        Text[ slovenian ] = "~Optimalno";
+        Text [ en-US ] = "~Optimal" ;
     };
 
     CheckBox CB_ANCHOR_ONLY
     {
         Pos = MAP_APPFONT ( 139 , 111 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text = "Er~ster Absatz" ;
-        Text [ ENGLISH ] = "~First paragraph" ;
-        Text [ english_us ] = "~First paragraph" ;
-        Text [ italian ] = "Primo paragrafo" ;
-        Text [ spanish ] = "Primer párra~fo" ;
-        Text [ french ] = "1~er paragraphe" ;
-        Text [ dutch ] = "~Eerste alinea" ;
-        Text [ swedish ] = "För~sta stycket" ;
-        Text [ danish ] = "Først~e afsnit" ;
-        Text [ portuguese_brazilian ] = "~Primeiro parágrafo" ;
-        Text [ portuguese ] = "Primeiro pará~grafo" ;
-        Text[ chinese_simplified ] = "ç¬¬ä¸€æ®µè½(~F)";
-        Text[ russian ] = "Ïåğâûé àáçàö";
-        Text[ polish ] = "Pierwszy ~akapit";
-        Text[ japanese ] = "æœ€åˆã®æ®µè½(~F)";
-        Text[ chinese_traditional ] = "ç¬¬ä¸€æ®µè½(~F)";
-        Text[ arabic ] = "ÇáİŞÑÉ ÇáÃæáì";
-        Text[ greek ] = "Ğñşôç ğáñÜãñáöï~ò";
-        Text[ korean ] = "ì²«ë²ˆì§¸ ë‹¨ë½(~F)";
-        Text[ turkish ] = "~İlk paragraf";
-        Text[ catalan ] = "Primer paràgra~f";
-        Text[ finnish ] = "Ensimmäinen kappale";
-        Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¹~à¸£à¸";
-        Text[ czech ] = "PrvnÃ­ odstavec";
-        Text[ hebrew ] = "Er~ster Absatz";
-        Text[ hindi ] = "~à¤ªà¤¹à¤¿à¤²à¤¾ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦";
-        Text[ slovak ] = "P~rvÃ½ odstavec";
-        Text[ hungarian ] = "ElsÅ‘ be~kezdÃ©s";
-        Text[ slovenian ] = "P~rvi odstavek";
+        Text [ de ] = "Er~ster Absatz" ;
+        Text [ en-US ] = "~First paragraph" ;
     };
     CheckBox CB_TRANSPARENT
     {
         Pos = MAP_APPFONT ( 139 , 125 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text = "Im Hin~tergrund" ;
-        Text [ ENGLISH ] = "To bac~kground" ;
-        Text [ dutch ] = "~Op achtergrond" ;
-        Text [ english_us ] = "In bac~kground" ;
-        Text [ italian ] = "Attraverso trasparente" ;
-        Text [ spanish ] = "En el f~ondo" ;
-        Text [ french ] = "À l'arrière-plan" ;
-        Text [ swedish ] = "I ~bakgrunden" ;
-        Text [ danish ] = "I ~baggrunden" ;
-        Text [ portuguese ] = "Em ~segundo plano" ;
-        Text [ portuguese_brazilian ] = "No plano de ~fundo" ;
-        Text[ chinese_simplified ] = "ç½®äºèƒŒæ™¯(~K)";
-        Text[ russian ] = "Íà ôîíå";
-        Text[ polish ] = "W ~tle";
-        Text[ japanese ] = "èƒŒæ™¯ã«(~K)";
-        Text[ chinese_traditional ] = "ç½®æ–¼èƒŒæ™¯(~K)";
-        Text[ arabic ] = "İí ÇáÎáİíÉ";
-        Text[ greek ] = "Óå öüíôï";
-        Text[ korean ] = "ë°°ê²½ì—(~K)";
-        Text[ turkish ] = "Arta~landa";
-        Text[ catalan ] = "En el ~fons";
-        Text[ finnish ] = "Taustalla";
-        Text[ thai ] = "à¹ƒà¸™à¸à¸·à¹‰à¸™~à¸«à¸¥à¸±à¸‡";
-        Text[ czech ] = "Na pozadÃ­";
-        Text[ hebrew ] = "Im Hin~tergrund";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ~à¤­à¤¾à¤— à¤®à¥‡à¤‚";
-        Text[ slovak ] = "Na ~pozadÃ­";
-        Text[ hungarian ] = "~HÃ¡ttÃ©rben";
-        Text[ slovenian ] = "V ~ozadju";
+        Text [ de ] = "Im Hin~tergrund" ;
+        Text [ en-US ] = "In bac~kground" ;
     };
     CheckBox CB_OUTLINE
     {
         Pos = MAP_APPFONT ( 139 , 139 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text = "Kont~ur" ;
-        Text [ ENGLISH ] = "Contou~r" ;
+        Text [ de ] = "Kont~ur" ;
         Hide = TRUE ;
-        Text [ dutch ] = "~Contour" ;
-        Text [ english_us ] = "~Contour" ;
-        Text [ italian ] = "Contorno" ;
-        Text [ spanish ] = "Conto~rno" ;
-        Text [ french ] = "Contour" ;
-        Text [ swedish ] = "~Kontur" ;
-        Text [ danish ] = "K~ontur" ;
-        Text [ portuguese ] = "~Contorno" ;
-        Text [ portuguese_brazilian ] = "~Contorno" ;
-        Text[ chinese_simplified ] = "è½®å»“(~C)";
-        Text[ russian ] = "Êîíòóğ";
-        Text[ polish ] = "~Kontur";
-        Text[ japanese ] = "è¼ªéƒ­(~C)";
-        Text[ chinese_traditional ] = "è¼ªå»“(~C)";
-        Text[ arabic ] = "ÇáÎØ ÇáßİÇİí";
-        Text[ greek ] = "Ğåñßãñáììá";
-        Text[ korean ] = "ìœ¤ê³½(~C)";
-        Text[ turkish ] = "~Dış çizgiler";
-        Text[ catalan ] = "~Contorn";
-        Text[ finnish ] = "Ääriviiva";
-        Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¹à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Obrys";
-        Text[ hebrew ] = "Kont~ur";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¥‡~à¤¶";
-        Text[ slovak ] = "~Obrys";
-        Text[ hungarian ] = "~KÃ¶rvonal";
-        Text[ slovenian ] = "O~bris";
+        Text [ en-US ] = "~Contour" ;
     };
     CheckBox CB_ONLYOUTSIDE
     {
         Pos = MAP_APPFONT ( 139 , 153 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text = "~Nur außen" ;
-        Text [ ENGLISH ] = "Onl~y outside" ;
+        Text [ de ] = "~Nur außen" ;
         Hide = TRUE ;
-        Text [ portuguese ] = "Só ~exterior" ;
-        Text [ english_us ] = "Outside only" ;
-        Text [ portuguese_brazilian ] = "Apenas o exterior" ;
-        Text [ swedish ] = "Bara uta~nför" ;
-        Text [ danish ] = "Kun yderside" ;
-        Text [ italian ] = "Solo esterno" ;
-        Text [ spanish ] = "Solo en el exterior" ;
-        Text [ french ] = "~Seul l'extérieur" ;
-        Text [ dutch ] = "~Alleen buiten" ;
-        Text[ chinese_simplified ] = "åªæ˜¯å¤–ä¾§";
-        Text[ russian ] = "Òîëüêî ñíàğóæè";
-        Text[ polish ] = "Tylko na zewn¹trz";
-        Text[ japanese ] = "å¤–å´ã®ã¿";
-        Text[ chinese_traditional ] = "åªæ˜¯å¤–å´";
-        Text[ arabic ] = "İí ÇáÎÇÑÌ İŞØ";
-        Text[ greek ] = "Ìü~íï åîùôåñéêÜ";
-        Text[ korean ] = "ë°”ê¹¥ìª½ë§Œ";
-        Text[ turkish ] = "Sadece dış kısım";
-        Text[ catalan ] = "Només a l'exterior";
-        Text[ finnish ] = "Vain ulkopuoli";
-        Text[ thai ] = "à¸”à¹‰à¸²à¸™à¸™à¸­à¸à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
-        Text[ czech ] = "Pouze vnÄ›";
-        Text[ hebrew ] = "~Nur auÃŸen";
-        Text[ hindi ] = "à¤•à¥‡à¤µà¤² à¤¬à¤¾à¤¹à¤°à¥€ à¤“à¤°";
-        Text[ slovak ] = "Iba vonku";
-        Text[ hungarian ] = "Csak kÃ¼lsÅ‘ oldal";
-        Text[ slovenian ] = "Samo zunaj";
+        Text [ en-US ] = "Outside only" ;
     };
     FixedLine FL_OPTION
     {
         Pos = MAP_APPFONT ( 133 , 100 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text = "Optionen" ;
-        Text [ ENGLISH ] = "Options" ;
-        Text [ dutch ] = "Opties" ;
-        Text [ english_us ] = "Options" ;
-        Text [ italian ] = "Opzioni" ;
-        Text [ spanish ] = "Opciones" ;
-        Text [ french ] = "Options" ;
-        Text [ swedish ] = "Alternativ" ;
-        Text [ danish ] = "Indstillinger" ;
-        Text [ portuguese ] = "Opções" ;
-        Text [ portuguese_brazilian ] = "Opções" ;
-        Text[ chinese_simplified ] = "é€‰é¡¹";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ polish ] = "Opcje";
-        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-        Text[ chinese_traditional ] = "é¸é …";
-        Text[ arabic ] = "ÎíÇÑÇÊ";
-        Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "ì˜µì…˜";
-        Text[ turkish ] = "Seçenekler";
-        Text[ catalan ] = "Opcions";
-        Text[ finnish ] = "Asetukset";
-        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "Volby";
-        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
-        Text[ slovak ] = "Nastavenia";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "MoÅ¾nosti";
+        Text [ de ] = "Optionen" ;
+        Text [ en-US ] = "Options" ;
     };
     FixedLine FL_OPTION_SEP
     {
@@ -503,37 +180,9 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "L~inks" ;
-        Text [ ENGLISH ] = "L~eft" ;
-        Text [ norwegian ] = "~Left" ;
-        Text [ italian ] = "Sinistra" ;
-        Text [ portuguese_brazilian ] = "~Esquerda" ;
-        Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "Vasen" ;
-        Text [ danish ] = "~Venstre" ;
-        Text [ french ] = "À gauche" ;
-        Text [ swedish ] = "~Vänster" ;
-        Text [ dutch ] = "L~inks" ;
-        Text [ spanish ] = "I~zquierda" ;
-        Text [ english_us ] = "L~eft" ;
+        Text [ de ] = "L~inks" ;
+        Text [ en-US ] = "L~eft" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å·¦(~E)";
-        Text[ russian ] = "Ñëåâà";
-        Text[ polish ] = "~Z lewej";
-        Text[ japanese ] = "å·¦(~E)";
-        Text[ chinese_traditional ] = "å·¦(~E)";
-        Text[ arabic ] = "Åáì ÇáíÓÇÑ";
-        Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "ì™¼ìª½(~E)";
-        Text[ turkish ] = "S~ol";
-        Text[ catalan ] = "E~squerra";
-        Text[ thai ] = "à¸‹à¹‰à¸²~à¸¢";
-        Text[ czech ] = "Vlevo";
-        Text[ hebrew ] = "L~inks";
-        Text[ hindi ] = "à¤¬à¤¾~à¤¯à¤¾à¤";
-        Text[ slovak ] = "~VÄ¾avo";
-        Text[ hungarian ] = "~Bal oldalon";
-        Text[ slovenian ] = "L~evo";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -554,37 +203,9 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Re~chts" ;
-        Text [ ENGLISH ] = "R~ight" ;
-        Text [ norwegian ] = "~Right" ;
-        Text [ italian ] = "Destra" ;
-        Text [ portuguese_brazilian ] = "~Direita" ;
-        Text [ portuguese ] = "~Direita" ;
-        Text [ finnish ] = "Oikea" ;
-        Text [ danish ] = "~Højre" ;
-        Text [ french ] = "À droite" ;
-        Text [ swedish ] = "H~öger" ;
-        Text [ dutch ] = "Rec~hts" ;
-        Text [ spanish ] = "D~erecha" ;
-        Text [ english_us ] = "~Right" ;
+        Text [ de ] = "Re~chts" ;
+        Text [ en-US ] = "~Right" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å³(~R)";
-        Text[ russian ] = "Ñïğàâà";
-        Text[ polish ] = "Z p~rawej";
-        Text[ japanese ] = "å³(~R)";
-        Text[ chinese_traditional ] = "å³(~R)";
-        Text[ arabic ] = "Åáì Çáíãíä";
-        Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½(~R)";
-        Text[ turkish ] = "S~ağ";
-        Text[ catalan ] = "Dre~ta";
-        Text[ thai ] = "~à¸‚à¸§à¸²";
-        Text[ czech ] = "Vpravo";
-        Text[ hebrew ] = "Re~chts";
-        Text[ hindi ] = "~à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
-        Text[ slovak ] = "Vp~ravo";
-        Text[ hungarian ] = "~Jobb oldalon";
-        Text[ slovenian ] = "~Desno";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -605,37 +226,9 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "~Oben" ;
-        Text [ ENGLISH ] = "~Top" ;
-        Text [ norwegian ] = "~Top" ;
-        Text [ italian ] = "In alto" ;
-        Text [ portuguese_brazilian ] = "Em ~Cima" ;
-        Text [ portuguese ] = "~Topo" ;
-        Text [ finnish ] = "Yläreuna" ;
-        Text [ danish ] = "~Top" ;
-        Text [ french ] = "En haut" ;
-        Text [ swedish ] = "~Uppe" ;
-        Text [ dutch ] = "~Boven" ;
-        Text [ spanish ] = "~Arriba" ;
-        Text [ english_us ] = "~Top" ;
+        Text [ de ] = "~Oben" ;
+        Text [ en-US ] = "~Top" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ä¸Š(~T)";
-        Text[ russian ] = "Ñâåğõó";
-        Text[ polish ] = "U ~góry";
-        Text[ japanese ] = "ä¸Š(~T)";
-        Text[ chinese_traditional ] = "ä¸Š(~T)";
-        Text[ arabic ] = "ÃÚáì";
-        Text[ greek ] = "~ĞÜíù";
-        Text[ korean ] = "ìœ„(~T)";
-        Text[ turkish ] = "~Yukarı";
-        Text[ catalan ] = "Part s~uperior";
-        Text[ thai ] = "~à¸šà¸™";
-        Text[ czech ] = "NahoÅ™e";
-        Text[ hebrew ] = "~Oben";
-        Text[ hindi ] = "~à¤Šà¤ªà¤°";
-        Text[ slovak ] = "~Hore";
-        Text[ hungarian ] = "~Fent";
-        Text[ slovenian ] = "~Zgoraj";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -656,37 +249,9 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Unt~en" ;
-        Text [ ENGLISH ] = "~Bottom" ;
-        Text [ norwegian ] = "~Bottom" ;
-        Text [ italian ] = "~Basso" ;
-        Text [ portuguese_brazilian ] = "Em ~Baixo" ;
-        Text [ portuguese ] = "Em ~baixo" ;
-        Text [ finnish ] = "Alareuna" ;
-        Text [ danish ] = "~Bund" ;
-        Text [ french ] = "En bas" ;
-        Text [ swedish ] = "N~ere" ;
-        Text [ dutch ] = "Be~neden" ;
-        Text [ spanish ] = "Abajo" ;
-        Text [ english_us ] = "~Bottom" ;
+        Text [ de ] = "Unt~en" ;
+        Text [ en-US ] = "~Bottom" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ä¸‹(~B)";
-        Text[ russian ] = "Âíèçó";
-        Text[ polish ] = "~U do³u";
-        Text[ japanese ] = "ä¸‹(~B)";
-        Text[ chinese_traditional ] = "ä¸‹(~B)";
-        Text[ arabic ] = "ÃÓİá";
-        Text[ greek ] = "ÊÜôù";
-        Text[ korean ] = "ì•„ë˜(~B)";
-        Text[ turkish ] = "A~lt";
-        Text[ catalan ] = "Part ~inferior";
-        Text[ thai ] = "~à¸¥à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Dole";
-        Text[ hebrew ] = "Unt~en";
-        Text[ hindi ] = "~à¤¨à¥€à¤šà¥‡";
-        Text[ slovak ] = "~Dolu";
-        Text[ hungarian ] = "~Lent";
-        Text[ slovenian ] = "~Spodaj";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -707,36 +272,8 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text = "Abstände" ;
-        Text [ ENGLISH ] = "Margins" ;
-        Text [ norwegian ] = "Margins" ;
-        Text [ italian ] = "Distanze" ;
-        Text [ portuguese_brazilian ] = "Afastamento" ;
-        Text [ portuguese ] = "Espaçamento" ;
-        Text [ finnish ] = "Välit" ;
-        Text [ danish ] = "Afstand" ;
-        Text [ french ] = "Écarts" ;
-        Text [ swedish ] = "Avstånd" ;
-        Text [ dutch ] = "Afstanden" ;
-        Text [ spanish ] = "Espacios" ;
-        Text [ english_us ] = "Spacing" ;
-        Text[ chinese_simplified ] = "é—´éš”";
-        Text[ russian ] = "Èíòåğâàëû";
-        Text[ polish ] = "Odstêp";
-        Text[ japanese ] = "ä½™ç™½";
-        Text[ chinese_traditional ] = "é–“éš”";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ";
-        Text[ greek ] = "AğïóôÜóåéò";
-        Text[ korean ] = "ê°„ê²©";
-        Text[ turkish ] = "Boşlık";
-        Text[ catalan ] = "Distàncies";
-        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
-        Text[ czech ] = "VzdÃ¡lenost";
-        Text[ hebrew ] = "â€®×¨×•×•×•×—â€¬";
-        Text[ hindi ] = "à¤…à¤¨à¥à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "VzdialenosÅ¥";
-        Text[ hungarian ] = "TÃ©rkÃ¶z";
-        Text[ slovenian ] = "Razmik";
+        Text [ de ] = "Abstände" ;
+        Text [ en-US ] = "Spacing" ;
     };
 #define WRAP_IDLIST \
         IdList =            \
@@ -754,6 +291,7 @@ TabPage TP_FRM_WRAP
             IMG_KON_IDEAL ;\
         };                 \
         IdCount = { 11 ; };
+
     ImageList IL_WRAP
     {
         Prefix = "wr";
@@ -768,42 +306,4 @@ TabPage TP_FRM_WRAP
     };
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
