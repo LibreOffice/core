@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:24:01 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ static const struct {
     { "lt_LT",  lcl_DATA_EURO, "lt" },
     { "lv_LV",  lcl_DATA_EURO, "lv" },
     { "uk_UA",  lcl_DATA_EURO, "uk" },
+    { "ro_RO",  lcl_DATA_EURO, "ro" },
 
     { "ja_JP",  lcl_DATA_OTHERS, "ja" },
     { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -273,7 +274,7 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
         cals = getAllCalendars(loc);
         len = cals.getLength();
         }
-        OUString& id = name.getToken(0, under, index);
+        const OUString& id = name.getToken(0, under, index);
         for (index = 0; index < cals.getLength(); index++) {
         if (id.equals(cals[index].Name)) {
             ref_cal = cals[index];
