@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpackcreator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:43:04 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
 
     if ( !xTargetStream.is() )
-        throw io::IOException(); // TODO
+        throw io::IOException(); // TODO/LATER
 
     sal_Bool bSuccess = sal_False;
     ::ucb::Content aContent;
@@ -207,7 +207,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
     }
 
     if ( !bSuccess )
-        throw io::IOException(); // TODO: can't proceed with creation
+        throw io::IOException(); // TODO/LATER: can't proceed with creation
 }
 
 //-------------------------------------------------------------------------
