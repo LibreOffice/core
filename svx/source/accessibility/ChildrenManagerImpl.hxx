@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 09:01:26 $
+ *  last change: $Author: af $ $Date: 2002-12-04 13:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,20 @@ private:
             that obejct does not already exist.
     */
     void CreateAccessibilityObjects (ChildDescriptorListType& raChildList);
+
+    /** Add a single shape.  Update all relevant data structures
+        accordingly.  Use this method instead of <member>Update()</member>
+        when only a single shape has been added.
+    */
+    void AddShape (const ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape>& xShape);
+
+    /** Remove a single shape.  Update all relevant data structures
+        accordingly.  Use this method instead of <member>Update()</member>
+        when only a single shape has been removed.
+    */
+    void RemoveShape (const ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape>& xShape);
 };
 
 
