@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-17 07:58:12 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,11 @@ namespace xmloff
         // the font properties are exported as single properties, but there is a FontDescriptor property which
         // collects them all-in-one, this has been exported implicitly
         exportedProperty(PROPERTY_FONT);
+
+        // for the DateFormat and TimeFormat, there exist wrapper properties which has been exported as
+        // style, too
+        exportedProperty(PROPERTY_DATEFORMAT);
+        exportedProperty(PROPERTY_TIMEFORMAT);
     }
 
     //---------------------------------------------------------------------
@@ -791,6 +796,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/04/17 07:58:12  fs
+ *  #85427# +_bVoidDefault parameter for addEnumPropertyAttribute
+ *
  *  Revision 1.15  2001/04/11 13:44:23  fs
  *  #85904# exportRemainingProperties: create the form:properties element only if there is at least one sub element (form:property)
  *
