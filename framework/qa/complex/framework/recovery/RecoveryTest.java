@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecoveryTest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-26 14:30:08 $
+ *  last change: $Date: 2005-02-02 13:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 package complex.framework.recovery;
 
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XDialog;
@@ -103,6 +105,7 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.view.XSelectionSupplier;
 import complexlib.ComplexTestCase;
 import helper.OfficeProvider;
+import helper.OfficeWatcher;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -110,13 +113,16 @@ import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.Random;
 import util.DesktopTools;
+import util.PropertyName;
 import util.SOfficeFactory;
 import util.UITools;
+import util.utils;
 
 public class RecoveryTest extends ComplexTestCase {
 
     static XMultiServiceFactory xMSF;
     static SOfficeFactory SOF;
+    static RecoveryTools rt;
     /**
      * If you devid the screen in four parts in the first of them the office
      * windows should be placed. The range of the first quarter is stored in the variable.
@@ -147,106 +153,125 @@ public class RecoveryTest extends ComplexTestCase {
      * @todo: sceond view of a document
      * @todo: remove recovery data before start test
      * @todo: after a second start after the crash there should no documents recovered anymore
+     * @todo: enable remove of recovery files
+     * @todo: makefile anpassen auf Parameter überprüfen
      */
     public String[] getTestMethodNames() {
-        return new String[]{"makeCrash",
-                            "handleRecoveryWindowAfterCrash"};
-//        return new String[]{"generateDesktop",
-//                            "makeCrash",
-//                            "pause",
-//                            "startOffice",
-//                            "compareWindowPositions"};
-//        return new String[] {"generateDesktop","compareWindowPositions"};
+        return new String[]{"testCrash"};
     }
 
-        /** Create the environment for following tests.
+    /** Create the environment for following tests.
      * Use either a component loader from desktop or
      * from frame
      * @throws Exception Exception
      */
+
+    public void normalCrash(){
+        cleanRecoveryData();
+        startOffice();
+        generateDesktop();
+        makeCrash();
+        int expectedDocumentCount = windowsPosSize.size() + 1;
+        handleRecoveryDialogAfterCrash(expectedDocumentCount);
+        startOffice();
+        handleRecoveryDialog_QuickExit(expectedDocumentCount);
+        handleCrashReporterDialog(true, true);
+        checkDocumentCount(expectedDocumentCount);
+    }
+
+    public void testCrash(){
+        cleanRecoveryData();
+        restoreBackupRecoveryData();
+        startOffice();
+        int expectedDocumentCount = 3;
+//        handleRecoveryDialog_QuickExit(expectedDocumentCount);
+        handleRecoveryDialog_QuickExitAndSave(expectedDocumentCount);
+        //handleCrashReporterDialog(true, true);
+        //checkDocumentCount(expectedDocumentCount);
+    }
+
     public void before() throws Exception {
 
-        // create TypeDetection
-        xMSF = (XMultiServiceFactory)param.getMSF();
-        assure("Could not get XMultiServiceFactory", xMSF != null);
+        String msg ="\n\n\tPATH TO OFFICE BINARY MISSING!\n";
+        msg +="\tPlease run your command with the following parameter:\n\n";
+        msg +="\t-AppExecutionCommand=OFFICEBINARY CONNECTIONSTRING\n\n";
+        msg +="Example Windows:\n";
+        msg +="-AppExecutionCommand=C:\\office\\soffice.exe -accept=socket,host=localhost,port=8101;urp;\n\n";
+        msg +="Example UNIX:\n";
+        msg +="-AppExecutionCommand=/office/soffice \"-accept=socket,host=localhost,port=8101;urp;\"\n\n";
+        msg+="NOTE: on UNIX be shure to have the connection string inside quotation mark!\n";
 
-    SOF = SOfficeFactory.getFactory(xMSF);
+        assure(msg, param.get("AppExecutionCommand") != null && ! param.get("AppExecutionCommand").equals(""));
+        System.out.println("HALLO" + param.get("AppExecutionCommand"));
+        msg = "\n\nONE PARAMETER IS MISSING!\n";
+        msg += "Please append to your command the following parameter:\n\n";
+        msg += "\t-NoOffice=true";
+        assure(msg, param.getBool("NoOffice"));
 
-        String office = (String) param.get("AppExecutionCommand");
-        if ((office.indexOf("-norestore") != -1) && (office.indexOf("-nocrashreport") != -1)){
-            log.println("try to close office...");
-            disconnect();
-            assure("Could not connect to office", connect());
-        }
+
+        rt = new RecoveryTools(param ,log);
+
+        rt.removeParametersFromAppExecutionCommand();
+
+        log.println("start the office to test recovery feature...");
+
         // make window ranges
         makeWindowPositionRage();
+
+        //makeRecoveryData();
     }
 
-    public void startOffice(){
+    private void makeRecoveryData(){
+        cleanRecoveryData();
+        startOffice();
+        generateDesktop();
+        makeCrash();
+        int expectedDocumentCount = windowsPosSize.size() + 1;
+        handleRecoveryDialogAfterCrash(expectedDocumentCount);
+        backupRecoveryData();
+        cleanRecoveryData();
+    }
+
+    private void startOffice(){
         assure("Could not connect to office", connect());
-        pause();
-        pause();
+        log.setWatcher(param.get("Watcher"));
     }
 
-    private boolean disconnect() {
-        try {
-            XDesktop desk = null;
-            desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, xMSF.createInstance(
-                    "com.sun.star.frame.Desktop"));
-            xMSF = null;
 
-            desk.terminate();
-            log.println("Waiting 5 seconds for the Office to close down");
-            try {
-                Thread.sleep(5000);
+    private void checkDocumentCount(int expectedDocumentCount){
+        XEnumeration allComp = DesktopTools.getAllComponents(xMSF);
+        int documentCount = 0;
+
+        try{
+            while (allComp.hasMoreElements()){
+                allComp.nextElement();
+                documentCount ++;
             }
-            catch(java.lang.InterruptedException e) {}
         }
-        catch (java.lang.Exception e) {
-            e.printStackTrace();
-            failed("Cannot dispose the Office.");
-            return false;
-        }
-        return true;
+        catch ( com.sun.star.container.NoSuchElementException e){}
+        catch ( com.sun.star.lang.WrappedTargetException e){}
+
+        String msg ="The amount of documents to recover is different form the expected amount:\n";
+        msg += "\texpected:\t" + expectedDocumentCount + "\n";
+        msg += "\tto recover:\t" + documentCount;
+
+        assure(msg, expectedDocumentCount == documentCount);
     }
 
-
-    public void pause(){
-        log.println("PAUSE");
-        sleep(5000);
-    }
-
-    public boolean connect(){
-        String office = (String) param.get("AppExecutionCommand");
-        String oldOffice = office;
+    /**
+     * This function starts an office instance. It uses the AppExecutionCommad parameter.
+     * @return TRUE if office is connected otherwise FALSE
+     */
+    private boolean connect(){
         try {
-            String[] params = {"-norestore", "-nocrashreport"};
-
-            for (int i = 0; i < params.length; i++){
-                int index = office.indexOf(params[i]);
-                int length = params[i].length();
-                if (index != -1){
-                    office = office.substring(0, index) + office.substring(index + length);
-                    log.println("removed '" + params[i] + "' from AppExecutionCommand: " + office);
-                }
-            }
-            param.put("AppExecutionCommand", office);
-            System.out.println("connect: " + (String) param.get("AppExecutionCommand"));
 
             OfficeProvider oProvider = new OfficeProvider();
             xMSF = (XMultiServiceFactory)oProvider.getManager(param);
 
             SOF = SOfficeFactory.getFactory(xMSF);
 
-            try {
-                Thread.sleep(200);
-            }
-            catch(java.lang.InterruptedException e) {}
-            param.put("AppExecutionCommand",office);
         }
         catch (java.lang.Exception e) {
-            param.put("AppExecutionCommand",office);
             log.println(e.getClass().getName());
             log.println("Message: " + e.getMessage());
             failed("Cannot connect the Office.");
@@ -260,7 +285,7 @@ public class RecoveryTest extends ComplexTestCase {
      * was saved. After the Office has recovered the documents, this functions
      * compares the saved positions and sizes with the current frame.
      */
-    public void compareWindowPositions(){
+    private void compareWindowPositions(){
         System.out.println("all frames:########");
         System.out.println(windowsPosSize.entrySet().toString());
 
@@ -313,84 +338,295 @@ public class RecoveryTest extends ComplexTestCase {
     /**
      * This function crashes the office
      */
-    public void makeCrash(){
+    private void makeCrash(){
         // get all documents
         Object[] allDocs = DesktopTools.getAllOpenDocuments(xMSF);
 
         // get one of them for dispatching
         XComponent xDoc = (XComponent) allDocs[0];
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
+        log.println("make the crash in second thread");
 
-        XController xController = xModel.getCurrentController();
-        XFrame xFrame = xController.getFrame();
-        XDispatchProvider xDispProv = (com.sun.star.frame.XDispatchProvider)
-                UnoRuntime.queryInterface(com.sun.star.frame.XDispatchProvider.class,xFrame);
-        com.sun.star.util.URL aURL = new com.sun.star.util.URL();
-        aURL.Complete = ".uno:Crash";
-
-        Object instance = null;
-        try{
-            instance = xMSF.createInstance("com.sun.star.util.URLTransformer");
-        } catch (com.sun.star.uno.Exception e){
-            failed("ERROR: could not create URLTransformer: " + e.toString());
-        }
-        com.sun.star.util.XURLTransformer atrans =
-                (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(
-                                    com.sun.star.util.XURLTransformer.class,instance);
-        com.sun.star.util.URL[] aURLA = new com.sun.star.util.URL[1];
-        aURLA[0] = aURL;
-        atrans.parseStrict(aURLA);
-        aURL = aURLA[0];
-
-        XDispatch xDisp = (com.sun.star.frame.XDispatch)xDispProv.queryDispatch(aURL, "",0);
-        xDisp.dispatch(aURL, null);
-
-
+        CrashThread crash = new CrashThread(xDoc, xMSF);
+        crash.start();
+        rt.pause();
+        rt.pause();
     }
 
-    public void handleRecoveryWindowAfterCrash(){
+    /**
+     *  This function uses accessibility to handle the dialog which appears while the
+     * office is crashed. It click the button "OK" to continue.
+     */
+    private void handleRecoveryDialogAfterCrash(int expectedDocumentCount){
         try{
-            XInterface xToolKit = null;
-            try {
-                xToolKit = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit") ;
-            } catch (com.sun.star.uno.Exception e) {
-              failed("Could not get Toolkit: " + e.toString());
+
+            // if the office crashes, the recovery feature needs some time
+            // to save all docs. Therefore the recovery dialog could need some
+            // time to pop up.
+            log.println("wating for recovery dialog...");
+
+            int counter = 0;
+            int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / param.getInt(PropertyName.SHORT_WAIT);
+
+            XDialog oDialog = rt.getActiveDialog(xMSF);
+
+            while ( oDialog == null && (counter < maximum))
+            {
+                rt.pause();
+                oDialog = rt.getActiveDialog(xMSF);
+                counter ++;
             }
 
-            XDialog oDialog = getActiveDialog(xToolKit);
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oDialog);
+            assure("could not get Recovery Window",(oDialog != null));
 
-            //util.dbg.printInterfaces(oDialog);
-            System.out.println(oDialog.getTitle());
+            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oDialog);
 
             UITools oUITools = new UITools(xMSF, xWindow);
 
-            oUITools.printAccessibleTree((PrintWriter) log);
+            oUITools.printAccessibleTree((PrintWriter) log, param.getBool(PropertyName.DEBUG_IS_ACTIVE));
 
             String[] documents = oUITools.getListBoxItems("The following files will be recovered");
             log.println("there are " + documents.length + " documents to save");
 
+            String msg ="The amount of documents to recover is different form the expected amount:\n";
+            msg += "\texpected:\t" + expectedDocumentCount + "\n";
+            msg += "\tto recover:\t" + documents.length;
+
+            assure(msg, expectedDocumentCount == documents.length);
+
+            log.println("disable automatically launch of Office");
+            oUITools.setCheckBoxValue("Launch StarOffice automatically", new Integer(0));
+
+            log.println("start saving...");
             oUITools.clickButton("OK");
 
-            // wait until unrecoveralError-Mesagebox occure
-            pause();
-            oDialog = getActiveDialog(xToolKit);
-
-            System.out.println(oDialog.getTitle());
-            //while (oDialog.getTitle().indexOf("Test")
-
+            rt.waitForClosedOffice();
 
         } catch (Exception e){
+            e.printStackTrace();
             failed("Could not handle crash-dialog: " + e.toString());
+        }
+    }
+
+     private void handleCrashReporterDialog(boolean cancel, boolean YesNo){
+        try{
+
+            log.println("try to get Crash Reporter Dialog...");
+
+            XDialog oDialog = rt.getActiveDialog(xMSF);
+            assure("could not get CrashReporter Dialog", oDialog != null);
+
+            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oDialog);
+
+            log.println(oDialog.getTitle());
+
+            UITools oUITools = new UITools(xMSF, xWindow);
+
+            if (cancel) {
+                log.println("clicking 'Cancel' button...");
+
+                try{
+                    rt.clickThreadButton(xMSF, xWindow, "Cancel");
+                } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
+                    failed("Could not click 'Cancel' at CrashReporter Dialog");
+                }
+
+            }
+            else {
+                log.println("clicking 'Next' button...");
+                oUITools.clickButton("Next>>");
+            }
+
+        } catch (Exception e){
+            failed("Could not handle CrashReporter Dialog: " + e.toString());
+        }
+    }
+
+    private void handleRecoveryDialog_QuickExit(int expectedDocumentCount){
+        log.println("handle Recovery Dialog at restart: quick exit");
+        handleRecoveryDialogAtRestart(expectedDocumentCount, false, true);
+        handleAreYouSureDialog(true);
+        handleSaveDocumentsDialog(false);
+
+    }
+    private void handleRecoveryDialog_QuickExitAndSave(int expectedDocumentCount){
+        log.println("handle Recovery Dialog at restart: quick exit");
+        handleRecoveryDialogAtRestart(expectedDocumentCount, false, true);
+        handleAreYouSureDialog(true);
+        handleSaveDocumentsDialog(true);
+    }
+    private void handleRecoveryDialog_Recover(int expectedDocumentCount){
+
+    }
+    private void handleRecoveryDialog_RecoverAndCrashreporter(int expectedDocumentCount){
+
+    }
+     /**
+      * This function uses accessibility to handle the dialog which appears while the
+      * office is started after a crash. It waits until the "next>>" button is enabled
+      * and click it then to continue.
+      * @param expectedDocumentCount the amount of documents which must be displayed in the recovery dialog
+      * @param recover If the documenst should be recoverd this variable must be true. If it is fasle
+      * the recovery process was stoped and the button cancel was klicked.
+      * @param cancel If the recovery is fifnished, this parameter desicdes to klick the "Next" button
+      * or the click cancel. If the value is true, the cancel button was clicked.
+      */
+    private void handleRecoveryDialogAtRestart(int expectedDocumentCount, boolean recover, boolean cancel){
+        try{
+
+            log.println("try to get Recovery Dialog...");
+
+            XDialog oDialog = null;
+            oDialog = rt.getActiveDialogAfterStartup(xMSF);
+
+            assure("could not get Recovery Dialog at start of office", (oDialog != null), CONTINUE);
+
+            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oDialog);
+            log.println("got the following dialog: '" +oDialog.getTitle() + "'");
+
+            UITools oUITools = new UITools(xMSF, xWindow);
+
+            String listBoxName = "Status of recovered documents";
+            String[] documents = oUITools.getListBoxItems(listBoxName);
+            log.println("there are " + documents.length + " documents to recover");
+            log.println("The following files will be recovered:");
+            for (int i=0;i<documents.length;i++){
+                log.println(documents[i]);
+            }
+
+            String msg ="The amount of documents to recover is different form the expected amount:\n";
+            msg += "\texpected:\t" + expectedDocumentCount + "\n";
+            msg += "\tto recover:\t" + documents.length;
+
+            assure(msg, expectedDocumentCount ==documents.length);
+
+            if (recover){
+
+                log.println("clicking 'Start Recovery' button...");
+                oUITools.clickButton("Start Recovery >");
+
+                rt.pause();
+
+                //XAccessibleContext oButton = oUITools.getButton("Start Recovery >");
+                int counter = 0;
+                int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / param.getInt(PropertyName.SHORT_WAIT);
+                //boolean enabeld = oButton.getAccessibleStateSet().contains(com.sun.star.accessibility.AccessibleStateType.ENABLED);
+
+                XAccessibleContext oButton = null;
+                while ((oButton == null) && (counter < maximum)){
+                    log.println("recovering...");
+
+                    try{
+                       oButton = oUITools.getButton("Next >");
+                    } catch (java.lang.NullPointerException e){
+                        // no fault: The title "Start Recovery" switches to "Next"
+                        // while all documents are recoverd
+                    }
+                    rt.pause();
+                    counter++;
+                }
+
+                if (cancel) {
+                    log.println("clicking 'Cancel' button...");
+
+                    try{
+                        rt.clickThreadButton(xMSF, xWindow, "Cancel");
+                    } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
+                        failed("Could not click 'Cancel' at recovery-dialog.");
+                    }
+
+                }
+                else {
+                    log.println("clicking 'Next' button...");
+                    oUITools.clickButton("Next >");
+                }
+
+                rt.pause();
+
+            } else {
+                    log.println("do not recover: clicking 'Cancel' button...");
+
+                    try{
+                        rt.clickThreadButton(xMSF, xWindow, "Cancel");
+                    } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
+                        failed("Could not click 'Cancel' at recovery-dialog");
+                    }
+            }
+
+        } catch (Exception e){
+            failed("Could not handle recovery-dialog at restart: " + e.toString());
         }
 
     }
 
-    public XDialog getActiveDialog(XInterface xToolKit){
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, xToolKit);
-        Object atw = tk.getActiveTopWindow();
-        return (XDialog) UnoRuntime.queryInterface(XDialog.class, atw);
+    /**
+     * This function uses accessibility to handle the dialog "Are you sure".
+     * It cklick "Yes" or "No", dependend on the value of the parameter <CODE>Yes</CODE>
+     * @param yes If value is <CODE>TRUE</CODE> the button "Yes" was clicked, otherwise the button
+     * "No".
+     */
+    private void handleAreYouSureDialog(boolean yes)
+    {
+        try{
+            if (yes){
+                rt.handleModalDialog(xMSF, "Yes");
+            } else{
+                rt.handleModalDialog(xMSF, "Cancel");
+            }
+        } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
+            failed("Could not handle 'Are you sure' dialog.");
+        }
+    }
+
+    /**
+     * This function uses accessibility to handle the dialog "Are you sure".
+     * It cklick "Yes" or "No", dependend on the value of the parameter <CODE>Yes</CODE>
+     * @param yes If value is <CODE>TRUE</CODE> the button "Yes" was clicked, otherwise the button
+     * "No".
+     */
+    private void handleSaveDocumentsDialog(boolean saveDocuments)
+    {
+        try{
+            if (!saveDocuments){
+                rt.handleModalDialog(xMSF, "Cancel");
+            } else{
+                XWindow oDialog = null;
+                oDialog = rt.getActiveWindow(xMSF);
+
+                assure("could not get 'Save Documents' Dialog: ", (oDialog != null), CONTINUE);
+
+                UITools oUITools = new UITools(xMSF, oDialog);
+
+                oUITools.printAccessibleTree((PrintWriter) log, param.getBool(PropertyName.DEBUG_IS_ACTIVE));
+
+                String listBoxName = "Documents";
+                String[] documents = null;
+                try{
+                    documents = oUITools.getListBoxItems(listBoxName);
+                } catch (java.lang.Exception e){
+                    failed("could not get the document names from the 'Save Documents' dialog", CONTINUE);
+                }
+                log.println("there are " + documents.length + " documents to save");
+                log.println("The following documents will be saved:");
+                for (int i=0;i<documents.length;i++){
+                    log.println(documents[i]);
+                }
+                String tempURL = utils.getOfficeTempDir(xMSF);
+
+                log.println("the destination for saveing is: " + tempURL);
+                try{
+                    oUITools.setTextEditFiledText("Save to", tempURL);
+                } catch (java.lang.Exception e){
+                    failed("could not set target directory for saving documents at 'Save Documents' dialog", CONTINUE);
+                }
+                try{
+                    oUITools.clickButton("OK");
+                } catch (java.lang.Exception e){
+                    failed("could not click 'OK' at 'Save Documents' dialog", CONTINUE);
+                }
+            }
+        } catch (com.sun.star.accessibility.IllegalAccessibleComponentStateException e){
+            failed("Could not handle 'Are you sure' dialog.");
+        }
     }
 
     /**
@@ -416,21 +652,27 @@ public class RecoveryTest extends ComplexTestCase {
         windowMaxSize = size;
     }
 
-    public void generateDesktop(){
+    private void generateDesktop(){
 
         // create some documents with content
-        makeCalcDoc("CalcDoc1", true);
         makeWriterDoc("WriterDoc1", true);
-        makeDrawDoc("DrawDoc1", true);
-        makeImpressDoc("ImpressDoc1", true);
-        makeMathDoc("MathDoc1", true);
+//        makeCalcDoc("CalcDoc1", true);
+//        makeDrawDoc("DrawDoc1", true);
+//        makeImpressDoc("ImpressDoc1", true);
+//        makeMathDoc("MathDoc1", true);
 
         // create some documents without content
-        makeMathDoc("MathDocEmpty", false);
-        makeDrawDoc("DrawDocEmpty", false);
-        makeCalcDoc("CalcDocEmpty", false);
+//        makeMathDoc("_blank_math", false);
+//        makeDrawDoc("_blank_draw", false);
+//        makeCalcDoc("_blank_calc", false);
+//        makeWriterDoc("_blank_writer", false);
+//        makeImpressDoc("_blank_impress", false);
+
+//        makeMathDoc("MathDocEmpty", false);
+//        makeDrawDoc("DrawDocEmpty", false);
+//        makeCalcDoc("CalcDocEmpty", false);
         makeWriterDoc("WriterDocEmpty", false);
-        makeImpressDoc("ImpressDocEmpty", false);
+//        makeImpressDoc("ImpressDocEmpty", false);
 
         log.println("Test object successfully created.");
 
@@ -443,6 +685,7 @@ public class RecoveryTest extends ComplexTestCase {
         positioningDocument((XModel) UnoRuntime.queryInterface(XModel.class,
                                                                xImpressDoc));
     }
+
     private void makeDrawDoc(String frameName, boolean withContent){
         log.println("creating Draw document '" + frameName + "'");
         XComponent xDrawDoc = createNewDrawDoc(frameName);
@@ -548,6 +791,7 @@ public class RecoveryTest extends ComplexTestCase {
         }
         return xImpressDoc;
     }
+
 
     private void fillImpressDocWithContent(XComponent xImpressDoc){
 
@@ -757,9 +1001,46 @@ public class RecoveryTest extends ComplexTestCase {
         }
     }
 
-    private void sleep(long millis){
+    /**
+     * copies all files from the backup folder into a folder called backup.recoveryTest
+     * and copies the Recovery.xcu to recovery.xcu.recoeryTest
+     */
+    private void backupRecoveryData()
+    {
+        log.println("backup recovery data...");
         try{
-            Thread.sleep(millis);
-        }catch (java.lang.InterruptedException e){}
+            rt.copyRecoveryData(true);
+        }catch (com.sun.star.io.IOException e){
+            failed("could not copy recovery data: " + e.toString());
+        }catch (java.io.IOException e){
+            failed("could not copy recovery data: " + e.toString());
+        }
+    }
+
+    /**
+     * copies all files from the backup.recoveryTest folder into the backup folder
+     * and copies the Recovery.xcu.recoveryTest to recovery.xcu
+     */
+    private void restoreBackupRecoveryData()
+    {
+        log.println("restore backup recovery data...");
+        try{
+            rt.copyRecoveryData(false);
+        }catch (com.sun.star.io.IOException e){
+            failed("could not copy recovery data: " + e.toString());
+        }catch (java.io.IOException e){
+            failed("could not copy recovery data: " + e.toString());
+        }
+    }
+
+    private void cleanRecoveryData(){
+        try{
+            log.println("bootstrapping the office to get user path to remove old recovery data...");
+
+            rt.cleanRecoveryData();
+
+        } catch (com.sun.star.io.IOException e){
+            failed("could not clean recovery data: " + e.toString());
+        }
     }
 }
