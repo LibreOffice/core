@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlnkitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-08 16:50:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <svtools/macitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #define HYPERDLG_EVENT_MOUSEOVER_OBJECT     0x0001
 #define HYPERDLG_EVENT_MOUSECLICK_OBJECT    0x0002
 #define HYPERDLG_EVENT_MOUSEOUT_OBJECT      0x0004
@@ -87,7 +91,7 @@ enum SvxLinkInsertMode
     HLINK_HTMLMODE = 0x0080
 };
 
-class SvxHyperlinkItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
 {
     String sName;
     String sURL;
