@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+#   last change: $Author: kr $ $Date: 2001-02-06 12:32:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,8 @@ TARGET  = com_sun_star_lib_util
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES= 									\
+    $(CLASSDIR)$/$(PACKAGE)$/IInvokeHook.class		\
+    $(CLASSDIR)$/$(PACKAGE)$/IInvokable.class		\
     $(CLASSDIR)$/$(PACKAGE)$/IStableListener.class	\
     $(CLASSDIR)$/$(PACKAGE)$/IStableObject.class	\
     $(CLASSDIR)$/$(PACKAGE)$/RefObject.class		\
