@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.168 $
+#   $Revision: 1.169 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:13:26 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:52:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -207,9 +207,8 @@ JAVADOC=javadoc -J-Xmx120m
 
 #required arguments
 .IF "$(JDK)" == "gcj"
-#JAVAC=$(JAVACOMPILER) -g -fno-assert -Wno-deprecated -C
-JAVAC=$(JAVACOMPILER) --encoding=ISO-8859-15 -g -fno-assert -Wno-deprecated -C
-JAVAI=$(JAVAINTERPRETER) -Dgnu.gcj.runtime.VMClassLoader.library_control=never
+JAVAC=$(JAVACOMPILER) --encoding=ISO-8859-15 -O2 -fno-assert -Wno-deprecated -C
+JAVAI=$(JAVAINTERPRETER) -Dgnu.gcj.precompiled.db.path=$(GCJ_DATABASE)
 .ELSE
 JAVAC=$(JAVACOMPILER)
 JAVAI=$(JAVAINTERPRETER)
