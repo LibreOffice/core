@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:40:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     //Also niemals direkt zugreifen!
     SwpHints    *pSwpHints;
     SwWrongList *pWrong;    // Rechtschreibfehler nach Online-Spelling
-    SwNodeNum   *pNdNum;    // Numerierung fuer diesen Absatz
+    mutable SwNodeNum   *pNdNum;    // Numerierung fuer diesen Absatz
     XubString   aText;
 
     // Some of the chars this para are hidden. Paragraph has to be reformatted
@@ -169,7 +169,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     }
 
     SW_DLLPRIVATE void CalcHiddenCharFlags() const;
-    SwNodeNum * _GetOutlineNum() const;
+
+    SW_DLLPRIVATE SwNodeNum * _GetOutlineNum(BOOL bUpdate = FALSE) const;
 
 public:
     const String& GetTxt() const { return aText; }
@@ -303,8 +304,29 @@ public:
     // Numerierung
     const SwNodeNum* UpdateNum( const SwNodeNum& );
     SwNumRule *GetNumRule() const;
-    const SwNodeNum* GetNum() const; // #i29363#
-    const SwNodeNum* GetOutlineNum() const;
+
+    /**
+       Returns number of this node.
+
+       @param bUpdate   - TRUE: ensure numrule is valid
+                        - FALSE: do not care about numrule's validity
+
+       @return     number of this node
+    */
+    const SwNodeNum* GetNum(BOOL bUpdate = FALSE) const; // #i29363#
+
+    /**
+       Returns outline number of this node.
+
+       If this node has an outline numbering rule the outline number
+       is its numbrt, otherwise the node has no outline number.
+
+       @param bUpdate   - TRUE: ensure numrule is valid
+                        - FALSE: do not care about numrule's validity
+
+       @return     outline number of this node
+    */
+    const SwNodeNum* GetOutlineNum(BOOL bUpdate = FALSE) const;
 
     // ->#i36903#
     /**
