@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:20:09 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #include "ui_pch.hxx"
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 //------------------------------------------------------------------
 
@@ -477,8 +479,8 @@ IMPL_LINK( SvXPropertyComboBox, LoseFocusHdl, ComboBox*, pCB )
 SvPropertyLine::SvPropertyLine( Window* pParent,WinBits nWinStyle)
         :   Control(pParent,nWinStyle),
             aName(this,WB_BORDER),
-            aXButton(this,WB_BORDER),
             pSvXPropertyControl(NULL),
+            aXButton(this,WB_BORDER),
             bIsLocked(FALSE),
             bIsHyperlink(FALSE)
 {
@@ -496,8 +498,8 @@ SvPropertyLine::SvPropertyLine( Window* pParent,WinBits nWinStyle)
 SvPropertyLine::SvPropertyLine( Window* pParent,const ResId& rResId )
         :   Control(pParent,rResId),
             aName       (this,WB_BORDER),
-            aXButton    (this,WB_BORDER),
             pSvXPropertyControl(NULL),
+            aXButton    (this,WB_BORDER),
             bIsLocked(FALSE),
             bIsHyperlink(FALSE)
 {
@@ -702,8 +704,8 @@ KeyCode SvXPropEvListener::GetKeyCode() const
 
 SvListBoxForProperties::SvListBoxForProperties( Window* pParent, WinBits nWinStyle)
         :   Control(pParent,nWinStyle),
-            aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG),
             aPlayGround(this,WB_DIALOGCONTROL),
+            aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG),
             pPropDataControl(NULL)
 {
 
@@ -730,8 +732,8 @@ SvListBoxForProperties::SvListBoxForProperties( Window* pParent, WinBits nWinSty
 
 SvListBoxForProperties::SvListBoxForProperties( Window* pParent, const ResId& rResId )
             :       Control(pParent,rResId),
-                    aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG),
                     aPlayGround(this,0),
+                    aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG),
                     pPropDataControl(NULL)
 {
     nTheNameSize=0;
@@ -765,6 +767,8 @@ void SvListBoxForProperties::Clear()
             case    KOC_LISTBOX:
             case    KOC_COMBOBOX:
             case    KOC_EDIT:       delete pPropLine->GetSvXPropertyControl();
+                                    break;
+            default:
                                     break;
         }
         delete pPropLine;
@@ -949,9 +953,6 @@ USHORT SvListBoxForProperties::InsertEntry( const SvPropertyData& aPropData, USH
     USHORT nInsPos=nPos;
     SvPropertyLine* pPropLine=new SvPropertyLine(&aPlayGround,WB_TABSTOP | WB_DIALOGCONTROL);
 
-    long nThumbPos=aVScroll.GetThumbPos();
-    long nLines=aVScroll.GetPageSize();
-
     if(nPos==LISTBOX_APPEND)
     {
         nInsPos=PLineArray.Count();
@@ -979,6 +980,8 @@ void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, USHOR
             case    KOC_LISTBOX:
             case    KOC_COMBOBOX:
             case    KOC_EDIT:       delete pPropLine->GetSvXPropertyControl();
+                                    break;
+            default:
                                     break;
         }
 
@@ -1155,9 +1158,10 @@ IMPL_LINK( SvListBoxForProperties, LoseFocusHdl,SvXPropEvListener*, pSvXPEvL)
 
 IMPL_LINK( SvListBoxForProperties, KeyInputHdl,SvXPropEvListener*, pSvXPEvL)
 {
+        //  FIXME  - This code does not make a lot of sense.
     if(pSvXPEvL!=NULL && pPropDataControl!=NULL)
     {
-        SvXPropertyControl* pSvXPCtr=aListener.GetPropertyControl();
+        /*SvXPropertyControl* pSvXPCtr=*/aListener.GetPropertyControl();
     }
     return 0;
 }
