@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentTemplates.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ module com {  module sun {  module star {  module frame {
     force that.
     </p>
  */
-interface XDocumentTemplates:  com::sun::star::uno::XInterface
+published interface XDocumentTemplates:  com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** privides access to the root of internal used hierarchy
