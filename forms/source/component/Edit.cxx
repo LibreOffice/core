@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:39:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -335,6 +338,16 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, EMPTYARG)
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl>(), MouseEvent() );
     return 0L;
+}
+
+//------------------------------------------------------------------
+void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, const Reference< XWindowPeer>& _rxParent ) throw ( RuntimeException )
+{
+    OBoundControl::createPeer(_rxToolkit, _rxParent);
+
+    Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
+    if ( xVclWindowPeer.is() )
+        xVclWindowPeer->setProperty( ::rtl::OUString::createFromAscii("JavaCompatibleTextNotifications"), ::cppu::bool2any( sal_False ) );
 }
 
 /*************************************************************************/
