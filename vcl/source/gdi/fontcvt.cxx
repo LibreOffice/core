@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:37:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,28 +1385,50 @@ StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly)
 
 sal_Unicode ImplRecodeChar( const ImplCvtChar* pConversion, sal_Unicode cChar )
 {
-    sal_Unicode cRetVal = cChar;
+    sal_Unicode cRetVal = 0;
     if( pConversion->mpCvtFunc )
+    {
+        // use a conversion function for recoding
         cRetVal = pConversion->mpCvtFunc( cChar );
-    else if( cChar>= 0xF020 && cChar<=0xF0FF )
-        cRetVal = pConversion->mpCvtTab[ cChar - 0xF020 ];
+    }
+    else
+    {
+        // use a conversion table for recoding
+        sal_Unicode cIndex = cChar;
+        // allow symbol aliasing
+        if( cIndex & 0xFF00 )
+            cIndex -= 0xF000;
+        // recode the symbol
+        if( cIndex>=0x0020 && cIndex<=0x00FF )
+            cRetVal = pConversion->mpCvtTab[ cIndex - 0x0020 ];
+    }
+
     return cRetVal ? cRetVal : cChar;
 }
 
 // -----------------------------------------------------------------------
 
+// recode the string assuming the character codes are symbol codes
+// from an traditional symbol font (i.e. U+F020..U+F0FF)
 void ImplRecodeString( const ImplCvtChar* pConversion, String& rStr,
            xub_StrLen nIndex, xub_StrLen nLen )
 {
     ULONG nLastIndex = (ULONG)nIndex + nLen;
-    if ( nLastIndex > rStr.Len() )
+    if( nLastIndex > rStr.Len() )
         nLastIndex = rStr.Len();
 
     for(; nIndex < nLastIndex; ++nIndex )
     {
-        sal_Unicode c = rStr.GetChar( nIndex );
-        if( (c >= 0xF020) && (c <= 0xF0FF) )
-            rStr.SetChar( nIndex, ImplRecodeChar( pConversion, c ) );
+        sal_Unicode cOrig = rStr.GetChar( nIndex );
+        // only recode symbols and their U+00xx aliases
+        if( ((cOrig < 0x0020) || (cOrig > 0x00FF))
+        &&  ((cOrig < 0xF020) || (cOrig > 0xF0FF)) )
+            continue;
+
+        // recode a symbol
+        sal_Unicode cNew = ImplRecodeChar( pConversion, cOrig );
+        if( cOrig != cNew )
+            rStr.SetChar( nIndex, cNew );
     }
 }
 
@@ -1417,6 +1439,7 @@ struct RecodeTable { const char* pOrgName; ImplCvtChar aCvt;};
 static RecodeTable aRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
+    // reason: fgrep for FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
     {"starbats",        {aStarBatsTab,  "StarSymbol", NULL}},
     {"starmath",        {aStarMathTab,  "StarSymbol", NULL}},
 
