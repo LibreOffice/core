@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:27:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1647,8 +1647,8 @@ private: // CLOOK-Impl-Methoden
 
     void    DeleteDrawLayer();
     void    DeleteColorTable();
-    void    LoadDrawLayer(SvStream& rStream);
-    void    StoreDrawLayer(SvStream& rStream) const;
+//BFS03 void    LoadDrawLayer(SvStream& rStream);
+//BFS03 void    StoreDrawLayer(SvStream& rStream) const;
     BOOL    DrawGetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const;
     void    DrawMovePage( USHORT nOldPos, USHORT nNewPos );
     void    DrawCopyPage( USHORT nOldPos, USHORT nNewPos );
