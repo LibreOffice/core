@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 11:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2735,6 +2735,20 @@ void ImpEditEngine::SetActiveView( EditView* pView )
 
     if ( pActiveView && pActiveView->HasSelection() )
         pActiveView->pImpEditView->DrawSelection(); // Wegzeichnen...
+
+    //  NN: Quick fix for #78668#:
+    //  When editing of a cell in Calc is ended, the edit engine is not deleted,
+    //  only the edit views are removed. If mpIMEInfos is still set in that case,
+    //  mpIMEInfos->aPos points to an invalid selection.
+    //  -> reset mpIMEInfos now
+    //  (probably something like this is necessary whenever the content is modified
+    //  from the outside)
+
+    if ( !pView && mpIMEInfos )
+    {
+        delete mpIMEInfos;
+        mpIMEInfos = NULL;
+    }
 }
 
 BOOL ImpEditEngine::HasData( ExchangeType eExchange, BOOL bAllowSpecial )
