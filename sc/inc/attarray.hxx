@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:01:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ public:
     SCROW   GetFirstEntryPos() const;
     SCROW   GetLastEntryPos( BOOL bIncludeBottom ) const;
 
-    BOOL    HasVisibleAttr( SCROW& rFirstRow, SCROW& rLastRow, BOOL bSkipFirst ) const;
+    BOOL    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
+    BOOL    GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const;
     BOOL    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     BOOL    IsVisibleEqual( const ScAttrArray& rOther,
                             SCROW nStartRow, SCROW nEndRow ) const;
