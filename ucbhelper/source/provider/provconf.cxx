@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provconf.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:22:49 $
+ *  last change: $Author: kso $ $Date: 2001-07-04 12:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
@@ -83,7 +86,6 @@
 #endif
 
 using namespace com::sun::star;
-using namespace rtl;
 
 //=========================================================================
 
@@ -96,8 +98,8 @@ namespace ucb {
 
 bool getContentProviderData(
             const uno::Reference< lang::XMultiServiceFactory > & rServiceMgr,
-            const OUString & rKey1,
-            const OUString & rKey2,
+            const rtl::OUString & rKey1,
+            const rtl::OUString & rKey2,
             ContentProviderDataList & rListToFill )
 {
     if ( !rServiceMgr.is() || !rKey1.getLength() || !rKey2.getLength() )
@@ -111,25 +113,44 @@ bool getContentProviderData(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 rServiceMgr->createInstance(
-                    OUString::createFromAscii(
+                    rtl::OUString::createFromAscii(
                         "com.sun.star.configuration.ConfigurationProvider" ) ),
                 uno::UNO_QUERY );
 
-        OUString aFullPath
-                    = OUString::createFromAscii( CONFIG_CONTENTPROVIDERS_KEY );
-        aFullPath += OUString::createFromAscii( "/" );
+        if ( !xConfigProv.is() )
+        {
+            OSL_ENSURE( false,
+                        "getContentProviderData - No config provider!" );
+            return false;
+        }
+
+        rtl::OUString aFullPath( RTL_CONSTASCII_USTRINGPARAM(
+                                            CONFIG_CONTENTPROVIDERS_KEY ) );
+#if SUPD<638
+        aFullPath += rtl::OUString::createFromAscii( "/" );
         aFullPath += rKey1;
-        aFullPath += OUString::createFromAscii( "/SecondaryKeys/" );
+        aFullPath += rtl::OUString::createFromAscii( "/SecondaryKeys/" );
         aFullPath += rKey2;
-        aFullPath += OUString::createFromAscii( "/ProviderData" );
+        aFullPath += rtl::OUString::createFromAscii( "/ProviderData" );
+#else
+        aFullPath += rtl::OUString::createFromAscii( "/['" );
+        aFullPath += rKey1;
+        aFullPath += rtl::OUString::createFromAscii( "']/SecondaryKeys/['" );
+        aFullPath += rKey2;
+        aFullPath += rtl::OUString::createFromAscii( "']/ProviderData" );
+#endif
 
         uno::Sequence< uno::Any > aArguments( 1 );
-        aArguments[ 0 ] <<= aFullPath;
+        beans::PropertyValue      aProperty;
+        aProperty.Name
+            = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aProperty.Value <<= aFullPath;
+        aArguments[ 0 ] <<= aProperty;
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationAccess" ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.ConfigurationAccess" ) ),
                     aArguments ) );
 
         if ( !xInterface.is() )
@@ -149,8 +170,8 @@ bool getContentProviderData(
             return false;
         }
 
-        uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
-        const OUString* pElems = aElems.getConstArray();
+        uno::Sequence< rtl::OUString > aElems = xNameAccess->getElementNames();
+        const rtl::OUString* pElems = aElems.getConstArray();
         sal_Int32 nCount = aElems.getLength();
 
         if ( nCount > 0 )
@@ -166,25 +187,45 @@ bool getContentProviderData(
                 return false;
             }
 
-            OUString aServiceKey  = OUString::createFromAscii( "/ServiceName" );
-            OUString aTemplateKey = OUString::createFromAscii( "/URLTemplate" );
-            OUString aArgsKey     = OUString::createFromAscii( "/Arguments" );
-
+#if SUPD<638
+            const rtl::OUString aServiceKey(
+                            RTL_CONSTASCII_USTRINGPARAM( "/ServiceName" ) );
+            const rtl::OUString aTemplateKey(
+                            RTL_CONSTASCII_USTRINGPARAM( "/URLTemplate" ) );
+            const rtl::OUString aArgsKey(
+                            RTL_CONSTASCII_USTRINGPARAM( "/Arguments" ) );
+#else
+            const rtl::OUString aKeyPrefix(
+                            RTL_CONSTASCII_USTRINGPARAM( "['" ) );
+            const rtl::OUString aPostfixService(
+                            RTL_CONSTASCII_USTRINGPARAM( "']/ServiceName" ) );
+            const rtl::OUString aPostfixTemplate(
+                            RTL_CONSTASCII_USTRINGPARAM( "']/URLTemplate" ) );
+            const rtl::OUString aPostfixArgs(
+                            RTL_CONSTASCII_USTRINGPARAM( "']/Arguments" ) );
+#endif
             // Iterate over children.
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {
-                const OUString& rElem = pElems[ n ];
-
+#if SUPD<638
+                const rtl::OUString& rElem = pElems[ n ];
+#else
+                rtl::OUString aElem = aKeyPrefix;
+                aElem += pElems[ n ];
+#endif
                 try
                 {
                     ContentProviderData aInfo;
 
                     // Obtain service name.
-
-                    OUString aKey = rElem;
+#if SUPD<638
+                    rtl::OUString aKey = rElem;
                     aKey += aServiceKey;
-
-                    OUString aValue;
+#else
+                    rtl::OUString aKey = aElem;
+                    aKey += aPostfixService;
+#endif
+                    rtl::OUString aValue;
                     if ( !( xHierNameAccess->getByHierarchicalName( aKey )
                         >>= aValue ) )
                     {
@@ -197,10 +238,13 @@ bool getContentProviderData(
                     aInfo.ServiceName = aValue;
 
                     // Obtain URL Template.
-
+#if SUPD<638
                     aKey = rElem;
                     aKey += aTemplateKey;
-
+#else
+                    aKey = aElem;
+                    aKey += aPostfixTemplate;
+#endif
                     if ( !( xHierNameAccess->getByHierarchicalName( aKey )
                         >>= aValue ) )
                     {
@@ -213,10 +257,13 @@ bool getContentProviderData(
                     aInfo.URLTemplate = aValue;
 
                     // Obtain Arguments.
-
+#if SUPD<638
                     aKey = rElem;
                     aKey += aArgsKey;
-
+#else
+                    aKey = aElem;
+                    aKey += aPostfixArgs;
+#endif
                     if ( !( xHierNameAccess->getByHierarchicalName( aKey )
                         >>= aValue ) )
                     {

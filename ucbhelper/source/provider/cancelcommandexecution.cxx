@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:40:47 $
+ *  last change: $Author: kso $ $Date: 2001-07-04 12:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define OLD_UCB_ERROR_HANDLING
+//#define OLD_UCB_ERROR_HANDLING
 
 /**************************************************************************
                                 TODO
