@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:48:43 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _SD_PPT_ANIMATIONS_HXX
 #include <ppt/pptanimations.hxx>
 #endif
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
+#endif
 
 class SdDrawDocument;
 class SfxMedium;
@@ -95,8 +98,12 @@ class SfxMedium;
 
 class SdPage;
 class SdAnimationInfo;
-struct PptAnimationInfoAtom;
 struct PptInteractiveInfoAtom;
+class Ppt97Animation;
+
+typedef boost::shared_ptr< Ppt97Animation > Ppt97AnimationPtr;
+typedef ::std::map < SdrObject*, Ppt97AnimationPtr > tAnimationMap;
+typedef std::vector< std::pair< SdrObject*, Ppt97AnimationPtr > > tAnimationVector;
 
 class ImplSdPPTImport : public SdrPowerPointImport
 {
@@ -112,11 +119,12 @@ class ImplSdPPTImport : public SdrPowerPointImport
     SdrLayerID      nBackgroundLayerID;
     SdrLayerID      nBackgroundObjectsLayerID;
 
+    tAnimationMap   aAnimations;
+
     void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     void            ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
 
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
-    void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoAtom* pAnim );
 
     virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
     virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
@@ -146,4 +154,3 @@ class SdPPTImport
 };
 
 #endif // _SD_PPTIN_HXX
-
