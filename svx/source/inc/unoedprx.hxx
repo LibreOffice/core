@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 11:29:36 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ public:
     virtual OutputDevice*   GetRefDevice() const;
     virtual sal_Bool        GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
     virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
+    virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
     virtual USHORT          GetLineCount( USHORT nPara ) const;
     virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
     virtual sal_Bool        Delete( const ESelection& );
