@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-13 18:46:50 $
+ *  last change: $Author: fme $ $Date: 2002-08-14 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,11 +894,16 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
     if( !bAtStart ) // noch kein Absatz Anfang ?
     {
-        if( !IsWordDelim( *pStr ))
-            return FALSE;       // kein gueltiger Trenner -> keine Ersetzung
-
-        while( 0 == ( bAtStart = (pStart == pStr--) ) && IsWordDelim( *pStr ))
-            ;
+        if ( IsWordDelim( *pStr ) )
+        {
+            while( 0 == ( bAtStart = (pStart == pStr--) ) && IsWordDelim( *pStr ))
+                ;
+        }
+        // Asian full stop, full width full stop, full width exclamation mark
+        // and full width question marks are treated as word delimiters
+        else if ( 0x3002 != *pStr && 0xFF0E != *pStr && 0xFF01 != *pStr &&
+                  0xFF1F != *pStr )
+            return FALSE; // kein gueltiger Trenner -> keine Ersetzung
     }
 
     if( bAtStart )  // am Absatz Anfang ?
@@ -941,7 +946,10 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         do {
             switch( *pStr )
             {
+            // Western and Asian full stop
             case '.':
+            case 0x3002 :
+            case 0xFF0E :
                 {
                     if( nFlag & C_FULL_STOP )
                         return FALSE;       // kein gueltiger Trenner -> keine Ersetzung
@@ -950,6 +958,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                 }
                 break;
             case '!':
+            case 0xFF01 :
                 {
                     if( nFlag & C_EXCLAMATION_MARK )
                         return FALSE;   // kein gueltiger Trenner -> keine Ersetzung
@@ -957,6 +966,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                 }
                 break;
             case '?':
+            case 0xFF1F :
                 {
                     if( nFlag & C_QUESTION_MARK)
                         return FALSE;       // kein gueltiger Trenner -> keine Ersetzung
