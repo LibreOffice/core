@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:53:59 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,12 +427,15 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
     return rtl::OUString::createFromAscii("com.sun.star.comp.math.FormulaDocument");
 }
 
-/*-- 07.02.00 13:24:09---------------------------------------------------
+/*-- 05.11.03 12:57:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == C2U("com.sun.star.formula.FormulaProperties");
+    return (
+            rServiceName == C2U("com.sun.star.document.OfficeDocument"  ) ||
+            rServiceName == C2U("com.sun.star.formula.FormulaProperties")
+           );
 }
 /*-- 07.02.00 13:24:09---------------------------------------------------
 
