@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:44:31 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ String MN_DRWTXT_POPUPMENU
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσ ΞΔΧΦ";
     Text[ russian ] = "Γπΰτθχερκθι ξαϊεκς Òεκρς";
     Text[ polish ] = "Tekst w obiekcie graficznym";
-    Text[ japanese ] = "}`µΜήΌήªΈΔ@Γ·½Δ";
+    Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔ‚ΜΓ·½Δ";
     Text[ chinese_traditional ] = "ΓΈΉΟª«¥σ ¤ε¦r";
     Text[ arabic ] = "δΥ ίΗΖδ ΡΣζγν";
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
@@ -470,7 +470,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσ ΞΔΧΦ";
     Text[ russian ] = "Òεκρς γπΰτθχερκξγξ ξαϊεκςΰ";
     Text[ polish ] = "Tekst w obiekcie graficznym";
-    Text[ japanese ] = "}`µΜήΌήªΈΔΓ·½Δ";
+    Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔ‚ΜΓ·½Δ";
     Text[ chinese_traditional ] = "ΓΈΉΟª«¥σ ¤ε¦r";
     Text[ arabic ] = "δΥ ίΗΖδ ΡΣζγν";
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
