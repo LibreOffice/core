@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:58:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1435,6 +1435,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                 case DataType::VARBINARY:
                     return NULL;
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     nOBJID = OBJ_FM_CHECKBOX;
                     break;
                 case DataType::TINYINT:
@@ -1708,7 +1709,7 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
 
     // positionieren
     ::Size szControlSize;
-    if (DataType::BIT == nDataType)
+    if (DataType::BIT == nDataType || nDataType == DataType::BOOLEAN )
         szControlSize = aDefSize;
     else if (OBJ_FM_IMAGECONTROL == _nObjID || DataType::LONGVARCHAR == nDataType)
         szControlSize = aDefImageSize;
