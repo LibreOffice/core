@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-06 17:24:25 $
+ *  last change: $Author: mfe $ $Date: 2001-02-27 15:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,6 +1031,9 @@ oslFileError SAL_CALL osl_getFileURLFromNormalizedPath( rtl_uString *normPath, r
 
 */
 
+oslFileError SAL_CALL osl_searchNormalizedPath( rtl_uString *filePath, rtl_uString *searchPath, rtl_uString **strPath );
+
+
 /** Converts a full qualified UNC path into a system dependend path
 
     @param dir[in] Full qualified UNC path
@@ -1045,8 +1048,6 @@ oslFileError SAL_CALL osl_getFileURLFromNormalizedPath( rtl_uString *normPath, r
 */
 
 oslFileError SAL_CALL osl_getSystemPathFromNormalizedPath( rtl_uString *normPath, rtl_uString **strPath);
-
-oslFileError SAL_CALL osl_searchNormalizedPath( rtl_uString *filePath, rtl_uString *searchPath, rtl_uString **strPath );
 
 
 /** Sets file-attributes
