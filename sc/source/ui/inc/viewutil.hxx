@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:21:59 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@ class ScAddress;
 
 enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 
+/** Specifiers for sheet conversion (functions iterating over the sheet and modifying cells). */
+enum ScConversionType
+{
+    SC_CONVERSION_SPELLCHECK,       /// Spell checker.
+    SC_CONVERSION_HANGULHANJA       /// Hangul-Hanja converter.
+};
 
 // ---------------------------------------------------------------------------
 
