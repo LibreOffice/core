@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-25 12:50:24 $
+ *  last change: $Author: jl $ $Date: 2002-04-29 08:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.HashMap;
 import java.lang.reflect.Field;
+import com.sun.star.lang.DisposedException;
 
 
 /** This class is an implementation of the interfaces com.sun.star.beans.XPropertySet,
@@ -193,37 +194,51 @@ XMultiPropertySet
     /** Registers a property with this class. This method expects that property values
      *  are stored in member variables as is the case if the methods convertPropertyValue,
      *  setPropertyValueNoBroadcast and getPropertyValue(Property) are not overridden.
-     *  It is presumed that the name of property is equal to the name of the member variable
-     *  that holds the property value. It is further presumed that the type of the member variable
+     *  It is presumed that the type of the member variable
      *  corresponds Property.Type. For example, if the TypeClass of Property.Type is to be
      *  a TypeClass.SHORT then the member must be a short or java.lang.Short.
      *  The handle for the property is generated.<br>
      *  If there is no member with the specified name or if the member has an incompatible type
      *  then a com.sun.star.uno.RuntimeException is thrown.
-     *  @param name The name of the property and the member variable that holds the property's value.
+     *  @param propertyName The name of the property.
+     *  @param memberName The name of the member variable that holds the value of the property.
      *  @param attributes The property attributes.
      */
-    protected void registerProperty(String name, short attributes)
+    protected void registerProperty(String propertyName, String memberName, short attributes)
     {
         Field propField= null;
         try
         {
-            propField= getClass().getDeclaredField(name);
+            propField= getClass().getDeclaredField(memberName);
         }
         catch (NoSuchFieldException e)
         {
-            throw new com.sun.star.uno.RuntimeException("there is no member variable: " + name);
+            throw new com.sun.star.uno.RuntimeException("there is no member variable: " + memberName);
         }
         Class cl= propField.getType();
         Type t= new Type(cl);
         if (t.getTypeClass() != TypeClass.UNKNOWN)
         {
-            Property p= new Property(name, lastHandle++,  t, attributes);
-            registerProperty(p,name);
+            Property p= new Property(propertyName, lastHandle++,  t, attributes);
+            registerProperty(p,memberName);
         }
         else
-            throw new com.sun.star.uno.RuntimeException("the member has an unknown type: " + name);
+            throw new com.sun.star.uno.RuntimeException("the member has an unknown type: " + memberName);
     }
+
+    /** Registers a property with this class.
+     *  It is presumed that the name of property is equal to the name of the member variable
+     *  that holds the property value.
+     *  @param propertyName The name of the property and the member variable that holds the property's value.
+     *  @param attributes The property attributes.
+     *  @see #registerProperty(String, String, short)
+     */
+    protected void registerProperty(String propertyName, short attributes)
+    {
+        registerProperty(propertyName, propertyName, attributes);
+    }
+
+
 
     /** Returns the Property object for a given property name or null if that property does
      *  not exists (i.e. it has not been registered). Override this method
@@ -349,7 +364,7 @@ XMultiPropertySet
             {
                 Property prop= getProperty(str);
                 if (prop == null)
-                    throw new UnknownPropertyException();
+                    throw new UnknownPropertyException("Property " + str + " is unknown");
 
                 // Add listener for a certain property
                 if ((prop.Attributes & PropertyAttribute.BOUND) > 0)
@@ -373,7 +388,7 @@ XMultiPropertySet
             {
                 Property prop= getProperty(str);
                 if (prop == null)
-                    throw new UnknownPropertyException();
+                    throw new UnknownPropertyException("Property " + str + " is unknown");
 
                 // Add listener for a certain property
                 if ((prop.Attributes & PropertyAttribute.CONSTRAINED) > 0)
@@ -405,11 +420,11 @@ XMultiPropertySet
     {
         Object ret= null;
         if (bInDispose || bDisposed)
-            throw new com.sun.star.lang.DisposedException();
+            throw new com.sun.star.lang.DisposedException("The component has been disposed already");
 
         Property prop= getProperty(name);
         if (prop == null)
-            throw new UnknownPropertyException();
+            throw new UnknownPropertyException("The property " + name + " is unknown");
         if ((prop.Attributes & PropertyAttribute.READONLY) == PropertyAttribute.READONLY)
             return null;
 
@@ -421,36 +436,36 @@ XMultiPropertySet
     }
 
     //XPropertySet ----------------------------------------------------
-    synchronized public void removePropertyChangeListener(String str, com.sun.star.beans.XPropertyChangeListener xPropertyChangeListener) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.lang.WrappedTargetException
+    synchronized public void removePropertyChangeListener(String propName, XPropertyChangeListener listener) throws UnknownPropertyException, WrappedTargetException
     {   // all listeners are automaticly released in a dispose call
         if (!bInDispose && !bDisposed)
         {
-            if (str.length() > 0)
+            if (propName.length() > 0)
             {
-                Property prop = getProperty(str);
+                Property prop = getProperty(propName);
                 if (prop == null)
-                    throw new UnknownPropertyException();
-                aBoundLC.removeInterface(str, xPropertyChangeListener);
+                    throw new UnknownPropertyException("Property " + propName + " is unknown");
+                aBoundLC.removeInterface(propName, listener);
             }
             else
-                listenerContainer.removeInterface(XPropertyChangeListener.class, xPropertyChangeListener);
+                listenerContainer.removeInterface(XPropertyChangeListener.class, listener);
         }
     }
 
     //XPropertySet ----------------------------------------------------
-    synchronized public void removeVetoableChangeListener(String str, com.sun.star.beans.XVetoableChangeListener xVetoableChangeListener) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.lang.WrappedTargetException
+    synchronized public void removeVetoableChangeListener(String propName, XVetoableChangeListener listener) throws UnknownPropertyException, WrappedTargetException
     {// all listeners are automaticly released in a dispose call
         if (!bInDispose && !bDisposed)
         {
-            if (str.length() > 0)
+            if (propName.length() > 0)
             {
-                Property prop = getProperty(str);
+                Property prop = getProperty(propName);
                 if (prop == null)
-                    throw new UnknownPropertyException();
-                aVetoableLC.removeInterface(str, xVetoableChangeListener);
+                    throw new UnknownPropertyException("Property " + propName + " is unknown");
+                aVetoableLC.removeInterface(propName, listener);
             }
             else
-                listenerContainer.removeInterface(XVetoableChangeListener.class, xVetoableChangeListener);
+                listenerContainer.removeInterface(XVetoableChangeListener.class, listener);
         }
     }
 
@@ -498,11 +513,12 @@ XMultiPropertySet
      *  @param name The name of the property.
      *  @param value The new value of the property.
      *     *     */
-    public void setPropertyValue(String name, Object value) throws com.sun.star.beans.UnknownPropertyException,
-    com.sun.star.beans.PropertyVetoException, com.sun.star.lang.IllegalArgumentException,
-    com.sun.star.lang.WrappedTargetException
+    public void setPropertyValue(String name, Object value) throws UnknownPropertyException,
+    PropertyVetoException, com.sun.star.lang.IllegalArgumentException,  WrappedTargetException
     {
         Property prop= getProperty(name);
+        if (prop == null)
+            throw new UnknownPropertyException("Property " + name + " is unknown");
         setPropertyValue(prop, value);
     }
 
@@ -511,12 +527,9 @@ XMultiPropertySet
      *  @param prop The property whose value is to be set.
      *  @param value The new value for the property.
      */
-    protected void setPropertyValue(Property prop, Object value) throws com.sun.star.beans.UnknownPropertyException,
-    com.sun.star.beans.PropertyVetoException, com.sun.star.lang.IllegalArgumentException,
-    com.sun.star.lang.WrappedTargetException
+    protected void setPropertyValue(Property prop, Object value) throws UnknownPropertyException,
+    PropertyVetoException, com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
-        if (prop == null)
-            throw new UnknownPropertyException();
         if ((prop.Attributes & PropertyAttribute.READONLY) == PropertyAttribute.READONLY)
             throw new com.sun.star.beans.PropertyVetoException();
         // The value may be null only if MAYBEVOID attribute is set
@@ -528,7 +541,7 @@ XMultiPropertySet
         if (bVoidValue && (prop.Attributes & PropertyAttribute.MAYBEVOID) == 0)
             throw new com.sun.star.lang.IllegalArgumentException("The property must have a value; the MAYBEVOID attribute is not set!");
         if (bInDispose || bDisposed)
-            throw new com.sun.star.lang.DisposedException();
+            throw new DisposedException("Component is already disposed");
 
         //Check if the argument is allowed
         boolean bValueOk= false;
@@ -713,11 +726,11 @@ XMultiPropertySet
         }
         catch (java.lang.NoSuchFieldException e)
         {
-            throw new com.sun.star.lang.WrappedTargetException("Field does not exist", this, e);
+            throw new WrappedTargetException("Field does not exist", this, e);
         }
         catch (java.lang.IllegalAccessException e)
         {
-            throw new com.sun.star.lang.WrappedTargetException("", this ,e);
+            throw new WrappedTargetException("", this ,e);
         }
         return ret;
     }
@@ -791,7 +804,7 @@ XMultiPropertySet
         else if (XInterface.class.isAssignableFrom(cl))
             retVal= AnyConverter.toObject(new Type(cl), obj);
         else
-            throw new com.sun.star.lang.IllegalArgumentException();
+            throw new com.sun.star.lang.IllegalArgumentException("Could not convert the argument");
         return retVal;
     }
 
@@ -814,7 +827,7 @@ XMultiPropertySet
      *  occured during the setting of the value.
      */
     protected void setPropertyValueNoBroadcast(Property property, Object newVal)
-    throws com.sun.star.lang.WrappedTargetException
+    throws WrappedTargetException
     {
         try
         {
@@ -832,7 +845,7 @@ XMultiPropertySet
         }
         catch(java.lang.Exception e)
         {
-            throw new com.sun.star.lang.WrappedTargetException("PropertySet.setPropertyValue_NoBroadcast", this, e);
+            throw new WrappedTargetException("PropertySet.setPropertyValueNoBroadcast", this, e);
         }
     }
     /** Retrieves the value of a property. This implementation presumes that the values are stored in member variables
@@ -957,7 +970,6 @@ XMultiPropertySet
                 InterfaceContainer lc= listenerContainer.getContainer(XPropertiesChangeListener.class);
                 if (lc != null)
                 {
-                // !!! Here is a Bug, unbound properties are also fired
                     Iterator it= lc.iterator();
                     while (it.hasNext())
                     {
@@ -974,6 +986,8 @@ XMultiPropertySet
     PropertyVetoException, com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
         Property prop= getPropertyByHandle(nHandle);
+        if (prop == null)
+            throw new UnknownPropertyException(" The property with handle : " + nHandle +" is unknown");
         setPropertyValue(prop, aValue);
     }
 
@@ -982,13 +996,15 @@ XMultiPropertySet
     WrappedTargetException
     {
         Property prop= getPropertyByHandle(nHandle);
+        if (prop == null)
+            throw new UnknownPropertyException("The property with handle : " + nHandle + " is unknown");
         return getPropertyValue(prop);
     }
 
     // XMultiPropertySet -----------------------------------------------------------------------------------
-    public void addPropertiesChangeListener(String[] propNames, XPropertiesChangeListener xPropertiesChangeListener)
+    public void addPropertiesChangeListener(String[] propNames, XPropertiesChangeListener listener)
     {
-        listenerContainer.addInterface(XPropertiesChangeListener.class, xPropertiesChangeListener);
+        listenerContainer.addInterface(XPropertiesChangeListener.class, listener);
     }
 
     // XMultiPropertySet -----------------------------------------------------------------------------------
