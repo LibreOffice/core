@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:44:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,14 +845,14 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
     if ( eProt == INET_PROT_PRIVATE )
     {
         aFileView.EnableNameReplacing( sal_False );
-        aFileView.Initialize( rURL, GetNewDocContents() );
+        aFileView.Initialize( GetNewDocContents() );
     }
     else
     {
         xub_StrLen nSampFoldLen = aSamplesFolderURL.Len();
         aFileView.EnableNameReplacing(
                     nSampFoldLen? rURL.CompareTo( aSamplesFolderURL, nSampFoldLen ) == COMPARE_EQUAL : sal_False );
-        aFileView.Initialize( rURL, String() );
+        aFileView.Initialize( rURL, String(), NULL );
     }
     aNewFolderLink.Call( this );
 }
@@ -860,7 +860,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
 sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( String& rURL ) const
 {
     return ( INetURLObject( aFileView.GetViewURL() ) != INetURLObject( aCurrentRootURL ) &&
-             aFileView.HasPreviousLevel( rURL ) );
+             aFileView.GetParentURL( rURL ) );
 }
 
 String SvtFileViewWindow_Impl::GetFolderTitle() const
