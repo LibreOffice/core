@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
+ *  last change: $Author: er $ $Date: 2000-10-20 18:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,10 +342,14 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
     nCnt = aWordSeq.getLength();
     DBG_ASSERT( reservedWords::TRUE_WORD < nCnt, "SetDependentKeywords: TRUE_WORD?" )
     if ( reservedWords::TRUE_WORD < nCnt )
-        sKeyword[NF_KEY_TRUE] = aWordSeq[ reservedWords::TRUE_WORD ];
+        sKeyword[NF_KEY_TRUE] = pCharClass->upper( aWordSeq[ reservedWords::TRUE_WORD ] );
+    else
+        sKeyword[NF_KEY_TRUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "TRUE" ) );
     DBG_ASSERT( reservedWords::FALSE_WORD < nCnt, "SetDependentKeywords: FALSE_WORD?" )
     if ( reservedWords::FALSE_WORD < nCnt )
-        sKeyword[NF_KEY_FALSE] = aWordSeq[ reservedWords::FALSE_WORD ];
+        sKeyword[NF_KEY_FALSE] = pCharClass->upper( aWordSeq[ reservedWords::FALSE_WORD ] );
+    else
+        sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
 
     // currency symbol
     Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
@@ -362,7 +366,9 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
         DBG_ASSERT( nElem < nCnt, "SetDependentKeywords: no currency at all" );
     }
     if ( nElem < nCnt )
-        sCurString = pFormatter->GetCharClass()->upper( aCurrSeq[nElem].symbol );
+        sCurString = pCharClass->upper( aCurrSeq[nElem].symbol );
+    else
+        sCurString.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "ShellsAndPebbles" ) );
 }
 
 
