@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kz $ $Date: 2004-07-30 15:23:49 $
+#   last change: $Author: kz $ $Date: 2004-08-30 17:22:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -220,6 +220,7 @@ YACCFLAGS*=-d -t
 EXECPOST=
 SCPPOST=.ins
 DLLDEST=$(LB)
+SOLARSHAREDBIN=$(SOLARLIBDIR)
 SONAME_SWITCH*=-h
 
 .IF "$(UNIXVERSIONNAMES)"!=""
