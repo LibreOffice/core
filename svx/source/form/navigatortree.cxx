@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 15:06:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,13 +1158,13 @@ namespace svxform
 
                 // und die Properties des alten in das neue kopieren
                 Reference< XPropertySet >  xCurrent(pControls[i], UNO_QUERY);
-#if DEBUG || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
                 // nur mal eben sehen, ob das Ding tatsaechlich ein hidden control ist
                 sal_Int16 nClassId = ::comphelper::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
                 DBG_ASSERT(nClassId == FormComponentType::HIDDENCONTROL, "NavigatorTree::implExecuteDataTransfer: invalid control in drop list !");
                     // wenn das SVX_FM_HIDDEN_CONTROLS-Format vorhanden ist, dann sollten wirklich nur hidden controls in der Sequenz
                     // stecken
-#endif // DEBUG || DBG_UTIL
+#endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
                 Reference< XPropertySetInfo >  xPropInfo( xCurrent->getPropertySetInfo());
                 Sequence< Property> seqAllCurrentProps = xPropInfo->getProperties();
                 Property* pAllCurrentProps = seqAllCurrentProps.getArray();
