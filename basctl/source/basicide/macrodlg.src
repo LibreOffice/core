@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:11:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Όνομα ~μακροεντολής";
         Text[ korean ] = "ΈΕΕ©·Ξ ΐΜΈ§(~M)";
         Text[ turkish ] = "Makro adύ";
+        Text[ catalan ] = "Nombre de la ~macro";
     };
     FixedText RID_TXT_MACROFROM
     {
@@ -153,6 +154,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Μακροεντολή από";
         Text[ korean ] = "ΈΕΕ©·Ξ ΓβΓ³(~F)";
         Text[ turkish ] = "Makro kaynaπύ";
+        Text[ catalan ] = "Macro ~desde";
     };
     Edit RID_ED_MACRONAME
     {
@@ -188,6 +190,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Περιγραφή";
         Text[ korean ] = "Ό³Έν(~S)";
         Text[ turkish ] = "Aηύklama";
+        Text[ catalan ] = "De~scripciσn";
     };
     PushButton RID_PB_RUN
     {
@@ -218,6 +221,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Εκτέλεση";
         Text[ korean ] = "½ΗΗΰ(~U)";
         Text[ turkish ] = "Yόrόt";
+        Text[ catalan ] = "Eje~cutar";
     };
     CancelButton RID_PB_CANCEL
     {
@@ -252,6 +256,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Αντιστοίχιση...";
         Text[ korean ] = "ΉθΑ€(~A)...";
         Text[ turkish ] = "Ata...";
+        Text[ catalan ] = "Asig~nar...";
     };
     PushButton RID_PB_EDIT
     {
@@ -280,6 +285,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Επεξεργασία";
         Text[ korean ] = "ΖνΑύ(~E)";
         Text[ turkish ] = "Dόzenle";
+        Text[ catalan ] = "Edi~tar";
     };
     PushButton RID_PB_DEL
     {
@@ -309,6 +315,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Διαγραφή...";
         Text[ korean ] = "»θΑ¦(~D)...";
         Text[ turkish ] = "Sil...";
+        Text[ catalan ] = "~Eliminar...";
     };
     PushButton RID_PB_ORG
     {
@@ -336,6 +343,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Δια~χείριση...";
         Text[ korean ] = "°όΈ®(~O)...";
         Text[ turkish ] = "Yφnet...";
+        Text[ catalan ] = "~Administrar...";
     };
     HelpButton RID_PB_HELP
     {
@@ -361,6 +369,7 @@ ModalDialog RID_MACROCHOOSER
     Text[ greek ] = "Μακροεντολή";
     Text[ korean ] = "ΈΕΕ©·Ξ";
     Text[ turkish ] = "Makro";
+    Text[ catalan ] = "Macro";
 };
 String RID_STR_STDMACRONAME
 {
@@ -386,6 +395,7 @@ String RID_STR_STDMACRONAME
     Text[ greek ] = "Μακροεντολή";
     Text[ korean ] = "ΈΕΕ©·Ξ";
     Text[ turkish ] = "Makro";
+    Text[ catalan ] = "Macro";
 };
 Bitmap RID_BMP_APPICON
 {
@@ -416,6 +426,7 @@ String RID_STR_BTNDEL
     Text[ greek ] = "Διαγραφή...";
     Text[ korean ] = "»θΑ¦(~D)...";
     Text[ turkish ] = "Sil...";
+    Text[ catalan ] = "~Eliminar...";
 };
 String RID_STR_BTNNEW
 {
@@ -441,6 +452,7 @@ String RID_STR_BTNNEW
     Text[ greek ] = "Δημιουργία";
     Text[ korean ] = "»υ·Ξ(~N)";
     Text[ turkish ] = "Yeni";
+    Text[ catalan ] = "~Nuevo";
 };
 String RID_STR_CLOSE
 {
@@ -467,6 +479,7 @@ String RID_STR_CLOSE
     Text[ greek ] = "Κλείσιμο";
     Text[ korean ] = "΄έ±β";
     Text[ turkish ] = "Kapat";
+    Text[ catalan ] = "Cerrar";
 };
 String RID_STR_CHOOSE
 {
@@ -493,6 +506,7 @@ String RID_STR_CHOOSE
     Text[ greek ] = "Επιλογή";
     Text[ korean ] = "Ό±ΕΓ";
     Text[ turkish ] = "Seη";
+    Text[ catalan ] = "Seleccionar";
 };
 String RID_STR_RUN
 {
@@ -519,4 +533,5 @@ String RID_STR_RUN
     Text[ greek ] = "Εκτέλεση";
     Text[ korean ] = "½ΗΗΰ";
     Text[ turkish ] = "Yόrόt";
+    Text[ catalan ] = "Ejecutar";
 };
