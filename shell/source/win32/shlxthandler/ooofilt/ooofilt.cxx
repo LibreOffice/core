@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ooofilt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:32:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,6 +1364,7 @@ namespace /* private */
 
 STDAPI DllRegisterServer()
 {
+    /*
     TCHAR ModuleFileName[MAX_PATH];
 
     GetModuleFileName(
@@ -1389,6 +1390,8 @@ STDAPI DllRegisterServer()
 
 
     return hr;
+    */
+    return S_OK;
 }
 
 //---------------------------
@@ -1397,6 +1400,7 @@ STDAPI DllRegisterServer()
 
 STDAPI DllUnregisterServer()
 {
+    /*
     TCHAR ModuleFileName[MAX_PATH];
 
     GetModuleFileName(
@@ -1419,4 +1423,6 @@ STDAPI DllUnregisterServer()
 #endif
 
     return hr;
+    */
+    return S_OK;
 }
