@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddecli.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: hro $ $Date: 2000-12-12 09:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#define UNICODE
 #include <string.h> // memset
 #include "ddeimp.hxx"
 #include <svdde.hxx>
@@ -476,8 +477,8 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
                   long n ) :
             DdeTransaction( d, i, n )
 {
-    const char* p = ByteString( rData, osl_getThreadTextEncoding() ).GetBuffer();
-    aDdeData = DdeData( (char*) p, rData.Len(), CF_TEXT );
+    ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+    aDdeData = DdeData( (void*) rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len()), CF_TEXT );
     nType = XTYP_POKE;
 }
 
@@ -496,8 +497,8 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
 DdeExecute::DdeExecute( DdeConnection& d, const String& rData, long n ) :
                 DdeTransaction( d, String(), n )
 {
-    const char* p = ByteString( rData, osl_getThreadTextEncoding() ).GetBuffer();;
-    aDdeData = DdeData( (char*) p, rData.Len() + 1, CF_TEXT );
+    ByteString aByteStr( rData, osl_getThreadTextEncoding() );
+    aDdeData = DdeData( (void*)rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;
 }
 
