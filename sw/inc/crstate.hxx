@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-28 14:26:32 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 11:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@ struct SwFillCrsrPos
     {}
 };
 
+struct Sw2LinesPos
+{
+    SwRect aLine;           // Position and size of the line
+    SwRect aPortion;        // Position and size of the (2line) portion
+};
+
 // CrsrTravelling-Staties (fuer GetCrsrOfst)
 enum CrsrMoveState
 {
@@ -110,6 +116,7 @@ enum CrsrMoveState
 struct SwCrsrMoveState
 {
     SwFillCrsrPos   *pFill;     // fuer das automatische Auffuellen mit Tabs etc.
+    Sw2LinesPos     *p2Lines;   // for selections inside/around 2line portions
     Point aRealHeight;          // enthaelt dann die Position/Hoehe des Cursors
     CrsrMoveState eState;
     BOOL bStop          :1;
@@ -123,9 +130,11 @@ struct SwCrsrMoveState
     BOOL bFillRet       :1;     // wird nur im FillModus temp. genutzt
     BOOL bSetInReadOnly :1;     // ReadOnlyBereiche duerfen betreten werden
     BOOL bRealWidth     :1;     // Calculation of the width required
+    BOOL b2Lines        :1;     // Check 2line portions and fill p2Lines
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
         pFill( NULL ),
+        p2Lines( NULL ),
         eState( eSt ),
         bStop( FALSE ),
         bRealHeight( FALSE ),
@@ -134,7 +143,8 @@ struct SwCrsrMoveState
         bFtnNoInfo( FALSE ),
         bExactOnly( FALSE ),
         bSetInReadOnly( FALSE ),
-        bRealWidth( FALSE )
+        bRealWidth( FALSE ),
+        b2Lines( FALSE )
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         pFill( pInitFill ),
@@ -146,7 +156,8 @@ struct SwCrsrMoveState
         bFtnNoInfo( FALSE ),
         bExactOnly( FALSE ),
         bSetInReadOnly( FALSE ),
-        bRealWidth( FALSE )
+        bRealWidth( FALSE ),
+        b2Lines( FALSE )
     {}
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 14:03:01 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 11:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1882,10 +1882,64 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             }
         } while( FALSE );
 
+        SwCrsrMoveState aTmpState( MV_NONE );
+        aTmpState.b2Lines = sal_True;
         //CntntRects zu Start- und EndFrms.
         SwRect aStRect, aEndRect;
-        pStartFrm->GetCharRect( aStRect, *pStartPos ),
-        pEndFrm->GetCharRect  ( aEndRect,*pEndPos );
+        pStartFrm->GetCharRect( aStRect, *pStartPos, &aTmpState );
+        Sw2LinesPos *pSt2Pos = aTmpState.p2Lines;
+        aTmpState.p2Lines = NULL;
+        pEndFrm->GetCharRect  ( aEndRect, *pEndPos, &aTmpState );
+        Sw2LinesPos *pEnd2Pos = aTmpState.p2Lines;
+
+        // If there's no doubleline portion involved or start and end are both
+        // in the same doubleline portion, all works fine, but otherwise
+        // we need the following...
+        if( pSt2Pos != pEnd2Pos && ( !pSt2Pos || !pEnd2Pos ||
+            pSt2Pos->aPortion != pEnd2Pos->aPortion ) )
+        {
+            // If we have a start(end) position inside a doubleline portion
+            // the surrounded part of the doubleline portion is subtracted
+            // from the region and the aStRect(aEndRect) is set to the
+            // end(start) of the doubleline portion.
+            if( pSt2Pos )
+            {
+                SwRect aTmp( aStRect.Pos(),
+                    Point( pSt2Pos->aPortion.Right(), aStRect.Bottom() ) );
+                if( pSt2Pos->aPortion.Top() == aStRect.Top() )
+                    aTmp.Top( pSt2Pos->aLine.Top() );
+                Sub( aRegion, aTmp );
+                if( aStRect.Bottom() < pSt2Pos->aLine.Bottom() )
+                {
+                    aTmp.Top( aTmp.Bottom() );
+                    aTmp.Bottom( pSt2Pos->aLine.Bottom() );
+                    if( aStRect.Bottom() < pSt2Pos->aPortion.Bottom() )
+                        aTmp.Left( pSt2Pos->aPortion.Left() );
+                    Sub( aRegion, aTmp );
+                }
+                aStRect = SwRect( Point( pSt2Pos->aPortion.Right(),
+                    pSt2Pos->aLine.Top() ), Size( 1, pSt2Pos->aLine.Height() ));
+            }
+            if( pEnd2Pos )
+            {
+                SwRect aTmp( Point( pEnd2Pos->aPortion.Left(), aEndRect.Top() ),
+                    Point( aEndRect.Left() + aEndRect.Width(),
+                           aEndRect.Top() + aEndRect.Height() ) );
+                if( pEnd2Pos->aPortion.Bottom() == aEndRect.Bottom() )
+                    aTmp.Bottom( pEnd2Pos->aLine.Bottom() );
+                Sub( aRegion, aTmp );
+                if( aEndRect.Top() > pEnd2Pos->aLine.Top() )
+                {
+                    aTmp.Bottom( aTmp.Top() );
+                    aTmp.Top( pEnd2Pos->aLine.Top() );
+                    if( aEndRect.Top() > pEnd2Pos->aPortion.Top() )
+                        aTmp.Right( pEnd2Pos->aPortion.Right() );
+                    Sub( aRegion, aTmp );
+                }
+                aEndRect = SwRect( Point( pEnd2Pos->aPortion.Left(),
+                    pEnd2Pos->aLine.Top()), Size( 1, pEnd2Pos->aLine.Height()));
+            }
+        }
 
         //Fall 1: (Gleicher Frame und gleiche Zeile)
         if( pStartFrm == pEndFrm && aStRect.Top() == aEndRect.Top() )
@@ -1908,8 +1962,17 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         //Fall 2: (Gleicher Frame ueber mehr als eine Zeile)
         else if( pStartFrm == pEndFrm )
         {
-            SwTwips lLeft = pStartFrm->Frm().Left() + pStartFrm->Prt().Left(),
-                    lRight= pStartFrm->Frm().Left() + pStartFrm->Prt().Right();
+            SwTwips lLeft, lRight;
+            if( pSt2Pos && pEnd2Pos && pSt2Pos->aPortion == pEnd2Pos->aPortion )
+            {
+                lLeft = pSt2Pos->aPortion.Left();
+                lRight = pSt2Pos->aPortion.Right();
+            }
+            else
+            {
+                lLeft = pStartFrm->Frm().Left() + pStartFrm->Prt().Left();
+                lRight = pStartFrm->Frm().Left() + pStartFrm->Prt().Right();
+            }
 
             //Erste Zeile
             Sub( aRegion, SwRect( aStRect.Pos(),Point( lRight, aStRect.Bottom())));
@@ -2000,6 +2063,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         }
 //      aRegion.Compress( FALSE );
         aRegion.Invert();
+        delete pSt2Pos;
+        delete pEnd2Pos;
     }
 
     //Flys mit Durchlauf ausstanzen. Nicht ausgestanzt werden Flys:
