@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: nn $ $Date: 2001-08-09 19:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,8 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nRefresh(0),
+    nSubTotalsUserListIndex(0),
+    nSubTotalRuleGroupFieldNumber(0),
     bContainsSort(sal_False),
     bContainsSubTotal(sal_False),
     bIsSelection(sal_False),
@@ -176,7 +178,14 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bOrientation(sal_False),
     bContainsHeader(sal_True),
     bAutoFilter(sal_False),
+    bFilterCopyOutputData(sal_False),
+    bFilterIsCaseSensitive(sal_False),
+    bFilterSkipDuplicates(sal_False),
+    bFilterUseRegularExpressions(sal_False),
     bFilterConditionSourceRange(sal_False),
+    bSubTotalsBindFormatsToContent(sal_False),
+    bSubTotalsIsCaseSensitive(sal_False),
+    bSubTotalsInsertPageBreaks(sal_False),
     bSubTotalsSortGroups(sal_False),
     bSubTotalsEnabledUserList(sal_False),
     bSubTotalsAscending(sal_True),
