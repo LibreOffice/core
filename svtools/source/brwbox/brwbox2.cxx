@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-03 18:24:29 $
+ *  last change: $Author: oj $ $Date: 2001-02-09 12:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,8 +652,8 @@ void BrowseBox::Paint( const Rectangle& rRect )
             DrawRect( Rectangle(
                 Point( nX, 0 ),
                 Point( rRect.Right(), GetTitleHeight() - 2 ) ) );
-            SetFillColor( aOldLineColor );
-            SetLineColor( aOldFillColor );
+            SetFillColor( aOldFillColor); // aOldLineColor );  oj 09.02.00 seems to be a copy&paste bug
+            SetLineColor( aOldLineColor); // aOldFillColor );
         }
     }
 }
